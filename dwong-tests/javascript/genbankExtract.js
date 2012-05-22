@@ -79,8 +79,10 @@ function genbankParse(genText) {
 			nextLine = "\t" + nextLine + genbankLineParse(genArr[i], genFeat[hasValue], flag);
 		}
 		
-		if (flag.features == true && genbankDetectField(genArr[i], genFeat) == undefined  ) {
+		if (flag.features == true && genArr[i].match(/^[\s]*\"[\S]*\"=\"[\S]*/)) {
+		//if (flag.features == true && genbankDetectField(genArr[i], genFeat) == undefined  ) {
 			nextLine = "\t\t" + parseFeatures(genArr[i], flag) + "\n";
+			console.log(nextLine);
 		}
 		
 		if ( genArr[i].match("FEATURES")) {
@@ -251,7 +253,7 @@ function genbankFeatures() {
 	field[0] = "source";
 	field[1] = "CDS";
 	field[2] = "gene";
-	//field[3] = "<";
+	field[3] = "<";
 	//field[4] = "protein_id";
 	//field[5] = "GI";
 	//field[6] = "ORGANISM";
