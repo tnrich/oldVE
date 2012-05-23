@@ -47,14 +47,14 @@ function genbankParse(genText) {
 		if ( genbankDetectField(genArr[i], genField) != undefined) {
 			hasValue = genbankDetectField(genArr[i], genField);
 			//console.log("HasValue=" + hasValue);
-			nextLine = nextLine + parseLine(genArr[i], genField[hasValue], flag);
+			nextLine = nextLine + genbankLineParse(genArr[i], genField[hasValue], flag);
 		} 		
 		
 		// FOR REFERENCES AND STUFF
 		if (genbankDetectField(genArr[i], genRef) != undefined) {
 			hasValue = genbankDetectField(genArr[i], genRef);
 			//console.log("HasValue=" + hasValue);
-			nextLine = "\t" + nextLine + parseLine(genArr[i], genRef[hasValue], flag);
+			nextLine = "\t" + nextLine + genbankLineParse(genArr[i], genRef[hasValue], flag);
 		}		
 		if (genArr[i].match("REFERENCE")) {
 			var tmp1 = genArr[i].replace(/REFERENCE[\s]*/g, "");
@@ -64,7 +64,7 @@ function genbankParse(genText) {
 				nextLine = "\"REFERENCE\" : [\n\t\"REF\" : \"" + tmp1 + "\"\n";
 				
 				//nextLine = "\"REFERENCE\" : [\n\t";
-				//nextLine = nextLine + parseLine(tmp1, tmp[0], flag);
+				//nextLine = nextLine + genbankLineParse(tmp1, tmp[0], flag);
 			} else {
 				nextLine = ",\n\t[\"REF\" : \"" + tmp1 + "\"\n";
 			}
@@ -80,7 +80,7 @@ function genbankParse(genText) {
 		if ( genbankDetectField(genArr[i], genFeat) != undefined) {
 			hasValue = genbankDetectField(genArr[i], genFeat);
 			//console.log("HasValue=" + hasValue);
-			nextLine = "\t" + nextLine + parseLine(genArr[i], genFeat[hasValue], flag);
+			nextLine = "\t" + nextLine + genbankLineParse(genArr[i], genFeat[hasValue], flag);
 		}*/
 		
 		
@@ -97,7 +97,7 @@ function genbankParse(genText) {
 			} else {
 				slash = genArr[i].replace(/^[\s]*/,"");
 				var tmp = slash.split(/\s/);
-				//nextLine = "\t" + nextLine + parseLine(genArr[i], tmp[0], flag);
+				//nextLine = "\t" + nextLine + genbankLineParse(genArr[i], tmp[0], flag);
 				nextLine = "\t" + parseFeatures(genArr[i],tmp[0],flag);
 			}
 		}
@@ -170,8 +170,8 @@ function genbankDetectField(line,fields) {
 	return hasValue;
 }
 
-// was genbankLineParse
-function parseLine(line, name, flag) {
+
+function genbankLineParse(line, name, flag) {
 	
 	var newLine = "";
 	//var patt = new RegExp("^" + "[\s]*" + name + "[\s]*","g");
