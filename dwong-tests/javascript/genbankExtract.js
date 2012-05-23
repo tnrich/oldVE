@@ -47,14 +47,14 @@ function genbankParse(genText) {
 		if ( genbankDetectField(genArr[i], genField) != undefined) {
 			hasValue = genbankDetectField(genArr[i], genField);
 			//console.log("HasValue=" + hasValue);
-			nextLine = nextLine + parseLine(genArr[i], genField[hasValue], flag);
+			nextLine = parseLine(genArr[i], genField[hasValue], flag);
 		} 		
 		
 		// FOR REFERENCES AND STUFF
 		if (genbankDetectField(genArr[i], genRef) != undefined) {
 			hasValue = genbankDetectField(genArr[i], genRef);
 			//console.log("HasValue=" + hasValue);
-			nextLine = "\t" + nextLine + parseLine(genArr[i], genRef[hasValue], flag);
+			nextLine = "\t" + parseLine(genArr[i], genRef[hasValue], flag);
 		}		
 		if (genArr[i].match("REFERENCE")) {
 			var tmp1 = genArr[i].replace(/REFERENCE[\s]*/g, "");
@@ -84,27 +84,21 @@ function genbankParse(genText) {
 		}*/
 		
 		
-		//if (flag.features == true && genArr[i].match(/^[\s]*\/[\w]*=\"[\S]*/)) {
-		//if (flag.features == true && genbankDetectField(genArr[i], genFeat) == undefined  ) {
-		//	nextLine = "\t\t" + parseFeatures(genArr[i], flag) + "\n";
-		//}
-		
-		
 		if (flag.features == true) {
+			// FOR entrees with the /KEY="BLAH" format
 			var slash = genArr[i].match(/^[\s]*\/[\w]*=\"[\S]*/);
 			if (slash != null) {
 				nextLine = "\t\t" + parseSlashTag(genArr[i], flag) + "\n";
 			} else {
+				// FOR entrees with "KEY BLAH" format
 				slash = genArr[i].replace(/^[\s]*/,"");
 				var tmp = slash.split(/\s/);
-				//nextLine = "\t" + nextLine + parseLine(genArr[i], tmp[0], flag);
 				nextLine = "\t" + parseFeatures(genArr[i],tmp[0],flag);
 			}
 		}
 		
 		if ( genArr[i].match("FEATURES")) {
 			nextLine = "\"FEATURES\" : \"[\n";
-			//console.log(nextLine);
 			flag.origin     = false;
 			flag.features   = true;
 			flag.reference  = false;
@@ -123,7 +117,6 @@ function genbankParse(genText) {
 				nextLine = "]\n}\n";
 			}
 			nextLine = "\"ORIGIN\" : \"";
-			//console.log(nextLine);
 			flag.origin     = true;
 			flag.features   = false;
 			flag.reference  = false;
@@ -131,8 +124,9 @@ function genbankParse(genText) {
 		
 		// LINE TERMINATION
 		
-		/*
-		if ( flag.runon = true ) {
+		
+		// RUNON FROM PREVIOUS LINE
+		/*if ( nextLine == "") {
 			if (genArr[i].match(/^\"$/)) {
 				flag.runon = false;
 			}
@@ -149,7 +143,6 @@ function genbankParse(genText) {
 		
 		newGenText = newGenText + nextLine;
 	}
-	nextLine = "\"\n}";
 	return newGenText;
 }
 
@@ -178,13 +171,13 @@ function parseLine(line, name, flag) {
 	//line = line.replace(/^[\s]*/g,"");
 	//line = line.replace(patt,"");
 	//line = line.replace(/^[\s]*/g,"");
-	newline = line.replace(/^[\s]*[\S]*[\s]*/, "");
+	line = line.replace(/^[\s]*[\S]*[\s]*/, "");
 	
-	if ( name == "CDS" ) {
-		newLine = "\"" + name + "\": [\n\t\t\"basespan\" : \"" + line + "\"";
-	} else {
+	//if ( name == "CDS" ) {
+	//	newLine = "\"" + name + "\": [\n\t\t\"basespan\" : \"" + line + "\"";
+	//} else {
 		newLine = newLine + "\"" + name + "\" : \"" + line + "\"";
-	}
+	//}
 	
 	if (flag.lastObj == true) {
 		newLine = newLine + "\n}";
@@ -196,8 +189,8 @@ function parseLine(line, name, flag) {
 
 function parseFeatures(line, name, flag) {
 	var newLine;
-	newLine = line.replace(/^[\s]*[\S]*[\s]*/, "");
-	newLine = "\"" + name + "\": [\n\t\t\"basespan\" : \"" + newLine + "\"";
+	line = line.replace(/^[\s]*[\S]*[\s]*/, "");
+	newLine = "\"" + name + "\": [\n\t\t\"basespan\" : \"" + line + "\"";
 
 	if (flag.lastObj == true) {
 		newLine = newLine + "\n}";
