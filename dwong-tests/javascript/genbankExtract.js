@@ -30,21 +30,15 @@ function genbankParse(genText) {
 		
 	var newGenText = "{\n";
 	
-	flag = new Object();
-	flag.newObj     = true;
-	flag.lastObj    = false;
-	flag.runon      = false;
-	flag.origin     = false;
-	flag.features   = false;
-	flag.reference  = false;
-	
+	var flag = initFlags();
+
 	for (var i=0 ; i < genArr.length; i++) {
 		var nextLine = "";
 		var hasValue;
 		
-		
-		// FOR REGULAR FIELDS
+		// FOR REGULAR FIELDS (not references, features fields, or origin)
 		if ( genbankDetectField(genArr[i], genField) != undefined) {
+			flag.indent = 0;
 			hasValue = genbankDetectField(genArr[i], genField);
 			//console.log("HasValue=" + hasValue);
 			nextLine = parseLine(genArr[i], genField[hasValue], flag);
@@ -52,28 +46,30 @@ function genbankParse(genText) {
 		
 		// FOR REFERENCES AND STUFF
 		if (genbankDetectField(genArr[i], genRef) != undefined) {
+			flag.indent = 1;
 			hasValue = genbankDetectField(genArr[i], genRef);
 			//console.log("HasValue=" + hasValue);
 			nextLine = "\t" + parseLine(genArr[i], genRef[hasValue], flag);
 		}		
 		if (genArr[i].match("REFERENCE")) {
+			flag.indent = 0;
 			var tmp1 = genArr[i].replace(/REFERENCE[\s]*/g, "");
+			/*
 			//var tmp  = tmp1.split(/\s/);
-			if (flag.newObj = true ) { //first ref
-				flag.newObj = false;
-				nextLine = "\"REFERENCE\" : [\n\t\"REF\" : \"" + tmp1 + "\"\n";
-				
-				//nextLine = "\"REFERENCE\" : [\n\t";
-				//nextLine = nextLine + parseLine(tmp1, tmp[0], flag);
+			if (flag.reference == false ) { //first ref
+				//flag.reference = true;
+				nextLine = "\"REFERENCE\" : [\n\t\"REF\" : \"" + tmp1 + "\"";
 			} else {
-				nextLine = ",\n\t[\"REF\" : \"" + tmp1 + "\"\n";
-			}
+				nextLine = "\t[\"REF\" : \"" + tmp1 + "\"";
+			}*/
+			// OVERWRITING AS TEMPORARY SOLUTION
+			nextLine = "\"REFERENCE\" : [\n\t\"name\" : \"" + tmp1;// + "\"";
 			flag.origin     = false;
 			flag.features   = false;
 			flag.reference  = true;
+			
 		}
-		
-		
+
 		
 		// FOR FEATURES
 		/*
@@ -85,12 +81,14 @@ function genbankParse(genText) {
 		
 		
 		if (flag.features == true) {
-			// FOR entrees with the /KEY="BLAH" format
-			var slash = genArr[i].match(/^[\s]*\/[\w]*=\"[\S]*/);
+			var slash = genArr[i].match(/^[\s]*\/[\w]+=\"[\S]+/);
 			if (slash != null) {
-				nextLine = "\t\t" + parseSlashTag(genArr[i], flag) + "\n";
+				// FOR entrees with the /KEY="BLAH" format
+				flag.indent = 2;
+				nextLine = "\t\t" + parseSlashTag(genArr[i], flag);// + "\n";
 			} else {
 				// FOR entrees with "KEY BLAH" format
+				flag.indent = 1;
 				slash = genArr[i].replace(/^[\s]*/,"");
 				var tmp = slash.split(/\s/);
 				nextLine = "\t" + parseFeatures(genArr[i],tmp[0],flag);
@@ -98,6 +96,7 @@ function genbankParse(genText) {
 		}
 		
 		if ( genArr[i].match("FEATURES")) {
+			flag.indent = 0;
 			nextLine = "\"FEATURES\" : \"[\n";
 			flag.origin     = false;
 			flag.features   = true;
@@ -106,7 +105,8 @@ function genbankParse(genText) {
 		}
 		
 		
-		
+		nextLine = parseTail(nextLine, flag);
+	
 		// FOR ORIGIN AND END OF FILE
 		if (flag.origin == true) {
 			nextLine = parseOrigin(genArr[i]);
@@ -141,11 +141,15 @@ function genbankParse(genText) {
 			flag.reference  = false;
 		}
 		
+		flag.prevIndent = flag.indent;
 		newGenText = newGenText + nextLine;
 	}
 	return newGenText;
 }
 
+//=================================
+// PARSING FUNCTIONS
+//=================================
 
 function genbankDetectField(line,fields) {
 	var hasValue;
@@ -171,32 +175,44 @@ function parseLine(line, name, flag) {
 	//line = line.replace(/^[\s]*/g,"");
 	//line = line.replace(patt,"");
 	//line = line.replace(/^[\s]*/g,"");
-	line = line.replace(/^[\s]*[\S]*[\s]*/, "");
+	line = line.replace(/^[\s]*[\S]+[\s]+/, "");
 	
-	//if ( name == "CDS" ) {
-	//	newLine = "\"" + name + "\": [\n\t\t\"basespan\" : \"" + line + "\"";
-	//} else {
-		newLine = newLine + "\"" + name + "\" : \"" + line + "\"";
-	//}
-	
-	if (flag.lastObj == true) {
-		newLine = newLine + "\n}";
+	if (name=="LOCUS") {
+		newLine = "\"" + name + "\" : [\n" + parseLocus(line) + "\t}\n  ]";
 	} else {
-		newLine = newLine + ",\n";
+		newLine = "\"" + name + "\" : \"" + line; // + "\"";
 	}
+	
 	return newLine;
+}
+
+function parseLocus(endLine) {
+	var arr = endLine.split(/[\s]+/g);
+	//console.log(endLine + arr);
+	
+	// WRITE PARSE CODE FOR LOCUS THAT IS NOT HARD CODED
+	var name = arr[0];
+	var seqlen = arr[1];
+	var moltype = arr[3];
+	var gendiv  = arr[4];
+	var date = arr[5];
+	
+	endLine = "\t{\n";
+	endLine = endLine +	"\t\t\"name\" : \"" 	+ name		+ "\",\n";
+	endLine = endLine +	"\t\t\"seqlen\" : \""	+ seqlen	+ "\",\n";
+	endLine = endLine +	"\t\t\"moltype\" : \""	+ moltype	+ "\",\n";
+	endLine = endLine +	"\t\t\"genbankDiv\" : \""	+ gendiv	+ "\",\n";
+	endLine = endLine +	"\t\t\"date\" : \""		+ date		+ "\"\n";
+	
+	return endLine;
+	
 }
 
 function parseFeatures(line, name, flag) {
 	var newLine;
-	line = line.replace(/^[\s]*[\S]*[\s]*/, "");
-	newLine = "\"" + name + "\": [\n\t\t\"basespan\" : \"" + line + "\"";
+	line = line.replace(/^[\s]*[\S]+[\s]+/, "");
+	newLine = "\"" + name + "\": [\t{\n\t\t\"basespan\" : \"" + line; // + "\"";
 
-	if (flag.lastObj == true) {
-		newLine = newLine + "\n}";
-	} else {
-		newLine = newLine + ",\n";
-	}
 	return newLine;
 }
 
@@ -204,7 +220,7 @@ function parseSlashTag(line, flag){
 	var newLine;
 	newLine =    line.replace(/^[\s]*/g,"");
 	newLine = newLine.replace(/^\// , "\"");
-	newLine = newLine.replace(/=\"/ , "\" : \"");
+	newLine = newLine.replace(/=\"/ , "\" : ");
 
 	if ( newLine.match(/\"$/)) {
 		flag.runon = true;
@@ -221,7 +237,49 @@ function parseSlashTag(line, flag){
 	return newLine;
 }
 
+
+function parseTail(nextLine, flag) {
+	var myLine = "";
+	if ( nextLine != "") {
+		console.log(flag.prevIndent + ":" + flag.indent + ":" + nextLine);
+		// && flag.runon == false) {
+		myLine = "\",\n";
+		if (flag.prevIndent == flag.indent) {
+			myLine = "\",\n";
+		//} else if (flag.prevIndent >= flag.indent) {
+			//do nothing
+		} else if (flag.prevIndent <= flag.indent) {
+			
+			if (flag.prevIndent == 2) {
+				myLine = "\",\n\t\t}\n\t  ]\n";
+			}
+			if (flag.prevIndent == 1) {
+				myLine = "\",\n\t}\n  ]\n";
+			}
+		}
+	}
+	nextLine = nextLine + myLine;
+	return nextLine;
+}
+
 //=================================
+// INITIALIZING FLAGS AND CONSTANTS
+//=================================
+function initFlags() {
+	flag = new Object();
+	flag.newObj     = true;
+	flag.lastObj    = false;
+	
+	flag.prevIndent	= 0;
+	flag.indent		= 0; //Number of indents (ie how many layers of subfields into the object; Need to explain this better
+	
+	flag.runon      = false;
+	
+	flag.origin     = false;
+	flag.features   = false;
+	flag.reference  = false;
+	return flag;
+}
 
 function genbankAllKeyWords() {
 	var field = new Array();
