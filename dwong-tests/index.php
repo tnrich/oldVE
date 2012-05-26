@@ -84,6 +84,15 @@ $(document).ready(function(){
 <output id="readfilelist"></output><hr>
 </dd>
 
+
+
+<p>
+<p>
+<p>
+<p>
+<p>
+<p>
+
 <script type="text/javascript"><?php include('javascript/sms_common.js');?></script>
 
 <script type="text/javascript"><?php include('javascript/concatenate.js');?></script>
@@ -91,9 +100,17 @@ $(document).ready(function(){
 <script type="text/javascript"><?php include('javascript/anotherdrawvector.js');?></script>
 <script type="text/javascript"><?php include('javascript/genbankFeat.js');?></script>
 <script type="text/javascript"><?php
-include('javascript/genbankExtract.js');?></script>
-<script type="text/javascript"><?php
 include('javascript/handleFileSelect.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleFileToDragSelect.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleDragOver.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleReadFileObject.js');?></script>
+
+
+
+<script type="text/javascript"><?php
+include('javascript/genbankExtract.js');?></script>
+<script type="text/javascript"><?php
+include('javascript/genbankExtractObj.js');?></script>
+<script type="text/javascript" src="../extjs/ext-debug.js"></script>
+<link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css">
+

@@ -267,15 +267,25 @@ ORIGIN
                     {alert('The following error was encountered: ' + e);}" /> 
 <input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
 <input type="reset" value="Reset" />
-<ul><li>
+
 
 <br/>
-<!--<input type=button name=b1 value="Genbank Output" onClick=genbankExtract(genbank)></input><br><br>
-!-->
 
-<textarea name="otxt" rows="20" cols="100">output JSON</textarea>
+<textarea name="otxt" rows="10" cols="80">output JSON</textarea>
 
-</li></ul>
+<br>
+
+<input type="button" value="Submit" name="main_submit"
+                    onclick="try{genbankExtractObj()} catch(e)
+                    {alert('The following error was encountered: ' + e);}" /> 
+<input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
+<input type="reset" value="Reset" />
+
+<br/><font face="Courier New">
+<textarea name="otxt2" rows="20" cols="80">output JSON--version 2</textarea></font>
+
+
+
 </form>
 
 
