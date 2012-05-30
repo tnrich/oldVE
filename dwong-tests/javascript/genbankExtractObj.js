@@ -261,16 +261,20 @@ function subFeature(line) {
 
 function runonCheck(line) {
 	var runon;
-	if ( line.match(/"$|\)$/ )) {
-		// closed case where it's '/key="blahblah"' OR 'KEY  ..join(<265..402,1088..1215)'
+	if ( line.match(/"$/ )) {
+		// closed case: '/key="blahblah"'
 		runon = false;
-	} else if ( line.charAt(line.length-1).match(/\w/)){
+	} else if (line.match(/\)$/ )) {
+		//closed case: 'CDS  ..join(<265..402,1088..1215)'
 		runon = false;
-		console.log(line);
-		console.log(runon);
+	} else if ( line.charAt(line.length-1).match(/\d/)){
+		//number case: 'CDS 1..3123' OR  '/codon=1'
+		runon = false;
+		//console.log("num case: " + line);
+		//console.log(runon);
 	} else {
 		runon = true;
-		console.log(line);
+		console.log("num case: " + line);
 		console.log(runon);
 	}
 	return runon;
