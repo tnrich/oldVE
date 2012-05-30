@@ -107,11 +107,9 @@ include('javascript/handleFileSelect.js');?></script>
 
 
 <script type="text/javascript"><?php
-include('javascript/genbankExtract.js');?></script>
-<script type="text/javascript"><?php
-include('javascript/genbankExtractObj.js');?></script>
-<script type="text/javascript"><?php
+include('javascript/genbankTextExtract.js');?></script>
 
+<script type="text/javascript"><?php
 include('javascript/genbankFileExtract.js');?></script>
 
 

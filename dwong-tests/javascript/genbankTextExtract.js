@@ -1,5 +1,5 @@
 
-function genbankExtractObj() {	
+function genbankTextExtract() {	
 
 	var maxInput = 200000;
 
@@ -260,7 +260,7 @@ function toString(obj) {
 function makeGenbankFields() {
 	Field = {};
 	Field.field = genbankFieldsSubset();
-	Field.feat  = genbankFeatures();
+	//Field.feat  = genbankFeatures();
 	Field.ref   = genbankReference();
 	return Field;
 }
@@ -313,6 +313,17 @@ function genbankReference() {
 	field[2] = "JOURNAL";
 	field[3] = "PUBMED";
 	field[4] = "CONSRTM";
+	return field;
+}
+
+function genbankFeatures() {
+	var field = new Array();
+	field[0] = "source";
+	field[1] = "CDS";
+	field[2] = "gene";
+	field[3] = "<";
+	//field[4] = "protein_id";
+
 	return field;
 }
 

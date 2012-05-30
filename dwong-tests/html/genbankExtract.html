@@ -281,7 +281,7 @@ ORIGIN
 <!-- FOR GENBANK TEXT !-->
 
 <input type="button" value="Submit" name="main_submit"
-                    onclick="try{genbankExtractObj()} catch(e)
+                    onclick="try{genbankTextExtract()} catch(e)
                     {alert('The following error was encountered: ' + e);}" /> 
 <input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
 <input type="reset" value="Reset" />
@@ -305,7 +305,7 @@ ORIGIN
 <input type="button" value="Submit" name="main_submit"
                     onclick="try{genbankFileExtract()} catch(e)
                     {alert('The following error was encountered: ' + e);}" /> 
-<input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
+<input type="button" value="Clear" onclick="document.getElementById('.value = ' '" /> 
 <input type="reset" value="Reset" />
 
 <br/><font face="Courier New">
