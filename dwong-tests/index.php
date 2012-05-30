@@ -106,11 +106,18 @@ include('javascript/handleFileSelect.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleReadFileObject.js');?></script>
 
 
+<script type="text/javascript"><?php
+include('javascript/genbankTextExtract.js');?></script>
 
 <script type="text/javascript"><?php
-include('javascript/genbankExtract.js');?></script>
-<script type="text/javascript"><?php
-include('javascript/genbankExtractObj.js');?></script>
+include('javascript/genbankFileExtract.js');?></script>
+
+
+
 <script type="text/javascript" src="../extjs/ext-debug.js"></script>
+
+
+
+
 <link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css">
 
