@@ -2,7 +2,7 @@
 of one or more GenBank files into the text area below. Input limit is
 200000 characters.
 <br />
-<textarea name="genbank" id="genbank" rows="20" cols="100">
+<textarea name="genbankText" id="genbankText" rows="20" cols="100">
 
 LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012
 ACCESSION   pj5_00028 Accession
@@ -262,6 +262,7 @@ ORIGIN
 -->
 <br />
 
+<!--
 <input type="button" value="Submit" name="main_submit"
                     onclick="try{genbankExtract()} catch(e)
                     {alert('The following error was encountered: ' + e);}" /> 
@@ -273,7 +274,11 @@ ORIGIN
 
 <textarea name="otxt" rows="10" cols="80">output JSON</textarea>
 
+!-->
+
 <br>
+
+<!-- FOR GENBANK TEXT !-->
 
 <input type="button" value="Submit" name="main_submit"
                     onclick="try{genbankExtractObj()} catch(e)
@@ -282,7 +287,29 @@ ORIGIN
 <input type="reset" value="Reset" />
 
 <br/><font face="Courier New">
-<textarea name="otxt2" rows="20" cols="80">output JSON--version 2</textarea></font>
+<textarea name="otxt1" rows="20" cols="80">output JSON--version 2</textarea></font>
+
+<br>
+
+
+<!-- FOR FILE UPLOAD OF GENBANK FILE !-->
+<hr>
+
+<a href="/"> Use Form Input to Select Genbank File Test </a>
+<dd>
+<input type="file" id="genbankFile" name="files[]" multiple />
+<output id="filelist"></output>
+
+<br>
+
+<input type="button" value="Submit" name="main_submit"
+                    onclick="try{genbankFileExtract()} catch(e)
+                    {alert('The following error was encountered: ' + e);}" /> 
+<input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
+<input type="reset" value="Reset" />
+
+<br/><font face="Courier New">
+<textarea name="otxt2" rows="20" cols="80">output JSON--file processing</textarea></font>
 
 
 

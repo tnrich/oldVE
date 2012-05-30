@@ -3,12 +3,12 @@ function genbankExtractObj() {
 
 	var maxInput = 200000;
 
-	var genText = document.getElementById('genbank').value;
+	var genText = document.getElementById('genbankText').value;
 	
 	if (genText.length < maxInput) {
-		document.gentest.otxt2.value = genbankParse(genText);
+		document.gentest.otxt1.value = genbankLineParser(genText);
 	} else {
-		document.gentest.otxt2.value = "File exceeded input limit of "+ maxInput + " characters.";
+		document.gentest.otxt1.value = "File exceeded input limit of "+ maxInput + " characters.";
 		throw new Error("File exceeded input limit of "+ maxInput + " characters.")
 		// THROW A REAL ERROR
 	}
@@ -16,27 +16,19 @@ function genbankExtractObj() {
 
 // Look at http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html for sample GenBank file with formating.
 
-function genbankParse(genText) {
+function genbankLineParser(genText) {
 	
-	MyGenFile = new Object();
-	
-	flag = new Flags();
-	//console.log(flag);
+	MyGenFile = {};
 	var lastObj;
 	var lastKey;
 	
-	Field = {};
-	Field.field = genbankFieldsSubset();
-	Field.feat  = genbankFeatures();
-	Field.ref   = genbankReference();
+	Flag = new Flags();
+	Field = makeGenbankFields();
 		
 	var genArr = genText.split(/\n/g);
-	
-	//console.log(Field.field);
+
 	for (var i=0 ; i < genArr.length; i++) {
-		
 		var testObj = parseLine(genArr[i]);
-	
 	}
 	
 	console.log(MyGenFile);
@@ -51,13 +43,15 @@ function parseLine(line) {
 	var key = getLineKey(line);
 	var val = getLineVal(line);
 	
-	flag.setType(key);
+	Flag.setType(key);
+	
+	// INITIALIZATION //
 	
 	// LOCUS
 	if ( key === "LOCUS" ) {
-		// This is hardcoded. Fix later.
-		//MyGenFile[key] = makeLocus(key,val);
-		MyGenFile[key] = new Locus(key,val);
+		// WARNING This is hardcoded. Fix later.
+		MyGenFile[key] = makeLocus(key,val);
+		//MyGenFile[key] = new Locus(key,val);
 		
 	// REFERENCE init
 	} else if ( key === "REFERENCE") {
@@ -65,7 +59,6 @@ function parseLine(line) {
 			MyGenFile[key] = [];	
 		}
 		len = MyGenFile[key].length;
-		//MyGenFile["REFERENCE"].push(new Ref(len, val));
 		MyGenFile[key].push({ "name" : val });
 		lastObj = MyGenFile[key][len];
 		
@@ -77,81 +70,72 @@ function parseLine(line) {
 	// ORIGIN init
 	} else if ( key === "ORIGIN") {
 		MyGenFile[key] = "";
+		
+	// BASE COUNT
+	} else if ( key === "BASE") {
+		// WARNING THIS IS HARDCODED!!!
+		Flag.setNone();
+		var tmp = line.replace(/^[\s]*BASE COUNT[\s]+/g,"");
+		var cnt = tmp.split(/[\s]+/g);
+		//console.log(cnt);
+		MyGenFile["BASECOUNT"] = {"A":cnt[0], "C":cnt[2], "G":cnt[4], "T":cnt[6] };
+		//cnt[3]:cnt[2], cnt[5]:cnt[4], cnt[7]:cnt[6] });
 	}
 	
-	// PARSE FIELDS, REFERENCES, FEATURES, ORIGIN entries	
+	// PARSE FIELDS, REFERENCES, FEATURES, ORIGIN entries //
+	
 	// FIELDS - standard stuff
 	hasKey = detectField(key, Field.field);
 	if ( hasKey !== undefined) {
 		MyGenFile[key] = val;
 	//}
-	
 	// REFERENCES entries
-	} else if (flag.reference === true && key !== "REFERENCE") {
+	} else if (Flag.reference === true && key !== "REFERENCE") {
 		hasKey = detectField(key, Field.ref);
 		if (hasKey !== undefined) {
 			lastObj[key] = val;
 			lastKey = key;
 		} else {
-			//run on case
+			//RUN ON case
 			var tmp = MyGenFile["REFERENCE"].pop();
-			//console.log(tmp);
-			//console.log(lastKey);
-			//console.log(tmp[lastKey]);
 			tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
-			//console.log(tmp[lastKey]);
 			MyGenFile["REFERENCE"].push(tmp);
 		}
 		
 	// FEATURES entries
-	} else if (flag.features === true && key !== "FEATURES" ) {
+	} else if (Flag.features === true && key !== "FEATURES" ) {
 		
-		if (flag.runon === false) {
+		if (Flag.runon === false) {
 			var slash = line.match(/^[\s]*\/[\w]+=[\S]+/);
 			if (slash == null) {
 				// FOR entrees with "KEY BLAH" format
-				
 				len = MyGenFile["FEATURES"].length;
-				//MyGenFile["FEATURES"].push(new Feat( len, key, val ));
 				MyGenFile["FEATURES"].push({"name":key, "basespan":val});
 				lastKey = "basespan";
 				lastObj = MyGenFile["FEATURES"][len];
-				//flag.runon = runonCheck(line);
+
 			} else {
 				// FOR entrees with the /KEY="BLAH" format
-				//MyGenFile["FEATURES"].push(new SubFeature( line ));
+				var arr = subFeature(line);
+				lastObj[arr[0]]= arr[1];	
+				lastKey = arr[0];
 				
-				//if ( flag.runon === false) {
-					var arr = subFeature(line);
-					lastObj[arr[0]]= arr[1];
-					lastKey = arr[0];
-				//} else {
-				//	console.log(line);
-				//	var tmp = MyGenFile["FEATURES"].pop();
-				//	console.log(tmp);
-				//	tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
-				//	MyGenFile["FEATURES"].push(tmp);
-				//	console.log(tmp);
-				//	flag.runon = runonCheck(line);
-				//}
 			}
 		} else {
-			// run on case
-			//console.log(line);
+			// RUN ON case
 			var tmp = MyGenFile["FEATURES"].pop();
-			//console.log(tmp);
-			tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
+			tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*|\"$/g, "");
 			MyGenFile["FEATURES"].push(tmp);
 			console.log(tmp);
-			//flag.runon = runonCheck(line);
-			
 		}
-		flag.runon = runonCheck(line);
+		// Flag runon for next line
+		Flag.runon = runonCheck(line);
+		
 	// ORIGIN entries
-	} else if (flag.origin === true && key !== "ORIGIN" ) {
+	} else if (Flag.origin === true && key !== "ORIGIN" ) {
 		line = line.replace(/[\s]*[0-9]*/g,"");
 		if ( key === "//" ) {
-			flag.setNone();
+			Flag.setNone();
 			console.log("End of File.");
 		} else {
 			MyGenFile.ORIGIN = MyGenFile.ORIGIN + line;
@@ -203,25 +187,16 @@ function makeLocus(field, endLine) {
 	var locus = {};	
 	var arr = endLine.split(/[\s]+/g);
 	// WRITE PARSE CODE FOR LOCUS THAT IS NOT HARD CODED
-	locus.name   = arr[0];
+	/*locus.name   = arr[0];
 	locus.seqlen = arr[1];
 	locus.moltype = arr[3];
 	locus.gendiv  = arr[4];
 	locus.date = arr[5];
+	*/
+	locus = { "name": arr[0], "seqlen":arr[1], "moltype":arr[3], "gendiv":arr[4], "date":arr[5] };
 	return locus;
 }
-/*
-function Ref(key, value) {
-	this[key] = { "name" : value };
-}
 
-function Feat(ind, key, value) {
-	//this[key] = [{ "basespn" : value }];
-	//this[ind] = {"name":key, "basespan":value};
-	
-	return {"name":key, "basespan":value};
-}
-*/
 
 //=================================
 // PARSING FUNCTIONS
@@ -244,17 +219,8 @@ function subFeature(line) {
 	
 	var arr = newLine.split(/=\"|=/);
 	
-	/*if ( line.match(/"$/) ) {
-		flag.runon = false;
-	} else {
-		if ( line.match(/=\"/) ) {
-			flag.runon = true;
-			//console.log(line);
-		}
-	}*/
-	flag.runon = runonCheck(line);
-	//var sub = new Object();
-	//sub[arr[0]] = arr[1];
+	Flag.runon = runonCheck(line);
+
 	return arr;
 }
 
@@ -265,17 +231,17 @@ function runonCheck(line) {
 		// closed case: '/key="blahblah"'
 		runon = false;
 	} else if (line.match(/\)$/ )) {
-		//closed case: 'CDS  ..join(<265..402,1088..1215)'
+		// closed case: 'CDS  ..join(<265..402,1088..1215)'
 		runon = false;
 	} else if ( line.charAt(line.length-1).match(/\d/)){
-		//number case: 'CDS 1..3123' OR  '/codon=1'
+		// number case: 'CDS 1..3123' OR  '/codon=1'
 		runon = false;
 		//console.log("num case: " + line);
 		//console.log(runon);
 	} else {
 		runon = true;
-		console.log("num case: " + line);
-		console.log(runon);
+		//console.log("runon case: " + line);
+		//console.log(runon);
 	}
 	return runon;
 }
@@ -290,6 +256,15 @@ function toString(obj) {
 //=================================
 // INITIALIZING FLAGS AND CONSTANTS
 //=================================
+
+function makeGenbankFields() {
+	Field = {};
+	Field.field = genbankFieldsSubset();
+	Field.feat  = genbankFeatures();
+	Field.ref   = genbankReference();
+	return Field;
+}
+
 
 function genbankFields() {
 	var field = new Array();
