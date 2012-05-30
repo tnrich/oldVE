@@ -9,6 +9,7 @@ function genbankExtractObj() {
 		document.gentest.otxt2.value = genbankParse(genText);
 	} else {
 		document.gentest.otxt2.value = "File exceeded input limit of "+ maxInput + " characters.";
+		throw new Error("File exceeded input limit of "+ maxInput + " characters.")
 		// THROW A REAL ERROR
 	}
 }
@@ -22,8 +23,9 @@ function genbankParse(genText) {
 	flag = new Flags();
 	//console.log(flag);
 	var lastObj;
+	var lastKey;
 	
-	Field = new Object();
+	Field = {};
 	Field.field = genbankFieldsSubset();
 	Field.feat  = genbankFeatures();
 	Field.ref   = genbankReference();
@@ -38,7 +40,7 @@ function genbankParse(genText) {
 	}
 	
 	console.log(MyGenFile);
-	genText = JSON.stringify(MyGenFile);
+	genText = JSON.stringify(MyGenFile, null, "    ");
 	return genText;
 }
 
@@ -56,68 +58,104 @@ function parseLine(line) {
 		// This is hardcoded. Fix later.
 		//MyGenFile[key] = makeLocus(key,val);
 		MyGenFile[key] = new Locus(key,val);
-
+		
+	// REFERENCE init
 	} else if ( key === "REFERENCE") {
-		if ( MyGenFile["REFERENCE"] == undefined) {
-			MyGenFile["REFERENCE"] = [];	
+		if ( MyGenFile[key] == undefined) {
+			MyGenFile[key] = [];	
 		}
-		len = MyGenFile["REFERENCE"].length;
-		
+		len = MyGenFile[key].length;
 		//MyGenFile["REFERENCE"].push(new Ref(len, val));
-		MyGenFile["REFERENCE"].push({ "name" : val });
+		MyGenFile[key].push({ "name" : val });
+		lastObj = MyGenFile[key][len];
 		
-		lastObj = MyGenFile["REFERENCE"][len];
-		
+	// FEATURES init	
 	} else if ( key === "FEATURES" ) {
-		MyGenFile["FEATURES"] = [];
-		lastObj = MyGenFile["FEATURES"];
+		MyGenFile[key] = [];
+		lastObj = MyGenFile[key];
 		
+	// ORIGIN init
 	} else if ( key === "ORIGIN") {
-		MyGenFile["ORIGIN"] = "";
+		MyGenFile[key] = "";
 	}
 	
-	
+	// PARSE FIELDS, REFERENCES, FEATURES, ORIGIN entries	
 	// FIELDS - standard stuff
 	hasKey = detectField(key, Field.field);
 	if ( hasKey !== undefined) {
 		MyGenFile[key] = val;
 	//}
 	
-	// REFERENCES, FEATURES, ORIGIN entries	
+	// REFERENCES entries
 	} else if (flag.reference === true && key !== "REFERENCE") {
-		// REFERENCES entries
 		hasKey = detectField(key, Field.ref);
 		if (hasKey !== undefined) {
 			lastObj[key] = val;
+			lastKey = key;
 		} else {
 			//run on case
-			//console.log(line);
+			var tmp = MyGenFile["REFERENCE"].pop();
+			//console.log(tmp);
+			//console.log(lastKey);
+			//console.log(tmp[lastKey]);
+			tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
+			//console.log(tmp[lastKey]);
+			MyGenFile["REFERENCE"].push(tmp);
 		}
 		
+	// FEATURES entries
 	} else if (flag.features === true && key !== "FEATURES" ) {
-		// FEATURES entries
 		
-		var slash = line.match(/^[\s]*\/[\w]+=\"[\S]+/);
-		if (slash == null) {
-			// FOR entrees with "KEY BLAH" format
-			len = MyGenFile["FEATURES"].length;
-			//MyGenFile["FEATURES"].push(new Feat( len, key, val ));
-			MyGenFile["FEATURES"].push({"name":key, "basespan":val});
-			lastObj = MyGenFile["FEATURES"][len];
-
+		if (flag.runon === false) {
+			var slash = line.match(/^[\s]*\/[\w]+=[\S]+/);
+			if (slash == null) {
+				// FOR entrees with "KEY BLAH" format
+				
+				len = MyGenFile["FEATURES"].length;
+				//MyGenFile["FEATURES"].push(new Feat( len, key, val ));
+				MyGenFile["FEATURES"].push({"name":key, "basespan":val});
+				lastKey = "basespan";
+				lastObj = MyGenFile["FEATURES"][len];
+				//flag.runon = runonCheck(line);
+			} else {
+				// FOR entrees with the /KEY="BLAH" format
+				//MyGenFile["FEATURES"].push(new SubFeature( line ));
+				
+				//if ( flag.runon === false) {
+					var arr = subFeature(line);
+					lastObj[arr[0]]= arr[1];
+					lastKey = arr[0];
+				//} else {
+				//	console.log(line);
+				//	var tmp = MyGenFile["FEATURES"].pop();
+				//	console.log(tmp);
+				//	tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
+				//	MyGenFile["FEATURES"].push(tmp);
+				//	console.log(tmp);
+				//	flag.runon = runonCheck(line);
+				//}
+			}
 		} else {
-			// FOR entrees with the /KEY="BLAH" format
-			//MyGenFile["FEATURES"].push(new SubFeature( line ));
-			//tmp = subFeature(line);
-			var arr = subFeature(line);
-			lastObj[arr[0]]= arr[1];
+			// run on case
+			//console.log(line);
+			var tmp = MyGenFile["FEATURES"].pop();
+			//console.log(tmp);
+			tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
+			MyGenFile["FEATURES"].push(tmp);
+			console.log(tmp);
+			//flag.runon = runonCheck(line);
+			
 		}
-		
-		
+		flag.runon = runonCheck(line);
+	// ORIGIN entries
 	} else if (flag.origin === true && key !== "ORIGIN" ) {
-		// ORIGIN entries
 		line = line.replace(/[\s]*[0-9]*/g,"");
-		MyGenFile.ORIGIN = MyGenFile.ORIGIN + line;
+		if ( key === "//" ) {
+			flag.setNone();
+			console.log("End of File.");
+		} else {
+			MyGenFile.ORIGIN = MyGenFile.ORIGIN + line;
+		}
 	} 
 		
 	return line;
@@ -185,25 +223,9 @@ function Feat(ind, key, value) {
 }
 */
 
-function subFeature(line) {	
-	var newLine;
-	newLine =    line.replace(/^[\s]*\//,"");
-	newLine = newLine.replace(/"$/, "");
-	
-	var arr = newLine.split(/=\"/);
-	//console.log(newLine);
-	if ( newLine.match(/"$/)) {
-		flag.runon = true;
-	} else {
-		flag.runon = false;
-	}
-	
-	//var sub = new Object();
-	//sub[arr[0]] = arr[1];
-	return arr;
-}
-
-
+//=================================
+// PARSING FUNCTIONS
+//=================================
 
 function detectField(key, fields) {
 	var hasKey;
@@ -215,24 +237,48 @@ function detectField(key, fields) {
 	return hasKey;
 }
 
+function subFeature(line) {	
+	var newLine;
+	newLine =    line.replace(/^[\s]*\//,"");
+	newLine = newLine.replace(/"$/, "");
+	
+	var arr = newLine.split(/=\"|=/);
+	
+	/*if ( line.match(/"$/) ) {
+		flag.runon = false;
+	} else {
+		if ( line.match(/=\"/) ) {
+			flag.runon = true;
+			//console.log(line);
+		}
+	}*/
+	flag.runon = runonCheck(line);
+	//var sub = new Object();
+	//sub[arr[0]] = arr[1];
+	return arr;
+}
 
 
-
-//=================================
-// PARSING FUNCTIONS
-//=================================
+function runonCheck(line) {
+	var runon;
+	if ( line.match(/"$|\)$/ )) {
+		// closed case where it's '/key="blahblah"' OR 'KEY  ..join(<265..402,1088..1215)'
+		runon = false;
+	} else if ( line.charAt(line.length-1).match(/\w/)){
+		runon = false;
+		console.log(line);
+		console.log(runon);
+	} else {
+		runon = true;
+		console.log(line);
+		console.log(runon);
+	}
+	return runon;
+}
 
 
 function toString(obj) {
-}
-
-
-function parseRef(line) {
-}
-
-
-
-function parseOrigin(line) {
+	
 }
 
 
@@ -318,6 +364,7 @@ function Flags() {
 		this.origin   = false;
 		this.features = false;
 		this.reference= false;
+		this.runon	  = false;
 	}
 	
 	this.setType = function(key) {
