@@ -1,0 +1,14 @@
+<form name=test2>
+<textarea name=txta rows="2">acgtacgtacgtacgt</textarea><br><br>
+<textarea name=txtb rows="2">acgtacgtacgtacgtacgt</textarea><br><br>
+<textarea name=txtc rows="2">acgtacgtacgtacgtacgtacgt</textarea><br><br>
+<textarea name=txtd rows="2">acgtacgtacgtacgtacgtacgtacgt</textarea><br><br>
+<textarea name=txte rows="2">acgtacgtacgtacgtacgtacgtacgtacgt</textarea><br><br><hr>
+<input type=button name=b2 value="Draw Vector" onClick=drawvector()></input><br><br>
+<textarea name=otxta rows="2">output sequence</textarea>
+<textarea name=otxtb rows="1">sequence length</textarea><br><br>
+</form>
+<canvas id="myCanvas1" width="400" height="400" style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+<script type="text/javascript"><?php include('drawvector.js');?></script>
