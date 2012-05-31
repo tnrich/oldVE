@@ -4,7 +4,7 @@
 <textarea name=txtc rows="2">acgtacgtacgtacgtacgtacgt</textarea><br><br>
 <textarea name=txtd rows="2">acgtacgtacgtacgtacgtacgtacgt</textarea><br><br>
 <textarea name=txte rows="2">acgtacgtacgtacgtacgtacgtacgtacgt</textarea><br><br><hr>
-<input type=button name=b2 value="Draw Vector" onClick=drawvector()></input><br><br>
+<input type=button name=b2 value="Draw Vector" onClick=simulatedigest()></input><br><br>
 <textarea name=otxta rows="2">output sequence</textarea>
 <textarea name=otxtb rows="1">sequence length</textarea><br><br>
 </form>
