@@ -1,4 +1,4 @@
-function drawvector(){
+function simulatedigest(){
 
 a = document.test_simulatedigest.txta.value
 b = document.test_simulatedigest.txtb.value
