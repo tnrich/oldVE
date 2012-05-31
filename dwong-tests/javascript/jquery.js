@@ -1,0 +1,1 @@
+../../mfero-tests/javascript/jquery.js

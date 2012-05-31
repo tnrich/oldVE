@@ -1,0 +1,33 @@
+<form action="gentestFile" name="gentestFile" id="gentestFile"> 
+<b>Choose a Genbank File and convert to JSON object.</b>
+
+
+<br>
+
+
+<input type='file' id='fileinput'>
+<input type='button' id='btnLoad' value='Load' onclick='loadFile( document.gentestFile.otxt1);'>
+
+<br>
+
+<font face="Courier New">
+<textarea name="otxt1" rows="20" cols="80">Load File Preview</textarea></font>
+
+<br>
+
+<input type="button" value="Submit" name="main_submit"
+onclick="try{ 
+	document.gentestFile.otxt2.value = genbank2JSON(document.gentestFile.otxt1.value)} 
+catch(e) {alert('The following error was encountered: ' + e);}" /> 
+
+<input type="reset" value="Reset" />
+
+<br>
+<br>
+<b> JSON output below:</b>
+<br>
+
+<font face="Courier New">
+<textarea name="otxt2" rows="20" cols="80">genbank2JSON.js Ouput</textarea></font>
+
+</form>

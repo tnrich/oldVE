@@ -1,6 +1,25 @@
+<!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="javascript/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+ $("dd::first").hide();
+ $("dd:not(:first)").hide();
+ $("dt a").click(function(){
+  $("dd:visible").slideUp("slow");
+  $(this).parent().next().slideDown("slow");
+  return false;
+ });
+});
+</script>
+</head>
+
+
+<!--<html>
+<head>
 <title>TESTS</title>
+!-->
 
 <style>
 .example {
@@ -32,7 +51,7 @@ dt a { color: #000; }
 dd a { color: #000; }
 </style>
 
-
+<!--
 <script>
 $(document).ready(function(){
  $("dd::first").hide();
@@ -44,12 +63,15 @@ $(document).ready(function(){
  });
 });
 
-</script>
+</script> !-->
 
 </head>
 
+<body>
 
-<p>Mikes Code Snippet Testing Page</p>
+<p>Code Snippet Testing Page -- Built on Mike's code</p>
+<hr>
+
 
 <dt><a href="/"> Concatenation Test </a></dt>
 <dd><?php include('html/concatenate.html');?></dd>
@@ -62,9 +84,6 @@ $(document).ready(function(){
 
 <dt><a href="/"> Genbank Feature Extraction Test </a></dt>
 <dd><?php include('html/genbankFeat.html');?></dd>
-
-<dt><a href="/"> DW's Genbank Extraction Test </a></dt>
-<dd><?php include('html/genbankExtract.html');?></dd>
 
 <dt><a href="/"> Using Form Input for Selecting Multiple Files Test </a></dt>
 <dd>
@@ -84,7 +103,11 @@ $(document).ready(function(){
 <output id="readfilelist"></output><hr>
 </dd>
 
+<dt><a href="/"> DW's Genbank Text Extraction 2 JSON </a></dt>
+<dd><?php include('html/genbankExtract.html');?></dd>
 
+<dt><a href="/"> DW's Genbank File Extraction 2 JSON </a></dt>
+<dd><?php include('html/genbankFileExtract.html');?></dd>
 
 <p>
 <p>
@@ -107,11 +130,16 @@ include('javascript/handleFileSelect.js');?></script>
 
 
 <script type="text/javascript"><?php
+include('javascript/loadFile.js');?></script>
+
+<script type="text/javascript"><?php
+include('javascript/genbankLineParser.js');?></script>
+
+<script type="text/javascript"><?php
 include('javascript/genbankTextExtract.js');?></script>
 
 <script type="text/javascript"><?php
-include('javascript/genbankFileExtract.js');?></script>
-
+include('javascript/genbank2JSON.js');?></script>
 
 
 <script type="text/javascript" src="../extjs/ext-debug.js"></script>
@@ -120,4 +148,7 @@ include('javascript/genbankFileExtract.js');?></script>
 
 
 <link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css">
+
+
+</html>
 

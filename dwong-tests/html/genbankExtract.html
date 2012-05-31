@@ -1,8 +1,7 @@
-<form action="" name="gentest" id="gentest"> Paste the contents
-of one or more GenBank files into the text area below. Input limit is
-200000 characters.
-<br />
-<textarea name="genbankText" id="genbankText" rows="20" cols="100">
+<form action="" name="gentest" id="gentest"> 
+<b>Paste the contents of one GenBank file into the text area below. Input limit is 200000 characters.</b>
+<br/><font face="Courier New">
+<textarea name="genbankText" id="genbankText" rows="20" cols="80">
 
 LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012
 ACCESSION   pj5_00028 Accession
@@ -153,7 +152,7 @@ ORIGIN
      5341 gccgatcaac gtctcatttt cgccagatat c  
 //
 
-</textarea>
+</textarea></font>
 <!--
 LOCUS       AF177870     3123 bp    DNA             INV       31-OCT-1999
 DEFINITION  Caenorhabditis remanei putative PP2C protein phosphatase FEM-2
@@ -280,36 +279,30 @@ ORIGIN
 
 <!-- FOR GENBANK TEXT !-->
 
+<!-- This uses old version of genbank2JSON converving script
 <input type="button" value="Submit" name="main_submit"
-                    onclick="try{genbankTextExtract()} catch(e)
-                    {alert('The following error was encountered: ' + e);}" /> 
+onclick="try{ 
+document.gentest.otxt1.value=genbankTextExtract()} 
+catch(e) {alert('The following error was encountered: ' + e);}" /> 
+!-->
+
+<input type="button" value="Submit" name="main_submit"
+onclick="try{ 
+document.gentest.otxt1.value=genbank2JSON(document.getElementById('genbankText').value)} 
+catch(e) {alert('The following error was encountered: ' + e);}" /> 
+
+
 <input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
 <input type="reset" value="Reset" />
 
-<br/><font face="Courier New">
-<textarea name="otxt1" rows="20" cols="80">output JSON--version 2</textarea></font>
 
 <br>
-
-
-<!-- FOR FILE UPLOAD OF GENBANK FILE !-->
-<hr>
-
-<a href="/"> Use Form Input to Select Genbank File Test </a>
-<dd>
-<input type="file" id="genbankFile" name="files[]" multiple />
-<output id="filelist"></output>
-
-<br>
-
-<input type="button" value="Submit" name="main_submit"
-                    onclick="try{genbankFileExtract()} catch(e)
-                    {alert('The following error was encountered: ' + e);}" /> 
-<input type="button" value="Clear" onclick="document.getElementById('.value = ' '" /> 
-<input type="reset" value="Reset" />
+<b> JSON output below:</b> 
 
 <br/><font face="Courier New">
-<textarea name="otxt2" rows="20" cols="80">output JSON--file processing</textarea></font>
+<textarea name="otxt1" rows="20" cols="80">JSON.stringify Output of YourGenFile text here</textarea></font>
+
+<br>
 
 
 

@@ -8,6 +8,7 @@ function genbankLineParser(line) {
 	
 	Flag.setType(key);
 	
+	// =====================================================
 	// INITIALIZATION //
 	
 	// LOCUS
@@ -15,27 +16,28 @@ function genbankLineParser(line) {
 		// WARNING This is hardcoded. Fix later.
 		MyGenFile[key] = makeLocus(key,val);
 		//MyGenFile[key] = new Locus(key,val);
-		
+		return;
+	} 
 	// REFERENCE init
-	} else if ( key === "REFERENCE") {
+	else if ( key === "REFERENCE") {
 		if ( MyGenFile[key] == undefined) {
 			MyGenFile[key] = [];	
 		}
 		len = MyGenFile[key].length;
 		MyGenFile[key].push({ "name" : val });
 		lastObj = MyGenFile[key][len];
-		
-	// FEATURES init	
-	} else if ( key === "FEATURES" ) {
+	} 
+	// FEATURES init
+	else if ( key === "FEATURES" ) {
 		MyGenFile[key] = [];
 		lastObj = MyGenFile[key];
-		
+	} 
 	// ORIGIN init
-	} else if ( key === "ORIGIN") {
+	else if ( key === "ORIGIN") {
 		MyGenFile[key] = "";
-		
+	} 
 	// BASE COUNT
-	} else if ( key === "BASE") {
+	else if ( key === "BASE") {
 		// WARNING THIS IS HARDCODED!!!
 		Flag.setNone();
 		var tmp = line.replace(/^[\s]*BASE COUNT[\s]+/g,"");
@@ -45,15 +47,16 @@ function genbankLineParser(line) {
 		//cnt[3]:cnt[2], cnt[5]:cnt[4], cnt[7]:cnt[6] });
 	}
 	
+	// =====================================================
 	// PARSE FIELDS, REFERENCES, FEATURES, ORIGIN entries //
 	
 	// FIELDS - standard stuff
 	hasKey = detectField(key, Field.field);
 	if ( hasKey !== undefined) {
 		MyGenFile[key] = val;
-	//}
+	} 
 	// REFERENCES entries
-	} else if (Flag.reference === true && key !== "REFERENCE") {
+	else if (Flag.reference === true && key !== "REFERENCE") {
 		hasKey = detectField(key, Field.ref);
 		if (hasKey !== undefined) {
 			lastObj[key] = val;
@@ -64,9 +67,9 @@ function genbankLineParser(line) {
 			tmp[lastKey] = tmp[lastKey] + line.replace(/^[\s]*/g, " ");
 			MyGenFile["REFERENCE"].push(tmp);
 		}
-		
+	} 
 	// FEATURES entries
-	} else if (Flag.features === true && key !== "FEATURES" ) {
+	else if (Flag.features === true && key !== "FEATURES" ) {
 		
 		if (Flag.runon === false) {
 			var slash = line.match(/^[\s]*\/[\w]+=[\S]+/);
@@ -93,9 +96,9 @@ function genbankLineParser(line) {
 		}
 		// Flag runon for next line
 		Flag.runon = runonCheck(line);
-		
+	} 
 	// ORIGIN entries
-	} else if (Flag.origin === true && key !== "ORIGIN" ) {
+	else if (Flag.origin === true && key !== "ORIGIN" ) {
 		line = line.replace(/[\s]*[0-9]*/g,"");
 		if ( key === "//" ) {
 			Flag.setNone();
