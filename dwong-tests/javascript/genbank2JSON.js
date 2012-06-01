@@ -6,7 +6,7 @@ function genbank2JSON(genText) {
 	MyGenFile = {};
 	
 	if (genText.length < maxInput) {
-		MyGenFile = genbankText2JSON(genText);
+		MyGenFile = genbank2JSONhelper(genText);
 	} else {
 		throw new Error("File contains (" + genText.length + ") exceeded input limit of "+ maxInput + " characters.")
 		// THROW A REAL ERROR
