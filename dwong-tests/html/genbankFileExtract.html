@@ -11,23 +11,42 @@
 <br>
 
 <font face="Courier New">
-<textarea name="otxt1" rows="20" cols="80">Load File Preview</textarea></font>
+<textarea name="otxt1" rows="10" cols="100">Load File Preview</textarea></font>
 
 <br>
 
+<br>
+<b> JSON output below:</b>
+<br>
 <input type="button" value="Submit" name="main_submit"
 onclick="try{ 
-	document.gentestFile.otxt2.value = genbank2JSON(document.gentestFile.otxt1.value)} 
+	MyGenFile = genbank2JSON(document.gentestFile.otxt1.value);
+	document.gentestFile.otxt2.value = JSON.stringify(MyGenFile, null, '  ');
+} 
 catch(e) {alert('The following error was encountered: ' + e);}" /> 
+
 
 <input type="reset" value="Reset" />
 
 <br>
+
+<font face="Courier New">
+<textarea name="otxt2" rows="10" cols="100">genbank2JSON.js Ouput</textarea></font>
+
 <br>
-<b> JSON output below:</b>
+<b> MyGenFile.ORIGIN:</b>
+<br>
+
+
+<input type="button" value="Get ORIGIN" name="main_submit"
+onclick="try{ 
+	document.gentestFile.otxt3.value = MyGenFile.ORIGIN;
+} 
+catch(e) {alert('The following error was encountered: ' + e);}" /> 
+
 <br>
 
 <font face="Courier New">
-<textarea name="otxt2" rows="20" cols="80">genbank2JSON.js Ouput</textarea></font>
+<textarea name="otxt3" rows="10" cols="100">Sequence Data (ORIGIN)</textarea></font>
 
 </form>

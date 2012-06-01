@@ -116,12 +116,18 @@ $(document).ready(function(){
 <p>
 <p>
 
-<script type="text/javascript"><?php include('javascript/sms_common.js');?></script>
+<script type="text/javascript"><?php include('javascript/teselagen.js');?></script>
 
+
+<!--
+<script type="text/javascript"><?php include('javascript/sms_common.js');?></script>
+!-->
 <script type="text/javascript"><?php include('javascript/concatenate.js');?></script>
 <script type="text/javascript"><?php include('javascript/drawvector.js');?></script>
 <script type="text/javascript"><?php include('javascript/anotherdrawvector.js');?></script>
+<!--
 <script type="text/javascript"><?php include('javascript/genbankFeat.js');?></script>
+!-->
 <script type="text/javascript"><?php
 include('javascript/handleFileSelect.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleFileToDragSelect.js');?></script>
@@ -134,10 +140,10 @@ include('javascript/loadFile.js');?></script>
 
 <script type="text/javascript"><?php
 include('javascript/genbankLineParser.js');?></script>
-
+<!--
 <script type="text/javascript"><?php
 include('javascript/genbankTextExtract.js');?></script>
-
+!-->
 <script type="text/javascript"><?php
 include('javascript/genbank2JSON.js');?></script>
 
