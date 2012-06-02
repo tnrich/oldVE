@@ -3,36 +3,44 @@
 function genbank2JSON(genText) {	
 	
 	var maxInput = 2000000;
-	MyGenFile = {};
+	//MyGenbank = {};
 	
 	if (genText.length < maxInput) {
-		MyGenFile = genbank2JSONhelper(genText);
+		//MyGenbank = genbank2JSONhelper(genText);
+		
+		MyGenbank = new Genbank(genText);
+		console.log(MyGenbank);
 	} else {
-		throw new Error("File contains (" + genText.length + ") exceeded input limit of "+ maxInput + " characters.")
+		throw new Error("genbank2JSON.js ERROR: File contains (" + genText.length + ") exceeded input limit of "+ maxInput + " characters.")
 		// THROW A REAL ERROR
-		MyGenFile = "File exceeded input limit of " + maxInput + " characters.";
+		MyGenbank = "File exceeded input limit of " + maxInput + " characters.";
 	}
-	return MyGenFile;
-}
+	return MyGenbank;
 
-// Look at http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html for sample GenBank file with formating.
 
-function genbank2JSONhelper(genText) {
+/*	// DO NOT NEED THIS OR genbankLineParser() anymore.
+	// WE NOW USE Genbank.js
+	// Look at http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html for sample GenBank file with formating.
 	
-	var lastObj;
-	var lastKey;
+	function genbank2JSONhelper(genText) {
+		
+		var lastObj;
+		var lastKey;
+		
+		Flag = new Flags();
+		Field = makeGenbankFields();
+		
+		// Make an array of lines out of your file and parse line by line.
+		var genArr = genText.split(/\n/g);
 	
-	Flag = new Flags();
-	Field = makeGenbankFields();
-	
-	// Make an array of lines out of your file and parse line by line.
-	var genArr = genText.split(/\n/g);
-
-	for (var i=0 ; i < genArr.length; i++) {
-		var testObj = genbankLineParser(genArr[i]);
+		for (var i=0 ; i < genArr.length; i++) {
+			var testObj = genbankLineParser(genArr[i]);
+		}
+		
+		console.log(MyGenFile);
+		//genText = JSON.stringify(MyGenFile, null, "    ");
+		return MyGenFile;
 	}
-	
-	console.log(MyGenFile);
-	//genText = JSON.stringify(MyGenFile, null, "    ");
-	return MyGenFile;
+	*/
+
 }
