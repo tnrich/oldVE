@@ -391,7 +391,7 @@ function Genbank(genText) {
 		
 		for (var i=0 ; i < this.ORIGIN.length; i++) {
 			var ind = i+1;
-			line = 
+			//line = 
 		}
 		
 		
