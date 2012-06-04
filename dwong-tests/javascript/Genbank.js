@@ -10,6 +10,8 @@ function Genbank(genText) {
 	//this.LOCUS = "test";
 	//this["REFERENCE"] = "blah";
 	
+	
+	// Constructor
 	var that = this; // stupid thing to make this available to private functions
 	
 	var lastObj;
@@ -22,7 +24,7 @@ function Genbank(genText) {
 	for (var i=0 ; i < genArr.length; i++) {
 		lineParser(genArr[i]);
 	}
-
+	// End Constructor
 	
 	//=================================================
 	// Line by Line Parser, for constructor
@@ -349,11 +351,53 @@ function Genbank(genText) {
 		return JSON.stringify(this, null, '  ');
 	}	
 	
+	this.getLocus = function () {
+		return this.LOCUS;
+	}
+
+	this.getReference = function () {
+		return this.REFERENCE;
+	}
+	
+	this.getFeatures = function () {
+		return this.FEATURES;
+	}
 	
 	this.getOrigin = function () {
 		return this.ORIGIN;
 	}
-
-
+	
+	
+	this.toGenbank = function () {
+		var genText, line;
+		
+		genText = "LOCUS       " + this.LOCUS.name + "\t";
+		genText = genText + this.LOCUS.seqlen + " bp ";
+		genText = genText + this.LOCUS.moltype + "\t";
+		genText = genText + this.LOCUS.gendiv + "\t";
+		genText = genText + this.LOCUS.date + "\n";
+		
+		genText = genText + "ACCESSION   " + this.ACCESSION +"\n";
+		genText = genText + "VERSION     " + this.VERSION +"\n";
+		genText = genText + "DEFINITION  " + this.DEFINITION +"\n";
+		genText = genText + "KEYWORDS    " + this.KEYWORDS +"\n";
+		//REFERENCES:
+		
+		//FEATURES:
+		genText = genText + "FEATURES             Location/Qualifiers\n";
+		
+		genText = genText + "ORIGIN\n" + this.ORIGIN.length;
+		
+		
+		for (var i=0 ; i < this.ORIGIN.length; i++) {
+			var ind = i+1;
+			line = 
+		}
+		
+		
+		return genText;
+		
+		
+	}
 
 }

@@ -116,8 +116,10 @@ $(document).ready(function(){
 <p>
 <p>
 
+<!--
+<script type="text/javascript" src="../extjs/ext-debug.js"></script>
 <script type="text/javascript"><?php include('javascript/teselagen.js');?></script>
-
+!-->
 
 <!--
 <script type="text/javascript"><?php include('javascript/sms_common.js');?></script>
@@ -138,6 +140,9 @@ include('javascript/handleFileSelect.js');?></script>
 <script type="text/javascript"><?php
 include('javascript/loadFile.js');?></script>
 
+
+<script type="text/javascript"><?php include('javascript/Genbank.js');?></script>
+
 <script type="text/javascript"><?php
 include('javascript/genbankLineParser.js');?></script>
 <!--
@@ -148,7 +153,7 @@ include('javascript/genbankTextExtract.js');?></script>
 include('javascript/genbank2JSON.js');?></script>
 
 
-<script type="text/javascript" src="../extjs/ext-debug.js"></script>
+
 
 
 

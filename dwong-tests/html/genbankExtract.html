@@ -288,7 +288,9 @@ catch(e) {alert('The following error was encountered: ' + e);}" />
 
 <input type="button" value="Submit" name="main_submit"
 onclick="try{ 
-	document.gentest.otxt1.value = JSON.stringify(genbank2JSON(document.getElementById('genbankText').value), null, '  ')
+	document.gentest.otxt1.value = (genbank2JSON(document.getElementById('genbankText').value).toString());
+	
+	
 } 
 catch(e) {alert('The following error was encountered: ' + e);}" /> 
 

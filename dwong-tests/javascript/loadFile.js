@@ -47,14 +47,14 @@ function loadFile(element) {
 		
 	}
 }
-    
-    
-    
+
+
+/*
 function bodyAppend(tagName, innerHTML) {
 	var elm;
 	elm = document.createElement(tagName);
 	elm.innerHTML = innerHTML;
 	document.body.appendChild(elm);
 }
-
+*/
 

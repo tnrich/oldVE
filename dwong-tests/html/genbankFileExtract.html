@@ -11,7 +11,7 @@
 <br>
 
 <font face="Courier New">
-<textarea name="otxt1" rows="10" cols="100">Load File Preview</textarea></font>
+<textarea name="otxt1" rows="5" cols="100">Load File Preview</textarea></font>
 
 <br>
 
@@ -21,7 +21,7 @@
 <input type="button" value="Submit" name="main_submit"
 onclick="try{ 
 	MyGenFile = genbank2JSON(document.gentestFile.otxt1.value);
-	document.gentestFile.otxt2.value = JSON.stringify(MyGenFile, null, '  ');
+	document.gentestFile.otxt2.value = MyGenFile.toString();
 } 
 catch(e) {alert('The following error was encountered: ' + e);}" /> 
 
@@ -31,22 +31,43 @@ catch(e) {alert('The following error was encountered: ' + e);}" />
 <br>
 
 <font face="Courier New">
-<textarea name="otxt2" rows="10" cols="100">genbank2JSON.js Ouput</textarea></font>
+<textarea name="otxt2" rows="5" cols="100">genbank2JSON.js Ouput</textarea></font>
 
 <br>
 <b> MyGenFile.ORIGIN:</b>
 <br>
 
 
-<input type="button" value="Get ORIGIN" name="main_submit"
+<input type="button" value="Get ORIGIN" name="origin_submit"
 onclick="try{ 
-	document.gentestFile.otxt3.value = MyGenFile.ORIGIN;
+	document.gentestFile.otxt3.value = MyGenFile.getOrigin();
 } 
 catch(e) {alert('The following error was encountered: ' + e);}" /> 
 
 <br>
 
 <font face="Courier New">
-<textarea name="otxt3" rows="10" cols="100">Sequence Data (ORIGIN)</textarea></font>
+<textarea name="otxt3" rows="5" cols="100">Sequence Data (ORIGIN)</textarea></font>
 
+
+<br>
+<b> MyGenFile.toGenbank():</b>
+<br>
+
+<input type="button" value="to Genbank" name="genbank_submit"
+onclick="try{ 
+	document.gentestFile.otxt4.value = MyGenFile.toGenbank();
+} 
+catch(e) {alert('The following error was encountered: ' + e);}" /> 
+
+<br>
+
+<font face="Courier New">
+<textarea name="otxt4" rows="5" cols="100">Converting back to GenBank</textarea></font>
+
+
+
+<br>
+<br>
+<br>
 </form>
