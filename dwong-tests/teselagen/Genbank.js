@@ -4,11 +4,11 @@
 // ouput: Genbank Object
 // http://javascript.crockford.com/private.html
 
-function Genbank(genText) {
+Ext.define('Teselagen.Genbank', {
+    constructor: function (genText) {
 	
 	// Make this.BLAH in lineParser() --> only make public objects as needed
 	
-	// Constructor
 	var that = this; // stupid thing to make this available to private functions
 	
 	var lastObj;
@@ -21,7 +21,7 @@ function Genbank(genText) {
 	for (var i=0 ; i < genArr.length; i++) {
 		lineParser(genArr[i]);
 	}
-	// End Constructor
+
 	
 	//=================================================
 	// Line by Line Parser, for constructor
@@ -348,22 +348,22 @@ function Genbank(genText) {
 		return JSON.stringify(this, null, '  ');
 	}	
 	
-	this.getLocus = function () {
-		return this.LOCUS;
-	}
-
-	this.getReference = function () {
-		return this.REFERENCE;
-	}
-	
-	this.getFeatures = function () {
-		return this.FEATURES;
-	}
+ 	this.getLocus = function () {
+ 		return this.LOCUS;
+ 	}
+ 
+ 	this.getReference = function () {
+ 		return this.REFERENCE;
+ 	}
+ 	
+ 	this.getFeatures = function () {
+ 		return this.FEATURES;
+ 	}
 	
 	this.getOrigin = function () {
 		return this.ORIGIN;
 	}
-	
+
 	// THIS FUNCTION IS INCOMPLETE.
 	// SHOULD MARCH THROUGH THE MYGENFILE OBJECT BUT THIS IS
 	// HARDCODED FOR NOW.
@@ -404,4 +404,7 @@ function Genbank(genText) {
 		return genText;		
 	}
 
-}
+	return this;
+    }
+
+});

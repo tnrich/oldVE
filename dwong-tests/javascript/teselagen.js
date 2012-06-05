@@ -1,3 +1,11 @@
-// This is for namespace creating.
+// see ve/vesa/app/app.js for original file
 
-Ext.namespace('TeselaGen.data');
+Ext.Loader.setConfig({
+    enabled: true,
+    paths: {
+        //Ext: '.',
+        Teselagen: './teselagen'
+    }
+});
+
+

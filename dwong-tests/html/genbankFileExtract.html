@@ -4,6 +4,10 @@
 
 <br>
 
+<input type="reset" value="Reset" />
+
+<br>
+<br>
 
 <input type='file' id='fileinput'>
 <input type='button' id='btnLoad' value='Load' onclick='loadFile( document.gentestFile.otxt1);'>
@@ -13,20 +17,20 @@
 <font face="Courier New">
 <textarea name="otxt1" rows="5" cols="100">Load File Preview</textarea></font>
 
-<br>
 
 <br>
-<b> JSON output below:</b>
+<b> JSON.stringify output of "gb" below:</b>
 <br>
 <input type="button" value="Submit" name="main_submit"
-onclick="try{ 
-	MyGenFile = genbank2JSON(document.gentestFile.otxt1.value);
-	document.gentestFile.otxt2.value = MyGenFile.toString();
-} 
-catch(e) {alert('The following error was encountered: ' + e);}" /> 
+onclick="
+try{ 
+	//MyGenFile = genbank2JSON(document.gentestFile.otxt1.value);
+	gb = Ext.create('Teselagen.Genbank', document.gentestFile.otxt1.value);
+	document.gentestFile.otxt2.value = gb.toString();
+} catch(e) {
+	alert('The following error was encountered: ' + e);
+}" /> 
 
-
-<input type="reset" value="Reset" />
 
 <br>
 
@@ -34,15 +38,17 @@ catch(e) {alert('The following error was encountered: ' + e);}" />
 <textarea name="otxt2" rows="5" cols="100">genbank2JSON.js Ouput</textarea></font>
 
 <br>
-<b> MyGenFile.ORIGIN:</b>
+<b> gb.getOrigin():</b>
 <br>
 
 
 <input type="button" value="Get ORIGIN" name="origin_submit"
-onclick="try{ 
-	document.gentestFile.otxt3.value = MyGenFile.getOrigin();
-} 
-catch(e) {alert('The following error was encountered: ' + e);}" /> 
+onclick="
+try{ 
+	document.gentestFile.otxt3.value = gb.getOrigin();
+} catch(e) {
+	alert('The following error was encountered: ' + e);
+}" /> 
 
 <br>
 
@@ -51,12 +57,12 @@ catch(e) {alert('The following error was encountered: ' + e);}" />
 
 
 <br>
-<b> MyGenFile.toGenbank():</b>
+<b> gb.toGenbank():</b>
 <br>
 
 <input type="button" value="to Genbank" name="genbank_submit"
 onclick="try{ 
-	document.gentestFile.otxt4.value = MyGenFile.toGenbank();
+	document.gentestFile.otxt4.value = gb.toGenbank();
 } 
 catch(e) {alert('The following error was encountered: ' + e);}" /> 
 

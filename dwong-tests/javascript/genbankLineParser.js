@@ -1,3 +1,5 @@
+// THIS IS NO LONGER USED (with genbankTextExtract.js). REPLACED WITH Genbank.js and genbank2JSON.js
+
 // Look at http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html for sample GenBank file with formating.
 
 function genbankLineParser(line) {
@@ -109,109 +111,106 @@ function genbankLineParser(line) {
 	} 
 		
 	return line;
-}
 
 
-//=================================
-// OBJECT FUNCTIONS
-//=================================
-
-function getLineKey(line) {
-	line    = line.replace(/^[\s]*/, "");
-	var arr = line.split(/\s/);
-	return arr[0];
-}
-
-function getLineVal(line) {
-	line	= line.replace(/^[\s]*[\S]+[\s]+/, "");	
-	return line;
-}
-
-function getKeyValObj(line) {
-	line    = line.replace(/^[\s]*/, "");
-	var arr = line.split(/\s/);
-	line	= line.replace(/^[\s]*[\S]+[\s]+/, "");
 	
-	var obj = new Object(); 
-	obj[arr[0]] = line;
+	//=================================
+	// OBJECT FUNCTIONS
+	//=================================
+
+	function getLineKey(line) {
+		line    = line.replace(/^[\s]*/, "");
+		var arr = line.split(/\s/);
+		return arr[0];
+	}
 	
-	return obj;
-}
+	function getLineVal(line) {
+		line	= line.replace(/^[\s]*[\S]+[\s]+/, "");	
+		return line;
+	}
+	
+	function getKeyValObj(line) {
+		line    = line.replace(/^[\s]*/, "");
+		var arr = line.split(/\s/);
+		line	= line.replace(/^[\s]*[\S]+[\s]+/, "");
+		
+		var obj = new Object(); 
+		obj[arr[0]] = line;
+		
+		return obj;
+	}
+	
+	function Locus(field, endLine) {
+		var arr = endLine.split(/[\s]+/g);
+		// WRITE PARSE CODE FOR LOCUS THAT IS NOT HARD CODED
+		this.name   = arr[0];
+		this.seqlen = arr[1];
+		this.moltype = arr[3];
+		this.gendiv  = arr[4];
+		this.date = arr[5];
+	}
+	
+	function makeLocus(field, endLine) {
+		// FIELD MUST BE === "LOCUS"
+		var locus = {};	
+		var arr = endLine.split(/[\s]+/g);
+		// WRITE PARSE CODE FOR LOCUS THAT IS NOT HARD CODED
+		/*locus.name   = arr[0];
+		locus.seqlen = arr[1];
+		locus.moltype = arr[3];
+		locus.gendiv  = arr[4];
+		locus.date = arr[5];
+		*/
+		locus = { "name": arr[0], "seqlen":arr[1], "moltype":arr[3], "gendiv":arr[4], "date":arr[5] };
+		return locus;
+	}
 
-function Locus(field, endLine) {
-	var arr = endLine.split(/[\s]+/g);
-	// WRITE PARSE CODE FOR LOCUS THAT IS NOT HARD CODED
-	this.name   = arr[0];
-	this.seqlen = arr[1];
-	this.moltype = arr[3];
-	this.gendiv  = arr[4];
-	this.date = arr[5];
-}
-
-function makeLocus(field, endLine) {
-	// FIELD MUST BE === "LOCUS"
-	var locus = {};	
-	var arr = endLine.split(/[\s]+/g);
-	// WRITE PARSE CODE FOR LOCUS THAT IS NOT HARD CODED
-	/*locus.name   = arr[0];
-	locus.seqlen = arr[1];
-	locus.moltype = arr[3];
-	locus.gendiv  = arr[4];
-	locus.date = arr[5];
-	*/
-	locus = { "name": arr[0], "seqlen":arr[1], "moltype":arr[3], "gendiv":arr[4], "date":arr[5] };
-	return locus;
-}
-
-
-//=================================
-// PARSING FUNCTIONS
-//=================================
-
-function detectField(key, fields) {
-	var hasKey;
-		for (var j=0; j<fields.length; j++) {
-			if (key.match(fields[j]) && fields[j] !== undefined) {
-			hasKey = j;
+	
+	//=================================
+	// PARSING FUNCTIONS
+	//=================================
+	
+	function detectField(key, fields) {
+		var hasKey;
+			for (var j=0; j<fields.length; j++) {
+				if (key.match(fields[j]) && fields[j] !== undefined) {
+				hasKey = j;
+			}
 		}
+		return hasKey;
 	}
-	return hasKey;
-}
-
-function subFeature(line) {	
-	var newLine;
-	newLine =    line.replace(/^[\s]*\//,"");
-	newLine = newLine.replace(/"$/, "");
 	
-	var arr = newLine.split(/=\"|=/);
+	function subFeature(line) {	
+		var newLine;
+		newLine =    line.replace(/^[\s]*\//,"");
+		newLine = newLine.replace(/"$/, "");
+		
+		var arr = newLine.split(/=\"|=/);
+		
+		Flag.runon = runonCheck(line);
 	
-	Flag.runon = runonCheck(line);
-
-	return arr;
-}
-
-
-function runonCheck(line) {
-	var runon;
-	if ( line.match(/"$/ )) {
-		// closed case: '/key="blahblah"'
-		runon = false;
-	} else if (line.match(/\)$/ )) {
-		// closed case: 'CDS  ..join(<265..402,1088..1215)'
-		runon = false;
-	} else if ( line.charAt(line.length-1).match(/\d/)){
-		// number case: 'CDS 1..3123' OR  '/codon=1'
-		runon = false;
-		//console.log("num case: " + line);
-		//console.log(runon);
-	} else {
-		runon = true;
-		//console.log("runon case: " + line);
-		//console.log(runon);
+		return arr;
 	}
-	return runon;
-}
+	
+	// Check if this line is connected to previous line (-> no new object)
+	function runonCheck(line) {
+		var runon;
+		if ( line.match(/"$/ )) {
+			// closed case: '/key="blahblah"'
+			runon = false;
+		} else if (line.match(/\)$/ )) {
+			// closed case: 'CDS  ..join(<265..402,1088..1215)'
+			runon = false;
+		} else if ( line.charAt(line.length-1).match(/\d/)){
+			// number case: 'CDS 1..3123' OR  '/codon=1'
+			runon = false;
+		} else {
+			runon = true;
+		}
+		return runon;
+	}
 
+} // END OF genbankLineParser()
 
 //=================================
 // INITIALIZING FLAGS AND CONSTANTS
@@ -220,73 +219,74 @@ function runonCheck(line) {
 function makeGenbankFields() {
 	Field = {};
 	Field.field = genbankFieldsSubset();
-	//Field.feat  = genbankFeatures();
+	//Field.allFields  = genbankFields();
 	Field.ref   = genbankReference();
 	return Field;
-}
 
 
-function genbankFields() {
-	var field = new Array();
-	field[0] = "LOCUS";
-	field[1] = "DEFINITION";
-	field[2] = "ACCESSION";
-	field[3] = "VERSION";
-	field[4] = "KEYWORDS";
-	field[5] = "SOURCE";
-	field[6] = "ORGANISM";
-	field[7] = "REFERENCE";
-	field[8] = "AUTHORS";
-	field[9] = "CONSRTM";
-	field[10] = "TITLE";
-	field[11] = "JOURNAL";
-	field[12] = "PUBMED";
-	field[13] = "REMARK";
-	field[14] = "COMMENT";
-	field[15] = "FEATURES";
-	field[16] = "BASE COUNT";     
-	field[17] = "ORIGIN";
-	//field[18] = "//";
-	field[18] = "ORIGIN";
-	field[19] = "SEGMENT";
-	field[20] = "CONTIG";
-	return field;
-}
 
+	function genbankFields() {
+		var field = new Array();
+		field[0] = "LOCUS";
+		field[1] = "DEFINITION";
+		field[2] = "ACCESSION";
+		field[3] = "VERSION";
+		field[4] = "KEYWORDS";
+		field[5] = "SOURCE";
+		field[6] = "ORGANISM";
+		field[7] = "REFERENCE";
+		field[8] = "AUTHORS";
+		field[9] = "CONSRTM";
+		field[10] = "TITLE";
+		field[11] = "JOURNAL";
+		field[12] = "PUBMED";
+		field[13] = "REMARK";
+		field[14] = "COMMENT";
+		field[15] = "FEATURES";
+		field[16] = "BASE COUNT";     
+		field[17] = "ORIGIN";
+		//field[18] = "//";
+		field[18] = "ORIGIN";
+		field[19] = "SEGMENT";
+		field[20] = "CONTIG";
+		return field;
+	}
+	
+	
+	function genbankFieldsSubset() {
+		var field = new Array();
+		//field[0] = "LOCUS";
+		field[0] = "DEFINITION";
+		field[1] = "ACCESSION";
+		field[2] = "VERSION";
+		field[3] = "KEYWORDS";
+		field[4] = "SOURCE";
+		field[5] = "ORGANISM";
+		return field;
+	}
+	
+	function genbankReference() {
+		var field = new Array();
+		field[0] = "AUTHORS";
+		field[1] = "TITLE";
+		field[2] = "JOURNAL";
+		field[3] = "PUBMED";
+		field[4] = "CONSRTM";
+		return field;
+	}
+	
+	function genbankFeatures() {
+		var field = new Array();
+		field[0] = "source";
+		field[1] = "CDS";
+		field[2] = "gene";
+		field[3] = "<";
+		//field[4] = "protein_id";
+	
+		return field;
+	}
 
-function genbankFieldsSubset() {
-	var field = new Array();
-	//field[0] = "LOCUS";
-	field[0] = "DEFINITION";
-	field[1] = "ACCESSION";
-	field[2] = "VERSION";
-	field[3] = "KEYWORDS";
-	field[4] = "SOURCE";
-	field[5] = "ORGANISM";
-	return field;
-}
-
-function genbankReference() {
-	var field = new Array();
-	field[0] = "AUTHORS";
-	field[1] = "TITLE";
-	field[2] = "JOURNAL";
-	field[3] = "PUBMED";
-	field[4] = "CONSRTM";
-	return field;
-}
-
-function genbankFeatures() {
-	var field = new Array();
-	field[0] = "source";
-	field[1] = "CDS";
-	field[2] = "gene";
-	field[3] = "<";
-	//field[4] = "protein_id";
-
-	return field;
-}
-
+} // END OF makeGenbankFields()
 
 function Flags() {
 	//this.needsTail	= false; 
@@ -326,4 +326,4 @@ function Flags() {
 			this.setOrigin();
 		}
 	}
-}
+} // END OF Flags()

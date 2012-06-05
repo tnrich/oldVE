@@ -1,3 +1,5 @@
+// THIS IS NO LONGER USED (with genbankLineParser.js). REPLACED WITH Genbank.js and genbank2JSON.js
+
 
 function genbankTextExtract() {	
 

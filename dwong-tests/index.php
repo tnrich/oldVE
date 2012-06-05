@@ -116,10 +116,11 @@ $(document).ready(function(){
 <br>
 <br>
 
-<!--
+
 <script type="text/javascript" src="../extjs/ext-debug.js"></script>
+
+
 <script type="text/javascript"><?php include('javascript/teselagen.js');?></script>
-!-->
 
 <!--
 <script type="text/javascript"><?php include('javascript/sms_common.js');?></script>
@@ -141,20 +142,13 @@ include('javascript/handleFileSelect.js');?></script>
 include('javascript/loadFile.js');?></script>
 
 
-<script type="text/javascript"><?php include('javascript/Genbank.js');?></script>
+<script type="text/javascript"><?php include('teselagen/Genbank.js');?></script>
 
-<!--
-<script type="text/javascript"><?php
-include('javascript/genbankLineParser.js');?></script>
-
-<script type="text/javascript"><?php
-include('javascript/genbankTextExtract.js');?></script>
-!-->
+<script type="text/javascript"><?php include('teselagen/Vector.js');?></script>
 
 <script type="text/javascript"><?php
 include('javascript/genbank2JSON.js');?></script>
 
-<script type="text/javascript"><?php include('javascript/Vector.js');?></script>
 
 
 
