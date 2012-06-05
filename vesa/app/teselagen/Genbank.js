@@ -8,8 +8,6 @@ Ext.define('Teselagen.Genbank', {
     constructor: function (genText) {
 	
 	// Make this.BLAH in lineParser() --> only make public objects as needed
-	//this.LOCUS = "test";
-	//this["REFERENCE"] = "blah";
 	
 	var that = this; // stupid thing to make this available to private functions
 	
@@ -350,9 +348,60 @@ Ext.define('Teselagen.Genbank', {
 		return JSON.stringify(this, null, '  ');
 	}	
 	
+ 	this.getLocus = function () {
+ 		return this.LOCUS;
+ 	}
+ 
+ 	this.getReference = function () {
+ 		return this.REFERENCE;
+ 	}
+ 	
+ 	this.getFeatures = function () {
+ 		return this.FEATURES;
+ 	}
 	
 	this.getOrigin = function () {
 		return this.ORIGIN;
+	}
+
+	// THIS FUNCTION IS INCOMPLETE.
+	// SHOULD MARCH THROUGH THE MYGENFILE OBJECT BUT THIS IS
+	// HARDCODED FOR NOW.
+	this.toGenbank = function () {
+		var genText, line;
+		
+		genText = "LOCUS       " + this.LOCUS.name + "\t";
+		genText = genText + this.LOCUS.seqlen + " bp\t";
+		genText = genText + this.LOCUS.moltype + "\t";
+		genText = genText + this.LOCUS.gendiv + "\t";
+		genText = genText + this.LOCUS.date + "\n";
+		
+		genText = genText + "ACCESSION   " + this.ACCESSION +"\n";
+		genText = genText + "VERSION     " + this.VERSION +"\n";
+		genText = genText + "DEFINITION  " + this.DEFINITION +"\n";
+		genText = genText + "KEYWORDS    " + this.KEYWORDS +"\n";
+		//REFERENCES:
+		
+		
+		genText = genText + "REFERENCE    \n";
+		//for each REFERENCE
+		
+		//FEATURES:
+		genText = genText + "FEATURES             Location/Qualifiers\n";
+		
+		//ORIGIN:
+		genText = genText + "ORIGIN\n";
+		for (var i=0 ; i < this.ORIGIN.length; i=i+60) {
+			var ind = i+1;
+			line = "\t" + ind;
+			for (var j=i; j < i+60; j=j+10) {
+				line = line + " " + this.ORIGIN.substring(j,j+10);
+			}
+			genText = genText + line + "\n";
+		}
+		
+		genText = genText + "//\n"
+		return genText;		
 	}
 
 	return this;
