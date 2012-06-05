@@ -7,9 +7,6 @@
 function Genbank(genText) {
 	
 	// Make this.BLAH in lineParser() --> only make public objects as needed
-	//this.LOCUS = "test";
-	//this["REFERENCE"] = "blah";
-	
 	
 	// Constructor
 	var that = this; // stupid thing to make this available to private functions
@@ -386,7 +383,7 @@ function Genbank(genText) {
 		//REFERENCES:
 		
 		
-		genText = genText + "REFERNCE    \n";
+		genText = genText + "REFERENCE    \n";
 		//for each REFERENCE
 		
 		//FEATURES:
