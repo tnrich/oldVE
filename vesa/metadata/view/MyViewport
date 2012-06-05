@@ -148,7 +148,7 @@
                                         "designer|userClassName": "MyMenu"
                                     },
                                     "customConfigs": [],
-                                    "expanded": true,
+                                    "expanded": false,
                                     "cn": [
                                         {
                                             "id": "ExtBox1-ext-gen10303",
@@ -159,6 +159,7 @@
                                             },
                                             "codeClass": null,
                                             "userConfig": {
+                                                "id": "importMi",
                                                 "plain": false,
                                                 "text": "Import from File",
                                                 "designer|userClassName": "MyMenuItem"
@@ -223,7 +224,7 @@
                                                 "designer|userClassName": "MyMenuItem3"
                                             },
                                             "customConfigs": [],
-                                            "expanded": true,
+                                            "expanded": false,
                                             "cn": [
                                                 {
                                                     "id": "ExtBox1-ext-gen13052",
@@ -239,7 +240,7 @@
                                                         "designer|userClassName": "MyMenu1"
                                                     },
                                                     "customConfigs": [],
-                                                    "expanded": true,
+                                                    "expanded": false,
                                                     "cn": [
                                                         {
                                                             "id": "ExtBox1-ext-gen13060",
@@ -1406,7 +1407,7 @@
                 "layout|region": "south"
             },
             "customConfigs": [],
-            "expanded": true,
+            "expanded": false,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen49366",
