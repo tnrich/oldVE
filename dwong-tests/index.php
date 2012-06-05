@@ -109,12 +109,12 @@ $(document).ready(function(){
 <dt><a href="/"> DW's Genbank File Extraction 2 JSON </a></dt>
 <dd><?php include('html/genbankFileExtract.html');?></dd>
 
-<p>
-<p>
-<p>
-<p>
-<p>
-<p>
+<dt><a href="/"> DW's Sequence Properties</a></dt>
+<dd><?php include('html/seqProp.html');?></dd>
+
+<br>
+<br>
+<br>
 
 <!--
 <script type="text/javascript" src="../extjs/ext-debug.js"></script>
@@ -143,18 +143,18 @@ include('javascript/loadFile.js');?></script>
 
 <script type="text/javascript"><?php include('javascript/Genbank.js');?></script>
 
+<!--
 <script type="text/javascript"><?php
 include('javascript/genbankLineParser.js');?></script>
-<!--
+
 <script type="text/javascript"><?php
 include('javascript/genbankTextExtract.js');?></script>
 !-->
+
 <script type="text/javascript"><?php
 include('javascript/genbank2JSON.js');?></script>
 
-
-
-
+<script type="text/javascript"><?php include('javascript/Vector.js');?></script>
 
 
 

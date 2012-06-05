@@ -1,0 +1,31 @@
+<form action="seqProp" name="seqProp" id="seqProp"> 
+<b>Show Sequence Properties of Genbank file/class.</b>
+
+<br>
+<input type="file" id="fileinput">
+
+<input type="button" id="btnLoad" value="Load" 
+onclick=" try{
+	genText2 = '';
+	loadFile( genText2);
+	console.log(genText2);
+	MyGenbank = genbank2JSON(genText2);
+	document.seqProp.otxt2.value = MyGenbank.toString();
+} 
+catch(e) {alert('Cannot load Genbank file. The following error was encountered: ' + e);}" />
+
+<input type="reset" value="Reset" />
+
+
+<br>
+
+<font face="Courier New">
+<textarea name="otxt2" rows="5" cols="100">genbank2JSON.js Ouput</textarea></font>
+
+
+
+
+<br>
+<br>
+<br>
+</form>

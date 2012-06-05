@@ -10,24 +10,66 @@ function Vector(myGenbank) {
 	var that = this;
 	var thisGenbank = myGenbank;
 	
+	var myComp= new Complement();
+	this.tmp = "YAY!";
+	
 	
 	//Vector.prototype = VeDe;
-	
-	
 
-	this.findORF = function() {
+	
+	// -----------------------------------------------------
+	// PRIVELEGED METHODS/FUNCTIONS --- ACCESSIBLE BY PUBLIC
+	// -----------------------------------------------------
+	
+	this.getFeatures = function () {
+		return null;
 		
 	}
-	this.forwardTranslation = function() {
+
+	this.findORF = function () {
+		return null;
 		
 	}
-	this.backTranslator = function() {
+	this.forwardTranslation = function () {
+		return null;
 		
 	}
-	this.reverseComplement = function() {
+	this.backTranslator = function () {
+		return null;
 		
 	}
-	this.getRestrictionEnzymeCuts = function() {
+	this.getReverseComplement = function () {
+		var seq = thisGenbank.getOrigin();
+		//var len = seq.length;
+		var revcomp = "";
 		
+		for (var i=0; i<seq.length; i++) {
+			revcomp = revcomp + myComp.getNA(seq.charAt(i));
+		}
+		return revcomp;
 	}
+	
+	// Given restriction sites, return an array of where all the cuts occur.
+	this.getCutSites = function () {
+		return null;
+	}
+	
+	
+	//=================================
+	// INTERNAL DATA STRUCTURES
+	//=================================
+	
+	function Complement() {
+		this.A = T;
+		this.T = A;
+		this.C = G;
+		this.G = C;
+		
+		this.getNA = function (nucAcid) {
+			return this[nucAcid];
+			return null;
+		}
+	}
+	
+	
 }

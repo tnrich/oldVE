@@ -367,12 +367,14 @@ function Genbank(genText) {
 		return this.ORIGIN;
 	}
 	
-	
+	// THIS FUNCTION IS INCOMPLETE.
+	// SHOULD MARCH THROUGH THE MYGENFILE OBJECT BUT THIS IS
+	// HARDCODED FOR NOW.
 	this.toGenbank = function () {
 		var genText, line;
 		
 		genText = "LOCUS       " + this.LOCUS.name + "\t";
-		genText = genText + this.LOCUS.seqlen + " bp ";
+		genText = genText + this.LOCUS.seqlen + " bp\t";
 		genText = genText + this.LOCUS.moltype + "\t";
 		genText = genText + this.LOCUS.gendiv + "\t";
 		genText = genText + this.LOCUS.date + "\n";
@@ -383,21 +385,26 @@ function Genbank(genText) {
 		genText = genText + "KEYWORDS    " + this.KEYWORDS +"\n";
 		//REFERENCES:
 		
+		
+		genText = genText + "REFERNCE    \n";
+		//for each REFERENCE
+		
 		//FEATURES:
 		genText = genText + "FEATURES             Location/Qualifiers\n";
 		
-		genText = genText + "ORIGIN\n" + this.ORIGIN.length;
-		
-		
-		for (var i=0 ; i < this.ORIGIN.length; i++) {
+		//ORIGIN:
+		genText = genText + "ORIGIN\n";
+		for (var i=0 ; i < this.ORIGIN.length; i=i+60) {
 			var ind = i+1;
-			//line = 
+			line = "\t" + ind;
+			for (var j=i; j < i+60; j=j+10) {
+				line = line + " " + this.ORIGIN.substring(j,j+10);
+			}
+			genText = genText + line + "\n";
 		}
 		
-		
-		return genText;
-		
-		
+		genText = genText + "//\n"
+		return genText;		
 	}
 
 }
