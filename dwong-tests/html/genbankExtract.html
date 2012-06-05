@@ -261,36 +261,15 @@ ORIGIN
 -->
 <br />
 
-<!--
-<input type="button" value="Submit" name="main_submit"
-                    onclick="try{genbankExtract()} catch(e)
-                    {alert('The following error was encountered: ' + e);}" /> 
-<input type="button" value="Clear" onclick="document.gentest.elements[0].value = ' '" /> 
-<input type="reset" value="Reset" />
-
-
-<br/>
-
-<textarea name="otxt" rows="10" cols="80">output JSON</textarea>
-
-!-->
-
 <br>
 
 <!-- FOR GENBANK TEXT !-->
 
-<!-- This uses old version of genbank2JSON converving script
 <input type="button" value="Submit" name="main_submit"
 onclick="try{ 
-document.gentest.otxt1.value=genbankTextExtract()} 
-catch(e) {alert('The following error was encountered: ' + e);}" /> 
-!-->
-
-<input type="button" value="Submit" name="main_submit"
-onclick="try{ 
-	document.gentest.otxt1.value = (genbank2JSON(document.getElementById('genbankText').value).toString());
-	
-	
+	var gb = Ext.create('Teselagen.Genbank', document.getElementById('genbankText').value);
+	//var gb = Ext.create('Teselagen.Genbank', document.gentest.genbankText.value);
+	document.gentest.otxt1.value = gb.toString();
 } 
 catch(e) {alert('The following error was encountered: ' + e);}" /> 
 
