@@ -27,6 +27,22 @@
                 "app/view/Viewport.js"
             ],
             "className": "MyViewport"
+        },
+        "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0": {
+            "paths": [
+                "metadata/controller/MyController",
+                "app/controller/override/MyController.js",
+                "app/controller/MyController.js"
+            ],
+            "className": "MyController"
+        },
+        "36796554-cdfd-4b2b-bfce-3a09263e3130": {
+            "paths": [
+                "metadata/view/FileImportWindow",
+                "app/view/override/FileImportWindow.js",
+                "app/view/FileImportWindow.js"
+            ],
+            "className": "FileImportWindow"
         }
     },
     "expandedState": {

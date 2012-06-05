@@ -14,13 +14,21 @@
  */
 
 Ext.Loader.setConfig({
-    enabled: true
+    enabled: true,
+    paths: {
+        Ext: '.',
+        Teselagen: './app/teselagen'
+    }
 });
 
 Ext.application({
     views: [
-        'MyViewport'
+        'MyViewport',
+        'FileImportWindow'
     ],
     autoCreateViewport: true,
-    name: 'MyApp'
+    name: 'MyApp',
+    controllers: [
+        'MyController'
+    ]
 });

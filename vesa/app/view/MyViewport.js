@@ -80,6 +80,7 @@ Ext.define('MyApp.view.MyViewport', {
                                         items: [
                                             {
                                                 xtype: 'menuitem',
+                                                id: 'importMi',
                                                 plain: false,
                                                 text: 'Import from File'
                                             },
