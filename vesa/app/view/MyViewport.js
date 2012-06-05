@@ -323,119 +323,119 @@ Ext.define('MyApp.view.MyViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'exportBtn',
-                                    icon: 'icons/export.png',
+                                    icon: 'resources/images/export.png',
                                     scale: 'medium',
                                     tooltip: 'Save to Registry'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'saveBtn',
-                                    icon: 'icons/save.png',
+                                    icon: 'resources/images/save.png',
                                     scale: 'medium',
                                     tooltip: 'Save Project'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'projectPropsBtn',
-                                    icon: 'icons/project_properties.png',
+                                    icon: 'resources/images/project_properties.png',
                                     scale: 'medium',
                                     tooltip: 'Project Properties'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'circularViewBtn',
-                                    icon: 'icons/pie.png',
+                                    icon: 'resources/images/pie.png',
                                     scale: 'medium',
                                     tooltip: 'Circular View'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'linearViewBtn',
-                                    icon: 'icons/rail.png',
+                                    icon: 'resources/images/rail.png',
                                     scale: 'medium',
                                     tooltip: 'Linear View'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'copyBtn',
-                                    icon: 'icons/copy.png',
+                                    icon: 'resources/images/copy.png',
                                     scale: 'medium',
                                     tooltip: 'Copy'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'cutBtn',
-                                    icon: 'icons/cut.png',
+                                    icon: 'resources/images/cut.png',
                                     scale: 'medium',
                                     tooltip: 'Cut'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'pasteBtn',
-                                    icon: 'icons/paste.png',
+                                    icon: 'resources/images/paste.png',
                                     scale: 'medium',
                                     tooltip: 'Paste'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'undoBtn',
-                                    icon: 'icons/undo.png',
+                                    icon: 'resources/images/undo.png',
                                     scale: 'medium',
                                     tooltip: 'Undo'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'redoBtn',
-                                    icon: 'icons/redo.png',
+                                    icon: 'resources/images/redo.png',
                                     scale: 'medium',
                                     tooltip: 'Redo'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'safeBtn',
-                                    icon: 'icons/safe_editing.png',
+                                    icon: 'resources/images/safe_editing.png',
                                     scale: 'medium',
                                     tooltip: 'Safe Editing'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'findBtn',
-                                    icon: 'icons/find.png',
+                                    icon: 'resources/images/find.png',
                                     scale: 'medium',
                                     tooltip: 'Find...'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'featuresBtn',
-                                    icon: 'icons/features.png',
+                                    icon: 'resources/images/features.png',
                                     scale: 'medium',
                                     tooltip: 'Show Features'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'cutsitesBtn',
-                                    icon: 'icons/cut_sites.png',
+                                    icon: 'resources/images/cut_sites.png',
                                     scale: 'medium',
                                     tooltip: 'Show Cut Sites'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'orfBtn',
-                                    icon: 'icons/orf.png',
+                                    icon: 'resources/images/orf.png',
                                     scale: 'medium',
                                     tooltip: 'Show ORF'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'reBtn',
-                                    icon: 'icons/restriction_enzymes.png',
+                                    icon: 'resources/images/restriction_enzymes.png',
                                     scale: 'medium',
                                     tooltip: 'Show Restriction Enzymes'
                                 },
                                 {
                                     xtype: 'button',
                                     id: 'propsBtn',
-                                    icon: 'icons/properties.png',
+                                    icon: 'resources/images/properties.png',
                                     scale: 'medium',
                                     tooltip: 'Properties'
                                 }

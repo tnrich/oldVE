@@ -90,7 +90,7 @@
                 "layout|region": "north"
             },
             "customConfigs": [],
-            "expanded": false,
+            "expanded": true,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen5762",
@@ -1044,7 +1044,7 @@
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen25950",
@@ -1056,7 +1056,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "exportBtn",
-                                "icon": "icons/export.png",
+                                "icon": "resources/images/export.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Save to Registry",
@@ -1076,7 +1076,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "saveBtn",
-                                "icon": "icons/save.png",
+                                "icon": "resources/images/save.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Save Project",
@@ -1096,7 +1096,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "projectPropsBtn",
-                                "icon": "icons/project_properties.png",
+                                "icon": "resources/images/project_properties.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Project Properties",
@@ -1116,7 +1116,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "circularViewBtn",
-                                "icon": "icons/pie.png",
+                                "icon": "resources/images/pie.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Circular View",
@@ -1136,7 +1136,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "linearViewBtn",
-                                "icon": "icons/rail.png",
+                                "icon": "resources/images/rail.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Linear View",
@@ -1156,7 +1156,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "copyBtn",
-                                "icon": "icons/copy.png",
+                                "icon": "resources/images/copy.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Copy",
@@ -1176,7 +1176,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "cutBtn",
-                                "icon": "icons/cut.png",
+                                "icon": "resources/images/cut.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Cut",
@@ -1196,7 +1196,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "pasteBtn",
-                                "icon": "icons/paste.png",
+                                "icon": "resources/images/paste.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Paste",
@@ -1216,7 +1216,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "undoBtn",
-                                "icon": "icons/undo.png",
+                                "icon": "resources/images/undo.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Undo",
@@ -1236,7 +1236,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "redoBtn",
-                                "icon": "icons/redo.png",
+                                "icon": "resources/images/redo.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Redo",
@@ -1256,7 +1256,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "safeBtn",
-                                "icon": "icons/safe_editing.png",
+                                "icon": "resources/images/safe_editing.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Safe Editing",
@@ -1276,7 +1276,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "findBtn",
-                                "icon": "icons/find.png",
+                                "icon": "resources/images/find.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Find...",
@@ -1296,7 +1296,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "featuresBtn",
-                                "icon": "icons/features.png",
+                                "icon": "resources/images/features.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Show Features",
@@ -1316,7 +1316,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "cutsitesBtn",
-                                "icon": "icons/cut_sites.png",
+                                "icon": "resources/images/cut_sites.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Show Cut Sites",
@@ -1336,7 +1336,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "orfBtn",
-                                "icon": "icons/orf.png",
+                                "icon": "resources/images/orf.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Show ORF",
@@ -1356,7 +1356,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "reBtn",
-                                "icon": "icons/restriction_enzymes.png",
+                                "icon": "resources/images/restriction_enzymes.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Show Restriction Enzymes",
@@ -1376,7 +1376,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "propsBtn",
-                                "icon": "icons/properties.png",
+                                "icon": "resources/images/properties.png",
                                 "scale": "medium",
                                 "text": null,
                                 "tooltip": "Properties",
