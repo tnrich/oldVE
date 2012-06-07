@@ -366,41 +366,71 @@ Ext.define('Teselagen.Genbank', {
 
 	// THIS FUNCTION IS INCOMPLETE.
 	// SHOULD MARCH THROUGH THE MYGENFILE OBJECT BUT THIS IS
-	// HARDCODED FOR NOW.
+	// HARDCODED FOR NOW
 	this.toGenbank = function () {
-		var genText, line;
+		var genText = "";
+		var line;
 		
-		genText = "LOCUS       " + this.LOCUS.name + "\t";
-		genText = genText + this.LOCUS.seqlen + " bp\t";
-		genText = genText + this.LOCUS.moltype + "\t";
-		genText = genText + this.LOCUS.gendiv + "\t";
-		genText = genText + this.LOCUS.date + "\n";
-		
-		genText = genText + "ACCESSION   " + this.ACCESSION +"\n";
-		genText = genText + "VERSION     " + this.VERSION +"\n";
-		genText = genText + "DEFINITION  " + this.DEFINITION +"\n";
-		genText = genText + "KEYWORDS    " + this.KEYWORDS +"\n";
-		//REFERENCES:
-		
-		
-		genText = genText + "REFERENCE    \n";
-		//for each REFERENCE
-		
-		//FEATURES:
-		genText = genText + "FEATURES             Location/Qualifiers\n";
-		
-		//ORIGIN:
-		genText = genText + "ORIGIN\n";
-		for (var i=0 ; i < this.ORIGIN.length; i=i+60) {
-			var ind = i+1;
-			line = "\t" + ind;
-			for (var j=i; j < i+60; j=j+10) {
-				line = line + " " + this.ORIGIN.substring(j,j+10);
-			}
-			genText = genText + line + "\n";
+		var jsonData = this;
+		console.log(jsonData);
+		console.log(jsonData.LOCUS);
+		//Loop over all genbankFields
+		for (var key in jsonData) {
+				console.log(key);
+				genText += key + "\t\t";
+				switch (key){
+					
+					case "LOCUS":
+					case "DEFINITION":
+					case "ACCESSION":
+					case "VERSION":
+					case "KEYWORDS":
+					case "SOURCE":
+					case "REFERENCE":
+					case "FEATURES":
+						
+						console.log(iterateOverElements(jsonData[key]));
+						genText += iterateOverElements(jsonData[key]);
+						genText += "\n";
+						break;
+					case "ORIGIN":
+						//Reused code from dwong's original implementation.
+						for (var i=0 ; i < this.ORIGIN.length; i=i+60) {
+							var ind = i+1;
+							line = "\t\t" + ind;
+
+							for (var j=i; j < i+60; j=j+10) {
+								line = line + " " + this.ORIGIN.substring(j,j+10);
+							}
+
+							genText = "\t" + genText + line + "\n";
+				
+						}
+						break;
+					default:
+						genText += "";
+						
+				}
 		}
-		
-		genText = genText + "//\n"
+		//A function that iterates over the elements in a JSON Object
+		function iterateOverElements(Object){
+			var objectContents = "";
+			if (typeof(Object) === 'string') { 
+				objectContents = Object;
+			}
+			else{
+				for (var key in Object){
+					//console.log("Inside: " + Object[key]);
+					if (typeof(Object[key]) === 'object') {
+						objectContents += iterateOverElements(Object[key]) + "\n";
+					}
+					else{
+						objectContents += Object[key] + "\t";
+					}
+				}
+			}
+			return objectContents;
+		}
 		return genText;		
 	}
 
