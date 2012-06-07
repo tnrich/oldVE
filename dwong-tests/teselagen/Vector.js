@@ -1,14 +1,15 @@
 
 // Vector object
-// input: Genbank object
+// input: Genbank Class
 // output:
 
-function Vector(myGenbank) {
+Ext.define('Teselagen.Vector', {
+    constructor: function (genbank) {
 	
-	
-	//Constructor
 	var that = this;
-	var thisGenbank = myGenbank;
+	var thisGenbank = genbank;
+	
+	console.log(thisGenbank.getOrigin());
 	
 	var myComp= new Complement();
 	this.tmp = "YAY!";
@@ -40,12 +41,13 @@ function Vector(myGenbank) {
 	}
 	this.getReverseComplement = function () {
 		var seq = thisGenbank.getOrigin();
+		console.log(seq);
 		//var len = seq.length;
 		var revcomp = "";
 		
-		for (var i=0; i<seq.length; i++) {
-			revcomp = revcomp + myComp.getNA(seq.charAt(i));
-		}
+		//for (var i=0; i<seq.length; i++) {
+		//	revcomp = revcomp + myComp.getNA(seq.charAt(i));
+		//}
 		return revcomp;
 	}
 	
@@ -60,16 +62,18 @@ function Vector(myGenbank) {
 	//=================================
 	
 	function Complement() {
-		this.A = T;
-		this.T = A;
-		this.C = G;
-		this.G = C;
+		this.A = "T";
+		this.T = "A";
+		this.C = "G";
+		this.G = "C";
 		
 		this.getNA = function (nucAcid) {
-			return this[nucAcid];
+			//return this[nucAcid];
 			return null;
-		}
+		};
 	}
 	
-	
-}
+	return this;
+    }
+
+});

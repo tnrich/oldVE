@@ -1,8 +1,8 @@
 
-// Genbank object
+// Genbank Class
 // input: string of text of the genbank file
 // ouput: Genbank Object
-// http://javascript.crockford.com/private.html
+// Look at http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html for sample GenBank file with formating.
 
 Ext.define('Teselagen.Genbank', {
     constructor: function (genText) {

@@ -1,21 +1,22 @@
-function loadFile(element) {
+function loadFile(inElm, outElm) {
 	var input, file, fr;
 	if (typeof window.FileReader !== 'function') {
-		element.value = "The file API isn't supported on this browser yet.";
+		outElm.value = "The file API isn't supported on this browser yet.";
 		//bodyAppend("p", "The file API isn't supported on this browser yet.");
 		return;
 	}
-	input = document.getElementById('fileinput');
+	//input = document.getElementById('fileinput');
+	input = inElm;
 	if (!input) {
-		element.value = "Um, couldn't find the fileinput element.";
+		outElm.value = "Um, couldn't find the fileinput element.";
 		//bodyAppend("p", "Um, couldn't find the fileinput element.");
 	}
 	else if (!input.files) {
-		element.value = "This browser doesn't seem to support the `files` property of file inputs.";
+		outElm.value = "This browser doesn't seem to support the `files` property of file inputs.";
 		//bodyAppend("p", "This browser doesn't seem to support the `files` property of file inputs.");
 	}
 	else if (!input.files[0]) {
-		element.value = "Please select a file before clicking 'Load'";
+		outElm.value = "Please select a file before clicking 'Load'";
 		//bodyAppend("p", "Please select a file before clicking 'Load'");
 	}
 	else {
@@ -30,9 +31,9 @@ function loadFile(element) {
 		var markup, result, n, aByte, byteStr;
 		markup = [];
 		result = fr.result;
-		element.value = result;
+		outElm.value = result;
 		
-		//console.log(element.value);
+		//console.log(outElm.value);
 		for (n=0; n<result.length; ++n) {
 			aByte = result.charCodeAt(n);
 			byteStr = aByte.toString(16);

@@ -7,14 +7,25 @@
 
 <br>
 
-<input type='file' id='fileinput'>
-<input type='button' id='btnLoad' value='Load' onclick='loadFile( document.seqProp.otxt1);'>
 
+<input type='file' id='fileinput_seqProp'>
+<input type="button" id="btnLoad_seqProp" value="Load" onclick=" 
+try{
+	loadFile( document.seqProp.fileinput_seqProp, document.seqProp.otxt1);
+	gb   = Ext.create('Teselagen.Genbank', document.seqProp.otxt1.value);
+	vec2 = Ext.create('Teselagen.Vector', gb);
+	document.seqProp.otxt2.value = vec2.getReverseComplement();
+	
+} catch(e) {
+	alert('The following error was encountered: ' + e);
+}" /> 
 
 <br>
 
 <font face="Courier New">
-<textarea name="otxt1" rows="5" cols="100">Load File Output</textarea></font>
+<textarea name="otxt1" rows="5" cols="100">Load File Preview</textarea></font>
+
+
 
 <br>
 

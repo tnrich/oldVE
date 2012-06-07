@@ -112,6 +112,9 @@ $(document).ready(function(){
 <dt><a href="/"> DW's Sequence Properties</a></dt>
 <dd><?php include('html/seqProp.html');?></dd>
 
+
+
+
 <br>
 <br>
 <br>
@@ -131,23 +134,25 @@ $(document).ready(function(){
 <!--
 <script type="text/javascript"><?php include('javascript/genbankFeat.js');?></script>
 !-->
-<script type="text/javascript"><?php
-include('javascript/handleFileSelect.js');?></script>
+<script type="text/javascript"><?php include('javascript/handleFileSelect.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleFileToDragSelect.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleDragOver.js');?></script>
 <script type="text/javascript"><?php include('javascript/handleReadFileObject.js');?></script>
 
 
-<script type="text/javascript"><?php
-include('javascript/loadFile.js');?></script>
+<script type="text/javascript"><?php include('javascript/loadFile.js');?></script>
 
 
 <script type="text/javascript"><?php include('teselagen/Genbank.js');?></script>
 
 <script type="text/javascript"><?php include('teselagen/Vector.js');?></script>
 
-<script type="text/javascript"><?php
-include('javascript/genbank2JSON.js');?></script>
+<script type="text/javascript"><?php include('teselagen/RestrictionCutSite.js');?></script>
+
+<script type="text/javascript"><?php include('teselagen/ORF.js');?></script>
+
+
+<script type="text/javascript"><?php include('javascript/genbank2JSON.js');?></script>
 
 
 
