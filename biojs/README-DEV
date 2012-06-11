@@ -2,6 +2,8 @@
 Follow jsdoc guidelines for documenting:
 http://code.google.com/p/jsdoc-toolkit/
 
-Use jasmine unit tester.
+Use jasmine unit tester:
 http://pivotal.github.com/jasmine/
 
+Go here for how the biojs/testing directories are set up:
+http://docs.sencha.com/ext-js/4-0/#!/guide/testing

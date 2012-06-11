@@ -9,7 +9,7 @@ Ext.define('Teselagen.Genbank', {
 	
 	// Make this.BLAH in lineParser() --> only make public objects as needed
 	
-	var that = this; // stupid thing to make this available to private functions
+	var that = this; // make this available to private functions
 	
 	var lastObj;
 	var lastKey;

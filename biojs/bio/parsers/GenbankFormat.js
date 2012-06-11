@@ -1,20 +1,21 @@
 
     /**
     * GenbankFormat class 
-    * @description 
+    * @description Main class. Takes in file input and creates the GenbankFileModel class.
     * @author DWong
     */
 
 Ext.define('Teselagen.biojs.bio.parsers.GenbankFormat', {
-	/* */
+	/** @lends Teselagen. */
     
+	/* public statics */
 	statics: {
         LOCUS_TAG: "LOCUS",
         DEFINITION_TAG: "DEFINITION",
         ACCESSION_TAG: "ACCESSION",
         VERSION_TAG: "VERSION",
         KEYWORDS_TAG: "KEYWORDS",
-        //SEGMENT:"SEGMENT"
+        //SEGMENT_TAG:"SEGMENT"
         SOURCE_TAG: "SOURCE",
         ORGANISM_TAG: "ORGANISM",
         REFERENCE_TAG: "REFERENCE",
@@ -39,8 +40,10 @@ Ext.define('Teselagen.biojs.bio.parsers.GenbankFormat', {
 	constructor: function (blah) {
 		this.pubname = blah;
     
-    
 		return this;
     }
+	
+	
+	
 
 });
