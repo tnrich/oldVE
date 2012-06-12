@@ -5,16 +5,6 @@
  */
 
 Ext.onReady(function() {
-
-	
-	Ext.Loader.setConfig({
-	    enabled: true,
-	    paths: {
-	        Ext: '../../extjs',
-	        Teselagen: '../src/teselagen'
-	    }
-	});
-
 	/*
 	Ext.application({
 	    views: [
