@@ -1,6 +1,7 @@
 
 /*
  * @description This function excecutes the jasmine unit testing. Recycle as needed.
+ * @author Diana Wong
  */
 
 Ext.onReady(function() {
@@ -9,7 +10,7 @@ Ext.onReady(function() {
 	Ext.Loader.setConfig({
 	    enabled: true,
 	    paths: {
-	        Ext: '.',
+	        Ext: '../../extjs',
 	        Teselagen: '../src/teselagen'
 	    }
 	});
