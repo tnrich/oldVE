@@ -2,10 +2,11 @@
     /**
     * GenbankFormat class 
     * @description Main class. Takes in file input and creates the GenbankFileModel class.
-    * @author DWong
+    * @author Diana Wong
+    * @author Timothy Ham (original author)
     */
 
-Ext.define('Teselagen.biojs.bio.parsers.GenbankFormat', {
+Ext.define('Teselagen.bio.parsers.GenbankFormat', {
 	/** @lends Teselagen. */
     
 	/* public statics */

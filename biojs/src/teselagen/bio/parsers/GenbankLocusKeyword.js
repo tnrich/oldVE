@@ -2,12 +2,13 @@
     /**
     * GenbankLocusKeyword class 
     * @description 
-    * @author DWong
+    * @author Diana Wong
+    * @author Timothy Ham (original author)
     */
 
-Ext.define('Teselagen.biojs.bio.parsers.GenbankLocusKeyword', {
+Ext.define('Teselagen.bio.parsers.GenbankLocusKeyword', {
 	/* */
-	extend: 'Teselagen.biojs.bio.parsers.GenbankKeyword',
+	extend: 'Teselagen.bio.parsers.GenbankKeyword',
     
 	/* 
 	 * @constructor
@@ -24,7 +25,7 @@ Ext.define('Teselagen.biojs.bio.parsers.GenbankLocusKeyword', {
 		
 		
 		
-		this.pubname = "locus";
+		//this.pubname = "locus";
 		return this;
     }
 

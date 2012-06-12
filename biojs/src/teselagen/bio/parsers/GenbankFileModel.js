@@ -2,10 +2,11 @@
     /**
     * GenbankFileModel class
     * @description This class sets up an empty shell object with Genbank information that is later populated by GenbankFormat.js
-    * @author DWong
+    * @author Diana Wong
+    * @author Timothy Ham (original author)
     */
 
-Ext.define('Teselagen.biojs.bio.parsers.GenbankFileModel', {
+Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 	/* */
 	
 	
@@ -35,45 +36,45 @@ Ext.define('Teselagen.biojs.bio.parsers.GenbankFileModel', {
 		//var locus;
 		//var origin;
 		//var features;
-		var myAccession;
-		var myVersion;
-		var myKeywordsTag;
-		var myKeywords;
+		var accession;
+		var version;
+		var keywordsTag;
+		var keywords;
 		
-		locus	= Ext.create('Teselagen.biojs.bio.parsers.GenbankLocusKeyword');
-		origin	= Ext.create('Teselagen.biojs.bio.parsers.GenbankOriginKeyword');
-		features= Ext.create('Teselagen.biojs.bio.parsers.GenbankFeatureKeyword');
-		//keywords= Ext.create('Teselagen.biojs.bio.parsers.Genbank');
+		locus	= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
+		origin	= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
+		features= Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword');
+		//keywords= Ext.create('Teselagen.bio.parsers.Genbank');
 		
 		
 		// ======== Getter and Setter function ========//
 		//THESE DO NOT CHECK FOR NULL VALUES
 		this.getAccession = function() {
-			return this.myAccession;
+			return this.accession;
 		}
-		this.setAccession = function(accession) {
-			this.myAccession = accession;
+		this.setAccession = function(pAccession) {
+			this.accession = pAccession;
 		}
 		
 		this.getVersion = function() {
-			return this.myVersion;
+			return this.version;
 		}
-		this.set = function(version) {
-			this.myVersion = version;
+		this.set = function(pVersion) {
+			this.version = pVersion;
 		}
 
 		this.getKeywordsTag = function() {
-			return this.myKeywordsTag;
+			return this.keywordsTag;
 		}
-		this.setKeywordsTag = function(keywordsTag) {
-			this.myKeywordsTag = keywordsTag;
+		this.setKeywordsTag = function(pKeywordsTag) {
+			this.keywordsTag = pKeywordsTag;
 		}
 		
 		/*this.get = function() {
-			return this.my;
+			return this.;
 		}
 		this.set = function() {
-			this.my = ;
+			this. = ;
 		}*/
 		
 		
