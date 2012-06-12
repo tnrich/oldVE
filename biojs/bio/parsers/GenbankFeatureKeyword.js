@@ -7,7 +7,7 @@
 
 Ext.define('Teselagen.biojs.bio.parsers.GenbankFeatureKeyword', {
 	/* */
-    
+	extend: 'Teselagen.biojs.bio.parsers.GenbankKeyword',
 	/* 
 	 * @constructor
 	 * @param */

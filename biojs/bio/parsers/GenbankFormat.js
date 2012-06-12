@@ -39,6 +39,10 @@ Ext.define('Teselagen.biojs.bio.parsers.GenbankFormat', {
 	
 	constructor: function (blah) {
 		this.pubname = blah;
+		
+		var gbFileModel = Ext.create('Teselagen.biojs.bio.parsers.GenbankFileModel');
+		
+		
     
 		return this;
     }
