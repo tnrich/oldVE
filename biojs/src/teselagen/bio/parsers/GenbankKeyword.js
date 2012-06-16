@@ -21,24 +21,24 @@ Ext.define('Teselagen.bio.parsers.GenbankKeyword', {
 		
 		
 		this.getKeyword = function() {
-			return this.keyword;
+			return keyword;
 		}
 		this.setKeyword = function(pKeyword) {
-			this.keyword = pKeyword;
+			keyword = pKeyword;
 		}
 		
 		this.getValue = function() {
-			return this.value;
+			return value;
 		}
 		this.setValue = function(pValue) {
-			this.value = pValue;
+			value = pValue;
 		}
 		
 		this.getSubKeywords = function() {
-			return this.subKeywords;
+			return subKeywords;
 		}
 		this.setSubKeywords = function(pSubKeywords) {
-			this.subKeywords = pSubKeywords;
+			subKeywords = pSubKeywords;
 		}
 		
 		return this;
