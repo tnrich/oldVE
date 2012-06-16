@@ -12,10 +12,10 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 	
 	config: {
 		// THESE SHOULD BE PRIVATE BUT THE AUTO CONFIG STUFF MAKES IT EASY...
-		locus: null,
-		origin: null,
-		features: null,
-		keywords: null
+		/*locus: Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword'),
+		origin: Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword'),
+		features: Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword'),
+		keywords: null*/
 		//var accession;
 		//var version;
 		//var keywordsTag;
@@ -28,53 +28,84 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 			//myGenbankFileModel.setLocus("new locus")
 		
 	},
+	/*
+	applyLocus: function(locus) {
+        if (!Ext.isString(locus) || locus.length === 0) {
+            alert('Error: LOCUS must be a valid non-empty string');
+        }
+        else {
+            return locus;
+        }
+    },*/
     
 	/* 
 	 * @constructor
 	 * @param */
 	constructor: function () {
-		//var locus;
-		//var origin;
-		//var features;
+		var that = this;
+
+		var locus	= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
 		var accession;
 		var version;
-		var keywordsTag;
-		var keywords;
+		var features= Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword');
+		var origin	= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
 		
-		locus	= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
-		origin	= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
-		features= Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword');
-		//keywords= Ext.create('Teselagen.bio.parsers.Genbank');
+		var keywordsTag;
+		var keywords = new Array();		//tracks which keywords are used in this file, array of GenbankKeyword objects	
 		
 		
 		// ======== Getter and Setter function ========//
 		//THESE DO NOT CHECK FOR NULL VALUES
+		
+		this.getLocus = function() {
+			console.log('get locus');
+			return locus;
+		}
+		this.setLocus = function(pLocus) {
+			console.log('set locus');
+			locus = pLocus;
+		}
+		
+		this.getOrigin = function(pOrigin) {
+			return origin = pOrigin;
+		}
+		this.setOrigin = function(pOrigin) {
+			origin = pOrigin;
+		}
+		
+		this.getFeatures = function() {
+			return getFeatures;
+		}
+		this.setFeatures = function(pFeatures) {
+			features = pFeatures;
+		}
+		
 		this.getAccession = function() {
-			return this.accession;
+			return accession;
 		}
 		this.setAccession = function(pAccession) {
-			this.accession = pAccession;
+			accession = pAccession;
 		}
 		
 		this.getVersion = function() {
-			return this.version;
+			return version;
 		}
 		this.set = function(pVersion) {
-			this.version = pVersion;
+			version = pVersion;
 		}
 
 		this.getKeywordsTag = function() {
-			return this.keywordsTag;
+			return keywordsTag;
 		}
 		this.setKeywordsTag = function(pKeywordsTag) {
-			this.keywordsTag = pKeywordsTag;
+			keywordsTag = pKeywordsTag;
 		}
 		
 		/*this.get = function() {
-			return this.;
+			return ;
 		}
 		this.set = function() {
-			this. = ;
+			 = ;
 		}*/
 		
 		

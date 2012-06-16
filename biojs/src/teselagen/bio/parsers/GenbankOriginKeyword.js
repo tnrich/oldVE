@@ -9,6 +9,7 @@
 Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 	/* */
 	extend: 'Teselagen.bio.parsers.GenbankKeyword',
+	
 	/* 
 	 * @constructor
 	 * @param */
@@ -16,12 +17,18 @@ Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 		//this.pubname = "origin";
 		
 		var sequence;
+		var keyword;
+		var value;
 		
 		this.getSequence = function() {
-			return this.sequence;
+			return sequence;
 		}
 		this.setSequence = function(pSequence) {
-			this.sequence = pSequence;
+			sequence = pSequence;
+		}
+		
+		this.appendSequence = function(line) {
+			sequence += line;
 		}
 		
 		return this;
