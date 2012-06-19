@@ -12,6 +12,7 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 	
 	config: {
 		// THESE SHOULD BE PRIVATE BUT THE AUTO CONFIG STUFF MAKES IT EASY...
+		// DONT USE THIS. VARIABLES BECOME PUBLIC.
 		/*locus: Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword'),
 		origin: Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword'),
 		features: Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword'),
@@ -56,13 +57,20 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 		
 		// ======== Getter and Setter function ========//
 		//THESE DO NOT CHECK FOR NULL VALUES
-		
+		/* @function
+         * @param {}
+         * @returns {GenbankLocusKeyword} 
+         */
 		this.getLocus = function() {
-			console.log('get locus');
+			//console.log('get locus');
 			return locus;
 		}
+		/* @function
+         * @param {GenbankLocusKeyword}
+         * @returns
+         */
 		this.setLocus = function(pLocus) {
-			console.log('set locus');
+			//console.log('set locus');
 			locus = pLocus;
 		}
 		
@@ -101,6 +109,13 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 			keywordsTag = pKeywordsTag;
 		}
 		
+		this.getKeywords = function() {
+			return keywords;
+		}
+		this.setKeywords = function(pKeywords) {
+			keywords = pKeywords;
+		}
+		
 		/*this.get = function() {
 			return ;
 		}
@@ -108,6 +123,9 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 			 = ;
 		}*/
 		
+		this.toJsonString = function() {
+			return JSON.stringify(this, null, '  ');
+		}
 		
 		return this;
     }
