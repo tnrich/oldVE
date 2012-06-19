@@ -42,12 +42,13 @@ describe("Testing Genbank related classes ", function() {
 	
 	describe("Testing Keyword Parsing from GenbankFormat.js", function() {
 	    var line;
+	    var dt =  Ext.create('Data');
 	    var gf =  Ext.create('Teselagen.bio.parsers.GenbankFormat');
 	    //console.log(Ext.Loader.getConfig());
 	    
 	    it("Parses LOCUS?",function(){
-	    	line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
-	    	var tmp = gf.parseGenbankFile(line);
+	    	line = dt.getLocusStr();
+	    	tmp = gf.parseGenbankFile(line);
 	    	console.log(tmp);
 	    });
 	    it("Parses ACCESSION?",function(){
@@ -75,12 +76,27 @@ describe("Testing Genbank related classes ", function() {
 	    	
 	    });
 	    it("Parses ORIGIN?",function(){
-	    	line = "ORIGIN      " +
-	    			"        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa" +
-	    			"       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc";
-	    	tmp = gf.parseGenbankFile(line);
-	    	console.log(tmp);
+	    	line = "ORIGIN      \n" +
+	    			"        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n" +
+	    			"       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n" +
+	    			"//";
+	    	//tmp = gf.parseGenbankFile(line);
+	    	//console.log(tmp);
 	    });
+
+	    it("Parses Top part of pj5_00028.gb string?",function(){
+	    	line = dt.getTopStr();
+	    	console.log(line);
+	    	tmp = gf.parseGenbankFile(line);
+	    	console.log(tmp.toJsonString());
+	    })
+	    
+	    it("Parses pj5_00028.gb string?",function(){
+	    	//line = dt.getPj5Str();
+	    	//tmp = gf.parseGenbankFile(line);
+	    	//console.log(tmp);
+	    })
+	    
 	    /*
 	    it("Parses ?",function(){
 	    	line = "";

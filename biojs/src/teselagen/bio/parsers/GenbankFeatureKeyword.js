@@ -13,7 +13,15 @@ Ext.define('Teselagen.bio.parsers.GenbankFeatureKeyword', {
 	 * @constructor
 	 * @param */
 	constructor: function () {
-		//this.pubname = "feature";
+		var features;
+		
+		this.getFeatures = function() {
+			return features;
+		}
+		this.setFeatures = function(pFeatures) {
+			features = pFeatures;
+		}
+
 		return this;
     }
 

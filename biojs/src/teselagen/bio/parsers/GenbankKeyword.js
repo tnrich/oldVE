@@ -12,11 +12,24 @@ Ext.define('Teselagen.bio.parsers.GenbankKeyword', {
 	/* 
 	 * @constructor
 	 * @param */
-	constructor: function () {
-		//this.pubname = "keyword";
+	
+	config: {
+		keyword: null,
+		value: null,
+		subKeywords: null,
 		
-		var keyword;
-		var balue;
+		toJsonString: function() {
+			return JSON.stringify(this, null, '  ');
+		}
+	},
+	
+	
+	
+	constructor: function () {
+		var that = this;
+		
+		/*var keyword;
+		var value;
 		var subKeywords; //This is under Vector (?)
 		
 		
@@ -39,7 +52,12 @@ Ext.define('Teselagen.bio.parsers.GenbankKeyword', {
 		}
 		this.setSubKeywords = function(pSubKeywords) {
 			subKeywords = pSubKeywords;
-		}
+		}*/
+		
+		
+		/*this.toJsonString = function() {
+			return JSON.stringify(that, null, '  ');
+		}*/
 		
 		return this;
     }

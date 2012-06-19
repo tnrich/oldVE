@@ -14,7 +14,6 @@ Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 	 * @constructor
 	 * @param */
 	constructor: function () {
-		//this.pubname = "origin";
 		
 		var sequence;
 		var keyword;

@@ -52,7 +52,7 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
          * @function
          * @param {String} String form of Genbank File.
          * @return {GenbankFileModel}
-         * @description Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main function in the GenbankFormat static class that performs the parsing.
+         * @description Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
          */
         this.parseGenbankFile = function(genbankFileString) {
         	var gbFM = Ext.create('Teselagen.bio.parsers.GenbankFileModel');
@@ -60,11 +60,37 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
         	// Process Keywords
         	
         	var keywordBlocks = splitKeywordBlocks(genbankFileString);
-        	var keyword = Ext.create('Teselagen.bio.parsers.GenbankKeyword');
+        	//var keyword = Ext.create('Teselagen.bio.parsers.GenbankKeyword');
+        	//console.log(keywordBlocks);
         	
-        	console.log(keywordBlocks);
+        	
+        	
+        	// RECONSIDER REWRITING THIS PART TO SAVE KEYWORDS. THIS IS NOT OPTIMAL!!!!
+        	for (var i=0; i < keywordBlocks.length; i++) {
+        		gbKey = parseKeywordBlock(keywordBlocks[i]);
+        		console.log(gbKey);
+        		if (gbKey.keyword === that.self.LOCUS_TAG) {
+        			//gbFM.setKeyword
+        		} else if (gbKey.keyword === that.self.ACCESSION_TAG) {
+        		} else if (gbKey.keyword === that.self.VERSION_TAG) {
+        		} else if (gbKey.keyword === that.self.DEFINITION_TAG) {
+        		} else if (gbKey.keyword === that.self.KEYWORDS_TAG) {
+        		} else if (gbKey.keyword === that.self.FEATURES_TAG) {
+        		} else if (gbKey.keyword === that.self.ORIGIN_TAG) {
+        		} else {
+        			gbFM.getKeywords().push(gbKey);
+        		}
+        		
+        		
+        	}
+        	//gbFM.setKeywords(gbFM.getKeywords().push(keyword));
+        	//console.log(gbFM.getKeywords());
+        	
         	
         	// Process Origin
+        	var orig = extractOrigin(genbankFileString);
+        	console.log(orig);
+        	gbFM.setOrigin(orig);
         	
         	
         	return gbFM;
@@ -92,54 +118,167 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
         	return result;
         }
 
-        //---------------------------------------------
+        // =============================================
         // Private Methods						 	//
-		//---------------------------------------------
-		
-		/* @function
+		// =============================================
+
+        // ---------------------------------------------
+        // KEYWORD PARSING (all but Origin)
+        // ---------------------------------------------
+         
+		/* @function 
          * @param {String}
          * @returns {Array} 
          */
-		function splitKeywordBlocks (genbankFileString) {
-			return splitBlocksByCharAt(genbankFileString, 0);
+		function splitKeywordBlocks (gbFileStr) {
+			return splitBlocksByCharAt(gbFileStr, 0);
 		}
 		
 		/* @function
          * @param {String, Int}
          * @returns {Array} 
          */
-		function splitBlocksByCharAt (gbFileString, ind) {
+		function splitBlocksByCharAt (gbFileStr, ind) {
 			var result = new Array();
-			if (gbFileString === "" || gbFileString === null) {
+			if (gbFileStr === "" || gbFileStr === null) {
 				return null;
 			}
 			
-			var lineArr = gbFileString.split(/\n/g);
+			var lineArr = gbFileStr.split(/[\n]+/g);
 			var newBlock = "";
 			for (var i = 0; i< lineArr.length; i++) {
 				var line = lineArr[i];
 				if (line.charAt(ind) == " ") {
 					newBlock += "\n" + line;
-					console.log(newBlock);
 				} else if (line != "") {
-					
 					if (newBlock != "") {
-						result.push(newBlock)	
+						result.push(newBlock);	
 					}
 					newBlock = line;
 				}
 			}
 			//console.log(newBlock);
 			result.push(newBlock);
+			//console.log(result);
+			return result;
+		}
+		
+        /* @function Takes a keword block (not origin) and parses into a GenbankKeyword (super) object.
+         * @param {String}
+         * @returns {GenbankKeyword} 
+         */
+		function parseKeywordBlock (blockStr) {
+			if (blockStr === "" || blockStr === undefined) {
+				return null;
+			}
+			
+			var result = Ext.create('Teselagen.bio.parsers.GenbankKeyword');
+			var blockArr, keyword, subKeywords;
+			
+			var blockArr = blockStr.split(/[\s]+/);
+			console.log(blockArr);
+			var keyword = blockArr[0];
+			console.log(keyword);
+			
+			//console.log(that.self.LOCUS_TAG);
+			if (keyword === that.self.LOCUS_TAG) {
+				result = parseLocusBlock(blockArr);
+				console.log(result);
+			} else if (keyword === that.self.FEATURE_TAG) {
+				subBlocks = splitFeatureKeywordBlocks(blockStr);
+			}
+			
+			result.setKeyword(keyword);
+			result.setSubKeywords(subKeywords);
+			console.log(result.toJsonString());
+			return result;
+		}
+		// ---------------------------------------------
+		// parseKeywordBlock: LOCUS PARSING
+		// ---------------------------------------------
+        /* @function Takes a locus block and parses into a GenbankLocusKeyword object.
+         * @param {StringArray}
+         * @returns {GenbankLocusKeyword} 
+         */
+		function parseLocusBlock(blockArr) {
+			var result = Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
+			// T.H. code does not distinguish btw "bp" or not "bp"
+			/*if (blockArr[3] === "bp") {
+				result.setLocusName(blockArr[1]);
+			} else {
+				result.setLocusName(blockArr[1]);
+			}*/
+			// Locus Name
+			result.setLocusName(blockArr[1]);
+			
+			// SequenceLength
+			result.setSequenceLength(blockArr[2]);
+			
+			// StrandType: T.H. Code defaults only to ds-DNA
+			if (blockArr[3].match(/ss/gi)) {
+				result.setStrandType("ss");
+			} else if (blockArr[3].match(/ds/gi)) {
+				result.setStrandType("ds")
+			} else {
+				result.setStrandType("unkown");
+			}
+			
+			// naType: T.H. defaults to DNA.
+			if (blockArr[3].match(/ss/gi)) {
+				result.setStrandType("ss");
+			} else if (blockArr[3].match(/ds/gi)) {
+				result.setStrandType("ds")
+			} else {
+				result.setStrandType("unkown");
+			}
+			
+			// Linear vs Circular?; CANNOT HANDLE TANDEM
+			for (var i=1; i < blockArr.length; i++) {
+				if (blockArr[i].match(/linear/gi)) {
+					result.setLinear(true);
+				} else {
+					result.setLinear(false);
+				}
+				// Circular may be redundant
+				if (blockArr[i].match(/circular/gi)) {
+					result.setLinear(true);
+				} else {
+					result.setLinear(false);
+				}
+			}
+			
+			// Date
+			result.setDate = new Date(blockArr[6]);
+			
+			//console.log(result);
+			return result;
+		}
+		// ---------------------------------------------
+		// parseKeywordBlock: FEATURE PARSING
+		// ---------------------------------------------
+        /* @function Takes a feature block and //parses into a GenbankLocusKeyword object.
+         * @param {StringArray}
+         * @returns {GenbankLocusKeyword} 
+         */
+		function splitFeatureKeywordBlocks(blockArr) {
+			var result = new Array();
+			
+			for (var i=1; i < blockArr.length; i++) { // First line is just FEATURES..Location/Qualifiers
+				var line = blockArr[i];
+				
+			}
+			
 			return result;
 		}
 		
 		
-		
+		// ---------------------------------------------
+		// ORIGIN PARSING
+		// ---------------------------------------------
 		
 		function extractOrigin(gbFileString) {
 			var result = new Array();
-			var gbOrigKey = Ext.create(Teselagen.bio.parsers.GenbankOriginKeyword);
+			var gbOriginKey = Ext.create(Teselagen.bio.parsers.GenbankOriginKeyword);
 			var seq = "";
 			var rest = "";
 			
@@ -150,8 +289,8 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
 			for (var i = 0; i< lineArr.length; i++) {
 				var line = lineArr[i];
 				if ( getLineKey(line) === "ORIGIN") { //gb.self.ORIGIN_TAG
-					gbOrigKey.setKeyword(getLineKey(line));
-					//gbOrigKey.setValue();
+					//gbOriginKey.setKeyword(getLineKey(line));
+					//gbOriginKey.setValue();
 					origFlag = true;
 					i++;
 				}
@@ -165,12 +304,14 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
 					origFlag = false;
 				}
 			}
-			
+			//console.log(result.toJsonString());
+			//console.log("yup");
 			
 			return result;
+			
 		}
 		
-		//parseKeywordBlock(block:String):GenbankKeyword
+		//-parseKeywordBlock(block:String):GenbankKeyword
 		//-extractOrigin(genbankFile:String):Array
 		//-splitKeywordBlocks(genbankFile:String):Vector.<String>
 		//splitSubKeywordBlocks(block:String):Vector.<String>
