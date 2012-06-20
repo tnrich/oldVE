@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg height="773" version="1.1" width="1657" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#ffffff" height="177" stroke="#ffffff" stroke-width="1" width="462" x="448" y="102"/>
+<rect fill="none" height="177" stroke="#000000" stroke-width="1" width="462" x="448" y="102"/>
+<text font-family="Lucida Grande" font-size="13" x="568" y="116">
++ RestrictionEnzymeGroupManager</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="462" x="448" y="126"/>
+<text font-family="Lucida Grande" font-size="13" x="452" y="141">
+-isInitialized : Boolean  = false</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="462" x="448" y="151"/>
+<text font-family="Lucida Grande" font-size="13" x="452" y="166">
++loadRebaseDatabase()</text>
+<text font-family="Lucida Grande" font-size="13" x="452" y="183">
++loadUserRestrictionEnzymes( : UserRestrictionEnzymes)</text>
+<text font-family="Lucida Grande" font-size="13" x="452" y="200">
++removeGroup( : RestrictionEnzymeGroup)</text>
+<text font-family="Lucida Grande" font-size="13" x="452" y="217">
++groupByName( : String) : RestrictionEnzymeGroup</text>
+<text font-family="Lucida Grande" font-size="13" x="452" y="234">
++createGroupByEnzymes( : String, : ArrayList) : RestrictionEnzymeGroup</text>
+<text font-family="Lucida Grande" font-size="13" x="452" y="251">
+-initializeDefaultActiveGroup()</text>
+<text font-family="Lucida Grande" font-size="13" x="452" y="268">
+-registerSystemGroups()</text>
+<rect fill="#ffffff" height="126" stroke="#ffffff" stroke-width="1" width="347" x="776" y="470"/>
+<rect fill="none" height="126" stroke="#000000" stroke-width="1" width="347" x="776" y="470"/>
+<text font-family="Lucida Grande" font-size="13" x="865" y="484">
++ RestrictionEnzymeGroup</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="347" x="776" y="494"/>
+<text font-family="Lucida Grande" font-size="13" x="780" y="509">
+-name : String</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="347" x="776" y="519"/>
+<text font-family="Lucida Grande" font-size="13" x="780" y="534">
++addRestrictionEnzyme( : RestrictionEnzyme)</text>
+<text font-family="Lucida Grande" font-size="13" x="780" y="551">
++removeRestrictionEnzyme( : RestrictionEnzyme)</text>
+<text font-family="Lucida Grande" font-size="13" x="780" y="568">
++hasEnzyme( : RestrictionEnzyme)</text>
+<text font-family="Lucida Grande" font-size="13" x="780" y="585">
++getRestrictionEnzyme( : Integer) : RestrictionEnzyme</text>
+<rect fill="#ffffff" height="211" stroke="#ffffff" stroke-width="1" width="172" x="486" y="398"/>
+<rect fill="none" height="211" stroke="#000000" stroke-width="1" width="172" x="486" y="398"/>
+<text font-family="Lucida Grande" font-size="13" x="507" y="412">
++ RestrictionEnzyme</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="172" x="486" y="422"/>
+<text font-family="Lucida Grande" font-size="13" x="490" y="437">
+-name : String</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="454">
+-site : String</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="471">
+-cutType : Integer</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="488">
+-forwardRegex : String</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="505">
+-reverseRegex : String</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="522">
+-dsForward : Integer</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="539">
+-dsReverse : Integer</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="556">
+-usForward : Integer</text>
+<text font-family="Lucida Grande" font-size="13" x="490" y="573">
+-usReverse : Integer</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="172" x="486" y="583"/>
+<text font-family="Lucida Grande" font-size="13" x="490" y="598">
++isPalindromic() : Boolean</text>
+<polyline fill="none" points="637,278 637,398" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="630" x2="637" y1="386" y2="398"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="644" x2="637" y1="386" y2="398"/>
+<text font-family="Lucida Grande" font-size="13" x="653" y="343">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="608" y="380">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="642" y="378">
+-activeGroup</text>
+<rect fill="#ffffff" height="71" stroke="#ffffff" stroke-width="1" width="269" x="448" y="670"/>
+<rect fill="none" height="71" stroke="#000000" stroke-width="1" width="269" x="448" y="670"/>
+<text font-family="Lucida Grande" font-size="13" x="500" y="684">
++ UserRestrictionEnzymes</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="269" x="448" y="694"/>
+<text font-family="Lucida Grande" font-size="13" x="452" y="709">
+-activeEnzymeNames [0..*] : String</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="269" x="448" y="719"/>
+<rect fill="#ffffff" height="88" stroke="#ffffff" stroke-width="1" width="235" x="856" y="670"/>
+<rect fill="none" height="88" stroke="#000000" stroke-width="1" width="235" x="856" y="670"/>
+<text font-family="Lucida Grande" font-size="13" x="875" y="684">
++ UserRestrictionEnzymeGroup</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="235" x="856" y="694"/>
+<text font-family="Lucida Grande" font-size="13" x="860" y="709">
+-groupName : String</text>
+<text font-family="Lucida Grande" font-size="13" x="860" y="726">
+-enzymeNames [0..*] : String</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="235" x="856" y="736"/>
+<polyline fill="none" points="716,718 856,718" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="844" x2="856" y1="725" y2="718"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="844" x2="856" y1="711" y2="718"/>
+<text font-family="Lucida Grande" font-size="13" x="755" y="698">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="787" y="737">
+-groups</text>
+<polyline fill="none" points="531,278 531,398" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="524" x2="531" y1="386" y2="398"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="538" x2="531" y1="386" y2="398"/>
+<text font-family="Lucida Grande" font-size="13" x="411" y="343">
+ HashMap&lt;name&gt;</text>
+<text font-family="Lucida Grande" font-size="13" x="537" y="381">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="359" y="381">
+-rebaseEnzymesDatabase</text>
+<polyline fill="none" points="871,278 871,470" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="864" x2="871" y1="458" y2="470"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="878" x2="871" y1="458" y2="470"/>
+<text font-family="Lucida Grande" font-size="13" x="887" y="379">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="877" y="453">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="873" y="431">
+-systemGroups</text>
+<polyline fill="none" points="779,278 779,470" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="772" x2="779" y1="458" y2="470"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="786" x2="779" y1="458" y2="470"/>
+<text font-family="Lucida Grande" font-size="13" x="795" y="379">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="785" y="453">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="781" y="434">
+-userGroups</text>
+<rect fill="#ffffff" height="105" stroke="#ffffff" stroke-width="1" width="294" x="96" y="238"/>
+<rect fill="none" height="105" stroke="#000000" stroke-width="1" width="294" x="96" y="238"/>
+<text font-family="Lucida Grande" font-size="13" x="151" y="252">
++ RestrictionEnzymeManager</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="294" x="96" y="262"/>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="294" x="96" y="283"/>
+<text font-family="Lucida Grande" font-size="13" x="100" y="298">
++getRebaseRestrictionEnzymes() : ArrayList</text>
+<text font-family="Lucida Grande" font-size="13" x="100" y="315">
++getCommonRestrictionEnzymes() : ArrayList</text>
+<text font-family="Lucida Grande" font-size="13" x="100" y="332">
++parseEnzymesXML( : XML) : ArrayList</text>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="448" x2="443" y1="270" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="438" x2="433" y1="270" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="428" x2="423" y1="270" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="418" x2="413" y1="270" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="408" x2="403" y1="270" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="398" x2="393" y1="270" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="401" x2="389" y1="263" y2="270"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="401" x2="389" y1="277" y2="270"/>
+<polyline fill="none" points="776,509 657,509" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="669" x2="657" y1="502" y2="509"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="669" x2="657" y1="516" y2="509"/>
+<text font-family="Lucida Grande" font-size="13" x="686" y="489">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="661" y="504">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="663" y="531">
+-enzymes</text>
+<polyline fill="none" points="162,342 162,486 486,486" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="474" x2="486" y1="493" y2="486"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="474" x2="486" y1="479" y2="486"/>
+<text font-family="Lucida Grande" font-size="13" x="221" y="466">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="460" y="481">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="207" y="501">
+-commonRestrictionEnzymes</text>
+<polyline fill="none" points="114,342 114,534 486,534" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="474" x2="486" y1="541" y2="534"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="474" x2="486" y1="527" y2="534"/>
+<text font-family="Lucida Grande" font-size="13" x="173" y="514">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="460" y="529">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="237" y="555">
+-rebaseRestrictionEnzymes</text>
+<rect fill="#ffffff" height="66" stroke="#ffffff" stroke-width="1" width="104" x="152" y="582"/>
+<rect fill="none" height="66" stroke="#000000" stroke-width="1" width="104" x="152" y="582"/>
+<text font-family="Lucida Grande" font-size="13" x="191" y="616">
+XML</text>
+<text font-family="Lucida Grande" font-size="13" x="157" y="597">
+&lt;&lt;datatype&gt;&gt;</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="104" x="152" y="626"/>
+<rect fill="#ffffff" height="68" stroke="#ffffff" stroke-width="1" width="173" x="160" y="62"/>
+<rect fill="none" height="68" stroke="#000000" stroke-width="1" width="173" x="160" y="62"/>
+<text font-family="Lucida Grande" font-size="13" x="222" y="76">
++ Class</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="173" x="160" y="86"/>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="173" x="160" y="107"/>
+<polyline fill="none" points="163,238 163,129" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="170" x2="163" y1="141" y2="129"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="156" x2="163" y1="141" y2="129"/>
+<text font-family="Lucida Grande" font-size="13" x="72" y="189">
+ common.xml</text>
+<text font-family="Lucida Grande" font-size="13" x="15" y="159">
+-CommonEnzymesXML</text>
+<polyline fill="none" points="226,238 226,129" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="233" x2="226" y1="141" y2="129"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="219" x2="226" y1="141" y2="129"/>
+<text font-family="Lucida Grande" font-size="13" x="229" y="190">
+ rebase.xml</text>
+<text font-family="Lucida Grande" font-size="13" x="228" y="158">
+-RebaseEnzymesXML</text>
+<rect fill="#ffffff" height="92" stroke="#ffffff" stroke-width="1" width="286" x="1166" y="262"/>
+<rect fill="none" height="92" stroke="#000000" stroke-width="1" width="286" x="1166" y="262"/>
+<text font-family="Lucida Grande" font-size="13" x="1221" y="276">
++ RestrictionEnzymeMapper</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="286" x="1166" y="286"/>
+<text font-family="Lucida Grande" font-size="13" x="1170" y="301">
++maxRestrictionEnzymeCuts : Integer  = -1</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="286" x="1166" y="311"/>
+<text font-family="Lucida Grande" font-size="13" x="1170" y="326">
++markAsDirty()</text>
+<text font-family="Lucida Grande" font-size="13" x="1170" y="343">
+-eliminateDuplicates()</text>
+<rect fill="#ffffff" height="71" stroke="#ffffff" stroke-width="1" width="162" x="1254" y="534"/>
+<rect fill="none" height="71" stroke="#000000" stroke-width="1" width="162" x="1254" y="534"/>
+<text font-family="Lucida Grande" font-size="13" x="1271" y="548">
++ RestrictionCutSite</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="162" x="1254" y="558"/>
+<text font-family="Lucida Grande" font-size="13" x="1258" y="573">
++numCuts : Integer  = 0</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="162" x="1254" y="583"/>
+<polyline fill="none" points="1262,604 1262,638 654,638 654,608" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="661" x2="654" y1="620" y2="608"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="647" x2="654" y1="620" y2="608"/>
+<text font-family="Lucida Grande" font-size="13" x="929" y="618">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="668" y="628">
+-restrictionEnzyme</text>
+<rect fill="#ffffff" height="71" stroke="#ffffff" stroke-width="1" width="276" x="1198" y="670"/>
+<rect fill="none" height="71" stroke="#000000" stroke-width="1" width="276" x="1198" y="670"/>
+<text font-family="Lucida Grande" font-size="13" x="1266" y="684">
++ StrandedAnnotation</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="276" x="1198" y="694"/>
+<text font-family="Lucida Grande" font-size="13" x="1202" y="709">
+-strand : Integer  = StrandType.FORWARD</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="276" x="1198" y="719"/>
+<polyline fill="none" points="1206,353 1206,566 1254,566" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1242" x2="1254" y1="573" y2="566"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1242" x2="1254" y1="559" y2="566"/>
+<text font-family="Lucida Grande" font-size="13" x="1222" y="488">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="1228" y="561">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="1179" y="591">
+-cutSites</text>
+<polyline fill="none" points="1166,350 1022,350 1022,470" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1015" x2="1022" y1="458" y2="470"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1029" x2="1022" y1="458" y2="470"/>
+<text font-family="Lucida Grande" font-size="13" x="997" y="331">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="1024" y="449">
+-restrictionEnzymeGroup</text>
+<polyline fill="none" points="1286,353 1286,534" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1279" x2="1286" y1="522" y2="534"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1293" x2="1286" y1="522" y2="534"/>
+<text font-family="Lucida Grande" font-size="13" x="1302" y="443">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="1258" y="520">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="1288" y="517">
+-allCutSites</text>
+<ellipse cx="1288" cy="443" fill="#000000" rx="0.5" ry="0.5" stroke="#000000" stroke-width="1"/>
+<ellipse cx="1289" cy="444" fill="#ffffff" rx="-0.5" ry="-0.5" stroke="#ffffff" stroke-width="1"/>
+<polyline fill="none" points="1399,353 1399,534" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1392" x2="1399" y1="522" y2="534"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1406" x2="1399" y1="522" y2="534"/>
+<text font-family="Lucida Grande" font-size="13" x="1254" y="426">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="1371" y="512">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="1404" y="509">
+-cutSitesMap</text>
+<ellipse cx="1401" cy="443" fill="#000000" rx="0.5" ry="0.5" stroke="#000000" stroke-width="1"/>
+<ellipse cx="1402" cy="444" fill="#ffffff" rx="-0.5" ry="-0.5" stroke="#ffffff" stroke-width="1"/>
+<polyline fill="none" points="1451,302 1542,302 1542,566 1415,566" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1427" x2="1415" y1="559" y2="566"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1427" x2="1415" y1="573" y2="566"/>
+<text font-family="Lucida Grande" font-size="13" x="1355" y="383">
+ </text>
+<text font-family="Lucida Grande" font-size="13" x="1434" y="557">
+0..*</text>
+<text font-family="Lucida Grande" font-size="13" x="1428" y="587">
+-allCutSitesMap</text>
+<ellipse cx="1544" cy="452" fill="#000000" rx="0.5" ry="0.5" stroke="#000000" stroke-width="1"/>
+<ellipse cx="1545" cy="453" fill="#ffffff" rx="-0.5" ry="-0.5" stroke="#ffffff" stroke-width="1"/>
+<rect fill="#ffffff" height="88" stroke="#ffffff" stroke-width="1" width="235" x="1278" y="14"/>
+<rect fill="none" height="88" stroke="#000000" stroke-width="1" width="235" x="1278" y="14"/>
+<text font-family="Lucida Grande" font-size="13" x="1298" y="28">
++ RestrictionEnzymeMapperBio</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="235" x="1278" y="38"/>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="235" x="1278" y="59"/>
+<text font-family="Lucida Grande" font-size="13" x="1282" y="74">
++cutSequence()</text>
+<text font-family="Lucida Grande" font-size="13" x="1282" y="91">
++cutSequenceByRestrictionEnzyme()</text>
+<polyline fill="none" points="1310,604 1310,670" stroke="#000000" stroke-width="1"/>
+<polygon fill="#ffffff" points="1310,670 1303,658 1317,658" stroke="#ffffff" stroke-width="1"/>
+<polygon fill="none" points="1310,670 1303,658 1317,658" stroke="#000000" stroke-width="1"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="262" y2="257"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="252" y2="247"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="242" y2="237"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="232" y2="227"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="222" y2="217"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="212" y2="207"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="202" y2="197"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="192" y2="187"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="182" y2="177"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="172" y2="167"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="162" y2="157"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="152" y2="147"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="142" y2="137"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="132" y2="127"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="122" y2="117"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="112" y2="107"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1398" x2="1398" y1="102" y2="101"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1405" x2="1398" y1="113" y2="101"/>
+<line fill="#000000" stroke="#000000" stroke-width="1" x1="1391" x2="1398" y1="113" y2="101"/>
+<rect fill="#ffffff" height="126" stroke="#ffffff" stroke-width="1" width="263" x="990" y="70"/>
+<rect fill="none" height="126" stroke="#000000" stroke-width="1" width="263" x="990" y="70"/>
+<text font-family="Lucida Grande" font-size="13" x="1091" y="84">
++ Mapper</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="263" x="990" y="94"/>
+<text font-family="Lucida Grande" font-size="13" x="994" y="109">
++dirty : Boolean</text>
+<rect fill="#000000" height="1" stroke="#000000" stroke-width="1" width="263" x="990" y="119"/>
+<text font-family="Lucida Grande" font-size="13" x="994" y="134">
++recalculate()</text>
+<text font-family="Lucida Grande" font-size="13" x="994" y="151">
++recalculateNonCircular()</text>
+<text font-family="Lucida Grande" font-size="13" x="994" y="168">
++recalculateCircular()</text>
+<text font-family="Lucida Grande" font-size="13" x="994" y="185">
++onSequenceProviderChanged( : Event)</text>
+<polyline fill="none" points="1174,262 1174,195" stroke="#000000" stroke-width="1"/>
+<polygon fill="#ffffff" points="1174,195 1181,207 1167,207" stroke="#ffffff" stroke-width="1"/>
+<polygon fill="none" points="1174,195 1181,207 1167,207" stroke="#000000" stroke-width="1"/>
+<polygon fill="#ffffff" points="1438,158 1632,158 1642,168 1642,197 1438,197 1438,158" stroke="#ffffff" stroke-width="1"/>
+<polyline fill="none" points="1438,158 1632,158 1642,168 1642,197 1438,197 1438,158" stroke="#3cc83c" stroke-width="1"/>
+<polygon fill="#b2b2b2" points="1632,158 1642,168 1632,168 1632,158" stroke="#b2b2b2" stroke-width="1"/>
+<polyline fill="none" points="1632,158 1642,168 1632,168 1632,158" stroke="#3cc83c" stroke-width="1"/>
+<text font-family="Lucida Grande" font-size="13" x="1441" y="174">
+HashMap&lt;RestrictionEnzyme,</text>
+<text font-family="Lucida Grande" font-size="13" x="1441" y="190">
+Array&lt;RestrictionCutSite&gt;&gt;</text>
+<line fill="#3cc83c" stroke="#3cc83c" stroke-width="1" x1="1526" x2="1526" y1="198" y2="302"/>
+<line fill="#3cc83c" stroke="#3cc83c" stroke-width="1" x1="1494" x2="1398" y1="414" y2="414"/>
+<line fill="#3cc83c" stroke="#3cc83c" stroke-width="1" x1="1494" x2="1494" y1="198" y2="414"/>
+</svg>
