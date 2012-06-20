@@ -13,16 +13,30 @@ Ext.define('Teselagen.bio.parsers.GenbankLocusKeyword', {
 	/* 
 	 * @constructor
 	 * @param */
-	constructor: function () {
+	constructor: function (inData) {
+		//var that = this;
 		
-		var locusName;
-		var strandType;
-		var sequenceLength;
-		var naType;
-		var linear; //boolean; cannot designate Tandem
-		var circular; //boolean
-		var divisionCode;
-		var date;
+		if (inData ) {
+			//console.log(JSON.stringify(inData, null, " "));
+			var locusName 		= inData.locusName;
+			var sequenceLength 	= inData.sequenceLength;
+			var strandType		= inData.strandType;
+			var naType			= inData.naType;
+			var linear			= inData.linear;
+			var circular;//		= inData.circular;
+			var divisionCode	= inData.divisionCode;
+			var date			= inData.date;
+		} else {
+			var locusName;
+			var sequenceLength;
+			var strandType;
+			var naType;
+			var linear; //boolean; cannot designate Tandem
+			var circular; //boolean
+			var divisionCode;
+			var date;
+		}
+		
 		
 		this.getLocusName = function() {
 			return locusName;
@@ -80,6 +94,36 @@ Ext.define('Teselagen.bio.parsers.GenbankLocusKeyword', {
 			date = pDate;
 		}
 		
+		
+		this.toString = function () {
+			var line = "LOCUS".rpad(" ", 12);
+			line += locusName.rpad(" ", 16);
+			line += " "; // T.H line 2778 of GenbankFormat.as col 29 space
+			line += sequenceLength.lpad(" ", 11);
+			line += " bp "; // col 41
+			line += (strandType + "-").lpad(" ", 3);
+			line += naType.rpad(" ",6);
+			line += "  ";
+			
+			if (linear === true) {
+				line += "linear  ";
+			} else {
+				line += "circular";
+			}
+			
+			line += " "; //col 64
+			if (divisionCode != null) {
+                line += divisionCode.rpad(" ", 3);
+            } else {
+                line.rpad(" ", 3);
+            }
+			line += " "; // col 68
+			// DOES NOT PARSE DATE USEFULLY ORIGINALLY!
+			line += date;
+			//line += "\n";
+			
+			return line;
+		}
 		
 		return this;
     }

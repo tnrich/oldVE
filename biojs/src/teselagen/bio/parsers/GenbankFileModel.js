@@ -48,7 +48,7 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 		var locus	= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
 		var accession;
 		var version;
-		var features= Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword');
+		var features;//= Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword');
 		var origin	= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
 		
 		var keywordsTag;
@@ -75,7 +75,7 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 		}
 		
 		this.getOrigin = function(pOrigin) {
-			return origin = pOrigin;
+			return origin;
 		}
 		this.setOrigin = function(pOrigin) {
 			origin = pOrigin;
@@ -123,8 +123,18 @@ Ext.define('Teselagen.bio.parsers.GenbankFileModel', {
 			 = ;
 		}*/
 		
-		this.toJsonString = function() {
-			return JSON.stringify(this, null, '  ');
+		this.toString = function() {
+			var gbStr = "";
+			
+			gbStr += locus.toString() + "\n";
+			gbStr += "ACCESSION".rpad(" ", 12) + accession + "\n";
+			gbStr += "VERSION".rpad(" ",12) + version + "\n";
+			gbStr += "KEYWORDS".rpad(" ", 12) + keywordsTag + "\n";
+			//gbStr += references.toString();
+			gbStr += origin.toString();
+			
+			
+			return gbStr;
 		}
 		
 		return this;

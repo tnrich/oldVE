@@ -2,21 +2,37 @@
  * @author Diana Womg
  */
 
-Ext.require('Teselagen.bio.parsers.GenTest');
+//Ext.require('Teselagen.bio.util.StringUtil');
 
 describe("Testing Genbank related classes ", function() {
+
+	describe("Testing Teselagen.bio.util.StringUtil", function() {
+	    
+	    it("Works?",function(){
+	    	var str = "  black  ";
+	    	console.log("a" + str.trim() + "b");   //result "ablackb"
+	    	console.log(Ext.String.trim(str));
+	    	console.log("a" + str.ltrim() + "b");  //result "ablack b"
+	    	console.log("a" + str.rtrim() + "b");  //result "a blackb"
+	    	console.log("" + str.lpad("0", 5)); //result "00005"
+	    	console.log("" + str.rpad("0", 5)); //result "50000"
+	    	expect(false).toBe(false);
+	    });
+ 
+	});
+	
 	
 	describe("Ceating classes correctly?", function() {
 		it("GenbankFormat statics are ok? ", function() {
 			var gbFormat = Ext.create('Teselagen.bio.parsers.GenbankFormat');
 			expect(gbFormat).toBeDefined();
-			expect(gbFormat.self.LOCUS_TAG).toBe("LOCUS");
-			expect(gbFormat.self.END_SEQUENCE_TAG).toBe("//");
+			//expect(gbFormat.self.LOCUS_TAG).toBe("LOCUS");
+			//expect(gbFormat.self.END_SEQUENCE_TAG).toBe("//");
 	    });
 	
 	    it("GenbankFileModel Initializing? ", function() {
 	    	var gbFM = Ext.create('Teselagen.bio.parsers.GenbankFileModel');
-	    	expect(gbFM.getLocus()).toBeDefined();
+	    	expect(gbFM).toBeDefined();
 	    });
 	    
 	    it("GenbankFileKeyword classes exist? ", function() {
@@ -41,15 +57,17 @@ describe("Testing Genbank related classes ", function() {
 
 	
 	describe("Testing Keyword Parsing from GenbankFormat.js", function() {
-	    var line;
+	    var line, tmp;
 	    var dt =  Ext.create('Data');
-	    var gf =  Ext.create('Teselagen.bio.parsers.GenbankFormat');
+	    //var gf =  Ext.create('Teselagen.bio.parsers.GenbankFormat');
+	    var gf =  Ext.create('Teselagen.bio.parsers.GenbankParser');
+	    
 	    //console.log(Ext.Loader.getConfig());
 	    
 	    it("Parses LOCUS?",function(){
 	    	line = dt.getLocusStr();
 	    	tmp = gf.parseGenbankFile(line);
-	    	console.log(tmp);
+	    	expect(tmp.getLocus().toString()).toBe(line);
 	    });
 	    it("Parses ACCESSION?",function(){
 	    	line = "ACCESSION   pj5_00028 Accession";
@@ -88,7 +106,8 @@ describe("Testing Genbank related classes ", function() {
 	    	line = dt.getTopStr();
 	    	console.log(line);
 	    	tmp = gf.parseGenbankFile(line);
-	    	console.log(tmp.toJsonString());
+	    	console.log(tmp.toString());
+	    	console.log(JSON.stringify(tmp));
 	    })
 	    
 	    it("Parses pj5_00028.gb string?",function(){
