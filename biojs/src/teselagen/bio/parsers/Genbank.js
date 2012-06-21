@@ -8,62 +8,44 @@
 
 Ext.define('Teselagen.bio.parsers.Genbank', {
 	/* */
-	
-	
-	config: {
-		// THESE SHOULD BE PRIVATE BUT THE AUTO CONFIG STUFF MAKES IT EASY...
-		// DONT USE THIS. VARIABLES BECOME PUBLIC.
-		/*locus: Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword'),
-		origin: Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword'),
-		features: Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword'),
-		keywords: null*/
-		//var accession;
-		//var version;
-		//var keywordsTag;
-		//var keywords;
-		//var features;
-
-		
-		// Automatically sets up:
-			//myGenbank.getLocus() 
-			//myGenbank.setLocus("new locus")
-		
-	},
-	/*
-	applyLocus: function(locus) {
-        if (!Ext.isString(locus) || locus.length === 0) {
-            alert('Error: LOCUS must be a valid non-empty string');
-        }
-        else {
-            return locus;
-        }
-    },*/
-    
+	    
 	/* 
 	 * @constructor
 	 * @param */
 	constructor: function () {
 		var that = this;
 
-		var locus		= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
+		var locus;//		= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
 		var accession;//	= Ext.create('Teselagen.bio.parsers.GenbankKeyword');// This is stupid, why not just put it in the keywords Array?
 		var version;//		= Ext.create('Teselagen.bio.parsers.GenbankKeyword', {keyword: version)}; // This is stupid, why not just put it in the keywords Array?
 		var features;//	= Ext.create('Teselagen.bio.parsers.GenbankFeatureKeyword');
-		var origin		= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
+		var origin;//		= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
 		
 		var keywordsTag	= new Array();	// List of Keywords being used
 		var keywords	= new Array();	// Keyword Objects other than the ones here (ie locus, accession, features, origin, etc)	
 		
 		
 		// ======== Getter and Setter function ========//
+		
+		function find(key) {
+			var entry;
+			for (var i=0; i<keywords.length; i++) {
+				if (keywords[i].keyword === key) {
+					entry = keywords[i];
+					console.log(entry);
+				}
+			}
+			return entry;
+		}
+		
 		//THESE DO NOT CHECK FOR NULL VALUES
 		/* @function
          * @param {}
          * @returns {GenbankLocusKeyword} 
          */
 		this.getLocus = function() {
-			//console.log('get locus');
-			return locus;
+			//return locus;
+			return find("LOCUS");
 		}
 		/* @function
          * @param {GenbankLocusKeyword}
@@ -71,35 +53,44 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
          */
 		this.setLocus = function(pLocus) {
 			//console.log('set locus');
-			locus = pLocus;
+			//locus = pLocus;
+			keywords.push(pLocus);
 		}
 		
 		this.getOrigin = function(pOrigin) {
-			return origin;
+			//return origin;
+			return find("ORIGIN");
 		}
 		this.setOrigin = function(pOrigin) {
-			origin = pOrigin;
+			//origin = pOrigin;
+			keywords.push(pOrigin);
 		}
 		
 		this.getFeatures = function() {
-			return getFeatures;
+			//return getFeatures;
+			return find("FEATURES");
 		}
 		this.setFeatures = function(pFeatures) {
-			features = pFeatures;
+			//features = pFeatures;
+			keywords.push(pFeatures);
 		}
 		
 		this.getAccession = function() {
-			return accession;
+			//return accession;
+			return find("ACCESSION");
 		}
 		this.setAccession = function(pAccession) {
-			accession = pAccession;
+			//accession = pAccession;
+			keywords.push(pAccession);
 		}
 		
 		this.getVersion = function() {
-			return version;
+			//return version;
+			return find("VERSION");
 		}
 		this.set = function(pVersion) {
-			version = pVersion;
+			//version = pVersion;
+			keywords.push(pVersion);
 		}
 
 		this.getKeywordsTag = function() {
@@ -116,11 +107,11 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			keywords = pKeywords;
 		}
 		
-		this.addKeywordsTag = function(pAddKey) {
-			keywordsTag.push(pAddKey);
+		this.addKeywordsTag = function(pAddKeywordsTag) {
+			keywordsTag.push(pAddKeywordsTag);
 		}
-		this.addKeywords = function(pAddKey) {
-			keywords.push(pAddKey);
+		this.addKeywords = function(pAddKeyword) {
+			keywords.push(pAddKeyword);
 		}
 		
 		/*this.get = function() {
@@ -130,7 +121,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			 = ;
 		}*/
 		
-		this.toString = function() {
+		this.toStringBADWAY = function() {
 			var gbStr = "";
 			
 			gbStr += locus.toString() + "\n";
@@ -143,7 +134,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			
 			return gbStr;
 		}
-		this.toString2 = function() {
+		this.toString = function() {
 			var gbStr = "";
 			//console.log(kewords.length);
 			for (var i=0; i < keywordsTag.length; i++) {
@@ -154,7 +145,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 				
 				switch (key) {
 					case "LOCUS":
-						gbStr += locus.toString() + "\n";
+						gbStr += find("LOCUS").toString() + "\n";
 						break;
 					case "DEFINITION":
 						break;
@@ -176,7 +167,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 					case "FEATURES":
 						break;
 					case "ORIGIN":
-						gbStr += origin.toString();
+						gbStr += find("ORIGIN").toString();
 						break;
 					default:
 						//gbStr += keywords[i].toString();
@@ -186,6 +177,21 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			
 			return gbStr;
 		}
+		
+		this.toString2 = function() {
+			var gbStr = "";
+			var entry;
+			//console.log(kewords.length);
+			for (var i=0; i < keywords.length; i++) {
+				entry = keywords[i];
+				console.log(entry);
+				gbStr += keywords[i].toString() + "\n";
+				
+			}
+			
+			return gbStr;
+		}
+		
 		
 		this.toJSON = function() {
 			var json = "not done yet with this overloaded function";
