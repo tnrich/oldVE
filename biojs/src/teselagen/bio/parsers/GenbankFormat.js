@@ -71,12 +71,12 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
         		console.log(gbKey);
         		if (gbKey.keyword === that.self.LOCUS_TAG) {
         			//gbFM.setKeyword
-        		} else if (gbKey.keyword === that.self.ACCESSION_TAG) {
-        		} else if (gbKey.keyword === that.self.VERSION_TAG) {
-        		} else if (gbKey.keyword === that.self.DEFINITION_TAG) {
-        		} else if (gbKey.keyword === that.self.KEYWORDS_TAG) {
-        		} else if (gbKey.keyword === that.self.FEATURES_TAG) {
-        		} else if (gbKey.keyword === that.self.ORIGIN_TAG) {
+        		} else if (gbKey.keywords === that.self.ACCESSION_TAG) {
+        		} else if (gbKey.keywords === that.self.VERSION_TAG) {
+        		} else if (gbKey.keywords === that.self.DEFINITION_TAG) {
+        		} else if (gbKey.keywords === that.self.KEYWORDS_TAG) {
+        		} else if (gbKey.keywords === that.self.FEATURES_TAG) {
+        		} else if (gbKey.keywords === that.self.ORIGIN_TAG) {
         		} else {
         			gbFM.getKeywords().push(gbKey);
         		}
@@ -220,16 +220,16 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
 			} else if (blockArr[3].match(/ds/gi)) {
 				result.setStrandType("ds")
 			} else {
-				result.setStrandType("unkown");
+				result.setStrandType("unknown");
 			}
 			
 			// naType: T.H. defaults to DNA.
-			if (blockArr[3].match(/ss/gi)) {
-				result.setStrandType("ss");
-			} else if (blockArr[3].match(/ds/gi)) {
-				result.setStrandType("ds")
+			if (blockArr[3].match(/DNA/gi)) {
+				result.setNaType("DNA");
+			} else if (blockArr[3].match(/RNA/gi)) {
+				result.setNaType("RNA")
 			} else {
-				result.setStrandType("unkown");
+				result.setNaType("unknown");
 			}
 			
 			// Linear vs Circular?; CANNOT HANDLE TANDEM
@@ -304,10 +304,10 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
 					origFlag = false;
 				}
 			}
-			//console.log(result.toJsonString());
-			//console.log("yup");
+			console.log(JSON.stringify(gbOriginKey));
+			console.log("yup");
 			
-			return result;
+			return gbOriginKey;
 			
 		}
 		
