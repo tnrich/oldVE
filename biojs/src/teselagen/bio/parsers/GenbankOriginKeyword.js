@@ -71,6 +71,11 @@ Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 			
 		}
 		
+		this.toJSONString = function() {
+			return JSON.stringify(that, null, '  ');
+		}
+		
+		
 		
 		return this;
     }

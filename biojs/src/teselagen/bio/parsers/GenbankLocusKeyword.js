@@ -14,7 +14,7 @@ Ext.define('Teselagen.bio.parsers.GenbankLocusKeyword', {
 	 * @constructor
 	 * @param */
 	constructor: function (inData) {
-		//var that = this;
+		var that = this;
 		
 		if (inData ) {
 			//console.log(JSON.stringify(inData, null, " "));
@@ -124,6 +124,11 @@ Ext.define('Teselagen.bio.parsers.GenbankLocusKeyword', {
 			
 			return line;
 		}
+		
+		this.toJSONString = function() {
+			return JSON.stringify(that, null, '  ');
+		}
+		
 		
 		return this;
     }

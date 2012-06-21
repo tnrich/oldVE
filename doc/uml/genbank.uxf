@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>760</x>
+      <y>50</y>
+      <w>300</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>+Genbank
+--
+-keywords: ArrayList (of GbK)
+-keywordsTag: Array (of String)
+-?locus: GenbankLocusKeyword
+-?accession: GenbankKeyword
+-?version: GenbankKeyword
+-?features: GenbankFeaturesKeyword
+-?origin: GenbankOriginKeyword
+--
++Genbank(input:String):Genbank
++getLocus(): GenbankLocusKeyword
++setLocus(GenbankLocusKeyword)
++setOrigin(): GenbankOriginKeyword
++getOrigin(GenbankOriginKeyword)
++get/set Features, Accession, Version
++get/set KeywordsTag, Keywords
++addKeywordsTag(keyword:String);
++addKeywords(GenbankKeyword)
++toString(): GenbankFileString:String
++toJSON(): JSONObject:String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>130</x>
+      <y>240</y>
+      <w>390</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>+GenbankManager
+--
+
+--
++parseGenbankFile(genbankFileString:String): Genbank
+
+-lineParser(line:String):
+-parseKeyword(line:String): GenbankKeyword
+-parseLocus(line:String): GenbankLocusKeyword
+-parseFeatures(line:String): GenbankFeaturesKeyword
+-parseOrigin(line:String): GenbankOriginKeyword
+========( Helper Functions )=========
+-getLineKey(line:String): String
+-getLineVal(line:String): String
+-isNewKeyword(line:String): Boolean
+-?detectField
+-?subFeature
+-?runonCheck
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>490</x>
+      <y>230</y>
+      <w>280</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>260;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>520</x>
+      <y>700</y>
+      <w>290</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>+ GenbankOriginKeyword
+--
+-sequence: String
+-?keyword: String (not KW inherited)
+-?value: String (not inherited)
+--
++getSequence(): String
++setSequence(line:String)
++appendSequence(line:String)
++toString(): GenbankFileLine:String
++toJSON()String: String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>580</x>
+      <y>520</y>
+      <w>320</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>+ GenbankKeyword
+--
++keyword: String
++value:
++subKeywords:
+--
++GenbankKeyword(config/null): Genbank
++toString(): GenbankFileLine:String
++?toJSONString() String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>870</x>
+      <y>730</y>
+      <w>230</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>+ GenbankSubKeyword
+--
+-key: String
+-value:
+--
++get/set Key
++get/set Value
+(+toString(): String)
+(+toJSONString(): String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>650</y>
+      <w>430</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>+ GenbankLocusKeyword
+--
+-locusName: String
+-sequenceLength: Number (integer)
+-strandType: String {ss/ds/unknown}
+-naType: String {DNA/RNA/unknown}
+-linear: Boolean
+-divisionCode: String
+-date: String (CHANGE TO DATE obj)
+--
++GenbankLocusKeyword(config/null): GebankLocusKeyword
++get/set LocusName ..
++toString(): GenbankFileLine:String
++toJSONString(): String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>880</x>
+      <y>420</y>
+      <w>220</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>+ GenbankFeatureKeyword
+--
++features: ArrayList?
+--
++GenbankFeatureKeyword():
++get/set Features
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1160</x>
+      <y>720</y>
+      <w>230</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>+ GenbankFeatureQualifier
+--
+-name: String
+-value: 
+-quoted: ???
+--
++ GenbankFeatureQualifer()
++get/set Name
++get/set Value
++get/set Quoted</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1160</x>
+      <y>470</y>
+      <w>230</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>+ GenbankFeatureElement
+--
+-key: String
+-strand: Integer
+--
++GenbankFeatureElement()
++get/set Key
++get/set Strand
++get/set FeatureQualifier
++get/set FeatureLocation
+(+toString(): String)
+(+toJSONString(): String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1090</x>
+      <y>290</y>
+      <w>310</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>+ GenbankLocation
+--
+-genbankStart: Integer
+-end: Integer
+--
++GenbankLocation(start:int,end:int/null):
++get/set End</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>70</x>
+      <y>30</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>SequenceManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>90</x>
+      <y>30</y>
+      <w>80</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60;200;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>660</x>
+      <y>630</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>300</x>
+      <y>560</y>
+      <w>300</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>30;90;30;30;280;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>750</x>
+      <y>450</y>
+      <w>150</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>130;30;30;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>170</x>
+      <y>80</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>+ StringUtil
+--
++String.trim()
++String.ltrm()
++String.rtrim()
++String.lpad(padder,int)
++String.rpad(padder,int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>190</x>
+      <y>110</y>
+      <w>50</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;120</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>340</x>
+      <y>590</y>
+      <w>260</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;60;30;30;240;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1230</x>
+      <y>360</y>
+      <w>50</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;110</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1230</x>
+      <y>630</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;90;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>820</x>
+      <y>630</y>
+      <w>150</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>130;100;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>950</x>
+      <y>480</y>
+      <w>230</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>210;100;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>480</x>
+      <y>20</y>
+      <w>180</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>- Fields (NOT USED)
+--
++field
++ref
+--
++genbankFieldsSubset()
++genbankReference()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>300</x>
+      <y>10</y>
+      <w>170</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>- Flags
+--
++keyword: Boolean
++subKeyword: Boolean
++?ori,feat,ref,
++?runon
+--
++setNone()
++setKeyType()
++setType()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>340</x>
+      <y>130</y>
+      <w>50</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;110</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>470</x>
+      <y>90</y>
+      <w>50</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;150</additional_attributes>
+  </element>
+</diagram>
