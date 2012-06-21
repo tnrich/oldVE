@@ -25,7 +25,7 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         PUBMED_TAG: "PUBMED",
         REMARK_TAG: "REMARK",
         COMMENT_TAG: "COMMENT",
-        FEATURE_TAG: "FEATURES",
+        FEATURES_TAG: "FEATURES",
         BASE_COUNT_TAG: "BASE COUNT",
         //CONTIG_TAG: "CONTIG"
         ORIGIN_TAG: "ORIGIN",
@@ -85,14 +85,14 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         		tmp = parseLocus(line);
         		//console.log(tmp.toString());
         		lastObj = gb.getLocus();
+        		//gb.addKeywords(lastObj);
         		break;
         	case that.self.ACCESSION_TAG:
         		console.log("accession");
         		tmp = parseKeyword(line);
-        		gb.addKeywords(tmp);
-        		gb.setAccession(tmp);
-        		gb.addKeywords(tmp);
-    			lastObj = gb.getKeywords().pop();
+        		//gb.setAccession(tmp);
+    			lastObj = gb.getAccession();
+    			//gb.addKeywords(lastObj);
         		break;
         	/*case that.self.VERSION_TAG:
         		//
@@ -105,7 +105,7 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         		//
         		break;
         	case that.self.FEATURES_TAG:
-        		//
+        		tmp = parseFeatures(line);
         		break;
         	case that.self.ORIGIN_TAG:
         		var tmp = parseOrigin(line);
@@ -114,22 +114,22 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         	case "BASE":
         		//
         		break;
-        		
+        	case that.self.END_SEQUENCE_TAG:
+        		break;
         	default:
+        		//console.log("default case: " + line);
         		if (myFlag.origin) {
         			tmp = parseOrigin(line);
             		lastObj = gb.getOrigin();
         		}
-        		if (myFlag.keyword) {
-        			console.log(line);
+        		//console.log(myFlag.keyword);
+        		if (myFlag.keyword === true) {
+        			//console.log(line);
         			tmp = parseKeyword(line);
         			gb.addKeywords(tmp);
         			lastObj = gb.getKeywords().pop();
         		}
         	
-        	}
-        	if (!tmp) {
-        		lastObj = tmp;
         	}
         	/*
         	if ( key === that.self.LOCUS_TAG ) {
@@ -226,7 +226,7 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         	result.setKeyword(that.self.LOCUS_TAG);	
         	gb.setLocus(result);
         	gb.addKeywordsTag(that.self.LOCUS_TAG);
-        	gb.addKeywords(result);
+        	//gb.addKeywords(result);
         	return result;
         }
 		
@@ -238,6 +238,7 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         		value: val
         	});;
         	
+        	gb.addKeywords(result);
         	gb.addKeywordsTag(key);
         	//gb.addKeywords(result); only do this if not existing
         	return result;
@@ -248,22 +249,25 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
         	var result;
         	//gb.setOrigin(result);
         	gb.addKeywordsTag(that.self.FEATURES_TAG);
-        	gb.addKeywords(gb.getFeatures());
+        	//gb.addKeywords(gb.getFeatures());
         	return result;
         }
         
-        function parseOrigin(line) {
-        	//var result = Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
-        	var result = gb.getOrigin();
+        function parseOrigin(line) {  
+        	var result;
+        	//var result = gb.getOrigin();
         	if (getLineKey(line) === that.self.ORIGIN_TAG) {
+        		result = Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
         		result.setKeyword(that.self.ORIGIN_TAG);
+        		gb.setOrigin(result);
         		gb.addKeywordsTag(that.self.ORIGIN_TAG);
         	} else { 
+        		result = gb.getOrigin();
         		line = line.replace(/[\s]*[0-9]*/g,"");
         		result.appendSequence(line);
         	}
-        	gb.setOrigin(result);
-        	gb.addKeywords(gb.getOrigin());
+        	//gb.setOrigin(result);
+        	//gb.addKeywords(gb.getOrigin());
         	return result;
         }
         
@@ -278,6 +282,7 @@ Ext.define('Teselagen.bio.parsers.GenbankManager', {
 		
 		function getLineVal(line) {
 			line	= line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");	
+			line = Ext.String.trim(line);
 			return line;
 		}
 		

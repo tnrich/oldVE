@@ -10,12 +10,13 @@ describe("Testing Genbank related classes ", function() {
 	    
 	    it("Works?",function(){
 	    	var str = "  black  ";
-	    	console.log("a" + str.trim() + "b");   //result "ablackb"
-	    	console.log(Ext.String.trim(str));
-	    	console.log("a" + str.ltrim() + "b");  //result "ablack b"
-	    	console.log("a" + str.rtrim() + "b");  //result "a blackb"
-	    	console.log("" + str.lpad("0", 5)); //result "00005"
-	    	console.log("" + str.rpad("0", 5)); //result "50000"
+	    	expect("a" + str.trim() + "b").toBe("ablackb");
+	    	expect(Ext.String.trim(str)).toBe("black");
+	    	expect("a" + str.ltrim() + "b").toBe("ablack  b");  //result "ablack b"
+	    	expect("a" + str.rtrim() + "b").toBe("a  blackb");  //result "a blackb"
+	    	var str = "5";
+	    	expect("" + str.lpad("0", 5)).toBe("00005"); //result "00005"
+	    	expect("" + str.rpad("0", 5)).toBe("50000"); //result "50000"
 	    	expect(false).toBe(false);
 	    });
  
