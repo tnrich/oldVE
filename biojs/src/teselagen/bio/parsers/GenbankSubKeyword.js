@@ -13,9 +13,15 @@ Ext.define('Teselagen.bio.parsers.GenbankSubKeyword', {
 	 * @constructor
 	 * @param {String, String}
 	 */
-	constructor: function (pKey, pValue) {
-		var key   = pKey;
-		var value = pValue;
+	constructor: function (inData) {
+		
+		if (inData) {
+			var key   = inData.key;
+			var value = inData.value;
+		} else {
+			var key;
+			var value;
+		}
 		
 		this.getKey = function() {
 			return key;

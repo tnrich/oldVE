@@ -71,12 +71,12 @@ Ext.define('Teselagen.bio.parsers.GenbankFormat', {
         		console.log(gbKey);
         		if (gbKey.keyword === that.self.LOCUS_TAG) {
         			//gbFM.setKeyword
-        		} else if (gbKey.keyword === that.self.ACCESSION_TAG) {
-        		} else if (gbKey.keyword === that.self.VERSION_TAG) {
-        		} else if (gbKey.keyword === that.self.DEFINITION_TAG) {
-        		} else if (gbKey.keyword === that.self.KEYWORDS_TAG) {
-        		} else if (gbKey.keyword === that.self.FEATURES_TAG) {
-        		} else if (gbKey.keyword === that.self.ORIGIN_TAG) {
+        		} else if (gbKey.keywords === that.self.ACCESSION_TAG) {
+        		} else if (gbKey.keywords === that.self.VERSION_TAG) {
+        		} else if (gbKey.keywords === that.self.DEFINITION_TAG) {
+        		} else if (gbKey.keywords === that.self.KEYWORDS_TAG) {
+        		} else if (gbKey.keywords === that.self.FEATURES_TAG) {
+        		} else if (gbKey.keywords === that.self.ORIGIN_TAG) {
         		} else {
         			gbFM.getKeywords().push(gbKey);
         		}

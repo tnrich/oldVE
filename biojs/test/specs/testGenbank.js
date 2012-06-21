@@ -23,16 +23,16 @@ describe("Testing Genbank related classes ", function() {
 	
 	
 	describe("Ceating classes correctly?", function() {
-		it("GenbankFormat statics are ok? ", function() {
-			var gbFormat = Ext.create('Teselagen.bio.parsers.GenbankFormat');
-			expect(gbFormat).toBeDefined();
-			//expect(gbFormat.self.LOCUS_TAG).toBe("LOCUS");
-			//expect(gbFormat.self.END_SEQUENCE_TAG).toBe("//");
+		it("GenbankManager statics are ok? ", function() {
+			var gbMan = Ext.create('Teselagen.bio.parsers.GenbankManager');
+			expect(gbMan).toBeDefined();
+			//expect(gbMan.self.LOCUS_TAG).toBe("LOCUS");
+			//expect(gbMan.self.END_SEQUENCE_TAG).toBe("//");
 	    });
 	
-	    it("GenbankFileModel Initializing? ", function() {
-	    	var gbFM = Ext.create('Teselagen.bio.parsers.GenbankFileModel');
-	    	expect(gbFM).toBeDefined();
+	    it("Genbank Initializing? ", function() {
+	    	var gb = Ext.create('Teselagen.bio.parsers.Genbank');
+	    	expect(gb).toBeDefined();
 	    });
 	    
 	    it("GenbankFileKeyword classes exist? ", function() {
@@ -56,17 +56,16 @@ describe("Testing Genbank related classes ", function() {
 	});
 
 	
-	describe("Testing Keyword Parsing from GenbankFormat.js", function() {
+	describe("Testing Keyword Parsing from GenbankManager.js", function() {
 	    var line, tmp;
 	    var dt =  Ext.create('Data');
-	    //var gf =  Ext.create('Teselagen.bio.parsers.GenbankFormat');
-	    var gf =  Ext.create('Teselagen.bio.parsers.GenbankParser');
+	    var gbMan =  Ext.create('Teselagen.bio.parsers.GenbankManager');
 	    
 	    //console.log(Ext.Loader.getConfig());
 	    
 	    it("Parses LOCUS?",function(){
 	    	line = dt.getLocusStr();
-	    	tmp = gf.parseGenbankFile(line);
+	    	tmp = gbMan.parseGenbankFile(line);
 	    	expect(tmp.getLocus().toString()).toBe(line);
 	    });
 	    it("Parses ACCESSION?",function(){
@@ -98,21 +97,25 @@ describe("Testing Genbank related classes ", function() {
 	    			"        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n" +
 	    			"       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n" +
 	    			"//";
-	    	//tmp = gf.parseGenbankFile(line);
+	    	//tmp = gbMan.parseGenbankFile(line);
 	    	//console.log(tmp);
 	    });
 
 	    it("Parses Top part of pj5_00028.gb string?",function(){
 	    	line = dt.getTopStr();
 	    	console.log(line);
-	    	tmp = gf.parseGenbankFile(line);
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	//console.log(tmp.getLocus().getKeyword());
 	    	console.log(tmp.toString());
+	    	console.log(tmp.toString2());
 	    	console.log(JSON.stringify(tmp));
+	    	console.log(JSON.stringify(tmp.getKeywordsTag(), null, '  '));
+	    	console.log(JSON.stringify(tmp.getKeywords(), null, '  '));
 	    })
 	    
 	    it("Parses pj5_00028.gb string?",function(){
 	    	//line = dt.getPj5Str();
-	    	//tmp = gf.parseGenbankFile(line);
+	    	//tmp = gbMan.parseGenbankFile(line);
 	    	//console.log(tmp);
 	    })
 	    

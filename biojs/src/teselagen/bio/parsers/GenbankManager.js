@@ -1,11 +1,11 @@
     /**
-    * GenbankParser class 
-    * @description Takes in file input (as a string) and creates the GenbankFileModel class. Static functions. Replaces GenbankFormat.js
+    * GenbankManager class 
+    * @description Takes in file input (as a string) and creates the Genbank class. Static functions. Replaces GenbankFormat.js
     * @author Diana Wong
-    * @author Timothy Ham (original author of GenbankFormat.js
+    * @author Timothy Ham (original author of GenbankFormat.js)
     */
 
-Ext.define('Teselagen.bio.parsers.GenbankParser', {
+Ext.define('Teselagen.bio.parsers.GenbankManager', {
 	/** @lends  */
 	
 	statics: {
@@ -35,31 +35,26 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
 	constructor: function() {
 		var that = this;
 		
-		var gbFM;
-    	var lastObj;
-    	var lastKey;
-    	
-    	var myFlag;
-    	var myField;
-    	
+		var gb;
+    	var lastObj, lastKey; // To keep track of last object/key when parsing next line
+    	var myFlag, myField; // Flags and Fields to keep track of stuff
     	var genArr;
 		
 		
-		//var gbFM = Ext.create('Teselagen.bio.parsers.GenbankFileModel');
+		//var gb = Ext.create('Teselagen.bio.parsers.Genbank');
 		//var genArr = new Array();
 		
-		
-		
+				
 		/* @function
          * @param {String} String form of Genbank File.
-         * @return {GenbankFileModel}
+         * @return {Genbank}
          * @description Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
          */
         this.parseGenbankFile = function(genbankFileString) {
-        	gbFM = Ext.create('Teselagen.bio.parsers.GenbankFileModel');
+        	gb = Ext.create('Teselagen.bio.parsers.Genbank');
         	
         	myFlag = new Flags();
-        	myField = new Field();
+        	//myField = new Field();
         	
         	genArr	= genbankFileString.split(/[\n]+/g);
         	for (var i=0 ; i < genArr.length; i++) {
@@ -67,7 +62,7 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
         	}
         	
         	
-        	return gbFM;
+        	return gb;
         }
         
         /* @function Line by line parser
@@ -78,28 +73,91 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
         	var key = getLineKey(line);
         	var val = getLineVal(line);
         	var newKey = isNewKeyword(line);
+        	var tmp;
         	
         	myFlag.setType(key);
         	myFlag.setKeyType(newKey);
         	
         	// For Keyword Lines
         	
+        	switch (key) {
+        	case that.self.LOCUS_TAG:
+        		tmp = parseLocus(line);
+        		//console.log(tmp.toString());
+        		lastObj = gb.getLocus();
+        		break;
+        	case that.self.ACCESSION_TAG:
+        		console.log("accession");
+        		tmp = parseKeyword(line);
+        		gb.addKeywords(tmp);
+        		gb.setAccession(tmp);
+        		gb.addKeywords(tmp);
+    			lastObj = gb.getKeywords().pop();
+        		break;
+        	/*case that.self.VERSION_TAG:
+        		//
+        		break;
+        	case that.self.KEYWORDS_TAG:
+        		//
+        		break;
+        		*/
+        	case that.self.REFERENCE_TAG:
+        		//
+        		break;
+        	case that.self.FEATURES_TAG:
+        		//
+        		break;
+        	case that.self.ORIGIN_TAG:
+        		var tmp = parseOrigin(line);
+        		lastObj = gb.getOrigin();
+        		break;
+        	case "BASE":
+        		//
+        		break;
+        		
+        	default:
+        		if (myFlag.origin) {
+        			tmp = parseOrigin(line);
+            		lastObj = gb.getOrigin();
+        		}
+        		if (myFlag.keyword) {
+        			console.log(line);
+        			tmp = parseKeyword(line);
+        			gb.addKeywords(tmp);
+        			lastObj = gb.getKeywords().pop();
+        		}
+        	
+        	}
+        	if (!tmp) {
+        		lastObj = tmp;
+        	}
+        	/*
         	if ( key === that.self.LOCUS_TAG ) {
         		var tmp = parseLocus(line);
-        		console.log(tmp.toString());
-        		gbFM.setLocus(tmp);
-        		//console.log(gbFM.toString());
-        	} else if ( key === that.self.REFERNCE_TAG ) {
+        		//console.log(tmp.toString());
+        		lastObj = gb.getLocus();
+        	} else if ( key === that.self.ACCESSION_TAG ) {
+        		//parse
+        	} else if ( key === that.self.VERSION_TAG ) {
+        		//parse
+        	} else if ( key === that.self.KEYWORDS_TAG ) {
+        		//parse
+        	} else if ( key === that.self.REFERENCE_TAG ) {
         		//parseReference(line);
         	} else if ( key === that.self.FEATURES_TAG ) {
         		//parseFeatures(line);
-        	} else if ( key === that.self.ORIGIN_TAG ) {
-        		parseOrigin(line);
+        	} else if ( key === that.self.ORIGIN_TAG || myFlag.origin ) {
+        		var tmp = parseOrigin(line);
+        		//console.log(tmp.getKeyword());
+        		//console.log(tmp.getSequence());
+        		//console.log(tmp.toString());
+        		lastObj = gb.getOrigin();
         	} else if ( key === "BASE") {
         		//parseBaseCount(line);
         	} else if ( myFlag.keyword === true ) { //this is a Keyword, not subKeyword
         		//parseKeyword(line);
         	} else {}
+        	*/
         	
         	
         	
@@ -114,7 +172,6 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
         function parseLocus(line) {
         	var result, locusName, seqLen, strand, naType, linear, div, date;
         	var lineArr = line.split(/[\s]+/g);
-        	//console.log(lineArr);
 
 			locusName = lineArr[1];
 			seqLen = lineArr[2];
@@ -166,27 +223,50 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
         		date: date
         	});
         	
-        	//console.log(line);
-        	//console.log(result.toString());
-        	
-        	gbFM.setLocus(result);
+        	result.setKeyword(that.self.LOCUS_TAG);	
+        	gb.setLocus(result);
+        	gb.addKeywordsTag(that.self.LOCUS_TAG);
+        	gb.addKeywords(result);
         	return result;
         }
 		
+        function parseKeyword(line) {
+        	var key = getLineKey(line);
+        	var val = getLineVal(line);
+        	var result = Ext.create('Teselagen.bio.parsers.GenbankKeyword', {
+        		keyword: key,
+        		value: val
+        	});;
+        	
+        	gb.addKeywordsTag(key);
+        	//gb.addKeywords(result); only do this if not existing
+        	return result;
+        }
+        
         function parseFeatures(line) {
-        	//var result = Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
+        	//var result = Ext.create('Teselagen.bio.parsers.GenbankFeaturesKeyword');
         	var result;
-        	//gbFM.setOrigin(result);
+        	//gb.setOrigin(result);
+        	gb.addKeywordsTag(that.self.FEATURES_TAG);
+        	gb.addKeywords(gb.getFeatures());
         	return result;
         }
         
         function parseOrigin(line) {
         	//var result = Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
-        	var result = gbFM.getOrigin();
-        	result.setSequence("Testing Sequence Setter");
-        	gbFM.setOrigin(result);
+        	var result = gb.getOrigin();
+        	if (getLineKey(line) === that.self.ORIGIN_TAG) {
+        		result.setKeyword(that.self.ORIGIN_TAG);
+        		gb.addKeywordsTag(that.self.ORIGIN_TAG);
+        	} else { 
+        		line = line.replace(/[\s]*[0-9]*/g,"");
+        		result.appendSequence(line);
+        	}
+        	gb.setOrigin(result);
+        	gb.addKeywords(gb.getOrigin());
         	return result;
         }
+        
         /* -----------------------------------------------------
          *  HELPER PARSING FUNCTIONS
          * -----------------------------------------------------*/
@@ -203,9 +283,9 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
 		
 		function isNewKeyword(line) {
 			if (line.match(/^[\s]+/)) {
-				var newKey = true;
-			} else {
 				var newKey = false;
+			} else {
+				var newKey = true;
 			}
 			return newKey;
 		}
@@ -376,6 +456,8 @@ Ext.define('Teselagen.bio.parsers.GenbankParser', {
 					this.setFeatures();
 				} else if (key === "ORIGIN") {
 					this.setOrigin();
+				} else if (key === that.self.END_SEQUENCE_TAG) {
+					this.setNone();
 				}
 			}
 		} // END OF Flags()
