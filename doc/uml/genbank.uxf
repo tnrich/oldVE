@@ -6,13 +6,13 @@
     <coordinates>
       <x>760</x>
       <y>50</y>
-      <w>300</w>
+      <w>320</w>
       <h>350</h>
     </coordinates>
     <panel_attributes>+Genbank
 --
--keywords: ArrayList (of GbK)
--keywordsTag: Array (of String)
+-keywords: ArrayList&lt;GbKeyW&gt;
+-keywordsTag: ArrayList&lt;String&gt;
 -?locus: GenbankLocusKeyword
 -?accession: GenbankKeyword
 -?version: GenbankKeyword
@@ -20,10 +20,9 @@
 -?origin: GenbankOriginKeyword
 --
 +Genbank(input:String):Genbank
-+getLocus(): GenbankLocusKeyword
-+setLocus(GenbankLocusKeyword)
-+setOrigin(): GenbankOriginKeyword
-+getOrigin(GenbankOriginKeyword)
++findKeyword(keywordName:String): GbKeyW
++get/setLocus(): GenbankLocusKeyword
++set/setOrigin(): GenbankOriginKeyword
 +get/set Features, Accession, Version
 +get/set KeywordsTag, Keywords
 +addKeywordsTag(keyword:String);
@@ -66,11 +65,11 @@
     <coordinates>
       <x>490</x>
       <y>230</y>
-      <w>280</w>
+      <w>290</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=.&gt;</panel_attributes>
-    <additional_attributes>260;30;30;30</additional_attributes>
+    <additional_attributes>270;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -219,7 +218,7 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1090</x>
+      <x>1120</x>
       <y>290</y>
       <w>310</w>
       <h>100</h>
@@ -247,13 +246,13 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>90</x>
+      <x>120</x>
       <y>30</y>
-      <w>80</w>
-      <h>220</h>
+      <w>50</w>
+      <h>230</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>60;200;30;30</additional_attributes>
+    <additional_attributes>30;210;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -286,7 +285,7 @@
       <h>90</h>
     </coordinates>
     <panel_attributes>lt=&gt;&gt;-</panel_attributes>
-    <additional_attributes>130;30;30;70</additional_attributes>
+    <additional_attributes>130;30;30;30;30;70</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -311,10 +310,10 @@
       <x>190</x>
       <y>110</y>
       <w>50</w>
-      <h>140</h>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>30;30;30;120</additional_attributes>
+    <additional_attributes>30;30;30;130</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -330,7 +329,7 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1230</x>
+      <x>1260</x>
       <y>360</y>
       <w>50</w>
       <h>130</h>
@@ -352,24 +351,24 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>820</x>
-      <y>630</y>
-      <w>150</w>
-      <h>120</h>
+      <x>870</x>
+      <y>580</y>
+      <w>100</w>
+      <h>170</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>130;100;30;30</additional_attributes>
+    <additional_attributes>80;150;80;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>950</x>
+      <x>1030</x>
       <y>480</y>
-      <w>230</w>
+      <w>150</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>210;100;30;30</additional_attributes>
+    <additional_attributes>130;100;30;100;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>

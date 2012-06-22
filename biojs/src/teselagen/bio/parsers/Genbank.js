@@ -27,6 +27,10 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 		
 		// ======== Getter and Setter function ========//
 		
+		this.findKeyword = function (key) {
+			return find(key);
+		}
+		
 		function find(key) {
 			var entry;
 			for (var i=0; i<keywords.length; i++) {
@@ -134,7 +138,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			
 			return gbStr;
 		}
-		this.toString = function() {
+		this.toString2 = function() {
 			var gbStr = "";
 			//console.log(kewords.length);
 			for (var i=0; i < keywordsTag.length; i++) {
@@ -178,7 +182,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			return gbStr;
 		}
 		
-		this.toString2 = function() {
+		this.toString = function() {
 			var gbStr = "";
 			var entry;
 			//console.log(kewords.length);
