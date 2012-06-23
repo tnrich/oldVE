@@ -205,7 +205,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 		}
 		
 		
-		this.toJSONString = function() {
+		this.toJSON = function() {
 			var json = new Object();
 			for (var i=0; i < keywords.length; i++) {
 				var key = keywords[i].getKeyword();
