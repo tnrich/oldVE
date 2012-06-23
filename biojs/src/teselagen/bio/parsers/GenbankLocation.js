@@ -13,9 +13,17 @@ Ext.define('Teselagen.bio.parsers.GenbankLocation', {
 	 * @constructor
 	 * @param {int, int} Genbank Feature Start and End indices
 	 */
-	constructor: function (pGenbankStart, pGenbankEnd) {
-		var genbankStart = pGenbankStart;
-		var end = pGenbankEnd;
+	constructor: function (inData) {
+		var that = this;
+		
+		if (inData) {
+			var start	= inData.start;
+			var end		= inData.end;
+		} else {
+			var start;
+			var end;
+		}
+		
 		
 		this.getGenbankStart = function() {
 			return genbankStart;

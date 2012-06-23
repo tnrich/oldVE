@@ -14,16 +14,16 @@ Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 	 * @constructor
 	 * @param */
 	constructor: function (inData) {
+		var that = this;
 		
-		//console.log("Made Origin");
 		if (inData) {
 			var sequence	= inData.sequence;
-			var keyword		= inData.keyword;
-			var value		= inData.value;
+			//var keyword		= inData.keyword;
+			//var value		= inData.value;
 		} else {
 			var sequence = "";
-			var keyword;
-			var value;
+			//var keyword;
+			//var value;
 		}
 		
 		this.getSequence = function() {
@@ -50,8 +50,8 @@ Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 			var line = "";
 			
 			line += "ORIGIN".rpad(" ", 12);
-			if ( value != null) {
-                line += value + "\n";
+			if ( that.value != null) {
+                line += that.value + "\n";
             } else {
                 line += "\n";
             }
@@ -71,8 +71,12 @@ Ext.define('Teselagen.bio.parsers.GenbankOriginKeyword', {
 			
 		}
 		
-		this.toJSONString = function() {
-			return JSON.stringify(that, null, '  ');
+		this.toJSON = function() {
+			json = {
+				keyword: that.keyword,
+				sequence: sequence
+			}
+			return json;
 		}
 		
 		

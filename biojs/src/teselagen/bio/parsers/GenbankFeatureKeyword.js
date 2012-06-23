@@ -13,7 +13,9 @@ Ext.define('Teselagen.bio.parsers.GenbankFeatureKeyword', {
 	 * @constructor
 	 * @param */
 	constructor: function () {
-		var features;
+		var that = this;
+		
+		var features = new Array();
 		
 		this.getFeatures = function() {
 			return features;
@@ -21,7 +23,25 @@ Ext.define('Teselagen.bio.parsers.GenbankFeatureKeyword', {
 		this.setFeatures = function(pFeatures) {
 			features = pFeatures;
 		}
-
+		
+		this.addElement = function(pElement) {
+			features.push(pElement);
+		}
+		
+		this.toString = function() {
+			var line = "FEATURES             Location/Qualifiers\n";
+			
+			for (var i=0; i < features.length; i++) {
+				line += features[i].toString() + "\n";
+			}
+			
+			return line;
+		}
+		
+		this.toJSONString = function() {
+			return JSON.stringify(that, null, '  ');
+		}
+		
 		return this;
     }
 
