@@ -9,7 +9,7 @@
     "userConfig": {
         "designer|initialView": true,
         "layout": "border",
-        "designer|userClassName": "MyViewport"
+        "designer|userClassName": "AppViewport"
     },
     "customConfigs": [],
     "designerId": "769f9c07-da27-4fec-8039-b923f3e3a5d5",
@@ -25,9 +25,10 @@
             },
             "codeClass": null,
             "userConfig": {
+                "id": "VectorPanel",
                 "resizable": null,
-                "title": "My Panel",
-                "titleCollapse": true,
+                "title": "Vector",
+                "titleCollapse": null,
                 "designer|userClassName": "MyPanel",
                 "layout|region": "center"
             },
@@ -43,7 +44,7 @@
             },
             "codeClass": null,
             "userConfig": {
-                "id": "projectPanel",
+                "id": "ProjectPanel",
                 "width": 150,
                 "resizable": "true",
                 "resizeHandles": "e",
@@ -63,10 +64,11 @@
             },
             "codeClass": null,
             "userConfig": {
+                "id": "AnnotatePanel",
                 "width": 150,
                 "resizable": "true",
                 "resizeHandles": "w",
-                "title": "My Panel",
+                "title": "Annotate",
                 "designer|userClassName": "MyPanel2",
                 "layout|region": "east"
             },
@@ -83,7 +85,7 @@
             "codeClass": null,
             "userConfig": {
                 "height": 75,
-                "id": "menuPanel",
+                "id": "MainMenuPanel",
                 "layout": "vbox",
                 "designer|userClassName": "MyPanel3",
                 "container|align": "stretch",
@@ -102,13 +104,13 @@
                     "codeClass": null,
                     "userConfig": {
                         "height": null,
-                        "id": "menuTb",
+                        "id": "MainMenuBar",
                         "autoScroll": false,
                         "designer|userClassName": "MyToolbar",
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen2938",
@@ -159,7 +161,7 @@
                                             },
                                             "codeClass": null,
                                             "userConfig": {
-                                                "id": "importMi",
+                                                "id": "importMenuItem",
                                                 "plain": false,
                                                 "text": "Import from File",
                                                 "designer|userClassName": "MyMenuItem"
@@ -581,7 +583,7 @@
                                 "layout|flex": null
                             },
                             "customConfigs": [],
-                            "expanded": false,
+                            "expanded": true,
                             "cn": [
                                 {
                                     "id": "ExtBox1-ext-gen14735",
@@ -801,6 +803,21 @@
                                             "userConfig": {
                                                 "text": "Cut Site Labels",
                                                 "designer|userClassName": "MyMenuItem22"
+                                            },
+                                            "customConfigs": [],
+                                            "expanded": true
+                                        },
+                                        {
+                                            "id": "ExtBox1-ext-gen16268",
+                                            "type": "menucheckitem",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "text": "Menu Item",
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
@@ -1039,12 +1056,12 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "id": "iconTb",
+                        "id": "MainControlBar",
                         "designer|userClassName": "MyToolbar1",
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen25950",
@@ -1400,7 +1417,7 @@
             "codeClass": null,
             "userConfig": {
                 "height": 23,
-                "id": "statusPanel",
+                "id": "StatusPanel",
                 "layout": "fit",
                 "title": null,
                 "designer|userClassName": "MyPanel4",
@@ -1418,7 +1435,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "id": "statusTb",
+                        "id": "StatusBar",
                         "designer|userClassName": "MyToolbar6",
                         "dock": "top"
                     },

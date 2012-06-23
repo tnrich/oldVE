@@ -7,7 +7,7 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userClassName": "MyController"
+        "designer|userClassName": "MainMenuController"
     },
     "customConfigs": [],
     "designerId": "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0",
@@ -25,12 +25,12 @@
             "userConfig": {
                 "fn": "onImportMenuItemClick",
                 "implHandler": [
-                    "Ext.create(\"MyApp.view.FileImportWindow\").show();"
+                    "Ext.create(\"App.view.FileImportWindow\").show();"
                 ],
                 "name": "click",
                 "scope": "me",
                 "designer|targetType": "Ext.menu.Item",
-                "designer|controlQuery": "#importMi",
+                "designer|controlQuery": "#importMenuItem",
                 "designer|userClassName": "onImportMenuItemClick"
             },
             "customConfigs": [],
@@ -93,16 +93,16 @@
                     "    var fileField = form.findField('importedFile');",
                     "    var fileInput = fileField.extractFileInput();",
                     "    var file = fileInput.files[0];",
-                    "\tfr = new FileReader();",
-                    "\tfr.onload = processText;",
+                    "    fr = new FileReader();",
+                    "    fr.onload = processText;",
                     "    fr.readAsText(file);",
                     "}",
                     "button.up('window').close();",
                     "",
                     "function processText() {",
-                    "  var result = fr.result;",
-                    "  var gb = Ext.create('Teselagen.Genbank', result);",
-                    "  console.log(gb);",
+                    "    var result = fr.result;",
+                    "    var gb = Ext.create('Teselagen.Genbank', result);",
+                    "    console.log(gb);",
                     "}"
                 ],
                 "name": "click",
