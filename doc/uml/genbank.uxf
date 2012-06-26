@@ -427,13 +427,15 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>710</x>
+      <x>690</x>
       <y>320</y>
-      <w>80</w>
+      <w>100</w>
       <h>200</h>
     </coordinates>
-    <panel_attributes>lt=&gt;.</panel_attributes>
-    <additional_attributes>60;30;30;30;30;180</additional_attributes>
+    <panel_attributes>lt=&gt;.
+m2=   *
+r2=-keywords</panel_attributes>
+    <additional_attributes>80;30;50;30;50;180</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.custom.Text</type>
@@ -452,18 +454,6 @@
     <coordinates>
       <x>1140</x>
       <y>530</y>
-      <w>20</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>*
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>740</x>
-      <y>470</y>
       <w>20</w>
       <h>20</h>
     </coordinates>
@@ -527,17 +517,6 @@
       <h>30</h>
     </coordinates>
     <panel_attributes>-subKeywords</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>620</x>
-      <y>470</y>
-      <w>120</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>-keywords</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
