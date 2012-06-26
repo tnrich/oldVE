@@ -44,13 +44,13 @@
             ],
             "className": "FileImportWindow"
         },
-        "25006bc2-243e-46eb-b645-d2d8eac9c6d4": {
+        "75149a58-6160-42c0-8847-5066ab8e2b32": {
             "paths": [
-                "metadata/view/MyMenuItem19",
-                "app/view/override/MyMenuItem19.js",
-                "app/view/MyMenuItem19.js"
+                "metadata/controller/MainToolbarController",
+                "app/controller/override/MainToolbarController.js",
+                "app/controller/MainToolbarController.js"
             ],
-            "className": "MyMenuItem19"
+            "className": "MainToolbarController"
         }
     },
     "expandedState": {

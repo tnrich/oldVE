@@ -29,6 +29,7 @@ Ext.application({
     autoCreateViewport: true,
     name: 'App',
     controllers: [
-        'MainMenuController'
+        'MainMenuController',
+        'MainToolbarController'
     ]
 });

@@ -16,17 +16,6 @@
 Ext.define('App.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
-    refs: [
-        {
-            ref: 'importWin',
-            selector: '#importWin'
-        }
-    ],
-
-    onImportMenuItemClick: function(item, e, options) {
-        Ext.create("App.view.FileImportWindow").show();
-    },
-
     onCancelButtonClick: function(button, e, options) {
         button.up('window').close();
     },
@@ -53,20 +42,38 @@ Ext.define('App.controller.MainMenuController', {
         }
     },
 
+    onImportMenuItemClick: function(item, e, options) {
+        Ext.create("App.view.FileImportWindow").show();
+    },
+
+    onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
+        if (checked) {
+            btn.toggle(true);
+        }
+        else {
+            btn.toggle(false);
+        }
+
+    },
+
     onControllerClickStub: function() {
 
     },
 
     init: function() {
         this.control({
-            "#importMenuItem": {
-                click: this.onImportMenuItemClick
-            },
             "button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
             "button[text='Import']": {
                 click: this.onImportButtonClick
+            },
+            "#importMenuItem": {
+                click: this.onImportMenuItemClick
+            },
+            "#featuresMenuItem": {
+                checkchange: this.onFeaturesMenuItemCheckChange
             }
         });
 

@@ -110,7 +110,7 @@
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen2938",
@@ -601,8 +601,8 @@
                                     "expanded": true,
                                     "cn": [
                                         {
-                                            "id": "ExtBox1-ext-gen14743",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen16268",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -610,14 +610,15 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Circular",
-                                                "designer|userClassName": "MyMenuItem19"
+                                                "group": "lineType",
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen14755",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen2940",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -625,7 +626,8 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Linear",
-                                                "designer|userClassName": "MyMenuItem20"
+                                                "group": "lineType",
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
@@ -645,23 +647,25 @@
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen14767",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen5261",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
                                             },
                                             "codeClass": null,
                                             "userConfig": {
+                                                "id": "featuresMenuItem",
                                                 "text": "Features",
-                                                "designer|userClassName": "MyMenuItem21"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen16009",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen6325",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -669,14 +673,15 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Cut Sites",
-                                                "designer|userClassName": "MyMenuItem22"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen16905",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen6540",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -684,7 +689,8 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "ORF",
-                                                "designer|userClassName": "MyMenuItem22"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
@@ -704,8 +710,8 @@
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen17443",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen7757",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -713,14 +719,15 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Complementary",
-                                                "designer|userClassName": "MyMenuItem22"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen18018",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen8322",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -728,14 +735,15 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Spaces",
-                                                "designer|userClassName": "MyMenuItem22"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen18295",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen8538",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -743,14 +751,15 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Sequence AA",
-                                                "designer|userClassName": "MyMenuItem22"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen18568",
-                                            "type": "menuitem",
+                                            "id": "ExtBox1-ext-gen8755",
+                                            "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
                                                 "type": "array"
@@ -758,7 +767,8 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "text": "Revcom AA",
-                                                "designer|userClassName": "MyMenuItem22"
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
                                             "expanded": true
@@ -778,37 +788,7 @@
                                             "expanded": true
                                         },
                                         {
-                                            "id": "ExtBox1-ext-gen19077",
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "text": "Feature Labels",
-                                                "designer|userClassName": "MyMenuItem22"
-                                            },
-                                            "customConfigs": [],
-                                            "expanded": true
-                                        },
-                                        {
-                                            "id": "ExtBox1-ext-gen19663",
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "text": "Cut Site Labels",
-                                                "designer|userClassName": "MyMenuItem22"
-                                            },
-                                            "customConfigs": [],
-                                            "expanded": true
-                                        },
-                                        {
-                                            "id": "ExtBox1-ext-gen16268",
+                                            "id": "ExtBox1-ext-gen10947",
                                             "type": "menucheckitem",
                                             "reference": {
                                                 "name": "items",
@@ -816,7 +796,24 @@
                                             },
                                             "codeClass": null,
                                             "userConfig": {
-                                                "text": "Menu Item",
+                                                "text": "Feature Labels",
+                                                "group": null,
+                                                "designer|userClassName": "MyCheckItem"
+                                            },
+                                            "customConfigs": [],
+                                            "expanded": true
+                                        },
+                                        {
+                                            "id": "ExtBox1-ext-gen11512",
+                                            "type": "menucheckitem",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "text": "Cut Site Labels",
+                                                "group": null,
                                                 "designer|userClassName": "MyCheckItem"
                                             },
                                             "customConfigs": [],
@@ -1056,12 +1053,12 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "id": "MainControlBar",
+                        "id": "MainToolBar",
                         "designer|userClassName": "MyToolbar1",
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen25950",
@@ -1313,6 +1310,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "id": "featuresBtn",
+                                "enableToggle": true,
                                 "icon": "resources/images/features.png",
                                 "scale": "medium",
                                 "text": null,

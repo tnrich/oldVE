@@ -15,44 +15,6 @@
     "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen4185",
-            "type": "controlleraction",
-            "reference": {
-                "name": "listeners",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "fn": "onImportMenuItemClick",
-                "implHandler": [
-                    "Ext.create(\"App.view.FileImportWindow\").show();"
-                ],
-                "name": "click",
-                "scope": "me",
-                "designer|targetType": "Ext.menu.Item",
-                "designer|controlQuery": "#importMenuItem",
-                "designer|userClassName": "onImportMenuItemClick"
-            },
-            "customConfigs": [],
-            "expanded": true
-        },
-        {
-            "id": "ExtBox1-ext-gen6684",
-            "type": "controllerref",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "ref": "importWin",
-                "selector": "#importWin",
-                "designer|userClassName": "importWin"
-            },
-            "customConfigs": [],
-            "expanded": true
-        },
-        {
             "id": "ExtBox1-ext-gen4157",
             "type": "controlleraction",
             "reference": {
@@ -110,6 +72,57 @@
                 "designer|targetType": "Ext.button.Button",
                 "designer|controlQuery": "button[text='Import']",
                 "designer|userClassName": "onImportButtonClick"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen4185",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onImportMenuItemClick",
+                "implHandler": [
+                    "Ext.create(\"App.view.FileImportWindow\").show();"
+                ],
+                "name": "click",
+                "scope": "me",
+                "designer|targetType": "Ext.menu.Item",
+                "designer|controlQuery": "#importMenuItem",
+                "designer|userClassName": "onImportMenuItemClick"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen3556",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onFeaturesMenuItemCheckChange",
+                "implHandler": [
+                    "var btn = Ext.ComponentQuery.query('#featuresBtn')[0];",
+                    "if (checked) {",
+                    "    btn.toggle(true);",
+                    "}",
+                    "else {",
+                    "    btn.toggle(false);",
+                    "}",
+                    ""
+                ],
+                "name": "checkchange",
+                "scope": "me",
+                "designer|targetType": "Ext.menu.CheckItem",
+                "designer|controlQuery": "#featuresMenuItem",
+                "designer|userClassName": "onFeaturesMenuItemCheckChange"
             },
             "customConfigs": [],
             "expanded": true

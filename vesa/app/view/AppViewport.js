@@ -200,61 +200,60 @@ Ext.define('App.view.AppViewport', {
                                         width: 120,
                                         items: [
                                             {
-                                                xtype: 'menuitem',
-                                                text: 'Circular'
+                                                xtype: 'menucheckitem',
+                                                text: 'Circular',
+                                                group: 'lineType'
                                             },
                                             {
-                                                xtype: 'menuitem',
-                                                text: 'Linear'
+                                                xtype: 'menucheckitem',
+                                                text: 'Linear',
+                                                group: 'lineType'
                                             },
                                             {
                                                 xtype: 'menuseparator'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
+                                                id: 'featuresMenuItem',
                                                 text: 'Features'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'Cut Sites'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'ORF'
                                             },
                                             {
                                                 xtype: 'menuseparator'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'Complementary'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'Spaces'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'Sequence AA'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'Revcom AA'
                                             },
                                             {
                                                 xtype: 'menuseparator'
                                             },
                                             {
-                                                xtype: 'menuitem',
+                                                xtype: 'menucheckitem',
                                                 text: 'Feature Labels'
                                             },
                                             {
-                                                xtype: 'menuitem',
-                                                text: 'Cut Site Labels'
-                                            },
-                                            {
                                                 xtype: 'menucheckitem',
-                                                text: 'Menu Item'
+                                                text: 'Cut Site Labels'
                                             }
                                         ]
                                     }
@@ -322,7 +321,7 @@ Ext.define('App.view.AppViewport', {
                         },
                         {
                             xtype: 'toolbar',
-                            id: 'MainControlBar',
+                            id: 'MainToolBar',
                             flex: 1,
                             items: [
                                 {
@@ -412,6 +411,7 @@ Ext.define('App.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'featuresBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/features.png',
                                     scale: 'medium',
                                     tooltip: 'Show Features'
