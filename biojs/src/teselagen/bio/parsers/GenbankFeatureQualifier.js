@@ -6,7 +6,7 @@
     * @author Timothy Ham (original author)
     */
 
-Ext.define('Teselagen.bio.parsers.GenbankFeatureQualifier', {
+Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
 	/* */
 
 	/* 
@@ -46,7 +46,19 @@ Ext.define('Teselagen.bio.parsers.GenbankFeatureQualifier', {
 			quoted = pQuoted;
 		}
 
-
+		this.toString = function() {
+			var line;
+			return line;
+		}
+		
+		this.toJSON = function() {
+			var json = {
+				name: name,
+				value: value,
+				quoted: quoted
+			}
+			return json;
+		}
 		return this;
     }
 

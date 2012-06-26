@@ -1,12 +1,12 @@
 
-    /**
-    * GenbankSubKeyword class 
-    * @description 
-    * @author Diana Wong
-    * @author Timothy Ham (original author)
-    */
+/**
+ * GenbankSubKeyword class 
+ * @description 
+ * @author Diana Wong
+ * @author Timothy Ham (original author)
+ */
 
-Ext.define('Teselagen.bio.parsers.GenbankSubKeyword', {
+Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 	/* */
 
 	/* 
@@ -15,7 +15,7 @@ Ext.define('Teselagen.bio.parsers.GenbankSubKeyword', {
 	 */
 	constructor: function (inData) {
 		var that = this;
-		
+
 		if (inData) {
 			var key   = inData.key;
 			var value = inData.value;
@@ -23,14 +23,14 @@ Ext.define('Teselagen.bio.parsers.GenbankSubKeyword', {
 			var key;
 			var value;
 		}
-		
+
 		this.getKey = function() {
 			return key;
 		}
 		this.setKey = function(pKeyword) {
 			key = pKey;
 		}
-		
+
 		this.getValue = function() {
 			return value;
 		}
@@ -39,6 +39,6 @@ Ext.define('Teselagen.bio.parsers.GenbankSubKeyword', {
 		}
 
 		return this;
-    }
+	}
 
 });

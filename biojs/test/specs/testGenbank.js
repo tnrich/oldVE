@@ -119,7 +119,7 @@ describe("Testing Genbank related classes ", function() {
 	    	console.log(tmp.toString());
 	    	//console.log(tmp.toString2());
 	    	console.log(JSON.stringify(tmp, null, '  '));
-	    	console.log(JSON.stringify(tmp.getKeywordsTag(), null, '  '));
+	    	//console.log(JSON.stringify(tmp.getKeywordsTag(), null, '  '));
 	    	console.log(JSON.stringify(tmp.getKeywords(), null, '  '));
 	    })
 	    

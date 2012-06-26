@@ -6,7 +6,7 @@
     * @author Timothy Ham (original author of GenbankFileModel.js)
     */
 
-Ext.define('Teselagen.bio.parsers.Genbank', {
+Ext.define("Teselagen.bio.parsers.Genbank", {
 	/* */
 	    
 	/* 
@@ -209,7 +209,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			var json = new Object();
 			for (var i=0; i < keywords.length; i++) {
 				var key = keywords[i].getKeyword();
-				console.log(Ext.getClassName(keywords[i]));
+				//console.log(Ext.getClassName(keywords[i]));
 				json[key] = keywords[i];
 			}
 			
