@@ -1,4 +1,4 @@
-function simulatedigest(){
+function simulateDigest(){
 
 a = document.test_simulatedigest.txta.value
 b = document.test_simulatedigest.txtb.value
