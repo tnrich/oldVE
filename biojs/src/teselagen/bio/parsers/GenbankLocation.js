@@ -40,7 +40,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocation", {
 		}
 
 		this.toString = function() {
-			var line = "(" + start + ".." + end + ")";
+			var line = start + ".." + end;
 			return line;
 		}
 		

@@ -117,8 +117,7 @@ describe("Testing Genbank related classes ", function() {
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	//console.log(tmp.getLocus().getKeyword());
 	    	console.log(tmp.toString());
-	    	//console.log(tmp.toString2());
-	    	console.log(JSON.stringify(tmp, null, '  '));
+	    	//console.log(JSON.stringify(tmp, null, '  '));
 	    	//console.log(JSON.stringify(tmp.getKeywordsTag(), null, '  '));
 	    	console.log(JSON.stringify(tmp.getKeywords(), null, '  '));
 	    })

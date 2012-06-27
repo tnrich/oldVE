@@ -27,6 +27,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 		this.addElement = function(pElement) {
 			features.push(pElement);
 		}
+		
+		this.getLastElement = function() {
+			return features[features.length-1];
+		}
 
 		this.toString = function() {
 			var line = "FEATURES             Location/Qualifiers\n";

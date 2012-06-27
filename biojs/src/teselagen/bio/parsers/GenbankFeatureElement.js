@@ -76,8 +76,31 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 		}
 
 		this.toString = function() {
-			var line = "     " + key.rpad(" ", 21);
-			line += strand;
+			var line = "     " + key.rpad(" ", 16);
+			var loc = "";
+			var qual = "";
+			//line += strand;
+			for (var i=0; i < featureLocation.length; i++) {
+				loc += featureLocation[i].toString();
+				if (i<featureLocation.length - 1) { 
+					loc += ",";
+				}
+			}
+			if (join) { 
+				loc = "join(" + loc + ")"; 
+			}
+			if (complement) {
+				loc = "complement(" + loc + ")"; 
+			}
+
+			for (var i=0; i < featureQualifier.length; i++) {
+				qual += featureQualifier[i].toString();
+				if (i<featureQualifier.length - 1) { 
+					qual += "\n";
+				}
+			}
+
+			line = line + loc + "\n" + qual;
 			return line;
 		}
 

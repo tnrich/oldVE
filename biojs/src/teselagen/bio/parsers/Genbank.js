@@ -111,6 +111,10 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 			keywords = pKeywords;
 		}
 		
+		this.getLastKeyword = function() {
+			return keywords[keywords.length-1];
+		}
+		
 		/* @function Add a single keyword String to Genbank.KeywordTag
          * @param {String}
          * @returns 
@@ -198,7 +202,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 				entry = keywords[i];
 				console.log(entry);
 				gbStr += keywords[i].toString() + "\n";
-				
+				//console.log(Ext.getClassName(keywords[i]));
 			}
 			
 			return gbStr;

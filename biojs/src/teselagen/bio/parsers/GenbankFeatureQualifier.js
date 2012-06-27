@@ -18,7 +18,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
 		if (inData) {
 			var name = inData.name;
 			var value = inData.value;
-			var quoted = inData.quoted
+			var quoted = inData.quoted; // boolean
 		} else {
 			var name;
 			var value;
@@ -45,17 +45,25 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
 		this.setQuoted = function(pQuoted) {
 			quoted = pQuoted;
 		}
+		
+		this.appendValue = function(append){
+			value += append;
+		}
 
 		this.toString = function() {
 			var line;
+			if (quoted) {
+				line = "/".lpad(" ", 22) + name + "=\"" + value + "\"";
+			} else {
+				line = "/".lpad(" ", 22) + name + "=" + value ;
+			}
 			return line;
 		}
 		
 		this.toJSON = function() {
 			var json = {
 				name: name,
-				value: value,
-				quoted: quoted
+				value: value
 			}
 			return json;
 		}
