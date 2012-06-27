@@ -21,20 +21,20 @@
     "topInstanceFileMap": {
         "769f9c07-da27-4fec-8039-b923f3e3a5d5": {
             "paths": [
-                "metadata/view/MyViewport",
-                "app/view/override/MyViewport.js",
-                "app/view/MyViewport.js",
+                "metadata/view/AppViewport",
+                "app/view/override/AppViewport.js",
+                "app/view/AppViewport.js",
                 "app/view/Viewport.js"
             ],
-            "className": "MyViewport"
+            "className": "AppViewport"
         },
         "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0": {
             "paths": [
-                "metadata/controller/MyController",
-                "app/controller/override/MyController.js",
-                "app/controller/MyController.js"
+                "metadata/controller/MainMenuController",
+                "app/controller/override/MainMenuController.js",
+                "app/controller/MainMenuController.js"
             ],
-            "className": "MyController"
+            "className": "MainMenuController"
         },
         "36796554-cdfd-4b2b-bfce-3a09263e3130": {
             "paths": [
@@ -43,6 +43,14 @@
                 "app/view/FileImportWindow.js"
             ],
             "className": "FileImportWindow"
+        },
+        "75149a58-6160-42c0-8847-5066ab8e2b32": {
+            "paths": [
+                "metadata/controller/MainToolbarController",
+                "app/controller/override/MainToolbarController.js",
+                "app/controller/MainToolbarController.js"
+            ],
+            "className": "MainToolbarController"
         }
     },
     "expandedState": {

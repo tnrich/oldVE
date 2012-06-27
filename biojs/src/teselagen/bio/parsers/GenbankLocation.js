@@ -6,16 +6,24 @@
     * @author Timothy Ham (original author)
     */
 
-Ext.define('Teselagen.bio.parsers.GenbankLocation', {
+Ext.define("Teselagen.bio.parsers.GenbankLocation", {
 	/* */
 
 	/* 
 	 * @constructor
 	 * @param {int, int} Genbank Feature Start and End indices
 	 */
-	constructor: function (pGenbankStart, pGenbankEnd) {
-		var genbankStart = pGenbankStart;
-		var end = pGenbankEnd;
+	constructor: function (inData) {
+		var that = this;
+		
+		if (inData) {
+			var start	= inData.start;
+			var end		= inData.end;
+		} else {
+			var start;
+			var end;
+		}
+		
 		
 		this.getGenbankStart = function() {
 			return genbankStart;
@@ -31,6 +39,18 @@ Ext.define('Teselagen.bio.parsers.GenbankLocation', {
 			end = pEnd;
 		}
 
+		this.toString = function() {
+			var line = start + ".." + end;
+			return line;
+		}
+		
+		this.toJSON = function() {
+			var json = {
+				start: start,
+				end: end
+			}
+			return json;
+		}
 		return this;
     }
 

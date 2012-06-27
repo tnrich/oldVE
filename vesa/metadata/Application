@@ -8,13 +8,14 @@
     "codeClass": null,
     "userConfig": {
         "views": [
-            "MyViewport",
+            "AppViewport",
             "FileImportWindow"
         ],
         "autoCreateViewport": true,
-        "name": "MyApp",
+        "name": "App",
         "controllers": [
-            "MyController"
+            "MainMenuController",
+            "MainToolbarController"
         ]
     },
     "customConfigs": [],

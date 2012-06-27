@@ -6,7 +6,7 @@
     * @author Timothy Ham (original author of GenbankFileModel.js)
     */
 
-Ext.define('Teselagen.bio.parsers.Genbank', {
+Ext.define("Teselagen.bio.parsers.Genbank", {
 	/* */
 	    
 	/* 
@@ -27,7 +27,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 		
 		// ======== Getter and Setter function ========//
 		
-		this.findKeyword = function (key) {
+		this.findKeyword = function(key) {
 			return find(key);
 		}
 		
@@ -36,14 +36,14 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			for (var i=0; i<keywords.length; i++) {
 				if (keywords[i].keyword === key) {
 					entry = keywords[i];
-					console.log(entry);
+					//console.log(entry);
 				}
 			}
 			return entry;
 		}
 		
 		//THESE DO NOT CHECK FOR NULL VALUES
-		/* @function
+		/* @function Same as GB.findKeyword("LOCUS")
          * @param {}
          * @returns {GenbankLocusKeyword} 
          */
@@ -51,7 +51,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			//return locus;
 			return find("LOCUS");
 		}
-		/* @function
+		/* @function Same as GB.addKeyword(GenbankLocusKeyword}
          * @param {GenbankLocusKeyword}
          * @returns
          */
@@ -92,7 +92,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			//return version;
 			return find("VERSION");
 		}
-		this.set = function(pVersion) {
+		this.setVersion = function(pVersion) {
 			//version = pVersion;
 			keywords.push(pVersion);
 		}
@@ -111,10 +111,22 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			keywords = pKeywords;
 		}
 		
-		this.addKeywordsTag = function(pAddKeywordsTag) {
+		this.getLastKeyword = function() {
+			return keywords[keywords.length-1];
+		}
+		
+		/* @function Add a single keyword String to Genbank.KeywordTag
+         * @param {String}
+         * @returns 
+         */
+		this.addKeywordTag = function(pAddKeywordsTag) {
 			keywordsTag.push(pAddKeywordsTag);
 		}
-		this.addKeywords = function(pAddKeyword) {
+		/* @function Add a single GenbankKeyword to Genbank.Keywords
+         * @param {GenbankKeyword}
+         * @returns 
+         */
+		this.addKeyword = function(pAddKeyword) {
 			keywords.push(pAddKeyword);
 		}
 		
@@ -135,9 +147,9 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 			//gbStr += references.toString();
 			gbStr += origin.toString();
 			
-			
 			return gbStr;
 		}
+		
 		this.toString2 = function() {
 			var gbStr = "";
 			//console.log(kewords.length);
@@ -190,7 +202,7 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 				entry = keywords[i];
 				console.log(entry);
 				gbStr += keywords[i].toString() + "\n";
-				
+				//console.log(Ext.getClassName(keywords[i]));
 			}
 			
 			return gbStr;
@@ -198,7 +210,12 @@ Ext.define('Teselagen.bio.parsers.Genbank', {
 		
 		
 		this.toJSON = function() {
-			var json = "not done yet with this overloaded function";
+			var json = new Object();
+			for (var i=0; i < keywords.length; i++) {
+				var key = keywords[i].getKeyword();
+				//console.log(Ext.getClassName(keywords[i]));
+				json[key] = keywords[i];
+			}
 			
 			return json;
 		}

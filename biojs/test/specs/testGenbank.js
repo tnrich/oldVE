@@ -71,18 +71,27 @@ describe("Testing Genbank related classes ", function() {
 	    });
 	    it("Parses ACCESSION?",function(){
 	    	line = "ACCESSION   pj5_00028 Accession";
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
+	    	expect(tmp.getAccession("ACCESSION").toString()).toBe(line);
 	    	
 	    });
 	    it("Parses VERSION?",function(){
 	    	line = "VERSION     pj5_00028 version.12";
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	expect(tmp.findKeyword("VERSION").toString()).toBe(line);
 	    	
 	    });
 	    it("Parses DEFINITION?",function(){
 	    	line = "DEFINITION  pj5_00028 Definition";
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	expect(tmp.findKeyword("DEFINITION").toString()).toBe(line);
 	    	
 	    });
 	    it("Parses KEYWORDS?",function(){
 	    	line = "KEYWORDS    .";
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	expect(tmp.findKeyword("KEYWORDS").toString()).toBe(line);
 	    	
 	    });
 	    it("Parses FEATURE-SUBKEYWORD?",function(){
@@ -96,10 +105,10 @@ describe("Testing Genbank related classes ", function() {
 	    it("Parses ORIGIN?",function(){
 	    	line = "ORIGIN      \n" +
 	    			"        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n" +
-	    			"       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n" +
-	    			"//";
-	    	//tmp = gbMan.parseGenbankFile(line);
-	    	//console.log(tmp);
+	    			"       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n";// +
+	    			//"//";
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	expect(line).toMatch(tmp.findKeyword("ORIGIN").toString());
 	    });
 
 	    it("Parses Top part of pj5_00028.gb string?",function(){
@@ -108,9 +117,8 @@ describe("Testing Genbank related classes ", function() {
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	//console.log(tmp.getLocus().getKeyword());
 	    	console.log(tmp.toString());
-	    	//console.log(tmp.toString2());
-	    	console.log(JSON.stringify(tmp));
-	    	console.log(JSON.stringify(tmp.getKeywordsTag(), null, '  '));
+	    	//console.log(JSON.stringify(tmp, null, '  '));
+	    	//console.log(JSON.stringify(tmp.getKeywordsTag(), null, '  '));
 	    	console.log(JSON.stringify(tmp.getKeywords(), null, '  '));
 	    })
 	    

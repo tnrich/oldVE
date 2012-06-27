@@ -13,7 +13,7 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('MyApp.view.FileImportWindow', {
+Ext.define('App.view.FileImportWindow', {
     extend: 'Ext.window.Window',
 
     height: 100,

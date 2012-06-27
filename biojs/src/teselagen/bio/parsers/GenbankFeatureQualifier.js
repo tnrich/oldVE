@@ -6,16 +6,24 @@
     * @author Timothy Ham (original author)
     */
 
-Ext.define('Teselagen.bio.parsers.GenbankFeatureQualifier', {
+Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
 	/* */
 
 	/* 
 	 * @constructor
 	 * @param */
-	constructor: function (pName, pValue, pQuoted) {
-		var name = pName;
-		var value = pValue;
-		var quoted = pQuoted;
+	constructor: function (inData) {
+		var that = this;
+		
+		if (inData) {
+			var name = inData.name;
+			var value = inData.value;
+			var quoted = inData.quoted; // boolean
+		} else {
+			var name;
+			var value;
+			var quoted;
+		}
 		
 		this.getName = function() {
 			return name;
@@ -37,8 +45,28 @@ Ext.define('Teselagen.bio.parsers.GenbankFeatureQualifier', {
 		this.setQuoted = function(pQuoted) {
 			quoted = pQuoted;
 		}
+		
+		this.appendValue = function(append){
+			value += append;
+		}
 
-
+		this.toString = function() {
+			var line;
+			if (quoted) {
+				line = "/".lpad(" ", 22) + name + "=\"" + value + "\"";
+			} else {
+				line = "/".lpad(" ", 22) + name + "=" + value ;
+			}
+			return line;
+		}
+		
+		this.toJSON = function() {
+			var json = {
+				name: name,
+				value: value
+			}
+			return json;
+		}
 		return this;
     }
 

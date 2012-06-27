@@ -23,12 +23,13 @@ Ext.Loader.setConfig({
 
 Ext.application({
     views: [
-        'MyViewport',
+        'AppViewport',
         'FileImportWindow'
     ],
     autoCreateViewport: true,
-    name: 'MyApp',
+    name: 'App',
     controllers: [
-        'MyController'
+        'MainMenuController',
+        'MainToolbarController'
     ]
 });

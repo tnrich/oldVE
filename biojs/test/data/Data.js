@@ -32,14 +32,36 @@ Ext.define('Data', {
 		}*/
 		
 		this.getTopStr = function () {
-			line = line = 'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n' +
+			line = '' + 
+'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n' +
 'ACCESSION   pj5_00028 Accession\n' +
 'VERSION     pj5_00028 version.1\n' +
 'DEFINITION  pj5_00028 Definition\n'+
 'KEYWORDS    .\n' +
+'SOURCE      Saccharomyces cerevisiae (baker\'s yeast)\n' +
+'  ORGANISM  Saccharomyces cerevisiae\n' +
+'            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
+'            Saccharomycetales; Saccharomycetaceae; Saccharomyces.\n' +
+'REFERENCE   1  (bases 1 to 5028)\n' +
+'  AUTHORS   Torpey,L.E., Gibbs,P.E., Nelson,J. and Lawrence,C.W.\n' +
+'  TITLE     Cloning and sequence of REV7, a gene whose function is required for\n' +
+'            DNA damage-induced mutagenesis in Saccharomyces cerevisiae\n' +
+'  JOURNAL   Yeast 10 (11), 1503-1509 (1994)\n' +
+'  PUBMED    7871890\n' +
 'FEATURES             Location/Qualifiers\n' +
 '     CDS             complement(7..885)\n' +
 '                     /label="araC"\n' +
+'     promoter        complement(1036..1064)\n' +
+'                     /label="araC promoter"\n' +
+'     CDS             >1236..<2090\n' +
+'                     /vntifkey="4"\n' +
+'                     /vntifkey2=4\n' +
+'     fakemRNA            join(<265..402,673..781,911..1007,1088..1215,\n' +
+'                     1377..1573,1866..2146,2306..2634,2683..>2855)\n' +
+'     fakeCDS             complement(3300..4037)\n' +
+'                     /translation="MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQ\n' +
+'                     FVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVD\n' +
+'                     LISGDDKILNGVYSQYEEGESIFGSLF"\n' +
 'ORIGIN      \n' +
 '        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n' +
 '       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n' +
