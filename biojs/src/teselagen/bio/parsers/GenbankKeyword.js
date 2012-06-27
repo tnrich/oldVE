@@ -59,7 +59,27 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 		this.setSubKeywords = function(pSubKeywords) {
 			subKeywords = pSubKeywords;
 		}*/
-
+		
+		this.addSubKeyword = function(subkey) {
+			if (this.subKeywords === undefined) {
+				//console.log("BLAH");
+				this.subKeywords = [];
+			}
+			this.subKeywords.push(subkey);
+		}
+		
+		this.appendValue = function(pVal) {
+			value += pVal;
+		}
+		
+		this.getLastSubKeyword = function() {
+			if (this.subKeywords.length > 0) {
+				return this.subKeywords[this.subKeywords.length-1];
+			} else {
+				return null;
+			}
+		}
+		
 		this.toString = function() {
 			var width = 80-12;
 			var line = this.keyword.rpad(" ", 12); // + this.value;
@@ -68,12 +88,21 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 			for (var i=width; i<this.value; i=i+width) {
 				line += this.value.substring(i,width);
 			}
+			if (this.subKeywords !== undefined) {
+				line += "\n";
+				for (var i=0; i < this.subKeywords.length; i++) {
+					line += this.subKeywords[i].toString();
+					if (i<this.subKeywords.length - 1) { 
+						line += "\n";
+					}
+				}
+			}
 
 			return line;
 		}
 
-		/*this.toJSONString = function() {
-			return JSON.stringify(that, null, '  ');
+		/*this.toJSON = function() {
+			return null;
 		}*/
 
 		return this;

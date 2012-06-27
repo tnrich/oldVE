@@ -38,11 +38,16 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 			value = pValue;
 		}
 		
+		this.appendValue = function(pVal) {
+			value += pVal;
+		}
+		
 		this.toString = function() {
 			var width = 80-12;
-			var line = "" + keyword;
-			line = line.rpad(" ", 10);
-			line = line.lpad(" ", 2); // + this.value;
+			var line = "  " + keyword;
+			//line = line.lpad(" ", 2); // + this.value;
+			line = line.rpad(" ", 12);
+			
 			line += value;
 			/*line += value.substring(0,width)
 
@@ -58,6 +63,7 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 					keyword: keyword,
 					value: value
 			}
+			return json;
 		}
 		
 		

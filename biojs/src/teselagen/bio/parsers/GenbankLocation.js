@@ -25,11 +25,11 @@ Ext.define("Teselagen.bio.parsers.GenbankLocation", {
 		}
 		
 		
-		this.getGenbankStart = function() {
-			return genbankStart;
+		this.getStart = function() {
+			return start;
 		}
-		this.setGenbankStart = function(pGenbankStart) {
-			genbankStart = pGenbankStart;
+		this.setStart = function(pStart) {
+			start = pStart;
 		}
 
 		this.getEnd = function() {

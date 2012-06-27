@@ -40,11 +40,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		var myFlag, myField; // Flags and Fields to keep track of stuff
 		var genArr;
 
-
-		//var gb = Ext.create('Teselagen.bio.parsers.Genbank');
-		//var genArr = new Array();
-
-
 		/* @function
 		 * @param {String} String form of Genbank File.
 		 * @return {Genbank}
@@ -54,14 +49,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			gb = Ext.create("Teselagen.bio.parsers.Genbank");
 
 			myFlag = new Flags();
-			//myField = new Field();
+			myField = new Field();
 
 			genArr	= genbankFileString.split(/[\n]+/g);
 			for (var i=0 ; i < genArr.length; i++) {
 				lineParser(genArr[i]);
 			}
-
-
 			return gb;
 		}
 
@@ -73,7 +66,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			var key = getLineKey(line);
 			var val = getLineVal(line);
 			var subKey = isSubKeyword(line);
-			//var isSubKey = isSubKeyword(line);
 			var tmp = null;
 
 			myFlag.setType(key, subKey);
@@ -83,18 +75,15 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			switch (key) {
 			case that.self.LOCUS_TAG:
 				tmp = parseLocus(line);
-				//lastObj = gb.getLocus();
 				break;
-			case that.self.REFERENCE_TAG:
+			/*case that.self.REFERENCE_TAG: // THIS IS SAME AS A KEYWORD/SUBKEYWORD
 				tmp = parseReference(line);
-				break;
+				break;*/
 			case that.self.FEATURES_TAG:
 				tmp = parseFeatures(line);
-				//lastObj = gb.getFeatures();
 				break;
 			case that.self.ORIGIN_TAG:
 				tmp = parseOrigin(line);
-				//lastObj = gb.getOrigin();
 				break;
 			case "BASE":
 				//
@@ -102,29 +91,20 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			case that.self.END_SEQUENCE_TAG:
 				break;
 			default:
-				//console.log("default case: " + line);
-				if (myFlag.keyword ) {	// NON-LOCUS/REFERENCE/FEATURES/ORIGIN KEYWORDS
+				if ( line === "") {
+					// do nothing;
+					break;
+				} else if ( myFlag.keyword ) {		// NON-LOCUS/REFERENCE/FEATURES/ORIGIN KEYWORDS
 					tmp = parseKeyword(line);
-					//gb.addKeyword(tmp);
-					//lastObj = tmp;
 				} else if ( myFlag.subkeyword && myFlag.features) { // FEATURE ELEMENTS & FEATURE QUALIFIERS
-					
 					tmp = parseFeatures(line);
-					//lastObj = tmp;
-				} else if (myFlag.origin) {	// ORIGIN SEQUENCE LINES
+				} else if ( myFlag.origin) {		// ORIGIN SEQUENCE LINES
 					tmp = parseOrigin(line);
-					//lastObj = gb.getOrigin();
-				} else if ( myFlag.subkeyword ) {
+				} else if ( myFlag.subkeyword ) {	// REGULAR KEYWORD SUBKEYWORD, NOT FEATURE
 					tmp = gb.getLastKeyword();
-					console.log("subkey:" + line);
-					//console.log(Ext.getClassName(tmp));
-					//console.log(line);
 					parseSubKeyword(tmp, line);
 				}
-
-
 			}
-			
 		}
 
 
@@ -145,7 +125,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			} else if (lineArr[4].match(/ds/gi)) {
 				strand = "ds";
 			} else {
-				strand = "unknown";
+				strand = ""; //"unknown";
 			}
 
 			// naType: T.H. defaults to DNA.
@@ -154,25 +134,26 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			} else if (lineArr[4].match(/RNA/gi)) {
 				naType = "RNA";
 			} else {
-				naType ="unknown";
+				naType = ""; //"unknown";
 			}
 
 			// Linear vs Circular?; CANNOT HANDLE TANDEM
 			for (var i=1; i < lineArr.length; i++) {
-				if (lineArr[i].match(/linear/gi)) {
-					linear = true;
-				} else {
+				if (lineArr[i].match(/circular/gi)) {
 					linear = false;
+					break;
+				} else {
+					linear = true;
 				}
 			}
 
 			// Date
-			if (lineArr[6].match(/[XYZ]{3}/g)) {
-				div = lineArr[6];
-				date = lineArr[7];
+			if (lineArr[lineArr.length-2].match(/[A-Z]{3}/g)  ) {
+				div = lineArr[lineArr.length-2];
+				date = lineArr[lineArr.length-1];
 			} else {
 				div = "";
-				date = lineArr[6];
+				date = lineArr[lineArr.length-1];
 			}
 
 			// Just rewrite the existing Locus object. It's easier than setting everything.
@@ -187,9 +168,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			});
 
 			result.setKeyword(that.self.LOCUS_TAG);	
-			gb.setLocus(result);
+			//gb.setLocus(result);
+			gb.addKeyword(result);
 			gb.addKeywordTag(that.self.LOCUS_TAG);
-			//gb.addKeywords(result);
 			return result;
 		}
 
@@ -208,31 +189,16 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		function parseSubKeyword(mainKey, line) {
 			var key = getLineKey(line);
 			var val = getLineVal(line);
-			console.log(key + " : " + val);
-			var result = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword", {
-				keyword: key,
-				value: val
-			});
 			
-			mainKey.addSubKeyword(result);
-			console.log(mainKey);
-			return result;
-		}
-		
-
-		function parseReference(line) {
-			var result;
-			if (getLineKey(line) === that.self.REFERENCE_TAG) {
-        		result = Ext.create("Teselagen.bio.parsers.GenbankKeyword", {
-        			keyword: that.self.REFERENCE_TAG,
-        			value: getLineVal(line),
-        			subKeywords: []
-        		});
-        		gb.addKeyword(result);
-    			gb.addKeywordTag(that.self.REFERENCE_TAG);
-        	} else {
-
-        	}
+			if (!line.substr(0,11).match(/[\s]{11}/)) {  // A bit of a hack. Just makes sure first keyword has more than 2 upper case letters which signifies a keyword
+				var result = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword", {
+					keyword: key,
+					value: val
+				});
+				mainKey.addSubKeyword(result);
+			} else {
+				mainKey.getLastSubKeyword().appendValue("\n".rpad(" ",13) + line.trim());
+			}
 			return result;
 		}
 
@@ -242,7 +208,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			var key = getLineKey(line);
 			var val = getLineVal(line);
 			
-			console.log(myFlag.runon + " : " + line);
+			//// console.log(myFlag.runon + " : " + line);
 			
 			if (myFlag.runon === false ) {
 				if (getLineKey(line) === that.self.FEATURES_TAG) {
@@ -252,8 +218,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 					gb.addKeywordTag(that.self.FEATURES_TAG);
 				} else {
 					result = gb.getFeatures();
-					//console.log(JSON.stringify(result, null, "  "));
-					//var lineArr = line.split(/[\s]+/g);
 					qual = isQualifier(line);
 					if (!qual) { // is a  Feature Element (e.g. source, CDS) with sequence indices/locations in the "KEY  BLAH"
 						
@@ -264,7 +228,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 						// complment and join are default for now
 						// Could be multiple locations per Element
 						parseFeatureLocation(featElm, val);
-						//console.log(featElm.toString());
 						result.addElement(featElm);
 						lastObj = featElm;
 					} else {  // is a FeatureQualifier in the /KEY="BLAH" format; could be multiple per Element
@@ -282,7 +245,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 					parseFeatureLocation(lastObj, line.trim());
 				} else if ( type.match(/GenbankFeatureQualifier/) ) {
 					
-					console.log("Qualifier: " + line.trim().replace(/\"/g, ""));
+					////console.log("Qualifier: " + line.trim().replace(/\"/g, ""));
 					
 					lastObj.appendValue(line.trim().replace(/\"/g, ""));
 				}
@@ -298,7 +261,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			var join = false;
 			
 			locStr = locStr.trim();
-			//console.log(locStr);
 			
 			if (locStr.match(/complement/i) ) {
 				complement = true;
@@ -312,7 +274,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			//locStr = locStr.replace(/complement|join|\(|\)|\>|\</g,"");
 			locStr = locStr.replace(/^,|,$|complement|join|\(|\)/g,"");
 			locArr = locStr.split(/,/g);
-			//console.log(locArr);
 			
 			// NEED TO DO > or < cases?
 			
@@ -323,7 +284,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 					end: ind[1]
 				});
 				featElm.addFeatureLocation(location);
-				//console.log(location);
 			}
 			
 			if (complement && join) {
@@ -339,7 +299,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			newLine = line.trim();
 			newLine = newLine.replace(/^\/|"$/g, "");
 			lineArr = newLine.split(/=\"|=/);
-			//console.log(lineArr);
 			
 			if (line.match(/=\"/g)) {
 				quoted = true;
@@ -407,9 +366,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 				qual = true;
 				console.log("T.H. Hard coded method works.");
 			} else */
-				if ( line.match(/^[\s]*\/[\w]+=[\S]+/) ) {
+			
+			if ( line.match(/^[\s]*\/[\w]+=[\S]+/) ) {
 				qual = true;
-				//console.log("Found Qualifier using RegEx.");
+			} else if ( line.substr(0,21).match(/[\s]{21}/ )) {
+				console.log("Found Qualifier using 21 spaces.");
+				qual = true
 			}
 			return qual;
 		}
@@ -428,23 +390,26 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			}
 			return runon;
 		}
-
-
-
-
-
-
-
+		
+		function isAFieldName(key) {
+			if (key.match(/[A-Z0-9]/i)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		
 		//=================================
 		// INITIALIZING FIELDS
 		//=================================
 
 		function Field() {
-			this.field = genbankFieldsSubset();
-			this.ref   = genbankReference();
+			this.field = keywords();
+			this.ref   = references();
 			//this.allFields  = genbankFields();
 
-			function genbankFields() {
+			function keywords() {
 				var field = new Array();
 				field[0] = "LOCUS";
 				field[1] = "DEFINITION";
@@ -465,25 +430,23 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 				field[16] = "BASE COUNT";     
 				field[17] = "ORIGIN";
 				//field[18] = "//";
-				field[18] = "ORIGIN";
 				field[19] = "SEGMENT";
 				field[20] = "CONTIG";
 				return field;
 			}
 
-			function genbankFieldsSubset() {
+			function subKeyword() {
 				var field = new Array();
-				//field[0] = "LOCUS";
-				field[0] = "DEFINITION";
-				field[1] = "ACCESSION";
-				field[2] = "VERSION";
-				field[3] = "KEYWORDS";
-				field[4] = "SOURCE";
+				field[0] = "AUTHORS";
+				field[1] = "TITLE";
+				field[2] = "JOURNAL";
+				field[3] = "PUBMED";
+				field[4] = "CONSRTM";
 				field[5] = "ORGANISM";
 				return field;
 			}
 
-			function genbankReference() {
+			function references() {
 				var field = new Array();
 				field[0] = "AUTHORS";
 				field[1] = "TITLE";
@@ -493,7 +456,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 				return field;
 			}
 
-			function genbankFeatures() {
+			function features() {
 				var field = new Array();
 				field[0] = "source";
 				field[1] = "CDS";

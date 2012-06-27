@@ -29,7 +29,11 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 		}
 		
 		this.getLastElement = function() {
-			return features[features.length-1];
+			if (features.length > 0) {
+				return features[features.length-1];
+			} else {
+				return null;
+			}
 		}
 
 		this.toString = function() {

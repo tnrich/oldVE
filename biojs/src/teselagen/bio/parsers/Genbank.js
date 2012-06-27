@@ -110,7 +110,13 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		this.setKeywords = function(pKeywords) {
 			keywords = pKeywords;
 		}
-		
+		/* @function Add a single GenbankKeyword to Genbank.Keywords
+         * @param {GenbankKeyword}
+         * @returns 
+         */
+		this.addKeyword = function(pAddKeyword) {
+			keywords.push(pAddKeyword);
+		}
 		this.getLastKeyword = function() {
 			return keywords[keywords.length-1];
 		}
@@ -122,13 +128,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		this.addKeywordTag = function(pAddKeywordsTag) {
 			keywordsTag.push(pAddKeywordsTag);
 		}
-		/* @function Add a single GenbankKeyword to Genbank.Keywords
-         * @param {GenbankKeyword}
-         * @returns 
-         */
-		this.addKeyword = function(pAddKeyword) {
-			keywords.push(pAddKeyword);
-		}
+		
 		
 		/*this.get = function() {
 			return ;
@@ -197,14 +197,13 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		this.toString = function() {
 			var gbStr = "";
 			var entry;
-			//console.log(kewords.length);
 			for (var i=0; i < keywords.length; i++) {
 				entry = keywords[i];
 				console.log(entry);
 				gbStr += keywords[i].toString() + "\n";
 				//console.log(Ext.getClassName(keywords[i]));
 			}
-			
+			gbStr += "//";
 			return gbStr;
 		}
 		
@@ -213,7 +212,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 			var json = new Object();
 			for (var i=0; i < keywords.length; i++) {
 				var key = keywords[i].getKeyword();
-				//console.log(Ext.getClassName(keywords[i]));
 				json[key] = keywords[i];
 			}
 			

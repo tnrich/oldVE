@@ -54,6 +54,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 		}
 		
 		this.addFeatureQualifier= function(pQual) {
+			if (featureQualifier === undefined ) {
+				featureQualifier = [];
+			}
 			featureQualifier.push(pQual);
 		}
 		
@@ -64,6 +67,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 			featureLocation = pFeatureLocation;
 		}
 		this.addFeatureLocation = function(pLoc) {
+			
 			featureLocation.push(pLoc);
 		}
 		
@@ -110,14 +114,14 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 					strand: strand
 			}
 			
-			if (featureLocation !== undefined) {
+			if (featureLocation !== undefined && featureLocation.length > 0) {
 				json["location"] = [];
 				for (var i = 0; i<featureLocation.length; i++) {
 					json["location"].push(featureLocation[i]);
 				}
 			}
 			
-			if ( featureQualifier !== undefined ) {
+			if ( featureQualifier !== undefined && featureQualifier.length > 0) {
 				json["qualifier"] =[];
 				for (var i = 0; i<featureQualifier.length; i++) {
 					json["qualifier"].push(featureQualifier[i]);

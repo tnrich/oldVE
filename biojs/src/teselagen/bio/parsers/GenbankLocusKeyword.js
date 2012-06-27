@@ -96,23 +96,31 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 
 
 		this.toString = function () {
+			var tmp;
+			
 			var line = "LOCUS".rpad(" ", 12);
 			line += locusName.rpad(" ", 16);
 			line += " "; // T.H line 2778 of GenbankFormat.as col 29 space
 			line += sequenceLength.lpad(" ", 11);
 			line += " bp "; // col 41
-			line += (strandType + "-").lpad(" ", 3);
+			if (strandType !== "") {
+				tmp =  strandType + "-";
+			} else {
+				tmp = "";
+			}
+			line += tmp.lpad(" ", 3);
 			line += naType.rpad(" ",6);
 			line += "  ";
 
 			if (linear === true) {
 				line += "linear  ";
+				//line += "        ";
 			} else {
 				line += "circular";
 			}
 
 			line += " "; //col 64
-			if (divisionCode != null) {
+			if (divisionCode !== undefined) {
 				line += divisionCode.rpad(" ", 3);
 			} else {
 				line.rpad(" ", 3);

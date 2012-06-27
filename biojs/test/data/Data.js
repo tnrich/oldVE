@@ -56,9 +56,9 @@ Ext.define('Data', {
 '     CDS             >1236..<2090\n' +
 '                     /vntifkey="4"\n' +
 '                     /vntifkey2=4\n' +
-'     fakemRNA            join(<265..402,673..781,911..1007,1088..1215,\n' +
+'     fakemRNA        join(<265..402,673..781,911..1007,1088..1215,\n' +
 '                     1377..1573,1866..2146,2306..2634,2683..>2855)\n' +
-'     fakeCDS             complement(3300..4037)\n' +
+'     fakeCDS         complement(3300..4037)\n' +
 '                     /translation="MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQ\n' +
 '                     FVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVD\n' +
 '                     LISGDDKILNGVYSQYEEGESIFGSLF"\n' +
