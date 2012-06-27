@@ -60,6 +60,12 @@ var content = "<p>Test Window</p>"
 		+ "<canvas id='myDigestCanvas' width=400 height=400 style='border:1px solid #c3c3c3;'>"
 		+ "Your browser does not support the canvas element." + "</canvas>"
 		+ "";
+
+testWindow = window.open('', 'test_window', 'width=800,height=1000');
+testWindow.document.write(content);
+testWindow.focus();
+canvasId = testWindow.document.getElementById("myDigestCanvas");
+
 // Matchers
 beforeEach(function () {
   this.addMatchers(imagediff.jasmine);
@@ -71,16 +77,36 @@ describe("Testing this empty function", function() {
 	});
 });
 
-describe("Testing this image matcher function", function() {
-	it('should convert be the same image', function() {
-		var a = new Image();
-		var b = new Image();
-		a.src = './specs/images/1_normal_a.jpg';
-		b.src = './specs/images/1_normal_b.jpg';
 
-		waitsFor(function() {
-			return a.complete & b.complete;
-		}, 'image not loaded.', 2000);
+//describe("Testing this Drawing Window", function() {
+//	it("Works?", function() {
+//		testWindow = window.open('', 'test_window', 'width=800,height=1000');
+//		testWindow.document.write(content);
+//		testWindow.focus();
+//		console.log(testWindow.document);
+////		vectorDraw(testWindow);
+//		// var s = Ext.create('Teselagen.bio.enzymes.simulateDigest');
+//		expect(false).toBe(false);
+//	});
+//});
+
+
+describe("Testing this image matcher function", function() {
+	it('should be the same image', function() {
+		var a;
+		var b;
+		var a = new Image();
+//		var b = new Image();
+		a.src = './specs/images/1_normal_a.jpg';
+//		b.src = './specs/images/1_normal_a.jpg';
+
+		var canvasId = testWindow.document.getElementById("myDigestCanvas");
+//		a = simulateDigest(canvasId);
+		b = simulateDigest(canvasId);
+
+//		waitsFor(function() {
+//			return a.complete & b.complete;
+//		}, 'image not loaded.', 2000);
 
 		runs(function() {
 			expect(a).toImageDiffEqual(b); // imagediff expects Image, Canvas,
@@ -90,18 +116,6 @@ describe("Testing this image matcher function", function() {
 
 	});
 });
-
-//describe("Testing this Drawing Window", function() {
-//	it("Works?", function() {
-//		testWindow = window.open('', 'test_window', 'width=800,height=1000');
-//		testWindow.document.write(content);
-//		testWindow.focus();
-//		// console.log(testWindow.document);
-//		vectorDraw(testWindow_2);
-//		// var s = Ext.create('Teselagen.bio.enzymes.simulateDigest');
-//		expect(false).toBe(false);
-//	});
-//});
 
 // describe("Testing enzyme related classes", function() {
 //
