@@ -101,7 +101,6 @@ describe("Testing Genbank related classes ", function() {
 	    	line = "ACCESSION   pj5_00028 Accession";
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
-	    	expect(tmp.getAccession().toString()).toBe(line);
 	    	expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBe(undefined);
 	    	tmp.findKeyword("ACCESSION").addSubKeyword(Ext.create('Teselagen.bio.parsers.GenbankSubKeyword', {keyword: "test", value : "test2"}));
 	    	

@@ -1,6 +1,6 @@
 /**
- * GenbankManager class 
- * @description Takes in file input (as a string) and creates the Genbank class. Static functions. Replaces GenbankFormat.js
+ * GenbankManager 
+ * Takes in Genbank File (as a string) and creates the Genbank class. Static functions. (Replaces GenbankFormat.js)
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
@@ -8,6 +8,9 @@
 Ext.define("Teselagen.bio.parsers.GenbankManager", {
 	/** @lends  */
 
+	/**
+	 * Static variables. Common Genbank Keyword names.
+	 */
 	statics: {
 		LOCUS_TAG: "LOCUS",
 		DEFINITION_TAG: "DEFINITION",
@@ -31,7 +34,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		ORIGIN_TAG: "ORIGIN",
 		END_SEQUENCE_TAG: "//"
 	},
-
+	
+	/**
+	 * Creates a static GenbankManager class with public functions.
+	 */
 	constructor: function() {
 		var that = this;
 
@@ -40,10 +46,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		var myFlag, myField; // Flags and Fields to keep track of stuff
 		var genArr;
 
-		/* @function
-		 * @param {String} String form of Genbank File.
+		/**
+		 * Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
+		 * @param {String} genbankFileString String form of Genbank File.
 		 * @return {Genbank}
-		 * @description Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
 		 */
 		this.parseGenbankFile = function(genbankFileString) {
 			gb = Ext.create("Teselagen.bio.parsers.Genbank");
@@ -58,7 +64,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			return gb;
 		}
 
-		/* @function Line by line parser
+		/** 
+		 * Line by line parser
 		 * @param {String} Single line from a Genbank File
 		 */
 		function lineParser(line) {
@@ -111,7 +118,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		/* -----------------------------------------------------
 		 *  KEYWORD/SUBKEYWORD PARSING FUNCTIONS
 		 * -----------------------------------------------------*/
-
+		/**
+		 * Parses Locus Line
+		 */
 		function parseLocus(line) {
 			var result, locusName, seqLen, strand, naType, linear, div, date;
 			var lineArr = line.split(/[\s]+/g);
@@ -173,7 +182,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			gb.addKeywordTag(that.self.LOCUS_TAG);
 			return result;
 		}
-
+		/**
+		 * Parses Keyword
+		 * @param line
+		 * @returns
+		 */
 		function parseKeyword(line) {
 			var key = getLineKey(line);
 			var val = getLineVal(line);
@@ -185,7 +198,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			gb.addKeywordTag(key);
 			return result;
 		}
-		
+		/**
+		 * Parses SubKeywords
+		 * @param mainKey
+		 * @param line
+		 * @returns
+		 */
 		function parseSubKeyword(mainKey, line) {
 			var key = getLineKey(line);
 			var val = getLineVal(line);
@@ -201,7 +219,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			}
 			return result;
 		}
-
+		/**
+		 * Parses Features
+		 * @param line
+		 * @returns
+		 */
 		function parseFeatures(line) {
 			var result, featElm, featQual, lastElm;
 			var qual;
@@ -254,7 +276,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			
 			return result;
 		}
-		
+		/**
+		 * Parses Feature Locatons
+		 * @param featElm
+		 * @param locStr
+		 * @returns GenbankFeatureLocation
+		 */
 		function parseFeatureLocation(featElm, locStr) {
 			var location;
 			var complement = false;
@@ -292,7 +319,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
 			return location;
 		}
-		
+		/**
+		 * Parses Feature Qualifier
+		 * @param line
+		 * @returns GenbankFeatureQualifier
+		 */
 		function parseFeatureQualifier(line) {
 			var featQual, newLine, lineArr, quoted;
 			
@@ -312,8 +343,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 				quoted: quoted
 			});
 			return featQual;
-		} 
-
+		}
+		/**
+		 * Parses Origin lines.
+		 */
 		function parseOrigin(line) {  
 			var result;
 			var key = getLineKey(line);
@@ -333,18 +366,29 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		/* -----------------------------------------------------
 		 *  HELPER PARSING FUNCTIONS
 		 * -----------------------------------------------------*/
+		/**
+		 * Gets the Key in a line of format " Key Value"
+		 * @param line
+		 * @returns
+		 */
 		function getLineKey(line) {
 			line    = line.replace(/^[\s]*/, "");
 			var arr = line.split(/[\s]+/);
 			return arr[0];
 		}
-
+		/**
+		 * Gets the value in a line of format " Key Value"
+		 * @param line
+		 * @returns
+		 */
 		function getLineVal(line) {
 			line	= line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");	
 			line = Ext.String.trim(line);
 			return line;
 		}
-		/* @function If whitespace before keyword, then it's a subkeyword. Works for FeatureElements
+		/**
+		 * Checks if line is a SubKeyword line. If there is whitespace before keyword, then it's a subkeyword. 
+		 * Works for FeatureElements too but not used there.
 		 * @param {String}
 		 * @return {Boolean}
 		 */
@@ -356,7 +400,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			}
 			return newKey;
 		}
-		/* @function Determines if the line is a Feature Qualifier, ie with syntax like /blah="information"
+		/**
+		 * Determines if the line is a Feature Qualifier, ie with syntax like /blah="information"
 		 * @param {String}
 		 * @return {Boolean}
 		 */
@@ -376,7 +421,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			return qual;
 		}
 
-		// Check if this line is connected to previous line (-> no new object)
+		/**
+		 *  Checks if this line will runon to next line (do not create new object @ next line, just append)
+		 */
 		function isRunon(line) {
 			var runon;
 			if ( line.match(/"$/ )) { // closed case: '/key="blahblah"'
@@ -391,13 +438,13 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			return runon;
 		}
 		
-		function isAFieldName(key) {
+		/*function isAFieldName(key) {
 			if (key.match(/[A-Z0-9]/i)) {
 				return true;
 			} else {
 				return false;
 			}
-		}
+		}*/
 		
 		
 		//=================================
