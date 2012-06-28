@@ -1,7 +1,7 @@
 
 /**
  * GenbankOriginKeyword class 
- * @description 
+ * Class for GenbankOriginKeyword. Specifically for the Origin/Sequence part of the Genbank file
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -10,9 +10,11 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 	/* */
 	extend: "Teselagen.bio.parsers.GenbankKeyword",
 
-	/* 
-	 * @constructor
-	 * @param */
+	/**
+	 * Creates a new GenbankLocusKeyword from inData.
+	 * @param {Object} inData
+	 * @param {String} sequence
+	 */
 	constructor: function (inData) {
 		var that = this;
 
@@ -25,14 +27,22 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 			//var keyword;
 			//var value;
 		}
-
+		/**
+		 * Get sequence
+		 */
 		this.getSequence = function() {
 			return sequence;
 		}
+		/**
+		 * Set sequence
+		 */
 		this.setSequence = function(pSequence) {
 			sequence = pSequence;
 		}
-
+		/**
+		 * Append more sequence to the sequence property
+		 * @param {String} line
+		 */
 		this.appendSequence = function(line) {
 			//if (sequence) {
 			sequence += line;
@@ -41,7 +51,9 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 			//}
 
 		}
-
+		/**
+		 * Converts this GenbankOriginKeyword to Genbank file format string
+		 */
 		this.toString = function() {
 			if ( sequence === undefined || sequence === "" ) {
 				return "NO ORIGIN";
@@ -70,7 +82,9 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 			return line;
 
 		}
-
+		/**
+		 * Converts to JSON format.
+		 */
 		this.toJSON = function() {
 			json = {
 					keyword: that.keyword,

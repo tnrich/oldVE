@@ -1,17 +1,18 @@
 
-    /**
-    * GenbankLocation class 
-    * @description 
-    * @author Diana Wong
-    * @author Timothy Ham (original author)
-    */
-
+/**
+ * GenbankLocation class 
+ * Class for GenbankFeatureQualifier. Follows the 'complement(join(>start...end))' format
+ * @author Diana Wong
+ * @author Timothy Ham (original author)
+ */
 Ext.define("Teselagen.bio.parsers.GenbankLocation", {
 	/* */
 
-	/* 
-	 * @constructor
-	 * @param {int, int} Genbank Feature Start and End indices
+	/**
+	 * Creates a new GenbankFeatureQualifier from inData.
+	 * @param {Object} inData
+	 * @param {IntString} start
+	 * @param {IntString} end
 	 */
 	constructor: function (inData) {
 		var that = this;
@@ -24,26 +25,41 @@ Ext.define("Teselagen.bio.parsers.GenbankLocation", {
 			var end;
 		}
 		
-		
-		this.getGenbankStart = function() {
-			return genbankStart;
+		/**
+		 * Get start
+		 */
+		this.getStart = function() {
+			return start;
 		}
-		this.setGenbankStart = function(pGenbankStart) {
-			genbankStart = pGenbankStart;
+		/**
+		 * Set start
+		 */
+		this.setStart = function(pStart) {
+			start = pStart;
 		}
-
+		/**
+		 * Get end
+		 */
 		this.getEnd = function() {
 			return end;
 		}
+		/**
+		 * Set end
+		 */
 		this.setEnd = function(pEnd) {
 			end = pEnd;
 		}
-
+		
+		/**
+		 * Converts this GenbankLocusKeyword to Genbank file format string
+		 */
 		this.toString = function() {
-			var line = "(" + start + ".." + end + ")";
+			var line = start + ".." + end;
 			return line;
 		}
-		
+		/**
+		 * Converts to JSON format.
+		 */
 		this.toJSON = function() {
 			var json = {
 				start: start,
