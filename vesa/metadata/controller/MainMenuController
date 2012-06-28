@@ -12,7 +12,7 @@
     "customConfigs": [],
     "designerId": "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0",
     "$viewOrder": 0,
-    "expanded": true,
+    "expanded": false,
     "cn": [
         {
             "id": "ExtBox1-ext-gen4157",
@@ -87,7 +87,7 @@
             "userConfig": {
                 "fn": "onImportMenuItemClick",
                 "implHandler": [
-                    "Ext.create(\"App.view.FileImportWindow\").show();"
+                    "Ext.create(\"MyApp.view.FileImportWindow\").show();"
                 ],
                 "name": "click",
                 "scope": "me",

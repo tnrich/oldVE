@@ -13,7 +13,7 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('App.view.AppViewport', {
+Ext.define('MyApp.view.AppViewport', {
     extend: 'Ext.container.Viewport',
 
     layout: {
@@ -28,7 +28,11 @@ Ext.define('App.view.AppViewport', {
                 {
                     xtype: 'panel',
                     id: 'VectorPanel',
+                    layout: {
+                        type: 'fit'
+                    },
                     title: 'Vector',
+                    flex: 2,
                     region: 'center'
                 },
                 {
@@ -38,6 +42,7 @@ Ext.define('App.view.AppViewport', {
                     resizable: true,
                     resizeHandles: 'e',
                     title: 'Project',
+                    flex: 1,
                     region: 'west'
                 },
                 {
@@ -47,6 +52,7 @@ Ext.define('App.view.AppViewport', {
                     resizable: true,
                     resizeHandles: 'w',
                     title: 'Annotate',
+                    flex: 2,
                     region: 'east'
                 },
                 {

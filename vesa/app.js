@@ -27,9 +27,10 @@ Ext.application({
         'FileImportWindow'
     ],
     autoCreateViewport: true,
-    name: 'App',
+    name: 'MyApp',
     controllers: [
         'MainMenuController',
-        'MainToolbarController'
+        'MainToolbarController',
+        'VectorPanelController'
     ]
 });
