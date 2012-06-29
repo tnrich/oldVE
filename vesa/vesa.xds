@@ -51,6 +51,14 @@
                 "app/controller/MainToolbarController.js"
             ],
             "className": "MainToolbarController"
+        },
+        "f835a9f2-f016-427b-bcde-f3f23c2ed3b7": {
+            "paths": [
+                "metadata/controller/VectorPanelController",
+                "app/controller/override/VectorPanelController.js",
+                "app/controller/VectorPanelController.js"
+            ],
+            "className": "VectorPanelController"
         }
     },
     "expandedState": {

@@ -13,7 +13,7 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('App.controller.MainMenuController', {
+Ext.define('MyApp.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
     onCancelButtonClick: function(button, e, options) {
@@ -43,7 +43,7 @@ Ext.define('App.controller.MainMenuController', {
     },
 
     onImportMenuItemClick: function(item, e, options) {
-        Ext.create("App.view.FileImportWindow").show();
+        Ext.create("MyApp.view.FileImportWindow").show();
     },
 
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {

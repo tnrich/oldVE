@@ -13,7 +13,7 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('App.controller.MainToolbarController', {
+Ext.define('MyApp.controller.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
     onFeaturesButtonClick: function(button, e, options) {

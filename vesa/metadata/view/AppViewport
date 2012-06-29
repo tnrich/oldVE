@@ -27,9 +27,11 @@
             "userConfig": {
                 "id": "VectorPanel",
                 "resizable": null,
+                "layout": "fit",
                 "title": "Vector",
                 "titleCollapse": null,
                 "designer|userClassName": "MyPanel",
+                "layout|flex": 2,
                 "layout|region": "center"
             },
             "customConfigs": [],
@@ -50,6 +52,7 @@
                 "resizeHandles": "e",
                 "title": "Project",
                 "designer|userClassName": "MyPanel1",
+                "layout|flex": 1,
                 "layout|region": "west"
             },
             "customConfigs": [],
@@ -70,6 +73,7 @@
                 "resizeHandles": "w",
                 "title": "Annotate",
                 "designer|userClassName": "MyPanel2",
+                "layout|flex": 2,
                 "layout|region": "east"
             },
             "customConfigs": [],
@@ -92,7 +96,7 @@
                 "layout|region": "north"
             },
             "customConfigs": [],
-            "expanded": true,
+            "expanded": false,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen5762",
@@ -1058,7 +1062,7 @@
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen25950",

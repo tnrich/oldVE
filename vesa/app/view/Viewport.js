@@ -13,11 +13,11 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('App.view.Viewport', {
-    extend: 'App.view.AppViewport',
+Ext.define('MyApp.view.Viewport', {
+    extend: 'MyApp.view.AppViewport',
     renderTo: Ext.getBody(),
     requires: [
-        'App.view.AppViewport',
-        'App.view.FileImportWindow'
+        'MyApp.view.AppViewport',
+        'MyApp.view.FileImportWindow'
     ]
 });
