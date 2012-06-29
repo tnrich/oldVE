@@ -52,7 +52,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 	
 <span id='Teselagen-bio-parsers-GenbankManager-method-constructor'>	/**
 </span>	 * Creates a static GenbankManager class with public functions.
-	 * @returns {GenbankManager} Handle to excecute methods.
+	 * @returns {GenbankManager} Handle to execute methods.
 	 */
 	constructor: function() {
 		var that = this;
@@ -66,9 +66,9 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 </span>		 * Loads a Genbank File.
 		 * @param {HTMLElement} fileInput
 		 * @returns {String} genbankFileString
-		 * @protected
+		 * @public
 		 */
-		function loadFile(fileInput) {
+		this.loadFile = function(fileInput) {
 			var genbankFileString;
 			var file = fileInput.files[0];
 			fr = new FileReader();
@@ -88,7 +88,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 </span>		 * Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
 		 * @param {String} genbankFileString String form of Genbank File.
 		 * @return {Genbank}
-		 * @protected
+		 * @public
 		 */
 		this.parseGenbankFile = function(genbankFileString) {
 			gb = Ext.create(&quot;Teselagen.bio.parsers.Genbank&quot;);
@@ -96,7 +96,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 			myFlag = new Flags();
 			myField = new Field();
 
-			genArr	= genbankFileString.split(/[\n]+/g);
+			genArr	= genbankFileString.split(/[\n]+|[\r]+/g);
 			for (var i=0 ; i &lt; genArr.length; i++) {
 				lineParser(genArr[i]);
 			}
@@ -323,7 +323,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 			return result;
 		}
 <span id='Teselagen-bio-parsers-GenbankManager-method-parseFeatureLocation'>		/**
-</span>		 * Parses Feature Locatons
+</span>		 * Parses Feature Locations
 		 * @param {GenbankFeaturesElement} featElm
 		 * @param {String} locStr
 		 * @returns {GenbankFeatureLocation} location
@@ -394,6 +394,9 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 		}
 <span id='Teselagen-bio-parsers-GenbankManager-method-parseOrigin'>		/**
 </span>		 * Parses Origin lines.
+		 * @param {String} line
+		 * @returns {GenbankOriginKeyword} result
+		 * @private
 		 */
 		function parseOrigin(line) {  
 			var result;

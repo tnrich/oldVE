@@ -219,25 +219,46 @@ describe("Testing Genbank related classes ", function() {
 	
 	describe("Opening data files from biojs/data/DATAFILE.gb correctly? ", function() {
 	    it("../data/pj5_00028.gb?",function(){
-	    	// Load data files from biojs/data/. to buffer
-	    	var text = "";  // ?
+	    	
+	    	var text, tmp; 
 	    	Ext.Ajax.request({
 	            url:'../test/data/pj5_00028.gb',
 	            success: function(response) {
 	              var text = response.responseText;
+	              console.log(text);
 	              var tmp = gbMan.parseGenbankFile(text);
 	              console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	              console.log(Ext.getClassName(tmp));
+	              console.log(JSON.stringify(tmp, null, "  "));
 	            }
 	        });
-	    	console.log(text);
-	    	//var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
+	    	
+	    	expect(false).toBe(false);
+	    });
+	    
+	});
+
+	describe("Opening data files from biojs/data/DATAFILE.gb correctly? ", function() {
+	    it("../data/SCU49845.gb?",function(){
+	    	
+	    	var text, tmp; 
+	    	Ext.Ajax.request({
+	            url:'../test/data/SCU49845.gb',
+	            success: function(response) {
+	              var text = response.responseText;
+	              console.log(text);
+	              var tmp = gbMan.parseGenbankFile(text);
+	              console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	              console.log(Ext.getClassName(tmp));
+	              console.log(JSON.stringify(tmp, null, "  "));
+	            }
+	        });
 	    	
 	    	
 	    	expect(false).toBe(false);
 	    });
 	    
 	});
-	
 	describe("Testing this DUMMY", function() {
 	    
 	    it("Works?",function(){

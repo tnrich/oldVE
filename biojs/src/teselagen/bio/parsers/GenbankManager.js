@@ -35,7 +35,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 	
 	/**
 	 * Creates a static GenbankManager class with public functions.
-	 * @returns {GenbankManager} Handle to excecute methods.
+	 * @returns {GenbankManager} Handle to execute methods.
 	 */
 	constructor: function() {
 		var that = this;
@@ -49,9 +49,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		 * Loads a Genbank File.
 		 * @param {HTMLElement} fileInput
 		 * @returns {String} genbankFileString
-		 * @protected
+		 * @public
 		 */
-		function loadFile(fileInput) {
+		this.loadFile = function(fileInput) {
 			var genbankFileString;
 			var file = fileInput.files[0];
 			fr = new FileReader();
@@ -71,7 +71,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		 * Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
 		 * @param {String} genbankFileString String form of Genbank File.
 		 * @return {Genbank}
-		 * @protected
+		 * @public
 		 */
 		this.parseGenbankFile = function(genbankFileString) {
 			gb = Ext.create("Teselagen.bio.parsers.Genbank");
@@ -79,7 +79,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			myFlag = new Flags();
 			myField = new Field();
 
-			genArr	= genbankFileString.split(/[\n]+/g);
+			genArr	= genbankFileString.split(/[\n]+|[\r]+/g);
 			for (var i=0 ; i < genArr.length; i++) {
 				lineParser(genArr[i]);
 			}
@@ -306,7 +306,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			return result;
 		}
 		/**
-		 * Parses Feature Locatons
+		 * Parses Feature Locations
 		 * @param {GenbankFeaturesElement} featElm
 		 * @param {String} locStr
 		 * @returns {GenbankFeatureLocation} location
@@ -377,6 +377,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 		}
 		/**
 		 * Parses Origin lines.
+		 * @param {String} line
+		 * @returns {GenbankOriginKeyword} result
+		 * @private
 		 */
 		function parseOrigin(line) {  
 			var result;

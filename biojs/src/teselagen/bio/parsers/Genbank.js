@@ -10,7 +10,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 	    
 	/** 
 	 * Creates new Genbank
-	 * @param 
+	 * @returns {Genbank} 
 	 * */
 	constructor: function () {
 		var that = this;
