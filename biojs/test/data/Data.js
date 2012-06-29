@@ -72,6 +72,18 @@ Ext.define('Data', {
 			return line;
 		}
 		
+		this.getPj5File = function() {
+			var fileStr = Ext.Ajax.request({
+		        url:'../data/sigpep.gb',
+		        success: function(response) {
+		          var text = response.responseText;
+		          console.log(text);
+		        }
+		    });
+			return fileStr;
+		}
+		
+		
 		/*
 		this.getPj5Str = function () {
 			line = 'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012
