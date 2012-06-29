@@ -1,6 +1,6 @@
 
 /**
- * GenbankLocusKeyword class 
+ * GenbankLocusKeyword class. 
  * Class for GenbankLocusKeyword. Specificfor parsing the Locus line.
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -8,11 +8,10 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 	/* */
-	extend: "Teselagen.bio.parsers.GenbankKeyword",
+	extend: "Teselagen.bio.parsers.Keyword",
 
 	/**
 	 * Creates a new GenbankLocusKeyword from inData.
-	 * @param {Object} inData
 	 * @param {String} locusName 
 	 * @param {String} sequenceLength
 	 * @param {String} strandType
@@ -23,6 +22,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 	 */
 	constructor: function (inData) {
 		var that = this;
+		that.keyword = "LOCUS";
 
 		if (inData ) {
 			//console.log(JSON.stringify(inData, null, " "));
@@ -46,60 +46,70 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 		}
 		/**
 		 * Get locusName
+		 * @returns {String} locusName
 		 */
 		this.getLocusName = function() {
 			return locusName;
 		}
 		/**
 		 * Set locusName
+		 * @params {String}
 		 */
 		this.setLocusName = function(pLocusName) {
 			locusName = pLocusName;
 		}
 		/**
 		 * Get strandType
+		 * @returns {String} strandType
 		 */
 		this.getStrandType = function() {
 			return strandType;
 		}
 		/**
 		 * Set strandType
+		 * @params {String} pStrandType
 		 */
 		this.setStrandType = function(pStrandType) {
 			strandType = pStrandType;
 		}
 		/**
 		 * Get sequenceLength
+		 * @returns {String} sequenceLength
 		 */
 		this.getSequenceLength = function() {
 			return sequenceLength;
 		}
 		/**
 		 * Set SequenceLength
+		 * @params {String}
 		 */
 		this.setSequenceLength = function(pSequenceLength) {
 			sequenceLength = pSequenceLength;
 		}
 		/**
 		 * Get naType
+		 * @returns {String} naType
 		 */
 		this.getNaType = function() {
 			return naType;
 		}
 		/**
 		 * Set naType
+		 * @params {String}
 		 */
 		this.setNaType = function(pNaType) {
 			naType = pNaType;
 		}
 		/**
 		 * Get linear
+		 * @returns {Boolean} linear
 		 */
 		this.getLinear = function() {
 			return linear;
 		}
 		/**
 		 * Set linear
+		 * @params {String}
 		 */
 		this.setLinear = function(pLinear) {
 			linear = pLinear;
@@ -113,24 +123,29 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 		}
 		/**
 		 * Get divisionCode
+		 * @returns {String} divisionCode
 		 */
 		this.getDivisionCode = function() {
 			return divisionCode;
 		}
 		/**
 		 * Set DivisionCode
+		 * @params {String}
 		 */
 		this.setDivisionCode = function(pDivisionCode) {
 			divisionCode = pDivisionCode;
 		}
 		/**
 		 * Get date
+		 * 
+		 * @returns {String} date
 		 */
 		this.getDate = function() {
 			return date;
 		}
 		/**
 		 * Set Date
+		 * @params {String}
 		 */
 		this.setDate = function(pDate) {
 			date = pDate;
@@ -138,6 +153,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 		
 		/**
 		 * Converts this GenbankLocusKeyword to Genbank file format string
+		 * @returns {String}
 		 */
 		this.toString = function () {
 			var tmp;
@@ -178,6 +194,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 		}
 		/**
 		 * Converts to JSON format.
+		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
 			var json;
@@ -191,7 +208,6 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 					divisionCode: divisionCode,
 					date: date
 			};
-			//JSON.stringify(json, null, "  ")
 			return json;
 		}
 

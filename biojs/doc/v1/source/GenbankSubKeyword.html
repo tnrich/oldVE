@@ -24,7 +24,8 @@
  */
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
-	/* */
+
+	extend: &quot;Teselagen.bio.parsers.GenbankKeyword&quot;,
 
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-constructor'>	/**
 </span>	 * Creates a new GenbankSubKeywords from inData.
@@ -36,17 +37,17 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 		var that = this;
 
 		if (inData) {
-			var keyword   = inData.keyword;
-			var value = inData.value;
+			that.keyword   = inData.keyword;
+			that.value = inData.value;
 		} else {
-			var keyword;
-			var value;
+			//var keyword;
+			//var value;
 		}
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-getKeyword'>		/**
 </span>		 * Get keyword
 		 */
 		this.getKeyword = function() {
-			return keyword;
+			return that.keyword;
 		}
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-setKeyword'>		/**
 </span>		 * Set keyword
@@ -58,7 +59,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 </span>		 * Get value
 		 */
 		this.getValue = function() {
-			return value;
+			return that.value;
 		}
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-setValue'>		/**
 </span>		 * Set value
@@ -79,15 +80,15 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 		 */
 		this.toString = function() {
 			var width = 80-12;
-			var line = &quot;  &quot; + keyword;
+			var line = &quot;  &quot; + that.keyword;
 			//line = line.lpad(&quot; &quot;, 2); // + this.value;
 			line = line.rpad(&quot; &quot;, 12);
 			
-			line += value;
-			/*line += value.substring(0,width)
+			line += that.value;
+			/*line += that.value.substring(0,width)
 
 			for (var i=width; i&lt;value; i=i+width) {
-				line += value.substring(i,width);
+				line += that.value.substring(i,width);
 			}*/
 
 			return line;
@@ -98,8 +99,8 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 		 */
 		this.toJSON = function() {
 			var json = {
-					keyword: keyword,
-					value: value
+					keyword: that.keyword,
+					value: that.value
 			}
 			return json;
 		}

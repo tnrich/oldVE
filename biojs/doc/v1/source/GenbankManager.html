@@ -465,17 +465,34 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 			/*if (line.charAt(21) === &quot;/&quot;) {
 				qual = true;
 				console.log(&quot;T.H. Hard coded method works.&quot;);
-			} else */
-			
-			if ( line.match(/^[\s]*\/[\w]+=[\S]+/) ) {
+			}*/
+
+			if ( line.trim().charAt(0).match(/\// )) {
+				//console.log(&quot;Found Qualifier using / sign.&quot;);
 				qual = true;
-			} else if ( line.substr(0,21).match(/[\s]{21}/ )) {
-				console.log(&quot;Found Qualifier using 21 spaces.&quot;);
-				qual = true
+			} else if ( line.match(/^[\s]*\/[\w]+=[\S]+/) ) {
+				qual = true;
 			}
 			return qual;
 		}
-
+		
+<span id='Teselagen-bio-parsers-GenbankManager-method-isThisRunon'>		/**
+</span>		 *  Checks if this line is a continuation of previous line. 
+		 *  (Do not create new object, just append to previous object.)
+		 *  @param {String} line
+		 *  @returns {Boolean} runon
+		 *  @private
+		 */
+		function isThisRunon(line) {
+			var runon;
+			if ( line.trim().charAt(0).match(/\// )) {
+				runon = false;
+			} else {
+				runon = true;
+			}
+			return runon;
+		}
+		
 <span id='Teselagen-bio-parsers-GenbankManager-method-isRunon'>		/**
 </span>		 *  Checks if this line will runon to next line (do not create new object @ next line, just append)
 		 *  @param {String} line

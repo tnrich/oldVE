@@ -1,6 +1,6 @@
 
 /**
-  * Genbank class
+  * Genbank class. 
   * Sets up an empty shell object with Genbank information and methods that is later populated by GenbankFormat.js
   * @author Diana Wong
   * @author Timothy Ham (original author of GenbankFileModel.js)
@@ -34,7 +34,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		 * Finds and gets Keyword
 		 * @param {String} key Keyword name. (e.g. "LOCUS", or "ORIGIN")
 		 * @return {GenbankKeyword} entry
-		 * @protected
+		 * @public
 		 */
 		this.findKeyword = function(key) {
 			return find(key);
@@ -54,7 +54,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Same as GB.findKeyword("LOCUS")
          * @returns {GenbankLocusKeyword} 
-         * @protected
+         * @public
          */
 		this.getLocus = function() {
 			//return locus;
@@ -63,7 +63,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Same as GB.addKeyword(GenbankLocusKeyword}
          * @param {GenbankLocusKeyword} pLocus
-         * @protected
+         * @public
          */
 		this.setLocus = function(pLocus) {
 			//console.log('set locus');
@@ -73,7 +73,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Same as GB.findKeyword("ORIGIN")
          * @returns {GenbankOriginKeyword}
-         * @protected
+         * @public
          */
 		this.getOrigin = function() {
 			//return origin;
@@ -82,7 +82,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Same as GB.addKeyword(GenbankOriginKeyword}
          * @param {GenbankOriginKeyword} pOrigin
-         * @protected
+         * @public
          */
 		this.setOrigin = function(pOrigin) {
 			//origin = pOrigin;
@@ -91,7 +91,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Same as GB.findKeyword("FEATURES")
          * @returns {GenbankFeaturesKeyword} 
-         * @protected
+         * @public
          */
 		this.getFeatures = function() {
 			//return getFeatures;
@@ -100,7 +100,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Same as GB.addKeyword(GenbankFeaturesKeyword}
          * @param {GenbankFeaturesKeyword} pFeatures
-         * @protected
+         * @public
          */
 		this.setFeatures = function(pFeatures) {
 			//features = pFeatures;
@@ -127,7 +127,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Gets KeywordsTag
 		 * @return {[String]} keywordsTag
-		 * @protected
+		 * @public
 		 */
 		this.getKeywordsTag = function() {
 			return keywordsTag;
@@ -135,7 +135,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Sets KeywordsTag
 		 * @param {String} pKeywordsTag
-		 * @protected
+		 * @public
 		 */
 		this.setKeywordsTag = function(pKeywordsTag) {
 			keywordsTag = pKeywordsTag;
@@ -143,7 +143,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Get Keywords, an array
 		 * @return {[GenbankKeywords]} pKeywords:ArrayList
-		 * @protected
+		 * @public
 		 */
 		this.getKeywords = function() {
 			return keywords;
@@ -151,7 +151,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Set Keywords, an array
 		 * @param {[GenbankKeywords]} pKeywords:ArrayList
-		 * @protected
+		 * @public
 		 */
 		this.setKeywords = function(pKeywords) {
 			keywords = pKeywords;
@@ -159,7 +159,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Add a single GenbankKeyword to Genbank.keywords
          * @param {GenbankKeyword} pKeywords
-         * @protected
+         * @public
          */
 		this.addKeyword = function(pAddKeyword) {
 			keywords.push(pAddKeyword);
@@ -167,7 +167,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Gets the last GenbankKeyword on the Keywords ArrayList
 		 * @return {GenbankKeyword}
-		 * @protected
+		 * @public
 		 */
 		this.getLastKeyword = function() {
 			return keywords[keywords.length-1];
@@ -176,7 +176,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Add a single keyword name (String) to Genbank.KeywordTag
          * @param {String} pAddKeywordsTag
-         * @protected
+         * @public
          */
 		this.addKeywordTag = function(pAddKeywordsTag) {
 			keywordsTag.push(pAddKeywordsTag);
@@ -236,7 +236,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		/**
 		 * Converts this GenbankSubKeywords to Genbank file format string
 		 * @returns {String} gbStr
-		 * @protected
+		 * @public
 		 */
 		this.toString = function() {
 			var gbStr = "";
@@ -253,8 +253,8 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		
 		/**
 		 * Converts to JSON format. Overloads for JSON.stringify()
-		 * @returns {Object}
-		 * @protected
+		 * @returns {Object} json
+		 * @public
 		 */
 		this.toJSON = function() {
 			var json = new Object();

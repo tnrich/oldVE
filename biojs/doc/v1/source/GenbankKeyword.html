@@ -24,7 +24,8 @@
  */
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;, {
-	/* */
+	
+	extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
 
 <span id='Teselagen-bio-parsers-GenbankKeyword-cfg-config'>	/**
 </span>	 * @cfg {Object} config
@@ -33,13 +34,12 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;, {
 	 * @cfg {GenbankSubKeyword} subKeywords 
 	 */
 	config: {
-		keyword: null,
-		value: null,
+		//keyword: null,
+		//value: null,
 		subKeywords: null,
 	},
 <span id='Teselagen-bio-parsers-GenbankKeyword-method-constructor'>	/**
 </span>	 * Creates a new GenbankKeyword from inData.
-	 * @param {Object} inData
 	 * @param {String} keyword
 	 * @param {String} value
 	 * @param {GenbankSubKeyword} subKeywords 

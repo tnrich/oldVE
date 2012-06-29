@@ -1,17 +1,17 @@
 
 /**
- * GenbankSubKeyword class 
+ * GenbankSubKeyword class. 
  * Class for SubKeywords not defined by GenbankFeatureElements (Qualifier and Location).
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
-	/* */
+
+	extend: "Teselagen.bio.parsers.Keyword",
 
 	/**
 	 * Creates a new GenbankSubKeywords from inData.
-	 * @param {Object} inData
 	 * @param {String} keyword
 	 * @param {String} value
 	 */
@@ -19,36 +19,19 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 		var that = this;
 
 		if (inData) {
-			var keyword   = inData.keyword;
-			var value = inData.value;
+			that.keyword   = inData.keyword;
+			that.value = inData.value;
 		} else {
-			var keyword;
-			var value;
+			//var keyword;
+			//var value;
 		}
 		/**
 		 * Get keyword
 		 */
 		this.getKeyword = function() {
-			return keyword;
+			return that.keyword;
 		}
-		/**
-		 * Set keyword
-		 */
-		this.setKeyword = function(pKeyword) {
-			keyword = pKeyword;
-		}
-		/**
-		 * Get value
-		 */
-		this.getValue = function() {
-			return value;
-		}
-		/**
-		 * Set value
-		 */
-		this.setValue = function(pValue) {
-			value = pValue;
-		}
+
 		/**
 		 * Appends pValue to existing value property
 		 * @param {String} pVal
@@ -59,18 +42,19 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 		
 		/**
 		 * Converts this GenbankSubKeywords to Genbank file format string
+		 * @returns {String}
 		 */
 		this.toString = function() {
 			var width = 80-12;
-			var line = "  " + keyword;
+			var line = "  " + that.keyword;
 			//line = line.lpad(" ", 2); // + this.value;
 			line = line.rpad(" ", 12);
 			
-			line += value;
-			/*line += value.substring(0,width)
+			line += that.value;
+			/*line += that.value.substring(0,width)
 
 			for (var i=width; i<value; i=i+width) {
-				line += value.substring(i,width);
+				line += that.value.substring(i,width);
 			}*/
 
 			return line;
@@ -78,11 +62,12 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 		
 		/**
 		 * Converts to JSON format. Overloads for JSON.stringify()
+		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
 			var json = {
-					keyword: keyword,
-					value: value
+					keyword: that.keyword,
+					value: that.value
 			}
 			return json;
 		}

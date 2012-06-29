@@ -7,7 +7,8 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
-	/* */
+	
+	extend: "Teselagen.bio.parsers.Keyword",
 
 	/**
 	 * @cfg {Object} config
@@ -16,16 +17,16 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 	 * @cfg {GenbankSubKeyword} subKeywords 
 	 */
 	config: {
-		keyword: null,
-		value: null,
+		//keyword: null,
+		//value: null,
 		subKeywords: null,
 	},
 	/**
 	 * Creates a new GenbankKeyword from inData.
-	 * @param {Object} inData
 	 * @param {String} keyword
 	 * @param {String} value
 	 * @param {GenbankSubKeyword} subKeywords 
+	 * @returns {GenbankKeyword}
 	 */
 	constructor: function (inData) {
 		var that = this;
@@ -68,6 +69,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 		}
 		/**
 		 * Converts this GenbankKeywords to Genbank file format string
+		 * @returns	{String} line
 		 */
 		this.toString = function() {
 			var width = 80-12;
