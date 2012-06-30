@@ -18,15 +18,13 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
 	 */
 	constructor: function (inData) {
 		var that = this;
-		
+		var name;
+		var value;
+		var quoted;
 		if (inData) {
-			var name = inData.name;
-			var value = inData.value;
-			var quoted = inData.quoted; // boolean
-		} else {
-			var name;
-			var value;
-			var quoted;
+			name = inData.name;
+			value = inData.value;
+			quoted = inData.quoted; // boolean
 		}
 		/**
 		 * Get name

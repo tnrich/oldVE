@@ -17,19 +17,19 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword'>/**
-</span> * GenbankLocusKeyword class 
- * Class for GenbankLocusKeyword. Specificfor parsing the Locus line.
+</span> * GenbankLocusKeyword class. 
+ * Class for GenbankLocusKeyword. Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
+ * Specificfor parsing the Locus line.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 	/* */
-	extend: &quot;Teselagen.bio.parsers.GenbankKeyword&quot;,
+	extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
 
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-constructor'>	/**
 </span>	 * Creates a new GenbankLocusKeyword from inData.
-	 * @param {Object} inData
 	 * @param {String} locusName 
 	 * @param {String} sequenceLength
 	 * @param {String} strandType
@@ -40,6 +40,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 	 */
 	constructor: function (inData) {
 		var that = this;
+		that.keyword = &quot;LOCUS&quot;;
 
 		if (inData ) {
 			//console.log(JSON.stringify(inData, null, &quot; &quot;));
@@ -63,60 +64,70 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getLocusName'>		/**
 </span>		 * Get locusName
+		 * @returns {String} locusName
 		 */
 		this.getLocusName = function() {
 			return locusName;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setLocusName'>		/**
 </span>		 * Set locusName
+		 * @params {String}
 		 */
 		this.setLocusName = function(pLocusName) {
 			locusName = pLocusName;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getStrandType'>		/**
 </span>		 * Get strandType
+		 * @returns {String} strandType
 		 */
 		this.getStrandType = function() {
 			return strandType;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setStrandType'>		/**
 </span>		 * Set strandType
+		 * @params {String} pStrandType
 		 */
 		this.setStrandType = function(pStrandType) {
 			strandType = pStrandType;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getSequenceLength'>		/**
 </span>		 * Get sequenceLength
+		 * @returns {String} sequenceLength
 		 */
 		this.getSequenceLength = function() {
 			return sequenceLength;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setSequenceLength'>		/**
 </span>		 * Set SequenceLength
+		 * @params {String}
 		 */
 		this.setSequenceLength = function(pSequenceLength) {
 			sequenceLength = pSequenceLength;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getNaType'>		/**
 </span>		 * Get naType
+		 * @returns {String} naType
 		 */
 		this.getNaType = function() {
 			return naType;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setNaType'>		/**
 </span>		 * Set naType
+		 * @params {String}
 		 */
 		this.setNaType = function(pNaType) {
 			naType = pNaType;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getLinear'>		/**
 </span>		 * Get linear
+		 * @returns {Boolean} linear
 		 */
 		this.getLinear = function() {
 			return linear;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setLinear'>		/**
 </span>		 * Set linear
+		 * @params {String}
 		 */
 		this.setLinear = function(pLinear) {
 			linear = pLinear;
@@ -130,24 +141,29 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getDivisionCode'>		/**
 </span>		 * Get divisionCode
+		 * @returns {String} divisionCode
 		 */
 		this.getDivisionCode = function() {
 			return divisionCode;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setDivisionCode'>		/**
 </span>		 * Set DivisionCode
+		 * @params {String}
 		 */
 		this.setDivisionCode = function(pDivisionCode) {
 			divisionCode = pDivisionCode;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-getDate'>		/**
 </span>		 * Get date
+		 * 
+		 * @returns {String} date
 		 */
 		this.getDate = function() {
 			return date;
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-setDate'>		/**
 </span>		 * Set Date
+		 * @params {String}
 		 */
 		this.setDate = function(pDate) {
 			date = pDate;
@@ -155,6 +171,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 		
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-toString'>		/**
 </span>		 * Converts this GenbankLocusKeyword to Genbank file format string
+		 * @returns {String}
 		 */
 		this.toString = function () {
 			var tmp;
@@ -195,6 +212,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 		}
 <span id='Teselagen-bio-parsers-GenbankLocusKeyword-method-toJSON'>		/**
 </span>		 * Converts to JSON format.
+		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
 			var json;
@@ -208,7 +226,6 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
 					divisionCode: divisionCode,
 					date: date
 			};
-			//JSON.stringify(json, null, &quot;  &quot;)
 			return json;
 		}
 

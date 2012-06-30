@@ -280,7 +280,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 			
 			if (myFlag.runon === false ) {
 				if (getLineKey(line) === that.self.FEATURES_TAG) {
-					result = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureKeyword&quot;);
+					result = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeaturesKeyword&quot;);
 					result.setKeyword(that.self.FEATURES_TAG);
 					gb.setFeatures(result);
 					gb.addKeywordTag(that.self.FEATURES_TAG);
@@ -353,7 +353,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
 			
 			for (var i=0; i&lt;locArr.length; i++) {
 				var ind = locArr[i].split(/[.]+/);
-				location = Ext.create(&quot;Teselagen.bio.parsers.GenbankLocation&quot;, {
+				location = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
 					start: ind[0],
 					end: ind[1]
 				});

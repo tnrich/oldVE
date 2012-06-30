@@ -1,7 +1,7 @@
 
 /**
  * GenbankKeyword class 
- * Class for Keywords. Also, superclass of all keywords, i.e. Locus, Features, Origin, and standard Keywords (e.g. Accession, Version).
+ * Class for Keywords. Same level as GebankLocusKeyword, GenbankFeaturesKeyword, and GenbankOriginKeyword.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -32,9 +32,9 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 		var that = this;
 
 		if (inData) {
-			this.keyword = inData.keyword;
-			this.value = inData.value;
-			this.subKeywords = inData.subKeywords;
+			that.keyword = inData.keyword;
+			that.value = inData.value;
+			that.subKeywords = inData.subKeywords;
 		}
 		
 		/**
@@ -42,11 +42,11 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 		 * @param {GenbankSubKeyword}
 		 */
 		this.addSubKeyword = function(subkey) {
-			if (this.subKeywords === undefined) {
+			if (that.subKeywords === undefined) {
 				//console.log("BLAH");
-				this.subKeywords = [];
+				that.subKeywords = [];
 			}
-			this.subKeywords.push(subkey);
+			that.subKeywords.push(subkey);
 		}
 		
 		/**
@@ -54,15 +54,15 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 		 * @param {String} pVal
 		 */
 		this.appendValue = function(pVal) {
-			value += pVal;
+			that.value += pVal;
 		}
 		/**
 		 * Gets last SubKeyword on the subKeywords array.
 		 * @returns {GenbankSubKeyword}
 		 */
 		this.getLastSubKeyword = function() {
-			if (this.subKeywords.length > 0) {
-				return this.subKeywords[this.subKeywords.length-1];
+			if ( that.subKeywords.length > 0 && that.subKeywords !== undefined) {
+				return that.subKeywords[that.subKeywords.length-1];
 			} else {
 				return null;
 			}
@@ -73,12 +73,14 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 		 */
 		this.toString = function() {
 			var width = 80-12;
-			var line = this.keyword.rpad(" ", 12); // + this.value;
-			line += this.value.substring(0,width)
+			var line = that.keyword.rpad(" ", 12); // + this.value;
+			line += that.value;
+			
+			/*line += that.value.substring(0,width)
 
 			for (var i=width; i<this.value; i=i+width) {
 				line += this.value.substring(i,width);
-			}
+			}*/
 			if (this.subKeywords !== undefined) {
 				line += "\n";
 				for (var i=0; i < this.subKeywords.length; i++) {

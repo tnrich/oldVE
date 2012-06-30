@@ -1,8 +1,9 @@
 
 /**
  * GenbankFeatureElement class 
- * Class for GenbankFeatureElement. An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
- * It's indices are defined by GenbankLocation and it's annotations by GenbankFeatureQualifier. 
+ * Class for GenbankFeatureElement. Stored in an array in GenbankFeaturesKeyword
+ * An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
+ * Its indices are defined by GenbankFeatureLocation and it's annotations by GenbankFeatureQualifier. 
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -19,25 +20,22 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 	 * @param {Boolean} complement
 	 * @param {Boolean} join
 	 * @param [GenbankFeatureQualifier] featureQualifer
-	 * @param [GenbankLocation] featureLoation
+	 * @param [GenbankFeatureLocation] featureLoation
 	 */
 	constructor: function (inData) {
-
+		var key;
+		var strand;
+		var complement;
+		var join;
+		var featureQualifier;
+		var featureLocation;
 		if (inData) {
-			var key = inData.key;
-			var strand = inData.strand;
-			var complement = inData.complement;
-			var join = inData.join;
-			var featureQualifier = [];
-			var featureLocation = [];
-			
-		} else {
-			var key;
-			var strand;
-			var complement;
-			var join;
-			var featureQualifier;
-			var featureLocation;
+			key = inData.key;
+			strand = inData.strand;
+			complement = inData.complement;
+			join = inData.join;
+			featureQualifier = [];
+			featureLocation = [];
 		}
 		/**
 		 * Get keyword
@@ -99,8 +97,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 			featureLocation = pFeatureLocation;
 		}
 		/**
-		 * Add a single GenbankLocation to the featureLocation array
-		 * @param {GenbankLocation} pLoc
+		 * Add a single GenbankFeatureLocation to the featureLocation array
+		 * @param {GenbankFeatureLocation} pLoc
 		 */
 		this.addFeatureLocation = function(pLoc) {
 			if (featureLocation === undefined ) {

@@ -1,7 +1,8 @@
 
 /**
  * GenbankLocusKeyword class. 
- * Class for GenbankLocusKeyword. Specificfor parsing the Locus line.
+ * Class for GenbankLocusKeyword. Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
+ * Specificfor parsing the Locus line.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -23,26 +24,25 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 	constructor: function (inData) {
 		var that = this;
 		that.keyword = "LOCUS";
-
+		var locusName;
+		var sequenceLength;
+		var strandType;
+		var naType;
+		var linear; //boolean; cannot designate Tandem
+		var circular; //boolean
+		var divisionCode;
+		var date;
+		
 		if (inData ) {
 			//console.log(JSON.stringify(inData, null, " "));
-			var locusName 		= inData.locusName;
-			var sequenceLength 	= inData.sequenceLength;
-			var strandType		= inData.strandType;
-			var naType			= inData.naType;
-			var linear			= inData.linear;
-			var circular;//		= inData.circular;
-			var divisionCode	= inData.divisionCode;
-			var date			= inData.date;
-		} else {
-			var locusName;
-			var sequenceLength;
-			var strandType;
-			var naType;
-			var linear; //boolean; cannot designate Tandem
-			var circular; //boolean
-			var divisionCode;
-			var date;
+			locusName 		= inData.locusName;
+			sequenceLength 	= inData.sequenceLength;
+			strandType		= inData.strandType;
+			naType			= inData.naType;
+			linear			= inData.linear;
+			circular;//		= inData.circular;
+			divisionCode	= inData.divisionCode;
+			date			= inData.date;
 		}
 		/**
 		 * Get locusName

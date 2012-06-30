@@ -44,8 +44,8 @@ describe("Testing Genbank related classes ", function() {
 	    	gbKey.setKeyword(test);
 	    	expect(gbKey.getKeyword()).toBe(test);
 
-	    	var gbFeatKey = Ext.create("Teselagen.bio.parsers.GenbankFeatureKeyword");
-	    	expect(Ext.getClassName(gbFeatKey)).toBe("Teselagen.bio.parsers.GenbankFeatureKeyword");
+	    	var gbFeatKey = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
+	    	expect(Ext.getClassName(gbFeatKey)).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
 
 	    });
 	    it("All Genbank classes defined?", function() {
@@ -54,10 +54,10 @@ describe("Testing Genbank related classes ", function() {
 	    	expect( Ext.create("Teselagen.bio.parsers.GenbankKeyword")).toBeDefined();
 	    	expect( Ext.create("Teselagen.bio.parsers.GenbankSubKeyword")).toBeDefined();
 	    	expect( Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword")).toBeDefined();
-	    	expect( Ext.create("Teselagen.bio.parsers.GenbankFeatureKeyword")).toBeDefined();
+	    	expect( Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword")).toBeDefined();
 	    	expect( Ext.create("Teselagen.bio.parsers.GenbankFeatureElement")).toBeDefined();
 	    	expect( Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier")).toBeDefined();
-	    	expect( Ext.create("Teselagen.bio.parsers.GenbankLocation")).toBeDefined();
+	    	expect( Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation")).toBeDefined();
 	    	expect( Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword")).toBeDefined();
 	    });	
 	});
@@ -127,15 +127,26 @@ describe("Testing Genbank related classes ", function() {
 	    	expect(tmp.findKeyword("KEYWORDS").toString()).toBe(line);
 	    });
 	    
+	    it("Parses DEFINITION?",function(){
+	    	line = 
+	    		'DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n' +
+	    		'            (AXL2) and Rev7p (REV7) genes, complete cds.';
+	    	//console.log(line);
+	    	tmp = gbMan.parseGenbankFile(line);
+	    	//console.log(tmp.toString());
+	    	expect(tmp.findKeyword("DEFINITION").toString()).toBe(line);
+	    });
+	    
 	    it("Parses SOURCE? Correctly parses SubKeywords and runons?",function(){
 	    	line = 
 	    		'SOURCE      Saccharomyces cerevisiae (baker\'s yeast)\n' +
 	    		'  ORGANISM  Saccharomyces cerevisiae\n' +
 	    		'            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
 	    		'            Saccharomycetales; Saccharomycetaceae; Saccharomyces.';
+	    	//console.log(line);
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	expect(tmp.findKeyword("SOURCE").getSubKeywords()[0].getKeyword()).toBe("ORGANISM");
-	    	
+	    	expect(tmp.findKeyword("SOURCE").getSubKeywords()[0].getValue()).toBe("Saccharomyces cerevisiae\n            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n            Saccharomycetales; Saccharomycetaceae; Saccharomyces.");
 	    });
 	    
 	    it("Parses FEATURE, FEATURE ELEMENTS, LOCATION, and QUALIFIER?",function(){
@@ -143,8 +154,10 @@ describe("Testing Genbank related classes ", function() {
 	    		'FEATURES             Location/Qualifiers\n' + 
 	    		'     CDS             complement(7..885)\n' + 
 	    		'                     /label="araC"';
+	    	console.log(line);
 	    	tmp = gbMan.parseGenbankFile(line);
-	    	expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeatureKeyword");
+	    	console.log(tmp);
+	    	expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getKeyword()).toBe("CDS");
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getStart()).toBe("7");
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getEnd()).toBe("885");
@@ -165,13 +178,13 @@ describe("Testing Genbank related classes ", function() {
 	    		'                     LISGDDKILNGVYSQYEEGESIFGSLF\n';
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	//console.log(tmp.toString());
-	    	expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeatureKeyword");
+	    	expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
 	    	//console.log(tmp.findKeyword("FEATURES").getLastElement());
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getKeyword()).toBe("fakemRNA");
-	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getStart()).toBe("<265");
+	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getStart()).toBe("265"); //<265
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getEnd()).toBe("402");
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[7].getStart()).toBe("2683");
-	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[7].getEnd()).toBe(">2855");
+	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[7].getEnd()).toBe("2855"); //>2855
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation().length).toBe(8);
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getName()).toBe("translation");
 	    	expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getValue()).toBe("MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQFVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVDLISGDDKILNGVYSQYEEGESIFGSLF");
@@ -190,7 +203,8 @@ describe("Testing Genbank related classes ", function() {
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	expect(line).toMatch(tmp.findKeyword("ORIGIN").toString());
 	    });
-
+	    
+	    /*
 	    it("Parses Top part of pj5_00028.gb string?",function(){
 	    	line = dt.getTopStr();
 	    	console.log(line);
@@ -207,8 +221,7 @@ describe("Testing Genbank related classes ", function() {
 	    	//tmp = gbMan.parseGenbankFile(line);
 	    	//console.log(tmp);
 	    })
-	    
-	    /*
+
 	    it("Parses ?",function(){
 	    	line = "";
 	    	
@@ -216,7 +229,7 @@ describe("Testing Genbank related classes ", function() {
  
 	});
 	
-	
+	/*
 	describe("Opening data files from biojs/data/DATAFILE.gb correctly? ", function() {
 	    it("../data/pj5_00028.gb?",function(){
 	    	
@@ -257,8 +270,8 @@ describe("Testing Genbank related classes ", function() {
 	    	
 	    	expect(false).toBe(false);
 	    });
-	    
 	});
+	*/
 	describe("Testing this DUMMY", function() {
 	    
 	    it("Works?",function(){

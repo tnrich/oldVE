@@ -1,17 +1,18 @@
 
 /**
- * GenbankFeatureKeyword class. 
- * Class for GenbankFeatureKeyword. Simply holds GenbankFeatureElements.
+ * GenbankFeaturesKeyword class. 
+ * Class for GenbankFeaturesKeyword. Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankOriginKeyword.
+ * Simply holds GenbankFeatureElements in an array.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
 
-Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
+Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 	/* */
 	extend: "Teselagen.bio.parsers.Keyword",
 
 	/**
-	 * Creates a new GenbankFeatureKeyword from inData.
+	 * Creates a new GenbankFeaturesKeyword from inData.
 	 */
 	constructor: function () {
 		var that = this;

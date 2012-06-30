@@ -32,20 +32,20 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 			return that.keyword;
 		}
 
-		/**
+		/*
 		 * Appends pValue to existing value property
 		 * @param {String} pVal
-		 */
+		 *
 		this.appendValue = function(pVal) {
 			value += pVal;
-		}
+		}*/
 		
 		/**
 		 * Converts this GenbankSubKeywords to Genbank file format string
 		 * @returns {String}
 		 */
 		this.toString = function() {
-			var width = 80-12;
+			//var width = 80-12;
 			var line = "  " + that.keyword;
 			//line = line.lpad(" ", 2); // + this.value;
 			line = line.rpad(" ", 12);

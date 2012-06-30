@@ -1,30 +1,38 @@
 
 /**
- * GenbankLocation class 
+ * GenbankFeatureLocation class 
  * Class for GenbankFeatureQualifier. Follows the 'complement(join(>start...end))' format
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
-Ext.define("Teselagen.bio.parsers.GenbankLocation", {
+Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 	/* */
 
 	/**
 	 * Creates a new GenbankFeatureQualifier from inData.
-	 * @param {Object} inData
-	 * @param {IntString} start
-	 * @param {IntString} end
+	 * @param {Int} start
+	 * @param {Int} end
+	 * @param {String} preStart
+	 * @param {String} preEnd
 	 */
 	constructor: function (inData) {
 		var that = this;
 		
-		if (inData) {
-			var start	= inData.start;
-			var end		= inData.end;
-		} else {
-			var start;
-			var end;
-		}
+		var start;
+		var preStart = "";
+		var sufStart = "";
+		var end;
+		var preEnd = "";
+		var sufEnd = "";
 		
+		if (inData) {
+			start		= inData.start.replace(/\<|\>/, "");
+			preStart	= inData.start.match(/<\<|<\>/, "");
+			sufStart	= inData.start.match(/\<$|\>$/, "");
+			end			= inData.end.replace(/\<|\>/, "");
+			preEnd		= inData.end.match(/^\<|^\>/, "");
+			sufEnd		= inData.end.match(/\<$|\>$/, "");
+		}
 		/**
 		 * Get start
 		 */
@@ -54,7 +62,8 @@ Ext.define("Teselagen.bio.parsers.GenbankLocation", {
 		 * Converts this GenbankLocusKeyword to Genbank file format string
 		 */
 		this.toString = function() {
-			var line = start + ".." + end;
+			//var line = preStart + start + sufStart + ".." + preEnd + end + sufEnd;
+			var line = start + ".." + end ;
 			return line;
 		}
 		/**

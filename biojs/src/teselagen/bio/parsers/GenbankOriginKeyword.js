@@ -1,7 +1,8 @@
 
 /**
  * GenbankOriginKeyword class. 
- * Class for GenbankOriginKeyword. Specifically for the Origin/Sequence part of the Genbank file
+ * Class for GenbankOriginKeyword. Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankFeaturesKeyword.
+ * Specifically for the Origin/Sequence part of the Genbank file
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -17,15 +18,10 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 	constructor: function (inData) {
 		var that = this;
 		that.keyword = "ORIGIN";
-
+		var sequence = "";
+		
 		if (inData) {
-			var sequence	= inData.sequence;
-			//var keyword		= inData.keyword;
-			//var value		= inData.value;
-		} else {
-			var sequence = "";
-			//var keyword;
-			//var value;
+			sequence	= inData.sequence;
 		}
 		/**
 		 * Get sequence
