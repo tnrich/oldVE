@@ -19,24 +19,24 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 		
 		that.keyword = "FEATURES";
 		/**
-		 *  @property [GenbankFeatureElements] features
+		 *  @property [GenbankFeatureElements] featuresElements
 		 */
-		var features = new Array();
+		var featuresElements = new Array();
 		
 		
 		/**
-		 * Get Features
+		 * Get featuresElements
 		 * @returns {GenbankFeaturesKeyword
 		 */
-		this.getFeatures = function() {
-			return features;
+		this.getFeaturesElements = function() {
+			return featuresElements;
 		}
 		/**
-		 * Set Features
-		 * @param {GenbankFeaturesKeyword} pFeatures
+		 * Set featuresElements
+		 * @param {GenbankFeaturesKeyword} pFeaturesElements
 		 */
-		this.setFeatures = function(pFeatures) {
-			features = pFeatures;
+		this.setFeaturesElements = function(pFeaturesElements) {
+			featuresElements = pFeaturesElements;
 		}
 		
 		/**
@@ -44,16 +44,16 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 		 * @param {GenbankFeatureElement} pElement
 		 */
 		this.addElement = function(pElement) {
-			features.push(pElement);
+			featuresElements.push(pElement);
 		}
 		
 		/**
-		 * Get Last GenbankFeatureElement in features array
+		 * Get Last GenbankFeatureElement in featuresElements array
 		 * @returns {GenbankFeatureElement} element
 		 */
 		this.getLastElement = function() {
-			if (features.length > 0) {
-				return features[features.length-1];
+			if (featuresElements.length > 0) {
+				return featuresElements[featuresElements.length-1];
 			} else {
 				return null;
 			}
@@ -65,8 +65,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 		this.toString = function() {
 			var line = "FEATURES             Location/Qualifiers\n";
 
-			for (var i=0; i < features.length; i++) {
-				line += features[i].toString() + "\n";
+			for (var i=0; i < featuresElements.length; i++) {
+				line += featuresElements[i].toString() + "\n";
 			}
 
 			return line;
@@ -83,8 +83,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 				json["value"] = that.value;
 			}
 			json["elements"] = [];
-			for (var i=0; i <features.length; i++) {
-				json["elements"].push(features[i]);
+			for (var i=0; i <featuresElements.length; i++) {
+				json["elements"].push(featuresElements[i]);
 			}
 
 

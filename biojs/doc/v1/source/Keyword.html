@@ -52,43 +52,43 @@ Ext.define(&quot;Teselagen.bio.parsers.Keyword&quot;, {
 			this.value = inData.value;
 		}
 		
-<span id='Teselagen-bio-parsers-Keyword-method-getKeyword'>		/**
-</span>		 * Get keyword
-		 * @returns {String} keyword
-		 */
-		this.getKeyword = function() {
-			return that.keyword;
-		}
-<span id='Teselagen-bio-parsers-Keyword-method-setKeyword'>		/**
-</span>		 * Set keyword
-		 * @param {String} pKeyword
-		 */
-		this.setKeyword = function(pKeyword) {
-			keyword = pKeyword;
-		}
-<span id='Teselagen-bio-parsers-Keyword-method-getValue'>		/**
-</span>		 * Get value
-		 * @returns {String} value
-		 */
-		this.getValue = function() {
-			return that.value;
-		}
-<span id='Teselagen-bio-parsers-Keyword-method-setValue'>		/**
-</span>		 * Set value
-		 * @param {String} pValue
-		 */
-		this.setValue = function(pValue) {
-			value = pValue;
-		}
-		
 		/*
-		/**
-		 * Appends to existing parameter, value.
-		 * @param {String} pVal
+		 * Get keyword
+		 * @returns {String} keyword
 		 *
-		this.appendValue = function(pVal) {
-			value += pVal;
+		this.getKeyword = function() {
+			return this.keyword;
+		}
+		/*
+		 * Set keyword
+		 * @param {String} pKeyword
+		 *
+		this.setKeyword = function(pKeyword) {
+			this.keyword = pKeyword;
+		}
+		/*
+		 * Get value
+		 * @returns {String} value
+		 *
+		this.getValue = function() {
+			return this.value;
+		}
+		/*
+		 * Set value
+		 * @param {String} pValue
+		 *
+		this.setValue = function(pValue) {
+			this.value = pValue;
 		}*/
+		
+		
+<span id='Teselagen-bio-parsers-Keyword-method-appendValue2'>		/**
+</span>		 * Appends to existing parameter, value.
+		 * @param {String} pVal
+		 */
+		this.appendValue2 = function(pVal) {
+			this.value += pVal;
+		}
 		
 		return this;
 	}

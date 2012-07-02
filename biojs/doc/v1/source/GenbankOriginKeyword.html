@@ -35,15 +35,10 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
 	constructor: function (inData) {
 		var that = this;
 		that.keyword = &quot;ORIGIN&quot;;
-
+		var sequence = &quot;&quot;;
+		
 		if (inData) {
-			var sequence	= inData.sequence;
-			//var keyword		= inData.keyword;
-			//var value		= inData.value;
-		} else {
-			var sequence = &quot;&quot;;
-			//var keyword;
-			//var value;
+			sequence	= inData.sequence;
 		}
 <span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-getSequence'>		/**
 </span>		 * Get sequence

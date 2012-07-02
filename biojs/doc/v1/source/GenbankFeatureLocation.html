@@ -27,21 +27,29 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
 
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-constructor'>	/**
 </span>	 * Creates a new GenbankFeatureQualifier from inData.
-	 * @param {Object} inData
-	 * @param {IntString} start
-	 * @param {IntString} end
+	 * @param {Int} start
+	 * @param {Int} end
+	 * @param {String} preStart
+	 * @param {String} preEnd
 	 */
 	constructor: function (inData) {
 		var that = this;
 		
-		if (inData) {
-			var start	= inData.start;
-			var end		= inData.end;
-		} else {
-			var start;
-			var end;
-		}
+		var start;
+		var preStart = &quot;&quot;;
+		var sufStart = &quot;&quot;;
+		var end;
+		var preEnd = &quot;&quot;;
+		var sufEnd = &quot;&quot;;
 		
+		if (inData) {
+			start		= inData.start.replace(/\&lt;|\&gt;/, &quot;&quot;);
+			preStart	= inData.start.match(/&lt;\&lt;|&lt;\&gt;/, &quot;&quot;);
+			sufStart	= inData.start.match(/\&lt;$|\&gt;$/, &quot;&quot;);
+			end			= inData.end.replace(/\&lt;|\&gt;/, &quot;&quot;);
+			preEnd		= inData.end.match(/^\&lt;|^\&gt;/, &quot;&quot;);
+			sufEnd		= inData.end.match(/\&lt;$|\&gt;$/, &quot;&quot;);
+		}
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-getStart'>		/**
 </span>		 * Get start
 		 */
@@ -71,7 +79,8 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
 </span>		 * Converts this GenbankLocusKeyword to Genbank file format string
 		 */
 		this.toString = function() {
-			var line = start + &quot;..&quot; + end;
+			//var line = preStart + start + sufStart + &quot;..&quot; + preEnd + end + sufEnd;
+			var line = start + &quot;..&quot; + end ;
 			return line;
 		}
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-toJSON'>		/**
