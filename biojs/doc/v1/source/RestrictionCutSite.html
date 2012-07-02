@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+Ext.define(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, {
+
+<span id='global-property-extend'>	/**
+</span>	 * Restriction cut site.
+	 * 
+	 * author Michael Fero after Zinovii Dmytriv
+	 * 
+	 */
+
+	extend : &quot;Teselagen.bio.sequence.common.StrandedAnnotation&quot;,
+
+	constructor : function(inData) {
+		var that = this;
+		var restrictionEnzyme;
+		var numCuts = 0;
+
+		if (inData){        
+			that.start = inData.start;
+			that.end = inData.end;
+			restrictionEnzyme = inData.restrictionEnzyme;
+
+		}
+		
+		this.getRestrictionEnzyme = function(){
+		return restrictionEnzyme;
+		}
+		this.getNumCuts = function(){
+			return numCuts;
+		}
+		this.setNumCuts = function(pNumCuts){
+			numCuts = pNumCuts;
+		}
+		
+		
+		return this;
+
+	}
+});</pre>
+</body>
+</html>

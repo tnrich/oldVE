@@ -1,6 +1,6 @@
 
 /**
- * GenbankFeatureKeyword class 
+ * GenbankFeatureKeyword class. 
  * Class for GenbankFeatureKeyword. Simply holds GenbankFeatureElements.
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -8,13 +8,15 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 	/* */
-	extend: "Teselagen.bio.parsers.GenbankKeyword",
+	extend: "Teselagen.bio.parsers.Keyword",
 
 	/**
 	 * Creates a new GenbankFeatureKeyword from inData.
 	 */
 	constructor: function () {
 		var that = this;
+		
+		that.keyword = "FEATURES";
 		/**
 		 *  @property [GenbankFeatureElements] features
 		 */
@@ -23,12 +25,14 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 		
 		/**
 		 * Get Features
+		 * @returns {GenbankFeaturesKeyword
 		 */
 		this.getFeatures = function() {
 			return features;
 		}
 		/**
 		 * Set Features
+		 * @param {GenbankFeaturesKeyword} pFeatures
 		 */
 		this.setFeatures = function(pFeatures) {
 			features = pFeatures;
@@ -44,7 +48,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 		
 		/**
 		 * Get Last GenbankFeatureElement in features array
-		 * @returns {GenbankFeatureElement}
+		 * @returns {GenbankFeatureElement} element
 		 */
 		this.getLastElement = function() {
 			if (features.length > 0) {
@@ -55,6 +59,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 		}
 		/**
 		 * Converts this GenbankFeaturesKeyword to Genbank file format string
+		 * @returns {String} line
 		 */
 		this.toString = function() {
 			var line = "FEATURES             Location/Qualifiers\n";
@@ -67,6 +72,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureKeyword", {
 		}
 		/**
 		 * Converts to JSON format.
+		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
 			var json = {

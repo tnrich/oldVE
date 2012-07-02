@@ -2,13 +2,212 @@
  * @author Micah Lerner
  */
 
+//Testing BioException class
+describe("Testing BioException", function(){
+	var bioException;
+	beforeEach(function(){
+		bioException = Ext.create("Teselagen.bio.BioException", {
+			message: "BioException message!",
+		});
+	});
+
+	it("Exists?", function(){
+		expect(bioException).toBeDefined();
+	});
+
+	it("BioException can be caught correctly.", function(){
+		try{
+			throw bioException;
+		}
+		catch(e){
+			expect(e.getMessage()).toEqual("BioException message!");
+		}
+	});
+});
+//Testing classes in the teselagen/bio/sequence/
 describe("Testing Sequence related classes ", function() {
+	
+	//Testing classes in the teselagen/bio/sequence/alphabet
 	describe("Testing 'alphabet' classes", function(){
 
 	});
-
+    	
+	//Testing classes in the teselagen/bio/sequence/common
 	describe("Testing 'common' classes", function(){
+		describe("Annotation test", function(){
+			var annotation;
+			
+			beforeEach(function(){
+				annotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+					start: 1,
+					end: 1
+				});
+				
+				this.addMatchers({
+					//Test that locations are equal to each other
+					equalLocation: function(expected){
+						var equal;
+						return ( (expected.getStart() === this.actual.getStart() ) && ( expected.getEnd() === this.actual.getStart() ) );
+					}
+				});
+			});
 
+
+			it("Constructor works correctly", function(){
+				expect(annotation).toBeDefined();
+			});
+	
+			
+			it(".getStart() works!", function(){
+				expect(annotation.getStart()).toEqual(1);
+			});
+
+			it(".setOneStart() works!", function(){
+				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 2,
+					end: 2
+				});
+				expect( function(){ annotation.setOneStart(1); } ).not.toThrow();
+
+				var testLocations = annotation.getLocations();
+				testLocations.push(newLocation);
+
+
+				annotation.setLocations(testLocations);
+				console.log(annotation.getLocations());
+				expect(function(){ annotation.setOneStart(1)} ).toThrow();
+			});
+
+			it(".getEnd() works!", function(){
+				expect(annotation.getEnd()).toEqual(1);
+				var locations = annotation.getLocations();
+
+				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 2,
+					end: 2
+				});
+
+				locations.push(newLocation);
+				expect(annotation.getEnd()).toEqual(2);
+			});
+
+			it(".setOneEnd() works!", function(){
+				annotation.setOneEnd(3);
+				expect(annotation.getEnd()).toEqual(3);
+				console.log(annotation.getEnd());
+				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 2,
+					end: 2
+				});
+
+				var retrievedLocations = annotation.getLocations(); 
+				retrievedLocations.push(newLocation);
+				try{
+					annotation.setOneEnd(3);
+				} catch (e){
+					console.log(e);
+					expect( e.getMessage() ).toEqual("Cannot set end when multiple Locations exist");
+				}
+			});
+
+			it(".setLocations() works!", function(){
+				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 2,
+					end: 2
+				});
+				var locationArray = [];
+				locationArray.push(newLocation);
+				annotation.setLocations(locationArray);
+				expect(annotation.getLocations()).toEqual(locationArray);
+			});
+
+			it(".getLocations works!", function(){
+				var testLocation =Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 1,
+					end: 1
+				});
+
+				var locationList = annotation.getLocations();
+				for (var i = 0; i < locationList.length; ++i){
+					expect(locationList[i]).equalLocation(testLocation);
+				}
+				
+			});
+
+			/*
+
+			it(".contains() works!", function(){
+				//var testAnnotation = Ext.create("Teselagen.bio.sequence.common.annotation");
+			});
+
+			it(".isMultiLocation() works!", function(){
+				expect(annotation.isMultiLocation()).not.toBe(true);
+			});
+
+			//Wait until getNormalized and deNormalized tests are written to write the meat of this test
+			it(".shift() works!", function(){
+				expect( function(){ annotation.shift(5, 1, true); } ).toThrow( Ext.create('Teselagen.bio.BioException', {
+					message: "Cannot shift by greater than maximum length"
+				}));
+				annotation.shift();
+			});
+
+			//Wait
+			it(".insertAt() works!", function(){
+
+			});
+
+			//Wait
+			it(".deleteAt()", function(){
+				
+			});
+
+			//Wait
+			it(".reverseLocations() works!", function(){
+				
+			});
+
+
+			it(".getNormalizedLocations()", function(){
+				
+			});
+			
+			it(".deNormalizeLocations() works!", function(){
+				
+			});
+
+
+			it(".reverseNormalizedLocations()", function(){
+				
+			});
+
+			it(".getOverlappingLocationIndex() works!", function(){
+				
+			});*/
+			 
+		});
+
+		describe("StrandedAnnotation tests", function(){
+			var strandedAnnotation;
+			beforeEach(function(){
+				strandedAnnotation = Ext.create("Teselagen.bio.sequence.common.StrandedAnnotation", {
+					start: 1,
+					end: 1,
+					strand: 1
+				});
+
+			});
+
+			it(".getStrand works?", function(){
+				
+				expect(strandedAnnotation.getStrand()).toEqual(1);
+			});
+			
+			it(".setStrand works", function(){
+				strandedAnnotation.setStrand(2);
+				expect(strandedAnnotation.getStrand()).toEqual(2);
+			});
+		});
 	});
 
 	describe("Testing 'dna' classes", function(){

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-parsers-GenbankManager'>/**
+</span> * GenbankManager 
+ * Takes in Genbank File (as a string) and creates the Genbank class. Static functions. (Replaces GenbankFormat.js)
+ * @author Diana Wong
+ * @author Timothy Ham (original author of GenbankFormat.js)
+ */
+
+Ext.define(&quot;Teselagen.bio.parsers.GenbankManager&quot;, {
+<span id='Teselagen-bio-parsers-GenbankManager-property-statics'>	/**
+</span>	 * Static variables. Common Genbank Keyword names.
+	 */
+	statics: {
+		LOCUS_TAG: &quot;LOCUS&quot;,
+		DEFINITION_TAG: &quot;DEFINITION&quot;,
+		ACCESSION_TAG: &quot;ACCESSION&quot;,
+		VERSION_TAG: &quot;VERSION&quot;,
+		KEYWORDS_TAG: &quot;KEYWORDS&quot;,
+		//SEGMENT_TAG:&quot;SEGMENT&quot;
+		SOURCE_TAG: &quot;SOURCE&quot;,
+		ORGANISM_TAG: &quot;ORGANISM&quot;,
+		REFERENCE_TAG: &quot;REFERENCE&quot;,
+		AUTHORS_TAG: &quot;AUTHORS&quot;,
+		CONSORTIUM_TAG: &quot;CONSRTM&quot;,
+		TITLE_TAG: &quot;TITLE&quot;,
+		JOURNAL_TAG: &quot;JOURNAL&quot;,
+		PUBMED_TAG: &quot;PUBMED&quot;,
+		REMARK_TAG: &quot;REMARK&quot;,
+		COMMENT_TAG: &quot;COMMENT&quot;,
+		FEATURES_TAG: &quot;FEATURES&quot;,
+		BASE_COUNT_TAG: &quot;BASE COUNT&quot;,
+		//CONTIG_TAG: &quot;CONTIG&quot;
+		ORIGIN_TAG: &quot;ORIGIN&quot;,
+		END_SEQUENCE_TAG: &quot;//&quot;
+	},
+	
+<span id='Teselagen-bio-parsers-GenbankManager-method-constructor'>	/**
+</span>	 * Creates a static GenbankManager class with public functions.
+	 * @returns {GenbankManager} Handle to execute methods.
+	 */
+	constructor: function() {
+		var that = this;
+
+		var gb;
+		var lastObj, lastKey; // To keep track of last object/key when parsing next line
+		var myFlag, myField; // Flags and Fields to keep track of stuff
+		var genArr;
+		
+<span id='Teselagen-bio-parsers-GenbankManager-method-loadFile'>		/**
+</span>		 * Loads a Genbank File.
+		 * @param {HTMLElement} fileInput
+		 * @returns {String} genbankFileString
+		 * @public
+		 */
+		this.loadFile = function(fileInput) {
+			var genbankFileString;
+			var file = fileInput.files[0];
+			fr = new FileReader();
+			fr.onload = processText;
+            fr.readAsText(file);
+            
+            function processText() {
+                var result = fr.result;
+                //var gb = Ext.create('Teselagen.Genbank', result);
+                //console.log(gb);
+            }
+            
+			return genbankFileString;
+		}
+		
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseGenbankFile'>		/**
+</span>		 * Converts a Genbank File (in string format) into a GenbankFileFormat object. This is the main method in the GenbankFormat static class that performs the parsing.
+		 * @param {String} genbankFileString String form of Genbank File.
+		 * @return {Genbank}
+		 * @public
+		 */
+		this.parseGenbankFile = function(genbankFileString) {
+			gb = Ext.create(&quot;Teselagen.bio.parsers.Genbank&quot;);
+
+			myFlag = new Flags();
+			myField = new Field();
+
+			genArr	= genbankFileString.split(/[\n]+|[\r]+/g);
+			for (var i=0 ; i &lt; genArr.length; i++) {
+				lineParser(genArr[i]);
+			}
+			return gb;
+		}
+		
+<span id='Teselagen-bio-parsers-GenbankManager-method-lineParser'>		/** 
+</span>		 * Line by line parser
+		 * @param {String} line A single line from a Genbank File
+		 * @private
+		 */
+		function lineParser(line) {
+			var hasValue, len;
+			var key = getLineKey(line);
+			var val = getLineVal(line);
+			var subKey = isSubKeyword(line);
+			var tmp = null;
+
+			myFlag.setType(key, subKey);
+
+			// For Keyword Lines
+
+			switch (key) {
+			case that.self.LOCUS_TAG:
+				tmp = parseLocus(line);
+				break;
+			/*case that.self.REFERENCE_TAG: // THIS IS SAME AS A KEYWORD/SUBKEYWORD
+				tmp = parseReference(line);
+				break;*/
+			case that.self.FEATURES_TAG:
+				tmp = parseFeatures(line);
+				break;
+			case that.self.ORIGIN_TAG:
+				tmp = parseOrigin(line);
+				break;
+			case &quot;BASE&quot;:
+				//
+				break;
+			case that.self.END_SEQUENCE_TAG:
+				break;
+			default:
+				if ( line === &quot;&quot;) {
+					// do nothing;
+					break;
+				} else if ( myFlag.keyword ) {		// NON-LOCUS/REFERENCE/FEATURES/ORIGIN KEYWORDS
+					tmp = parseKeyword(line);
+				} else if ( myFlag.subkeyword &amp;&amp; myFlag.features) { // FEATURE ELEMENTS &amp; FEATURE QUALIFIERS
+					tmp = parseFeatures(line);
+				} else if ( myFlag.origin) {		// ORIGIN SEQUENCE LINES
+					tmp = parseOrigin(line);
+				} else if ( myFlag.subkeyword ) {	// REGULAR KEYWORD SUBKEYWORD, NOT FEATURE
+					tmp = gb.getLastKeyword();
+					parseSubKeyword(tmp, line);
+				}
+			}
+		}
+
+
+		/* -----------------------------------------------------
+		 *  KEYWORD/SUBKEYWORD PARSING FUNCTIONS
+		 * -----------------------------------------------------*/
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseLocus'>		/**
+</span>		 * Parses Locus Line
+		 * @param {String} line
+		 * @returns {GenbankLocusKeyword} result
+		 * @private
+		 */
+		function parseLocus(line) {
+			var result, locusName, seqLen, strand, naType, linear, div, date;
+			var lineArr = line.split(/[\s]+/g);
+
+			locusName = lineArr[1];
+			seqLen = lineArr[2];
+
+			// StrandType: T.H. Code defaults only to ds-DNA
+			if (lineArr[4].match(/ss/gi)) {
+				strand = &quot;ss&quot;;
+			} else if (lineArr[4].match(/ds/gi)) {
+				strand = &quot;ds&quot;;
+			} else {
+				strand = &quot;&quot;; //&quot;unknown&quot;;
+			}
+
+			// naType: T.H. defaults to DNA.
+			if (lineArr[4].match(/DNA/gi)) {
+				naType = &quot;DNA&quot;;
+			} else if (lineArr[4].match(/RNA/gi)) {
+				naType = &quot;RNA&quot;;
+			} else {
+				naType = &quot;&quot;; //&quot;unknown&quot;;
+			}
+
+			// Linear vs Circular?; CANNOT HANDLE TANDEM
+			for (var i=1; i &lt; lineArr.length; i++) {
+				if (lineArr[i].match(/circular/gi)) {
+					linear = false;
+					break;
+				} else {
+					linear = true;
+				}
+			}
+
+			// Date
+			if (lineArr[lineArr.length-2].match(/[A-Z]{3}/g)  ) {
+				div = lineArr[lineArr.length-2];
+				date = lineArr[lineArr.length-1];
+			} else {
+				div = &quot;&quot;;
+				date = lineArr[lineArr.length-1];
+			}
+
+			// Just rewrite the existing Locus object. It's easier than setting everything.
+			var result = Ext.create(&quot;Teselagen.bio.parsers.GenbankLocusKeyword&quot;, {
+				locusName: locusName,
+				sequenceLength: seqLen,
+				strandType: strand,
+				naType: naType,
+				linear: linear,
+				divisionCode: div,
+				date: date
+			});
+
+			result.setKeyword(that.self.LOCUS_TAG);	
+			//gb.setLocus(result);
+			gb.addKeyword(result);
+			gb.addKeywordTag(that.self.LOCUS_TAG);
+			return result;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseKeyword'>		/**
+</span>		 * Parses Keyword
+		 * @param {String} line
+		 * @returns {GenbankKeyword} result
+		 * @private
+		 */
+		function parseKeyword(line) {
+			var key = getLineKey(line);
+			var val = getLineVal(line);
+			var result = Ext.create(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;, {
+				keyword: key,
+				value: val
+			});
+			gb.addKeyword(result);
+			gb.addKeywordTag(key);
+			return result;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseSubKeyword'>		/**
+</span>		 * Parses SubKeywords
+		 * @param {GenbankKeyword} mainKey
+		 * @param {String} line
+		 * @returns {GenbankSubKeyword} result
+		 * @private
+		 */
+		function parseSubKeyword(mainKey, line) {
+			var key = getLineKey(line);
+			var val = getLineVal(line);
+			
+			if (!line.substr(0,11).match(/[\s]{11}/)) {  // A bit of a hack. Just makes sure first keyword has more than 2 upper case letters which signifies a keyword
+				var result = Ext.create(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
+					keyword: key,
+					value: val
+				});
+				mainKey.addSubKeyword(result);
+			} else {
+				mainKey.getLastSubKeyword().appendValue(&quot;\n&quot;.rpad(&quot; &quot;,13) + line.trim());
+			}
+			return result;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseFeatures'>		/**
+</span>		 * Parses Features
+		 * @param {String} line
+		 * @returns {GenbankFeaturesKeyword} result
+		 * @private
+		 */
+		function parseFeatures(line) {
+			var result, featElm, featQual, lastElm;
+			var qual;
+			var key = getLineKey(line);
+			var val = getLineVal(line);
+			
+			//// console.log(myFlag.runon + &quot; : &quot; + line);
+			
+			if (myFlag.runon === false ) {
+				if (getLineKey(line) === that.self.FEATURES_TAG) {
+					result = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureKeyword&quot;);
+					result.setKeyword(that.self.FEATURES_TAG);
+					gb.setFeatures(result);
+					gb.addKeywordTag(that.self.FEATURES_TAG);
+				} else {
+					result = gb.getFeatures();
+					qual = isQualifier(line);
+					if (!qual) { // is a  Feature Element (e.g. source, CDS) with sequence indices/locations in the &quot;KEY  BLAH&quot;
+						
+						featElm = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
+							key: key,
+							strand: val
+						});
+						// complment and join are default for now
+						// Could be multiple locations per Element
+						parseFeatureLocation(featElm, val);
+						result.addElement(featElm);
+						lastObj = featElm;
+					} else {  // is a FeatureQualifier in the /KEY=&quot;BLAH&quot; format; could be multiple per Element
+						featQual = parseFeatureQualifier(line);
+						lastElm = result.getLastElement();
+						lastElm.addFeatureQualifier(featQual);
+						lastObj = featQual;
+					}
+					myFlag.runon = isRunon(line);
+				}
+			} else {
+				result = gb.getFeatures();
+				var type = Ext.getClassName(lastObj);
+				if (type.match(/GenbankFeatureElement/g) ) {
+					parseFeatureLocation(lastObj, line.trim());
+				} else if ( type.match(/GenbankFeatureQualifier/) ) {
+					
+					////console.log(&quot;Qualifier: &quot; + line.trim().replace(/\&quot;/g, &quot;&quot;));
+					
+					lastObj.appendValue(line.trim().replace(/\&quot;/g, &quot;&quot;));
+				}
+				myFlag.runon = isRunon(line);
+			}
+			
+			return result;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseFeatureLocation'>		/**
+</span>		 * Parses Feature Locations
+		 * @param {GenbankFeaturesElement} featElm
+		 * @param {String} locStr
+		 * @returns {GenbankFeatureLocation} location
+		 * @private
+		 */
+		function parseFeatureLocation(featElm, locStr) {
+			var location;
+			var complement = false;
+			var join = false;
+			
+			locStr = locStr.trim();
+			
+			if (locStr.match(/complement/i) ) {
+				complement = true;
+				featElm.setComplement(complement);
+			}
+			if (locStr.match(/join/i) ) {
+				join = true;
+				featElm.setJoin(join);
+			}
+			
+			//locStr = locStr.replace(/complement|join|\(|\)|\&gt;|\&lt;/g,&quot;&quot;);
+			locStr = locStr.replace(/^,|,$|complement|join|\(|\)/g,&quot;&quot;);
+			locArr = locStr.split(/,/g);
+			
+			// NEED TO DO &gt; or &lt; cases?
+			
+			for (var i=0; i&lt;locArr.length; i++) {
+				var ind = locArr[i].split(/[.]+/);
+				location = Ext.create(&quot;Teselagen.bio.parsers.GenbankLocation&quot;, {
+					start: ind[0],
+					end: ind[1]
+				});
+				featElm.addFeatureLocation(location);
+			}
+			
+			if (complement &amp;&amp; join) {
+				// Do ReverseLocations Case
+			}
+
+			return location;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseFeatureQualifier'>		/**
+</span>		 * Parses Feature Qualifier
+		 * @param {String} line
+		 * @returns {GenbankFeatureQualifier} featQual
+		 * @private
+		 */
+		function parseFeatureQualifier(line) {
+			var featQual, newLine, lineArr, quoted;
+			
+			newLine = line.trim();
+			newLine = newLine.replace(/^\/|&quot;$/g, &quot;&quot;);
+			lineArr = newLine.split(/=\&quot;|=/);
+			
+			if (line.match(/=\&quot;/g)) {
+				quoted = true;
+			} else { 
+				quoted = false;
+			}
+			
+			featQual = Ext.create(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
+				name: lineArr[0],
+				value: lineArr[1],
+				quoted: quoted
+			});
+			return featQual;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-parseOrigin'>		/**
+</span>		 * Parses Origin lines.
+		 * @param {String} line
+		 * @returns {GenbankOriginKeyword} result
+		 * @private
+		 */
+		function parseOrigin(line) {  
+			var result;
+			var key = getLineKey(line);
+			if (key === that.self.ORIGIN_TAG) {
+				result = Ext.create(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;);
+				result.setKeyword(that.self.ORIGIN_TAG);
+				gb.setOrigin(result);
+				gb.addKeywordTag(that.self.ORIGIN_TAG);
+			} else { 
+				result = gb.getOrigin();
+				line = line.replace(/[\s]*[0-9]*/g,&quot;&quot;);
+				result.appendSequence(line);
+			}
+			return result;
+		}
+
+		/* -----------------------------------------------------
+		 *  HELPER PARSING FUNCTIONS
+		 * -----------------------------------------------------*/
+<span id='Teselagen-bio-parsers-GenbankManager-method-getLineKey'>		/**
+</span>		 * Gets the Key in a line of format &quot; Key Value&quot;
+		 * @param {String} line
+		 * @returns {String} key
+		 * @private
+		 */
+		function getLineKey(line) {
+			line    = line.replace(/^[\s]*/, &quot;&quot;);
+			var arr = line.split(/[\s]+/);
+			return arr[0];
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-getLineVal'>		/**
+</span>		 * Gets the value in a line of format &quot; Key Value&quot;
+		 * @param {String} line
+		 * @returns {String} val
+		 * @private
+		 */
+		function getLineVal(line) {
+			line	= line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, &quot;&quot;);	
+			line = Ext.String.trim(line);
+			return line;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-isSubKeyword'>		/**
+</span>		 * Checks if line is a SubKeyword line. If there is whitespace before keyword, then it's a subkeyword. 
+		 * Works for FeatureElements too but not used there.
+		 * @param {String} line
+		 * @return {Boolean} newKey
+		 * @private
+		 */
+		function isSubKeyword(line) {
+			if (line.match(/^[\s]+/)) {
+				var newKey = true;
+			} else {
+				var newKey = false;
+			}
+			return newKey;
+		}
+<span id='Teselagen-bio-parsers-GenbankManager-method-isQualifier'>		/**
+</span>		 * Determines if the line is a Feature Qualifier, ie with syntax like /blah=&quot;information&quot;
+		 * @param {String} line
+		 * @return {Boolean} qual
+		 * @private
+		 */
+		function isQualifier(line) {
+			var qual = false;
+			/*if (line.charAt(21) === &quot;/&quot;) {
+				qual = true;
+				console.log(&quot;T.H. Hard coded method works.&quot;);
+			}*/
+
+			if ( line.trim().charAt(0).match(/\// )) {
+				//console.log(&quot;Found Qualifier using / sign.&quot;);
+				qual = true;
+			} else if ( line.match(/^[\s]*\/[\w]+=[\S]+/) ) {
+				qual = true;
+			}
+			return qual;
+		}
+		
+<span id='Teselagen-bio-parsers-GenbankManager-method-isThisRunon'>		/**
+</span>		 *  Checks if this line is a continuation of previous line. 
+		 *  (Do not create new object, just append to previous object.)
+		 *  @param {String} line
+		 *  @returns {Boolean} runon
+		 *  @private
+		 */
+		function isThisRunon(line) {
+			var runon;
+			if ( line.trim().charAt(0).match(/\// )) {
+				runon = false;
+			} else {
+				runon = true;
+			}
+			return runon;
+		}
+		
+<span id='Teselagen-bio-parsers-GenbankManager-method-isRunon'>		/**
+</span>		 *  Checks if this line will runon to next line (do not create new object @ next line, just append)
+		 *  @param {String} line
+		 *  @returns {Boolean} runon
+		 *  @private
+		 */
+		function isRunon(line) {
+			var runon;
+			if ( line.match(/&quot;$/ )) { // closed case: '/key=&quot;blahblah&quot;'
+				runon = false;
+			} else if (line.match(/\)$/ )) { // closed case: 'CDS  ..join(&lt;265..402,1088..1215)'
+				runon = false;
+			} else if ( line.charAt(line.length-1).match(/\d/)){ // number case: 'CDS 1..3123' OR  '/codon=1'
+				runon = false;
+			} else {
+				runon = true;
+			}
+			return runon;
+		}
+		
+		/*function isAFieldName(key) {
+			if (key.match(/[A-Z0-9]/i)) {
+				return true;
+			} else {
+				return false;
+			}
+		}*/
+		
+		
+		//=================================
+		// INITIALIZING FIELDS
+		//=================================
+
+		function Field() {
+			this.field = keywords();
+			this.ref   = references();
+			//this.allFields  = genbankFields();
+
+			function keywords() {
+				var field = new Array();
+				field[0] = &quot;LOCUS&quot;;
+				field[1] = &quot;DEFINITION&quot;;
+				field[2] = &quot;ACCESSION&quot;;
+				field[3] = &quot;VERSION&quot;;
+				field[4] = &quot;KEYWORDS&quot;;
+				field[5] = &quot;SOURCE&quot;;
+				field[6] = &quot;ORGANISM&quot;;
+				field[7] = &quot;REFERENCE&quot;;
+				field[8] = &quot;AUTHORS&quot;;
+				field[9] = &quot;CONSRTM&quot;;
+				field[10] = &quot;TITLE&quot;;
+				field[11] = &quot;JOURNAL&quot;;
+				field[12] = &quot;PUBMED&quot;;
+				field[13] = &quot;REMARK&quot;;
+				field[14] = &quot;COMMENT&quot;;
+				field[15] = &quot;FEATURES&quot;;
+				field[16] = &quot;BASE COUNT&quot;;     
+				field[17] = &quot;ORIGIN&quot;;
+				//field[18] = &quot;//&quot;;
+				field[19] = &quot;SEGMENT&quot;;
+				field[20] = &quot;CONTIG&quot;;
+				return field;
+			}
+
+			function subKeyword() {
+				var field = new Array();
+				field[0] = &quot;AUTHORS&quot;;
+				field[1] = &quot;TITLE&quot;;
+				field[2] = &quot;JOURNAL&quot;;
+				field[3] = &quot;PUBMED&quot;;
+				field[4] = &quot;CONSRTM&quot;;
+				field[5] = &quot;ORGANISM&quot;;
+				return field;
+			}
+
+			function references() {
+				var field = new Array();
+				field[0] = &quot;AUTHORS&quot;;
+				field[1] = &quot;TITLE&quot;;
+				field[2] = &quot;JOURNAL&quot;;
+				field[3] = &quot;PUBMED&quot;;
+				field[4] = &quot;CONSRTM&quot;;
+				return field;
+			}
+
+			function features() {
+				var field = new Array();
+				field[0] = &quot;source&quot;;
+				field[1] = &quot;CDS&quot;;
+				field[2] = &quot;gene&quot;;
+				field[3] = &quot;&lt;&quot;;
+				//field[4] = &quot;protein_id&quot;;
+				return field;
+			}
+		} // END OF Field()
+
+
+		//=================================
+		// INITIALIZING FLAGS 
+		//=================================
+		function Flags() {
+			this.origin     = false;
+			this.features   = false;
+			this.reference  = false;
+			this.keyword	= false;
+			this.subkeyword = false;
+			this.runon      = false;
+
+			this.setOrigin = function() {
+				this.origin   = true;
+				this.features = false;
+				this.reference= false;
+			}
+			this.setFeatures = function() {
+				this.origin   = false;
+				this.features = true;
+				this.reference= false;
+			}
+			this.setReference = function() {
+				this.origin   = false;
+				this.features = false;
+				this.reference= true;
+			}
+			this.setNone = function() {
+				this.origin   	= false;
+				this.features 	= false;
+				this.reference	= false;
+				//this.keyword	= false;
+				//this.subkeyword	= false;
+				this.runon	  	= false;
+			}
+
+			this.setType = function(key, subKey) {
+				if (subKey === false) {
+					this.keyword	= true;
+					this.subkeyword	= false;
+				} else {
+					this.keyword	= false;
+					this.subkeyword	= true;
+				}
+
+				if (key === &quot;REFERENCE&quot;) {
+					this.setReference();
+				} else if (key === &quot;FEATURES&quot;) {
+					this.setFeatures();
+				} else if (key === &quot;ORIGIN&quot;) {
+					this.setOrigin();
+				} else if (key === that.self.END_SEQUENCE_TAG) {
+					this.setNone();
+				} else if (subKey === false) {
+					this.setNone();
+				}
+			}
+		} // END OF Flags()
+
+		return this;
+	}
+
+
+});</pre>
+</body>
+</html>

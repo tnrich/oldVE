@@ -3,6 +3,7 @@
  */
 
 //Ext.require('Teselagen.bio.util.StringUtil');
+Ext.require("Ext.Ajax");
 
 describe("Testing Genbank related classes ", function() {
 
@@ -22,10 +23,10 @@ describe("Testing Genbank related classes ", function() {
  
 	});
 	
-	
+	var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
 	describe("Ceating classes correctly?", function() {
 		it("GenbankManager statics are ok?", function() {
-			var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
+			
 			expect(gbMan).toBeDefined();
 			expect(gbMan.self.LOCUS_TAG).toBe("LOCUS");
 			expect(gbMan.self.END_SEQUENCE_TAG).toBe("//");
@@ -92,7 +93,7 @@ describe("Testing Genbank related classes ", function() {
 	    	expect(tmp.getLocus().getLinear()).toBe(true);
 	    	expect(tmp.getLocus().getDivisionCode()).toBe("PLN");
 	    });
-	    it("Parses LOCUS3: no ds/ss, linear, division code?",function(){
+	    it("Parses LOCUS 3: no ds/ss, linear, division code?",function(){
 	    	line = "LOCUS       LISOD                    756 bp    DNA     linear   BCT 30-JUN-1993";
 	    	tmp = gbMan.parseGenbankFile(line);
 	    	expect(tmp.getLocus().toString()).toBe(line);
@@ -215,19 +216,49 @@ describe("Testing Genbank related classes ", function() {
  
 	});
 	
-	/*
-	describe("Opening data files from biojs/data/DATAFILE.gb correctly? DUMMY", function() {
-	    it("loadFile.js open files and pass in a string correctly?",function(){
-	    	// Load data files from biojs/data/. to buffer
-	    	var fileinput;  // ?
-	    	var fileoutput; // a string
-	    	// Make an element and hardcode the path for the files.
-	    	//loadFile( fileinput, fileoutput );
+	
+	describe("Opening data files from biojs/data/DATAFILE.gb correctly? ", function() {
+	    it("../data/pj5_00028.gb?",function(){
+	    	
+	    	var text, tmp; 
+	    	Ext.Ajax.request({
+	            url:'../test/data/pj5_00028.gb',
+	            success: function(response) {
+	              var text = response.responseText;
+	              console.log(text);
+	              var tmp = gbMan.parseGenbankFile(text);
+	              console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	              console.log(Ext.getClassName(tmp));
+	              console.log(JSON.stringify(tmp, null, "  "));
+	            }
+	        });
+	    	
 	    	expect(false).toBe(false);
 	    });
 	    
-	});*/
-	
+	});
+
+	describe("Opening data files from biojs/data/DATAFILE.gb correctly? ", function() {
+	    it("../data/SCU49845.gb?",function(){
+	    	
+	    	var text, tmp; 
+	    	Ext.Ajax.request({
+	            url:'../test/data/SCU49845.gb',
+	            success: function(response) {
+	              var text = response.responseText;
+	              console.log(text);
+	              var tmp = gbMan.parseGenbankFile(text);
+	              console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	              console.log(Ext.getClassName(tmp));
+	              console.log(JSON.stringify(tmp, null, "  "));
+	            }
+	        });
+	    	
+	    	
+	    	expect(false).toBe(false);
+	    });
+	    
+	});
 	describe("Testing this DUMMY", function() {
 	    
 	    it("Works?",function(){
