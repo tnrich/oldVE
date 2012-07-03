@@ -1,4 +1,9 @@
+Ext.require("Teselagen.bio.enzymes.RestrictionCutSite");
+
 /**
+ * @class Teselagen.bio.enzymes.RestrictionEnzymeMapper
+ * @singleton
+ * 
  * Restriction enzyme mapper- finds restriction enzyme cut sites in DNA sequence.
  * 
  * @see Teselagen.bio.enzymes.RestrictionEnzyme
@@ -7,9 +12,6 @@
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
-
-Ext.require("Teselagen.bio.enzymes.RestrictionCutSite");
-
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 	singleton: true,
 	
