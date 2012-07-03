@@ -1,10 +1,11 @@
 /**
+ * @class Teselagen.bio.enzymes.RestrictionEnzyme
+ *  
  * Restriction Enzyme holder.
  * 
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
-
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
 	/**

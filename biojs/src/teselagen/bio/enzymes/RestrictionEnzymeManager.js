@@ -1,15 +1,18 @@
+
+Ext.require("Ext.Ajax");
+Ext.require("Ext.data.Store");
+Ext.require("Teselagen.bio.enzymes.RestrictionEnzyme");
+
 /**
+ * @class Teselagen.bio.enzymes.RestrictionEnzymeManager
+ * @singleton
+ * 
  * Restriction Enzyme loader. 
  * Allows easy retrieval of common and REBASE restriction enzymes.
  * 
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
-
-Ext.require("Ext.Ajax");
-Ext.require("Ext.data.Store");
-Ext.require("Teselagen.bio.enzymes.RestrictionEnzyme");
-
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	//Use ext's built-in singleton functionality.
 	singleton: true,

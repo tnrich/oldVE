@@ -77,7 +77,7 @@ Ext.define(&quot;Teselagen.bio.parsers.Genbank&quot;, {
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-setLocus'>		/**
 </span>		 * Same as GB.addKeyword(GenbankLocusKeyword}
-         * @param {GenbankLocusKeyword} pLocus
+         * @param {GenbankLocusKeyword} locus
          */
 		this.setLocus = function(pLocus) {
 			//console.log('set locus');
@@ -94,7 +94,7 @@ Ext.define(&quot;Teselagen.bio.parsers.Genbank&quot;, {
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-setOrigin'>		/**
 </span>		 * Same as GB.addKeyword(GenbankOriginKeyword}
-         * @param {GenbankOriginKeyword} pOrigin
+         * @param {GenbankOriginKeyword} origin
          */
 		this.setOrigin = function(pOrigin) {
 			//origin = pOrigin;
@@ -110,7 +110,7 @@ Ext.define(&quot;Teselagen.bio.parsers.Genbank&quot;, {
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-setFeatures'>		/**
 </span>		 * Same as GB.addKeyword(GenbankFeaturesKeyword}
-         * @param {GenbankFeaturesKeyword} pFeatures
+         * @param {GenbankFeaturesKeyword} features
          */
 		this.setFeatures = function(pFeatures) {
 			//features = pFeatures;
@@ -143,28 +143,28 @@ Ext.define(&quot;Teselagen.bio.parsers.Genbank&quot;, {
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-setKeywordsTag'>		/**
 </span>		 * Sets KeywordsTag
-		 * @param {String} pKeywordsTag
+		 * @param {String} keywordsTag
 		 */
 		this.setKeywordsTag = function(pKeywordsTag) {
 			keywordsTag = pKeywordsTag;
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-getKeywords'>		/**
 </span>		 * Get Keywords, an array
-		 * @return {[GenbankKeywords]} pKeywords:ArrayList
+		 * @return {[GenbankKeywords]} keywords:ArrayList
 		 */
 		this.getKeywords = function() {
 			return keywords;
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-setKeywords'>		/**
 </span>		 * Set Keywords, an array
-		 * @param {[GenbankKeywords]} pKeywords:ArrayList
+		 * @param {[GenbankKeywords]} keywords:ArrayList
 		 */
 		this.setKeywords = function(pKeywords) {
 			keywords = pKeywords;
 		}
 <span id='Teselagen-bio-parsers-Genbank-method-addKeyword'>		/**
 </span>		 * Add a single GenbankKeyword to Genbank.keywords
-         * @param {GenbankKeyword} pKeywords
+         * @param {GenbankKeyword} keywords
          */
 		this.addKeyword = function(pAddKeyword) {
 			keywords.push(pAddKeyword);
@@ -179,61 +179,10 @@ Ext.define(&quot;Teselagen.bio.parsers.Genbank&quot;, {
 		
 <span id='Teselagen-bio-parsers-Genbank-method-addKeywordTag'>		/**
 </span>		 * Add a single keyword name (String) to Genbank.KeywordTag
-         * @param {String} pAddKeywordsTag
+         * @param {String} addKeywordsTag
          */
 		this.addKeywordTag = function(pAddKeywordsTag) {
 			keywordsTag.push(pAddKeywordsTag);
-		}
-		
-		
-		/*this.get = function() {
-			return ;
-		}
-		this.set = function() {
-			 = ;
-		}*/
-		
-		this.toString2 = function() {
-			var gbStr = &quot;&quot;;
-			for (var i=0; i &lt; keywordsTag.length; i++) {
-				key = keywordsTag[i];
-				console.log(key);
-				//key = keywords[i].getKeyword();
-				//gbStr += key + &quot;\n&quot;;
-				
-				switch (key) {
-					case &quot;LOCUS&quot;:
-						gbStr += find(&quot;LOCUS&quot;).toString() + &quot;\n&quot;;
-						break;
-					case &quot;DEFINITION&quot;:
-						break;
-					/*case &quot;ACCESSION&quot;:
-						//gbStr += key.rpad(&quot; &quot;,12) + accession.getValue() + &quot;\n&quot;;
-						//gbStr += (accession.getKeyword()).rpad(&quot; &quot;, 12) + accession.getValue() + &quot;\n&quot;;
-						break;
-					case &quot;VERSION&quot;:
-						gbStr += &quot;VERSION&quot;.rpad(&quot; &quot;,12) + version + &quot;\n&quot;;
-						break;
-					case &quot;KEYWORDS&quot;:
-						gbStr += &quot;KEYWORDS&quot;.rpad(&quot; &quot;, 12) + keywordsTag + &quot;\n&quot;;
-						break;
-					case &quot;SOURCE&quot;:
-					*/
-					case &quot;REFERENCE&quot;:
-						//gbStr += references.toString();
-						break;
-					case &quot;FEATURES&quot;:
-						break;
-					case &quot;ORIGIN&quot;:
-						gbStr += find(&quot;ORIGIN&quot;).toString();
-						break;
-					default:
-						//gbStr += keywords[i].toString();
-						break;
-				}
-			}
-			
-			return gbStr;
 		}
 		
 <span id='Teselagen-bio-parsers-Genbank-method-toString'>		/**
