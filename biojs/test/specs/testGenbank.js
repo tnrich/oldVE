@@ -274,12 +274,21 @@ describe("Testing Genbank related classes ", function() {
 	    	
 	    	var text, tmp;
 	    	
-	    	tmp = waitsFor(function() {
+	    	runs(function() {
+	    	    flag = false;
+	    	    tmp = null;
+	    	    
+	    	    setTimeout(function() {
+	    	        flag = true;
+	    	    }, 20);
+	    	});
+	    	
+	    	waitsFor(function() {
 	    	    Ext.Ajax.request({
 	    	        url:'../test/data/pj5_00028.gb',
 	    	        success: function(response) {
 	    	            text = response.responseText;
-	    	            console.log(text);
+	    	            //console.log(text);
 	    	            tmp = gbMan.parseGenbankFile(text);
 	    	            //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
 
@@ -288,12 +297,22 @@ describe("Testing Genbank related classes ", function() {
 	    	            //console.log(Ext.getClassName(tmp));
 	    	        }
 	    	    });
-	    	    console.log(JSON.stringify(tmp, null, "  "));
-	    	    console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
-	    	    return tmp;
-	    	}, "Completed Reading file", 10000);
+	    	    //console.log(JSON.stringify(tmp, null, "  "));
+	    	    //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	    	    return flag;
+	    	}, "Completed Reading file", 25);
 	    	
-	    	expect(false).toBe(false);
+	    	
+	    	runs(function() {
+	    	    console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	    	    console.log(tmp.findKeyword("LOCUS").toString());
+	    	    console.log("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
+	    	    expect(tmp.findKeyword("LOCUS").toString()).toBe("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
+	    	    expect(tmp.getKeywords().length).toBe(7);
+	    	    expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(7);
+	    	    expect(false).toBe(false);
+	    	})
+	    	
 	    });
 	    
 	});
