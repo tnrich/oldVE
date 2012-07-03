@@ -272,21 +272,27 @@ describe("Testing Genbank related classes ", function() {
 	describe("Opening data files from biojs/data/DATAFILE.gb correctly? ", function() {
 	    it("../data/pj5_00028.gb?",function(){
 	    	
-	    	var text, tmp; 
-	    	Ext.Ajax.request({
-	            url:'../test/data/pj5_00028.gb',
-	            success: function(response) {
-	              text = response.responseText;
-	              console.log(text);
-	              tmp = gbMan.parseGenbankFile(text);
-	              console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
-	              
-	              console.log(JSON.stringify(tmp, null, "  "));
-	              //expect(text).toMatch(tmp.toString());
-	              //console.log(Ext.getClassName(tmp));
-	            }
-	        });
-	    	//console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	    	var text, tmp;
+	    	
+	    	tmp = waitsFor(function() {
+	    	    Ext.Ajax.request({
+	    	        url:'../test/data/pj5_00028.gb',
+	    	        success: function(response) {
+	    	            text = response.responseText;
+	    	            console.log(text);
+	    	            tmp = gbMan.parseGenbankFile(text);
+	    	            //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+
+	    	            //console.log(JSON.stringify(tmp, null, "  "));
+	    	            //expect(text).toMatch(tmp.toString());
+	    	            //console.log(Ext.getClassName(tmp));
+	    	        }
+	    	    });
+	    	    console.log(JSON.stringify(tmp, null, "  "));
+	    	    console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+	    	    return tmp;
+	    	}, "Completed Reading file", 10000);
+	    	
 	    	expect(false).toBe(false);
 	    });
 	    
