@@ -147,6 +147,8 @@ describe("Testing Genbank related classes ", function() {
 	    		'            Saccharomycetales; Saccharomycetaceae; Saccharomyces.';
 	    	//console.log("ORIGINAL\n" + line);
 	    	var tmp = gbMan.parseGenbankFile(line);
+	    	//console.log("RECONSTRUCTED\n" + tmp.toString());
+	    	//console.log(JSON.stringify(tmp, null, "  "));
 	    	expect(tmp.findKeyword("SOURCE").getSubKeywords()[0].getKeyword()).toBe("ORGANISM");
 	    	expect(tmp.findKeyword("SOURCE").getSubKeywords()[0].getValue()).toBe("Saccharomyces cerevisiae\n            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n            Saccharomycetales; Saccharomycetaceae; Saccharomyces.");
 	    });
@@ -274,15 +276,17 @@ describe("Testing Genbank related classes ", function() {
 	    	Ext.Ajax.request({
 	            url:'../test/data/pj5_00028.gb',
 	            success: function(response) {
-	              var text = response.responseText;
+	              text = response.responseText;
 	              console.log(text);
-	              var tmp = gbMan.parseGenbankFile(text);
+	              tmp = gbMan.parseGenbankFile(text);
 	              console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
-	              console.log(Ext.getClassName(tmp));
+	              
 	              console.log(JSON.stringify(tmp, null, "  "));
+	              //expect(text).toMatch(tmp.toString());
+	              //console.log(Ext.getClassName(tmp));
 	            }
 	        });
-	    	
+	    	//console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
 	    	expect(false).toBe(false);
 	    });
 	    

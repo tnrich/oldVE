@@ -47,7 +47,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         /**
          * Loads a Genbank File.
-         * @param {HTMLElement} fileInput
+         * @param {FileInputHTMLElement} fileInput
          * @returns {String} genbankFileString
          */
         this.loadFile = function(fileInput) {
@@ -134,8 +134,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 } else if ( isKeyRunon ) {      // RUNON LINES FOR NON-FEATURES
                     //console.log(lastObj.getValue());
                     lastObj.setValue(lastObj.getValue() + "\n".rpad(" ",13) + line.trim());
-                    //console.log(lastObj.getValue());
-                    //console.log(lastObj.toString());
+                    //lastObj.appendValue("\n".rpad(" ",13) + line.trim()); //SOOOO DOES NOT WORK
                 }
             }
 

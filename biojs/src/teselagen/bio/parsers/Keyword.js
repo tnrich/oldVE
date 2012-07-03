@@ -69,8 +69,8 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
 		 * Appends to existing parameter, value.
 		 * @param {String} pVal
 		 */
-		this.appendValue2 = function(pVal) {
-			this.value += pVal;
+		this.appendValue = function(pVal) {
+			that.value += pVal;
 		}
 		
 		return this;

@@ -60,7 +60,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		}
 		/**
 		 * Same as GB.addKeyword(GenbankLocusKeyword}
-         * @param {GenbankLocusKeyword} pLocus
+         * @param {GenbankLocusKeyword} locus
          */
 		this.setLocus = function(pLocus) {
 			//console.log('set locus');
@@ -77,7 +77,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		}
 		/**
 		 * Same as GB.addKeyword(GenbankOriginKeyword}
-         * @param {GenbankOriginKeyword} pOrigin
+         * @param {GenbankOriginKeyword} origin
          */
 		this.setOrigin = function(pOrigin) {
 			//origin = pOrigin;
@@ -93,7 +93,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		}
 		/**
 		 * Same as GB.addKeyword(GenbankFeaturesKeyword}
-         * @param {GenbankFeaturesKeyword} pFeatures
+         * @param {GenbankFeaturesKeyword} features
          */
 		this.setFeatures = function(pFeatures) {
 			//features = pFeatures;
@@ -126,28 +126,28 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		}
 		/**
 		 * Sets KeywordsTag
-		 * @param {String} pKeywordsTag
+		 * @param {String} keywordsTag
 		 */
 		this.setKeywordsTag = function(pKeywordsTag) {
 			keywordsTag = pKeywordsTag;
 		}
 		/**
 		 * Get Keywords, an array
-		 * @return {[GenbankKeywords]} pKeywords:ArrayList
+		 * @return {[GenbankKeywords]} keywords:ArrayList
 		 */
 		this.getKeywords = function() {
 			return keywords;
 		}
 		/**
 		 * Set Keywords, an array
-		 * @param {[GenbankKeywords]} pKeywords:ArrayList
+		 * @param {[GenbankKeywords]} keywords:ArrayList
 		 */
 		this.setKeywords = function(pKeywords) {
 			keywords = pKeywords;
 		}
 		/**
 		 * Add a single GenbankKeyword to Genbank.keywords
-         * @param {GenbankKeyword} pKeywords
+         * @param {GenbankKeyword} keywords
          */
 		this.addKeyword = function(pAddKeyword) {
 			keywords.push(pAddKeyword);
@@ -162,61 +162,10 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		
 		/**
 		 * Add a single keyword name (String) to Genbank.KeywordTag
-         * @param {String} pAddKeywordsTag
+         * @param {String} addKeywordsTag
          */
 		this.addKeywordTag = function(pAddKeywordsTag) {
 			keywordsTag.push(pAddKeywordsTag);
-		}
-		
-		
-		/*this.get = function() {
-			return ;
-		}
-		this.set = function() {
-			 = ;
-		}*/
-		
-		this.toString2 = function() {
-			var gbStr = "";
-			for (var i=0; i < keywordsTag.length; i++) {
-				key = keywordsTag[i];
-				console.log(key);
-				//key = keywords[i].getKeyword();
-				//gbStr += key + "\n";
-				
-				switch (key) {
-					case "LOCUS":
-						gbStr += find("LOCUS").toString() + "\n";
-						break;
-					case "DEFINITION":
-						break;
-					/*case "ACCESSION":
-						//gbStr += key.rpad(" ",12) + accession.getValue() + "\n";
-						//gbStr += (accession.getKeyword()).rpad(" ", 12) + accession.getValue() + "\n";
-						break;
-					case "VERSION":
-						gbStr += "VERSION".rpad(" ",12) + version + "\n";
-						break;
-					case "KEYWORDS":
-						gbStr += "KEYWORDS".rpad(" ", 12) + keywordsTag + "\n";
-						break;
-					case "SOURCE":
-					*/
-					case "REFERENCE":
-						//gbStr += references.toString();
-						break;
-					case "FEATURES":
-						break;
-					case "ORIGIN":
-						gbStr += find("ORIGIN").toString();
-						break;
-					default:
-						//gbStr += keywords[i].toString();
-						break;
-				}
-			}
-			
-			return gbStr;
 		}
 		
 		/**
