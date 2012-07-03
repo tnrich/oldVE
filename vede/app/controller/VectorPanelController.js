@@ -1,4 +1,4 @@
-Ext.define('MyApp.controller.VectorPanelController', {
+Ext.define('Vede.controller.VectorPanelController', {
     extend: 'Ext.app.Controller',
 
     onLaunch: function() {

@@ -1,8 +1,8 @@
-Ext.define('MyApp.view.Viewport', {
-    extend: 'MyApp.view.AppViewport',
+Ext.define('Vede.view.Viewport', {
+    extend: 'Vede.view.AppViewport',
     renderTo: Ext.getBody(),
     requires: [
-        'MyApp.view.AppViewport',
-        'MyApp.view.FileImportWindow'
+        'Vede.view.AppViewport',
+        'Vede.view.FileImportWindow'
     ]
 });

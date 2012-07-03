@@ -1,4 +1,4 @@
-Ext.define('MyApp.controller.AnnotatePanelController', {
+Ext.define('Vede.controller.AnnotatePanelController', {
     extend: 'Ext.app.Controller',
 
     onLaunch: function() {}

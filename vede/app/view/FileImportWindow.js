@@ -1,4 +1,4 @@
-Ext.define('MyApp.view.FileImportWindow', {
+Ext.define('Vede.view.FileImportWindow', {
     extend: 'Ext.window.Window',
 
     height: 100,

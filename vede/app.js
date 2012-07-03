@@ -13,7 +13,7 @@ Ext.application({
         'FileImportWindow'
     ],
     autoCreateViewport: true,
-    name: 'MyApp',
+    name: 'Vede',
     controllers: [
         'AnnotatePanelController',
         'MainMenuController',
