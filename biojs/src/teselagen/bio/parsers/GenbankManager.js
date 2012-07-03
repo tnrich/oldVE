@@ -5,6 +5,8 @@
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
 
+Ext.require("Teselagen.bio.util.StringUtil");
+
 Ext.define("Teselagen.bio.parsers.GenbankManager", {
     /**
      * Static variables. Common Genbank Keyword names.
@@ -82,6 +84,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             for (var i=0 ; i < genArr.length; i++) {
                 lineParser(genArr[i]);
             }
+            //console.log(gb.toString());
             return gb;
         }
 

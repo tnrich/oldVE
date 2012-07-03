@@ -26,9 +26,8 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 			return this.commonRestrictionEnzymes;
 		}
 		
-		this.getEnzymes("../src/teselagen/bio/enzymes/assets/common.xml", "common");
-		
-		setTimeout("return this.commonRestrictionEnzymes", 500);
+		this.commonRestrictionEnzymes = this.getEnzymes("assets/common.xml");
+		return this.commonRestrictionEnzymes;
 	},
 	
 	/**
@@ -40,8 +39,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 			return this.rebaseRestrictionEnzymes;
 		}
 		
-		this.getEnzymes("../src/teselagen/bio/enzymes/assets/rebase.xml", "rebase");
-		
+		this.rebaseRestrictionEnzymes = this.getEnzymes("assets/rebase.xml");
 		return this.rebaseRestrictionEnzymes;
 	},
 
@@ -51,30 +49,21 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	 * @param {String} url The url to retrieve data from.
 	 * @param {String} group Which enzyme variable to write to; either "common" or "rebase".
 	 */
-	getEnzymes: function(url, group) {
-		Ext.Ajax.request({
-            url:url,
-            success: function(response) {
-            	Teselagen.bio.enzymes.RestrictionEnzymeManager.writeEnzymesToVariable(response, group);
-            },
-			failure: function(response) {
-				//alert("Error retrieving enzyme XML file.");
-			}
-        });
-	},
-	
-	/**
-	 * Helper function to allow the "group" variable to be passed
-	 * into the AJAX callback in getEnzymes.
-	 */
-	writeEnzymesToVariable: function(response, group) {
-		list = Teselagen.bio.enzymes.RestrictionEnzymeManager.parseXml(response.responseText);
-
-    	if(group === "common") {
-    		Teselagen.bio.enzymes.RestrictionEnzymeManager.commonRestrictionEnzymes = list;
-    	} else if(group === "rebase") {
-    		Teselagen.bio.enzymes.RestrictionEnzymeManager.rebaseRestrictionEnzymes = list;
-    	}
+	getEnzymes: function(url) {
+		var xhReq = new XMLHttpRequest();
+		xhReq.open("GET", url, false); 
+		xhReq.send(null);
+		var xml = xhReq.responseText;
+		
+		// Handle errors.
+		if(xhReq.status != 200) {
+			bioException = Ext.create("Teselagen.bio.BioException", {
+				message: "Incorrect enzyme file URL: " + url,
+			});
+			throw bioException;
+		}
+		
+		return Teselagen.bio.enzymes.RestrictionEnzymeManager.parseXml(xml);
 	},
 	
 	/**
@@ -134,5 +123,12 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 		});
 		
 		return enzymeList;
+	},
+	
+	createXMLHttpRequest: function() {
+		try { return new XMLHttpRequest(); } catch(e) {}
+		try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {}
+		alert("XMLHttpRequest not supported");
+		return null;
 	}
 });
