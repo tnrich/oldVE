@@ -2,7 +2,8 @@ Ext.Loader.setConfig({
     enabled: true,
     paths: {
         Ext: '.',
-        Teselagen: './app/teselagen'
+        Teselagen: './app/teselagen',
+        'Teselagen.bio':'../biojs/src/teselagen/bio'
     }
 });
 
