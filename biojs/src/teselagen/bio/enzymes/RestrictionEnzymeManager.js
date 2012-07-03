@@ -26,7 +26,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 			return this.commonRestrictionEnzymes;
 		}
 		
-		this.commonRestrictionEnzymes = this.getEnzymes("../src/teselagen/bio/enzymes/assets/common.xml");
+		this.commonRestrictionEnzymes = this.getEnzymes("assets/common.xml");
 		return this.commonRestrictionEnzymes;
 	},
 	
@@ -39,7 +39,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 			return this.rebaseRestrictionEnzymes;
 		}
 		
-		this.rebaseRestrictionEnzymes = this.getEnzymes("../src/teselagen/bio/enzymes/assets/rebase.xml", "rebase");
+		this.rebaseRestrictionEnzymes = this.getEnzymes("assets/rebase.xml");
 		return this.rebaseRestrictionEnzymes;
 	},
 
@@ -54,6 +54,14 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 		xhReq.open("GET", url, false); 
 		xhReq.send(null);
 		var xml = xhReq.responseText;
+		
+		// Handle errors.
+		if(xhReq.status != 200) {
+			bioException = Ext.create("Teselagen.bio.BioException", {
+				message: "Incorrect enzyme file URL: " + url,
+			});
+			throw bioException;
+		}
 		
 		return Teselagen.bio.enzymes.RestrictionEnzymeManager.parseXml(xml);
 	},
