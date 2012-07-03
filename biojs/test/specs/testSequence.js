@@ -30,6 +30,55 @@ describe("Testing Sequence related classes ", function() {
 	//Testing classes in the teselagen/bio/sequence/alphabet
 	describe("Testing 'alphabet' classes", function(){
 
+		describe("AbstractAlphabet tests", function(){
+			var abstractAlphabet;
+			beforeEach(function(){
+				abstractAlphabet = Ext.create("Teselagen.bio.sequence.alphabets.AbstractAlphabet");
+			});
+
+			it("getSymbols works", function(){
+				var returned = abstractAlphabet.getSymbols();
+				expect(returned).toMatch([]);
+			});
+
+			it("addSymbol", function(){
+				var m = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+					name: "Ambiguous {'a' or 'c;'}" , value: "m", ambiguousMatches: ["a", "c"]});
+				abstractAlphabet.addSymbol(m);
+				expect(abstractAlphabet.getSymbols()).toMatch(m);
+			});
+
+			it("symbolByValue works", function(){
+				var symbolByValue= abstractAlphabet.symbolByValue("-");
+				
+				expect(symbolByValue.getValue()).toBe("-");
+			});
+
+			it("getGap works", function(){
+				expect(abstractAlphabet.getGap().getValue()).toBe("-");
+			});
+
+		});
+
+		describe("DNAAlphabet tests", function(){
+			var testAlphabet;
+			beforeEach(function(){
+				test = Ext.create("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+			});
+			it("getG works", function(){
+				expect(test).toBeDefined();
+				var fetched = test.getA();
+				expect(fetched.getName()).toMatch("Adenine");
+			});	
+		});
+
+		describe("ProteinAlphabet tests", function(){
+			
+		});
+
+		describe("RNAAlphabet tests", function(){
+			
+		});
 	});
     	
 	//Testing classes in the teselagen/bio/sequence/common
@@ -198,23 +247,146 @@ describe("Testing Sequence related classes ", function() {
 
 			});
 
-			it(".getStrand works?", function(){
+			it(".getAlphabet works?", function(){
 				
 				expect(strandedAnnotation.getStrand()).toEqual(1);
 			});
 			
-			it(".setStrand works", function(){
+			it(".setAlphabet works", function(){
 				strandedAnnotation.setStrand(2);
 				expect(strandedAnnotation.getStrand()).toEqual(2);
 			});
 		});
+
+
+
+		//SymbolList tests commeted out until 'alphabets' classes are completed.
+		/*
+		describe("SymbolList tests", function(){
+			var symbolList;
+			var testSymbol0 = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+				name: "testName0",
+				value: "testValue0"
+			});
+
+			var testSymbol1 = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+				name: "testName1",
+				value: "testValue1"
+			});
+
+			var testSymbol2 = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+				name: "testName2",
+				value: "testValue2"
+			});
+
+			var testAlphabet = Ext.create("Teselagen.bio.sequence.alphabets.AbstractAlphabet");
+
+			beforeEach(function(){
+
+				symbolList = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+					symbols: [testSymbol0],
+					alphabet: [testAlphabet]
+				});
+
+				this.addMatchers({
+					//Test that alphabets are equal to each other
+					toEqualAlphabet: function(expected){
+						return ( (expected.getGap() === this.actual.getGap() ) && ( expected.getSymbols() === this.actual.getSymbols() ) );
+					}
+				});
+
+			});
+
+			it(".getAlphabet works?", function(){
+				expect(symbolList.getAlphabet()).toEqualAlphabet(testAlphabet);
+
+			});
+			
+			it(".setAlphabet works", function(){
+				symbolList.setAlphabet([testAlphabet]);
+				symbolList.getAlphabet().forEach( function(element){
+					expect(testAlphabet).toContain(element);
+				});
+				
+			});
+
+			it(".getSymbols works?", function(){
+
+				expect(symbolList.getSymbols()).toMatch([testSymbol0]);
+			});
+
+			it(".setSymbols works?", function(){
+				symbolList.setSymbols([testSymbol1]);
+				expect(symbolList.getSymbols()).toMatch([testSymbol1]);
+			});
+			
+			it(".getSymbolsLength works", function(){
+				expect(symbolList.getSymbolsLength()).toEqual(1);
+
+			});
+
+			it(".symbolAt works?", function(){
+				expect(symbolList.symbolAt(0)).toMatch(testSymbol0);
+
+			});
+			
+			//Implement alphabet!
+			it(".hasGap works", function(){
+				expect(testAlphabet.hasGap()).toBeTruthy();
+			});
+
+
+			it(".subList works?", function(){
+				symbolList.setSymbols(["testset", "test1", "test2"]);
+				var subListTest = symbolList.subList(0, 2);
+				expect(subListTest.getSymbols()).toEqual(["testset", "test1"]);
+			});
+			
+			//ponder this function some more
+			it(".seqString works", function(){
+
+
+			});
+
+			it(".clear works?", function(){
+				symbolList.clear();
+				expect(symbolList.getSymbols()).toMatch([]);
+
+			});
+			
+			it(".addSymbols works", function(){
+				symbolList.addSymbols(["test1", "test2"]);
+				expect(symbolList.getSymbols()).toEqual(["test", "test1", "test2"])
+
+			});
+
+			it(".deleteSymbols works?", function(){
+				symbolList.setSymbols(["testset", "test1", "test2"]);
+				symbolList.deleteSymbols(0, 3);
+				expect(symbolList.getSymbols()).toMatch([]);
+			});
+			
+			it(".insertSymbols works", function(){
+				symbolList.insertSymbols(0, ["test3"]);
+				expect(symbolList.getSymbols()).toContain(["test3"]);
+
+			});
+
+			it(".toString works", function(){
+				expect(symbolList.toString()).toEqual("");
+
+			});
+		});*/
 	});
 
 	describe("Testing 'dna' classes", function(){
 
 	});
 
+	//Teselagen.bio.sequence.symbol Tests
 	describe("Testing 'symbol' classes", function(){
+
+		//Teselagen.bio.sequence.symbol.AminoAcidSymbol Tests
 		describe("AminoAcidSymbol tests", function(){
 			var aminoAcidSymbol;
 			beforeEach(function(){
@@ -263,6 +435,7 @@ describe("Testing Sequence related classes ", function() {
 			});
 		});
 
+		//GapSymbol tests
 		describe("GapSymbol tests", function(){
 			var gapSymbol;
 			beforeEach(function(){
@@ -298,6 +471,7 @@ describe("Testing Sequence related classes ", function() {
 			});
 		});
 
+		//NucleotideSymbol tests
 		describe("NucleotideSymbol tests", function(){
 			var nucleotideSymbol;
 			var ambiguousMatchesData =["a", "b", "c"];
