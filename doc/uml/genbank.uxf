@@ -168,7 +168,7 @@
     <coordinates>
       <x>1160</x>
       <y>240</y>
-      <w>240</w>
+      <w>220</w>
       <h>170</h>
     </coordinates>
     <panel_attributes>+ GenbankFeatureKeyword
