@@ -14,6 +14,7 @@ Ext.application({
     autoCreateViewport: true,
     name: 'MyApp',
     controllers: [
+        'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
         'VectorPanelController'
