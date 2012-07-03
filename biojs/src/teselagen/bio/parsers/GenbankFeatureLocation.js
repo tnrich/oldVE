@@ -5,6 +5,8 @@
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
+Ext.require("Teselagen.bio.util.StringUtil");
+
 Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
     /* */
 
