@@ -1,4 +1,4 @@
-Ext.define('MyApp.controller.MainMenuController', {
+Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
     onCancelButtonClick: function(button, e, options) {
@@ -22,13 +22,14 @@ Ext.define('MyApp.controller.MainMenuController', {
 
         function processText() {
             var result = fr.result;
-            var gb = Ext.create('Teselagen.Genbank', result);
+            var gbm = Ext.create('Teselagen.bio.parsers.GenbankManager');
+            var gb = gbm.parseGenbankFile(result);
             console.log(gb);
         }
     },
 
     onImportMenuItemClick: function(item, e, options) {
-        Ext.create("MyApp.view.FileImportWindow").show();
+        Ext.create("Vede.view.FileImportWindow").show();
     },
 
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {

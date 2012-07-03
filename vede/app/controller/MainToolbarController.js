@@ -1,4 +1,4 @@
-Ext.define('MyApp.controller.MainToolbarController', {
+Ext.define('Vede.controller.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
     onFeaturesButtonClick: function(button, e, options) {
