@@ -18,7 +18,7 @@
   <pre class="prettyprint lang-js">
 <span id='Teselagen-bio-parsers-GenbankKeyword'>/**
 </span> * GenbankKeyword class 
- * Class for Keywords. Also, superclass of all keywords, i.e. Locus, Features, Origin, and standard Keywords (e.g. Accession, Version).
+ * Class for Keywords. Same level as GebankLocusKeyword, GenbankFeaturesKeyword, and GenbankOriginKeyword.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -43,14 +43,15 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;, {
 	 * @param {String} keyword
 	 * @param {String} value
 	 * @param {GenbankSubKeyword} subKeywords 
+	 * @returns {GenbankKeyword}
 	 */
 	constructor: function (inData) {
 		var that = this;
 
 		if (inData) {
-			this.keyword = inData.keyword;
-			this.value = inData.value;
-			this.subKeywords = inData.subKeywords;
+			that.keyword = inData.keyword;
+			that.value = inData.value;
+			that.subKeywords = inData.subKeywords;
 		}
 		
 <span id='Teselagen-bio-parsers-GenbankKeyword-method-addSubKeyword'>		/**
@@ -58,11 +59,11 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;, {
 		 * @param {GenbankSubKeyword}
 		 */
 		this.addSubKeyword = function(subkey) {
-			if (this.subKeywords === undefined) {
+			if (that.subKeywords === undefined) {
 				//console.log(&quot;BLAH&quot;);
-				this.subKeywords = [];
+				that.subKeywords = [];
 			}
-			this.subKeywords.push(subkey);
+			that.subKeywords.push(subkey);
 		}
 		
 <span id='Teselagen-bio-parsers-GenbankKeyword-method-appendValue'>		/**
@@ -70,30 +71,33 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankKeyword&quot;, {
 		 * @param {String} pVal
 		 */
 		this.appendValue = function(pVal) {
-			value += pVal;
+			that.value += pVal;
 		}
 <span id='Teselagen-bio-parsers-GenbankKeyword-method-getLastSubKeyword'>		/**
 </span>		 * Gets last SubKeyword on the subKeywords array.
 		 * @returns {GenbankSubKeyword}
 		 */
 		this.getLastSubKeyword = function() {
-			if (this.subKeywords.length &gt; 0) {
-				return this.subKeywords[this.subKeywords.length-1];
+			if ( that.subKeywords.length &gt; 0 &amp;&amp; that.subKeywords !== undefined) {
+				return that.subKeywords[that.subKeywords.length-1];
 			} else {
 				return null;
 			}
 		}
 <span id='Teselagen-bio-parsers-GenbankKeyword-method-toString'>		/**
 </span>		 * Converts this GenbankKeywords to Genbank file format string
+		 * @returns	{String} line
 		 */
 		this.toString = function() {
 			var width = 80-12;
-			var line = this.keyword.rpad(&quot; &quot;, 12); // + this.value;
-			line += this.value.substring(0,width)
+			var line = that.keyword.rpad(&quot; &quot;, 12); // + this.value;
+			line += that.value;
+			
+			/*line += that.value.substring(0,width)
 
 			for (var i=width; i&lt;this.value; i=i+width) {
 				line += this.value.substring(i,width);
-			}
+			}*/
 			if (this.subKeywords !== undefined) {
 				line += &quot;\n&quot;;
 				for (var i=0; i &lt; this.subKeywords.length; i++) {

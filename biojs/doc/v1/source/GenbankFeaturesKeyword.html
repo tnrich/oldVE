@@ -16,42 +16,47 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword'>/**
-</span> * GenbankFeatureKeyword class 
- * Class for GenbankFeatureKeyword. Simply holds GenbankFeatureElements.
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword'>/**
+</span> * GenbankFeaturesKeyword class. 
+ * Class for GenbankFeaturesKeyword. Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankOriginKeyword.
+ * Simply holds GenbankFeatureElements in an array.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
 
-Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureKeyword&quot;, {
+Ext.define(&quot;Teselagen.bio.parsers.GenbankFeaturesKeyword&quot;, {
 	/* */
-	extend: &quot;Teselagen.bio.parsers.GenbankKeyword&quot;,
+	extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
 
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-constructor'>	/**
-</span>	 * Creates a new GenbankFeatureKeyword from inData.
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-constructor'>	/**
+</span>	 * Creates a new GenbankFeaturesKeyword from inData.
 	 */
 	constructor: function () {
 		var that = this;
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-property-GenbankFeatureElements'>		/**
+		
+		that.keyword = &quot;FEATURES&quot;;
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-property-GenbankFeatureElements'>		/**
 </span>		 *  @property [GenbankFeatureElements] features
 		 */
 		var features = new Array();
 		
 		
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-getFeatures'>		/**
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-getFeatures'>		/**
 </span>		 * Get Features
+		 * @returns {GenbankFeaturesKeyword
 		 */
 		this.getFeatures = function() {
 			return features;
 		}
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-setFeatures'>		/**
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-setFeatures'>		/**
 </span>		 * Set Features
+		 * @param {GenbankFeaturesKeyword} pFeatures
 		 */
 		this.setFeatures = function(pFeatures) {
 			features = pFeatures;
 		}
 		
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-addElement'>		/**
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-addElement'>		/**
 </span>		 * Add GenbankFeatureElement
 		 * @param {GenbankFeatureElement} pElement
 		 */
@@ -59,9 +64,9 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureKeyword&quot;, {
 			features.push(pElement);
 		}
 		
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-getLastElement'>		/**
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-getLastElement'>		/**
 </span>		 * Get Last GenbankFeatureElement in features array
-		 * @returns {GenbankFeatureElement}
+		 * @returns {GenbankFeatureElement} element
 		 */
 		this.getLastElement = function() {
 			if (features.length &gt; 0) {
@@ -70,8 +75,9 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureKeyword&quot;, {
 				return null;
 			}
 		}
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-toString'>		/**
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-toString'>		/**
 </span>		 * Converts this GenbankFeaturesKeyword to Genbank file format string
+		 * @returns {String} line
 		 */
 		this.toString = function() {
 			var line = &quot;FEATURES             Location/Qualifiers\n&quot;;
@@ -82,8 +88,9 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureKeyword&quot;, {
 
 			return line;
 		}
-<span id='Teselagen-bio-parsers-GenbankFeatureKeyword-method-toJSON'>		/**
+<span id='Teselagen-bio-parsers-GenbankFeaturesKeyword-method-toJSON'>		/**
 </span>		 * Converts to JSON format.
+		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
 			var json = {

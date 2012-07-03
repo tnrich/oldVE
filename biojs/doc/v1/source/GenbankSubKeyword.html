@@ -17,7 +17,7 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
 <span id='Teselagen-bio-parsers-GenbankSubKeyword'>/**
-</span> * GenbankSubKeyword class 
+</span> * GenbankSubKeyword class. 
  * Class for SubKeywords not defined by GenbankFeatureElements (Qualifier and Location).
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -25,11 +25,10 @@
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 
-	extend: &quot;Teselagen.bio.parsers.GenbankKeyword&quot;,
+	extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
 
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-constructor'>	/**
 </span>	 * Creates a new GenbankSubKeywords from inData.
-	 * @param {Object} inData
 	 * @param {String} keyword
 	 * @param {String} value
 	 */
@@ -49,37 +48,21 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 		this.getKeyword = function() {
 			return that.keyword;
 		}
-<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-setKeyword'>		/**
-</span>		 * Set keyword
-		 */
-		this.setKeyword = function(pKeyword) {
-			keyword = pKeyword;
-		}
-<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-getValue'>		/**
-</span>		 * Get value
-		 */
-		this.getValue = function() {
-			return that.value;
-		}
-<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-setValue'>		/**
-</span>		 * Set value
-		 */
-		this.setValue = function(pValue) {
-			value = pValue;
-		}
-<span id='Teselagen-bio-parsers-GenbankSubKeyword-method-appendValue'>		/**
-</span>		 * Appends pValue to existing value property
+
+		/*
+		 * Appends pValue to existing value property
 		 * @param {String} pVal
-		 */
+		 *
 		this.appendValue = function(pVal) {
 			value += pVal;
-		}
+		}*/
 		
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-toString'>		/**
 </span>		 * Converts this GenbankSubKeywords to Genbank file format string
+		 * @returns {String}
 		 */
 		this.toString = function() {
-			var width = 80-12;
+			//var width = 80-12;
 			var line = &quot;  &quot; + that.keyword;
 			//line = line.lpad(&quot; &quot;, 2); // + this.value;
 			line = line.rpad(&quot; &quot;, 12);
@@ -96,6 +79,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 		
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-toJSON'>		/**
 </span>		 * Converts to JSON format. Overloads for JSON.stringify()
+		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
 			var json = {
