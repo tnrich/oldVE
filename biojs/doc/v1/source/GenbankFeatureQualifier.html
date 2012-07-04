@@ -16,18 +16,26 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier'>/**
+<span id='global-property-'>/**
 </span> * GenbankFeatureQualifier class 
  * Class for GenbankFeatureQualifier. Follows the '/key=&quot;value&quot;' format
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
 
+Ext.require(&quot;Teselagen.bio.util.StringUtil&quot;);
+
 Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
+<<<<<<< HEAD
     
     requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
 
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-constructor'>    /**
+=======
+    /* */
+
+<span id='global-method-constructor'>    /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>     * Creates a new GenbankFeatureQualifier from inData.
      * @param {Object} inData
      * @param {String} name
@@ -44,50 +52,82 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
             value = inData.value;
             quoted = inData.quoted; // boolean
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getName'>        /**
+=======
+<span id='global-method-getName'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get name
          */
         this.getName = function() {
             return name;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setName'>        /**
+=======
+<span id='global-method-setName'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set name
          */
         this.setName = function(pName) {
             name = pName;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getValue'>        /**
+=======
+<span id='global-method-getValue'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get value
          */
         this.getValue = function() {
             return value;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setValue'>        /**
+=======
+<span id='global-method-setValue'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set value
          */
         this.setValue = function(pValue) {
             value = pValue;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getQuoted'>        /**
+=======
+<span id='global-method-getQuoted'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get Quoted
          */
         this.getQuoted = function() {
             return quoted;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setQuoted'>        /**
+=======
+<span id='global-method-setQuoted'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set Quoted
          */
         this.setQuoted = function(pQuoted) {
             quoted = pQuoted;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-appendValue'>        /**
+=======
+<span id='global-method-appendValue'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Append a string to the value property
          * @param {String} append
          */
         this.appendValue = function(append){
             value += append;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-toString'>        /**
+=======
+<span id='global-method-toString'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts this GenbankLocusKeyword to Genbank file format string
          */
         this.toString = function() {
@@ -99,7 +139,11 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
             }
             return line;
         }
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-toJSON'>        /**
+=======
+<span id='global-method-toJSON'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts to JSON format.
          */
         this.toJSON = function() {

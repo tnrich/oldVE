@@ -16,12 +16,14 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='Teselagen-bio-parsers-GenbankSubKeyword'>/**
+<span id='global-property-'>/**
 </span> * GenbankSubKeyword class. 
  * Class for SubKeywords not defined by GenbankFeatureElements (Qualifier and Location).
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
+
+Ext.require(&quot;Teselagen.bio.util.StringUtil&quot;);
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
     
@@ -29,6 +31,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
     
     extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
 
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-constructor'>    /**
 </span>     * Creates a new GenbankSubKeywords from inData.
      * @param {String} keyword
@@ -51,6 +54,32 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
             return that.keyword;
         }*/
 
+=======
+    extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
+
+<span id='global-method-constructor'>    /**
+</span>     * Creates a new GenbankSubKeywords from inData.
+     * @param {String} keyword
+     * @param {String} value
+     */
+    constructor: function (inData) {
+        var that = this;
+
+        if (inData) {
+            that.keyword   = inData.keyword;
+            that.value = inData.value;
+        } else {
+            //var keyword;
+            //var value;
+        }
+        /*
+         * Get keyword
+         *
+        this.getKeyword = function() {
+            return that.keyword;
+        }*/
+
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
         /*
          * Appends pValue to existing value property
          * @param {String} pVal
@@ -59,7 +88,11 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
 			that.value += pVal;
 		}*/
 
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-toString'>        /**
+=======
+<span id='global-method-toString'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts this GenbankSubKeywords to Genbank file format string
          * @returns {String}
          */
@@ -79,7 +112,11 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankSubKeyword&quot;, {
             return line;
         }
 
+<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankSubKeyword-method-toJSON'>        /**
+=======
+<span id='global-method-toJSON'>        /**
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts to JSON format. Overloads for JSON.stringify()
          * @returns {Object} json
          */

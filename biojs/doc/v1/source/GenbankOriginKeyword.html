@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword'>/**
+<span id='global-property-'>/**
 </span> * GenbankOriginKeyword class. 
  * Class for GenbankOriginKeyword. Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankFeaturesKeyword.
  * Specifically for the Origin/Sequence part of the Genbank file
@@ -24,7 +24,10 @@
  * @author Timothy Ham (original author)
  */
 
+Ext.require(&quot;Teselagen.bio.util.StringUtil&quot;);
+
 Ext.define(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
+<<<<<<< HEAD
     
     requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
     
@@ -94,6 +97,88 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
             line.replace(/[\n]+$/,&quot;&quot;);
 
             return line;
+=======
+    /* */
+    extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
+
+<span id='global-method-constructor'>    /**
+</span>     * Creates a new GenbankLocusKeyword from inData.
+     * @param {String} sequence
+     */
+    constructor: function (inData) {
+        var that = this;
+        that.keyword = &quot;ORIGIN&quot;;
+        var sequence = &quot;&quot;;
+
+        if (inData) {
+            sequence	= inData.sequence;
+        }
+<span id='global-method-getSequence'>        /**
+</span>         * Get sequence
+         * @returns {String} sequence
+         */
+        this.getSequence = function() {
+            return sequence;
+        }
+<span id='global-method-setSequence'>        /**
+</span>         * Set sequence
+         * @param {String} sequence
+         */
+        this.setSequence = function(pSequence) {
+            sequence = pSequence;
+        }
+<span id='global-method-appendSequence'>        /**
+</span>         * Append more sequence to the sequence property
+         * @param {String} line
+         */
+        this.appendSequence = function(line) {
+            sequence += line;
+        }
+<span id='global-method-toString'>        /**
+</span>         * Converts this GenbankOriginKeyword to Genbank file format string
+         * @returns {String}
+         */
+        this.toString = function() {
+            if ( sequence === undefined || sequence === &quot;&quot; ) {
+                return &quot;NO ORIGIN&quot;;
+            }
+
+            var line = &quot;&quot;;
+
+            line += &quot;ORIGIN&quot;.rpad(&quot; &quot;, 12);
+            if ( that.value != null) {
+                line += that.value + &quot;\n&quot;;
+            } else {
+                line += &quot;\n&quot;;
+            }
+
+            for (var i=0 ; i &lt; sequence.length; i=i+60) {
+                var ind = i+1;
+                var ind2 = (&quot;&quot;+ind).lpad(&quot; &quot;, 9);
+                line += ind2;
+
+                for (var j=i; j &lt; i+60; j=j+10) {
+                    line += &quot; &quot; + sequence.substring(j,j+10);
+                }
+                line += &quot;\n&quot;;
+            }
+            line.replace(/[\n]+$/,&quot;&quot;);
+
+            return line;
+
+        }
+<span id='global-method-toJSON'>        /**
+</span>         * Converts to JSON format.
+         * @param {Object} json
+         */
+        this.toJSON = function() {
+            json = {
+                    keyword: that.keyword,
+                    sequence: sequence
+            }
+            return json;
+        }
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 
         }
 <span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-toJSON'>        /**
@@ -109,7 +194,10 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
         }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
         return this;
     }
 

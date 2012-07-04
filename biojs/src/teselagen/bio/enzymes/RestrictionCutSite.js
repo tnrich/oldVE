@@ -1,16 +1,17 @@
 
+/**
+ * @class Teselagen.bio.enzymes.RestrictionCutSite
+ * 
+ * Restriction cut site.
+ * 
+ * @author Michael Fero
+ * @author Zinovii Dmytriv (original author)
+ */
 Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
 
-	/**
-	 * Restriction cut site.
-	 * 
-	 * author Michael Fero after Zinovii Dmytriv
-	 * 
-	 */
+	extend: "Teselagen.bio.sequence.common.StrandedAnnotation",
 
-	extend : "Teselagen.bio.sequence.common.StrandedAnnotation",
-
-	constructor : function(inData) {
+	constructor: function(inData) {
 		var that = this;
 		var restrictionEnzyme;
 		var numCuts = 0;

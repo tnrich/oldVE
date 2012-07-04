@@ -16,18 +16,19 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
+<span id='Teselagen-bio-enzymes-RestrictionCutSite'>/**
+</span> * @class Teselagen.bio.enzymes.RestrictionCutSite
+ * 
+ * Restriction cut site.
+ * 
+ * @author Michael Fero
+ * @author Zinovii Dmytriv (original author)
+ */
 Ext.define(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, {
 
-<span id='global-property-extend'>	/**
-</span>	 * Restriction cut site.
-	 * 
-	 * author Michael Fero after Zinovii Dmytriv
-	 * 
-	 */
+	extend: &quot;Teselagen.bio.sequence.common.StrandedAnnotation&quot;,
 
-	extend : &quot;Teselagen.bio.sequence.common.StrandedAnnotation&quot;,
-
-	constructor : function(inData) {
+	constructor: function(inData) {
 		var that = this;
 		var restrictionEnzyme;
 		var numCuts = 0;
