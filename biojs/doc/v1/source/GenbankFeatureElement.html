@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='global-property-'>/**
+<span id='Teselagen-bio-parsers-GenbankFeatureElement'>/**
 </span> * GenbankFeatureElement class 
  * Class for GenbankFeatureElement. Stored in an array in GenbankFeaturesKeyword
  * An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
@@ -24,24 +24,14 @@
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
-<<<<<<< HEAD
 //Ext.require(&quot;Teselagen.bio.util.StringUtil&quot;);
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
     requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
     
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-constructor'>    /**
-=======
-Ext.require(&quot;Teselagen.bio.util.StringUtil&quot;);
-
-Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
-    /* */
-
-<span id='global-method-constructor'>    /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>     * Creates a new GenbankFeatureElement from inData.
      * There can be multiple featureQualifier and featureLocations for each FeatureElement.
-     * @param {Object} inData
      * @param {String} keyword
      * @param {String} strand
      * @param {Boolean} complement
@@ -65,72 +55,44 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             featureQualifier = [];
             featureLocation = [];
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getKeyword'>        /**
-=======
-<span id='global-method-getKeyword'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get keyword
          */
         this.getKeyword = function() {
             return keyword;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-setKeyword'>        /**
-=======
-<span id='global-method-setKeyword'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set keyword
          */
         this.setKeyword = function(pKeyword) {
             keyword = pKeyword;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getStrand'>        /**
-=======
-<span id='global-method-getStrand'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get strand
          */
         this.getStrand = function() {
             return strand;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-setStrand'>        /**
-=======
-<span id='global-method-setStrand'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set strand
          */
         this.setStrand = function(pStrand) {
             strand = pStrand;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getFeatureQualifier'>        /**
-=======
-<span id='global-method-getFeatureQualifier'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get featureQualifier
          */
         this.getFeatureQualifier = function() {
             return featureQualifier;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-setFeatureQualifier'>        /**
-=======
-<span id='global-method-setFeatureQualifier'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set featureQualifier
          */
         this.setFeatureQualifier = function(pFeatureQualifier) {
             featureQualifier = pFeatureQualifier;
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getLastFeatureQualifier'>        /**
-=======
-<span id='global-method-getLastFeatureQualifier'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get Last GenbankFeatureElement in features array
          * @returns {GenbankFeatureElement} element
          */
@@ -142,11 +104,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             }
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-addFeatureQualifier'>        /**
-=======
-<span id='global-method-addFeatureQualifier'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Add a single GenbankFeatureQualifier to the featureQualifier array
          * @param {GenbankFeatureQualifer} qual
          */
@@ -156,31 +114,19 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             }
             featureQualifier.push(pQual);
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getFeatureLocation'>        /**
-=======
-<span id='global-method-getFeatureLocation'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get featureLocation
          */
         this.getFeatureLocation = function() {
             return featureLocation;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-setFeatureLocation'>        /**
-=======
-<span id='global-method-setFeatureLocation'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get featureLocation
          */
         this.setFeatureLocation = function(pFeatureLocation) {
             featureLocation = pFeatureLocation;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-addFeatureLocation'>        /**
-=======
-<span id='global-method-addFeatureLocation'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Add a single GenbankFeatureLocation to the featureLocation array
          * @param {GenbankFeatureLocation} pLoc
          */
@@ -191,11 +137,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             featureLocation.push(pLoc);
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getComplement'>        /**
-=======
-<span id='global-method-getComplement'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get Complement
          * @return {Boolean}
          */
@@ -203,11 +145,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             return complement;
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-setComplement'>        /**
-=======
-<span id='global-method-setComplement'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set Complement to be true or false
          * @param {Boolean}
          */
@@ -215,33 +153,21 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             complement = bool;
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-getJoin'>        /**
-=======
-<span id='global-method-getJoin'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get Join
          * @return {Boolean}
          */
         this.getJoin = function() {
             return join;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-setJoin'>        /**
-=======
-<span id='global-method-setJoin'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set Join to be true or false
          * @param {Boolean}
          */
         this.setJoin = function(bool) {
             join = bool;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-toString'>        /**
-=======
-<span id='global-method-toString'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts this GenbankLocusKeyword to Genbank file format string
          * @returns {String}
          */
@@ -274,11 +200,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureElement&quot;, {
             return line;
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureElement-method-toJSON'>        /**
-=======
-<span id='global-method-toJSON'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts to JSON format.
          * @returns {Object}
          */

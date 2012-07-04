@@ -16,27 +16,18 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='global-property-'>/**
+<span id='Teselagen-bio-parsers-GenbankFeatureLocation'>/**
 </span> * GenbankFeatureLocation class 
  * Class for GenbankFeatureQualifier. Follows the 'complement(join(&gt;start...end))' format
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
-<<<<<<< HEAD
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
     
     requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
 
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-constructor'>    /**
-=======
-Ext.require(&quot;Teselagen.bio.util.StringUtil&quot;);
-
-Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
-    /* */
-
-<span id='global-method-constructor'>    /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>     * Creates a new GenbankFeatureQualifier from inData.
      * @param {Int} start
      * @param {Int} end
@@ -65,43 +56,27 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
                 sufEnd      = inData.end.match(/\&lt;$|\&gt;$/, &quot;&quot;);
             }
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-getStart'>        /**
-=======
-<span id='global-method-getStart'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get start
          */
         this.getStart = function() {
             return start;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-setStart'>        /**
-=======
-<span id='global-method-setStart'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set start
          * @params {int} start
          */
         this.setStart = function(pStart) {
             start = pStart;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-getEnd'>        /**
-=======
-<span id='global-method-getEnd'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Get end
          * @returns {Int} end
          */
         this.getEnd = function() {
             return end;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-setEnd'>        /**
-=======
-<span id='global-method-setEnd'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Set end
          * @param {Int} end
          */
@@ -109,11 +84,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
             end = pEnd;
         }
 
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-toString'>        /**
-=======
-<span id='global-method-toString'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts this GenbankLocusKeyword to Genbank file format string
          * @returns {String}
          */
@@ -125,11 +96,7 @@ Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureLocation&quot;, {
             }
             return line;
         }
-<<<<<<< HEAD
 <span id='Teselagen-bio-parsers-GenbankFeatureLocation-method-toJSON'>        /**
-=======
-<span id='global-method-toJSON'>        /**
->>>>>>> 7ca8a95fd5f36ad143adccfe49808669d3562af4
 </span>         * Converts to JSON format.
          * @returns {Object}
          */

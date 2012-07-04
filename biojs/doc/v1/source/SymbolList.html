@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define(&quot;Teselagen.bio.sequence.common.SymbolList&quot;, {
+	constructor: function(data){
+		var symbols;
+		var alphabet;
+		if (data.symbols &amp;&amp; data.alphabet) {
+			symbols = data.symbols;
+			alphabet = data.alphabet;
+		} else {
+			throw new Error(&quot;Invalid parameters&quot;);
+		}
+		
+
+		this.getAlphabet =  function (){
+			return alphabet;
+		}
+
+		this.setAlphabet = function(pAlphabet){
+			alphabet = pAlphabet;
+		}
+
+		this.getSymbols = function(){
+			return symbols;
+		}
+
+		this.setSymbols = function(pSymbols){
+			symbols = pSymbols;
+		}
+
+		this.getSymbolsLength = function(){
+			return symbols.length;
+		}
+
+		this.symbolAt = function(pPosition){
+			return symbols[pPosition];
+		}
+
+		this.hasGap = function(){
+			return symbols.indexOf(alphabet.getGap()) &gt; 0;
+		}
+
+		this.subList = function(pStart, pEnd){
+			var subSymbols = symbols.splice(pStart, pEnd);
+
+			return Ext.create(&quot;Teselagen.bio.sequence.common.SymbolList&quot;, {
+				symbols: subSymbols,
+				alphabet: this.alphabet
+			});
+		}
+
+		this.seqString = function (){
+			var buffer = [];
+
+			for ( var i = 0; i &lt; symbols.length; ++i ) {
+				buffer[i] = symbols[i].getValue().charCodeAt(0);;
+			}
+		}
+
+		this.clear = function (){
+			symbols = [];
+		}
+
+		this.addSymbols = function (pSymbols) {
+			if (Array.isArray(pSymbols)){
+				pSymbols.forEach(function(element){
+					symbols.push(element);
+				});
+				console.log(&quot;Cool function&quot;);
+			}
+		}
+
+		this.deleteSymbols = function (pStart, pLength) {
+			symbols.splice(pStart, pLength);
+		}
+
+		this.insertSymbols = function (pPosition, pNewSymbols){
+			symbols.splice(pPosition, 0, pNewSymbols);
+		}
+
+		this.toString = function(){
+			return this.seqString();
+		}
+
+	}
+});</pre>
+</body>
+</html>

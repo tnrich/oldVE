@@ -15,8 +15,13 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='global-property-'>/**
-</span> * Restriction enzyme mapper- finds restriction enzyme cut sites in DNA sequence.
+  <pre class="prettyprint lang-js">Ext.require(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;);
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzymeMapper'>/**
+</span> * @class Teselagen.bio.enzymes.RestrictionEnzymeMapper
+ * @singleton
+ * 
+ * Restriction enzyme mapper- finds restriction enzyme cut sites in DNA sequence.
  * 
  * @see Teselagen.bio.enzymes.RestrictionEnzyme
  * @see Teselagen.bio.enzymes.RestrictionCutSite
@@ -24,13 +29,10 @@
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
-
-Ext.require(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;);
-
 Ext.define(&quot;Teselagen.bio.enzymes.RestrictionEnzymeMapper&quot;, {
 	singleton: true,
 	
-<span id='global-method-cutSequence'>	/**
+<span id='Teselagen-bio-enzymes-RestrictionEnzymeMapper-method-cutSequence'>	/**
 </span>	 * Cut sequence by list of restriction enzymes.
 	 * 
 	 * @param {Array} restrictionEnzymes List of restriction enzymes to cut sequence with.
@@ -50,7 +52,7 @@ Ext.define(&quot;Teselagen.bio.enzymes.RestrictionEnzymeMapper&quot;, {
 		return reCuts;
 	},
 	
-<span id='global-method-cutSequenceByRestrictionEnzyme'>	/**
+<span id='Teselagen-bio-enzymes-RestrictionEnzymeMapper-method-cutSequenceByRestrictionEnzyme'>	/**
 </span>	 * Cut sequence with one restriction enzyme.
 	 * 
 	 * @param {RestrictionEnzyme} Restriction enzyme to cut the sequence with.

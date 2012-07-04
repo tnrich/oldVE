@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define(&quot;Teselagen.bio.sequence.alphabets.RNAAlphabet&quot;, {
+	extend: &quot;Teselagen.bio.sequence.alphabets.AbstractAlphabets&quot;,
+
+	var a = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Adenine&quot;, value: &quot;a&quot;, ambiguousMatches: &quot;&quot;});
+        var g = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Guanine&quot;, value: &quot;g&quot;, ambiguousMatches: &quot;&quot;}); 
+        var c = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Cytosine&quot;, value: &quot;c&quot;, ambiguousMatches: &quot;&quot;}); 
+        var u = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Uracil&quot;, value: &quot;u&quot;, ambiguousMatches: &quot;&quot;});
+        var m = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c'}&quot;, value: &quot;m&quot;, ambiguousMatches: [a, c]}); 
+        var r = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'g'}&quot;, value: &quot;r&quot;, ambiguousMatches: [a, g] }); 
+        var w = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'u'}&quot;, value: &quot;s&quot;, ambiguousMatches: [a, u]}); 
+        var s = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'g'}&quot;, value: &quot;s&quot;, ambiguousMatches: [c, g]}); 
+        var y = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'u'}&quot;, value: &quot;y&quot;, ambiguousMatches: [c, u]}); 
+        var k = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'g' or 'u'}&quot;, value: &quot;k&quot;, ambiguousMatches: [g, u]}); 
+        var v = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c' or 'g'}&quot;, value: &quot;v&quot;, ambiguousMatches: [a, c, g]});
+        var h = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c' or 'u'}&quot;, value: &quot;h&quot;, ambiguousMatches: [a, c, u]}); 
+        var d = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'g' or 'u'}&quot;, value: &quot;d&quot;, ambiguousMatches: [a, g, u]});
+        var b = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'g' or 'u'}&quot;, value: &quot;b&quot;, ambiguousMatches: [c, g, u]}); 
+        var n = Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'u' or 'g' or 'c'}&quot;, value: &quot;n&quot;, ambiguousMatches: [a, c, g, u]});
+        
+              this.getA = function (){ return a; }
+       this.getG = function (){ return g; }
+       this.getC = function (){ return c; }
+       this.getU = function (){ return u; }
+       this.getM = function (){ return m; }
+       this.getR = function (){ return r; }
+       this.getW = function (){ return w; }
+       this.getS = function (){ return s; }
+       this.getY = function (){ return y; }
+       this.getK = function (){ return k; }
+       this.getV = function (){ return v; }
+       this.getH = function (){ return h; }
+       this.getD = function (){ return d; }
+       this.getB = function (){ return b; }
+       this.getN = function (){ return n; }
+});</pre>
+</body>
+</html>
