@@ -5,8 +5,10 @@
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
+
 Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
-    /* */
+    
+    requires: ["Teselagen.bio.util.StringUtil"],
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.

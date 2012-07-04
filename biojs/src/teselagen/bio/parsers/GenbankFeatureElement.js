@@ -7,14 +7,14 @@
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
+//Ext.require("Teselagen.bio.util.StringUtil");
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
-    /* */
-
+    requires: ["Teselagen.bio.util.StringUtil"],
+    
     /**
      * Creates a new GenbankFeatureElement from inData.
      * There can be multiple featureQualifier and featureLocations for each FeatureElement.
-     * @param {Object} inData
      * @param {String} keyword
      * @param {String} strand
      * @param {Boolean} complement

@@ -6,6 +6,9 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankManager", {
+    
+    requires: ["Teselagen.bio.util.StringUtil"],
+    
     /**
      * Static variables. Common Genbank Keyword names.
      */
@@ -82,6 +85,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             for (var i=0 ; i < genArr.length; i++) {
                 lineParser(genArr[i]);
             }
+            //console.log(gb.toString());
             return gb;
         }
 

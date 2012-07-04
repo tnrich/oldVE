@@ -7,11 +7,11 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
-    /* */
+    
+    requires: ["Teselagen.bio.util.StringUtil"],
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.
-     * @param {Object} inData
      * @param {String} name
      * @param {String} value
      * @param {Boolean} quoted

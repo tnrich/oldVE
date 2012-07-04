@@ -7,7 +7,9 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
-
+    
+    requires: ["Teselagen.bio.util.StringUtil"],
+    
     extend: "Teselagen.bio.parsers.Keyword",
 
     /**
