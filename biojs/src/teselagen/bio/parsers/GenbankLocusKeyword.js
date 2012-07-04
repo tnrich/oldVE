@@ -7,10 +7,10 @@
  * @author Timothy Ham (original author)
  */
 
-Ext.require("Teselagen.bio.util.StringUtil");
-
 Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
-    /* */
+    
+    requires: ["Teselagen.bio.util.StringUtil"],
+    
     extend: "Teselagen.bio.parsers.Keyword",
 
     /**

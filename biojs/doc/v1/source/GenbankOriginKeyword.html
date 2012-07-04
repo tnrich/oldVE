@@ -25,90 +25,93 @@
  */
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankOriginKeyword&quot;, {
-	/* */
-	extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
+    
+    requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
+    
+    extend: &quot;Teselagen.bio.parsers.Keyword&quot;,
 
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-constructor'>	/**
-</span>	 * Creates a new GenbankLocusKeyword from inData.
-	 * @param {String} sequence
-	 */
-	constructor: function (inData) {
-		var that = this;
-		that.keyword = &quot;ORIGIN&quot;;
-		var sequence = &quot;&quot;;
-		
-		if (inData) {
-			sequence	= inData.sequence;
-		}
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-getSequence'>		/**
-</span>		 * Get sequence
-		 * @returns {String} sequence
-		 */
-		this.getSequence = function() {
-			return sequence;
-		}
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-setSequence'>		/**
-</span>		 * Set sequence
-		 * @param {String} pSequence
-		 */
-		this.setSequence = function(pSequence) {
-			sequence = pSequence;
-		}
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-appendSequence'>		/**
-</span>		 * Append more sequence to the sequence property
-		 * @param {String} line
-		 */
-		this.appendSequence = function(line) {
-			sequence += line;
-		}
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-toString'>		/**
-</span>		 * Converts this GenbankOriginKeyword to Genbank file format string
-		 * @returns {String}
-		 */
-		this.toString = function() {
-			if ( sequence === undefined || sequence === &quot;&quot; ) {
-				return &quot;NO ORIGIN&quot;;
-			}
+<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-constructor'>    /**
+</span>     * Creates a new GenbankLocusKeyword from inData.
+     * @param {String} sequence
+     */
+    constructor: function (inData) {
+        var that = this;
+        that.keyword = &quot;ORIGIN&quot;;
+        var sequence = &quot;&quot;;
 
-			var line = &quot;&quot;;
+        if (inData) {
+            sequence	= inData.sequence;
+        }
+<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-getSequence'>        /**
+</span>         * Get sequence
+         * @returns {String} sequence
+         */
+        this.getSequence = function() {
+            return sequence;
+        }
+<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-setSequence'>        /**
+</span>         * Set sequence
+         * @param {String} sequence
+         */
+        this.setSequence = function(pSequence) {
+            sequence = pSequence;
+        }
+<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-appendSequence'>        /**
+</span>         * Append more sequence to the sequence property
+         * @param {String} line
+         */
+        this.appendSequence = function(line) {
+            sequence += line;
+        }
+<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-toString'>        /**
+</span>         * Converts this GenbankOriginKeyword to Genbank file format string
+         * @returns {String}
+         */
+        this.toString = function() {
+            if ( sequence === undefined || sequence === &quot;&quot; ) {
+                return &quot;NO ORIGIN&quot;;
+            }
 
-			line += &quot;ORIGIN&quot;.rpad(&quot; &quot;, 12);
-			if ( that.value != null) {
-				line += that.value + &quot;\n&quot;;
-			} else {
-				line += &quot;\n&quot;;
-			}
+            var line = &quot;&quot;;
 
-			for (var i=0 ; i &lt; sequence.length; i=i+60) {
-				var ind = i+1;
-				var ind2 = (&quot;&quot;+ind).lpad(&quot; &quot;, 9);
-				line += ind2;
+            line += &quot;ORIGIN&quot;.rpad(&quot; &quot;, 12);
+            if ( that.value != null) {
+                line += that.value + &quot;\n&quot;;
+            } else {
+                line += &quot;\n&quot;;
+            }
 
-				for (var j=i; j &lt; i+60; j=j+10) {
-					line += &quot; &quot; + sequence.substring(j,j+10);
-				}
-				line += &quot;\n&quot;;
-			}
+            for (var i=0 ; i &lt; sequence.length; i=i+60) {
+                var ind = i+1;
+                var ind2 = (&quot;&quot;+ind).lpad(&quot; &quot;, 9);
+                line += ind2;
 
-			return line;
+                for (var j=i; j &lt; i+60; j=j+10) {
+                    line += &quot; &quot; + sequence.substring(j,j+10);
+                }
+                line += &quot;\n&quot;;
+            }
+            line.replace(/[\n]+$/,&quot;&quot;);
 
-		}
-<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-toJSON'>		/**
-</span>		 * Converts to JSON format.
-		 * @param {Object} json
-		 */
-		this.toJSON = function() {
-			json = {
-					keyword: that.keyword,
-					sequence: sequence
-			}
-			return json;
-		}
+            return line;
+
+        }
+<span id='Teselagen-bio-parsers-GenbankOriginKeyword-method-toJSON'>        /**
+</span>         * Converts to JSON format.
+         * @param {Object} json
+         */
+        this.toJSON = function() {
+            json = {
+                    keyword: that.keyword,
+                    sequence: sequence
+            }
+            return json;
+        }
 
 
 
-		return this;
-	}
+        return this;
+    }
 
 });</pre>
 </body>

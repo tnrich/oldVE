@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='global-property-'>/**
+</span> * Restriction Enzyme loader. 
+ * Allows easy retrieval of common and REBASE restriction enzymes.
+ * 
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author)
+ */
+
+Ext.require(&quot;Ext.Ajax&quot;);
+Ext.require(&quot;Ext.data.Store&quot;);
+Ext.require(&quot;Teselagen.bio.enzymes.RestrictionEnzyme&quot;);
+
+Ext.define(&quot;Teselagen.bio.enzymes.RestrictionEnzymeManager&quot;, {
+	//Use ext's built-in singleton functionality.
+	singleton: true,
+	
+	commonRestrictionEnzymes: null,
+	rebaseRestrictionEnzymes: null,
+	
+<span id='global-method-getCommonRestrictionEnzymes'>	/**
+</span>	 * Retrieves and returns common enzymes from common.xml.
+	 * Relies on asynchronous network requests, 
+	 */
+	getCommonRestrictionEnzymes: function() {
+		if(this.commonRestrictionEnzymes != null) {
+			return this.commonRestrictionEnzymes;
+		}
+		
+		this.getEnzymes(&quot;../src/teselagen/bio/enzymes/assets/common.xml&quot;, &quot;common&quot;);
+		
+		setTimeout(&quot;return this.commonRestrictionEnzymes&quot;, 500);
+	},
+	
+<span id='global-method-getRebaseRestrictionEnzymes'>	/**
+</span>	 * Retrieves and returns rebase enzymes from rebase.xml.
+	 * Relies on asynchronous network requests, 
+	 */
+	getRebaseRestrictionEnzymes: function() {
+		if(this.rebaseRestrictionEnzymes != null) {
+			return this.rebaseRestrictionEnzymes;
+		}
+		
+		this.getEnzymes(&quot;../src/teselagen/bio/enzymes/assets/rebase.xml&quot;, &quot;rebase&quot;);
+		
+		return this.rebaseRestrictionEnzymes;
+	},
+
+<span id='global-method-getEnzymes'>	/**
+</span>	 * Retrieves xml text from a given url, hands it to the parser, 
+	 * and writes the enzymes to a variable.
+	 * @param {String} url The url to retrieve data from.
+	 * @param {String} group Which enzyme variable to write to; either &quot;common&quot; or &quot;rebase&quot;.
+	 */
+	getEnzymes: function(url, group) {
+		Ext.Ajax.request({
+            url:url,
+            success: function(response) {
+            	Teselagen.bio.enzymes.RestrictionEnzymeManager.writeEnzymesToVariable(response, group);
+            },
+			failure: function(response) {
+				//alert(&quot;Error retrieving enzyme XML file.&quot;);
+			}
+        });
+	},
+	
+<span id='global-method-writeEnzymesToVariable'>	/**
+</span>	 * Helper function to allow the &quot;group&quot; variable to be passed
+	 * into the AJAX callback in getEnzymes.
+	 */
+	writeEnzymesToVariable: function(response, group) {
+		list = Teselagen.bio.enzymes.RestrictionEnzymeManager.parseXml(response.responseText);
+
+    	if(group === &quot;common&quot;) {
+    		Teselagen.bio.enzymes.RestrictionEnzymeManager.commonRestrictionEnzymes = list;
+    	} else if(group === &quot;rebase&quot;) {
+    		Teselagen.bio.enzymes.RestrictionEnzymeManager.rebaseRestrictionEnzymes = list;
+    	}
+	},
+	
+<span id='global-method-parseXml'>	/**
+</span>	 * Parses XML text and returns an array of RestrictionEnzyme objects.
+	 * @param {String} xml XML string to parse.
+	 * @returns {Array} enzymeList An array of RestrictionEnzyme objects.
+	 */
+	parseXml: function(xml) {
+		var enzymeList = new Array();
+		
+		// Define an Ext model &quot;Enzyme&quot; to make reading from XML data possible.
+		Ext.define(&quot;Enzyme&quot;, {
+		    extend: &quot;Ext.data.Model&quot;,
+		    fields: [{name: &quot;name&quot;, mapping: &quot;n&quot;},
+		             {name: &quot;site&quot;, mapping: &quot;s&quot;},
+		             {name: &quot;forwardRegex&quot;, mapping: &quot;fr&quot;},
+		             {name: &quot;reverseRegex&quot;, mapping: &quot;rr&quot;},
+		             {name: &quot;cutType&quot;, type: &quot;int&quot;, mapping: &quot;c&quot;},
+		             {name: &quot;dsForward&quot;, type: &quot;int&quot;, mapping: &quot;ds &gt; df&quot;},
+		             {name: &quot;dsReverse&quot;, type: &quot;int&quot;, mapping: &quot;ds &gt; dr&quot;},
+		             {name: &quot;usForward&quot;, type: &quot;int&quot;, mapping: &quot;us &gt; uf&quot;},
+		             {name: &quot;usReverse&quot;, type: &quot;int&quot;, mapping: &quot;us &gt; ur&quot;}]
+		});
+		
+		var doc = new DOMParser().parseFromString(xml, &quot;text/xml&quot;);
+		
+		// Define a store which will hold the data read from XML.
+		var memstore = new Ext.data.Store({
+		    autoLoad: true,
+		    model: &quot;Enzyme&quot;,
+		    data : doc,
+		    proxy: {
+		        type: &quot;memory&quot;,
+		        reader: {
+		            type: &quot;xml&quot;,
+		            record: &quot;e&quot;,
+		            root: &quot;enzymes&quot;
+		        }
+		    }
+		});
+		
+		// For each item in the store, add it to a list of enzymes.
+		memstore.each(function(e) {
+			var enzyme = Ext.create(&quot;Teselagen.bio.enzymes.RestrictionEnzyme&quot;, {
+				name: e.get(&quot;name&quot;),
+				site: e.get(&quot;site&quot;),
+				forwardRegex: e.get(&quot;forwardRegex&quot;),
+				reverseRegex: e.get(&quot;reverseRegex&quot;),
+				cutType: e.get(&quot;cutType&quot;),
+				dsForward: e.get(&quot;dsForward&quot;),
+				dsReverse: e.get(&quot;dsReverse&quot;),
+				usForward: e.get(&quot;usForward&quot;),
+				usReverse: e.get(&quot;usReverse&quot;)
+			});
+			
+			enzymeList.push(enzyme);
+		});
+		
+		return enzymeList;
+	}
+});
+</pre>
+</body>
+</html>

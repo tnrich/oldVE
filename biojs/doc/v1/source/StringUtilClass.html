@@ -16,45 +16,46 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">
-<span id='global-method-trim'>    /**
+<span id='Teselagen-bio-util-StringUtil'>    /**
 </span>    * StringUtil Library
     * @description From http://sajjadhossain.com/2008/10/31/javascript-string-trimming-and-padding/
     * @author Diana Wong
     */
 
-//Ext.define('Teselagen.bio.util.StringUtil', {
+Ext.define('Teselagen.bio.util.StringUtil', {
 	
-	//singleton = true; 
+	singleton: true,
+	extend: &quot;Ext.String&quot;,
 	
 
-	String.prototype.trim = function() {
+	this.trim: function() {
 		return this.replace(/^\s+|\s+$/g,&quot;&quot;);
-	}
+	},
 	 
 	//trimming space from left side of the string
-	String.prototype.ltrim = function() {
+	this.ltrim: function() {
 		return this.replace(/^\s+/,&quot;&quot;);
-	}
+	},
 	 
 	//trimming space from right side of the string
-	String.prototype.rtrim = function() {
+	this.rtrim: function() {
 		return this.replace(/\s+$/,&quot;&quot;);
-	}
+	},
 	
-	String.prototype.lpad = function(padString, length) {
+	this.lpad: function(padString, length) {
 		var str = this;
 	    while (str.length &lt; length)
 	        str = padString + str;
 	    return str;
-	}
+	},
 	 
 	//pads right
-	String.prototype.rpad = function(padString, length) {
+	this.rpad: function(padString, length) {
 		var str = this;
 	    while (str.length &lt; length)
 	        str = str + padString;
 	    return str;
 	}
-//});</pre>
+});</pre>
 </body>
 </html>

@@ -24,91 +24,92 @@
  */
 
 Ext.define(&quot;Teselagen.bio.parsers.GenbankFeatureQualifier&quot;, {
-	/* */
+    
+    requires: [&quot;Teselagen.bio.util.StringUtil&quot;],
 
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-constructor'>	/**
-</span>	 * Creates a new GenbankFeatureQualifier from inData.
-	 * @param {Object} inData
-	 * @param {String} name
-	 * @param {String} value
-	 * @param {Boolean} quoted
-	 */
-	constructor: function (inData) {
-		var that = this;
-		var name;
-		var value;
-		var quoted;
-		if (inData) {
-			name = inData.name;
-			value = inData.value;
-			quoted = inData.quoted; // boolean
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getName'>		/**
-</span>		 * Get name
-		 */
-		this.getName = function() {
-			return name;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setName'>		/**
-</span>		 * Set name
-		 */
-		this.setName = function(pName) {
-			name = pName;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getValue'>		/**
-</span>		 * Get value
-		 */
-		this.getValue = function() {
-			return value;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setValue'>		/**
-</span>		 * Set value
-		 */
-		this.setValue = function(pValue) {
-			value = pValue;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getQuoted'>		/**
-</span>		 * Get Quoted
-		 */
-		this.getQuoted = function() {
-			return quoted;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setQuoted'>		/**
-</span>		 * Set Quoted
-		 */
-		this.setQuoted = function(pQuoted) {
-			quoted = pQuoted;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-appendValue'>		/**
-</span>		 * Append a string to the value property
-		 * @param {String} append
-		 */
-		this.appendValue = function(append){
-			value += append;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-toString'>		/**
-</span>		 * Converts this GenbankLocusKeyword to Genbank file format string
-		 */
-		this.toString = function() {
-			var line;
-			if (quoted) {
-				line = &quot;/&quot;.lpad(&quot; &quot;, 22) + name + &quot;=\&quot;&quot; + value + &quot;\&quot;&quot;;
-			} else {
-				line = &quot;/&quot;.lpad(&quot; &quot;, 22) + name + &quot;=&quot; + value ;
-			}
-			return line;
-		}
-<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-toJSON'>		/**
-</span>		 * Converts to JSON format.
-		 */
-		this.toJSON = function() {
-			var json = {
-				name: name,
-				value: value
-			}
-			return json;
-		}
-		return this;
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-constructor'>    /**
+</span>     * Creates a new GenbankFeatureQualifier from inData.
+     * @param {Object} inData
+     * @param {String} name
+     * @param {String} value
+     * @param {Boolean} quoted
+     */
+    constructor: function (inData) {
+        var that = this;
+        var name;
+        var value;
+        var quoted;
+        if (inData) {
+            name = inData.name;
+            value = inData.value;
+            quoted = inData.quoted; // boolean
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getName'>        /**
+</span>         * Get name
+         */
+        this.getName = function() {
+            return name;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setName'>        /**
+</span>         * Set name
+         */
+        this.setName = function(pName) {
+            name = pName;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getValue'>        /**
+</span>         * Get value
+         */
+        this.getValue = function() {
+            return value;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setValue'>        /**
+</span>         * Set value
+         */
+        this.setValue = function(pValue) {
+            value = pValue;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-getQuoted'>        /**
+</span>         * Get Quoted
+         */
+        this.getQuoted = function() {
+            return quoted;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-setQuoted'>        /**
+</span>         * Set Quoted
+         */
+        this.setQuoted = function(pQuoted) {
+            quoted = pQuoted;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-appendValue'>        /**
+</span>         * Append a string to the value property
+         * @param {String} append
+         */
+        this.appendValue = function(append){
+            value += append;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-toString'>        /**
+</span>         * Converts this GenbankLocusKeyword to Genbank file format string
+         */
+        this.toString = function() {
+            var line;
+            if (quoted) {
+                line = &quot;/&quot;.lpad(&quot; &quot;, 22) + name + &quot;=\&quot;&quot; + value + &quot;\&quot;&quot;;
+            } else {
+                line = &quot;/&quot;.lpad(&quot; &quot;, 22) + name + &quot;=&quot; + value ;
+            }
+            return line;
+        }
+<span id='Teselagen-bio-parsers-GenbankFeatureQualifier-method-toJSON'>        /**
+</span>         * Converts to JSON format.
+         */
+        this.toJSON = function() {
+            var json = {
+                    name: name,
+                    value: value
+            }
+            return json;
+        }
+        return this;
     }
 
 });</pre>
