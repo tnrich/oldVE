@@ -3,6 +3,6 @@
 # Make sure you install jsduck this way!
 #> sudo gem install jsduck
 
-jsduck --verbose ../src --output v2
+jsduck --verbose ../src --output v1
 
 
