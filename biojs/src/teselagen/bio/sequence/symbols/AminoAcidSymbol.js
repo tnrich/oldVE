@@ -13,7 +13,6 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 	*/
 
 	constructor: function(data){
-		var that = this;
 		var name = data.name;
 		var value = data.value;
 		var threeLettersName = data.threeLettersName;

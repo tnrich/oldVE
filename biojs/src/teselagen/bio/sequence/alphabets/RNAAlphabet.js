@@ -1,3 +1,5 @@
+//Need to implement  singleton
+
 Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabets",
 

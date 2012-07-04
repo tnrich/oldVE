@@ -72,13 +72,14 @@ describe("Testing Sequence related classes ", function() {
 			});	
 		});
 
+		/*
 		describe("ProteinAlphabet tests", function(){
 			
 		});
 
 		describe("RNAAlphabet tests", function(){
 			
-		});
+		});*/
 	});
     	
 	//Testing classes in the teselagen/bio/sequence/common

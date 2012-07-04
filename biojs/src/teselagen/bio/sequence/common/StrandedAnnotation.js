@@ -1,3 +1,12 @@
+/**
+ * @class Teselagen.bio.sequence.common.StrandedAnnotation
+ * 
+ * 
+ * 
+ * 
+ * @author Micah Lerner
+ */
+
 Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 	constructor: function(data){
 

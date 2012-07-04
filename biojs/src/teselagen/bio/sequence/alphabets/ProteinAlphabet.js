@@ -1,3 +1,4 @@
+//Need to implement  singleton
 Ext.define("Teselagen.bio.sequence.alphabets.ProteinAlphabet", {
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet"
 	contstructor: function(data){
