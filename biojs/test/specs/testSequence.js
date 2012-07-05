@@ -61,14 +61,12 @@ describe("Testing Sequence related classes ", function() {
 		});
 
 		describe("DNAAlphabet tests", function(){
-			var testAlphabet;
-			beforeEach(function(){
-				test = Ext.create("Teselagen.bio.sequence.alphabets.DNAAlphabet");
-			});
 			it("getG works", function(){
-				expect(test).toBeDefined();
-				var fetched = test.getA();
-				expect(fetched.getName()).toMatch("Adenine");
+				//var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
+				Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+				Teselagen.bio.sequence.alphabets.DNAAlphabet.testlog();
+				//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
+				//expect(a.getName()).toMatch("Adenine");
 			});	
 		});
 
@@ -381,7 +379,9 @@ describe("Testing Sequence related classes ", function() {
 	});
 
 	describe("Testing 'dna' classes", function(){
+		describe("Testning 'DigestionFragment.js", function(){
 
+		});
 	});
 
 	//Teselagen.bio.sequence.symbol Tests

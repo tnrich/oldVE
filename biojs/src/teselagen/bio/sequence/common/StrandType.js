@@ -7,7 +7,7 @@ Ext.define("Teselagen.bio.sequence.common.StrandType", {
 		var UNKNOWN = 0;
 	},
 
-	alternateClassName: "Teselagen.StrandType";
+	alternateClassName: "Teselagen.StrandType",
 
-	singleton: "True";
+	singleton: true,
 });
