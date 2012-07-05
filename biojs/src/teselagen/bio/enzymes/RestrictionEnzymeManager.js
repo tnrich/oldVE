@@ -1,8 +1,3 @@
-
-Ext.require("Ext.Ajax");
-Ext.require("Ext.data.Store");
-Ext.require("Teselagen.bio.enzymes.RestrictionEnzyme");
-
 /**
  * @class Teselagen.bio.enzymes.RestrictionEnzymeManager
  * @singleton
@@ -16,6 +11,8 @@ Ext.require("Teselagen.bio.enzymes.RestrictionEnzyme");
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	//Use ext's built-in singleton functionality.
 	singleton: true,
+	
+	requires: ["Ext.Ajax", "Ext.data.Store", "Teselagen.bio.enzymes.RestrictionEnzyme"],
 	
 	commonRestrictionEnzymes: null,
 	rebaseRestrictionEnzymes: null,

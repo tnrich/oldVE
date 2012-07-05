@@ -1,4 +1,3 @@
-
 /**
  * @class Teselagen.bio.enzymes.RestrictionCutSite
  * 

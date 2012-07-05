@@ -2,7 +2,8 @@
  * @author Nick Elsbree
  */
 Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
-//Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeMapper");
+Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeMapper");
+Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
 
 describe("Restriction enzyme tests:", function(){
 	//Test RestrictionEnzyme class.
@@ -85,45 +86,67 @@ describe("Restriction enzyme tests:", function(){
 		
 		it("can compute common enzymes?", function() {
 			var enz = Teselagen.bio.enzymes.RestrictionEnzymeManager.getCommonRestrictionEnzymes();
-			console.log(enz);
 			expect(enz.length).toBeGreaterThan(0);
 		});
 		
 		it("can compute rebase enzymes?", function() {
 			var enz = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRebaseRestrictionEnzymes();
-			console.log(enz);
 			expect(enz.length).toBeGreaterThan(0);
 		});
 	});
 	
 	//Test RestrictionEnzymeMapper class.
 	
-	/*describe("RestrictionEnzymeMapper", function() {
-		it("can correctly cut a DNA strand?", function() {
-			var enzyme1 = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
-				inData: {
-					name: "Genericase",
-					site: "GTCCAGC",
-					cutType: 0,
-					forwardRegex: "gtcc.gc",
-					reverseRegex: "gtcc.gc",
-					dsForward: 5,
-					dsReverse: 8,
-					usForward: 1,
-					usReverse: 2
-				}
-			});			
-			
-			var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(
-					enzyme1,
-					"actcacgccggcatgtccagcgtcctgcgtccgcgacctg");
-			console.log(cutSites);
+	describe("RestrictionEnzymeMapper", function() {
+		var enzyme = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+			name: "Genericase",
+			site: "GTCCAGC",
+			cutType: 0,
+			forwardRegex: "gtcc.gc",
+			reverseRegex: "gtcc.gc",
+			dsForward: 5,
+			dsReverse: 8,
+			usForward: 1,
+			usReverse: 2
+		});
 
-			describe("Cut sites", function() {
-				it("has correct number of cuts? (3)", function() {
-					expect(cutSites.length).toBe(3);
+		var sequence = Ext.create("Teselagen.bio.sequence.common.StrandedAnnotation", {
+			start: 0,
+			end: 39,
+			strand: "actcacgccggcatgtccagcgtcctgcgtccgcgacctg"
+		});
+
+		it("exists?", function() {
+			expect(Teselagen.bio.enzymes.RestrictionEnzymeMapper).toBeDefined();
+		});
+		
+		
+		describe("cutSequenceByRestrictionEnzyme", function() {
+
+			it("found correct number of cut sites?", function() {
+				waitsFor(function() {
+					return Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined;
+				});
+
+				runs(function() {	
+					var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(enzyme, "actcacgccggcatgtccagcgtcctgcgtccgcgacctg");
+					console.log(cutSites);
+					expect(cutSites.length).toBe(2);
+				});
+			});
+			
+			it("have correct start indices?", function() {
+				waitsFor(function() {
+					return Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined;
+				});
+
+				runs(function() {
+					var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(enzyme, "actcacgccggcatgtccagcgtcctgcgtccgcgacctg");
+					expect(cutSites[0].start).toBe(14);
+					expect(cutSites[1].start).toBe(21);
 				});
 			});
 		});
-	});*/
+
+	});
 });
