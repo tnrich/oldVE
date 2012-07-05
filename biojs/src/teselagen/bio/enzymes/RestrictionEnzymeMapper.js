@@ -1,5 +1,3 @@
-Ext.require("Teselagen.bio.enzymes.RestrictionCutSite");
-
 /**
  * @class Teselagen.bio.enzymes.RestrictionEnzymeMapper
  * @singleton
@@ -14,6 +12,8 @@ Ext.require("Teselagen.bio.enzymes.RestrictionCutSite");
  */
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 	singleton: true,
+	
+	requires: ["Teselagen.bio.enzymes.RestrictionCutSite", "Teselagen.bio.sequence.common.StrandType"],
 	
 	/**
 	 * Cut sequence by list of restriction enzymes.
@@ -46,29 +46,29 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 	 */
 	cutSequenceByRestrictionEnzyme: function(restrictionEnzyme, symbolList) {
 		var restrictionCutSites = new Array();
-		
-		var forwardRegExpPattern = new RegExp(restrictionEnzyme.forwardRegex.toLowerCase(), "g");
-		var reverseRegExpPattern = new RegExp(restrictionEnzyme.reverseRegex.toLowerCase(), "g");
+
+		var forwardRegExpPattern = new RegExp(restrictionEnzyme.getForwardRegex().toLowerCase(), "g");
+		var reverseRegExpPattern = new RegExp(restrictionEnzyme.getReverseRegex().toLowerCase(), "g");
 		
 		var reLength = restrictionEnzyme.getSite().length;
-		if(reLength != restrictionEnzyme.dsForward + restrictionEnzyme.dsReverse) {
-			reLength = restrictionEnzyme.dsForward;
+		if(reLength != restrictionEnzyme.getDsForward() + restrictionEnzyme.getDsReverse()) {
+			reLength = restrictionEnzyme.getDsForward();
 		}
 		
 		var sequence = symbolList;//.seqString();
 		var seqLength = sequence.length;
 		
 		var matchIndex = sequence.search(forwardRegExpPattern);
-		var prevIndex = 0;
+		var startIndex = 0;
 		var subSequence = sequence;
-		while(match != -1) {
-			if(matchIndex + reLength - 1 >= subsequence.length) { // subsequence is too short
+		while(matchIndex != -1) {
+			if(matchIndex + reLength - 1 >= subSequence.length) { // subSequence is too short
 				break;
 			}
 			
 			restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
-				start: matchIndex + prevIndex + 1,
-				end: matchIndex + reLength + prevIndex + 1,
+				start: matchIndex + startIndex,
+				end: matchIndex + reLength + startIndex + 1,
 				strand: Teselagen.bio.sequence.common.StrandType.FORWARD,
 				restrictionEnzyme: restrictionEnzyme
 			});
@@ -76,26 +76,26 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 			
 			// Make sure that we always store the previous match index to ensure
 			// that we are always storing indices relative to the whole sequence,
-			// not just the subsequence.
-			prevIndex = matchIndex;
+			// not just the subSequence.
+			startIndex = matchIndex + 1;
 			
-			// Search again on subsequence, starting from the index of the last match + 1.
-			subSequence = subSequence.substring(matchIndex + 1, subSequence.length - 1);
+			// Search again on subSequence, starting from the index of the last match + 1.
+			subSequence = subSequence.substring(startIndex, subSequence.length);
 			matchIndex = subSequence.search(forwardRegExpPattern);
 		}
 		
 		if(!restrictionEnzyme.isPalindromic()) {
 			matchIndex = sequence.search(reverseRegExpPattern);
-			prevIndex = 0;
+			startIndex = 0;
 			subSequence = sequence;
 			while(match != -1) {
-				if(matchIndex + reLength - 1 >= subsequence.length) { // subsequence is too short
+				if(matchIndex + reLength - 1 >= subSequence.length) { // subSequence is too short
 					break;
 				}
 				
 				restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
-					start: matchIndex + prevIndex + 1,
-					end: matchIndex + reLength + prevIndex + 1,
+					start: matchIndex + startIndex,
+					end: matchIndex + reLength + startIndex + 1,
 					strand: Teselagen.bio.sequence.common.StrandType.BACKWARD,
 					restrictionEnzyme: restrictionEnzyme
 				});
@@ -103,11 +103,11 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 				
 				// Make sure that we always store the previous match index to ensure
 				// that we are always storing indices relative to the whole sequence,
-				// not just the subsequence.
-				prevIndex = matchIndex;
+				// not just the subSequence.
+				startIndex = matchIndex + 1;
 				
-				// Search again on subsequence, starting from the index of the last match + 1.
-				subSequence = subSequence.substring(matchIndex + 1, subSequence.length - 1);
+				// Search again on subSequence, starting from the index of the last match + 1.
+				subSequence = subSequence.substring(startIndex, subSequence.length);
 				matchIndex = subSequence.search(reverseRegExpPattern);
 			}
 		}

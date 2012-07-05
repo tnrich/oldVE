@@ -24,34 +24,22 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 	 */
 	
 	constructor: function(inData) {
-		if (inData) {
-			var name = inData.name;
-			var site = inData.site;
-			var cutType = inData.cutType;
-			var forwardRegex = inData.forwardRegex;
-			var reverseRegex = inData.reverseRegex;
-			var dsForward = inData.dsForward;
-			var dsReverse = inData.dsReverse;
-			var usForward = inData.usForward;
-			var usReverse = inData.usReverse;
-		} else {
-			var name;
-			var site;
-			var cutType;
-			var forwardRegex;
-			var reverseRegex;
-			var dsForward;
-			var dsReverse;
-			var usForward;
-			var usReverse;
-		}
+		var name = inData.name;
+		var site = inData.site;
+		var cutType = inData.cutType;
+		var forwardRegex = inData.forwardRegex;
+		var reverseRegex = inData.reverseRegex;
+		var dsForward = inData.dsForward;
+		var dsReverse = inData.dsReverse;
+		var usForward = inData.usForward;
+		var usReverse = inData.usReverse;
 		
 		/**
 		 * Checks if enzyme is palindromic.
 		 * @returns {Boolean} True if enzyme has palindromic regex.
 		 */
 		this.isPalindromic = function() {
-			return forwardRegex == reverseRegex;
+			return forwardRegex === reverseRegex;
 		}
 		
 		this.toString = function() {

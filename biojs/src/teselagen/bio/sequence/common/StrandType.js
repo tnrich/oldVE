@@ -2,12 +2,12 @@
 
 Ext.define("Teselagen.bio.sequence.common.StrandType", {
 	statics: {
-		var FORWARD = 1;
-		var BACKWARD = -1;
-		var UNKNOWN = 0;
+		FORWARD: 1,
+		BACKWARD: -1,
+		UNKNOWN: 0,
 	},
 
-	alternateClassName: "Teselagen.StrandType";
+	alternateClassName: "Teselagen.StrandType",
 
-	singleton: "True";
+	singleton: "True",
 });
