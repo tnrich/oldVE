@@ -21,7 +21,6 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 	 * @param {Int} usReverse Upstream 5" strand cut position.
 	 * @returns {RestrictionEnzyme} Restriction Enzyme object.
 	 */
-	
 	constructor: function(inData) {
 		var name = inData.name;
 		var site = inData.site;
