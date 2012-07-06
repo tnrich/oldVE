@@ -19,7 +19,8 @@
 </span> * @class Teselagen.bio.enzymes.RestrictionCutSite
  * 
  * Restriction cut site.
- * 
+ *
+ * @author Nick Elsbree
  * @author Michael Fero
  * @author Zinovii Dmytriv (original author)
  */
@@ -27,6 +28,15 @@ Ext.define(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, {
 
 	extend: &quot;Teselagen.bio.sequence.common.StrandedAnnotation&quot;,
 
+<span id='Teselagen-bio-enzymes-RestrictionCutSite-method-constructor'>	/**
+</span>	 * Constructor.
+	 * 
+	 * @param {Int} start Cut site start location.
+	 * @param {Int} end Cut site end location.
+	 * @param {Teselagen.bio.enzymes.RestrictionEnzyme} restrictionEnzyme Restriction enzyme this cut site was created with.
+	 * 
+	 * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
+	 */
 	constructor: function(inData) {
 		var that = this;
 		var restrictionEnzyme;
@@ -36,22 +46,42 @@ Ext.define(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, {
 			that.start = inData.start;
 			that.end = inData.end;
 			restrictionEnzyme = inData.restrictionEnzyme;
-
 		}
 		
+<span id='Teselagen-bio-enzymes-RestrictionCutSite-method-getRestrictionEnzyme'>		/**
+</span>		 * Get restriction enzyme.
+		 * 
+		 * @return {Teselagen.bio.enzymes.RestrictionEnzyme}
+		 */
 		this.getRestrictionEnzyme = function(){
-		return restrictionEnzyme;
-		}
+			return restrictionEnzyme;
+		};
+<span id='Teselagen-bio-enzymes-RestrictionCutSite-method-setRestrictionEnzyme'>		/**
+</span>		 * Set restriction enzyme.
+		 * 
+		 * @param {Teselagen.bio.enzymes.RestrictionEnzyme} pRestrictionEnzyme
+		 */
+		this.setRestrictionEnzyme = function(pRestrictionEnzyme) {
+			restrictionEnzyme = pRestrictionEnzyme;
+		};
+<span id='Teselagen-bio-enzymes-RestrictionCutSite-method-getNumCuts'>		/**
+</span>		 * Get number of cuts.
+		 * 
+		 * @return {Int}
+		 */
 		this.getNumCuts = function(){
 			return numCuts;
-		}
+		};
+<span id='Teselagen-bio-enzymes-RestrictionCutSite-method-setNumCuts'>		/**
+</span>		 * Set number of cuts.
+		 * 
+		 * @param {Int} pNumCuts
+		 */
 		this.setNumCuts = function(pNumCuts){
 			numCuts = pNumCuts;
-		}
-		
+		};
 		
 		return this;
-
 	}
 });</pre>
 </body>
