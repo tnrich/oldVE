@@ -10,7 +10,6 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
 	/**
 	 * Creates a RestrictionEnzyme object.
-	 * @param {Object} inData Input parameters.
 	 * @param {String} name Enzyme name.
 	 * @param {String} site Enzyme site.
 	 * @param {Int} cutType Downstream or Upstream cut type. Values: 0 = downstream, 1 = upstream
