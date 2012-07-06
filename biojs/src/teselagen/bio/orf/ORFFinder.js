@@ -32,9 +32,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			return [];
 		}
 
-		var orfs1 = orfPerFrame(0, dnaSymbolList, minimumLength);
-		var orfs2 = orfPerFrame(1, dnaSymbolList, minimumLength);
-		var orfs3 = orfPerFrame(2, dnaSymbolList, minimumLength);
+		var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength);
+		var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength);
+		var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength);
 
 		return orfs1.concat(orfs2, orfs3);
 	},
@@ -167,7 +167,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	},
 
 	evaluatePossibleStop: function(nucleotideOne, nucleotideTwo, nucleotideThree) {
-		if(nucleotideOne instanceof GapSymbol || (nucleotideTwo instanceof GapSymbol || nucleotideThree instanceof GapSymbol)) {
+		if(nucleotideOne instanceof Teselagen.bio.sequence.symbols.GapSymbol || 
+			(nucleotideTwo instanceof Teselagen.bio.sequence.symbols.GapSymbol || 
+			nucleotideThree instanceof Teselagen.bio.sequence.symbols.GapSymbol)) {
 			return true;
 		}
 
@@ -178,7 +180,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		for(var i1 = 0; i1 < n1.length; i1++) {
 			for(var i2 = 0; i2 < n2.length; i2++) {
 				for(var i3 = 0; i3 <n3.length; i3++) {
-					if(TranslationUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
+					if(Teselagen.bio.sequence.TranslationUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
 						return true;
 					}
 				}

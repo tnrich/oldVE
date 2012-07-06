@@ -3,6 +3,8 @@
  */
 
 //Testing BioException class
+//
+Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 describe("Testing BioException", function(){
 	var bioException;
 	beforeEach(function(){
@@ -62,11 +64,21 @@ describe("Testing Sequence related classes ", function() {
 
 		describe("DNAAlphabet tests", function(){
 			it("getG works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
+					//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
+					expect(a.getName()).toMatch("Adenine");
+				});
+
 				//var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
-				Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
-				Teselagen.bio.sequence.alphabets.DNAAlphabet.testlog();
+				//Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+				
 				//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
-				//expect(a.getName()).toMatch("Adenine");
+				//expect(a.getName()).toMatch("Adenine");*/
 			});	
 		});
 
