@@ -50,7 +50,7 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
             //var width = 80-12;
             var line = "  " + that.keyword;
             //line = line.lpad(" ", 2); // + this.value;
-            line = line.rpad(" ", 12);
+            line = Teselagen.StringUtil.rpad(line," ", 12);
 
             line += that.value;
             /*line += that.value.substring(0,width)

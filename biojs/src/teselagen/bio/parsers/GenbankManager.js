@@ -137,8 +137,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                     lastObj = parseSubKeyword(tmp, line);
                 } else if ( isKeyRunon ) {      // RUNON LINES FOR NON-FEATURES
                     //console.log(lastObj.getValue());
-                    lastObj.setValue(lastObj.getValue() + "\n".rpad(" ",13) + line.trim());
-                    //lastObj.appendValue("\n".rpad(" ",13) + line.trim()); //SOOOO DOES NOT WORK
+                    lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
+                    //lastObj.appendValue("\n".rpad(" ",13) + Ext.String.trim(line)); //SOOOO DOES NOT WORK
                 }
             }
 
@@ -328,15 +328,15 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
                 if ( isLocRunon) {
                     //console.log(Ext.getClassName(lastObj));
-                    //parseFeatureLocation(lastObj, line.trim());
+                    //parseFeatureLocation(lastObj, Ext.String.trim(line));
 
-                    parseFeatureLocation( result.getLastElement() , line.trim());
+                    parseFeatureLocation( result.getLastElement() , Ext.String.trim(line));
                 }
                 if ( isQualRunon) {
                     //console.log(Ext.getClassName(lastObj));
-                    //lastObj.appendValue(line.trim().replace(/\"/g, ""));
+                    //lastObj.appendValue(Ext.String.trim(line).replace(/\"/g, ""));
 
-                    result.getLastElement().getLastFeatureQualifier().appendValue(line.trim().replace(/\"/g, ""));
+                    result.getLastElement().getLastFeatureQualifier().appendValue(Ext.String.trim(line).replace(/\"/g, ""));
                 }
             }
             return result;
@@ -354,7 +354,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             var complement = false;
             var join = false;
 
-            locStr = locStr.trim();
+            locStr = Ext.String.trim(locStr);
 
             if (locStr.match(/complement/i) ) {
                 complement = true;
@@ -395,7 +395,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         function parseFeatureQualifier(line) {
             var featQual, newLine, lineArr, quoted;
 
-            newLine = line.trim();
+            newLine = Ext.String.trim(line);
             newLine = newLine.replace(/^\/|"$/g, "");
             lineArr = newLine.split(/=\"|=/);
 
@@ -508,7 +508,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 				qual = true;
 			}*/
 
-            if ( line.trim().charAt(0).match(/\// )) {
+            if ( Ext.String.trim(line).charAt(0).match(/\// )) {
                 //console.log("Found Qualifier using / sign.");
                 qual = true;
             } else if ( line.match(/^[\s]*\/[\w]+=[\S]+/) ) {
@@ -526,7 +526,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         function isQualifierRunon(line) {
             var runon = false;
             //console.log("test qual runon: " + line);
-            if ( line.substr(0,20).trim() === ""  && !line.trim().charAt(0).match(/\// ) && !isLocationRunon(line) ) {
+            if ( Ext.String.trim(line.substr(0,20)) === ""  && !Ext.String.trim(line).charAt(0).match(/\// ) && !isLocationRunon(line) ) {
                 //console.log("qual runon: " + line);
                 runon = true;
             }
@@ -542,7 +542,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         function isLocationRunon(line) {
             var runon = false;
             //console.log("test loc runon: " + line);
-            if ( line.substr(0,20).trim() === ""  && line.trim().charAt(0).match(/[\d]/) && line.match(/[.]{2}/g) ) {
+            if ( Ext.String.trim(line.substr(0,20)) === ""  && Ext.String.trim(line).charAt(0).match(/[\d]/) && line.match(/[.]{2}/g) ) {
                 //console.log("loc runon: " + line);
                 runon = true;
             }
