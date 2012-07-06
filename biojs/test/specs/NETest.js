@@ -242,13 +242,16 @@ describe("ORF classes:", function() {
 		var n1;
 		var n2;
 		var n3;
+		var n4;
+		var n5;
+		var sequence;
 
 		n1 = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
 			name: "gap",
 			value: "gappy"
 		});
-		n2 = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
-			name: "Adenosine",
+		n2 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+			name: "Adenine",
 			value: "a",
 		})
 		n3 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
@@ -256,11 +259,36 @@ describe("ORF classes:", function() {
 			value: "t",
 			ambiguousMatches: n2
 		});
+		n4 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+			name: "Cytosine",
+			value: "c"
+		});
+		n5 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+			name: "Guanine",
+			value: "g"
+		});
+
+		sequence = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+			symbols: [n4, n2, n2, n5, n4, n5, n4, n5, n4, n4, n3, n2, n5],
+			alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
+		});
 
 		it("can find stop codons", function() {
 			expect(ORFFinder.evaluatePossibleStop(n1, n1, n1)).toBeTruthy();
 			expect(ORFFinder.evaluatePossibleStop(n2, n2, n2)).toBeFalsy();
 			expect(ORFFinder.evaluatePossibleStop(n3, n3, n3)).toBeTruthey();
+		});
+
+		describe("can find correct orfs", function() {
+			var orfs = ORFFinder.calculateORFs(sequence);
+			it("finds correct number", function() {
+				expect(orfs.length).toBe(1);
+			});
+
+			it("finds correct locations", function() {
+				expect(orfs[0].getFrame()).toBe(1);
+				expect(orfs[0].getStart()).toBe(1);
+			});
 		});
 	});
 });
