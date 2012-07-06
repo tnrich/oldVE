@@ -1,5 +1,5 @@
 Ext.define("Teselagen.bio.sequence.TranslationUtils", {
-<<<<<<< HEAD
+
 	requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
 			 "Teselagen.bio.sequence.alphabets.ProteinAlphabet", 
 			 "Teselagen.bio.sequence.alphabets.RNAAlphabet",
@@ -312,7 +312,5 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		
 
 	}
-=======
->>>>>>> 0cd4236546cd76394b0caa5a22b4f75e50ad1b8f
 
 });
