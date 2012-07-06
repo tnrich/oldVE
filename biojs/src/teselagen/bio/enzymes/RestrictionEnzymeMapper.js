@@ -29,7 +29,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 		
 		for(var i = 0; i < restrictionEnzymes.length; i++) {
 			var re = restrictionEnzymes[i];
-			reCuts[re.name] = cutSequenceByRestrictionEnzyme(re, symbolList);
+			reCuts[re.name] = this.cutSequenceByRestrictionEnzyme(re, symbolList);
 		}
 		
 		return reCuts;
@@ -54,8 +54,8 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 		if(reLength != restrictionEnzyme.getDsForward() + restrictionEnzyme.getDsReverse()) {
 			reLength = restrictionEnzyme.getDsForward();
 		}
-		
-		var sequence = symbolList;//.seqString();
+		console.log(symbolList.getSymbols());
+		var sequence = symbolList.seqString();
 		var seqLength = sequence.length;
 		
 		var matchIndex = sequence.search(forwardRegExpPattern);

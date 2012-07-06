@@ -3,26 +3,55 @@
  */
 Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeMapper");
+Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
+Ext.require("Teselagen.bio.sequence.symbols.GapSymbol");
+Ext.require("Teselagen.bio.tools.DigestionCalculator");
+Ext.require("Teselagen.bio.orf.ORF");
+Ext.require("Teselagen.bio.orf.ORFFinder");
 
-describe("Restriction enzyme tests:", function(){
+n1 = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+	name: "gap",
+	value: "gappy"
+});
+a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+	name: "Adenine",
+	value: "a",
+})
+n3 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+	name: "A or T",
+	value: "t",
+	ambiguousMatches: a
+});
+c = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+	name: "Cytosine",
+	value: "c"
+});
+g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+	name: "Guanine",
+	value: "g"
+});
+t = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+	name: "Thymine",
+	value: "t"
+});
+
+describe("Restriction enzyme classes:", function() {
 	//Test RestrictionEnzyme class.
 	
 	describe("RestrictionEnzyme", function() {
 		var enzyme;
 		beforeEach(function(){
 			enzyme = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
-				inData: {
-					name: "Genericase",
-					site: "GTCCAGC",
-					cutType: 0,
-					forwardRegex: "gtcc.gc",
-					reverseRegex: "gtcc.gc",
-					dsForward: 5,
-					dsReverse: 8,
-					usForward: 1,
-					usReverse: 2
-				}
+				name: "Genericase",
+				site: "GTCCAGC",
+				cutType: 0,
+				forwardRegex: "gtcc.gc",
+				reverseRegex: "gtcc.gc",
+				dsForward: 5,
+				dsReverse: 8,
+				usForward: 1,
+				usReverse: 2
 			});
 		});
 	
@@ -35,30 +64,39 @@ describe("Restriction enzyme tests:", function(){
 		});
 		
 		it("has working getters and setters?", function(){
+			expect(enzyme.getName()).toBe("Genericase");
 			enzyme.setName("My Enzyme");
 			expect(enzyme.getName()).toBe("My Enzyme");
 			
+			expect(enzyme.getSite()).toBe("GTCCAGC");
 			enzyme.setSite("GCCAGCC");
 			expect(enzyme.getSite()).toBe("GCCAGCC");
 			
+			expect(enzyme.getCutType()).toBe(0);
 			enzyme.setCutType(1);
 			expect(enzyme.getCutType()).toBe(1);
 			
+			expect(enzyme.getForwardRegex()).toBe("gtcc.gc");
 			enzyme.setForwardRegex("g+t");
 			expect(enzyme.getForwardRegex()).toBe("g+t");
 			
+			expect(enzyme.getReverseRegex()).toBe("gtcc.gc");
 			enzyme.setReverseRegex("t+g");
 			expect(enzyme.getReverseRegex()).toBe("t+g");
 			
+			expect(enzyme.getDsForward()).toBe(5);
 			enzyme.setDsForward(3);
 			expect(enzyme.getDsForward()).toBe(3);
 			
+			expect(enzyme.getDsReverse()).toBe(8);
 			enzyme.setDsReverse(4);
 			expect(enzyme.getDsReverse(4)).toBe(4);
 			
+			expect(enzyme.getUsForward()).toBe(1);
 			enzyme.setUsForward(2);
 			expect(enzyme.getUsForward(2)).toBe(2);
 			
+			expect(enzyme.getUsReverse()).toBe(2);
 			enzyme.setUsReverse(0);
 			expect(enzyme.getUsReverse(0)).toBe(0);
 		});
@@ -66,8 +104,55 @@ describe("Restriction enzyme tests:", function(){
 	
 	//Test RestrictionCutSite class.
 	
-	xdescribe("RestrictionCutSite", function() {
-		
+	describe("RestrictionCutSite", function() {
+		var enzyme;
+		var site;
+		beforeEach(function(){
+			enzyme = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+				name: "Genericase",
+				site: "GTCCAGC",
+				cutType: 0,
+				forwardRegex: "gtcc.gc",
+				reverseRegex: "gtcc.gc",
+				dsForward: 5,
+				dsReverse: 8,
+				usForward: 1,
+				usReverse: 2
+			});
+
+			site = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
+				start: 10,
+				end: 20,
+				strand: Teselagen.bio.sequence.common.StrandType.FORWARD,
+				restrictionEnzyme: enzyme
+			});
+		});
+
+		it("exists?", function() {
+			expect(site).toBeDefined();
+		});
+
+		it("has working getters and setters?", function() {
+			enzyme2 = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+				name: "Genericase 2",
+				site: "GTCCAGC",
+				cutType: 1,
+				forwardRegex: "gtcc.gc",
+				reverseRegex: "gt.gc",
+				dsForward: 50,
+				dsReverse: 8,
+				usForward: 11,
+				usReverse: 10
+			});
+
+			expect(site.getRestrictionEnzyme()).toEqual(enzyme);
+			site.setRestrictionEnzyme(enzyme2);
+			expect(site.getRestrictionEnzyme()).toEqual(enzyme2);
+
+			expect(site.getNumCuts()).toEqual(0);
+			site.setNumCuts(10);
+			expect(site.getNumCuts()).toEqual(10);
+		});
 	});
 	
 	//Test RestrictionEnzymeManager class.
@@ -122,31 +207,144 @@ describe("Restriction enzyme tests:", function(){
 		
 		
 		describe("cutSequenceByRestrictionEnzyme", function() {
-
-			it("found correct number of cut sites?", function() {
+			it("finds correct cut sites", function() {
 				waitsFor(function() {
-					return Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined;
-				});
-
-				runs(function() {	
-					var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(enzyme, "actcacgccggcatgtccagcgtcctgcgtccgcgacctg");
-					console.log(cutSites);
-					expect(cutSites.length).toBe(2);
-				});
-			});
-			
-			it("have correct start indices?", function() {
-				waitsFor(function() {
-					return Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined;
-				});
+					return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined &&
+							Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined;
+				}, "Timed out waiting for DNAAlphabet.", 2000);
 
 				runs(function() {
-					var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(enzyme, "actcacgccggcatgtccagcgtcctgcgtccgcgacctg");
+					var symList = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+						symbols: [a,t,c,a,c,g,c,c,g,g,c,a,t,g,t,c,c,a,g,c,g,t,c,c,t,g,c,g,t,c,c,g,c,g,a,c,c,t,g],
+						alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
+					});
+
+					var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(enzyme, symList);
+					expect(cutSites.length).toBe(2);
 					expect(cutSites[0].start).toBe(14);
 					expect(cutSites[1].start).toBe(21);
 				});
 			});
 		});
+	});
+});
 
+describe("ORF classes:", function() {
+	//Test ORF classes.
+	
+	describe("ORF", function() {
+		var orfVar;
+		beforeEach(function() {
+			orfVar = Ext.create("Teselagen.bio.orf.ORF", {
+				start: 5,
+				end: 100,
+				strand: Teselagen.bio.sequence.common.StrandType.FORWARD,
+				frame: 1,
+				startCodons: [1, 3, 5]
+			});
+		});
+
+		it("exists?", function() {
+			expect(orfVar).toBeDefined();
+		});
+
+		it("has working getters and setters?", function() {
+			expect(orfVar.getFrame()).toBe(1);
+			orfVar.setFrame(2);
+			expect(orfVar.getFrame()).toBe(2);
+
+			expect(orfVar.getStartCodons()).toEqual([1, 3, 5]);
+			orfVar.setStartCodons([2, 3, 4]);
+			expect(orfVar.getStartCodons()).toEqual([2, 3, 4]);
+		});
+	});
+
+	xdescribe("ORFFinder", function() {
+		var seq;
+
+		it("can find stop codons", function() {
+			expect(Teselagen.bio.orf.ORFFinder.evaluatePossibleStop(n1, n1, n1)).toBeTruthy();
+			expect(Teselagen.bio.orf.ORFFinder.evaluatePossibleStop(a, a, a)).toBeFalsy();
+			expect(Teselagen.bio.orf.ORFFinder.evaluatePossibleStop(n3, n3, n3)).toBeTruthey();
+		});
+
+		it("can find correct orfs", function() {
+
+			waitsFor(function() {
+				return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined;
+			}, "Timed out waiting for DNAAlphabet.", 2000);
+
+			runs(function() {
+				seq = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+					symbols: [c, a, a, g, c, g, c, g, c, c, n3, a, g],
+					alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
+				});
+
+				var orfs = Teselagen.bio.orf.ORFFinder.calculateORFs(seq);
+					
+				expect(orfs.length).toBe(1);
+				expect(orfs[0].getFrame()).toBe(1);
+				expect(orfs[0].getStart()).toBe(1);
+			});
+		});
+	});
+});
+
+describe("Tools:", function() {
+	describe("DigestionCalculator", function() {
+		it("can digest sequences", function() {
+			waitsFor(function() {
+				return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined;
+			}, "Timed out waiting for DNAAlphabet.", 2000);
+
+			runs(function() {
+				var symList = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+					symbols: [a,g,c,a,g,a,g,t,c,c,a,g,c,a,c,g,c,a,t,t,c,a,g,g,c,a,c,a,g,a,c,g,t],
+					alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
+				});
+				try{
+					var seq = Ext.create("Teselagen.bio.sequence.dna.DNASequence", {
+						symbolList: symList,
+						name: "Test Sequence",
+						circular: false,
+						accession: "",
+						version : 1,
+						seqVersion: 1.0,
+						symbols: [],
+						alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
+					});
+				} catch(e) {
+					console.log(e.getMessage());
+				}
+
+				var enzyme1 = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+					name: "Genericase",
+					site: "GTCCAGC",
+					cutType: 0,
+					forwardRegex: "gtcc.gc",
+					reverseRegex: "gtcc.gc",
+					dsForward: 5,
+					dsReverse: 8,
+					usForward: 1,
+					usReverse: 2
+				});
+
+				var enzyme2 = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+					name: "Genericase 2",
+					site: "cag",
+					cutType: 0,
+					forwardRegex: "cag",
+					reverseRegex: "cag",
+					dsForward: 5,
+					dsReverse: 8,
+					usForward: 1,
+					usReverse: 2
+				});
+
+				var frags = Teselagen.bio.tools.DigestionCalculator.digestSequence(seq, [enzyme1, enzyme2]);
+
+				expect(frags.length).toBe(5);
+			});
+		});
 	});
 });
