@@ -5,6 +5,7 @@
 //Testing BioException class
 //
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+
 describe("Testing BioException", function(){
 	var bioException;
 	beforeEach(function(){
@@ -28,6 +29,13 @@ describe("Testing BioException", function(){
 });
 //Testing classes in the teselagen/bio/sequence/
 describe("Testing Sequence related classes ", function() {
+	describe("Testing DNATools", {
+
+	});
+
+	describe("Testing TranslationUtils", {
+		
+	});
 	
 	//Testing classes in the teselagen/bio/sequence/alphabet
 	describe("Testing 'alphabet' classes", function(){
