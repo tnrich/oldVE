@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-enzymes-RestrictionEnzyme'>/**
+</span> * @class Teselagen.bio.enzymes.RestrictionEnzyme
+ *  
+ * Restriction Enzyme holder.
+ * 
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author)
+ */
+Ext.define(&quot;Teselagen.bio.enzymes.RestrictionEnzyme&quot;, {
+
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-constructor'>	/**
+</span>	 * Creates a RestrictionEnzyme object.
+	 * @param {Object} inData Input parameters.
+	 * @param {String} name Enzyme name.
+	 * @param {String} site Enzyme site.
+	 * @param {Int} cutType Downstream or Upstream cut type. Values: 0 = downstream, 1 = upstream
+	 * @param {String} forwardRegex Forward regular expression.
+	 * @param {String} reverseRegex Reverse regular expression.
+	 * @param {Int} dsForward Downstream 3&quot; strand cut position.
+	 * @param {Int} dsReverse Downstream 5&quot; strand cut position.
+	 * @param {Int} usForward Upstream 3&quot; strand cut position.
+	 * @param {Int} usReverse Upstream 5&quot; strand cut position.
+	 * @returns {RestrictionEnzyme} Restriction Enzyme object.
+	 */
+	
+	constructor: function(inData) {
+		if (inData) {
+			var name = inData.name;
+			var site = inData.site;
+			var cutType = inData.cutType;
+			var forwardRegex = inData.forwardRegex;
+			var reverseRegex = inData.reverseRegex;
+			var dsForward = inData.dsForward;
+			var dsReverse = inData.dsReverse;
+			var usForward = inData.usForward;
+			var usReverse = inData.usReverse;
+		} else {
+			var name;
+			var site;
+			var cutType;
+			var forwardRegex;
+			var reverseRegex;
+			var dsForward;
+			var dsReverse;
+			var usForward;
+			var usReverse;
+		}
+		
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-isPalindromic'>		/**
+</span>		 * Checks if enzyme is palindromic.
+		 * @returns {Boolean} True if enzyme has palindromic regex.
+		 */
+		this.isPalindromic = function() {
+			return forwardRegex == reverseRegex;
+		}
+		
+		this.toString = function() {
+			return &quot;RestrictionEnzyme: &quot; + name;
+		}
+		
+		/* -----------------------------------------------------
+		 * GETTERS AND SETTERS
+		 * -----------------------------------------------------*/
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getName'>		/**
+</span>		 * Get name.
+		 */
+		this.getName = function() {
+			return name;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setName'>		/**
+</span>		 * Set name.
+		 */
+		this.setName = function(pName) {
+			name = pName;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getSite'>		/**
+</span>		 * Get site.
+		 */
+		this.getSite = function() {
+			return site;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setSite'>		/**
+</span>		 * Set site.
+		 */
+		this.setSite = function(pSite) {
+			site = pSite;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getCutType'>		/**
+</span>		 * Get cutType.
+		 */
+		this.getCutType = function() {
+			return cutType;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setCutType'>		/**
+</span>		 * Set name.
+		 */
+		this.setCutType = function(pCutType) {
+			cutType = pCutType;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getForwardRegex'>		/**
+</span>		 * Get forwardRegex.
+		 */
+		this.getForwardRegex = function() {
+			return forwardRegex;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setForwardRegex'>		/**
+</span>		 * Set forwardRegex.
+		 */
+		this.setForwardRegex = function(pForwardRegex) {
+			forwardRegex = pForwardRegex;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getReverseRegex'>		/**
+</span>		 * Get reverseRegex.
+		 */
+		this.getReverseRegex = function() {
+			return reverseRegex;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setReverseRegex'>		/**
+</span>		 * Set reverseRegex.
+		 */
+		this.setReverseRegex = function(pReverseRegex) {
+			reverseRegex = pReverseRegex;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getDsForward'>		/**
+</span>		 * Get dsForward.
+		 */
+		this.getDsForward = function() {
+			return dsForward;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setDsForward'>		/**
+</span>		 * Set dsForward.
+		 */
+		this.setDsForward = function(pDsForward) {
+			dsForward = pDsForward;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getDsReverse'>		/**
+</span>		 * Get dsReverse.
+		 */
+		this.getDsReverse = function() {
+			return dsReverse;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setDsReverse'>		/**
+</span>		 * Set dsReverse.
+		 */
+		this.setDsReverse = function(pDsReverse) {
+			dsReverse = pDsReverse;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getUsForward'>		/**
+</span>		 * Get usForward.
+		 */
+		this.getUsForward = function() {
+			return usForward;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setUsForward'>		/**
+</span>		 * Set name.
+		 */
+		this.setUsForward = function(pUsForward) {
+			usForward = pUsForward;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-getUsReverse'>		/**
+</span>		 * Get usReverse.
+		 */
+		this.getUsReverse = function() {
+			return usReverse;
+		}
+<span id='Teselagen-bio-enzymes-RestrictionEnzyme-method-setUsReverse'>		/**
+</span>		 * Set usReverse.
+		 */
+		this.setUsReverse = function(pUsReverse) {
+			usReverse = pUsReverse;
+		}
+	}
+});</pre>
+</body>
+</html>

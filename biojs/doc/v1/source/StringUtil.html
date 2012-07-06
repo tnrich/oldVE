@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">
+<span id='global-method-trim'>    /**
+</span>    * StringUtil Library
+    * @description From http://sajjadhossain.com/2008/10/31/javascript-string-trimming-and-padding/
+    * @author Diana Wong
+    */
+
+//Ext.define('Teselagen.bio.util.StringUtil', {
+	
+	//singleton = true; 
+	
+
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g,&quot;&quot;);
+	}
+	 
+	//trimming space from left side of the string
+	String.prototype.ltrim = function() {
+		return this.replace(/^\s+/,&quot;&quot;);
+	}
+	 
+	//trimming space from right side of the string
+	String.prototype.rtrim = function() {
+		return this.replace(/\s+$/,&quot;&quot;);
+	}
+	
+	String.prototype.lpad = function(padString, length) {
+		var str = this;
+	    while (str.length &lt; length)
+	        str = padString + str;
+	    return str;
+	}
+	 
+	//pads right
+	String.prototype.rpad = function(padString, length) {
+		var str = this;
+	    while (str.length &lt; length)
+	        str = str + padString;
+	    return str;
+	}
+//});</pre>
+</body>
+</html>
