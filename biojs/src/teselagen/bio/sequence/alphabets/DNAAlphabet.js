@@ -12,7 +12,7 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 	singleton: true,
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet",
 	requires: ["Teselagen.bio.sequence.symbols.NucleotideSymbol"],
-	
+	//statics: {
 	
 		a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []}),
 		g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []}), 
@@ -34,98 +34,99 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 		 * Returns data about the Adenine NucleotideSymbol
 		 * @return {NucleotideSymbol} returns the datastructure for the "a" nucleotide
 		 */
+		getA: function() { 
+			return this.a;
+		},
+		/**
+		*
+		 * Returns data about the Guanine NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the "g" nucleotide
+		  */
+		getG: function() { 
+			return this.g; 
+		},
+
+		/**
+		 * Returns data about the Cytosine NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the "c" nucleotide
+		 */
+		getC: function(){ 
+			return this.c; 
+		},
+
+		/**
+		 * Returns data about the Thymine NucleotideSymbol
+		 * @return {NucleotideSymbol} [description]
+		 */
+		getT: function(){ return this.t; },
+
+		/**
+		  * Returns data about the "Ambiguous a or c" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c nucleotide
+		 */
+		getM: function(){ return this.m; },
+
+		/**
+		  * Returns data about the "Ambiguous a or g" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or g nucleotide
+		 */
+		getR: function(){ return this.r; },
+
+		/**
+		  * Returns data about the "Ambiguous a or t" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t nucleotide
+		 */
+		getW: function(){ return this.w; },
+
+		/**
+		  * Returns data about the "Ambiguous c or g" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or g nucleotide
+		 */
+		getS: function(){ return this.s; },
+		/**
+		*
+		  * Returns data about the "Ambiguous c or t" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or t nucleotide
+		  */
+		getY: function(){ return this.y; },
+
+		/**
+		  * Returns data about the "Ambiguous g or t" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous g or t nucleotide
+		 */
+		getK: function(){ return this.k; },
+
+		/**
+		  * Returns data about the "Ambiguous a or c or g" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c or g nucleotide
+		 */
+		getV: function(){ return this.v; },
+
+		/**
+		  * Returns data about the "Ambiguous a or c or t" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c or t nucleotide
+		 */
+		getH: function(){ return this.h; },
+
+		/**
+		  * Returns data about the "Ambiguous a or g or t" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or g or t nucleotide
+		 */
+		getD: function(){ return this.d; },
+
+		/**
+		  * Returns data about the "Ambiguous c or g or t" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or g or t nucleotide
+		 */
+		getB: function(){ return this.b; },
+
+		/**
+		  * Returns data about the "Ambiguous a or t or g or c" NucleotideSymbol
+		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t or g or c nucleotide
+		 */
+		getN: function(){ return this.n; },
 		
-		testlog: function() {
-			console.log("Test Singleton");
-		}
-
-		// getA: function() { 
-		// 	return this.a; 
-		// }
-
-		// *
-		//  * Returns data about the Guanine NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the "g" nucleotide
-		 
-		// getG: function() { return this.g; }
-
-		// /**
-		//  * Returns data about the Cytosine NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the "c" nucleotide
-		//  */
-		// getC: function(){ return c; }
-
-		// /**
-		//  * Returns data about the Thymine NucleotideSymbol
-		//  * @return {NucleotideSymbol} [description]
-		//  */
-		// getT: function(){ return t; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or c" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c nucleotide
-		//  */
-		// getM: function(){ return m; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or g" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or g nucleotide
-		//  */
-		// getR: function(){ return r; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or t" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t nucleotide
-		//  */
-		// getW: function(){ return w; }
-
-		// /**
-		//   * Returns data about the "Ambiguous c or g" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or g nucleotide
-		//  */
-		// getS: function(){ return s; }
-
-		// *
-		//   * Returns data about the "Ambiguous c or t" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or t nucleotide
-		 
-		// getY: function(){ return y; }
-
-		// /**
-		//   * Returns data about the "Ambiguous g or t" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous g or t nucleotide
-		//  */
-		// getK: function(){ return k; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or c or g" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c or g nucleotide
-		//  */
-		// getV: function(){ return v; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or c or t" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or c or t nucleotide
-		//  */
-		// getH: function(){ return h; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or g or t" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or g or t nucleotide
-		//  */
-		// getD: function(){ return d; }
-
-		// /**
-		//   * Returns data about the "Ambiguous c or g or t" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous c or g or t nucleotide
-		//  */
-		// getB: function(){ return b; }
-
-		// /**
-		//   * Returns data about the "Ambiguous a or t or g or c" NucleotideSymbol
-		//  * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t or g or c nucleotide
-		//  */
-		// getN: function(){ return n; }
+	//}
 
 	
 });

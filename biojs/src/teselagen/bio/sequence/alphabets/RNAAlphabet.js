@@ -20,19 +20,19 @@ Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
         b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g' or 'u'}", value: "b", ambiguousMatches: [c, g, u]}), 
         n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u' or 'g' or 'c'}", value: "n", ambiguousMatches: [a, c, g, u]}),
         
-        getA: function (){ return a; }
-       getG: function (){ return g; }
-       getC: function (){ return c; }
-       getU: function (){ return u; }
-       getM: function (){ return m; }
-       getR: function (){ return r; }
-       getW: function (){ return w; }
-       getS: function (){ return s; }
-       getY: function (){ return y; }
-       getK: function (){ return k; }
-       getV: function (){ return v; }
-       getH: function (){ return h; }
-       getD: function (){ return d; }
-       getB: function (){ return b; }
-       getN: function (){ return n; }
+        getA: function (){ return this.a; }
+       getG: function (){ return this.g; }
+       getC: function (){ return this.c; }
+       getU: function (){ return this.u; }
+       getM: function (){ return this.m; }
+       getR: function (){ return this.r; }
+       getW: function (){ return this.w; }
+       getS: function (){ return this.s; }
+       getY: function (){ return this.y; }
+       getK: function (){ return this.k; }
+       getV: function (){ return this.v; }
+       getH: function (){ return this.h; }
+       getD: function (){ return this.d; }
+       getB: function (){ return this.b; }
+       getN: function (){ return this.n; }
 });

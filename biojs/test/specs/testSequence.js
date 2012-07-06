@@ -69,10 +69,9 @@ describe("Testing Sequence related classes ", function() {
 				});
 
 				runs(function() {	
-					//var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
-					//console.log(a.getName());
-					Teselagen.bio.sequence.alphabets.DNAAlphabet.testlog();
-					//expect(a.getName()).toMatch("Adenine");
+					var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
+					//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
+					expect(a.getName()).toMatch("Adenine");
 				});
 
 				//var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
