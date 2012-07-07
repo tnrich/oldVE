@@ -53,7 +53,7 @@ Ext.define("Teselagen.bio.sequence.alphabets.ProteinAlphabet", {
    getGlutamic:  function (){ return this.e; },
    getGlutamine:  function (){ return this.q; },
    getGlycine:  function (){ return this.g; },
-   geidine:  function (){ return this.h; },
+   getHistidine:  function (){ return this.h; },
    getIsoleucine:  function (){ return this.i; },
    getLeucine:  function (){ return this.l; },
    getLysine:  function (){ return this.k; },

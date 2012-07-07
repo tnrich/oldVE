@@ -5,6 +5,9 @@
 //Testing BioException class
 //
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+
 describe("Testing BioException", function(){
 	var bioException;
 	beforeEach(function(){
@@ -28,6 +31,13 @@ describe("Testing BioException", function(){
 });
 //Testing classes in the teselagen/bio/sequence/
 describe("Testing Sequence related classes ", function() {
+	describe("Testing DNATools", function(){
+
+	});
+
+	describe("Testing TranslationUtils", function(){
+		
+	});
 	
 	//Testing classes in the teselagen/bio/sequence/alphabet
 	describe("Testing 'alphabet' classes", function(){
@@ -70,26 +80,51 @@ describe("Testing Sequence related classes ", function() {
 
 				runs(function() {	
 					var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
-					//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
 					expect(a.getName()).toMatch("Adenine");
 				});
-
-				//var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
-				//Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
-				
-				//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
-				//expect(a.getName()).toMatch("Adenine");*/
 			});	
 		});
 
-		/*
 		describe("ProteinAlphabet tests", function(){
-			
+			it("get{by abbreviation} works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.ProteinAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var h = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getH();
+					//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
+					expect(h.getValue()).toMatch("H");
+					expect(h.getName()).toMatch("Histidine");
+				});
+			});
+
+			it("get{by name} works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.ProteinAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var histidine = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getHistidine();
+					expect(histidine.getValue()).toMatch("H");
+				});
+			});		
 		});
 
 		describe("RNAAlphabet tests", function(){
-			
-		});*/
+			it("get{by abbreviation} works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.RNAAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var m = Teselagen.bio.sequence.alphabets.RNAAlphabet.getM();
+					console.log(m.getValue());
+					//expect(m.getAmbiguousMatches().getValue()).toMatch("a");
+					//expect(m.getAmbiguousMatches().getValue()).toMatch("a");
+				});
+			});
+		});
 	});
     	
 	//Testing classes in the teselagen/bio/sequence/common

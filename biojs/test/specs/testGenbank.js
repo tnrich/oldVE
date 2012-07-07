@@ -4,7 +4,7 @@
 
 //Ext.require('Teselagen.bio.util.StringUtil');
 Ext.require("Ext.Ajax");
-
+Ext.require("Teselagen.StringUtil");
 describe("Testing Genbank related classes ", function() {
     var dt =  Ext.create("Data");
     var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
@@ -13,13 +13,13 @@ describe("Testing Genbank related classes ", function() {
 
         it("Works?",function(){
             var str = "  black  ";
-            expect("a" + str.trim() + "b").toBe("ablackb");
+            expect("a" + Teselagen.StringUtil.trim(str) + "b").toBe("ablackb");
             expect(Ext.String.trim(str)).toBe("black");
-            expect("a" + str.ltrim() + "b").toBe("ablack  b");  //result "ablack b"
-            expect("a" + str.rtrim() + "b").toBe("a  blackb");  //result "a blackb"
+            expect("a" + Teselagen.StringUtil.ltrim(str) + "b").toBe("ablack  b");  //result "ablack b"
+            expect("a" + Teselagen.StringUtil.rtrim(str) + "b").toBe("a  blackb");  //result "a blackb"
             var str = "5";
-            expect("" + str.lpad("0", 5)).toBe("00005"); //result "00005"
-            expect("" + str.rpad("0", 5)).toBe("50000"); //result "50000"
+            expect("" + Teselagen.StringUtil.lpad(str, "0", 5)).toBe("00005"); //result "00005"
+            expect("" + Teselagen.StringUtil.rpad(str, "0", 5)).toBe("50000"); //result "50000"
             expect(false).toBe(false);
         });
 

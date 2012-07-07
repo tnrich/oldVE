@@ -75,9 +75,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         this.toString = function() {
             var line;
             if (quoted) {
-                line = "/".lpad(" ", 22) + name + "=\"" + value + "\"";
+                line = Teselagen.StringUtil.lpad("/", " ", 22) + name + "=\"" + value + "\"";
             } else {
-                line = "/".lpad(" ", 22) + name + "=" + value ;
+                line = Teselagen.StringUtil.lpad("/"," ", 22) + name + "=" + value ;
             }
             return line;
         }

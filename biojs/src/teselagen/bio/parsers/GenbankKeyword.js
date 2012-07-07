@@ -75,7 +75,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
          */
         this.toString = function() {
             var width = 80-12;
-            var line = that.keyword.rpad(" ", 12); // + this.value;
+            var line = Teselagen.StringUtil.rpad(that.keyword, " ", 12); // + this.value;
             line += that.value;
 
             /*line += that.value.substring(0,width)

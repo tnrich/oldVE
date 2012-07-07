@@ -1,10 +1,12 @@
 Ext.define("Teselagen.bio.sequence.TranslationUtils", {
+
 	requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
 			 "Teselagen.bio.sequence.alphabets.ProteinAlphabet", 
 			 "Teselagen.bio.sequence.alphabets.RNAAlphabet",
 			 "Teselagen.bio.sequence.common.SymbolList",
-			 "Teselagen.bio.sequence.symbols.GapSymbol"],
-			 //write Teselagen.bio.sequence.symbols.IllegalSymbolException
+			 "Teselagen.bio.sequence.symbols.GapSymbol", 
+			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
+			 //write 
 	constructor: function(inData){
 		if (inData) {
 			var dnaToRNATranslationTable = inData.dnaToRNATranslationTable;
