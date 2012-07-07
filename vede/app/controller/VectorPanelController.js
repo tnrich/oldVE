@@ -35,8 +35,8 @@ Ext.define('Vede.controller.VectorPanelController', {
         vp.add(drawComponent);
     },
 
-    onClickPie: function() {
-        console.log('Click');
+    onClickPie: function(t,e) {
+        console.log(e.getXY());
     }
 
 });
