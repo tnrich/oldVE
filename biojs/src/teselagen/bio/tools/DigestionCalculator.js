@@ -86,6 +86,7 @@ Ext.define("Teselagen.bio.tools.DigestionCalculator", {
 	},
 
 	/**
+	 * @private
 	 * Helper function for sorting two restriction cut sites.
 	 * 
 	 * @param {Teselagen.bio.enzymes.RestrictionCutSite} x

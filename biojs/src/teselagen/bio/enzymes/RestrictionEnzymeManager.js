@@ -19,7 +19,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	
 	/**
 	 * Retrieves and returns common enzymes from common.xml.
-	 * Relies on asynchronous network requests, 
+	 * @return {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} List of common enzymes.
 	 */
 	getCommonRestrictionEnzymes: function() {
 		if(this.commonRestrictionEnzymes != null) {
@@ -32,7 +32,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	
 	/**
 	 * Retrieves and returns rebase enzymes from rebase.xml.
-	 * Relies on asynchronous network requests, 
+	 * @return {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} List of enzymes in REBASE.
 	 */
 	getRebaseRestrictionEnzymes: function() {
 		if(this.rebaseRestrictionEnzymes != null) {
@@ -44,6 +44,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	},
 
 	/**
+	 * @private
 	 * Retrieves xml text from a given url, hands it to the parser, 
 	 * and writes the enzymes to a variable.
 	 * @param {String} url The url to retrieve data from.
@@ -67,6 +68,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 	},
 	
 	/**
+	 * @private
 	 * Parses XML text and returns an array of RestrictionEnzyme objects.
 	 * @param {String} xml XML string to parse.
 	 * @returns {Array} enzymeList An array of RestrictionEnzyme objects.
@@ -125,6 +127,11 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
 		return enzymeList;
 	},
 	
+	/**
+	 * @private
+	 * Helper function to get XML from a file on the server.
+	 * @return Either an XMLHttpRequest object or an ActiveXObject (for IE users).
+	 */
 	createXMLHttpRequest: function() {
 		try { return new XMLHttpRequest(); } catch(e) {}
 		try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {}

@@ -49,10 +49,17 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		this.seqString = function (){
 			var buffer = [];
+			var string = "";
 
 			for ( var i = 0; i < symbols.length; ++i ) {
 				buffer[i] = symbols[i].getValue().charCodeAt(0);;
 			}
+
+			for(var i = 0; i < buffer.length; i++) {
+				string += String.fromCharCode(buffer[i]);
+			}
+
+			return string;
 		}
 
 		this.clear = function (){

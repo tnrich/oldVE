@@ -9,7 +9,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 	constructor: function(data){
 		var name = data.name;
 		var value = data.value;
-		var ambiguousMatches = data.ambiguousMatches || null;
+		var ambiguousMatches = data.ambiguousMatches;
 
 		this.getName = function(){
 			return name;

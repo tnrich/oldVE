@@ -1,11 +1,12 @@
 Ext.define("Teselagen.bio.sequence.TranslationUtils", {
-<<<<<<< HEAD
+
 	requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
 			 "Teselagen.bio.sequence.alphabets.ProteinAlphabet", 
 			 "Teselagen.bio.sequence.alphabets.RNAAlphabet",
 			 "Teselagen.bio.sequence.common.SymbolList",
-			 "Teselagen.bio.sequence.symbols.GapSymbol"]
-			 //write Teselagen.bio.sequence.symbols.IllegalSymbolException
+			 "Teselagen.bio.sequence.symbols.GapSymbol", 
+			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
+			 //write 
 	constructor: function(inData){
 		if (inData) {
 			var dnaToRNATranslationTable = inData.dnaToRNATranslationTable;
@@ -89,7 +90,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		this.rnaToProteinSymbol = function(pNucleotide1, pNucleotide2, pNucleotide3){
 			initializeAminoAcidsTranslationTable();
 
-			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
 				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
 			};
 
@@ -129,7 +130,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		this.isStartCodon = function (pNucleotide1, pNucleotide2, pNucleotide3) {
 			var result = false;
 
-			if Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
 				return result;
 			};
 
@@ -141,7 +142,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		this.isStopCodon = function(pNucleotide1, pNucleotide2, pNucleotide3){
 			var result = false;
 
-			if Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
 				return result;
 			};
 
@@ -312,7 +313,4 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		
 
 	}
-=======
->>>>>>> 0cd4236546cd76394b0caa5a22b4f75e50ad1b8f
-
 });

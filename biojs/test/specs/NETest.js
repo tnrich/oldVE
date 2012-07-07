@@ -18,11 +18,6 @@ a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
 	name: "Adenine",
 	value: "a",
 })
-n3 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
-	name: "A or T",
-	value: "t",
-	ambiguousMatches: a
-});
 c = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
 	name: "Cytosine",
 	value: "c"
@@ -34,6 +29,11 @@ g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
 t = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
 	name: "Thymine",
 	value: "t"
+});
+n3 = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
+	name: "A or T",
+	value: "t",
+	ambiguousMatches: [a, t]
 });
 
 describe("Restriction enzyme classes:", function() {
@@ -221,8 +221,10 @@ describe("Restriction enzyme classes:", function() {
 
 					var cutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequenceByRestrictionEnzyme(enzyme, symList);
 					expect(cutSites.length).toBe(2);
-					expect(cutSites[0].start).toBe(14);
-					expect(cutSites[1].start).toBe(21);
+					expect(cutSites[0].start).toBe(13);
+					expect(cutSites[0].end).toBe(19)
+					expect(cutSites[1].start).toBe(20);
+					expect(cutSites[1].end).toBe(26);
 				});
 			});
 		});
@@ -259,14 +261,8 @@ describe("ORF classes:", function() {
 		});
 	});
 
-	xdescribe("ORFFinder", function() {
+	describe("ORFFinder", function() {
 		var seq;
-
-		it("can find stop codons", function() {
-			expect(Teselagen.bio.orf.ORFFinder.evaluatePossibleStop(n1, n1, n1)).toBeTruthy();
-			expect(Teselagen.bio.orf.ORFFinder.evaluatePossibleStop(a, a, a)).toBeFalsy();
-			expect(Teselagen.bio.orf.ORFFinder.evaluatePossibleStop(n3, n3, n3)).toBeTruthey();
-		});
 
 		it("can find correct orfs", function() {
 
@@ -345,6 +341,12 @@ describe("Tools:", function() {
 
 				expect(frags.length).toBe(5);
 			});
+		});
+	});
+
+	describe("TemperatureCalculator", function() {
+		it("can calculate temperature correctly", function() {
+
 		});
 	});
 });
