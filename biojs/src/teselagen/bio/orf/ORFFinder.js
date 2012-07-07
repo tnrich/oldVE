@@ -28,7 +28,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			minimumLength = -1;
 		}
 
-		if(typeof(dnaSymbolList) === "undefined" || dnaSymbolList.length < 6) {
+		if(typeof(dnaSymbolList) === "undefined" || dnaSymbolList.seqString().length < 6) {
 			return [];
 		}
 
@@ -88,13 +88,30 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		return result.concat(orfs1Forward, orfs2Forward, orfs3Forward, reverseCombined);
 	},
 
+	/**
+	 * @private
+	 * Finds ORFs in a given DNA strand in a given frame.
+	 * 
+	 * @param  {Int} frame The frame to look in.
+	 * @param  {Teselagen.bio.sequence.common.SymbolList} dnaSymbolList The dna sequence.
+	 * @param  {Int} minimumLength The minimum length of ORF to return.
+	 * @param  {Teselagen.bio.sequence.common.StrandType} strand The strand we are looking at.
+	 * 
+	 * @return {Array<Teselagen.bio.orf.ORF>} The list of ORFs found.
+	 */
 	orfPerFrame: function(frame, dnaSymbolList, minimumLength, strand) {
 		if(typeof(minimumLength) === "undefined") {
 			minimumLength = -1;
 		}
 
+		tu = Ext.create("Teselagen.bio.sequence.TranslationUtils", {
+			dnaToRNATranslationTable: null,
+			rnaToDNATranslationTable: null,
+			aminoAcidsTranslationTable: null
+		});
+
 		var orfs = [];
-		var sequenceLength = dnaSymbolList.length;
+		var sequenceLength = dnaSymbolList.seqString().length;
 
 		var index = frame;
 		var startIndex = -1;
@@ -107,19 +124,19 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			var n2 = dnaSymbolList.symbolAt(index + 1);
 			var n3 = dnaSymbolList.symbolAt(index + 2);
 
-			var aaSymbol = TranslationUtils.dnaToProteinSymbol(n1, n2, n3);
+			var aaSymbol = tu.dnaToProteinSymbol(n1, n2, n3);
 
 			possibleStopCodon = false;
 
 			// Check if current codon could be a stop codon.
-			if(aaSymbol === ProteinAlphabet.instance.gap && !TranslationUtils.isStartCodon(n1, n2, n3)) {
+			if(aaSymbol === ProteinAlphabet.instance.gap && !tu.isStartCodon(n1, n2, n3)) {
 				if(evaluatePossibleStop(n1, n2, n3)) {
 					possibleStopCodon = true;
 				}
 			}
 
 			// If we've found a start codon, add its index to startCodonIndexes.
-			if(!possibleStopCodon && TranslationUtils.isStartCodon(n1, n2, n3)) {
+			if(!possibleStopCodon && tu.isStartCodon(n1, n2, n3)) {
 				// If we're not currently in an ORF, start evaluating a new potential ORF at current index.
 				if(startIndex == -1) {
 					startIndex = index;
@@ -137,7 +154,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
 			// If we've reached a stop codon with a corresponding start codon and
 			// its length is greater than minimumLength, create an ORF object and add it to orfs.
-			if(possibleStopCodon || TranslationUtils.isStopCodon(n1, n2, n3)) {
+			if(possibleStopCodon || tu.isStopCodon(n1, n2, n3)) {
 				if(startIndex != -1) {
 					endIndex = index + 2;
 					if(minimumLength == -1 || (Math.abs(endIndex - startIndex) + 1 >= minimumLength)) {
@@ -166,21 +183,31 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		return orfs;
 	},
 
+	/**
+	 * @private
+	 * Takes three nucleotides and determines if they (and their ambiguous matches) form a stop codon.
+	 * 
+	 * @param  {Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)} nucleotideOne
+	 * @param  {Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)} nucleotideTwo
+	 * @param  {{Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)}} nucleotideThree
+	 * 
+	 * @return {Boolean} True if the nucleotides given form a stop codon.
+	 */
 	evaluatePossibleStop: function(nucleotideOne, nucleotideTwo, nucleotideThree) {
-		if(nucleotideOne instanceof Teselagen.bio.sequence.symbols.GapSymbol || 
-			(nucleotideTwo instanceof Teselagen.bio.sequence.symbols.GapSymbol || 
-			nucleotideThree instanceof Teselagen.bio.sequence.symbols.GapSymbol)) {
+		if(Ext.getClassName(nucleotideOne) === "Teselagen.bio.sequence.symbols.GapSymbol" || 
+			(Ext.getClassName(nucleotideTwo) === "Teselagen.bio.sequence.symbols.GapSymbol" || 
+			Ext.getClassName(nucleotideThree) === "Teselagen.bio.sequence.symbols.GapSymbol")) {
 			return true;
 		}
 
-		var n1 = nucleotideOne.ambiguousMatches ? nucleotideOne.ambiguousMatches : [nucleotideOne];
-		var n2 = nucleotideTwo.ambiguousMatches ? nucleotideTwo.ambiguousMatches : [nucleotideTwo];
-		var n3 = nucleotideThree.ambiguousMatches ? nucleotideThree.ambiguousMatches : [nucleotideThree];
+		var n1 = nucleotideOne.getAmbiguousMatches() ? nucleotideOne.getAmbiguousMatches() : [nucleotideOne];
+		var n2 = nucleotideTwo.getAmbiguousMatches() ? nucleotideTwo.getAmbiguousMatches() : [nucleotideTwo];
+		var n3 = nucleotideThree.getAmbiguousMatches() ? nucleotideThree.getAmbiguousMatches() : [nucleotideThree];
 
 		for(var i1 = 0; i1 < n1.length; i1++) {
 			for(var i2 = 0; i2 < n2.length; i2++) {
 				for(var i3 = 0; i3 <n3.length; i3++) {
-					if(Teselagen.bio.sequence.TranslationUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
+					if(tu.isStopCodon(n1[i1], n2[i2], n3[i3])) {
 						return true;
 					}
 				}
@@ -190,6 +217,14 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		return false;
 	},
 
+	/**
+	 * @private
+	 * Sorting function for sorting codons.
+	 * 
+	 * @param a
+	 * @param b
+	 * @return {Int} Sort order.
+	 */
 	codonsSort: function(a, b) {
 		if(a > b) {
 			return 1;
