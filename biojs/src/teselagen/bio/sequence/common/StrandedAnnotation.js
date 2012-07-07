@@ -8,15 +8,18 @@
  */
 
 Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
+	extend: 'Teselagen.bio.sequence.common.Annotation',
+	
 	constructor: function(data){
 
-		//extend: 'Teselagen.bio.sequence.common.Annotation',
 
-		var start = data.start;
-		var end = data.end;
-		var strand = data.strand;
+		start = data.start;
+		end = data.end;
+		strand = data.strand;
 
-		this.callParent(data);
+		console.log(strand);
+
+		this.callParent([data]);
 
 		this.getStrand = function(){
 			return strand;

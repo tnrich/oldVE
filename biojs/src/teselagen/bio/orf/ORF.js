@@ -24,7 +24,7 @@ Ext.define("Teselagen.bio.orf.ORF", {
 		var frame;
 		var startCodons;
 
-		this.callParent(arguments);
+		this.callParent([inData]);
 
 		if(typeof(inData.frame) === "undefined") {
 			frame = 0;

@@ -25,6 +25,8 @@ Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
 		var restrictionEnzyme;
 		var numCuts = 0;
 
+		this.callParent([inData]);
+
 		if (inData){        
 			that.start = inData.start;
 			that.end = inData.end;

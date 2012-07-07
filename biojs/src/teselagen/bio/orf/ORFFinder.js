@@ -103,6 +103,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		if(typeof(minimumLength) === "undefined") {
 			minimumLength = -1;
 		}
+		if(typeof(strand) === "undefined") {
+			strand = 1;
+		}
 
 		tu = Ext.create("Teselagen.bio.sequence.TranslationUtils", {
 			dnaToRNATranslationTable: null,
@@ -129,8 +132,8 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			possibleStopCodon = false;
 
 			// Check if current codon could be a stop codon.
-			if(aaSymbol === ProteinAlphabet.instance.gap && !tu.isStartCodon(n1, n2, n3)) {
-				if(evaluatePossibleStop(n1, n2, n3)) {
+			if(aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap && !tu.isStartCodon(n1, n2, n3)) {
+				if(this.evaluatePossibleStop(n1, n2, n3)) {
 					possibleStopCodon = true;
 				}
 			}
@@ -161,13 +164,13 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 						if(startCodonIndexes == null) {
 							startCodonIndexes = [];
 						}
-						orfs.push(Ext.create("Teselagen.bio.orf.ORF"), {
+						orfs.push(Ext.create("Teselagen.bio.orf.ORF", {
 							start: startIndex,
 							end: endIndex + 1,
 							strand: strand,
 							frame: frame,
 							startCodons: startCodonIndexes
-						});
+						}));
 					}
 				}
 

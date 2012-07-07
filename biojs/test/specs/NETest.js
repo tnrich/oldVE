@@ -5,6 +5,7 @@ Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeMapper");
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
+Ext.require("Teselagen.bio.sequence.common.StrandType");
 Ext.require("Teselagen.bio.sequence.symbols.GapSymbol");
 Ext.require("Teselagen.bio.tools.DigestionCalculator");
 Ext.require("Teselagen.bio.orf.ORF");
@@ -195,11 +196,6 @@ describe("Restriction enzyme classes:", function() {
 			usReverse: 2
 		});
 
-		var sequence = Ext.create("Teselagen.bio.sequence.common.StrandedAnnotation", {
-			start: 0,
-			end: 39,
-			strand: "actcacgccggcatgtccagcgtcctgcgtccgcgacctg"
-		});
 
 		it("exists?", function() {
 			expect(Teselagen.bio.enzymes.RestrictionEnzymeMapper).toBeDefined();
@@ -210,10 +206,17 @@ describe("Restriction enzyme classes:", function() {
 			it("finds correct cut sites", function() {
 				waitsFor(function() {
 					return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined &&
-							Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined;
+							Teselagen.bio.enzymes.RestrictionEnzymeMapper != undefined &&
+							Teselagen.bio.sequence.common.StrandType;
 				}, "Timed out waiting for DNAAlphabet.", 2000);
 
 				runs(function() {
+					var sequence = Ext.create("Teselagen.bio.sequence.common.StrandedAnnotation", {
+						start: 0,
+						end: 39,
+						strand: Teselagen.bio.sequence.common.StrandType.BACKWARD
+					});
+
 					var symList = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
 						symbols: [a,t,c,a,c,g,c,c,g,g,c,a,t,g,t,c,c,a,g,c,g,t,c,c,t,g,c,g,t,c,c,g,c,g,a,c,c,t,g],
 						alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
@@ -272,7 +275,7 @@ describe("ORF classes:", function() {
 
 			runs(function() {
 				seq = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
-					symbols: [c, a, a, g, c, g, c, g, c, c, n3, a, g],
+					symbols: [c, a, t, g, a, a, g, c, g, c, g, c, c, n3, a, g],
 					alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
 				});
 

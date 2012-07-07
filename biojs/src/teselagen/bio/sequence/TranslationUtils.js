@@ -105,6 +105,24 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			return symbol;
 		}
 
+		this.dnaToProteinSymbol = function(pNucleotide1, pNucleotide2, pNucleotide3) {
+			initializeAminoAcidsTranslationTable();
+
+			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
+			};
+
+			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
+
+			var symbol = aminoAcidsTranslationTable[triplet];
+
+			if(symbol == null) {
+				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap;
+			}
+
+			return symbol;
+		}
+
 		this.rnaToProtein = function(pSymbolList){
 			var length = pSymbolList.length - (pSymbolList.length % 3);
 

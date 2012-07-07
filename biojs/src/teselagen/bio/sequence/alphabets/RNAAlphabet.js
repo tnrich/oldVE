@@ -8,7 +8,7 @@ Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
         g: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: null}), 
         c: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: null}), 
         u: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: null}),
-        m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c'}", value: "m", ambiguousMatches: [this.getA(), this.getC()]}), 
+        m: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'c'}", value: "m", ambiguousMatches: [this.a, this.c]}), 
         r: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'g'}", value: "r", ambiguousMatches: [this.a, this.g] }), 
         w: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u'}", value: "s", ambiguousMatches: [this.a, this.u]}), 
         s: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g'}", value: "s", ambiguousMatches: [this.c, this.g]}), 
