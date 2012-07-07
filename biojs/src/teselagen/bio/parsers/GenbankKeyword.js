@@ -1,6 +1,6 @@
 
 /**
- * GenbankKeyword class 
+ * GenbankKeyword 
  * Class for Keywords. Same level as GebankLocusKeyword, GenbankFeaturesKeyword, and GenbankOriginKeyword.
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -45,7 +45,6 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
          */
         this.addSubKeyword = function(subkey) {
             if (that.subKeywords === undefined) {
-                //console.log("BLAH");
                 that.subKeywords = [];
             }
             that.subKeywords.push(subkey);

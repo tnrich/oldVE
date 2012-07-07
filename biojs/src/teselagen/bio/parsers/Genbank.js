@@ -1,6 +1,6 @@
 
 /**
-  * Genbank class. 
+  * Genbank. 
   * Sets up an empty shell object with Genbank information and methods that is later populated by GenbankFormat.js
   * @author Diana Wong
   * @author Timothy Ham (original author of GenbankFileModel.js)
@@ -158,9 +158,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 			var entry;
 			for (var i=0; i < keywords.length; i++) {
 				entry = keywords[i];
-				//console.log(entry);
 				gbStr += keywords[i].toString() + "\n";
-				//console.log(Ext.getClassName(keywords[i]));
 			}
 			gbStr += "//";
 			return gbStr;

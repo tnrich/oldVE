@@ -1,58 +1,58 @@
 
-    /**
-    * StringUtil Library
-    * Code from http://sajjadhossain.com/2008/10/31/javascript-string-trimming-and-padding/
-    * @author Diana Wong
-    */
+/**
+ * StringUtil Library
+ * Code from http://sajjadhossain.com/2008/10/31/javascript-string-trimming-and-padding/
+ * @author Diana Wong
+ */
 
 Ext.define("Teselagen.bio.util.StringUtil", {
-	
-	singleton: true,
-	alternateClassName: "Teselagen.StringUtil",
-	
-	/** Trims white space at beginning and end of string
-	 * @param {String} line
-	 * @returns {String} line
-	 */
-	trim: function(line) {
-		return line.replace(/^\s+|\s+$/g,"");
-	},
-	 
-	/** Trims white space at beginning string
+
+    singleton: true,
+    alternateClassName: "Teselagen.StringUtil",
+
+    /** Trims white space at beginning and end of string
      * @param {String} line
      * @returns {String} line
      */
-	ltrim: function(line) {
-		return line.replace(/^\s+/,"");
-	},
-	 
-	/** Trims white space at end of string
+    trim: function(line) {
+        return line.replace(/^\s+|\s+$/g,"");
+    },
+
+    /** Trims white space at beginning string
      * @param {String} line
      * @returns {String} line
      */
-	rtrim: function(line) {
-		return line.replace(/\s+$/,"");
-	},
-	
-	/** Pads white space at beginning of string
+    ltrim: function(line) {
+        return line.replace(/^\s+/,"");
+    },
+
+    /** Trims white space at end of string
      * @param {String} line
      * @returns {String} line
      */
-	lpad: function(line, padString, length) {
-		var str = line;
-	    while (str.length < length)
-	        str = padString + str;
-	    return str;
-	},
-	 
-	/** Pads white space at end of string
+    rtrim: function(line) {
+        return line.replace(/\s+$/,"");
+    },
+
+    /** Pads white space at beginning of string
      * @param {String} line
      * @returns {String} line
      */
-	rpad: function(line, padString, length) {
-		var str = line;
-	    while (str.length < length)
-	        str = str + padString;
-	    return str;
-	}
+    lpad: function(line, padString, length) {
+        var str = line;
+        while (str.length < length)
+            str = padString + str;
+        return str;
+    },
+
+    /** Pads white space at end of string
+     * @param {String} line
+     * @returns {String} line
+     */
+    rpad: function(line, padString, length) {
+        var str = line;
+        while (str.length < length)
+            str = str + padString;
+        return str;
+    }
 });

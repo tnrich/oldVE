@@ -1,6 +1,6 @@
 
 /**
- * GenbankLocusKeyword class. 
+ * GenbankLocusKeyword 
  * Class for GenbankLocusKeyword. Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
  * Specificfor parsing the Locus line.
  * @author Diana Wong

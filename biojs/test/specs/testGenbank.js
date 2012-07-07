@@ -224,6 +224,7 @@ describe("Testing Genbank related classes ", function() {
             //"//";
             tmp = gbMan.parseGenbankFile(line);
             expect(line).toMatch(tmp.findKeyword("ORIGIN").toString());
+            expect(tmp.findKeyword("ORIGIN").getSequence()).toBe("gacgtcttatgacaacttgacggctacatcattcactttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgcgagaaatagagttgatcgtc");
         });
     });
 

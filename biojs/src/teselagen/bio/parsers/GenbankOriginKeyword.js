@@ -91,8 +91,6 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
             return json;
         }
 
-
-
         return this;
     }
 

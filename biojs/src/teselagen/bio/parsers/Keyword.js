@@ -35,38 +35,8 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
 			this.value = inData.value;
 		}
 		
-		/*
-		 * Get keyword
-		 * @returns {String} keyword
-		 *
-		this.getKeyword = function() {
-			return this.keyword;
-		}
-		/*
-		 * Set keyword
-		 * @param {String} pKeyword
-		 *
-		this.setKeyword = function(pKeyword) {
-			this.keyword = pKeyword;
-		}
-		/*
-		 * Get value
-		 * @returns {String} value
-		 *
-		this.getValue = function() {
-			return this.value;
-		}
-		/*
-		 * Set value
-		 * @param {String} pValue
-		 *
-		this.setValue = function(pValue) {
-			this.value = pValue;
-		}*/
-		
-		
 		/**
-		 * Appends to existing parameter, value.
+		 * Appends to existing parameter, value. THIS MAY NOT WORK RIGHT NOW.
 		 * @param {String} pVal
 		 */
 		this.appendValue = function(pVal) {
