@@ -6,7 +6,10 @@ Ext.define("Teselagen.bio.sequence.common.Sequence", {
 
 		if (inData) {
 			name = inData.name;
-			this.callParent(inData.symbolList);
+			this.callParent([{
+				symbols: inData.symbolList.getSymbols(),
+				alphabet: inData.symbolList.getAlphabet()
+			}]);
 		} else {
 			throw Ext.create("Teselagen.bio.BioException", {
 				message: "Arguments needed"
