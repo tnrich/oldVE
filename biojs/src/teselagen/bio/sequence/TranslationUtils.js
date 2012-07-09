@@ -8,15 +8,9 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
 			 //write 
 	constructor: function(inData){
-		if (inData) {
-			var dnaToRNATranslationTable = inData.dnaToRNATranslationTable;
-			var rnaToDNATranslationTable = inData.rnaToDNATranslationTable;
-			var aminoAcidsTranslationTable = inData.aminoAcidsTranslationTable;
-		} else {
-			throw Ext.create("Teselagen.bio.BioException", {
-				message: "Incorrect arguments provided"
-			});
-		}
+			var dnaToRNATranslationTable;
+			var rnaToDNATranslationTable;
+			var aminoAcidsTranslationTable;
 
 		this.dnaToRNASymbol = function(pSymbol){
 			initializeDNAToRNATranslationTable();
