@@ -31,8 +31,8 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
 		 *  @property {String} value
 		 */
 		if (inData) {
-			this.keyword = inData.keyword;
-			this.value = inData.value;
+			this.keyword = inData.keyword || null;
+			this.value = inData.value || null;
 		}
 		
 		/**

@@ -37,14 +37,14 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 
         if (inData ) {
             //console.log(JSON.stringify(inData, null, " "));
-            locusName 		= inData.locusName;
-            sequenceLength 	= inData.sequenceLength;
-            strandType		= inData.strandType;
-            naType			= inData.naType;
-            linear			= inData.linear;
+            locusName 		= inData.locusName || "";
+            sequenceLength 	= inData.sequenceLength || "";
+            strandType		= inData.strandType || "";
+            naType			= inData.naType || "";
+            linear			= inData.linear || false; // false or false; default is false, only a true can override this
             circular;//		= inData.circular;
-            divisionCode	= inData.divisionCode;
-            date			= inData.date;
+            divisionCode	= inData.divisionCode || "";
+            date			= inData.date || "";
         }
         /**
          * Get locusName

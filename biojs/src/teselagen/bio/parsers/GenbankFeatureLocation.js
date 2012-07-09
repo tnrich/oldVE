@@ -29,14 +29,14 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
         if (inData !== undefined) {
             if (inData.start !== undefined ) {
-                start		= inData.start.replace(/\<|\>/, "");
-                preStart	= inData.start.match(/<\<|<\>/, "");
-                sufStart	= inData.start.match(/\<$|\>$/, "");
+                start		= inData.start.replace(/\<|\>/, "") || "";
+                preStart	= inData.start.match(/<\<|<\>/, "") || "";
+                sufStart	= inData.start.match(/\<$|\>$/, "") || "";
             }
             if (inData.end !== undefined) {
-                end         = inData.end.replace(/\<|\>/, "");
-                preEnd      = inData.end.match(/^\<|^\>/, "");
-                sufEnd      = inData.end.match(/\<$|\>$/, "");
+                end         = inData.end.replace(/\<|\>/, "") || "";
+                preEnd      = inData.end.match(/^\<|^\>/, "") || "";
+                sufEnd      = inData.end.match(/\<$|\>$/, "") || "";
             }
         }
         /**

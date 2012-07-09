@@ -21,11 +21,8 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
         var that = this;
 
         if (inData) {
-            that.keyword   = inData.keyword;
-            that.value = inData.value;
-        } else {
-            //var keyword;
-            //var value;
+            that.keyword   = inData.keyword || null;
+            that.value = inData.value || null;
         }
         /*
          * Get keyword
