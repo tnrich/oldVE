@@ -1,7 +1,7 @@
 
 /**
- * GenbankFeatureElement class 
- * Class for GenbankFeatureElement. Stored in an array in GenbankFeaturesKeyword
+ * GenbankFeatureElement. 
+ * Stores an array of Feature Elements in GenbankFeaturesKeyword. 
  * An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
  * Its indices are defined by GenbankFeatureLocation and it's annotations by GenbankFeatureQualifier. 
  * @author Diana Wong
@@ -19,8 +19,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * @param {String} strand
      * @param {Boolean} complement
      * @param {Boolean} join
-     * @param [GenbankFeatureQualifier] featureQualifer
-     * @param [GenbankFeatureLocation] featureLoation
+     * @param {[GenbankFeatureQualifier]} featureQualifer
+     * @param {[GenbankFeatureLocation]} featureLocation
+     * @returns {GenbankFeatureElement}
+     * @memberOf GenbankFeatureElement
      */
     constructor: function (inData) {
         var keyword;
@@ -40,36 +42,42 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         }
         /**
          * Get keyword
+         * @returns {String} keyword
          */
         this.getKeyword = function() {
             return keyword;
         }
         /**
          * Set keyword
+         * @param {String} keyword
          */
         this.setKeyword = function(pKeyword) {
             keyword = pKeyword;
         }
         /**
          * Get strand
+         * @returns {String} strand
          */
         this.getStrand = function() {
             return strand;
         }
         /**
          * Set strand
+         * @param {String} strand
          */
         this.setStrand = function(pStrand) {
             strand = pStrand;
         }
         /**
          * Get featureQualifier
+         * @returns {GenbankFeatureQualifer} featureQualifer
          */
         this.getFeatureQualifier = function() {
             return featureQualifier;
         }
         /**
          * Set featureQualifier
+         * @param {GenbankFeatureQualifer} featureQualifer
          */
         this.setFeatureQualifier = function(pFeatureQualifier) {
             featureQualifier = pFeatureQualifier;
@@ -89,7 +97,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Add a single GenbankFeatureQualifier to the featureQualifier array
-         * @param {GenbankFeatureQualifer} qual
+         * @param {GenbankFeatureQualifer} qualifier
          */
         this.addFeatureQualifier= function(pQual) {
             if (featureQualifier === undefined ) {
@@ -99,19 +107,21 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         }
         /**
          * Get featureLocation
+         * @returns {GenbankFeatureLocation} featureLocation
          */
         this.getFeatureLocation = function() {
             return featureLocation;
         }
         /**
          * Get featureLocation
+         * @param {GenbankFeatureLocation} featureLocation
          */
         this.setFeatureLocation = function(pFeatureLocation) {
             featureLocation = pFeatureLocation;
         }
         /**
          * Add a single GenbankFeatureLocation to the featureLocation array
-         * @param {GenbankFeatureLocation} pLoc
+         * @param {GenbankFeatureLocation} location
          */
         this.addFeatureLocation = function(pLoc) {
             if (featureLocation === undefined ) {
@@ -122,7 +132,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Get Complement
-         * @return {Boolean}
+         * @return {Boolean} complement
          */
         this.getComplement = function() {
             return complement;
@@ -130,7 +140,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Set Complement to be true or false
-         * @param {Boolean}
+         * @param {Boolean} complement
          */
         this.setComplement = function(bool) {
             complement = bool;
@@ -138,21 +148,21 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Get Join
-         * @return {Boolean}
+         * @return {Boolean} join
          */
         this.getJoin = function() {
             return join;
         }
         /**
          * Set Join to be true or false
-         * @param {Boolean}
+         * @param {Boolean} join
          */
         this.setJoin = function(bool) {
             join = bool;
         }
         /**
          * Converts this GenbankLocusKeyword to Genbank file format string
-         * @returns {String}
+         * @returns {String} genbankString
          */
         this.toString = function() {
             var line = "     " + keyword.rpad(" ", 16);
@@ -185,7 +195,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Converts to JSON format.
-         * @returns {Object}
+         * @returns {Object} json
          */
         this.toJSON = function() {
             var json = {

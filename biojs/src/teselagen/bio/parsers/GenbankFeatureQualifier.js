@@ -1,7 +1,7 @@
 
 /**
- * GenbankFeatureQualifier class 
- * Class for GenbankFeatureQualifier. Follows the '/key="value"' format
+ * GenbankFeatureQualifier. 
+ * Stores the Feature Qualifier from the Genbank formatted line: '/key="value"'
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -15,9 +15,12 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
      * @param {String} name
      * @param {String} value
      * @param {Boolean} quoted
+     * @returns {GenbankFeatureQualifer}
+     * @memberOf GenbankFeatureQualifer
      */
     constructor: function (inData) {
-        var that = this;
+        //var that = this;
+        
         var name;
         var value;
         var quoted;
@@ -28,36 +31,42 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         }
         /**
          * Get name
+         * @returns {String} name
          */
         this.getName = function() {
             return name;
         }
         /**
          * Set name
+         * @param {String} name
          */
         this.setName = function(pName) {
             name = pName;
         }
         /**
          * Get value
+         * @returns {String} value
          */
         this.getValue = function() {
             return value;
         }
         /**
          * Set value
+         * @param {String} value
          */
         this.setValue = function(pValue) {
             value = pValue;
         }
         /**
          * Get Quoted
+         * @returns {Boolean} quoted
          */
         this.getQuoted = function() {
             return quoted;
         }
         /**
          * Set Quoted
+         * @param {Boolean} quoted
          */
         this.setQuoted = function(pQuoted) {
             quoted = pQuoted;
@@ -71,6 +80,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         }
         /**
          * Converts this GenbankLocusKeyword to Genbank file format string
+         * @returns {String} genbankString
          */
         this.toString = function() {
             var line;
@@ -83,6 +93,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         }
         /**
          * Converts to JSON format.
+         * @returns {Object} json
          */
         this.toJSON = function() {
             var json = {

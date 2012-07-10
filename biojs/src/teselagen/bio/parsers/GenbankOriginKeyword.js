@@ -1,7 +1,8 @@
 
 /**
- * GenbankOriginKeyword class. 
- * Class for GenbankOriginKeyword. Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankFeaturesKeyword.
+ * GenbankOriginKeyword. 
+ * Stores the information from the ORIGIN line of a Genbank file. 
+ * Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankFeaturesKeyword.
  * Specifically for the Origin/Sequence part of the Genbank file
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -14,12 +15,15 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
     extend: "Teselagen.bio.parsers.Keyword",
 
     /**
-     * Creates a new GenbankLocusKeyword from inData.
+     * Creates a new GenbankOriginKeyword from inData.
      * @param {String} sequence
+     * @returns {GenbankOriginKeyword}
+     * @memberOf GenbankOriginKeyword
      */
     constructor: function (inData) {
-        var that = this;
-        that.keyword = "ORIGIN";
+        //var that = this;
+        
+        this.keyword = "ORIGIN";
         var sequence = "";
 
         if (inData) {
@@ -48,7 +52,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
         }
         /**
          * Converts this GenbankOriginKeyword to Genbank file format string
-         * @returns {String}
+         * @returns {String} genbankString
          */
         this.toString = function() {
             if ( sequence === undefined || sequence === "" ) {
@@ -58,8 +62,8 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
             var line = "";
 
             line += Teselagen.StringUtil.rpad("ORIGIN"," ", 12);
-            if ( that.value != null) {
-                line += that.value + "\n";
+            if ( this.value != null) {
+                line += this.value + "\n";
             } else {
                 line += "\n";
             }

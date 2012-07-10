@@ -1,6 +1,7 @@
 /**
- * GenbankManager 
- * Takes in Genbank File (as a string) and creates the Genbank class. Static functions. (Replaces GenbankFormat.js)
+ * GenbankManager. 
+ * Takes in Genbank file (as a string) and creates the Genbank class. 
+ * Static functions. (Replaces GenbankFormat.js)
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
@@ -39,6 +40,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
     /**
      * Creates a static GenbankManager class with public functions.
      * @returns {GenbankManager} Handle to execute methods.
+     * @memberOf GenbankManager
      */
     constructor: function() {
         var that = this;
@@ -62,8 +64,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
             function processText() {
                 genbankFileString = fr.result;
-                //var gb = Ext.create('Teselagen.Genbank', genbankFileString);
-                //console.log(gb);
             }
 
             return genbankFileString;
@@ -73,7 +73,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
          * This is the main method in the GenbankFormat static class that performs the parsing. 
          * Converts a Genbank File (in string format) into a GenbankFileFormat object. 
          * @param {String} genbankFileString String form of Genbank File.
-         * @return {Genbank}
+         * @return {Genbank} 
          */
         this.parseGenbankFile = function(genbankFileString) {
             gb = Ext.create("Teselagen.bio.parsers.Genbank");
@@ -85,7 +85,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             for (var i=0 ; i < genArr.length; i++) {
                 lineParser(genArr[i]);
             }
-            //console.log(gb.toString());
             return gb;
         }
 
@@ -630,9 +629,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             this.origin     = false;
             this.features   = false;
             this.reference  = false;
-            this.keyword	= false;
-            this.subkeyword = false;
-            //this.runon      = false;
 
             this.setOrigin = function() {
                 this.origin   = true;
@@ -653,9 +649,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 this.origin   	= false;
                 this.features 	= false;
                 this.reference	= false;
-                //this.keyword	= false;
-                //this.subkeyword	= false;
-                //this.runon	  	= false;
             }
 
             this.setType = function(key, isKey) {
