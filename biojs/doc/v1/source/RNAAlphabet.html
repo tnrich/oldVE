@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">//Need to implement  singleton
+
+Ext.define(&quot;Teselagen.bio.sequence.alphabets.RNAAlphabet&quot;, {
+	extend: &quot;Teselagen.bio.sequence.alphabets.AbstractAlphabet&quot;,
+	singleton: true,
+
+	a: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Adenine&quot;, value: &quot;a&quot; , ambiguousMatches: []}),
+	g: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Guanine&quot;, value: &quot;g&quot;, ambiguousMatches: []}), 
+	c: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Cytosine&quot;, value: &quot;c&quot;, ambiguousMatches: []}), 
+	t: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Uracil&quot;, value: &quot;u&quot;, ambiguousMatches: []}), 
+	m: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c;'}&quot; , value: &quot;m&quot;, ambiguousMatches: []}),
+	r: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'g;'}&quot;, value: &quot;r&quot;, ambiguousMatches: []}),
+	w: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'u;'}&quot;, value: &quot;w&quot;, ambiguousMatches: []}), 
+	s: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'g;'}&quot;, value: &quot;s&quot;, ambiguousMatches: []}), 
+	y: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'u}&quot;, value: &quot;y&quot;, ambiguousMatches: []}), 
+	k: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'g' or 'u;'}&quot;, value: &quot;k&quot;, ambiguousMatches: []}), 
+	v: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c;' or 'g'}&quot;, value: &quot;v&quot;, ambiguousMatches: []}), 
+	h: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'c;' or 'u'}&quot;, value: &quot;h&quot;, ambiguousMatches: []}), 
+	d: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'g;' or 'u'}&quot;, value: &quot;d&quot;, ambiguousMatches: []}), 
+	b: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'c' or 'g;' or 'u'}&quot;, value: &quot;b&quot;, ambiguousMatches: []}), 
+	n: Ext.create(&quot;Teselagen.bio.sequence.symbols.NucleotideSymbol&quot;, {name: &quot;Ambiguous {'a' or 'u;' or 'g' or 'c'}&quot;, value: &quot;n&quot;, ambiguousMatches: [] }), 
+
+	//A workaround to set ambiguous matches.
+	constructor: function(){
+		var that = this;
+		that.m.setAmbiguousMatches([that.a, that.c]);
+		that.r.setAmbiguousMatches([that.a, that.g]);
+		that.w.setAmbiguousMatches([that.a, that.u]);
+		that.s.setAmbiguousMatches([that.c, that.g]);
+		that.y.setAmbiguousMatches([that.c, that.u]);
+		that.k.setAmbiguousMatches([that.g, that.u]);
+		that.v.setAmbiguousMatches([that.a, that.c, that.g]);
+		that.h.setAmbiguousMatches([that.a, that.c, that.u]);
+		that.d.setAmbiguousMatches([that.a, that.g, that.u]);
+		that.b.setAmbiguousMatches( [that.c, that.g, that.u]);
+		that.n.setAmbiguousMatches([that.a, that.c, that.g, that.u]);	
+	},
+
+	getA: function (){ return this.a; },
+	getG: function (){ return this.g; },
+	getC: function (){ return this.c; },
+	getU: function (){ return this.u; },
+	getM: function (){ return this.m; },
+	getR: function (){ return this.r; },
+	getW: function (){ return this.w; },
+	getS: function (){ return this.s; },
+	getY: function (){ return this.y; },
+	getK: function (){ return this.k; },
+	getV: function (){ return this.v; },
+	getH: function (){ return this.h; },
+	getD: function (){ return this.d; },
+	getB: function (){ return this.b; },
+	getN: function (){ return this.n; },
+});</pre>
+</body>
+</html>

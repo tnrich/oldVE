@@ -10,6 +10,8 @@
  */
 Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 	singleton: true,
+
+	alternateClassName: "Teselagen.DNAAlphabet",
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet",
 	requires: ["Teselagen.bio.sequence.symbols.NucleotideSymbol"],
 	a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []}),
@@ -30,6 +32,7 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 
 	//A workaround to set ambiguous matches.
 	constructor: function(){
+		//Set ambiguous matches inside the constructor so ExtJS doesn't complain.
 		var that = this;
 		that.m.setAmbiguousMatches([that.a, that.c]);
 		that.r.setAmbiguousMatches([that.a, that.g]);
@@ -50,8 +53,8 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 		getA: function() { 
 			return this.a;
 		},
+		
 		/**
-		*
 		 * Returns data about the Guanine NucleotideSymbol
 		 * @return {NucleotideSymbol} returns the datastructure for the "g" nucleotide
 		  */
@@ -138,8 +141,6 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 		 * @return {NucleotideSymbol} returns the datastructure for the ambiguous a or t or g or c nucleotide
 		 */
 		getN: function(){ return this.n; },
-		
-	//}
 
 	
 });
