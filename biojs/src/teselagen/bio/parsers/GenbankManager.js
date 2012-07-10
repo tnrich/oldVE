@@ -552,7 +552,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 			}
 			return runon;
 		}*/
-
+        
+        /*
 
         //=================================
         // INITIALIZING FIELDS
@@ -620,7 +621,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 return field;
             }
         } // END OF Field()
-
+        */
 
         //=================================
         // INITIALIZING FLAGS 
