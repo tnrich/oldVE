@@ -42,13 +42,13 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
 			this.value = inData.value || null;
 		}
 		
-		/**
+		/*
 		 * Appends to existing parameter, value. THIS MAY NOT WORK RIGHT NOW.
 		 * @param {String} value
-		 */
+		 *
 		this.appendValue = function(pVal) {
 			this.value += pVal;
-		}
+		}*/
 		
 		return this;
 	}

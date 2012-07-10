@@ -136,8 +136,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                     lastObj = parseSubKeyword(tmp, line);
                 } else if ( isKeyRunon ) {      // RUNON LINES FOR NON-FEATURES
                     //console.log(lastObj.getValue());
-                    lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
-                    //lastObj.appendValue("\n".rpad(" ",13) + Ext.String.trim(line)); //SOOOO DOES NOT WORK
+                    //lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
+                    lastObj.appendValue(Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line)); //SOOOO DOES NOT WORK; ok nm, works now 7/10/12
                 }
             }
 

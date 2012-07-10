@@ -29,13 +29,13 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
             this.value      = inData.value || null;
         }
 
-        /*
+        /**
          * Appends pValue to existing value property
-         * @param {String} pVal
-         *
+         * @param {String} value
+         */
 		this.appendValue = function(pVal) {
 			this.value += pVal;
-		}*/
+		}
 
         /**
          * Converts this GenbankSubKeywords to Genbank file format string
