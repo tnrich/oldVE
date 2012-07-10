@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define(&quot;Teselagen.bio.sequence.common.Sequence&quot;, {
+	extend: &quot;Teselagen.bio.sequence.common.SymbolList&quot;,
+
+	constructor: function(inData){
+		var name;
+
+		if (inData) {
+			name = inData.name;
+			this.callParent([{
+				symbols: inData.symbolList.getSymbols(),
+				alphabet: inData.symbolList.getAlphabet()
+			}]);
+		} else {
+			throw Ext.create(&quot;Teselagen.bio.BioException&quot;, {
+				message: &quot;Arguments needed&quot;
+			});
+		}
+
+		this.getName = function(){
+			return name;
+		}
+
+		this.setName = function(pName){
+			name = pName;
+		}
+
+		return this;
+	}
+});</pre>
+</body>
+</html>

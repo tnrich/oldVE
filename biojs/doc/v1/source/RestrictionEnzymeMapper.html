@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-enzymes-RestrictionEnzymeMapper'>/**
+</span> * @class Teselagen.bio.enzymes.RestrictionEnzymeMapper
+ * @singleton
+ * 
+ * Restriction enzyme mapper- finds restriction enzyme cut sites in DNA sequence.
+ * 
+ * @see Teselagen.bio.enzymes.RestrictionEnzyme
+ * @see Teselagen.bio.enzymes.RestrictionCutSite
+ * 
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author)
+ */
+Ext.define(&quot;Teselagen.bio.enzymes.RestrictionEnzymeMapper&quot;, {
+	singleton: true,
+	
+	requires: [&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, &quot;Teselagen.bio.sequence.common.StrandType&quot;],
+	
+<span id='Teselagen-bio-enzymes-RestrictionEnzymeMapper-method-cutSequence'>	/**
+</span>	 * Cut sequence by list of restriction enzymes.
+	 * 
+	 * @param {Array} restrictionEnzymes List of restriction enzymes to cut sequence with.
+	 * @param {} symbolList The DNA sequence to be cut.
+	 * @return 
+	 * 
+	 * @see Teselegen.bio.enzymes.RestrictionCutSite
+	 */
+	cutSequence: function(restrictionEnzymes, symbolList) {
+		var reCuts = {};
+		
+		for(var i = 0; i &lt; restrictionEnzymes.length; i++) {
+			var re = restrictionEnzymes[i];
+			reCuts[re.name] = this.cutSequenceByRestrictionEnzyme(re, symbolList);
+		}
+		
+		return reCuts;
+	},
+	
+<span id='Teselagen-bio-enzymes-RestrictionEnzymeMapper-method-cutSequenceByRestrictionEnzyme'>	/**
+</span>	 * Cut sequence with one restriction enzyme.
+	 * 
+	 * @param {RestrictionEnzyme} Restriction enzyme to cut the sequence with.
+	 * @param {SymbolList} symbolList DNA sequence.
+	 * @return {Array} List of RestrictionCutSite's.
+	 * 
+	 * @see Teselegen.bio.enzymes.RestrictionCutSite
+	 */
+	cutSequenceByRestrictionEnzyme: function(restrictionEnzyme, symbolList) {
+		var restrictionCutSites = new Array();
+
+		var forwardRegExpPattern = new RegExp(restrictionEnzyme.getForwardRegex().toLowerCase(), &quot;g&quot;);
+		var reverseRegExpPattern = new RegExp(restrictionEnzyme.getReverseRegex().toLowerCase(), &quot;g&quot;);
+		
+		var reLength = restrictionEnzyme.getSite().length;
+		if(reLength != restrictionEnzyme.getDsForward() + restrictionEnzyme.getDsReverse()) {
+			reLength = restrictionEnzyme.getDsForward();
+		}
+		
+		var sequence = symbolList.seqString();
+		var seqLength = sequence.length;
+		
+		var matchIndex = sequence.search(forwardRegExpPattern);
+		var startIndex = 0;
+		var subSequence = sequence;
+		while(matchIndex != -1) {
+			if(matchIndex + reLength - 1 &gt;= subSequence.length) { // subSequence is too short
+				break;
+			}
+			
+			restrictionCutSite = Ext.create(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, {
+				start: matchIndex + startIndex,
+				end: matchIndex + reLength + startIndex + 1,
+				strand: Teselagen.bio.sequence.common.StrandType.FORWARD,
+				restrictionEnzyme: restrictionEnzyme
+			});
+			restrictionCutSites.push(restrictionCutSite);
+			
+			// Make sure that we always store the previous match index to ensure
+			// that we are always storing indices relative to the whole sequence,
+			// not just the subSequence.
+			startIndex = matchIndex + 1;
+			
+			// Search again on subSequence, starting from the index of the last match + 1.
+			subSequence = subSequence.substring(startIndex, subSequence.length);
+			matchIndex = subSequence.search(forwardRegExpPattern);
+		}
+		
+		if(!restrictionEnzyme.isPalindromic()) {
+			matchIndex = sequence.search(reverseRegExpPattern);
+			startIndex = 0;
+			subSequence = sequence;
+			while(match != -1) {
+				if(matchIndex + reLength - 1 &gt;= subSequence.length) { // subSequence is too short
+					break;
+				}
+				
+				restrictionCutSite = Ext.create(&quot;Teselagen.bio.enzymes.RestrictionCutSite&quot;, {
+					start: matchIndex + startIndex,
+					end: matchIndex + reLength + startIndex + 1,
+					strand: Teselagen.bio.sequence.common.StrandType.BACKWARD,
+					restrictionEnzyme: restrictionEnzyme
+				});
+				restrictionCutSites.push(restrictionCutSite);
+				
+				// Make sure that we always store the previous match index to ensure
+				// that we are always storing indices relative to the whole sequence,
+				// not just the subSequence.
+				startIndex = matchIndex + 1;
+				
+				// Search again on subSequence, starting from the index of the last match + 1.
+				subSequence = subSequence.substring(startIndex, subSequence.length);
+				matchIndex = subSequence.search(reverseRegExpPattern);
+			}
+		}
+		
+		return restrictionCutSites;
+	}
+});</pre>
+</body>
+</html>
