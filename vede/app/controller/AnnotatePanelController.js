@@ -6,22 +6,21 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         var box = Ext.create('Ext.draw.Sprite',{
             type: 'rect',
             fill: '#79BB3F',
-            height: 20,
-            width: 30,
-            x: 0,
-            y: 0,
+            width: 100,
+            height: 30,
+            x: 10,
+            y: 10,
             listeners: {
-                mouseover: this.onMouseoverBox
+                //click: this.onClickPie
             }
         });
-
-        var drawComponent = Ext.create('Ext.draw.Component', {
+        
+        var drawComponent2 = Ext.create('Ext.draw.Component', {
             items: [box]
         });
-        ap.add(drawComponent);
-    },
-    onMouseoverBox: function onMouseoverBox() {
-        console.log('Mouseover');
-        console.log(this);
+        ap.add(drawComponent2);
+        console.log(ap);
+        
     }
+
 });

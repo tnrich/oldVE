@@ -22,9 +22,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         var value;
         var quoted;
         if (inData) {
-            name = inData.name;
-            value = inData.value;
-            quoted = inData.quoted; // boolean
+            name = inData.name || null;
+            value = inData.value || null;
+            quoted = inData.quoted || false; // boolean
         }
         /**
          * Get name
@@ -75,9 +75,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         this.toString = function() {
             var line;
             if (quoted) {
-                line = "/".lpad(" ", 22) + name + "=\"" + value + "\"";
+                line = Teselagen.StringUtil.lpad("/", " ", 22) + name + "=\"" + value + "\"";
             } else {
-                line = "/".lpad(" ", 22) + name + "=" + value ;
+                line = Teselagen.StringUtil.lpad("/"," ", 22) + name + "=" + value ;
             }
             return line;
         }

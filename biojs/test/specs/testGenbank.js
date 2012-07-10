@@ -4,8 +4,8 @@
 
 //Ext.require('Teselagen.bio.util.StringUtil');
 Ext.require("Ext.Ajax");
-
-describe("Testing Genbank related classes ", function() {
+Ext.require("Teselagen.StringUtil");
+describe("Testing Genbank related classes:", function() {
     var dt =  Ext.create("Data");
     var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
 
@@ -13,19 +13,19 @@ describe("Testing Genbank related classes ", function() {
 
         it("Works?",function(){
             var str = "  black  ";
-            expect("a" + str.trim() + "b").toBe("ablackb");
+            expect("a" + Teselagen.StringUtil.trim(str) + "b").toBe("ablackb");
             expect(Ext.String.trim(str)).toBe("black");
-            expect("a" + str.ltrim() + "b").toBe("ablack  b");  //result "ablack b"
-            expect("a" + str.rtrim() + "b").toBe("a  blackb");  //result "a blackb"
+            expect("a" + Teselagen.StringUtil.ltrim(str) + "b").toBe("ablack  b");  //result "ablack b"
+            expect("a" + Teselagen.StringUtil.rtrim(str) + "b").toBe("a  blackb");  //result "a blackb"
             var str = "5";
-            expect("" + str.lpad("0", 5)).toBe("00005"); //result "00005"
-            expect("" + str.rpad("0", 5)).toBe("50000"); //result "50000"
+            expect("" + Teselagen.StringUtil.lpad(str, "0", 5)).toBe("00005"); //result "00005"
+            expect("" + Teselagen.StringUtil.rpad(str, "0", 5)).toBe("50000"); //result "50000"
             expect(false).toBe(false);
         });
 
     });
 
-    describe("Ceating classes correctly?", function() {
+    describe("Creating classes correctly?", function() {
         it("GenbankManager statics are ok?", function() {
 
             expect(gbMan).toBeDefined();
@@ -39,8 +39,8 @@ describe("Testing Genbank related classes ", function() {
         });
 
         it("GenbankKeyword classes ok?.", function() {
-            var test = "blah;"
-                var gbKey = Ext.create("Teselagen.bio.parsers.GenbankKeyword");
+            var test = "blah";
+            var gbKey = Ext.create("Teselagen.bio.parsers.GenbankKeyword");
             expect(gbKey).toBeDefined();
             gbKey.setKeyword(test);
             expect(gbKey.getKeyword()).toBe(test);
@@ -63,6 +63,54 @@ describe("Testing Genbank related classes ", function() {
         });	
     });
 
+    describe("Testing creation of a null Genbank Object.", function() {
+
+        it("Keyword?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.Keyword", {} );
+            expect(tmp.getKeyword()).toBe(null);
+        });
+        it("GenbankKeyword?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankKeyword", {} );
+            expect(tmp.getKeyword()).toBe(null);
+            expect(tmp.getValue()).toBe(null);
+        });
+        it("GenbankSubKeyword?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword", {} );
+            expect(tmp.getKeyword()).toBe(null);
+        });
+        it("GenbankLocusKeyword?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {} );
+            expect(tmp.getKeyword()).toBe("LOCUS");
+            expect(tmp.getValue()).toBe(null);
+        });
+        it("GenbankOriginKeyword?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {} );
+            expect(tmp.getKeyword()).toBe("ORIGIN");
+            expect(tmp.getSequence()).toBe("");
+        });
+        it("GenbankFeatureKeyword?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
+            expect(tmp.getKeyword()).toBe("FEATURES");
+        });
+        it("GenbankFeatureElement?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
+                keyword: "blah",
+                join: true
+            } );
+            expect(tmp.getStrand()).toBe(null);
+            expect(tmp.getFeatureQualifier()).toBeTruthy();
+            expect(tmp.getFeatureLocation()).toBeTruthy();
+        });
+        it("GenbankFeatureLocation?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {} );
+            expect(tmp.getStart()).toBe("");
+        });
+        it("GenbankFeatureQualifier?",function(){
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {} );
+            expect(tmp.getName()).toBe(null);
+        });
+
+    });
 
     describe("Testing SIMPLE Keyword Parsing from GenbankManager.js", function() {
         var line, tmp;
@@ -101,7 +149,7 @@ describe("Testing Genbank related classes ", function() {
             line = "ACCESSION   pj5_00028 Accession";
             var tmp = gbMan.parseGenbankFile(line);
             expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
-            expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBe(undefined);
+            expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBeTruthy(); // {} is truthy
             tmp.findKeyword("ACCESSION").addSubKeyword(Ext.create('Teselagen.bio.parsers.GenbankSubKeyword', {keyword: "test", value : "test2"}));
 
             expect(tmp.findKeyword("ACCESSION").getSubKeywords().length).toBe(1);
@@ -224,6 +272,7 @@ describe("Testing Genbank related classes ", function() {
             //"//";
             tmp = gbMan.parseGenbankFile(line);
             expect(line).toMatch(tmp.findKeyword("ORIGIN").toString());
+            expect(tmp.findKeyword("ORIGIN").getSequence()).toBe("gacgtcttatgacaacttgacggctacatcattcactttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgcgagaaatagagttgatcgtc");
         });
     });
 

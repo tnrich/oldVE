@@ -1,6 +1,6 @@
 
 /**
- * GenbankLocusKeyword class. 
+ * GenbankLocusKeyword 
  * Class for GenbankLocusKeyword. Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
  * Specificfor parsing the Locus line.
  * @author Diana Wong
@@ -37,14 +37,14 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 
         if (inData ) {
             //console.log(JSON.stringify(inData, null, " "));
-            locusName 		= inData.locusName;
-            sequenceLength 	= inData.sequenceLength;
-            strandType		= inData.strandType;
-            naType			= inData.naType;
-            linear			= inData.linear;
+            locusName 		= inData.locusName || "";
+            sequenceLength 	= inData.sequenceLength || "";
+            strandType		= inData.strandType || "";
+            naType			= inData.naType || "";
+            linear			= inData.linear || false; // false or false; default is false, only a true can override this
             circular;//		= inData.circular;
-            divisionCode	= inData.divisionCode;
-            date			= inData.date;
+            divisionCode	= inData.divisionCode || "";
+            date			= inData.date || "";
         }
         /**
          * Get locusName
@@ -160,18 +160,18 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         this.toString = function () {
             var tmp;
 
-            var line = "LOCUS".rpad(" ", 12);
-            line += locusName.rpad(" ", 16);
+            var line = Teselagen.StringUtil.rpad("LOCUS"," ", 12);
+            line += Teselagen.StringUtil.rpad(locusName," ", 16);
             line += " "; // T.H line 2778 of GenbankFormat.as col 29 space
-            line += sequenceLength.lpad(" ", 11);
+            line += Teselagen.StringUtil.lpad(sequenceLength," ", 11);
             line += " bp "; // col 41
             if (strandType !== "") {
                 tmp =  strandType + "-";
             } else {
                 tmp = "";
             }
-            line += tmp.lpad(" ", 3);
-            line += naType.rpad(" ",6);
+            line += Teselagen.StringUtil.lpad(tmp, " ", 3);
+            line += Teselagen.StringUtil.rpad(naType," ",6);
             line += "  ";
 
             if (linear === true) {
@@ -183,9 +183,9 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 
             line += " "; //col 64
             if (divisionCode !== undefined) {
-                line += divisionCode.rpad(" ", 3);
+                line += Teselagen.StringUtil.rpad(divisionCode," ", 3);
             } else {
-                line.rpad(" ", 3);
+                Teselagen.StringUtil.rpad(line, " ", 3);
             }
             line += " "; // col 68
             // DOES NOT PARSE DATE USEFULLY ORIGINALLY!

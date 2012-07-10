@@ -31,12 +31,12 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         var featureLocation;
 
         if (inData) {
-            keyword = inData.keyword;
-            strand = inData.strand;
-            complement = inData.complement;
-            join = inData.join;
-            featureQualifier = [];
-            featureLocation = [];
+            keyword = inData.keyword || null;
+            strand = inData.strand || null;
+            complement = inData.complement || false;
+            join = inData.join || false;
+            featureQualifier = inData.featureQualifier || [];
+            featureLocation = inData.featureLocation || [];
         }
         /**
          * Get keyword

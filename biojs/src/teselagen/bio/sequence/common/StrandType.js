@@ -1,13 +1,12 @@
-//Move this to app.js eventually?
-
 Ext.define("Teselagen.bio.sequence.common.StrandType", {
-	statics: {
-		var FORWARD = 1;
-		var BACKWARD = -1;
-		var UNKNOWN = 0;
-	},
+    statics: {
+       FORWARD: 1,
+       BACKWARD: -1,
+       UNKNOWN: 0,
+    },
+ 
+   alternateClassName: "Teselagen.StrandType",
 
-	alternateClassName: "Teselagen.StrandType";
-
-	singleton: "True";
+   // Nick's edit: apparently making a class a singleton makes the 'statics' unavailable from outside that class. hooray for extjs
+   //singleton: "True",
 });

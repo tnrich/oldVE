@@ -1,6 +1,6 @@
 
 /**
-  * Genbank class. 
+  * Genbank. 
   * Sets up an empty shell object with Genbank information and methods that is later populated by GenbankFormat.js
   * @author Diana Wong
   * @author Timothy Ham (original author of GenbankFileModel.js)
@@ -63,7 +63,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @param {GenbankLocusKeyword} locus
          */
 		this.setLocus = function(pLocus) {
-			//console.log('set locus');
 			//locus = pLocus;
 			keywords.push(pLocus);
 		}
@@ -99,24 +98,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 			//features = pFeatures;
 			keywords.push(pFeatures);
 		}
-		/*
-		this.getAccession = function() {
-			//return accession;
-			return find("ACCESSION");
-		}
-		this.setAccession = function(pAccession) {
-			//accession = pAccession;
-			keywords.push(pAccession);
-		}
-		
-		this.getVersion = function() {
-			//return version;
-			return find("VERSION");
-		}
-		this.setVersion = function(pVersion) {
-			//version = pVersion;
-			keywords.push(pVersion);
-		}*/
 		/**
 		 * Gets KeywordsTag
 		 * @return {[String]} keywordsTag
@@ -177,9 +158,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 			var entry;
 			for (var i=0; i < keywords.length; i++) {
 				entry = keywords[i];
-				//console.log(entry);
 				gbStr += keywords[i].toString() + "\n";
-				//console.log(Ext.getClassName(keywords[i]));
 			}
 			gbStr += "//";
 			return gbStr;

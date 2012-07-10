@@ -33,6 +33,9 @@ Ext.define('Vede.view.AppViewport', {
                 {
                     xtype: 'panel',
                     id: 'AnnotatePanel',
+                    layout: {
+                        type: 'fit'
+                    },
                     width: 150,
                     resizable: true,
                     resizeHandles: 'w',

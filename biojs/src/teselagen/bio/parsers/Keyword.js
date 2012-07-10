@@ -31,42 +31,12 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
 		 *  @property {String} value
 		 */
 		if (inData) {
-			this.keyword = inData.keyword;
-			this.value = inData.value;
+			this.keyword = inData.keyword || null;
+			this.value = inData.value || null;
 		}
-		
-		/*
-		 * Get keyword
-		 * @returns {String} keyword
-		 *
-		this.getKeyword = function() {
-			return this.keyword;
-		}
-		/*
-		 * Set keyword
-		 * @param {String} pKeyword
-		 *
-		this.setKeyword = function(pKeyword) {
-			this.keyword = pKeyword;
-		}
-		/*
-		 * Get value
-		 * @returns {String} value
-		 *
-		this.getValue = function() {
-			return this.value;
-		}
-		/*
-		 * Set value
-		 * @param {String} pValue
-		 *
-		this.setValue = function(pValue) {
-			this.value = pValue;
-		}*/
-		
 		
 		/**
-		 * Appends to existing parameter, value.
+		 * Appends to existing parameter, value. THIS MAY NOT WORK RIGHT NOW.
 		 * @param {String} pVal
 		 */
 		this.appendValue = function(pVal) {

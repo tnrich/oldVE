@@ -1,7 +1,13 @@
 Ext.define("Teselagen.bio.sequence.common.Location", {
-	constructor: function(data){
-		var start = data.start;
-		var end = data.end;
+	constructor: function(inData){
+		var start; 
+		var end;
+		if (inData) {
+			start = inData.start || 0;
+			end = inData.end || 0;
+		} else {
+
+		};
 
 		this.getStart = function (){
 			return start;

@@ -3,6 +3,37 @@
  */
 
 //Testing BioException class
+//
+Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+/*
+describe("Testing falsity", function(){
+	var falsity = true; 
+	var testEval = falsity || "False";
+	console.log("TestEval: " + testEval);
+
+	falsity = "";
+	var testEval = falsity || "False";
+	console.log("TestEval: " + testEval);
+
+	falsity = [];
+	var testEval = falsity || "False";
+	console.log("TestEval: " + testEval);
+
+	falsity = null;
+	var testEval = falsity || "False";
+	console.log("TestEval: " + testEval);
+
+	var falsity1;
+	var testEval = falsity1 || "False";
+	console.log("TestEval: " + testEval);
+
+	var falsity1 = {};
+	var testEval = falsity1 || "False";
+	console.log("TestEval: " + testEval);
+});*/
+
 describe("Testing BioException", function(){
 	var bioException;
 	beforeEach(function(){
@@ -30,6 +61,7 @@ describe("Testing Sequence related classes ", function() {
 	//Testing classes in the teselagen/bio/sequence/alphabet
 	describe("Testing 'alphabet' classes", function(){
 
+		//Testing class teselagen/bio/sequence/alphabet/AbstractAlphabet.js (done)
 		describe("AbstractAlphabet tests", function(){
 			var abstractAlphabet;
 			beforeEach(function(){
@@ -43,7 +75,7 @@ describe("Testing Sequence related classes ", function() {
 
 			it("addSymbol", function(){
 				var m = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
-					name: "Ambiguous {'a' or 'c;'}" , value: "m", ambiguousMatches: ["a", "c"]});
+					name: "Ambiguous {'a' or 'c;'}" , value: "m", ambiguousMatches: []});
 				abstractAlphabet.addSymbol(m);
 				expect(abstractAlphabet.getSymbols()).toMatch(m);
 			});
@@ -60,38 +92,148 @@ describe("Testing Sequence related classes ", function() {
 
 		});
 
+		//Testing class teselagen/bio/sequence/alphabet/DNAAlphabet.js (done)
 		describe("DNAAlphabet tests", function(){
-			var testAlphabet;
-			beforeEach(function(){
-				test = Ext.create("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+			it("Accessing NucleotideSymbols works.", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
+					expect(a.getName()).toMatch("Adenine");
+		
+					
+				});
+
 			});
-			it("getG works", function(){
-				expect(test).toBeDefined();
-				var fetched = test.getA();
-				expect(fetched.getName()).toMatch("Adenine");
-			});	
+
+			it("Accessing ambiguousMatches works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.DNAAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
+					var c = Teselagen.bio.sequence.alphabets.DNAAlphabet.getC();
+					var t = Teselagen.bio.sequence.alphabets.DNAAlphabet.getT();
+					var m = Teselagen.bio.sequence.alphabets.DNAAlphabet.getM();
+					expect(m.getAmbiguousMatches()).toContain(a);
+					expect(m.getAmbiguousMatches()).toContain(c);
+					expect(m.getAmbiguousMatches()).not.toContain(t);
+				});
+
+			});		
 		});
 
-		/*
+		//Testing class teselagen/bio/sequence/alphabet/DNAAlphabet.js (done)
 		describe("ProteinAlphabet tests", function(){
-			
+			it("get{by abbreviation} works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.ProteinAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var h = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getH();
+					//console.log(Teselagen.bio.sequence.alphabets.DNAAlphabet.getA());
+					expect(h.getValue()).toMatch("H");
+					expect(h.getName()).toMatch("Histidine");
+				});
+			});
+
+			it("get{by name} works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.ProteinAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var histidine = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getHistidine();
+					expect(histidine.getValue()).toMatch("H");
+				});
+			});		
 		});
 
+		//Testing class teselagen/bio/sequence/alphabet/RNAAlphabet.js (done)
 		describe("RNAAlphabet tests", function(){
-			
-		});*/
+			it("Accessing NucleotideSymbols works.", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.RNAAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var a = Teselagen.bio.sequence.alphabets.RNAAlphabet.getA();
+					expect(a.getName()).toMatch("Adenine");
+		
+					
+				});
+
+			});
+
+			it("Accessing ambiguousMatches works", function(){
+				waitsFor(function() {
+					return Teselagen.bio.sequence.alphabets.RNAAlphabet != undefined;
+				});
+
+				runs(function() {	
+					var a = Teselagen.bio.sequence.alphabets.RNAAlphabet.getA();
+					var c = Teselagen.bio.sequence.alphabets.RNAAlphabet.getC();
+					var u = Teselagen.bio.sequence.alphabets.RNAAlphabet.getU();
+					var m = Teselagen.bio.sequence.alphabets.RNAAlphabet.getM();
+					expect(m.getAmbiguousMatches()).toContain(a);
+					expect(m.getAmbiguousMatches()).toContain(c);
+					expect(m.getAmbiguousMatches()).not.toContain(u);
+				});
+
+			});		
+		});
+
 	});
     	
 	//Testing classes in the teselagen/bio/sequence/common
 	describe("Testing 'common' classes", function(){
+
+		//Testing classes in the teselagen/bio/sequence/common/Annotation.js (WIP)
 		describe("Annotation test", function(){
 			var annotation;
+			var annotationTest;
+			var locations = [];
+			var location1;
+			var location2;
+			var location3;
 			
 			beforeEach(function(){
 				annotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
 					start: 1,
 					end: 1
 				});
+
+				annotationTest = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+					start: null,
+					end: null
+				});
+
+				location1 = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 10,
+					end: 20
+				});
+
+				location2 = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 30,
+					end: 40
+				});
+
+				location3 = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 50,
+					end: 60
+				});
+
+				locations.push(location1);
+				locations.push(location2);
+				locations.push(location3);
+
+				annotationTest.setLocations(locations);
+
+
 				
 				this.addMatchers({
 					//Test that locations are equal to each other
@@ -100,6 +242,12 @@ describe("Testing Sequence related classes ", function() {
 						return ( (expected.getStart() === this.actual.getStart() ) && ( expected.getEnd() === this.actual.getStart() ) );
 					}
 				});
+			});
+
+			afterEach(function(){
+				//resets locations
+				locations = [];
+				annotationTest.setLocations(locations);
 			});
 
 
@@ -184,56 +332,167 @@ describe("Testing Sequence related classes ", function() {
 				
 			});
 
-			/*
-
+			
+			//WIP
 			it(".contains() works!", function(){
 				//var testAnnotation = Ext.create("Teselagen.bio.sequence.common.annotation");
 			});
 
+			
 			it(".isMultiLocation() works!", function(){
 				expect(annotation.isMultiLocation()).not.toBe(true);
 			});
 
 			//Wait until getNormalized and deNormalized tests are written to write the meat of this test
 			it(".shift() works!", function(){
-				expect( function(){ annotation.shift(5, 1, true); } ).toThrow( Ext.create('Teselagen.bio.BioException', {
-					message: "Cannot shift by greater than maximum length"
-				}));
-				annotation.shift();
-			});
 
-			//Wait
-			it(".insertAt() works!", function(){
+				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 2,
+					end: 2
+				});
+				annotation.setLocations([newLocation]);
+				expect( function(){ annotation.shift(5, 1, true); } ).toThrow();
+				annotation.shift(5, 100, true);
+				var returnedLocations = annotation.getLocations();
+				console.log(returnedLocations);
+				expect(returnedLocations[0].getStart()).toEqual(0);
 
-			});
-
-			//Wait
-			it(".deleteAt()", function(){
-				
-			});
-
-			//Wait
-			it(".reverseLocations() works!", function(){
-				
-			});
-
-
-			it(".getNormalizedLocations()", function(){
-				
 			});
 			
-			it(".deNormalizeLocations() works!", function(){
-				
+			//Wait
+			// //
+			// it(".insertAt() works!", function(){
+
+			// });
+
+			//Wait
+			describe("Testing deleteAt", function(){
+
+
+
+				it(".deleteAt() Before First", function(){
+					annotationTest.deleteAt(-10, 5, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(3);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(5);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(15);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(25);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(35);
+
+					expect(annotationTest.getLocations()[2].getStart()).toEqual(45);
+					expect(annotationTest.getLocations()[2].getEnd()).toEqual(55);
+
+
+				});
+
+				it(".deleteAt() Front Part First", function(){
+					annotationTest.deleteAt(10, 5, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(3);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(15);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(25);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(35);
+
+					expect(annotationTest.getLocations()[2].getStart()).toEqual(45);
+					expect(annotationTest.getLocations()[2].getEnd()).toEqual(55);
+				});
+
+				it(".deleteAt() Middle Part First", function(){
+					annotationTest.deleteAt(12, 5, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(3);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(15);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(25);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(35);
+
+					expect(annotationTest.getLocations()[2].getStart()).toEqual(45);
+					expect(annotationTest.getLocations()[2].getEnd()).toEqual(55);
+				});
+
+				it(".deleteAt() First and Gap", function(){
+					annotationTest.deleteAt(10, 15, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(2);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(25);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(35);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(45);
+				});
+
+				it(".deleteAt() EndFirst", function(){
+					annotationTest.deleteAt(15, 5, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(3);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(15);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(25);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(35);
+
+					expect(annotationTest.getLocations()[2].getStart()).toEqual(45);
+					expect(annotationTest.getLocations()[2].getEnd()).toEqual(55);
+				});
+
+				it(".deleteAt() EndFirstPartGap", function(){
+					annotationTest.deleteAt(15, 10, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(3);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(15);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(20);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(30);
+
+					expect(annotationTest.getLocations()[2].getStart()).toEqual(40);
+					expect(annotationTest.getLocations()[2].getEnd()).toEqual(50);
+				});
+
+				it("testDeleteAtWithinGap", function(){
+					annotationTest.deleteAt(22, 5, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(3);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(20);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(25);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(35);
+
+					expect(annotationTest.getLocations()[2].getStart()).toEqual(45);
+					expect(annotationTest.getLocations()[2].getEnd()).toEqual(55);
+				});
+
+				it("testDeleteAtPartialFirstSecond", function(){
+					annotationTest.deleteAt(15, 20, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(2);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(20);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(30);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(40);
+
+				});
+
+				it("testDeleteAtSecondPartialThird", function(){
+					annotationTest.deleteAt(15, 20, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(2);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(20);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(30);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(40);
+
+				});
+
+				it("testDeleteAtGapEnd", function(){
+					annotationTest.deleteAt(45, 15, 100, false);
+					expect(annotationTest.getLocations().length).toEqual(2);
+					expect(annotationTest.getLocations()[0].getStart()).toEqual(10);
+					expect(annotationTest.getLocations()[0].getEnd()).toEqual(20);
+
+					expect(annotationTest.getLocations()[1].getStart()).toEqual(30);
+					expect(annotationTest.getLocations()[1].getEnd()).toEqual(45);
+				});
 			});
 
-
-			it(".reverseNormalizedLocations()", function(){
-				
-			});
-
-			it(".getOverlappingLocationIndex() works!", function(){
-				
-			});*/
 			 
 		});
 
@@ -248,12 +507,12 @@ describe("Testing Sequence related classes ", function() {
 
 			});
 
-			it(".getAlphabet works?", function(){
+			it(".getStrand works?", function(){
 				
 				expect(strandedAnnotation.getStrand()).toEqual(1);
 			});
 			
-			it(".setAlphabet works", function(){
+			it(".setStrand works", function(){
 				strandedAnnotation.setStrand(2);
 				expect(strandedAnnotation.getStrand()).toEqual(2);
 			});
@@ -382,6 +641,11 @@ describe("Testing Sequence related classes ", function() {
 
 	describe("Testing 'dna' classes", function(){
 
+		describe("Testing 'DigestionFragment.js", function(){
+			describe("", function(){
+
+			})
+		});
 	});
 
 	//Teselagen.bio.sequence.symbol Tests

@@ -23,7 +23,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
         var sequence = "";
 
         if (inData) {
-            sequence	= inData.sequence;
+            sequence	= inData.sequence || "";
         }
         /**
          * Get sequence
@@ -57,7 +57,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 
             var line = "";
 
-            line += "ORIGIN".rpad(" ", 12);
+            line += Teselagen.StringUtil.rpad("ORIGIN"," ", 12);
             if ( that.value != null) {
                 line += that.value + "\n";
             } else {
@@ -66,7 +66,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 
             for (var i=0 ; i < sequence.length; i=i+60) {
                 var ind = i+1;
-                var ind2 = (""+ind).lpad(" ", 9);
+                var ind2 = Teselagen.StringUtil.lpad( (""+ind)," ", 9);
                 line += ind2;
 
                 for (var j=i; j < i+60; j=j+10) {
@@ -90,8 +90,6 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
             }
             return json;
         }
-
-
 
         return this;
     }
