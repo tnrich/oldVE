@@ -55,6 +55,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 		this.setEndRE = function(pEndRE){
 			endRE = pEndRE;
 		}
+		
 		return this;
 	}
 });

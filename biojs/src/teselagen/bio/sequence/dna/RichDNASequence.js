@@ -4,7 +4,7 @@ Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 
 	constructor: function(inData){
 		if (inData) {
-			this.callParent(inData);
+			this.callParent([inData]);
 		} else{
 			throw Ext.create("Teselagen.bio.BioException", {
 				message: "Arguments needed"

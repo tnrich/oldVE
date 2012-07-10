@@ -9,7 +9,7 @@
  */ 
  Ext.define("Teselagen.bio.sequence.alphabets.AbstractAlphabet", {
 	require: ["Teselagen.bio.sequence.symbols.GapSymbol", "Teselagen.bio.BioException"],
-	constructor: function(data){
+	constructor: function(inData){
 
 		var that = this;
 		var gap = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {

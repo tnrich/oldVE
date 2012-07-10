@@ -71,7 +71,6 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 				pSymbols.forEach(function(element){
 					symbols.push(element);
 				});
-				console.log("Cool function");
 			}
 		}
 

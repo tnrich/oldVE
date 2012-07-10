@@ -10,13 +10,13 @@
 Ext.define("Teselagen.bio.sequence.common.Annotation", {
 	requires: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.BioException"],
 	
-	constructor: function(data){
+	constructor: function(inData){
 
-		var inputStart = data.start;
-		var inputEnd = data.end;
+		var start = inData.start;
+		var end = inData.end;
 		var initialLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
-			start: inputStart,
-			end: inputEnd
+			start: start,
+			end: end
 		});
 
 		var locations = [];
@@ -145,123 +145,124 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 * @return {Boolean} returns a boolean representing whether the annotation contains more than one annotation.
 		 */
 		this.isMultiLocation = function(){
-			if ( this.locations.length >= 2 ) {
+			if ( locations.length >= 2 ) {
 				return true;
 			} else {
 				return false;
 			}
 		}
-		/*
-		this.shift = function (shiftBy, maxLength, circular){
-			if ( shiftBy > (maxLength - 1)) {
+		
+		this.shift = function (pShiftBy, pMaxLength, pCircular){
+			if ( pShiftBy > (pMaxLength - 1)) {
 				throw Ext.create("Teselagen.bio.BioException", {
 					message : "Cannot shift by greater than maximum length"
 				}); 
 			}
 
-			var offset = this.start;
-			var tempLocations = getNormalizedLocations();
-
-			for (var i = 0; i < tempLocations.getLocations().length; ++i ){ 
-				location.setStart( location.getStart() + shiftBy );
-				location.setEnd( location.getEnd() + shiftBy );
+			var offset = start;
+			var tempLocations = getNormalizedLocations(pMaxLength);
+			var tempLocation = Ext.create("Teselagen.bio.sequence.common.Location",{
+				start: null,
+				end: null
+			});
+			for (var i = 0; i < tempLocations.length; ++i ){ 
+				tempLocations[i].setStart( tempLocations[i].getStart() + pShiftBy );
+				tempLocations[i].setEnd( tempLocations[i].getEnd() + pShiftBy );
 			}
 
-			tempLocations = deNormalizeLocation(tempLocations, offset, maxLength, circular);
+			tempLocations = deNormalizeLocations(tempLocations, offset, pMaxLength, pCircular);
 			locations = tempLocations;
 		}
 			 
+		
 
-
-		this.insertAt = function (position, insertLength, maxLength, circular){
+		this.insertAt = function (pPosition, pInsertLength, pMaxLength, pCircular){
 			var shifting = 0;
 			var tempEnd;
-			var offset = locations[0].start;
+			var offset = locations[0].getStart();
 
-			var normalizedPosition = position - offset;
+			var normalizedPosition = pPosition - offset;
 			var circularAdjustment = 0;
 
-			if (end < start && position < end) {
-				normalizedPosition += maxLength;
+			if (end < start && pPosition < end) {
+				normalizedPosition += pMaxLength;
 				circularAdjustment = -insertLength;
 			}
 
-			var tempLocations = getNormalizedLocations(maxLength);
+			var tempLocations = getNormalizedLocations(pMaxLength);
 
-			for (var i = 0; i < tempLocations.length; i++ {
-				currentLocation = tempLocations[i];
+			for (var i = 0; i < tempLocations.length; i++ ){
+				var currentLocation = tempLocations[i];
 				if ( shifting == 0 ) {
-					if (normalizedPosition > currentLocation.start && normalizedPosition < currentLocation.end ) {
-						currentLocation.end += insertLength;
-						shifting = insertLength;
+					if (normalizedPosition > currentLocation.getStart() && normalizedPosition < currentLocation.getEnd() ) {
+						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
+						shifting = pInsertLength;
 						continue;
-					} else if ( normalizedPosition < currentLocation.start ){
-						currentLocation.start += insertLength;
-						currentLocation.end += insertLength;
-						shifting = insertLength;
+					} else if ( normalizedPosition < currentLocation.getStart() ){
+						tempLocations[i].setStart(currentLocation.getEnd() + pInsertLength);
+						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
+						shifting = pInsertLength;
 					}
 				} else {
-					currentLocation.start += insertLength;
-					currentLocation.end += insertLength;
+					tempLocations[i].setStart(currentLocation.getStart() + pInsertLength);
+					tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
 				}
 			}
 
-			this.locations = deNormalizeLocation(tempLocations, offset, maxLength + insertLength, circular, circularAdjustment);
-
-			return this;
+			locations = deNormalizeLocation(tempLocations, offset, maxLength + insertLength, circular, circularAdjustment);
 		}
 
 
-		this.deleteAt = function(cutStart, cutLength, maxLength, circular){
-			if (cutLength < 1) {
+		this.deleteAt = function(pCutStart, pCutLength, pMaxLength, pCircular){
+			if (pCutLength < 1) {
 				exit;
 			}
 
 			var expectedNewLength = -1;
 
 			var shifting = 0;
-			var offset = locations[0].start;
-			var normalizedCutStart = cutStart - offset;
+			var offset = locations[0].getStart();
+			var normalizedCutStart = pCutStart - offset;
 			var circularAdjustment = 0;
 
-			if (end < start && cutStart >= 0  && cutStart < end) {
-				normalizedCutStart += maxLength;
-				circularAdjustment = cutLength;
+			if (end < start && pCutStart >= 0  && pCutStart < end) {
+				normalizedCutStart += pMaxLength;
+				circularAdjustment = pCutLength;
 			}
 
 			var newMinimum = 0;
-			var normalizedCutEnd = normalizedCutStart + cutLength;
-			var tempLocations = getNormalizedLocations(maxLength);
+			var normalizedCutEnd = normalizedCutStart + pCutLength;
+			var tempLocations = getNormalizedLocations(pMaxLength);
 
-			var normalizedStart = tempLocations[0].start;
-			var normalizedEnd  = tempLocations[tempLocations.length - 1].end;
+			var normalizedStart = tempLocations[0].getStart();
+			var normalizedEnd  = tempLocations[tempLocations.length - 1].getEnd();
 
 			if (normalizedCutStart < normalizedStart && normalizedCutEnd <= normalizedStart) {
 				expectedNewLength = normalizedEnd - normalizedStart;
 			} else if (normalizedCutStart < normalizedStart && normalizedCutEnd <= normalizedEnd) {
 				expectedNewLength = normalizedEnd - (normalizedCutEnd);
 			} else if (normalizedCutStart >= normalizedStart && normalizedCutEnd <= normalizedEnd) {
-				expectedNewLength = normalizedEnd -normalizedStart - cutLength;
+				expectedNewLength = normalizedEnd -normalizedStart - pCutLength;
 			} else if (normalizedCutStart <= normalizedEnd && normalizedCutEnd >= normalizedEnd) {
 				expectedNewLength = normalizedCutStart - normalizedStart;
 			}
 
-			if (normalizedCutStart < tempLocations[0].start) {
-				if (normalizedCutStart + cutLength >= tempLocations[0].start) {
+			if (normalizedCutStart < tempLocations[0].getStart()) {
+				if (normalizedCutStart + pCutLength >= tempLocations[0].getStart()) {
 					newMinimum = normalizedCutStart;
-				} else if (normalizedCutStart + cutLength <= tempLocations[0].start) {
-					newMinimum = tempLocations[0].start - cutLength;
+				} else if (normalizedCutStart + pCutLength <= tempLocations[0].getStart()) {
+					newMinimum = tempLocations[0].getStart() - pCutLength;
 				}
 			} else {
-				newMinimum = tempLocations[0].start;
+				newMinimum = tempLocations[0].getStart();
 			}
 
 
 			// if deletion happened before feature, shift only, no delete
-			if (normalizedCutEnd <= tempLocations[0].start) {
-				for (var j:int = 0; j < tempLocations.length; j++) {
-					tempLocations[j].start -= cutLength;
-					tempLocations[j].end -= cutLength;
+			if (normalizedCutEnd <= tempLocations[0].getStart()) {
+				for (var j = 0; j < tempLocations.length; j++) {
+					tempLocations[j].setStart( tempLocations[j].getStart() - pCutLength);
+					tempLocations[j].setEnd( tempLocations[j].getEnd() - pCutLength);
 				}
 			} else {
 				// do deletions
@@ -272,80 +273,80 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				for (var i = 0; i < tempLocations.length; i++) {
 					currentLocation = tempLocations[i];
 					if (shifting == 0) {
-						if (normalizedCutStart >= currentLocation.end) {
+						if (normalizedCutStart >= tempLocations[i].getEnd()) {
 							continue;
-						} else if (normalizedCutEnd <= currentLocation.start && normalizedCutStart <= currentLocation.start && cutLength > 0) { 
+						} else if (normalizedCutEnd <= tempLocations[i].getStart() && normalizedCutStart <= tempLocations[i].getStart() && pCutLength > 0) { 
 							// cuts are left, but is all before this location. Switch to shifting
-							currentLocation.start -= cutLength;
-							currentLocation.end -= cutLength;
-							shifting = cutLength;
-						} else if (normalizedCutEnd <= currentLocation.end) {
-							if (normalizedCutStart < currentLocation.start) {
+							tempLocations[i].setStart( tempLocations[i].getStart() - pCutLength);
+							tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
+							shifting = pCutLength;
+						} else if (normalizedCutEnd <=tempLocations[i].getEnd()) {
+							if (normalizedCutStart < tempLocations[i].getStart()) {
 								// cut starts before and ends within this location
-								currentLocation.start = normalizedCutStart;
-								currentLocation.end -= cutLength;
-								shifting = cutLength;
-							} else if (normalizedCutStart >= currentLocation.start) { 
+								tempLocations[i].setStart( normalizedCutStart );
+								// currentLocation.start = normalizedCutStart;
+								tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
+								// currentLocation.end -= pCutLength;
+								shifting = pCutLength;
+							} else if (normalizedCutStart >= tempLocations[i].getStart()) { 
 								// cut entirely within this location
-								currentLocation.end -= cutLength;
-								shifting = cutLength;
+								// currentLocation.end -= pCutLength;
+								tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
+								shifting = pCutLength;
 							}
-						} else if (normalizedCutEnd > currentLocation.end) { 
-							if (normalizedCutStart < currentLocation.start) { 
+						} else if (normalizedCutEnd > currentLocation.getEnd()) { 
+							if (normalizedCutStart < currentLocation.getStart()) { 
 								// cut starts before this location, and ends after this location
-								currentLocation.start = normalizedCutStart;
-								currentLocation.end = normalizedCutStart;
-							} else if (normalizedCutStart >= currentLocation.start) { 
+								tempLocations[i].setStart( normalizedCutStart );
+								tempLocations[i].setEnd( normalizedCutStart );
+							} else if (normalizedCutStart >= currentLocation.getStart()) { 
 								// cut starts within this location and continues after this location
-								currentLocation.end = normalizedCutStart;
+								tempLocations[i].setEnd( normalizedCutStart );
 							}
 						}
 					} else { // shifting
-						currentLocation.start -= shifting;
-						currentLocation.end -= shifting;
+						tempLocations[i].setStart( tempLocations[i].getStart() - shifting);
+						tempLocations[i].setEnd( tempLocations[i].getEnd() - shifting);
 					}
-				} // end for (var i:int = 0; i < tempLocations.length; i++) {
+				} // end for (var i = 0; i < tempLocations.length; i++) {
 			}
 
 			// remove zero length locations and combine locations that are next to each other
 			var combinedLocations = [];
 			for (i = 0; i < tempLocations.length; i++) {
 				if (combinedLocations.length == 0) {
-					if (tempLocations[i].length > 0) {
+					if (tempLocations[i].getLength() > 0) {
 						combinedLocations.push(tempLocations[i]);	
 					}
 					continue;
 				}
-				if (combinedLocations[combinedLocations.length - 1].end == tempLocations[i].start) {
-					combinedLocations[combinedLocations.length - 1].end = tempLocations[i].end;
-				} else if (tempLocations[i].length > 0) {
+				if (combinedLocations[combinedLocations.length - 1].getEnd() == tempLocations[i].getStart()) {
+					combinedLocations[combinedLocations.length - 1].setEnd( tempLocations[i].getEnd() );
+				} else if (tempLocations[i].getLength() > 0) {
 					combinedLocations.push(tempLocations[i]);
 				}
 			}
 			
 			// first and last location must fill the length of the feature.
-			if (combinedLocations[0].start > newMinimum) {
-				combinedLocations[0].start = newMinimum;
+			if (combinedLocations[0].getStart() > newMinimum) {
+				combinedLocations[0].setStart( newMinimum );
 			}
 			
-			if (combinedLocations[combinedLocations.length - 1].end != newMinimum + expectedNewLength) {
-				combinedLocations[combinedLocations.length - 1].end = newMinimum + expectedNewLength;
+			if (combinedLocations[combinedLocations.length - 1].getEnd() != (newMinimum + expectedNewLength) ){
+				combinedLocations[combinedLocations.length - 1].setEnd( newMinimum + expectedNewLength );
 			}
-			
-			locations = deNormalizeLocations(combinedLocations, offset, maxLength - cutLength, circular, circularAdjustment);
-
-			return this;
+			var changedLength = pMaxLength - pCutLength;
+			locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, circularAdjustment);
 
 		}
 
-		this.reverseLocations = function (newStartIndex, newMaxLength, circular){
-			var tempLocations = getNormalizedLocations(newMaxLength);
+
+		this.reverseLocations = function (pNewStartIndex, pNewMaxLength, pCircular){
+			var tempLocations = getNormalizedLocations(pNewMaxLength);
 			tempLocations = reverseNormalizedLocations(tempLocations);
-			tempLocations = deNormalizeLocations(tempLocations, newStartIndex, newMaxLength, circular);
+			tempLocations = deNormalizeLocations(tempLocations, pNewStartIndex, pNewMaxLength, pCircular);
 			
 			locations = tempLocations;
-
-			return this;
 		}
 
 		var getNormalizedLocations = function(maxLength){
@@ -354,18 +355,18 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			}
 			
 			var result = [];
-			var offset = locations[0].start;
+			var offset = locations[0].getStart();
 			var newStart = 0;
 			var newEnd = 0;
 			var location;
 			
 			for (var i= 0; i < locations.length; i++) {
 				location = locations[i];	
-				newStart = location.start - offset;
+				newStart = location.getStart() - offset;
 				if (newStart < 0) {
 					newStart += maxLength;
 				}
-				newEnd = location.end - offset;
+				newEnd = location.getEnd() - offset;
 				if (newEnd < 0) {
 					newEnd += maxLength;
 				}
@@ -377,8 +378,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			return result;
 		}
 
-		var deNormalizeLocations = function(tempLocations, offset, maxLength, circularAdjustment){
-			if (tempLocations.length === 0) {
+		function deNormalizeLocations(pTempLocations, pOffset, pMaxLength, pCircular, pCircularAdjustment){
+			if (pTempLocations.length === 0) {
 				return null;
 			}
 
@@ -387,34 +388,34 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			var newEnd;
 			var location;
 
-			for (var i = 0; i < tempLocations.length; i++) {
-				location = tempLocations[i];
-				newStart = location.start + offset;
-				if (circular && newStart > maxLength) {
-					newStart -= maxLength + circularAdjustment;
-				} else if (circular) {
-					newStart -= circularAdjustment;
+			for (var i = 0; i < pTempLocations.length; i++) {
+				location = pTempLocations[i];
+				newStart = location.getStart() + pOffset;
+				if (pCircular && newStart > pMaxLength) {
+					newStart -= pMaxLength + pCircularAdjustment;
+				} else if (pCircular) {
+					newStart -= pCircularAdjustment;
 				}
 				
-				newEnd = location.end + offset;
-				if (circular && newEnd > maxLength) {
-					newEnd -= maxLength + circularAdjustment;
-				} else if (circular) {
-					newEnd -= circularAdjustment;
+				newEnd = location.getEnd() + pOffset;
+				if (pCircular && newEnd > pMaxLength) {
+					newEnd -= pMaxLength + pCircularAdjustment;
+				} else if (pCircular) {
+					newEnd -= pCircularAdjustment;
 				}
 				
 				// On rare occasions, the calculated value is two circular distances away. Handle this case.
-				if (circular && location.start + offset == maxLength && location.end + offset == maxLength + maxLength) {
+				if ( ( pCircular && location.getStart() + pOffset == pMaxLength ) && ( location.getEnd() + pOffset == pMaxLength + pMaxLength ) ) {
 					newStart = 0;
-					newEnd = maxLength;
+					newEnd = pMaxLength;
 				}
 				
-				if (circular && newStart < 0) {
-					newStart += maxLength;
+				if (pCircular && newStart < 0) {
+					newStart += pMaxLength;
 				}
 				
-				if (circular && newEnd < 0) {
-					newEnd += maxLength;
+				if (pCircular && newEnd < 0) {
+					newEnd += pMaxLength;
 				}
 
 				result.push(Ext.create("Teselagen.bio.sequence.common.Location", {
@@ -432,16 +433,16 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			}
 
 			var result = [];
-			var offset = tempLocations[0].start;
+			var offset = tempLocations[0].getStart();
 			var location;
 			var locationLength;
-			var featureLength = tempLocations[tempLocations.length - 1].end - offset;
+			var featureLength = tempLocations[tempLocations.length - 1].getEnd() - offset;
 			var newStart;
 
 			for (var i = tempLocations.length - 1; i > -1; i--) {
 				location = tempLocations[i];
-				locationLength = location.end - location.start;
-				newStart = featureLength - location.end;
+				locationLength = location.getEnd() - location.getStart();
+				newStart = featureLength - location.getEnd();
 
 				result.push(Ext.create("Teselagen.bio.sequence.common.Location", {
 					start: newStart,
@@ -456,8 +457,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		function getOverlappingIndex (index){
 			var result = -1;
 			for (var index; index < locations.length; index++) {
-				var location:Location = locations[index];
-				if (index >= location.start && index <= location.end) {
+				var location = locations[index];
+				if (index >= location.getStart() && index <= location.getEnd()) {
 					result = index;
 					break;
 				} 
@@ -465,7 +466,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			
 			return result;
 
-		} */
+		} 
 
 		return this;
 	},
