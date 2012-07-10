@@ -1,7 +1,6 @@
 /**
  * @class Teselagen.bio.tools.TemperatureCalculator
  * DNA temperature calculator.
- *
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
@@ -21,10 +20,8 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 
 	/**
 	 * Calculates temperature for DNA sequence using a given algorithm.
-	 * 
 	 * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence The DNA sequence to use.
 	 * @param  {String} type Either Teselagen.bio.tools.TemperatureCalculator.TABLE_BRESLAUER, TABLE_SUGIMOTO, or TABLE_UNIFIED
-	 * 
 	 * @return {Double} Temperature for the given sequence, in Celsius.
 	 */
 	calculateTemperature: function(dnaSequence, type) {
@@ -91,9 +88,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	/**
 	 * @private
 	 * Function to return deltaH table for given algorithm.
-	 * 
 	 * @param {String} type Algorithm to get table for.
-	 * 
 	 * @return {Array<Int>} deltaH table for given algorithm.
 	 */
 	getDeltaHTable: function(type) {
@@ -111,9 +106,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	/**
 	 * @private
 	 * Function to return deltaS table for given algorithm.
-	 * 
 	 * @param {String} type Algorithm to get table for.
-	 * 
 	 * @return {Array<Int>} deltaS table for given algorithm.
 	 */
 	getDeltaSTable: function(type) {
@@ -133,10 +126,8 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	 * Finds number of occurrences of target in sequence.
 	 * Will find repeating sequences, meaning that
 	 * calculateReps("aaa", "aa") returns 2 rather than 1.
-	 * 
 	 * @param  {String} sequence The string to search through.
 	 * @param  {String} target   The string to search for.
-	 * 
 	 * @return {Int} Number of occurrences of target in sequence, with repeats.
 	 */
 	calculateReps: function(sequence, target) {
@@ -170,10 +161,8 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	/**
 	 * @private
 	 * Counts number of occurrences of target in sequence, without repeating.
-	 * 
 	 * @param  {String} sequence The string to search through.
 	 * @param  {String} target   The string to search for.
-	 * 
 	 * @return {Int} Number of occurrences of target in sequence.
 	 */
 	calculateNumberOfOccurrences: function(sequence, target) {

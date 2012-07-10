@@ -1,8 +1,6 @@
 /**
  * @class Teselagen.bio.tools.DigestionCalculator
- *
  * Digestion calculator class.
- *
  * @author Nick Elsbree
  * @author unknown (original author)
  */
@@ -17,10 +15,8 @@ Ext.define("Teselagen.bio.tools.DigestionCalculator", {
 
 	/**
 	 * Calculates position where enzyme cuts sequence and lists digestion fragments.
-	 * 
 	 * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence DNA sequence to digest.
 	 * @param  {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} enzymes List of enzymes that participate in digestion.
-	 * 
 	 * @return {Array<Teselagen.bio.sequence.dna.DigestionFragment>} List of resulting digestion fragments.
 	 */
 	digestSequence: function(dnaSequence, enzymes) {
@@ -76,7 +72,7 @@ Ext.define("Teselagen.bio.tools.DigestionCalculator", {
 
 			fragment = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment", {
 				start: reSitesList[reSitesList.length-1].getStart(),
-				end: seqLength, //TODO: should this be seqLength-1 ?
+				end: seqLength,
 				length: seqLength - reSitesList[reSitesList.length-1].getStart(),
 				startRE: reSitesList[reSitesList.length-1].getRestrictionEnzyme(),
 				endRE: null
@@ -90,10 +86,8 @@ Ext.define("Teselagen.bio.tools.DigestionCalculator", {
 	/**
 	 * @private
 	 * Helper function for sorting two restriction cut sites.
-	 * 
 	 * @param {Teselagen.bio.enzymes.RestrictionCutSite} x
 	 * @param {Teselagen.bio.enzymes.RestrictionCutSite} y
-	 * 
 	 * @return {Int} The sort order.
 	 */
 	sortByStart: function(x, y) {

@@ -1,10 +1,8 @@
 /**
  * @class Teselagen.bio.enzymes.RestrictionEnzymeManager
  * @singleton
- * 
  * Restriction Enzyme loader. 
  * Allows easy retrieval of common and REBASE restriction enzymes.
- * 
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
