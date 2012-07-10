@@ -118,17 +118,17 @@ Ext.define('Teselagen.manager.SequenceManager', {
      * @param {int} end Range end
      */
     subSequence: function(start,end) {
-        var result = null; //SymbolList
+        var result = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
         
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
             return result;
         }
-        /*
+        
         if(start > end) {
-            result = DNATools.createDNA(sequence.subList(start, sequence.length).seqString() + sequence.subList(0, end).seqString());
+            //result = DNATools.createDNA(sequence.subList(start, sequence.length).seqString() + sequence.subList(0, end).seqString());
         } else {
-            result = sequence.subList(start, end);
-        }*/
+            //result = sequence.subList(start, end);
+        }
         
         return result;
     },
@@ -157,6 +157,18 @@ Ext.define('Teselagen.manager.SequenceManager', {
                     //var clonedFeature1 = feature.clone();
                     //clonedFeature1.shift(-start, sequence.length, circular);
                     //subfeatures.addItem(clonedFeature1);
+                }
+            } else if ( start > end && feature.start >=feature.end) {
+                if ( start <= feature.start && end >= feature.end) {
+                    var clonedFeature2 = feature.clone();
+                    clonedFeature2.shif(-start, sequence.length, circular);
+                    subFeatures.addItem(clonedFeature2);
+                }
+            } else if (start > end && feature.start <= feature.end) {
+                if ( start <= feature.start ) {
+                    var 
+                }
+            }
                 }
             }
             }
