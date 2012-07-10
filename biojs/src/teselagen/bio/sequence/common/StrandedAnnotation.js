@@ -17,8 +17,6 @@ Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 		end = data.end;
 		strand = data.strand;
 
-		console.log(strand);
-
 		this.callParent([data]);
 
 		this.getStrand = function(){

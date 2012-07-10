@@ -1,8 +1,6 @@
 /**
  * @class Teselagen.bio.orf.ORF
- *
  * Open Read Frame sequence annotation.
- * 
  * @author Nick Elsbree
  * @author Zinovii Dmytriv
  */
@@ -11,18 +9,16 @@ Ext.define("Teselagen.bio.orf.ORF", {
 
 	/**
 	 * Constructor.
-	 * 
 	 * @param {Int} start Frame start location.
-	 * @param {Int} end Frame end location.
+	 * @param {Int} end Index of the nucleotide after the last nucleotide in the frame.
 	 * @param {Teselagen.StrandType} strand Frame strand.
 	 * @param {Int} frame The frame. Can be 0, 1, or 2.
 	 * @param {Array} startCodons List of start codons for ORF.
-	 * 
-	 * @return {Teselagen.bio.orf.ORF}
 	 */
 	constructor: function(inData) {
 		var frame;
 		var startCodons;
+		var strand;
 
 		this.callParent([inData]);
 
@@ -36,6 +32,12 @@ Ext.define("Teselagen.bio.orf.ORF", {
 			startCodons = null;
 		} else {
 			startCodons = inData.startCodons;
+		}
+
+		if(typeof(inData.strand) === "undefined") {
+			strand = 1;
+		} else {
+			strand = inData.strand;
 		}
 
 		/**
@@ -66,6 +68,20 @@ Ext.define("Teselagen.bio.orf.ORF", {
 		this.setStartCodons = function(pStartCodons) {
 			startCodons = pStartCodons;
 		};
+		/**
+		 * Get the strand.
+		 * @return {Int}
+		 */
+		this.getStrand = function() {
+			return strand;
+		}
+		/**
+		 * Set the strand.
+		 * @param {Int} strand
+		 */
+		this.setStrand = function(pStrand) {
+			strand = pStrand;
+		}
 
 		return this;
 	}

@@ -5,7 +5,7 @@
 //Ext.require('Teselagen.bio.util.StringUtil');
 Ext.require("Ext.Ajax");
 Ext.require("Teselagen.StringUtil");
-describe("Testing Genbank related classes ", function() {
+describe("Testing Genbank related classes:", function() {
     var dt =  Ext.create("Data");
     var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
 

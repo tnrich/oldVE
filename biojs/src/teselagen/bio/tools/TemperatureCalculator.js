@@ -1,7 +1,6 @@
 /**
  * @class Teselagen.bio.tools.TemperatureCalculator
  * DNA temperature calculator.
- *
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
@@ -10,23 +9,19 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 
 	requires: ["Teselagen.bio.BioException", "Teselagen.bio.sequence.dna.DNASequence"],
 
-	statics: {
-		TABLE_BRESLAUER: "breslauer",
-		TABLE_SUGIMOTO: "sugimoto",
-		TABLE_UNIFIED: "unified",
+	TABLE_BRESLAUER: "breslauer",
+	TABLE_SUGIMOTO: "sugimoto",
+	TABLE_UNIFIED: "unified",
 
-		A: -10.8,	// Helix initiation for deltaS
-		R: 1.987	// Gas constant (cal/(K*mol)).
-		C: 0.5e-6	// Oligo concentration. 0.5uM is typical for PCR.
-		Na: 50e-3	// Monovalent salt concentration. 50mM is typical for PCR.
-	},
+	A: -10.8,	// Helix initiation for deltaS
+	R: 1.987,	// Gas constant (cal/(K*mol)).
+	C: 0.5e-6,	// Oligo concentration. 0.5uM is typical for PCR.
+	Na: 50e-3,	// Monovalent salt concentration. 50mM is typical for PCR.
 
 	/**
 	 * Calculates temperature for DNA sequence using a given algorithm.
-	 * 
 	 * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence The DNA sequence to use.
 	 * @param  {String} type Either Teselagen.bio.tools.TemperatureCalculator.TABLE_BRESLAUER, TABLE_SUGIMOTO, or TABLE_UNIFIED
-	 * 
 	 * @return {Double} Temperature for the given sequence, in Celsius.
 	 */
 	calculateTemperature: function(dnaSequence, type) {
@@ -80,7 +75,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
             sumDeltaS = sumDeltaS + neighbors[i] * deltaSTable[i];
         }
 
-        var temperature = ((-1000.0 * sumDeltaH) / (this.A + -sumDeltaS + this.R * Math.log(this.C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(Na);
+        var temperature = ((-1000.0 * sumDeltaH) / (this.A + -sumDeltaS + this.R * Math.log(this.C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(this.Na);
 
         // If temperature is negative then return 0.
         if(temperature < 0) {
@@ -93,9 +88,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	/**
 	 * @private
 	 * Function to return deltaH table for given algorithm.
-	 * 
 	 * @param {String} type Algorithm to get table for.
-	 * 
 	 * @return {Array<Int>} deltaH table for given algorithm.
 	 */
 	getDeltaHTable: function(type) {
@@ -108,14 +101,12 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 		} else {
 			return null;
 		}
-	}
+	},
 
 	/**
 	 * @private
 	 * Function to return deltaS table for given algorithm.
-	 * 
 	 * @param {String} type Algorithm to get table for.
-	 * 
 	 * @return {Array<Int>} deltaS table for given algorithm.
 	 */
 	getDeltaSTable: function(type) {
@@ -135,10 +126,8 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	 * Finds number of occurrences of target in sequence.
 	 * Will find repeating sequences, meaning that
 	 * calculateReps("aaa", "aa") returns 2 rather than 1.
-	 * 
 	 * @param  {String} sequence The string to search through.
 	 * @param  {String} target   The string to search for.
-	 * 
 	 * @return {Int} Number of occurrences of target in sequence, with repeats.
 	 */
 	calculateReps: function(sequence, target) {
@@ -172,10 +161,8 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 	/**
 	 * @private
 	 * Counts number of occurrences of target in sequence, without repeating.
-	 * 
 	 * @param  {String} sequence The string to search through.
 	 * @param  {String} target   The string to search for.
-	 * 
 	 * @return {Int} Number of occurrences of target in sequence.
 	 */
 	calculateNumberOfOccurrences: function(sequence, target) {

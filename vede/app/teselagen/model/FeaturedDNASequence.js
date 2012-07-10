@@ -5,7 +5,7 @@
  * @author Zinovii Dmytriv (original author)
  */
 
-Ext.define("Teselagen.bio.parsers.Genbank", {
+Ext.define("Teselagen.bio.parsers.FeatureedDNASequence", {
     
     config:{
         

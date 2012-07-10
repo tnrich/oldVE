@@ -1,9 +1,7 @@
 /**
  * @class Teselagen.bio.orf.ORFFinder
  * @singleton
- *
  * Helper class to find open reading frames in a DNA sequence.
- *
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
@@ -14,13 +12,12 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		"Teselagen.bio.sequence.symbols.GapSymbol"],
 
 	singleton:true,
+
 	/**
 	 * Calculates open read frames for a DNA sequence and filters them by a minimum length.
 	 * No open read frames shorter than minimumLength will be returned.
-	 * 
 	 * @param  {SymbolList} dnaSymbolList A DNA sequence.
 	 * @param  {Int} minimumLength Minimum ORF length. If value is -1 or not given, no minimum length will be applied.
-	 * 
 	 * @return {Array<Teselagen.bio.orf.ORF} All open read frames in forward strand with length > minimumLength.
 	 */
 	calculateORFs: function(dnaSymbolList, minimumLength) {
@@ -32,9 +29,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			return [];
 		}
 
-		var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength);
-		var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength);
-		var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength);
+		var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
 
 		return orfs1.concat(orfs2, orfs3);
 	},
@@ -42,11 +39,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	/**
 	 * Calculates open read frames for a DNA sequence in both directions and filters them by a minimum length.
 	 * No open read frames shorter than minimumLength will be returned.
-	 * 
 	 * @param  {SymbolList} forwardSymbolList The forward DNA sequence.
 	 * @param  {SymbolList} reverseSymbolList  The reverse DNA sequence.
 	 * @param  {Int} minimumLength      Minimum ORF length. If value is -1 or not given, no minimum length will be applied.
-	 * 
 	 * @return {Array<Teselagen.bio.orf.ORF>} All open read frames in forward and reverse strands with length > minimumLength.
 	 */
 	calculateORFBothDirections: function(forwardSymbolList, reverseSymbolList, minimumLength) {
@@ -56,32 +51,32 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
 		var result = [];
 
-		var orfs1Forward = orfPerFrame(0, forwardSymbolList, minimumLength, StrandType.FORWARD);
-		var orfs2Forward = orfPerFrame(1, forwardSymbolList, minimumLength, StrandType.FORWARD);
-		var orfs3Forward = orfPerFrame(2, forwardSymbolList, minimumLength, StrandType.FORWARD);
+		var orfs1Forward = this.orfPerFrame(0, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs2Forward = this.orfPerFrame(1, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs3Forward = this.orfPerFrame(2, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
 
-		var orfs1Reverse = orfPerFrame(0, forwardSymbolList, minimumLength, StrandType.BACKWARD);
-		var orfs2Reverse = orfPerFrame(1, forwardSymbolList, minimumLength, StrandType.BACKWARD);
-		var orfs3Reverse = orfPerFrame(2, forwardSymbolList, minimumLength, StrandType.BACKWARD);
+		var orfs1Reverse = this.orfPerFrame(0, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
+		var orfs2Reverse = this.orfPerFrame(1, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
+		var orfs3Reverse = this.orfPerFrame(2, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
 
 		var reverseCombined = orfs1Reverse.concat(orfs2Reverse, orfs3Reverse);
 
-		var sequenceLength = reverseSymbolList.length;
+		var sequenceLength = reverseSymbolList.toString().length;
 		for(var i = 0; i < reverseCombined.length; i++) {
 			var orf = reverseCombined[i];
 
-			var start = sequenceLength - orf.start;
-			var end = sequenceLength - orf.end;
+			var start = sequenceLength - orf.getStart();
+			var end = sequenceLength - orf.getEnd();
 
 			orf.setOneStart(end);
 			orf.setOneEnd(start);
 
-			for(var j = 0; j < orf.startCodons.length; j++) {
-				orf.startCodons[j] = sequenceLength - orf.startCodons[j] - 1;
+			for(var j = 0; j < orf.getStartCodons().length; j++) {
+				orf.getStartCodons()[j] = sequenceLength - orf.getStartCodons()[j] - 1;
 			}
 
-			startCodons = orf.getStartCodons();
-			startCodons.sort(codonsSort);
+			var startCodons = orf.getStartCodons();
+			startCodons.sort(this.codonsSort);
 			orf.setStartCodons(startCodons);
 		}
 
@@ -91,12 +86,10 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	/**
 	 * @private
 	 * Finds ORFs in a given DNA strand in a given frame.
-	 * 
 	 * @param  {Int} frame The frame to look in.
 	 * @param  {Teselagen.bio.sequence.common.SymbolList} dnaSymbolList The dna sequence.
 	 * @param  {Int} minimumLength The minimum length of ORF to return.
 	 * @param  {Teselagen.bio.sequence.common.StrandType} strand The strand we are looking at.
-	 * 
 	 * @return {Array<Teselagen.bio.orf.ORF>} The list of ORFs found.
 	 */
 	orfPerFrame: function(frame, dnaSymbolList, minimumLength, strand) {
@@ -104,7 +97,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			minimumLength = -1;
 		}
 		if(typeof(strand) === "undefined") {
-			strand = 1;
+			var strand = Teselagen.bio.sequence.common.StrandType.FORWARD;
 		}
 
 		tu = Ext.create("Teselagen.bio.sequence.TranslationUtils", {
@@ -164,13 +157,15 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 						if(startCodonIndexes == null) {
 							startCodonIndexes = [];
 						}
-						orfs.push(Ext.create("Teselagen.bio.orf.ORF", {
+						var orf = Ext.create("Teselagen.bio.orf.ORF", {
 							start: startIndex,
 							end: endIndex + 1,
 							strand: strand,
 							frame: frame,
 							startCodons: startCodonIndexes
-						}));
+						});
+
+						orfs.push(orf);
 					}
 				}
 
@@ -189,11 +184,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	/**
 	 * @private
 	 * Takes three nucleotides and determines if they (and their ambiguous matches) form a stop codon.
-	 * 
 	 * @param  {Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)} nucleotideOne
 	 * @param  {Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)} nucleotideTwo
 	 * @param  {{Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)}} nucleotideThree
-	 * 
 	 * @return {Boolean} True if the nucleotides given form a stop codon.
 	 */
 	evaluatePossibleStop: function(nucleotideOne, nucleotideTwo, nucleotideThree) {
@@ -223,7 +216,6 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	/**
 	 * @private
 	 * Sorting function for sorting codons.
-	 * 
 	 * @param a
 	 * @param b
 	 * @return {Int} Sort order.
