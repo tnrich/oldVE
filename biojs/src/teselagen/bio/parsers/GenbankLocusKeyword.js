@@ -1,7 +1,8 @@
 
 /**
- * GenbankLocusKeyword 
- * Class for GenbankLocusKeyword. Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
+ * GenbankLocusKeyword. 
+ * Stores the information from the LOCUS line of a Genbank file. 
+ * Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
  * Specificfor parsing the Locus line.
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -22,10 +23,13 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
      * @param {String} linear
      * @param {String} divisionCode
      * @param {String} date
+     * @returns {GenbankLocusKeyword}
+     * @memberOf GenbankLocusKeyword
      */
     constructor: function (inData) {
-        var that = this;
-        that.keyword = "LOCUS";
+        //var that = this;
+        
+        this.keyword = "LOCUS";
         var locusName;
         var sequenceLength;
         var strandType;
@@ -42,7 +46,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
             strandType		= inData.strandType || "";
             naType			= inData.naType || "";
             linear			= inData.linear || false; // false or false; default is false, only a true can override this
-            circular;//		= inData.circular;
+            circular		= !inData.linear || false; //untested
             divisionCode	= inData.divisionCode || "";
             date			= inData.date || "";
         }
@@ -55,7 +59,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set locusName
-         * @params {String} locusName
+         * @param {String} locusName
          */
         this.setLocusName = function(pLocusName) {
             locusName = pLocusName;
@@ -69,7 +73,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set strandType
-         * @params {String} pStrandType
+         * @param {String} strandType
          */
         this.setStrandType = function(pStrandType) {
             strandType = pStrandType;
@@ -83,7 +87,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set SequenceLength
-         * @params {String}
+         * @param {String} sequenceLength
          */
         this.setSequenceLength = function(pSequenceLength) {
             sequenceLength = pSequenceLength;
@@ -97,7 +101,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set naType
-         * @params {String} naType
+         * @param {String} naType
          */
         this.setNaType = function(pNaType) {
             naType = pNaType;
@@ -111,15 +115,21 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set linear
-         * @params {String}
+         * @param {Boolean} linear
          */
         this.setLinear = function(pLinear) {
             linear = pLinear;
         }
-
+        /** Get Circular
+         * @returns {Boolean} circular
+         */
         this.getCircular = function() {
             return circular;
         }
+        /**
+         * Set Circular
+         * @param {Boolean} circular
+         */
         this.setCircular = function(pCircular) {
             circular = pCircular;
         }
@@ -132,14 +142,13 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set DivisionCode
-         * @params {String}
+         * @param {String} divisionCode
          */
         this.setDivisionCode = function(pDivisionCode) {
             divisionCode = pDivisionCode;
         }
         /**
          * Get date
-         * 
          * @returns {String} date
          */
         this.getDate = function() {
@@ -147,7 +156,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set Date
-         * @params {String}
+         * @param {String} date
          */
         this.setDate = function(pDate) {
             date = pDate;
@@ -155,7 +164,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 
         /**
          * Converts this GenbankLocusKeyword to Genbank file format string
-         * @returns {String}
+         * @returns {String} genbankString
          */
         this.toString = function () {
             var tmp;

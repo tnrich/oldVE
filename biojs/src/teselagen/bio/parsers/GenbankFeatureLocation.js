@@ -1,7 +1,7 @@
 
 /**
- * GenbankFeatureLocation class 
- * Class for GenbankFeatureQualifier. Follows the 'complement(join(>start...end))' format
+ * GenbankFeatureLocation. 
+ * Stores the Feature Location from the Genbank formatted line:  'ELEMENTNAME               complement(join(>start...end))' .
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -12,13 +12,15 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.
-     * @param {Int} start
-     * @param {Int} end
+     * @param {int} start
+     * @param {int} end
      * @param {String} preStart
      * @param {String} preEnd
+     * @returns {GenbankFeatureQualifier}
+     * @memberOf GenbankFeatureLocation
      */
     constructor: function (inData) {
-        var that = this;
+        //var that = this;
 
         var start = "";
         var preStart = "";
@@ -41,27 +43,28 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         }
         /**
          * Get start
+         * @returns {int} start
          */
         this.getStart = function() {
             return start;
         }
         /**
          * Set start
-         * @params {int} start
+         * @param {int} start
          */
         this.setStart = function(pStart) {
             start = pStart;
         }
         /**
          * Get end
-         * @returns {Int} end
+         * @returns {int} end
          */
         this.getEnd = function() {
             return end;
         }
         /**
          * Set end
-         * @param {Int} end
+         * @param {int} end
          */
         this.setEnd = function(pEnd) {
             end = pEnd;
@@ -69,7 +72,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
         /**
          * Converts this GenbankLocusKeyword to Genbank file format string
-         * @returns {String}
+         * @returns {String} genbankString
          */
         this.toString = function() {
             //var line = preStart + start + sufStart + ".." + preEnd + end + sufEnd;
@@ -81,7 +84,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         }
         /**
          * Converts to JSON format.
-         * @returns {Object}
+         * @returns {Object} json
          */
         this.toJSON = function() {
             var json = {

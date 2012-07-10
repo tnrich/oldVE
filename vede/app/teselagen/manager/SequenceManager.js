@@ -6,7 +6,7 @@
  * @author Zinovii Dmytriv (original author of SequenceProvider.as)
  */
 
-Ext.define('Teselagen.manager.SequenceManager', {
+Ext.define("Teselagen.manager.SequenceManager", {
 
     constructor: function(inData) {
         var that = this;
@@ -29,38 +29,38 @@ Ext.define('Teselagen.manager.SequenceManager', {
             sequence = inData.sequence || null;
             features = inData.features || [];
         }
-
+        
         this.getName = function () {
-            return = that.name;
+            return name;
         }
         this.setName = function(pName) {
             //manualUpdateStart();
-            that.name = pName;
+            name = pName;
             //manualUpdateEnd();
         }
         this.getCircular = function () {
-            return = that.circular;
+            return circular;
         }
         this.setCircular = function(pCircular) {
             //manualUpdateStart();
-            that.circular = pCircular;
+            circular = pCircular;
             //manualUpdateEnd();
         }
         this.getSequence = function () {
-            return = that.sequence;
+            return sequence;
         }
         this.setSequence = function(pSequence) {
             needsRecalculateComplementSequence = true;
             needsRecalculateReverseComplementSequence = true;
-            that.sequence = pSequence;
+            sequence = pSequence;
         }
         this.getFeatures = function () {
-            return = that.features;
+            return features;
         }
         this.setFeatures = function(pFeatures) {
-            that.features = pFeatures;
+            features = pFeatures;
         }
-
+        
 
         return this;
     },
@@ -73,6 +73,7 @@ Ext.define('Teselagen.manager.SequenceManager', {
     // Build in lib/common
     createMemento: function() {
         //
+        return null;
     },
     
     setMemento: function(pMemento) {
@@ -137,8 +138,10 @@ Ext.define('Teselagen.manager.SequenceManager', {
      * Sub sequence manager by range
      * @param {int} start Range start
      * @param {int} end Range end
+     * @memberOf SequenceManager
+     * Was subSequenceProvider
      */
-    subSequenceProvider: function(start, end) {
+    subSequenceManager: function(start, end) {
         var featuredSubSequence = null; //SequenceManger
         
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
@@ -149,35 +152,49 @@ Ext.define('Teselagen.manager.SequenceManager', {
         
         var subFeatures = {}; // ArrayCollection?
         
+        
         for (var i=0; i > features.length; i++) {
             var feature = features[i]; //Feature
 
             if ( start < end && feature.start < end ) { // only do this when the end is after the start
                 if ( start <= feature.start && end >= feature.end ) { //
-                    //var clonedFeature1 = feature.clone();
-                    //clonedFeature1.shift(-start, sequence.length, circular);
-                    //subfeatures.addItem(clonedFeature1);
+                    var clonedFeature1 = feature.clone();
+                    clonedFeature1.shift(-start, sequence.length, circular);
+                    subfeatures.addItem(clonedFeature1);
                 }
             } else if ( start > end && feature.start >=feature.end) {
                 if ( start <= feature.start && end >= feature.end) {
                     var clonedFeature2 = feature.clone();
-                    clonedFeature2.shif(-start, sequence.length, circular);
+                    clonedFeature2.shift(-start, sequence.length, circular);
                     subFeatures.addItem(clonedFeature2);
                 }
             } else if (start > end && feature.start <= feature.end) {
                 if ( start <= feature.start ) {
-                    var 
+                    var clonedFeature3 = feature.clone();
+                    clonedFeature3.shift(-start, sequence.length, circular);
+                    subFeatures.addItem(clonedFeature3);
+                } else if ( end > feature.end ) {
+                    var clonedFeature4 = feature.clone();
+                    clonedFeature4.shift(-start, sequence.length, circular);
+                    subFeatures.addItem(clonedFeature4);
                 }
-            }
-                }
-            }
             }
         }
-        
-        
-    }
+        featuredSubSequence = Ext.create("Teselagen.manager.SequenceManager", {
+            name: "Dummy",
+            circular: false,
+            sequence: featuredSubSymbloList,
+            features: subFeatures
+        });
+        return featuredSubSequence;
+    },
     
-
+    /**
+     * Adds feature to sequence manager
+     * @param {Feature} feature Feature to add
+     * @param {Boolean} quiet When tr
+     */
+    
     fromGenbank: function(genbank) {
         var result;
 

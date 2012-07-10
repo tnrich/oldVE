@@ -1,7 +1,8 @@
 
 /**
- * GenbankFeaturesKeyword class. 
- * Class for GenbankFeaturesKeyword. Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankOriginKeyword.
+ * GenbankFeaturesKeyword. 
+ * Stores an array of GenbankFeatureElements. Is created when parsing the line "FEATURES" from a Genbank file.
+ * Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankOriginKeyword.
  * Simply holds GenbankFeatureElements in an array.
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -15,11 +16,15 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 
     /**
      * Creates a new GenbankFeaturesKeyword from inData.
+     * @returns {GenbankFeaturesKeyword}
+     * @memberOf GenbankFeaturesKeyword
      */
     constructor: function () {
-        var that = this;
-
-        that.keyword = "FEATURES";
+        //var that = this;
+        /**
+         *  @property {String} keyword
+         */
+        this.keyword = "FEATURES";
         /**
          *  @property [GenbankFeatureElements] featuresElements
          */
@@ -28,14 +33,14 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 
         /**
          * Get featuresElements
-         * @returns {GenbankFeaturesKeyword
+         * @returns {GenbankFeaturesKeyword} featuresElements
          */
         this.getFeaturesElements = function() {
             return featuresElements;
         }
         /**
          * Set featuresElements
-         * @param {GenbankFeaturesKeyword} featuresElements
+         * @param {[GenbankFeaturesKeyword]} featuresElements
          */
         this.setFeaturesElements = function(pFeaturesElements) {
             featuresElements = pFeaturesElements;
@@ -62,7 +67,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
         }
         /**
          * Converts this GenbankFeaturesKeyword to Genbank file format string
-         * @returns {String} line
+         * @returns {String} genbankString
          */
         this.toString = function() {
             var line = "FEATURES             Location/Qualifiers\n";
@@ -81,10 +86,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
          */
         this.toJSON = function() {
             var json = {
-                    keyword: that.keyword,
+                    keyword: this.keyword,
             }
-            if (that.value  !== null) {
-                json["value"] = that.value;
+            if (this.value  !== null) {
+                json["value"] = this.value;
             }
             json["elements"] = [];
             for (var i=0; i <featuresElements.length; i++) {

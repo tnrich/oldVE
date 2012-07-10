@@ -1,7 +1,9 @@
 
 /**
  * GenbankSubKeyword class. 
- * Class for SubKeywords not defined by GenbankFeatureElements (Qualifier and Location).
+ * Stores the information from sub-keyword lines of a Genbank file.
+ * These are for subkeywords not defined by GenbankFeatureElements (Qualifier and Location)
+ * and from the main section of the Genbank File (e.g. Source, Authors, etc.)
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -16,40 +18,36 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
      * Creates a new GenbankSubKeywords from inData.
      * @param {String} keyword
      * @param {String} value
+     * @returns {GenbankSubKeywords}
+     * @memberOf GenbankSubKeywords
      */
     constructor: function (inData) {
-        var that = this;
+        //var that = this;
 
         if (inData) {
-            that.keyword   = inData.keyword || null;
-            that.value = inData.value || null;
+            this.keyword    = inData.keyword || null;
+            this.value      = inData.value || null;
         }
-        /*
-         * Get keyword
-         *
-        this.getKeyword = function() {
-            return that.keyword;
-        }*/
 
-        /*
+        /**
          * Appends pValue to existing value property
-         * @param {String} pVal
-         *
+         * @param {String} value
+         */
 		this.appendValue = function(pVal) {
-			that.value += pVal;
-		}*/
+			this.value += pVal;
+		}
 
         /**
          * Converts this GenbankSubKeywords to Genbank file format string
-         * @returns {String}
+         * @returns {String} genbankString
          */
         this.toString = function() {
             //var width = 80-12;
-            var line = "  " + that.keyword;
+            var line = "  " + this.keyword;
             //line = line.lpad(" ", 2); // + this.value;
             line = Teselagen.StringUtil.rpad(line," ", 12);
 
-            line += that.value;
+            line += this.value;
             /*line += that.value.substring(0,width)
 
 			for (var i=width; i<value; i=i+width) {
@@ -65,8 +63,8 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
          */
         this.toJSON = function() {
             var json = {
-                    keyword: that.keyword,
-                    value: that.value
+                    keyword: this.keyword,
+                    value: this.value
             }
             return json;
         }
