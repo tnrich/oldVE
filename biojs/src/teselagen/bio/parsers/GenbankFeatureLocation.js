@@ -1,7 +1,7 @@
 
 /**
  * GenbankFeatureLocation. 
- * Class for GenbankFeatureQualifier. Follows the 'complement(join(>start...end))' format
+ * Stores the Feature Location from the Genbank formatted line:  'ELEMENTNAME               complement(join(>start...end))' .
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -12,8 +12,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.
-     * @param {Int} start
-     * @param {Int} end
+     * @param {int} start
+     * @param {int} end
      * @param {String} preStart
      * @param {String} preEnd
      * @returns {GenbankFeatureQualifier}
@@ -43,28 +43,28 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         }
         /**
          * Get start
-         * @returns {Int} start
+         * @returns {int} start
          */
         this.getStart = function() {
             return start;
         }
         /**
          * Set start
-         * @param {Int} start
+         * @param {int} start
          */
         this.setStart = function(pStart) {
             start = pStart;
         }
         /**
          * Get end
-         * @returns {Int} end
+         * @returns {int} end
          */
         this.getEnd = function() {
             return end;
         }
         /**
          * Set end
-         * @param {Int} end
+         * @param {int} end
          */
         this.setEnd = function(pEnd) {
             end = pEnd;

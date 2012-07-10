@@ -59,7 +59,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set locusName
-         * @params {String} locusName
+         * @param {String} locusName
          */
         this.setLocusName = function(pLocusName) {
             locusName = pLocusName;
@@ -73,7 +73,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set strandType
-         * @params {String} pStrandType
+         * @param {String} strandType
          */
         this.setStrandType = function(pStrandType) {
             strandType = pStrandType;
@@ -87,7 +87,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set SequenceLength
-         * @params {String} sequenceLength
+         * @param {String} sequenceLength
          */
         this.setSequenceLength = function(pSequenceLength) {
             sequenceLength = pSequenceLength;
@@ -101,7 +101,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set naType
-         * @params {String} naType
+         * @param {String} naType
          */
         this.setNaType = function(pNaType) {
             naType = pNaType;
@@ -115,7 +115,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set linear
-         * @params {Boolean} linear
+         * @param {Boolean} linear
          */
         this.setLinear = function(pLinear) {
             linear = pLinear;
@@ -142,7 +142,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set DivisionCode
-         * @params {String} divisionCode
+         * @param {String} divisionCode
          */
         this.setDivisionCode = function(pDivisionCode) {
             divisionCode = pDivisionCode;
@@ -156,7 +156,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         }
         /**
          * Set Date
-         * @params {String} date
+         * @param {String} date
          */
         this.setDate = function(pDate) {
             date = pDate;
