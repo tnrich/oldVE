@@ -1,4 +1,13 @@
-//Need to implement  singleton
+/**
+ * @class Teselagen.bio.sequence.alphabets.ProteinAlphabet
+ * 
+ * Protein alphabet. Most general alphabet to build Protein sequences.
+ * 
+ * @see Teselagen.bio.sequence.symbols.AminoAcidSymbol
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ * @author Timothy Ham (original author)
+ */
 Ext.define("Teselagen.bio.sequence.alphabets.ProteinAlphabet", {
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet",
 	singleton: true,
