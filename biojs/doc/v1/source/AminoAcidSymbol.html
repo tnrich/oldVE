@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol'>    /**
+</span>    * AminoAcidSymbol class
+    * @description This class ssets up the data structure for Amino Acids
+    * @author Micah Lerner
+    */
+
+Ext.define(&quot;Teselagen.bio.sequence.symbols.AminoAcidSymbol&quot;,{
+<span id='Teselagen-bio-sequence-symbols-AminoAcidSymbol-method-constructor'>	/**
+</span>	* Constructor
+	* @param  String name  	Full Name
+	* @param  String value 	One Letter Symbol
+	* @param  String threeLettersName 	Three letter symbol abbreviation
+	*/
+
+	constructor: function(data){
+		var name = data.name;
+		var value = data.value;
+		var threeLettersName = data.threeLettersName;
+
+		this.getName =function(){
+			return name;
+		}
+
+		this.setName = function(pName){
+			name = pName;
+		}
+
+		this.getThreeLettersName = function(){
+			return threeLettersName;
+		}
+
+		this.setThreeLettersName = function(pThreeLettersName){
+			threeLettersName = pThreeLettersName;
+		}
+
+		this.getValue = function() {
+			return value;
+		}
+		this.setValue = function(pValue) {
+			value = pValue;
+		}
+
+		return this;
+
+	}
+});</pre>
+</body>
+</html>
