@@ -10,7 +10,7 @@
 Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 	extend: 'Teselagen.bio.sequence.common.Annotation',
 	
-	constructor: function(data){
+	constructor: function(inData){
 
 
 		start = data.start;

@@ -9,9 +9,8 @@
 Ext.define("Teselagen.bio.sequence.common.Location", {
 	/**
 	 * Constructor
-	 * @param  inData contains:
-	 *         		       location start
-	 *         	        	       location end
+	 * @param {Integer} start location start
+	 * @param {Integer} end location end
 	 */
 	constructor: function(inData){
 		var start; 
@@ -20,7 +19,9 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 			start = inData.start || 0;
 			end = inData.end || 0;
 		} else {
-
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
 		};
 
 		/**
