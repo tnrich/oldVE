@@ -13,23 +13,24 @@
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 	singleton: true,
 	
-	requires: ["Teselagen.bio.enzymes.RestrictionCutSite", "Teselagen.bio.sequence.common.StrandType"],
+	requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
+		"Teselagen.bio.sequence.common.StrandType",],
 	
 	/**
 	 * Cut sequence by list of restriction enzymes.
 	 * 
 	 * @param {Array} restrictionEnzymes List of restriction enzymes to cut sequence with.
-	 * @param {} symbolList The DNA sequence to be cut.
+	 * @param {Teselagen.bio.sequence.dna.DNASequence} symbolList The DNA sequence to be cut.
 	 * @return 
 	 * 
 	 * @see Teselegen.bio.enzymes.RestrictionCutSite
 	 */
 	cutSequence: function(restrictionEnzymes, symbolList) {
-		var reCuts = {};
+		var reCuts = new Ext.util.HashMap();
 		
 		for(var i = 0; i < restrictionEnzymes.length; i++) {
 			var re = restrictionEnzymes[i];
-			reCuts[re.name] = this.cutSequenceByRestrictionEnzyme(re, symbolList);
+			reCuts.add(re, this.cutSequenceByRestrictionEnzyme(re, symbolList));
 		}
 		
 		return reCuts;
@@ -62,13 +63,13 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 		var startIndex = 0;
 		var subSequence = sequence;
 		while(matchIndex != -1) {
-			if(matchIndex + reLength - 1 >= subSequence.length) { // subSequence is too short
+			if(matchIndex + startIndex + reLength - 1 >= sequence.length) { // subSequence is too short
 				break;
 			}
 			
 			restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
 				start: matchIndex + startIndex,
-				end: matchIndex + reLength + startIndex + 1,
+				end: matchIndex + reLength + startIndex,
 				strand: Teselagen.bio.sequence.common.StrandType.FORWARD,
 				restrictionEnzyme: restrictionEnzyme
 			});
@@ -77,10 +78,10 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 			// Make sure that we always store the previous match index to ensure
 			// that we are always storing indices relative to the whole sequence,
 			// not just the subSequence.
-			startIndex = matchIndex + 1;
+			startIndex = startIndex + matchIndex + 1;
 			
 			// Search again on subSequence, starting from the index of the last match + 1.
-			subSequence = subSequence.substring(startIndex, subSequence.length);
+			subSequence = sequence.substring(startIndex, sequence.length);
 			matchIndex = subSequence.search(forwardRegExpPattern);
 		}
 		
@@ -88,14 +89,14 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 			matchIndex = sequence.search(reverseRegExpPattern);
 			startIndex = 0;
 			subSequence = sequence;
-			while(match != -1) {
-				if(matchIndex + reLength - 1 >= subSequence.length) { // subSequence is too short
+			while(matchIndex != -1) {
+				if(matchIndex + startIndex + reLength - 1 >= sequence.length) { // subSequence is too short
 					break;
 				}
 				
 				restrictionCutSite = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
-					start: matchIndex + startIndex,
-					end: matchIndex + reLength + startIndex + 1,
+					start: matchIndex - 1 + startIndex,
+					end: matchIndex - 1 + reLength + startIndex,
 					strand: Teselagen.bio.sequence.common.StrandType.BACKWARD,
 					restrictionEnzyme: restrictionEnzyme
 				});
@@ -104,10 +105,10 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 				// Make sure that we always store the previous match index to ensure
 				// that we are always storing indices relative to the whole sequence,
 				// not just the subSequence.
-				startIndex = matchIndex + 1;
+				startIndex = startIndex + matchIndex + 1;
 				
 				// Search again on subSequence, starting from the index of the last match + 1.
-				subSequence = subSequence.substring(startIndex, subSequence.length);
+				subSequence = sequence.substring(startIndex, sequence.length);
 				matchIndex = subSequence.search(reverseRegExpPattern);
 			}
 		}

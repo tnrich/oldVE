@@ -7,7 +7,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 		if (inData) {
 			var start = inData.start || 0;
 			var end = inData.end || 0;
-			var length = inData._length || 0;
+			var length = inData.length || 0;
 			var startRE = inData.startRE || null;
 			var endRE = inData.endRE || null;
 		} else {
@@ -33,11 +33,11 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 		}
 
 		this.getLength = function(){
-			return _length;
+			return length;
 		}
 
 		this.setLength = function(pLength){
-			_length = pLength;
+			length = pLength;
 		}
 
 		this.getStartRE = function(){

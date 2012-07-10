@@ -13,7 +13,7 @@ Ext.define("Teselagen.bio.orf.ORF", {
 	 * Constructor.
 	 * 
 	 * @param {Int} start Frame start location.
-	 * @param {Int} end Frame end location.
+	 * @param {Int} end Index of the nucleotide after the last nucleotide in the frame.
 	 * @param {Teselagen.StrandType} strand Frame strand.
 	 * @param {Int} frame The frame. Can be 0, 1, or 2.
 	 * @param {Array} startCodons List of start codons for ORF.

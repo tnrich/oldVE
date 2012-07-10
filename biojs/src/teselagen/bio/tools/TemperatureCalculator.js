@@ -10,16 +10,14 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 
 	requires: ["Teselagen.bio.BioException", "Teselagen.bio.sequence.dna.DNASequence"],
 
-	statics: {
-		TABLE_BRESLAUER: "breslauer",
-		TABLE_SUGIMOTO: "sugimoto",
-		TABLE_UNIFIED: "unified",
+	TABLE_BRESLAUER: "breslauer",
+	TABLE_SUGIMOTO: "sugimoto",
+	TABLE_UNIFIED: "unified",
 
-		A: -10.8,	// Helix initiation for deltaS
-		R: 1.987	// Gas constant (cal/(K*mol)).
-		C: 0.5e-6	// Oligo concentration. 0.5uM is typical for PCR.
-		Na: 50e-3	// Monovalent salt concentration. 50mM is typical for PCR.
-	},
+	A: -10.8,	// Helix initiation for deltaS
+	R: 1.987,	// Gas constant (cal/(K*mol)).
+	C: 0.5e-6,	// Oligo concentration. 0.5uM is typical for PCR.
+	Na: 50e-3,	// Monovalent salt concentration. 50mM is typical for PCR.
 
 	/**
 	 * Calculates temperature for DNA sequence using a given algorithm.
@@ -80,7 +78,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
             sumDeltaS = sumDeltaS + neighbors[i] * deltaSTable[i];
         }
 
-        var temperature = ((-1000.0 * sumDeltaH) / (this.A + -sumDeltaS + this.R * Math.log(this.C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(Na);
+        var temperature = ((-1000.0 * sumDeltaH) / (this.A + -sumDeltaS + this.R * Math.log(this.C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(this.Na);
 
         // If temperature is negative then return 0.
         if(temperature < 0) {
@@ -108,7 +106,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
 		} else {
 			return null;
 		}
-	}
+	},
 
 	/**
 	 * @private

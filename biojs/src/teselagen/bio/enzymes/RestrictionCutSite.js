@@ -15,7 +15,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionCutSite", {
 	 * Constructor.
 	 * 
 	 * @param {Int} start Cut site start location.
-	 * @param {Int} end Cut site end location.
+	 * @param {Int} end Index of the nucleotide AFTER the last nucleotide in the cut site.
 	 * @param {Teselagen.bio.enzymes.RestrictionEnzyme} restrictionEnzyme Restriction enzyme this cut site was created with.
 	 * 
 	 * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.

@@ -10,7 +10,7 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 			var accession = inData.accession || "";
 			var version = inData.version || 1;
 			var seqVersion = inData.seqVersion || 0.0;
-			this.callParent(inData);
+			this.callParent([inData]);
 		} else {
 			throw Ext.create("Teselagen.bio.BioException", {
 				message: "Arguments needed"

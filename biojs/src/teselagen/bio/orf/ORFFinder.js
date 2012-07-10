@@ -32,9 +32,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			return [];
 		}
 
-		var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength);
-		var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength);
-		var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength);
+		var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
 
 		return orfs1.concat(orfs2, orfs3);
 	},
@@ -56,32 +56,32 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
 		var result = [];
 
-		var orfs1Forward = orfPerFrame(0, forwardSymbolList, minimumLength, StrandType.FORWARD);
-		var orfs2Forward = orfPerFrame(1, forwardSymbolList, minimumLength, StrandType.FORWARD);
-		var orfs3Forward = orfPerFrame(2, forwardSymbolList, minimumLength, StrandType.FORWARD);
+		var orfs1Forward = this.orfPerFrame(0, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs2Forward = this.orfPerFrame(1, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+		var orfs3Forward = this.orfPerFrame(2, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
 
-		var orfs1Reverse = orfPerFrame(0, forwardSymbolList, minimumLength, StrandType.BACKWARD);
-		var orfs2Reverse = orfPerFrame(1, forwardSymbolList, minimumLength, StrandType.BACKWARD);
-		var orfs3Reverse = orfPerFrame(2, forwardSymbolList, minimumLength, StrandType.BACKWARD);
+		var orfs1Reverse = this.orfPerFrame(0, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
+		var orfs2Reverse = this.orfPerFrame(1, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
+		var orfs3Reverse = this.orfPerFrame(2, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
 
 		var reverseCombined = orfs1Reverse.concat(orfs2Reverse, orfs3Reverse);
 
-		var sequenceLength = reverseSymbolList.length;
+		var sequenceLength = reverseSymbolList.toString().length;
 		for(var i = 0; i < reverseCombined.length; i++) {
 			var orf = reverseCombined[i];
 
-			var start = sequenceLength - orf.start;
-			var end = sequenceLength - orf.end;
+			var start = sequenceLength - orf.getStart();
+			var end = sequenceLength - orf.getEnd();
 
 			orf.setOneStart(end);
 			orf.setOneEnd(start);
 
-			for(var j = 0; j < orf.startCodons.length; j++) {
-				orf.startCodons[j] = sequenceLength - orf.startCodons[j] - 1;
+			for(var j = 0; j < orf.getStartCodons().length; j++) {
+				orf.getStartCodons()[j] = sequenceLength - orf.getStartCodons()[j] - 1;
 			}
 
 			startCodons = orf.getStartCodons();
-			startCodons.sort(codonsSort);
+			startCodons.sort(this.codonsSort);
 			orf.setStartCodons(startCodons);
 		}
 
@@ -104,7 +104,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			minimumLength = -1;
 		}
 		if(typeof(strand) === "undefined") {
-			strand = 1;
+			var strand = Teselagen.bio.sequence.common.StrandType.FORWARD;
 		}
 
 		tu = Ext.create("Teselagen.bio.sequence.TranslationUtils", {
@@ -164,13 +164,15 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 						if(startCodonIndexes == null) {
 							startCodonIndexes = [];
 						}
-						orfs.push(Ext.create("Teselagen.bio.orf.ORF", {
+						var orf = Ext.create("Teselagen.bio.orf.ORF", {
 							start: startIndex,
 							end: endIndex + 1,
 							strand: strand,
 							frame: frame,
 							startCodons: startCodonIndexes
-						}));
+						});
+
+						orfs.push(orf);
 					}
 				}
 
