@@ -17,42 +17,35 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 			});
 		}
 
-		/**
+		
 		this.getAccession = function(){
 			return accession;
 		}
 
-		/**
 		this.setAccession= function (pAccession){
 			accession = pAccession;
 		}
 
-		/**
 		this.getVersion = function(){
 			return version;
 		}
 
-		/**
 		this.setVersion= function (pVersion){
 			version = pVersion;
 		}
 
-		/**
 		this.getSeqVersion = function(){
 			return seqVersion;
 		}
 
-		/**
 		this.setSeqVersion= function (pSeqVersion){
 			seqVersion = pSeqVersion;
 		}
 
-		/**
 		this.getCircular = function(){
 			return circular;
 		}
 
-		/**
 		this.setCircular = function (pCircular){
 			circular = pCircular;
 		}
