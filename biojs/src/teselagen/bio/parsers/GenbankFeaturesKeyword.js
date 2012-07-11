@@ -2,7 +2,7 @@
 /**
  * GenbankFeaturesKeyword. 
  * Stores an array of GenbankFeatureElements. Is created when parsing the line "FEATURES" from a Genbank file.
- * Same level as  GenbankKeyword, GebankLocusKeyword, and GenbankOriginKeyword.
+ * Same level as {@link GenbankKeyword}, {@link GebankLocusKeyword}, and {@link GenbankOriginKeyword}.
  * Simply holds GenbankFeatureElements in an array.
  * @author Diana Wong
  * @author Timothy Ham (original author)

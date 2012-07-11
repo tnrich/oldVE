@@ -2,7 +2,7 @@
 /**
  * GenbankSubKeyword class. 
  * Stores the information from sub-keyword lines of a Genbank file.
- * These are for subkeywords not defined by GenbankFeatureElements (Qualifier and Location)
+ * These are for subkeywords not defined by {@link GenbankFeatureElements} (Qualifier and Location)
  * and from the main section of the Genbank File (e.g. Source, Authors, etc.)
  * @author Diana Wong
  * @author Timothy Ham (original author)

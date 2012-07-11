@@ -1,7 +1,7 @@
 
 /**
   * Genbank. 
-  * Sets up an empty shell object with Genbank information and methods that is later populated by {@link GenbankManager#parseGenbankFile}.
+  * Sets up an empty shell object with Genbank information and methods that is later populated by {@link Teselagen.bio.parsers.GenbankManager#parseGenbankFile}.
   * @author Diana Wong
   * @author Timothy Ham (original author of GenbankFileModel.js)
   */
@@ -23,12 +23,12 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		var origin;			//= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
 		*/
 		/**
-         * @property {[String]} keywordTags Array of all the GenbankKeyword names in a Genbank class. 
+         * @property {String[]} keywordTags Array of all the GenbankKeyword names in a Genbank class. 
          * THIS MAY BE DELETED SINCE SEARCHING FOR KEYWORDS[i].keyword WILL RESULT IN ALL THE KEYWORDS IN THE GB FILE.
          */
 		var keywordsTag	= new Array();	// List of Keywords being used
 		/**
-		 * @property {[GenbankKeywords]} keywords Array of all the GenbankKeyword objects in a Genbank class
+		 * @property {GenbankKeywords[]} keywords Array of all the GenbankKeyword objects in a Genbank class
 		 * (which also includes GenbankLocusKeyword, GenbankFeaturesKeyword, GenbankOriginKeyword which inherit from GenbankKeyword).
 		 */
 		var keywords	= new Array();	
