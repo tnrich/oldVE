@@ -1,7 +1,11 @@
 
 /**
  * GenbankFeatureLocation. 
- * Stores the Feature Location from the Genbank formatted line:  'ELEMENTNAME               complement(join(>start...end))' .
+ * Stores the Feature Location from the Genbank formatted line:  
+ * 'ELEMENTNAME               complement(join(>start...end))' .
+ * Go to http://www.insdc.org/documents/feature_table.html#3.4 for specifications of Genbank file. 
+ * This class does not assumes all locations of one feature are complement or not complement, join or not join.
+ * 
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -12,33 +16,47 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.
-     * @param {int} start
-     * @param {int} end
-     * @param {String} preStart
-     * @param {String} preEnd
+     * @param {int} start Start index. 
+     * 					"<" in front indicates that the exact lower boundary point of a feature is unknown. 
+     * 					A location with just a start and no end is annotation for a single base.
+     * @param {int} end End index. A ">" indicates that the feature continues beyond the end base.
+     * @param {String} to This joins the start with end. 
+     * 					"start..end" means it is a continuous range. 
+     * 					"start.end" indicates exact location is unknown. 
+     * 					"start^end" points to a single point in that range.
      * @returns {GenbankFeatureQualifier}
      * @memberOf GenbankFeatureLocation
      */
     constructor: function (inData) {
-        //var that = this;
 
-        var start = "";
-        var preStart = "";
-        var sufStart = "";
-        var end = "";
-        var preEnd = "";
-        var sufEnd = "";
-
-        if (inData !== undefined) {
-            if (inData.start !== undefined ) {
+        var start 		= "";
+        var preStart 	= "";	// stores partials
+        var end 		= "";
+        var preEnd 		= "";	// stores partials
+        var to			= "";	// stores how start and end are joined. ie start TO end
+        
+        if (inData) {
+            if (inData.start) {
                 start		= inData.start.replace(/\<|\>/, "") || "";
-                preStart	= inData.start.match(/<\<|<\>/, "") || "";
-                sufStart	= inData.start.match(/\<$|\>$/, "") || "";
+                preStart	= inData.start.match(/\</, "") || "";
+                /*if ( inData.start.match(/\>/g) ) {
+                	throw Ext.create("Teselagen.bio.BioException", {
+        				message: "Incorrect Usage of > in a start index in your Genbank file."
+        			});
+                }*/
             }
-            if (inData.end !== undefined) {
+            if (inData.end) {
                 end         = inData.end.replace(/\<|\>/, "") || "";
-                preEnd      = inData.end.match(/^\<|^\>/, "") || "";
-                sufEnd      = inData.end.match(/\<$|\>$/, "") || "";
+                preEnd      = inData.end.match(/\>/, "") || "";
+                /*if ( inData.start.match(/\</g) ) {
+                	throw Ext.create("Teselagen.bio.BioException", {
+        				message: "Incorrect Usage of < in an end index in your Genbank file."
+        			});
+                }*/
+            }
+            if (inData.to) {
+            	to			= inData.to; 
+            	// This joins the start and end. start..
             }
         }
         /**
@@ -75,12 +93,20 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
          * @returns {String} genbankString
          */
         this.toString = function() {
+        	//put partials as suffix, warn for wrong usage
             //var line = preStart + start + sufStart + ".." + preEnd + end + sufEnd;
-            var line = start;
-            if (end !== "" ) {
-                line += ".." + end ;
+            var line = [ preStart, start];
+            
+            if (to) {
+            	line.push(to);
+            	console.log(to);
             }
-            return line;
+            
+            if (end) {
+                line.push(preEnd);
+                line.push(   end);
+            }
+            return line.join("");
         }
         /**
          * Converts to JSON format.
@@ -89,6 +115,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         this.toJSON = function() {
             var json = {
                     start: start,
+                    to: to,
                     end: end
             }
             return json;

@@ -159,14 +159,14 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		 * @returns {String} gbStr
 		 */
 		this.toString = function() {
-			var gbStr = "";
+			var gbStr = [];
 			var entry;
 			for (var i=0; i < keywords.length; i++) {
 				entry = keywords[i];
-				gbStr += keywords[i].toString() + "\n";
+				gbStr.push(keywords[i].toString() + "\n");
 			}
-			gbStr += "//";
-			return gbStr;
+			gbStr.push("//");
+			return gbStr.join(" ");
 		}
 		
 		/**
@@ -174,7 +174,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
-			var json = new Object();
+			var json = {};
 			for (var i=0; i < keywords.length; i++) {
 				var key = keywords[i].getKeyword();
 				json[key] = keywords[i];

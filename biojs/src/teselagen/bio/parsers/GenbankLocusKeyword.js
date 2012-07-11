@@ -210,7 +210,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         this.toJSON = function() {
             var json;
             json = {
-                    keyword: that.keyword,
+                    keyword: this.keyword,
                     locusName: locusName,
                     sequenceLength: sequenceLength,
                     strandType: strandType,

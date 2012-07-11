@@ -89,7 +89,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
          */
         this.toJSON = function() {
             json = {
-                    keyword: that.keyword,
+                    keyword: this.keyword,
                     sequence: sequence
             }
             return json;

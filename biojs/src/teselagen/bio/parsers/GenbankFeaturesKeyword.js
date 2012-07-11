@@ -28,7 +28,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
         /**
          *  @property [GenbankFeatureElements] featuresElements
          */
-        var featuresElements = new Array();
+        var featuresElements = [];
 
 
         /**
