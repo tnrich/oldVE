@@ -2,8 +2,8 @@
 /**
  * GenbankLocusKeyword. 
  * Stores the information from the LOCUS line of a Genbank file. 
- * Same level as GenbankKeyword, GebankFeaturesKeyword, and GenbankOriginKeyword.
- * Specificfor parsing the Locus line.
+ * Same level as {@link GenbankKeyword}, {@link GebankFeaturesKeyword}, and {@link GenbankOriginKeyword}.
+ * Specifically for parsing the Locus line.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */

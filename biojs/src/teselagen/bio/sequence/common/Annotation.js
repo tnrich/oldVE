@@ -10,10 +10,23 @@
 Ext.define("Teselagen.bio.sequence.common.Annotation", {
 	requires: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.BioException"],
 	
+	/**
+	 * Constructor
+	 * @param start Annotation start
+	 * @param  end Annotation end
+	 */
 	constructor: function(inData){
+		var start;
+		var end;
+		if (inData) {
+			start = inData.start || 0;
+			end = inData.end || 0;	
+		} else {
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
+		}
 
-		var start = inData.start;
-		var end = inData.end;
 		var initialLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
 			start: start,
 			end: end
@@ -27,7 +40,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				}); 
 		/**
 		 * Returns the start of the annotation
-		 * @return {Number} the start of the annotation
+		 * @return {Integer} the start of the annotation
 		 */
 		this.getStart = function(){
 			if ( locations.length > 0 ) {
@@ -39,7 +52,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		
 		/**
 		 * Allows one to set the start of the annotation
-		 * @param {Number} pStart is the new start.
+		 * @param {Integer} pStart is the new start.
 		 */
 		this.setStart = function(pStart){
 			start = pStart;
@@ -47,7 +60,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the first start in an annotation, unless there is more than one start.
-		 * @param {Number} pStart sets the new start of the annotation only if there is one location.
+		 * @param {Integer} pStart sets the new start of the annotation only if there is one location.
 		 */
 		this.setOneStart = function(pStart){
 			if ( locations.length === 1 ) {
@@ -62,7 +75,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Returns the end of the annotation.
-		 * @return {Number} returns the end of the annotation.
+		 * @return {Integer} returns the end of the annotation.
 		 */
 		this.getEnd = function(){
 			if (locations.length > 0){
@@ -75,7 +88,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the end of the annotation.
-		 * @param {Number} pEnd sets the end of the annotation.
+		 * @param {Integer} pEnd sets the end of the annotation.
 		 */
 		this.setEnd= function(pEnd){
 			end = pEnd;
@@ -83,7 +96,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the end of the annotation.
-		 * @param {Number} pEnd sets the end of the annotation only if there is one location.
+		 * @param {Integer} pEnd sets the end of the annotation only if there is one location.
 		 */
 		this.setOneEnd = function(pEnd){
 			if  ( locations.length === 1 ) {
@@ -106,7 +119,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the locations of the annotation.
-		 * @param {Array of Locations} pLocations sets the new list of locations.
+		 * @param {Array <Location>} pLocations sets the new list of locations.
 		 */
 		this.setLocations = function(pLocations){
 			locations = pLocations;
@@ -157,7 +170,6 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 * @param  {Integer} pShiftBy represents amount by which you want to shift the locations
 		 * @param  {Integer} pMaxLength is the maximum length of the sequence
 		 * @param  {Boolean} pCircular is whether the sequence is circular or not
-		 * @return {void} Sets the new position of the locations
 		 */
 		this.shift = function (pShiftBy, pMaxLength, pCircular){
 			if ( pShiftBy > (pMaxLength - 1)) {

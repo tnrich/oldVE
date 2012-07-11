@@ -2,7 +2,7 @@
 /**
  * GenbankKeyword. 
  * Stores information for each keyword in Genbank. 
- * Same level as GebankLocusKeyword, GenbankFeaturesKeyword, and GenbankOriginKeyword.
+ * Same level as {@link GebankLocusKeyword}, {@link GenbankFeaturesKeyword}, and {@link GenbankOriginKeyword}.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
