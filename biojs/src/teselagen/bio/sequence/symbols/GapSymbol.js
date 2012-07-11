@@ -3,8 +3,7 @@
     * @description This class sets up a Gap Symbol class
     * @author Micah Lerner
     */
-   
-Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
+   Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
 
 	constructor: function(inData){
 		var name;

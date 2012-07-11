@@ -125,7 +125,7 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		/**
 		 * Reverse complement of the input symbol list
 		 * @param  {SymbolList} pSymbolList An input symbol List
-		 * @return {SymbolList}            The reverse complement of the input symbollist
+		 * @return {SymbolList}            The reverse complement of the
 		 */
 		reverseComplement: function(pSymbolList){
 			var symbols = pSymbolList.getSymbols();
@@ -137,7 +137,7 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 
 			Ext.create("Teselagen.bio.sequence.symbols.SymbolList", {
 				symbols: reverseComplementSymbols,
-				alphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet
+				alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 			});
 		}
 	},	

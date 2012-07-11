@@ -28,26 +28,50 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 			});
 		}
 
+		/**
+		 * Get name.
+		 * @return {String} Name
+		 */
 		this.getName =function(){
 			return name;
 		}
 
+		/**
+		 * Set Name
+		 * @param {String} pName input name
+		 */
 		this.setName = function(pName){
 			name = pName;
 		}
 
+		/**
+		 * Get threeLettersName
+		 * @return {String} returns threelettername
+		 */
 		this.getThreeLettersName = function(){
 			return threeLettersName;
 		}
 
+		/**
+		 * Set threeLettersName
+		 * @param {String} pThreeLettersName input threelettersname
+		 */
 		this.setThreeLettersName = function(pThreeLettersName){
 			threeLettersName = pThreeLettersName;
 		}
 
+		/**
+		 * Get value
+		 * @return {String} returns value
+		 */
 		this.getValue = function() {
 			return value;
 		}
-		
+
+		/**
+		 * [setValue description]
+		 * @param {[type]} pValue [description]
+		 */
 		this.setValue = function(pValue) {
 			value = pValue;
 		}
