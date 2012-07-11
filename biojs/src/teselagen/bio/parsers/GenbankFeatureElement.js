@@ -4,6 +4,17 @@
  * Stores an array of Feature Elements in GenbankFeaturesKeyword. 
  * An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
  * Its indices are defined by GenbankFeatureLocation and it's annotations by GenbankFeatureQualifier. 
+ * 
+ * Go to http://www.insdc.org/documents/feature_table.html#3.4 for specifications of Genbank file. 
+ * This class does not assumes all locations of one feature are complement or not complement, join or not join.
+ * This means: 
+ * 		"complement(join(2691..4571,4918..5163))"
+ * is acceptable, and:
+ * 		"join(complement(4918..5163),complement(2691..4571))"
+ * is also acceptable, but assumes every location (i.e. the feature) is a complement. However:
+ * 		join(complement(4918..5163),2691..4571)
+ * would not be acceptable and all location pairs would be stored as complement.  (Is this biologically possible?)
+ * 
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -165,7 +176,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
          * @returns {String} genbankString
          */
         this.toString = function() {
-            var line = "     " + keyword.rpad(" ", 16);
+            var line = "     " + Teselagen.StringUtil.rpad(keyword, " ", 16);
             var loc = "";
             var qual = "";
             //line += strand;

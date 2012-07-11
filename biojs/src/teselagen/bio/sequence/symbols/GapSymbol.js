@@ -3,12 +3,20 @@
     * @description This class sets up a Gap Symbol class
     * @author Micah Lerner
     */
-   
-Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
+   Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{
 
-	constructor: function(data){
-		var name = data.name;
-		var value = data.value;
+	constructor: function(inData){
+		var name;
+		var value;
+
+		if (inData) {
+			name = inData.name;
+			value = inData.value
+		}else {
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
+		}
 
 		this.getName = function(){
 			return name;

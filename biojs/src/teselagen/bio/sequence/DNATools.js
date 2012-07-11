@@ -16,6 +16,11 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		    "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
 
 	statics: {
+		/**
+		 * Creates SymbolList from DNA sequence
+		 * @param  {String} pDNASequence A DNA sequence
+		 * @return {SymbolList}              A symbol lits
+		 */
 		createDNA: function(pDNASequence){
 			var DNASequence = pDNASequence.toLowerCase();
 			var symbols = [];
@@ -37,6 +42,12 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 			});
 		},
 
+		/**
+		 * Creates a DNA Sequence from an input Sequence
+		 * @param  {String} pName        The name of the Sequence
+		 * @param  {String} pDNASequence the DNA sequence
+		 * @return {DNASequence}              A created DNA sequence
+		 */
 		createDNASequence: function(pName, pDNASequence){
 			return Ext.create("Teselagen.bio.sequence.dna.DNASequence", {
 				symbolList: Teselagen.bio.sequence.DNATools.createDNA(pDNASequence),
@@ -44,6 +55,11 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 			});
 		},
 
+		/**
+		 * Retrieves the symbol's complement
+		 * @param  {Symbol} pSymbol An input symbol
+		 * @return {Symbol}         The input symbol's complement
+		 */
 		complementSymbol: function(pSymbol){
 			switch(pSymbol.getValue()) {
 				case Teselagen.DNAAlphabet.getA().getValue():
@@ -85,6 +101,11 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 			}
 		},
 
+		/**
+		 * Retrieves the complement for a SymbolList
+		 * @param  {SymbolList} pSymbolList an input symbol list
+		 * @return {SymbolList}             The input's complement strand.
+		 */
 		complement: function(pSymbolList){
 			var symbols = pSymbolList.getSymbols();
 			var complementSymbols = [];
@@ -101,6 +122,11 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 			});
 		},
 
+		/**
+		 * Reverse complement of the input symbol list
+		 * @param  {SymbolList} pSymbolList An input symbol List
+		 * @return {SymbolList}            The reverse complement of the
+		 */
 		reverseComplement: function(pSymbolList){
 			var symbols = pSymbolList.getSymbols();
 			var reverseComplementSymbols = [];

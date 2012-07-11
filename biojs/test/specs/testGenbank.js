@@ -329,7 +329,7 @@ describe("Testing Genbank related classes:", function() {
 
                 setTimeout(function() {
                     flag = true;
-                }, 20);
+                }, 30);
             });
 
             waitsFor(function() {
@@ -349,17 +349,17 @@ describe("Testing Genbank related classes:", function() {
                 //console.log(JSON.stringify(tmp, null, "  "));
                 //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
                 return flag;
-            }, "Completed Reading file", 25);
+            }, "Completed Reading file", 35);
 
 
             runs(function() {
-                //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+                console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+                console.log(JSON.stringify(tmp, null, "  "));
                 //console.log(tmp.findKeyword("LOCUS").toString());
                 //console.log("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
                 expect(tmp.findKeyword("LOCUS").toString()).toBe("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
                 expect(tmp.getKeywords().length).toBe(7);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(19);
-                expect(false).toBe(false);
             })
 
         });

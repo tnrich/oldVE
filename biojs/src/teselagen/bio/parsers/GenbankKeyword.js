@@ -87,7 +87,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 			for (var i=width; i<this.value; i=i+width) {
 				line += this.value.substring(i,width);
 			}*/
-            if ( !this.subKeywords && this.subKeywords.length > 0) {
+            if ( this.subKeywords.length > 0) {
                 line += "\n";
                 for (var i=0; i < this.subKeywords.length; i++) {
                     line += this.subKeywords[i].toString();
@@ -100,10 +100,21 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
             return line;
         }
 
-        /*this.toJSON = function() {
-			return null;
-		}*/
-
+        /**
+         * Converts to JSON format.
+         * @returns {Object} json
+         */
+        this.toJSON = function() {
+            var json = {
+                    keyword: this.keyword,
+                    value: this.value
+            }
+            if (this.subKeywords.length > 0) {
+            	json[subKeywords] = this.subKeywords
+            }
+            return json;
+        }
+        
         return this;
     }
 
