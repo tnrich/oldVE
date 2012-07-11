@@ -1,15 +1,31 @@
+/**
+ * @class Teselagen.bio.sequence.common.SymbolList
+ * Main class for all sequences in the library.
+ * 
+ * @author Micah Lerner
+ */
 Ext.define("Teselagen.bio.sequence.common.SymbolList", {
-	constructor: function(data){
+	/**
+	 * Constructor
+	 * @param  {Array <Symbols>} symbols The array of symbols in the SymbolList
+	 * @param {String} alphabet Alphabet used in the SymbolList
+	 */
+	constructor: function(inData){
 		var symbols;
 		var alphabet;
-		if (data.symbols && data.alphabet) {
-			symbols = data.symbols;
-			alphabet = data.alphabet;
+		if (inData) {
+			symbols = inData.symbols || null;
+			alphabet = inData.alphabet || null;
 		} else {
-			throw new Error("Invalid parameters");
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
 		}
 		
-
+		/**
+		 * Returns alphabet
+		 * @return {String} [description]
+		 */
 		this.getAlphabet =  function (){
 			return alphabet;
 		}
@@ -52,7 +68,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 			var string = "";
 
 			for ( var i = 0; i < symbols.length; ++i ) {
-				buffer[i] = symbols[i].getValue().charCodeAt(0);;
+				buffer[i] = symbols[i].getValue().charCodeAt(0);
 			}
 
 			for(var i = 0; i < buffer.length; i++) {

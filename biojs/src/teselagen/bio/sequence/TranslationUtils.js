@@ -1,3 +1,11 @@
+/**
+ * @class Teselagen.bio.sequence.TranslationUtils
+ * 
+ * Translation Utilities to convert between RNA, DNA, and  Protein
+ * @see Teselagen.bio.sequence.symbols.NucleotideSymbol
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author)
+ */
 Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 	requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
@@ -6,52 +14,71 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			 "Teselagen.bio.sequence.common.SymbolList",
 			 "Teselagen.bio.sequence.symbols.GapSymbol", 
 			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
-			 //write 
-	constructor: function(inData){
-			var dnaToRNATranslationTable;
-			var rnaToDNATranslationTable;
-			var aminoAcidsTranslationTable;
 
+	constructor: function(inData){
+		var dnaToRNATranslationTable = null;
+		var rnaToDNATranslationTable = null;
+		var aminoAcidsTranslationTable = null;
+
+		/**
+		 * Converts a DNA symbol to an RNA symbol
+		 * @param  {NucleotideSymbol} pSymbol an input NucleotideSymbol
+		 * @return {NucleotideSymbol}         Returns the corresponding RNA symbol
+		 */
 		this.dnaToRNASymbol = function(pSymbol){
 			initializeDNAToRNATranslationTable();
 
+			//Typechecks for GapSymbol
 			if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
 				return  Teselagen.bio.sequence.alphabets.RNAAlphabet.superclass.getGap();
 			};
 
-			var newSymbol = dnaToRNATranslationTable[pSymbol];
+			var newSymbol = dnaToRNATranslationTable[pSymbol.getValue()] || null;
 
 			if (newSymbol == null) {
-				//throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException");
+				throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
+					message: "Illegal symbol"
+				});
 			};
 
 			return newSymbol;
 		}
 
+		/**
+		 * Converts an RNA symbol to a DNA symbol
+		 * @return {[type]} [description]
+		 */
 		this.rnaToDNASymbol = function(){
 			initializeRNAToDNATranslationTable();
 
+			//Typechecks if this is a Gap Symbol
 			if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
 				return  Teselagen.bio.sequence.alphabets.DNAAlphabet.superclass.getGap();
 			};
 
-			var newSymbol = dnaToRNATranslationTable[pSymbol];
+			var newSymbol = dnaToRNATranslationTable[pSymbol.getValue()] || null;
 
 			if (newSymbol == null) {
-				//throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException");
+				throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
+					message: "Illegal symbol"
+				});
 			};
 
 			return newSymbol;
 		}
 
+		/**
+		 * Converts a list of DNA symbols to RNA
+		 * @param  {SymbolList} pSymbolList A list of input symbols
+		 * @return {SymbolList}             A list of RNA symbols
+		 */
 		this.dnaToRNA = function(pSymbolList){
 			var symbols = pSymbolList.getSymbols();
 			var rnaSymbols = [];
 
-			var length = symbols.length;
-
-			if (length > 0) {
-				for (var i = 0; i < length; i++) {
+			//If there are symbols, dive into this loop.
+			if (symbols.length > 0) {
+				for (var i = 0; i < symbols.length; i++) {
 					rnaSymbols[i] = dnaToRNASymbol(symbols[i]);
 				};
 			};
@@ -62,15 +89,17 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			});
 		}
 
-
+		/**
+		 * Translates RNA to DNA
+		 * @param  {SymbolList} pSymbolList an input symbol list containing RNA NucleotideSymbols
+		 * @return {SymbolList}             an output symbol list containing DNA NucleotideSymbols
+		 */
 		this.rnaToDNA = function(pSymbolList){
 			var symbols = pSymbolList.getSymbols();
 			var rnaSymbols = [];
 
-			var length = symbols.length;
-
-			if (length > 0) {
-				for (var i = 0; i < length; i++) {
+			if (symbols.length > 0) {
+				for (var i = 0; i < symbols.length; i++) {
 					dnaSymbols[i] = rnaToDNASymbol(symbols[i]);
 				};
 			};
@@ -81,6 +110,13 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			});
 		}
 
+		/**
+		 * Converts RNA to Protein Symbol
+		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+		 * @return {AminoAcidSymbol}              An amino acid that corresponds to the RNA codon
+		 */
 		this.rnaToProteinSymbol = function(pNucleotide1, pNucleotide2, pNucleotide3){
 			initializeAminoAcidsTranslationTable();
 
@@ -99,6 +135,14 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			return symbol;
 		}
 
+
+		/**
+		 * Converts DNA to Protein Symbol
+		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+		 * @return {AminoAcidSymbol}              An amino acid that corresponds to the DNA codon
+		 */
 		this.dnaToProteinSymbol = function(pNucleotide1, pNucleotide2, pNucleotide3) {
 			initializeAminoAcidsTranslationTable();
 
@@ -111,12 +155,17 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			var symbol = aminoAcidsTranslationTable[triplet];
 
 			if(symbol == null) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap;
+				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
 			}
 
 			return symbol;
 		}
 
+		/**
+		 * Translates RNA Sequence to Protein Sequence
+		 * @param  {SymbolList} pSymbolList an input symbol list containing RNA NucleotideSymbols
+		 * @return {SymbolList}             an output symbol list containing AminoAcidSymbols
+		 */
 		this.rnaToProtein = function(pSymbolList){
 			var length = pSymbolList.length - (pSymbolList.length % 3);
 
@@ -128,7 +177,8 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			var symbols = pSymbolList.getSymbols();
 
 			for (var i = 0; i < length; i++) {
-				proteinSymbols[ i / 3] = rnaToProteinSymbol(pSymbolList[i], pSymbolList[i+1], pSymbolList[i+2]);
+				var codon = i / 3;
+				proteinSymbols[codon] = rnaToProteinSymbol(pSymbolList[i], pSymbolList[i+1], pSymbolList[i+2]);
 			};
 
 
@@ -139,6 +189,13 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 		}
 
+		/**
+		 * Calculates whether three nucleotides make up a start codon
+		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+		 * @return {Boolean}             shows whether the nucleotides make up a start codon
+		 */
 		this.isStartCodon = function (pNucleotide1, pNucleotide2, pNucleotide3) {
 			var result = false;
 
@@ -146,11 +203,18 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 				return result;
 			};
 
-			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
+			var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
 
 			return (triplet === 'atg' || triplet === 'aug');
 		}
 		
+		/**
+		 * Calculates whether three nucleotides make up a stop codon
+		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+		 * @return {Boolean}             shows whether the nucleotides make up a stop codon
+		 */
 		this.isStopCodon = function(pNucleotide1, pNucleotide2, pNucleotide3){
 			var result = false;
 
@@ -158,7 +222,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 				return result;
 			};
 
-			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
+			var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
 
 			return (triplet == 'taa'
 				|| triplet == 'tag'
