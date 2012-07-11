@@ -34,7 +34,7 @@ Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 			var index = features.indexOf(pFeature);
 			if (index == -1) {
 				throw Ext.create("Teselagen.bio.BioException", {
-					message: "Arguments needed"
+					message: "Nonexistent feature"
 				});
 			};
 

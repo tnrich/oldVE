@@ -12,10 +12,21 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 	* @param  String threeLettersName 	Three letter symbol abbreviation
 	*/
 
-	constructor: function(data){
-		var name = data.name;
-		var value = data.value;
-		var threeLettersName = data.threeLettersName;
+	constructor: function(inData){
+		var name;
+		var value;
+		var threeLettersName;
+
+
+		if (inData) {
+			name = inData.name;
+			value = inData.value
+			threeLettersName = inData.threeLettersName;
+		}else {
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
+		}
 
 		this.getName =function(){
 			return name;
@@ -36,6 +47,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 		this.getValue = function() {
 			return value;
 		}
+		
 		this.setValue = function(pValue) {
 			value = pValue;
 		}

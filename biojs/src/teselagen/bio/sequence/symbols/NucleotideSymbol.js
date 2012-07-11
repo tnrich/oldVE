@@ -6,10 +6,20 @@
    
 Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
-	constructor: function(data){
-		var name = data.name;
-		var value = data.value;
-		var ambiguousMatches = data.ambiguousMatches;
+	constructor: function(inData){
+		var name;
+		var value
+		var ambiguousMatches;
+
+		if (inData) {
+			name = inData.name;
+			value = inData.value;
+			ambiguousMatches = inData.ambiguousMatches;
+		} else {
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
+		}
 
 		this.getName = function(){
 			return name;
