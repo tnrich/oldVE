@@ -10,7 +10,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 			var _type = inData.type || "";
 			var strand = inData.strand || 0;
 			var notes = inData.notes || null;
-			this.callParent(inData);
+			this.callParent([inData]);
 		} else {
 			throw Ext.create("Teselagen.bio.BioException", {
 				message: "Arguments needed"
@@ -60,7 +60,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
 			clonedFeature.setLocations(clonedLocations);
 
-			if (this.notes && this.notes.length > 0) {
+			if (notes && notes.length > 0) {
 				var clonedNotes = [];
 				for (var i = 0; i < notes.length; i++) {
 					clonedNotes.push(notes[i].clone());

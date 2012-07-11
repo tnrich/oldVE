@@ -1,20 +1,24 @@
 /**
  * @class Teselagen.bio.sequence.common.Sequence
  * 
- * The Annotation class contains functions that processes data about locations
+ * Sequence with name
  * @extends Teselagen.bio.sequence.common.SymbolList
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
- * @author Timothy Ham (original author)
  */
 Ext.define("Teselagen.bio.sequence.common.Sequence", {
 	extend: "Teselagen.bio.sequence.common.SymbolList",
 
+	/**
+	 * Constructor
+	 * @param  {String} name name of sequence
+	 * @param {SymbolList} [symbolList] a list of symbols that contains symbols and an alphabet
+	 */
 	constructor: function(inData){
 		var name;
 
 		if (inData) {
-			name = inData.name;
+			name = inData.name || "";
 			this.callParent([{
 				symbols: inData.symbolList.getSymbols(),
 				alphabet: inData.symbolList.getAlphabet()
