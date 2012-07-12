@@ -1,8 +1,23 @@
-
-
+/**
+* @class Teselagen.bio.sequence.dna.DigestionFragment
+* Digestion fragment holder.
+* 
+* @see Teselagen.bio.tools.DigestionCalculator
+* @author Micah Lerner
+* @author Joanna Chen (original author)
+*/
 Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 	requires: ["Teselagen.bio.enzymes.RestrictionEnzyme"],
 
+	/**
+	* Contructor
+	* 
+	* @param start Fragment start position
+	* @param end Fragment start position
+	* @param length Fragment length
+	* @param startRE Fragment start restriction enzyme
+	* @param endRE Fragment end restriction enzyme
+	*/
 	constructor: function (inData) {
 		if (inData) {
 			var start = inData.start || 0;

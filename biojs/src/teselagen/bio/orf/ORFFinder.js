@@ -16,7 +16,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	/**
 	 * Calculates open read frames for a DNA sequence and filters them by a minimum length.
 	 * No open read frames shorter than minimumLength will be returned.
-	 * @param  {SymbolList} dnaSymbolList A DNA sequence.
+	 * @param  {Teselagen.bio.sequence.common.SymbolList} dnaSymbolList A DNA sequence.
 	 * @param  {Int} minimumLength Minimum ORF length. If value is -1 or not given, no minimum length will be applied.
 	 * @return {Array<Teselagen.bio.orf.ORF} All open read frames in forward strand with length > minimumLength.
 	 */
@@ -39,8 +39,8 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 	/**
 	 * Calculates open read frames for a DNA sequence in both directions and filters them by a minimum length.
 	 * No open read frames shorter than minimumLength will be returned.
-	 * @param  {SymbolList} forwardSymbolList The forward DNA sequence.
-	 * @param  {SymbolList} reverseSymbolList  The reverse DNA sequence.
+	 * @param  {Teselagen.bio.sequence.common.SymbolList} forwardSymbolList The forward DNA sequence.
+	 * @param  {Teselagen.bio.sequence.common.SymbolList} reverseSymbolList  The reverse DNA sequence.
 	 * @param  {Int} minimumLength      Minimum ORF length. If value is -1 or not given, no minimum length will be applied.
 	 * @return {Array<Teselagen.bio.orf.ORF>} All open read frames in forward and reverse strands with length > minimumLength.
 	 */

@@ -6,7 +6,6 @@
  * @extends {Teselagen.bio.sequence.common.Annotation}
  * @author Micah Lerner
  */
-
 Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 	extend: 'Teselagen.bio.sequence.common.Annotation',
 	

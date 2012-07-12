@@ -2,8 +2,6 @@
  * @class Teselagen.bio.enzymes.RestrictionEnzymeMapper
  * @singleton
  * Restriction enzyme mapper- finds restriction enzyme cut sites in DNA sequence.
- * @see Teselagen.bio.enzymes.RestrictionEnzyme
- * @see Teselagen.bio.enzymes.RestrictionCutSite
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
@@ -33,7 +31,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 	
 	/**
 	 * Cut sequence with one restriction enzyme.
-	 * @param {RestrictionEnzyme} Restriction enzyme to cut the sequence with.
+	 * @param {RestrictionEnzyme} restrictionEnzyme Restriction enzyme to cut the sequence with.
 	 * @param {SymbolList} symbolList DNA sequence.
 	 * @return {Array} List of RestrictionCutSite's.
 	 * @see Teselegen.bio.enzymes.RestrictionCutSite

@@ -132,20 +132,31 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 */
 		this.contains = function(pAnnotation){
 			var result = false; 
-
-			//if (typeof pAnnotation ===) {};
 			//First comparison tests whether this annotation is non-circular. 
 			//Second comparison tests whether the input annotations is non-circular.
 			//Non-circular pieces of DNA will have their starts before their ends.
-			if (start <= end) {
-				if (annotation.getStart() <= annotation.getEnd()) {
-					result = ((start <= annotation.getStart()) && (end >= annotation.getEnd()));
+			
+			//case 1
+			if (this.getStart() <= this.getEnd()) {
+				//case 1a
+				if (pAnnotation.getStart() <= pAnnotation.getEnd()) {
+					//case 1a result 
+					result = ((this.getStart() <= pAnnotation.getStart()) && (this.getEnd() >= pAnnotation.getEnd()));
+					//console.log(this.getStart() + "  should be less than or equal to  " + pAnnotation.getEnd() + " . And " + this.getEnd() + " should be greather than or equal to " + pAnnotation.getEnd());
 				};
+			//case 2
 			} else {
-				if (annotation.getStart() < annotation.getEnd()) {
-					result = ((annotation.end <= end) || (annotation.start >= start));
-				} else{
-					result = ((start <= annotation.start) && (end >= annotation.end));
+				//case 2a
+				//if annotation start is less than annotation end, 
+				//determine whether the input end is inside the end or the input start is inside the start
+				if (pAnnotation.getStart() <= pAnnotation.getEnd()) {
+					result = ((pAnnotation.getEnd() <= this.getEnd()) || (pAnnotation.getStart() >= this.getStart()));
+					//console.log(pAnnotation.getEnd() + "  should be less than or equal to  " + this.getEnd() + "  or  " + pAnnotation.getStart() + " should be greather than or equal to " + this.getStart());
+				//case 2b
+				} else{ 
+					//if the start is less than the input start and the end is larger than the input end, input is inside
+					result = ((start <= pAnnotation.getStart()) && (end >= pAnnotation.getEnd()));
+					//console.log(this.getStart() + "  should be less than or equal to  " + pAnnotation.getStart() + "  and  " + this.getEnd() + " should be greather than or equal to " + pAnnotation.getEnd());
 				}
 			}
 			
@@ -176,6 +187,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				throw Ext.create("Teselagen.bio.BioException", {
 					message : "Cannot shift by greater than maximum length"
 				}); 
+				return;
 			}
 
 			var offset = start;
@@ -184,12 +196,15 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				start: null,
 				end: null
 			});
-			for (var i = 0; i < tempLocations.length; ++i ){ 
-				tempLocations[i].setStart( tempLocations[i].getStart() + pShiftBy );
-				tempLocations[i].setEnd( tempLocations[i].getEnd() + pShiftBy );
+
+			 for (var i = 0; i < tempLocations.length; ++i ){ 
+				tempLocation = tempLocations[i];
+				tempLocation.setStart( tempLocation.getStart() + pShiftBy );
+				tempLocation.setEnd( tempLocation.getEnd() + pShiftBy );
+				tempLocations[i] = tempLocation;
 			}
 
-			tempLocations = deNormalizeLocations(tempLocations, offset, pMaxLength, pCircular);
+			tempLocations = deNormalizeLocations(tempLocations, offset, pMaxLength, pCircular, 0);
 			locations = tempLocations;
 		}
 			 
@@ -446,7 +461,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				location = pTempLocations[i];
 				newStart = location.getStart() + pOffset;
 				if (pCircular && newStart > pMaxLength) {
-					newStart -= pMaxLength + pCircularAdjustment;
+					newStart -= (pMaxLength + pCircularAdjustment);
 				} else if (pCircular) {
 					newStart -= pCircularAdjustment;
 				}

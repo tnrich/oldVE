@@ -10,9 +10,6 @@ Ext.define("Teselagen.bio.sequence.common.StrandType", {
 		BACKWARD: -1,
 		UNKNOWN: 0,
 	},
-	
-	alternateClassName: "Teselagen.StrandType",
-
 
 	alternateClassName: "Teselagen.StrandType",
 
