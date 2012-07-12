@@ -1,6 +1,11 @@
 /**
- * GenbankManager 
- * Takes in Genbank File (as a string) and creates the Genbank class. Static functions. (Replaces GenbankFormat.js)
+ * GenbankManager. 
+ * Takes in Genbank file (as a string) and creates the Genbank class. 
+ * Static functions. (Replaces GenbankFormat.js) \n
+ * 
+ * Currently, this does not log errors in the Genbank file. 
+ * Need to include enhancement in the future.
+ * 
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
@@ -39,6 +44,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
     /**
      * Creates a static GenbankManager class with public functions.
      * @returns {GenbankManager} Handle to execute methods.
+     * @memberOf GenbankManager
      */
     constructor: function() {
         var that = this;
@@ -62,8 +68,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
             function processText() {
                 genbankFileString = fr.result;
-                //var gb = Ext.create('Teselagen.Genbank', genbankFileString);
-                //console.log(gb);
             }
 
             return genbankFileString;
@@ -73,7 +77,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
          * This is the main method in the GenbankFormat static class that performs the parsing. 
          * Converts a Genbank File (in string format) into a GenbankFileFormat object. 
          * @param {String} genbankFileString String form of Genbank File.
-         * @return {Genbank}
+         * @return {Genbank} 
          */
         this.parseGenbankFile = function(genbankFileString) {
             gb = Ext.create("Teselagen.bio.parsers.Genbank");
@@ -85,7 +89,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             for (var i=0 ; i < genArr.length; i++) {
                 lineParser(genArr[i]);
             }
-            //console.log(gb.toString());
             return gb;
         }
 
@@ -117,7 +120,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 lastObj = parseOrigin(line);
                 break;
             case "BASE":
-                console.log("BASE"); // CURRENTLY DOES NOT DEAL WITH THIS CASE
+                console.log("BASE"); // FOR "BASE COUNT" KEYWORD; CURRENTLY DOES NOT DEAL WITH THIS CASE
                 break;
             case that.self.END_SEQUENCE_TAG:
                 //console.log("END"); // DO NOTHING
@@ -128,17 +131,17 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                     break;
                 }else if ( flag.features ) {    // FEATURE ELEMENTS & FEATURE QUALIFIERS
                     parseFeatures(line); //lastObj set in this function
-                } else if ( flag.origin) {      // ORIGIN SEQUENCE LINES; THIS MUST COME BEFORE SUBKEYWORD BECAUSE THESE LINES LOOK LIKE SUBKEYWORDS
+                } else if ( flag.origin) {      // ORIGIN SEQUENCE LINES
                     lastObj = parseOrigin(line);
-                } else if ( isKey  ) {          // REGULAR KEYWORDS (NOT LOCUS/FEATURES/ORIGIN)
+                } else if ( isKey && !flag.origin && !flag.features && !flag.locus ) {          
+                	// REGULAR KEYWORDS (NOT LOCUS/FEATURES/ORIGIN)
                     lastObj = parseKeyword(line);
                 }  else if ( isSubKey ) {       // REGULAR SUBKEYWORD, NOT FEATURE
                     tmp = gb.getLastKeyword();
                     lastObj = parseSubKeyword(tmp, line);
                 } else if ( isKeyRunon ) {      // RUNON LINES FOR NON-FEATURES
-                    //console.log(lastObj.getValue());
-                    lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
-                    //lastObj.appendValue("\n".rpad(" ",13) + Ext.String.trim(line)); //SOOOO DOES NOT WORK
+                    //lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
+                    lastObj.appendValue(Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
                 }
             }
 
@@ -196,6 +199,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 div = "";
                 date = lineArr[lineArr.length-1];
             }
+            // Date is in this format:1-APR-2012
+            /*var dateArr = date.split(/\-/g);
+            console.log(dateArr[2]);
+            console.log(Ext.create("Date", { year: dateArr[2], day: dateArr[0], month: dateArr[1] }));
+            */
 
             // Just rewrite the existing Locus object. It's easier than setting everything.
             var result = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
@@ -303,7 +311,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             if ( !isLocRunon && !isQualRunon ) {    // New Element/Qualifier lines. Not runon lines.
 
                 if ( !isQual ) {    // is a new Feature Element (e.g. source, CDS) in the form of  "[\s] KEY  SEQLOCATION"
-                    strand = val.replace(/\(|\)|[\d]+|[.]+|,|>|</g, "");
+                    //strand = val.replace(/\(|\)|[\d]+|[.]+|,|>|</g, "");
+                    if (val.match(/complement/g)) {
+                    	strand = -1;
+                    } else {
+                    	strand = 1;
+                    }
                     featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
                         keyword: key,
                         strand: strand,
@@ -366,13 +379,15 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             locStr = locStr.replace(/^,|,$|complement|join|\(|\)/g,"");
             locArr = locStr.split(/,/g);
 
-            // NEED TO DO > or < cases?
-
             for (var i=0; i<locArr.length; i++) {
-                var ind = locArr[i].split(/[.]+/);
+                var ind   = locArr[i].split(/[.]+/);
+                var toArr = locArr[i].match(/[.]+|\^/) || [];
+                var to    = toArr[0] || "";
+                // GenbankFeatureLocation will deal with the partial <||> cases.
                 location = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
                     start: ind[0],
-                    end: ind[1]
+                    end: ind[1],
+                    to: to
                 });
                 featElm.addFeatureLocation(location);
             }
@@ -630,9 +645,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             this.origin     = false;
             this.features   = false;
             this.reference  = false;
-            this.keyword	= false;
-            this.subkeyword = false;
-            //this.runon      = false;
 
             this.setOrigin = function() {
                 this.origin   = true;
@@ -653,19 +665,16 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 this.origin   	= false;
                 this.features 	= false;
                 this.reference	= false;
-                //this.keyword	= false;
-                //this.subkeyword	= false;
-                //this.runon	  	= false;
             }
 
             this.setType = function(key, isKey) {
-                if (isKey === true) {
+                /*if (isKey === true) {
                     this.keyword	= true;
                     this.subkeyword	= false;
                 } else {
                     this.keyword	= false;
                     this.subkeyword	= true;
-                }
+                }*/
 
                 if (key === "REFERENCE") {
                     this.setReference();

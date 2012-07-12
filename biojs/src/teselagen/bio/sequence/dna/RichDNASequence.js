@@ -3,13 +3,16 @@ Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 	require: ["Teselagen.bio.sequence.common.SymbolList", "Teselagen.bio.BioException", "Teselagen.bio.sequence.dna.Feature"],
 
 	constructor: function(inData){
+		var features;
 		if (inData) {
+			features = inData.features;
 			this.callParent([inData]);
 		} else{
 			throw Ext.create("Teselagen.bio.BioException", {
 				message: "Arguments needed"
 			});
 		}
+
 
 		this.getFeatures = function(){
 			return features;
@@ -31,7 +34,7 @@ Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 			var index = features.indexOf(pFeature);
 			if (index == -1) {
 				throw Ext.create("Teselagen.bio.BioException", {
-					message: "Arguments needed"
+					message: "Nonexistent feature"
 				});
 			};
 

@@ -3,6 +3,6 @@
 # Make sure you install jsduck this way!
 #> sudo gem install jsduck
 
-jsduck ../src --verbose --output v1
+jsduck ../biojs/src ../vede/src --verbos --output v1
 
 

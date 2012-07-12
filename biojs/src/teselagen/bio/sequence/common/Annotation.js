@@ -10,10 +10,23 @@
 Ext.define("Teselagen.bio.sequence.common.Annotation", {
 	requires: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.BioException"],
 	
+	/**
+	 * Constructor
+	 * @param start Annotation start
+	 * @param  end Annotation end
+	 */
 	constructor: function(inData){
+		var start;
+		var end;
+		if (inData) {
+			start = inData.start || 0;
+			end = inData.end || 0;	
+		} else {
+			throw Ext.create("Teselagen.bio.BioException", {
+				message: "Arguments needed"
+			});
+		}
 
-		var start = inData.start;
-		var end = inData.end;
 		var initialLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
 			start: start,
 			end: end
@@ -27,7 +40,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				}); 
 		/**
 		 * Returns the start of the annotation
-		 * @return {Number} the start of the annotation
+		 * @return {Integer} the start of the annotation
 		 */
 		this.getStart = function(){
 			if ( locations.length > 0 ) {
@@ -39,7 +52,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		
 		/**
 		 * Allows one to set the start of the annotation
-		 * @param {Number} pStart is the new start.
+		 * @param {Integer} pStart is the new start.
 		 */
 		this.setStart = function(pStart){
 			start = pStart;
@@ -47,7 +60,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the first start in an annotation, unless there is more than one start.
-		 * @param {Number} pStart sets the new start of the annotation only if there is one location.
+		 * @param {Integer} pStart sets the new start of the annotation only if there is one location.
 		 */
 		this.setOneStart = function(pStart){
 			if ( locations.length === 1 ) {
@@ -62,7 +75,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Returns the end of the annotation.
-		 * @return {Number} returns the end of the annotation.
+		 * @return {Integer} returns the end of the annotation.
 		 */
 		this.getEnd = function(){
 			if (locations.length > 0){
@@ -75,7 +88,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the end of the annotation.
-		 * @param {Number} pEnd sets the end of the annotation.
+		 * @param {Integer} pEnd sets the end of the annotation.
 		 */
 		this.setEnd= function(pEnd){
 			end = pEnd;
@@ -83,7 +96,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the end of the annotation.
-		 * @param {Number} pEnd sets the end of the annotation only if there is one location.
+		 * @param {Integer} pEnd sets the end of the annotation only if there is one location.
 		 */
 		this.setOneEnd = function(pEnd){
 			if  ( locations.length === 1 ) {
@@ -106,7 +119,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the locations of the annotation.
-		 * @param {Array of Locations} pLocations sets the new list of locations.
+		 * @param {Array <Location>} pLocations sets the new list of locations.
 		 */
 		this.setLocations = function(pLocations){
 			locations = pLocations;
@@ -119,20 +132,31 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 */
 		this.contains = function(pAnnotation){
 			var result = false; 
-
-			//if (typeof pAnnotation ===) {};
 			//First comparison tests whether this annotation is non-circular. 
 			//Second comparison tests whether the input annotations is non-circular.
 			//Non-circular pieces of DNA will have their starts before their ends.
-			if (start <= end) {
-				if (annotation.getStart() <= annotation.getEnd()) {
-					result = ((start <= annotation.getStart()) && (end >= annotation.getEnd()));
+			
+			//case 1
+			if (this.getStart() <= this.getEnd()) {
+				//case 1a
+				if (pAnnotation.getStart() <= pAnnotation.getEnd()) {
+					//case 1a result 
+					result = ((this.getStart() <= pAnnotation.getStart()) && (this.getEnd() >= pAnnotation.getEnd()));
+					//console.log(this.getStart() + "  should be less than or equal to  " + pAnnotation.getEnd() + " . And " + this.getEnd() + " should be greather than or equal to " + pAnnotation.getEnd());
 				};
+			//case 2
 			} else {
-				if (annotation.getStart() < annotation.getEnd()) {
-					result = ((annotation.end <= end) || (annotation.start >= start));
-				} else{
-					result = ((start <= annotation.start) && (end >= annotation.end));
+				//case 2a
+				//if annotation start is less than annotation end, 
+				//determine whether the input end is inside the end or the input start is inside the start
+				if (pAnnotation.getStart() <= pAnnotation.getEnd()) {
+					result = ((pAnnotation.getEnd() <= this.getEnd()) || (pAnnotation.getStart() >= this.getStart()));
+					//console.log(pAnnotation.getEnd() + "  should be less than or equal to  " + this.getEnd() + "  or  " + pAnnotation.getStart() + " should be greather than or equal to " + this.getStart());
+				//case 2b
+				} else{ 
+					//if the start is less than the input start and the end is larger than the input end, input is inside
+					result = ((start <= pAnnotation.getStart()) && (end >= pAnnotation.getEnd()));
+					//console.log(this.getStart() + "  should be less than or equal to  " + pAnnotation.getStart() + "  and  " + this.getEnd() + " should be greather than or equal to " + pAnnotation.getEnd());
 				}
 			}
 			
@@ -152,11 +176,18 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			}
 		}
 		
+		/**
+		 * Shifts the locations.
+		 * @param  {Integer} pShiftBy represents amount by which you want to shift the locations
+		 * @param  {Integer} pMaxLength is the maximum length of the sequence
+		 * @param  {Boolean} pCircular is whether the sequence is circular or not
+		 */
 		this.shift = function (pShiftBy, pMaxLength, pCircular){
 			if ( pShiftBy > (pMaxLength - 1)) {
 				throw Ext.create("Teselagen.bio.BioException", {
 					message : "Cannot shift by greater than maximum length"
 				}); 
+				return;
 			}
 
 			var offset = start;
@@ -165,17 +196,26 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				start: null,
 				end: null
 			});
-			for (var i = 0; i < tempLocations.length; ++i ){ 
-				tempLocations[i].setStart( tempLocations[i].getStart() + pShiftBy );
-				tempLocations[i].setEnd( tempLocations[i].getEnd() + pShiftBy );
+
+			 for (var i = 0; i < tempLocations.length; ++i ){ 
+				tempLocation = tempLocations[i];
+				tempLocation.setStart( tempLocation.getStart() + pShiftBy );
+				tempLocation.setEnd( tempLocation.getEnd() + pShiftBy );
+				tempLocations[i] = tempLocation;
 			}
 
-			tempLocations = deNormalizeLocations(tempLocations, offset, pMaxLength, pCircular);
+			tempLocations = deNormalizeLocations(tempLocations, offset, pMaxLength, pCircular, 0);
 			locations = tempLocations;
 		}
 			 
 		
-
+		/**
+		 * Inserts basepairs and updates locations. Alters only the affected locations.
+		 * @param  {Integer} pPosition is the position of the insert
+		 * @param  {Integer} pInsertLength is the length of the insert
+		 * @param  {Integer} pMaxLength the max length of the locations
+		 * @param  {Integer} pCircular whether the annotation is circular or not
+		 */
 		this.insertAt = function (pPosition, pInsertLength, pMaxLength, pCircular){
 			var shifting = 0;
 			var tempEnd;
@@ -185,25 +225,35 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			var circularAdjustment = 0;
 
 			if (end < start && pPosition < end) {
+				// insert is happening at wrapped around tail end of feature
 				normalizedPosition += pMaxLength;
 				circularAdjustment = -insertLength;
 			}
 
 			var tempLocations = getNormalizedLocations(pMaxLength);
 
+			/* For each location, if insertion position is before the location, shift the current 
+			location and all the locations after that. If the position is within the 
+			location, resize that location and shift back the rest.
+			*/
 			for (var i = 0; i < tempLocations.length; i++ ){
 				var currentLocation = tempLocations[i];
-				if ( shifting == 0 ) {
+				if ( shifting == 0 ) { //search phase
+
 					if (normalizedPosition > currentLocation.getStart() && normalizedPosition < currentLocation.getEnd() ) {
+						//the position is within the location. change this location and shift the rest.
+						//Note: if the location is at the start, it isn't "within" the location
 						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
 						shifting = pInsertLength;
 						continue;
 					} else if ( normalizedPosition < currentLocation.getStart() ){
+						//shift this and the rest
 						tempLocations[i].setStart(currentLocation.getEnd() + pInsertLength);
 						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
 						shifting = pInsertLength;
+						continue;
 					}
-				} else {
+				} else {//shifting locations
 					tempLocations[i].setStart(currentLocation.getStart() + pInsertLength);
 					tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
 				}
@@ -212,7 +262,13 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			locations = deNormalizeLocation(tempLocations, offset, maxLength + insertLength, circular, circularAdjustment);
 		}
 
-
+		/**
+		 * Delete basepairs and change locations. Alter only the affected location
+		 * @param  {Integer} pCutStart  the start of the cut
+		 * @param  {Integer} pCutLength the length of the cut
+		 * @param  {Integer} pMaxLength the max length of the locations
+		 * @param  {Boolean} pCircular  whether the annotation is circular
+		 */
 		this.deleteAt = function(pCutStart, pCutLength, pMaxLength, pCircular){
 			if (pCutLength < 1) {
 				exit;
@@ -340,7 +396,12 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		}
 
-
+		/**
+		 * Reverses the locations
+		 * @param  {Integer} pNewStartIndex the new start index of teh locationz
+		 * @param  {Integer} pNewMaxLength the max length of the locations
+		 * @param  {Boolean} pCircular whether the annotations are circular
+		 */
 		this.reverseLocations = function (pNewStartIndex, pNewMaxLength, pCircular){
 			var tempLocations = getNormalizedLocations(pNewMaxLength);
 			tempLocations = reverseNormalizedLocations(tempLocations);
@@ -377,7 +438,15 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			}
 			return result;
 		}
-
+		/**
+		 * Denormalize the location form zero-based to offset. Calculates circularity (if needed)
+		 * @param  {Array<Location>} pTempLocations is the array of locations you want to denormalize
+		 * @param  {Integer} pOffset the offset of the locations
+		 * @param  {Integer} pMaxLength is the max length of the locations   
+		 * @param  {Boolean} pCircular if the annotation is circular
+		 * @param  {Integer} pCircularAdjustment is adjustment that needs to be made because of circularity
+		 * @return {Array<Location>} returns denormalized locations
+		 */
 		function deNormalizeLocations(pTempLocations, pOffset, pMaxLength, pCircular, pCircularAdjustment){
 			if (pTempLocations.length === 0) {
 				return null;
@@ -392,7 +461,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				location = pTempLocations[i];
 				newStart = location.getStart() + pOffset;
 				if (pCircular && newStart > pMaxLength) {
-					newStart -= pMaxLength + pCircularAdjustment;
+					newStart -= (pMaxLength + pCircularAdjustment);
 				} else if (pCircular) {
 					newStart -= pCircularAdjustment;
 				}
@@ -427,6 +496,11 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		}
 
+		/**
+		 * Reverses locations. This function assumes normalized locations, meaning it will not
+		 * handle locations that go over zero properly, although it will calculate non-zero
+		 * offset.
+		 */
 		function reverseNormalizedLocations(tempLocations){
 			if (tempLocations.length === 0 ){
 				return null;
@@ -453,7 +527,14 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			return result;
 
 		}
-
+		/**
+		 * 
+		 */
+		/**
+		 * Gets the index of the location
+		 * @param  {Integer} index the index
+		 * @return {Integer} The index of Location. -1 if not within a Location.
+		 */
 		function getOverlappingIndex (index){
 			var result = -1;
 			for (var index; index < locations.length; index++) {

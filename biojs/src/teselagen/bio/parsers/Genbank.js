@@ -1,7 +1,7 @@
 
 /**
   * Genbank. 
-  * Sets up an empty shell object with Genbank information and methods that is later populated by GenbankFormat.js
+  * Sets up an empty shell object with Genbank information and methods that is later populated by {@link Teselagen.bio.parsers.GenbankManager#parseGenbankFile}.
   * @author Diana Wong
   * @author Timothy Ham (original author of GenbankFileModel.js)
   */
@@ -10,7 +10,8 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 	    
 	/** 
 	 * Creates new Genbank
-	 * @returns {Genbank} 
+	 * @returns {Genbank}
+	 * @memberOf Genbank
 	 * */
 	constructor: function () {
 		var that = this;
@@ -21,10 +22,14 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		var features;		//= Ext.create('Teselagen.bio.parsers.GenbankFeaturesKeyword');
 		var origin;			//= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
 		*/
+		/**
+         * @property {String[]} keywordTags Array of all the GenbankKeyword names in a Genbank class. 
+         * THIS MAY BE DELETED SINCE SEARCHING FOR KEYWORDS[i].keyword WILL RESULT IN ALL THE KEYWORDS IN THE GB FILE.
+         */
 		var keywordsTag	= new Array();	// List of Keywords being used
 		/**
-		 * @property {[GenbankKeywords]} keywords Array of all the GenbankKeyword objects in a Genbank class
-		 * (also includes GenbankLocusKeyword, GenbankFeaturesKeyword, GenbankOriginKeyword which inherit from GenbankKeyword).
+		 * @property {GenbankKeywords[]} keywords Array of all the GenbankKeyword objects in a Genbank class
+		 * (which also includes GenbankLocusKeyword, GenbankFeaturesKeyword, GenbankOriginKeyword which inherit from GenbankKeyword).
 		 */
 		var keywords	= new Array();	
 		
@@ -40,7 +45,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		}
 		
 		function find(key) {
-			var entry;
+			var entry = null;
 			for (var i=0; i<keywords.length; i++) {
 				if (keywords[i].keyword === key) {
 					entry = keywords[i];
@@ -128,7 +133,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		}
 		/**
 		 * Add a single GenbankKeyword to Genbank.keywords
-         * @param {GenbankKeyword} keywords
+         * @param {GenbankKeyword} keyword
          */
 		this.addKeyword = function(pAddKeyword) {
 			keywords.push(pAddKeyword);
@@ -154,14 +159,14 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		 * @returns {String} gbStr
 		 */
 		this.toString = function() {
-			var gbStr = "";
+			var gbStr = [];
 			var entry;
 			for (var i=0; i < keywords.length; i++) {
 				entry = keywords[i];
-				gbStr += keywords[i].toString() + "\n";
+				gbStr.push(keywords[i].toString() + "\n");
 			}
-			gbStr += "//";
-			return gbStr;
+			gbStr.push("//");
+			return gbStr.join(" ");
 		}
 		
 		/**
@@ -169,10 +174,12 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 		 * @returns {Object} json
 		 */
 		this.toJSON = function() {
-			var json = new Object();
+			var json = {};
 			for (var i=0; i < keywords.length; i++) {
 				var key = keywords[i].getKeyword();
 				json[key] = keywords[i];
+				
+				//json.push(keywords[i]); //if you don't want the redundant keywords, but need to change json = []
 			}
 			
 			return json;
