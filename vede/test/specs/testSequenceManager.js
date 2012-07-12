@@ -7,10 +7,17 @@ describe("Testing SequenceManager Classes", function() {
     
 
     describe("Init SequenceManager.js", function() {
-        var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
-        var sm = Ext.create("Teselagen.manager.SequenceManager", {
-            name: "test"
-        });
+        var tmp, sm;
+
+        beforeEach(function() {
+            //tmp = Ext.create("Teselagen.bio.parsers.GenbankManager");
+            sm  = Ext.create("Teselagen.manager.SequenceManager", {
+                name: "test",
+                circular: true,
+                sequence: "GATTACA",
+                features: []
+            });
+        }
         
         it("Init?",function(){
             expect(sm.getCircular()).toBeFalsy();

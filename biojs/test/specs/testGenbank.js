@@ -241,6 +241,12 @@ describe("Testing Genbank related classes:", function() {
 
     });
 
+    describe("Unit Testing for private GenbankManager.js ???", function() {
+        it("Test it here",function(){
+            expect(false).toBeFalsy();
+        });
+    });
+
     describe("Testing LOCUS Keyword Parsing from GenbankManager.js", function() {
         var line, tmp;
 
