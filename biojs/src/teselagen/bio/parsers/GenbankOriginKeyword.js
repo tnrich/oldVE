@@ -78,7 +78,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
                 }
                 line += "\n";
             }
-            line.replace(/[\n]+$/,"");
+            //line.replace(/[\n]+$/,"");
 
             return line;
 
