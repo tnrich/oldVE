@@ -1,3 +1,5 @@
+Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
+
 describe("Models", function() {
     describe("DNAFeatureLocation", function() {
         beforeEach(function() {
@@ -63,8 +65,6 @@ describe("Models", function() {
     describe("DNAFeature", function() {
         beforeEach(function() {
             f = Ext.create("Teselagen.models.DNAFeature", {
-                genbankStart: 10,
-                end: 90,
                 name: "MyFeature",
                 type: "Special",
                 strand: 1,
@@ -102,8 +102,6 @@ describe("Models", function() {
     });
 
     describe("FeaturedDNASequence", function() {
-        var fd;
-
         beforeEach(function() {
             fd = Ext.create("Teselagen.models.FeaturedDNASequence", {
                 name: "MyFD",
@@ -126,12 +124,70 @@ describe("Models", function() {
 
 describe("Utils", function() {
     describe("FeaturedDNASequenceUtils", function() {
-        it("can convert sequenceProvider -> FeaturedDNASequence", function() {
+        var feature = Ext.create("Teselagen.bio.sequence.dna.Feature", {
+            name: "MyFeature",
+            start: 20,
+            end: 203,
+            type: "Special",
+            strand: 1,
+            notes: [Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
+                name: "MyNote",
+                value: "This is a note.",
+                quoted: true
+            })]
+        });
 
+        var seqMan = Ext.create("Teselagen.manager.SequenceManager", {
+            name: "MyFD",
+            circular: false,
+            sequence: "acgtcgcgattctatatcgcccgagcgagagtcgttgtcgctgacgacgatcactagtc",
+            features: [feature, feature]
+        });
+
+        it("can convert sequenceManager -> FeaturedDNASequence", function() {
+            convertedFd = Teselagen.utils.FeaturedDNASequenceUtils.sequenceManagerToFeaturedDNASequence(seqMan);
+
+            expect(convertedFd).toBeDefined();
+
+            expect(convertedFd.get("name")).toBe("MyFD");
+            expect(convertedFd.get("isCircular")).toBeFalsy();
+            expect(convertedFd.get("sequence")).toBe(fd.get("sequence"));
+
+            expect(convertedFd.get("features")[0].get("name")).toBe("MyFeature");
+            expect(convertedFd.get("features")[0].get("strand")).toBe(1);
+            expect(convertedFd.get("features")[0].get("type")).toBe("Special");
+
+            expect(convertedFd.get("features")[0].get("notes")[0].get("name")).toBe("MyNote");
+            expect(convertedFd.get("features")[0].get("notes")[0].get("aValue")).toBe("This is a note.");
+            expect(convertedFd.get("features")[0].get("notes")[0].get("quoted")).toBeTruthy();
+
+            expect(convertedFd.get("features")[0].get("locations")[0].get("genbankStart")).toBe(21);
+            expect(convertedFd.get("features")[0].get("locations")[0].get("end")).toBe(203);
         });
 
         it("can convert FeaturedDNASequence -> sequenceProvider", function() {
+            try {
+                var newSM = Teselagen.utils.FeaturedDNASequenceUtils.featuredDNASequenceToSequenceManager(convertedFd);
+            }
+            catch (e) {
+                console.log(e);
+            }
 
+            expect(newSM).toBeDefined();
+
+            expect(newSM.getName()).toBe("MyFD");
+            expect(newSM.getCircular()).toBeFalsy();
+            expect(newSM.getSequence()).toBe(fd.get("sequence"));
+
+            expect(newSM.getFeatures()[0].getName()).toBe("MyFeature");
+            expect(newSM.getFeatures()[0].getStrand()).toBe(1);
+            expect(newSM.getFeatures()[0].getType()).toBe("Special");
+            expect(newSM.getFeatures()[0].getStart()).toBe(20);
+            expect(newSM.getFeatures()[0].getEnd()).toBe(203);
+
+            expect(newSM.getFeatures()[0].getNotes()[0].getName()).toBe("MyNote");
+            expect(newSM.getFeatures()[0].getNotes()[0].getValue()).toBe("This is a note.");
+            expect(newSM.getFeatures()[0].getNotes()[0].getQuoted()).toBeTruthy();
         });
     });
 });
