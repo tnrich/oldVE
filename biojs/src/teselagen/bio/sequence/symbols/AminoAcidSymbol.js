@@ -69,8 +69,8 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 		}
 
 		/**
-		 * [setValue description]
-		 * @param {[type]} pValue [description]
+		 * Set value
+		 * @param {String} pValue input value
 		 */
 		this.setValue = function(pValue) {
 			value = pValue;
