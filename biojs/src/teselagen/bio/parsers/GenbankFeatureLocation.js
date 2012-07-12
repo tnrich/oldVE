@@ -34,11 +34,13 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         var end 		= "";
         var preEnd 		= "";	// stores partials
         var to			= "";	// stores how start and end are joined. ie start TO end
+        var tmp;
         
         if (inData) {
             if (inData.start) {
                 start		= inData.start.replace(/\<|\>/, "") || "";
-                preStart	= inData.start.match(/\</, "") || "";
+                tmp         = inData.start.match(/\</g);
+                if (tmp) {preStart	= tmp[0] || ""};
                 /*if ( inData.start.match(/\>/g) ) {
                 	throw Ext.create("Teselagen.bio.BioException", {
         				message: "Incorrect Usage of > in a start index in your Genbank file."
@@ -47,7 +49,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
             }
             if (inData.end) {
                 end         = inData.end.replace(/\<|\>/, "") || "";
-                preEnd      = inData.end.match(/\>/, "") || "";
+                tmp         = inData.end.match(/\>/g);
+                if (tmp) {  preEnd  = tmp[0] || ""};
                 /*if ( inData.start.match(/\</g) ) {
                 	throw Ext.create("Teselagen.bio.BioException", {
         				message: "Incorrect Usage of < in an end index in your Genbank file."
@@ -74,6 +77,20 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
             start = pStart;
         }
         /**
+         * Get preStart
+         * @returns {String} preStart Can be "" or "<"
+         */
+        this.getPreStart = function() {
+            return preStart;
+        }
+        /**
+         * Set preStart
+         * @param {String} preStart Can be "" or "<"
+         */
+        this.setStart = function(pPreStart) {
+            preStart = pPreStart;
+        }
+        /**
          * Get end
          * @returns {int} end
          */
@@ -87,7 +104,34 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         this.setEnd = function(pEnd) {
             end = pEnd;
         }
-
+        /**
+         * Get preEnd
+         * @returns {String} preEnd Can be "" or ">"
+         */
+        this.getPreEnd = function() {
+            return preEnd;
+        }
+        /**
+         * Set preEnd
+         * @param {String} preEnd Can be "" or ">"
+         */
+        this.setEnd = function(pPreEnd) {
+            preEnd = pPreEnd;
+        }
+        /**
+         * Get to
+         * @returns {String} to
+         */
+        this.getTo = function() {
+            return to;
+        }
+        /**
+         * Set to
+         * @param {String} to
+         */
+        this.setTo = function(pTo) {
+            to = pTo;
+        }
         /**
          * Converts this GenbankLocusKeyword to Genbank file format string
          * @returns {String} genbankString
@@ -99,7 +143,6 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
             
             if (to) {
             	line.push(to);
-            	console.log(to);
             }
             
             if (end) {

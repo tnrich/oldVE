@@ -178,6 +178,8 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 			for (var i=0; i < keywords.length; i++) {
 				var key = keywords[i].getKeyword();
 				json[key] = keywords[i];
+				
+				//json.push(keywords[i]); //if you don't want the redundant keywords, but need to change json = []
 			}
 			
 			return json;
