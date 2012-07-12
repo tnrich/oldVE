@@ -952,9 +952,63 @@ describe("Testing Sequence related classes ", function() {
 
 	describe("Testing DNATools.js", function(){
 
+			describe("createDNA", function(){
+
+			});
+
+			describe("createDNASequence", function(){
+
+			});
+
+			describe("complementSymbol", function(){
+
+			});
+
+			describe("complement", function(){
+
+			});
+
+			describe("reverseComplement", function(){
+
+			});
 	});
 
 	describe("Testing TranslationUtils.js", function(){
 
+			describe("dnaToRNASymbol", function(){
+
+			});
+
+			describe("rnaToDNASymbol", function(){
+
+			});
+
+			describe("dnaToRNA", function(){
+
+			});
+
+			describe("rnaToDNA", function(){
+
+			});
+
+			describe("rnaToProteinSymbol", function(){
+
+			});
+
+			describe("dnaToProteinSymbol", function(){
+
+			});
+
+			describe("rnaToProtein", function(){
+
+			});
+
+			describe("isStartCodon", function(){
+
+			});
+
+			describe("isStopCodon", function(){
+
+			});
 	});
 });
