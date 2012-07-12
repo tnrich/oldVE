@@ -7,6 +7,7 @@
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+Ext.require("Teselagen.bio.sequence.common.StrandType");
 /*
 describe("Testing falsity", function(){
 	var falsity = true; 
@@ -102,8 +103,6 @@ describe("Testing Sequence related classes ", function() {
 				runs(function() {	
 					var a = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
 					expect(a.getName()).toMatch("Adenine");
-		
-					
 				});
 
 			});
@@ -162,9 +161,7 @@ describe("Testing Sequence related classes ", function() {
 
 				runs(function() {	
 					var a = Teselagen.bio.sequence.alphabets.RNAAlphabet.getA();
-					expect(a.getName()).toMatch("Adenine");
-		
-					
+					expect(a.getName()).toMatch("Adenine");			
 				});
 
 			});
@@ -272,7 +269,6 @@ describe("Testing Sequence related classes ", function() {
 
 
 				annotation.setLocations(testLocations);
-				console.log(annotation.getLocations());
 				expect(function(){ annotation.setOneStart(1)} ).toThrow();
 			});
 
@@ -332,43 +328,94 @@ describe("Testing Sequence related classes ", function() {
 				
 			});
 
-			
-			//WIP
 			it(".contains() works!", function(){
-				//var testAnnotation = Ext.create("Teselagen.bio.sequence.common.annotation");
+				
+				
+				var baseAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+					start: 4,
+					end: 6
+				});
+
+				var containsAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+					start:5,
+					end: 5
+				});
+				//base annotation start:4
+				//base annotation end: 6
+				
+				//case 1
+				//annotation start <= annotation end
+					//case 1a
+					//contains annotaiton start < annotation end
+						//case 1a result true
+						//base annotation start:4 < annotation start 5 && base annotation end: 6 > annotation end: 5
+						expect(baseAnnotation.contains(containsAnnotation)).toBe(true);
+						//case 1a result false
+						
+						containsAnnotation.setOneStart(3);
+						containsAnnotation.setOneEnd(5);
+						//base annotation start:4 < annotation start 5 && base annotation end: 6 > annotation end: 7
+						expect(baseAnnotation.contains(containsAnnotation)).toBe(false);
+					
+				baseAnnotation.setOneStart(8);
+				console.log(baseAnnotation.getStart());
+				baseAnnotation.setOneEnd(7);
+				console.log(baseAnnotation.getEnd());
+				//case 2: base annotaiton start > base annotation end
+					containsAnnotation.setOneStart(6);
+					console.log(containsAnnotation.getStart());
+					containsAnnotation.setOneEnd(7);
+					console.log(containsAnnotation.getEnd() <= baseAnnotation.getEnd());
+					//2a: annotation start  < annotation end 
+						//2a result true
+						// annotation end <= base	annotation end || annotation start  >= base annotation start 
+						expect(baseAnnotation.contains(containsAnnotation)).toBe(true);
+
+						//2a result false
+						// annotation end > base annotation end  || annotation start < base annotation start 
+						containsAnnotation.setOneEnd(9);
+						containsAnnotation.setOneStart(1);
+						expect(baseAnnotation.contains(containsAnnotation)).toBe(false);
+
+						//2b result true
+						containsAnnotation.setOneEnd(1);
+						containsAnnotation.setOneStart(9);
+						expect(baseAnnotation.contains(containsAnnotation)).toBe(true);
 			});
+
 
 			
 			it(".isMultiLocation() works!", function(){
 				expect(annotation.isMultiLocation()).not.toBe(true);
+				expect(annotationTest.isMultiLocation()).toBe(true);
+
 			});
 
-			//Wait until getNormalized and deNormalized tests are written to write the meat of this test
+			//Extensive testing needed
 			it(".shift() works!", function(){
 
 				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
-					start: 2,
-					end: 2
+					start: 5,
+					end: 5
 				});
 				annotation.setLocations([newLocation]);
 				expect( function(){ annotation.shift(5, 1, true); } ).toThrow();
-				annotation.shift(5, 100, true);
+				
+
+				var newLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
+					start: 5,
+					end: 5
+				});
+
+				annotation.setLocations([newLocation]);
+				annotation.shift(6, 100, false);
 				var returnedLocations = annotation.getLocations();
-				console.log(returnedLocations);
-				expect(returnedLocations[0].getStart()).toEqual(0);
+				console.log(returnedLocations[0].getStart());
+				expect(returnedLocations[0].getStart()).toEqual(6);
 
 			});
-			
-			//Wait
-			// //
-			// it(".insertAt() works!", function(){
-
-			// });
-
-			//Wait
+		
 			describe("Testing deleteAt", function(){
-
-
 
 				it(".deleteAt() Before First", function(){
 					annotationTest.deleteAt(-10, 5, 100, false);
@@ -517,6 +564,17 @@ describe("Testing Sequence related classes ", function() {
 				expect(strandedAnnotation.getStrand()).toEqual(2);
 			});
 		});
+		describe("StrandType tests", function(){
+			it("StrandTypes work", function(){
+
+				waitsFor(function() {
+					return Teselagen.bio.sequence.common.StrandType != undefined;
+				});
+				expect(Teselagen.bio.sequence.common.StrandType.FORWARD).toEqual(1);
+				expect(Teselagen.bio.sequence.common.StrandType.BACKWARD).toEqual(-1);
+				expect(Teselagen.bio.sequence.common.StrandType.UNKNOWN).toEqual(0);
+			});
+		})
 
 
 
@@ -642,9 +700,115 @@ describe("Testing Sequence related classes ", function() {
 	describe("Testing 'dna' classes", function(){
 
 		describe("Testing 'DigestionFragment.js", function(){
+
 			describe("", function(){
 
-			})
+			});
+
+
+			describe("", function(){
+
+			});
+
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+
+			describe("", function(){
+
+			});
+
+			describe("", function(){
+
+			});
+
+			describe("", function(){
+
+			});
+
+			describe("", function(){
+
+			});
+
+			describe("", function(){
+
+			});
+
+
+		});
+
+
+		describe("Testing 'DNASequence.js", function(){
+
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+		});
+
+
+		describe("Testing 'Feature.js", function(){
+			describe("it exists?", function(){
+
+			});
+
+			describe(".getName()", function(){
+
+			});
+
+
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+			describe("", function(){
+
+			});
+		});
+
+
+		describe("Testing 'FeatureNote.js", function(){
+			describe("", function(){
+
+			});
+		});
+
+
+		describe("Testing 'RichDNASequence.js", function(){
+			describe("", function(){
+
+			});
 		});
 	});
 
@@ -739,11 +903,13 @@ describe("Testing Sequence related classes ", function() {
 		//NucleotideSymbol tests
 		describe("NucleotideSymbol tests", function(){
 			var nucleotideSymbol;
-			var ambiguousMatchesData =["a", "b", "c"];
+			var a =  Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
+			var c = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Cytosine", value: "c", ambiguousMatches: []});
+			var ambiguousMatchesData =[a];
 			beforeEach(function(){
 				nucleotideSymbol =  Ext.create('Teselagen.bio.sequence.symbols.NucleotideSymbol', {
-					name: "test",
-					value: "test",
+					name: "Test",
+					value: "t",
 					ambiguousMatches: ambiguousMatchesData
 				});
 			});
@@ -755,7 +921,7 @@ describe("Testing Sequence related classes ", function() {
 			it(".getName() functions correctly", function(){
 				var test= "test";
 
-				expect(nucleotideSymbol.getName()).toEqual(test);
+				expect(nucleotideSymbol.getName()).toEqual("Test");
 			});
 
 			it(".setName() functions correctly", function(){
@@ -765,7 +931,7 @@ describe("Testing Sequence related classes ", function() {
 
 
 			it(".getValue() functions correctly", function(){
-				expect(nucleotideSymbol.getValue()).toEqual("test");
+				expect(nucleotideSymbol.getValue()).toEqual("t");
 			});
 
 			it(".setValue()) functions correctly", function(){
@@ -774,21 +940,75 @@ describe("Testing Sequence related classes ", function() {
 			});
 
 			it(".getAmbiguousMatches() functions correctly", function(){
-				expect(nucleotideSymbol.getAmbiguousMatches()).toEqual(["a", "b", "c"]);
+				expect(nucleotideSymbol.getAmbiguousMatches()[0].getName()).toEqual(a.getName());
 			});
 
 			it(".setAmbiguousMatches()) functions correctly", function(){
-				nucleotideSymbol.setAmbiguousMatches(["d", "e", "f"]);
-				expect(nucleotideSymbol.getAmbiguousMatches()).toEqual(["d", "e", "f"]);
+				nucleotideSymbol.setAmbiguousMatches([c]);
+				expect(nucleotideSymbol.getAmbiguousMatches()[0].getName()).toEqual(c.getName());
 			});
 		});
 	});
 
 	describe("Testing DNATools.js", function(){
 
+			describe("createDNA", function(){
+
+			});
+
+			describe("createDNASequence", function(){
+
+			});
+
+			describe("complementSymbol", function(){
+
+			});
+
+			describe("complement", function(){
+
+			});
+
+			describe("reverseComplement", function(){
+
+			});
 	});
 
 	describe("Testing TranslationUtils.js", function(){
 
+			describe("dnaToRNASymbol", function(){
+
+			});
+
+			describe("rnaToDNASymbol", function(){
+
+			});
+
+			describe("dnaToRNA", function(){
+
+			});
+
+			describe("rnaToDNA", function(){
+
+			});
+
+			describe("rnaToProteinSymbol", function(){
+
+			});
+
+			describe("dnaToProteinSymbol", function(){
+
+			});
+
+			describe("rnaToProtein", function(){
+
+			});
+
+			describe("isStartCodon", function(){
+
+			});
+
+			describe("isStopCodon", function(){
+
+			});
 	});
 });

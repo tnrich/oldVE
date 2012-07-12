@@ -199,6 +199,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 div = "";
                 date = lineArr[lineArr.length-1];
             }
+            // Date is in this format:1-APR-2012
+            /*var dateArr = date.split(/\-/g);
+            console.log(dateArr[2]);
+            console.log(Ext.create("Date", { year: dateArr[2], day: dateArr[0], month: dateArr[1] }));
+            */
 
             // Just rewrite the existing Locus object. It's easier than setting everything.
             var result = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
@@ -663,13 +668,13 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             }
 
             this.setType = function(key, isKey) {
-                if (isKey === true) {
+                /*if (isKey === true) {
                     this.keyword	= true;
                     this.subkeyword	= false;
                 } else {
                     this.keyword	= false;
                     this.subkeyword	= true;
-                }
+                }*/
 
                 if (key === "REFERENCE") {
                     this.setReference();

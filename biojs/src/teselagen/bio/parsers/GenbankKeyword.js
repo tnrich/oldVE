@@ -109,12 +109,12 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
                     keyword: this.keyword,
                     value: this.value
             }
-            if (this.subKeywords.length > 0) {
-            	json[subKeywords] = this.subKeywords
+            if ( this.subKeywords.length > 0) {
+                json["subKeywords"] = this.subKeywords;
             }
             return json;
         }
-        
+
         return this;
     }
 
