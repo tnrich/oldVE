@@ -492,8 +492,8 @@ describe("Tools:", function() {
 				}
 
 				var frags = Teselagen.bio.tools.DigestionCalculator.digestSequence(seq, [enzyme1, enzyme2]);
-				console.log(frags);
-				expect(frags.length).toBe(4);
+				
+                expect(frags.length).toBe(4);
 
 				expect(frags[0].getStart()).toBe(2);
 				expect(frags[0].getEnd()).toBe(13);
