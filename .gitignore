@@ -1,6 +1,9 @@
 .project
 
 # OS generated files #
+*.js.swp
+*.un~
+# OS generated files #
 ################
 
 .DS_Store

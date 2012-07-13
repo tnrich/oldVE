@@ -25,7 +25,8 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 			var symbols = [];
 
 			for (var i = 0; i < DNASequence.length; i++) {
-				var symbol = Teselagen.bio.sequence.alphabets.DNAAlphabet.superclass.symbolByValue(DNASequence.charAt(i));
+
+				var symbol = Teselagen.bio.sequence.alphabets.DNAAlphabet.symbolMap(DNASequence.charAt(i));
 				if (symbol == null) {
 					throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
 						message: null
@@ -49,8 +50,8 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		 */
 		createDNASequence: function(pName, pDNASequence){
 			return Ext.create("Teselagen.bio.sequence.dna.DNASequence", {
-				symbolList: Teselagen.bio.sequence.DNATools.createDNA(pDNASequence),
-				name: pName;
+				symbolList: this.createDNA(pDNASequence),
+				name: pName
 			});
 		},
 
@@ -111,11 +112,12 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 
 			if (symbols.length > 0) {
 				for (var i = 0; i < symbols.length; i++) {
-					complementSymbols[i].push(complementSymbols(symbols[i]));
+
+					complementSymbols.push(this.complementSymbol(symbols[i]));
 				};
 			};
 
-			Ext.create("Teselagen.bio.sequence.symbols.SymbolList", {
+			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
 				symbols: complementSymbols,
 				alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 			});
@@ -130,14 +132,14 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 			var symbols = pSymbolList.getSymbols();
 			var reverseComplementSymbols = [];
 			for (var i = symbols.length - 1; i >= 0; --i){
-				reverseComplementSymbols.push( complement(symbols[i]) );
+				reverseComplementSymbols.push(this.complementSymbol(symbols[i]));
 			}
 
 
-			Ext.create("Teselagen.bio.sequence.symbols.SymbolList", {
+			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
 				symbols: reverseComplementSymbols,
 				alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 			});
-		}
+		},
 	},	
 });

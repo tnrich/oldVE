@@ -4,12 +4,21 @@
  * 
  * @author Micah Lerner
  */
+//Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 	/**
 	 * Constructor
 	 * @param  {Array <Symbols>} symbols The array of symbols in the SymbolList
 	 * @param {String} alphabet Alphabet used in the SymbolList
 	 */
+
+
+	requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
+			 "Teselagen.bio.sequence.alphabets.ProteinAlphabet", 
+			 "Teselagen.bio.sequence.alphabets.RNAAlphabet",
+			 "Teselagen.bio.sequence.symbols.GapSymbol", 
+			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
+
 	constructor: function(inData){
 		var symbols;
 		var alphabet;
@@ -76,8 +85,15 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 * @return {Boolean} returns whether the alphabet has a gap
 		 */
 		this.hasGap = function(){
-			return symbols.indexOf(alphabet.getGap()) > 0;
-		}
+          //  var alphabetObject = Ext.create("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+           // console.log(alphabetObject.superclass.getGap().getName());
+            var hasGapBoolean = symbols.some(function(element){
+                 
+			    return (element instanceof Teselagen.bio.sequence.symbols.GapSymbol); 
+                 
+            });	
+            return hasGapBoolean;
+        }
 
 		/**
 		 * Returns a sublist of symbols
@@ -99,18 +115,13 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 * @return {Striing} the sequence's string
 		 */	
 		this.seqString = function (){
-			var buffer = [];
-			var string = "";
+			var string = [];
+            symbols.forEach(function(element){
 
-			for ( var i = 0; i < symbols.length; ++i ) {
-				buffer[i] = symbols[i].getValue().charCodeAt(0);
-			}
-
-			for(var i = 0; i < buffer.length; i++) {
-				string += String.fromCharCode(buffer[i]);
-			}
-
-			return string;
+			if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) {
+                string.push(element.getValue());
+            }});        
+			return string.join("");
 		}
 
 		/**

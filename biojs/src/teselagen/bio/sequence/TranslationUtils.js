@@ -29,8 +29,8 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			initializeDNAToRNATranslationTable();
 
 			//Typechecks for GapSymbol
-			if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return  Teselagen.bio.sequence.alphabets.RNAAlphabet.superclass.getGap();
+			if (pSymbol instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
+				return  Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
 			};
 
 			var newSymbol = dnaToRNATranslationTable[pSymbol.getValue()] || null;
@@ -48,7 +48,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		 * Converts an RNA symbol to a DNA symbol
 		 * @return {[type]} [description]
 		 */
-		this.rnaToDNASymbol = function(){
+		this.rnaToDNASymbol = function(pSymbol){
 			initializeRNAToDNATranslationTable();
 
 			//Typechecks if this is a Gap Symbol
@@ -56,7 +56,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 				return  Teselagen.bio.sequence.alphabets.DNAAlphabet.superclass.getGap();
 			};
 
-			var newSymbol = dnaToRNATranslationTable[pSymbol.getValue()] || null;
+			var newSymbol = rnaToDNATranslationTable[pSymbol.getValue()] || null;
 
 			if (newSymbol == null) {
 				throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
@@ -79,7 +79,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			//If there are symbols, dive into this loop.
 			if (symbols.length > 0) {
 				for (var i = 0; i < symbols.length; i++) {
-					rnaSymbols[i] = dnaToRNASymbol(symbols[i]);
+					rnaSymbols[i] = this.dnaToRNASymbol(symbols[i]);
 				};
 			};
 
@@ -100,12 +100,12 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 			if (symbols.length > 0) {
 				for (var i = 0; i < symbols.length; i++) {
-					dnaSymbols[i] = rnaToDNASymbol(symbols[i]);
+					rnaSymbols[i] = this.rnaToDNASymbol(symbols[i]);
 				};
 			};
 
 			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
-				symbols: dnaSymbols,
+				symbols: rnaSymbols,
 				alphabet:  "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 			});
 		}
@@ -121,15 +121,15 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			initializeAminoAcidsTranslationTable();
 
 			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
+				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
 			};
 
-			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getGap();
+			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
 
 			var symbol = aminoAcidsTranslationTable[triplet];
 
 			if (symbol == null) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
+				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
 			};
 
 			return symbol;
@@ -155,7 +155,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			var symbol = aminoAcidsTranslationTable[triplet];
 
 			if(symbol == null) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
+				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
 			}
 
 			return symbol;
@@ -335,11 +335,11 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			aminoAcidsTranslationTable['gug'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
 		}
 
-		function initializeDNAtoRNATranslationTable(){
+	function initializeDNAToRNATranslationTable(){
 			if (dnaToRNATranslationTable != null) {
 				return;
 			};
-
+            dnaToRNATranslationTable= [];
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getA().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getA();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getT().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getU();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getG().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getG();
@@ -350,12 +350,12 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getW().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getW();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getK().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getK();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getM().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getM();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getB]().getValue()   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getB();
+			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getB().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getB();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getV().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getV();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getD().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getD();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getH().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getH();
 			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getN().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getN();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
+			//dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
 		}
 
 		function initializeRNAToDNATranslationTable () {
@@ -381,7 +381,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getD().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getD();
 			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getH().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getH();
 			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getN().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getN();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap();
+			//rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap();
 
 		}
 
