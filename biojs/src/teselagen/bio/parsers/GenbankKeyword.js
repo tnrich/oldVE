@@ -67,7 +67,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
          * @returns {GenbankSubKeyword} subKeyword
          */
         this.getLastSubKeyword = function() {
-            if ( !this.subKeywords && this.subKeywords.length > 0 ) {
+            if ( this.subKeywords.length > 0 ) {
                 return this.subKeywords[this.subKeywords.length-1];
             } else {
                 return null;

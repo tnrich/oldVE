@@ -38,7 +38,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         
         if (inData) {
             if (inData.start) {
-                start		= inData.start.replace(/\<|\>/, "") || "";
+                start		= inData.start.replace(/\<|\>/, "") || "" ;
                 tmp         = inData.start.match(/\</g);
                 if (tmp) {preStart	= tmp[0] || ""};
                 /*if ( inData.start.match(/\>/g) ) {

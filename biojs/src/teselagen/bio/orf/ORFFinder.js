@@ -100,11 +100,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			var strand = Teselagen.bio.sequence.common.StrandType.FORWARD;
 		}
 
-		tu = Ext.create("Teselagen.bio.sequence.TranslationUtils", {
-			dnaToRNATranslationTable: null,
-			rnaToDNATranslationTable: null,
-			aminoAcidsTranslationTable: null
-		});
+		tUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils", {});
 
 		var orfs = [];
 		var sequenceLength = dnaSymbolList.seqString().length;

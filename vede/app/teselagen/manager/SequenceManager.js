@@ -8,6 +8,9 @@
 
 Ext.define("Teselagen.manager.SequenceManager", {
 
+
+
+
     /**
      * @param {String} name
      * @param {Boolean} circular
