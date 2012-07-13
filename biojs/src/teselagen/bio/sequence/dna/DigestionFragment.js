@@ -52,7 +52,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 		 * @return {Integer} returns pEnd
 		 */
 		this.getEnd = function(){
-			return this.end;
+			return end;
 		}
 
 		/**
