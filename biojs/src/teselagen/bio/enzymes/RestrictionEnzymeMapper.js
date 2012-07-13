@@ -53,6 +53,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
 		var matchIndex = sequence.search(forwardRegExpPattern);
 		var startIndex = 0;
 		var subSequence = sequence;
+		
 		while(matchIndex != -1) {
 			if(matchIndex + startIndex + reLength - 1 >= sequence.length) { // subSequence is too short
 				break;

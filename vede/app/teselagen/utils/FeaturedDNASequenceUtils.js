@@ -16,11 +16,13 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
      * @return {Teselagen.models.FeaturedDNASequence} The SequenceManager in FeaturedDNASequence form.
      */
     sequenceManagerToFeaturedDNASequence: function(sequenceManager) {
+        var dnaSequenceFeatures = [];
+        var convertedNotes = [];
+        var convertedLocations = [];
+
         if(!sequenceManager) {
             return null;
         }
-
-        var dnaSequenceFeatures = [];
 
         var featuredDNASequence = Ext.create("Teselagen.models.FeaturedDNASequence", {
             name: sequenceManager.getName(),
@@ -31,7 +33,6 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
 
         // Iterate through all the features associated with sequenceManager, converting them to DNAFeatures.
         Ext.each(sequenceManager.getFeatures(), function(feature) {
-            var convertedNotes = [];
             // Convert notes from feature to DNAFeatureNotes and add them to convertedNotes.
             Ext.each(feature.getNotes(), function(note) {
                 convertedNotes.push(Ext.create("Teselagen.models.DNAFeatureNote", {
@@ -41,7 +42,6 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
                 }));
             });
 
-            var convertedLocations = [];
             // Convert locations from feature to DNAFeatureLocations and add them to convertedLocations.
             Ext.each(feature.getLocations(), function(location) {
                 convertedLocations.push(Ext.create("Teselagen.models.DNAFeatureLocation", {
@@ -70,6 +70,10 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
      * @return {[type]} The FeaturedDNASequence in the form of a SequenceManager.
      */
     featuredDNASequenceToSequenceManager: function(featuredDNASequence) {
+        var convertedFeatures = [];
+        var convertedNotes = [];
+        var convertedLocations = [];
+        
         if(!featuredDNASequence) {
             return null;
         }
@@ -80,9 +84,7 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
             sequence: featuredDNASequence.get("sequence")
         });
 
-        var convertedFeatures = [];
         Ext.each(featuredDNASequence.get("features"), function(feature) {
-            var convertedNotes = [];
             // Convert feature's DNAFeatureNotes to FeatureNotes (Teselagen.bio.sequence.dna.FeatureNote)
             Ext.each(feature.get("notes"), function(note) {
                 convertedNotes.push(Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
@@ -92,7 +94,6 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
                 }));
             });
 
-            var convertedLocations = [];
             // Convert feature's DNAFeatureLocation to Locations (Teselagen.bio.sequence.common.Location)
             Ext.each(feature.get("locations"), function(location) {
                 convertedLocations.push(Ext.create("Teselagen.bio.sequence.common.Location", {

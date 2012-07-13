@@ -551,7 +551,7 @@ describe("Tools:", function() {
 				expect(temp).toBeCloseTo(47.9, 0);
 
 				var temp = Teselagen.bio.tools.TemperatureCalculator.calculateTemperature(seq, "sugimoto");
-				xexpect(temp).toBeCloseTo(38.69, 0); // There are two Sugimoto papers, one which is within 2 degrees of this prediction.
+				//expect(temp).toBeCloseTo(38.69, 0); // There are two Sugimoto papers, one which is within 2 degrees of this prediction.
 
 				// I can't find any other applications which calculate DNA melting temperature using a "unified" table.
 			});

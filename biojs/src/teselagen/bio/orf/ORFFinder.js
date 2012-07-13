@@ -116,19 +116,19 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 			var n2 = dnaSymbolList.symbolAt(index + 1);
 			var n3 = dnaSymbolList.symbolAt(index + 2);
 
-			var aaSymbol = tu.dnaToProteinSymbol(n1, n2, n3);
+			var aaSymbol = tUtils.dnaToProteinSymbol(n1, n2, n3);
 
 			possibleStopCodon = false;
 
 			// Check if current codon could be a stop codon.
-			if(aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap && !tu.isStartCodon(n1, n2, n3)) {
+			if(aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap && !tUtils.isStartCodon(n1, n2, n3)) {
 				if(this.evaluatePossibleStop(n1, n2, n3)) {
 					possibleStopCodon = true;
 				}
 			}
 
 			// If we've found a start codon, add its index to startCodonIndexes.
-			if(!possibleStopCodon && tu.isStartCodon(n1, n2, n3)) {
+			if(!possibleStopCodon && tUtils.isStartCodon(n1, n2, n3)) {
 				// If we're not currently in an ORF, start evaluating a new potential ORF at current index.
 				if(startIndex == -1) {
 					startIndex = index;
@@ -146,7 +146,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
 			// If we've reached a stop codon with a corresponding start codon and
 			// its length is greater than minimumLength, create an ORF object and add it to orfs.
-			if(possibleStopCodon || tu.isStopCodon(n1, n2, n3)) {
+			if(possibleStopCodon || tUtils.isStopCodon(n1, n2, n3)) {
 				if(startIndex != -1) {
 					endIndex = index + 2;
 					if(minimumLength == -1 || (Math.abs(endIndex - startIndex) + 1 >= minimumLength)) {
@@ -199,7 +199,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 		for(var i1 = 0; i1 < n1.length; i1++) {
 			for(var i2 = 0; i2 < n2.length; i2++) {
 				for(var i3 = 0; i3 <n3.length; i3++) {
-					if(tu.isStopCodon(n1[i1], n2[i2], n3[i3])) {
+					if(tUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
 						return true;
 					}
 				}

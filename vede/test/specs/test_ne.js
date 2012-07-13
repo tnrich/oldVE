@@ -1,6 +1,6 @@
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
 
-describe("Models", function() {
+xdescribe("Models", function() {
     describe("DNAFeatureLocation", function() {
         beforeEach(function() {
             fl = Ext.create("Teselagen.models.DNAFeatureLocation", {
@@ -19,15 +19,10 @@ describe("Models", function() {
             expect(fl.get("genbankStart")).toBe(20);
             fl.set("genbankStart", 10);
             expect(fl.get("genbankStart")).toBe(10);
-
-            expect(fl.get("end")).toBe(203);
-            fl.set("end", 1000);
-            expect(fl.get("end")).toBe(1000);
-
-            expect(fl.get("singleResidue")).toBeFalsy();
-            fl.set("singleResidue", true);
-            expect(fl.get("singleResidue")).toBeTruthy();
-
+            expect(fl.get("end")).toBe(203); fl.set("end", 1000);
+            expect(fl.get("end")).toBe(1000); expect(fl.get("singleResidue")).toBeFalsy();
+            fl.set("singleResidue", true); 
+            expect(fl.get("singleResidue")).toBeTruthy(); 
             expect(fl.get("inBetween")).toBeFalsy();
             fl.set("inBetween", true);
             expect(fl.get("inBetween")).toBeTruthy();
@@ -123,7 +118,7 @@ describe("Models", function() {
 });
 
 describe("Utils", function() {
-    describe("FeaturedDNASequenceUtils", function() {
+    xdescribe("FeaturedDNASequenceUtils", function() {
         var feature = Ext.create("Teselagen.bio.sequence.dna.Feature", {
             name: "MyFeature",
             start: 20,
@@ -137,7 +132,7 @@ describe("Utils", function() {
             })]
         });
 
-        var seqMan = Ext.create("Teselagen.manager.SequenceManager", {
+        seqMan = Ext.create("Teselagen.manager.SequenceManager", {
             name: "MyFD",
             circular: false,
             sequence: "acgtcgcgattctatatcgcccgagcgagagtcgttgtcgctgacgacgatcactagtc",
@@ -188,6 +183,49 @@ describe("Utils", function() {
             expect(newSM.getFeatures()[0].getNotes()[0].getName()).toBe("MyNote");
             expect(newSM.getFeatures()[0].getNotes()[0].getValue()).toBe("This is a note.");
             expect(newSM.getFeatures()[0].getNotes()[0].getQuoted()).toBeTruthy();
+        });
+    });
+
+    describe("SystemUtils", function() {
+        it("can correctly identify OS", function() {
+            expect(Teselagen.utils.SystemUtils.getSystemMonospaceFontFamily()).toBe("Monaco");
+        });
+
+        it("can correctly get application version", function() {
+            var versionDate = new Date();
+            expect(Teselagen.utils.SystemUtils.applicationVersion("v")).toBe("v" + String(versionDate.getFullYear()).substr(2,2) + 
+                                                                            "." + String(versionDate.getMonth() + 1) + 
+                                                                            "." + String(versionDate.getDate()));
+        })
+    });
+});
+
+describe("Mappers", function() {
+    describe("Mapper", function() {
+        var mapper = Ext.create("Teselagen.mappers.Mapper", {
+            sequenceManager: seqMan
+        });
+
+        it("is defined", function() {
+            expect(mapper).toBeDefined();
+        });
+
+        it("has working config", function() {
+            expect(mapper.getSequenceManager()).toEqual(seqMan);
+        });
+    });
+
+    describe("AAMapper", function() {
+        var aa = Ext.create("Teselagen.mappers.AAMapper", {
+            sequenceManager: seqMan
+        });
+
+        it("is defined", function() {
+            expect(aa.toBeDefined());
+        });
+
+        it("can calculate amino acid sequences", function() {
+            console.log(aa.getSequence(1, true));
         });
     });
 });
