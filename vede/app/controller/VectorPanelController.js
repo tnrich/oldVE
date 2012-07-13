@@ -1,6 +1,14 @@
+/**
+ * Controller for Vector Panel
+ */
 Ext.define('Vede.controller.VectorPanelController', {
     extend: 'Ext.app.Controller',
 
+    drawComponent: null,
+    
+    /**
+     * @member Vede.controller.VectorPanelController
+     */
     init: function() {
         this.control({
             '#ViewPanel' : {
@@ -29,14 +37,18 @@ Ext.define('Vede.controller.VectorPanelController', {
                 click: this.onClickPie
             }
         });
-        var drawComponent = Ext.create('Ext.draw.Component', {
+        drawComponent = Ext.create('Ext.draw.Component', {
             items: [pie, caret]
         });
         vp.add(drawComponent);
     },
 
-    onClickPie: function(t,e) {
-        console.log(e.getXY());
+    onClickPie: function(pT, pE, pOpts) {
+        var el = pT.surface.el;
+        var relX = pE.getX()-el.getLeft();
+        var relY = pE.getY()-el.getTop();
+        console.log(relX, relY);
+        console.log(pT.x, pT.y);
     }
 
 });
