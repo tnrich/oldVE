@@ -330,9 +330,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
                 } else {    // is a FeatureQualifier in the /KEY="BLAH" format; could be multiple per Element
                     featQual = parseFeatureQualifier(line);
-                    lastElm = result.getLastElement();
+                    lastElm  = result.getLastElement();
                     lastElm.addFeatureQualifier(featQual);
-                    lastObj = featQual;
+                    lastObj  = featQual;
                 }
 
             } else {
@@ -362,7 +362,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         function parseFeatureLocation(featElm, locStr) {
             var location;
             var complement = false;
-            var join = false;
+            var join       = false;
 
             locStr = Ext.String.trim(locStr);
 
@@ -447,7 +447,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
          * @private
          */
         function getLineVal(line) {
-            line	= line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");	
+            line = line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");	
             line = Ext.String.trim(line);
             return line;
         }
@@ -459,7 +459,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
          * @private
          */
         function isKeyword(line) {
-            var key = getLineKey(line);
+            var key   = getLineKey(line);
             var isKey = false;
             if ( line.substr(0,10).match(/^[\S]+/) ) {
                 isKey = true;
@@ -474,7 +474,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
          * @private
          */
         function isSubKeyword(line) {
-            var key = getLineKey(line);
+            var key      = getLineKey(line);
             var isSubKey = false;
 
             if ( line.substr(0,10).match(/^[\s]+[\S]+/) ) {

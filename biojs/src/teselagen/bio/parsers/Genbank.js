@@ -26,12 +26,12 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @property {String[]} keywordTags Array of all the GenbankKeyword names in a Genbank class. 
          * THIS MAY BE DELETED SINCE SEARCHING FOR KEYWORDS[i].keyword WILL RESULT IN ALL THE KEYWORDS IN THE GB FILE.
          */
-		var keywordsTag	= new Array();	// List of Keywords being used
+		var keywordsTag	= [];	// List of Keywords being used
 		/**
 		 * @property {GenbankKeywords[]} keywords Array of all the GenbankKeyword objects in a Genbank class
 		 * (which also includes GenbankLocusKeyword, GenbankFeaturesKeyword, GenbankOriginKeyword which inherit from GenbankKeyword).
 		 */
-		var keywords	= new Array();	
+		var keywords	= [];	
 		
 		
 		// ======== Getter and Setter function ========//
