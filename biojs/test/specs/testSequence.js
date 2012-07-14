@@ -687,44 +687,63 @@ describe("Testing Sequence related classes ", function() {
 			});
         });
     });
-/*
 	describe("Testing 'dna' classes", function(){
 
 		describe("Testing 'DigestionFragment.js", function(){
+            
+            var testDigestionFragment; 
+            beforeEach(function(){
+                testDigestionFragment = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                    });
+            
+            });
 
-			describe("", function(){
+			describe("exists?", function(){
+                expect(testDigestionFragment).toBeDefined();
+			});
 
+            describe(".getStart", function(){
+                expect(testDigestionFragment.getStart()).toEqual(1);
 			});
 
 
-			describe("", function(){
+			describe(".setStart", function(){
 
 			});
 
-			describe("", function(){
+			describe("getEnd", function(){
 
 			});
-			describe("", function(){
-
-			});
-
-			describe("", function(){
+			describe("setEnd", function(){
 
 			});
 
-			describe("", function(){
+			describe("getLength", function(){
 
 			});
 
-			describe("", function(){
+			describe("setLenght", function(){
 
 			});
 
-			describe("", function(){
+			describe("getStartRE", function(){
 
 			});
 
-			describe("", function(){
+			describe("setStartRE", function(){
+
+			});
+
+			describe("getEndRE", function(){
+
+			});
+
+			describe("setEndRE", function(){
 
 			});
 
@@ -801,7 +820,7 @@ describe("Testing Sequence related classes ", function() {
 
 			});
 		});
-	});*/
+	});
 
 	//Teselagen.bio.sequence.symbol Tests
 	describe("Testing 'symbol' classes", function(){
@@ -995,7 +1014,7 @@ describe("Testing Sequence related classes ", function() {
 						alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 					});
 					var complement = Teselagen.bio.sequence.DNATools.complement(inputSymbols);
-					console.log(complement.getSymbols()[0].getName());
+					//console.log(complement.getSymbols()[0].getName());
 					expect(complement.getSymbols()[0].getName()).toMatch("Thymine");
 					expect(complement.getSymbols()[1].getName()).toMatch("Cytosine");
 				});	
@@ -1015,7 +1034,7 @@ describe("Testing Sequence related classes ", function() {
 						alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 					});
 					var complement = Teselagen.bio.sequence.DNATools.reverseComplement(inputSymbols);
-					console.log(complement.getSymbols()[0].getName());
+					//console.log(complement.getSymbols()[0].getName());
 					expect(complement.getSymbols()[0].getName()).toMatch("Cytosine");
 					expect(complement.getSymbols()[1].getName()).toMatch("Thymine");
 				});	
