@@ -133,8 +133,9 @@ describe("Generic Ext tests", function() {
    });
 });
 
-describe("Test class inheritance and aliasing", function() {
-    var sl, seq, dna, rna;
+describe("Test class inheritance", function() {
+    var sl, seq, dna, alphabet;
+    var RNASequence;
     Ext.define("SymbolList", {
         constructor: function() {
             var symbols;
@@ -150,15 +151,17 @@ describe("Test class inheritance and aliasing", function() {
         extend: "SymbolList"
     });
     Ext.define("DNASequence", {
-        extend: "Sequence"
+        extend: "Sequence",
+        constructor: function() {
+            this.callParent();
+        }
     });
-    Ext.define("Teselagen.RNASequence", {
-        extend: "Sequence"
+    Ext.define("AbstractAlphabet", {
     });
     sl = Ext.create("SymbolList");
     seq = Ext.create("Sequence");
     dna = Ext.create("DNASequence");
-    rna = Ext.create("Teselagen.RNASequence");
+    alphabet = Ext.create("AbstractAlphabet")
     it("Privileged functions and config properties/functions get inherited", function() {
         expect(sl.getSymbols).toBeDefined();      
         expect(sl.getAlphabet).toBeDefined();      
@@ -170,15 +173,59 @@ describe("Test class inheritance and aliasing", function() {
         expect(dna.getAlphabet).toBeDefined();      
         expect(dna.alphabet).toBeDefined();      
     });
-    it("Ext.getClass", function() {
-        expect(Ext.getClass(dna)).toBe(DNASequence);
-    });
     it("instanceof", function() {
         expect(dna instanceof DNASequence).toBe(true);
         expect(dna instanceof Sequence).toBe(true);
         expect(dna instanceof SymbolList).toBe(true);
+        expect(dna instanceof AbstractAlphabet).toBe(false);
     });
-    it("Alias", function() {
-        
+    it("Class names", function() {
+        expect(Ext.getClass(dna)).toBe(DNASequence);
+        expect(Ext.getClassName(DNASequence)).toBe("DNASequence");
+        expect(DNASequence.getName()).toBe("DNASequence");
     });
 });
+
+describe("Aliasing", function() {
+    var mgr;
+    it("GenbankManager", function() {
+        expect(Ext.create("Teselagen.bio.parsers.GenbankManager")).toBeDefined();
+    });
+    it("MyManager", function() {
+        Ext.define("MyManager", {
+            extend: "Teselagen.bio.parsers.GenbankManager",
+            GenbankManager:  Teselagen.bio.parsers.GenbankManager,
+            statics: {
+                GenbankMgr: Teselagen.bio.parsers.GenbankManager
+            },
+            constructor: function() {
+                var self = this.statics();
+                expect(this.GenbankManager.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+                expect(this.self.GenbankMgr.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+                expect(self.GenbankMgr.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+            }
+        });
+        mgr = Ext.create("MyManager");
+        expect(mgr.GenbankManager.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+        expect(MyManager.GenbankMgr.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+    });
+});
+
+describe("Config", function() {
+    var iphone, android;
+    Ext.define('SmartPhone', {
+        config: {
+            hasTouchScreen: false,
+            operatingSystem: 'Other',
+            price: 500
+        }
+    });
+    iphone = Ext.create("SmartPhone");
+    expect(iphone.price).toBe(500);
+    iphone.price=600;
+    expect(iphone.price).toBe(600);
+    iphone.setPrice(550);
+    expect(iphone.price).toBe(550);
+    android = Ext.create("SmartPhone");
+    expect(android.price).toBe(500);
+})
