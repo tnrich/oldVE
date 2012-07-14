@@ -145,6 +145,9 @@ describe("Test class inheritance", function() {
         },
         config: {
             alphabet:"ABC"
+        },
+        statics: {
+            staticProp: 5
         }
     });
     Ext.define("Sequence", {
@@ -184,6 +187,10 @@ describe("Test class inheritance", function() {
         expect(Ext.getClassName(DNASequence)).toBe("DNASequence");
         expect(DNASequence.getName()).toBe("DNASequence");
     });
+    it("Static properties are not inherited", function() {
+        expect(SymbolList.staticProp).toBe(5);
+        expect(DNASequence.staticProp).not.toBeDefined();
+    })
 });
 
 describe("Aliasing", function() {
