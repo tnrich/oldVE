@@ -9,7 +9,8 @@ Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
 Ext.require("Teselagen.bio.sequence.common.StrandType");
 Ext.require("Teselagen.bio.sequence.DNATools");
-Ext.require("Teselagen.bio.sequence.TranslationUtils");/*
+Ext.require("Teselagen.bio.sequence.TranslationUtils");
+
 describe("Testing falsity", function(){
 	var falsity = true; 
 	var testEval = falsity || "False";
@@ -34,7 +35,7 @@ describe("Testing falsity", function(){
 	var falsity1 = {};
 	var testEval = falsity1 || "False";
 	console.log("TestEval: " + testEval);
-});*/
+});
 
 describe("Testing BioException", function(){
 	var bioException;
@@ -57,6 +58,7 @@ describe("Testing BioException", function(){
 		}
 	});
 });
+
 //Testing classes in the teselagen/bio/sequence/
 describe("Testing Sequence related classes ", function() {
 	
@@ -79,7 +81,7 @@ describe("Testing Sequence related classes ", function() {
 				var m = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {
 					name: "Ambiguous {'a' or 'c;'}" , value: "m", ambiguousMatches: []});
 				abstractAlphabet.addSymbol(m);
-				expect(abstractAlphabet.getSymbols()).toMatch(m);
+				expect(abstractAlphabet.getSymbols()[1].getName()).toMatch(m.getValue());
 			});
 
 			it("symbolByValue works", function(){
@@ -632,7 +634,6 @@ describe("Testing Sequence related classes ", function() {
 
 			});
 			
-			//Implement alphabet!
 			it(".hasGap works", function(){
 				expect(symbolList.hasGap()).toBe(false);
                 var testGap = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol",{name: "Gap", value:"-"});
@@ -648,24 +649,19 @@ describe("Testing Sequence related classes ", function() {
 				expect(subListTest.getSymbols()).toEqual(["testset", "test1"]);
 			});
 			
-			//ponder this function some more
 			it(".seqString works", function(){
-
-
+                expect(symbolList.seqString()).toMatch("agu");
 			});
 
 			it(".clear works?", function(){
 				symbolList.clear();
 				expect(symbolList.getSymbols()).toMatch([]);
-
 			});
 			
 			it(".addSymbols works", function(){
 				symbolList.addSymbols(["test1", "test2"]);
 				expect(symbolList.getSymbols()[3]).toEqual("test1");
-                
 				expect(symbolList.getSymbols()[4]).toEqual("test2");
-
 			});
 
 			it(".deleteSymbols works?", function(){
@@ -682,8 +678,7 @@ describe("Testing Sequence related classes ", function() {
 
 			it(".toString works", function(){
                 symbolList.setSymbols(symbols);
-				expect(symbolList.seqString()).toEqual("agu");
-
+				expect(symbolList.toString()).toEqual("agu");
 			});
         });
     });
@@ -755,27 +750,79 @@ describe("Testing Sequence related classes ", function() {
 			});
 
 			describe("getLength", function(){
-
+                
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                    });
+                expect(testObj.getLength()).toEqual(1);
 			});
 
 			describe("setLenght", function(){
+                
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                     });
+                testObj.setLength(5);
+                expect(testObj.getLength()).toEqual(5);
 
 			});
 
 			describe("getStartRE", function(){
-
+                
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                     });
+                expect(testObj.getStartRE()).toMatch("Bam");
 			});
-
 			describe("setStartRE", function(){
 
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                     });
+                testObj.setStartRE("TestRE");
+                expect(testObj.getStartRE()).toMatch("TestRE");
 			});
 
 			describe("getEndRE", function(){
 
+                
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                     });
+                expect(testObj.getEndRE()).toMatch("Not");
 			});
 
 			describe("setEndRE", function(){
 
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                     });
+                testObj.setEndRE("TestRE");
+                expect(testObj.getEndRE()).toMatch("TestRE");
 			});
 
 
@@ -784,25 +831,36 @@ describe("Testing Sequence related classes ", function() {
 
 		describe("Testing 'DNASequence.js", function(){
 
-			describe("", function(){
+			describe("getters and setters function correctly", function(){
+					var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
+				var symbolList = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+					symbols: [a],
+					alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
+                var testDNA = Ext.create("Teselagen.bio.sequence.dna.DNASequence", 
+                    {
+                        symbolList: symbolList,
+                        name: "Test",
+                        circular: true,
+                        accession: 1,
+                        version: 1.0,
+                        seqVersion: 5.0,
+                    });
 
-			});
-			describe("", function(){
+                expect(testDNA.getAccession()).toEqual(1);
+                testDNA.setAccession(2);
+                expect(testDNA.getAccession()).toEqual(2);
 
-			});
-			describe("", function(){
+                expect(testDNA.getVersion()).toEqual(1.0);
+                testDNA.setVersion(2.0);
+                expect(testDNA.getVersion()).toEqual(2.0);
+                
+                expect(testDNA.getSeqVersion()).toEqual(5.0);
+                testDNA.setSeqVersion(2.0);
+                expect(testDNA.getSeqVersion()).toEqual(2.0);
 
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
+                expect(testDNA.getCircular()).toBe(true);
+                testDNA.setCircular(false);
+                expect(testDNA.getCircular()).toBe(false);
 
 			});
 		});
