@@ -408,9 +408,9 @@ describe("Testing Sequence related classes ", function() {
 					end: 5
 				});
 
-				annotation.setLocations([newLocation]);
-				annotation.shift(6, 100, false);
-				var returnedLocations = annotation.getLocations();
+				annotationTest.setLocations([newLocation]);
+				annotationTest.shift(1, 100, false);
+				var returnedLocations = annotationTest.getLocations();
 				console.log(returnedLocations[0].getStart());
 				expect(returnedLocations[0].getStart()).toEqual(6);
 
@@ -682,7 +682,7 @@ describe("Testing Sequence related classes ", function() {
 
 			it(".toString works", function(){
                 symbolList.setSymbols(symbols);
-				expect(symbolList.toString()).toEqual("agu");
+				expect(symbolList.seqString()).toEqual("agu");
 
 			});
         });
@@ -691,9 +691,9 @@ describe("Testing Sequence related classes ", function() {
 
 		describe("Testing 'DigestionFragment.js", function(){
             
-            var testDigestionFragment; 
+            var testObj; 
             beforeEach(function(){
-                testDigestionFragment = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
                     {   start: 1,
                         end: 1,
                         length: 1,
@@ -703,24 +703,55 @@ describe("Testing Sequence related classes ", function() {
             
             });
 
-			describe("exists?", function(){
-                expect(testDigestionFragment).toBeDefined();
-			});
-
             describe(".getStart", function(){
-                expect(testDigestionFragment.getStart()).toEqual(1);
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                    });
+                expect(testObj.getStart()).toEqual(1);
 			});
 
 
 			describe(".setStart", function(){
 
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                    });
+                testObj.setStart(5);
+                expect(testObj.getStart()).toEqual(5);
 			});
 
 			describe("getEnd", function(){
 
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                    });
+                expect(testObj.getEnd()).toEqual(1);
+
 			});
 			describe("setEnd", function(){
 
+
+                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
+                    {   start: 1,
+                        end: 1,
+                        length: 1,
+                        startRE: "Bam",
+                        endRE: "Not"
+                    });
+                testObj.setEnd(5);
+                expect(testObj.getEnd()).toEqual(5);
 			});
 
 			describe("getLength", function(){

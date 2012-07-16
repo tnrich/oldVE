@@ -2,15 +2,12 @@
  * @author Diana Womg
  */
 
-//Ext.require('Teselagen.bio.util.StringUtil');
 Ext.require("Ext.Ajax");
 Ext.require("Teselagen.StringUtil");
 describe("Testing Genbank related classes:", function() {
     var dt =  Ext.create("Data");
     var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
     var line, tmp;
-
-    //console.log(Ext.Loader.getConfig());
 
     describe("Teselagen.bio.util.StringUtil", function() {
 
@@ -41,16 +38,9 @@ describe("Testing Genbank related classes:", function() {
             expect(gb).toBeDefined();
         });
 
-        it("GenbankKeyword", function() {
-            var test = "blah";
-            var gbKey = Ext.create("Teselagen.bio.parsers.GenbankKeyword");
-            expect(gbKey).toBeDefined();
-            gbKey.setKeyword(test);
-            expect(gbKey.getKeyword()).toBe(test);
-
-            var gbFeatKey = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
-            expect(Ext.getClassName(gbFeatKey)).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
-
+        it("GenbankManager Initializes?", function() {
+            var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
+            expect(gbMan).toBeDefined();
         });
         it("All Genbank classes defined?", function() {
 
@@ -116,6 +106,12 @@ describe("Testing Genbank related classes:", function() {
 
     });
     describe("Unit Testing: Creates dummy Genbank Objects directly, tests properties/methods", function() {
+        it("Parses LOCUS 1: circular?",function(){
+            var line = "\n";
+            var tmp = gbMan.parseGenbankFile(line);
+            expect(tmp.getKeywords().length).toBe(0);
+        });
+
         it("Keyword: get, toJSON",function(){
             var tmp = Ext.create("Teselagen.bio.parsers.Keyword", {
                 keyword: "key",
@@ -184,6 +180,7 @@ describe("Testing Genbank related classes:", function() {
             expect(tmp.getSequence()).toBe("AGCT");
             tmp.appendSequence("GATTACA");
             expect(tmp.getSequence()).toBe("AGCTGATTACA");
+            // DONT MATCH BACK TO ORIGINAL STRING. SPACING DOES NOT HAVE TO BE EXACT.
             //expect(tmp.toString()).toMatch("ORIGIN      \n        1 AGCTGATTAC A\n");
             //console.log(tmp.toString());
             //console.log("ORIGIN      \n        1 AGCTGATTAC A\n");
@@ -211,8 +208,8 @@ describe("Testing Genbank related classes:", function() {
             //This function not created since never needed
             //expect(tmp.getLastFeatureLocation()).toBe(4);
 
-            tmp2 = "     key             complement(3,4)\n1\n2\n10"
-                expect(tmp.toString()).toBe(tmp2);
+            tmp2 = "     key             complement(3,4)\n1\n2\n10";
+            expect(tmp.toString()).toBe(tmp2);
 
         });
         it("GenbankFeatureLocation: get",function(){
@@ -247,11 +244,10 @@ describe("Testing Genbank related classes:", function() {
         });
     });
 
-    describe("Testing LOCUS Keyword Parsing from GenbankManager.js", function() {
+    describe("Integrative: parseLocus() from GenbankManager.js", function() {
         var line, tmp;
 
         it("Parses LOCUS 1: circular?",function(){
-            //var line = dt.getLocusStr();
             var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
             var tmp = gbMan.parseGenbankFile(line);
             expect(tmp.getLocus().toString()).toBe(line);
@@ -308,7 +304,7 @@ describe("Testing Genbank related classes:", function() {
         });
     });
 
-    describe("Testing SIMPLE Keyword Parsing from GenbankManager.js", function() {
+    describe("Integrative: parseKeyword() from GenbankManager.js (SIMPLE CASE)", function() {
         it("Parses ACCESSION? Correctly parses/adds Dummy SubKeywords?",function(){
             var line = "ACCESSION   pj5_00028 Accession";
             var tmp = gbMan.parseGenbankFile(line);
@@ -358,14 +354,13 @@ describe("Testing Genbank related classes:", function() {
     });
 
 
-    describe("Testing COMPLEX Keyword Parsing from GenbankManager.js: lines with runons", function() {
+    describe("Integrative: parseKeyword() & parseSubKeyword() from GenbankManager.js (COMPLEX CASE: lines with runons)", function() {
         it("Parses DEFINITION with 2 lines?",function(){
             line = 
-                'DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n' +
+                'DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n ' +
                 '            (AXL2) and Rev7p (REV7) genes, complete cds.';
-            //console.log("ORIGINAL\n" + line);
             tmp = gbMan.parseGenbankFile(line);
-            //console.log(tmp.toString());
+            expect(tmp.findKeyword("DEFINITION").getValue()).toBe('Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n            (AXL2) and Rev7p (REV7) genes, complete cds.');
             expect(tmp.findKeyword("DEFINITION").toString()).toBe(line);
         });
 
@@ -375,8 +370,8 @@ describe("Testing Genbank related classes:", function() {
                 '  ORGANISM  Saccharomyces cerevisiae\n' +
                 '            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
                 '            Saccharomycetales; Saccharomycetaceae; Saccharomyces.';
-            //console.log("ORIGINAL\n" + line);
             var tmp = gbMan.parseGenbankFile(line);
+            //console.log("ORIGINAL\n" + line);
             //console.log("RECONSTRUCTED\n" + tmp.toString());
             //console.log(JSON.stringify(tmp, null, "  "));
             expect(tmp.findKeyword("SOURCE").getSubKeywords()[0].getKeyword()).toBe("ORGANISM");
@@ -408,14 +403,12 @@ describe("Testing Genbank related classes:", function() {
     });
 
 
-    describe("Testing simple FEATURES Parsing from GenbankManager.js:", function() {
+    describe("Integrative: parseFeatures(), parseFeatureLocation(), parseFeatureQualifier() from GenbankManager.js from GenbankManager.js (SIMPLE CASE)", function() {
         var line = 
             'FEATURES             Location/Qualifiers\n' + 
             '     CDS             complement(7..885)\n' + 
             '                     /label="araC"';
-        //console.log("ORIGINAL\n" + line);
         var tmp = gbMan.parseGenbankFile(line);
-        //console.log(JSON.stringify(tmp, null, "  "));
         it("Parses FEATURE & FEATURE ELEMENT?",function(){
             expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
             expect(tmp.findKeyword("FEATURES").getLastElement().getKeyword()).toBe("CDS");
@@ -441,7 +434,7 @@ describe("Testing Genbank related classes:", function() {
     });
 
 
-    describe("Testing complex FEATURES parsing from GenbankManager.js: Runon LOCATION, and QUALIFIER?", function() {
+    describe("Integrative: parseFeatures() etc from GenbankManager.js (COMPLEX CASE: Runon LOCATION, and QUALIFIER)", function() {
         beforeEach(function() {
             line = 
                 'FEATURES             Location/Qualifiers\n' + 
@@ -452,7 +445,6 @@ describe("Testing Genbank related classes:", function() {
                 '                     /translation="MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQ\n' +
                 '                     FVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVD\n' +
                 '                     LISGDDKILNGVYSQYEEGESIFGSLF\n';
-            //console.log("ORIGINAL\n" + line);
             tmp = gbMan.parseGenbankFile(line);
             //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
             //console.log(JSON.stringify(tmp, null, "  "));
@@ -496,14 +488,13 @@ describe("Testing Genbank related classes:", function() {
     });
 
 
-    describe("Testing ORIGIN Parsing from GenbankManager.js:?", function() {
+    describe("Integrative: parseOrigin() from GenbankManager.js?", function() {
         beforeEach(function() {
             line = "ORIGIN      \n" +
             "        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n" +
             "       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n";// +
             //"//";
             tmp = gbMan.parseGenbankFile(line);
-            //console.log(JSON.stringify(tmp, null, "  "));
         });
 
         it("Parses ORIGIN?",function(){
@@ -517,14 +508,10 @@ describe("Testing Genbank related classes:", function() {
     });
 
 
-    describe("Testing partial file (top part of pj5_00028.gb) parsing from GenbankManager.js:?", function() {
+    describe("Integrative: Partial file (top part of pj5_00028.gb) parsing from GenbankManager.js:?", function() {
         beforeEach(function() {
             line = dt.getTopStr();
-            //console.log("ORIGINAL\n" + line);
             tmp = gbMan.parseGenbankFile(line);
-            //console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
-            //console.log(JSON.stringify(tmp, null, '  '));
-            //console.log(JSON.stringify(tmp.getKeywords(), null, '  '));
 
         });
 
@@ -555,7 +542,7 @@ describe("Testing Genbank related classes:", function() {
     });
 
 
-    describe("Opening data files from biojs/data/DATAFILE.gb correctly? This uses AJAX and is asynchronos.", function() {
+    describe("Opening data files from biojs/data/DATAFILE.gb correctly? Uses AJAX and is asynchronos.", function() {
         it("../data/pj5_00028.gb: correct Locus, # of Keywords, # of Features",function(){
 
             var text, tmp;

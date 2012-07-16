@@ -125,7 +125,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             case that.self.END_SEQUENCE_TAG:
                 //console.log("END"); // DO NOTHING
                 break;
-            default: // FOLLOWING MUST BE IN THIS ORDER DUE TO HOW IT CHECKS FOR LINE TYPES
+            default: // FOLLOWING FOR KEYWORDS NOT PREVIOUSLY DEFINED IN CASES
                 if ( line === "") {
                     // do nothing;              // BLANK LINES
                     break;
