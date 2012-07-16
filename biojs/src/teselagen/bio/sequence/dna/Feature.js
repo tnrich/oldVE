@@ -5,10 +5,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 	constructor: function (inData) {
 		if (inData) {
 			var name = inData.name || "";
-			var start = inData.start || 0;
-			var end = inData.end || 0;
 			var _type = inData.type || "";
-			var strand = inData.strand || 0;
 			var notes = inData.notes || null;
 			this.callParent([inData]);
 		} else {
@@ -45,14 +42,10 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
 		this.clone = function(){
 			var clonedFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", {
-				name: this.name,
-				start: this.start,
-				end: this.end,
-				type: this._type,
-			});
+			    inData: inData});
 
 			var clonedLocations = [];
-			var locations = this.superclass().getLocations();
+			var locations = this.superclass.getLocations();
 
 			for (var i = 0; i < locations.length; i++) {
 				clonedLocations.push(locations[i].clone());
@@ -66,7 +59,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 					clonedNotes.push(notes[i].clone());
 				};
 
-				clonedFeature.superclass.superclass(setNotes(clonedNotes));
+				clonedFeature.setNotes(clonedNotes);
 			}
 
 			return clonedFeature;

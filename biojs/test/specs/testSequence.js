@@ -867,45 +867,76 @@ describe("Testing Sequence related classes ", function() {
 
 
 		describe("Testing 'Feature.js", function(){
+            var testFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", 
+                {
+                    name: "Test",
+                    start: 1,
+                    end: 1,
+                    type: "DNA",
+                    strand: 1,
+                    notes: "Dummy Notes"
+                });
 			describe("it exists?", function(){
-
+                expect(testFeature).toBeDefined();
 			});
 
-			describe(".getName()", function(){
+			describe(".get{ters} and set{ters} work", function(){
+                expect(testFeature.getName()).toMatch("Test");
+                testFeature.setName("Changed");
+                expect(testFeature.getName()).toMatch("Changed");
+
+                expect(testFeature.getType()).toMatch("DNA");
+                testFeature.setType("RNA");
+                expect(testFeature.getType()).toMatch("RNA");
+
+                expect(testFeature.getNotes()).toMatch("Dummy Notes");
+                testFeature.setNotes("Test notes");
+                expect(testFeature.getNotes()).toMatch("Test notes");
 
 			});
-
-
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
-			describe("", function(){
-
-			});
+/*
+			describe(".clone()", function(){
+               var cloned = testFeature.clone();
+               expect(cloned.length);
+			});*/
 		});
 
 
 		describe("Testing 'FeatureNote.js", function(){
-			describe("", function(){
+            var featureNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote",
+                {
+                    name: "Test Note",
+                    value: "value",
+                    quoted: true
+                });
+			describe("it exists?", function(){
+                expect(featureNote).toBeDefined();
+			});
 
+			describe("clone() works", function(){
+                var clonedFeatureNote = featureNote.clone();
+                expect(clonedFeatureNote.getName()).toMatch("Test Note");
+                expect(clonedFeatureNote.getValue()).toMatch("value");
+			});
+
+			describe("get{ters} and set{ters} works", function(){
+                expect(featureNote.getName()).toMatch("Test Note");
+                featureNote.setName("test");
+                expect(featureNote.getName()).toMatch("test");
+
+                expect(featureNote.getValue()).toMatch("value");
+                featureNote.setValue("test");
+                expect(featureNote.getValue()).toMatch("test");
+
+                expect(featureNote.getQuoted()).toMatch(true);
+                featureNote.setValue(false);
+                expect(featureNote.getValue()).toMatch(false);
 			});
 		});
 
 
 		describe("Testing 'RichDNASequence.js", function(){
-			describe("", function(){
+			describe("it exists?", function(){
 
 			});
 		});
