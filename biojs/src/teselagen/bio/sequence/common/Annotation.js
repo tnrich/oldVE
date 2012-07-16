@@ -122,7 +122,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 * @param {Array <Location>} pLocations sets the new list of locations.
 		 */
 		this.setLocations = function(pLocations){
-			locations = pLocations;
+		    locations = [];	
+            locations = pLocations;
 		}
 
 		/**
@@ -192,20 +193,16 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 			var offset = start;
 			var tempLocations = getNormalizedLocations(pMaxLength);
-			var tempLocation = Ext.create("Teselagen.bio.sequence.common.Location",{
-				start: null,
-				end: null
-			});
+            console.log("TempLocation test getStart: " + tempLocations[0].getStart());
+			 for (var i = 0; i < tempLocations.length; ++i ){
+                var newStart = tempLocations[i].getStart() + pShiftBy;
+				tempLocations[i].setStart(newStart);
+                console.log("Temp location start set to: " + (pShiftBy));
+                var newEnd = tempLocations[i].getEnd() + pShiftBy;
+				tempLocations[i].setEnd(newEnd);
+            }
 
-			 for (var i = 0; i < tempLocations.length; ++i ){ 
-				tempLocation = tempLocations[i];
-				tempLocation.setStart( tempLocation.getStart() + pShiftBy );
-				tempLocation.setEnd( tempLocation.getEnd() + pShiftBy );
-				tempLocations[i] = tempLocation;
-			}
-
-			tempLocations = deNormalizeLocations(tempLocations, offset, pMaxLength, pCircular, 0);
-			locations = tempLocations;
+			locations = deNormalizeLocations(tempLocations, locations[0].getStart(), pMaxLength, pCircular, 0);
 		}
 			 
 		
@@ -415,7 +412,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				return null;
 			}
 			
-			var result = [];
+			var normalizedLocations = [];
 			var offset = locations[0].getStart();
 			var newStart = 0;
 			var newEnd = 0;
@@ -431,12 +428,13 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				if (newEnd < 0) {
 					newEnd += maxLength;
 				}
-				result.push(Ext.create("Teselagen.bio.sequence.common.Location", {
+				normalizedLocations.push(Ext.create("Teselagen.bio.sequence.common.Location", {
 					start: newStart,
 					end: newEnd
 				}));
+                console.log("newStart: " + newStart + " and newEnd: " + newEnd);
 			}
-			return result;
+			return normalizedLocations;
 		}
 		/**
 		 * Denormalize the location form zero-based to offset. Calculates circularity (if needed)
