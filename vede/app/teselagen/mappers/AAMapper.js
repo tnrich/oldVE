@@ -6,13 +6,19 @@
  */
 Ext.define("Teselagen.mappers.AAMapper", {
     extends: "Teselagen.mappers.Mapper",
+    
+    tUtils: Teselagen.bio.sequence.TranslationUtils,
+
+    mixins: {
+        observable: "Ext.util.Observable"
+    },
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.
      */
     constructor: function(inData) {
         this.callParent(arguments);
-        this.addEvent(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED);
+        this.addEvents(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED);
         
         var aaSequence = ["", "", ""];
         var aaSequenceSparse = ["", "", ""];
@@ -21,7 +27,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
 
         var dirty = true;
 
-        this.addEventListener(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
+        this.on(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
                              function(){alert("aa mapper updated")});
     },
    
@@ -40,7 +46,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
         }
 
         this.fireEvent(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED);
-    }
+    },
     
     /**
      * @private
@@ -62,8 +68,6 @@ Ext.define("Teselagen.mappers.AAMapper", {
         aaSequenceSparseArray = [[], [], []];
         revComArray = [[], [], []];
         revComSparse = [[], [], []];
-
-        var tUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils",{});
 
         for(i = 0; i < seqLen; i++) {
             if(i >= seqLen - 2) {
@@ -119,7 +123,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
         } else {
             return aaSequence[frame];
         }
-    }
+    },
 
     /**
      * Returns the amino acid sequence of a given frame of the reverse complement sequence.

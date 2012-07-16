@@ -1,53 +1,69 @@
 /**
  * @class Teselagen.bio.tools.TemperatureCalculator
- * DNA temperature calculator.
+ * DNA melting temperature calculator.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
-	singleton: true,
+    singleton: true,
 
-	requires: ["Teselagen.bio.BioException", "Teselagen.bio.sequence.dna.DNASequence"],
+    requires: ["Teselagen.bio.BioException", "Teselagen.bio.sequence.dna.DNASequence"],
 
-	TABLE_BRESLAUER: "breslauer",
-	TABLE_SUGIMOTO: "sugimoto",
-	TABLE_UNIFIED: "unified",
+    TABLE_BRESLAUER: "breslauer",
+    TABLE_SUGIMOTO: "sugimoto",
+    TABLE_UNIFIED: "unified",
 
-	A: -10.8,	// Helix initiation for deltaS
-	R: 1.987,	// Gas constant (cal/(K*mol)).
-	C: 0.5e-6,	// Oligo concentration. 0.5uM is typical for PCR.
-	Na: 50e-3,	// Monovalent salt concentration. 50mM is typical for PCR.
+    A: -10.8,   // Helix initiation for deltaS
+    R: 1.987,   // Gas constant (cal/(K*mol)).
+    C: 0.5e-6,  // Oligo concentration. 0.5uM is typical for PCR.
+    Na: 50e-3,  // Monovalent salt concentration. 50mM is typical for PCR.
 
-	/**
-	 * Calculates temperature for DNA sequence using a given algorithm.
-	 * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence The DNA sequence to use.
-	 * @param  {String} type Either Teselagen.bio.tools.TemperatureCalculator.TABLE_BRESLAUER, TABLE_SUGIMOTO, or TABLE_UNIFIED
-	 * @return {Double} Temperature for the given sequence, in Celsius.
-	 */
-	calculateTemperature: function(dnaSequence, type) {
-		if(typeof(type) === "undefined") {
-			type = this.TABLE_BRESLAUER;
-		} else if(type != this.TABLE_BRESLAUER && (
-					type != this.TABLE_UNIFIED &&
-					type != this.TABLE_SUGIMOTO)) {
-			throw Ext.create("Teselagen.bio.BioException", {
-				message: "Invalid table type!"
-			});
-		}
+    /**
+     * Calculates temperature for DNA sequence using a given algorithm.
+     * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence The DNA sequence to use.
+     * @param  {String} type Either Teselagen.bio.tools.TemperatureCalculator.TABLE_BRESLAUER, TABLE_SUGIMOTO, or TABLE_UNIFIED
+     * @param  {Double} A Helix initation for deltaS. Defaults to -10.8.
+     * @param  {Double} R The gas constant, in cal/(K*mol). Defaults to 0.5e-6M.
+     * @param  {Double} Na THe monovalent salt concentration. Defaults to 50e-3M.
+     * @return {Double} Temperature for the given sequence, in Celsius.
+     */
+    calculateTemperature: function(dnaSequence, type, A, R, C, Na) {
+        if(typeof(type) === "undefined") {
+            type = this.TABLE_BRESLAUER;
+        } else if(type != this.TABLE_BRESLAUER && (
+                    type != this.TABLE_UNIFIED &&
+                    type != this.TABLE_SUGIMOTO)) {
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid table type!"
+            });
+        }
 
-		var sequence = dnaSequence.seqString();
-		var sequenceLength = sequence.length;
+        if(!A) {
+            A = this.A;
+        }
+        if(!R) {
+            R = this.R;
+        }
+        if(!C) {
+            C = this.C;
+        }
+        if(!Na) {
+            Na = this.Na;
+        }
 
-		if(sequenceLength == 0) {
-			return 0;
-		}
+        var sequence = dnaSequence.seqString();
+        var sequenceLength = sequence.length;
 
-		var deltaHTable = this.getDeltaHTable(type);
-		var deltaSTable = this.getDeltaSTable(type);
+        if(sequenceLength == 0) {
+            return 0;
+        }
 
-		var neighbors = new Array(); // List goes in order: aa, at, ac, ag, tt, ta, tc, tg, cc, ca, ct, cg, gg, gt, gc
+        var deltaHTable = this.getDeltaHTable(type);
+        var deltaSTable = this.getDeltaSTable(type);
 
-		neighbors.push(this.calculateReps(sequence, "aa"));
+        var neighbors = new Array(); // List goes in order: aa, at, ac, ag, tt, ta, tc, tg, cc, ca, ct, cg, gg, gt, gc
+
+        neighbors.push(this.calculateReps(sequence, "aa"));
         neighbors.push(this.calculateNumberOfOccurrences(sequence, "at"));
         neighbors.push(this.calculateNumberOfOccurrences(sequence, "ac"));
         neighbors.push(this.calculateNumberOfOccurrences(sequence, "ag"));
@@ -71,109 +87,109 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
         var sumDeltaS = 0.0;
 
         for(var i = 0; i < 16; i++) {
-        	sumDeltaH = sumDeltaH + neighbors[i] * deltaHTable[i];
+            sumDeltaH = sumDeltaH + neighbors[i] * deltaHTable[i];
             sumDeltaS = sumDeltaS + neighbors[i] * deltaSTable[i];
         }
 
-        var temperature = ((-1000.0 * sumDeltaH) / (this.A + -sumDeltaS + this.R * Math.log(this.C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(this.Na);
+        var temperature = ((-1000.0 * sumDeltaH) / (A + -sumDeltaS + R * Math.log(C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(Na);
 
         // If temperature is negative then return 0.
         if(temperature < 0) {
-        	return 0;
+            return 0;
         }
 
         return temperature;
-	},
+    },
 
-	/**
-	 * @private
-	 * Function to return deltaH table for given algorithm.
-	 * @param {String} type Algorithm to get table for.
-	 * @return {Array<Int>} deltaH table for given algorithm.
-	 */
-	getDeltaHTable: function(type) {
-		if(type == this.TABLE_BRESLAUER) {
-			return [9.1, 8.6, 6.5, 7.8, 9.1, 6.0, 5.6, 5.8, 11.0, 5.8, 7.8, 11.9, 11.0, 5.6, 6.5, 11.1];
-		} else if(type == this.TABLE_SUGIMOTO) {
-			return [8.0, 5.6, 6.5, 7.8, 8.0, 5.6, 5.6, 5.8, 10.9, 8.2, 6.6, 11.8, 10.9, 6.6, 9.4, 11.9];
-		} else if(type == this.TABLE_UNIFIED) {
-			return [7.9, 7.2, 8.4, 7.8, 7.9, 7.2, 8.2, 8.5, 8.0, 8.5, 7.8, 10.6, 8.0, 8.2, 8.4, 9.8];
-		} else {
-			return null;
-		}
-	},
+    /**
+     * @private
+     * Function to return deltaH table for given algorithm.
+     * @param {String} type Algorithm to get table for.
+     * @return {Array<Int>} deltaH table for given algorithm.
+     */
+    getDeltaHTable: function(type) {
+        if(type == this.TABLE_BRESLAUER) {
+            return [9.1, 8.6, 6.5, 7.8, 9.1, 6.0, 5.6, 5.8, 11.0, 5.8, 7.8, 11.9, 11.0, 5.6, 6.5, 11.1];
+        } else if(type == this.TABLE_SUGIMOTO) {
+            return [8.0, 5.6, 6.5, 7.8, 8.0, 5.6, 5.6, 5.8, 10.9, 8.2, 6.6, 11.8, 10.9, 6.6, 9.4, 11.9];
+        } else if(type == this.TABLE_UNIFIED) {
+            return [7.9, 7.2, 8.4, 7.8, 7.9, 7.2, 8.2, 8.5, 8.0, 8.5, 7.8, 10.6, 8.0, 8.2, 8.4, 9.8];
+        } else {
+            return null;
+        }
+    },
 
-	/**
-	 * @private
-	 * Function to return deltaS table for given algorithm.
-	 * @param {String} type Algorithm to get table for.
-	 * @return {Array<Int>} deltaS table for given algorithm.
-	 */
-	getDeltaSTable: function(type) {
-		if(type == this.TABLE_BRESLAUER) {
-			return [24.0, 23.9, 17.3, 20.8, 24.0, 16.9, 13.5, 12.9, 26.6, 12.9, 20.8, 27.8, 26.6, 13.5, 17.3, 26.7];
-		} else if(type == this.TABLE_SUGIMOTO) {
-			return [21.9, 15.2, 17.3, 20.8, 21.9, 15.2, 13.5, 12.9, 28.4, 25.5, 23.5, 29.0, 28.4, 16.4, 25.5, 29.0];
-		} else if(type == this.TABLE_UNIFIED) {
-			return [22.2, 20.4, 22.4, 21.0, 22.2, 21.3, 22.2, 22.7, 19.9, 22.7, 21.0, 27.2, 19.9, 22.2, 22.4, 24.4];
-		} else {
-			return null;
-		}
-	},
+    /**
+     * @private
+     * Function to return deltaS table for given algorithm.
+     * @param {String} type Algorithm to get table for.
+     * @return {Array<Int>} deltaS table for given algorithm.
+     */
+    getDeltaSTable: function(type) {
+        if(type == this.TABLE_BRESLAUER) {
+            return [24.0, 23.9, 17.3, 20.8, 24.0, 16.9, 13.5, 12.9, 26.6, 12.9, 20.8, 27.8, 26.6, 13.5, 17.3, 26.7];
+        } else if(type == this.TABLE_SUGIMOTO) {
+            return [21.9, 15.2, 17.3, 20.8, 21.9, 15.2, 13.5, 12.9, 28.4, 25.5, 23.5, 29.0, 28.4, 16.4, 25.5, 29.0];
+        } else if(type == this.TABLE_UNIFIED) {
+            return [22.2, 20.4, 22.4, 21.0, 22.2, 21.3, 22.2, 22.7, 19.9, 22.7, 21.0, 27.2, 19.9, 22.2, 22.4, 24.4];
+        } else {
+            return null;
+        }
+    },
 
-	/**
-	 * @private
-	 * Finds number of occurrences of target in sequence.
-	 * Will find repeating sequences, meaning that
-	 * calculateReps("aaa", "aa") returns 2 rather than 1.
-	 * @param  {String} sequence The string to search through.
-	 * @param  {String} target   The string to search for.
-	 * @return {Int} Number of occurrences of target in sequence, with repeats.
-	 */
-	calculateReps: function(sequence, target) {
-		var sequenceLength = sequence.length;
+    /**
+     * @private
+     * Finds number of occurrences of target in sequence.
+     * Will find repeating sequences, meaning that
+     * calculateReps("aaa", "aa") returns 2 rather than 1.
+     * @param  {String} sequence The string to search through.
+     * @param  {String} target   The string to search for.
+     * @return {Int} Number of occurrences of target in sequence, with repeats.
+     */
+    calculateReps: function(sequence, target) {
+        var sequenceLength = sequence.length;
 
-		if(sequenceLength == 0) {
-			return 0;
-		}
+        if(sequenceLength == 0) {
+            return 0;
+        }
 
-		var numFound = 0;
-		var seqOffset = 0; // Search offset for finding multiple matches.
+        var numFound = 0;
+        var seqOffset = 0; // Search offset for finding multiple matches.
 
-		while(true) {
-			var foundSeq = sequence.indexOf(target, seqOffset);
+        while(true) {
+            var foundSeq = sequence.indexOf(target, seqOffset);
 
-			if(foundSeq == -1) {
-				break;
-			}
+            if(foundSeq == -1) {
+                break;
+            }
 
-			seqOffset = foundSeq + 1;
-			numFound++;
+            seqOffset = foundSeq + 1;
+            numFound++;
 
-			if(seqOffset > sequenceLength) {
-				break;
-			}
-		}
+            if(seqOffset > sequenceLength) {
+                break;
+            }
+        }
 
-		return numFound;
-	},
+        return numFound;
+    },
 
-	/**
-	 * @private
-	 * Counts number of occurrences of target in sequence, without repeating.
-	 * @param  {String} sequence The string to search through.
-	 * @param  {String} target   The string to search for.
-	 * @return {Int} Number of occurrences of target in sequence.
-	 */
-	calculateNumberOfOccurrences: function(sequence, target) {
-		var sequenceLength = sequence.length;
+    /**
+     * @private
+     * Counts number of occurrences of target in sequence, without repeating.
+     * @param  {String} sequence The string to search through.
+     * @param  {String} target   The string to search for.
+     * @return {Int} Number of occurrences of target in sequence.
+     */
+    calculateNumberOfOccurrences: function(sequence, target) {
+        var sequenceLength = sequence.length;
 
-		if(sequenceLength == 0) {
-			return 0;
-		}
+        if(sequenceLength == 0) {
+            return 0;
+        }
 
-		var numberFound = sequence.split(target).length - 1;
+        var numberFound = sequence.split(target).length - 1;
 
-		return numberFound;
-	}
+        return numberFound;
+    }
 });
