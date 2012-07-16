@@ -145,7 +145,13 @@ describe("Test class inheritance", function() {
         },
         config: {
             alphabet:"ABC"
-        }
+        },
+	statics: {
+	    staticProp: 10,
+	    staticFunc: function() {
+		return "DEF"
+	    }
+	}
     });
     Ext.define("Sequence", {
         extend: "SymbolList"
@@ -154,6 +160,7 @@ describe("Test class inheritance", function() {
         extend: "Sequence",
         constructor: function() {
             this.callParent();
+	    expect(this.superclass.superclass.self.staticProp).toBe(10);
         }
     });
     Ext.define("AbstractAlphabet", {
@@ -184,6 +191,11 @@ describe("Test class inheritance", function() {
         expect(Ext.getClassName(DNASequence)).toBe("DNASequence");
         expect(DNASequence.getName()).toBe("DNASequence");
     });
+    it("Superclass access", function() {
+	expect(dna.superclass.superclass.self.staticProp).toBe(10);
+	expect(DNASequence.superclass.superclass.self.staticProp).toBe(10);
+	expect(dna.superclass.superclass.self.staticFunc.call()).toBe("DEF");
+    });
 });
 
 describe("Aliasing", function() {
@@ -200,14 +212,19 @@ describe("Aliasing", function() {
             },
             constructor: function() {
                 var self = this.statics();
-                expect(this.GenbankManager.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
-                expect(this.self.GenbankMgr.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
-                expect(self.GenbankMgr.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+                expect(this.GenbankManager.getName())
+		    .toBe("Teselagen.bio.parsers.GenbankManager");
+                expect(this.self.GenbankMgr.getName())
+		    .toBe("Teselagen.bio.parsers.GenbankManager");
+                expect(self.GenbankMgr.getName())
+		    .toBe("Teselagen.bio.parsers.GenbankManager");
             }
         });
         mgr = Ext.create("MyManager");
-        expect(mgr.GenbankManager.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
-        expect(MyManager.GenbankMgr.getName()).toBe("Teselagen.bio.parsers.GenbankManager");
+        expect(mgr.GenbankManager.getName())
+	    .toBe("Teselagen.bio.parsers.GenbankManager");
+        expect(MyManager.GenbankMgr.getName())
+	    .toBe("Teselagen.bio.parsers.GenbankManager");
     });
 });
 
