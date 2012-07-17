@@ -74,7 +74,7 @@ describe("Testing Sequence related classes ", function() {
 
 			it("getSymbols works", function(){
 				var returned = abstractAlphabet.getSymbols();
-				expect(returned).toMatch([]);
+				expect(returned.length).toBe(1);
 			});
 
 			it("addSymbol", function(){
@@ -85,7 +85,7 @@ describe("Testing Sequence related classes ", function() {
 			});
 
 			it("symbolByValue works", function(){
-				var symbolByValue= abstractAlphabet.symbolByValue("-");
+				var symbolByValue = abstractAlphabet.symbolByValue("-");
 				
 				expect(symbolByValue.getValue()).toBe("-");
 			});
@@ -150,7 +150,7 @@ describe("Testing Sequence related classes ", function() {
 
 				runs(function() {	
 					var histidine = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getHistidine();
-					expect(histidine.getValue()).toMatch("H");
+					expect(histidine.getValue()).toBe("H");
 				});
 			});		
 		});
@@ -698,14 +698,8 @@ describe("Testing Sequence related classes ", function() {
             
             });
 
-            describe(".getStart", function(){
-                testObj = Ext.create("Teselagen.bio.sequence.dna.DigestionFragment",
-                    {   start: 1,
-                        end: 1,
-                        length: 1,
-                        startRE: "Bam",
-                        endRE: "Not"
-                    });
+            it(".getStart", function(){
+              
                 expect(testObj.getStart()).toEqual(1);
 			});
 
@@ -1168,7 +1162,7 @@ describe("Testing Sequence related classes ", function() {
 				waitsFor(function() {
 					return Teselagen.bio.sequence.TranslationUtils != undefined;
 				});
-
+				//Add additional test for thymine
 				runs(function() {	
                     var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
                     var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");

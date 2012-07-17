@@ -3,7 +3,7 @@
  */
 
 Ext.require("Ext.Ajax");
-Ext.require("Teselagen.StringUtil");
+Ext.require("Teselagen.bio.util.StringUtil");
 describe("Testing Genbank related classes:", function() {
     var dt =  Ext.create("Data");
     var gbMan = Ext.create("Teselagen.bio.parsers.GenbankManager");
