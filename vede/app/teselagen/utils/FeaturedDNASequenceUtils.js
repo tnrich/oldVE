@@ -8,8 +8,6 @@
 Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
     singleton: true,
 
-    requires: ["Teselagen.bio.sequence.DNATools"],
-
     /**
      * Converts a sequenceManager object to a FeaturedDNASequence object.
      * @param  {[type]} SequenceManager The SequenceManager to be converted.

@@ -7,18 +7,18 @@
 Ext.define("Teselagen.mappers.AAMapper", {
     extend: "Teselagen.mappers.Mapper",
 
-    tUtils: Teselagen.bio.sequence.TranslationUtils,
+    requires: ["Teselagen.bio.sequence.TranslationUtils"],
 
     mixins: {
         observable: "Ext.util.Observable"
     },
 
-    updateEventString: Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
-
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.
      */
     constructor: function(inData) {
+        this.updateEventString = Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED;
+
         this.mixins.observable.constructor.call(this, inData);
         this.callParent([inData]);
         this.addEvents(this.updateEventString);
@@ -74,14 +74,14 @@ Ext.define("Teselagen.mappers.AAMapper", {
                 codon = [sequence.symbolAt(i), sequence.symbolAt(i + 1), sequence.symbolAt(i + 2)];
                 codonRevCom = [revCom.symbolAt(i), revCom.symbolAt(i + 1), revCom.symbolAt(i + 2)];
 
-                aminoAcid = tUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
-                aminoAcidRevCom = tUtils.dnaToProteinSymbol(codonRevComRevCom[0], codonRevCom[1], codonRevCom[2]);
+                aminoAcid = Teselagen.TranslationUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
+                aminoAcidRevCom = Teselagen.TranslationUtils.dnaToProteinSymbol(codonRevComRevCom[0], codonRevCom[1], codonRevCom[2]);
                 
                 aaString = "";
                 aaStringRevCom = "";
 
                 if(aminoAcid instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
-                    if(tUtils.isStopCodon(codon[0], codon[1], codon[2])) {
+                    if(Teselagen.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) {
                         aaString = ".";
                     }
                 } else {
@@ -89,7 +89,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
                 }
 
                 if(aminoAcidRevCom instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
-                    if(tUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) {
+                    if(Teselagen.TranslationUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) {
                         aaStringRevCom = ".";
                     }
                 } else {

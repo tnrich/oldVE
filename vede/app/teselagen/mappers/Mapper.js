@@ -10,6 +10,8 @@ Ext.define("Teselagen.mappers.Mapper", {
         observable: "Ext.util.Observable"
     },
 
+    updateEventString: null,
+
 	constructor: function(inData) {
         var that = this;
         this.mixins.observable.constructor.call(this, inData);

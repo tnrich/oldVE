@@ -9,7 +9,9 @@
 Ext.define("Teselagen.manager.SequenceManager", {
 
 
-
+    mixins: {
+        observable: "Ext.util.Observable"
+    },
 
     /**
      * @param {String} name
@@ -22,6 +24,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     constructor: function(inData) {
         //var that = this;
+        this.mixins.observable.constructor.call(this, inData);
+        this.addEvents("SequenceChanged");
 
         var name;
         var circular;
