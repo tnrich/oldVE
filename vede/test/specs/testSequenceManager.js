@@ -2,6 +2,7 @@
  * @author Diana Womg
  */
 
+Ext.require(["Teselagen.bio.sequence.DNATools","Teselagen.bio.sequence.dna.Feature"]);
 describe("Testing SequenceManager Classes", function() {
     //console.log(Ext.Loader.getConfig());
     
@@ -10,7 +11,6 @@ describe("Testing SequenceManager Classes", function() {
         var tmp, sm;
 
         beforeEach(function() {
-            //tmp = Ext.create("Teselagen.bio.parsers.GenbankManager");
             sm  = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "test",
                 circular: true,
@@ -22,15 +22,48 @@ describe("Testing SequenceManager Classes", function() {
         it("Init?",function(){
             expect(sm.getName()).toBe("test");
             expect(sm.getCircular()).toBeTruthy();
-            expect(sm.getSequence())).toBe("GATTACA");
+            expect(sm.getSequence()).toBe("GATTACA");
+            expect(sm.getFeatures()).toBeDefined();
+            expect(sm.getManualUpdateStarted()).toBeFalsy();
+
         });
         
-        it("Init?",function(){
-            
-            expect(sm.getSequence())).toBe("GATTACA");
+        it("setSequence() ",function(){
+            sm.setSequence("GATTACAGATTACA");
+            expect(sm.getSequence()).toBe("GATTACAGATTACA");
+        });
+        it("create/setMemento()",function(){
+            expect(sm.createMemento()).toBe(null); //FIX LATER
+            //sm.setMemento();
+            //expect(sm);
         });
 
-        
+        it("",function(){
+        });
+
+    });
+    
+    describe("Test cases from 'SequenceProviderTestCases.as'", function() {
+        var seqStr, seq, feat1, feat2, sm;
+
+        beforeEach(function() {
+            seqStr  = "tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc";
+            seq     = Teselagen.bio.sequence.DNATools.createDNA(seqStr);
+
+            feat1   = Ext.create("Teselagen.bio.sequence.dna.Feature",{});
+            sm      = Ext.create("Teselagen.manager.SequenceManager", {
+                name: "test",
+                circular: true,
+                sequence: seq,
+                features: []
+            });
+        });
+        it("Check Setup",function(){
+            expect(sm.getName()).toBe("test");
+
+        });
+        it("",function(){
+        });
 
     });
 });
