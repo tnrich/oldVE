@@ -114,13 +114,13 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
             var n2 = dnaSymbolList.symbolAt(index + 1);
             var n3 = dnaSymbolList.symbolAt(index + 2);
 
-            var aaSymbol = Teselagen.bio.sequence.TranslationUtils.dnaToProteinSymbol(n1, n2, n3);
+            var aaSymbol = Teselagen.TranslationUtils.dnaToProteinSymbol(n1, n2, n3);
 
             possibleStopCodon = false;
 
             // Check if current codon could be a stop codon.
             if(aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap && 
-               !Teselagen.bio.sequence.TranslationUtils.isStartCodon(n1, n2, n3)) {
+               !Teselagen.TranslationUtils.isStartCodon(n1, n2, n3)) {
                 if(this.evaluatePossibleStop(n1, n2, n3)) {
                     possibleStopCodon = true;
                 }
@@ -128,7 +128,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
             // If we've found a start codon, add its index to startCodonIndexes.
             if(!possibleStopCodon && 
-               Teselagen.bio.sequence.TranslationUtils.isStartCodon(n1, n2, n3)) {
+               Teselagen.TranslationUtils.isStartCodon(n1, n2, n3)) {
                 // If we're not currently in an ORF, start evaluating a new potential ORF at current index.
                 if(startIndex == -1) {
                     startIndex = index;
@@ -146,7 +146,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
             // If we've reached a stop codon with a corresponding start codon and
             // its length is greater than minimumLength, create an ORF object and add it to orfs.
-            if(possibleStopCodon || Teselagen.bio.sequence.TranslationUtils.isStopCodon(n1, n2, n3)) {
+            if(possibleStopCodon || Teselagen.TranslationUtils.isStopCodon(n1, n2, n3)) {
                 if(startIndex != -1) {
                     endIndex = index + 2;
                     if(minimumLength == -1 || (Math.abs(endIndex - startIndex) + 1 >= minimumLength)) {
@@ -199,7 +199,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
         for(var i1 = 0; i1 < n1.length; i1++) {
             for(var i2 = 0; i2 < n2.length; i2++) {
                 for(var i3 = 0; i3 <n3.length; i3++) {
-                    if(Teselagen.bio.sequence.TranslationUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
+                    if(Teselagen.TranslationUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
                         return true;
                     }
                 }

@@ -1,5 +1,9 @@
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
 Ext.require("Teselagen.utils.SystemUtils");
+Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+
 
 Ext.onReady(function() {
     describe("Models", function() {
@@ -216,6 +220,12 @@ Ext.onReady(function() {
             it("has working config", function() {
                 expect(mapper.getSequenceManager()).toEqual(seqMan);
             });
+
+            it("responds to sequenceManager events", function() {
+                mapper.setDirty(false);
+                seqMan.fireEvent("SequenceChanged");
+                expect(mapper.getDirty()).toBeTruthy();
+            });
         });
 
         describe("AAMapper", function() {
@@ -274,15 +284,53 @@ Ext.onReady(function() {
 
             it("can calculate circular ORFs", function() {
                 orfMan.setCircular(true);
-                //TODO: finish
+                var orfs = om.getOrfs();
+
+                expect(orfs.length).toBe(2);
+
+                expect(orfs[0].getFrame()).toBe(0);
+                expect(orfs[0].getStrand()).toBe(1);
+                expect(orfs[0].getStart()).toBe(0);
+                expect(orfs[0].getEnd()).toBe(24);
+
+                expect(orfs[1].getFrame()).toBe(2);
+                expect(orfs[1].getStrand()).toBe(1);
+                expect(orfs[1].getStart()).toBe(17);
+                expect(orfs[1].getEnd()).toBe(8);
             });
+
         });
 
         describe("RestrictionEnzymeMapper", function() {
-            var re = Ext.create("Teselagen.mappers.RestrictionEnzymeMapper", {
-                restrictionEnzymeMapper: null
+            var agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+                name: "agc enzyme",
+                site: "agc",
+                cutType: 1,
+                forwardRegex: "agc",
+                reverseRegex: "agc",
+                dsForward: 1,
+                dsReverse: 2,
+                usForward: 1,
+                usReverse: 2
             });
 
+            var gntEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+                name: "gnt enzyme",
+                site: "gnt",
+                cutType: 1,
+                forwardRegex: "g.t",
+                reverseRegex: "g.t",
+                dsForward: 1,
+                dsReverse: 2,
+                usForward: 1,
+                usReverse: 2
+            }); 
+
+            var re = Ext.create("Teselagen.mappers.RestrictionEnzymeMapper", {
+                restrictionEnzymeGroup: null,
+                sequenceManager: seqMan
+            });
+            // sequence acgtcgcgattctatatcgcccgagcgagagtcgttgtcgctgacgacgatcactagtc
             it("exists", function() {
                 expect(re).toBeDefined();
             });
@@ -293,7 +341,10 @@ Ext.onReady(function() {
                 expect(re.getMaxCuts()).toBe(-1);
                 re.setMaxCuts(10)
                 expect(re.getMaxCuts()).toBe(10);
-                
+                expect(re.getDirty()).toBeTruthy();
+            });
+
+            it("can calculate cut sites for linear DNA", function() {
                 
             });
         });
