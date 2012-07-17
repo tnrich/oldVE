@@ -1173,8 +1173,7 @@ describe("Testing Sequence related classes ", function() {
 				//Add additional test for thymine
 				runs(function() {	
                     var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var rnaSymbol = translationUtils.dnaToRNASymbol(a);
+		var rnaSymbol = Teselagen.TranslationUtils.dnaToRNASymbol(a);
                     expect(rnaSymbol.getName()).toMatch(a.getName());
                 });	
 			});
@@ -1189,8 +1188,7 @@ describe("Testing Sequence related classes ", function() {
 
 				runs(function() {	
                     var u = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}); 
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var dnaSymbol = translationUtils.rnaToDNASymbol(u);
+			        var dnaSymbol = Teselagen.TranslationUtils.rnaToDNASymbol(u);
                     expect(dnaSymbol.getName()).toMatch("Thymine");
 			    });
 
@@ -1210,8 +1208,8 @@ describe("Testing Sequence related classes ", function() {
 					var inputSymbols = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
 						symbols: testSymbolList,
 						alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var rnaSequence = translationUtils.dnaToRNA(inputSymbols);
+             
+			        var rnaSequence = Teselagen.TranslationUtils.dnaToRNA(inputSymbols);
                     expect(rnaSequence.getAlphabet()).toMatch("Teselagen.bio.sequence.alphabets.RNAAlphabet");
                     expect(rnaSequence.getSymbols()[0].getName()).toMatch("Adenine");
                     expect(rnaSequence.getSymbols()[1].getName()).toMatch("Guanine");
@@ -1236,8 +1234,8 @@ describe("Testing Sequence related classes ", function() {
 					var inputSymbols = Ext.create("Teselagen.bio.sequence.common.SymbolList", {
 						symbols: testSymbolList,
 						alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"});
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var rnaSequence = translationUtils.rnaToDNA(inputSymbols);
+                
+			        var rnaSequence = Teselagen.TranslationUtils.rnaToDNA(inputSymbols);
                     expect(rnaSequence.getAlphabet()).toMatch("Teselagen.bio.sequence.alphabets.DNAAlphabet");
                     expect(rnaSequence.getSymbols()[0].getName()).toMatch("Adenine");
                     expect(rnaSequence.getSymbols()[1].getName()).toMatch("Guanine");
@@ -1256,8 +1254,8 @@ describe("Testing Sequence related classes ", function() {
 					var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
 					var g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []});
                     var u = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}); 
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var aminoAcidSymbol = translationUtils.rnaToProteinSymbol(a, g, u);
+                
+			        var aminoAcidSymbol = Teselagen.TranslationUtils.rnaToProteinSymbol(a, g, u);
                     expect(aminoAcidSymbol.getName()).toMatch("Serine");
 
 			});
@@ -1272,8 +1270,8 @@ describe("Testing Sequence related classes ", function() {
 					var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
 					var g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []});
                     var t = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Thymine", value: "t", ambiguousMatches: []}); 
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var aminoAcidSymbol = translationUtils.dnaToProteinSymbol(a, g, t);
+                  
+			        var aminoAcidSymbol = Teselagen.TranslationUtils.dnaToProteinSymbol(a, g, t);
                     expect(aminoAcidSymbol.getName()).toMatch("Serine");
 
 			});
@@ -1289,8 +1287,8 @@ describe("Testing Sequence related classes ", function() {
 					var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
 					var g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []});
                     var u = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}); 
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var aminoAcidSymbol = translationUtils.rnaToProteinSymbol(a, u, g);
+                   
+			        var aminoAcidSymbol = Teselagen.TranslationUtils.rnaToProteinSymbol(a, u, g);
                     expect(aminoAcidSymbol.getName()).toMatch("Methionine");
 
 			});
@@ -1307,8 +1305,8 @@ describe("Testing Sequence related classes ", function() {
 					var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
 					var g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []});
                     var u = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}); 
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var isStartCodon = translationUtils.isStartCodon(a, u, g);
+                    
+			        var isStartCodon = Teselagen.TranslationUtils.isStartCodon(a, u, g);
                     expect(isStartCodon).toBe(true);
 
 			});
@@ -1325,8 +1323,8 @@ describe("Testing Sequence related classes ", function() {
 					var a = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []});
 					var g = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Guanine", value: "g", ambiguousMatches: []});
                     var u = Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Uracil", value: "u", ambiguousMatches: []}); 
-                    var translationUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils");
-			        var isStopCodon = translationUtils.isStopCodon(u, g, a);
+
+			        var isStopCodon = Teselagen.TranslationUtils.isStopCodon(u, g, a);
                     expect(isStopCodon).toBe(true);
 
 			});
