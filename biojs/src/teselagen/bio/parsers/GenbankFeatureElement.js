@@ -8,9 +8,9 @@
  * Go to http://www.insdc.org/documents/feature_table.html#3.4 for specifications of Genbank file. 
  * This class does not assumes all locations of one feature are complement or not complement, join or not join.
  * This means: 
- * 		"complement(join(2691..4571,4918..5163))"
+ * 		complement(join(2691..4571,4918..5163))
  * is acceptable, and:
- * 		"join(complement(4918..5163),complement(2691..4571))"
+ * 		join(complement(4918..5163),complement(2691..4571))
  * is also acceptable, but assumes every location (i.e. the feature) is a complement. However:
  * 		join(complement(4918..5163),2691..4571)
  * would not be acceptable and all location pairs would be stored as complement.  (Is this biologically possible?)
@@ -22,14 +22,14 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
     requires: ["Teselagen.bio.util.StringUtil"],
-    
+
     /**
      * Creates a new GenbankFeatureElement from inData.
      * There can be multiple featureQualifier and featureLocations for each FeatureElement.
-     * @param {String} keyword
-     * @param {String} strand
-     * @param {Boolean} complement
-     * @param {Boolean} join
+     * @param {String} keyword e.g. source, CDS
+     * @param {String} strand 1 for normal read, -1 for complement
+     * @param {Boolean} complement On complementary strand
+     * @param {Boolean} join Location is not continuous
      * @param {[GenbankFeatureQualifier]} featureQualifer
      * @param {[GenbankFeatureLocation]} featureLocation
      * @returns {GenbankFeatureElement}
@@ -171,68 +171,80 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         this.setJoin = function(bool) {
             join = bool;
         }
-        /**
-         * Converts this GenbankLocusKeyword to Genbank file format string
-         * @returns {String} genbankString
-         */
-        this.toString = function() {
-            var line = "     " + Teselagen.StringUtil.rpad(keyword, " ", 16);
-            var loc = "";
-            var qual = "";
-            //line += strand;
-            for (var i=0; i < featureLocation.length; i++) {
-                loc += featureLocation[i].toString();
-                if (i<featureLocation.length - 1) { 
-                    loc += ",";
-                }
-            }
-            if (join) { 
-                loc = "join(" + loc + ")"; 
-            }
-            if (complement) {
-                loc = "complement(" + loc + ")"; 
-            }
-
-            for (var i=0; i < featureQualifier.length; i++) {
-                qual += featureQualifier[i].toString();
-                if (i<featureQualifier.length - 1) { 
-                    qual += "\n";
-                }
-            }
-
-            line = line + loc + "\n" + qual;
-            return line;
-        }
-
-        /**
-         * Converts to JSON format.
-         * @returns {Object} json
-         */
-        this.toJSON = function() {
-            var json = {
-                    keyword: keyword,
-                    strand: strand
-            }
-
-            if (featureLocation !== undefined && featureLocation.length > 0) {
-                json["location"] = [];
-                for (var i = 0; i<featureLocation.length; i++) {
-                    json["location"].push(featureLocation[i]);
-                }
-            }
-
-            if ( featureQualifier !== undefined && featureQualifier.length > 0) {
-                json["qualifier"] =[];
-                for (var i = 0; i<featureQualifier.length; i++) {
-                    json["qualifier"].push(featureQualifier[i]);
-                }
-            }
-            return json;
-        }
-
-
-
         return this;
+    },
+
+    /**
+     * Converts this GenbankLocusKeyword to Genbank file format string
+     * @returns {String} genbankString
+     */
+    toString: function() {
+        var keyword = this.getKeyword();
+        var featureLocation = this.getFeatureLocation();
+        var featureQualifier = this.getFeatureQualifier();
+        var join = this.getJoin()
+        var complement = this.getComplement();
+        
+        var line = "     " + Teselagen.StringUtil.rpad(keyword, " ", 16);
+        var loc = "";
+        var qual = "";
+        
+        for (var i=0; i < featureLocation.length; i++) {
+            loc += featureLocation[i].toString();
+            if (i<featureLocation.length - 1) { 
+                loc += ",";
+            }
+        }
+        if (join) { 
+            loc = "join(" + loc + ")"; 
+        }
+        if (complement) {
+            loc = "complement(" + loc + ")"; 
+        }
+
+        for (var i=0; i < featureQualifier.length; i++) {
+            qual += featureQualifier[i].toString();
+            if (i<featureQualifier.length - 1) { 
+                qual += "\n";
+            }
+        }
+
+        line = line + loc + "\n" + qual;
+        return line;
+    },
+
+    /**
+     * Converts to JSON format.
+     * @returns {Object} json
+     */
+    toJSON: function() {
+        var keyword = this.getKeyword();
+        var strand = this.getStrand();
+        var featureLocation = this.getFeatureLocation();
+        var featureQualifier = this.getFeatureQualifier();
+        var join = this.getJoin()
+        var complement = this.getComplement();
+        
+        var json = {
+                keyword: keyword,
+                strand: strand
+        }
+
+        if (featureLocation !== undefined && featureLocation.length > 0) {
+            json["location"] = [];
+            for (var i = 0; i<featureLocation.length; i++) {
+                json["location"].push(featureLocation[i]);
+            }
+        }
+
+        if ( featureQualifier !== undefined && featureQualifier.length > 0) {
+            json["qualifier"] =[];
+            for (var i = 0; i<featureQualifier.length; i++) {
+                json["qualifier"].push(featureQualifier[i]);
+            }
+        }
+        return json;
     }
+
 
 });
