@@ -868,13 +868,13 @@ describe("Testing Sequence related classes ", function() {
                     end: 1,
                     type: "DNA",
                     strand: 1,
-                    notes: "Dummy Notes"
+                    notes: ["Dummy Notes"]
                 });
-			describe("it exists?", function(){
+			it("it exists?", function(){
                 expect(testFeature).toBeDefined();
 			});
 
-			describe(".get{ters} and set{ters} work", function(){
+			it(".get{ters} and set{ters} work", function(){
                 expect(testFeature.getName()).toMatch("Test");
                 testFeature.setName("Changed");
                 expect(testFeature.getName()).toMatch("Changed");
@@ -884,15 +884,23 @@ describe("Testing Sequence related classes ", function() {
                 expect(testFeature.getType()).toMatch("RNA");
 
                 expect(testFeature.getNotes()).toMatch("Dummy Notes");
-                testFeature.setNotes("Test notes");
+                testFeature.setNotes(["Test notes"]);
                 expect(testFeature.getNotes()).toMatch("Test notes");
 
 			});
 
-	        describe(".clone()", function(){
-                var cloned = testFeature.clone();
-                expect(cloned.length);
+	        it(".clone()", function(){
+            var featureNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote",
+                {
+                    name: "Test Note",
+                    value: "value",
+                    quoted: true
 			});
+                testFeature.setNotes([featureNote]);
+                testFeature.setName("Test");
+                var cloned = testFeature.clone();
+                expect(cloned.getName()).toBe("Test");
+		});
 		});
 
 

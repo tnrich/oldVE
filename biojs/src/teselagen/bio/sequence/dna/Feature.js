@@ -86,11 +86,19 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 		 * @return {Feature} cloned feature
 		 */
 		this.clone = function(){
-			var clonedFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", {
-			    inData: inData});
+			var clonedFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", 
+                    {
+			            name: name,
+                        start: inData.start,
+                        end: inData.end,
+                        type: _type,
+                        strand: inData.strand,
+                        notes: inData.notes
+                    });
 
 			var clonedLocations = [];
-			var locations = this.superclass.getLocations();
+			var locations = this.getLocations();
+            console.log(locations)
             console.log("Cloned length: " + locations.length);
 
 			for (var i = 0; i < locations.length; i++) {
