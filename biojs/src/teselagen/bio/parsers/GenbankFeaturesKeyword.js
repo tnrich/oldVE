@@ -9,9 +9,9 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
-    
+
     requires: ["Teselagen.bio.util.StringUtil"],
-    
+
     extend: "Teselagen.bio.parsers.Keyword",
 
     /**
@@ -65,42 +65,45 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
                 return null;
             }
         }
-        /**
-         * Converts this GenbankFeaturesKeyword to Genbank file format string
-         * @returns {String} genbankString
-         */
-        this.toString = function() {
-            var line = "FEATURES             Location/Qualifiers\n";
-
-            for (var i=0; i < featuresElements.length; i++) {
-                line += featuresElements[i].toString();
-                if (i < featuresElements.length-1) {
-                    line += "\n";
-                }
-            }
-            return line;
-        }
-        /**
-         * Converts to JSON format.
-         * @returns {Object} json
-         */
-        this.toJSON = function() {
-            var json = {
-                    keyword: this.keyword,
-            }
-            if (this.value  !== null) {
-                json["value"] = this.value;
-            }
-            json["elements"] = [];
-            for (var i=0; i <featuresElements.length; i++) {
-                json["elements"].push(featuresElements[i]);
-            }
-
-
-            return json;
-        }
-
         return this;
+    },
+    /**
+     * Converts this GenbankFeaturesKeyword to Genbank file format string
+     * @returns {String} genbankString
+     */
+    toString : function() {
+        var line = "FEATURES             Location/Qualifiers\n";
+        var featuresElements = this.getFeaturesElements();
+
+        for (var i=0; i < featuresElements.length; i++) {
+            line += featuresElements[i].toString();
+            if (i < featuresElements.length-1) {
+                line += "\n";
+            }
+        }
+        return line;
+    },
+    /**
+     * Converts to JSON format.
+     * @returns {Object} json
+     */
+    toJSON : function() {
+        var featuresElements = this.getFeaturesElements();
+
+        var json = {
+                keyword: this.keyword,
+        }
+        if (this.value  !== null) {
+            json["value"] = this.value;
+        }
+        json["elements"] = [];
+        for (var i=0; i <featuresElements.length; i++) {
+            json["elements"].push(featuresElements[i]);
+        }
+
+
+        return json;
     }
+
 
 });
