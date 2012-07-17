@@ -31,6 +31,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var complementSequence;
         var reverseComplementSequence;
         var manualUpdateStarted = false;
+        
         var needsRecalculateComplementSequence = true;
         var needsRecalculateReverseComplementSequence = true;
         //var dispactcher;
@@ -78,7 +79,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     getManualUpdateStarted:function() {
-        return manualUpdateStarted;
+        return this.manualUpdateStarted;
     },
 
     //part of IOriginator Interface
