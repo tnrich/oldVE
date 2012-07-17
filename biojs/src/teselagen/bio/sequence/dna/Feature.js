@@ -1,7 +1,26 @@
+/**
+* @class Teselagen.bio.sequence.dna.Feature
+* DNA feature holder.
+* 
+* @author Micah Lerner
+* @author Zinovii Dmytriv (original author)
+* @extends Teselagen.bio.sequence.common.StrandedAnnotation
+* @requires Teselagen.bio.sequence.common.StrandedAnnotation
+* @requires Teselagen.bio.sequence.common.Location
+* @requires Teselagen.bio.BioException
+*/
 Ext.define("Teselagen.bio.sequence.dna.Feature", {
-	require: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.sequence.common.StrandedAnnotation"],
+	require: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.sequence.common.StrandedAnnotation", "Teselagen.bio.sequence.common.StrandType"],
 	extend: "Teselagen.bio.sequence.common.StrandedAnnotation",
 
+	/**
+	 * Constructor
+	 * @param  {String} Name is the string name
+	 * @param  {String} Name is the type of feature
+	 * @param  {Integer} start stranded annotation start
+	 * @param {Integer} end stranded annotation end
+	 * @param {Integer} Strand strand directionality
+	 */
 	constructor: function (inData) {
 		if (inData) {
 			var name = inData.name || "";
@@ -14,38 +33,65 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 			});
 		}
 
+		/**
+		 * Get Name
+		 * @return {String} Name
+		 */
 		this.getName = function(){
 			return name;
 		}
 
+		/**
+		 * Sets Name
+		 * @param {String} pName
+		 */
 		this.setName = function(pName){
 			name = pName;
 		}
 
-
+		/**
+		 * Get Type
+		 * @return {String} Type
+		 */
 		this.getType = function(){
 			return _type;
 		}
 
+		/**
+		 * Sets Type
+		 * @param {String} pName
+		 */
 		this.setType = function(pType){
 			_type = pType;
 		}
 
-
+		/**
+		 * Get Notes
+		 * @return {Notes} Notes
+		 */
 		this.getNotes = function(){
 			return notes;
 		}
 
+		/**
+		 * Sets Name
+		 * @param {Notes} pNotes
+		 */
 		this.setNotes = function(pNotes){
 			notes = pNotes;
 		}
 
+		/**
+		 * Clones the feature
+		 * @return {Feature} cloned feature
+		 */
 		this.clone = function(){
 			var clonedFeature = Ext.create("Teselagen.bio.sequence.dna.Feature", {
 			    inData: inData});
 
 			var clonedLocations = [];
 			var locations = this.superclass.getLocations();
+            console.log("Cloned length: " + locations.length);
 
 			for (var i = 0; i < locations.length; i++) {
 				clonedLocations.push(locations[i].clone());

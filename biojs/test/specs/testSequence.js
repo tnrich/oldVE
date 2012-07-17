@@ -888,11 +888,11 @@ describe("Testing Sequence related classes ", function() {
                 expect(testFeature.getNotes()).toMatch("Test notes");
 
 			});
-/*
-			describe(".clone()", function(){
-               var cloned = testFeature.clone();
-               expect(cloned.length);
-			});*/
+
+	        describe(".clone()", function(){
+                var cloned = testFeature.clone();
+                expect(cloned.length);
+			});
 		});
 
 
