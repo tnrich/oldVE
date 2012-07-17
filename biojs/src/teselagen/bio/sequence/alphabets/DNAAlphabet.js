@@ -44,7 +44,8 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 		that.h.setAmbiguousMatches([that.a, that.c, that.t]);
 		that.d.setAmbiguousMatches([that.a, that.g, that.t]);
 		that.b.setAmbiguousMatches( [that.c, that.g, that.t]);
-		that.n.setAmbiguousMatches([that.a, that.c, that.g, that.t]);	
+		that.n.setAmbiguousMatches([that.a, that.c, that.g, that.t]);
+		that.callParent([]);
 	},
 
               symbolMap: function (pCharacter) {
