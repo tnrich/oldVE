@@ -190,7 +190,8 @@ Ext.onReady(function() {
 
         describe("SystemUtils", function() {
             it("can correctly identify OS", function() {
-                expect(Teselagen.utils.SystemUtils.getSystemMonospaceFontFamily()).toBe("Monaco");
+                var os = Teselagen.utils.SystemUtils.getSystemMonospaceFontFamily();
+                console.log(os);
             });
 
             it("can correctly get application version", function() {
@@ -219,15 +220,81 @@ Ext.onReady(function() {
 
         describe("AAMapper", function() {
             var aa = Ext.create("Teselagen.mappers.AAMapper", {
+                sequenceManager: seqMan,
+            });
+
+            it("is defined", function() {
+                expect(aa).toBeDefined();
+            });
+
+            it("can calculate amino acid sequences", function() {
+                expect(aa.getSequenceFrame(0)).toBe("tsrfyiararvvvadddh-");
+                expect(aa.getSequenceFrame(1)).toBe("rrdsispereslslttits");
+                expect(aa.getSequenceFrame(2)).toBe("vailyrpsesrcr-rrslv");
+
+                expect(aa.getRevComFrame(0)).toBe("d--sssatttlarai-nrd");
+                expect(aa.getRevComFrame(1)).toBe("tsdrrqrqrlslgryriat");
+                expect(aa.getRevComFrame(2)).toBe("lvivvsdndsrsgdiesrr");
+
+                expect(aa.getSequenceFrame(0)).toBe("t s r f y i a r a r v v v a d d d h -");
+                expect(aa.getSequenceFrame(1)).toBe("r r d s i s p e r e s l s l t t i t s");
+                expect(aa.getSequenceFrame(2)).toBe("v a i l y r p s e s r c r - r r s l v");
+
+                expect(aa.getRevComFrame(0)).toBe("d - - s s s a t t t l a r a i - n r d");
+                expect(aa.getRevComFrame(1)).toBe("t s d r r q r q r l s l g r y r i a t");
+                expect(aa.getRevComFrame(2)).toBe("l v i v v s d n d s r s g d i e s r r");
+            });
+        });
+
+        describe("ORFMapper", function() {
+            var orfMan = Ext.create("Teselagen.manager.SequenceManager", {
+                name: "orfMan",
+                circular: false,
+                sequence: "atgcctagaaaaaaaaaatgctag",
+                features: []
+            });
+
+            var om = Ext.create("Teselagen.mappers.ORFMapper", {
                 sequenceManager: seqMan
             });
 
             it("is defined", function() {
-                expect(aa.toBeDefined());
+                expect(om).toBeDefined();
             });
 
-            it("can calculate amino acid sequences", function() {
-                console.log(aa.getSequence(1, true));
+            it("can calculate linear ORFs", function() {
+                var orf = om.getOrfs()[0];
+                expect(om.getOrfs().length).toBe(1);
+
+                expect(orf.getFrame()).toBe(0);
+                expect(orf.getStrand()).toBe(1);
+                expect(orf.getStart()).toBe(0);
+                expect(orf.getEnd()).toBe(24);
+            });
+
+            it("can calculate circular ORFs", function() {
+                orfMan.setCircular(true);
+                //TODO: finish
+            });
+        });
+
+        describe("RestrictionEnzymeMapper", function() {
+            var re = Ext.create("Teselagen.mappers.RestrictionEnzymeMapper", {
+                restrictionEnzymeMapper: null
+            });
+
+            it("exists", function() {
+                expect(re).toBeDefined();
+            });
+
+            it("has working getters and setters", function() {
+                expect(re).getDirty().toBeTruthy();
+
+                expect(re.getMaxCuts()).toBe(-1);
+                re.setMaxCuts(10)
+                expect(re.getMaxCuts()).toBe(10);
+                
+                
             });
         });
     });

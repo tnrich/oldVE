@@ -2,7 +2,8 @@ Ext.define("Teselagen.mappers.Mapper", {
     requires: ["Teselagen.mappers.MapperEvent"],
     
     config: {
-        sequenceManager: null
+        sequenceManager: null,
+        dirty: true
     },
 
     mixins: {
@@ -10,17 +11,16 @@ Ext.define("Teselagen.mappers.Mapper", {
     },
 
 	constructor: function(inData) {
-        var dirty = true;
-
-		if (inData) {
+        var that = this;
+        this.mixins.observable.constructor.call(this, inData);
+		
+        if (inData) {
 			this.initConfig(inData);
-            // TODO: figure out what to do with this event
-			this.sequenceManager.on("SequenceChanged", this.onSequenceProviderChanged);
+			this.sequenceManager.on("SequenceChanged", this.onSequenceProviderChanged, this);
 		}
 
 		this.onSequenceProviderChanged = function() {
-            dirty = true;
+            this.dirty = true;
         }
 	},
 });
-
