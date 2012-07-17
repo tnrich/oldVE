@@ -8,6 +8,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
     extend: "Teselagen.mappers.Mapper",
 
     requires: ["Teselagen.bio.sequence.TranslationUtils"],
+    TranslationUtils: Teselagen.bio.sequence.TranslationUtils,
 
     mixins: {
         observable: "Ext.util.Observable"
@@ -22,6 +23,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
         this.mixins.observable.constructor.call(this, inData);
         this.callParent([inData]);
         this.addEvents(this.updateEventString);
+
         
         var aaSequence = ["", "", ""];
         var aaSequenceSparse = ["", "", ""];
@@ -74,14 +76,14 @@ Ext.define("Teselagen.mappers.AAMapper", {
                 codon = [sequence.symbolAt(i), sequence.symbolAt(i + 1), sequence.symbolAt(i + 2)];
                 codonRevCom = [revCom.symbolAt(i), revCom.symbolAt(i + 1), revCom.symbolAt(i + 2)];
 
-                aminoAcid = Teselagen.TranslationUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
-                aminoAcidRevCom = Teselagen.TranslationUtils.dnaToProteinSymbol(codonRevComRevCom[0], codonRevCom[1], codonRevCom[2]);
+                aminoAcid = this.TranslationUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
+                aminoAcidRevCom = this.TranslationUtils.dnaToProteinSymbol(codonRevComRevCom[0], codonRevCom[1], codonRevCom[2]);
                 
                 aaString = "";
                 aaStringRevCom = "";
 
                 if(aminoAcid instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
-                    if(Teselagen.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) {
+                    if(this.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) {
                         aaString = ".";
                     }
                 } else {
@@ -89,7 +91,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
                 }
 
                 if(aminoAcidRevCom instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
-                    if(Teselagen.TranslationUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) {
+                    if(this.TranslationUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) {
                         aaStringRevCom = ".";
                     }
                 } else {

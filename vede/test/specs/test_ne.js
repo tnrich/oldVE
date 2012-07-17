@@ -1,5 +1,9 @@
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
 Ext.require("Teselagen.utils.SystemUtils");
+Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
+Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+
 
 Ext.onReady(function() {
     describe("Models", function() {
