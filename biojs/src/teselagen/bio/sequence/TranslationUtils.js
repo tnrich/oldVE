@@ -35,7 +35,10 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 		//Typechecks for GapSymbol
 		if (pSymbol instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
-			return  Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
+			return  Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 		};
 
 		var newSymbol = this.dnaToRNATranslationTable[pSymbol.getValue()] || null;
@@ -82,7 +85,10 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 		//Typechecks if this is a Gap Symbol
 		if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-			return  Teselagen.bio.sequence.alphabets.DNAAlphabet.superclass.getGap();
+			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 		};
 
 		var newSymbol = this.rnaToDNATranslationTable[pSymbol.getValue()] || null;
@@ -129,7 +135,10 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		this.initializeAminoAcidsTranslationTable();
 
 		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-			return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
+			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 		};
 
 		var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
@@ -137,7 +146,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		var symbol = this.aminoAcidsTranslationTable[triplet];
 
 		if (symbol == null) {
-			return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
+			return this.ProteinAlphabet.getGap();
 		};
 
 		return symbol;
@@ -154,7 +163,10 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		this.initializeAminoAcidsTranslationTable();
 
 		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-			return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
+			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 		};
 
 		var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
@@ -162,7 +174,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		var symbol = this.aminoAcidsTranslationTable[triplet];
 
 		if(symbol == null) {
-			return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
+			return this.ProteinAlphabet.getGap();
 		}
 
 		return symbol;
@@ -362,7 +374,10 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			this.dnaToRNATranslationTable[this.DNAAlphabet.getD().getValue()]   = this.RNAAlphabet.getD();
 			this.dnaToRNATranslationTable[this.DNAAlphabet.getH().getValue()]   = this.RNAAlphabet.getH();
 			this.dnaToRNATranslationTable[this.DNAAlphabet.getN().getValue()]   = this.RNAAlphabet.getN();
-			//this.dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
+			this.dnaToRNATranslationTable["-"] = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 	},
 
 	initializeRNAToDNATranslationTable: function() {
@@ -373,22 +388,25 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			this.rnaToDNATranslationTable = [];
 
 
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getA().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getU().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getT();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getG().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getG();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getC().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getC();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getY().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getY();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getR().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getR();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getS().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getS();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getW().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getW();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getK().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getK();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getM().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getM();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getB().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getB();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getV().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getV();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getD().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getD();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getH().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getH();
-			this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getN().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getN();
-			//this.rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getA().getValue()] = this.DNAAlphabet.getA();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getU().getValue()] = this.DNAAlphabet.getT();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getG().getValue()] = this.DNAAlphabet.getG();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getC().getValue()] = this.DNAAlphabet.getC();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getY().getValue()] = this.DNAAlphabet.getY();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getR().getValue()] = this.DNAAlphabet.getR();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getS().getValue()] = this.DNAAlphabet.getS();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getW().getValue()] = this.DNAAlphabet.getW();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getK().getValue()] = this.DNAAlphabet.getK();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getM().getValue()] = this.DNAAlphabet.getM();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getB().getValue()] = this.DNAAlphabet.getB();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getV().getValue()] = this.DNAAlphabet.getV();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getD().getValue()] = this.DNAAlphabet.getD();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getH().getValue()] = this.DNAAlphabet.getH();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getN().getValue()] = this.DNAAlphabet.getN();
+			this.rnaToDNATranslationTable["-"] = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 
 	},
 });
