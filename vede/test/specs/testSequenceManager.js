@@ -44,10 +44,10 @@ describe("Testing SequenceManager Classes", function() {
     });
     
     describe("Test cases from 'SequenceProviderTestCases.as'", function() {
-        var seqStr, seq, feat1, feat2, sm;
+        var seqStr, seq, feat1, feat2, sm, tmp;
 
         beforeEach(function() {
-            seqStr  = "tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc";
+            seqStr  = "tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc"; //64bp
             seq     = Teselagen.bio.sequence.DNATools.createDNA(seqStr);
             console.log(seq);
 
@@ -59,6 +59,10 @@ describe("Testing SequenceManager Classes", function() {
                 strand: -1,
                 notes: null
             });
+            console.log(feat1.getLocations().length);
+            feat1.getLocations().push(Ext.create("Teselagen.bio.sequence.common.Location", {start:25, end:30}));
+            console.log(feat1.getLocations().length);
+            
             feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "cds2",
                 start: 40,
@@ -67,19 +71,34 @@ describe("Testing SequenceManager Classes", function() {
                 strand: 1,
                 notes: null
             });
+            console.log(feat2.getLocations().length);
+            tmp = Ext.create("Teselagen.bio.sequence.common.Location", {start:55, end:5});
+            feat2.getLocations().push(tmp);
+            console.log(feat2.getLocations().length);
+
             sm      = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "test",
                 circular: true,
                 sequence: seq,
-                features: []
+                features: [feat1, feat2]
             });
             console.log(sm);
+
+
+
         });
         it("Check Setup",function(){
             expect(sm.getName()).toBe("test");
-
+            expect(sm.getCircular()).toBeTruthy();
+            //expect(sm.getSequence()).toBe(seq);
+            expect(sm.getFeatures().length).toBe(2);
+            expect(sm.getFeatures()[0].getLocations().length).toBe(2);
+            expect(sm.getFeatures()[1].getLocations().length).toBe(2);
         });
-        it("",function(){
+
+        it("testRemoveSequenceFnSn1FcSn1",function(){
+            //sm.removeSequence(5, 8);
+
         });
 
     });
