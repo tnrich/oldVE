@@ -12,7 +12,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 		}
 
 		this.getName = function(){
-			return this.name;
+			return name;
 		}
 
 		this.setName = function(pName){
@@ -37,8 +37,8 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		this.clone =function(){
 			return Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
-				name: this.name,
-				value: this.value
+				name: name,
+				value: value
 			});
 		}
 	}
