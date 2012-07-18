@@ -34,8 +34,10 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
      */
     constructor: function(inData) {
         this.mixins.observable.constructor.call(this, inData);
-        this.callParent(arguments);
         this.addEvents(this.updateEventString);
+        
+        this.callParent([inData]);
+        this.initConfig(inData);
     },
 
     /**

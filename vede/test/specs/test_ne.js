@@ -6,6 +6,30 @@ Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
 
 
 Ext.onReady(function() {
+    var agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+        name: "agc enzyme",
+        site: "agc",
+        cutType: 1,
+        forwardRegex: "agc",
+        reverseRegex: "agc",
+        dsForward: 1,
+        dsReverse: 2,
+        usForward: 1,
+        usReverse: 2
+    });
+
+    var gntEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
+        name: "gnt enzyme",
+        site: "gnt",
+        cutType: 1,
+        forwardRegex: "g.t",
+        reverseRegex: "g.t",
+        dsForward: 1,
+        dsReverse: 2,
+        usForward: 1,
+        usReverse: 2
+    });
+    
     describe("Models", function() {
         describe("DNAFeatureLocation", function() {
             beforeEach(function() {
@@ -26,7 +50,8 @@ Ext.onReady(function() {
                 fl.set("genbankStart", 10);
                 expect(fl.get("genbankStart")).toBe(10);
                 expect(fl.get("end")).toBe(203); fl.set("end", 1000);
-                expect(fl.get("end")).toBe(1000); expect(fl.get("singleResidue")).toBeFalsy();
+                expect(fl.get("end")).toBe(1000);
+                expect(fl.get("singleResidue")).toBeFalsy();
                 fl.set("singleResidue", true); 
                 expect(fl.get("singleResidue")).toBeTruthy(); 
                 expect(fl.get("inBetween")).toBeFalsy();
@@ -119,6 +144,54 @@ Ext.onReady(function() {
             it("can access child objects", function() {
                 expect(fd.get("features")[1].get("notes")[0]).toEqual(fn);
                 expect(fd.get("features")[0].get("locations")[0]).toEqual(fl);
+            });
+        });
+
+        var uGroup;
+        describe("UserRestrictionEnzymeGroup", function() {
+
+            beforeEach(function() {
+                uGroup = Ext.create("Teselagen.models.UserRestrictionEnzymeGroup", {
+                    groupName: "mygroup",
+                    enzymeNames: ["enz1", "enz2", "enz3"]
+                });
+            });
+
+            it("can be created", function() {
+                expect(uGroup).toBeDefined();
+            });
+
+            it("fields can be accessed", function() {
+                expect(uGroup.get("groupName")).toBe("mygroup");
+                uGroup.set("groupName", "hisgroup");
+                expect(uGroup.get("groupName")).toBe("hisgroup");
+
+                expect(uGroup.get("enzymeNames")).toEqual(["enz1", "enz2", "enz3"]);
+                uGroup.set("enzymeNames", "hisgroup");
+                expect(uGroup.get("enzymeNames")).toBe("hisgroup");
+            });
+        });
+
+        describe("UserRestrictionEnzymes", function() {
+            beforeEach(function() {
+                uEnz = Ext.create("Teselagen.models.UserRestrictionEnzymes", {
+                    groups: [uGroup, uGroup],
+                    activeEnzymeNames: ["enz1, enz3"]
+                });
+            });
+
+            it("can be created", function() {
+                expect(uEnz).toBeDefined();
+            });
+
+            it("fields can be accessed", function() {
+                expect(uEnz.get("groups")).toEqual([uGroup, uGroup]);
+                uEnz.set("groups", [uGroup]);
+                expect(uEnz.get("groups")).toEqual([uGroup]);
+
+                expect(uEnz.get("activeEnzymeNames")).toEqual(["enz1, enz3"]);
+                uEnz.set("activeEnzymeNames", ["enz"]);
+                expect(uEnz.get("activeEnzymeNames")).toEqual(["enz"]);
             });
         });
     });
@@ -336,7 +409,7 @@ Ext.onReady(function() {
             });
 
             it("has working getters and setters", function() {
-                expect(re).getDirty().toBeTruthy();
+                expect(re.getDirty()).toBeTruthy();
 
                 expect(re.getMaxCuts()).toBe(-1);
                 re.setMaxCuts(10)
@@ -345,7 +418,93 @@ Ext.onReady(function() {
             });
 
             it("can calculate cut sites for linear DNA", function() {
-                
+            });
+        });
+
+        describe("TraceMapper", function() {
+            var tm = Ext.create("Teselagen.mappers.TraceMapper", {
+                sequenceManager: seqMan
+            });
+
+            it("is defined", function() {
+                expect(tm).toBeDefined();
+            });
+        });
+    });
+
+    describe("Data Classes", function() {
+        describe("RestrictionEnzymeGroup", function() {
+            var group;
+
+            beforeEach(function() {
+                group = Ext.create("Teselagen.data.RestrictionEnzymeGroup", {
+                    name: "MyGroup",
+                    enzymes: [agcEnz, gntEnz]
+                });
+            });
+
+            it("is defined", function() {
+                expect(group).toBeDefined();
+            });
+
+            it("has working getters and setters", function() {
+                var enzList = group.getEnzymes();
+
+                expect(enzList.length).toBe(2);
+
+                expect(enzList[0].getName()).toBe("agc enzyme");
+                expect(enzList[1].getName()).toBe("gnt enzyme");
+
+                group.setEnzymes([gntEnz]);
+                expect(group.getEnzymes()).toEqual([gntEnz]);
+            });
+
+            describe("addRestrictionEnzyme", function() {
+                it("rejects duplicate enzymes", function() {
+                    var addFn = function() {
+                        group.addRestrictionEnzyme(agcEnz);
+                    };
+                    expect(addFn).toThrow();
+                });
+
+                it("accepts new enzymes", function() {
+                    group.setEnzymes([gntEnz]);
+                    group.addRestrictionEnzyme(agcEnz);
+                    expect(group.getEnzymes()).toEqual([gntEnz, agcEnz]);
+                });
+            });
+
+            describe("removeRestrictionEnzyme", function() {
+                it("rejects enzymes which are not present", function() {
+                    var remFn = function() {
+                        group.setEnzymes([agcEnz]);
+                        group.removeRestrictionEnzyme(gntEnz);
+                    };
+                    expect(remFn).toThrow();
+                });
+
+                it("removes enzymes which are present", function() {
+                    group.removeRestrictionEnzyme(agcEnz);
+                    expect(group.getEnzymes()).toEqual([gntEnz]);
+                });
+            });
+
+            it("hasEnzyme", function() {
+                expect(group.hasEnzyme(agcEnz)).toBeTruthy();
+
+                group.setEnzymes([agcEnz]);
+                expect(group.hasEnzyme(gntEnz)).toBeFalsy();
+            });
+
+            it("getRestrictionEnzyme", function() {
+                expect(group.getRestrictionEnzyme(0)).toBe(agcEnz);
+                expect(group.getRestrictionEnzyme(1)).toBe(gntEnz);
+
+                var getFn = function() {
+                    group.getRestrictionEnzyme(-2);
+                };
+
+                expect(getFn).toThrow();
             });
         });
     });

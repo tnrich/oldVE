@@ -25,27 +25,30 @@ Ext.define("Teselagen.mappers.ORFMapper", {
         this.updateEventString = Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED;
 
         this.mixins.observable.constructor.call(this, inData);
-        this.callParent(arguments);
         this.addEvents(this.updateEventString);
+
+        this.callParent([inData]);
+        this.initConfig(inData);
 
         var orfs = [];
 
-        this.setOrfs = function(pOrfs) {
-            orfs = pOrfs;
-        };
+    },
 
-        /**
-         * Gets ORFs from sequence. Recalculate them if the sequence has changed.
-         * @return {Array<Teselagen.bio.orf.ORF>} Array of ORFs in DNA sequence.
-         */
-        this.getOrfs = function() {
-            if(this.dirty) {
-                this.recalculate();
-                this.dirty = false;
-            } 
+    setOrfs: function(pOrfs) {
+        this.orfs = pOrfs;
+    },
+    
+    /**
+     * Gets ORFs from sequence. Recalculate them if the sequence has changed.
+     * @return {Array<Teselagen.bio.orf.ORF>} Array of ORFs in DNA sequence.
+     */
+    getOrfs: function() {
+        if(this.dirty) {
+            this.recalculate();
+            this.dirty = false;
+        } 
 
-            return orfs;
-        };
+        return orfs;
     },
 
     /**
@@ -86,7 +89,7 @@ Ext.define("Teselagen.mappers.ORFMapper", {
         this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(
                                 this.sequenceManager.getSequence(),
                                 this.sequenceManager.getReverseComplementSequence(),
-                                minORFSize));
+                                this.minORFSize));
     },
 
     /**
