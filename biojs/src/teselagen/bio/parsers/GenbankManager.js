@@ -355,7 +355,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         /**
          * Parses Feature Locations.
          * @param {GenbankFeaturesElement} featElm
-         * @param {String} locStr
+         * @param {String} locStr string with unparse locations
          * @returns {GenbankFeatureLocation} location
          * @private
          */
@@ -393,6 +393,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             }
             if (complement && join) {
                 // Do ReverseLocations Case
+                // This may not be neccesary with the inclusion of join and complement booleans.
             }
 
             return location;
@@ -548,25 +549,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             }
             return runon;
         }
-        /*
-         *  Checks if this line will runon to next line (do not create new object @ next line, just append)
-         *  @param {String} line
-         *  @returns {Boolean} runon
-         *  @private
-         *
-		function isRunon(line) {
-			var runon;
-			if ( line.match(/"$/ )) { // closed case: '/key="blahblah"'
-				runon = false;
-			} else if (line.match(/\)$/ )) { // closed case: 'CDS  ..join(<265..402,1088..1215)'
-				runon = false;
-			} else if ( line.charAt(line.length-1).match(/\d/)){ // number case: 'CDS 1..3123' OR  '/codon=1'
-				runon = false;
-			} else {
-				runon = true;
-			}
-			return runon;
-		}*/
         
         /*
 
@@ -668,13 +650,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             }
 
             this.setType = function(key, isKey) {
-                /*if (isKey === true) {
-                    this.keyword	= true;
-                    this.subkeyword	= false;
-                } else {
-                    this.keyword	= false;
-                    this.subkeyword	= true;
-                }*/
 
                 if (key === "REFERENCE") {
                     this.setReference();

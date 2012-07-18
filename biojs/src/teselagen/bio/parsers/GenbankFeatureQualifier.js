@@ -7,7 +7,7 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
-    
+
     requires: ["Teselagen.bio.util.StringUtil"],
 
     /**
@@ -19,8 +19,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
      * @memberOf GenbankFeatureQualifer
      */
     constructor: function (inData) {
-        //var that = this;
-        
+
         var name;
         var value;
         var quoted;
@@ -78,31 +77,40 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         this.appendValue = function(append){
             value += append;
         }
-        /**
-         * Converts this GenbankLocusKeyword to Genbank file format string
-         * @returns {String} genbankString
-         */
-        this.toString = function() {
-            var line;
-            if (quoted) {
-                line = Teselagen.StringUtil.lpad("/", " ", 22) + name + "=\"" + value + "\"";
-            } else {
-                line = Teselagen.StringUtil.lpad("/"," ", 22) + name + "=" + value ;
-            }
-            return line;
-        }
-        /**
-         * Converts to JSON format.
-         * @returns {Object} json
-         */
-        this.toJSON = function() {
-            var json = {
-                    name: name,
-                    value: value
-            }
-            return json;
-        }
         return this;
+    },
+    /**
+     * Converts this GenbankLocusKeyword to Genbank file format string
+     * @returns {String} genbankString
+     */
+    toString : function() {
+        var line;
+        var name    = this.getName();
+        var value   = this.getValue();
+        var quoted  = this.getQuoted();
+        
+        if (quoted) {
+            line = Teselagen.StringUtil.lpad("/", " ", 22) + name + "=\"" + value + "\"";
+        } else {
+            line = Teselagen.StringUtil.lpad("/"," ", 22) + name + "=" + value ;
+        }
+        return line;
+    },
+    /**
+     * Converts to JSON format.
+     * @returns {Object} json
+     */
+    toJSON : function() {
+        var name    = this.getName();
+        var value   = this.getValue();
+        var quoted  = this.getQuoted();
+        
+        var json = {
+                name: name,
+                value: value
+        }
+        return json;
     }
+
 
 });

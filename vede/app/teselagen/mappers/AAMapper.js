@@ -5,42 +5,50 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.mappers.AAMapper", {
-    extends: "Teselagen.mappers.Mapper",
+    extend: "Teselagen.mappers.Mapper",
+
+    requires: ["Teselagen.bio.sequence.TranslationUtils"],
+
+    config: {
+        aaSequence: ["", "", ""],
+        aaSequenceSparse: ["", "", ""],
+        aaRevCom: ["", "", ""],
+        aaRevComSparse: ["", "", ""]
+    },
+
+    mixins: {
+        observable: "Ext.util.Observable"
+    },
+
+    TranslationUtils: Teselagen.bio.sequence.TranslationUtils,
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.
      */
     constructor: function(inData) {
-        this.callParent(arguments);
-        this.addEvent(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED);
+        this.updateEventString = Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED;
+
+        this.mixins.observable.constructor.call(this, inData);
+        this.addEvents(this.updateEventString);
         
-        var aaSequence = ["", "", ""];
-        var aaSequenceSparse = ["", "", ""];
-        var aaRevCom = ["", "", ""];
-        var aaRevComSparse = ["", "", ""];
+        this.callParent([inData]);
+        this.initConfig(inData);
 
-        var dirty = true;
-
-        this.addEventListener(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
+        this.on(this.updateEventString,
                              function(){alert("aa mapper updated")});
     },
-   
+
     /**
      * @private
      * Recalculates amino acid sequences.
      */
     recalculate: function() {
-        aaSequence = ["", "", ""];
-        aaSequenceSparse = ["", "", ""];
-        aaRevCom = ["", "", ""];
-        aaRevComSparse: ["", "", ""];
-   
-        if(sequencemanager) {
-            this.recalculatenoncircular();
+        if(this.sequenceManager) {
+            this.recalculateNonCircular();
         }
 
-        this.fireEvent(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED);
-    }
+        this.fireEvent(this.updateEventString);
+    },
     
     /**
      * @private
@@ -48,8 +56,8 @@ Ext.define("Teselagen.mappers.AAMapper", {
      */
     recalculateNonCircular: function() {
         var i;
-        var sequence = sequenceManager.getSequence();
-        var revCom = sequenceManager.getReverseComplementSequence();
+        var sequence = this.sequenceManager.getSequence();
+        var revCom = this.sequenceManager.getReverseComplementSequence();
         var seqLen = sequence.length;
         var aminoAcid;
         var aminoAcidRevCom;
@@ -58,12 +66,13 @@ Ext.define("Teselagen.mappers.AAMapper", {
         var codon = [];
         var codonRevCom = [];
 
-        aaSequenceArray = [[], [], []];
-        aaSequenceSparseArray = [[], [], []];
-        revComArray = [[], [], []];
-        revComSparse = [[], [], []];
+        var aaSequenceNew = [];
+        var aaSequenceSparseNew = [];
+        var revComNew = [];
+        var revComSparseNew = [];
 
-        var tUtils = Ext.create("Teselagen.bio.sequence.TranslationUtils",{});
+        var aaSequenceArray = [[], [], []];
+        var revComArray = [[], [], []];
 
         for(i = 0; i < seqLen; i++) {
             if(i >= seqLen - 2) {
@@ -73,14 +82,19 @@ Ext.define("Teselagen.mappers.AAMapper", {
             codon = [sequence.symbolAt(i), sequence.symbolAt(i + 1), sequence.symbolAt(i + 2)];
             codonRevCom = [revCom.symbolAt(i), revCom.symbolAt(i + 1), revCom.symbolAt(i + 2)];
 
-            aminoAcid = tUtils.dnaToProteinSymbol(codon[0], codon[1], codon[2]);
-            aminoAcidRevCom = tUtils.dnaToProteinSymbol(codonRevComRevCom[0], codonRevCom[1], codonRevCom[2]);
+            aminoAcid = this.TranslationUtils.dnaToProteinSymbol(codon[0],
+                                                                 codon[1], 
+                                                                 codon[2]);
+
+            aminoAcidRevCom = this.TranslationUtils.dnaToProteinSymbol(codonRevCom[0],
+                                                                       codonRevCom[1], 
+                                                                       codonRevCom[2]);
             
             aaString = "";
             aaStringRevCom = "";
 
             if(aminoAcid instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
-                if(tUtils.isStopCodon(codon[0], codon[1], codon[2])) {
+                if(this.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) {
                     aaString = ".";
                 }
             } else {
@@ -88,7 +102,9 @@ Ext.define("Teselagen.mappers.AAMapper", {
             }
 
             if(aminoAcidRevCom instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
-                if(tUtils.isStopCodon(codonRevCom[0], codonRevCom[1], codonRevCom[2])) {
+                if(this.TranslationUtils.isStopCodon(codonRevCom[0],
+                                                     codonRevCom[1], 
+                                                     codonRevCom[2])) {
                     aaStringRevCom = ".";
                 }
             } else {
@@ -96,11 +112,20 @@ Ext.define("Teselagen.mappers.AAMapper", {
             }
 
             aaSequenceArray[i % 3].push(aaString);
-            aaSequenceSparseArray[i % 3].push([aaString, " "].join(""));
-
             revComArray[i % 3].push(aaStringRevCom);
-            revComSparseArray[i % 3].push([aaStringRevCom, " "].join(""));
         }
+
+        for(i = 0; i < 3; i++) {
+            aaSequenceNew[i] = aaSequenceArray[i].join("");
+            aaSequenceSparseNew[i] = aaSequenceArray[i].join(" ");
+            revComNew[i] = revComArray[i].join("");
+            revComSparseNew[i] = revComArray[i].join("");
+        }
+
+        this.aaSequence = aaSequenceNew;
+        this.aaSequenceSparse = aaSequenceSparseNew;
+        this.revCom = revComNew;
+        this.revComSparse = revComSparseNew;
     },
     
     /**
@@ -109,9 +134,9 @@ Ext.define("Teselagen.mappers.AAMapper", {
      * @param {Boolean} sparse Whether to return the sparse version of the sequence.
      */
     getSequenceFrame: function(frame, sparse) {
-        if(dirty) {
+        if(this.dirty) {
             this.recalculate();
-            dirty = false;
+            this.dirty = false;
         }
 
         if(sparse) {
@@ -119,7 +144,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
         } else {
             return aaSequence[frame];
         }
-    }
+    },
 
     /**
      * Returns the amino acid sequence of a given frame of the reverse complement sequence.
@@ -127,9 +152,9 @@ Ext.define("Teselagen.mappers.AAMapper", {
      * @param {Boolean} sparse Whether to return the sparse version of the sequence.
      */
     getRevComFrame: function(frame, sparse) {
-        if(dirty) {
+        if(this.dirty) {
             this.recalculate();
-            dirty = false;
+            this.dirty = false;
         }
 
         if(sparse) {

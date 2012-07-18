@@ -15,6 +15,8 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		    "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
 
 	statics: {
+
+        DNAAlphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet,
 		/**
 		 * Creates SymbolList from DNA sequence
 		 * @param  {String} pDNASequence A DNA sequence
@@ -26,7 +28,7 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 
 			for (var i = 0; i < DNASequence.length; i++) {
 
-				var symbol = Teselagen.bio.sequence.alphabets.DNAAlphabet.symbolMap(DNASequence.charAt(i));
+				var symbol = this.DNAAlphabet.symbolMap(DNASequence.charAt(i));
 				if (symbol == null) {
 					throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
 						message: null
@@ -62,38 +64,38 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		 */
 		complementSymbol: function(pSymbol){
 			switch(pSymbol.getValue()) {
-				case Teselagen.DNAAlphabet.getA().getValue():
-					return Teselagen.DNAAlphabet.getT();
-				case Teselagen.DNAAlphabet.getT().getValue():
-					return Teselagen.DNAAlphabet.getA();
-				case Teselagen.DNAAlphabet.getG().getValue():
-					return Teselagen.DNAAlphabet.getC();
-				case Teselagen.DNAAlphabet.getC().getValue():
-					return Teselagen.DNAAlphabet.getG();
-				case Teselagen.DNAAlphabet.getY().getValue():
-					return Teselagen.DNAAlphabet.getR();
-				case Teselagen.DNAAlphabet.getR().getValue():
-					return Teselagen.DNAAlphabet.getY();
-				case Teselagen.DNAAlphabet.getS().getValue():
-					return Teselagen.DNAAlphabet.getS();
-				case Teselagen.DNAAlphabet.getW().getValue():
-					return Teselagen.DNAAlphabet.getW();
-				case Teselagen.DNAAlphabet.getK().getValue():
-					return Teselagen.DNAAlphabet.getM();
-				case Teselagen.DNAAlphabet.getM().getValue():
-					return Teselagen.DNAAlphabet.getK();
-				case Teselagen.DNAAlphabet.getB().getValue():
-					return Teselagen.DNAAlphabet.getV();
-				case Teselagen.DNAAlphabet.getV().getValue():
-					return Teselagen.DNAAlphabet.getB();
-				case Teselagen.DNAAlphabet.getD().getValue():
-					return Teselagen.DNAAlphabet.getH();
-				case Teselagen.DNAAlphabet.getH().getValue():
-					return Teselagen.DNAAlphabet.getD();
-				case Teselagen.DNAAlphabet.getN().getValue():
-					return Teselagen.DNAAlphabet.getN();
-				case Teselagen.DNAAlphabet.getGap().getValue():
-					return Teselagen.DNAAlphabet.getGap();
+				case this.DNAAlphabet.getA().getValue():
+					return this.DNAAlphabet.getT();
+				case this.DNAAlphabet.getT().getValue():
+					return this.DNAAlphabet.getA();
+				case this.DNAAlphabet.getG().getValue():
+					return this.DNAAlphabet.getC();
+				case this.DNAAlphabet.getC().getValue():
+					return this.DNAAlphabet.getG();
+				case this.DNAAlphabet.getY().getValue():
+					return this.DNAAlphabet.getR();
+				case this.DNAAlphabet.getR().getValue():
+					return this.DNAAlphabet.getY();
+				case this.DNAAlphabet.getS().getValue():
+					return this.DNAAlphabet.getS();
+				case this.DNAAlphabet.getW().getValue():
+					return this.DNAAlphabet.getW();
+				case this.DNAAlphabet.getK().getValue():
+					return this.DNAAlphabet.getM();
+				case this.DNAAlphabet.getM().getValue():
+					return this.DNAAlphabet.getK();
+				case this.DNAAlphabet.getB().getValue():
+					return this.DNAAlphabet.getV();
+				case this.DNAAlphabet.getV().getValue():
+					return this.DNAAlphabet.getB();
+				case this.DNAAlphabet.getD().getValue():
+					return this.DNAAlphabet.getH();
+				case this.DNAAlphabet.getH().getValue():
+					return this.DNAAlphabet.getD();
+				case this.DNAAlphabet.getN().getValue():
+					return this.DNAAlphabet.getN();
+				case this.DNAAlphabet.getGap().getValue():
+					return this.DNAAlphabet.getGap();
 				default:
 					throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
 						message: "Failed to find complement for symbol '" + symbol.value + ".'"

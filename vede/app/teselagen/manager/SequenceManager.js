@@ -5,25 +5,51 @@
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceProvider.as)
  */
+Ext.require("Teselagen.bio.sequence.common.Location");
+Ext.require("Teselagen.bio.sequence.common.SymbolList");
 
+//Ext.require("");
 Ext.define("Teselagen.manager.SequenceManager", {
 
+    /**
+     * @cfg {Object} config
+     * @cfg {String} name
+     * @cfg {Teselagen.bio.sequence.dna.DNASequence} sequence
+     */
+    config: {
+        name: null,
+        circular: false,
+        sequence: null,
+        features: [],
 
+        complementSequence: null,
+        reverseComplementSequence: null,
+        manualUpdateStarted: false,
+        
+        needsRecalculateComplementSequence: true,
+        needsRecalculateReverseComplementSequence: true,
 
+        dispatcher: null
+    },
+
+    mixins: {
+        observable: "Ext.util.Observable"
+    },
 
     /**
      * @param {String} name
      * @param {Boolean} circular
      * @param {String} sequence
-     * @param {[Feature]} features
+     * @param {Feature]} features
      * @returns {SequenceManager}
      * @memberOf SequenceManager
      * 
      */
     constructor: function(inData) {
-        //var that = this;
+        this.mixins.observable.constructor.call(this, inData);
+        this.addEvents("SequenceChanged");
 
-        var name;
+        /*var name;
         var circular;
         var sequence;
         var features;
@@ -31,54 +57,52 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var complementSequence;
         var reverseComplementSequence;
         var manualUpdateStarted = false;
+        
         var needsRecalculateComplementSequence = true;
         var needsRecalculateReverseComplementSequence = true;
-        //var dispactcher;
+        //var dispactcher;*/
 
         if (inData) {
-            name = inData.name || null;
-            circular = inData.circular || false;
-            sequence = inData.sequence || null;
-            features = inData.features || [];
+            this.name = inData.name || null;
+            this.circular = inData.circular || false;
+            this.sequence = inData.sequence || null;
+            this.features = inData.features || [];
         }
 
-        this.getName = function () {
-            return name;
-        }
+        /*this.getName = function () {
+            return this.name;
+        }*/
         this.setName = function(pName) {
             //manualUpdateStart();
-            name = pName;
+            this.name = pName;
             //manualUpdateEnd();
         }
-        this.getCircular = function () {
-            return circular;
-        }
+        /*this.getCircular = function () {
+            return this.circular;
+        }*/
         this.setCircular = function(pCircular) {
             //manualUpdateStart();
-            circular = pCircular;
+            this.circular = pCircular;
             //manualUpdateEnd();
         }
-        this.getSequence = function () {
-            return sequence;
-        }
+        /*this.getSequence = function () {
+            return this.sequence;
+        }*/
         this.setSequence = function(pSequence) {
             needsRecalculateComplementSequence = true;
             needsRecalculateReverseComplementSequence = true;
-            sequence = pSequence;
+            this.sequence = pSequence;
         }
-        this.getFeatures = function () {
-            return features;
-        }
+        /*this.getFeatures = function () {
+            return this.features;
+        }*/
         this.setFeatures = function(pFeatures) {
-            features = pFeatures;
+            this.features = pFeatures;
         }
-
-
-        return this;
     },
 
     getManualUpdateStarted:function() {
-        return manualUpdateStarted;
+        return this.manualUpdateStarted;
     },
 
     //part of IOriginator Interface
@@ -92,15 +116,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var sequenceManagerMemento = pMemento;
 
         //BUILD SequenceManagerMemento == SequenceProviderMemento class in lib/common
-        name = sequenceManagerMemento.name;
-        circular = sequenceManagerMemento.circular;
-        sequence = sequenceManagerMemento.sequence;
-        features = sequenceManagerMemento.features;
+        this.name     = sequenceManagerMemento.name;
+        this.circular = sequenceManagerMemento.circular;
+        this.sequence = sequenceManagerMemento.sequence;
+        this.features = sequenceManagerMemento.features;
 
-        needsRecalculateComplementSequence = true;
-        needsRecalculateReverseComplementSequence = true;
+        this.needsRecalculateComplementSequence = true;
+        this.needsRecalculateReverseComplementSequence = true;
 
-        //dispatcher;
+        //this.dispatcher;
     },
 
     addEventListener: function(type, listener) {
@@ -117,18 +141,18 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     getComplementSequence: function() {
         //updateComplementSequence();
-        return complementSequence;
+        return this.complementSequence;
     },
 
     getReverseComplementSequence: function() {
         //updateReverseComplementSequence();
-        return reverseComplementSequence;
+        return this.reverseComplementSequence;
     },
 
     /**
      * Sub sequence by range
-     * @param {int} start Range start
-     * @param {int} end Range end
+     * @param {Number} start Range start
+     * @param {Number} end Range end
      */
     subSequence: function(start,end) {
         var result = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
@@ -148,8 +172,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Sub sequence manager by range
-     * @param {int} start Range start
-     * @param {int} end Range end
+     * @param {Number} start Range start
+     * @param {Number} end Range end
      * Was subSequenceProvider
      */
     subSequenceManager: function(start, end) {
@@ -336,7 +360,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Insert another sequence manager at position. This method is used on sequence paste. 
      * SEQUENCE PASTE?
      * @param {SequenceManger} sequenceManger SequenceManager to insert
-     * @param {int} position Position where to insert
+     * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
     insertSequenceManger: function(sequenceManger, position, quiet) {
@@ -374,7 +398,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Insert another sequence at position. This method is used on sequence paste
      * 
      * @param {SymbolList} insertSequence SymbolList to insert
-     * @param {int} position Position where to insert
+     * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
     insertSequence: function(insertSequence, position, quiet) {
@@ -403,6 +427,18 @@ Ext.define("Teselagen.manager.SequenceManager", {
         } 
     },
 
+    /**
+     * Remove sequence in range
+     * 
+     * @param startIndex Range start 
+     * @param endIndex Range end 
+     * @param quiet When true not SequenceProviderEvent will be dispatched
+     */
+    removeSequence: function(start, end, quiet) {
+        var lengthBefore,
+
+        lengthBefore = this.sequence.length;
+    },
 
     fromGenbank: function(genbank) {
         var result;

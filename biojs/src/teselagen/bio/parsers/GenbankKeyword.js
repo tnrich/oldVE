@@ -8,9 +8,9 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
-    
+
     requires: ["Teselagen.bio.util.StringUtil"],
-    
+
     extend: "Teselagen.bio.parsers.Keyword",
 
     /**
@@ -22,9 +22,9 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
     config: {
         //keyword: null,
         //value: null,
-       /**
-        * @cfg {[GenbankSubKeyword]} subKeywords 
-        */ 
+        /**
+         * @cfg {[GenbankSubKeyword]} subKeywords 
+         */ 
         subKeywords: null
     },
     /**
@@ -73,49 +73,53 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
                 return null;
             }
         }
-        /**
-         * Converts this GenbankKeywords to Genbank file format string
-         * @returns	{String} genbankString
-         */
-        this.toString = function() {
-            var width = 80-12;
-            var line = Teselagen.StringUtil.rpad(this.keyword, " ", 12); // + this.value;
-            line += this.value;
+        return this;
+    },
 
-            /*line += this.value.substring(0,width)
+    /**
+     * Converts this GenbankKeywords to Genbank file format string.
+     * Currently does not recalculate wrapping.
+     * @returns	{String} genbankString
+     */
+    toString : function() {
+        var subKeywords = this.getSubKeywords();
+        var width = 80-12;
+        var line = Teselagen.StringUtil.rpad(this.keyword, " ", 12); // + this.value;
+        line += this.value;
+
+        /*line += this.value.substring(0,width)
 
 			for (var i=width; i<this.value; i=i+width) {
 				line += this.value.substring(i,width);
 			}*/
-            if ( this.subKeywords.length > 0) {
-                line += "\n";
-                for (var i=0; i < this.subKeywords.length; i++) {
-                    line += this.subKeywords[i].toString();
-                    if (i<this.subKeywords.length - 1) { 
-                        line += "\n";
-                    }
+        if ( this.subKeywords.length > 0) {
+            line += "\n";
+            for (var i=0; i < this.subKeywords.length; i++) {
+                line += this.subKeywords[i].toString();
+                if (i<this.subKeywords.length - 1) { 
+                    line += "\n";
                 }
             }
-
-            return line;
         }
 
-        /**
-         * Converts to JSON format.
-         * @returns {Object} json
-         */
-        this.toJSON = function() {
-            var json = {
-                    keyword: this.keyword,
-                    value: this.value
-            }
-            if ( this.subKeywords.length > 0) {
-                json["subKeywords"] = this.subKeywords;
-            }
-            return json;
-        }
+        return line;
+    },
 
-        return this;
+    /**
+     * Converts to JSON format.
+     * @returns {Object} json
+     */
+    toJSON : function() {
+        var subKeywords = this.getSubKeywords();
+        var json = {
+                keyword: this.keyword,
+                value: this.value
+        }
+        if ( this.subKeywords.length > 0) {
+            json["subKeywords"] = this.subKeywords;
+        }
+        return json;
     }
+
 
 });

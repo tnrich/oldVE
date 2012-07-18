@@ -2,7 +2,7 @@
 /**
  * GenbankFeatureLocation. 
  * Stores the Feature Location from the Genbank formatted line:  
- * 'ELEMENTNAME               complement(join(>start...end))' .
+ *      'ELEMENTNAME               complement(join(>start...end))' .
  * Go to http://www.insdc.org/documents/feature_table.html#3.4 for specifications of Genbank file. 
  * This class does not assumes all locations of one feature are complement or not complement, join or not join.
  * 
@@ -11,14 +11,16 @@
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
-    
+
     requires: ["Teselagen.bio.util.StringUtil"],
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.
+     * @param {int} preStart Prefix to start index. Indicates partial <
      * @param {int} start Start index. 
      * 					"<" in front indicates that the exact lower boundary point of a feature is unknown. 
      * 					A location with just a start and no end is annotation for a single base.
+     * @param {int} preEnd Prefix to end index. Indicates partial >
      * @param {int} end End index. A ">" indicates that the feature continues beyond the end base.
      * @param {String} to This joins the start with end. 
      * 					"start..end" means it is a continuous range. 
@@ -35,7 +37,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         var preEnd 		= "";	// stores partials
         var to			= "";	// stores how start and end are joined. ie start TO end
         var tmp;
-        
+
         if (inData) {
             if (inData.start) {
                 start		= inData.start.replace(/\<|\>/, "") || "" ;
@@ -58,8 +60,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
                 }*/
             }
             if (inData.to) {
-            	to			= inData.to; 
-            	// This joins the start and end. start..
+                to			= inData.to; 
+                // This joins the start and end. start..
             }
         }
         /**
@@ -132,38 +134,54 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         this.setTo = function(pTo) {
             to = pTo;
         }
-        /**
-         * Converts this GenbankLocusKeyword to Genbank file format string
-         * @returns {String} genbankString
-         */
-        this.toString = function() {
-        	//put partials as suffix, warn for wrong usage
-            //var line = preStart + start + sufStart + ".." + preEnd + end + sufEnd;
-            var line = [ preStart, start];
-            
-            if (to) {
-            	line.push(to);
-            }
-            
-            if (end) {
-                line.push(preEnd);
-                line.push(   end);
-            }
-            return line.join("");
-        }
-        /**
-         * Converts to JSON format.
-         * @returns {Object} json
-         */
-        this.toJSON = function() {
-            var json = {
-                    start: start,
-                    to: to,
-                    end: end
-            }
-            return json;
-        }
         return this;
+    },
+    
+    /**
+     * Converts this GenbankLocusKeyword to Genbank file format string
+     * @returns {String} genbankString
+     */
+    toString : function() {
+        //put partials as suffix, warn for wrong usage
+        
+        var preStart    = this.getPreStart();
+        var start       = this.getStart();
+        var preEnd      = this.getPreEnd();
+        var end         = this.getEnd();
+        var to          = this.getTo();
+        
+        //var line = preStart + start + sufStart + ".." + preEnd + end + sufEnd;
+        var line = [ preStart, start];
+
+        if (to) {
+            line.push(to);
+        }
+
+        if (end) {
+            line.push(preEnd);
+            line.push(   end);
+        }
+        return line.join("");
+    },
+    
+    /**
+     * Converts to JSON format.
+     * @returns {Object} json
+     */
+    toJSON : function() {
+        var preStart    = this.getPreStart();
+        var start       = this.getStart();
+        var preEnd      = this.getPreEnd();
+        var end         = this.getEnd();
+        var to          = this.getTo();
+        
+        var json = {
+                start: start,
+                to: to,
+                end: end
+        }
+        return json;
     }
+
 
 });

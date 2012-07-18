@@ -1,53 +1,101 @@
+/**
+ * @class Teselagen.mappers.ORFMapper
+ * Class which manages the calculation of ORFs in the sequence.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv
+ */
 Ext.define("Teselagen.mappers.ORFMapper", {
+    extend: "Teselagen.mappers.Mapper",
+
+    requires: ["Teselagen.bio.orf.ORFFinder"],
+
     config: {
         minORFSize: 300
     },
 
-    constructor: function(inData) {
-        this.callParent(arguments);
-        this.addEvent(Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED);
-
-        orfs = [];
+    mixins: {
+        observable: "Ext.util.Observable"
     },
 
-    getORFs: function() {
-        if(dirty) {
-            recalculate();
 
-            dirty = false;
+    /**
+     * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to observe for sequence changes.
+     */
+    constructor: function(inData) {
+        this.updateEventString = Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED;
+
+        this.mixins.observable.constructor.call(this, inData);
+        this.addEvents(this.updateEventString);
+
+        this.callParent([inData]);
+        this.initConfig(inData);
+
+        var orfs = [];
+
+    },
+
+    setOrfs: function(pOrfs) {
+        this.orfs = pOrfs;
+    },
+    
+    /**
+     * Gets ORFs from sequence. Recalculate them if the sequence has changed.
+     * @return {Array<Teselagen.bio.orf.ORF>} Array of ORFs in DNA sequence.
+     */
+    getOrfs: function() {
+        if(this.dirty) {
+            this.recalculate();
+            this.dirty = false;
         } 
 
         return orfs;
     },
 
-    setMinORF: function(pSize) {
-        if(minORFSize != pSize) {
-            minORFSize = value;
-            dirty = true;
+    /**
+     * Sets the minimum ORF size. 
+     * Checks to make sure it is a new size to avoid unnecessary recalculation.
+     * @param {Int} pSize The new minimum ORF size.
+     */
+    setMinORFSize: function(pSize) {
+        if(this.minORFSize != pSize) {
+            this.minORFSize = pSize;
+            this.dirty = true;
         }
     },
 
+    /**
+     * @private
+     * Handles recalculation depending on whether the sequence is linear or circular.
+     */
     recalculate: function() {
-        if(sequenceManager) {
-            if(sequenceManager.getIsCircular()) {
-                recalculateCircular();
+        if(this.sequenceManager) {
+            if(this.sequenceManager.getCircular()) {
+                this.recalculateCircular();
             } else {
-                recalculateNonCircular();
+                this.recalculateNonCircular();
             }
         } else {
-            ords = null;
+            this.setOrfs(null);
         }
 
         this.fireEvent(Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED);
-    }
-
-    recalculateNonCircular: function() {
-        var orfs = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(
-                                sequenceManager.getSequence(),
-                                sequenceManager.getReverseComplementSequence(),
-                                minORFSize);
     },
 
+    /**
+     * @private
+     * Recalculates ORFs for linear DNA. Simply calls the method in ORFMapper.
+     */
+    recalculateNonCircular: function() {
+        this.setOrfs(Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(
+                                this.sequenceManager.getSequence(),
+                                this.sequenceManager.getReverseComplementSequence(),
+                                this.minORFSize));
+    },
+
+    /**
+     * @private
+     * Recalculates ORFs for circular DNA.
+     */
     recalculateCircular: function() {
         var forwardSequence = sequenceManager.getSequence();
         var backwardSequence = sequenceManager.getReverseComplementSequence();
@@ -64,7 +112,7 @@ Ext.define("Teselagen.mappers.ORFMapper", {
 
         var maxLength = forwardSequence.getLength();
 
-        orfs = [];
+        var recalcOrfs = [];
         var normalOrfs = [];
         var orf = null;
 
@@ -84,7 +132,7 @@ Ext.define("Teselagen.mappers.ORFMapper", {
                     }
                 }
 
-                orfs.push(orf);
+                recalcOrfs.push(orf);
             }
         }
         
@@ -95,8 +143,8 @@ Ext.define("Teselagen.mappers.ORFMapper", {
             normalOrf = normalOrfs[k];
             var skip = false;
 
-            for(var l = 0; l < orfs.length; l++) {
-                circularOrf = orfs[l];
+            for(var l = 0; l < recalcOrfs.length; l++) {
+                circularOrf = recalcOrfs[l];
                 if(circularOrf.getEnd() == normalOrf.getEnd() &&
                    circularOrg.getStrand() == normalOrf.getStrand()) {
                     skip = true;
@@ -104,8 +152,10 @@ Ext.define("Teselagen.mappers.ORFMapper", {
                 }
             }
             if(!skip) {
-                orfs.push(normalOrf);
+                recalcOrfs.push(normalOrf);
             }
         }
+
+        this.setOrfs(recalcOrfs);
     },
 });

@@ -15,378 +15,398 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			 "Teselagen.bio.sequence.symbols.GapSymbol", 
 			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
 
-	constructor: function(inData){
-		var dnaToRNATranslationTable = null;
-		var rnaToDNATranslationTable = null;
-		var aminoAcidsTranslationTable = null;
+	alternateClassName: "Teselagen.TranslationUtils",
+	ProteinAlphabet: Teselagen.bio.sequence.alphabets.ProteinAlphabet,
+	DNAAlphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet,
+	RNAAlphabet: Teselagen.bio.sequence.alphabets.RNAAlphabet,
+	singleton: true,
 
-		/**
-		 * Converts a DNA symbol to an RNA symbol
-		 * @param  {NucleotideSymbol} pSymbol an input NucleotideSymbol
-		 * @return {NucleotideSymbol}         Returns the corresponding RNA symbol
-		 */
-		this.dnaToRNASymbol = function(pSymbol){
-			initializeDNAToRNATranslationTable();
+	dnaToRNATranslationTable: null,
+	rnaToDNATranslationTable: null,
+	aminoAcidsTranslationTable: null,
 
-			//Typechecks for GapSymbol
-			if (pSymbol instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
-				return  Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
-			};
+	/**
+	 * Converts a DNA symbol to an RNA symbol
+	 * @param  {NucleotideSymbol} pSymbol an input NucleotideSymbol
+	 * @return {NucleotideSymbol}         Returns the corresponding RNA symbol
+	 */
+	dnaToRNASymbol: function(pSymbol){
+		this.initializeDNAToRNATranslationTable();
 
-			var newSymbol = dnaToRNATranslationTable[pSymbol.getValue()] || null;
+		//Typechecks for GapSymbol
+		if (pSymbol instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
+			return  Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
+		};
 
-			if (newSymbol == null) {
-				throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
-					message: "Illegal symbol"
-				});
-			};
+		var newSymbol = this.dnaToRNATranslationTable[pSymbol.getValue()] || null;
 
-			return newSymbol;
-		}
-
-		/**
-		 * Converts an RNA symbol to a DNA symbol
-		 * @return {[type]} [description]
-		 */
-		this.rnaToDNASymbol = function(pSymbol){
-			initializeRNAToDNATranslationTable();
-
-			//Typechecks if this is a Gap Symbol
-			if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return  Teselagen.bio.sequence.alphabets.DNAAlphabet.superclass.getGap();
-			};
-
-			var newSymbol = rnaToDNATranslationTable[pSymbol.getValue()] || null;
-
-			if (newSymbol == null) {
-				throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
-					message: "Illegal symbol"
-				});
-			};
-
-			return newSymbol;
-		}
-
-		/**
-		 * Converts a list of DNA symbols to RNA
-		 * @param  {SymbolList} pSymbolList A list of input symbols
-		 * @return {SymbolList}             A list of RNA symbols
-		 */
-		this.dnaToRNA = function(pSymbolList){
-			var symbols = pSymbolList.getSymbols();
-			var rnaSymbols = [];
-
-			//If there are symbols, dive into this loop.
-			if (symbols.length > 0) {
-				for (var i = 0; i < symbols.length; i++) {
-					rnaSymbols[i] = this.dnaToRNASymbol(symbols[i]);
-				};
-			};
-
-			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
-				symbols: rnaSymbols,
-				alphabet:  "Teselagen.bio.sequence.alphabets.RNAAlphabet"
+		if (newSymbol == null) {
+			throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
+				message: "Illegal symbol"
 			});
-		}
+		};
+
+		return newSymbol;
+	},
 
 		/**
-		 * Translates RNA to DNA
-		 * @param  {SymbolList} pSymbolList an input symbol list containing RNA NucleotideSymbols
-		 * @return {SymbolList}             an output symbol list containing DNA NucleotideSymbols
-		 */
-		this.rnaToDNA = function(pSymbolList){
-			var symbols = pSymbolList.getSymbols();
-			var rnaSymbols = [];
+	 * Converts a list of DNA symbols to RNA
+	 * @param  {SymbolList} pSymbolList A list of input symbols
+	 * @return {SymbolList}             A list of RNA symbols
+	 */
+	dnaToRNA: function(pSymbolList){
+		var symbols = pSymbolList.getSymbols();
+		var rnaSymbols = [];
 
-			if (symbols.length > 0) {
-				for (var i = 0; i < symbols.length; i++) {
-					rnaSymbols[i] = this.rnaToDNASymbol(symbols[i]);
-				};
+		//If there are symbols, dive into this loop.
+		if (symbols.length > 0) {
+			for (var i = 0; i < symbols.length; i++) {
+				rnaSymbols[i] = this.dnaToRNASymbol(symbols[i]);
 			};
+		};
 
-			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
-				symbols: rnaSymbols,
-				alphabet:  "Teselagen.bio.sequence.alphabets.DNAAlphabet"
+		return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+			symbols: rnaSymbols,
+			alphabet:  "Teselagen.bio.sequence.alphabets.RNAAlphabet"
+		});
+	},
+
+
+
+	/**
+	 * Converts an RNA symbol to a DNA symbol
+	 * @return {[type]} [description]
+	 */
+	rnaToDNASymbol: function(pSymbol){
+		this.initializeRNAToDNATranslationTable();
+
+		//Typechecks if this is a Gap Symbol
+		if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
+		};
+
+		var newSymbol = this.rnaToDNATranslationTable[pSymbol.getValue()] || null;
+
+		if (newSymbol == null) {
+			throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
+				message: "Illegal symbol"
 			});
+		};
+
+		return newSymbol;
+	},
+
+
+	/**
+	 * Translates RNA to DNA
+	 * @param  {SymbolList} pSymbolList an input symbol list containing RNA NucleotideSymbols
+	 * @return {SymbolList}             an output symbol list containing DNA NucleotideSymbols
+	 */
+	rnaToDNA: function(pSymbolList){
+		var symbols = pSymbolList.getSymbols();
+		var rnaSymbols = [];
+
+		if (symbols.length > 0) {
+			for (var i = 0; i < symbols.length; i++) {
+				rnaSymbols[i] = this.rnaToDNASymbol(symbols[i]);
+			};
+		};
+
+		return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+			symbols: rnaSymbols,
+			alphabet:  "Teselagen.bio.sequence.alphabets.DNAAlphabet"
+		});
+	},
+
+	/**
+	 * Converts RNA to Protein Symbol
+	 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+	 * @return {AminoAcidSymbol}              An amino acid that corresponds to the RNA codon
+	 */
+	rnaToProteinSymbol: function(pNucleotide1, pNucleotide2, pNucleotide3){
+		this.initializeAminoAcidsTranslationTable();
+
+		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
+		};
+
+		var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
+
+		var symbol = this.aminoAcidsTranslationTable[triplet];
+
+		if (symbol == null) {
+			return this.ProteinAlphabet.getGap();
+		};
+
+		return symbol;
+	},
+
+	/**
+	 * Converts DNA to Protein Symbol
+	 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+	 * @return {AminoAcidSymbol}              An amino acid that corresponds to the DNA codon
+	 */
+	dnaToProteinSymbol: function(pNucleotide1, pNucleotide2, pNucleotide3) {
+		this.initializeAminoAcidsTranslationTable();
+
+		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
+		};
+
+		var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
+
+		var symbol = this.aminoAcidsTranslationTable[triplet];
+
+		if(symbol == null) {
+			return this.ProteinAlphabet.getGap();
 		}
 
-		/**
-		 * Converts RNA to Protein Symbol
-		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
-		 * @return {AminoAcidSymbol}              An amino acid that corresponds to the RNA codon
-		 */
-		this.rnaToProteinSymbol = function(pNucleotide1, pNucleotide2, pNucleotide3){
-			initializeAminoAcidsTranslationTable();
+		return symbol;
+	},
 
-			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
-			};
+	/**
+	 * Translates RNA Sequence to Protein Sequence
+	 * @param  {SymbolList} pSymbolList an input symbol list containing RNA NucleotideSymbols
+	 * @return {SymbolList}             an output symbol list containing AminoAcidSymbols
+	 */
+	rnaToProtein: function(pSymbolList){
+		var length = pSymbolList.length - (pSymbolList.length % 3);
 
-			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
-
-			var symbol = aminoAcidsTranslationTable[triplet];
-
-			if (symbol == null) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
-			};
-
-			return symbol;
+		if (length == 0) {
+			return [];
 		}
 
+		var proteinSymbols = [];
+		var symbols = pSymbolList.getSymbols();
 
-		/**
-		 * Converts DNA to Protein Symbol
-		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
-		 * @return {AminoAcidSymbol}              An amino acid that corresponds to the DNA codon
-		 */
-		this.dnaToProteinSymbol = function(pNucleotide1, pNucleotide2, pNucleotide3) {
-			initializeAminoAcidsTranslationTable();
-
-			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.superclass.getGap();
-			};
-
-			var triplet = pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue();
-
-			var symbol = aminoAcidsTranslationTable[triplet];
-
-			if(symbol == null) {
-				return Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap();
-			}
-
-			return symbol;
-		}
-
-		/**
-		 * Translates RNA Sequence to Protein Sequence
-		 * @param  {SymbolList} pSymbolList an input symbol list containing RNA NucleotideSymbols
-		 * @return {SymbolList}             an output symbol list containing AminoAcidSymbols
-		 */
-		this.rnaToProtein = function(pSymbolList){
-			var length = pSymbolList.length - (pSymbolList.length % 3);
-
-			if (length == 0) {
-				return [];
-			}
-
-			var proteinSymbols = [];
-			var symbols = pSymbolList.getSymbols();
-
-			for (var i = 0; i < length; i++) {
-				var codon = i / 3;
-				proteinSymbols[codon] = rnaToProteinSymbol(pSymbolList[i], pSymbolList[i+1], pSymbolList[i+2]);
-			};
+		for (var i = 0; i < length; i++) {
+			var codon = i / 3;
+			proteinSymbols[codon] = this.rnaToProteinSymbol(pSymbolList[i], pSymbolList[i+1], pSymbolList[i+2]);
+		};
 
 
-			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
-				symbols: proteinSymbols,
-				alphabet:  "Teselagen.bio.sequence.alphabets.ProteinAlphabet"
-			});
+		return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
+			symbols: proteinSymbols,
+			alphabet:  "Teselagen.bio.sequence.alphabets.ProteinAlphabet"
+		});
 
-		}
+	},
 
-		/**
-		 * Calculates whether three nucleotides make up a start codon
-		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
-		 * @return {Boolean}             shows whether the nucleotides make up a start codon
-		 */
-		this.isStartCodon = function (pNucleotide1, pNucleotide2, pNucleotide3) {
-			var result = false;
+	/**
+	 * Calculates whether three nucleotides make up a start codon
+	 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+	 * @return {Boolean}             shows whether the nucleotides make up a start codon
+	 */
+	isStartCodon: function (pNucleotide1, pNucleotide2, pNucleotide3) {
+		var result = false;
 
-			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return result;
-			};
+		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			return result;
+		};
 
-			var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
+		var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
 
-			return (triplet === 'atg' || triplet === 'aug');
-		}
-		
-		/**
-		 * Calculates whether three nucleotides make up a stop codon
-		 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
-		 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
-		 * @return {Boolean}             shows whether the nucleotides make up a stop codon
-		 */
-		this.isStopCodon = function(pNucleotide1, pNucleotide2, pNucleotide3){
-			var result = false;
+		return (triplet === 'atg' || triplet === 'aug');
+	},
+	
+	/**
+	 * Calculates whether three nucleotides make up a stop codon
+	 * @param  {NucleotideSymbol} pNucleotide1 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide2 a NucleotideSymbol
+	 * @param  {NucleotideSymbol} pNucleotide3 a NucleotideSymbol
+	 * @return {Boolean}             shows whether the nucleotides make up a stop codon
+	 */
+	isStopCodon: function(pNucleotide1, pNucleotide2, pNucleotide3){
+		var result = false;
 
-			if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
-				return result;
-			};
+		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+			return result;
+		};
 
-			var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
+		var triplet = (pNucleotide1.getValue() + pNucleotide2.getValue() + pNucleotide3.getValue());
 
-			return (triplet == 'taa'
-				|| triplet == 'tag'
-				|| triplet == 'tga'
-				|| triplet == 'uaa'
-				|| triplet == 'uag'
-				|| triplet == 'uga');
-		}
+		return (triplet == 'taa'
+			|| triplet == 'tag'
+			|| triplet == 'tga'
+			|| triplet == 'uaa'
+			|| triplet == 'uag'
+			|| triplet == 'uga');
+	},
 
-		function initializeAminoAcidsTranslationTable(){
-			if (aminoAcidsTranslationTable != null) {
+	initializeAminoAcidsTranslationTable: function(){
+			if (this.aminoAcidsTranslationTable != null) {
 				return;
 			};
-			aminoAcidsTranslationTable = [];
+			this.aminoAcidsTranslationTable = [];
 
-			aminoAcidsTranslationTable['gct'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAlanine();
-			aminoAcidsTranslationTable['gcc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAlanine();
-			aminoAcidsTranslationTable['gca'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAlanine();
-			aminoAcidsTranslationTable['gcg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAlanine();
-			aminoAcidsTranslationTable['gcu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAlanine();
-			aminoAcidsTranslationTable['cgt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['cgc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['cga'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['cgg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['aga'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['agg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['cgu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getArginine();
-			aminoAcidsTranslationTable['aat'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAsparagine();
-			aminoAcidsTranslationTable['aac'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAsparagine();
-			aminoAcidsTranslationTable['aau'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAsparagine();
-			aminoAcidsTranslationTable['gat'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAspartic();
-			aminoAcidsTranslationTable['gac'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAspartic();
-			aminoAcidsTranslationTable['gau'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getAspartic();
-			aminoAcidsTranslationTable['tgt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getCysteine();
-			aminoAcidsTranslationTable['tgc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getCysteine();
-			aminoAcidsTranslationTable['ugu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getCysteine();
-			aminoAcidsTranslationTable['ugc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getCysteine();
-			aminoAcidsTranslationTable['gaa'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlutamic();
-			aminoAcidsTranslationTable['gag'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlutamic();
-			aminoAcidsTranslationTable['caa'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlutamine();
-			aminoAcidsTranslationTable['cag'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlutamine();
-			aminoAcidsTranslationTable['ggt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlycine();
-			aminoAcidsTranslationTable['ggc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlycine();
-			aminoAcidsTranslationTable['gga'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlycine();
-			aminoAcidsTranslationTable['ggg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlycine();
-			aminoAcidsTranslationTable['ggu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGlycine();
-			aminoAcidsTranslationTable['cat'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getHistidine();
-			aminoAcidsTranslationTable['cac'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getHistidine();
-			aminoAcidsTranslationTable['cau'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getHistidine();
-			aminoAcidsTranslationTable['att'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getIsoleucine();
-			aminoAcidsTranslationTable['atc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getIsoleucine();
-			aminoAcidsTranslationTable['ata'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getIsoleucine();
-			aminoAcidsTranslationTable['auu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getIsoleucine();
-			aminoAcidsTranslationTable['auc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getIsoleucine();
-			aminoAcidsTranslationTable['aua'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getIsoleucine();
-			aminoAcidsTranslationTable['ctt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['ctc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['cta'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['ctg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['tta'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['ttg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['cuu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['cuc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['cua'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['cug'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['uua'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['uug'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLeucine();
-			aminoAcidsTranslationTable['aaa'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLysine();
-			aminoAcidsTranslationTable['aag'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getLysine();
-			aminoAcidsTranslationTable['atg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getMethionine();
-			aminoAcidsTranslationTable['aug'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getMethionine();
-			aminoAcidsTranslationTable['ttt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getPhenylalanine();
-			aminoAcidsTranslationTable['ttc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getPhenylalanine();
-			aminoAcidsTranslationTable['uuu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getPhenylalanine();
-			aminoAcidsTranslationTable['uuc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getPhenylalanine();
-			aminoAcidsTranslationTable['cct'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getProline();
-			aminoAcidsTranslationTable['ccc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getProline();
-			aminoAcidsTranslationTable['cca'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getProline();
-			aminoAcidsTranslationTable['ccg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getProline();
-			aminoAcidsTranslationTable['ccu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getProline();
-			aminoAcidsTranslationTable['tct'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['tcc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['tca'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['tcg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['agt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['agc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['ucu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['ucc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['uca'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['ucg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['agu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getSerine();
-			aminoAcidsTranslationTable['act'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getThreonine();
-			aminoAcidsTranslationTable['acc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getThreonine();
-			aminoAcidsTranslationTable['aca'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getThreonine();
-			aminoAcidsTranslationTable['acg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getThreonine();
-			aminoAcidsTranslationTable['acu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getThreonine();
-			aminoAcidsTranslationTable['tgg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getTryptophan();
-			aminoAcidsTranslationTable['ugg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getTryptophan();
-			aminoAcidsTranslationTable['tat'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getTyrosine();
-			aminoAcidsTranslationTable['tac'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getTyrosine();
-			aminoAcidsTranslationTable['uau'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getTyrosine();
-			aminoAcidsTranslationTable['uac'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getTyrosine();
-			aminoAcidsTranslationTable['gtt'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['gtc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['gta'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['gtg'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['guu'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['guc'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['gua'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-			aminoAcidsTranslationTable['gug'] = Teselagen.bio.sequence.alphabets.ProteinAlphabet.getValine();
-		}
+			this.aminoAcidsTranslationTable['gct'] = this.ProteinAlphabet.getAlanine();
+			this.aminoAcidsTranslationTable['gcc'] = this.ProteinAlphabet.getAlanine();
+			this.aminoAcidsTranslationTable['gca'] = this.ProteinAlphabet.getAlanine();
+			this.aminoAcidsTranslationTable['gcg'] = this.ProteinAlphabet.getAlanine();
+			this.aminoAcidsTranslationTable['gcu'] = this.ProteinAlphabet.getAlanine();
+			this.aminoAcidsTranslationTable['cgt'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['cgc'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['cga'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['cgg'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['aga'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['agg'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['cgu'] = this.ProteinAlphabet.getArginine();
+			this.aminoAcidsTranslationTable['aat'] = this.ProteinAlphabet.getAsparagine();
+			this.aminoAcidsTranslationTable['aac'] = this.ProteinAlphabet.getAsparagine();
+			this.aminoAcidsTranslationTable['aau'] = this.ProteinAlphabet.getAsparagine();
+			this.aminoAcidsTranslationTable['gat'] = this.ProteinAlphabet.getAspartic();
+			this.aminoAcidsTranslationTable['gac'] = this.ProteinAlphabet.getAspartic();
+			this.aminoAcidsTranslationTable['gau'] = this.ProteinAlphabet.getAspartic();
+			this.aminoAcidsTranslationTable['tgt'] = this.ProteinAlphabet.getCysteine();
+			this.aminoAcidsTranslationTable['tgc'] = this.ProteinAlphabet.getCysteine();
+			this.aminoAcidsTranslationTable['ugu'] = this.ProteinAlphabet.getCysteine();
+			this.aminoAcidsTranslationTable['ugc'] = this.ProteinAlphabet.getCysteine();
+			this.aminoAcidsTranslationTable['gaa'] = this.ProteinAlphabet.getGlutamic();
+			this.aminoAcidsTranslationTable['gag'] = this.ProteinAlphabet.getGlutamic();
+			this.aminoAcidsTranslationTable['caa'] = this.ProteinAlphabet.getGlutamine();
+			this.aminoAcidsTranslationTable['cag'] = this.ProteinAlphabet.getGlutamine();
+			this.aminoAcidsTranslationTable['ggt'] = this.ProteinAlphabet.getGlycine();
+			this.aminoAcidsTranslationTable['ggc'] = this.ProteinAlphabet.getGlycine();
+			this.aminoAcidsTranslationTable['gga'] = this.ProteinAlphabet.getGlycine();
+			this.aminoAcidsTranslationTable['ggg'] = this.ProteinAlphabet.getGlycine();
+			this.aminoAcidsTranslationTable['ggu'] = this.ProteinAlphabet.getGlycine();
+			this.aminoAcidsTranslationTable['cat'] = this.ProteinAlphabet.getHistidine();
+			this.aminoAcidsTranslationTable['cac'] = this.ProteinAlphabet.getHistidine();
+			this.aminoAcidsTranslationTable['cau'] = this.ProteinAlphabet.getHistidine();
+			this.aminoAcidsTranslationTable['att'] = this.ProteinAlphabet.getIsoleucine();
+			this.aminoAcidsTranslationTable['atc'] = this.ProteinAlphabet.getIsoleucine();
+			this.aminoAcidsTranslationTable['ata'] = this.ProteinAlphabet.getIsoleucine();
+			this.aminoAcidsTranslationTable['auu'] = this.ProteinAlphabet.getIsoleucine();
+			this.aminoAcidsTranslationTable['auc'] = this.ProteinAlphabet.getIsoleucine();
+			this.aminoAcidsTranslationTable['aua'] = this.ProteinAlphabet.getIsoleucine();
+			this.aminoAcidsTranslationTable['ctt'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['ctc'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['cta'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['ctg'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['tta'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['ttg'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['cuu'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['cuc'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['cua'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['cug'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['uua'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['uug'] = this.ProteinAlphabet.getLeucine();
+			this.aminoAcidsTranslationTable['aaa'] = this.ProteinAlphabet.getLysine();
+			this.aminoAcidsTranslationTable['aag'] = this.ProteinAlphabet.getLysine();
+			this.aminoAcidsTranslationTable['atg'] = this.ProteinAlphabet.getMethionine();
+			this.aminoAcidsTranslationTable['aug'] = this.ProteinAlphabet.getMethionine();
+			this.aminoAcidsTranslationTable['ttt'] = this.ProteinAlphabet.getPhenylalanine();
+			this.aminoAcidsTranslationTable['ttc'] = this.ProteinAlphabet.getPhenylalanine();
+			this.aminoAcidsTranslationTable['uuu'] = this.ProteinAlphabet.getPhenylalanine();
+			this.aminoAcidsTranslationTable['uuc'] = this.ProteinAlphabet.getPhenylalanine();
+			this.aminoAcidsTranslationTable['cct'] = this.ProteinAlphabet.getProline();
+			this.aminoAcidsTranslationTable['ccc'] = this.ProteinAlphabet.getProline();
+			this.aminoAcidsTranslationTable['cca'] = this.ProteinAlphabet.getProline();
+			this.aminoAcidsTranslationTable['ccg'] = this.ProteinAlphabet.getProline();
+			this.aminoAcidsTranslationTable['ccu'] = this.ProteinAlphabet.getProline();
+			this.aminoAcidsTranslationTable['tct'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['tcc'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['tca'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['tcg'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['agt'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['agc'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['ucu'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['ucc'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['uca'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['ucg'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['agu'] = this.ProteinAlphabet.getSerine();
+			this.aminoAcidsTranslationTable['act'] = this.ProteinAlphabet.getThreonine();
+			this.aminoAcidsTranslationTable['acc'] = this.ProteinAlphabet.getThreonine();
+			this.aminoAcidsTranslationTable['aca'] = this.ProteinAlphabet.getThreonine();
+			this.aminoAcidsTranslationTable['acg'] = this.ProteinAlphabet.getThreonine();
+			this.aminoAcidsTranslationTable['acu'] = this.ProteinAlphabet.getThreonine();
+			this.aminoAcidsTranslationTable['tgg'] = this.ProteinAlphabet.getTryptophan();
+			this.aminoAcidsTranslationTable['ugg'] = this.ProteinAlphabet.getTryptophan();
+			this.aminoAcidsTranslationTable['tat'] = this.ProteinAlphabet.getTyrosine();
+			this.aminoAcidsTranslationTable['tac'] = this.ProteinAlphabet.getTyrosine();
+			this.aminoAcidsTranslationTable['uau'] = this.ProteinAlphabet.getTyrosine();
+			this.aminoAcidsTranslationTable['uac'] = this.ProteinAlphabet.getTyrosine();
+			this.aminoAcidsTranslationTable['gtt'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['gtc'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['gta'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['gtg'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['guu'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['guc'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['gua'] = this.ProteinAlphabet.getValine();
+			this.aminoAcidsTranslationTable['gug'] = this.ProteinAlphabet.getValine();
+	},
 
-	function initializeDNAToRNATranslationTable(){
-			if (dnaToRNATranslationTable != null) {
+	initializeDNAToRNATranslationTable: function(){
+			if (this.dnaToRNATranslationTable != null) {
 				return;
 			};
-            dnaToRNATranslationTable= [];
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getA().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getA();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getT().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getU();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getG().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getG();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getC().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getC();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getY().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getY();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getR().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getR();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getS().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getS();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getW().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getW();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getK().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getK();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getM().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getM();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getB().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getB();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getV().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getV();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getD().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getD();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getH().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getH();
-			dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getN().getValue()]   = Teselagen.bio.sequence.alphabets.RNAAlphabet.getN();
-			//dnaToRNATranslationTable[Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap();
-		}
+            this.dnaToRNATranslationTable= [];
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getA().getValue()]   = this.RNAAlphabet.getA();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getT().getValue()]   = this.RNAAlphabet.getU();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getG().getValue()]   = this.RNAAlphabet.getG();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getC().getValue()]   = this.RNAAlphabet.getC();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getY().getValue()]   = this.RNAAlphabet.getY();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getR().getValue()]   = this.RNAAlphabet.getR();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getS().getValue()]   = this.RNAAlphabet.getS();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getW().getValue()]   = this.RNAAlphabet.getW();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getK().getValue()]   = this.RNAAlphabet.getK();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getM().getValue()]   = this.RNAAlphabet.getM();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getB().getValue()]   = this.RNAAlphabet.getB();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getV().getValue()]   = this.RNAAlphabet.getV();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getD().getValue()]   = this.RNAAlphabet.getD();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getH().getValue()]   = this.RNAAlphabet.getH();
+			this.dnaToRNATranslationTable[this.DNAAlphabet.getN().getValue()]   = this.RNAAlphabet.getN();
+			this.dnaToRNATranslationTable["-"] = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
+	},
 
-		function initializeRNAToDNATranslationTable () {
-			if (rnaToDNATranslationTable != null) {
+	initializeRNAToDNATranslationTable: function() {
+			if (this.rnaToDNATranslationTable != null) {
 				return;
 			}
 
-			rnaToDNATranslationTable = [];
+			this.rnaToDNATranslationTable = [];
 
 
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getA().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getA();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getU().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getT();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getG().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getG();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getC().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getC();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getY().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getY();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getR().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getR();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getS().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getS();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getW().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getW();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getK().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getK();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getM().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getM();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getB().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getB();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getV().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getV();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getD().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getD();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getH().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getH();
-			rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getN().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getN();
-			//rnaToDNATranslationTable[Teselagen.bio.sequence.alphabets.RNAAlphabet.getGap().getValue()] = Teselagen.bio.sequence.alphabets.DNAAlphabet.getGap();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getA().getValue()] = this.DNAAlphabet.getA();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getU().getValue()] = this.DNAAlphabet.getT();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getG().getValue()] = this.DNAAlphabet.getG();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getC().getValue()] = this.DNAAlphabet.getC();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getY().getValue()] = this.DNAAlphabet.getY();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getR().getValue()] = this.DNAAlphabet.getR();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getS().getValue()] = this.DNAAlphabet.getS();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getW().getValue()] = this.DNAAlphabet.getW();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getK().getValue()] = this.DNAAlphabet.getK();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getM().getValue()] = this.DNAAlphabet.getM();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getB().getValue()] = this.DNAAlphabet.getB();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getV().getValue()] = this.DNAAlphabet.getV();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getD().getValue()] = this.DNAAlphabet.getD();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getH().getValue()] = this.DNAAlphabet.getH();
+			this.rnaToDNATranslationTable[this.RNAAlphabet.getN().getValue()] = this.DNAAlphabet.getN();
+			this.rnaToDNATranslationTable["-"] = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
+										name: "Gap",
+										value: "-"
+								});
 
-		}
-
-
-		
-
-	}
+	},
 });
