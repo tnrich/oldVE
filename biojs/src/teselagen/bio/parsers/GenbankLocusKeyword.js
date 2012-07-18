@@ -17,11 +17,11 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
     /**
      * Creates a new GenbankLocusKeyword from inData.
      * @param {String} locusName 
-     * @param {String} sequenceLength
-     * @param {String} strandType
-     * @param {String} naType
-     * @param {String} linear
-     * @param {String} divisionCode
+     * @param {Number} sequenceLength base pair length
+     * @param {String} strandType ss or ds
+     * @param {String} naType DNA or RNA
+     * @param {Boolean} linear !linear = circular.
+     * @param {String} divisionCode Three letter code in caps.
      * @param {String} date
      * @returns {GenbankLocusKeyword}
      * @memberOf GenbankLocusKeyword
@@ -40,7 +40,6 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         var date;
 
         if (inData ) {
-            //console.log(JSON.stringify(inData, null, " "));
             locusName 		= inData.locusName || "";
             sequenceLength 	= inData.sequenceLength || "";
             strandType		= inData.strandType || "";

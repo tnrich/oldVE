@@ -5,8 +5,11 @@
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceProvider.as)
  */
+Ext.require("Teselagen.bio.sequence.common.Location");
+Ext.require("Teselagen.bio.sequence.common.SymbolList");
 
-Ext.define("Teselagen.manager.SequenceManager", {\
+//Ext.require("");
+Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * @cfg {Object} config
@@ -24,7 +27,7 @@ Ext.define("Teselagen.manager.SequenceManager", {\
         manualUpdateStarted: false,
         
         needsRecalculateComplementSequence: true,
-        needsRecalculateReverseComplementSequence: true
+        needsRecalculateReverseComplementSequence: true,
 
         dispatcher: null
     },

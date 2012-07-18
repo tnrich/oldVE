@@ -77,7 +77,8 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
     },
 
     /**
-     * Converts this GenbankKeywords to Genbank file format string
+     * Converts this GenbankKeywords to Genbank file format string.
+     * Currently does not recalculate wrapping.
      * @returns	{String} genbankString
      */
     toString : function() {

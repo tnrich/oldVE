@@ -43,7 +43,7 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
 		}
 		
 		/*
-		 * Appends to existing parameter, value. THIS MAY NOT WORK RIGHT NOW.
+		 * Appends to existing parameter, value. THIS HAS BEEN MOVED TO CHILDREN.
 		 * @param {String} value
 		 *
 		this.appendValue = function(pVal) {

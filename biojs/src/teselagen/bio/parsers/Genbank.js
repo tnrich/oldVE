@@ -15,21 +15,17 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
      * */
     constructor: function () {
         var that = this;
-        /*
-		var locus;			//= Ext.create('Teselagen.bio.parsers.GenbankLocusKeyword');
-		var accession;		//= Ext.create('Teselagen.bio.parsers.GenbankKeyword');// This is stupid, why not just put it in the keywords Array?
-		var version;		//= Ext.create('Teselagen.bio.parsers.GenbankKeyword', {keyword: version)}; // This is stupid, why not just put it in the keywords Array?
-		var features;		//= Ext.create('Teselagen.bio.parsers.GenbankFeaturesKeyword');
-		var origin;			//= Ext.create('Teselagen.bio.parsers.GenbankOriginKeyword');
-         */
         /**
          * @property {String[]} keywordTags Array of all the GenbankKeyword names in a Genbank class. 
-         * THIS MAY BE DELETED SINCE SEARCHING FOR KEYWORDS[i].keyword WILL RESULT IN ALL THE KEYWORDS IN THE GB FILE.
+         * This is redundant since iterating through keywords[i].keyword will regenerate this list.
          */
         var keywordsTag	= [];	// List of Keywords being used
         /**
          * @property {GenbankKeywords[]} keywords Array of all the GenbankKeyword objects in a Genbank class
-         * (which also includes GenbankLocusKeyword, GenbankFeaturesKeyword, GenbankOriginKeyword which inherit from GenbankKeyword).
+         * (which also includes {@link Teselagen.bio.parsers.GenbankLocusKeyword}, 
+         * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}, 
+         * {@link Teselagen.bio.parsers.GenbankOriginKeyword} which inherit from 
+         * {@link Teselagen.bio.parsers.GenbankKeyword}).
          */
         var keywords	= [];	
 
@@ -60,7 +56,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @returns {GenbankLocusKeyword}
          */
         this.getLocus = function() {
-            //return locus;
             return find("LOCUS");
         }
         /**
@@ -68,7 +63,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @param {GenbankLocusKeyword} locus
          */
         this.setLocus = function(pLocus) {
-            //locus = pLocus;
             keywords.push(pLocus);
         }
         /**
@@ -76,7 +70,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @returns {GenbankOriginKeyword}
          */
         this.getOrigin = function() {
-            //return origin;
             return find("ORIGIN");
         }
         /**
@@ -84,7 +77,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @param {GenbankOriginKeyword} origin
          */
         this.setOrigin = function(pOrigin) {
-            //origin = pOrigin;
             keywords.push(pOrigin);
         }
         /**
@@ -92,7 +84,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @returns {GenbankFeaturesKeyword}
          */
         this.getFeatures = function() {
-            //return getFeatures;
             return find("FEATURES");
         }
         /**
@@ -100,7 +91,6 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
          * @param {GenbankFeaturesKeyword} features
          */
         this.setFeatures = function(pFeatures) {
-            //features = pFeatures;
             keywords.push(pFeatures);
         }
         /**
@@ -172,6 +162,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 
     /**
      * Converts to JSON format. Overloads for JSON.stringify()
+     * This version includes a redundant Keyword in the key-value pair.
      * @returns {Object} json
      */
     toJSON: function() {
