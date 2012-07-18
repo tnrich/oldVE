@@ -1,8 +1,9 @@
-Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
-Ext.require("Teselagen.utils.SystemUtils");
+Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
+Ext.require("Teselagen.utils.SystemUtils");
 
 
 Ext.onReady(function() {
@@ -147,7 +148,6 @@ Ext.onReady(function() {
             });
         });
 
-        var uGroup;
         describe("UserRestrictionEnzymeGroup", function() {
 
             beforeEach(function() {
@@ -505,6 +505,77 @@ Ext.onReady(function() {
                 };
 
                 expect(getFn).toThrow();
+            });
+        });
+    });
+
+    describe("Manager Classes", function() {
+        describe("RestrictionEnzymeGroupManager", function() {
+            var rem; 
+
+            beforeEach(function() {
+                rem = Ext.create("Teselagen.manager.RestrictionEnzymeGroupManager", {});
+            });
+
+            it("exists", function() {
+                expect(rem).toBeDefined();
+            });
+
+            it("can load all groups", function() {
+                rem.loadRebaseDatabase();
+
+                var sg = rem.getSystemGroups();
+                expect(sg.length).toBeGreaterThan(0);
+
+                Ext.each(sg, function(group) {
+                    expect(group.getEnzymes()[0] instanceof Teselagen.bio.enzymes.RestrictionEnzyme);
+                });
+
+                var ug = rem.getUserGroups();
+                expect(ug.length).toBe(0);
+
+                var ag = rem.getActiveGroup();
+                expect(ag).toEqual(sg[0].getEnzymes());
+            });
+
+            var user;
+            var group;
+            it("loadUserRestrictionEnzymes works", function() {
+                group = Ext.create("Teselagen.models.UserRestrictionEnzymeGroup", {
+                    groupName: "mygroup",
+                    enzymeNames: ["AatII", "BglII"]
+                });
+
+                user = Ext.create("Teselagen.models.UserRestrictionEnzymes", {
+                    groups: [group],
+                    activeEnzymeNames: ["AatII, BglII"]
+                });
+
+                rem.setIsInitialized(true);
+                rem.loadUserRestrictionEnzymes(user);
+
+                var ug = rem.getUserGroups();
+                expect(ug.length).toBe(1);
+                expect(ug[0].getEnzymes().length).toBe(2);
+                expect(ug[0].getEnzymes()[0] instanceof Teselagen.bio.enzymes.RestrictionEnzyme).toBeTruthy();
+            });
+
+            it("removeGroup works", function() {
+                rem.setIsInitialized(true);
+                rem.loadUserRestrictionEnzymes(user);
+
+                rem.removeGroup(rem.getUserGroups()[0]);
+                expect(rem.getUserGroups()).toEqual([]);
+            });
+
+            it("groupByName works", function() {
+                rem.setIsInitialized(true);
+                rem.loadUserRestrictionEnzymes(user);
+
+                var testGroup = rem.groupByName("mygroup");
+
+                expect(testGroup.getEnzymes()[0].getName()).toBe("AatII");
+                expect(testGroup.getEnzymes()[1].getName()).toBe("BglII");
             });
         });
     });
