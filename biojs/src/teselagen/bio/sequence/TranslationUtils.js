@@ -16,15 +16,17 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 			 "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
 
 	alternateClassName: "Teselagen.TranslationUtils",
-	ProteinAlphabet: Teselagen.bio.sequence.alphabets.ProteinAlphabet,
-	DNAAlphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet,
-	RNAAlphabet: Teselagen.bio.sequence.alphabets.RNAAlphabet,
 	singleton: true,
 
 	dnaToRNATranslationTable: null,
 	rnaToDNATranslationTable: null,
 	aminoAcidsTranslationTable: null,
 
+    constructor: function() {
+        this.ProteinAlphabet = Teselagen.bio.sequence.alphabets.ProteinAlphabet;
+        this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+        this.RNAAlphabet = Teselagen.bio.sequence.alphabets.RNAAlphabet;
+    },
 	/**
 	 * Converts a DNA symbol to an RNA symbol
 	 * @param  {NucleotideSymbol} pSymbol an input NucleotideSymbol

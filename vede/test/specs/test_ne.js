@@ -2,6 +2,7 @@ Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
+Ext.require("Teselagen.bio.sequence.DNATools");
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
 Ext.require("Teselagen.utils.SystemUtils");
 
