@@ -1,12 +1,12 @@
 /* 
  * @author Diana Womg
  */
-Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
-Ext.require("Teselagen.utils.SystemUtils");
-Ext.require("Teselagen.bio.sequence.common.Sequence");
-Ext.require("Teselagen.bio.sequence.common.SymbolList");
-Ext.require("Teselagen.bio.sequence.dna.DNASequence");
-Ext.require("Teselagen.bio.sequence.symbols.IllegalSymbolException");
+//Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
+//Ext.require("Teselagen.utils.SystemUtils");
+//Ext.require("Teselagen.bio.sequence.common.Sequence");
+//Ext.require("Teselagen.bio.sequence.common.SymbolList");
+//Ext.require("Teselagen.bio.sequence.dna.DNASequence");
+//Ext.require("Teselagen.bio.sequence.symbols.IllegalSymbolException");
 //Ext.require("");
 //Ext.require("");
 Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
@@ -15,12 +15,12 @@ Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 // The previous three are included only because DNATools directly/indirectly uses them.
 // Prot and RNA seem unnecessary (only children of SymbolList) but DNATools cannot be found without them.
 // Not sure how to resolve that right now.
-//Ext.require("Teselagen.bio.sequence.DNATools"); 
+Ext.require("Teselagen.bio.sequence.DNATools"); 
 //Ext.require("");
-Ext.require("Teselagen.bio.sequence.common.Location");
-Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
-Ext.require("Teselagen.bio.sequence.common.StrandType");
-Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
+//Ext.require("Teselagen.bio.sequence.common.Location");
+//Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
+//Ext.require("Teselagen.bio.sequence.common.StrandType");
+//Ext.require("Teselagen.bio.sequence.common.StrandedAnnotation");
 //Ext.require("Teselagen.bio.sequence.dna.Feature");
 
 Ext.require("Teselagen.manager.SequenceManager");
@@ -47,11 +47,11 @@ Ext.onReady(function() {
 
             it("Init?",function(){
                 expect(false).toBeFalsy();
-                //expect(sm.getName()).toBe("test");
-                //expect(sm.getCircular()).toBeTruthy();
-                //expect(sm.getSequence()).toBe("GATTACA");
-                //expect(sm.getFeatures()).toBeDefined();
-                //expect(sm.getManualUpdateStarted()).toBeFalsy();
+                expect(sm.getName()).toBe("test");
+                expect(sm.getCircular()).toBeTruthy();
+                expect(sm.getSequence()).toBe("GATTACA");
+                expect(sm.getFeatures()).toBeDefined();
+                expect(sm.getManualUpdateStarted()).toBeFalsy();
 
             });
 
