@@ -269,8 +269,15 @@ Ext.define('Vede.view.AppViewport', {
                                                 text: 'Restriction Enzymes Manager'
                                             },
                                             {
-                                                xtype: 'menuitem',
-                                                text: 'Simulate Digestion'
+                                               xtype: 'menuitem',
+                                                id: 'simulateDigestionMenuItem',
+                                                text: 'Simulate Digestion',
+/*                                                listeners: {
+                                                    click: {
+                                                        fn: me.onMenuitemClick,
+                                                        scope: me
+                                                    }
+                                                }*/
                                             },
                                             {
                                                 xtype: 'menuitem',

@@ -12,7 +12,7 @@
     "customConfigs": [],
     "designerId": "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0",
     "$viewOrder": 0,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen4157",
@@ -123,6 +123,28 @@
                 "designer|targetType": "Ext.menu.CheckItem",
                 "designer|controlQuery": "#featuresMenuItem",
                 "designer|userClassName": "onFeaturesMenuItemCheckChange"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen7850",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onSimulateDigestionMenuItemClick",
+                "implHandler": [
+                    "Ext.create(\"MyApp.view.SimulateDigestionWindow\").show();"
+                ],
+                "name": "click",
+                "scope": "me",
+                "designer|targetType": "Ext.menu.Item",
+                "designer|controlQuery": "#simulateDigestionMenuItem",
+                "designer|userClassName": "onSimulateDigestionMenuItemClick"
             },
             "customConfigs": [],
             "expanded": true

@@ -114,7 +114,7 @@
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen2938",
@@ -130,7 +130,7 @@
                                 "layout|flex": null
                             },
                             "customConfigs": [],
-                            "expanded": false,
+                            "expanded": true,
                             "cn": [
                                 {
                                     "id": "ExtBox1-ext-gen10290",
@@ -154,7 +154,7 @@
                                         "designer|userClassName": "MyMenu"
                                     },
                                     "customConfigs": [],
-                                    "expanded": false,
+                                    "expanded": true,
                                     "cn": [
                                         {
                                             "id": "ExtBox1-ext-gen10303",
@@ -230,7 +230,7 @@
                                                 "designer|userClassName": "MyMenuItem3"
                                             },
                                             "customConfigs": [],
-                                            "expanded": false,
+                                            "expanded": true,
                                             "cn": [
                                                 {
                                                     "id": "ExtBox1-ext-gen13052",
@@ -246,7 +246,7 @@
                                                         "designer|userClassName": "MyMenu1"
                                                     },
                                                     "customConfigs": [],
-                                                    "expanded": false,
+                                                    "expanded": true,
                                                     "cn": [
                                                         {
                                                             "id": "ExtBox1-ext-gen13060",
@@ -841,7 +841,7 @@
                                 "layout|flex": null
                             },
                             "customConfigs": [],
-                            "expanded": false,
+                            "expanded": true,
                             "cn": [
                                 {
                                     "id": "ExtBox1-ext-gen20273",
@@ -898,11 +898,34 @@
                                             },
                                             "codeClass": null,
                                             "userConfig": {
+                                                "id": "simulateDigestionMenuItem",
                                                 "text": "Simulate Digestion",
                                                 "designer|userClassName": "MyMenuItem32"
                                             },
                                             "customConfigs": [],
-                                            "expanded": true
+                                            "expanded": true,
+                                            "cn": [
+                                                {
+                                                    "id": "ExtBox1-ext-gen5297",
+                                                    "type": "basiceventbinding",
+                                                    "reference": {
+                                                        "name": "listeners",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "fn": "onMenuitemClick",
+                                                        "implHandler": [
+                                                            ""
+                                                        ],
+                                                        "name": "click",
+                                                        "scope": "me",
+                                                        "designer|userClassName": "onMenuitemClick"
+                                                    },
+                                                    "customConfigs": [],
+                                                    "expanded": true
+                                                }
+                                            ]
                                         },
                                         {
                                             "id": "ExtBox1-ext-gen21734",

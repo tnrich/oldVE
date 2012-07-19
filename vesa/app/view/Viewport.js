@@ -18,6 +18,7 @@ Ext.define('MyApp.view.Viewport', {
     renderTo: Ext.getBody(),
     requires: [
         'MyApp.view.AppViewport',
-        'MyApp.view.FileImportWindow'
+        'MyApp.view.FileImportWindow',
+        'MyApp.view.SimulateDigestionWindow'
     ]
 });
