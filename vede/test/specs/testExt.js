@@ -1,3 +1,6 @@
+Ext.require("Teselagen.bio.parsers.GenbankManager");
+
+Ext.onReady(function() {
 describe("Generic Ext tests", function() {
  
     describe("Test class inheritance", function() {
@@ -29,9 +32,6 @@ describe("Generic Ext tests", function() {
                 getMask: function() {
                     return 1;
                 },
-                /*applyMask: function(pMask) {
-                    return pMask*2;
-                },*/
                 applyLength: function(pLength) {
                   if (pLength > 0) {
                       return pLength;
@@ -175,10 +175,10 @@ describe("Generic Ext tests", function() {
 
     describe("Aliasing", function() {
         var mgr;
-        it("GenbankManager", function() {
+        it("GenbankManager exists", function() {
             expect(Ext.create("Teselagen.bio.parsers.GenbankManager")).toBeDefined();
         });
-        it("MyManager", function() {
+        beforeEach(function() {
             Ext.define("MyManager", {
                 extend: "Teselagen.bio.parsers.GenbankManager",
                 GenbankManager:  Teselagen.bio.parsers.GenbankManager,
@@ -196,33 +196,92 @@ describe("Generic Ext tests", function() {
                 }
             });
             mgr = Ext.create("MyManager");
+        });
+        it("Can get instance alias class name", function() {
             expect(mgr.GenbankManager.getName())
                 .toBe("Teselagen.bio.parsers.GenbankManager");
+        });
+        it("Can get static alias class name", function() {
             expect(MyManager.GenbankMgr.getName())
             .toBe("Teselagen.bio.parsers.GenbankManager");
-        });
+        })
     });
 
-    describe("Config", function() {
+    describe("Config tests", function() {
         var iphone, android;
-        Ext.define('SmartPhone', {
-            config: {
-                hasTouchScreen: false,
-                operatingSystem: 'Other',
-                price: 500
-            }
+        beforeEach(function() {
+            Ext.define('SmartPhone', {
+                config: {
+                    hasTouchScreen: false,
+                    operatingSystem: 'Other',
+                    price: 500
+                }
+            });
+            iphone = Ext.create("SmartPhone");
         });
-        iphone = Ext.create("SmartPhone");
-        expect(iphone.price).toBe(500);
-        iphone.price=600;
-        expect(iphone.price).toBe(600);
-        iphone.setPrice(550);
-        expect(iphone.price).toBe(550);
-        android = Ext.create("SmartPhone");
-        expect(android.price).toBe(500);
+        it("Config can be gotten with dot operator", function() {
+            expect(iphone.price).toBe(500);
+        })
+        it("Config can be set with dot operator", function() {
+            iphone.price=600;
+            expect(iphone.price).toBe(600);
+        })
+        it("Config can be gotten with getter method", function() {
+            expect(iphone.getPrice()).toBe(500);
+        })
+        it("Config can be set with setter method", function() {
+            iphone.setPrice(550);
+            expect(iphone.price).toBe(550);
+        })
     });
 
-    describe("Test singleton", function() {
+    describe("Exception tests", function() {
+        var inst, flag = false;
+        beforeEach(function() {
+           Ext.define('ExceptionTest', {
+               constructor: function() {
+                   Ext.Error.handle = this.errHandler;  
+               },
+               raiseException: function() {
+                   Ext.Error.raise({msg:"Test exception"});
+               },
+               throwException: function() {
+                   throw new Ext.Error({msg:"Test throwing"});
+               },
+               errHandler:function(pErr) {
+                   console.warn(pErr);
+                   return true;
+             }  
+           });
+           inst = Ext.create("ExceptionTest");
+        });
+        
+        it("Raising exception", function() {
+            inst.raiseException();
+        });
+        it("Cannot catch raised exception", function() {
+            try {
+                inst.raiseException();
+            }
+            catch(pE) {
+                console.warn("Caught:" + pE);
+                flag = true;
+            }
+            expect(flag).toBe(false);
+        });
+        it("Catch thrown exception", function() {
+            try {
+                inst.throwException();
+            }
+            catch(pE) {
+                flag = true;
+                console.warn("Caught:" + pE);
+            }
+            expect(flag).toBe(true);
+        });
+    })
+    
+    xdescribe("Test singleton", function() {
         Ext.define('Nucleotide', {
             config: {
                 someProp: 1,
@@ -263,7 +322,7 @@ describe("Generic Ext tests", function() {
       //var mySingle = My.Singleton;	  // Ext.create() gives error
     });
    
-    describe("Test statics", function() {
+    xdescribe("Test statics", function() {
         Ext.define('Computer', {
             statics: {
                 instanceCount: 0,
@@ -355,4 +414,6 @@ describe("Generic Ext tests", function() {
        });
    });
    
+});
+
 });
