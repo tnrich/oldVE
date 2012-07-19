@@ -92,12 +92,23 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>430</x>
-      <y>290</y>
+      <x>440</x>
+      <y>270</y>
       <w>200</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SequenceController</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>440</x>
+      <y>330</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>SimulateDigestionController</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
