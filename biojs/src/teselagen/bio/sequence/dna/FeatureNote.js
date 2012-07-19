@@ -19,9 +19,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 			var value = inData.value || "";
 			var quoted = inData.quoted || false;
 		} else {
-			throw Ext.create("Teselagen.bio.BioException", {
-				message: "Arguments needed"
-			});
+			Teselagen.bio.BioException.raiseException("Arguments needed");
 		}
 
 		/**
