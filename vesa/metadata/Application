@@ -10,7 +10,9 @@
         "views": [
             "AppViewport",
             "FileImportWindow",
-            "SimulateDigestionWindow"
+            "SimulateDigestionWindow",
+            "MyWindow1",
+            "MySplitter4"
         ],
         "autoCreateViewport": true,
         "name": "MyApp",

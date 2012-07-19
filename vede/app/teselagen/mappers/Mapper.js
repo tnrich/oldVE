@@ -26,7 +26,8 @@ Ext.define("Teselagen.mappers.Mapper", {
 		
         if (inData) {
 			this.initConfig(inData);
-			this.sequenceManager.on("SequenceChanged", this.onSequenceProviderChanged, this);
+            // This line is going to go to a controller instead, which will call the onSequenceProviderChanged method.
+			this.sequenceManager.on("SequenceChanged", this.onSequenceProviderChanged, this); 
 		}
 	},
 
