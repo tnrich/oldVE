@@ -8,16 +8,30 @@ Ext.Loader.setConfig({
 });
 
 Ext.application({
+    autoCreateViewport: true,
+    name: 'Vede',
     views: [
         'AppViewport',
         'FileImportWindow'
     ],
-    autoCreateViewport: true,
-    name: 'Vede',
     controllers: [
         'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
         'VectorPanelController'
-    ]
+    ],
+    errorHandler: function(err) {
+        console.warn(err);
+        return true;
+    },
+    launch: function() {
+        Ext.Error.notify = false; // prevent ie6 and ie7 popup
+        Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
+    },
 });
+
+// Handle errors that are not thrown using Ext.Error
+window.onerror = function(pMsg) {
+    console.warn("Caught error: " + pMsg);
+    return true;
+}
