@@ -22,6 +22,8 @@ Ext.define("Teselagen.mappers.AAMapper", {
 
     TranslationUtils: Teselagen.bio.sequence.TranslationUtils,
 
+    updateEventString: Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
+
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.
      */
@@ -33,6 +35,8 @@ Ext.define("Teselagen.mappers.AAMapper", {
         
         this.callParent([inData]);
         this.initConfig(inData);
+        
+        this.fireEvent(this.updateEventString);
 
         this.on(this.updateEventString,
                              function(){alert("aa mapper updated")});
