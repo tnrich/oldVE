@@ -7,10 +7,11 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
-    //Use ext's built-in singleton functionality.
-    singleton: true,
-    
     requires: ["Ext.Ajax", "Ext.data.Store", "Teselagen.bio.enzymes.RestrictionEnzyme"],
+    
+    singleton: true,
+
+    BASE_URL: "http://dhcp-169-230-22-252.compbio.ucsf.edu/~nelsbree/",
     
     commonRestrictionEnzymes: null,
     rebaseRestrictionEnzymes: null,
@@ -24,7 +25,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.commonRestrictionEnzymes;
         }
         
-        this.commonRestrictionEnzymes = this.getEnzymes("assets/common.xml");
+        this.commonRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "biojs/src/teselagen/bio/enzymes/assets/common.xml");
         return this.commonRestrictionEnzymes;
     },
     
@@ -37,7 +38,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.rebaseRestrictionEnzymes;
         }
         
-        this.rebaseRestrictionEnzymes = this.getEnzymes("assets/rebase.xml");
+        this.rebaseRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "biojs/src/teselagen/bio/enzymes/assets/rebase.xml");
         return this.rebaseRestrictionEnzymes;
     },
 

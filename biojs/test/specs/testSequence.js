@@ -10,7 +10,7 @@ Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
 Ext.require("Teselagen.bio.sequence.common.StrandType");
 Ext.require("Teselagen.bio.sequence.DNATools");
 Ext.require("Teselagen.bio.sequence.TranslationUtils");
-
+Ext.onReady(function() {
 describe("Testing falsity", function(){
 	var falsity = true; 
 	var testEval = falsity || "False";
@@ -1354,4 +1354,5 @@ describe("Testing Sequence related classes ", function() {
 			});
 			});
 	});
+});
 });

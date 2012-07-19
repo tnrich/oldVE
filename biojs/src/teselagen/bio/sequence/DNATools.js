@@ -14,9 +14,11 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		    "Teselagen.bio.sequence.dna.DNASequence", 
 		    "Teselagen.bio.sequence.symbols.IllegalSymbolException"],
 
-	statics: {
+        singleton: true,
 
-        DNAAlphabet: Teselagen.bio.sequence.alphabets.DNAAlphabet,
+        constructor: function() {
+            this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+        },
 		/**
 		 * Creates SymbolList from DNA sequence
 		 * @param  {String} pDNASequence A DNA sequence
@@ -142,6 +144,5 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 				symbols: reverseComplementSymbols,
 				alphabet: "Teselagen.bio.sequence.alphabets.DNAAlphabet"
 			});
-		},
-	},	
+		},	
 });
