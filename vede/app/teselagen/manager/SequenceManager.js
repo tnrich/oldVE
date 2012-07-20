@@ -205,7 +205,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         return result;
     },
 
-    /**
+    /** THIS DOES NOT WORK YET
      * Sub sequence manager by range
      * @param {Number} start Range start
      * @param {Number} end Range end
@@ -332,10 +332,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     removeFeature: function(feature, quiet) {
         var evt;
-        var index = features.getItemIndex(feature);
-
+        //var index = this.features.getItemIndex(feature);
+        var index = Ext.Array.indexOf(this.features, feature);
         if ( index >= 0 ) {
-            if (!quiet && !manualUpdateStarted) {
+            if (!quiet && !this.manualUpdateStarted) {
                 //evt = Ext.create("SequenceManagerEvent", {
                 //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
                 //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -343,8 +343,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 //}
                 //dispatcher.dispatchEvent(evt);
             }
-            features.removeItemAt(index);
-            if (!quiet && !manualUpdateStarted) {
+            //this.features.removeItemAt(index);
+            Ext.Array.remove(this.features, feature);
+            if (!quiet && !this.manualUpdateStarted) {
                 //evt = Ext.create("SequenceManagerEvent", {
                 //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
                 //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,

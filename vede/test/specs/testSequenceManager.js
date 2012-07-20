@@ -120,15 +120,16 @@ Ext.onReady(function() {
 
             it("subSequence()",function(){
                 var tmp;
-                //null;
+                //GATTACA
                 tmp = sm.subSequence(-1,-2);
                 expect(tmp).toBeFalsy();
                 // start > end
                 tmp = sm.subSequence(0,2);
                 expect(tmp.toString()).toBe("ga"); // NOT SURE TRUE ANSWER
-                tmp = sm.subSequence(1,2);
+                // start > end
+                tmp = sm.subSequence(1,9);
                 console.log(tmp.toString());  // ta of gattaca
-                //expect(tmp.toString()).toBe("ga"); // NOT SURE TRUE ANSWER
+                expect(tmp.toString()).toBe("a"); // NOT SURE TRUE ANSWER
                 // start => end
                 tmp = sm.subSequence(3,1);
                 expect(tmp.toString()).toBe("gat"); // atta NOT SURE TRUE ANSWER
@@ -144,6 +145,7 @@ Ext.onReady(function() {
             });
 
             it("addFeature()",function(){
+
                 sm.addFeature(feat2, false);
                 expect(sm.getFeatures().length).toBe(2);
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
@@ -155,7 +157,21 @@ Ext.onReady(function() {
                 expect(sm.getFeatures().length).toBe(3);
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
                 expect(sm.getFeatures()[1].getName()).toBe("feat2");
-                expect(sm.getFeatures()[3].getName()).toBe("feat1");
+                expect(sm.getFeatures()[2].getName()).toBe("feat1");
+                //CHECK FOR EVENT HANDLING
+            });
+
+            it("removeFeature()",function(){
+                sm.removeFeature(feat1, false);
+                expect(sm.getFeatures().length).toBe(0);
+                //CHECK FOR EVENT HANDLING
+            });
+            it("removeFeatures()",function(){
+                sm.addFeatures([feat2, feat1], false);
+                sm.removeFeature(feat1, false);
+                expect(sm.getFeatures().length).toBe(2);
+                expect(sm.getFeatures()[0].getName()).toBe("feat2");
+                expect(sm.getFeatures()[1].getName()).toBe("feat1");
                 //CHECK FOR EVENT HANDLING
             });
 
