@@ -251,7 +251,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				}
 			}
 
-			locations = deNormalizeLocation(tempLocations, offset, maxLength + insertLength, circular, circularAdjustment);
+			locations = deNormalizeLocations(tempLocations, offset, pMaxLength + pInsertLength, pCircular, circularAdjustment);
 		}
 
 		/**

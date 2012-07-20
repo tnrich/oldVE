@@ -590,8 +590,8 @@ Ext.onReady(function() {
 
 
                 runs(function() {
-                    console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
-                    console.log(JSON.stringify(tmp, null, "  "));
+                    //  console.log("RECONSTRUCTED GENBANK FILE\n" + tmp.toString());
+                    //  console.log(JSON.stringify(tmp, null, "  "));
                     //console.log(tmp.findKeyword("LOCUS").toString());
                     //console.log("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
                     expect(tmp.findKeyword("LOCUS").toString()).toBe("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
