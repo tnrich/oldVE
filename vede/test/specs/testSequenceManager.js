@@ -56,6 +56,8 @@ Ext.onReady(function() {
                 expect(sm.getSequence().toString().toUpperCase()).toBe("GATTACA");
                 expect(sm.getFeatures().length).toBe(1);
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(2);
                 expect(sm.getManualUpdateStarted()).toBeFalsy();
 
             });
@@ -118,7 +120,7 @@ Ext.onReady(function() {
                 expect(tmp.toString()).toBe("tgtaatc");
             });           
 
-            it("subSequence()",function(){
+            it("subSequence(); Start => End behavior ????",function(){
                 var tmp;
                 //GATTACA
                 tmp = sm.subSequence(-1,-2);
@@ -132,7 +134,7 @@ Ext.onReady(function() {
                 expect(tmp.toString()).toBe("a"); // NOT SURE TRUE ANSWER
                 // start => end
                 tmp = sm.subSequence(3,1);
-                expect(tmp.toString()).toBe("gat"); // atta NOT SURE TRUE ANSWER
+                expect(tmp.toString()).toBe("gat"); // tacag NOT SURE TRUE ANSWER
             });
 
             it("subSequenceManager() THIS IS NOT COMPLETE",function(){
@@ -145,7 +147,6 @@ Ext.onReady(function() {
             });
 
             it("addFeature()",function(){
-
                 sm.addFeature(feat2, false);
                 expect(sm.getFeatures().length).toBe(2);
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
@@ -173,6 +174,35 @@ Ext.onReady(function() {
                 expect(sm.getFeatures()[0].getName()).toBe("feat2");
                 expect(sm.getFeatures()[1].getName()).toBe("feat1");
                 //CHECK FOR EVENT HANDLING
+            });
+
+            it("hasFeature()",function(){
+                expect(sm.hasFeature(feat1)).toBeTruthy();
+                expect(sm.hasFeature(feat2)).toBeFalsy();
+            });
+            it("insertSequence",function() {
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(2);
+
+
+                var insSeq = Teselagen.bio.sequence.DNATools.createDNA("GGG");
+                sm.insertSequence(insSeq, 3, false);
+
+                expect(sm.getSequence().length).toBe(10);
+                expect(sm.getSequence().toString()).toBe("gatgggtaca");
+
+                expect(sm.getFeatures().length).toBe(1);
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(5);
+                
+
+            });
+            it("insertSequenceManager",function(){
+                expect(false).toBeFalsy();
+            });
+
+            it("",function(){
+                expect(false).toBeFalsy();
             });
 
             it("",function(){

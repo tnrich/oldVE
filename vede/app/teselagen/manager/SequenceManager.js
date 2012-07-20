@@ -394,7 +394,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Feature} feature Feature existance to check
      */
     hasFeature: function(feature) {
-        return features.contains(feature);
+        //return this.features.contains(feature);
+        return Ext.Array.contains(this.features, feature);
     },
 
     /**
@@ -407,10 +408,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
     insertSequenceManger: function(sequenceManger, position, quiet) {
         var i, evt, insertFeature;
 
-        needsRecalculateComplementSequence = true;
-        needsRecalculateReverseComplementSequence = true;
+        this.needsRecalculateComplementSequence = true;
+        this.needsRecalculateReverseComplementSequence = true;
 
-        if(!quiet && !manualUpdateStarted) {
+        if(!quiet && !this.manualUpdateStarted) {
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -418,11 +419,11 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        insertSequence(sequenceManagers.sequence, position, true);
-        for (var i=0; i<sequenceManager.features.length; i++) {
-            //insertFeature = sequenceManager.features[i].clone();
+        this.insertSequence(sequenceManagers.getSequence(), position, true);
+        for (var i=0; i<sequenceManager.getFeatures().length; i++) {
+            insertFeature = sequenceManager.getFeatures()[i].clone();
             insertFeature.shift(position, sequence.length, circular);
-            addFeature(insertFeature, true);
+            this.addFeature(insertFeature, true);
         }
         if(!quiet && !manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
@@ -443,15 +444,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
     insertSequence: function(insertSequence, position, quiet) {
-        var i, evt, lengthBefore, insertSequenceLength, feature;
+        var i, lengthBefore, insertSequence, insertSequenceLength, feature;
 
-        if (position < 0 || position > sequence.length || insertSequence.length < 1 ) {
+        if (position < 0 || position > this.sequence.length || insertSequence.length < 1 ) {
             return null;
         }
-        needsRecalculateComplementSequence        = true;
-        needsRecalculateReverseComplementSequence = true;
+        this.needsRecalculateComplementSequence        = true;
+        this.needsRecalculateReverseComplementSequence = true;
 
-        if(!quiet && !manualUpdateStarted) {
+        if(!quiet && !this.manualUpdateStarted) {
             // evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -459,13 +460,23 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        lengthBefore = sequence.length;
-        sequence.insertSymbols(position, insertSequence);
-        insertSequenceLength = insertSequence.length;
 
-        for (var i=0; i<features.length; i++) {
-            //feature
+        lengthBefore = this.sequence.length;
+        insertSequenceLength = insertSequence.getSymbolsLength();
+
+        console.log(this.sequence.toString() + ":" + insertSequenceLength);        
+        this.sequence.insertSymbols(position, insertSequence.getSymbols()[0]);
+        console.log(this.sequence.toString() + ":" + insertSequenceLength);
+
+        for (var i=0; i < this.features.length; i++) {
+            feature = this.features[i];
+            console.log(feature.getStart() + ":" + feature.getEnd());
+            this.features[i].insertAt(position, insertSequenceLength, lengthBefore, this.circular);
+            console.log(feature.getStart() + ":" + feature.getEnd());
         } 
+        if(!quiet && !this.manualUpdateStarted) {
+            //SEQUENCE_CHANGED
+        }
     },
 
     /**
