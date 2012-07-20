@@ -127,7 +127,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 clonedFeatures.push(this.features[i].clone());
             }
         }
-        var seq = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.seqString());
+        var seq = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.toString());
         //
         return Ext.create("Teselagen.manager.SequenceManagerMemento", {
             name:     this.name,
@@ -212,8 +212,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Was subSequenceProvider
      */
     subSequenceManager: function(start, end) {
-        sequence = this.sequence;
-        features = this.features;
+        var sequence = this.sequence;
+        var features = this.features;
         var featuredSubSequence = null; //SequenceManger
 
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
@@ -222,33 +222,35 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         var featuredSubSymbolList = this.subSequence(start, end); //SymbolList
 
-        var subFeatures = {}; // ArrayCollection?
+        var subFeatures = []; // ArrayCollection?
 
+        console.log(start + ":" + end + ":" + features.length);
 
-        for (var i=0; i > features.length; i++) {
+        for (var i=0; i < features.length; i++) {
             var feature = features[i]; //Feature
+            console.log(start + ":" + end + ":" + feature.getStart() + ":" + feature.getEnd());
 
-            if ( start < end && feature.start < end ) { // only do this when the end is after the start
-                if ( start <= feature.start && end >= feature.end ) { //
+            if ( start < end && feature.getStart() < end ) { // only do this when the end is after the start
+                if ( start <= feature.getStart() && end >= feature.end ) { // When the 
                     var clonedFeature1 = feature.clone();
                     clonedFeature1.shift(-start, sequence.length, circular);
-                    subfeatures.addItem(clonedFeature1);
+                    subfeatures.push(clonedFeature1);
                 }
-            } else if ( start > end && feature.start >=feature.end) {
-                if ( start <= feature.start && end >= feature.end) {
+            } else if ( start > end && feature.getStart() >= feature.getEnd()) {
+                if ( start <= feature.getStart() && end >= feature.getEnd()) {
                     var clonedFeature2 = feature.clone();
                     clonedFeature2.shift(-start, sequence.length, circular);
-                    subFeatures.addItem(clonedFeature2);
+                    subFeatures.push(clonedFeature2);
                 }
-            } else if (start > end && feature.start <= feature.end) {
-                if ( start <= feature.start ) {
+            } else if (start > end && feature.getStart() <= feature.getEnd()) {
+                if ( start <= feature.getStart() ) {
                     var clonedFeature3 = feature.clone();
                     clonedFeature3.shift(-start, sequence.length, circular);
-                    subFeatures.addItem(clonedFeature3);
-                } else if ( end > feature.end ) {
+                    subFeatures.push(clonedFeature3);
+                } else if ( end > feature.getEnd() ) {
                     var clonedFeature4 = feature.clone();
                     clonedFeature4.shift(-start, sequence.length, circular);
-                    subFeatures.addItem(clonedFeature4);
+                    subFeatures.push(clonedFeature4);
                 }
             }
         }

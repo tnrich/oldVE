@@ -16,20 +16,32 @@ Ext.onReady(function() {
 
 
         describe("Init SequenceManager.js", function() {
-            var seq, feat1, sm;
+            var seq, feat1, feat2, sm;
 
             beforeEach(function() {
                 seq = Teselagen.bio.sequence.DNATools.createDNA("GATTACA");
                 feat1   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
-                    name: "lacZalpha",
-                    start: 10,
-                    end: 20,
+                    name: "feat1",
+                    start: 1,
+                    end: 2,
+                    _type: "CDS",
+                    strand: 1,
+                    notes: null
+                });
+                //feat1.getLocations().push(Ext.create("Teselagen.bio.sequence.common.Location", {start:1, end:2}));
+                //console.log(feat1.getLocations());
+
+
+                feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                    name: "feat2",
+                    start: 4,
+                    end: 5,
                     _type: "CDS",
                     strand: -1,
                     notes: null
                 });
-                feat1.getLocations().push(Ext.create("Teselagen.bio.sequence.common.Location", {start:25, end:30}));
-                
+
+
                 sm  = Ext.create("Teselagen.manager.SequenceManager", {
                     name: "test",
                     circular: true,
@@ -41,8 +53,9 @@ Ext.onReady(function() {
             it("Init?",function(){
                 expect(sm.getName()).toBe("test");
                 expect(sm.getCircular()).toBeTruthy();
-                expect(sm.getSequence().seqString().toUpperCase()).toBe("GATTACA");
-                expect(sm.getFeatures()[0].getName()).toBe("lacZalpha");
+                expect(sm.getSequence().toString().toUpperCase()).toBe("GATTACA");
+                expect(sm.getFeatures().length).toBe(1);
+                expect(sm.getFeatures()[0].getName()).toBe("feat1");
                 expect(sm.getManualUpdateStarted()).toBeFalsy();
 
             });
@@ -58,7 +71,7 @@ Ext.onReady(function() {
             it("setSequence() ",function(){
                 var seq2 = Teselagen.bio.sequence.DNATools.createDNA("GATTACAGATTACA"); 
                 sm.setSequence(seq2 );
-                expect(sm.getSequence().seqString().toUpperCase()).toBe("GATTACAGATTACA");
+                expect(sm.getSequence().toString().toUpperCase()).toBe("GATTACAGATTACA");
             });
 
             it("getManualUpdateStarted(), manualUpdateStarted(), manualUpdateEnded()",function(){
@@ -74,7 +87,7 @@ Ext.onReady(function() {
                 var sm2 = sm.createMemento();
                 expect(sm2.getName()).toBe(sm.getName());
                 expect(sm2.getFeatures().length).toBe(1);
-                expect(sm2.getFeatures()[0].getName()).toBe("lacZalpha");
+                expect(sm2.getFeatures()[0].getName()).toBe("feat1");
             });
 
             it("setMemento()",function(){
@@ -95,14 +108,14 @@ Ext.onReady(function() {
                 var tmp = sm.getComplementSequence();
                 //console.log(tmp.getSymbolsLength());
                 expect(tmp.getSymbolsLength()).toBe("GATTACA".length);
-                expect(tmp.seqString()).toBe("ctaatgt");
+                expect(tmp.toString()).toBe("ctaatgt");
             });
 
             it("getReverseComplementSequence()",function(){
                 var tmp = sm.getReverseComplementSequence();
                 //console.log(tmp.getSymbolsLength());
                 expect(tmp.getSymbolsLength()).toBe("GATTACA".length);
-                expect(tmp.seqString()).toBe("tgtaatc");
+                expect(tmp.toString()).toBe("tgtaatc");
             });           
 
             it("subSequence()",function(){
@@ -112,21 +125,43 @@ Ext.onReady(function() {
                 expect(tmp).toBeFalsy();
                 // start > end
                 tmp = sm.subSequence(0,2);
-                expect(tmp.seqString()).toBe("ga"); // NOT SURE TRUE ANSWER
+                expect(tmp.toString()).toBe("ga"); // NOT SURE TRUE ANSWER
+                tmp = sm.subSequence(1,2);
+                console.log(tmp.toString());  // ta of gattaca
+                //expect(tmp.toString()).toBe("ga"); // NOT SURE TRUE ANSWER
                 // start => end
-                tmp = sm.subSequence(3,2);
-                expect(tmp.seqString()).toBe("gat"); // NOT SURE TRUE ANSWER
+                tmp = sm.subSequence(3,1);
+                expect(tmp.toString()).toBe("gat"); // atta NOT SURE TRUE ANSWER
             });
 
             it("subSequenceManager()",function(){
-                var tmp = sm.subSequenceManager(0, 2);
+                var tmp = sm.subSequenceManager(0, 4);
+                console.log(feat1.getName());
                 console.log(tmp.getSequence().toString());
+                expect(sm.getFeatures().length).toBe(1);
+                console.log(tmp.getFeatures().length);
+                console.log(tmp.getCircular());
             });
 
-            it("",function(){
+            it("addFeature()",function(){
+                expect(false).toBeFalsy();
+            });
+
+            t("",function(){
+                expect(false).toBeFalsy();
+            });
+
+            t("",function(){
+                expect(false).toBeFalsy();
+            });
+
+            t("",function(){
                 expect(false).toBeFalsy();
             });
         });
+
+
+
 
 
 
