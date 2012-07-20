@@ -9,7 +9,8 @@
     "userConfig": {
         "views": [
             "AppViewport",
-            "FileImportWindow"
+            "FileImportWindow",
+            "SimulateDigestionWindow"
         ],
         "autoCreateViewport": true,
         "name": "MyApp",

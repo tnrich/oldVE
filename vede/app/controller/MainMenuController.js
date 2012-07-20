@@ -43,6 +43,12 @@ Ext.define('Vede.controller.MainMenuController', {
 
     },
 
+        onSimulateDigestionMenuItemClick: function(item, e, options) {
+        console.log("called");
+        Ext.create("Vede.view.SimulateDigestionWindow").show();
+    },
+
+
     init: function() {
         this.control({
             "button[text=Cancel]": {
@@ -56,6 +62,10 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#featuresMenuItem": {
                 checkchange: this.onFeaturesMenuItemCheckChange
+            },
+
+                    "#simulateDigestionMenuItem": {
+                click: this.onSimulateDigestionMenuItemClick
             }
         });
 

@@ -1,7 +1,7 @@
 {
     "name": "vesa",
     "settings": {
-        "urlPrefix": "http://localhost/~ybendana/vesa",
+        "urlPrefix": "http://localhost/teselagen/ve/vesa/app.html",
         "spacesToIndent": 4,
         "codeGenFormat": "Class",
         "exportPath": "",
@@ -59,6 +59,14 @@
                 "app/controller/VectorPanelController.js"
             ],
             "className": "VectorPanelController"
+        },
+        "435687d5-4dc4-474f-81d9-f799dcf736fb": {
+            "paths": [
+                "metadata/view/SimulateDigestionWindow",
+                "app/view/override/SimulateDigestionWindow.js",
+                "app/view/SimulateDigestionWindow.js"
+            ],
+            "className": "SimulateDigestionWindow"
         }
     },
     "expandedState": {

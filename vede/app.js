@@ -12,7 +12,8 @@ Ext.application({
     name: 'Vede',
     views: [
         'AppViewport',
-        'FileImportWindow'
+        'FileImportWindow',
+        'SimulateDigestionWindow'
     ],
     controllers: [
         'AnnotatePanelController',
@@ -32,6 +33,6 @@ Ext.application({
 
 // Handle errors that are not thrown using Ext.Error
 window.onerror = function(pMsg) {
-    console.warn("Caught error: " + pMsg);
+    //console.warn("Caught error: " + pMsg);
     return true;
 }

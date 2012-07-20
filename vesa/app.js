@@ -24,7 +24,8 @@ Ext.Loader.setConfig({
 Ext.application({
     views: [
         'AppViewport',
-        'FileImportWindow'
+        'FileImportWindow',
+        'SimulateDigestionWindow'
     ],
     autoCreateViewport: true,
     name: 'MyApp',

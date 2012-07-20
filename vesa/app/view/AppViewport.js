@@ -282,7 +282,14 @@ Ext.define('MyApp.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Simulate Digestion'
+                                                id: 'simulateDigestionMenuItem',
+                                                text: 'Simulate Digestion',
+                                                listeners: {
+                                                    click: {
+                                                        fn: me.onMenuitemClick,
+                                                        scope: me
+                                                    }
+                                                }
                                             },
                                             {
                                                 xtype: 'menuitem',
@@ -507,6 +514,10 @@ Ext.define('MyApp.view.AppViewport', {
         });
 
         me.callParent(arguments);
+    },
+
+    onMenuitemClick: function(item, e, options) {
+
     }
 
 });

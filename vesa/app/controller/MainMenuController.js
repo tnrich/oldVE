@@ -57,6 +57,10 @@ Ext.define('MyApp.controller.MainMenuController', {
 
     },
 
+    onSimulateDigestionMenuItemClick: function(item, e, options) {
+        Ext.create("MyApp.view.SimulateDigestionWindow").show();
+    },
+
     onControllerClickStub: function() {
 
     },
@@ -74,6 +78,9 @@ Ext.define('MyApp.controller.MainMenuController', {
             },
             "#featuresMenuItem": {
                 checkchange: this.onFeaturesMenuItemCheckChange
+            },
+            "#simulateDigestionMenuItem": {
+                click: this.onSimulateDigestionMenuItemClick
             }
         });
 
