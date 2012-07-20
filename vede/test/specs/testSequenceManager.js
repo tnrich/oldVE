@@ -134,7 +134,7 @@ Ext.onReady(function() {
                 expect(tmp.toString()).toBe("gat"); // atta NOT SURE TRUE ANSWER
             });
 
-            it("subSequenceManager()",function(){
+            it("subSequenceManager() THIS IS NOT COMPLETE",function(){
                 var tmp = sm.subSequenceManager(0, 4);
                 console.log(feat1.getName());
                 console.log(tmp.getSequence().toString());
@@ -144,18 +144,30 @@ Ext.onReady(function() {
             });
 
             it("addFeature()",function(){
+                sm.addFeature(feat2, false);
+                expect(sm.getFeatures().length).toBe(2);
+                expect(sm.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm.getFeatures()[1].getName()).toBe("feat2");
+                //CHECK FOR EVENT HANDLING
+            });
+            it("addFeatures()",function(){
+                sm.addFeatures([feat2, feat1], false);
+                expect(sm.getFeatures().length).toBe(3);
+                expect(sm.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm.getFeatures()[1].getName()).toBe("feat2");
+                expect(sm.getFeatures()[3].getName()).toBe("feat1");
+                //CHECK FOR EVENT HANDLING
+            });
+
+            it("",function(){
                 expect(false).toBeFalsy();
             });
 
-            t("",function(){
+            it("",function(){
                 expect(false).toBeFalsy();
             });
 
-            t("",function(){
-                expect(false).toBeFalsy();
-            });
-
-            t("",function(){
+            it("",function(){
                 expect(false).toBeFalsy();
             });
         });

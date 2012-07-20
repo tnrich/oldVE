@@ -271,7 +271,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
     addFeature: function(feature, quiet) {
         var evt;
 
-        if (!quiet && !manualUpdateStarted) {
+        if (!quiet && !this.manualUpdateStarted) {
+            console.log("launch sequence changing, kind feature add: createMemento");
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -279,9 +280,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        features.addItem(feature);
+        this.features.push(feature);
 
-        if (!quiet && !manualUpdateStarted) {
+        if (!quiet && !this.manualUpdateStarted) {
+            console.log("launch sequence changing, kind feature add: feature");
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -301,7 +303,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         if ( !featuresToAdd || featuresToAdd.length === 0) {
             return null; //? null?
         }
-        if ( !quiet && !manualUpdateStarted) {
+        if ( !quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -310,9 +312,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //dispatcher.dispatchEvent(evt)
         }
         for (var i=0; i<featuresToAdd.length; i++) {
-            addFeature(featuresToAdd[i], true);
+            this.addFeature(featuresToAdd[i], true);
         }
-        if (!quiet && !manualUpdateStarted) {
+        if (!quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
