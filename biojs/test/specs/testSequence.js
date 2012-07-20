@@ -671,8 +671,14 @@ describe("Testing Sequence related classes ", function() {
             });
             
             it(".insertSymbols works", function(){
-                symbolList.insertSymbols(0, ["test3"]);
+                symbolList.insertSymbols(1, ["test3"]);
                 expect(symbolList.getSymbols()).toContain("test3");
+                console.log(symbolList.getSymbols()[1]);
+
+                console.log(symbolList.getSymbols());
+                symbolList.insertSymbols(2, ["test3", "test4"]);
+                console.log(symbolList.getSymbols()[2]);
+                console.log(symbolList.getSymbols()[3]);
 
             });
 
