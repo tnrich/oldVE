@@ -46,9 +46,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		var newSymbol = this.dnaToRNATranslationTable[pSymbol.getValue()] || null;
 
 		if (newSymbol == null) {
-			throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
-				message: "Illegal symbol"
-			});
+			Teselagen.bio.sequence.symbols.IllegalSymbolException.raiseException("Failed to find complement for symbol '" + symbol.value + ".'");
 		};
 
 		return newSymbol;
@@ -96,9 +94,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 		var newSymbol = this.rnaToDNATranslationTable[pSymbol.getValue()] || null;
 
 		if (newSymbol == null) {
-			throw Ext.create("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
-				message: "Illegal symbol"
-			});
+			Teselagen.bio.sequence.symbols.IllegalSymbolException.raiseException("Failed to find complement for symbol '" + symbol.value + ".'");
 		};
 
 		return newSymbol;
