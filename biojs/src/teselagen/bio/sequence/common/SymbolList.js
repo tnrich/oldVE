@@ -151,12 +151,14 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		}
 
 		/**
-		 * Inserts a symbol list
+		 * Inserts a symbol list at a position (using non-zero-based  cardinal index) 
 		 * @param  {Integer} pPosition   The position the symbols should be inserted at
 		 * @param  {Array <Symbols>} pNewSymbols The symbols to be added
 		 */
 		this.insertSymbols = function (pPosition, pNewSymbols){
-			symbols.splice(pPosition, 0, pNewSymbols);
+			var beforeInsert= symbols.slice(0, pPosition);
+			var afterInsert = symbols.slice(pPosition);
+			symbols = beforeInsert.concat(pNewSymbols).concat(afterInsert);
 		}
 
 		/**
