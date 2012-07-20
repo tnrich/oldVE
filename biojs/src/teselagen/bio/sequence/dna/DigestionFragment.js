@@ -26,10 +26,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 			var startRE = inData.startRE || null;
 			var endRE = inData.endRE || null;
 		} else {
-			var BioException = Ext.create("Teselagen.bio.BioException", {
-				message: "Arguments needed"
-			});
-			BioException.raiseException();
+			Teselagen.bio.BioException.raiseException("Arguments needed");
 		}
 
 		/**

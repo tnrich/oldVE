@@ -45,7 +45,10 @@ Ext.define('Vede.controller.MainMenuController', {
 
         onSimulateDigestionMenuItemClick: function(item, e, options) {
         console.log("called");
-        Ext.create("Vede.view.SimulateDigestionWindow").show();
+        var simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
+        simulateDigestionWindow.show();
+        simulateDigestionWindow.center();
+
     },
 
 

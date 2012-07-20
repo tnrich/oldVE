@@ -4,7 +4,7 @@
     * @author Micah Lerner
     */
 Ext.define("Teselagen.bio.sequence.symbols.IllegalSymbolException", {
-
+    extend: 'Ext.error',
     message: null,
     statics: {
         raiseException: function(pInput) {

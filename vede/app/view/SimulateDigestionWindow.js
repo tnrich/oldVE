@@ -22,10 +22,12 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
     extend: 'Ext.window.Window',
 
     height: 500,
-    width: 1000,
+    width: 900,
     resizable: false,
     title: 'Gel Digest',
-
+    id: "simulateDigestionWindow",
+    resizable: false,
+    modal: true,
     initComponent: function() {
         var me = this;
 
@@ -33,8 +35,8 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
             dockedItems: [
                 {
                     xtype: 'container',
-                    height: 654,
-                    width: 206,
+                    height: 650,
+                    width: 200,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
@@ -43,6 +45,7 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     items: [
                         {
                             xtype: 'panel',
+                            width: 200,
                             layout: {
                                 type: 'absolute'
                             },
@@ -58,14 +61,16 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                                 },
                                 {
                                     xtype: 'textfield',
-                                    width: 280,
+                                    width: 180,
                                     fieldLabel: 'Label',
-                                    x: -96,
+                                    hideLabel: true,
+                                    x: 10,
                                     y: 40
                                 },
                                 {
                                     xtype: 'fieldset',
-                                    height: 510,
+                                    height: 380,
+                                    width: 200,
                                     title: '',
                                     x: 0,
                                     y: 70
@@ -123,12 +128,13 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     width: 195,
                     title: 'Active Enzymes',
                     dock: 'left'
-                },
+                },/*
                 {
                     xtype: 'splitter',
                     dock: 'left'
-                }
+                }*/
             ],
+            
             items: [
                 {
                     xtype: 'panel',
@@ -152,16 +158,10 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                             items: [
                                 {
                                     xtype: 'container',
-                                    height: 200,
-                                    layout: {
-                                        align: 'stretch',
-                                        type: 'hbox'
-                                    },
                                     flex: 1
                                 },
                                 {
                                     xtype: 'container',
-                                    height: 412,
                                     flex: 1
                                 }
                             ]

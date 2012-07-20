@@ -1,5 +1,5 @@
 Ext.define("Teselagen.bio.BioException", {
-
+    extend: 'Ext.error',
     message: null,
     statics: {
         raiseException: function(pInput) {

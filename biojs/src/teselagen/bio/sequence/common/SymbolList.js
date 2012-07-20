@@ -100,7 +100,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 * @return {SymbolList}        a spliced array of symbols
 		 */
 		this.subList = function(pStart, pEnd){
-			var subSymbols = symbols.splice(pStart, pEnd);
+			var subSymbols = symbols.slice(pStart, pEnd);
 
 			return Ext.create("Teselagen.bio.sequence.common.SymbolList", {
 				symbols: subSymbols,
