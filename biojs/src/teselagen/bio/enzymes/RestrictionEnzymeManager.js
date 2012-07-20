@@ -11,8 +11,6 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
     
     singleton: true,
 
-    BASE_URL: "http://dhcp-169-230-22-252.compbio.ucsf.edu/~nelsbree/",
-    
     commonRestrictionEnzymes: null,
     rebaseRestrictionEnzymes: null,
     
@@ -25,7 +23,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.commonRestrictionEnzymes;
         }
         
-        this.commonRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "biojs/src/teselagen/bio/enzymes/assets/common.xml");
+        this.commonRestrictionEnzymes = this.getEnzymes("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
         return this.commonRestrictionEnzymes;
     },
     
@@ -38,7 +36,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.rebaseRestrictionEnzymes;
         }
         
-        this.rebaseRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "biojs/src/teselagen/bio/enzymes/assets/rebase.xml");
+        this.rebaseRestrictionEnzymes = this.getEnzymes("/biojs/src/teselagen/bio/enzymes/assets/rebase.xml");
         return this.rebaseRestrictionEnzymes;
     },
 
