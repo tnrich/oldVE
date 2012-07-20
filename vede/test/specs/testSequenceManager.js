@@ -91,13 +91,41 @@ Ext.onReady(function() {
 
             });
 
-            
+            it("getComplementSequence()",function(){
+                var tmp = sm.getComplementSequence();
+                //console.log(tmp.getSymbolsLength());
+                expect(tmp.getSymbolsLength()).toBe("GATTACA".length);
+                expect(tmp.seqString()).toBe("ctaatgt");
+            });
+
+            it("getReverseComplementSequence()",function(){
+                var tmp = sm.getReverseComplementSequence();
+                //console.log(tmp.getSymbolsLength());
+                expect(tmp.getSymbolsLength()).toBe("GATTACA".length);
+                expect(tmp.seqString()).toBe("tgtaatc");
+            });           
+
+            it("subSequence()",function(){
+                var tmp;
+                //null;
+                tmp = sm.subSequence(-1,-2);
+                expect(tmp).toBeFalsy();
+                // start > end
+                tmp = sm.subSequence(0,2);
+                expect(tmp.seqString()).toBe("ga"); // NOT SURE TRUE ANSWER
+                // start => end
+                tmp = sm.subSequence(3,2);
+                expect(tmp.seqString()).toBe("gat"); // NOT SURE TRUE ANSWER
+            });
+
+            it("subSequenceManager()",function(){
+                var tmp = sm.subSequenceManager(0, 2);
+                console.log(tmp.getSequence().toString());
+            });
 
             it("",function(){
                 expect(false).toBeFalsy();
             });
-
-
         });
 
 
@@ -113,7 +141,7 @@ Ext.onReady(function() {
             beforeEach(function() {
                 seqStr  = "tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc"; //64bp
                 seq     = Teselagen.bio.sequence.DNATools.createDNA(seqStr);
-                console.log(seqStr);
+                //console.log(seqStr);
 
                 feat1   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                     name: "lacZalpha",
@@ -123,9 +151,9 @@ Ext.onReady(function() {
                     strand: -1,
                     notes: null
                 });
-                console.log(feat1.getLocations().length);
+                //console.log(feat1.getLocations().length);
                 feat1.getLocations().push(Ext.create("Teselagen.bio.sequence.common.Location", {start:25, end:30}));
-                console.log(feat1.getLocations().length);
+                //console.log(feat1.getLocations().length);
 
                 feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                     name: "cds2",
@@ -135,10 +163,10 @@ Ext.onReady(function() {
                     strand: 1,
                     notes: null
                 });
-                console.log(feat2.getLocations().length);
+                //console.log(feat2.getLocations().length);
                 tmp = Ext.create("Teselagen.bio.sequence.common.Location", {start:55, end:5});
                 feat2.getLocations().push(tmp);
-                console.log(feat2.getLocations().length);
+                //console.log(feat2.getLocations().length);
 
                 sm      = Ext.create("Teselagen.manager.SequenceManager", {
                     name: "test",
@@ -146,11 +174,10 @@ Ext.onReady(function() {
                     sequence: seq,
                     features: [feat1, feat2]
                 });
-                console.log(sm);
-                
-
+                //console.log(sm);
 
             });
+
             it("Check Setup",function(){
                 expect(sm.getName()).toBe("test");
                 expect(sm.getCircular()).toBeTruthy();

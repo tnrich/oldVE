@@ -11,7 +11,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     requires: ["Teselagen.bio.sequence.common.Location",
         "Teselagen.bio.sequence.common.SymbolList",
-        "Teselagen.manager.SequenceManagerEvent"
+        "Teselagen.manager.SequenceManagerEvent",
+        "Teselagen.bio.sequence.DNATools"
     ],
     /**
      * @cfg {Object} config
@@ -32,7 +33,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         needsRecalculateReverseComplementSequence: true
     },
 
-    DNATools: Teselagen.bio.sequence.DNATools,
+    DNATools: null,
     updateSequenceChanged: null, //     Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
     //updateSequenceChanging:     Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGING,
     //updateKindFeatureAdd:       Teselagen.manager.SequenceManagerEvent.KIND_FEATURE_ADD,
@@ -53,8 +54,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * @param {String} name
      * @param {Boolean} circular
-     * @param {String} sequence
-     * @param {Feature]} features
+     * @param {Teselagen.bio.sequence.common.SymbolList} sequence
+     * @param {[Teselagen.bio.sequence.dna.Feature]} features
      * @returns {SequenceManager}
      * @memberOf SequenceManager
      * 
@@ -71,41 +72,53 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
 
         if (inData) {
-            this.name     = inData.name || null;
+            this.name     = inData.name     || null;
             this.circular = inData.circular || false;
             this.sequence = inData.sequence || null;
             this.features = inData.features || [];
         }
-
+        /**
+         * @param {String} name
+         */
         this.self.prototype.setName = function(pName) {
             this.manualUpdateStart();
             this.name = pName;
             this.manualUpdateEnd();
         }
-
+        /**
+         * @param {Boolean} circular
+         */
         this.self.prototype.setCircular = function(pCircular) {
             this.manualUpdateStart();
             this.circular = pCircular;
             this.manualUpdateEnd();
         }
-
+        /**
+         * @param {Teselagen.bio.sequence.common.SymbolList} sequence
+         */
         this.self.prototype.setSequence = function(pSequence) {
             needsRecalculateComplementSequence = true;
             needsRecalculateReverseComplementSequence = true;
             this.sequence = pSequence;
         }
-
+        /**
+         * @param {Teselagen.bio.sequence.dna.Feature} name
+         */
         this.self.prototype.setFeatures = function(pFeatures) {
             this.features = pFeatures;
         }
     },
 
+    /**
+     * @param {Boolean} manualUpdateStarted Manual update event started 
+     */
     getManualUpdateStarted:function() {
         return this.manualUpdateStarted;
     },
 
-    //part of IOriginator Interface
-    // Build in lib/common
+    /**
+     * @returns {Teselagen.manager.SequenceManagerMemento} memento 
+     */
     createMemento: function() {
         var clonedFeatures = [];
 
@@ -124,6 +137,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
         });
     },
 
+    /**
+     * @params {Teselagen.manager.SequenceManagerMemento} memento 
+     */
     setMemento: function(pMemento) {
         var sequenceManagerMemento = pMemento;
 
@@ -152,13 +168,19 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //dispatcher.dispatchEvent(event);
     },
 
+    /**
+     * @returns {Teselagen.bio.sequence.common.SymbolList} complementSequence 
+     */
     getComplementSequence: function() {
-        //updateComplementSequence();
+        this.updateComplementSequence();
         return this.complementSequence;
     },
 
+    /**
+     * @returns {Teselagen.bio.sequence.common.SymbolList} reverseComplementSequence 
+     */
     getReverseComplementSequence: function() {
-        //updateReverseComplementSequence();
+        this.updateReverseComplementSequence();
         return this.reverseComplementSequence;
     },
 
@@ -167,17 +189,17 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Number} start Range start
      * @param {Number} end Range end
      */
-    subSequence: function(start,end) {
-        var result = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
+    subSequence: function(start, end) {
+        var result = null;// = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
 
-        if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
+        if(start < 0 || end < 0 || start > this.sequence.length || end > this.sequence.length) {
             return result;
         }
-
+        //console.log("subsequence");
         if(start > end) {
-            //result = DNATools.createDNA(sequence.subList(start, sequence.length).seqString() + sequence.subList(0, end).seqString());
+            result = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.subList(start, this.sequence.length).seqString() + this.sequence.subList(0, end).seqString());
         } else {
-            //result = sequence.subList(start, end);
+            result = this.sequence.subList(start, end);
         }
 
         return result;
@@ -190,14 +212,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Was subSequenceProvider
      */
     subSequenceManager: function(start, end) {
-
+        sequence = this.sequence;
+        features = this.features;
         var featuredSubSequence = null; //SequenceManger
 
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
             return featuredSubSequence;
         }
 
-        var featuredSubSymbolList = subSequence(start, end); //SymbolList
+        var featuredSubSymbolList = this.subSequence(start, end); //SymbolList
 
         var subFeatures = {}; // ArrayCollection?
 
@@ -232,7 +255,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         featuredSubSequence = Ext.create("Teselagen.manager.SequenceManager", {
             name: "Dummy",
             circular: false,
-            sequence: featuredSubSymbloList,
+            sequence: featuredSubSymbolList,
             features: subFeatures
         });
         return featuredSubSequence;
@@ -508,24 +531,22 @@ Ext.define("Teselagen.manager.SequenceManager", {
      *
      * @private
      */
-    updateComplementSequence: function()
-    {
-        if(needsRecalculateComplementSequence) {
-            complementSequence = DNATools.complement(this.sequence);
+    updateComplementSequence: function() {
+        if(this.needsRecalculateComplementSequence) {
+            this.complementSequence = Teselagen.bio.sequence.DNATools.complement(this.sequence);
 
-            needsRecalculateComplementSequence = false;
+            this.needsRecalculateComplementSequence = false;
         }
     },
     /**
      *
      * @private
      */
-    updateReverseComplementSequence: function()
-    {
-        if(needsRecalculateReverseComplementSequence) {
-            reverseComplementSequence = DNATools.reverseComplement(this.sequence);
+    updateReverseComplementSequence: function() {
+        if(this.needsRecalculateReverseComplementSequence) {
+            this.reverseComplementSequence = Teselagen.bio.sequence.DNATools.reverseComplement(this.sequence);
 
-            needsRecalculateReverseComplementSequence = false;
+            this.needsRecalculateReverseComplementSequence = false;
         }
     },
 
