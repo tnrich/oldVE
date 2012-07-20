@@ -4,7 +4,7 @@
 
 Ext.require("Ext.Ajax");
 Ext.require("Teselagen.bio.util.StringUtil");
-
+Ext.require("Teselagen.bio.parsers.GenbankManager2"); //will be a singleton
 Ext.onReady(function() {
 
     describe("Testing Genbank related classes:", function() {
@@ -61,6 +61,7 @@ Ext.onReady(function() {
 
         describe("Unit Testing: creation of a null Genbank Object.", function() {
             var tmp2 = [];
+
             it("Keyword?",function(){
                 var tmp = Ext.create("Teselagen.bio.parsers.Keyword", {} );
                 expect(tmp.getKeyword()).toBe(null);
@@ -109,7 +110,8 @@ Ext.onReady(function() {
 
         });
         describe("Unit Testing: Creates dummy Genbank Objects directly, tests properties/methods", function() {
-            it("Parses LOCUS 1: circular?",function(){
+
+            it("Creates GenbankManager: This needs to be changed to a singleton***",function(){
                 var line = "\n";
                 var tmp = gbMan.parseGenbankFile(line);
                 expect(tmp.getKeywords().length).toBe(0);
@@ -241,9 +243,11 @@ Ext.onReady(function() {
 
         });
 
-        describe("Unit Testing for private GenbankManager.js ???", function() {
-            it("Test it here",function(){
-                expect(false).toBeFalsy();
+        describe("Unit Testing for private GenbankManager2.js ???", function() {
+            it("GB2?",function(){
+                var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
+                var tmp = Teselagen.bio.parsers.GenbankManager2.parseGenbankFile(line);
+                expect(tmp.findKeyword("LOCUS").getKeyword()).toBe("LOCUS");
             });
         });
 
@@ -359,10 +363,10 @@ Ext.onReady(function() {
 
         describe("Integrative: parseKeyword() & parseSubKeyword() from GenbankManager.js (COMPLEX CASE: lines with runons)", function() {
             it("Parses DEFINITION with 2 lines?",function(){
-                line = 
+                var line = 
                     'DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n ' +
                     '            (AXL2) and Rev7p (REV7) genes, complete cds.';
-                tmp = gbMan.parseGenbankFile(line);
+                var tmp = gbMan.parseGenbankFile(line);
                 expect(tmp.findKeyword("DEFINITION").getValue()).toBe('Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n            (AXL2) and Rev7p (REV7) genes, complete cds.');
                 //expect(tmp.findKeyword("DEFINITION").toString()).toBe(line);
             });
@@ -407,12 +411,15 @@ Ext.onReady(function() {
 
 
         describe("Integrative: parseFeatures(), parseFeatureLocation(), parseFeatureQualifier() from GenbankManager.js from GenbankManager.js (SIMPLE CASE)", function() {
-            var line = 
-                'FEATURES             Location/Qualifiers\n' + 
-                '     CDS             complement(7..885)\n' + 
-                '                     /label="araC"';
-            var tmp = gbMan.parseGenbankFile(line);
+            beforeEach(function() {
+                line = 
+                    'FEATURES             Location/Qualifiers\n' + 
+                    '     CDS             complement(7..885)\n' + 
+                    '                     /label="araC"';
+                tmp = gbMan.parseGenbankFile(line);
+            })
             it("Parses FEATURE & FEATURE ELEMENT?",function(){
+                //console.log(tmp.getLastKeyword());
                 expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
                 expect(tmp.findKeyword("FEATURES").getLastElement().getKeyword()).toBe("CDS");
             });
@@ -543,8 +550,17 @@ Ext.onReady(function() {
             });;
 
         });
+        describe("Integrative: Partial file (top part of pj5_00028.gb) parsing from GenbankManager2.js:?", function() {
+            beforeEach(function() {
+                line = dt.getTopStr();
+                tmp = Teselagen.bio.parsers.GenbankManager2.parseGenbankFile(line);
+                console.log(tmp);
+            });
 
-
+            it("Parses the # of Keywords (in the array) Correctly?",function(){
+                expect(tmp.getKeywords().length).toBe(9);
+            });
+        });
         describe("Opening data files from biojs/data/DATAFILE.gb correctly? Uses AJAX and is asynchronos.", function() {
             var text, tmp;
             it("../data/pj5_00028.gb: correct Locus, # of Keywords, # of Features",function(){

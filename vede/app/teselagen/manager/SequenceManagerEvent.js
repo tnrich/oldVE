@@ -1,4 +1,10 @@
- Ext.define("Teselagen.manager.SequenceManagerEvent", {
+/**
+ *
+ * @author Diana Wong
+ * @author Zinovii Dmytriv (original author of SequenceProviderEvent.as)
+ */
+
+Ext.define("Teselagen.manager.SequenceManagerEvent", {
     singleton: true,
 
     SEQUENCE_CHANGING: "SequenceChanging",
@@ -14,6 +20,10 @@
     KIND_MANUAL_UPDATE: "ManualUpdate",
     KIND_SET_MEMENTO: "SetMemento",
         
-    KIND_INITIALIZED: "SequenceInitialized"
+    KIND_INITIALIZED: "SequenceInitialized",
+
+
+    NEEDS_RECALCULATE_COMPLEMENT_SEQUENCE: "RecalculateComplementSequence",
+    NEEDS_RECALCULATE_REVERSE_COMPLEMENT_SEQUENCE: "RecalculateReverseComplementSequence"
 
 });
