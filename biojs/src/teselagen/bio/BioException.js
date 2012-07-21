@@ -2,9 +2,9 @@ Ext.define("Teselagen.bio.BioException", {
     extend: 'Ext.Error',
     message: null,
     statics: {
-        raiseException: function(pInput) {
+        raise: function(pInput) {
                    var passedMessage = "";
-                   if (typeof pInput == "object"){
+                   if (Ext.isObject(pInput)){
                         passedMessage = pInput.message || "You have an error."
                    } else{
                     passedMessage = pInput;
@@ -15,13 +15,9 @@ Ext.define("Teselagen.bio.BioException", {
     constructor: function(inData){
         var that = this;
         that.message = inData.message || "Default Message";
-        Ext.Error.handle = this.errHandler;  
+        this.callParent([inData]);
     },
 
-
-        throwException: function(pMessage) {
-                   throw new Ext.Error({msg: this.message});
-        },
         
         errHandler:function(pErr) {
             console.warn(pErr);

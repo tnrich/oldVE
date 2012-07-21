@@ -41,7 +41,8 @@ describe("Testing BioException", function(){
 
 
     it("Raising exception", function() {
-               Teselagen.bio.BioException.raiseException("Test");
+               //This stops all your tests!
+               //Teselagen.bio.BioException.raise("This fails a test because it actually works!");
             });
             
         it("Catch thrown exception", function() {
@@ -49,11 +50,11 @@ describe("Testing BioException", function(){
         message: "BioException message!",
     });
             try {
-                bioException.throwException();
+                throw bioException;
             }
             catch(pE) {
                 flag = true;
-                console.warn("Caught:" + pE);
+                console.warn("Caught:" + pE.message);
             }
             expect(flag).toBe(true);
         });

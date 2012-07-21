@@ -19,7 +19,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 			var value = inData.value || "";
 			var quoted = inData.quoted || false;
 		} else {
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 		/**

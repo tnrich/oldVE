@@ -28,7 +28,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 			var notes = inData.notes || null;
 			this.callParent([inData]);
 		} else {
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 		/**

@@ -8,7 +8,7 @@ Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 			features = inData.features;
 			this.callParent([inData]);
 		} else{
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 
@@ -31,7 +31,7 @@ Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 		this.removeFeature = function(pFeature){
 			var index = features.indexOf(pFeature);
 			if (index == -1) {
-				Teselagen.bio.BioException.raiseException("Arguments needed");
+				Teselagen.bio.BioException.raise("Arguments needed");
 			};
 
 			features.splice(index, 1);

@@ -20,7 +20,7 @@
 ]);*/
 Ext.define('Vede.view.SimulateDigestionWindow', {
     extend: 'Ext.window.Window',
-
+    requires: ['Ext.form.Panel', 'Ext.ux.form.MultiSelect', 'Ext.ux.form.ItemSelector'],
     height: 500,
     width: 900,
     resizable: false,
@@ -30,27 +30,25 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
     modal: true,
     initComponent: function() {
         var me = this;
-
-        Ext.applyIf(me, {
+                Ext.applyIf(me, {
             dockedItems: [
                 {
                     xtype: 'container',
-                    height: 650,
-                    width: 200,
+                    height: 470,
+                    width: 500,
                     layout: {
                         align: 'stretch',
-                        type: 'vbox'
+                        type: 'hbox'
                     },
-                    dock: 'left',
                     items: [
                         {
                             xtype: 'panel',
-                            width: 200,
+                            width: 500,
+                            title: 'Enzymes', 
+                            flex: 1,
                             layout: {
                                 type: 'absolute'
-                            },
-                            title: 'Enzymes',
-                            flex: 1,
+                            } ,
                             items: [
                                 {
                                     xtype: 'combobox',
@@ -62,130 +60,101 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                                 {
                                     xtype: 'textfield',
                                     width: 180,
-                                    fieldLabel: 'Label',
+                                    fieldLabel: '',
                                     hideLabel: true,
-                                    x: 10,
-                                    y: 40
+                                    x: 235,
+                                    y: 10
                                 },
                                 {
-                                    xtype: 'fieldset',
-                                    height: 380,
-                                    width: 200,
-                                    title: '',
-                                    x: 0,
-                                    y: 70
+                                   xtype: 'itemselector', 
+                    title: "Enzymes",
+                    height: 400,
+                    width: 420,
+        id: 'itemselector-field',
+                    imagePath: '../../../extjs/examples/ux/css/images/',
+        store: [[123,'One Hundred Twenty Three'],
+                    ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
+                    ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
+        autoShow: true,
+        displayField: 'text',
+        valueField: 'value',
+        value: ['3', '4', '6'],
+        allowBlank: false,
+        msgTarget: 'side',
+        x: 10,
+        y: 40
+                                    
                                 }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    xtype: 'fieldcontainer',
-                    height: 658,
-                    width: 131,
-                    layout: {
-                        type: 'absolute'
-                    },
-                    fieldLabel: '',
-                    dock: 'left',
-                    items: [
-                        {
-                            xtype: 'button',
-                            height: 22,
-                            width: 103,
-                            text: '>',
-                            x: 15,
-                            y: 210
+                            ] 
                         },
+                        
                         {
-                            xtype: 'button',
-                            height: 22,
-                            width: 103,
-                            text: '<',
-                            x: 15,
-                            y: 320
-                        },
-                        {
-                            xtype: 'button',
-                            height: 22,
-                            width: 103,
-                            text: '<<',
-                            x: 15,
-                            y: 345
-                        },
-                        {
-                            xtype: 'button',
-                            height: 22,
-                            width: 103,
-                            text: '>>',
-                            x: 15,
-                            y: 235
-                        }
-                    ]
-                },
-                {
-                    xtype: 'panel',
-                    width: 195,
-                    title: 'Active Enzymes',
-                    dock: 'left'
-                },/*
-                {
-                    xtype: 'splitter',
-                    dock: 'left'
-                }*/
-            ],
-            
-            items: [
-                {
-                    xtype: 'panel',
-                    height: 656,
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    title: 'Simulated Digestion Results',
-                    dockedItems: [
-                        {
-                            xtype: 'container',
-                            height: 600,
-                            width: 460,
+                            xtype: 'panel',
+                            height: 500,
+                            width: 300,
                             layout: {
-                                align: 'stretch',
+                                align: 'middle',
                                 type: 'hbox'
                             },
-                            flex: 10,
+                            dock: 'right',
+                            title: 'Digest Results',
+                            flex: 1,
+                        
+                            dockedItems: [
+                        {
+                            xtype: 'container',
+                            height: 400,
+                            width: 460,
+                            layout: {
+                                align: 'middle',
+                                type: 'hbox'
+                            },
                             dock: 'bottom',
                             items: [
                                 {
                                     xtype: 'container',
+                                    height: 388,
+                                    layout: {
+                                        type: 'absolute'
+                                    },
                                     flex: 1
                                 },
                                 {
                                     xtype: 'container',
+                                    layout: {
+                                        type: 'absolute'
+                                    },
                                     flex: 1
                                 }
                             ]
                         }
                     ],
-                    items: [
+                        
+                       items: [
                         {
                             xtype: 'fieldcontainer',
-                            height: 56,
-                            width: 450,
+                            height: 40,
+                            padding: '10 0 30 10',
+                            width: 400,
                             fieldLabel: '',
                             items: [
                                 {
                                     xtype: 'combobox',
-                                    width: 437,
-                                    fieldLabel: 'Ladder'
+                                    height: 21,
+                                    padding: ' 10 0 0 10',
+                                    width: 327,
+                                    fieldLabel: 'Ladder',
+                                    labelWidth: 50
                                 }
                             ]
+                        }
+                    ] 
+                        //
                         }
                     ]
                 }
             ]
         });
-
         me.callParent(arguments);
     }
 

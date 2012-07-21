@@ -24,10 +24,7 @@ Ext.define("Teselagen.bio.sequence.common.Sequence", {
 				alphabet: inData.symbolList.getAlphabet()
 			}]);
 		} else {
-			var BioException = Ext.create("Teselagen.bio.BioException", {
-				message: "Arguments needed"
-			});
-			BioException.raiseException();
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 		/**
