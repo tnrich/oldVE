@@ -400,12 +400,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Insert another sequence manager at position. This method is used on sequence paste. 
-     * SEQUENCE PASTE?
+     *
      * @param {SequenceManger} sequenceManger SequenceManager to insert
      * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
-    insertSequenceManger: function(sequenceManger, position, quiet) {
+    insertSequenceManager: function(sequenceManager, position, quiet) {
         var i, evt, insertFeature;
 
         this.needsRecalculateComplementSequence = true;
@@ -419,13 +419,17 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        this.insertSequence(sequenceManagers.getSequence(), position, true);
+        console.log(this.getSequence().toString());
+        console.log(sequenceManager.getSequence().toString());
+        this.insertSequence(sequenceManager.getSequence(), position, true);
+        console.log(this.getSequence().toString());
+
         for (var i=0; i<sequenceManager.getFeatures().length; i++) {
             insertFeature = sequenceManager.getFeatures()[i].clone();
-            insertFeature.shift(position, sequence.length, circular);
+            insertFeature.shift(position, this.sequence.length, this.circular);
             this.addFeature(insertFeature, true);
         }
-        if(!quiet && !manualUpdateStarted) {
+        if(!quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -440,11 +444,11 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Insert another sequence at position. This method is used on sequence paste
      * 
      * @param {SymbolList} insertSequence SymbolList to insert
-     * @param {Number} position Position where to insert
+     * @param {Number} position Position where to insert; non-zero based
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
     insertSequence: function(insertSequence, position, quiet) {
-        var i, lengthBefore, insertSequence, insertSequenceLength, feature;
+        var lengthBefore, insertSequence, insertSequenceLength;
 
         if (position < 0 || position > this.sequence.length || insertSequence.length < 1 ) {
             return null;
@@ -464,15 +468,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
         lengthBefore = this.sequence.length;
         insertSequenceLength = insertSequence.getSymbolsLength();
 
-        console.log(this.sequence.toString() + ":" + insertSequenceLength);        
-        this.sequence.insertSymbols(position, insertSequence.getSymbols()[0]);
-        console.log(this.sequence.toString() + ":" + insertSequenceLength);
+        this.sequence.insertSymbols(position, insertSequence.getSymbols());
+        //this.sequence.insertSymbols(position, [insertSequence.getSymbols()[0], insertSequence.getSymbols()[0]]);
+        //console.log(this.sequence.toString() + ":" + insertSequenceLength);
 
         for (var i=0; i < this.features.length; i++) {
-            feature = this.features[i];
-            console.log(feature.getStart() + ":" + feature.getEnd());
             this.features[i].insertAt(position, insertSequenceLength, lengthBefore, this.circular);
-            console.log(feature.getStart() + ":" + feature.getEnd());
         } 
         if(!quiet && !this.manualUpdateStarted) {
             //SEQUENCE_CHANGED
