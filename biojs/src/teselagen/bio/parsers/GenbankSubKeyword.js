@@ -1,9 +1,10 @@
 
 /**
- * GenbankSubKeyword class. 
+ * @class Teselagen.bio.parsers.GenbankSubKeyword class
+ *
  * Stores the information from sub-keyword lines of a Genbank file.
- * These are for subkeywords not defined by {@link GenbankFeatureElements} (Qualifier and Location)
- * and from the main section of the Genbank File (e.g. Source, Authors, etc.)
+ * These are for subkeywords not defined by {@link Teselagen.bio.parsers.GenbankFeatureElements} 
+ * (Qualifier and Location) and from the main section of the Genbank File (e.g. Source, Authors, etc.)
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */

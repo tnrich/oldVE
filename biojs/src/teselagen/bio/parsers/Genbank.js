@@ -1,6 +1,6 @@
 
 /**
- * Genbank. 
+ * @class Teselagen.bio.parsers.Genbank
  * Sets up an empty shell object with Genbank information and methods that is later populated by {@link Teselagen.bio.parsers.GenbankManager#parseGenbankFile}.
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFileModel.js)
@@ -16,12 +16,13 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
     constructor: function () {
         var that = this;
         /**
-         * @property {String[]} keywordTags Array of all the GenbankKeyword names in a Genbank class. 
+         * @property {String} [keywordTags] Array of all the GenbankKeyword names in a Genbank class. 
          * This is redundant since iterating through keywords[i].keyword will regenerate this list.
+         * @deprecated
          */
         var keywordsTag	= [];	// List of Keywords being used
         /**
-         * @property {GenbankKeywords[]} keywords Array of all the GenbankKeyword objects in a Genbank class
+         * @property {GenbankKeywords} [keywords] Array of all the GenbankKeyword objects in a Genbank class
          * (which also includes {@link Teselagen.bio.parsers.GenbankLocusKeyword}, 
          * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}, 
          * {@link Teselagen.bio.parsers.GenbankOriginKeyword} which inherit from 
@@ -34,7 +35,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
         /**
          * Finds and gets Keyword
          * @param {String} key Keyword name. (e.g. "LOCUS", or "ORIGIN")
-         * @return {GenbankKeyword} entry
+         * @return {Teselagen.bio.parsers.GenbankKeyword} entry
          */
         this.self.prototype.findKeyword = function(key) {
             return find(key);
@@ -53,49 +54,50 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
         //THESE DO NOT CHECK FOR NULL VALUES
         /**
          * Same as GB.findKeyword("LOCUS")
-         * @returns {GenbankLocusKeyword}
+         * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
          */
         this.self.prototype.getLocus = function() {
             return find("LOCUS");
         }
         /**
          * Same as GB.addKeyword(GenbankLocusKeyword}
-         * @param {GenbankLocusKeyword} locus
+         * @param {Teselagen.bio.parsers.GenbankLocusKeyword} locus
          */
         this.self.prototype.setLocus = function(pLocus) {
             keywords.push(pLocus);
         }
         /**
          * Same as GB.findKeyword("ORIGIN")
-         * @returns {GenbankOriginKeyword}
+         * @returns {Teselagen.bio.parsers.GenbankOriginKeyword}
          */
         this.self.prototype.getOrigin = function() {
             return find("ORIGIN");
         }
         /**
          * Same as GB.addKeyword(GenbankOriginKeyword}
-         * @param {GenbankOriginKeyword} origin
+         * @param {Teselagen.bio.parsers.GenbankOriginKeyword} origin
          */
         this.self.prototype.setOrigin = function(pOrigin) {
             keywords.push(pOrigin);
         }
         /**
          * Same as GB.findKeyword("FEATURES")
-         * @returns {GenbankFeaturesKeyword}
+         * @returns {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureKeyword]
          */
         this.self.prototype.getFeatures = function() {
             return find("FEATURES");
         }
         /**
          * Same as GB.addKeyword(GenbankFeaturesKeyword}
-         * @param {GenbankFeaturesKeyword} features
+         * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
          */
         this.self.prototype.setFeatures = function(pFeatures) {
             keywords.push(pFeatures);
         }
         /**
          * Gets KeywordsTag
-         * @return {[String]} keywordsTag
+         * @return {String} [keywordsTag]
+         * @deprecated
          */
         this.self.prototype.getKeywordsTag = function() {
             return keywordsTag;
@@ -103,34 +105,35 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
         /**
          * Sets KeywordsTag
          * @param {String} keywordsTag
+         * @deprecated
          */
         this.self.prototype.setKeywordsTag = function(pKeywordsTag) {
             keywordsTag = pKeywordsTag;
         }
         /**
          * Get Keywords, an array
-         * @return {[GenbankKeywords]} keywords:ArrayList
+         * @return {Teselagen.bio.parsers.GenbankKeywords} [keywords:ArrayList]
          */
         this.self.prototype.getKeywords = function() {
             return keywords;
         }
         /**
          * Set Keywords, an array
-         * @param {[GenbankKeywords]} keywords:ArrayList
+         * @param {Teselagen.bio.parsers.GenbankKeywords} [keywords:ArrayList]
          */
         this.self.prototype.setKeywords = function(pKeywords) {
             keywords = pKeywords;
         }
         /**
          * Add a single GenbankKeyword to Genbank.keywords
-         * @param {GenbankKeyword} keyword
+         * @param {Teselagen.bio.parsers.GenbankKeyword} keyword
          */
         this.self.prototype.addKeyword = function(pAddKeyword) {
             keywords.push(pAddKeyword);
         }
         /**
          * Gets the last GenbankKeyword on the Keywords ArrayList
-         * @return {GenbankKeyword}
+         * @return {Teselagen.bio.parsers.GenbankKeyword} keyword
          */
         this.self.prototype.getLastKeyword = function() {
             return keywords[keywords.length-1];

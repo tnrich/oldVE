@@ -1,9 +1,25 @@
 
 /**
- * GenbankLocusKeyword. 
+ * @class Teselagen.bio.parsers.GenbankLocusKeyword
+ *
  * Stores the information from the LOCUS line of a Genbank file. 
- * Same level as {@link GenbankKeyword}, {@link GebankFeaturesKeyword}, and {@link GenbankOriginKeyword}.
+ * Same level as {@link Teselagen.bio.parsers.GenbankKeyword}, 
+ * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}, 
+ * and {@link Teselagen.bio.parsers.GenbankOriginKeyword}.
  * Specifically for parsing the Locus line.
+ * 
+ * When parsing through GenbankManager, the Locus line must be in this order with no white space in each term.
+ * The spaces between the terms (either spaces or tabs or other white space) between terms do not:
+ *      LOCUS <locusName> <sequenceLength> bp <strandType>-<nucleic acid type> <linear/circular> <division code> <date>
+ * 
+ * Sequence Length:     Number of base pairs. Required.
+ * Strand Type:         Single strand (ss) or double strand. Not required
+ * Nucleic Acid Type:   DNA or RNA. Required.
+ * Linear/Circular:     When absent, default is Linear
+ * Division Code:       Three letter, all caps. Not required.
+ * Date:                Date. Not required.      
+ *
+ *
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
