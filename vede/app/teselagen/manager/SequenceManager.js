@@ -480,8 +480,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
     },
 
-    /**
-     * Remove sequence in range
+    /** THIS ONE IS HARD--GET BACK TO THIS LATER
+     * Remove sequence in range.
      * 
      * @param startIndex Range start 
      * @param endIndex Range end 
@@ -510,6 +510,63 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     },
 
+    /**
+     * Get list of features in range
+     * 
+     * @return List of features
+     */
+     featuresByRange: function(start, end) {
+        var result;
+        var features = this.features;
+
+        for (var i=0; i < features.length; i++) {
+            if (start < end) {
+                if (features[i].start < features[i].end) {
+                    if (features[i].start < end  &&  features[i].end > start) {
+                        result.push(features[i]);
+                    }
+                } else {
+                    if (start < features[i].end || end > features[i].start) {
+                        result.push(features[i]);
+                    }
+                } 
+            } else {
+                if (features[i].start <= features[i].end) {
+                    if (features[i].start >= end  &&  features[i].end < start) {
+
+                    } else {
+                        result.push(features[i]);
+                    }
+                } else {
+                    resutl.push(features[i]);
+                }
+            }
+        }
+        return result;
+     },
+
+     /**
+      * Get list of features at position
+      * 
+      * @return List of features
+      */
+    featuresAt: function(position) {
+        var result;
+        var features = this.features;
+
+        for (var i=0; i < features.length; i++) {
+            if (features[i].start <= features[i].end) {
+                if (features[i].start < position  && features[i].end > position) {
+                    result.push(features[i]);
+                }
+            } else {
+                if (features[i].start < position || features[i].end > position) {
+                    result.push(features[i]);
+                }
+            }
+        }
+        return result;
+    },
 
     /**
      * Use this method for manually operate sequence changing state.
@@ -545,6 +602,67 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
+    * Clone sequence provider
+    */
+    clone: function() {
+        var clonedSeq = Teselagen.bio.sequence.DNATools.createDNA(this.getSequence().seqString());
+        var clonedSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
+            name:       this.name,
+            circular:   this.circular,
+            sequence:   clonedSeq
+        });
+        var features = this.features;
+
+        if (features && features.length > 0) {
+            for (var i=0; i < features.length; i++) {
+                clonedSequenceManager.addFeature(features[i], true);
+            }
+        }
+        return clonedSequenceManager;
+    },
+
+    /**
+     * Reverse sequence
+     */
+    reverseSequence: function(inputSequenceManager) {
+        return true;
+    },
+
+    /**
+     * Reverse complement sequence
+     */
+    reverseComplementSequence: function(inputSequenceManager) {
+        return true;
+    },
+
+    /**
+     * Rebase sequence. Rotate sequence to new position.
+     */
+    rebaseSequence: function(inputSequenceManager) {
+        return true;
+    },
+
+    toGenbank: function() {
+        return true;
+    },
+
+
+    fromGenbank: function(genbank) {
+        var result;
+        return result;
+    },
+
+    fromJbeiSeqXml: function(jbeiSeq) {
+        var result;
+        return result;
+    },
+
+    fromFasta: function(fasta) {
+        var result;
+        return result;
+    },
+    
+    /**
      *
      * @private
      */
@@ -565,16 +683,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             this.needsRecalculateReverseComplementSequence = false;
         }
-    },
-
-
-
-    fromGenbank: function(genbank) {
-        var result;
-
-
-        return result;
-
     }
 
 

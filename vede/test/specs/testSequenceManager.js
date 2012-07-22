@@ -199,7 +199,11 @@ Ext.onReady(function() {
             });
 
             it("insertSequenceManager",function(){
-                expect(false).toBeFalsy();
+                // gattaca
+                // 11----- <= where Feat1 of sm is
+                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+
                 seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGGGG");
                 sm2  = Ext.create("Teselagen.manager.SequenceManager", {
                     name: "test2",
@@ -207,38 +211,119 @@ Ext.onReady(function() {
                     sequence: seq2,
                     features: [feat2]
                 });
-                // gggggg
+                // GGGGGG
                 // --22-- <== where Feat2 is
                 expect(sm.getSequence().toString()).toBe("gattaca");
 
-                // gattaca
-                // 11----- <= where Feat1 of sm is
-
                 sm.insertSequenceManager(sm2, 2, false);
 
-                // gaggggggttaca
+                // gaGGGGGGttaca
                 // 11--22------- <=where Feat 1 and Feat 2 are now
                 expect(sm.getSequence().toString()).toBe("gaggggggttaca");
 
                 // Features[0] == feat1
-                expect(sm.getFeatures()[0].getStart()).toBe("x");
-                expect(sm.getFeatures()[0].getEnd()).toBe(6); // gaggg [1,6)
+                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
                 // Features[1] == feat2
-                expect(sm.getFeatures()[1].getStart()).toBe(1);
-                expect(sm.getFeatures()[1].getEnd()).toBe(6); // gaggg [1,6)
-
-
+                expect(sm.getFeatures()[1].getStart()).toBe(5);
+                expect(sm.getFeatures()[1].getEnd()).toBe(7); // gaggg [1,6)
             });
 
-            it("removeSequence",function(){
-                expect(false).toBeFalsy();
+            it("insertSequenceManager v2",function(){
+                // gattaca
+                // 11----- <= where Feat1 of sm is
+                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+
+                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGGGG");
+                sm2  = Ext.create("Teselagen.manager.SequenceManager", {
+                    name: "test2",
+                    circular: true,
+                    sequence: seq2,
+                    features: [feat2]
+                });
+                // GGGGGG
+                // --22-- <== where Feat2 is
+                expect(sm.getSequence().toString()).toBe("gattaca");
+
+                sm.insertSequenceManager(sm2, 1, false); // insert between
+
+                // gGGGGGGattaca
+                // 1--22--1----- <=where Feat 1 and Feat 2 are now
+                expect(sm.getSequence().toString()).toBe("gggggggattaca");
+
+                // Features[0] == feat1
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(8);
+                // Features[1] == feat2
+                expect(sm.getFeatures()[1].getStart()).toBe(4);
+                expect(sm.getFeatures()[1].getEnd()).toBe(6); 
             });
 
-            it("",function(){
-                expect(false).toBeFalsy();
+            it("removeSequence() THIS IS HARD COME BACK LATER",function(){
+                expect(true).toBeFalsy();
             });
 
-            it("",function(){
+            it("featuresByRange() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("featuresAt() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+
+            it("manualUpdateStart()",function(){
+                sm.manualUpdateStart();
+                expect(sm.getManualUpdateStarted()).toBe(true);
+            });
+
+            it("manualUpdateEnd()",function(){
+                sm.manualUpdateEnd();
+                expect(sm.getManualUpdateStarted()).toBe(false);
+            });
+
+            it("clone() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("reverseSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("reverseComplementSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("rebaseSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("toGenbank() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("fromGenbank() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("fromJbeiSeqXml() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("fromFasta() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("updateComplmementSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("updateReverseComplementSeuquence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it(" ",function(){
                 expect(false).toBeFalsy();
             });
 
