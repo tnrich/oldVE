@@ -209,11 +209,11 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Sub sequence manager by range
      * @param {Number} start Range start
      * @param {Number} end Range end
-     * Was subSequenceProvider
      */
     subSequenceManager: function(start, end) {
         var sequence = this.sequence;
         var features = this.features;
+        var circular = this.circular;
         var featuredSubSequence = null; //SequenceManger
 
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
@@ -226,28 +226,32 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         console.log(start + ":" + end + ":" + features.length);
 
+        // see Teselagen.bio.sequence.common.Annotation for the feature.clone() function
+
         for (var i=0; i < features.length; i++) {
             var feature = features[i]; //Feature
-            console.log(start + ":" + end + ":" + feature.getStart() + ":" + feature.getEnd());
+            var featStart = feature.getStart();
+            var featEnd   = feature.getEnd();
+            console.log(start + ":" + end + ":" + featStart + ":" + featEnd);
 
-            if ( start < end && feature.getStart() < end ) { // only do this when the end is after the start
-                if ( start <= feature.getStart() && end >= feature.end ) { // When the 
+            if ( start < end && featStart < featEnd ) {
+                if ( start <= featStart && end >= featEnd ) {
                     var clonedFeature1 = feature.clone();
                     clonedFeature1.shift(-start, sequence.length, circular);
-                    subfeatures.push(clonedFeature1);
+                    subFeatures.push(clonedFeature1);
                 }
-            } else if ( start > end && feature.getStart() >= feature.getEnd()) {
-                if ( start <= feature.getStart() && end >= feature.getEnd()) {
+            } else if ( start > end && featStart >= featEnd) {
+                if ( start <= featStart && end >= featEnd) {
                     var clonedFeature2 = feature.clone();
                     clonedFeature2.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature2);
                 }
-            } else if (start > end && feature.getStart() <= feature.getEnd()) {
-                if ( start <= feature.getStart() ) {
+            } else if (start > end && featStart <= featEnd) {
+                if ( start <= featStart ) {
                     var clonedFeature3 = feature.clone();
                     clonedFeature3.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature3);
-                } else if ( end > feature.getEnd() ) {
+                } else if ( end > featEnd ) {
                     var clonedFeature4 = feature.clone();
                     clonedFeature4.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature4);
@@ -272,7 +276,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var evt;
 
         if (!quiet && !this.manualUpdateStarted) {
-            console.log("launch sequence changing, kind feature add: createMemento");
+            // console.log("launch sequence changing, kind feature add: createMemento");
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -283,7 +287,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.features.push(feature);
 
         if (!quiet && !this.manualUpdateStarted) {
-            console.log("launch sequence changing, kind feature add: feature");
+            // console.log("launch sequence changing, kind feature add: feature");
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -469,6 +473,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         insertSequenceLength = insertSequence.getSymbolsLength();
 
         this.sequence.insertSymbols(position, insertSequence.getSymbols());
+        // for prior to the fix that allows an array to be taken into insertSymbols
         //this.sequence.insertSymbols(position, [insertSequence.getSymbols()[0], insertSequence.getSymbols()[0]]);
         //console.log(this.sequence.toString() + ":" + insertSequenceLength);
 
@@ -481,25 +486,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /** THIS ONE IS HARD--GET BACK TO THIS LATER
+     * TEMP: USING Ext.Error.raise to throw errors for now
      * Remove sequence in range.
      * 
      * @param startIndex Range start 
      * @param endIndex Range end 
      * @param quiet When true not SequenceProviderEvent will be dispatched
      */
-    removeSequence: function(start, end, quiet) {
-        var evt;
+    removeSequence: function(startIndex, endIndex, quiet) {
         var lengthBefore = this.sequence.length;
 
         // impossible cases
-        if (end < 0 || start < 0 || start > lengthBefore || end > lengthBefore || start == end ) {
-            return;
+        if (endIndex < 0 || startIndex < 0 || startIndex > lengthBefore || endIndex > lengthBefore || startIndex == endIndex ) {
+            return null;
         }
 
         needsRecalculateComplementSequence        = true;
         needsRecalculateReverseComplementSequence = true;
 
-        if (!quiet && !manualUpdateStarted) {
+        if (!quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -507,6 +512,343 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
+        var DEBUG_MODE = true;
+
+        var deletions = [];
+        var delLength1, delLength2;
+        var delLengthBetween, delLengthBefore;
+        var lengthBefore2, lengthBefore3;
+        var delLengthOutside, delLengthInside;
+
+        var features = this.features;
+        var sequence = this.sequence;
+        var circular = this.circular;
+        var feature, featStart, featEnd;
+
+        for (var i=0; i < features.length; i++) {
+            var feature = features[i];
+            featStart = feature.getStart();
+            featEnd   = feature.getEnd();
+            console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
+            console.log("remove Info " + startIndex + ":" + endIndex);
+
+            if ( featStart < featEnd ) {
+                // Normal Feature
+                if ( startIndex < endIndex) {
+                    // Normal Selection
+                    normFeatureNormSelection();
+                } else {
+                    // Circular Selection
+                    normalFeatureStartEqMoreEnd();
+                }
+            } else {
+                // Circular Feature
+                if ( startIndex < endIndex) {
+                    // Normal Selection
+                    circFeatureNormSelection();
+                } else {
+                    //Circular Selection
+                    circFeatureCircSelection();
+                }
+            }
+            console.log("New Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
+        }
+
+        for (var d=0; d < deletions.length; d++) {
+            this.removeFeatures(deletions[d], true);
+        }
+
+        if(startIndex > endIndex) {
+            sequence.deleteSymbols(0, endIndex);
+            sequence.deleteSymbols(startIndex - endIndex, lengthBefore - startIndex);
+        } else {
+            var removeSequenceLength = endIndex - startIndex;
+            sequence.deleteSymbols(startIndex, removeSequenceLength);
+        }
+
+
+        
+        if(!quiet && !this.manualUpdateStarted) {
+            //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_SEQUENCE_REMOVE, {position : startIndex, length : length}));
+        }
+
+        // helper functions here 
+
+        function normFeatureNormSelection() {
+            console.log("norm-norm");
+            /* Selection before feature => feature shift left
+             * |-----SSSSSSSSSSSSSSSSSSSSSSSSS--------------------------------------------------------------------|
+             *                                     |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                 */
+            if(startIndex < featStart && endIndex <= featStart) {
+                feature.deleteAt(startIndex, endIndex - startIndex, lengthBefore, circular);
+                //if (DEBUG_MODE) trace("case Fn,Sn 1");
+                if (DEBUG_MODE) console.log("case Fn,Sn 1");
+            }
+            /* Selection after feature => no action
+             * |-------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS------------|
+             *        |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                                              */
+            else if(startIndex >= featEnd) {
+                // if (DEBUG_MODE) trace("case Fn,Sn 2");
+                if (DEBUG_MODE) console.log("case Fn,Sn 2");
+            }
+            /* Selection cover feature => remove feature
+             * |-----------------------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS-----------------------|
+             *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
+            else if(startIndex <= featStart && featEnd <= (endIndex)) {
+                deletions.push(feature);
+                //if (DEBUG_MODE) trace("case Fn,Sn 3");
+                if (DEBUG_MODE) console.log("case Fn,Sn 3");
+            }
+            /* Selection inside feature => resize feature
+             * |-------------------------------------SSSSSSSSSSSSSSSSSSSSSS---------------------------------------|
+             *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
+            else if(((startIndex >= featStart) && ((endIndex) <= featEnd))) {
+                feature.deleteAt(startIndex, endIndex - startIndex, lengthBefore, circular);
+                //if (DEBUG_MODE) trace("case Fn,Sn 4");
+                if (DEBUG_MODE) console.log("case Fn,Sn 4");
+            }
+            /* Selection left overlap feature => shift & resize feature
+             * |-----------------------------SSSSSSSSSSSSSSSSSSSSS------------------------------------------------|
+             *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
+            else if(startIndex < featStart && featStart < (endIndex)) {
+                delLengthOutside = featStart - startIndex;
+                delLengthInside = endIndex - featStart;
+                lengthBefore2 = lengthBefore - (featStart - startIndex);
+                feature.deleteAt(startIndex, delLengthOutside, lengthBefore, circular);
+                feature.deleteAt(featStart, delLengthInside, lengthBefore2, circular);
+                //if (DEBUG_MODE) trace("case Fn,Sn 5");
+                if (DEBUG_MODE) console.log("case Fn,Sn 5");
+            }
+            /* Selection right overlap feature => shift & resize feature
+             * |-------------------------------------------------SSSSSSSSSSSSSSSSSSSSS----------------------------|
+             *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
+            else if(startIndex < featEnd && (endIndex) > featEnd) {
+                feature.deleteAt(startIndex, featEnd - startIndex, lengthBefore, circular);
+                //if (DEBUG_MODE) trace("case Fn,Sn 6");
+                if (DEBUG_MODE) console.log("case Fn,Sn 6");
+            } else {
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + startIndex + ", " + endIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+            }
+        };
+
+        function normFeatureCircSelection() {
+            console.log("norm-circ");
+            /* Selection and feature no overlap => shift left
+             * |SSSSSSSSSSS-------------------------------------------------------------------------SSSSSSSSSSSSSS|
+             *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
+            if(startIndex > featEnd && (endIndex) <= featStart) {
+                feature.shift(-endIndex, lengthBefore, circular); 
+                if (DEBUG_MODE) console.log("case Fn,Sc 1");
+            }
+            /* Selection and feature left partial overlap => cut and shift
+             * |SSSSSSSSSSSSSSSSSSSS----------------------------------------------------------------SSSSSSSSSSSSSS|
+             *             |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                                         */
+            else if(startIndex > featEnd && (endIndex) > featStart && endIndex <= featEnd) {
+                delLengthOutside = featStart;
+                delLengthInside = endIndex - featStart;
+                feature.deleteAt(0, delLengthOutside, lengthBefore, circular); 
+                feature.deleteAt(featStart, delLengthInside, lengthBefore, circular); 
+                if (DEBUG_MODE) console.log("case Fn,Sc 2");
+            }
+            /* Selection and feature right partial overlap => cut and shift
+             * |SSSSSSSSSSSSSSS--------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *                                                       |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|               */
+            else if(startIndex > featStart && startIndex < featEnd && (endIndex) < featStart) {
+                feature.deleteAt(startIndex, featEnd - startIndex, lengthBefore, circular);
+                feature.shift(-endIndex, lengthBefore, circular); 
+                if (DEBUG_MODE) console.log("case Fn,Sc 3");
+            }
+            /* Double selection overlap => cut and shift
+             * |SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS-----------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *                           |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                          */
+            else if(startIndex < featEnd && (endIndex) > featStart) {
+                feature.deleteAt(startIndex, featEnd - startIndex, lengthBefore, circular);
+                feature.deleteAt(featStart, endIndex - featStart, lengthBefore, circular);
+                feature.shift(featStart, lengthBefore, circular);
+                if (DEBUG_MODE) console.log("case Fn,Sc 3");
+            }
+            /* Complete left cover => remove feature
+             * |SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS------------------------------SSSSSSSSSSSSSSSSSSSSS|
+             *             |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                                        */
+            else if(endIndex >= featEnd) {
+                deletions.push(feature);
+                if (DEBUG_MODE) console.log("case Fn,Sc 4");
+            }
+            /* Complete right cover => remove feature
+             * |SSSSSSSSSSS---------------------------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *                                                     |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|               */
+            else if(startIndex <= featStart) {
+                deletions.push(feature);
+                if (DEBUG_MODE) console.log("case Fn,Sc 5");
+            } else {
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + startIndex + ", " + endIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+            }
+        };
+
+        function circFeatureNormSelection() {
+            console.log("circ-norm");
+            /* Selection between feature start and end
+             * |-------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS------------------------------------------|
+             *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            if(startIndex >= featEnd && (endIndex) <= featStart) {
+                feature.deleteAt(startIndex, endIndex - startIndex, lengthBefore, circular);
+                if (DEBUG_MODE) console.log("case Fc,Sn 1");
+            }
+            /* Selection inside feature start
+             * |----------------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS---|
+             *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(startIndex >= featStart) {
+                feature.deleteAt(startIndex, endIndex - startIndex, lengthBefore, circular);
+                if (DEBUG_MODE) console.log("case Fc,Sn 2");
+            }
+            /* Selection inside feature end
+             * |--SSSSSSSSSSSSSSSSSS------------------------------------------------------------------------------|
+             *  FFFFFFFFFFFFFFFFFFFFFFFFF|                                         |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if((endIndex) <= featEnd) {
+                feature.deleteAt(startIndex, endIndex - startIndex, lengthBefore, circular);
+                if (DEBUG_MODE) console.log("case Fc,Sn 3");
+            }
+            /* Selection in feature start
+             * |----------------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS---|
+             *  FFFFFFFFFFFFFFFFFFF|                                                        |FFFFFFFFFFFFFFFFFFFFF  */
+            else if(startIndex >= featEnd && startIndex <= featStart && (endIndex) > featStart) {
+                delLengthBefore = featStart - startIndex;
+                delLengthInside = endIndex - featStart;
+                lengthBefore2 = lengthBefore - delLengthInside;
+                feature.deleteAt(featStart, delLengthInside, lengthBefore, circular);
+                feature.deleteAt(startIndex, delLengthBefore, lengthBefore2, circular);
+
+                if (DEBUG_MODE) console.log("case Fc,Sn 4a");
+                if (DEBUG_MODE) console.log("case Fc,Sn 4b");
+            }
+            /* Selection in feature end
+             * |--SSSSSSSSSSSSSSSSSSSSSSSSSSSSS-------------------------------------------------------------------|
+             *  FFFFFFFFFFFFFFFFFFFFFFFFF|                                         |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(startIndex < featEnd && (endIndex) >= featEnd && (endIndex) <= featStart) {
+                delLengthOutside = endIndex - featEnd;
+                lengthBefore2 = lengthBefore - (featEnd - startIndex);
+                feature.deleteAt(startIndex, featEnd - startIndex, lengthBefore, circular);
+                feature.deleteAt(featEnd, delLengthOutside, lengthBefore2, circular);
+
+                if (DEBUG_MODE) console.log("case Fc,Sn 5a");
+                if (DEBUG_MODE) console.log("case Fc,Sn 5b");
+            }
+            /* Double ends selection
+             * |------------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS---------------------|
+             *  FFFFFFFFFFFFFFFFFFFFFFFFF|                                         |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(startIndex <= featEnd && featStart <= endIndex - 1) {
+                delLengthBetween = featStart - featEnd;
+                delLength1 = featEnd - startIndex;
+                delLength2 = endIndex - featStart;
+
+                feature.deleteAt(startIndex, delLength1, lengthBefore, circular);
+                lengthBefore2 = lengthBefore - delLength1;
+                feature.deleteAt(featEnd, delLengthBetween, lengthBefore2, circular);
+                lengthBefore3 = lengthBefore2 - delLengthBetween;
+                feature.deleteAt(featStart, delLength2, lengthBefore3, circular);
+
+                if(startIndex == 0 && endIndex == lengthBefore) {
+                } else if(endIndex == sequence.length) {
+                    if (DEBUG_MODE) console.log("case Fc,Sn 6a");
+                } else if(startIndex == 0) {
+                    if (DEBUG_MODE) console.log("case Fc,Sn 6b");
+                } else {
+                    if (DEBUG_MODE) console.log("case Fc,Sn 6c");
+                }
+
+            } else {
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + startIndex + ", " + endIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+            }
+        };
+
+        function circFeatureCircSelection() {
+            console.log("circ-circ");
+            /* Selection inside feature
+             * |SSSSSSSSSSSSSSSSS--------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS|
+             *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            if(startIndex > featStart && (endIndex - 1) < featEnd) {
+                if (DEBUG_MODE) console.log("case Fc,Sc 1");
+                delLength1 = endIndex;
+                delLength2 = lengthBefore - startIndex;
+                feature.deleteAt(startIndex, delLength2, lengthBefore, circular);
+                lengthBefore2 = lengthBefore - delLength2;
+                feature.deleteAt(0, delLength1, lengthBefore2, circular);
+            }
+            /* Selection end overlap
+             * |SSSSSSSSSSSSSSSSSSSSSS---------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS|
+             *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(endIndex - 1 >= featEnd && startIndex > featStart && (endIndex - 1) < featStart) {
+                if (DEBUG_MODE) console.log("case Fc,Sc 2");
+                delLength1 = featEnd;
+                delLength2 = lengthBefore - startIndex;
+                delLengthBetween = endIndex - featEnd;
+
+                feature.deleteAt(startIndex, delLength2, lengthBefore, circular);
+                lengthBefore2 = lengthBefore - delLength2;
+                feature.deleteAt(featEnd, delLengthBetween, lengthBefore2, circular);
+                lengthBefore3 = lengthBefore2 - delLengthBetween;
+                feature.deleteAt(0, delLength1, lengthBefore3, circular);
+            }
+            /* Selection start overlap
+             * |SSSSSSSSSSSSSSSSS-----------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(startIndex <= featStart && endIndex < featEnd && startIndex >= featEnd) {
+                if (DEBUG_MODE) console.log("case Fc,Sc 3");
+                delLengthOutside = featStart - startIndex;
+                delLength2 = lengthBefore - featStart;
+                feature.deleteAt(featStart, delLength2, lengthBefore, circular);
+                lengthBefore2 = lengthBefore - delLength2;
+                feature.deleteAt(startIndex, delLengthOutside, lengthBefore2, circular);
+                lengthBefore3 = lengthBefore2 - delLengthOutside;
+                feature.deleteAt(0, endIndex, lengthBefore3, circular);
+            }
+            /* Selection inside feature
+             * |SSSSSSSSSSSSSSSSSSSSSSS-----------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(endIndex >= featEnd && startIndex <= featStart && endIndex <= featStart) {
+                if (DEBUG_MODE) console.log("case Fc,Sc 4");
+                deletions.push(feature);
+            }
+            /* Selection double end right overlap
+             * |SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS----------------------------SSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *  FFFFFFFFFFFFFFFFFFF|             |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(endIndex - 1 >= featStart) {
+                if (DEBUG_MODE) console.log("case Fc,Sc 5");
+                var delLength2a = endIndex - featStart;
+                var delLength2b = lengthBefore - startIndex;
+                delLengthBetween = featStart - featEnd;
+                delLength1 = featEnd;
+
+                feature.deleteAt(0, delLength1, lengthBefore, circular);
+                lengthBefore2 = lengthBefore - delLength1;
+                feature.deleteAt(0, delLengthBetween, lengthBefore2, circular);
+                lengthBefore3 = lengthBefore2 - delLengthBetween;
+                feature.deleteAt(0, delLength2a, lengthBefore3, circular);
+                var lengthBefore4 = lengthBefore3 - delLength2a;
+                feature.deleteAt(lengthBefore4 - delLength2b, delLength2b, lengthBefore4, circular);
+            }
+            /* Selection double end left overlap
+             * |SSSSSSSSSSS---------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS|
+             *  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                        |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
+            else if(startIndex <= featEnd) {
+                if (DEBUG_MODE) console.log("case Fc,Sc 6");
+                var delLength1a = endIndex;
+                var delLength1b = featEnd - startIndex;
+                delLengthBetween = featStart - featEnd;
+
+                delLength2 = lengthBefore - featStart;
+                var newCutStart = startIndex - endIndex;
+                feature.deleteAt(0, delLength1a, lengthBefore, circular);
+                lengthBefore2 = lengthBefore - delLength1a;
+                feature.deleteAt(newCutStart, delLength1b, lengthBefore2, circular);
+                lengthBefore3 = lengthBefore2 - delLength1b;
+                feature.deleteAt(featEnd, lengthBefore3 - featEnd, lengthBefore3, circular);
+
+            }
+            else {
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + startIndex + ", " + endIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+            }
+        };
 
     },
 
