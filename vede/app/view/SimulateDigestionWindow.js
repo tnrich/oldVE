@@ -54,14 +54,34 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                                     xtype: 'combobox',
                                     width: 180,
                                     fieldLabel: '',
+                                    editable: false,
+                                    store: ['Common', 'REBASE', 'Berkeley BioBricks', 
+                                            'MIT BioBricks', 'Fermentas Fast Digest'], //change this store to query database
+                                    value: 'Common',
+                                    listeners: { 
+                                        select: function(combo, record, index){
+                                            var newEnzymeSet = combo.getValue();
+                                            console.log(combo.getValue() + ": okay?");
+                                            var reGroupManager = Ext.create("Teselagen.manager.RestrictionEnzymeGroupManager", {});
+                                            console.log("This far");
+                                            reGroupManager.initialize();
+                                            var newGroup = reGroupManager.groupByName(newEnzymeSet);
+                                            console.log(newGroup.systemGroups);
+                                        }
+                                    },
                                     x: 10,
                                     y: 10
                                 },
                                 {
-                                    xtype: 'textfield',
+                                    xtype: 'combobox',
                                     width: 180,
+                                    hideTrigger: true,
+                                    store: ['AatII', 'Acc65I', 'AccI', 'Not', 'Bam', 'XhoI'], //change this to query database
                                     fieldLabel: '',
                                     hideLabel: true,
+                                    triggerAction: 'query',
+                                    typeAhead: true,
+                                    //disabled: true,
                                     x: 235,
                                     y: 10
                                 },
@@ -71,7 +91,7 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     height: 400,
                     width: 420,
         id: 'itemselector-field',
-                    imagePath: '../../../extjs/examples/ux/css/images/',
+                    imagePath: '../../extjs/examples/ux/css/images/',
         store: [[123,'One Hundred Twenty Three'],
                     ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
                     ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
@@ -112,20 +132,26 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                             dock: 'bottom',
                             items: [
                                 {
-                                    xtype: 'container',
-                                    height: 388,
+                                    xtype: 'panel',
+                                    height: 400,
+                                    width: 400,
                                     layout: {
                                         type: 'absolute'
                                     },
-                                    flex: 1
+                                    flex: 1,
+                                    items: [{
+                                        xtype: 'draw',
+                                        id: 'drawingSurface',
+                                            items: [{
+                                                type: 'rect',
+                                                fill: '#000',
+                                                width: 400,
+                                                height: 400,
+                                                x: 0,
+                                                y: 0
+                                            }]
+                                    }]
                                 },
-                                {
-                                    xtype: 'container',
-                                    layout: {
-                                        type: 'absolute'
-                                    },
-                                    flex: 1
-                                }
                             ]
                         }
                     ],
