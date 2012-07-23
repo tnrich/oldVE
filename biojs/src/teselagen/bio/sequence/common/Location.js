@@ -20,7 +20,7 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 			start = inData.start || 0;
 			end = inData.end || 0;
 		} else {
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		};
 
 		/**

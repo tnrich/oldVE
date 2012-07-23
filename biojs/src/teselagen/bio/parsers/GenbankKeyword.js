@@ -1,8 +1,10 @@
 
 /**
- * GenbankKeyword. 
+ * @class Teselagen.bio.parsers.GenbankKeyword
+ * 
  * Stores information for each keyword in Genbank. 
- * Same level as {@link GebankLocusKeyword}, {@link GenbankFeaturesKeyword}, and {@link GenbankOriginKeyword}.
+ * Same level as {@link Teselagen.bio.parsers.GenbankLocusKeyword}, 
+ * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}, and {@link Teselagen.bio.parsers.GenbankOriginKeyword}.
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
@@ -17,7 +19,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
      * @cfg {Object} config
      * @cfg {String} keyword
      * @cfg {String} value
-     * @cfg {[GenbankSubKeyword]} subKeywords 
+     * @cfg {GenbankSubKeyword} [subKeywords]
      */
     config: {
         //keyword: null,

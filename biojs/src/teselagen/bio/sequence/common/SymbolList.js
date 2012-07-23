@@ -26,7 +26,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 			symbols = inData.symbols || null;
 			alphabet = inData.alphabet || null;
 		} else {
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 		
 		/**
@@ -144,19 +144,22 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		/**
 		 * Deletes a subset of symbols
 		 * @param  {Integer} pStart  A start to the slice
-		 * @param  {Integer} pLength The length of the delete
+		 * @param  {Integer} pLength The length of the delete (how many symbols to delete)
 		 */
 		this.deleteSymbols = function (pStart, pLength) {
 			symbols.splice(pStart, pLength);
 		}
 
 		/**
-		 * Inserts a symbol list
+		 * Inserts a symbol list at a position (using non-zero-based  cardinal index) 
 		 * @param  {Integer} pPosition   The position the symbols should be inserted at
 		 * @param  {Array <Symbols>} pNewSymbols The symbols to be added
 		 */
 		this.insertSymbols = function (pPosition, pNewSymbols){
-			symbols.splice(pPosition, 0, pNewSymbols);
+			// Slices [0, pPosition)
+			var beforeInsert= symbols.slice(0, pPosition);
+			var afterInsert = symbols.slice(pPosition);
+			symbols = beforeInsert.concat(pNewSymbols).concat(afterInsert);
 		}
 
 		/**

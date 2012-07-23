@@ -1,8 +1,11 @@
 
 /**
- * GenbankFeaturesKeyword. 
+ * @class Teselagen.bio.parsers.GenbankFeaturesKeyword
+ *
  * Stores an array of GenbankFeatureElements. Is created when parsing the line "FEATURES" from a Genbank file.
- * Same level as {@link GenbankKeyword}, {@link GebankLocusKeyword}, and {@link GenbankOriginKeyword}.
+ * Same level as {@link Teselagen.bio.parsers.GenbankKeyword}, 
+ * {@link Teselagen.bio.parsers.GenbankLocusKeyword}, 
+ * and {@link Teselagen.bio.parsers.GenbankOriginKeyword}.
  * Simply holds GenbankFeatureElements in an array.
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -26,7 +29,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
          */
         this.keyword = "FEATURES";
         /**
-         *  @property [GenbankFeatureElements] featuresElements
+         *  @property {GenbankFeatureElements} [featuresElements]
          */
         var featuresElements = [];
 
@@ -40,7 +43,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
         }
         /**
          * Set featuresElements
-         * @param {[GenbankFeaturesKeyword]} featuresElements
+         * @param {GenbankFeaturesKeyword} [featuresElements]
          */
         this.setFeaturesElements = function(pFeaturesElements) {
             featuresElements = pFeaturesElements;

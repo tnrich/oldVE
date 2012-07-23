@@ -23,7 +23,7 @@ Ext.onReady(function() {
                 feat1   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                     name: "feat1",
                     start: 1,
-                    end: 2,
+                    end: 3,
                     _type: "CDS",
                     strand: 1,
                     notes: null
@@ -34,7 +34,7 @@ Ext.onReady(function() {
 
                 feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                     name: "feat2",
-                    start: 4,
+                    start: 3,
                     end: 5,
                     _type: "CDS",
                     strand: -1,
@@ -57,7 +57,7 @@ Ext.onReady(function() {
                 expect(sm.getFeatures().length).toBe(1);
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
-                expect(sm.getFeatures()[0].getEnd()).toBe(2);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3);
                 expect(sm.getManualUpdateStarted()).toBeFalsy();
 
             });
@@ -130,8 +130,8 @@ Ext.onReady(function() {
                 expect(tmp.toString()).toBe("ga"); // NOT SURE TRUE ANSWER
                 // start > end
                 tmp = sm.subSequence(1,9);
-                console.log(tmp.toString());  // ta of gattaca
-                expect(tmp.toString()).toBe("a"); // NOT SURE TRUE ANSWER
+                //console.log(tmp.toString());  // ta of gattaca
+                expect(tmp.toString()).toBe("attaca"); // NOT SURE TRUE ANSWER
                 // start => end
                 tmp = sm.subSequence(3,1);
                 expect(tmp.toString()).toBe("gat"); // tacag NOT SURE TRUE ANSWER
@@ -139,11 +139,11 @@ Ext.onReady(function() {
 
             it("subSequenceManager() THIS IS NOT COMPLETE",function(){
                 var tmp = sm.subSequenceManager(0, 4);
-                console.log(feat1.getName());
-                console.log(tmp.getSequence().toString());
+                //console.log(feat1.getName());
+                //console.log(tmp.getSequence().toString());
                 expect(sm.getFeatures().length).toBe(1);
-                console.log(tmp.getFeatures().length);
-                console.log(tmp.getCircular());
+                //console.log(tmp.getFeatures().length);
+                //console.log(tmp.getCircular());
             });
 
             it("addFeature()",function(){
@@ -182,34 +182,148 @@ Ext.onReady(function() {
             });
             it("insertSequence",function() {
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
-                expect(sm.getFeatures()[0].getEnd()).toBe(2);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3);
 
 
                 var insSeq = Teselagen.bio.sequence.DNATools.createDNA("GGG");
-                sm.insertSequence(insSeq, 3, false);
+                sm.insertSequence(insSeq, 2, false);
 
-                expect(sm.getSequence().length).toBe(10);
-                expect(sm.getSequence().toString()).toBe("gatgggtaca");
+                expect(sm.getSequence().getSymbolsLength()).toBe(10);
+                expect(sm.getSequence().toString()).toBe("gagggttaca");
 
                 expect(sm.getFeatures().length).toBe(1);
+
+                // Remember that it is [start, end) where end is noninclusive
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
-                expect(sm.getFeatures()[0].getEnd()).toBe(5);
-                
-
+                expect(sm.getFeatures()[0].getEnd()).toBe(6); // gaggg [1,6)
             });
+
             it("insertSequenceManager",function(){
-                expect(false).toBeFalsy();
+                // gattaca
+                // 11----- <= where Feat1 of sm is
+                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+
+                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGGGG");
+                sm2  = Ext.create("Teselagen.manager.SequenceManager", {
+                    name: "test2",
+                    circular: true,
+                    sequence: seq2,
+                    features: [feat2]
+                });
+                // GGGGGG
+                // --22-- <== where Feat2 is
+                expect(sm.getSequence().toString()).toBe("gattaca");
+
+                sm.insertSequenceManager(sm2, 2, false);
+
+                // gaGGGGGGttaca
+                // 11--22------- <=where Feat 1 and Feat 2 are now
+                expect(sm.getSequence().toString()).toBe("gaggggggttaca");
+
+                // Features[0] == feat1
+                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+                // Features[1] == feat2
+                expect(sm.getFeatures()[1].getStart()).toBe(5);
+                expect(sm.getFeatures()[1].getEnd()).toBe(7); // gaggg [1,6)
             });
 
-            it("",function(){
-                expect(false).toBeFalsy();
+            it("insertSequenceManager v2",function(){
+                // gattaca
+                // 11----- <= where Feat1 of sm is
+                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+
+                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGGGG");
+                sm2  = Ext.create("Teselagen.manager.SequenceManager", {
+                    name: "test2",
+                    circular: true,
+                    sequence: seq2,
+                    features: [feat2]
+                });
+                // GGGGGG
+                // --22-- <== where Feat2 is
+                expect(sm.getSequence().toString()).toBe("gattaca");
+
+                sm.insertSequenceManager(sm2, 1, false); // insert between
+
+                // gGGGGGGattaca
+                // 1--22--1----- <=where Feat 1 and Feat 2 are now
+                expect(sm.getSequence().toString()).toBe("gggggggattaca");
+
+                // Features[0] == feat1
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(8);
+                // Features[1] == feat2
+                expect(sm.getFeatures()[1].getStart()).toBe(4);
+                expect(sm.getFeatures()[1].getEnd()).toBe(6); 
             });
 
-            it("",function(){
-                expect(false).toBeFalsy();
+            it("removeSequence() THIS IS HARD COME BACK LATER",function(){
+                expect(true).toBeFalsy();
             });
 
-            it("",function(){
+            it("featuresByRange() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("featuresAt() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+
+            it("manualUpdateStart()",function(){
+                sm.manualUpdateStart();
+                expect(sm.getManualUpdateStarted()).toBe(true);
+            });
+
+            it("manualUpdateEnd()",function(){
+                sm.manualUpdateEnd();
+                expect(sm.getManualUpdateStarted()).toBe(false);
+            });
+
+            it("clone() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("reverseSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("reverseComplementSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("rebaseSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("toGenbank() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("fromGenbank() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("fromJbeiSeqXml() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("fromFasta() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("updateComplmementSequence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it("updateReverseComplementSeuquence() TEST ME",function(){
+                expect(true).toBeFalsy();
+            });
+
+            it(" ",function(){
                 expect(false).toBeFalsy();
             });
 

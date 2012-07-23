@@ -23,9 +23,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 			value = inData.value
 			threeLettersName = inData.threeLettersName;
 		}else {
-			throw Ext.create("Teselagen.bio.BioException", {
-				message: "Arguments needed"
-			});
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 		/**

@@ -1,6 +1,7 @@
 
 /**
- * GenbankFeatureQualifier. 
+ * @class Teselagen.bio.parsers.GenbankFeatureQualifier
+ *
  * Stores the Feature Qualifier from the Genbank formatted line: '/key="value"'
  * @author Diana Wong
  * @author Timothy Ham (original author)

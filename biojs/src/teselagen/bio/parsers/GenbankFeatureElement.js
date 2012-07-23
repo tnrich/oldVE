@@ -1,11 +1,13 @@
 
 /**
- * GenbankFeatureElement. 
- * Stores an array of Feature Elements in GenbankFeaturesKeyword. 
+ * @class Teselagen.bio.parsers.GenbankFeatureElement 
+ *
+ * Stores an array of Feature Elements in {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}. 
  * An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
- * Its indices are defined by GenbankFeatureLocation and it's annotations by GenbankFeatureQualifier. 
+ * Its indices are defined by GenbankFeatureLocation and it's annotations by 
+ * {@link Teselagen.bio.parsers.GenbankFeatureQualifier}. 
  * 
- * Go to http://www.insdc.org/documents/feature_table.html#3.4 for specifications of Genbank file. 
+ * Go to {@link http://www.insdc.org/documents/feature_table.html#3.4} for specifications of Genbank file. 
  * This class does not assumes all locations of one feature are complement or not complement, join or not join.
  * This means: 
  * 		complement(join(2691..4571,4918..5163))
@@ -18,7 +20,6 @@
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
-//Ext.require("Teselagen.bio.util.StringUtil");
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
     requires: ["Teselagen.bio.util.StringUtil"],
@@ -30,9 +31,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * @param {String} strand 1 for normal read, -1 for complement
      * @param {Boolean} complement On complementary strand
      * @param {Boolean} join Location is not continuous
-     * @param {[GenbankFeatureQualifier]} featureQualifer
-     * @param {[GenbankFeatureLocation]} featureLocation
-     * @returns {GenbankFeatureElement}
+     * @param {Teselagen.bio.parsers.GenbankFeatureQualifier} [featureQualifer] Array of GenbankFeatureQualifiers
+     * @param {Teselagen.bio.parsers.GenbankFeatureLocation} [featureLocation] Array of GenbankFeatureLocations
+     * @returns {Teselagen.bio.parsers.GenbankFeatureElement}
      * @memberOf GenbankFeatureElement
      */
     constructor: function (inData) {
@@ -81,14 +82,14 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         }
         /**
          * Get featureQualifier
-         * @returns {GenbankFeatureQualifer} featureQualifer
+         * @returns {Teselagen.bio.parsers.GenbankFeatureQualifer} [featureQualifer] An array of Feature Qualifiers
          */
         this.getFeatureQualifier = function() {
             return featureQualifier;
         }
         /**
          * Set featureQualifier
-         * @param {GenbankFeatureQualifer} featureQualifer
+         * @param {Teselagen.bio.parsers.GenbankFeatureQualifer} [featureQualifer] An array of Feature Qualifiers
          */
         this.setFeatureQualifier = function(pFeatureQualifier) {
             featureQualifier = pFeatureQualifier;
@@ -96,7 +97,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Get Last GenbankFeatureElement in features array
-         * @returns {GenbankFeatureElement} element
+         * @returns {Teselagen.bio.parsers.GenbankFeatureElement} element
          */
         this.getLastFeatureQualifier = function() {
             if (featureQualifier.length > 0) {
@@ -108,7 +109,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         /**
          * Add a single GenbankFeatureQualifier to the featureQualifier array
-         * @param {GenbankFeatureQualifer} qualifier
+         * @param {Teselagen.bio.parsers.GenbankFeatureQualifer} qualifier
          */
         this.addFeatureQualifier= function(pQual) {
             if (featureQualifier === undefined ) {
@@ -118,21 +119,21 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         }
         /**
          * Get featureLocation
-         * @returns {GenbankFeatureLocation} featureLocation
+         * @returns {Teselagen.bio.parsers.GenbankFeatureLocation} [featureLocation] An array of Feature Locations
          */
         this.getFeatureLocation = function() {
             return featureLocation;
         }
         /**
          * Get featureLocation
-         * @param {GenbankFeatureLocation} featureLocation
+         * @param {Teselagen.bio.parsers.GenbankFeatureLocation} [featureLocation] An array of Feature Locations
          */
         this.setFeatureLocation = function(pFeatureLocation) {
             featureLocation = pFeatureLocation;
         }
         /**
          * Add a single GenbankFeatureLocation to the featureLocation array
-         * @param {GenbankFeatureLocation} location
+         * @param {Teselagen.bio.parsers.GenbankFeatureLocation} location
          */
         this.addFeatureLocation = function(pLoc) {
             if (featureLocation === undefined ) {

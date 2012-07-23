@@ -25,7 +25,7 @@ Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 			end    = inData.end || 0;
 			strand = inData.strand || Teselagen.StrandType.FORWARD;
 		} else{
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 

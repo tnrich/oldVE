@@ -32,7 +32,7 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 			var seqVersion = inData.seqVersion || 0.0;
 			this.callParent([inData]);
 		} else {
-			Teselagen.bio.BioException.raiseException("Arguments needed");
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 		/**

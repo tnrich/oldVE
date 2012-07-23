@@ -23,9 +23,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 			value = inData.value;
 			ambiguousMatches = inData.ambiguousMatches;
 		} else {
-			throw Ext.create("Teselagen.bio.BioException", {
-				message: "Arguments needed"
-			});
+			Teselagen.bio.BioException.raise("Arguments needed");
 		}
 
 		/**

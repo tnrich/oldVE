@@ -2,6 +2,7 @@
  * @class Teselagen.bio.sequence.common.Annotation
  * 
  * The Annotation class contains functions that processes data about locations
+ * indices are [start, end)
  * 
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
@@ -65,7 +66,10 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				locations[0].setStart(pStart);
 			} else {	
 				console.log("You've found an error!");		
-				BioException.throwException();
+				
+		throw Ext.create("Teselagen.bio.BioException", {
+					message : "Cannot set start when multiple Locations exist"
+				}); 
 			}
 		}
 
@@ -98,8 +102,9 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			if  ( locations.length === 1 ) {
 				locations[0].setEnd(pEnd);
 			} else{
-				console.log("You've found an error!");	
-				BioException.throwException();
+		throw Ext.create("Teselagen.bio.BioException", {
+					message : "Cannot set start when multiple Locations exist"
+				}); 
 			}
 
 		}
@@ -179,10 +184,9 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 */
 		this.shift = function (pShiftBy, pMaxLength, pCircular){
 			if ( pShiftBy > (pMaxLength - 1)) {
-				var ShiftException =  Ext.create("Teselagen.bio.BioException", {
+				throw Ext.create("Teselagen.bio.BioException", {
 					message : "Cannot shift by greater than maximum length"
 				}); 
-				ShiftException.throwException();
 				return;
 			}
 
