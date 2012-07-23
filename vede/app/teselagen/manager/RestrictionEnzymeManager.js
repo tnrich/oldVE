@@ -209,9 +209,9 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
             // or add them all if maxCuts is -1 (default).
             if(this.maxCuts < 0 || numCuts <= this.maxCuts) {
                 newCutSitesMap[enzyme] = sitesForOneEnzyme;
-                newCutSites.concat(sitesForOneEnzyme);
+                newCutSites = newCutSites.concat(sitesForOneEnzyme);
             }
-        });
+        }, this);
 
         this.cutSites = newCutSites;
         this.cutSitesMap = newCutSitesMap;

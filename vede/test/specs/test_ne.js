@@ -555,7 +555,7 @@ Ext.onReady(function() {
             });
 
             it("can load all groups", function() {
-                rem.loadRebaseDatabase();
+                rem.initialize();
 
                 var sg = rem.getSystemGroups();
                 expect(sg.length).toBeGreaterThan(0);
