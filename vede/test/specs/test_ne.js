@@ -450,10 +450,15 @@ Ext.onReady(function() {
                 re.setDirty(true);
                 var sites = re.getCutSites();
 
-                expect(sites.length).toBe(3);
+                expect(sites.length).toBe(5);
+
+                expect(sites[4].getStart()).toBe(33);
+                expect(sites[4].getEnd()).toBe(1);
             });
         });
 
+        // As far as I can tell, trace manager is never used.
+        // If we plan on doing sequence alignment in the future, it may be useful.
         describe("TraceManager", function() {
             var tm = Ext.create("Teselagen.manager.TraceManager", {
                 sequenceManager: seqMan
