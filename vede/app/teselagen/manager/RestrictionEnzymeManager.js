@@ -108,7 +108,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     setMaxCuts: function(pMaxCuts) {
         if(pMaxCuts!= this.maxCuts) {
             this.maxCuts = pMaxCuts;
-            dirty = true;
+            this.dirty = true;
         }
     },
 

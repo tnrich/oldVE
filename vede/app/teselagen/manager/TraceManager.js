@@ -1,5 +1,6 @@
 /**
  * @class Teselagen.manager.TraceManager
+ * NOTE: As far as I can tell, this isn't used in the application at all.
  * Annotates aligned sequences with matches, mismatches, deletions, and insertions.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv
@@ -75,8 +76,8 @@ Ext.define("Teselagen.manager.TraceManager", {
         });
     },
 
-    /*
-     * Iterates through a given alignment object and creates Annotations for each
+    /**
+     * aIterates through a given alignment object and creates Annotations for each
      * area where the query and subject alignments match.
      * @param {TraceSequence}
      */
