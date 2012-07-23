@@ -1,4 +1,10 @@
-Ext.define("Teselagen.mappers.TraceMapper", {
+/**
+ * @class Teselagen.manager.TraceManager
+ * Annotates aligned sequences with matches, mismatches, deletions, and insertions.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv
+ */
+Ext.define("Teselagen.manager.TraceManager", {
     extend: "Teselagen.mappers.Mapper",
 
     mixins: {
@@ -9,9 +15,9 @@ Ext.define("Teselagen.mappers.TraceMapper", {
         traceAnnotations: null
     },
 
-    constructor: function(inData) {
-        this.updateEventString = Teselagen.mappers.MapperEvent.TRACE_MAPPER_UPDATED;
+    updateEventString: Teselagen.mappers.MapperEvent.TRACE_MAPPER_UPDATED,
 
+    constructor: function(inData) {
         this.mixins.observable.constructor.call(arguments, this);
         this.addEvents(this.updateEventString);
 

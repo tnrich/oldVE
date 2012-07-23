@@ -1,10 +1,10 @@
 /**
- * @class Teselagen.mappers.RestrictionEnzymeMapper
+ * @class Teselagen.manager.RestrictionEnzymeManager
  * Maps restriction enzyme cut sites to a DNA sequence.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv
  */
-Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
+Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     extend: "Teselagen.mappers.Mapper",
 
     requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper"],
@@ -145,7 +145,7 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
      * Recalculates cut sites for a circular sequence.
      */
     recalculateCircular: function() {
-        var seqLen = sequenceProvider.getSequence().length;
+        var seqLen = sequenceProvider.getSequence().seqString().length;
         var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(
                                                 this.restrictionEnzymeGroup.getEnzymes(),
                                                 this.sequenceManager.getSequence() +

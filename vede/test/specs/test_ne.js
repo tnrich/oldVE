@@ -8,6 +8,8 @@ Ext.require("Teselagen.utils.SystemUtils");
 
 
 Ext.onReady(function() {
+    var DNATools = Teselagen.bio.sequence.DNATools;
+
     var agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
         name: "agc enzyme",
         site: "agc",
@@ -31,6 +33,9 @@ Ext.onReady(function() {
         usForward: 1,
         usReverse: 2
     });
+
+    var seqMan;
+    var sequence;
     
     describe("Models", function() {
         describe("DNAFeatureLocation", function() {
@@ -212,10 +217,13 @@ Ext.onReady(function() {
                 })]
             });
 
+            sequence = DNATools.createDNA(
+                "acgtcgcgattctatatcgcccgagcgagagtcgttgtcgctgacgacgatcactagtc");
+
             seqMan = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "MyFD",
                 circular: false,
-                sequence: "acgtcgcgattctatatcgcccgagcgagagtcgttgtcgctgacgacgatcactagtc",
+                sequence: sequence,
                 features: [feature, feature]
             });
 
@@ -294,16 +302,10 @@ Ext.onReady(function() {
             it("has working config", function() {
                 expect(mapper.getSequenceManager()).toEqual(seqMan);
             });
-
-            it("responds to sequenceManager events", function() {
-                mapper.setDirty(false);
-                seqMan.fireEvent("SequenceChanged");
-                expect(mapper.getDirty()).toBeTruthy();
-            });
         });
 
-        describe("AAMapper", function() {
-            var aa = Ext.create("Teselagen.mappers.AAMapper", {
+        describe("AAManager", function() {
+            var aa = Ext.create("Teselagen.manager.AAManager", {
                 sequenceManager: seqMan,
             });
 
@@ -312,34 +314,37 @@ Ext.onReady(function() {
             });
 
             it("can calculate amino acid sequences", function() {
-                expect(aa.getSequenceFrame(0)).toBe("tsrfyiararvvvadddh-");
-                expect(aa.getSequenceFrame(1)).toBe("rrdsispereslslttits");
-                expect(aa.getSequenceFrame(2)).toBe("vailyrpsesrcr-rrslv");
+                expect(aa.getSequenceFrame(0).toLowerCase()).toBe("tsrfyiararvvvadddh.");
+                expect(aa.getSequenceFrame(1).toLowerCase()).toBe("rrdsispereslslttits");
+                expect(aa.getSequenceFrame(2).toLowerCase()).toBe("vailyrpsesrcr.rrslv");
 
-                expect(aa.getRevComFrame(0)).toBe("d--sssatttlarai-nrd");
-                expect(aa.getRevComFrame(1)).toBe("tsdrrqrqrlslgryriat");
-                expect(aa.getRevComFrame(2)).toBe("lvivvsdndsrsgdiesrr");
+                expect(aa.getRevComFrame(0).toLowerCase()).toBe("d..sssatttlarai.nrd");
+                expect(aa.getRevComFrame(1).toLowerCase()).toBe("tsdrrqrqrlslgryriat");
+                expect(aa.getRevComFrame(2).toLowerCase()).toBe("lvivvsdndsrsgdiesrr");
 
-                expect(aa.getSequenceFrame(0)).toBe("t s r f y i a r a r v v v a d d d h -");
-                expect(aa.getSequenceFrame(1)).toBe("r r d s i s p e r e s l s l t t i t s");
-                expect(aa.getSequenceFrame(2)).toBe("v a i l y r p s e s r c r - r r s l v");
+                expect(aa.getSequenceFrame(0, true).toLowerCase()).toBe("t s r f y i a r a r v v v a d d d h .");
+                expect(aa.getSequenceFrame(1, true).toLowerCase()).toBe("r r d s i s p e r e s l s l t t i t s");
+                expect(aa.getSequenceFrame(2, true).toLowerCase()).toBe("v a i l y r p s e s r c r . r r s l v");
 
-                expect(aa.getRevComFrame(0)).toBe("d - - s s s a t t t l a r a i - n r d");
-                expect(aa.getRevComFrame(1)).toBe("t s d r r q r q r l s l g r y r i a t");
-                expect(aa.getRevComFrame(2)).toBe("l v i v v s d n d s r s g d i e s r r");
+                expect(aa.getRevComFrame(0, true).toLowerCase()).toBe("d . . s s s a t t t l a r a i . n r d");
+                expect(aa.getRevComFrame(1, true).toLowerCase()).toBe("t s d r r q r q r l s l g r y r i a t");
+                expect(aa.getRevComFrame(2, true).toLowerCase()).toBe("l v i v v s d n d s r s g d i e s r r");
             });
         });
 
-        describe("ORFMapper", function() {
+        describe("ORFManager", function() {
+            var orfSequence = DNATools.createDNA("atgcctagaaaaaaaaaatgctag");
+
             var orfMan = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "orfMan",
                 circular: false,
-                sequence: "atgcctagaaaaaaaaaatgctag",
+                sequence: orfSequence,
                 features: []
             });
 
-            var om = Ext.create("Teselagen.mappers.ORFMapper", {
-                sequenceManager: seqMan
+            var om = Ext.create("Teselagen.manager.ORFManager", {
+                sequenceManager: orfMan,
+                minORFSize: 3
             });
 
             it("is defined", function() {
@@ -358,24 +363,26 @@ Ext.onReady(function() {
 
             it("can calculate circular ORFs", function() {
                 orfMan.setCircular(true);
+                om.setDirty(true);
+
                 var orfs = om.getOrfs();
 
                 expect(orfs.length).toBe(2);
 
-                expect(orfs[0].getFrame()).toBe(0);
-                expect(orfs[0].getStrand()).toBe(1);
-                expect(orfs[0].getStart()).toBe(0);
-                expect(orfs[0].getEnd()).toBe(24);
-
-                expect(orfs[1].getFrame()).toBe(2);
+                expect(orfs[1].getFrame()).toBe(0);
                 expect(orfs[1].getStrand()).toBe(1);
-                expect(orfs[1].getStart()).toBe(17);
-                expect(orfs[1].getEnd()).toBe(8);
+                expect(orfs[1].getStart()).toBe(0);
+                expect(orfs[1].getEnd()).toBe(24);
+
+                expect(orfs[0].getFrame()).toBe(2);
+                expect(orfs[0].getStrand()).toBe(1);
+                expect(orfs[0].getStart()).toBe(17);
+                expect(orfs[0].getEnd()).toBe(8);
             });
 
         });
 
-        describe("RestrictionEnzymeMapper", function() {
+        describe("RestrictionEnzymeManager", function() {
             var agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
                 name: "agc enzyme",
                 site: "agc",
@@ -400,7 +407,7 @@ Ext.onReady(function() {
                 usReverse: 2
             }); 
 
-            var re = Ext.create("Teselagen.mappers.RestrictionEnzymeMapper", {
+            var re = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
                 restrictionEnzymeGroup: null,
                 sequenceManager: seqMan
             });
@@ -422,8 +429,8 @@ Ext.onReady(function() {
             });
         });
 
-        describe("TraceMapper", function() {
-            var tm = Ext.create("Teselagen.mappers.TraceMapper", {
+        describe("TraceManager", function() {
+            var tm = Ext.create("Teselagen.manager.TraceManager", {
                 sequenceManager: seqMan
             });
 

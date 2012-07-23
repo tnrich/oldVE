@@ -26,8 +26,6 @@ Ext.define("Teselagen.mappers.Mapper", {
 		
         if (inData) {
 			this.initConfig(inData);
-            // This line is going to go to a controller instead, which will call the onSequenceProviderChanged method.
-			this.sequenceManager.on("SequenceChanged", this.onSequenceProviderChanged, this); 
 		}
 	},
 
@@ -36,7 +34,7 @@ Ext.define("Teselagen.mappers.Mapper", {
      * Called when the sequence provider changes. Sets the dirty flag to true,
      * telling the mapper to recalculate when it is next accessed.
      */
-	onSequenceProviderChanged: function() {
+	sequenceChanged: function() {
         this.dirty = true;
     },
 });
