@@ -46,7 +46,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * Calls the RestrictionEnzymeManager to get enzyme data from rebase.xml and loads it
      * into a hashmap, then calls functions to load pre-stored enzyme groups.
      */
-    loadRebaseDatabase: function() {
+    initialize: function() {
         if(this.isInitialized) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "REBASE database already initialized!"

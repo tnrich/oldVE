@@ -383,35 +383,23 @@ Ext.onReady(function() {
         });
 
         describe("RestrictionEnzymeManager", function() {
-            var agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
-                name: "agc enzyme",
-                site: "agc",
-                cutType: 1,
-                forwardRegex: "agc",
-                reverseRegex: "agc",
-                dsForward: 1,
-                dsReverse: 2,
-                usForward: 1,
-                usReverse: 2
+            var reGroup = Ext.create("Teselagen.data.RestrictionEnzymeGroup", {
+                name:"my group",
+                enzymes: [agcEnz, gntEnz]
             });
 
-            var gntEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
-                name: "gnt enzyme",
-                site: "gnt",
-                cutType: 1,
-                forwardRegex: "g.t",
-                reverseRegex: "g.t",
-                dsForward: 1,
-                dsReverse: 2,
-                usForward: 1,
-                usReverse: 2
-            }); 
+            var reSequence = DNATools.createDNA("tagccccgctaaagccccccccctctctgatccgc");
+
+            var reMan = Ext.create("Teselagen.manager.SequenceManager", {
+                name: "re man",
+                sequence: reSequence
+            });
 
             var re = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
-                restrictionEnzymeGroup: null,
-                sequenceManager: seqMan
+                restrictionEnzymeGroup: reGroup,
+                sequenceManager: reMan
             });
-            // sequence acgtcgcgattctatatcgcccgagcgagagtcgttgtcgctgacgacgatcactagtc
+            
             it("exists", function() {
                 expect(re).toBeDefined();
             });
@@ -425,7 +413,44 @@ Ext.onReady(function() {
                 expect(re.getDirty()).toBeTruthy();
             });
 
-            it("can calculate cut sites for linear DNA", function() {
+            describe("can calculate cut sites for linear DNA", function() {
+                it("getAllCutSites works", function() {
+                    var allSites = re.getAllCutSites();
+                    expect(allSites.length).toBe(4);
+
+                    expect(allSites[0].getStart()).toBe(1);
+                    expect(allSites[0].getEnd()).toBe(4);
+
+                    expect(allSites[2].getStart()).toBe(7);
+                    expect(allSites[2].getEnd()).toBe(10);
+
+                    expect(allSites[1].getStart()).toBe(12);
+                    expect(allSites[1].getEnd()).toBe(15);
+
+                    expect(allSites[3].getStart()).toBe(28);
+                    expect(allSites[3].getEnd()).toBe(31);
+                });
+
+                it("getAllCutSitesMap works", function() {
+                    var allMap = re.getAllCutSitesMap();
+
+                    expect(allMap.get(agcEnz).length).toBe(2);
+                    expect(allMap.get(gntEnz).length).toBe(2);
+                });
+
+                it("can filter based on maxcutsites", function() {
+                    re.setMaxCuts(1);
+                    expect(re.getCutSites().length).toBe(0);
+                    re.setMaxCuts(10);
+                });
+            });
+
+            it("can calculate cut sites for circular DNA", function() {
+                reMan.setCircular(true);
+                re.setDirty(true);
+                var sites = re.getCutSites();
+
+                expect(sites.length).toBe(3);
             });
         });
 
