@@ -11,6 +11,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
     
     singleton: true,
 
+    BASE_URL: "/biojs/src/teselagen/bio/enzymes/assets/",
     commonRestrictionEnzymes: null,
     rebaseRestrictionEnzymes: null,
     
@@ -23,7 +24,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.commonRestrictionEnzymes;
         }
         
-        this.commonRestrictionEnzymes = this.getEnzymes("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
+        this.commonRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "common.xml");
         return this.commonRestrictionEnzymes;
     },
     
@@ -36,7 +37,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             return this.rebaseRestrictionEnzymes;
         }
         
-        this.rebaseRestrictionEnzymes = this.getEnzymes("/biojs/src/teselagen/bio/enzymes/assets/rebase.xml");
+        this.rebaseRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "rebase.xml");
         return this.rebaseRestrictionEnzymes;
     },
 
