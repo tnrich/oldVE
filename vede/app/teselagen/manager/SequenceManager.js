@@ -5,12 +5,15 @@
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceProvider.as)
  */
-Ext.require("Teselagen.bio.sequence.common.Location");
-Ext.require("Teselagen.bio.sequence.common.SymbolList");
 
-//Ext.require("");
 Ext.define("Teselagen.manager.SequenceManager", {
 
+
+    requires: ["Teselagen.bio.sequence.common.Location",
+        "Teselagen.bio.sequence.common.SymbolList",
+        "Teselagen.manager.SequenceManagerEvent",
+        "Teselagen.bio.sequence.DNATools"
+    ],
     /**
      * @cfg {Object} config
      * @cfg {String} name
@@ -25,12 +28,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
         complementSequence: null,
         reverseComplementSequence: null,
         manualUpdateStarted: false,
-        
+
         needsRecalculateComplementSequence: true,
         needsRecalculateReverseComplementSequence: true
     },
 
-    //updateSequenceChanged:      Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
+    DNATools: null,
+    updateSequenceChanged: null, //     Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
     //updateSequenceChanging:     Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGING,
     //updateKindFeatureAdd:       Teselagen.manager.SequenceManagerEvent.KIND_FEATURE_ADD,
     //updateKindFeatureRemove:    Teselagen.manager.SequenceManagerEvent.KIND_FEATURE_REMOVE,
@@ -41,7 +45,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     //updateKindKManualUpdate:    Teselagen.manager.SequenceManagerEvent.KIND_MANUAL_UPDATE,
     //updateKindSetMeento:        Teselagen.manager.SequenceManagerEvent.KIND_SET_MEMENTO,
     //updateKindInitialized:      Teselagen.manager.SequenceManagerEvent.KIND_INITIALIZED,
-    
+
 
     mixins: {
         observable: "Ext.util.Observable"
@@ -50,58 +54,92 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * @param {String} name
      * @param {Boolean} circular
-     * @param {String} sequence
-     * @param {Feature]} features
+     * @param {Teselagen.bio.sequence.common.SymbolList} sequence
+     * @param {[Teselagen.bio.sequence.dna.Feature]} features
      * @returns {SequenceManager}
      * @memberOf SequenceManager
      * 
      */
     constructor: function(inData) {
         this.mixins.observable.constructor.call(this, inData);
+
+        //DNATools: Teselagen.bio.sequence.DNATools,
+        updateSequenceChanged: Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
+
+
         this.addEvents("SequenceChanged");
+        //this.addEvents(this.updateSequenceChanged);
 
 
         if (inData) {
-            this.name = inData.name || null;
+            this.name     = inData.name     || null;
             this.circular = inData.circular || false;
             this.sequence = inData.sequence || null;
             this.features = inData.features || [];
         }
-
-        this.setName = function(pName) {
-            //manualUpdateStart();
+        /**
+         * @param {String} name
+         */
+        this.self.prototype.setName = function(pName) {
+            this.manualUpdateStart();
             this.name = pName;
-            //manualUpdateEnd();
+            this.manualUpdateEnd();
         }
-
-        this.setCircular = function(pCircular) {
-            //manualUpdateStart();
+        /**
+         * @param {Boolean} circular
+         */
+        this.self.prototype.setCircular = function(pCircular) {
+            this.manualUpdateStart();
             this.circular = pCircular;
-            //manualUpdateEnd();
+            this.manualUpdateEnd();
         }
-
-        this.setSequence = function(pSequence) {
+        /**
+         * @param {Teselagen.bio.sequence.common.SymbolList} sequence
+         */
+        this.self.prototype.setSequence = function(pSequence) {
             needsRecalculateComplementSequence = true;
             needsRecalculateReverseComplementSequence = true;
             this.sequence = pSequence;
         }
-
-        this.setFeatures = function(pFeatures) {
+        /**
+         * @param {Teselagen.bio.sequence.dna.Feature} name
+         */
+        this.self.prototype.setFeatures = function(pFeatures) {
             this.features = pFeatures;
         }
     },
 
+    /**
+     * @param {Boolean} manualUpdateStarted Manual update event started 
+     */
     getManualUpdateStarted:function() {
         return this.manualUpdateStarted;
     },
 
-    //part of IOriginator Interface
-    // Build in lib/common
+    /**
+     * @returns {Teselagen.manager.SequenceManagerMemento} memento 
+     */
     createMemento: function() {
+        var clonedFeatures = [];
+
+        if (this.features && this.features.length > 0) {
+            for (var i=0; i< this.features.length; i++) {
+                clonedFeatures.push(this.features[i].clone());
+            }
+        }
+        var seq = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.toString());
         //
-        return null;
+        return Ext.create("Teselagen.manager.SequenceManagerMemento", {
+            name:     this.name,
+            circular: this.circular,
+            sequence: seq,
+            features: clonedFeatures
+        });
     },
 
+    /**
+     * @params {Teselagen.manager.SequenceManagerMemento} memento 
+     */
     setMemento: function(pMemento) {
         var sequenceManagerMemento = pMemento;
 
@@ -117,25 +155,32 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //this.dispatcher;
     },
 
+    // to AnnotatePanelController.js
     addEventListener: function(type, listener) {
         //dispatcher.addEventListener(type, listener);
     },
-
+    // to AnnotatePanelController.js
     removeEventListener: function(type, listener) {
         //dispatcher.removeEventListener(type, listener);
     },
-
+    // to AnnotatePanelController.js
     dispatchEvent: function(event) {
         //dispatcher.dispatchEvent(event);
     },
 
+    /**
+     * @returns {Teselagen.bio.sequence.common.SymbolList} complementSequence 
+     */
     getComplementSequence: function() {
-        //updateComplementSequence();
+        this.updateComplementSequence();
         return this.complementSequence;
     },
 
+    /**
+     * @returns {Teselagen.bio.sequence.common.SymbolList} reverseComplementSequence 
+     */
     getReverseComplementSequence: function() {
-        //updateReverseComplementSequence();
+        this.updateReverseComplementSequence();
         return this.reverseComplementSequence;
     },
 
@@ -144,72 +189,75 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Number} start Range start
      * @param {Number} end Range end
      */
-    subSequence: function(start,end) {
-        var result = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
+    subSequence: function(start, end) {
+        var result = null;// = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
 
-        if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
+        if(start < 0 || end < 0 || start > this.sequence.length || end > this.sequence.length) {
             return result;
         }
-
+        //console.log("subsequence");
         if(start > end) {
-            //result = DNATools.createDNA(sequence.subList(start, sequence.length).seqString() + sequence.subList(0, end).seqString());
+            result = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.subList(start, this.sequence.length).seqString() + this.sequence.subList(0, end).seqString());
         } else {
-            //result = sequence.subList(start, end);
+            result = this.sequence.subList(start, end);
         }
 
         return result;
     },
 
-    /**
+    /** THIS DOES NOT WORK YET
      * Sub sequence manager by range
      * @param {Number} start Range start
      * @param {Number} end Range end
      * Was subSequenceProvider
      */
     subSequenceManager: function(start, end) {
-        
+        var sequence = this.sequence;
+        var features = this.features;
         var featuredSubSequence = null; //SequenceManger
 
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
             return featuredSubSequence;
         }
 
-        var featuredSubSymbolList = subSequence(start, end); //SymbolList
+        var featuredSubSymbolList = this.subSequence(start, end); //SymbolList
 
-        var subFeatures = {}; // ArrayCollection?
+        var subFeatures = []; // ArrayCollection?
 
+        console.log(start + ":" + end + ":" + features.length);
 
-        for (var i=0; i > features.length; i++) {
+        for (var i=0; i < features.length; i++) {
             var feature = features[i]; //Feature
+            console.log(start + ":" + end + ":" + feature.getStart() + ":" + feature.getEnd());
 
-            if ( start < end && feature.start < end ) { // only do this when the end is after the start
-                if ( start <= feature.start && end >= feature.end ) { //
+            if ( start < end && feature.getStart() < end ) { // only do this when the end is after the start
+                if ( start <= feature.getStart() && end >= feature.end ) { // When the 
                     var clonedFeature1 = feature.clone();
                     clonedFeature1.shift(-start, sequence.length, circular);
-                    subfeatures.addItem(clonedFeature1);
+                    subfeatures.push(clonedFeature1);
                 }
-            } else if ( start > end && feature.start >=feature.end) {
-                if ( start <= feature.start && end >= feature.end) {
+            } else if ( start > end && feature.getStart() >= feature.getEnd()) {
+                if ( start <= feature.getStart() && end >= feature.getEnd()) {
                     var clonedFeature2 = feature.clone();
                     clonedFeature2.shift(-start, sequence.length, circular);
-                    subFeatures.addItem(clonedFeature2);
+                    subFeatures.push(clonedFeature2);
                 }
-            } else if (start > end && feature.start <= feature.end) {
-                if ( start <= feature.start ) {
+            } else if (start > end && feature.getStart() <= feature.getEnd()) {
+                if ( start <= feature.getStart() ) {
                     var clonedFeature3 = feature.clone();
                     clonedFeature3.shift(-start, sequence.length, circular);
-                    subFeatures.addItem(clonedFeature3);
-                } else if ( end > feature.end ) {
+                    subFeatures.push(clonedFeature3);
+                } else if ( end > feature.getEnd() ) {
                     var clonedFeature4 = feature.clone();
                     clonedFeature4.shift(-start, sequence.length, circular);
-                    subFeatures.addItem(clonedFeature4);
+                    subFeatures.push(clonedFeature4);
                 }
             }
         }
         featuredSubSequence = Ext.create("Teselagen.manager.SequenceManager", {
             name: "Dummy",
             circular: false,
-            sequence: featuredSubSymbloList,
+            sequence: featuredSubSymbolList,
             features: subFeatures
         });
         return featuredSubSequence;
@@ -222,8 +270,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     addFeature: function(feature, quiet) {
         var evt;
-        
-        if (!quiet && !manualUpdateStarted) {
+
+        if (!quiet && !this.manualUpdateStarted) {
+            console.log("launch sequence changing, kind feature add: createMemento");
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -231,9 +280,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        features.addItem(feature);
+        this.features.push(feature);
 
-        if (!quiet && !manualUpdateStarted) {
+        if (!quiet && !this.manualUpdateStarted) {
+            console.log("launch sequence changing, kind feature add: feature");
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -253,7 +303,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         if ( !featuresToAdd || featuresToAdd.length === 0) {
             return null; //? null?
         }
-        if ( !quiet && !manualUpdateStarted) {
+        if ( !quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -262,9 +312,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //dispatcher.dispatchEvent(evt)
         }
         for (var i=0; i<featuresToAdd.length; i++) {
-            addFeature(featuresToAdd[i], true);
+            this.addFeature(featuresToAdd[i], true);
         }
-        if (!quiet && !manualUpdateStarted) {
+        if (!quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -282,10 +332,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     removeFeature: function(feature, quiet) {
         var evt;
-        var index = features.getItemIndex(feature);
-
+        //var index = this.features.getItemIndex(feature);
+        var index = Ext.Array.indexOf(this.features, feature);
         if ( index >= 0 ) {
-            if (!quiet && !manualUpdateStarted) {
+            if (!quiet && !this.manualUpdateStarted) {
                 //evt = Ext.create("SequenceManagerEvent", {
                 //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
                 //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -293,8 +343,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 //}
                 //dispatcher.dispatchEvent(evt);
             }
-            features.removeItemAt(index);
-            if (!quiet && !manualUpdateStarted) {
+            //this.features.removeItemAt(index);
+            Ext.Array.remove(this.features, feature);
+            if (!quiet && !this.manualUpdateStarted) {
                 //evt = Ext.create("SequenceManagerEvent", {
                 //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
                 //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -312,7 +363,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     removeFeatures: function(featuresToRemove, quiet) {
         var i, evt;
-        
+
         if (!featuresToRemove || featuresToRemove < 1) {
             return null;
         }
@@ -343,23 +394,24 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Feature} feature Feature existance to check
      */
     hasFeature: function(feature) {
-        return features.contains(feature);
+        //return this.features.contains(feature);
+        return Ext.Array.contains(this.features, feature);
     },
 
     /**
      * Insert another sequence manager at position. This method is used on sequence paste. 
-     * SEQUENCE PASTE?
+     *
      * @param {SequenceManger} sequenceManger SequenceManager to insert
      * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
-    insertSequenceManger: function(sequenceManger, position, quiet) {
+    insertSequenceManager: function(sequenceManager, position, quiet) {
         var i, evt, insertFeature;
-        
-        needsRecalculateComplementSequence = true;
-        needsRecalculateReverseComplementSequence = true;
 
-        if(!quiet && !manualUpdateStarted) {
+        this.needsRecalculateComplementSequence = true;
+        this.needsRecalculateReverseComplementSequence = true;
+
+        if(!quiet && !this.manualUpdateStarted) {
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -367,13 +419,17 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        insertSequence(sequenceManagers.sequence, position, true);
-        for (var i=0; i<sequenceManager.features.length; i++) {
-            //insertFeature = sequenceManager.features[i].clone();
-            insertFeature.shift(position, sequence.length, circular);
-            addFeature(insertFeature, true);
+        console.log(this.getSequence().toString());
+        console.log(sequenceManager.getSequence().toString());
+        this.insertSequence(sequenceManager.getSequence(), position, true);
+        console.log(this.getSequence().toString());
+
+        for (var i=0; i<sequenceManager.getFeatures().length; i++) {
+            insertFeature = sequenceManager.getFeatures()[i].clone();
+            insertFeature.shift(position, this.sequence.length, this.circular);
+            this.addFeature(insertFeature, true);
         }
-        if(!quiet && !manualUpdateStarted) {
+        if(!quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -383,42 +439,49 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
 
     },
-    
+
     /**
      * Insert another sequence at position. This method is used on sequence paste
      * 
      * @param {SymbolList} insertSequence SymbolList to insert
-     * @param {Number} position Position where to insert
+     * @param {Number} position Position where to insert; non-zero based
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
     insertSequence: function(insertSequence, position, quiet) {
-        var i, evt, lengthBefore, insertSequenceLength, feature;
-        
-        if (position < 0 || position > sequence.length || insertSequence.length < 1 ) {
+        var lengthBefore, insertSequence, insertSequenceLength;
+
+        if (position < 0 || position > this.sequence.length || insertSequence.length < 1 ) {
             return null;
         }
-        needsRecalculateComplementSequence        = true;
-        needsRecalculateReverseComplementSequence = true;
-        
-        if(!quiet && !manualUpdateStarted) {
-          // evt = Ext.create("SequenceManagerEvent", {
+        this.needsRecalculateComplementSequence        = true;
+        this.needsRecalculateReverseComplementSequence = true;
+
+        if(!quiet && !this.manualUpdateStarted) {
+            // evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
             //    blah3: createMemento()  
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        lengthBefore = sequence.length;
-        sequence.insertSymbols(position, insertSequence);
-        insertSequenceLength = insertSequence.length;
-        
-        for (var i=0; i<features.length; i++) {
-            //feature
+
+        lengthBefore = this.sequence.length;
+        insertSequenceLength = insertSequence.getSymbolsLength();
+
+        this.sequence.insertSymbols(position, insertSequence.getSymbols());
+        //this.sequence.insertSymbols(position, [insertSequence.getSymbols()[0], insertSequence.getSymbols()[0]]);
+        //console.log(this.sequence.toString() + ":" + insertSequenceLength);
+
+        for (var i=0; i < this.features.length; i++) {
+            this.features[i].insertAt(position, insertSequenceLength, lengthBefore, this.circular);
         } 
+        if(!quiet && !this.manualUpdateStarted) {
+            //SEQUENCE_CHANGED
+        }
     },
 
-    /**
-     * Remove sequence in range
+    /** THIS ONE IS HARD--GET BACK TO THIS LATER
+     * Remove sequence in range.
      * 
      * @param startIndex Range start 
      * @param endIndex Range end 
@@ -447,8 +510,65 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     },
 
+    /**
+     * Get list of features in range
+     * 
+     * @return List of features
+     */
+     featuresByRange: function(start, end) {
+        var result;
+        var features = this.features;
 
-    /*
+        for (var i=0; i < features.length; i++) {
+            if (start < end) {
+                if (features[i].start < features[i].end) {
+                    if (features[i].start < end  &&  features[i].end > start) {
+                        result.push(features[i]);
+                    }
+                } else {
+                    if (start < features[i].end || end > features[i].start) {
+                        result.push(features[i]);
+                    }
+                } 
+            } else {
+                if (features[i].start <= features[i].end) {
+                    if (features[i].start >= end  &&  features[i].end < start) {
+
+                    } else {
+                        result.push(features[i]);
+                    }
+                } else {
+                    resutl.push(features[i]);
+                }
+            }
+        }
+        return result;
+     },
+
+     /**
+      * Get list of features at position
+      * 
+      * @return List of features
+      */
+    featuresAt: function(position) {
+        var result;
+        var features = this.features;
+
+        for (var i=0; i < features.length; i++) {
+            if (features[i].start <= features[i].end) {
+                if (features[i].start < position  && features[i].end > position) {
+                    result.push(features[i]);
+                }
+            } else {
+                if (features[i].start < position || features[i].end > position) {
+                    result.push(features[i]);
+                }
+            }
+        }
+        return result;
+    },
+
+    /**
      * Use this method for manually operate sequence changing state.
      * 
      * <pre>
@@ -461,32 +581,108 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * sequenceProvider.removeFeature(feature4);
      * sequenceProvider.manualUpdateEnd(); // only here SequenceManagerEvent.SEQUENCE_CHANGED will be trigered.
      * </pre>
-     *
+     */
     manualUpdateStart: function() {
-        if(!manualUpdateStarted) {
-            manualUpdateStarted = true;
-            
+        if(!this.manualUpdateStarted) {
+            this.manualUpdateStarted = true;
+
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGING, SequenceProviderEvent.KIND_MANUAL_UPDATE, createMemento()));
         }
     },
-    
-    /*
-    * @see manualUpdateStart
-    *
+
+    /**
+     * @see manualUpdateStart
+     */
     manualUpdateEnd: function() {
-        if(manualUpdateStarted) {
+        if(this.manualUpdateStarted) {
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_MANUAL_UPDATE, null));
-            
-            manualUpdateStarted = false;
+
+            this.manualUpdateStarted = false;
         }
-    },*/
+    },
+
+    /**
+    * Clone sequence provider
+    */
+    clone: function() {
+        var clonedSeq = Teselagen.bio.sequence.DNATools.createDNA(this.getSequence().seqString());
+        var clonedSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
+            name:       this.name,
+            circular:   this.circular,
+            sequence:   clonedSeq
+        });
+        var features = this.features;
+
+        if (features && features.length > 0) {
+            for (var i=0; i < features.length; i++) {
+                clonedSequenceManager.addFeature(features[i], true);
+            }
+        }
+        return clonedSequenceManager;
+    },
+
+    /**
+     * Reverse sequence
+     */
+    reverseSequence: function(inputSequenceManager) {
+        return true;
+    },
+
+    /**
+     * Reverse complement sequence
+     */
+    reverseComplementSequence: function(inputSequenceManager) {
+        return true;
+    },
+
+    /**
+     * Rebase sequence. Rotate sequence to new position.
+     */
+    rebaseSequence: function(inputSequenceManager) {
+        return true;
+    },
+
+    toGenbank: function() {
+        return true;
+    },
+
 
     fromGenbank: function(genbank) {
         var result;
-
-
         return result;
+    },
 
+    fromJbeiSeqXml: function(jbeiSeq) {
+        var result;
+        return result;
+    },
+
+    fromFasta: function(fasta) {
+        var result;
+        return result;
+    },
+    
+    /**
+     *
+     * @private
+     */
+    updateComplementSequence: function() {
+        if(this.needsRecalculateComplementSequence) {
+            this.complementSequence = Teselagen.bio.sequence.DNATools.complement(this.sequence);
+
+            this.needsRecalculateComplementSequence = false;
+        }
+    },
+    /**
+     *
+     * @private
+     */
+    updateReverseComplementSequence: function() {
+        if(this.needsRecalculateReverseComplementSequence) {
+            this.reverseComplementSequence = Teselagen.bio.sequence.DNATools.reverseComplement(this.sequence);
+
+            this.needsRecalculateReverseComplementSequence = false;
+        }
     }
 
 

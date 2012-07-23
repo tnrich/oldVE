@@ -1,9 +1,13 @@
 
 /**
- * GenbankOriginKeyword. 
+ * @class Teselagen.bio.parsers.GenbankOriginKeyword
+ *
  * Stores the information from the ORIGIN line of a Genbank file. 
- * Same level as {@link GenbankKeyword}, {@link GebankLocusKeyword}, and {@link GenbankFeaturesKeyword}.
- * Specifically for the Origin/Sequence part of the Genbank file
+ * Same level as {@link Teselagen.bio.parsers.GenbankKeyword}, 
+ * {@link Teselagen.bio.parsers.GenbankLocusKeyword}, and 
+ * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}.
+ * Specifically for the Origin/Sequence part of the Genbank file.
+ *
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */

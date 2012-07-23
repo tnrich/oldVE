@@ -2,6 +2,7 @@
  * @class Teselagen.bio.sequence.common.Annotation
  * 
  * The Annotation class contains functions that processes data about locations
+ * indices are [start, end)
  * 
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
@@ -22,9 +23,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			start = inData.start || 0;
 			end = inData.end || 0;	
 		} else {
-			throw Ext.create("Teselagen.bio.BioException", {
-				message: "Arguments needed"
-			});
+			Teselagen.bio.BioException.raiseException("Arguments needed");
 		}
 
 		var initialLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
@@ -67,8 +66,9 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				locations[0].setStart(pStart);
 			} else {	
 				console.log("You've found an error!");		
-				throw Ext.create("Teselagen.bio.BioException", {
-					message : "Cannot set start when multiple locations exist"
+				
+		throw Ext.create("Teselagen.bio.BioException", {
+					message : "Cannot set start when multiple Locations exist"
 				}); 
 			}
 		}
@@ -102,9 +102,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			if  ( locations.length === 1 ) {
 				locations[0].setEnd(pEnd);
 			} else{
-				console.log("You've found an error!");	
-				throw Ext.create("Teselagen.bio.BioException", {
-					message : "Cannot set end when multiple Locations exist"
+		throw Ext.create("Teselagen.bio.BioException", {
+					message : "Cannot set start when multiple Locations exist"
 				}); 
 			}
 
@@ -193,11 +192,11 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 			var offset = start;
 			var tempLocations = getNormalizedLocations(pMaxLength);
-            console.log("TempLocation test getStart: " + tempLocations[0].getStart());
+          
 			 for (var i = 0; i < tempLocations.length; ++i ){
                 var newStart = tempLocations[i].getStart() + pShiftBy;
 				tempLocations[i].setStart(newStart);
-                console.log("Temp location start set to: " + (pShiftBy));
+                
                 var newEnd = tempLocations[i].getEnd() + pShiftBy;
 				tempLocations[i].setEnd(newEnd);
             }
@@ -256,7 +255,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				}
 			}
 
-			locations = deNormalizeLocation(tempLocations, offset, maxLength + insertLength, circular, circularAdjustment);
+			locations = deNormalizeLocations(tempLocations, offset, pMaxLength + pInsertLength, pCircular, circularAdjustment);
 		}
 
 		/**
@@ -432,7 +431,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 					start: newStart,
 					end: newEnd
 				}));
-                console.log("newStart: " + newStart + " and newEnd: " + newEnd);
+
 			}
 			return normalizedLocations;
 		}

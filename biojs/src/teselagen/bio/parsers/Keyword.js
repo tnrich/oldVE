@@ -1,6 +1,7 @@
 
 /**
- * Keyword. 
+ * @class Teselagen.bio.parsers.Keyword
+ *
  * Super class for all Keywords that have a keyword-value pairs. 
  * Not used directly by Genbank.
  * @author Diana Wong

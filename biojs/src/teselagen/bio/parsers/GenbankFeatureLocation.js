@@ -1,9 +1,10 @@
 
 /**
- * GenbankFeatureLocation. 
+ * @class Teselagen.bio.parsers.GenbankFeatureLocation
+ *
  * Stores the Feature Location from the Genbank formatted line:  
- *      'ELEMENTNAME               complement(join(>start...end))' .
- * Go to http://www.insdc.org/documents/feature_table.html#3.4 for specifications of Genbank file. 
+ *      '     ELEMENTNAME               complement(join(>start...end))' .
+ * Go to (@link http://www.insdc.org/documents/feature_table.html#3.4} for specifications of Genbank file. 
  * This class does not assumes all locations of one feature are complement or not complement, join or not join.
  * 
  * @author Diana Wong
@@ -16,11 +17,11 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
     /**
      * Creates a new GenbankFeatureQualifier from inData.
-     * @param {int} preStart Prefix to start index. Indicates partial <
+     * @param {String} preStart Prefix to start index. Indicates partial <
      * @param {int} start Start index. 
      * 					"<" in front indicates that the exact lower boundary point of a feature is unknown. 
      * 					A location with just a start and no end is annotation for a single base.
-     * @param {int} preEnd Prefix to end index. Indicates partial >
+     * @param {String} preEnd Prefix to end index. Indicates partial >
      * @param {int} end End index. A ">" indicates that the feature continues beyond the end base.
      * @param {String} to This joins the start with end. 
      * 					"start..end" means it is a continuous range. 
@@ -40,7 +41,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
         if (inData) {
             if (inData.start) {
-                start		= inData.start.replace(/\<|\>/, "") || "" ;
+                start		= parseInt(inData.start.replace(/\<|\>/, "")) || "" ;
                 tmp         = inData.start.match(/\</g);
                 if (tmp) {preStart	= tmp[0] || ""};
                 /*if ( inData.start.match(/\>/g) ) {
@@ -50,7 +51,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
                 }*/
             }
             if (inData.end) {
-                end         = inData.end.replace(/\<|\>/, "") || "";
+                end         = parseInt(inData.end.replace(/\<|\>/, "")) || "";
                 tmp         = inData.end.match(/\>/g);
                 if (tmp) {  preEnd  = tmp[0] || ""};
                 /*if ( inData.start.match(/\</g) ) {
