@@ -62,9 +62,9 @@ Ext.onReady(function() {
                 });
 
                 //-GATTACA
-                //=-23----  <- feat1 (added to sm)
-                //=--45---  <- feat2, complment, not added to sm yet
-                //=--345--  <- feat3, not added to sm
+                //=-12----  <- feat1 (added to sm)
+                //=---34--  <- feat2, complment, not added to sm yet
+                //=--245--  <- feat3, not added to sm
             });
 
             it("Init?",function(){
@@ -75,6 +75,7 @@ Ext.onReady(function() {
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
                 expect(sm.getFeatures()[0].getEnd()).toBe(3);
+                //console.log(sm.getFeatures()[0].toString());
                 expect(sm.getManualUpdateStarted()).toBeFalsy();
 
             });
@@ -147,26 +148,31 @@ Ext.onReady(function() {
                 
                 // start > end
                 //=GATTACA
-                //=12-----
+                //=01-----
                 tmp = sm.subSequence(0,2);
-                expect(tmp.toString()).toBe("ga"); // NOT SURE TRUE ANSWER
+                expect(tmp.toString()).toBe("ga");
+                
+                // start > end: FEAT1
+                //=GATTACA
+                //=-12----
+                tmp = sm.subSequence(1,3);
+                expect(tmp.toString()).toBe("at");
+
+                // start > end: FEAT2
+                //=GATTACA
+                //=---34--
+                tmp = sm.subSequence(3,5);
+                expect(tmp.toString()).toBe("ta");
                 
                 // start > end
                 //=GATTACA
-                //=-2-----
-                tmp = sm.subSequence(1,2);
-                expect(tmp.toString()).toBe("a"); // NOT SURE TRUE ANSWER
-                
-                // start > end
-                //=GATTACA
-                //=-23456789
+                //=-12345678
                 tmp = sm.subSequence(1,9);
-                //console.log(tmp.toString());  // ta of gattaca
-                expect(tmp.toString()).toBe("attaca"); // NOT SURE TRUE ANSWER
+                expect(tmp.toString()).toBe("attaca");
                 
                 // start => end
                 //=GATTACA
-                //=8--4567
+                //=0--3456
                 tmp = sm.subSequence(3,1);
                 expect(tmp.toString()).toBe("tacag"); // tacag NOT SURE TRUE ANSWER
             });
@@ -184,11 +190,11 @@ Ext.onReady(function() {
             });
 
             // TALK TO MICAH ABOUT INCLUSIVE/NONINCLUSIVE 7/23/2012
-            it("subSequenceManager(): #1 One Feature case, Start non-inclusive, END IS INCLUSIVE (WEIRD)",function(){
+            it("subSequenceManager(): #1 One Feature case,",function(){
                 //console.log("===> Begin subSequenceManagerTesting");
                 //=GATTACA
                 //=FF-----
-                //=-234---
+                //=-123---
                 var tmp = sm.subSequenceManager(1, 4);
                 expect(tmp.getName()).toBe("Dummy");
                 expect(tmp.getCircular()).toBe(false);
@@ -197,16 +203,13 @@ Ext.onReady(function() {
                 //console.log("===> End subSequenceManagerTesting");
             });
 
-
-            // TALK TO MICAH ABOUT INCLUSIVE/NONINCLUSIVE 7/23/2012
-            it("subSequenceManager(): #2 Two Feature case, Start non-inclusive, END IS INCLUSIVE (WEIRD)",function(){
-                //console.log("===> Begin subSequenceManagerTesting");
+            it("subSequenceManager(): #2 Two Feature case",function(){
                 sm.addFeature(feat2, false);
                 expect(sm.getFeatures().length).toBe(2);
                 //=GATTACA
-                //=-23----   * feat1
-                //=---45--   * feat2
-                //=-2345--  <-- New selection 1,5
+                //=-12----   * feat1 [1,3)
+                //=---34--   * feat2 [3,5)
+                //=-1234--  <-- New selection [1,5)
                 //...get sub Sequence Manager -- ie cut out a chunk (1,5]
                 //=ATTA     <-- New Sequence
                 //=1122     <-- Where Feat 1 and 2 live now
@@ -220,15 +223,14 @@ Ext.onReady(function() {
                 expect(tmp.getFeatures()[0].getEnd()).toBe(2);
                 expect(tmp.getFeatures()[1].getStart()).toBe(2);
                 expect(tmp.getFeatures()[1].getEnd()).toBe(4);
-                //console.log("===> End subSequenceManagerTesting");
             });
             
-            it("subSequenceManager(): #3 select middle of feature--WILL NOT INCLUDE THE FEATURE",function(){
+            it("subSequenceManager(): #3 select middle of feature--DOES NOT INCLUDE THE SUB-FEATURE (Is that right?)",function(){
                 //sm.setFeatures(feat3);
                 //expect(sm.getFeatures().length).toBe(1);
                 //=GATTACA
-                //=---45--   * feat2 (3,5]
-                //=----5--  <-- New selection (4,5]
+                //=---34--   * feat2 (3,5]
+                //=----4--  <-- New selection (4,5]
                 //...get sub Sequence Manager -- ie cut out a chunk (4,5]
                 //=A     <-- New Sequence
                 //=2     <-- Where part of Feat 2 live now
@@ -276,11 +278,59 @@ Ext.onReady(function() {
                 expect(sm.hasFeature(feat1)).toBeTruthy();
                 expect(sm.hasFeature(feat2)).toBeFalsy();
             });
-            it("insertSequence",function() {
+
+            it("insertSequence(): before a feature-->SOMETHING WRONG WITH FEATURES.INSERTAT()",function() {
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
                 expect(sm.getFeatures()[0].getEnd()).toBe(3);
 
+                //=GATTACA
+                //=-FF----
+                //=0------
+                var insSeq = Teselagen.bio.sequence.DNATools.createDNA("CCC");
+                sm.insertSequence(insSeq, 0, false);
 
+                expect(sm.getSequence().getSymbolsLength()).toBe(10);
+                expect(sm.getSequence().toString()).toBe("cccgattaca");
+
+                expect(sm.getFeatures().length).toBe(1);
+
+                //=gggGATTACA
+                //=----45----
+                // Remember that it is [start, end) where end is noninclusive
+                expect(sm.getFeatures()[0].getStart()).toBe(4);
+                expect(sm.getFeatures()[0].getEnd()).toBe(6); // gaggg [1,6)
+                //CHECK FOR EVENT HANDLING
+            });
+
+            it("insertSequence(): after a feature",function() {
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3);
+
+                //=GATTACA
+                //=-FF----
+                //=----4--
+                var insSeq = Teselagen.bio.sequence.DNATools.createDNA("CCC");
+                sm.insertSequence(insSeq, 4, false);
+
+                expect(sm.getSequence().getSymbolsLength()).toBe(10);
+                expect(sm.getSequence().toString()).toBe("gattcccaca");
+
+                expect(sm.getFeatures().length).toBe(1);
+                //=GATTgggACA
+                //=-12-------
+                // Remember that it is [start, end) where end is noninclusive
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+                //CHECK FOR EVENT HANDLING
+            });
+
+            it("insertSequence(): inside of a feature",function() {
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3);
+
+                //=GATTACA
+                //=-FF----
+                //=--2----
                 var insSeq = Teselagen.bio.sequence.DNATools.createDNA("GGG");
                 sm.insertSequence(insSeq, 2, false);
 
@@ -290,73 +340,94 @@ Ext.onReady(function() {
                 expect(sm.getFeatures().length).toBe(1);
 
                 // Remember that it is [start, end) where end is noninclusive
+                //=GAGGGTTACA
+                //=-FfffF----
+                //=-12345----
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
-                expect(sm.getFeatures()[0].getEnd()).toBe(6); // gaggg [1,6)
+                expect(sm.getFeatures()[0].getEnd()).toBe(6); // agggt [1,6)
                 //CHECK FOR EVENT HANDLING
             });
 
-            it("insertSequenceManager",function(){
+            it("insertSequenceManager(): outside of a feature: ",function(){
                 //=gattaca
-                //=-11---- <= where Feat1 of sm is
+                //=-11---- <= where Feat1 is in sm
                 expect(sm.getFeatures()[0].getStart()).toBe(1); //1
                 expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
+                console.log(sm.subSequence(1,3).toString());
 
-                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGGGG");
+                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGCCG");
                 sm2  = Ext.create("Teselagen.manager.SequenceManager", {
                     name: "test2",
                     circular: true,
                     sequence: seq2,
                     features: [feat2]
                 });
-                // GGGGGG
-                // ---22- <== where Feat2 is
+                //=GGGCCG
+                //=---22- <== where Feat2 is in seq2/sm2
                 expect(sm.getSequence().toString()).toBe("gattaca");
 
-                sm.insertSequenceManager(sm2, 2, false);
+                sm.insertSequenceManager(sm2, 1, false);
+                expect(sm.getFeatures().length).toBe(2);
 
-                // gaGGGGGGttaca
-                // -11--22------ <=where Feat 1 and Feat 2 are now
-                expect(sm.getSequence().toString()).toBe("gaggggggttaca");
-
-                // Features[0] == feat1
-                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
-                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
-                // Features[1] == feat2
-                expect(sm.getFeatures()[1].getStart()).toBe(5);
-                expect(sm.getFeatures()[1].getEnd()).toBe(7); // gaggg [1,6)
-                //CHECK FOR EVENT HANDLING
-            });
-
-            it("insertSequenceManager v2",function(){
-                //=gattaca
-                //=-11---- <= where Feat1 of sm is
-                expect(sm.getFeatures()[0].getStart()).toBe(1); //1
-                expect(sm.getFeatures()[0].getEnd()).toBe(3); // gaggg [1,6)
-
-                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGGGG");
-                sm2  = Ext.create("Teselagen.manager.SequenceManager", {
-                    name: "test2",
-                    circular: true,
-                    sequence: seq2,
-                    features: [feat2]
-                });
-                // GGGGGG
-                // ---22- <== where Feat2 is
-                expect(sm.getSequence().toString()).toBe("gattaca");
-
-                sm.insertSequenceManager(sm2, 1, false); // insert between
-
-                // gGGGGGGattaca
-                // -1--22--1---- <=where Feat 1 and Feat 2 are now
-                expect(sm.getSequence().toString()).toBe("gggggggattaca");
+                //=gGGGCCGattaca
+                //=----22-11---- <=where Feat 1 and Feat 2 are now
+                expect(sm.getSequence().seqString()).toBe("ggggccgattaca");
 
                 // Features[0] == feat1
-                expect(sm.getFeatures()[0].getStart()).toBe(1);
-                expect(sm.getFeatures()[0].getEnd()).toBe(8);
+                //=gGGGCCGattaca
+                //=-------FF----
+                //=-------78----
+                console.log(sm.subSequence(1,3).toString());
+                console.log(sm.subSequence(7,9).toString());
+                expect(sm.getFeatures()[0].getStart()).toBe(7);
+                expect(sm.getFeatures()[0].getEnd()).toBe(9);
                 // Features[1] == feat2
+                //=gGGGCCGattaca
+                //=----FF-------
+                //=----45-------
                 expect(sm.getFeatures()[1].getStart()).toBe(4);
                 expect(sm.getFeatures()[1].getEnd()).toBe(6); 
             //CHECK FOR EVENT HANDLING
+            });
+
+            it("insertSequenceManager(): inside of a feature",function(){
+                //=gattaca
+                //=-11---- <= where Feat1 of sm is
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3);
+                
+
+                // GGGCCG
+                // ---22- <== where Feat2 is in seq2
+                seq2 = Teselagen.bio.sequence.DNATools.createDNA("GGGCCG");
+                sm2  = Ext.create("Teselagen.manager.SequenceManager", {
+                    name: "test2",
+                    circular: true,
+                    sequence: seq2,
+                    features: [feat2]
+                });
+                expect(sm.getSequence().toString()).toBe("gattaca");
+
+                sm.insertSequenceManager(sm2, 2, false);
+                expect(sm.getFeatures().length).toBe(2);
+
+                // gaGGGGGGttaca
+                // -1---22-1---- <=where Feat 1 and Feat 2 are now
+                expect(sm.getSequence().toString()).toBe("gagggccgttaca");
+
+                // Features[0] == feat1
+                //=gaGGGCCGttaca
+                //=-FFFFFFFF---- 
+                //=-12345678----
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(9);
+                // Features[1] == feat2
+                //=gaGGGCCGttaca
+                //=-----FF---- 
+                //=-----56------
+                expect(sm.getFeatures()[1].getStart()).toBe(5);
+                expect(sm.getFeatures()[1].getEnd()).toBe(7); 
+                //CHECK FOR EVENT HANDLING
             });
 
             it("removeSequence() -- SEE RemoveSequence Suite of tests",function(){

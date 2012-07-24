@@ -1,6 +1,19 @@
 /**
- * SequenceManager
+ * @class Teselagen.manager.SequenceManager
  * Main class that provides data to VectorPanel (Pie and Rail representations) and AnnotatePanel.
+
+ * NOTE: This class uses other classes (e.g.{@link Teselagen.bio.sequence.DNATools} )
+ * that have inputs of "start" and "end."  Indices begin at 0.
+ * The convention used is start is inclusive and end is exclusive:
+ *          [start, end)
+ * For example, the selection with the following indices
+ *          start = 2, end = 5
+ * is:
+ *          GATTACA
+ *          --234--
+ *          or 
+ *            TTA
+ *
  * Based off SequenceProvider.as
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceProvider.as)
@@ -168,7 +181,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //dispatcher.dispatchEvent(event);
     },
 
-    /**
+    /** Calculates the complement sequence
      * @returns {Teselagen.bio.sequence.common.SymbolList} complementSequence 
      */
     getComplementSequence: function() {
@@ -176,7 +189,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         return this.complementSequence;
     },
 
-    /**
+    /** Calculates the reverse complement sequence
      * @returns {Teselagen.bio.sequence.common.SymbolList} reverseComplementSequence 
      */
     getReverseComplementSequence: function() {
@@ -185,9 +198,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * Sub sequence by range
-     * @param {Number} start Range start
-     * @param {Number} end Range end
+     * Extracts the sub sequence by range.
+     * @param {Number} start Range start, inclusive.
+     * @param {Number} end Range end, exclusive.
+     * @returns {Teselagen.bio.sequence.common.SymbolList} subSequence
      */
     subSequence: function(start, end) {
         var result = null;// = Ext.define("Teselagen.bio.sequence.common.SymbolList"); //SymbolList
@@ -205,10 +219,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
         return result;
     },
 
-    /** THIS DOES NOT WORK YET
-     * Sub sequence manager by range
-     * @param {Number} start Range start
-     * @param {Number} end Range end
+    /**
+     * Extracts the sub sequence manager by range.
+     * If the range of the sub sequence you choose is only a subset of a feature, 
+     * that feature is not transfered to your new subSequenceManager.
+     * @param {Number} start Range start, inclusive.
+     * @param {Number} end Range end, exclusive.
+     * @returns {Teselagen.manager.SequenceManager} subSequenceManager
      */
     subSequenceManager: function(start, end) {
         var sequence = this.sequence;
@@ -283,9 +300,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * Adds feature to sequence manager
-     * @param {Feature} feature Feature to add
-     * @param {Boolean} quiet When true not SequenceManagerEvent will be dispatched (???)
+     * Adds Feature to sequence manager.
+     * @param {Teselagen.bio.sequence.dna.Feature} feature Feature to add
+     * @param {Boolean} quiet When true not SequenceManagerEvent will be dispatched
      */
     addFeature: function(feature, quiet) {
         var evt;
@@ -313,14 +330,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * Adds list of features to sequence provider
-     * @param {[Features]} featuresToAdd List of features to add
+     * Adds list of Features to sequence manager.
+     * @param {Teselagen.bio.sequence.dna.Feature} [featuresToAdd] List of features to add
      * @param{Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @returns {Boolean} done True if successful, False if nothing was done.
      */
     addFeatures: function(featuresToAdd, quiet) {
         var i, evt;
         if ( !featuresToAdd || featuresToAdd.length === 0) {
-            return null; //? null?
+            return false; //? null?
         }
         if ( !quiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
@@ -341,12 +359,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-
+        return true;
     },
 
     /**
-     * Removes feature from sequence manager
-     * @param {Feature} feature Feature to remove
+     * Removes Feature from sequence manager.
+     * @param {Teselagen.bio.sequence.dna.Feature} feature Feature to remove
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
     removeFeature: function(feature, quiet) {
@@ -376,15 +394,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * Remove list of features to sequence provider
-     * @param {[Features]} featuresToRemove List of features to remove
+     * Remove list of Features to sequence manager.
+     * @param {Teselagen.bio.sequence.dna.Feature} [featuresToRemove] List of features to remove
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @returns {Boolean} done True if successful, False if nothing was done.
      */
     removeFeatures: function(featuresToRemove, quiet) {
         var i, evt;
 
         if (!featuresToRemove || featuresToRemove < 1) {
-            return null;
+            return false;
         }
 
         if (!featuresToRemove && !manualUpdateStarted) {
@@ -406,11 +425,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
+        return true;
     },
 
     /**
-     * Check if sequenceProvider has feature
-     * @param {Feature} feature Feature existance to check
+     * Check if SequenceManager has Feature
+     * @param {Teselagen.bio.sequence.dna.Feature} feature Feature existance to check
+     * @return {Boolean} hasFeature
      */
     hasFeature: function(feature) {
         //return this.features.contains(feature);
@@ -420,7 +441,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * Insert another sequence manager at position. This method is used on sequence paste. 
      *
-     * @param {SequenceManger} sequenceManger SequenceManager to insert
+     * @param {Teselagen.manager.SequenceManager} sequenceManager SequenceManager to insert
      * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
@@ -438,10 +459,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        console.log(this.getSequence().toString());
-        console.log(sequenceManager.getSequence().toString());
         this.insertSequence(sequenceManager.getSequence(), position, true);
-        console.log(this.getSequence().toString());
 
         for (var i=0; i<sequenceManager.getFeatures().length; i++) {
             insertFeature = sequenceManager.getFeatures()[i].clone();
@@ -462,15 +480,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * Insert another sequence at position. This method is used on sequence paste
      * 
-     * @param {SymbolList} insertSequence SymbolList to insert
+     * @param {Teselagen.bio.sequence.common.SymbolList} insertSequence SymbolList to insert
      * @param {Number} position Position where to insert; non-zero based
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @returns {Boolean} done True if successful, False if nothing was done.
      */
     insertSequence: function(insertSequence, position, quiet) {
         var lengthBefore, insertSequence, insertSequenceLength;
 
         if (position < 0 || position > this.sequence.length || insertSequence.length < 1 ) {
-            return null;
+            return false;
         }
         this.needsRecalculateComplementSequence        = true;
         this.needsRecalculateReverseComplementSequence = true;
@@ -498,22 +517,24 @@ Ext.define("Teselagen.manager.SequenceManager", {
         if(!quiet && !this.manualUpdateStarted) {
             //SEQUENCE_CHANGED
         }
+        return false;
     },
 
-    /** THIS ONE IS HARD--GET BACK TO THIS LATER
+    /**
      * TEMP: USING Ext.Error.raise to throw errors for now
      * Remove sequence in range.
      * 
-     * @param startIndex Range start 
-     * @param endIndex Range end 
-     * @param quiet When true not SequenceProviderEvent will be dispatched
+     * @param {Number} startIndex Range start, inclusive.
+     * @param {Number} endIndex Range end, exclusive.
+     * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @returns {Boolean} done True if successful, False if nothing was done.
      */
     removeSequence: function(startIndex, endIndex, quiet) {
         var lengthBefore = this.sequence.length;
 
         // impossible cases
         if (endIndex < 0 || startIndex < 0 || startIndex > lengthBefore || endIndex > lengthBefore || startIndex == endIndex ) {
-            return null;
+            return false;
         }
 
         needsRecalculateComplementSequence        = true;
@@ -544,8 +565,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
             var feature = features[i];
             featStart = feature.getStart();
             featEnd   = feature.getEnd();
-            console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
-            console.log("remove Info " + startIndex + ":" + endIndex);
+            //console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
+            //console.log("remove Info " + startIndex + ":" + endIndex);
 
             if ( featStart < featEnd ) {
                 // Normal Feature
@@ -566,7 +587,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                     circFeatureCircSelection();
                 }
             }
-            console.log("New Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
+            //console.log("New Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
         }
 
         for (var d=0; d < deletions.length; d++) {
@@ -587,10 +608,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_SEQUENCE_REMOVE, {position : startIndex, length : length}));
         }
 
+        return true;
+
         // helper functions here 
 
         function normFeatureNormSelection() {
-            console.log("norm-norm");
+            if (DEBUG_MODE) console.log("norm-norm");
             /* Selection before feature => feature shift left
              * |-----SSSSSSSSSSSSSSSSSSSSSSSSS--------------------------------------------------------------------|
              *                                     |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                 */
@@ -647,7 +670,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         };
 
         function normFeatureCircSelection() {
-            console.log("norm-circ");
+            if (DEBUG_MODE) console.log("norm-circ");
             /* Selection and feature no overlap => shift left
              * |SSSSSSSSSSS-------------------------------------------------------------------------SSSSSSSSSSSSSS|
              *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
@@ -701,7 +724,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         };
 
         function circFeatureNormSelection() {
-            console.log("circ-norm");
+            if (DEBUG_MODE) console.log("circ-norm");
             /* Selection between feature start and end
              * |-------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS------------------------------------------|
              *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
@@ -777,7 +800,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         };
 
         function circFeatureCircSelection() {
-            console.log("circ-circ");
+            if (DEBUG_MODE) console.log("circ-circ");
             /* Selection inside feature
              * |SSSSSSSSSSSSSSSSS--------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS|
              *  FFFFFFFFFFFFFFFFFFF|                                               |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
