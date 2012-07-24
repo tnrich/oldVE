@@ -437,7 +437,7 @@ Ext.onReady(function() {
                     //CHECK FOR EVENT HANDLING
                 });
             });
-            describe("removeSequence()", function() {
+            describe("removeSequence(): normal Feature, normal Selection", function() {
                 it("removeSequence() -- Fn,Sn1 -- selection before feature",function(){
                     //GATTACA
                     //-FF----
@@ -647,14 +647,45 @@ Ext.onReady(function() {
                 expect(sm.getName()).toBe("test");
                 expect(sm.getCircular()).toBeTruthy();
                 expect(sm.getSequence()).toBe(seq);
-                expect(sm.getFeatures().length).toBe(2);
-                expect(sm.getFeatures()[0].getLocations().length).toBe(2);
-                expect(sm.getFeatures()[1].getLocations().length).toBe(2);
+
+
+                var features = sm.getFeatures();
+                expect(features.length).toBe(2);
+                expect(features[0].getLocations().length).toBe(2);
+                expect(features[1].getLocations().length).toBe(2);
+
+                expect(features[0].getLocations()[0].getStart()).toBe(10);
+                expect(features[0].getLocations()[0].getEnd()).toBe(20);
+                expect(features[0].getLocations()[1].getStart()).toBe(25);
+                expect(features[0].getLocations()[1].getEnd()).toBe(30);
+
+                expect(features[1].getLocations()[0].getStart()).toBe(40);
+                expect(features[1].getLocations()[0].getEnd()).toBe(50);
+                expect(features[1].getLocations()[1].getStart()).toBe(55);
+                expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
 
             it("testRemoveSequenceFnSn1FcSn1",function(){
-                //sm.removeSequence(5, 8);
+                sm.removeSequence(5, 8);
+                var features = sm.getFeatures();
+                expect(features.length).toBe(2);
+                expect(features[0].getLocations()[0].getStart()).toBe(7);
+                expect(features[0].getLocations()[0].getEnd()).toBe(17);
+                expect(features[0].getLocations()[1].getStart()).toBe(22);
+                expect(features[0].getLocations()[1].getEnd()).toBe(27);
 
+                expect(features[1].getLocations()[0].getStart()).toBe(37);
+                expect(features[1].getLocations()[0].getEnd()).toBe(47);
+                expect(features[1].getLocations()[1].getStart()).toBe(52);
+                expect(features[1].getLocations()[1].getEnd()).toBe(5); //this is wrong?
+            });
+
+
+
+
+
+            
+            it("",function(){
             });
 
         });
