@@ -1,12 +1,8 @@
 Ext.define('Vede.controller.AnnotatePanelController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.manager.SequenceManagerEvent",
-               "Teselagen.mappers.MapperEvent"],
-
-    mixins: {
-        observable: "Ext.util.Observable"
-    },
+    requires: ["Teselagen.event.SequenceManagerEvent",
+               "Teselagen.event.MapperEvent"],
 
     /*init: {
         updateSequenceChanged: Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
@@ -48,7 +44,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             items: [box]
         });
         ap.add(drawComponent2);
-        console.log(ap);
+        //console.log(ap);
         
         // Instantiate the managers.
         this.SequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
@@ -77,19 +73,19 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                          this.TraceManager];
 
         // Add event listeners to managers.
-        this.SequenceManager.on(Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED, 
+        this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
                                 this.onSequenceChanged, this);
 
-        this.AAManager.on(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
+        this.AAManager.on(Teselagen.event.MapperEvent.AA_MAPPER_UPDATED,
                           this.onAAManagerUpdated, this);
 
-        this.ORFManager.on(Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED,
+        this.ORFManager.on(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED,
                           this.onORFManagerUpdated, this);
 
-        this.RestrictionEnzymeManager.on(Teselagen.mappers.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
+        this.RestrictionEnzymeManager.on(Teselagen.event.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
                           this.onRestrictionEnzymeManagerUpdated, this);
 
-        this.TraceManager.on(Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED,
+        this.TraceManager.on(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED,
                           this.onTraceManagerUpdated, this);
     },
 
