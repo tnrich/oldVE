@@ -1,9 +1,9 @@
 /**
- * @class Teselagen.data.RestrictionEnzymeGroup
+ * @class Teselagen.models.RestrictionEnzymeGroup
  * Class to hold a group of RestrictionEnzymes.
- * Used by @link Teselagen.mappers.RestrictionEnzymeMapper
+ * Used by @link Teselagen.manager.RestrictionEnzymeManager
  */
-Ext.define("Teselagen.data.RestrictionEnzymeGroup", {
+Ext.define("Teselagen.models.RestrictionEnzymeGroup", {
     config: {
         name: "",
         enzymes: [],

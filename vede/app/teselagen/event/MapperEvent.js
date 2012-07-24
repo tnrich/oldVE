@@ -1,4 +1,4 @@
-Ext.define("Teselagen.mappers.MapperEvent", {
+Ext.define("Teselagen.event.MapperEvent", {
     singleton: true,
 
     AA_MAPPER_UPDATED: "AAMapperUpdated",

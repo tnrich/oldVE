@@ -4,7 +4,7 @@
  * @author Zinovii Dmytriv (original author of SequenceProviderEvent.as)
  */
 
-Ext.define("Teselagen.manager.SequenceManagerEvent", {
+Ext.define("Teselagen.event.SequenceManagerEvent", {
     singleton: true,
 
     SEQUENCE_CHANGING: "SequenceChanging",

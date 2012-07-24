@@ -24,7 +24,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     requires: ["Teselagen.bio.sequence.common.Location",
         "Teselagen.bio.sequence.common.SymbolList",
-        "Teselagen.manager.SequenceManagerEvent",
+        "Teselagen.event.SequenceManagerEvent",
         "Teselagen.bio.sequence.DNATools"
     ],
     /**
@@ -77,7 +77,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.mixins.observable.constructor.call(this, inData);
 
         //DNATools: Teselagen.bio.sequence.DNATools,
-        updateSequenceChanged: Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
+        updateSequenceChanged: Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED,
 
 
         this.addEvents("SequenceChanged");
