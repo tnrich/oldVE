@@ -187,10 +187,9 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				throw Ext.create("Teselagen.bio.BioException", {
 					message : "Cannot shift by greater than maximum length"
 				}); 
-				return;
 			}
 
-			var offset = start;
+			var offset = locations[0].getStart();
 			var tempLocations = getNormalizedLocations(pMaxLength);
           
 			 for (var i = 0; i < tempLocations.length; ++i ){

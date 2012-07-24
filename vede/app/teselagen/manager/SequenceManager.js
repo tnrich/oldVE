@@ -445,13 +445,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
-    insertSequenceManager: function(sequenceManager, position, quiet) {
+    insertSequenceManager: function(pSequenceManager, pPosition, pQuiet) {
         var i, evt, insertFeature;
 
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
-        if(!quiet && !this.manualUpdateStarted) {
+        if(!pQuiet && !this.manualUpdateStarted) {
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -459,14 +459,19 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        this.insertSequence(sequenceManager.getSequence(), position, true);
+        this.insertSequence(pSequenceManager.getSequence(), pPosition, true);
 
-        for (var i=0; i<sequenceManager.getFeatures().length; i++) {
-            insertFeature = sequenceManager.getFeatures()[i].clone();
-            insertFeature.shift(position, this.sequence.length, this.circular);
-            this.addFeature(insertFeature, true);
+        for (var i=0; i<pSequenceManager.getFeatures().length; i++) {
+            insertFeature = pSequenceManager.getFeatures()[i].clone();
+            pSequenceManager.getFeatures()[i].shift(pPosition, this.sequence.length, this.circular);
+            this.addFeature(pSequenceManager.getFeatures()[i], true);
         }
-        if(!quiet && !this.manualUpdateStarted) {
+
+        Ext.each(pSequenceManager.getFeatures(), function(pFeature){
+            console.log("Called within insertSequenceManager: " +  
+                "Feature start: " + pFeature.getStart() + " and Feature end: " + pFeature.getEnd());
+        });
+        if(!pQuiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
