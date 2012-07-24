@@ -15,7 +15,13 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             },
             "#restrictionEnzymesManagerOKButton": {
                 click: this.onOKButtonClick
-            }
+            },
+            "#saveGroupButton": {
+                click: this.onSaveButtonClick
+            },
+            "#deleteGroupButton": {
+                click: this.onDeleteGroupButtonClick
+            },
         });
 
         this.application.on({
@@ -24,6 +30,10 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         });
     },
 
+    /**
+     * Populates the group selector combobox when the restriction enzyme
+     * manager window is opened.
+     */
     onEnzymeManagerOpened: function(manager) {
         this.managerWindow = manager;
         if(!this.GroupManager.getIsInitialized()) {
@@ -60,7 +70,19 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         selector.bindStore(selector.store);
     },
 
+    /**
+     * Saves active enzymes and closes the window.
+     */
     onOKButtonClick: function() {
+        var selected = this.managerWindow.query("#enzymeListSelector")[0].getValue();
+        var newActiveGroup = [];
+
+        Ext.each(selected, function(name) {
+            newActiveGroup.push(this.GroupManager.getEnzymeByName(name));
+        }, this);
+
+        this.GroupManager.setActiveGroup(newActiveGroup);
+
         this.managerWindow.close();
     }
 });
