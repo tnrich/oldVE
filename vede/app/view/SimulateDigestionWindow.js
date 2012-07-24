@@ -20,7 +20,7 @@
 ]);*/
 Ext.define('Vede.view.SimulateDigestionWindow', {
     extend: 'Ext.window.Window',
-    requires: ['Ext.form.Panel', 'Ext.ux.form.MultiSelect', 'Ext.ux.form.ItemSelector'],
+    requires: ['Ext.form.Panel', 'Ext.ux.form.MultiSelect', 'Ext.ux.form.ItemSelector', 'Teselagen.manager.RestrictionEnzymeGroupManager'],
     height: 500,
     width: 900,
     resizable: false,
@@ -31,19 +31,17 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
     //var enzymeStore = 
     initComponent: function() {
         var me = this;
-var possibleEnzymes = new Ext.data.Store({
+var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
    // store configs
             autoLoad: true,
    autoDestroy: true,
-   storeId: 'initialEnzymes',
+   storeId: 'itemSelectorEnzymeStore',
    // reader configs
    fields: [
-            {name : 'id', type : 'int'},
-      {name: 'name', type: 'string'}
+            //{name : 'enzymes', type : 'auto'},
+      {name: 'name', type: 'string'},
+        {name: 'site', type: 'string'}
    ],
-    data: [
-    {"id": 0,"name": "Common"},
-    ]
 });
 
         var initialEnzymes = new Ext.data.Store({
@@ -95,17 +93,23 @@ var possibleEnzymes = new Ext.data.Store({
                                     store: initialEnzymes, //change this store to query database
                                     value: 'Common',
                                     listeners: { 
-                                        select: function(combo, newvalue, oldvalue){
+                                        change: function(combo, newvalue, oldvalue){
                                             var newGroup = combo.getValue();
-                                            var reGroupManager = Ext.create("Teselagen.manager.RestrictionEnzymeGroupManager", {});
-                                            reGroupManager.initialize();
-                                            var retrievedGroup = reGroupManager.groupByName(newGroup);
+                                            Teselagen.manager.RestrictionEnzymeGroupManager.initialize();
+                                            var retrievedGroup = Teselagen.manager.RestrictionEnzymeGroupManager.groupByName(newGroup);
                                             console.log(retrievedGroup.getName());
+                                            console.log(retrievedGroup.getEnzymes()[0]);
                                             var cmp = Ext.getCmp('itemselector-field');
                                             console.log(cmp.store.getAt(0));
                                             cmp.store.removeAll(true);-
                                             console.log(cmp.store.getAt(0));
-                                            cmp.store.add([newGroup]);
+                                            var newStoreData = [];
+                                            Ext.each(retrievedGroup.getEnzymes(), function(enzyme){
+                                                var newRow = [enzyme.getName(), enzyme.getSite()];
+                                                newStoreData.push(newRow);
+                                            });
+                                            cmp.store.loadData(newStoreData);
+                                            cmp.bindStore(cmp.store);
                                         }
                                     },
                                     x: 10,
@@ -132,7 +136,7 @@ var possibleEnzymes = new Ext.data.Store({
                     width: 420,
         id: 'itemselector-field',
                     imagePath: '../../extjs/examples/ux/css/images/',
-        store: possibleEnzymes,
+        store: itemSelectorEnzymeStore,
         autoShow: true,
         displayField: 'name',
         valueField: 'name',
