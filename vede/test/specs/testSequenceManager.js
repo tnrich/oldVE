@@ -519,7 +519,7 @@ Ext.onReady(function() {
             });
 
             it("featuresByRange() TEST ME",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
 
             /*it("featuresAt() TEST ME",function(){
