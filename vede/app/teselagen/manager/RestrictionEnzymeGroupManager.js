@@ -1,4 +1,5 @@
 /**
+ * @singleton
  * @class Teselagen.manager.RestrictionEnzymeGroupManager
  * This class manages the different user-defined and pre-installed groups of restriction enzymes.
  * It calls on @link Teselagen.bio.enzymes.RestrictionEnzymeManager to load them from an xml file.
@@ -8,18 +9,7 @@
 Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     requires: ["Teselagen.bio.enzymes.RestrictionEnzymeManager"],
 
-    statics: {
-        instance: null,
-        getInstance: function() {
-            if(!this.instance) {
-                this.instance = Ext.create("Teselagen.manager.RestrictionEnzymeGroupManager", {
-
-                });
-            }
-
-            return this.instance;
-        }
-    },
+    singleton: true,
 
     config: {
         systemGroups: [],

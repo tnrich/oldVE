@@ -26,8 +26,7 @@ Ext.application({
         'AppViewport',
         'FileImportWindow',
         'SimulateDigestionWindow',
-        'MyWindow1',
-        'MySplitter4'
+        'RestrictionEnzymesManagerWindow'
     ],
     autoCreateViewport: true,
     name: 'MyApp',

@@ -3,6 +3,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
     init: function() {
         this.control({
+            
         });
     }
 });

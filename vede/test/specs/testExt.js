@@ -1,4 +1,4 @@
-Ext.require("Teselagen.bio.parsers.GenbankManager");
+Ext.require("Teselagen.bio.parsers.Genbank");
 
 Ext.onReady(function() {
 describe("Generic Ext tests", function() {
@@ -175,35 +175,35 @@ describe("Generic Ext tests", function() {
 
     describe("Aliasing", function() {
         var mgr;
-        it("GenbankManager exists", function() {
-            expect(Ext.create("Teselagen.bio.parsers.GenbankManager")).toBeDefined();
+        it("Genbank exists", function() {
+            expect(Ext.create("Teselagen.bio.parsers.Genbank")).toBeDefined();
         });
         beforeEach(function() {
-            Ext.define("MyManager", {
-                extend: "Teselagen.bio.parsers.GenbankManager",
-                GenbankManager:  Teselagen.bio.parsers.GenbankManager,
+            Ext.define("MyClass", {
+                extend: "Teselagen.bio.parsers.Genbank",
+                Genbank:  Teselagen.bio.parsers.Genbank,
                 statics: {
-                    GenbankMgr: Teselagen.bio.parsers.GenbankManager
+                    GenbankStatic: Teselagen.bio.parsers.Genbank
                 },
                 constructor: function() {
                     var self = this.statics();
-                    expect(this.GenbankManager.getName())
-                        .toBe("Teselagen.bio.parsers.GenbankManager");
-                    expect(this.self.GenbankMgr.getName())
-                        .toBe("Teselagen.bio.parsers.GenbankManager");
-                    expect(self.GenbankMgr.getName())
-                        .toBe("Teselagen.bio.parsers.GenbankManager");
+                    expect(this.Genbank.getName())
+                        .toBe("Teselagen.bio.parsers.Genbank");
+                    expect(this.self.GenbankStatic.getName())
+                        .toBe("Teselagen.bio.parsers.Genbank");
+                    expect(self.GenbankStatic.getName())
+                        .toBe("Teselagen.bio.parsers.Genbank");
                 }
             });
-            mgr = Ext.create("MyManager");
+            inst = Ext.create("MyClass");
         });
         it("Can get instance alias class name", function() {
-            expect(mgr.GenbankManager.getName())
-                .toBe("Teselagen.bio.parsers.GenbankManager");
+            expect(inst.Genbank.getName())
+                .toBe("Teselagen.bio.parsers.Genbank");
         });
         it("Can get static alias class name", function() {
-            expect(MyManager.GenbankMgr.getName())
-            .toBe("Teselagen.bio.parsers.GenbankManager");
+            expect(MyClass.GenbankStatic.getName())
+            .toBe("Teselagen.bio.parsers.Genbank");
         })
     });
 

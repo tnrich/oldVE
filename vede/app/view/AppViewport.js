@@ -266,6 +266,7 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
+                                                id: 'restrictionEnzymesManagerMenuItem',
                                                 text: 'Restriction Enzymes Manager'
                                             },
                                             {

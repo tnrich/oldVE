@@ -45,9 +45,9 @@ Ext.define('Vede.controller.VectorPanelController', {
 
     onClickPie: function(pT, pE, pOpts) {
         var el = pT.surface.el;
-        var relX = pE.getX()-el.getLeft();
-        var relY = pE.getY()-el.getTop();
-        console.log(relX, relY);
+        var relEvtX = pE.getX()-el.getLeft();
+        var relEvtY = pE.getY()-el.getTop();
+        console.log(relEvtX, relEvtY);
         console.log(pT.x, pT.y);
     }
 

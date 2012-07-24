@@ -1,7 +1,8 @@
 Ext.define('Vede.controller.AnnotatePanelController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.manager.SequenceManagerEvent"],
+    requires: ["Teselagen.manager.SequenceManagerEvent",
+               "Teselagen.mappers.MapperEvent"],
 
     mixins: {
         observable: "Ext.util.Observable"
@@ -75,6 +76,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                          this.RestrictionEnzymeManager, 
                          this.TraceManager];
 
+        // Add event listeners to managers.
         this.SequenceManager.on(Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED, 
                                 this.onSequenceChanged, this);
 
@@ -95,5 +97,17 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         Ext.each(this.Managers, function(manager) {
             manager.sequenceChanged();
         });
+    },
+
+    onAAManagerUpdated: function() {
+    },
+
+    onORFManagerUpdated: function() {
+    },
+
+    onRestrictionEnzymeManagerUpdated: function() {
+    },
+
+    onTraceManagerUpdated: function() {
     }
 });
