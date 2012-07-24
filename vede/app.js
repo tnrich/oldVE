@@ -20,6 +20,7 @@ Ext.application({
         'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
+        'RestrictionEnzymeController',
         'VectorPanelController'
     ],
     errorHandler: function(err) {

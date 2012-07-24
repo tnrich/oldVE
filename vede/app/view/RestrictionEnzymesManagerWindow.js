@@ -15,6 +15,17 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
     modal: true,
 
     initComponent: function() {
+        var groupStore = Ext.create("Ext.data.Store", {
+            fields: [{name: "name", type: "string"}],
+            data: []
+        });
+
+        var enzymeListStore = Ext.create("Ext.data.Store", {
+            fields: [{name: "name", type: "string"}],
+            data: [],
+            sorters: [{property: "name", direction: "ASC"}]
+        });
+
         var me = this;
 
         Ext.applyIf(me, {
@@ -55,8 +66,14 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                                 {
                                                     xtype: 'combobox',
                                                     id: 'enzymeGroupSelector',
+                                                    store: groupStore,
+                                                    displayField: 'name',
                                                     fieldLabel: 'Enzymes',
-                                                    labelAlign: 'top'
+                                                    labelAlign: 'top',
+                                                    queryMode: 'local',
+                                                    editable: false,
+                                                    fieldLabel: 'Active Enzymes'
+
                                                 }
                                             ]
                                         },
@@ -72,7 +89,8 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             xtype: 'itemselector',
                                             id: 'enzymeListSelector',
                                             imagePath: '../../../extjs/examples/ux/css/images/',
-                                            store: [['1', 'one']],
+                                            store: enzymeListStore,
+                                            displayField: 'name', 
                                             flex: 1,
                                             buttons: ["oneRight", "allRight",
                                                       "oneLeft", "allLeft"],
@@ -83,7 +101,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                 },
                             ]
                         },
-                        /*{
+                        {
                             xtype: 'container',
                             id: 'enzymeWindowRightButtonContainer',
                             layout: {
@@ -91,7 +109,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                             },
                             flex: 0.3,
                             items: [
-                                {
+                                /*{
                                     xtype: 'container',
                                     height: 140,
                                     id: 'upperEnzymeGroupButtonContainer',
@@ -130,7 +148,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             flex: 1
                                         }
                                     ]
-                                },
+                                },*/
                                 {
                                     xtype: 'container',
                                     height: 70,
@@ -143,7 +161,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                         type: 'vbox'
                                     },
                                     x: -5,
-                                    y: 270,
+                                    y: 170,
                                     items: [
                                         {
                                             xtype: 'button',
@@ -154,13 +172,13 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                         {
                                             xtype: 'button',
                                             margin: 2,
-                                            text: 'Remove Enzyme',
+                                            text: 'Delete Group',
                                             flex: 1
                                         }
                                     ]
                                 }
                             ]
-                        }*/
+                        }
                     ]
                 },
                 {
