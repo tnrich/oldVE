@@ -13,6 +13,7 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
+    //alternateClassName: "Teselagen.GenbankManager",
     requires: ["Teselagen.bio.util.StringUtil"],
     singleton: true,
     /**
