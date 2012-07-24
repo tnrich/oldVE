@@ -52,13 +52,14 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
-        console.log("Restriction Enzymes Manager opening.");
-
         var restrictionEnzymesManagerWindow = Ext.create(
             "Vede.view.RestrictionEnzymesManagerWindow");
 
         restrictionEnzymesManagerWindow.show();
         restrictionEnzymesManagerWindow.center();
+
+        this.application.fireEvent("RestrictionEnzymeManagerOpened",
+                                   restrictionEnzymesManagerWindow);
     },
 
 

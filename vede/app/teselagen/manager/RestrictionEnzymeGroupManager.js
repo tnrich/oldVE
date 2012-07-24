@@ -172,6 +172,17 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
+     * Returns a list of all group names.
+     */
+    getGroupNames: function() {
+        var names = [];
+        Ext.each(this.systemGroups.concat(this.userGroups), function(group) {
+            names.push(group.getName());
+        });
+        return names;
+    },
+
+    /**
      * @private
      * Initializes activeGroup by loading the first system group, the "common" group enzymes, into it.
      */
