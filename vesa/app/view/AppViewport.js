@@ -278,7 +278,13 @@ Ext.define('MyApp.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Restriction Enzymes Manager'
+                                                text: 'Restriction Enzymes Manager',
+                                                listeners: {
+                                                    click: {
+                                                        fn: me.onMenuitemClick1,
+                                                        scope: me
+                                                    }
+                                                }
                                             },
                                             {
                                                 xtype: 'menuitem',
@@ -514,6 +520,10 @@ Ext.define('MyApp.view.AppViewport', {
         });
 
         me.callParent(arguments);
+    },
+
+    onMenuitemClick1: function(item, e, options) {
+        Ext.create("MyApp.view.RestrictionEnzymesManagerWindow").show();
     },
 
     onMenuitemClick: function(item, e, options) {

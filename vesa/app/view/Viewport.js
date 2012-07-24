@@ -19,7 +19,6 @@ Ext.define('MyApp.view.Viewport', {
     requires: [
         'MyApp.view.AppViewport',
         'MyApp.view.FileImportWindow',
-        'MyApp.view.MyWindow1',
-        'MyApp.view.MySplitter4'
+        'MyApp.view.RestrictionEnzymesManagerWindow'
     ]
 });
