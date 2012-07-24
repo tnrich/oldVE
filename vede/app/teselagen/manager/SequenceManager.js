@@ -214,17 +214,17 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var sequence = this.sequence;
         var features = this.features;
         var circular = this.circular;
-        var featuredSubSequence = null; //SequenceManger
+        var featuredSubSequence = null; //SequenceManger object
 
         if(start < 0 || end < 0 || start > sequence.length || end > sequence.length) {
-            return featuredSubSequence;
+            //console.log("HERE");
+            //return featuredSubSequence;
+            return null;
         }
 
         var featuredSubSymbolList = this.subSequence(start, end); //SymbolList
 
         var subFeatures = []; // ArrayCollection?
-
-        console.log(start + ":" + end + ":" + features.length);
 
         // see Teselagen.bio.sequence.common.Annotation for the feature.clone() function
 
@@ -232,30 +232,45 @@ Ext.define("Teselagen.manager.SequenceManager", {
             var feature = features[i]; //Feature
             var featStart = feature.getStart();
             var featEnd   = feature.getEnd();
-            console.log(start + ":" + end + ":" + featStart + ":" + featEnd);
+            //console.log("SubSeq at: (" + start + ":" + end + "), Feat at:" + featStart + ":" + featEnd + ")");
 
             if ( start < end && featStart < featEnd ) {
+                // ----------FFFFFFFF---------
+                //         SSSSSSSSSSSS        or
+                //           SSSSSSSS
                 if ( start <= featStart && end >= featEnd ) {
                     var clonedFeature1 = feature.clone();
                     clonedFeature1.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature1);
                 }
             } else if ( start > end && featStart >= featEnd) {
+                // FFFF-------------------FFFF
+                // SSSSSS               SSSSSS or 
+                // SSSS                   SSSS
                 if ( start <= featStart && end >= featEnd) {
                     var clonedFeature2 = feature.clone();
                     clonedFeature2.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature2);
                 }
             } else if (start > end && featStart <= featEnd) {
+                // ----------FFFFFFFF---------
+                // SSSSSS   SSSSSSSSSSSSSSSSSS or
+                // SSSSSS    SSSSSSSSSSSSSSSSS
                 if ( start <= featStart ) {
                     var clonedFeature3 = feature.clone();
                     clonedFeature3.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature3);
+
+                // ----------FFFFFFFF---------
+                // SSSSSSSSSSSS        SSSSSSS or
+                // SSSSSSSS            SSSSSSS  (but this means there is no overlap...)
                 } else if ( end > featEnd ) {
                     var clonedFeature4 = feature.clone();
                     clonedFeature4.shift(-start, sequence.length, circular);
                     subFeatures.push(clonedFeature4);
                 }
+            } else {
+                return null;
             }
         }
         featuredSubSequence = Ext.create("Teselagen.manager.SequenceManager", {
