@@ -1,28 +1,33 @@
 /**
- * @class Teselagen.mappers.ORFMapper
+ * @class Teselagen.manager.ORFManager
  * Class which manages the calculation of ORFs in the sequence.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv
  */
-Ext.define("Teselagen.mappers.ORFMapper", {
+Ext.define("Teselagen.manager.ORFManager", {
     extend: "Teselagen.mappers.Mapper",
 
-    requires: ["Teselagen.bio.orf.ORFFinder"],
+    requires: ["Teselagen.bio.orf.ORFFinder",
+               "Teselagen.bio.sequence.DNATools"],
 
     config: {
-        minORFSize: 300
+        minORFSize: 300,
+        orfs: null
     },
 
     mixins: {
         observable: "Ext.util.Observable"
     },
 
+    updateEventString: Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED,
+
+    DNATools: null,
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to observe for sequence changes.
      */
     constructor: function(inData) {
-        this.updateEventString = Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED;
+        this.DNATools = Teselagen.bio.sequence.DNATools;
 
         this.mixins.observable.constructor.call(this, inData);
         this.addEvents(this.updateEventString);
@@ -30,7 +35,7 @@ Ext.define("Teselagen.mappers.ORFMapper", {
         this.callParent([inData]);
         this.initConfig(inData);
 
-        var orfs = [];
+        this.orfs = [];
 
     },
 
@@ -48,7 +53,7 @@ Ext.define("Teselagen.mappers.ORFMapper", {
             this.dirty = false;
         } 
 
-        return orfs;
+        return this.orfs;
     },
 
     /**
@@ -97,64 +102,62 @@ Ext.define("Teselagen.mappers.ORFMapper", {
      * Recalculates ORFs for circular DNA.
      */
     recalculateCircular: function() {
-        var forwardSequence = sequenceManager.getSequence();
-        var backwardSequence = sequenceManager.getReverseComplementSequence();
+        var forwardSequence = this.sequenceManager.getSequence().seqString();
+        var backwardSequence = this.sequenceManager.getReverseComplementSequence().seqString();
 
-        var doubleForward = DNATools.createDNA(forwardSequence.seqString() +
-                                               forwardSequence.seqString());
-        var doubleBackward = DNATools.createDNA(backwardSequence.seqString() +
-                                                backwardSequence.seqString());
+        var doubleForward = this.DNATools.createDNA(forwardSequence +
+                                               forwardSequence);
+        var doubleBackward = this.DNATools.createDNA(backwardSequence +
+                                                backwardSequence);
 
         var orfsSequence = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(
                                                                 doubleForward,
                                                                 doubleBackward,
-                                                                minORFSize);
+                                                                this.minORFSize);
 
-        var maxLength = forwardSequence.getLength();
+        var maxLength = forwardSequence.length;
 
         var recalcOrfs = [];
         var normalOrfs = [];
         var orf = null;
 
-        for(var i = 0; i < orfsSequence.getLength(); i++) {
-            orf = orfsSequence[i];
-
+        Ext.each(orfsSequence, function(orf) {
             if(orf.getStart() >= maxLength) {
-            } else if(orf.getEnd() < maxLength) {
-                normalOrffs.push(orf);
-            } else if(orf.getEnd() >= maxLength && orf.getStart() < maxLength) {
-                orf.setOneEnd(orf.end - maxLength);
+            } else if(orf.getEnd() <= maxLength) {
+                normalOrfs.push(orf);
+            } else if(orf.getEnd() > maxLength && orf.getStart() < maxLength) {
+                orf.setOneEnd(orf.getEnd() - maxLength);
                 var startCodons = orf.getStartCodons();
 
-                for(var j = 0; j < startCodons.length; j++) {
-                    if(startCodons[j] >= maxLength) {
-                        startCodons[j] -= maxLength;
+                Ext.each(startCodons, function(startCodon) {
+                    if(startCodon >= maxLength) {
+                        startCodon -= maxLength;
                     }
-                }
+                });
 
                 recalcOrfs.push(orf);
             }
-        }
+        });
         
         var normalOrf = null;
         var circularOrf = null;
+
         // Eliminate the orf that overlaps with circular orfs.
-        for(var k = 0; k < normalOrfs.length; k++) {
-            normalOrf = normalOrfs[k];
+        Ext.each(normalOrfs, function(normalOrf) {
             var skip = false;
 
-            for(var l = 0; l < recalcOrfs.length; l++) {
-                circularOrf = recalcOrfs[l];
+            Ext.each(recalcOrfs, function(circularOrf) {
                 if(circularOrf.getEnd() == normalOrf.getEnd() &&
-                   circularOrg.getStrand() == normalOrf.getStrand()) {
+                   circularOrf.getStrand() == normalOrf.getStrand()) {
                     skip = true;
-                    break;
+                    return false;
                 }
-            }
+            });
+
             if(!skip) {
                 recalcOrfs.push(normalOrf);
             }
-        }
+        });
 
         this.setOrfs(recalcOrfs);
     },

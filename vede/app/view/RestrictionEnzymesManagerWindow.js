@@ -13,7 +13,7 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('MyApp.view.RestrictionEnzymeManagerWindow', {
+Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
     extend: 'Ext.window.Window',
 
     height: 468,
@@ -167,6 +167,9 @@ Ext.define('MyApp.view.RestrictionEnzymeManagerWindow', {
                                     allowBlank: false,
                                     forceSelection: true,
                                     flex: 1
+                                },
+                                {
+                                    xtype: 'listbox'
                                 }
                             ]
                         },

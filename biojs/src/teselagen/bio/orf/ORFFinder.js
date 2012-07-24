@@ -29,9 +29,12 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
             return [];
         }
 
-        var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
-        var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
-        var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+        var orfs1 = this.orfPerFrame(0, dnaSymbolList, minimumLength, 
+                                     Teselagen.bio.sequence.common.StrandType.FORWARD);
+        var orfs2 = this.orfPerFrame(1, dnaSymbolList, minimumLength, 
+                                     Teselagen.bio.sequence.common.StrandType.FORWARD);
+        var orfs3 = this.orfPerFrame(2, dnaSymbolList, minimumLength, 
+                                     Teselagen.bio.sequence.common.StrandType.FORWARD);
 
         return orfs1.concat(orfs2, orfs3);
     },
@@ -51,13 +54,19 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
 
         var result = [];
 
-        var orfs1Forward = this.orfPerFrame(0, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
-        var orfs2Forward = this.orfPerFrame(1, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
-        var orfs3Forward = this.orfPerFrame(2, forwardSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.FORWARD);
+        var orfs1Forward = this.orfPerFrame(0, forwardSymbolList, minimumLength, 
+                                            Teselagen.bio.sequence.common.StrandType.FORWARD);
+        var orfs2Forward = this.orfPerFrame(1, forwardSymbolList, minimumLength, 
+                                            Teselagen.bio.sequence.common.StrandType.FORWARD);
+        var orfs3Forward = this.orfPerFrame(2, forwardSymbolList, minimumLength, 
+                                            Teselagen.bio.sequence.common.StrandType.FORWARD);
 
-        var orfs1Reverse = this.orfPerFrame(0, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
-        var orfs2Reverse = this.orfPerFrame(1, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
-        var orfs3Reverse = this.orfPerFrame(2, reverseSymbolList, minimumLength, Teselagen.bio.sequence.common.StrandType.BACKWARD);
+        var orfs1Reverse = this.orfPerFrame(0, reverseSymbolList, minimumLength, 
+                                            Teselagen.bio.sequence.common.StrandType.BACKWARD);
+        var orfs2Reverse = this.orfPerFrame(1, reverseSymbolList, minimumLength, 
+                                            Teselagen.bio.sequence.common.StrandType.BACKWARD);
+        var orfs3Reverse = this.orfPerFrame(2, reverseSymbolList, minimumLength, 
+                                            Teselagen.bio.sequence.common.StrandType.BACKWARD);
 
         var reverseCombined = orfs1Reverse.concat(orfs2Reverse, orfs3Reverse);
 
@@ -119,7 +128,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
             possibleStopCodon = false;
 
             // Check if current codon could be a stop codon.
-            if(aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.gap && 
+            if(aaSymbol === Teselagen.bio.sequence.alphabets.ProteinAlphabet.getGap() && 
                !Teselagen.TranslationUtils.isStartCodon(n1, n2, n3)) {
                 if(this.evaluatePossibleStop(n1, n2, n3)) {
                     possibleStopCodon = true;
@@ -192,9 +201,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
             return true;
         }
 
-        var n1 = nucleotideOne.getAmbiguousMatches() ? nucleotideOne.getAmbiguousMatches() : [nucleotideOne];
-        var n2 = nucleotideTwo.getAmbiguousMatches() ? nucleotideTwo.getAmbiguousMatches() : [nucleotideTwo];
-        var n3 = nucleotideThree.getAmbiguousMatches() ? nucleotideThree.getAmbiguousMatches() : [nucleotideThree];
+        var n1 = this.returnMatches(nucleotideOne);
+        var n2 = this.returnMatches(nucleotideTwo);
+        var n3 = this.returnMatches(nucleotideThree);
 
         for(var i1 = 0; i1 < n1.length; i1++) {
             for(var i2 = 0; i2 < n2.length; i2++) {
@@ -207,6 +216,21 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
         }
 
         return false;
+    },
+
+    /**
+     * @private
+     * Helper function to return ambiguous matches of a nucleotide if they exist, and
+     * otherwise return an array just containing the nucleotide.
+     * @param {Teselagen.bio.sequence.symbols.NucleotideSymbol} nucleotide The nucleotide to get matches for.
+     * @return {Array<Teselagen.bio.sequence.symbols.NucleotideSymbol>} The array containing matches.
+     */
+    returnMatches: function(nucleotide) {
+        if(nucleotide.getAmbiguousMatches().length == 0) {
+            return [nucleotide];
+        } else {
+            return nucleotide.getAmbiguousMatches();
+        }
     },
 
     /**

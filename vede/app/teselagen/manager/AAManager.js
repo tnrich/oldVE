@@ -1,10 +1,10 @@
 /**
- * @class Teselagen.mappers.AAMapper
+ * @class Teselagen.manager.AAManager
  * Class which translates the different frames from a sequenceManager.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
-Ext.define("Teselagen.mappers.AAMapper", {
+Ext.define("Teselagen.manager.AAManager", {
     extend: "Teselagen.mappers.Mapper",
 
     requires: ["Teselagen.bio.sequence.TranslationUtils"],
@@ -20,7 +20,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
         observable: "Ext.util.Observable"
     },
 
-    TranslationUtils: Teselagen.bio.sequence.TranslationUtils,
+    TranslationUtils: null,
 
     updateEventString: Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
 
@@ -28,18 +28,12 @@ Ext.define("Teselagen.mappers.AAMapper", {
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.
      */
     constructor: function(inData) {
-        this.updateEventString = Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED;
-
+        this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
         this.mixins.observable.constructor.call(this, inData);
         this.addEvents(this.updateEventString);
         
         this.callParent([inData]);
         this.initConfig(inData);
-        
-        this.fireEvent(this.updateEventString);
-
-        this.on(this.updateEventString,
-                             function(){alert("aa mapper updated")});
     },
 
     /**
@@ -62,7 +56,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
         var i;
         var sequence = this.sequenceManager.getSequence();
         var revCom = this.sequenceManager.getReverseComplementSequence();
-        var seqLen = sequence.length;
+        var seqLen = sequence.seqString().length;
         var aminoAcid;
         var aminoAcidRevCom;
         var aaString;
@@ -97,7 +91,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
             aaString = "";
             aaStringRevCom = "";
 
-            if(aminoAcid instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
+            if(aminoAcid instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
                 if(this.TranslationUtils.isStopCodon(codon[0], codon[1], codon[2])) {
                     aaString = ".";
                 }
@@ -105,7 +99,7 @@ Ext.define("Teselagen.mappers.AAMapper", {
                 aaString = aminoAcid.getValue();
             }
 
-            if(aminoAcidRevCom instanceof Teselagen.bio.sequence.dna.symbols.GapSymbol) {
+            if(aminoAcidRevCom instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
                 if(this.TranslationUtils.isStopCodon(codonRevCom[0],
                                                      codonRevCom[1], 
                                                      codonRevCom[2])) {
@@ -123,13 +117,13 @@ Ext.define("Teselagen.mappers.AAMapper", {
             aaSequenceNew[i] = aaSequenceArray[i].join("");
             aaSequenceSparseNew[i] = aaSequenceArray[i].join(" ");
             revComNew[i] = revComArray[i].join("");
-            revComSparseNew[i] = revComArray[i].join("");
+            revComSparseNew[i] = revComArray[i].join(" ");
         }
 
-        this.aaSequence = aaSequenceNew;
-        this.aaSequenceSparse = aaSequenceSparseNew;
-        this.revCom = revComNew;
-        this.revComSparse = revComSparseNew;
+        this.setAaSequence(aaSequenceNew);
+        this.setAaSequenceSparse(aaSequenceSparseNew);
+        this.setAaRevCom(revComNew);
+        this.setAaRevComSparse(revComSparseNew);
     },
     
     /**
@@ -144,9 +138,9 @@ Ext.define("Teselagen.mappers.AAMapper", {
         }
 
         if(sparse) {
-            return aaSequenceSparse[frame];
+            return this.aaSequenceSparse[frame];
         } else {
-            return aaSequence[frame];
+            return this.aaSequence[frame];
         }
     },
 
@@ -162,9 +156,9 @@ Ext.define("Teselagen.mappers.AAMapper", {
         }
 
         if(sparse) {
-            return aaRevComSparse[frame];
+            return this.aaRevComSparse[frame];
         } else {
-            return aaRevCom[frame];
+            return this.aaRevCom[frame];
         }
     }
 });

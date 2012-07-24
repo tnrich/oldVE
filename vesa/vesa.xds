@@ -60,13 +60,21 @@
             ],
             "className": "VectorPanelController"
         },
-        "435687d5-4dc4-474f-81d9-f799dcf736fb": {
+        "d6163f70-d682-413d-98e2-dab474dee738": {
             "paths": [
-                "metadata/view/SimulateDigestionWindow",
-                "app/view/override/SimulateDigestionWindow.js",
-                "app/view/SimulateDigestionWindow.js"
+                "metadata/view/MyWindow1",
+                "app/view/override/MyWindow1.js",
+                "app/view/MyWindow1.js"
             ],
-            "className": "SimulateDigestionWindow"
+            "className": "MyWindow1"
+        },
+        "4c7a0fe5-c4fb-4462-a71c-7ed56fdd78c7": {
+            "paths": [
+                "metadata/view/MySplitter4",
+                "app/view/override/MySplitter4.js",
+                "app/view/MySplitter4.js"
+            ],
+            "className": "MySplitter4"
         }
     },
     "expandedState": {

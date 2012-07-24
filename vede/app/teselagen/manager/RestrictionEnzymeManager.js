@@ -1,13 +1,14 @@
 /**
- * @class Teselagen.mappers.RestrictionEnzymeMapper
+ * @class Teselagen.manager.RestrictionEnzymeManager
  * Maps restriction enzyme cut sites to a DNA sequence.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv
  */
-Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
+Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     extend: "Teselagen.mappers.Mapper",
 
-    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper"],
+    requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper",
+               "Teselagen.bio.sequence.DNATools"],
 
     config: {
         restrictionEnzymeGroup: null,
@@ -24,6 +25,8 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
 
     updateEventString: Teselagen.mappers.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
 
+    DNATools: null,
+
     /**
      * @param {Teselagen.data.RestrictionEnzymeGroup} restrictionEnzymeGroup The group of enzymes to map to the sequence.
      * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} allCutSites All cut sites produced by the enzymes in the group.
@@ -33,6 +36,8 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
      * @param {Int} maxCuts The maximum number of cuts an enzyme can make before its cut sites are not returned. Defaults to -1, meaning no limit.
      */
     constructor: function(inData) {
+        this.DNATools = Teselagen.bio.sequence.DNATools;
+
         this.mixins.observable.constructor.call(this, inData);
         this.addEvents(this.updateEventString);
         
@@ -46,7 +51,7 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
      */
     setRestrictionEnzymeGroup: function(pRestrictionEnzymeGroup) {
         this.restrictionEnzymeGroup = pRestrictionEnzymeGroup;
-        recalculate();
+        this.recalculate();
         dirty = false;
     },
 
@@ -92,7 +97,7 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
      */
     recalcIfNeeded: function() {
         if(this.dirty) {
-            recalculate();
+            this.recalculate();
             this.dirty = false;
         }
     },
@@ -103,7 +108,7 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
     setMaxCuts: function(pMaxCuts) {
         if(pMaxCuts!= this.maxCuts) {
             this.maxCuts = pMaxCuts;
-            dirty = true;
+            this.dirty = true;
         }
     },
 
@@ -145,11 +150,14 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
      * Recalculates cut sites for a circular sequence.
      */
     recalculateCircular: function() {
-        var seqLen = sequenceProvider.getSequence().length;
+        var seqLen = this.sequenceManager.getSequence().seqString().length;
+
+        var doubleSequence = this.DNATools.createDNA(this.sequenceManager.getSequence().seqString() +
+                                                     this.sequenceManager.getSequence().seqString());
+
         var newCutSites = Teselagen.bio.enzymes.RestrictionEnzymeMapper.cutSequence(
                                                 this.restrictionEnzymeGroup.getEnzymes(),
-                                                this.sequenceManager.getSequence() +
-                                                this.sequenceManager.getSequence());
+                                                doubleSequence);
 
         var editedCutSites = new Ext.util.HashMap();
 
@@ -159,7 +167,7 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
             // Eliminate cut sites that are over sequence length.
             var sitesForOneEnzyme = [];
             Ext.each(sitesList, function(site) {
-                if(site.getStart() <= sequenceLength) {
+                if(site.getStart() >= seqLen) {
                 } else if(site.getEnd() <= seqLen) {
                     sitesForOneEnzyme.push(site);
                 } else {
@@ -171,7 +179,7 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
             editedCutSites.add(key, sitesForOneEnzyme);
         });
 
-        filterByMaxCuts(editedCutSites);
+        this.filterByMaxCuts(editedCutSites);
     },
 
     /**
@@ -182,11 +190,11 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
     filterByMaxCuts: function(pCutSites) {
         var newCutSites = [];
         var newCutSitesMap = new Ext.util.HashMap();
-        var newAllCutSites = pCutSites.getValues();
+        var newAllCutSites = [];
         var newAllCutSitesMap = pCutSites;
         
         Ext.each(pCutSites.getKeys(), function(enzyme) {
-            var sitesForOneEnzyme = pCutSites[enzyme];    
+            var sitesForOneEnzyme = pCutSites.get(enzyme);    
             var numCuts = sitesForOneEnzyme.length;
 
             // Set numCuts for each site.
@@ -194,15 +202,16 @@ Ext.define("Teselagen.mappers.RestrictionEnzymeMapper", {
                 site.setNumCuts(numCuts);
             });
         
+            newAllCutSites = newAllCutSites.concat(sitesForOneEnzyme);
             newAllCutSitesMap[enzyme] = sitesForOneEnzyme;
 
             // Add only the cut sites of enzymes which have made fewer than maxCuts,
             // or add them all if maxCuts is -1 (default).
             if(this.maxCuts < 0 || numCuts <= this.maxCuts) {
                 newCutSitesMap[enzyme] = sitesForOneEnzyme;
-                newCutSites.concat(sitesForOneEnzyme);
+                newCutSites = newCutSites.concat(sitesForOneEnzyme);
             }
-        });
+        }, this);
 
         this.cutSites = newCutSites;
         this.cutSitesMap = newCutSitesMap;

@@ -20,6 +20,14 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         //updateKindSetMeento:        Teselagen.manager.SequenceManagerEvent.KIND_SET_MEMENTO,
         //updateKindInitialized:      Teselagen.manager.SequenceManagerEvent.KIND_INITIALIZED,
     },*/
+
+    AAManager: null,
+    ORFManager: null,
+    RestrictionEnzymeManager: null,
+    SequenceManager: null,
+    TraceManager: null,
+
+    Managers: null,
     
     onLaunch: function() {
         var ap = Ext.getCmp('AnnotatePanel');
@@ -41,6 +49,51 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         ap.add(drawComponent2);
         console.log(ap);
         
-    }
+        // Instantiate the managers.
+        this.SequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
+            name: "Sequence Manager"
+        });
 
+        this.AAManager = Ext.create("Teselagen.manager.AAManager", {
+            sequenceManager: this.SequenceManager
+        });
+        
+        this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {
+            sequenceManager: this.SequenceManager
+        });
+
+        this.RestrictionEnzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
+            sequenceManager: this.SequenceManager
+        });
+
+        this.TraceManager = Ext.create("Teselagen.manager.TraceManager", {
+            sequenceManager: this.SequenceManager
+        });
+
+        this.Managers = [this.AAManager, 
+                         this.ORFManager, 
+                         this.RestrictionEnzymeManager, 
+                         this.TraceManager];
+
+        this.SequenceManager.on(Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED, 
+                                this.onSequenceChanged, this);
+
+        this.AAManager.on(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
+                          this.onAAManagerUpdated, this);
+
+        this.ORFManager.on(Teselagen.managers.MapperEvent.ORF_MAPPER_UPDATED,
+                          this.onORFManagerUpdated, this);
+
+        this.RestrictionEnzymeManager.on(Teselagen.managers.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
+                          this.onRestrictionEnzymeManagerUpdated, this);
+
+        this.TraceManager.on(Teselagen.managers.MapperEvent.ORF_MAPPER_UPDATED,
+                          this.onTraceManagerUpdated, this);
+    },
+
+    onSequenceChanged: function() {
+        Ext.each(this.Managers, function(manager) {
+            manager.sequenceChanged();
+        });
+    }
 });
