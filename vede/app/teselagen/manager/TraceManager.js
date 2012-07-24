@@ -16,7 +16,7 @@ Ext.define("Teselagen.manager.TraceManager", {
         traceAnnotations: null
     },
 
-    updateEventString: Teselagen.mappers.MapperEvent.TRACE_MAPPER_UPDATED,
+    updateEventString: Teselagen.event.MapperEvent.TRACE_MAPPER_UPDATED,
 
     constructor: function(inData) {
         this.mixins.observable.constructor.call(arguments, this);
