@@ -19,7 +19,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         isInitialized: false
     },
 
-    RestrictionEnzymeManager: Teselagen.bio.enzymes.RestrictionEnzymeManager,
+    RestrictionEnzymeManager: null,
 
     /**
      * @param {Array<Teselagen.data.RestrictionEnzymeGroup>} systemGroups Groups of enzymes which are pre-defined by the program.
@@ -29,6 +29,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * @param {Boolean} isInitialized Whether the database has already been read from the xml file.
      */
     constructor: function(inData) {
+        this.RestrictionEnzymeManager = Teselagen.bio.enzymes.RestrictionEnzymeManager;
         this.initConfig(inData);
     },
 

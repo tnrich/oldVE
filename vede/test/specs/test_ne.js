@@ -3,6 +3,7 @@ Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
 Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
 Ext.require("Teselagen.bio.sequence.DNATools");
+Ext.require("Teselagen.manager.RestrictionEnzymeGroupManager");
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
 Ext.require("Teselagen.utils.SystemUtils");
 
@@ -549,11 +550,7 @@ Ext.onReady(function() {
 
     describe("Manager Classes", function() {
         describe("RestrictionEnzymeGroupManager", function() {
-            var rem; 
-
-            beforeEach(function() {
-                rem = Ext.create("Teselagen.manager.RestrictionEnzymeGroupManager", {});
-            });
+            var rem = Teselagen.manager.RestrictionEnzymeGroupManager;
 
             it("exists", function() {
                 expect(rem).toBeDefined();
