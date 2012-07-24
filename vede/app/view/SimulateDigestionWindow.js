@@ -28,8 +28,42 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
     id: "simulateDigestionWindow",
     resizable: false,
     modal: true,
+    //var enzymeStore = 
     initComponent: function() {
         var me = this;
+var possibleEnzymes = new Ext.data.Store({
+   // store configs
+            autoLoad: true,
+   autoDestroy: true,
+   storeId: 'initialEnzymes',
+   // reader configs
+   fields: [
+            {name : 'id', type : 'int'},
+      {name: 'name', type: 'string'}
+   ],
+    data: [
+    {"id": 0,"name": "Common"},
+    ]
+});
+
+        var initialEnzymes = new Ext.data.Store({
+   // store configs
+            autoLoad: true,
+   autoDestroy: true,
+   storeId: 'initialEnzymes',
+   // reader configs
+   fields: [
+            {name : 'id', type : 'int'},
+      {name: 'name', type: 'string'}
+   ],
+    data: [
+    {"id": 0,"name": "Common"},
+    {"id": 1,"name": "REBASE"},
+    {"id": 2,"name": "Berkeley BioBricks"},
+    {"id": 3,"name": "MIT BioBricks"},
+    {"id": 4,"name": "Fermentas Fast Digest"}
+    ]
+});
                 Ext.applyIf(me, {
             dockedItems: [
                 {
@@ -52,16 +86,42 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                             items: [
                                 {
                                     xtype: 'combobox',
-                                    width: 180,
+                                    id: 'enzymeGroupSelector',
+                                    width: 195,
                                     fieldLabel: '',
+                                    editable: false,
+                                    displayField: 'name',
+                                    valueField: 'name',
+                                    store: initialEnzymes, //change this store to query database
+                                    value: 'Common',
+                                    listeners: { 
+                                        select: function(combo, newvalue, oldvalue){
+                                            var newGroup = combo.getValue();
+                                            var reGroupManager = Ext.create("Teselagen.manager.RestrictionEnzymeGroupManager", {});
+                                            reGroupManager.initialize();
+                                            var retrievedGroup = reGroupManager.groupByName(newGroup);
+                                            console.log(retrievedGroup.getName());
+                                            var cmp = Ext.getCmp('itemselector-field');
+                                            console.log(cmp.store.getAt(0));
+                                            cmp.store.removeAll(true);-
+                                            console.log(cmp.store.getAt(0));
+                                            cmp.store.add([newGroup]);
+                                        }
+                                    },
                                     x: 10,
                                     y: 10
                                 },
                                 {
-                                    xtype: 'textfield',
-                                    width: 180,
+                                    xtype: 'combobox',
+                                    width: 195,
+                                    hideTrigger: true,
+                                    value: 'Search enzymes',
+                                    store: ['AatII', 'Acc65I', 'AccI', 'Not', 'Bam', 'XhoI'], //change this to query database
                                     fieldLabel: '',
                                     hideLabel: true,
+                                    triggerAction: 'query',
+                                    typeAhead: true,
+                                    //disabled: true,
                                     x: 235,
                                     y: 10
                                 },
@@ -71,14 +131,11 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     height: 400,
                     width: 420,
         id: 'itemselector-field',
-                    imagePath: '../../../extjs/examples/ux/css/images/',
-        store: [[123,'One Hundred Twenty Three'],
-                    ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
-                    ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
+                    imagePath: '../../extjs/examples/ux/css/images/',
+        store: possibleEnzymes,
         autoShow: true,
-        displayField: 'text',
-        valueField: 'value',
-        value: ['3', '4', '6'],
+        displayField: 'name',
+        valueField: 'name',
         allowBlank: false,
         msgTarget: 'side',
         x: 10,
@@ -112,20 +169,26 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                             dock: 'bottom',
                             items: [
                                 {
-                                    xtype: 'container',
-                                    height: 388,
+                                    xtype: 'panel',
+                                    height: 400,
+                                    width: 400,
                                     layout: {
                                         type: 'absolute'
                                     },
-                                    flex: 1
+                                    flex: 1,
+                                    items: [{
+                                        xtype: 'draw',
+                                        id: 'drawingSurface',
+                                            items: [{
+                                                type: 'rect',
+                                                fill: '#000',
+                                                width: 400,
+                                                height: 400,
+                                                x: 0,
+                                                y: 0
+                                            }]
+                                    }]
                                 },
-                                {
-                                    xtype: 'container',
-                                    layout: {
-                                        type: 'absolute'
-                                    },
-                                    flex: 1
-                                }
                             ]
                         }
                     ],
@@ -143,7 +206,15 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                                     height: 21,
                                     padding: ' 10 0 0 10',
                                     width: 327,
+                                    value: 'GeneRuler 1kb Plus DNA',
+                                    store: ['GeneRuler 1kb Plus DNA', 'GeneRuler 100bp Plus DNA'],
                                     fieldLabel: 'Ladder',
+                                    listeners: { 
+                                        select: function(combo, record, index){
+                                           me.changeLadder(combo,record, index); 
+                                        }
+                                    },
+
                                     labelWidth: 50
                                 }
                             ]
@@ -156,6 +227,13 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
             ]
         });
         me.callParent(arguments);
-    }
+    },
 
+    updateEnzymeList: function(combo, newvalue, oldvalue){
+        console.log(combo.getValue());
+    },
+
+    changeLadder: function(combo, record, index){
+        console.log("Ladder changed");
+    }
 });
