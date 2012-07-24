@@ -83,13 +83,13 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.AAManager.on(Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
                           this.onAAManagerUpdated, this);
 
-        this.ORFManager.on(Teselagen.managers.MapperEvent.ORF_MAPPER_UPDATED,
+        this.ORFManager.on(Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED,
                           this.onORFManagerUpdated, this);
 
-        this.RestrictionEnzymeManager.on(Teselagen.managers.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
+        this.RestrictionEnzymeManager.on(Teselagen.mappers.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
                           this.onRestrictionEnzymeManagerUpdated, this);
 
-        this.TraceManager.on(Teselagen.managers.MapperEvent.ORF_MAPPER_UPDATED,
+        this.TraceManager.on(Teselagen.mappers.MapperEvent.ORF_MAPPER_UPDATED,
                           this.onTraceManagerUpdated, this);
     },
 
