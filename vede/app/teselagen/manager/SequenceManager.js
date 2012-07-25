@@ -932,33 +932,41 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Get list of features in range
-     * 
-     * @return List of features
+     *
+     * @param {Number} start Start inclusive
+     * @param {Number} end End expclusive 
+     * @returns {Teselagen.bio.sequence.dna.Feature[]} features List of features
      */
      featuresByRange: function(pStart, pEnd) {
-        var result;
-        var features = this.features;
+        var result = [];
+        var feat, featStart, featEnd;
 
-        for (var i=0; i < features.length; i++) {
-            if (pStart < pEnd) {
-                if (features[i].start < features[i].end) {
-                    if (features[i].start < pEnd  &&  features[i].end > pStart) {
-                        result.push(features[i]);
+        for (var i=0; i < this.features.length; i++) {
+            feat        = this.features[i];
+            featStart   = feat.getStart();
+            featEnd     = feat.getEnd();
+
+            if (pStart < pEnd) { // NORMAL selection
+                if (featStart <= featEnd) {
+                    if (featStart < pEnd  &&  featEnd > pStart) {
+                        result.push(feat);
                     }
                 } else {
-                    if (pStart < features[i].end || pEnd > features[i].start) {
-                        result.push(features[i]);
+                    //if (pStart < featEnd || pEnd > featStart) { //ORIG
+                    if (pStart < featEnd || pEnd >= featStart) { //DW; should be inclusive
+                        result.push(feat); //circ feat
                     }
                 } 
-            } else {
-                if (features[i].start <= features[i].end) {
-                    if (features[i].start >= pEnd  &&  features[i].end < pStart) {
-
+            } else {            // CIRCULAR selection
+                if (featStart <= featEnd) {
+                    if (featStart >= pEnd  &&  featEnd <= pStart) { 
+                    //DW orig code WRONG: featEnd < pStart is WRONG; featEnd is exclusive so need =
+                        // none
                     } else {
-                        result.push(features[i]);
+                        result.push(feat);
                     }
                 } else {
-                    resutl.push(features[i]);
+                    result.push(feat); //circ feat, push all since selection is circ
                 }
             }
         }
@@ -967,21 +975,27 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
      /**
       * Get list of features at position
-      * 
-      * @return List of features
+      *
+      * @param {Number} position Index at which to search for features.
+      * @returns {Teselagen.bio.sequence.dna.Feature[]} features List of features
       */
-    featuresAt: function(position) {
-        var result;
-        var features = this.features;
+    featuresAt: function(pPosition) {
+        var result = [];
+        var feat, featStart, featEnd;
 
-        for (var i=0; i < features.length; i++) {
-            if (features[i].start <= features[i].end) {
-                if (features[i].start < position  && features[i].end > position) {
-                    result.push(features[i]);
+        for (var i=0; i < this.features.length; i++) {
+            feat        = this.features[i];
+            featStart   = feat.getStart();
+            featEnd     = feat.getEnd();
+            if (featStart <= featEnd) { //Feat is normal
+                if (featStart <= pPosition  && featEnd > pPosition) {
+                    // DW should be featStart <= not < pPosition 
+                    result.push(feat);
                 }
-            } else {
-                if (features[i].start < position || features[i].end > position) {
-                    result.push(features[i]);
+            } else { // Feat is circular.
+                //if (featStart < pPosition || featEnd > pPosition) { //ORIG
+                if (featStart <= pPosition || featEnd > pPosition) { // DW: ORIG WAS WRONG
+                    result.push(feat);
                 }
             }
         }
@@ -1043,9 +1057,29 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Reverse sequence
+     * @param {Teselagen.manager.SequenceManager} inputSequenceManager
+     * @returns {Teselagen.manager.SequenceManager} reverseSequenceManger
      */
-    reverseSequence: function(inputSequenceManager) {
-        return true;
+    reverseSequence: function(pSequenceManager) {
+
+        var revComSeq = Teselagen.bio.sequence.DNATools.reverseComplement(pSequenceManager.getSequence());
+        /*var revSeqMgr = Ext.create("Teselagen.manager.SequenceManager", {
+            name:     pSequenceManager.getName(),
+            circular: pSequenceManager.getCircular(),
+            sequence: pSequenceManager.getSequence()
+        }
+
+        var seqLen = pSequenceManager.getSequence().length;
+
+        var feats   = pSequenceManager.getFeatures();
+
+        for (var i=0; i < feats.length; i++) {
+            var newStart = seqLen - feats[i].getEnd() - 1;
+            //var revFeat.
+        }
+
+
+        return revSeqMgr;*/
     },
 
     /**
@@ -1087,7 +1121,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @private
      */
     updateComplementSequence: function() {
-        if(this.needsRecalculateComplementSequence) {
+        if(this.getNeedsRecalculateComplementSequence()) {
             this.complementSequence = Teselagen.bio.sequence.DNATools.complement(this.sequence);
 
             this.needsRecalculateComplementSequence = false;
@@ -1098,7 +1132,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @private
      */
     updateReverseComplementSequence: function() {
-        if(this.needsRecalculateReverseComplementSequence) {
+        if(this.getNeedsRecalculateReverseComplementSequence()) {
             this.reverseComplementSequence = Teselagen.bio.sequence.DNATools.reverseComplement(this.sequence);
 
             this.needsRecalculateReverseComplementSequence = false;

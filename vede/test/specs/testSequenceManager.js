@@ -52,6 +52,14 @@ Ext.onReady(function() {
                 notes: null
             });
 
+            feat4   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: "feat4",
+                start: 6,
+                end: 1,
+                _type: "CDS",
+                strand: 1,
+                notes: null
+            });
 
             sm  = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "test",
@@ -258,42 +266,44 @@ Ext.onReady(function() {
                 //expect(tmp.getFeatures()[0].getEnd()).toBe(1);
             });
         });
+        describe("Feature Manipulation: add, remove, has", function() {
 
-        it("addFeature()",function(){
-            sm.addFeature(feat2, false);
-            expect(sm.getFeatures().length).toBe(2);
-            expect(sm.getFeatures()[0].getName()).toBe("feat1");
-            expect(sm.getFeatures()[1].getName()).toBe("feat2");
-            //CHECK FOR EVENT HANDLING
-        });
-        it("addFeatures()",function(){
-            sm.addFeatures([feat2, feat1], false);
-            expect(sm.getFeatures().length).toBe(3);
-            expect(sm.getFeatures()[0].getName()).toBe("feat1");
-            expect(sm.getFeatures()[1].getName()).toBe("feat2");
-            expect(sm.getFeatures()[2].getName()).toBe("feat1");
-            //CHECK FOR EVENT HANDLING
-        });
+            it("addFeature()",function(){
+                sm.addFeature(feat2, false);
+                expect(sm.getFeatures().length).toBe(2);
+                expect(sm.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm.getFeatures()[1].getName()).toBe("feat2");
+                //CHECK FOR EVENT HANDLING
+            });
+            it("addFeatures()",function(){
+                sm.addFeatures([feat2, feat1], false);
+                expect(sm.getFeatures().length).toBe(3);
+                expect(sm.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm.getFeatures()[1].getName()).toBe("feat2");
+                expect(sm.getFeatures()[2].getName()).toBe("feat1");
+                //CHECK FOR EVENT HANDLING
+            });
 
-        it("removeFeature()",function(){
-            expect(sm.getFeatures().length).toBe(1);
-            sm.removeFeature(feat1, false);
-            expect(sm.getFeatures().length).toBe(0);
-            //CHECK FOR EVENT HANDLING
-        });
+            it("removeFeature()",function(){
+                expect(sm.getFeatures().length).toBe(1);
+                sm.removeFeature(feat1, false);
+                expect(sm.getFeatures().length).toBe(0);
+                //CHECK FOR EVENT HANDLING
+            });
 
-        it("removeFeatures()",function(){
-            sm.addFeatures([feat2, feat3], false);
-            expect(sm.getFeatures().length).toBe(3);
-            sm.removeFeatures([feat1, feat2], false);
-            expect(sm.getFeatures().length).toBe(1);
-            expect(sm.getFeatures()[0].getName()).toBe("feat3");
-            //CHECK FOR EVENT HANDLING
-        });
+            it("removeFeatures()",function(){
+                sm.addFeatures([feat2, feat3], false);
+                expect(sm.getFeatures().length).toBe(3);
+                sm.removeFeatures([feat1, feat2], false);
+                expect(sm.getFeatures().length).toBe(1);
+                expect(sm.getFeatures()[0].getName()).toBe("feat3");
+                //CHECK FOR EVENT HANDLING
+            });
 
-        it("hasFeature()",function(){
-            expect(sm.hasFeature(feat1)).toBeTruthy();
-            expect(sm.hasFeature(feat2)).toBeFalsy();
+            it("hasFeature()",function(){
+                expect(sm.hasFeature(feat1)).toBeTruthy();
+                expect(sm.hasFeature(feat2)).toBeFalsy();
+            });
         });
 
         describe("InsertSequence(): Multiple Tests", function() {
@@ -602,14 +612,108 @@ Ext.onReady(function() {
             });
         });
 
-        it("featuresByRange() TEST ME",function(){
-            //expect(true).toBeFalsy();
-        });
-
-        /*it("featuresAt() TEST ME",function(){
-                expect(true).toBeFalsy();
+        describe("Searching for Features @ [1,3) and [2,5)", function() {
+            //GATTACA
+            //-FF---- Feat1
+            //---FF-- Feat2
+            //--FFF-- Feat3 (only to test featuresAt() )
+            //F-----F Feat4
+            beforeEach(function() {
+                sm.addFeature(feat2, false);
             });
 
+            it("featuresByRange(0,2)",function(){
+                var feats = sm.featuresByRange(0,2);
+                expect(feats.length).toBe(1);
+                expect(feats[0].getStart()).toBe(1);
+                expect(feats[0].getEnd()).toBe(3);
+            });
+
+            it("featuresByRange(1,4)",function(){
+                var feats = sm.featuresByRange(1,4);
+                expect(feats.length).toBe(2);
+            });
+
+            it("featuresByRange(3,5)",function(){
+                var feats = sm.featuresByRange(3,5);
+                expect(feats.length).toBe(1);
+            });
+
+            it("featuresByRange(5,6)",function(){
+                var feats = sm.featuresByRange(5,6);
+                expect(feats.length).toBe(0);
+            });
+            it("featuresByRange(5,8): out of range",function(){
+                var feats = sm.featuresByRange(5,8);
+                expect(feats.length).toBe(0);
+            });
+
+            it("featuresByRange(5,0): circular none",function(){
+                var feats = sm.featuresByRange(5,0);
+                expect(feats.length).toBe(0);
+            });
+            it("featuresByRange(4,1): circular one",function(){
+                var feats = sm.featuresByRange(4,1);
+                expect(feats.length).toBe(1);
+            });
+            it("featuresByRange(4,2): circular two",function(){
+                var feats = sm.featuresByRange(4,2);
+                expect(feats.length).toBe(2);
+            });
+
+            it("featuresByRange(6,1): circ feat",function(){
+                sm.addFeature(feat4);
+                expect(feat4.getStart()).toBe(6);
+                expect(feat4.getEnd()).toBe(1);
+                var feats = sm.featuresByRange(6,1);
+                expect(feats.length).toBe(1);
+            });
+
+            it("featuresAt(): simple cases",function(){
+                var feats = sm.featuresAt(0);
+                expect(feats.length).toBe(0);
+
+                var feats = sm.featuresAt(1);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(2);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(3);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(4);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(5);
+                expect(feats.length).toBe(0);
+            });
+
+            it("featuresAt(): overlap cases",function(){
+                sm.addFeature(feat3);
+                var feats = sm.featuresAt(2);
+                expect(feats.length).toBe(2);
+            });
+            it("featuresAt() circ feat",function(){
+                sm.addFeature(feat4);
+                var feats = sm.featuresAt(5);
+                expect(feats.length).toBe(0);
+
+                var feats = sm.featuresAt(6);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(7);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(0);
+                expect(feats.length).toBe(1);
+
+                var feats = sm.featuresAt(1);
+                expect(feats.length).toBe(1);
+            });
+        });
+
+        describe("UpdateStart and End", function() {
 
             it("manualUpdateStart()",function(){
                 sm.manualUpdateStart();
@@ -620,46 +724,78 @@ Ext.onReady(function() {
                 sm.manualUpdateEnd();
                 expect(sm.getManualUpdateStarted()).toBe(false);
             });
+        });
 
-            it("clone() TEST ME",function(){
+        describe("Cloning", function() {
+            it("clone()",function(){
+                var clone = sm.clone();
+
+                expect(sm.getName()).toBe(clone.getName());
+                expect(sm.getCircular()).toBe(clone.getCircular());
+                expect(sm.getSequence().seqString()).toBe(clone.getSequence().seqString());
+                //expect(sm.getSequence()).toBe(clone.getSequence()); //can't compare directly
+                expect(sm.getFeatures().length).toBe(clone.getFeatures().length);
+
+                clone.setName("clone");
+                clone.setCircular(false);
+                clone.setSequence(Teselagen.bio.sequence.DNATools.createDNA(""));
+                clone.setFeatures([]);
+
+                expect(clone.getName()).toBe("clone");
+
+                expect(sm.getName()).not.toBe(clone.getName());
+                expect(sm.getCircular()).not.toBe(clone.getCircular());
+                expect(sm.getSequence().seqString()).not.toBe(clone.getSequence().seqString());
+                expect(sm.getSequence()).not.toBe(clone.getSequence());
+                expect(sm.getFeatures().length).not.toBe(clone.getFeatures().length);
+            });
+        });
+
+        xdescribe("Reverse Reg and Comp Sequence", function() {
+            it("reverseSequence() ",function(){
                 expect(true).toBeFalsy();
             });
 
-            it("reverseSequence() TEST ME",function(){
+            it("reverseComplementSequence() ",function(){
+                expect(true).toBeFalsy();
+            });
+        });
+
+        xdescribe("Rebase", function() {
+            it("rebaseSequence() ",function(){
+                expect(true).toBeFalsy();
+            });
+        });
+
+        xdescribe("Genank, JbeiSeqXml, Fasta", function() {
+            it("toGenbank() ",function(){
                 expect(true).toBeFalsy();
             });
 
-            it("reverseComplementSequence() TEST ME",function(){
+            it("fromGenbank() ",function(){
                 expect(true).toBeFalsy();
             });
 
-            it("rebaseSequence() TEST ME",function(){
+            it("fromJbeiSeqXml() ",function(){
                 expect(true).toBeFalsy();
             });
 
-            it("toGenbank() TEST ME",function(){
+            it("fromFasta() ",function(){
+                expect(true).toBeFalsy();
+            });
+        });
+
+        xdescribe("update Reg and Rev ComplmementSequence", function() {
+            it("updateComplmementSequence() ",function(){
                 expect(true).toBeFalsy();
             });
 
-            it("fromGenbank() TEST ME",function(){
+            it("updateReverseComplementSeuquence() ",function(){
                 expect(true).toBeFalsy();
             });
+        });
 
-            it("fromJbeiSeqXml() TEST ME",function(){
-                expect(true).toBeFalsy();
-            });
-
-            it("fromFasta() TEST ME",function(){
-                expect(true).toBeFalsy();
-            });
-
-            it("updateComplmementSequence() TEST ME",function(){
-                expect(true).toBeFalsy();
-            });
-
-            it("updateReverseComplementSeuquence() TEST ME",function(){
-                expect(true).toBeFalsy();
-            });
+        xdescribe("TMP", function() {
 
             it(" ",function(){
                 expect(false).toBeFalsy();
@@ -668,7 +804,7 @@ Ext.onReady(function() {
             it("",function(){
                 expect(false).toBeFalsy();
             });
-         */
+        });
     });
 
 });
