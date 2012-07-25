@@ -131,8 +131,8 @@ Ext.define('Vede.view.AppViewport', {
                                                 xtype: 'menuitem',
                                                 text: 'Redo'
                                             },
-                                            {
                                                 xtype: 'menuseparator'
+                                            {
                                             },
                                             {
                                                 xtype: 'menuitem',

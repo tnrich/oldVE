@@ -99,12 +99,13 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             });
         }
 
-        selector.fromField.store.removeAll(true);
+        var enzymeArray = [];
 
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
-            selector.fromField.store.add({name: enzyme.getName()});
+            enzymeArray.push({name: enzyme.getName()});
         });
 
+        selector.fromField.store.loadData(enzymeArray, false);
         selector.fromField.store.sort();
 
         this.displayActiveGroups(unsavedSelections);
