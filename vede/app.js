@@ -21,7 +21,8 @@ Ext.application({
         'MainMenuController',
         'MainToolbarController',
         'RestrictionEnzymeController',
-        'VectorPanelController'
+        'VectorPanelController',
+        'SimulateDigestionController'
     ],
     errorHandler: function(err) {
         console.warn(err);

@@ -43,12 +43,12 @@ Ext.define('Vede.controller.MainMenuController', {
 
     },
 
-        onSimulateDigestionMenuItemClick: function(item, e, options) {
+        onSimulateDigestionMenuItemClick: function() {
         console.log("called");
         var simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
-
+        this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
     },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {

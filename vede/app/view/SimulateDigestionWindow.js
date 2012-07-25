@@ -20,48 +20,38 @@
 ]);*/
 Ext.define('Vede.view.SimulateDigestionWindow', {
     extend: 'Ext.window.Window',
-    requires: ['Ext.form.Panel', 'Ext.ux.form.MultiSelect', 'Ext.ux.form.ItemSelector', 'Teselagen.manager.RestrictionEnzymeGroupManager'],
+    requires: ['Ext.form.Panel', 'Ext.ux.form.MultiSelect', 'Ext.ux.form.ItemSelector'],
     height: 500,
     width: 900,
     resizable: false,
     title: 'Gel Digest',
-    id: "simulateDigestionWindow",
     resizable: false,
     modal: true,
     //var enzymeStore = 
     initComponent: function() {
-        var me = this;
-var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
-   // store configs
-            autoLoad: true,
-   autoDestroy: true,
-   storeId: 'itemSelectorEnzymeStore',
-   // reader configs
+        var groupStore = Ext.create("Ext.data.Store",{
    fields: [
-            //{name : 'enzymes', type : 'auto'},
       {name: 'name', type: 'string'},
-        {name: 'site', type: 'string'}
    ],
+    data: [],
 });
 
-        var initialEnzymes = new Ext.data.Store({
+        var enzymeListStore = Ext.create("Ext.data.Store",{
    // store configs
-            autoLoad: true,
-   autoDestroy: true,
-   storeId: 'initialEnzymes',
-   // reader configs
    fields: [
-            {name : 'id', type : 'int'},
       {name: 'name', type: 'string'}
    ],
-    data: [
-    {"id": 0,"name": "Common"},
-    {"id": 1,"name": "REBASE"},
-    {"id": 2,"name": "Berkeley BioBricks"},
-    {"id": 3,"name": "MIT BioBricks"},
-    {"id": 4,"name": "Fermentas Fast Digest"}
-    ]
+    data: [],
+    sorters: [{property: "name", direction: "ASC"}]
 });
+
+var searchStore = Ext.create("Ext.data.Store",{
+   // store configs
+   fields: ['name'],
+    data: [],
+});
+
+        var me = this;
                 Ext.applyIf(me, {
             dockedItems: [
                 {
@@ -84,34 +74,13 @@ var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
                             items: [
                                 {
                                     xtype: 'combobox',
-                                    id: 'enzymeGroupSelector',
+                                    id: 'enzymeGroupSelector-digest',
+                                    store: groupStore, //change this store to query database
                                     width: 195,
-                                    fieldLabel: '',
                                     editable: false,
-                                    displayField: 'name',
-                                    valueField: 'name',
-                                    store: initialEnzymes, //change this store to query database
+                                    queryMode: 'local',
                                     value: 'Common',
-                                    listeners: { 
-                                        change: function(combo, newvalue, oldvalue){
-                                            var newGroup = combo.getValue();
-                                            Teselagen.manager.RestrictionEnzymeGroupManager.initialize();
-                                            var retrievedGroup = Teselagen.manager.RestrictionEnzymeGroupManager.groupByName(newGroup);
-                                            console.log(retrievedGroup.getName());
-                                            console.log(retrievedGroup.getEnzymes()[0]);
-                                            var cmp = Ext.getCmp('itemselector-field');
-                                            console.log(cmp.store.getAt(0));
-                                            cmp.store.removeAll(true);-
-                                            console.log(cmp.store.getAt(0));
-                                            var newStoreData = [];
-                                            Ext.each(retrievedGroup.getEnzymes(), function(enzyme){
-                                                var newRow = [enzyme.getName(), enzyme.getSite()];
-                                                newStoreData.push(newRow);
-                                            });
-                                            cmp.store.loadData(newStoreData);
-                                            cmp.bindStore(cmp.store);
-                                        }
-                                    },
+                                    displayField: 'name',
                                     x: 10,
                                     y: 10
                                 },
@@ -119,32 +88,35 @@ var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
                                     xtype: 'combobox',
                                     width: 195,
                                     hideTrigger: true,
-                                    value: 'Search enzymes',
-                                    store: ['AatII', 'Acc65I', 'AccI', 'Not', 'Bam', 'XhoI'], //change this to query database
-                                    fieldLabel: '',
-                                    hideLabel: true,
-                                    triggerAction: 'query',
-                                    typeAhead: true,
+                                    valueField: 'name',
+                                    emptyText: 'Search for Enzyme',
+                                    id: 'enzymeGroupSelector-search',
+                                    mode: 'local',
+                                    store: ['One'], 
                                     //disabled: true,
                                     x: 235,
                                     y: 10
                                 },
                                 {
                                    xtype: 'itemselector', 
-                    title: "Enzymes",
-                    height: 400,
+                    height: 370,
                     width: 420,
-        id: 'itemselector-field',
+        id: 'enzymeListSelector-digest',
                     imagePath: '../../extjs/examples/ux/css/images/',
-        store: itemSelectorEnzymeStore,
-        autoShow: true,
+        store: enzymeListStore,
         displayField: 'name',
         valueField: 'name',
-        allowBlank: false,
-        msgTarget: 'side',
         x: 10,
         y: 40
                                     
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: 'digestButton',
+                                    width: 90,
+                                    text: 'Run Digest',
+                                    x: 340,
+                                    y: 415
                                 }
                             ] 
                         },
@@ -152,7 +124,7 @@ var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
                         {
                             xtype: 'panel',
                             height: 500,
-                            width: 300,
+                            width: 400,
                             layout: {
                                 align: 'middle',
                                 type: 'hbox'
@@ -183,14 +155,18 @@ var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
                                     items: [{
                                         xtype: 'draw',
                                         id: 'drawingSurface',
-                                            items: [{
+                                        height: 400,
+                                        width: 445,
+                                        x: 0,
+                                        y: 0
+                                            /*items: [{
                                                 type: 'rect',
                                                 fill: '#000',
                                                 width: 400,
                                                 height: 400,
                                                 x: 0,
                                                 y: 0
-                                            }]
+                                            }]*/
                                     }]
                                 },
                             ]
@@ -208,18 +184,17 @@ var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
                                 {
                                     xtype: 'combobox',
                                     height: 21,
+                                    id: 'ladderSelector',
                                     padding: ' 10 0 0 10',
                                     width: 327,
                                     value: 'GeneRuler 1kb Plus DNA',
-                                    store: ['GeneRuler 1kb Plus DNA', 'GeneRuler 100bp Plus DNA'],
+                                    store: ['GeneRuler 1kb Plus DNA', 
+                                            'GeneRuler 100bp Plus DNA'],
                                     fieldLabel: 'Ladder',
-                                    listeners: { 
-                                        select: function(combo, record, index){
-                                           me.changeLadder(combo,record, index); 
-                                        }
-                                    },
+                                    editable: false,
+                                    x: 10,
+                                    y: 10,
 
-                                    labelWidth: 50
                                 }
                             ]
                         }
@@ -233,11 +208,4 @@ var itemSelectorEnzymeStore = new Ext.data.ArrayStore({
         me.callParent(arguments);
     },
 
-    updateEnzymeList: function(combo, newvalue, oldvalue){
-        console.log(combo.getValue());
-    },
-
-    changeLadder: function(combo, record, index){
-        console.log("Ladder changed");
-    }
 });
