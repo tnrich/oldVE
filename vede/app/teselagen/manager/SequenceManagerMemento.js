@@ -1,3 +1,11 @@
+/**
+ * @class Teselagen.manager.SequenceManagerMemento
+ * Memento to keep track of old versions of SequenceManager.
+ *
+ * Based off SequenceProviderMemento.as
+ * @author Diana Wong
+ * @author Zinovii Dmytriv (original author of SequenceProvider.as)
+ */
 Ext.define("Teselagen.manager.SequenceManagerMemento", {
 
     config: {
