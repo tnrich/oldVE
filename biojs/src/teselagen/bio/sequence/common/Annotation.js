@@ -241,7 +241,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
 						shifting = pInsertLength;
 						continue;
-					} else if ( normalizedPosition < currentLocation.getStart() ){
+					} else if ( normalizedPosition <= currentLocation.getStart() ){ //DW 7/25 added = sign
 						//shift this and the rest
 						tempLocations[i].setStart(currentLocation.getStart() + pInsertLength);
 						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
