@@ -11,7 +11,7 @@ Ext.define('Vede.controller.RailController', {
      * @member Vede.controller.RailController
      */
     init: function() {
-        this.control({
+//        this.control({
 //            '#ViewPanel' : {
 //                click : this.onClickPie
 //            }

@@ -20,6 +20,8 @@ Ext.application({
         'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
+        'PieController',
+        'RailController',
         'RestrictionEnzymeController',
         'VectorPanelController'
     ],
