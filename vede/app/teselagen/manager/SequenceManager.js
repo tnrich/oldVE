@@ -151,7 +151,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * @params {Teselagen.manager.SequenceManagerMemento} memento 
+     * @param {Teselagen.manager.SequenceManagerMemento} memento 
      */
     setMemento: function(pMemento) {
         var sequenceManagerMemento = pMemento;
@@ -366,6 +366,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Removes Feature from sequence manager.
      * @param {Teselagen.bio.sequence.dna.Feature} feature Feature to remove
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @returns {Boolean} done True if successful, False if nothing was done.
      */
     removeFeature: function(pFeature, quiet) {
         var evt;
@@ -382,6 +383,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             }
             //this.features.removeItemAt(index);
             Ext.Array.remove(this.features, pFeature);
+
             if (!quiet && !this.manualUpdateStarted) {
                 //evt = Ext.create("SequenceManagerEvent", {
                 //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
@@ -390,22 +392,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 //}
                 //dispatcher.dispatchEvent(evt);
             }
+            return true;
+        } else {
+            return false;
         }
     },
 
     /**
      * Remove list of Features to sequence manager.
-     * @param {Teselagen.bio.sequence.dna.Feature} [featuresToRemove] List of features to remove
+     * (It is easier to just iterate through your array and use removeFeature() instead.)
+     * @param {Teselagen.bio.sequence.dna.Feature[]} [featuresToRemove] List of features to remove
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      * @returns {Boolean} done True if successful, False if nothing was done.
      */
     removeFeatures: function(pFeaturesToRemove, quiet) {
         var i, evt;
 
-        if (!pFeaturesToRemove || pFeaturesToRemove === 0) {
+        if (!pFeaturesToRemove || pFeaturesToRemove.length === 0) {
             return false;
         }
-
         if (!pFeaturesToRemove && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
@@ -415,7 +420,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //dispatcher.dispatchEvent(evt);
         }
         for (var i=0; i < pFeaturesToRemove.length; i++) {
-            this.removeFeature(pFeatureToremove[i], true);
+            var success = this.removeFeature(pFeaturesToRemove[i], true);
+            if (!success) console.warn("Could not remove Feature[" + i  + "] from Sequence.");
         }
         if (!pFeaturesToRemove && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
@@ -449,6 +455,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
     insertSequenceManager: function(pSequenceManager, pPosition, pQuiet) {
         var i, evt, insertFeature;
 
+        var features = this.getFeatures();
+
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
@@ -460,22 +468,32 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //}
             //dispatcher.dispatchEvent(evt);
         }
-        this.insertSequence(pSequenceManager.getSequence(), pPosition, true);
+        var success = this.insertSequence(pSequenceManager.getSequence(), pPosition, true);
+
+        if (!success) console.warn("Could not insert a SequenceManager into another SequenceManager.");
+
+        //for (var i=0; i<features.length; i++) {
+        //    console.log("This Feat: (" + features[i].getStart() + "," + features[0].getEnd() + ")");
+        //}
 
         for (var i=0; i<pSequenceManager.getFeatures().length; i++) {
             insertFeature = pSequenceManager.getFeatures()[i].clone();
-            //if (!pQuiet) console.log("1start: " + insertFeature.getStart());
-            //if (!pQuiet) console.log("1end  : " + insertFeature.getEnd());
-            pSequenceManager.getFeatures()[i].shift(pPosition, this.sequence.length, this.circular);
-            this.addFeature(pSequenceManager.getFeatures()[i], true); // ERROR WAS cloning insertFeature
-            //if (!pQuiet) console.log("2start: " + insertFeature.getStart());
-            //if (!pQuiet) console.log("2end  : " + insertFeature.getEnd());
+            //pSequenceManager.getFeatures()[i].shift(pPosition, this.sequence.length, this.circular);
+            //this.addFeature(pSequenceManager.getFeatures()[i], true); // ERROR need cloning insertFeature
+            
+            insertFeature.shift(pPosition, this.sequence.length, this.circular);
+            this.addFeature(insertFeature, true); // original way
         }
 
-        Ext.each(pSequenceManager.getFeatures(), function(pFeature){
-            console.log("Called within insertSequenceManager: " +  
-                "Feature start: " + pFeature.getStart() + " and Feature end: " + pFeature.getEnd());
-        });
+        //Ext.each(pSequenceManager.getFeatures(), function(pFeature){
+        //    console.log("Called within insertSequenceManager: " +  
+        //        "Feature start: " + pFeature.getStart() + " and Feature end: " + pFeature.getEnd());
+        //});
+
+        //for (var i=0; i<features.length; i++) {
+        //    console.log("New Feat: (" + features[i].getStart() + "," + features[0].getEnd() + ")");
+        //}
+
         if(!pQuiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
@@ -528,7 +546,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         if(!pQuiet && !this.manualUpdateStarted) {
             //SEQUENCE_CHANGED
         }
-        return false;
+        return true;
     },
 
     /**
@@ -601,10 +619,19 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //console.log("New Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
         }
 
+        // Deleting entire features if necessary 
         for (var d=0; d < deletions.length; d++) {
-            this.removeFeatures(deletions[d], true);
+            //console.log(deletions.length);
+            var success = this.removeFeature(deletions[d], false);
+            if (!success) console.warn("Could not delete Features when removing Sequence.");
         }
 
+        //if (deletions.length > 0) {
+        //    var success = this.removeFeatures(deletions, true);
+        //    if (!success) console.warn("Could not delete Features when removing Sequence.");
+        //}
+
+        // Readjusting sequence indices
         if(pStartIndex > pEndIndex) {
             sequence.deleteSymbols(0, pEndIndex);
             sequence.deleteSymbols(pStartIndex - pEndIndex, lengthBefore - pStartIndex);
@@ -621,14 +648,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         return true;
 
-        // helper functions here 
+        // Helper Functions here
+        // These take care of existing this.features that may be affected by an inserted seq/seqMgr
+        // 
 
         function normFeatureNormSelection() {
             if (DEBUG_MODE) console.log("norm-norm");
             /* Selection before feature => feature shift left
              * |-----SSSSSSSSSSSSSSSSSSSSSSSSS--------------------------------------------------------------------|
              *                                     |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                 */
-            if(pStartIndex < featStart && pEndIndex <= featStart) {
+            if(pStartIndex < featStart && pEndIndex <= featStart) { //correct for indices
                 feature.deleteAt(pStartIndex, pEndIndex - pStartIndex, lengthBefore, circular);
                 //if (DEBUG_MODE) trace("case Fn,Sn 1");
                 if (DEBUG_MODE) console.log("case Fn,Sn 1");
@@ -636,14 +665,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
             /* Selection after feature => no action
              * |-------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS------------|
              *        |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                                              */
-            else if(pStartIndex >= featEnd) {
+            else if(pStartIndex >= featEnd) { // Do nothing
                 // if (DEBUG_MODE) trace("case Fn,Sn 2");
                 if (DEBUG_MODE) console.log("case Fn,Sn 2");
             }
             /* Selection cover feature => remove feature
              * |-----------------------------SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS-----------------------|
              *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
-            else if(pStartIndex <= featStart && featEnd <= (pEndIndex)) {
+            else if(pStartIndex <= featStart && featEnd <= (pEndIndex)) {  // delete feature entirely
                 deletions.push(feature);
                 //if (DEBUG_MODE) trace("case Fn,Sn 3");
                 if (DEBUG_MODE) console.log("case Fn,Sn 3");
@@ -651,7 +680,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             /* Selection inside feature => resize feature
              * |-------------------------------------SSSSSSSSSSSSSSSSSSSSSS---------------------------------------|
              *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
-            else if(((pStartIndex >= featStart) && ((pEndIndex) <= featEnd))) {
+            else if(((pStartIndex >= featStart) && ((pEndIndex) <= featEnd))) { //delete part of feature
                 feature.deleteAt(pStartIndex, pEndIndex - pStartIndex, lengthBefore, circular);
                 //if (DEBUG_MODE) trace("case Fn,Sn 4");
                 if (DEBUG_MODE) console.log("case Fn,Sn 4");
