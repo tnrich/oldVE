@@ -1,4 +1,4 @@
-Ext.define("Teselagen.util.Point", {
+Ext.define("Teselagen.bio.util.Point", {
 
 	/**
 	* Point instance - used to manage a point in 2-D space, and compute distances, angles, polar and orbital positions, etc.
@@ -32,7 +32,7 @@ Ext.define("Teselagen.util.Point", {
 	* @returns Point
 	*/
 	add : function(v){
-		return Ext.create("Point", [this.x + v.x, this.y + v.y]);
+		return Ext.create(this.self.getName(), this.x + v.x, this.y + v.y);
 	},
 	
 	/**
@@ -41,7 +41,7 @@ Ext.define("Teselagen.util.Point", {
 	* @returns Point
 	*/
 	clone : function(){
-		return Ext.create("Point", [this.x, this.y]);
+		return Ext.create(this.self.getName(), this.x, this.y);
 	},
 	
 	/**
@@ -87,7 +87,7 @@ Ext.define("Teselagen.util.Point", {
 	* @returns Point
 	*/
 	interpolate : function(v, f){
-		return Ext.create("Point", [(this.x + v.x) * f, (this.y + v.y) * f]);
+		return Ext.create(this.self.getName(), (this.x + v.x) * f, (this.y + v.y) * f);
 	},
 	
 	/**
@@ -142,7 +142,7 @@ Ext.define("Teselagen.util.Point", {
 	* @returns Point
 	*/
 	subtract : function(v){
-		return Ext.create("Point", [this.x - v.x, this.y - v.y]);
+		return Ext.create(this.self.getName(), this.x - v.x, this.y - v.y);
 	},
 	
 	/**
@@ -165,7 +165,7 @@ Ext.define("Teselagen.util.Point", {
     	* @returns Point
     	*/
     	interpolate : function(pt1, pt2, f){
-    		return Ext.create("Point", [(pt1.x + pt2.x) * f, (pt1.y + pt2.y) * f]);
+    		return Ext.create(this.self.getName(), (pt1.x + pt2.x) * f, (pt1.y + pt2.y) * f);
     	},
     	
     	/**
@@ -177,7 +177,7 @@ Ext.define("Teselagen.util.Point", {
     	* @returns Point
     	*/
     	polar : function(len, angle){
-    		return Ext.create("Point", [len * Math.sin(angle), len * Math.cos(angle)]);
+    		return Ext.create(this.self.getName(), len * Math.sin(angle), len * Math.cos(angle));
     	},
     	
     	/**

@@ -24,7 +24,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     requires: ["Teselagen.bio.sequence.common.Location",
         "Teselagen.bio.sequence.common.SymbolList",
-        "Teselagen.manager.SequenceManagerEvent",
+        "Teselagen.event.SequenceManagerEvent",
         "Teselagen.bio.sequence.DNATools"
     ],
     /**
@@ -77,7 +77,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.mixins.observable.constructor.call(this, inData);
 
         //DNATools: Teselagen.bio.sequence.DNATools,
-        updateSequenceChanged: Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
+        updateSequenceChanged: Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED,
 
 
         this.addEvents("SequenceChanged");
@@ -445,13 +445,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Number} position Position where to insert
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      */
-    insertSequenceManager: function(pSequenceManager, pPosition, quiet) {
+
+    insertSequenceManager: function(pSequenceManager, pPosition, pQuiet) {
         var i, evt, insertFeature;
 
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
-        if(!quiet && !this.manualUpdateStarted) {
+        if(!pQuiet && !this.manualUpdateStarted) {
             //var evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
@@ -461,17 +462,21 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
         this.insertSequence(pSequenceManager.getSequence(), pPosition, true);
 
-        for (var i=0; i < pSequenceManager.getFeatures().length; i++) {
-
+        for (var i=0; i<pSequenceManager.getFeatures().length; i++) {
             insertFeature = pSequenceManager.getFeatures()[i].clone();
-            if (!quiet) console.log("1start: " + insertFeature.getStart());
-            if (!quiet) console.log("1end  : " + insertFeature.getEnd());
-            insertFeature.shift(pPosition, this.sequence.length, this.circular);
-            if (!quiet) console.log("2start: " + insertFeature.getStart());
-            if (!quiet) console.log("2end  : " + insertFeature.getEnd());
-            this.addFeature(insertFeature, true);
+            //if (!pQuiet) console.log("1start: " + insertFeature.getStart());
+            //if (!pQuiet) console.log("1end  : " + insertFeature.getEnd());
+            pSequenceManager.getFeatures()[i].shift(pPosition, this.sequence.length, this.circular);
+            this.addFeature(pSequenceManager.getFeatures()[i], true); // ERROR WAS cloning insertFeature
+            //if (!pQuiet) console.log("2start: " + insertFeature.getStart());
+            //if (!pQuiet) console.log("2end  : " + insertFeature.getEnd());
         }
-        if(!quiet && !this.manualUpdateStarted) {
+
+        Ext.each(pSequenceManager.getFeatures(), function(pFeature){
+            console.log("Called within insertSequenceManager: " +  
+                "Feature start: " + pFeature.getStart() + " and Feature end: " + pFeature.getEnd());
+        });
+        if(!pQuiet && !this.manualUpdateStarted) {
             //evt = Ext.create("SequenceManagerEvent", {
             //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
             //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,

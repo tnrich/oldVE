@@ -22,7 +22,7 @@ Ext.define("Teselagen.manager.AAManager", {
 
     TranslationUtils: null,
 
-    updateEventString: Teselagen.mappers.MapperEvent.AA_MAPPER_UPDATED,
+    updateEventString: Teselagen.event.MapperEvent.AA_MAPPER_UPDATED,
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The sequenceManager to get sequences from.

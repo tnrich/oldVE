@@ -384,7 +384,7 @@ Ext.onReady(function() {
         });
 
         describe("RestrictionEnzymeManager", function() {
-            var reGroup = Ext.create("Teselagen.data.RestrictionEnzymeGroup", {
+            var reGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
                 name:"my group",
                 enzymes: [agcEnz, gntEnz]
             });
@@ -476,7 +476,7 @@ Ext.onReady(function() {
             var group;
 
             beforeEach(function() {
-                group = Ext.create("Teselagen.data.RestrictionEnzymeGroup", {
+                group = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
                     name: "MyGroup",
                     enzymes: [agcEnz, gntEnz]
                 });

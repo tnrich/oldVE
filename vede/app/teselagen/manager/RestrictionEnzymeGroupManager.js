@@ -22,8 +22,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     RestrictionEnzymeManager: null,
 
     /**
-     * @param {Array<Teselagen.data.RestrictionEnzymeGroup>} systemGroups Groups of enzymes which are pre-defined by the program.
-     * @param {Array<Teselagen.data.RestrictionEnzymeGroup>} userGroups Groups defined by the user.
+     * @param {Array<Teselagen.models.RestrictionEnzymeGroup>} systemGroups Groups of enzymes which are pre-defined by the program.
+     * @param {Array<Teselagen.models.RestrictionEnzymeGroup>} userGroups Groups defined by the user.
      * @param {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} activeGroup A list of enzymes which is currently in use.
      * @param {Ext.util.HashMap} rebaseEnzymesDatabase A hashmap mapping enzyme names to the RestrictionEnzyme objects.
      * @param {Boolean} isInitialized Whether the database has already been read from the xml file.
@@ -62,7 +62,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
     /**
      * Given a @link Teselagen.models.UserRestrictionEnzymes object, creates
-     * @link Teselagen.data.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
+     * @link Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
      * @param {Teselagen.models.UserRestrictionEnzymes} userEnzymes The UserRestrictionEnzymes object to load from.
      */
     loadUserRestrictionEnzymes: function(userEnzymes) {
@@ -100,7 +100,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
     /**
      * Removes a given RestrictionEnzymeGroup from userGroups.
-     * @param {Teselagen.data.RestrictionEnzymeGroup} enzymeGroup The group to remove from userGroups.
+     * @param {Teselagen.models.RestrictionEnzymeGroup} enzymeGroup The group to remove from userGroups.
      */
     removeGroup: function(enzymeGroup) {
         var newUserGroups = this.getUserGroups();
@@ -116,7 +116,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     /**
      * Returns a group from userGroups by its name.
      * @param {String} name The name of the group to return.
-     * @return {Teselagen.data.RestrictionEnzymeGroup} The desired group, or null if it is not found.
+     * @return {Teselagen.models.RestrictionEnzymeGroup} The desired group, or null if it is not found.
      */
     groupByName: function(name) {
         var resultGroup = null;
@@ -144,7 +144,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * @param {String} name The name of the group.
      * @param {Array<String>} enzymeNames A list of enzyme names. Will be used to search the database
      * to get each enzyme object.
-     * @return {Teselagen.data.RestrictionEnzymeGroup} The newly created group.
+     * @return {Teselagen.models.RestrictionEnzymeGroup} The newly created group.
      */
     createGroupByEnzymes: function(name, enzymeNames) {
         if(!this.isInitialized) {
@@ -165,10 +165,21 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
             }
         }, this);
 
-        return Ext.create("Teselagen.data.RestrictionEnzymeGroup", {
+        return Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
             name: name,
             enzymes: enzymes
         });
+    },
+
+    /**
+     * Returns a list of all group names.
+     */
+    getGroupNames: function() {
+        var names = [];
+        Ext.each(this.systemGroups.concat(this.userGroups), function(group) {
+            names.push(group.getName());
+        });
+        return names;
     },
 
     /**
@@ -192,7 +203,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         newSystemGroups.push(commonGroup);
         
         // 2. REBASE
-        var rebaseGroup = Ext.create("Teselagen.data.RestrictionEnzymeGroup", {
+        var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
             name: "REBASE",
             enzymes: this.getRebaseEnzymesDatabase().getValues()
         });

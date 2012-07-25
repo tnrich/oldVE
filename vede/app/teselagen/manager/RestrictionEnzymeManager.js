@@ -23,12 +23,12 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         observable: "Ext.util.Observable"
     },
 
-    updateEventString: Teselagen.mappers.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
+    updateEventString: Teselagen.event.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
 
     DNATools: null,
 
     /**
-     * @param {Teselagen.data.RestrictionEnzymeGroup} restrictionEnzymeGroup The group of enzymes to map to the sequence.
+     * @param {Teselagen.models.RestrictionEnzymeGroup} restrictionEnzymeGroup The group of enzymes to map to the sequence.
      * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} allCutSites All cut sites produced by the enzymes in the group.
      * @param {Ext.util.HashMap} allCutSitesMap A map of all cut sites with RestrictionEnzymes as keys and arrays of cut sites as values.
      * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} cutSites Cut sites which belong to enzymes that cut the sequence less than maxCuts times.
@@ -47,7 +47,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
 
     /**
      * Sets the restrictionEnzymeGroup, marking the mapper as dirty.
-     * @param pRestrictionEnzymeGroup {Teselagen.data.RestrictionEnzymeGroup} The restrictionEnzymeGroup to be set.
+     * @param pRestrictionEnzymeGroup {Teselagen.models.RestrictionEnzymeGroup} The restrictionEnzymeGroup to be set.
      */
     setRestrictionEnzymeGroup: function(pRestrictionEnzymeGroup) {
         this.restrictionEnzymeGroup = pRestrictionEnzymeGroup;
