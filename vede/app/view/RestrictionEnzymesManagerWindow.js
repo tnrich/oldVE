@@ -95,7 +95,8 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             buttons: ["oneRight", "allRight",
                                                       "oneLeft", "allLeft"],
                                             buttonsText: {oneRight: ">", allRight: ">>",
-                                                          oneLeft: "<", allLeft: "<<"}
+                                                          oneLeft: "<", allLeft: "<<"},
+                                            appendOnly: true
                                         }
                                     ]
                                 },
