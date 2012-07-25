@@ -1,6 +1,4 @@
 Ext.define("Teselagen.renderer.AnnotationRenderer", {
-    extend: "Teselagen.renderer.common.AnnotationRenderer",
-
     statics: {
         FRAME_COLOR: "#606060"
     },
@@ -8,13 +6,15 @@ Ext.define("Teselagen.renderer.AnnotationRenderer", {
     config: {
         sequenceManager: null,
         center: 0,
-        railRadius: 0
+        railRadius: 0,
+        needsMeasurement: true
     },
 
     GraphicUtils: null,
     StrandType: null,
 
     constructor: function(inData) {
+        this.callParent(arguments);
         this.initConfig(inData);
 
         this.GraphicUtils = Teselagen.utils.GraphicUtils;
@@ -23,21 +23,18 @@ Ext.define("Teselagen.renderer.AnnotationRenderer", {
 
     applySequenceManager: function(pSeqMan) {
         this.setNeedsMeasurement(true);
-        this.invalidateDisplayList();
 
         return pSeqMan;
     },
 
     applyCenter: function(pCenter) {
         this.setNeedsMeasurement(true);
-        this.invalidateDisplayList();
 
         return pCenter;
     },
 
     applyRailRadius: function(pRailRadius) {
         this.setNeedsMeasurement(true);
-        this.invalidateDisplaylist();
 
         return pRailRadius;
     }

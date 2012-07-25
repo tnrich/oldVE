@@ -52,6 +52,15 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                 path: "M" + lineStart.x + " " + lineStart.y + " " +
                       "L" + lineEnd.x + " " + lineEnd.y,
                 fill: this.FRAME_COLOR
+                tooltip: this.getToolTip(site),
+                listeners: {
+                    render: function(me) {
+                        Ext.QuickTip.register({
+                            target: me.el,
+                            text: me.tooltip
+                        });
+                    }
+                }
             });
 
             // Create a tooltip for the sprite. Hopefully.
@@ -85,7 +94,6 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
 
     applyCutSites: function(pCutSites) {
         this.setNeedsMeasurement(true);
-        this.invalidateDisplayList();
 
         return pCutSites;
     }

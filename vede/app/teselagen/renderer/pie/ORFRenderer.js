@@ -52,10 +52,12 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             sprites.push(arcSprite);
 
             // Attach a tooltip to the arc.
-            var tooltip = this.getToolTip(orf);
-            Ext.create("Ext.tip.ToolTip", {
-                target: arcSprite,
-                html: this.getToolTip(orf)
+            arcSprite.tooltip = this.getToolTip(orf);
+            arcSprite.on("render", function(me) {
+                Ext.QuickTip.register({
+                    target: me.el,
+                    text: me.tooltip
+                });
             });
 
             // Render start codons as bold dots.
@@ -142,7 +144,6 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
      */
     applyOrfs: function(pOrfs) {
         this.setNeedsMeasurement(true);
-        this.invalidateDisplayList();
 
         return pOrfs;
     }

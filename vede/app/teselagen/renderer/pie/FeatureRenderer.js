@@ -60,8 +60,16 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                 direction = 2;
             }
 
-            sprites.push(this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius,
+            var arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius,
                          this.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color));
+
+            arcSprite.tooltip = this.getToolTip(feature);
+            arcSprite.on("render", function(me) {
+                Ext.QuickTip.register({
+                    target: me.el,
+                    text: me.tooltip
+                });
+            });
             
             // Draw a pie slice for each location in the feature.
             // At the moment color is a final argument to the calls to
@@ -177,6 +185,5 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      */
     applyFeatures: function(pFeatures) {
         this.setNeedsMeasurement(true);
-        this.invalidateDisplayList();
     },
 });
