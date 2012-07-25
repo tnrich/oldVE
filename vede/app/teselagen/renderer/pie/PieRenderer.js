@@ -12,11 +12,13 @@ Ext.define("Teselagen.renderer.AnnotationRenderer", {
     },
 
     GraphicUtils: null,
+    StrandType: null,
 
     constructor: function(inData) {
         this.initConfig(inData);
 
         this.GraphicUtils = Teselagen.utils.GraphicUtils;
+        this.StrandType = Teselagen.bio.sequence.common.StrandType;
     },
 
     applySequenceManager: function(pSeqMan) {

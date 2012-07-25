@@ -7,7 +7,7 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
     
     config: {
         cutSites: [],
-        middlePoint: 0
+        middlePoints: null 
     },
 
     /**
@@ -18,6 +18,8 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
         this.callParent(arguments);
 
         this.initConfig(inData);
+
+        this.middlePoints = Ext.create("Ext.util.HashMap");
     },
 
     /**
@@ -25,13 +27,15 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
      * @return {Array<Ext.draw.Sprite>} Sprites made from cut sites.
      */
     render: function() {
+        var sprites = [];
+
         Ext.each(this.getCutSites(), function(site) {
             var angle = site.getStart() * 2 * Math.PI / 
                         this.sequenceManager.getSequence().seqString().length;
             
-            var middlePoint = this.GraphicUtils.pointOnCircle(this.center,
+            this.middlePoints.add(site, this.GraphicUtils.pointOnCircle(this.center,
                                                               angle,
-                                                              this.railRadius + 10);
+                                                              this.railRadius + 10));
 
             var lineStart = {
                 x: this.center.x + this.railRadius * Math.sin(angle),
@@ -45,11 +49,38 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
 
             var siteSprite = Ext.create("Ext.draw.Sprite", {
                 type: "path",
-                path: "M " + lineStart.x + " " + lineStart.y + 
-                      "L " + lineEnd.x + " " + lineEnd.y,
+                path: "M" + lineStart.x + " " + lineStart.y + " " +
+                      "L" + lineEnd.x + " " + lineEnd.y,
                 fill: this.FRAME_COLOR
             });
+
+            // Create a tooltip for the sprite. Hopefully.
+            var tooltip = this.getToolTip(site);
+            Ext.create("Ext.tip.ToolTip", {
+                target: site,
+                html: tooltip
+            });
+
+            sprites.push(siteSprite);
         }, this);
+
+        return sprites;
+    },
+
+    /**
+     * Generates a tooltip for the given cut site.
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} cutSite The site to get
+     * a tooltip for.
+     */
+    getToolTip: function(cutSite) {
+        var complement = ", complement";
+        if(cutSite.getStrand() == 1) {
+            complement = "";
+        }
+
+        var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + 
+                      (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) +
+                      complement + ", cuts " + cutSite.getNumCuts() + " times";
     },
 
     applyCutSites: function(pCutSites) {

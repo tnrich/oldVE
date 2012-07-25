@@ -15,7 +15,7 @@ Ext.define('Vede.controller.PieController', {
             '#PieContainer' : {
                 click : this.onClickPie
             }
-        })
+        });
     },
     
     onLaunch: function() {

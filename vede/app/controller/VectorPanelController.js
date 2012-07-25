@@ -12,8 +12,8 @@ Ext.define('Vede.controller.VectorPanelController', {
         this.control({
 //            '#ViewPanel' : {
 //                click : this.onClickPie
-            }
-        })
+//            }
+        });
     },
     
     onLaunch: function() {
