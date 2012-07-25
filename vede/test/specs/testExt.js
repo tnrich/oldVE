@@ -249,7 +249,7 @@ describe("Generic Ext tests", function() {
                    throw new Ext.Error({msg:"Test throwing"});
                },
                errHandler:function(pErr) {
-                   console.warn(pErr);
+                   //console.warn(pErr);
                    return true;
              }  
            });
@@ -264,7 +264,7 @@ describe("Generic Ext tests", function() {
                 inst.raiseException();
             }
             catch(pE) {
-                console.warn("Caught:" + pE);
+                //console.warn("Caught:" + pE);
                 flag = true;
             }
             expect(flag).toBe(false);
@@ -275,7 +275,7 @@ describe("Generic Ext tests", function() {
             }
             catch(pE) {
                 flag = true;
-                console.warn("Caught:" + pE);
+                //console.warn("Caught:" + pE);
             }
             expect(flag).toBe(true);
         });
