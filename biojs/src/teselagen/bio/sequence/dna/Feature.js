@@ -96,8 +96,8 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
 			var clonedLocations = [];
 			var locations = this.getLocations();
-            console.log(locations)
-            console.log("Cloned length: " + locations.length);
+            //console.log(locations)
+            //console.log("Cloned length: " + locations.length);
 
 			for (var i = 0; i < locations.length; i++) {
 				clonedLocations.push(locations[i].clone());
