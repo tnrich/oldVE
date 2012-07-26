@@ -5,8 +5,6 @@
 Ext.define('Vede.controller.PieController', {
     extend: 'Ext.app.Controller',
 
-    drawComponent: null,
-    
     /**
      * @member Vede.controller.PieController
      */
