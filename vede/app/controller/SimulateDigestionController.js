@@ -6,7 +6,13 @@ Ext.define('Vede.controller.SimulateDigestionController', {
     GroupManager: null,
     managerWindow: null,
     digestPanel: null,
+
     digestSpriteGroup: null,
+    ladderSpriteGroup: null,
+    sampleSpriteGroup: null,
+
+    ladderLane: null,
+    sampleLane: null,
 
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
@@ -71,6 +77,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
     onDigestButtonClick: function(){
         console.log("Digesting!");
+        this.updateSampleLane();
     },
 
     initializeDigestDrawingPanel: function(){
@@ -78,6 +85,8 @@ Ext.define('Vede.controller.SimulateDigestionController', {
         this.digestSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
             surface: this.digestPanel.surface
         });
+                console.log('test');
+        //console.log(this.ladderLane.getLadder());
        var digestBG = Ext.create('Ext.draw.Sprite', {
             type: 'rect',
             height: 400,
@@ -88,36 +97,56 @@ Ext.define('Vede.controller.SimulateDigestionController', {
         });
         this.digestSpriteGroup.add(digestBG);
         this.showSprites(this.digestSpriteGroup);
+       
+        this.ladderSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
+            surface: this.digestPanel.surface
+        });
+
+        this.ladderLane = Ext.create("Teselagen.models.digest.LadderLane", {
+            ladder: "test",
+        });
+        var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
+        this.updateLadderLane(ladderSelector);
     },
 
     updateLadderLane: function(combobox){
-        console.log("changing ladder");
-       var band3000 = Ext.create('Ext.draw.Sprite', {
-            type: 'rect',
-            fill: '#fff',
-            height: 2,
-            width: 100,
-      //      surface: this.digestPanel.surface,
-            x: 50,
-            y: 50
-        });
-        var band2000 = Ext.create('Ext.draw.Sprite', {
-            type: 'rect',
-            fill: '#fff',
-            height: 2,
-            width: 100,
-      //      surface: this.digestPanel.surface,
-            x: 50,
-            y: 100
+        this.ladderSpriteGroup.destroy();
+        this.ladderSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
+            surface: this.digestPanel.surface
         });
 
+        this.ladderLane.updateLadderLane(combobox.getValue());
+        Ext.each(this.ladderLane.getBandYPositions(), function(yPosition, index){
+             var gelBand = Ext.create('Ext.draw.Sprite', {
+                type: 'rect',
+                fill: '#fff',
+                height: 2,
+                width: 100,
+          //      surface: this.digestPanel.surface,
+                x: 100,
+                y: yPosition
+            });
+            var bandText = Ext.create('Ext.draw.Sprite', {
+                type: 'text',
+                text: this.ladderLane.getLadder()[index],
+                fill: '#fff',
+                size: 50,
+          //      surface: this.digestPanel.surface,
+                x: 40,
+                y: yPosition
+            });
 
-       this.digestSpriteGroup.add(band2000);
-       this.digestSpriteGroup.add(band3000);
-       this.showSprites(this.digestSpriteGroup);
+            this.ladderSpriteGroup.add(bandText); 
+            this.ladderSpriteGroup.add(gelBand); 
+        
+        }, this);
+
+        this.showSprites(this.ladderSpriteGroup);
+console.log("changing ladder");
     },
 
     updateSampleLane: function(selectedEnzymes){
+        console.log("Updating sample...");
     },
 
     showSprites: function(pSpriteGroup){

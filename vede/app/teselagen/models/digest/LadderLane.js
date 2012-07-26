@@ -4,81 +4,87 @@
  * @author Micah Lerner
  */
 Ext.define("Teselagen.models.digest.LadderLane", {
-	extend: "Ext.data.Model",
     config: {
-        BAND_COLOR:  '#fff',
-        CONNECTOR_COLOR:  '#999999',
+        BAND_COLOR: '#fff',
+        CONNECTOR_COLOR: '#999999',
         ladder: null,
         bandYPositions: null,
         bandSizeLabels: null,
         bandSizeLabelYPositions: null,  
-        
-        actualWidth: null,
-        actualHeight: null,
+
+        actualWidth: 200,
+        actualHeight: 400,
 
         ladderChanged: true,
         needsRemeasurement: true,
     },
 
     statics: {
-        100BP_LADDER_BANDS:['20000', 
-                            '10000',
-                            '7000',
-                            '5000',
-                            '4000',
-                            '2000',
-                            '1500',
-                            '1000',
-                            '700',
-                            '500'
-                            '400',
-                            '300',
-                            '200',
-                            '75'],
-        1KB_LADDER_BANDS: ['3000',
-                           '2000', 
-                           '1500', 
-                           '1200', 
-                           '1000', 
-                           '900', 
-                           '800', 
-                           '700', 
-                           '600', 
-                           '500', 
-                           '400', 
-                           '300', 
-                           '200', 
-                           '100'],
+        BP_LADDER_BANDS: ['20000', '10000', '7000', '5000', '4000', '2000', '1500', '1000', '700', '500', '400', '300', '200', '75'],
+        KB_LADDER_BANDS: ['3000', '2000', '1500', '1200', '1000', '900', '800', '700', '600', '500', '400', '300', '200', '100'],
     },
 
     constructor: function(inData){
-        if (inData.ladder === '100BP_LADDER_BANDS'){
-            this.ladder = this.self.100BP_LADDER_BANDS; 
+        this.initConfig(inData);
+        this.statics();
+        if (inData.ladder.indexOf('1kb') > -1 ){
+            this.ladder = this.self.BP_LADDER_BANDS; 
         }else {
-            
+            this.ladder = this.self.KB_LADDER_BANDS;
+        }
+        this.redrawBands();
+        this.redrawBandSizeLabels();
+        return this;
     },
     
-    setLadder: function(pLadder){
-        if(ladder != pLadder){
-            ladder = pLadder;
-            ladderChanged = true;
-            needsRemeasurement = true;
+    updateLadderLane: function(pLadder){
+        if (pLadder.indexOf('1kb') > -1 ){
+            this.ladder = this.self.BP_LADDER_BANDS; 
+        }else {
+            this.ladder = this.self.KB_LADDER_BANDS;
         }
-    },
-
-    updateLadderLane: function(){
-        redrawBands();
-        redrawBandSizeLabels();
-        redrawConnectors();
+       this.redrawBands();
+        this.redrawBandSizeLabels();
+        //redrawConnectors();*/
     },
 
     redrawBands: function(){
-        var ladderMin = 
+        var ladderHeight = this.actualHeight * 0.8;
+        var ladderMin = this.ladder[this.ladder.length - 1]; 
+        var ladderMax = this.ladder[0]; 
+        var totalLogDifference = Math.log(ladderMax / ladderMin);
+        this.bandYPositions = [];
+
+        for (var i = 0; i < this.ladder.length; ++i){
+            var bandSize = this.ladder[i];
+
+            var currentLogDifference =  Math.log(this.ladder[i] / ladderMin);
+            var normalizedLogDifference =  currentLogDifference/ totalLogDifference;
+            var scalingFactor = -(.1 * Math.sin(2*3.14*normalizedLogDifference));
+            this.bandYPositions.push(0.9 * this.actualHeight - (scalingFactor + normalizedLogDifference) * ladderHeight);
+        }
     },
-    redrawBandSizeLabels: function(){},
+    redrawBandSizeLabels: function(){
+        this.bandSizeLabelYPositions = [];
+        console.log("about to redraw bands");
+        for (var i = 0; i < this.ladder.length; ++i){
+            console.log("you are drawing");
+            var labelText = this.ladder[i];
+            var labelWidth = 40;
+            //var defaultLabelYPosition = bandYPositions[i] - 10;
+            if(i === 0){
+                this.bandSizeLabelYPositions.push(50);
+            } else {
+                this.bandSizeLabelYPositions.push(100);
+            }
+        
+        }
+        console.log("redrew bands");
+    },
+    /*
     removeBandSizeLabels: function(){},
     createBandSizeLabels: function(){},
-    redrawConnectors: function(){},
+    redrawConnectors: function(){},*/
     
 
     
