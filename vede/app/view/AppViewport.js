@@ -12,16 +12,6 @@ Ext.define('Vede.view.AppViewport', {
             items: [
                 {
                     xtype: 'panel',
-                    id: 'VectorPanel',
-                    layout: {
-                        type: 'fit'
-                    },
-                    title: 'Vector',
-                    flex: 2,
-                    region: 'center'
-                },
-                {
-                    xtype: 'panel',
                     id: 'ProjectPanel',
                     width: 150,
                     resizable: true,
@@ -29,6 +19,33 @@ Ext.define('Vede.view.AppViewport', {
                     title: 'Project',
                     flex: 1,
                     region: 'west'
+                },
+                {
+                    xtype: 'panel',
+                    id: 'VectorPanel',
+                    layout: {
+                        type: 'fit'
+                    },
+                    title: 'Vector',
+                    flex: 2,
+                    region: 'center',
+                    items: [
+                        {
+                            xtype: 'container',
+                            id: 'PieContainer',
+                            layout: {
+                                type: 'fit'
+                            }
+                        },
+                        {
+                            xtype: 'container',
+                            hidden: true,
+                            id: 'RailContainer',
+                            layout: {
+                                type: 'fit'
+                            }
+                        }
+                    ]
                 },
                 {
                     xtype: 'panel',

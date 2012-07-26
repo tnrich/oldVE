@@ -26,7 +26,7 @@
                 "fn": "onLaunch",
                 "implHandler": [
                     "var vp = Ext.getCmp(\"VectorPanel\");",
-                    "var drawComponent = Ext.create('Ext.draw.Component', {",
+                    "/*var drawComponent = Ext.create('Ext.draw.Component', {",
                     "    items: [{",
                     "        type: 'circle',",
                     "        fill: '#79BB3F',",
@@ -39,7 +39,7 @@
                     "        stroke: 'black' ",
                     "    }]",
                     "});",
-                    "vp.add(drawComponent);",
+                    "vp.add(drawComponent);*/",
                     "//drawComponent.surface.add({",
                     "//    type: 'path',",
                     "//    path: 'M 10 10 L 100 100'",

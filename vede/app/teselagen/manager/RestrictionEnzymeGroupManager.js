@@ -140,6 +140,15 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
+     * Returns an enzyme object given the enzyme's name.
+     * @param {String} name The enzyme's name.
+     * @return {Teselagen.bio.enzymes.RestrictionEnzyme} The enzyme object.
+     */
+    getEnzymeByName: function(name) {
+        return this.getRebaseEnzymesDatabase().get(name.toLowerCase());
+    },
+
+    /**
      * Creates a RestrictionEnzymeGroup, given a name and a list of enzyme names.
      * @param {String} name The name of the group.
      * @param {Array<String>} enzymeNames A list of enzyme names. Will be used to search the database

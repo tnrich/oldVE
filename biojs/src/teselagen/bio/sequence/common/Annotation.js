@@ -241,7 +241,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
 						shifting = pInsertLength;
 						continue;
-					} else if ( normalizedPosition < currentLocation.getStart() ){
+					} else if ( normalizedPosition <= currentLocation.getStart() ){ //DW 7/25 added = sign
 						//shift this and the rest
 						tempLocations[i].setStart(currentLocation.getStart() + pInsertLength);
 						tempLocations[i].setEnd(currentLocation.getEnd() + pInsertLength);
@@ -513,6 +513,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				location = tempLocations[i];
 				locationLength = location.getEnd() - location.getStart();
 				newStart = featureLength - location.getEnd();
+				newEnd   = newStart + locationLength; //DW ADDED THIS LINE 7/25/2012
 
 				result.push(Ext.create("Teselagen.bio.sequence.common.Location", {
 					start: newStart,

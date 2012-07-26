@@ -24,7 +24,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 	constructor: function (inData) {
 		if (inData) {
 			var name = inData.name || "";
-			var _type = inData.type || "";
+			var type = inData.type || "";
 			var notes = inData.notes || null;
 			this.callParent([inData]);
 		} else {
@@ -52,7 +52,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 		 * @return {String} Type
 		 */
 		this.getType = function(){
-			return _type;
+			return type;
 		}
 
 		/**
@@ -60,7 +60,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 		 * @param {String} pName
 		 */
 		this.setType = function(pType){
-			_type = pType;
+			type = pType;
 		}
 
 		/**
@@ -89,7 +89,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 			            name: name,
                         start: inData.start,
                         end: inData.end,
-                        type: _type,
+                        type: type,
                         strand: inData.strand,
                         notes: inData.notes
                     });

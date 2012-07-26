@@ -20,6 +20,8 @@ Ext.application({
         'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
+        'PieController',
+        'RailController',
         'RestrictionEnzymeController',
         'VectorPanelController',
         'SimulateDigestionController'
@@ -34,8 +36,3 @@ Ext.application({
     },
 });
 
-// Handle errors that are not thrown using Ext.Error
-window.onerror = function(pMsg) {
-    console.error(pMsg);
-    return true;
-}
