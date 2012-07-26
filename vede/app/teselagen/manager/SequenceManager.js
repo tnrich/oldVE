@@ -1128,7 +1128,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Rebase sequence. Rotate sequence to new position.
-     * @param {Number} rebasePosition New position to...
+     * Assumes sequence is circular resets new rebase position to be the first index.
+     * @param {Number} rebasePosition New position to be the first index
+     * @returns {Boolean} done True if successful, False if nothing was done.
      */
     rebaseSequence: function(pRebasePosition) {
         var features = this.features;
@@ -1138,7 +1140,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //console.log(pRebasePosition + " : " + seqLen);
 
         if(pRebasePosition === undefined || pRebasePosition === 0 || seqLen === 0 || pRebasePosition === seqLen) {
-            return null; // nothing to rebase;
+            return false; // nothing to rebase;
         }
 
 
@@ -1155,8 +1157,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         // rebase sequence
         var tmpSequence = sequence.subList(0, pRebasePosition); //symbolList
+
+        //console.log("***\n" + tmpSequence.seqString());
         sequence.deleteSymbols(0, pRebasePosition);
-        sequence.addSymbols(tmpSequence);
+        //console.log(sequence.seqString());
+        sequence.addSymbolList(tmpSequence);  // DW 7.26.2012 added addSymbolList() to SymbolList class to make this work
+        //console.log(sequence.seqString());
 
         // rebase features
         if(features && features.length > 0) {
