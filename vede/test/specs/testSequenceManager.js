@@ -186,7 +186,7 @@ Ext.onReady(function() {
                 //=GATTACA
                 //=-12345678
                 tmp = sm.subSequence(1,9);
-                expect(tmp.toString()).toBe("attaca");
+                expect(tmp).toBe(null);
             });
 
             it("subSequence(): [3,1) (circular)", function() {
@@ -759,28 +759,58 @@ Ext.onReady(function() {
 
         describe("Reverse Reg and Comp Sequence", function() {
             it("reverseSequence()--WAS THIS MEANT TO WORK???? ",function(){
-                var smRev =  Ext.create("Teselagen.manager.SequenceManager", {
+                // The SequenceManager that you execute reverseSequence() from seems
+                // to only be a dummy that isn't even used in the function or output.
+                var seqTmp =  Teselagen.bio.sequence.DNATools.createDNA("");
+                var smTmp  =  Ext.create("Teselagen.manager.SequenceManager", {
                     name:       "revSeq",
-                    circular:   true
+                    circular:   true,
+                    sequence:   seqTmp
                 });
+                //console.log(sm.getSequence().toString());
 
-                smRev.reverseSequence(sm);
+                var smRev = smTmp.reverseSequence(sm);
 
-                //console.log(smRev.getSequence().toString());
+                //console.log(smRev.getSequence().seqString());
+                //console.log(sm.getSequence().seqString());
+                expect(sm.getSequence().seqString()).toBe("gattaca");
+                expect(smRev.getSequence().seqString()).toBe("tgtaatc");
             });
 
             it("reverseComplementSequence() ",function(){
-                console.log(sm.getSequence().toString());
+                //GATTACA
+                //CTAATGT
+                //console.log(sm.getSequence().toString());
+                expect(sm.getSequence().seqString()).toBe("gattaca");
+                
                 sm.reverseComplementSequence();
-
-                console.log(sm.getSequence().toString());
-
+                //console.log(sm.getSequence().toString());
+                expect(sm.getSequence().seqString()).toBe("tgtaatc");
             });
         });
 
-        xdescribe("Rebase", function() {
-            it("rebaseSequence() ",function(){
-                expect(true).toBeFalsy();
+        describe("Rebase", function() {
+            beforeEach(function() {
+                var pos;
+                var flag = false;
+
+            });
+            it("rebaseSequence(0) Invalid rebase position",function(){
+                try {
+                    sm.rebaseSequence(0);
+                } catch (msg) {
+                    console.warn("Caught: " + msg);
+                }
+            });
+            it("rebaseSequence(10) Invalid rebase position",function(){
+                var pos = 10
+                try {
+                    sm.rebaseSequence(10);
+                } catch (msg) {
+                    flag = true;
+                    console.warn("Caught: " + msg);
+                }
+                expect(flag).toBe(true);
             });
         });
 
