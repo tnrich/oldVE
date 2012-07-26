@@ -3,7 +3,7 @@
  * Class which creates sprites to draw all given features.
  */
 Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
-    extend: "Teselagen.renderer.pie.FeatureRenderer", 
+    extend: "Teselagen.renderer.pie.PieRenderer", 
 
     requires: ["Teselagen.bio.sequence.common.StrandType"],
 
@@ -28,7 +28,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
 
         this.initConfig(inData);
 
-        this.middlePoints = Ext.create("Ext.util.HashMap");
+        this.setMiddlePoints(Ext.create("Ext.util.HashMap"));
     },
 
     /**
@@ -61,7 +61,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
             }
 
             var arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius,
-                         this.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color));
+                         this.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
 
             arcSprite.tooltip = this.getToolTip(feature);
             arcSprite.on("render", function(me) {
