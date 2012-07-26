@@ -735,29 +735,42 @@ Ext.onReady(function() {
                 expect(sm.getSequence().seqString()).toBe(clone.getSequence().seqString());
                 //expect(sm.getSequence()).toBe(clone.getSequence()); //can't compare directly
                 expect(sm.getFeatures().length).toBe(clone.getFeatures().length);
+                expect(Ext.getClassName(clone.getFeatures()[0])).toMatch("Feature");
 
                 clone.setName("clone");
                 clone.setCircular(false);
-                clone.setSequence(Teselagen.bio.sequence.DNATools.createDNA(""));
-                clone.setFeatures([]);
-
-                expect(clone.getName()).toBe("clone");
+                clone.setSequence(Teselagen.bio.sequence.DNATools.createDNA("AGCT"));
+                clone.addFeature(feat4);
 
                 expect(sm.getName()).not.toBe(clone.getName());
                 expect(sm.getCircular()).not.toBe(clone.getCircular());
                 expect(sm.getSequence().seqString()).not.toBe(clone.getSequence().seqString());
                 expect(sm.getSequence()).not.toBe(clone.getSequence());
+                expect(sm.getFeatures()[0].getName()).toBe(clone.getFeatures()[0].getName());
+                expect(sm.getFeatures()[0].getName()).not.toBe(clone.getFeatures()[1].getName());
                 expect(sm.getFeatures().length).not.toBe(clone.getFeatures().length);
+
+
+                clone.getFeatures()[0].setName("blah");
+                expect(sm.getFeatures()[0].getName()).not.toBe(clone.getFeatures()[0].getName());
+                //console.log(sm.getFeatures()[0].getName() + " : " + clone.getFeatures()[0].getName());
             });
         });
 
-        xdescribe("Reverse Reg and Comp Sequence", function() {
+        describe("Reverse Reg and Comp Sequence", function() {
             it("reverseSequence() ",function(){
-                expect(true).toBeFalsy();
+                var smRev =  Ext.create("Teselagen.manager.SequenceManager", {
+                    name:       "revSeq",
+                    circular:   true
+                });
+
+                smRev.reverseSequence(sm);
+
+                //console.log(smRev.getSequence().toString());
             });
 
             it("reverseComplementSequence() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
         });
 

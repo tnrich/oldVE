@@ -953,14 +953,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
                     }
                 } else {
                     //if (pStart < featEnd || pEnd > featStart) { //ORIG
-                    if (pStart < featEnd || pEnd >= featStart) { //DW; should be inclusive
+                    if (pStart < featEnd || pEnd >= featStart) { //DW; ORIG WAS >, should be inclusive >=
                         result.push(feat); //circ feat
                     }
                 } 
             } else {            // CIRCULAR selection
                 if (featStart <= featEnd) {
                     if (featStart >= pEnd  &&  featEnd <= pStart) { 
-                    //DW orig code WRONG: featEnd < pStart is WRONG; featEnd is exclusive so need =
+                    //DW ORIG CODE > instead of >=: featEnd < pStart is WRONG; featEnd is exclusive so need =
                         // none
                     } else {
                         result.push(feat);
@@ -989,12 +989,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
             featEnd     = feat.getEnd();
             if (featStart <= featEnd) { //Feat is normal
                 if (featStart <= pPosition  && featEnd > pPosition) {
-                    // DW should be featStart <= not < pPosition 
+                    // DW : ORIG should be featStart <= not < pPosition 
                     result.push(feat);
                 }
             } else { // Feat is circular.
                 //if (featStart < pPosition || featEnd > pPosition) { //ORIG
-                if (featStart <= pPosition || featEnd > pPosition) { // DW: ORIG WAS WRONG
+                if (featStart <= pPosition || featEnd > pPosition) { // DW: ORIG WAS < instead of <=
                     result.push(feat);
                 }
             }
@@ -1037,22 +1037,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
     * Clone sequence provider
+    *
+    * @returns {Teselagen.manager.SequenceManager} clonedSequenceManager Copy of the sequenceManager, deep copy (of sequence and features)
     */
     clone: function() {
         var clonedSeq = Teselagen.bio.sequence.DNATools.createDNA(this.getSequence().seqString());
-        var clonedSequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
+        var clonedSeqMgr = Ext.create("Teselagen.manager.SequenceManager", {
             name:       this.name,
             circular:   this.circular,
-            sequence:   clonedSeq
+            sequence:   clonedSeq,
+            features:   []
         });
         var features = this.features;
 
         if (features && features.length > 0) {
             for (var i=0; i < features.length; i++) {
-                clonedSequenceManager.addFeature(features[i], true);
+                clonedSeqMgr.addFeature(features[i].clone(), true);  //DW: ORIG DOES NOT CLONE FEAT
             }
         }
-        return clonedSequenceManager;
+        return clonedSeqMgr;
     },
 
     /**
@@ -1063,29 +1066,59 @@ Ext.define("Teselagen.manager.SequenceManager", {
     reverseSequence: function(pSequenceManager) {
 
         var revComSeq = Teselagen.bio.sequence.DNATools.reverseComplement(pSequenceManager.getSequence());
-        /*var revSeqMgr = Ext.create("Teselagen.manager.SequenceManager", {
+        var revSeqMgr = Ext.create("Teselagen.manager.SequenceManager", {
             name:     pSequenceManager.getName(),
             circular: pSequenceManager.getCircular(),
-            sequence: pSequenceManager.getSequence()
-        }
-
+            sequence: revComSeq
+        });
+        console.log(pSequenceManager.getSequence().seqString());
+        console.log(revComSeq.seqString());
+        
         var seqLen = pSequenceManager.getSequence().length;
 
         var feats   = pSequenceManager.getFeatures();
 
         for (var i=0; i < feats.length; i++) {
-            var newStart = seqLen - feats[i].getEnd() - 1;
-            //var revFeat.
+            var revFeat, newStart;
+            newStart = seqLen - feats[i].getEnd() - 1;
+            revFeat = feats[i].clone();
+            //console.log("strand: " + revFeat.getStrand());
+            revFeat.setStrand(-revFeat.getStrand());
+            //console.log("strand: " + revFeat.getStrand());
+            revFeat.reverseLocations(revFeat.getStart(), seqLen, pSequenceManager.getCircular());
+            revSeqMgr.addFeature(revFeat, true);
         }
 
 
-        return revSeqMgr;*/
+        return revSeqMgr;
     },
 
     /**
      * Reverse complement sequence
+     * @returns {Boolean} success
      */
     reverseComplementSequence: function(inputSequenceManager) {
+        this.manualUpdateStart();
+
+        var revComSeq, seqLen, revFeat, newStart, newEnd;
+
+        revComSeq = Teselagen.bio.sequence.DNATools.reverseComplement(this.sequence);
+        this.setSequence(revComSeq);
+
+        seqLen = this.sequence.length;
+
+        for (var i=0; i < this.features.length; i++) {
+            revFeat = this.features[i].clone; // DW: ORIG DOES NOT CLONE
+            newStart = seqLen - revFeat.getEnd() - 1;
+
+            revFeat.setStrand(-revFeat.getStrand());
+            revFeat.reverseLocations( newStart, seqLen, this.circular);
+        }
+
+        this.needsRecalculateComplementSequence = true;
+        this.needsRecalculateReverseComplementSequence = true;
+
+        this.manualUpdateEnd();
         return true;
     },
 
@@ -1121,7 +1154,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @private
      */
     updateComplementSequence: function() {
-        if(this.getNeedsRecalculateComplementSequence()) {
+        if(this.needsRecalculateComplementSequence) {
             this.complementSequence = Teselagen.bio.sequence.DNATools.complement(this.sequence);
 
             this.needsRecalculateComplementSequence = false;
@@ -1132,7 +1165,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @private
      */
     updateReverseComplementSequence: function() {
-        if(this.getNeedsRecalculateReverseComplementSequence()) {
+        if(this.needsRecalculateReverseComplementSequence) {
             this.reverseComplementSequence = Teselagen.bio.sequence.DNATools.reverseComplement(this.sequence);
 
             this.needsRecalculateReverseComplementSequence = false;
