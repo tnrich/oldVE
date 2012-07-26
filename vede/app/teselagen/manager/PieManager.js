@@ -11,6 +11,9 @@ Ext.define("Teselagen.manager.PieManager", {
         cutSites: [],
         features: [],
         orfs: [],
+        showCutSites: true,
+        showFeatures: true,
+        showOrfs: true
     },
 
     cutSiteRenderer: null,
@@ -31,7 +34,19 @@ Ext.define("Teselagen.manager.PieManager", {
      * SequenceManager to obtain the sequence from.
      * @param {Object} center An object with parameters x and y, containing the
      * coordinates of the center of the pie.
-     * @param {Int} railRadius
+     * @param {Int} railRadius The radius of the circular sequence display.
+     * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} cutSites The
+     * list of cut sites to be rendered.
+     * @param {Array<Teselagen.bio.sequence.common.Annotation>} features The
+     * list of features to be rendered.
+     * @param {Array<Teselagen.bio.orf.ORF>} orfs The list of orfs to be
+     * rendered.
+     * @param {Boolean} showCutSites Whether or not to render cut sites.
+     * Defaults to true.
+     * @param {Boolean} showFeatures Whether or not to render features. Defaults
+     * to true.
+     * @param {Boolean} showOrfs Whether or not to render orfs. Defaults to
+     * true.
      */
     constructor: function(inData) {
         this.initConfig(inData);
@@ -56,13 +71,6 @@ Ext.define("Teselagen.manager.PieManager", {
             railRadius: this.railRadius,
             orfs: this.orfs
         });
-
-        /*this.traceRenderer = Ext.create("Teselagen.renderer.pie.TraceRenderer", {
-            sequenceManager: this.sequenceManager,
-            center: this.center,
-            railRadius: this.railRadius,
-            traces: this.traces
-        });*/
 
         this.renderers = [this.cutSiteRenderer,
                           this.featureRenderer,
@@ -107,9 +115,20 @@ Ext.define("Teselagen.manager.PieManager", {
             this.orfRenderer.setOrfs(this.orfs);
         }
 
-        var cutSiteSprites = this.cutSiteRenderer.render();
-        var featureSprites = this.featureRenderer.render();
-        var orfSprites = this.orfRenderer.render();
+        var cutSiteSprites = [];
+        if(this.showCutSites) {
+            cutSiteSprites = this.cutSiteRenderer.render();
+        } 
+
+        var featureSprites = [];
+        if(this.showFeatures) {
+            featureSprites = this.featureRenderer.render();
+        }
+
+        var orfSprites = [];
+        if(this.showOrfs) {
+            orfSprites = this.orfRenderer.render();
+        }
 
         return [].concat(traceSprites, cutSiteSprites, featureSprites, orfSprites);
     },

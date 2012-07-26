@@ -754,6 +754,17 @@ Ext.onReady(function() {
             it("can render sprites", function() {
                 expect(pieMan.render().length).toBe(8);
             });
+
+            it("'show' flags work correctly", function() {
+                pieMan.setShowCutSites(false);
+                expect(pieMan.render().length).toBe(6);
+                
+                pieMan.setShowFeatures(false);
+                expect(pieMan.render().length).toBe(4);
+
+                pieMan.setShowOrfs(false);
+                expect(pieMan.render().length).toBe(0);
+            });
         });
     });
 });

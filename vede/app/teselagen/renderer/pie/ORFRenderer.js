@@ -35,11 +35,11 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
         var seqLen = this.sequenceManager.getSequence().seqString().length;
 
         Ext.each(this.orfs, function(orf, index) {
-            var color = this.ORF_FRAME_COLOR[orf.getFrame()];
+            var color = this.self.ORF_FRAME_COLOR[orf.getFrame()];
 
-            var orfRadius = railRadius + this.DISTANCE_FROM_RAIL;
+            var orfRadius = this.railRadius + this.self.DISTANCE_FROM_RAIL;
             if(index > 0) {
-                orfRadius += index * this.DISTANCE_BETWEEN_ORFS;
+                orfRadius += index * this.self.DISTANCE_BETWEEN_ORFS;
             }
 
             var startAngle = orf.getStart() * 2 * Math.PI / seqLen;
@@ -90,7 +90,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                       this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle) + " " +
                       "L" + this.center.x + orfRadius * Math.sin(endAngle) + " " +
                       this.center.y - (orfRadius - 2) * Math.cos(endAngle) + " " +
-                      "L" + this.center.x + (orfradius - 2) * Math.sin(arrowShiftAngle) + " " +
+                      "L" + this.center.x + (orfRadius - 2) * Math.sin(arrowShiftAngle) + " " +
                       this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle)
             }));
         }, this);
