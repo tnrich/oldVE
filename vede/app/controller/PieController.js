@@ -18,7 +18,7 @@ Ext.define('Vede.controller.PieController', {
     
     onLaunch: function() {
         var pc = Ext.getCmp('PieContainer');
-        //pc.add(Ext.create("Vede.view.pie.Pie"));
+        pc.add(Ext.create("Vede.view.pie.Pie"));
     },
 
     onClickPie: function(pT, pE, pOpts) {
