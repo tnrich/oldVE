@@ -27,15 +27,85 @@
             "userConfig": {
                 "id": "VectorPanel",
                 "resizable": null,
-                "layout": "fit",
+                "layout": "hbox",
                 "title": "Vector",
                 "titleCollapse": null,
                 "designer|userClassName": "MyPanel",
                 "layout|flex": 2,
-                "layout|region": "center"
+                "layout|region": "center",
+                "container|align": "stretch"
             },
             "customConfigs": [],
-            "expanded": true
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen3090",
+                    "type": "container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "id": "PieContainer",
+                        "layout": "fit",
+                        "designer|userClassName": "MyContainer1"
+                    },
+                    "customConfigs": [],
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen4276",
+                            "type": "button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "text": "MyButton",
+                                "designer|userClassName": "MyButton24"
+                            },
+                            "customConfigs": [],
+                            "expanded": true
+                        }
+                    ]
+                },
+                {
+                    "id": "ExtBox1-ext-gen3433",
+                    "type": "container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "hidden": true,
+                        "id": "RailContainer",
+                        "layout": "fit",
+                        "designer|userClassName": "MyContainer2"
+                    },
+                    "customConfigs": [],
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen5072",
+                            "type": "button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "text": "MyButton",
+                                "designer|userClassName": "MyButton25"
+                            },
+                            "customConfigs": [],
+                            "expanded": true
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": "ExtBox1-ext-gen3484",
@@ -96,7 +166,7 @@
                 "layout|region": "north"
             },
             "customConfigs": [],
-            "expanded": true,
+            "expanded": false,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen5762",

@@ -29,11 +29,41 @@ Ext.define('MyApp.view.AppViewport', {
                     xtype: 'panel',
                     id: 'VectorPanel',
                     layout: {
-                        type: 'fit'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
                     title: 'Vector',
                     flex: 2,
-                    region: 'center'
+                    region: 'center',
+                    items: [
+                        {
+                            xtype: 'container',
+                            id: 'PieContainer',
+                            layout: {
+                                type: 'fit'
+                            },
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    text: 'MyButton'
+                                }
+                            ]
+                        },
+                        {
+                            xtype: 'container',
+                            hidden: true,
+                            id: 'RailContainer',
+                            layout: {
+                                type: 'fit'
+                            },
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    text: 'MyButton'
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     xtype: 'panel',
