@@ -9,7 +9,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
 
     requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper",
                "Teselagen.bio.sequence.DNATools",
-               "Teselagen.event.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED"],
+               "Teselagen.event.MapperEvent"],
 
     config: {
         restrictionEnzymeGroup: null,
