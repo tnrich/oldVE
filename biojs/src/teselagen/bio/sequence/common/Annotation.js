@@ -513,6 +513,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				location = tempLocations[i];
 				locationLength = location.getEnd() - location.getStart();
 				newStart = featureLength - location.getEnd();
+				newEnd   = newStart + locationLength; //DW ADDED THIS LINE 7/25/2012
 
 				result.push(Ext.create("Teselagen.bio.sequence.common.Location", {
 					start: newStart,
