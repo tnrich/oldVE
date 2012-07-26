@@ -15,33 +15,12 @@ Ext.define('Vede.controller.PieController', {
             '#PieContainer' : {
                 click : this.onClickPie
             }
-        })
+        });
     },
     
     onLaunch: function() {
         var pc = Ext.getCmp('PieContainer');
-        var pie = Ext.create('Ext.draw.Sprite',{
-            type: 'circle',
-            fill: '#79BB3F',
-            radius: 100,
-            x: 100,
-            y: 100,
-            listeners: {
-                click: this.onClickPie
-            }
-        });
-        var caret = Ext.create('Ext.draw.Sprite',{
-            type: 'path',
-            path: 'M 10 10 L 100 100',
-            stroke: 'black',
-            listeners: {
-                click: this.onClickPie
-            }
-        });
-        drawComponent = Ext.create('Ext.draw.Component', {
-            items: [pie, caret]
-        });
-        pc.add(drawComponent);
+        //pc.add(Ext.create("Vede.view.pie.Pie"));
     },
 
     onClickPie: function(pT, pE, pOpts) {
