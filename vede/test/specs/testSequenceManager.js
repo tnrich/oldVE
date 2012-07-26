@@ -758,7 +758,7 @@ Ext.onReady(function() {
         });
 
         describe("Reverse Reg and Comp Sequence", function() {
-            it("reverseSequence() ",function(){
+            it("reverseSequence()--WAS THIS MEANT TO WORK???? ",function(){
                 var smRev =  Ext.create("Teselagen.manager.SequenceManager", {
                     name:       "revSeq",
                     circular:   true
@@ -770,7 +770,11 @@ Ext.onReady(function() {
             });
 
             it("reverseComplementSequence() ",function(){
-                //expect(true).toBeFalsy();
+                console.log(sm.getSequence().toString());
+                sm.reverseComplementSequence();
+
+                console.log(sm.getSequence().toString());
+
             });
         });
 
