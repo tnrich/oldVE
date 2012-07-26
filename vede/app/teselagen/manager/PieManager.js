@@ -6,6 +6,7 @@ Ext.define("Teselagen.manager.PieManager", {
     config: {
         sequenceManager: null,
         center: 0,
+        pie: null,
         railRadius: 0,
         cutSites: [],
         features: [],
@@ -25,6 +26,8 @@ Ext.define("Teselagen.manager.PieManager", {
 
     constructor: function(inData) {
         this.initConfig();
+
+        this.pie = Ext.create("Vede.view.pie.Pie");
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,
@@ -111,4 +114,22 @@ Ext.define("Teselagen.manager.PieManager", {
 
         return pTraces;
     },
+    
+    initPie: function() {
+    	var base = Ext.create('Ext.draw.Sprite',{
+            type: 'circle',
+            fill: '#79BB3F',
+            radius: 100,
+            x: 100,
+            y: 100,
+        });
+        var caret = Ext.create('Ext.draw.Sprite',{
+            type: 'path',
+            path: 'M 10 10 L 100 100',
+            stroke: 'black',
+        });
+        this.pie.surface.add(base);
+//        this.surface.add(pie, caret);
+
+    }
 });

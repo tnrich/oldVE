@@ -5,6 +5,8 @@
 Ext.define('Vede.controller.PieController', {
     extend: 'Ext.app.Controller',
 
+    pieManager: null,
+
     /**
      * @member Vede.controller.PieController
      */
@@ -17,8 +19,10 @@ Ext.define('Vede.controller.PieController', {
     },
     
     onLaunch: function() {
+        this.pieManager = Ext.create("Teselagen.manager.PieManager");
         var pc = Ext.getCmp('PieContainer');
-        pc.add(Ext.create("Vede.view.pie.Pie"));
+        //pc.add(this.pieManager.getPie());
+        //this.pieManager.initPie();
     },
 
     onClickPie: function(pT, pE, pOpts) {
