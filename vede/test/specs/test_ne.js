@@ -548,6 +548,129 @@ Ext.onReady(function() {
         });
     });
 
+    var cutSite1;
+    var cutSite2;
+    var feature;
+    var orf;
+    describe("Renderer Classes", function() {
+        describe("pie renderers", function() {
+            describe("CutSiteRenderer", function() {
+                cutSite1 = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
+                    start: 10,
+                    end: 20,
+                    restrictionEnzyme: agcEnz
+                });
+
+                cutSite2 = Ext.create("Teselagen.bio.enzymes.RestrictionCutSite", {
+                    start: 0,
+                    end: 2,
+                    restrictionEnzyme: agcEnz
+                });
+
+                var csRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
+                    sequenceManager: seqMan,
+                    center: 0,
+                    railRadius: 10,
+                    cutSites: [cutSite1, cutSite2]
+                });
+
+                it("exists", function() {
+                    expect(csRenderer).toBeDefined();
+                });
+            });
+
+            describe("FeatureRenderer", function() {
+                feature = Ext.create("Teselagen.bio.sequence.dna.Feature", {
+                    name: "Awesome Feature",
+                    type: "terminator",
+                    start: 1,
+                    end: 18,
+                    strand: 1
+                });
+
+                var fRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+                    sequenceManager: seqMan,
+                    center: 0,
+                    railRadius: 10,
+                    features: [feature]
+                });
+
+                it("exists", function() {
+                    expect(fRenderer).toBeDefined();
+                });
+            });
+
+            describe("ORFRenderer", function() {
+                orf = Ext.create("Teselagen.bio.orf.ORF", {
+                    start: 2,
+                    end: 33,
+                    strand: -1,
+                    frame: 1,
+                    startCodons: [1, 10]
+                });
+
+                var oRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {
+                    sequenceManager: seqMan,
+                    center: 0,
+                    railRadius: 10,
+                    orfs: [orf]
+                });
+
+                it("exists", function() {
+                    expect(oRenderer).toBeDefined();
+                });
+            });
+        });
+    });
+
+    describe("Label classes", function() {
+        describe("Label", function() {
+            var label = Ext.create("Teselagen.renderer.common.Label", {
+                annotation: feature
+            });
+
+            it("exists", function() {
+                expect(label).toBeDefined();
+            });
+
+            it("can create sprite without dying", function() {
+                expect(label.getSprite()).toBeDefined();
+            });
+        });
+
+        describe("pie labels", function() {
+            describe("CutSiteLabel", function() {
+                var csLabel = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
+                    annotation: cutSite1
+                });
+
+                it("exists", function() {
+                    expect(csLabel).toBeDefined();
+                });
+
+                it("can generate labels and tooltips", function() {
+                    console.log(csLabel.labelText());
+                    console.log(csLabel.tipText());
+                });
+            });
+
+            describe("FeatureLabel", function() {
+                var fLabel = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
+                    annotation: feature
+                });
+
+                it("exists", function() {
+                    expect(fLabel).toBeDefined();
+                });
+
+                it("can generate labels and tooltips", function() {
+                    console.log(fLabel.labelText());
+                    console.log(fLabel.tipText());
+                });
+            });
+        });
+    });
+
     describe("Manager Classes", function() {
         describe("RestrictionEnzymeGroupManager", function() {
             var rem = Teselagen.manager.RestrictionEnzymeGroupManager;
@@ -611,6 +734,25 @@ Ext.onReady(function() {
 
                 expect(testGroup.getEnzymes()[0].getName()).toBe("AatII");
                 expect(testGroup.getEnzymes()[1].getName()).toBe("BglII");
+            });
+        });
+
+        describe("PieManager", function() {
+            var pieMan = Ext.create("Teselagen.manager.PieManager", {
+                sequenceManager: seqMan,
+                center: 0,
+                railRadius: 0,
+                cutSites: [cutSite1, cutSite2],
+                features: [feature],
+                orfs: [orf]
+            });
+
+            it("exists", function() {
+                expect(pieMan).toBeDefined();
+            });
+
+            it("can render sprites", function() {
+                expect(pieMan.render().length).toBe(8);
             });
         });
     });

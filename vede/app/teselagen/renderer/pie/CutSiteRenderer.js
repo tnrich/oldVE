@@ -51,7 +51,7 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                 type: "path",
                 path: "M" + lineStart.x + " " + lineStart.y + " " +
                       "L" + lineEnd.x + " " + lineEnd.y,
-                fill: this.FRAME_COLOR
+                fill: this.FRAME_COLOR,
                 tooltip: this.getToolTip(site),
                 listeners: {
                     render: function(me) {
