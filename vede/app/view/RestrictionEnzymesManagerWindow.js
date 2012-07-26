@@ -95,7 +95,8 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             buttons: ["oneRight", "allRight",
                                                       "oneLeft", "allLeft"],
                                             buttonsText: {oneRight: ">", allRight: ">>",
-                                                          oneLeft: "<", allLeft: "<<"}
+                                                          oneLeft: "<", allLeft: "<<"},
+                                            appendOnly: true
                                         }
                                     ]
                                 },
@@ -167,12 +168,14 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             xtype: 'button',
                                             margin: 2,
                                             text: 'Save as Group',
+                                            id: 'saveGroupButton',
                                             flex: 1
                                         },
                                         {
                                             xtype: 'button',
                                             margin: 2,
                                             text: 'Delete Group',
+                                            id: 'deleteGroupButton',
                                             flex: 1
                                         }
                                     ]

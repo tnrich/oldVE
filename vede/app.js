@@ -36,7 +36,7 @@ Ext.application({
 });
 
 // Handle errors that are not thrown using Ext.Error
-window.onerror = function(pMsg) {
+/*window.onerror = function(pMsg) {
     console.error(pMsg);
     return true;
-}
+}*/
