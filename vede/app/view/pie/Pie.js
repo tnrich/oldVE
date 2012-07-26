@@ -18,7 +18,7 @@ Ext.define('Vede.view.pie.Pie', {
             path: 'M 10 10 L 100 100',
             stroke: 'black',
         });
-        this.surface.add(pie);
+//        this.surface.add(pie);
 //        this.surface.add(pie, caret);
     }
 });
