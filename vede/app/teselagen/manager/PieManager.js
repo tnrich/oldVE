@@ -134,7 +134,25 @@ Ext.define("Teselagen.manager.PieManager", {
             orfSprites = this.orfRenderer.render();
         }
 
-        return [].concat(traceSprites, cutSiteSprites, featureSprites, orfSprites);
+        var sprites = cutSiteSprites.concat(featureSprites, orfSprites);
+
+        /*for(var i = 0; i < 200; i+= 20) {
+            for(var j = 0; j < 200; j+= 20) {
+                sprites.push(Ext.create("Ext.draw.Sprite", {
+                    type: "text",
+                    text: i + "," + j,
+                    x: i,
+                    y: j,
+                    font: "6px monospace"
+                }));
+            }
+        }*/
+
+        this.pie.surface.add(sprites);
+
+        Ext.each(sprites, function(sprite){
+            sprite.show(true);
+        });
     },
 
     applySequenceManager: function(pSequenceManager) {
@@ -181,5 +199,4 @@ Ext.define("Teselagen.manager.PieManager", {
         this.pie.surface.add(caret);
         caret.show(true);
     }
-
 });

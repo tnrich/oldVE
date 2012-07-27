@@ -38,36 +38,30 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                                                               this.railRadius + 10));
 
             var lineStart = {
-                x: this.center.x + this.railRadius * Math.sin(angle),
-                y: this.center.y - this.railRadius * Math.cos(angle),
+                x: Math.floor(this.center.x + this.railRadius * Math.sin(angle)),
+                y: Math.floor(this.center.y - this.railRadius * Math.cos(angle)),
             };
 
             var lineEnd = {
-                x: this.center.x + (this.railRadius + 10) * Math.sin(angle),
-                y: this.center.y + (this.railRadius + 10) * Math.cos(angle)
+                x: Math.floor(this.center.x + (this.railRadius + 10) * Math.sin(angle)),
+                y: Math.floor(this.center.y - (this.railRadius + 10) * Math.cos(angle))
             };
 
             var siteSprite = Ext.create("Ext.draw.Sprite", {
                 type: "path",
                 path: "M" + lineStart.x + " " + lineStart.y + " " +
                       "L" + lineEnd.x + " " + lineEnd.y,
-                fill: this.FRAME_COLOR,
+                stroke: this.self.FRAME_COLOR,
                 tooltip: this.getToolTip(site),
                 listeners: {
                     render: function(me) {
-                        Ext.QuickTip.register({
+                        console.log(me);
+                        Ext.tip.QuickTipManager.register({
                             target: me.el,
                             text: me.tooltip
                         });
                     }
                 }
-            });
-
-            // Create a tooltip for the sprite. Hopefully.
-            var tooltip = this.getToolTip(site);
-            Ext.create("Ext.tip.ToolTip", {
-                target: site,
-                html: tooltip
             });
 
             sprites.push(siteSprite);
@@ -90,6 +84,8 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
         var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + 
                       (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) +
                       complement + ", cuts " + cutSite.getNumCuts() + " times";
+
+        return toolTip;
     },
 
     applyCutSites: function(pCutSites) {

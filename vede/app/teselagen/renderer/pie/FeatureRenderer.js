@@ -39,15 +39,15 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
         var sprites = [];
 
         Ext.each(this.features, function(feature, index) {
-            var featureRadius = this.railRadius - this.DEFAULT_FEATURES_GAP - 
-                                2 * this.DEFAULT_FEATURES_GAP;
+            var featureRadius = this.railRadius - this.self.DEFAULT_FEATURES_GAP - 
+                                2 * this.self.DEFAULT_FEATURES_GAP;
 
             if(index > 0) {
                 featureRadius -= index * (DEFAULT_FEATURE_HEIGHT + 
                                           DEFAULT_FEATURES_GAP);
             }
 
-            var angles = this.calculateAngles(feature);
+            var angles = this.calculateAngles(feature, featureRadius);
 
             var startAngle = angles[0];
             var endAngle = angles[1];
@@ -61,15 +61,17 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
             }
 
             var arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius,
-                         this.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
+                         this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
 
             arcSprite.tooltip = this.getToolTip(feature);
             arcSprite.on("render", function(me) {
-                Ext.QuickTip.register({
+                Ext.tip.QuickTipManager.register({
                     target: me.el,
                     text: me.tooltip
                 });
             });
+
+            sprites.push(arcSprite);
             
             // Draw a pie slice for each location in the feature.
             // At the moment color is a final argument to the calls to
@@ -86,19 +88,19 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                    feature.getStrand() == this.StrandType.BACKWARD) {
 
                     sprites.push(this.GraphicUtils.drawDirectedPiePiece(this.center, 
-                                 featureRadius, this.DEFAULT_FEATURE_HEIGHT, startAngle,
+                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle,
                                  endAngle, direction, color));
 
                 } else if(feature.getEnd() == location.getEnd() && 
                           feature.getStrand() == this.StrandType.FORWARD) {
 
                     sprites.push(this.GraphicUtils.drawDirectedPiePiece(this.center,
-                                 featureRadius, this.DEFAULT_FEATURE_HEIGHT, startAngle, 
+                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, 
                                  endAngle, direction, color));
 
                 } else {
                     sprites.push(this.GraphicUtils.drawPiePiece(this.center,
-                                 featureRadius, this.DEFAULT_FEATURE_HEIGHT, startAngle, 
+                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, 
                                  endAngle, direction, color));
                 }
             }, this);
@@ -114,7 +116,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      * calculate angles for.
      * @return {Array<Int>} The start and end angles, in that order.
      */
-    calculateAngles: function(feature) {
+    calculateAngles: function(feature, featureRadius) {
         var angle1 = feature.getStart() * 2 + Math.PI /
                      this.sequenceManager.getSequence().seqString().length;
         var angle2 = feature.getEnd() * 2 + Math.PI /
@@ -147,7 +149,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      * a tooltip for.
      * @return {String} The generated tooltip.
      */
-    getTooltip: function(feature) {
+    getToolTip: function(feature) {
         var nameString = "";
         if(feature.getName() == "") {
             nameString = " - " + feature.getName();
@@ -185,5 +187,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      */
     applyFeatures: function(pFeatures) {
         this.setNeedsMeasurement(true);
+
+        return pFeatures;
     },
 });

@@ -54,7 +54,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             // Attach a tooltip to the arc.
             arcSprite.tooltip = this.getToolTip(orf);
             arcSprite.on("render", function(me) {
-                Ext.QuickTip.register({
+                Ext.tip.QuickTipManager.register({
                     target: me.el,
                     text: me.tooltip
                 });

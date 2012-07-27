@@ -1,7 +1,9 @@
 Ext.define("Teselagen.renderer.pie.PieRenderer", {
     extend: "Teselagen.renderer.common.AnnotationRenderer",
 
-    statics: {
+    requires: "Teselagen.utils.GraphicUtils",
+
+    inheritableStatics: {
         FRAME_COLOR: "#606060"
     },
 
