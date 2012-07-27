@@ -176,6 +176,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var result, locusName, seqLen, strand, naType, linear, div, date;
         var lineArr = line.split(/[\s]+/g);
 
+
+        if (lineArr.length <= 1) {
+            console.warn("WARNING! Parsing Genbank File: Locus line contains no values!");
+        }
+
         locusName = lineArr[1];
 
         // Sequence Length and bp

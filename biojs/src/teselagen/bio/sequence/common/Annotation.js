@@ -312,8 +312,10 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			// if deletion happened before feature, shift only, no delete
 			if (normalizedCutEnd <= tempLocations[0].getStart()) {
 				for (var j = 0; j < tempLocations.length; j++) {
+					console.log("BUG HERE?1 " + tempLocations[j].getEnd()); //DW
 					tempLocations[j].setStart( tempLocations[j].getStart() - pCutLength);
 					tempLocations[j].setEnd( tempLocations[j].getEnd() - pCutLength);
+					console.log("BUG HERE?2 " + tempLocations[j].getEnd()); //DW
 				}
 			} else {
 				// do deletions

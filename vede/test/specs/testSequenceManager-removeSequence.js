@@ -11,7 +11,7 @@ Ext.require("Teselagen.bio.sequence.TranslationUtils");
 
 
 Ext.onReady(function() {
-    xdescribe("Testing SequenceManager Classes pt2", function() {
+    describe("Testing SequenceManager Classes pt2", function() {
 
         // =============================================
         //  SequenceManager.removeSequence Testing Suite
@@ -107,7 +107,7 @@ Ext.onReady(function() {
                 expect(features[1].getLocations()[0].getStart()).toBe(37);
                 expect(features[1].getLocations()[0].getEnd()).toBe(47);
                 expect(features[1].getLocations()[1].getStart()).toBe(52);
-                expect(features[1].getLocations()[1].getEnd()).toBe(5); //this is 37?
+                expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
 
             it("testRemoveSequenceFnSn2",function(){
@@ -126,7 +126,7 @@ Ext.onReady(function() {
                 expect(features[1].getLocations()[0].getStart()).toBe(37);
                 expect(features[1].getLocations()[0].getEnd()).toBe(47);
                 expect(features[1].getLocations()[1].getStart()).toBe(52);
-                expect(features[1].getLocations()[1].getEnd()).toBe(5); // this is 37?
+                expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
 
             it("testRemoveSequenceFnSn3A",function(){
@@ -141,11 +141,6 @@ Ext.onReady(function() {
                 expect(features[0].getLocations()[0].getEnd()).toBe(27);
                 expect(features[0].getLocations()[1].getStart()).toBe(32);
                 expect(features[0].getLocations()[1].getEnd()).toBe(5);
-
-                expect(features[1].getLocations()[0].getStart()).toBe(17);
-                expect(features[1].getLocations()[0].getEnd()).toBe(27);
-                expect(features[1].getLocations()[1].getStart()).toBe(32);
-                expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
 
             it("testRemoveSequenceFnSn4",function(){
@@ -235,7 +230,7 @@ Ext.onReady(function() {
                 expect(features[0].getLocations()[1].getStart()).toBe(25);
                 expect(features[0].getLocations()[1].getEnd()).toBe(30);
 
-                expect(features[1].getLocations()[0].getStart()).toBe(30);
+                expect(features[1].getLocations()[0].getStart()).toBe(39);
                 expect(features[1].getLocations()[0].getEnd()).toBe(49);
                 expect(features[1].getLocations()[1].getStart()).toBe(54);
                 expect(features[1].getLocations()[1].getEnd()).toBe(5);
@@ -257,7 +252,14 @@ Ext.onReady(function() {
                 expect(features[1].getLocations()[0].getStart()).toBe(40);
                 //expect(features[1].getLocations()[0].getEnd()).toBe(50);
                 //expect(features[1].getLocations()[1].getStart()).toBe(55);
-                expect(features[1].getLocations()[1].getEnd()).toBe(5);
+                expect(features[1].getLocations()[0].getEnd()).toBe(5);
+            });
+            it("testRemoveSequenceFcSn3",function(){
+                console.log("=================>DEBUG HERE");
+                console.log(sm.getFeatures()[1].getStart() + " : " + sm.getFeatures()[1].getEnd());
+                sm.getFeatures()[1].deleteAt(2, 2, 7, true);
+                console.log(sm.getFeatures()[1].getStart() + " : " + sm.getFeatures()[1].getEnd());
+                console.log("=================>DEBUG HERE");
             });
 
             it("testRemoveSequenceFcSn3",function(){
@@ -265,6 +267,7 @@ Ext.onReady(function() {
                 // 22222-----1111111111-----11111----------2222222222-----222222222
                 // 0123456789012345678901234567890123456789012345678901234567890123
                 // --XX------------------------------------------------------------
+                console.log("=================>DEBUG HERE");
                 sm.removeSequence(2, 4);
                 var features = sm.getFeatures();
                 expect(features.length).toBe(2);
@@ -276,7 +279,8 @@ Ext.onReady(function() {
                 expect(features[1].getLocations()[0].getStart()).toBe(38);
                 expect(features[1].getLocations()[0].getEnd()).toBe(48);
                 expect(features[1].getLocations()[1].getStart()).toBe(53);
-                expect(features[1].getLocations()[1].getEnd()).toBe(3);
+                expect(features[1].getLocations()[1].getEnd()).toBe(3);  //HERE 5 deleteAt(2, 2, 7, true)
+                console.log("=================>DEBUG HERE");
             });
 
             it("testRemoveSequenceFcSn4",function(){
@@ -293,7 +297,7 @@ Ext.onReady(function() {
                 expect(features[0].getLocations()[1].getEnd()).toBe(30);
 
                 expect(features[1].getLocations()[0].getStart()).toBe(35);
-                expect(features[1].getLocations()[0].getEnd()).toBe(45);
+                expect(features[1].getLocations()[0].getEnd()).toBe(40);
                 expect(features[1].getLocations()[1].getStart()).toBe(45);
                 expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
@@ -312,13 +316,13 @@ Ext.onReady(function() {
                 expect(features[0].getLocations()[1].getEnd()).toBe(30);
 
                 expect(features[1].getLocations()[0].getStart()).toBe(35);
-                expect(features[1].getLocations()[0].getEnd()).toBe(45);
+                expect(features[1].getLocations()[0].getEnd()).toBe(40);
                 expect(features[1].getLocations()[1].getStart()).toBe(45);
                 expect(features[1].getLocations()[1].getEnd()).toBe(5);
 
             });
 
-            it("testRemoveSequenceFcSn6",function(){
+            it("testRemoveSequenceFcSn6",function(){   /// ALL WRONG
                 // tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc
                 // 22222-----1111111111-----11111----------2222222222-----222222222
                 // 0123456789012345678901234567890123456789012345678901234567890123
@@ -326,10 +330,10 @@ Ext.onReady(function() {
                 sm.removeSequence(3, 45);
                 var features = sm.getFeatures();
                 expect(features.length).toBe(1);
-                expect(features[0].getLocations()[0].getStart()).toBe(3);
-                expect(features[0].getLocations()[0].getEnd()).toBe(8);
-                expect(features[0].getLocations()[1].getStart()).toBe(13);
-                expect(features[0].getLocations()[1].getEnd()).toBe(3);
+                expect(features[0].getLocations()[0].getStart()).toBe(3);    //5
+                expect(features[0].getLocations()[0].getEnd()).toBe(8); //8
+                expect(features[0].getLocations()[1].getStart()).toBe(13); //18
+                expect(features[0].getLocations()[1].getEnd()).toBe(3); //4 
 
                 //expect(features[1].getLocations()[0].getStart()).toBe(40);
                 //expect(features[1].getLocations()[0].getEnd()).toBe(50);
@@ -352,8 +356,8 @@ Ext.onReady(function() {
 
                 expect(features[1].getLocations()[0].getStart()).toBe(37);
                 expect(features[1].getLocations()[0].getEnd()).toBe(47);
-                expect(features[1].getLocations()[1].getStart()).toBe(0);
-                expect(features[1].getLocations()[1].getEnd()).toBe(2);
+                expect(features[1].getLocations()[1].getStart()).toBe(0); //50
+                expect(features[1].getLocations()[1].getEnd()).toBe(2); //5
             });
 
             it("testRemoveSequenceFcSc2",function(){
@@ -369,11 +373,11 @@ Ext.onReady(function() {
                 expect(features[0].getLocations()[1].getStart()).toBe(17);
                 expect(features[0].getLocations()[1].getEnd()).toBe(22);
 
-                expect(features[1].length).toBe(1);
+                expect(features[1].getLocations().length).toBe(1); //2
                 expect(features[1].getLocations()[0].getStart()).toBe(32);
-                expect(features[1].getLocations()[0].getEnd()).toBe(0);
-                //expect(features[1].getLocations()[1].getStart()).toBe(55);
-                //expect(features[1].getLocations()[1].getEnd()).toBe(5);
+                expect(features[1].getLocations()[0].getEnd()).toBe(0); //42
+                expect(features[1].getLocations()[1].getStart()).toBe(55); //45
+                expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
 
             it("testRemoveSequenceFcSc3",function(){
@@ -389,9 +393,9 @@ Ext.onReady(function() {
                 expect(features[0].getLocations()[1].getStart()).toBe(22);
                 expect(features[0].getLocations()[1].getEnd()).toBe(27);
 
-                expect(features[1].length).toBe(1);
-                expect(features[1].getLocations()[0].getStart()).toBe(0);
-                expect(features[1].getLocations()[0].getEnd()).toBe(2);
+                expect(features[1].getLocations().length).toBe(1);
+                expect(features[1].getLocations()[0].getStart()).toBe(0); //32
+                expect(features[1].getLocations()[0].getEnd()).toBe(2); //5
                 //expect(features[1].getLocations()[1].getStart()).toBe(55);
                 //expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
@@ -422,12 +426,13 @@ Ext.onReady(function() {
                 // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX----------XXXXXXXXXXXXX
                 sm.removeSequence(51, 41);
                 var features = sm.getFeatures();
-                expect(features.length).toBe(2);
-                expect(features[0].length).toBe(1);
+                expect(features.length).toBe(1);
+                expect(features[0].getLocations().length).toBe(1);
+                expect(features[0].getName()).toBe("cds2");
                 expect(features[0].getLocations()[0].getStart()).toBe(0);
                 expect(features[0].getLocations()[0].getEnd()).toBe(10);
-                //expect(features[0].getLocations()[1].getStart()).toBe(25);
-                //expect(features[0].getLocations()[1].getEnd()).toBe(30);
+                expect(features[0].getLocations()[1].getStart()).toBe(25); //4
+                expect(features[0].getLocations()[1].getEnd()).toBe(30); //9    
 
                 //expect(features[1].getLocations()[0].getStart()).toBe(40);
                 //expect(features[1].getLocations()[0].getEnd()).toBe(50);
@@ -442,8 +447,8 @@ Ext.onReady(function() {
                 // X---XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                 sm.removeSequence(4, 1);
                 var features = sm.getFeatures();
-                expect(features.length).toBe(2);
-                expect(features[0].length).toBe(1);
+                expect(features.length).toBe(1);
+                expect(features[0].getLocations().length).toBe(1);
                 expect(features[0].getLocations()[0].getStart()).toBe(0);
                 expect(features[0].getLocations()[0].getEnd()).toBe(3);
                 //expect(features[0].getLocations()[1].getStart()).toBe(25);
