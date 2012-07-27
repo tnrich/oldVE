@@ -7,6 +7,7 @@ Ext.define("Teselagen.manager.PieManager", {
     config: {
         sequenceManager: null,
         center: {x: 0, y: 0},
+        pie: null,
         railRadius: 0,
         cutSites: [],
         features: [],
@@ -18,7 +19,6 @@ Ext.define("Teselagen.manager.PieManager", {
 
     cutSiteRenderer: null,
     orfRenderer: null,
-
     renderers: [],
 
     dirty: false,
@@ -50,6 +50,10 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     constructor: function(inData) {
         this.initConfig(inData);
+
+        this.pie = Ext.create("Vede.view.pie.Pie", {
+            items: [Ext.create("Vede.view.pie.Frame")]
+        });
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,
@@ -171,4 +175,11 @@ Ext.define("Teselagen.manager.PieManager", {
 
         return pOrfs;
     },
+    
+    initPie: function() {
+        var caret = Ext.create("Vede.view.pie.Caret");
+        this.pie.surface.add(caret);
+        caret.show(true);
+    }
+
 });
