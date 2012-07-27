@@ -87,7 +87,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                         },
                                         {
                                             xtype: 'itemselector',
-                                            id: 'enzymeListSelector',
+                                            id: 'enzymeSelector',
                                             imagePath: '../../../extjs/examples/ux/css/images/',
                                             store: enzymeListStore,
                                             displayField: 'name', 

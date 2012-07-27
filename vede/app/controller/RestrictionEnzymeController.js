@@ -6,6 +6,9 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     GroupManager: null,
     managerWindow: null,
 
+    unsavedActiveEnzymes: [],
+    enzymeSelector: null,
+
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
 
@@ -36,6 +39,8 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onEnzymeManagerOpened: function(manager) {
         this.managerWindow = manager;
+        this.enzymeSelector = manager.query("#enzymeSelector")[0];
+
         if(!this.GroupManager.getIsInitialized()) {
             this.GroupManager.initialize();
         }
@@ -49,33 +54,39 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
         // Set the value in the combobox to the first element by default.
         groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
+
+        // Load data into the enzyme selector.
+        var startGroup = this.GroupManager.groupByName(groupSelector.getValue());
+        var groupArray = [];
+        Ext.each(startGroup.getEnzymes(), function(enzyme) {
+            groupArray.push({name: enzyme.getName()});
+        });
+        this.enzymeSelector.store.loadData(groupArray);
+        this.enzymeSelector.bindStore(this.enzymeSelector.store);
+
+        // Add listeners to the 'toField' on the enzyme selector.
+        this.enzymeSelector.toField.store.on("add", this.onEnzymeAdded, this);
+        this.enzymeSelector.toField.store.on("remove", this.onEnzymeRemoved, this);
     },
 
-    displayActiveGroups: function(unsavedSelections) {
-        // Set values in the itemselector to current active enzymes.
-        var enzymeSelector = this.managerWindow.query("#enzymeListSelector")[0];
-        var activeEnzymes = [];
-
-        Ext.each(this.GroupManager.getActiveGroup(), function(enzyme) {
-            enzymeSelector.toField.store.add({name: enzyme.getName()});
+    onEnzymeAdded: function(toStore, enzymes) {
+        var newActive = [];
+        toStore.each(function(rec) {
+            newActive.push(rec);
         });
 
-        if(unsavedSelections) {
-            Ext.each(unsavedSelections, function(selection) {
-                enzymeSelector.toField.store.add(selection);
-            });
+        this.unsavedActiveEnzymes = newActive;
+    },
+
+    onEnzymeRemoved: function(toStore, enzyme) {
+        var enzIndex = this.unsavedActiveEnzymes.indexOf(enzyme);
+        this.unsavedActiveEnzymes.splice(enzIndex, 1);
+    },
+
+    displayActiveGroups: function() {
+        if(this.unsavedActiveEnzymes.length == 0) {
+
         }
-
-        // Remove duplicate values from the left enzyme box.
-        /*var testArray = [];
-        enzymeSelector.toField.store.each(function(record) {
-            testArray.push(record.name);
-        });
-        enzymeSelector.fromField.store.filterBy(function(record) {
-            if(testArray.indexOf(record.name) == -1) {
-                return true;
-            }
-        });*/
     },
 
     /**
@@ -84,20 +95,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onEnzymeGroupSelected: function(combobox) {
         var newGroup = this.GroupManager.groupByName(combobox.getValue());
-        var selector = this.managerWindow.query("#enzymeListSelector")[0];
         var newStoreData = [];
-
-        // If we have unsaved items in the active enzyme box, we must save them
-        // so we can restore them after clearing the store.
-        var rightStore = selector.toField.store;
-        var unsavedSelections = null;
-        if(rightStore.getCount() > 0) {
-            unsavedSelections = [];
-
-            rightStore.each(function(item) {
-                unsavedSelections.push(item);
-            });
-        }
 
         var enzymeArray = [];
 
@@ -105,24 +103,24 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             enzymeArray.push({name: enzyme.getName()});
         });
 
-        selector.fromField.store.loadData(enzymeArray, false);
-        selector.fromField.store.sort();
+        this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
+        this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
 
-        this.displayActiveGroups(unsavedSelections);
+        //this.displayActiveGroups();
     },
 
     /**
      * Saves active enzymes and closes the window.
      */
     onOKButtonClick: function() {
-        var selected = this.managerWindow.query("#enzymeListSelector")[0].getValue();
         var newActiveGroup = [];
 
-        Ext.each(selected, function(name) {
+        Ext.each(this.unsavedActiveEnzymes, function(name) {
             newActiveGroup.push(this.GroupManager.getEnzymeByName(name));
         }, this);
 
         this.GroupManager.setActiveGroup(newActiveGroup);
+        this.unsavedActiveEnzymes = [];
 
         this.managerWindow.close();
     }
