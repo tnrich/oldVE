@@ -1214,7 +1214,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var featKW = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {});
         result.setFeatures(featKW);
 
-
         for (var i=0; i < this.features.length; i++) {
             var feat = this.features[i];
             var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
@@ -1244,7 +1243,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 });
                 featElm.addFeatureLocation(featLoc);
             }
+
+            /*if (feat.getNotes() !== null) {
+                for (var j=0; j < feat.getNotes().length; j++) {
+                    var featLoc = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
+                        name: feat.getNotes()[i].getName(),
+                        value: feat.getNotes()[i].getValue(),
+                        quoted: feat.getNotes()[i].getQuoted()
+                    });
+                    featElm.addFeatureLocation(featLoc);
+                }
+            }*/
         }
+
+        // ORIGIN
+
+        var origKW = Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+            sequence: this.sequence.seqString()
+        });
+        result.setFeatures(origKW);
 
 
         

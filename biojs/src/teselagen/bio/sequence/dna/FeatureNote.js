@@ -11,7 +11,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 	 * Constructor
 	 * @param  {String} Name is the string name
 	 * @param  {String} Value is the type of feature
-	 * @param  {Boolean} whether the featurenote is quoted or not
+	 * @param  {Boolean} Quoted whether the featurenote is quoted or not
 	 */
 	constructor: function(inData){
 		if (inData) {
@@ -77,7 +77,8 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 		this.clone =function(){
 			return Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
 				name: name,
-				value: value
+				value: value,
+				quoted: quoted
 			});
 		}
 	}

@@ -874,8 +874,16 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Genank, JbeiSeqXml, Fasta", function() {
+        describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
             it("toGenbank() ",function(){
+                var note1 = Ext.create("Teselagen.bio.sequence.dna.Feature", {
+                    name: "note1",
+                    value: "note1value",
+                    whether: true
+                });
+
+                //sm.getFeatures()[0].addNote(note1);
+
                 var gb = sm.toGenbank();
 
                 console.log(gb.toString());
