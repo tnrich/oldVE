@@ -17,7 +17,7 @@ Ext.define("Teselagen.manager.PieManager", {
     featureRenderer: null,
     cutSiteRenderer: null,
     traceRenderer: null,
-    orfRenderer: null
+    orfRenderer: null,
 
     renderers: [this.featureRenderer,
                 this.cutSiteRenderer,
@@ -27,35 +27,37 @@ Ext.define("Teselagen.manager.PieManager", {
     constructor: function(inData) {
         this.initConfig();
 
-        this.pie = Ext.create("Vede.view.pie.Pie");
-
-        this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
-            sequenceManager: this.sequenceManager,
-            center: this.center,
-            railRadius: this.railRadius,
-            cutSites: this.cutSites
+        this.pie = Ext.create("Vede.view.pie.Pie", {
+            items: [Ext.create("Vede.view.pie.Frame")]
         });
 
-        this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
-            sequenceManager: this.sequenceManager,
-            center: this.center,
-            railRadius: this.railRadius,
-            features: this.features
-        });
-
-        this.orfRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {
-            sequenceManager: this.sequenceManager,
-            center: this.center,
-            railRadius: this.railRadius,
-            orfs: this.orfs
-        });
-
-        this.traceRenderer = Ext.create("Teselagen.renderer.pie.TraceRenderer", {
-            sequenceManager: this.sequenceManager,
-            center: this.center,
-            railRadius: this.railRadius,
-            traces: this.traces
-        });
+//        this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
+//            sequenceManager: this.sequenceManager,
+//            center: this.center,
+//            railRadius: this.railRadius,
+//            cutSites: this.cutSites
+//        });
+//
+//        this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+//            sequenceManager: this.sequenceManager,
+//            center: this.center,
+//            railRadius: this.railRadius,
+//            features: this.features
+//        });
+//
+//        this.orfRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {
+//            sequenceManager: this.sequenceManager,
+//            center: this.center,
+//            railRadius: this.railRadius,
+//            orfs: this.orfs
+//        });
+//
+//        this.traceRenderer = Ext.create("Teselagen.renderer.pie.TraceRenderer", {
+//            sequenceManager: this.sequenceManager,
+//            center: this.center,
+//            railRadius: this.railRadius,
+//            traces: this.traces
+//        });
     },
 
     render: function() {
@@ -77,7 +79,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
     applyCenter: function(pCenter) {
         Ext.each(this.renderers, function(renderer) {
-            renderer.setCenter(pCenter);
+//            renderer.setCenter(pCenter);
         });
 
         return pCenter;
@@ -85,7 +87,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
     applyRailRadius: function(pRailRadius) {
         Ext.each(this.renderers, function(renderer) {
-            renderer.setRailRadius(pRailRadius);
+//            renderer.setRailRadius(pRailRadius);
         });
 
         return pRailRadius;
@@ -98,38 +100,27 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     applyFeatures: function(pFeatures) {
-        this.featureRenderer.setFeatures(pFeatures);
+//        this.featureRenderer.setFeatures(pFeatures);
 
         return pFeatures;
     },
 
     applyOrfs: function(pOrfs) {
-        this.orfRenderer.setOrfs(pOrfs);
+//        this.orfRenderer.setOrfs(pOrfs);
 
         return pOrfs;
     },
 
     applyTraces: function(pTraces) {
-        this.traceRenderer.setTraces(pTraces);
+//        this.traceRenderer.setTraces(pTraces);
 
         return pTraces;
     },
     
     initPie: function() {
-    	var base = Ext.create('Ext.draw.Sprite',{
-            type: 'circle',
-            fill: '#79BB3F',
-            radius: 100,
-            x: 100,
-            y: 100,
-        });
-        var caret = Ext.create('Ext.draw.Sprite',{
-            type: 'path',
-            path: 'M 10 10 L 100 100',
-            stroke: 'black',
-        });
-        this.pie.surface.add(base);
-//        this.surface.add(pie, caret);
-
+        var caret = Ext.create("Vede.view.pie.Caret");
+        this.pie.surface.add(caret);
+        caret.show(true);
     }
+
 });

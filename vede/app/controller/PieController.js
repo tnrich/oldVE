@@ -12,25 +12,26 @@ Ext.define('Vede.controller.PieController', {
      */
     init: function() {
         this.control({
-            '#PieContainer' : {
+            "#Pie" : {
                 click : this.onClickPie
             }
         });
     },
     
     onLaunch: function() {
+        var pieContainer, pie;
         this.pieManager = Ext.create("Teselagen.manager.PieManager");
-        var pc = Ext.getCmp('PieContainer');
-        //pc.add(this.pieManager.getPie());
-        //this.pieManager.initPie();
+        pieContainer = Ext.getCmp('PieContainer');
+        pie = this.pieManager.getPie();
+        pieContainer.add(pie);
+        this.pieManager.initPie();
     },
 
-    onClickPie: function(pT, pE, pOpts) {
-        var el = pT.surface.el;
-        var relEvtX = pE.getX()-el.getLeft();
-        var relEvtY = pE.getY()-el.getTop();
+    onClickPie: function(pEvt, pOpts) {
+        var el = this.pieManager.getPie().surface.el;
+        var relEvtX = pEvt.getX()-el.getLeft();
+        var relEvtY = pEvt.getY()-el.getTop();
         console.log(relEvtX, relEvtY);
-        console.log(pT.x, pT.y);
     }
 
 });
