@@ -14,7 +14,17 @@
  *          or 
  *            TTA
  *
+ *
+ * NOTE: When dealing with Features, if there is only one Location, then 
+ *          sm.getFeatures()[0].getName()
+ * is functional.
+ * If there is more than one Location, a getLocations()
+ * call is necessary:
+ *          eg. sm.getFeatures()[0].getLocations[0].getName()
+ *
+ *
  * Based off SequenceProvider.as
+ *
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceProvider.as)
  */
@@ -1176,8 +1186,71 @@ Ext.define("Teselagen.manager.SequenceManager", {
         return true;
     },
 
+
+    /**
+     * Converts a Sequence Manager into a Genbank {@link Teselagen.bio.parsers.Genbank}
+     * form of the data.
+     * @returns {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
+     */ 
+
     toGenbank: function() {
-        return true;
+
+        var result = Ext.create("Teselagen.bio.parsers.Genbank", {});
+
+        // LOCUS
+        var date    = (new Date()).toDateString().split(" ");
+        var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
+        var locusKW = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+            name: this.name,
+            sequenceLength: this.sequence.getSymbolsLength(),
+            linear: !this.circular,
+            naType: "DNA",
+            strandType: "ds",
+            date: dateStr
+        });
+        result.setLocus(locusKW);
+
+        // FEATURES
+        var featKW = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {});
+        result.setFeatures(featKW);
+
+
+        for (var i=0; i < this.features.length; i++) {
+            var feat = this.features[i];
+            var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
+                keyword: feat.getName(),
+                strand: this.strand,
+                complement: false,
+                join: false,
+                featureQualifier: [],
+                featureLocation: []
+            });
+
+            if (this.strand === 11) {
+                featElm.setCompelment(true);
+            }
+
+            if (feat.getLocations().length > 1) {
+                featElm.setJoin(true);
+            }
+
+            featKW.addElement(featElm);
+
+            for (var j=0; j < feat.getLocations().length; j++) {
+                var featLoc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
+                    start: feat.getLocations()[j].getStart(),
+                    end: feat.getLocations()[j].getEnd(),
+                    to: ".."
+                });
+                featElm.addFeatureLocation(featLoc);
+            }
+        }
+
+
+        
+        
+
+        return result;
     },
 
 

@@ -41,8 +41,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
         if (inData) {
             if (inData.start) {
-                start		= parseInt(inData.start.replace(/\<|\>/, "")) || "" ;
-                tmp         = inData.start.match(/\</g);
+                start		= parseInt((inData.start).toString().replace(/\<|\>/, "")) || "" ;
+                tmp         = (inData.start).toString().match(/\</g);
                 if (tmp) {preStart	= tmp[0] || ""};
                 /*if ( inData.start.match(/\>/g) ) {
                 	throw Ext.create("Teselagen.bio.BioException", {
@@ -51,8 +51,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
                 }*/
             }
             if (inData.end) {
-                end         = parseInt(inData.end.replace(/\<|\>/, "")) || "";
-                tmp         = inData.end.match(/\>/g);
+                end         = parseInt((inData.end).toString().replace(/\<|\>/, "")) || "";
+                tmp         = (inData.end).toString().match(/\>/g);
                 if (tmp) {  preEnd  = tmp[0] || ""};
                 /*if ( inData.start.match(/\</g) ) {
                 	throw Ext.create("Teselagen.bio.BioException", {
@@ -60,6 +60,13 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         			});
                 }*/
             }
+            if (inData.preStart) {
+                preStart    = inData.preStart || ""; 
+            }
+            if (inData.preStart) {
+                preEnd      = inData.preEnd || ""; 
+            }
+
             if (inData.to) {
                 to			= inData.to; 
                 // This joins the start and end. start..

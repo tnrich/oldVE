@@ -34,6 +34,12 @@ Ext.onReady(function() {
             //console.log(feat1.getLocations());
 
 
+            // NOTE: If you only have one location, then 
+            //          sm.getFeatures()[0].getName()
+            // works fine.
+            // If you add locations (see testSeqMgr-removeSequence.js), then  you have to do:
+            //          sm.getFeatures()[0].getLocations[0].getName()
+
             feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "feat2",
                 start: 3,
@@ -51,6 +57,8 @@ Ext.onReady(function() {
                 strand: 1,
                 notes: null
             });
+            feat3.getLocations().push(Ext.create("Teselagen.bio.sequence.common.Location", {start:0, end:1}));
+            //this is for multi-location
 
             feat4   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "feat4",
@@ -60,6 +68,7 @@ Ext.onReady(function() {
                 strand: 1,
                 notes: null
             });
+
 
             sm  = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "test",
@@ -865,21 +874,23 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Genank, JbeiSeqXml, Fasta", function() {
+        describe("Genank, JbeiSeqXml, Fasta", function() {
             it("toGenbank() ",function(){
-                expect(true).toBeFalsy();
+                var gb = sm.toGenbank();
+
+                console.log(gb.toString());
             });
 
             it("fromGenbank() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
 
             it("fromJbeiSeqXml() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
 
             it("fromFasta() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
         });
 
