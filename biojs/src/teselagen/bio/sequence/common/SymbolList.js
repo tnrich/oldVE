@@ -110,7 +110,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Turns the symbol list into a string
-		 * @return {Striing} the sequence's string
+		 * @return {String} the sequence's string
 		 */	
 		this.seqString = function (){
 			var string = [];
@@ -131,7 +131,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Adds a specified symbol
-		 * @param {Symbol} pSymbols A symbol you want to add
+		 * @param {symbols[]} pSymbols Array of symbols you want to add
 		 */
 		this.addSymbols = function (pSymbols) {
 			if (Array.isArray(pSymbols)){
@@ -141,6 +141,24 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 			}
 		}
 
+		/**
+		 * Adds a SymbolList to existing SymbolList.
+		 * (DW: Added 7/26/2012 because addSymbols is specfic to an array of symbols)
+		 * @param {Teselagen.bio.sequence.common.SymbolList} pSymbols Symbols you want to add
+		 */
+		this.addSymbolList = function (pSymbols) {
+			/*if (Array.isArray(pSymbols)){
+				pSymbols.forEach(function(element){
+					symbols.push(element);
+				});
+			}*/
+			// DW: 7/26/2012 Redid this. a Symbol
+			if (pSymbols && pSymbols.getSymbolsLength() > 0) {
+				for (var i=0; i < pSymbols.getSymbolsLength(); i++) {
+					symbols.push(pSymbols.getSymbols()[i]);
+				}
+			}
+		}
 		/**
 		 * Deletes a subset of symbols
 		 * @param  {Integer} pStart  A start to the slice

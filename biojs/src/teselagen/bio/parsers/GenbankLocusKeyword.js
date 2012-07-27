@@ -134,6 +134,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
          */
         this.setLinear = function(pLinear) {
             linear = pLinear;
+            circular = !pLinear;
         }
         /** Get Circular
          * @returns {Boolean} circular
@@ -147,6 +148,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
          */
         this.setCircular = function(pCircular) {
             circular = pCircular;
+            linear = !pCircular;
         }
         /**
          * Get divisionCode

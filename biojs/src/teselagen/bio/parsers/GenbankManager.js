@@ -58,7 +58,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         fr.readAsText(file);
 
         function processText() {
-            genbankFileString = fr.result;
+            genbankFileString = String(fr.result);
         }
 
         return genbankFileString;
@@ -164,11 +164,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var result, locusName, seqLen, strand, naType, linear, div, date;
         var lineArr = line.split(/[\s]+/g);
 
+        //console.log(lineArr[1]);
         locusName = lineArr[1];
         seqLen = lineArr[2];
 
         // StrandType: T.H. Code defaults only to ds-DNA
-        if (lineArr[4].match(/ss/gi)) {
+        if (lineArr[4] && lineArr[4].toString().match(/ss/gi)) {
             strand = "ss";
         } else if (lineArr[4].match(/ds/gi)) {
             strand = "ds";
@@ -177,7 +178,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         }
 
         // naType: T.H. defaults to DNA.
-        if (lineArr[4].match(/DNA/gi)) {
+        if (lineArr[4] && lineArr[4].toString().match(/DNA/gi)) {
             naType = "DNA";
         } else if (lineArr[4].match(/RNA/gi)) {
             naType = "RNA";
@@ -187,7 +188,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         // Linear vs Circular?; CANNOT HANDLE TANDEM
         for (var i=1; i < lineArr.length; i++) {
-            if (lineArr[i].match(/circular/gi)) {
+            if (lineArr[i] && lineArr[i].toString().match(/circular/gi)) {
                 linear = false;
                 break;
             } else {
@@ -196,7 +197,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         }
 
         // Date
-        if (lineArr[lineArr.length-2].match(/[A-Z]{3}/g)  ) {
+        if (lineArr[lineArr.length-2].toString().match(/[A-Z]{3}/g)  ) {
             div = lineArr[lineArr.length-2];
             date = lineArr[lineArr.length-1];
         } else {
