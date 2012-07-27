@@ -76,7 +76,12 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
          * @param {String} append
          */
         this.appendValue = function(append){
-            value += append;
+            if (value) {
+                value += append;
+            } else {
+                value = append;
+            }
+            //value += append;
         }
         return this;
     },

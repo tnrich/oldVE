@@ -62,7 +62,11 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
          * @param {String} value
          */
         this.appendValue = function(pVal) {
-            this.value += pVal;
+            if (this.value) {
+                this.value += pVal;
+            } else {
+                this.value = pVal;
+            }
         }
         /**
          * Gets last SubKeyword on the subKeywords array.

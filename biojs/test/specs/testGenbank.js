@@ -369,7 +369,7 @@ Ext.onReady(function() {
                 tmp  = Teselagen.bio.parsers.GenbankManager.parseLocus(line, gb);
                 expect(tmp.getLocusName()).toBe("blah");
                 expect(tmp.getStrandType()).toBe("ds");
-                expect(tmp.getSequenceLength()).toBe("10");
+                expect(tmp.getSequenceLength()).toBe(10);
                 expect(tmp.getNaType()).toBe("DNA");
                 expect(tmp.getLinear()).toBeFalsy();
                 expect(tmp.getDivisionCode()).toBe("");
@@ -503,7 +503,7 @@ Ext.onReady(function() {
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 expect(tmp.getLocus().toString()).toBe(line);
                 expect(tmp.getLocus().getStrandType()).toBe("ds");
-                expect(tmp.getLocus().getSequenceLength()).toBe("5371"); //currently a string
+                expect(tmp.getLocus().getSequenceLength()).toBe(5371); //currently a string
                 expect(tmp.getLocus().getNaType()).toBe("DNA");
                 expect(tmp.getLocus().getLinear()).toBe(false);
                 expect(tmp.getLocus().getDivisionCode()).toBe("");
@@ -515,7 +515,7 @@ Ext.onReady(function() {
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 expect(tmp.getLocus().getLocusName()).toBe("SCU49845");
                 expect(tmp.getLocus().getStrandType()).toBe("");
-                expect(tmp.getLocus().getSequenceLength()).toBe("5028");
+                expect(tmp.getLocus().getSequenceLength()).toBe(5028);
                 expect(tmp.getLocus().getNaType()).toBe("DNA");
                 expect(tmp.getLocus().getLinear()).toBe(true);
                 expect(tmp.getLocus().getDivisionCode()).toBe("PLN");
@@ -525,7 +525,7 @@ Ext.onReady(function() {
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 expect(tmp.getLocus().getLocusName()).toBe("LISOD");
                 expect(tmp.getLocus().getStrandType()).toBe("");
-                expect(tmp.getLocus().getSequenceLength()).toBe("756");
+                expect(tmp.getLocus().getSequenceLength()).toBe(756);
                 expect(tmp.getLocus().getNaType()).toBe("DNA");
                 expect(tmp.getLocus().getLinear()).toBeTruthy();
                 expect(tmp.getLocus().getDivisionCode()).toBe("BCT");
@@ -536,7 +536,7 @@ Ext.onReady(function() {
                 var json = {
                         "keyword": "LOCUS", 
                         "locusName": "pj5_00028", 
-                        "sequenceLength": "5371", 
+                        "sequenceLength": 5371, 
                         "strandType": "ds", 
                         "naType": "DNA", 
                         "linear": false, 
