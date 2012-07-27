@@ -194,6 +194,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
             loc += featureLocation[i].toString();
             if (i<featureLocation.length - 1) { 
                 loc += ",";
+            } else {
+                //loc += "\n";
             }
         }
         if (join) { 

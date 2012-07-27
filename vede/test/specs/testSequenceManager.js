@@ -17,7 +17,7 @@ Ext.onReady(function() {
     //   Sequence Manager Unit Testing
     // ====================================
 
-    describe("Testing SequenceManager Classes pt1", function() {
+    xdescribe("Testing SequenceManager Classes pt1", function() {
         var seq, feat1, feat2, feat3, sm;
 
         beforeEach(function() {
@@ -876,15 +876,33 @@ Ext.onReady(function() {
 
         describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
             it("toGenbank() ",function(){
-                var note1 = Ext.create("Teselagen.bio.sequence.dna.Feature", {
+                var note1 = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
                     name: "note1",
                     value: "note1value",
-                    whether: true
+                    quoted: true
                 });
 
-                //sm.getFeatures()[0].addNote(note1);
+                sm.getFeatures()[0].addNote(note1);
 
                 var gb = sm.toGenbank();
+
+                expect(gb.getLocus().getLocusName()).toBe("test");
+                expect(gb.getLocus().getStrandType()).toBe("ds");
+                expect(gb.getLocus().getSequenceLength()).toBe(7);
+                expect(gb.getLocus().getNaType()).toBe("DNA");
+                expect(gb.getLocus().getLinear()).toBe(false);
+                expect(gb.getLocus().getDivisionCode()).toBe("");
+
+                expect(sm.getFeatures().length).toBe(1);
+                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
+                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
+
+                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note1");
+                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
+                
+                expect(gb.findKeyword("ORIGIN").getSequence()).toBe("gattaca");
+                expect(gb.findKeyword("ORIGIN").getSequence().length).toBe(7);
 
                 console.log(gb.toString());
             });

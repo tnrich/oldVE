@@ -762,9 +762,13 @@ Ext.onReady(function() {
                 //"//";
                 tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
             });
+
+            if("Parses Origin correctly ", function() {
+                expect(tmp.findKeyword("ORIGIN").getSequence().length.toBe(120);
+            }
         });
 
-        describe("", function() {
+        xdescribe("", function() {
         });
     });
 });

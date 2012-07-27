@@ -797,8 +797,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
              * |--SSSSSSSSSSSSSSSSSS------------------------------------------------------------------------------|
              *  FFFFFFFFFFFFFFFFFFFFFFFFF|                                         |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
             else if((pEndIndex) <= featEnd) {
+                console.log(feature.getLocations()[1].getStart() +  " : " + feature.getLocations()[1].getEnd());
                 feature.deleteAt(pStartIndex, pEndIndex - pStartIndex, lengthBefore, circular);
-                if (DEBUG_MODE) console.log("case Fc,Sn 3");
+                if (DEBUG_MODE) console.log("case Fc,Sn 3 ");  ///DEBUGGING HERE
+                console.log(feature.getLocations()[1].getStart() +  " : " + feature.getLocations()[1].getEnd());
             }
             /* Selection in feature start
              * |----------------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS---|
@@ -1201,7 +1203,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var date    = (new Date()).toDateString().split(" ");
         var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
         var locusKW = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-            name: this.name,
+            locusName: this.name,
             sequenceLength: this.sequence.getSymbolsLength(),
             linear: !this.circular,
             naType: "DNA",
@@ -1235,25 +1237,29 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             featKW.addElement(featElm);
 
+            console.log(feat.getLocations().length);
+
             for (var j=0; j < feat.getLocations().length; j++) {
                 var featLoc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
                     start: feat.getLocations()[j].getStart(),
                     end: feat.getLocations()[j].getEnd(),
                     to: ".."
                 });
+                console.log(featElm.getFeatureLocation().length);
                 featElm.addFeatureLocation(featLoc);
             }
+            console.log(featElm.getFeatureLocation().length);
 
-            /*if (feat.getNotes() !== null) {
+            if (feat.getNotes() !== null) {
                 for (var j=0; j < feat.getNotes().length; j++) {
-                    var featLoc = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
+                    var featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
                         name: feat.getNotes()[i].getName(),
                         value: feat.getNotes()[i].getValue(),
                         quoted: feat.getNotes()[i].getQuoted()
                     });
-                    featElm.addFeatureLocation(featLoc);
+                    featElm.addFeatureQualifier(featQual);
                 }
-            }*/
+            }
         }
 
         // ORIGIN
@@ -1263,14 +1269,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
         });
         result.setFeatures(origKW);
 
-
-        
-        
-
         return result;
     },
 
-
+    /**
+     * Converts a Genbank {@link Teselagen.bio.parsers.Genbank} into a SequenceManager 
+     * form of the data.
+     * @param {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
+     * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     */
     fromGenbank: function(genbank) {
         var result;
         return result;
