@@ -58,7 +58,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         fr.readAsText(file);
 
         function processText() {
-            genbankFileString = fr.result;
+            genbankFileString = String(fr.result);
         }
 
         return genbankFileString;
@@ -95,6 +95,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @private
      */
     lineParser: function(line, gb) {
+
         var that = this;
         var key = this.getLineKey(line);
         var val = this.getLineVal(line);
@@ -102,6 +103,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var isSubKey = this.isSubKeyword(line);
         var isKey = this.isKeyword(line);
         var tmp = null;
+
+        // IGNORE LINES: DO NOT EVEN PROCESS
+        if (Ext.String.trim(line) === "" || key==="COMMENT") {
+            return null;
+        }
 
         this.setType(key, isKey);
 
@@ -131,6 +137,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         case this.self.END_SEQUENCE_TAG:
             //console.log("END"); // DO NOTHING
             break;
+        case "COMMENT":
+            // do nothing
+            break;
         default: // FOLLOWING FOR KEYWORDS NOT PREVIOUSLY DEFINED IN CASES
             if ( line === "" || key === ";" || key === "BASE") {
                 // do nothing;              // BLANK LINES || line with ;;;;;;;;;  || "BASE COUNT"
@@ -143,6 +152,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 tmp = gb.getLastKeyword();
                 lastObj = this.parseSubKeyword(tmp, line, gb);
             } else if ( isKeyRunon ) {      // RUNON LINES FOR NON-FEATURES
+                //console.log(line);
                 //lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
                 lastObj.appendValue(Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line), gb);
             }
@@ -160,49 +170,88 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @returns {GenbankLocusKeyword} result
      * @private
      */
+     // NOTE: It looks inefficient, but we for loop the lineArr because it's easier to
+     // to correct the parser for different cases in the future.
     parseLocus: function(line, gb) {
         var result, locusName, seqLen, strand, naType, linear, div, date;
         var lineArr = line.split(/[\s]+/g);
 
         locusName = lineArr[1];
-        seqLen = lineArr[2];
 
-        // StrandType: T.H. Code defaults only to ds-DNA
-        if (lineArr[4].match(/ss/gi)) {
-            strand = "ss";
-        } else if (lineArr[4].match(/ds/gi)) {
-            strand = "ds";
-        } else {
-            strand = ""; //"unknown";
-        }
-
-        // naType: T.H. defaults to DNA.
-        if (lineArr[4].match(/DNA/gi)) {
-            naType = "DNA";
-        } else if (lineArr[4].match(/RNA/gi)) {
-            naType = "RNA";
-        } else {
-            naType = ""; //"unknown";
-        }
-
-        // Linear vs Circular?; CANNOT HANDLE TANDEM
+        // Sequence Length and bp
+        //seqLen = lineArr[2];
+        seqLen = "";
         for (var i=1; i < lineArr.length; i++) {
-            if (lineArr[i].match(/circular/gi)) {
-                linear = false;
-                break;
-            } else {
-                linear = true;
+            if (lineArr[i].match(/^bp$/gi)) {
+                seqLen = parseInt(lineArr[i-1]);
             }
         }
 
-        // Date
-        if (lineArr[lineArr.length-2].match(/[A-Z]{3}/g)  ) {
+
+        // StrandType: T.H. Code defaults only to ds-DNA
+        /*if (lineArr[4] && lineArr[4].match(/ss/gi)) {
+            strand = "ss";
+        } else if (lineArr[4] && lineArr[4].match(/ds/gi)) {
+            strand = "ds";
+        } else {
+            strand = ""; //"unknown";
+        }*/
+        strand = "";
+        for (var i=1; i < lineArr.length; i++) {
+            if (lineArr[i].match(/^ss/gi)) {
+                strand = "ss";
+            } else if (lineArr[i].match(/^ds/gi)) {
+                strand = "ds";
+            }
+        }
+
+
+        // naType: T.H. defaults to DNA.
+        /*if (lineArr[4] && lineArr[4].match(/DNA/gi)) {
+            naType = "DNA";
+        } else if (lineArr[4] && lineArr[4].match(/RNA/gi)) {
+            naType = "RNA";
+        } else {
+            naType = ""; //"unknown";
+        }*/
+        naType = "";
+        for (var i=1; i < lineArr.length; i++) {
+            if (lineArr[i].match(/DNA$/gi)) {
+                naType = "DNA"
+            } else if (lineArr[i].match(/RNA$/gi)) {
+                naType = "RNA";
+            }
+        }
+
+
+        // Linear vs Circular?; CANNOT HANDLE TANDEM
+        linear = true;
+        for (var i=1; i < lineArr.length; i++) {
+            if (lineArr[i].match(/circular/gi)) {
+                linear = false;
+            }
+        }
+
+        // Date and Div
+        // Date is in this format:1-APR-2012
+        for (var i=1; i < lineArr.length; i++) {
+            if (lineArr[i].match(/-[A-Z]{3}-/g)) {
+                date = lineArr[i];
+            }
+            if (lineArr[i].match(/^[A-Z]{3}/g) && lineArr[i].length === 3 && !lineArr[i].match(/DNA|RNA/g)) {
+                div = lineArr[i];
+            }
+
+        }
+
+        /*if (lineArr[lineArr.length-2].match(/[A-Z]{3}/g)  ) {
             div = lineArr[lineArr.length-2];
             date = lineArr[lineArr.length-1];
         } else {
             div = "";
             date = lineArr[lineArr.length-1];
-        }
+        }*/
+
         // Date is in this format:1-APR-2012
         /*var dateArr = date.split(/\-/g);
             console.log(dateArr[2]);

@@ -153,14 +153,17 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
      * @returns {String} gbStr
      */
     toString: function() {
-        var gbStr = [];
+        var gbStr = ""; //= []; //The array thing is bad--regex for where to join may break when files have those symbols
         var entry;
         for (var i=0; i < this.getKeywords().length; i++) {
             entry = this.getKeywords()[i];
-            gbStr.push(this.getKeywords()[i].toString() + "\n");
+            //gbStr.push(this.getKeywords()[i].toString() + "\n");
+            gbStr += this.getKeywords()[i].toString() + "\n";
         }
-        gbStr.push("//");
-        return gbStr.join(" ");
+        //gbStr.push("//");
+        gbStr += "//";
+        //return gbStr.join(" ");
+        return gbStr;
     },
 
     /**

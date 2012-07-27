@@ -35,7 +35,11 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
          * @param {String} value
          */
 		this.appendValue = function(pVal) {
-			this.value += pVal;
+            if (this.value) {
+                this.value += pVal;
+            } else {
+                this.value = pVal;
+            }
 		}
 
         /**

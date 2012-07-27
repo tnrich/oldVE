@@ -134,6 +134,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
          */
         this.setLinear = function(pLinear) {
             linear = pLinear;
+            circular = !pLinear;
         }
         /** Get Circular
          * @returns {Boolean} circular
@@ -147,6 +148,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
          */
         this.setCircular = function(pCircular) {
             circular = pCircular;
+            linear = !pCircular;
         }
         /**
          * Get divisionCode
@@ -187,7 +189,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
             var line = Teselagen.StringUtil.rpad("LOCUS"," ", 12);
             line += Teselagen.StringUtil.rpad(locusName," ", 16);
             line += " "; // T.H line 2778 of GenbankFormat.as col 29 space
-            line += Teselagen.StringUtil.lpad(sequenceLength," ", 11);
+            line += Teselagen.StringUtil.lpad(String(sequenceLength)," ", 11);
             line += " bp "; // col 41
             if (strandType !== "") {
                 tmp =  strandType + "-";

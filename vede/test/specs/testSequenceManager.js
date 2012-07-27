@@ -34,6 +34,12 @@ Ext.onReady(function() {
             //console.log(feat1.getLocations());
 
 
+            // NOTE: If you only have one location, then 
+            //          sm.getFeatures()[0].getName()
+            // works fine.
+            // If you add locations (see testSeqMgr-removeSequence.js), then  you have to do:
+            //          sm.getFeatures()[0].getLocations[0].getName()
+
             feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "feat2",
                 start: 3,
@@ -51,6 +57,8 @@ Ext.onReady(function() {
                 strand: 1,
                 notes: null
             });
+            feat3.getLocations().push(Ext.create("Teselagen.bio.sequence.common.Location", {start:0, end:1}));
+            //this is for multi-location
 
             feat4   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "feat4",
@@ -60,6 +68,7 @@ Ext.onReady(function() {
                 strand: 1,
                 notes: null
             });
+
 
             sm  = Ext.create("Teselagen.manager.SequenceManager", {
                 name: "test",
@@ -77,7 +86,7 @@ Ext.onReady(function() {
             it("Init?",function(){
                 expect(sm.getName()).toBe("test");
                 expect(sm.getCircular()).toBeTruthy();
-                expect(sm.getSequence().toString().toUpperCase()).toBe("GATTACA");
+                expect(sm.getSequence().seqString().toUpperCase()).toBe("GATTACA");
                 expect(sm.getFeatures().length).toBe(1);
                 expect(sm.getFeatures()[0].getName()).toBe("feat1");
                 expect(sm.getFeatures()[0].getStart()).toBe(1);
@@ -98,7 +107,7 @@ Ext.onReady(function() {
             it("setSequence() ",function(){
                 var seq2 = Teselagen.bio.sequence.DNATools.createDNA("GATTACAGATTACA"); 
                 sm.setSequence(seq2 );
-                expect(sm.getSequence().toString().toUpperCase()).toBe("GATTACAGATTACA");
+                expect(sm.getSequence().seqString().toUpperCase()).toBe("GATTACAGATTACA");
             });
 
             it("getManualUpdateStarted(), manualUpdateStarted(), manualUpdateEnded()",function(){
@@ -318,7 +327,7 @@ Ext.onReady(function() {
                 sm.insertSequence(insSeq, 0, false);
 
                 expect(sm.getSequence().getSymbolsLength()).toBe(10);
-                expect(sm.getSequence().toString()).toBe("cccgattaca");
+                expect(sm.getSequence().seqString()).toBe("cccgattaca");
 
                 expect(sm.getFeatures().length).toBe(1);
 
@@ -341,7 +350,7 @@ Ext.onReady(function() {
                 sm.insertSequence(insSeq, 1, false);
 
                 expect(sm.getSequence().getSymbolsLength()).toBe(10);
-                expect(sm.getSequence().toString()).toBe("gcccattaca");
+                expect(sm.getSequence().seqString()).toBe("gcccattaca");
 
                 expect(sm.getFeatures().length).toBe(1);
 
@@ -364,7 +373,7 @@ Ext.onReady(function() {
                 sm.insertSequence(insSeq, 4, false);
 
                 expect(sm.getSequence().getSymbolsLength()).toBe(10);
-                expect(sm.getSequence().toString()).toBe("gattcccaca");
+                expect(sm.getSequence().seqString()).toBe("gattcccaca");
 
                 expect(sm.getFeatures().length).toBe(1);
                 //=GATTgggACA
@@ -386,7 +395,7 @@ Ext.onReady(function() {
                 sm.insertSequence(insSeq, 2, false);
 
                 expect(sm.getSequence().getSymbolsLength()).toBe(10);
-                expect(sm.getSequence().toString()).toBe("gagggttaca");
+                expect(sm.getSequence().seqString()).toBe("gagggttaca");
 
                 expect(sm.getFeatures().length).toBe(1);
 
@@ -419,7 +428,7 @@ Ext.onReady(function() {
                 });
                 //=GGGCCG
                 //=---22- <== where Feat2 is in seq2/sm2
-                expect(sm.getSequence().toString()).toBe("gattaca");
+                expect(sm.getSequence().seqString()).toBe("gattaca");
 
                 sm.insertSequenceManager(sm2, 1, true);  // <<=== EXCEUTE THIS CODE
                 expect(sm.getFeatures().length).toBe(2);
@@ -461,14 +470,14 @@ Ext.onReady(function() {
                     sequence: seq2,
                     features: [feat2]
                 });
-                expect(sm.getSequence().toString()).toBe("gattaca");
+                expect(sm.getSequence().seqString()).toBe("gattaca");
 
                 sm.insertSequenceManager(sm2, 2, false);
                 expect(sm.getFeatures().length).toBe(2);
 
                 // gaGGGGGGttaca
                 // -1---22-1---- <=where Feat 1 and Feat 2 are now
-                expect(sm.getSequence().toString()).toBe("gagggccgttaca");
+                expect(sm.getSequence().seqString()).toBe("gagggccgttaca");
 
                 // Features[0] == feat1
                 //=gaGGGCCGttaca
@@ -501,7 +510,7 @@ Ext.onReady(function() {
                 });
                 //=CCCCCC
                 //=---22- <== where Feat2 is in seq2/sm2
-                expect(sm.getSequence().toString()).toBe("gattaca");
+                expect(sm.getSequence().seqString()).toBe("gattaca");
 
                 sm.insertSequenceManager(sm2, 4, false);
                 expect(sm.getFeatures().length).toBe(2);
@@ -767,7 +776,7 @@ Ext.onReady(function() {
                     circular:   true,
                     sequence:   seqTmp
                 });
-                //console.log(sm.getSequence().toString());
+                //console.log(sm.getSequence().seqString());
 
                 var smRev = smTmp.reverseSequence(sm);
 
@@ -780,28 +789,79 @@ Ext.onReady(function() {
             it("reverseComplementSequence() ",function(){
                 //GATTACA
                 //CTAATGT
-                //console.log(sm.getSequence().toString());
+                //console.log(sm.getSequence().seqString());
                 expect(sm.getSequence().seqString()).toBe("gattaca");
                 
                 sm.reverseComplementSequence();
-                //console.log(sm.getSequence().toString());
+                //console.log(sm.getSequence().seqString());
                 expect(sm.getSequence().seqString()).toBe("tgtaatc");
             });
         });
 
-        describe("Rebase", function() {
+        describe("Rebase:", function() {
             beforeEach(function() {
                 var pos;
                 var flag = false;
-
             });
-            it("rebaseSequence(0) Invalid rebase position",function(){
+
+            //GATTACA
+            //0123456
+            it("rebaseSequence(0) Returns false, do nothing",function(){
                 try {
-                    sm.rebaseSequence(0);
+                    expect(sm.rebaseSequence(0)).toBe(false);
                 } catch (msg) {
                     console.warn("Caught: " + msg);
                 }
             });
+
+            it("rebaseSequence(1)",function(){
+                //ATTACAG
+                //XX-----
+                sm.rebaseSequence(1);
+                expect(sm.getSequence().seqString()).toBe("attacag");
+                expect(sm.getFeatures()[0].getStart()).toBe(0);
+                expect(sm.getFeatures()[0].getEnd()).toBe(2);
+            });
+
+            it("rebaseSequence(2)",function(){
+                //TTACAGA
+                //X-----X
+                sm.rebaseSequence(2);
+                expect(sm.getSequence().seqString()).toBe("ttacaga");
+                expect(sm.getFeatures()[0].getStart()).toBe(6);
+                expect(sm.getFeatures()[0].getEnd()).toBe(1);
+            });
+
+            it("rebaseSequence(3)",function(){
+                //TACAGAT
+                //-----XX
+                sm.rebaseSequence(3);
+                expect(sm.getSequence().seqString()).toBe("tacagat");
+                expect(sm.getFeatures()[0].getStart()).toBe(5);
+                expect(sm.getFeatures()[0].getEnd()).toBe(0);
+            });
+
+            it("rebaseSequence(4)",function(){
+                sm.rebaseSequence(4);
+                expect(sm.getSequence().seqString()).toBe("acagatt");
+                expect(sm.getFeatures()[0].getStart()).toBe(4);
+                expect(sm.getFeatures()[0].getEnd()).toBe(6);
+            });
+
+            it("rebaseSequence(5)",function(){
+                sm.rebaseSequence(5);
+                expect(sm.getSequence().seqString()).toBe("cagatta");
+                expect(sm.getFeatures()[0].getStart()).toBe(3);
+                expect(sm.getFeatures()[0].getEnd()).toBe(5);
+            });
+
+            it("rebaseSequence(6)",function(){
+                sm.rebaseSequence(6);
+                expect(sm.getSequence().seqString()).toBe("agattac");
+                expect(sm.getFeatures()[0].getStart()).toBe(2);
+                expect(sm.getFeatures()[0].getEnd()).toBe(4);
+            });
+
             it("rebaseSequence(10) Invalid rebase position",function(){
                 var pos = 10
                 try {
@@ -814,21 +874,23 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Genank, JbeiSeqXml, Fasta", function() {
+        describe("Genank, JbeiSeqXml, Fasta", function() {
             it("toGenbank() ",function(){
-                expect(true).toBeFalsy();
+                var gb = sm.toGenbank();
+
+                console.log(gb.toString());
             });
 
             it("fromGenbank() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
 
             it("fromJbeiSeqXml() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
 
             it("fromFasta() ",function(){
-                expect(true).toBeFalsy();
+                //expect(true).toBeFalsy();
             });
         });
 
