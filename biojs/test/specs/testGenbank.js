@@ -764,11 +764,8 @@ Ext.onReady(function() {
             });
 
             if("Parses Origin correctly ", function() {
-                expect(tmp.findKeyword("ORIGIN").getSequence().length.toBe(120);
-            }
-        });
-
-        xdescribe("", function() {
+                expect(tmp.findKeyword("ORIGIN").getSequence()).length.toBe(120);
+            });
         });
     });
 });

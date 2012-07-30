@@ -17,7 +17,7 @@ Ext.onReady(function() {
     //   Sequence Manager Unit Testing
     // ====================================
 
-    xdescribe("Testing SequenceManager Classes pt1", function() {
+    describe("Testing SequenceManager Classes pt1", function() {
         var seq, feat1, feat2, feat3, sm;
 
         beforeEach(function() {
