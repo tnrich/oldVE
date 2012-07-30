@@ -1237,7 +1237,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             featKW.addElement(featElm);
 
-            console.log(feat.getLocations().length);
+            //console.log(feat.getLocations().length);
 
             for (var j=0; j < feat.getLocations().length; j++) {
                 var featLoc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
@@ -1245,10 +1245,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
                     end: feat.getLocations()[j].getEnd(),
                     to: ".."
                 });
-                console.log(featElm.getFeatureLocation().length);
+                //console.log(featElm.getFeatureLocation().length);
                 featElm.addFeatureLocation(featLoc);
             }
-            console.log(featElm.getFeatureLocation().length);
+            //console.log(featElm.getFeatureLocation().length);
 
             if (feat.getNotes() !== null) {
                 for (var j=0; j < feat.getNotes().length; j++) {
@@ -1280,11 +1280,66 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     fromGenbank: function(genbank) {
         var result;
+
+        var name        = genbank.getLocus().getLocusName();
+        var isCirc      = !genbank.getLocus().getLinear(); //genbank.getLocus().getCircular();
+        var sequence    = Teselagen.bio.sequence.DNATools.createDNA(genbank.getOrigin().getSequence());
+        var features    = [];
+        var locations   = [];
+        var notes       = [];
+        
+        var gbFeats     = genbank.getFeatures().getFeaturesElements();
+
+
+        for (var i=0; i < gbFeats.length; i++) {
+
+            for (var j=0; j < gbFeats[i].getFeatureLocation().length; j++) {
+                var tmpLoc = Ext.create("Teselagen.bio.sequence.common.Location", { 
+                    start: gbFeats[i].getFeatureLocation()[j].getStart(), 
+                    end: gbFeats[i].getFeatureLocation()[j].getEnd() 
+                });
+                locations.push(tmpLoc);
+            }
+
+            for (var k=0; k < gbFeats[i].getFeatureQualifier().length; k++) {
+                var tmpNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
+                    name: gbFeats[i].getFeatureQualifier()[k].getName(),
+                    value: gbFeats[i].getFeatureQualifier()[k].getValue(),
+                    quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted(),
+                });
+                notes.push(tmpNote);
+            }
+
+            var tmpFeat = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: gbFeats[i].getKeyword(),
+                _type: gbFeats[i].getKeyword(),
+                strand: gbFeats[i].getStrand(),
+                notes: notes
+            });
+            tmpFeat.setLocations(locations);
+
+            features.push(tmpFeat);
+        }
+
+        result = Ext.create("Teselagen.manager.SequenceManager", {
+            name: name,
+            circular: isCirc,
+            sequence: sequence,
+            features: features
+        });
+
+        this.name = name;
+        this.circular = isCirc;
+        this.sequence = sequence;
+        this.features = features;
+        
         return result;
     },
 
     fromJbeiSeqXml: function(jbeiSeq) {
         var result;
+
+
         return result;
     },
 

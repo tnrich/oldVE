@@ -82,14 +82,16 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         }
         /**
          * Get featureQualifier
-         * @returns {Teselagen.bio.parsers.GenbankFeatureQualifer} [featureQualifer] An array of Feature Qualifiers
+         * This should be featureQualifiers since it is an array.
+         * @returns {Teselagen.bio.parsers.GenbankFeatureQualifier[]} featureQualifer An array of Feature Qualifiers
          */
         this.getFeatureQualifier = function() {
             return featureQualifier;
         }
         /**
          * Set featureQualifier
-         * @param {Teselagen.bio.parsers.GenbankFeatureQualifer} [featureQualifer] An array of Feature Qualifiers
+         * This should be featureQualifiers since it is an array.
+         * @param {Teselagen.bio.parsers.GenbankFeatureQualifier[]} featureQualifer An array of Feature Qualifiers
          */
         this.setFeatureQualifier = function(pFeatureQualifier) {
             featureQualifier = pFeatureQualifier;
@@ -119,14 +121,16 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         }
         /**
          * Get featureLocation
-         * @returns {Teselagen.bio.parsers.GenbankFeatureLocation} [featureLocation] An array of Feature Locations
+         * This should be featureLocations since it is an array.
+         * @returns {Teselagen.bio.parsers.GenbankFeatureLocation[]} featureLocation An array of Feature Locations
          */
         this.getFeatureLocation = function() {
             return featureLocation;
         }
         /**
          * Get featureLocation
-         * @param {Teselagen.bio.parsers.GenbankFeatureLocation} [featureLocation] An array of Feature Locations
+         * This should be featureLocations since it is an array.
+         * @param {Teselagen.bio.parsers.GenbankFeatureLocation[]} featureLocation An array of Feature Locations
          */
         this.setFeatureLocation = function(pFeatureLocation) {
             featureLocation = pFeatureLocation;

@@ -875,7 +875,9 @@ Ext.onReady(function() {
         });
 
         describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
-            it("toGenbank() ",function(){
+            var gb;
+
+            beforeEach(function() {
                 var note1 = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
                     name: "note1",
                     value: "note1value",
@@ -883,9 +885,11 @@ Ext.onReady(function() {
                 });
 
                 sm.getFeatures()[0].addNote(note1);
+                gb = sm.toGenbank();
+            });
 
-                var gb = sm.toGenbank();
-
+            it("toGenbank() ",function(){
+                
                 expect(gb.getLocus().getLocusName()).toBe("test");
                 expect(gb.getLocus().getStrandType()).toBe("ds");
                 expect(gb.getLocus().getSequenceLength()).toBe(7);
@@ -908,7 +912,18 @@ Ext.onReady(function() {
             });
 
             it("fromGenbank() ",function(){
-                //expect(true).toBeFalsy();
+                var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
+
+                newSM.fromGenbank(gb);
+
+                expect(newSM.getName()).toBe("test");
+                expect(newSM.getCircular()).toBeTruthy();
+                expect(newSM.getSequence().seqString().toUpperCase()).toBe("GATTACA");
+                expect(newSM.getFeatures().length).toBe(1);
+                expect(newSM.getFeatures()[0].getName()).toBe("feat1");
+                expect(newSM.getFeatures()[0].getStart()).toBe(1);
+                expect(newSM.getFeatures()[0].getEnd()).toBe(3);
+
             });
 
             it("fromJbeiSeqXml() ",function(){

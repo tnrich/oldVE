@@ -1,6 +1,8 @@
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
+    requires: 'Teselagen.bio.parsers.GenbankManager',
+
     onCancelButtonClick: function(button, e, options) {
         button.up('window').close();
     },
@@ -21,10 +23,14 @@ Ext.define('Vede.controller.MainMenuController', {
         button.up('window').close();
 
         function processText() {
-            var result = fr.result;
-            var gbm = Ext.create('Teselagen.bio.parsers.GenbankManager');
-            var gb = gbm.parseGenbankFile(result);
-            console.log(gb);
+            var result  = fr.result;
+            //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
+            //var gb      = gbm.parseGenbankFile(result);
+            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
+            var seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
+            seqMgr.fromGenbank(gb);
+            console.log(gb.toString());
+            console.log(seqMgr.getName());
         }
     },
 
