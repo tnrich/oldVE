@@ -24,7 +24,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
         var name;
         var value;
         var quoted;
-        if (inData) {
+        if (inData !== undefined) {
             name = inData.name || null;
             value = inData.value || null;
             quoted = inData.quoted || false; // boolean

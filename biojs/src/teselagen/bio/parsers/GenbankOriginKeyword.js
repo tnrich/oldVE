@@ -30,7 +30,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
         this.keyword = "ORIGIN";
         var sequence = "";
 
-        if (inData) {
+        if (inData !== undefined) {
             sequence	= inData.sequence || "";
         }
         /**

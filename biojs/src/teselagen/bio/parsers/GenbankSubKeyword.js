@@ -25,7 +25,7 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
     constructor: function (inData) {
         //var that = this;
 
-        if (inData) {
+        if (inData !== undefined) {
             this.keyword    = inData.keyword || null;
             this.value      = inData.value || null;
         }

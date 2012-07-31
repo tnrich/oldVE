@@ -8,7 +8,7 @@ Ext.require("Teselagen.bio.sequence.alphabets.RNAAlphabet");
 Ext.require("Teselagen.bio.sequence.common.StrandType");
 Ext.require("Teselagen.bio.sequence.DNATools");
 Ext.require("Teselagen.bio.sequence.TranslationUtils");
-
+Ext.require("Teselagen.bio.parsers.GenbankManager");
 
 Ext.onReady(function() {
     //console.log(Ext.Loader.getConfig());
@@ -875,7 +875,7 @@ Ext.onReady(function() {
         });
 
         describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
-            var gb;
+            var newGb;
 
             beforeEach(function() {
                 var note1 = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
@@ -885,10 +885,20 @@ Ext.onReady(function() {
                 });
 
                 sm.getFeatures()[0].addNote(note1);
-                gb = sm.toGenbank();
+                sm.addFeature(feat3, false);
+
+                var smLine =  'LOCUS       test                       7 bp ds-DNA     circular     30-JUL-2012\n' + 
+                        'FEATURES             Location/Qualifiers\n' +
+                        '     feat1           1..3\n' +
+                        '                     /note1="note1value"\n' +
+                        '     feat3           join(2..5,0..1)\n' +
+                        'ORIGIN      \n' +
+                        '        1 gattaca     \n';
+                newGb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(smLine);
             });
 
-            it("toGenbank() ",function(){
+            it("checkGenbank() ",function(){
+                var gb = newGb;
                 
                 expect(gb.getLocus().getLocusName()).toBe("test");
                 expect(gb.getLocus().getStrandType()).toBe("ds");
@@ -897,13 +907,52 @@ Ext.onReady(function() {
                 expect(gb.getLocus().getLinear()).toBe(false);
                 expect(gb.getLocus().getDivisionCode()).toBe("");
 
-                expect(sm.getFeatures().length).toBe(1);
-                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
-                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
-                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
+                expect(gb.getFeatures().getFeaturesElements().length).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
 
-                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note1");
-                expect(gb.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(5);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
+
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note1");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
+                
+                expect(gb.getOrigin().getSequence()).toBe("gattaca");
+                expect(gb.getOrigin().getSequence().length).toBe(7);
+
+                console.log(gb.toString());
+            });
+
+            it("toGenbank() ",function(){
+                var gb = sm.toGenbank();
+                
+                expect(gb.getLocus().getLocusName()).toBe("test");
+                expect(gb.getLocus().getStrandType()).toBe("ds");
+                expect(gb.getLocus().getSequenceLength()).toBe(7);
+                expect(gb.getLocus().getNaType()).toBe("DNA");
+                expect(gb.getLocus().getLinear()).toBe(false);
+                expect(gb.getLocus().getDivisionCode()).toBe("");
+
+                expect(gb.getFeatures().getFeaturesElements().length).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
+
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(5);
+
+                expect(sm.getFeatures()[1].getLocations()[1].getStart()).toBe(0);
+                expect(sm.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0); //"" <<<=== really broken...why???
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
+
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note1");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
                 
                 expect(gb.findKeyword("ORIGIN").getSequence()).toBe("gattaca");
                 expect(gb.findKeyword("ORIGIN").getSequence().length).toBe(7);
@@ -914,15 +963,24 @@ Ext.onReady(function() {
             it("fromGenbank() ",function(){
                 var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
 
-                newSM.fromGenbank(gb);
+                newSM.fromGenbank(newGb);
 
                 expect(newSM.getName()).toBe("test");
                 expect(newSM.getCircular()).toBeTruthy();
-                expect(newSM.getSequence().seqString().toUpperCase()).toBe("GATTACA");
-                expect(newSM.getFeatures().length).toBe(1);
+                expect(newSM.getSequence().seqString()).toBe("gattaca");
+                expect(newSM.getFeatures().length).toBe(2);
                 expect(newSM.getFeatures()[0].getName()).toBe("feat1");
                 expect(newSM.getFeatures()[0].getStart()).toBe(1);
-                expect(newSM.getFeatures()[0].getEnd()).toBe(3);
+                expect(newSM.getFeatures()[0].getEnd()).toBe(3); //5
+                expect(newSM.getFeatures()[0].getLocations()[0].getStart()).toBe(1);
+                expect(newSM.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
+
+                /*expect(newSM.getFeatures()[1].getName()).toBe("feat3");
+                expect(newSM.getFeatures()[1].getLocations()[0].getStart()).toBe(2); // 1
+                expect(newSM.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
+                expect(newSM.getFeatures()[1].getLocations()[1].getStart()).toBe(0); // 1
+                expect(newSM.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
+                */
 
             });
 
