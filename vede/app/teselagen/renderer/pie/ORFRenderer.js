@@ -8,8 +8,8 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
     extend: "Teselagen.renderer.pie.PieRenderer",
 
     statics: {
-        DISTANCE_FROM_RAIL: 15,
-        DISTANCE_BETWEEN_ORFS: 10,
+        DISTANCE_FROM_RAIL: -15,
+        DISTANCE_BETWEEN_ORFS: -5,
         ORF_FRAME_COLOR: ["#FF0000", "#31B440", "#3366CC"]
     },
 
@@ -45,14 +45,31 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             var startAngle = orf.getStart() * 2 * Math.PI / seqLen;
             var endAngle = orf.getEnd() * 2 * Math.PI / seqLen;
 
+            // Calculate SVG flags sweep and large-arc. See SVG docs for details.
+            var sweep = true;
+            if(endAngle < startAngle) {
+                sweep = false;
+            }
+
+            var largeArc = false;
+            if(Math.abs(endAngle - startAngle) > Math.PI) {
+                largeArc = true;
+            }
+
             // Generate the arc of the orf.
-            var arcSprite = this.GraphicUtils.drawArc(this.center, orfRadius,
-                                                startAngle, endAngle, color);
+            var arcSprite = Ext.create("Ext.draw.Sprite", {
+                type: "path",
+                path: this.GraphicUtils.drawArc(this.center, orfRadius,
+                                          startAngle, endAngle, false, true,
+                                          sweep, largeArc),
+                stroke: color
+            });
 
             sprites.push(arcSprite);
 
             // Attach a tooltip to the arc.
-            arcSprite.tooltip = this.getToolTip(orf);
+            var tooltip = this.getToolTip(orf);
+            arcSprite.tooltip = tooltip;
             arcSprite.on("render", function(me) {
                 Ext.tip.QuickTipManager.register({
                     target: me.el,
@@ -65,34 +82,60 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 var codonAngle = codonIndex * 2 * Math.PI / seqLen;
 
                 var codonX = this.center.x + orfRadius * Math.sin(codonAngle);
-                var codonY = this.center.y + orfRadius * Math.cos(codonAngle);
+                var codonY = this.center.y - orfRadius * Math.cos(codonAngle);
 
-                sprites.push(Ext.create("Ext.draw.Sprite", {
+                var codonSprite = Ext.create("Ext.draw.Sprite", {
                     type: "circle",
                     radius: 2,
                     x: codonX,
                     y: codonY,
                     fill: color
-                }));
-            });
+                });
+                codonSprite.tooltip = tooltip;
+                codonSprite.on("render", function(me) {
+                    Ext.tip.QuickTipManager.register({
+                        target: me.el,
+                        text: me.tooltip
+                    });
+                });
+
+                sprites.push(codonSprite);
+            }, this);
 
             // Render end codons as arrows.
+            var lastAngle;
             var arrowShiftAngle;
             if(orf.getStrand() == this.StrandType.FORWARD) {
                 arrowShiftAngle = endAngle - 5 / orfRadius;
+                lastAngle = endAngle;
             } else {
                 arrowShiftAngle = startAngle + 5 / orfRadius;
+                lastAngle = startAngle;
             }
 
-            sprites.push(Ext.create("Ext.draw.Sprite", {
+            var stopSprite = Ext.create("Ext.draw.Sprite", {
                 type: "path",
-                path: "M" + this.center.x + (orfRadius + 2) * Math.sin(arrowShiftAngle) + " " +
-                      this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle) + " " +
-                      "L" + this.center.x + orfRadius * Math.sin(endAngle) + " " +
-                      this.center.y - (orfRadius - 2) * Math.cos(endAngle) + " " +
-                      "L" + this.center.x + (orfRadius - 2) * Math.sin(arrowShiftAngle) + " " +
-                      this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle)
-            }));
+                path: "M" + (this.center.x + (orfRadius + 2) * 
+                      Math.sin(arrowShiftAngle)) + " " +
+                      (this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle)) + 
+                      "L" + (this.center.x + orfRadius * Math.sin(lastAngle)) + 
+                      " " + (this.center.y - orfRadius * Math.cos(lastAngle)) + 
+                      "L" + (this.center.x + (orfRadius - 2) * Math.sin(arrowShiftAngle)) +
+                      " " + (this.center.y - (orfRadius - 2) * Math.cos(arrowShiftAngle)) + 
+                      "z",
+                stroke: color,
+                fill: color
+            });
+
+            stopSprite.tooltip = tooltip;
+            stopSprite.on("render", function(me) {
+                Ext.tip.QuickTipManager.register({
+                    target: me.el,
+                    text: me.tooltip
+                });
+            });
+
+            sprites.push(stopSprite);
         }, this);
         
         return sprites;
@@ -110,7 +153,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
         var aa = Math.floor(bp / 3);
         var complimentary = "";
         
-        if(orf.getStrand() == 1) {
+        if(orf.getStrand() == 1 && orf.getStartCodons().length > 1) {
             complimentary = ", complimentary";
         }
 
@@ -136,6 +179,8 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
 
             tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
         }
+
+        return tooltipLabel;
     },
 
     /**
