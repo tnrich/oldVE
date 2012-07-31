@@ -59,6 +59,8 @@ Ext.define("Teselagen.manager.PieManager", {
             items: [Ext.create("Vede.view.pie.Frame")]
         });
 
+        console.log(this.pie.items[0].path);
+
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,
             center: this.center,
