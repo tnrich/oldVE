@@ -1,11 +1,58 @@
+/**
+ * @class Teselagen.utils.GraphicUtils
+ * @singleton
+ * Class which aids in the drawing of pieces of the pie.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author)
+ */
 Ext.define("Teselagen.utils.GraphicUtils", {
     singleton: true,
 
     ARC_THRESHOLD: 8,
+    OUTLINE_COLOR: "black",
+    OUTLINE_WIDTH: 0.5,
 
-    drawArc: function(center, radius, startAngle, endAngle, reverseRendering, returnString) {
-        var reverseRendering = reverseRendering || false;
+    /**
+     * Draws an arc using an SVG path.
+     * @param {Object} center The center of the arc. An object with attrs x and y.
+     * @param {Int} radius The radius of the arc.
+     * @param {Int} thickness The thickness of the arc to draw.
+     * @param {Int} startAngle The start angle of the arc in radians. Angles
+     * are calculated relative to the vertical axis, and the positive direction
+     * is clockwise.
+     * @param {Int} endAngle The end angle of the arc in radians. Angles
+     * are calculated relative to the vertical axis, and the positive direction
+     * is clockwise.
+     * @param {Boolean} reverse Whether to draw from start to end or vice versa.
+     * @param {Boolean} returnString Whether to return a string or a sprite.
+     * @param {Boolean} sweep The SVG arc-sweep flag. See SVG docs for details.
+     * @param {Boolean} largeArc The SVG large-arc flag. See SVG docs for details.
+     * @return {String} The path string of the arc. Returned if returnString true.
+     * @return {Ext.draw.Sprite} A sprite of the arc. Returned if returnString false.
+     */
+    drawArc: function(center, radius, startAngle, endAngle, reverse, 
+                      returnString, sweep, largeArc) {
+
+        var sweep = sweep || false;
+        var largeArc = largeArc || false;
+        var reverse = reverse || false;
         var returnString = returnString || false;
+
+        // Set SVG arc flags. See SVG path documentation for more information 
+        // on the sweep flag and large arc flag.
+        var sweepFlag;
+        if(sweep) {
+            sweepFlag = 1;
+        } else {
+            sweepFlag = 0;
+        }
+
+        var largeFlag;
+        if(largeArc) {
+            largeFlag = 1;
+        } else {
+            largeFlag = 0;
+        }
 
         var alpha;
         if(endAngle < startAngle) {
@@ -19,45 +66,52 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
         var sprite;
         var path;
-        if(!reverseRendering) {
-            startPoint.x = center.x + radius * Math.sin(startAngle);
-            startPoint.y = center.y + radius * Math.cos(startAngle);
 
-            endPoint.x = center.x + radius * Math.sin(startAngle);
-            endPoint.y = center.y - radius * Math.cos(startAngle);
-
-            path = "M" + Math.floor(startPoint.x) + " " + Math.floor(startPoint.y) +
-                   "A" + radius + " " + radius + " 0 0 0 " +
-                   Math.floor(endPoint.x) + " " + Math.floor(endPoint.y)
-
-            sprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: path
-            });
-        } else {
-            startPoint.x = center.x + radius * Math.sin(endAngle);
-            startPoint.y = center.y - radius * Math.sin(endAngle);
-
-            endPoint.x = center.x + radius * Math.sin(endAngle);
-            endPoint.y = center.y - radius * Math.cos(endAngle);
-
-            path = "M" + Math.floor(startPoint.x) + " " + Math.floor(startPoint.y) +
-                   "A" + radius + " " + radius + " 0 0 0 " +
-                   Math.floor(endPoint.x) + " " + Math.floor(endPoint.y)
-
-            sprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: path
-            });
+        // Swap angles if the arc will be drawn in reverse.
+        var tempAngle;
+        if(reverse) {
+            tempAngle = startAngle;
+            startAngle = endAngle;
+            endAngle = tempAngle;
         }
 
+        startPoint.x = center.x + radius * Math.sin(startAngle);
+        startPoint.y = center.y - radius * Math.cos(startAngle);
+
+        endPoint.x = center.x + radius * Math.sin(endAngle);
+        endPoint.y = center.y - radius * Math.cos(endAngle);
+
+        path = "M" + startPoint.x + " " + startPoint.y +
+               "A" + radius + " " + radius + " 0 " + largeFlag + " " + 
+               sweepFlag + " " + endPoint.x + " " + endPoint.y + " ";
+        
         if(!returnString) {
-            return sprite;
+            return Ext.create("Ext.draw.Sprite", {
+                type: "path",
+                path: path
+            });
         } else {
             return path;
         }
     },
 
+    /**
+     * Function which draws a portion of the pie with no directionality. Used in
+     * FeatureRenderer to draw locations of a feature which do not contain either
+     * the end or start of the feature.
+     * @param {Object} center The center of the pie. An object with attrs x and y.
+     * @param {Int} radius The radius of the pie.
+     * @param {Int} thickness The thickness of the pie piece to draw.
+     * @param {Int} startAngle The start angle of the pie piece in radians. Angles
+     * are calculated relative to the vertical axis, and the positive direction
+     * is clockwise.
+     * @param {Int} endAngle The end angle of the pie piece in radians. Angles
+     * are calculated relative to the vertical axis, and the positive direction
+     * is clockwise.
+     * @param {String} color The color of the pie piece. Can be a string such as
+     * "black" or "red", or a string of a hex value, like "#ffffff".
+     * @return {Ext.draw.Sprite} A sprite of the pie piece.
+     */
     drawPiePiece: function(center, radius, thickness, startAngle, endAngle, color) {
         var outerRadius = radius + thickness / 2;
         var innerRadius = radius - thickness / 2;
@@ -73,15 +127,36 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
         return Ext.create("Ext.draw.Sprite", {
             type: "path",
-            path: "M" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y) + " " +
+            path: "M" + outerCorner.x + " " + outerCorner.y + " " +
                   this.drawArc(center, outerRadius, startAngle, endAngle, false, true) +
-                  "L" + Math.floor(innerCorner.x) + " " + Math.floor(innerCorner.y) + " " +
+                  "L" + innerCorner.x + " " + innerCorner.y + " " +
                   this.drawArc(center, innerRadius, startAngle, endAngle, true, true) +
-                  "L" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y),
-            stroke: color
+                  "L" + outerCorner.x + " " + outerCorner.y,
+            stroke: this.OUTLINE_COLOR,
+            "stroke-width": this.OUTLINE_WIDTH,
+            fill: color
         });
     },
 
+    /**
+     * Function which draws a portion of the pie which has an arrow pointing in
+     * one direction, determined by the "direction" argument.
+     * @param {Object} center The center of the pie. An object with attrs x and y.
+     * @param {Int} radius The radius of the pie.
+     * @param {Int} thickness The thickness of the pie piece to draw.
+     * @param {Int} startAngle The start angle of the pie piece in radians. Angles
+     * are calculated relative to the vertical axis, and the positive direction
+     * is clockwise.
+     * @param {Int} endAngle The end angle of the pie piece in radians. Angles
+     * are calculated relative to the vertical axis, and the positive direction
+     * is clockwise.
+     * @param {Int} direction The direction the arrow will point. 1 means the
+     * clockwise end will have an arrow, 2 means the point will be at the 
+     * counterclockwise end.
+     * @param {String} color The color of the pie piece. Can be a string such as
+     * "black" or "red", or a string of a hex value, like "#ffffff".
+     * @return {Ext.draw.Sprite} A sprite of the pie piece.
+     */
     drawDirectedPiePiece: function (center, radius, thickness, startAngle, endAngle, direction, color) {
         var outerRadius = radius + thickness / 2;
         var innerRadius = radius - thickness / 2;
@@ -105,6 +180,17 @@ Ext.define("Teselagen.utils.GraphicUtils", {
             if(arcLength > this.ARC_THRESHOLD) {
                 var alpha = this.ARC_THRESHOLD / radius;
 
+                var sweep = true;
+                if(endAngle < startAngle) {
+                    sweep = false;
+                }
+
+                // Determine whether we must set the large-arc-flag in SVG to 1.
+                var largeFlag = false;
+                if(Math.abs(endAngle - startAngle) > Math.PI) {
+                    largeFlag = true;
+                }
+
                 if(direction == 1) {
                     middlePoint.x = center.x + radius * Math.sin(endAngle);
                     middlePoint.y = center.y - radius * Math.cos(endAngle);
@@ -119,15 +205,17 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
                     sprite = Ext.create("Ext.draw.Sprite", {
                         type: "path",
-                        path: "M" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y) + " " +
-                              this.drawArc(center, outerRadius, startAngle, 
-                                           endAngle, false, true) + 
-                              "L" + Math.floor(middlePoint.x) + " " + Math.floor(middlePoint.y) + " " +
-                              "L" + Math.floor(innerCorner.x) + " " + Math.floor(innerCorner.y) + " " +
-                              this.drawArc(center, innerRadius, startAngle,
-                                           endAngle, false, true) +
-                              "L" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y),
-                        stroke: color,
+                        path: this.drawArc(center, outerRadius, startAngle, 
+                                    endAngle, false, true, sweep, largeFlag) + 
+                              "L" + middlePoint.x + " " + middlePoint.y + " " +
+                              "L" + innerCorner.x + " " + innerCorner.y + " " +
+                              this.drawArc(center, innerRadius, endAngle,
+                                    startAngle, false, true, !sweep, largeFlag) +
+                              "L" + outerCorner.x + " " + outerCorner.y,
+                        stroke: this.OUTLINE_COLOR,
+                        "stroke-width": this.OUTLINE_WIDTH,
+                        fill: color,
+                        "fill-rule": "evenodd"
                     });
 				} else if(direction == 2) {
                     middlePoint.x = center.x + radius * Math.sin(startAngle);
@@ -143,15 +231,18 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
                     sprite = Ext.create("Ext.draw.Sprite", {
                         type: "path",
-                        path: "M" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y) + 
+                        path: "M" + outerCorner.x + " " + outerCorner.y + 
                               this.drawArc(center, outerRadius, startAngle,
-                                           endAngle, false, true) + 
-                              "L" + Math.floor(innerCorner.x) + " " + Math.floor(innerCorner.y) +
+                                    endAngle, false, true, sweep, largeFlag) + 
+                              "L" + innerCorner.x + " " + innerCorner.y +
                               this.drawArc(center, innerRadius, startAngle,
-                                           endAngle, false, true) +
-                              "L" + Math.floor(middlePoint.x) + " " + Math.floor(middlePoint.y) +
-                              "L" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y),
-                        stroke: color
+                                    endAngle, true, true, !sweep, largeFlag) + 
+                              "L" + middlePoint.x + " " + middlePoint.y + 
+                              "L" + outerCorner.x + " " + outerCorner.y,
+                        stroke: this.OUTLINE_COLOR,
+                        "stroke-width": this.OUTLINE_WIDTH,
+                        fill: color,
+                        "fill-rule": "evenodd"
                     });
 				}
             } else {
@@ -166,11 +257,13 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
                     sprite = Ext.create("Ext.draw.Sprite", {
                         type: "path",
-                        path: "M" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y) +
-                              "L" + Math.floor(middlePoint.x) + " " + Math.floor(middlePoint.y) +
-                              "L" + Math.floor(innerCorner.x) + " " + Math.floor(innerCorner.y) +
-                              "L" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y),
-                        stroke: color
+                        path: "M" + outerCorner.x + " " + outerCorner.y +
+                              "L" + middlePoint.x + " " + middlePoint.y +
+                              "L" + innerCorner.x + " " + innerCorner.y +
+                              "Z",
+                        stroke: this.OUTLINE_COLOR,
+                        "stroke-width": this.OUTLINE_WIDTH,
+                        fill: color
                     });
                 } else if(direction == 2) {
                     middlePoint.x = center.x + radius * Math.sin(startAngle);
@@ -183,11 +276,13 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
                     sprite = Ext.create("Ext.draw.Sprite", {
                         type: "path",
-                        path: "M" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y) +
-                              "L" + Math.floor(innerCorner.x) + " " + Math.floor(innerCorner.y) +
-                              "L" + Math.floor(middlePoint.x) + " " + Math.floor(middlePoint.y) +
-                              "L" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y),
-                        stroke: color
+                        path: "M" + outerCorner.x + " " + outerCorner.y +
+                              "L" + innerCorner.x + " " + innerCorner.y +
+                              "L" + middlePoint.x + " " + middlePoint.y +
+                              "Z",
+                        stroke: this.OUTLINE_COLOR,
+                        "stroke-width": this.OUTLINE_WIDTH,
+                        fill: color
                     });
                 }
             }
@@ -200,20 +295,32 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
             sprite = Ext.create("Ext.draw.Sprite", {
                 type: "path",
-                path: "M" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y) +
+                path: "M" + outerCorner.x + " " + outerCorner.y +
                       this.drawArc(center, outerRadius, startAngle, endAngle,
                                    false, true) + 
-                      "L" + Math.floor(innerCorner.x) + " " + Math.floor(innerCorner.y) +
+                      "L" + innerCorner.x + " " + innerCorner.y +
                       this.drawArc(center, innerRadius, startAngle, endAngle,
                                    false, true) +
-                      "L" + Math.floor(outerCorner.x) + " " + Math.floor(outerCorner.y),
-                stroke: color
+                      "L" + outerCorner.x + " " + outerCorner.y,
+                stroke: this.OUTLINE_COLOR,
+                "stroke-width": this.OUTLINE_WIDTH,
+                fill: color
             });
         }
 
         return sprite;
     },
 
+    /**
+     * Given the parameters defining a circle, returns a point object on that
+     * circle at a given angle.
+     * @param {Object} center A point object defining the center of the object,
+     * with integer attributes x and y.
+     * @param {Int} angle The angle at which to generate the point.
+     * @param {Int} radius The radius of the circle.
+     * @return {Object} The coordinates of the point on the given circle at the
+     * given angle. Has attributes x and y.
+     */
     pointOnCircle: function(center, angle, radius) {
         if(angle > 2 * Math.PI) {
             angle = angle % (2 * Math.PI);

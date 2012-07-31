@@ -4,6 +4,10 @@
  */
 Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
     extend: "Teselagen.renderer.pie.PieRenderer",
+
+    statics: {
+        CUTSITE_LINE_WIDTH: 0.5,
+    },
     
     config: {
         cutSites: [],
@@ -52,10 +56,10 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                 path: "M" + lineStart.x + " " + lineStart.y + " " +
                       "L" + lineEnd.x + " " + lineEnd.y,
                 stroke: this.self.FRAME_COLOR,
+                "stroke-width": this.self.CUTSITE_LINE_WIDTH,
                 tooltip: this.getToolTip(site),
                 listeners: {
                     render: function(me) {
-                        console.log(me);
                         Ext.tip.QuickTipManager.register({
                             target: me.el,
                             text: me.tooltip

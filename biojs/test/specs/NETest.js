@@ -371,7 +371,7 @@ Ext.onReady(function() {
 
                 expect(orfs[2].getFrame()).toBe(0);
                 expect(orfs[2].getStart()).toBe(0);
-                expect(orfs[2].getEnd()).toBe(24);
+                expect(orfs[2].getEnd()).toBe(23);
                 expect(orfs[2].getStrand()).toBe(-1);
             });
         });
