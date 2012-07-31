@@ -1,6 +1,4 @@
 Ext.define("Teselagen.manager.DigestionManager", {
-    extend: "Teselagen.mapper.Mapper",
-    singleton: true,
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite", 
                "Teselagen.bio.sequence.DNATools",
                "Teselagen.manager.SequenceManager",
@@ -11,7 +9,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
         matchNone: "None",
         matchNormalOnly: "NormalOnly",
         matchReverseComOnly: "RevComOnly",
-        matchBoth: "Both"
+        matchBoth: "Both",
         overhangNone: "None",
         overhangTop: "Top",
         overhangBottom: "Bottom"
@@ -45,6 +43,10 @@ Ext.define("Teselagen.manager.DigestionManager", {
     constructor: function(inData){
         this.statics();
         this.initConfig(inData);
+        this.sequenceProvider = inData.sequenceManager;
+        this.start =  inData.start;
+        this.end = inData.end;
+        this.digestionSequence = inData.digestionSequence;
 
         /*this.initializeSource();
          this.initializeDestination();
@@ -52,8 +54,39 @@ Ext.define("Teselagen.manager.DigestionManager", {
 */
     },
     
+    digest: function(pType){
+        if (!(pType == this.self.matchNormalOnly 
+           || pType == this.self.matchReverseComOnly)){
+            throw new Error("Invalid digestion type");
+        }
+
+        if (pType == matchReverseComOnly){
+            //reverseComplementSequence();
+        },
+        var startPosition = destinationStartCutSite.getStart();
+        var endPosition = destinationStartCutSite.getEnd() 
+            + destinationStartCutSite.getRestrictionEnzyme.getDsForward();
+
+        if (destinationStartCutSite.getRestrictionEnzyme().getDsForward()
+        > destinationStartCutSite.getRestrictionEnzyme().getDsReverse()){
+            startPosition = destinationStartCutSite.getStart() + destinationStartCutSite.getRestrictionEnzyme().getDsReverse();
+
+        } else if(destinationStartCutSite.getRestrictionEnzyme().getDsForward() < destination.getRestrictionEnzyme().getDsReverse()){
+            startPosition = destinationStartCutSite.getStart() + destinationStartCutSite.getRestrictionEnzyme().getDsForward();
+        } else {
+            startPosition = destinationStartCutSite.getStart() + destinationStartCutSite.getRestrictionEnzyme().getDsForward();
+        }
+
+        if (destinationEndCutSite.getRestrictionEnzyme().getDsForward() > destinationEndCutSite.getRestrictionEnzyme().getDsReverse()){
+            endPosition = destinationEndCutSite.getStart() + destinationEndCutSite.getRestrictionEnzyme().getDsForward();
+        } else if (destinationEndCutSite.getRestrictionEnzyme().getDsForward() < destinationEndCutSite.getRestrictionEnzyme.getDsReverse()){
+            endPosition = destinationEndCutSite.getStart() + destinationEndCutSite.getRestrictionEnzyme.getDsReverse();
+        } else {
+            endPosition = destinationEndCutSite.getStart() + destinationEndCutSite.getRestrictionEnzyme.getDsReverse();
+        }
+
+    },
     /*
-    digest: function(){},
     calculateMatchingType: function(){},
     initializeSource: function(){},
     initializeDestination: function(){},

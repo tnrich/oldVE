@@ -145,6 +145,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * @return {Teselagen.bio.enzymes.RestrictionEnzyme} The enzyme object.
      */
     getEnzymeByName: function(name) {
+        //In the future, all enzymes might not be in the REBASE database, but
+        //for now this works.
         return this.getRebaseEnzymesDatabase().get(name.toLowerCase());
     },
 

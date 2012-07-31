@@ -32,8 +32,6 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         }else {
             this.ladder = this.self.KB_LADDER_BANDS;
         }
-        this.redrawBands();
-        this.redrawBandSizeLabels();
         return this;
     },
     

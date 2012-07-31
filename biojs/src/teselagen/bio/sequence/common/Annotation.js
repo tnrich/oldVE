@@ -19,12 +19,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 	constructor: function(inData){
 		var start;
 		var end;
-		if (inData) {
-			start = inData.start || 0;
-			end = inData.end || 0;	
-		} else {
-			Teselagen.bio.BioException.raiseException("Arguments needed");
-		}
+        start = inData.start || 0;
+        end = inData.end || 0;	
 
 		var initialLocation = Ext.create("Teselagen.bio.sequence.common.Location", {
 			start: start,

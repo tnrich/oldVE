@@ -32,7 +32,7 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 
 				var symbol = this.DNAAlphabet.symbolMap(DNASequence.charAt(i));
 				if (symbol == null) {
-					Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
+					//Teselagen.bio.sequence.symbols.IllegalSymbolException.raise("Failed to find complement for symbol '" + symbol.value + ".'");
 				} else {
 					symbols.push(symbol);
 				}
