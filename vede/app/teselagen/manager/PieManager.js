@@ -29,6 +29,10 @@ Ext.define("Teselagen.manager.PieManager", {
     featuresChanged: false,
     orfsChanged: false,
 
+    orfSprites: null,
+    featureSprites: null,
+    cutSiteSprites: null,
+
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
      * SequenceManager to obtain the sequence from.
@@ -88,6 +92,22 @@ Ext.define("Teselagen.manager.PieManager", {
      * renderers.
      */
     render: function() {
+        if(this.orfSprites) {
+            this.orfSprites.destroy();
+            this.featureSprites.destroy();
+            this.cutSiteSprites.destroy();
+        }
+
+        this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
+            surface: this.pie.surface
+        });
+        this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
+            surface: this.pie.surface
+        });
+        this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
+            surface: this.pie.surface
+        });
+ 
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
                 if(this.sequenceManagerChanged) {
@@ -119,40 +139,28 @@ Ext.define("Teselagen.manager.PieManager", {
             this.orfRenderer.setOrfs(this.orfs);
         }
 
-        var cutSiteSprites = [];
         if(this.showCutSites) {
-            cutSiteSprites = this.cutSiteRenderer.render();
+            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         } 
 
-        var featureSprites = [];
         if(this.showFeatures) {
-            featureSprites = this.featureRenderer.render();
+            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
-        var orfSprites = [];
         if(this.showOrfs) {
-            orfSprites = this.orfRenderer.render();
+            this.orfSprites.addAll(this.orfRenderer.render());
         }
 
-        var sprites = cutSiteSprites.concat(featureSprites, orfSprites);
+        this.showSprites(this.cutSiteSprites);
+        this.showSprites(this.featureSprites);
+        this.showSprites(this.orfSprites);
+    },
 
-        /*for(var i = 0; i < 200; i+= 20) {
-            for(var j = 0; j < 200; j+= 20) {
-                sprites.push(Ext.create("Ext.draw.Sprite", {
-                    type: "text",
-                    text: i + "," + j,
-                    x: i,
-                    y: j,
-                    font: "6px monospace"
-                }));
-            }
-        }*/
-
-        this.pie.surface.add(sprites);
-
-        Ext.each(sprites, function(sprite){
+    showSprites: function(collection) {
+        collection.each(function(sprite) {
+            this.pie.surface.add(sprite);
             sprite.show(true);
-        });
+        }, this);
     },
 
     applySequenceManager: function(pSequenceManager) {

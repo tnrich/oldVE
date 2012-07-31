@@ -43,14 +43,11 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                                 2 * this.self.DEFAULT_FEATURES_GAP;
 
             if(index > 0) {
-                featureRadius -= index * (DEFAULT_FEATURE_HEIGHT + 
-                                          DEFAULT_FEATURES_GAP);
+                featureRadius -= index * (this.self.DEFAULT_FEATURE_HEIGHT + 
+                                          this.self.DEFAULT_FEATURES_GAP);
             }
 
-            var angles = this.calculateAngles(feature, featureRadius);
-
-            var startAngle = angles[0];
-            var endAngle = angles[1];
+            this.calculateAngles(feature, featureRadius);
 
             var color = "#ffffff";
             var direction = 0;
@@ -60,22 +57,10 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                 direction = 2;
             }
 
-            var arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, featureRadius,
-                         this.self.DEFAULT_FEATURE_HEIGHT, startAngle, endAngle, direction, color);
-
-            arcSprite.tooltip = this.getToolTip(feature);
-            arcSprite.on("render", function(me) {
-                Ext.tip.QuickTipManager.register({
-                    target: me.el,
-                    text: me.tooltip
-                });
-            });
-
-            sprites.push(arcSprite);
-            
             // Draw a pie slice for each location in the feature.
-            // At the moment color is a final argument to the calls to
-            // GraphicUtils
+            var arcSprite;
+            var startAngle;
+            var endAngle;
             Ext.each(feature.getLocations(), function(location) {
                 color = this.colorByType(feature.getType().toLowerCase());
 
@@ -87,22 +72,32 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                 if(feature.getStart() == location.getStart() &&
                    feature.getStrand() == this.StrandType.BACKWARD) {
 
-                    sprites.push(this.GraphicUtils.drawDirectedPiePiece(this.center, 
-                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle,
-                                 endAngle, direction, color));
+                    arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, 
+                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 
+                                 startAngle, endAngle, direction, color);
 
                 } else if(feature.getEnd() == location.getEnd() && 
                           feature.getStrand() == this.StrandType.FORWARD) {
 
-                    sprites.push(this.GraphicUtils.drawDirectedPiePiece(this.center,
-                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, 
-                                 endAngle, direction, color));
+                    arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center,
+                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 
+                                 startAngle, endAngle, direction, color);
 
                 } else {
-                    sprites.push(this.GraphicUtils.drawPiePiece(this.center,
-                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, startAngle, 
-                                 endAngle, direction, color));
+                    arcSprite = this.GraphicUtils.drawPiePiece(this.center,
+                                 featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 
+                                 startAngle, endAngle, direction, color);
                 }
+
+                arcSprite.tooltip = this.getToolTip(feature);
+                arcSprite.on("render", function(me) {
+                    Ext.tip.QuickTipManager.register({
+                        target: me.el,
+                        text: me.tooltip
+                    });
+                });
+                sprites.push(arcSprite);
+                console.log(arcSprite.path);
             }, this);
         }, this);
 
@@ -117,9 +112,9 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      * @return {Array<Int>} The start and end angles, in that order.
      */
     calculateAngles: function(feature, featureRadius) {
-        var angle1 = feature.getStart() * 2 + Math.PI /
+        var angle1 = feature.getStart() * 2 * Math.PI /
                      this.sequenceManager.getSequence().seqString().length;
-        var angle2 = feature.getEnd() * 2 + Math.PI /
+        var angle2 = feature.getEnd() * 2 * Math.PI /
                      this.sequenceManager.getSequence().seqString().length;
 
         var centralAngle;

@@ -74,7 +74,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
         for(var i = 0; i < reverseCombined.length; i++) {
             var orf = reverseCombined[i];
 
-            var start = sequenceLength - orf.getStart();
+            var start = sequenceLength - orf.getStart() - 1;
             var end = sequenceLength - orf.getEnd();
 
             orf.setOneStart(end);
@@ -226,7 +226,8 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
      * @return {Array<Teselagen.bio.sequence.symbols.NucleotideSymbol>} The array containing matches.
      */
     returnMatches: function(nucleotide) {
-        if(nucleotide.getAmbiguousMatches().length == 0) {
+        if(!nucleotide.getAmbiguousMatches() || 
+           nucleotide.getAmbiguousMatches().length == 0) {
             return [nucleotide];
         } else {
             return nucleotide.getAmbiguousMatches();
