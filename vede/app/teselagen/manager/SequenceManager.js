@@ -1227,7 +1227,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 featureLocation: []
             });
 
-            if (this.strand === 11) {
+            if (this.strand === 1) {
                 featElm.setCompelment(true);
             }
 
@@ -1241,11 +1241,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             for (var j=0; j < feat.getLocations().length; j++) {
                 var featLoc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
-                    start: feat.getLocations()[j].getStart(),
-                    end: feat.getLocations()[j].getEnd(),
-                    to: ".."
+                    start:  feat.getLocations()[j].getStart(),
+                    end:    feat.getLocations()[j].getEnd(),
+                    to:     ".."
                 });
-                //console.log(featElm.getFeatureLocation().length);
                 featElm.addFeatureLocation(featLoc);
             }
             //console.log(featElm.getFeatureLocation().length);
@@ -1253,9 +1252,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
             if (feat.getNotes() !== null) {
                 for (var j=0; j < feat.getNotes().length; j++) {
                     var featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
-                        name: feat.getNotes()[i].getName(),
-                        value: feat.getNotes()[i].getValue(),
-                        quoted: feat.getNotes()[i].getQuoted()
+                        name: feat.getNotes()[j].getName(),
+                        value: feat.getNotes()[j].getValue(),
+                        quoted: feat.getNotes()[j].getQuoted()
                     });
                     featElm.addFeatureQualifier(featQual);
                 }
@@ -1295,16 +1294,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             for (var j=0; j < gbFeats[i].getFeatureLocation().length; j++) {
                 var tmpLoc = Ext.create("Teselagen.bio.sequence.common.Location", { 
-                    start: gbFeats[i].getFeatureLocation()[j].getStart(), 
-                    end: gbFeats[i].getFeatureLocation()[j].getEnd() 
+                    start:  gbFeats[i].getFeatureLocation()[j].getStart(), 
+                    end:    gbFeats[i].getFeatureLocation()[j].getEnd() 
                 });
                 locations.push(tmpLoc);
             }
 
             for (var k=0; k < gbFeats[i].getFeatureQualifier().length; k++) {
                 var tmpNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
-                    name: gbFeats[i].getFeatureQualifier()[k].getName(),
-                    value: gbFeats[i].getFeatureQualifier()[k].getValue(),
+                    name:   gbFeats[i].getFeatureQualifier()[k].getName(),
+                    value:  gbFeats[i].getFeatureQualifier()[k].getValue(),
                     quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted(),
                 });
                 notes.push(tmpNote);
@@ -1316,6 +1315,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 strand: gbFeats[i].getStrand(),
                 notes: notes
             });
+            tmpFeat.setNotes(notes);
             tmpFeat.setLocations(locations);
 
             features.push(tmpFeat);

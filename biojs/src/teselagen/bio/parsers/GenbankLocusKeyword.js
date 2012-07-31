@@ -55,7 +55,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         var divisionCode;
         var date;
 
-        if (inData ) {
+        if (inData !== undefined) {
             locusName 		= inData.locusName || "";
             sequenceLength 	= inData.sequenceLength || "";
             strandType		= inData.strandType || "";

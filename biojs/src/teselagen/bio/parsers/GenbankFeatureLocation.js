@@ -40,8 +40,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         var tmp;
 
         if (inData) {
-            if (inData.start) {
-                start		= parseInt((inData.start).toString().replace(/\<|\>/, "")) || "" ;
+            if (inData.start !== undefined) {
+                start		= parseInt((inData.start).toString().replace(/\<|\>/, ""));
                 tmp         = (inData.start).toString().match(/\</g);
                 if (tmp) {preStart	= tmp[0] || ""};
                 /*if ( inData.start.match(/\>/g) ) {
@@ -50,8 +50,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         			});
                 }*/
             }
-            if (inData.end) {
-                end         = parseInt((inData.end).toString().replace(/\<|\>/, "")) || "";
+            if (inData.end !== undefined) {
+                end         = parseInt((inData.end).toString().replace(/\<|\>/, ""));
                 tmp         = (inData.end).toString().match(/\>/g);
                 if (tmp) {  preEnd  = tmp[0] || ""};
                 /*if ( inData.start.match(/\</g) ) {

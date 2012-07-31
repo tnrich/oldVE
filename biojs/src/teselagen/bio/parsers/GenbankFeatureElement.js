@@ -44,7 +44,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         var featureQualifier;
         var featureLocation;
 
-        if (inData) {
+        if (inData !== undefined) {
             keyword = inData.keyword || null;
             strand = inData.strand || null;
             complement = inData.complement || false;
