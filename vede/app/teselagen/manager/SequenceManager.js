@@ -1275,10 +1275,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Converts a Genbank {@link Teselagen.bio.parsers.Genbank} into a SequenceManager 
      * form of the data.
      * @param {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
-     * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     fromGenbank: function(genbank) {
-        var result;
+        var result; // original wants this to be a FeaturedDNASequence NOT SeqMgr!
 
         var name        = genbank.getLocus().getLocusName();
         var isCirc      = !genbank.getLocus().getLinear(); //genbank.getLocus().getCircular();
@@ -1293,7 +1293,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //var tmpFeat = null;
 
             for (var j=0; j < gbFeats[i].getFeatureLocation().length; j++) {
-                console.log(i + " : " + j + " : " + gbFeats[i].getFeatureLocation()[j].getStart());
                 var tmpLoc = Ext.create("Teselagen.bio.sequence.common.Location", { 
                     start:  gbFeats[i].getFeatureLocation()[j].getStart(), 
                     end:    gbFeats[i].getFeatureLocation()[j].getEnd() 
@@ -1337,15 +1336,72 @@ Ext.define("Teselagen.manager.SequenceManager", {
         return result;
     },
 
+    /**
+     * Converts a JbeiSeq XML file into a SequenceManager form of the data.
+     * @param {JbeiSeq} jbeiSeq 
+     * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     */
     fromJbeiSeqXml: function(jbeiSeq) {
-        var result;
+        var result; /// original wants this to be a FeaturedDNASequence NOT SeqMgr!
+
+        var xmlData;
+
+        /*if (window.DOMParser) {
+            parser=new DOMParser();
+            xmlDoc=parser.parseFromString(txt,"text/xml");
+        } else { // Internet Explorer
+            xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async=false;
+            xmlDoc.loadXML(txt); 
+        }*/
 
 
         return result;
     },
 
-    fromFasta: function(fasta) {
-        var result;
+    /**
+     * Converts a FASTA file into a SequenceManager form of the data.
+     * @param {String} pFasta FASTA formated string
+     * @returns {Teselagen.bio.sequence.common.Sequence} sequence A Sequence model of your data
+     */
+    fromFasta: function(pFasta) {
+        var result; // original wants this to be a FeaturedDNASequence NOT SeqMgr!
+
+        var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
+        var seqArr  = [];
+        var name    = "";
+        var sequence = "";
+
+        if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
+            var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
+            if (nameArr !== null && nameArr.length >= 1) {
+                name = nameArr[0].replace(/^>/, "");
+            }
+        }
+
+        console.log(lineArr.length);
+
+        for (var i=0; i < lineArr.length; i++) {
+            console.log(sequence);
+
+            if ( !lineArr[i].match(/^\>/) ) {
+                sequence += Ext.String.trim(lineArr[i]);
+            }
+        }   
+        console.log(sequence);
+        sequence = sequence.replace(/[\d]|[\s]/g, ""); //remove whitespace and digits
+        if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
+            //illegalcharacters
+            return null;
+        }
+        console.log(sequence);
+
+        result = Teselagen.bio.sequence.DNATools.createDNASequence(name, sequence);
+
+        console.log(result.seqString());
+        console.log(Ext.getClassName(result));
+
+
         return result;
     },
     

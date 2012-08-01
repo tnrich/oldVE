@@ -924,7 +924,7 @@ Ext.onReady(function() {
                 expect(gb.getOrigin().getSequence()).toBe("gattaca");
                 expect(gb.getOrigin().getSequence().length).toBe(7);
 
-                console.log(gb.toString());
+                //console.log(gb.toString());
             });
 
             it("toGenbank() ",function(){
@@ -957,7 +957,7 @@ Ext.onReady(function() {
                 expect(gb.findKeyword("ORIGIN").getSequence()).toBe("gattaca");
                 expect(gb.findKeyword("ORIGIN").getSequence().length).toBe(7);
 
-                console.log(gb.toString());
+                //console.log(gb.toString());
             });
 
             it("fromGenbank() ",function(){
@@ -989,12 +989,23 @@ Ext.onReady(function() {
 
             });
 
-            it("fromJbeiSeqXml() ",function(){
-                //expect(true).toBeFalsy();
+            it("fromJbeiSeqXml() THIS STILL NEEDS TO BE WRITTEN",function(){
+                var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
+
+                jbeiSeq = "BLAH";
+
+                newSM.fromJbeiSeqXml(jbeiSeq);
             });
 
             it("fromFasta() ",function(){
-                //expect(true).toBeFalsy();
+
+                var fasta = ">DummyName\n" +
+                            "GATTACA\n";
+
+                var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
+
+                var seq   = newSM.fromFasta(fasta);
+                expect(seq.seqString()).toBe("gattaca");
             });
         });
 
