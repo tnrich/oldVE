@@ -1284,15 +1284,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var isCirc      = !genbank.getLocus().getLinear(); //genbank.getLocus().getCircular();
         var sequence    = Teselagen.bio.sequence.DNATools.createDNA(genbank.getOrigin().getSequence());
         var features    = [];
-        var locations   = [];
-        var notes       = [];
         
         var gbFeats     = genbank.getFeatures().getFeaturesElements();
 
-
         for (var i=0; i < gbFeats.length; i++) {
+            var locations   = [];
+            var notes       = [];
+            //var tmpFeat = null;
 
             for (var j=0; j < gbFeats[i].getFeatureLocation().length; j++) {
+                console.log(i + " : " + j + " : " + gbFeats[i].getFeatureLocation()[j].getStart());
                 var tmpLoc = Ext.create("Teselagen.bio.sequence.common.Location", { 
                     start:  gbFeats[i].getFeatureLocation()[j].getStart(), 
                     end:    gbFeats[i].getFeatureLocation()[j].getEnd() 
@@ -1309,16 +1310,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 notes.push(tmpNote);
             }
 
-            var tmpFeat = Ext.create("Teselagen.bio.sequence.dna.Feature",{
-                name: gbFeats[i].getKeyword(),
-                _type: gbFeats[i].getKeyword(),
+            features[i] = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name:   gbFeats[i].getKeyword(),
+                _type:  gbFeats[i].getKeyword(),
                 strand: gbFeats[i].getStrand(),
-                notes: notes
+                //start:  gbFeats[i].getFeatureLocation()[0].getStart(),
+                //end:    gbFeats[i].getFeatureLocation()[0].getEnd(),
+                notes:  notes
             });
-            tmpFeat.setNotes(notes);
-            tmpFeat.setLocations(locations);
-
-            features.push(tmpFeat);
+            features[i].setNotes(notes);
+            features[i].setLocations(locations);
         }
 
         result = Ext.create("Teselagen.manager.SequenceManager", {
