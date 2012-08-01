@@ -10,7 +10,7 @@
  */
 Ext.define("Teselagen.bio.sequence.common.Annotation", {
 	requires: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.BioException"],
-	
+    circularAdjustment: 0,	
 	/**
 	 * Constructor
 	 * @param start Annotation start
@@ -288,6 +288,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
                 console.log("Setting circularAdjustment to: " + circularAdjustment);
 			}
 
+            this.circularAdjustment = circularAdjustment;
+
 			var newMinimum = 0;
 			var normalizedCutEnd = normalizedCutStart + pCutLength;
             			var tempLocations = getNormalizedLocations(pMaxLength);
@@ -403,7 +405,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			Ext.each(combinedLocations, function(location){
                 console.log("The combined location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
             });
-locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, circularAdjustment);
+locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, this.circularAdjustment);
             Ext.each(locations, function(location){
                 console.log("The combined location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
             });
@@ -476,17 +478,18 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 				location = pTempLocations[i];
 				newStart = location.getStart() + pOffset;
 			    console.log("Location start: " + location.getStart());
-                console.log("Possible new start: " + newStart);
+			    console.log("Offset: " + pOffset);
+                console.log("newStart: " + newStart);
                 console.log("pMaxLength = " + pMaxLength);
                 console.log("pCircularAdjustment = " + pCircularAdjustment);
-	if (pCircular && newStart > pMaxLength) {
-					newStart -= (pMaxLength + pCircularAdjustment);
+	            if (pCircular && newStart > pMaxLength) {
+					newStart = newStart - (pMaxLength + pCircularAdjustment);
 				} else if (pCircular) {
 					newStart -= pCircularAdjustment;
 				}
 				
 				newEnd = location.getEnd() + pOffset;
-               				if (pCircular && newEnd > pMaxLength) {
+                if (pCircular && newEnd > pMaxLength) {
 					newEnd = newEnd - (pMaxLength + pCircularAdjustment);
                     console.log("The newEnd is: " + newEnd);
                     
