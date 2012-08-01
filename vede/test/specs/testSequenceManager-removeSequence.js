@@ -378,6 +378,9 @@ Ext.onReady(function() {
                 expect(features[1].getLocations().length).toBe(1); //2
                 expect(features[1].getLocations()[0].getStart()).toBe(32);
                 expect(features[1].getLocations()[0].getEnd()).toBe(0); //42
+
+                //expect(features[1].getLocations()[1].getStart()).toBe(undefined); //45
+                //expect(features[1].getLocations()[1].getEnd()).toBe(undefined);
             });
 
             it("testRemoveSequenceFcSc3",function(){
@@ -432,7 +435,10 @@ Ext.onReady(function() {
                 expect(features[0].getLocations().length).toBe(1);
                 expect(features[0].getName()).toBe("cds2");
                 expect(features[0].getLocations()[0].getStart()).toBe(0);
-                expect(features[0].getLocations()[0].getEnd()).toBe(10);   
+                expect(features[0].getLocations()[0].getEnd()).toBe(10);
+
+                //expect(features[0].getLocations()[1].getStart()).toBe(undefined); //4
+                //expect(features[0].getLocations()[1].getEnd()).toBe(undefined); //9    
 
                 //expect(features[1].getLocations()[0].getStart()).toBe(40);
                 //expect(features[1].getLocations()[0].getEnd()).toBe(50);
