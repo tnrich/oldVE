@@ -11,7 +11,7 @@ Ext.require("Teselagen.bio.sequence.TranslationUtils");
 
 
 Ext.onReady(function() {
-    xdescribe("Testing SequenceManager Classes pt2", function() {
+    describe("Testing SequenceManager Classes pt2", function() {
 
         // =============================================
         //  SequenceManager.removeSequence Testing Suite
@@ -376,8 +376,8 @@ Ext.onReady(function() {
                 expect(features[1].getLocations().length).toBe(1); //2
                 expect(features[1].getLocations()[0].getStart()).toBe(32);
                 expect(features[1].getLocations()[0].getEnd()).toBe(0); //42
-                expect(features[1].getLocations()[1].getStart()).toBe(55); //45
-                expect(features[1].getLocations()[1].getEnd()).toBe(5);
+                expect(features[1].getLocations()[1].getStart()).toBe(undefined); //45
+                expect(features[1].getLocations()[1].getEnd()).toBe(undefined);
             });
 
             it("testRemoveSequenceFcSc3",function(){
@@ -431,8 +431,8 @@ Ext.onReady(function() {
                 expect(features[0].getName()).toBe("cds2");
                 expect(features[0].getLocations()[0].getStart()).toBe(0);
                 expect(features[0].getLocations()[0].getEnd()).toBe(10);
-                expect(features[0].getLocations()[1].getStart()).toBe(25); //4
-                expect(features[0].getLocations()[1].getEnd()).toBe(30); //9    
+                expect(features[0].getLocations()[1].getStart()).toBe(undefined); //4
+                expect(features[0].getLocations()[1].getEnd()).toBe(undefined); //9    
 
                 //expect(features[1].getLocations()[0].getStart()).toBe(40);
                 //expect(features[1].getLocations()[0].getEnd()).toBe(50);
