@@ -60,27 +60,9 @@ Ext.define("Teselagen.manager.PieManager", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        var radius = Vede.view.pie.Frame.OUTER_RADIUS;
-        var center = Vede.view.pie.Frame.CENTER;
-        var up = {x: center.x, y: center.y - this.self.Y_PAD - radius};
-        var down = {x: center.x, y: center.y + this.self.Y_PAD + radius};
-        var left = {x: center.x - this.self.X_PAD - radius, y: center.y};
-        var right = {x: center.x + this.self.X_PAD + radius, y: center.y};
-
         this.pie = Ext.create("Vede.view.pie.Pie", {
             items: [
-                Ext.create("Vede.view.pie.Frame"),
-                Ext.create("Ext.draw.Sprite", {
-                    type: "path",
-                    path: "M" + center.x + " " + center.y +
-                          "L" + up.x + " " + up.y +
-                          "M" + center.x + " " + center.y +
-                          "L" + down.x + " " + down.y +
-                          "M" + center.x + " " + center.y +
-                          "L" + left.x + " " + left.y +
-                          "M" + center.x + " " + center.y +
-                          "L" + right.x + " " + right.y
-                })
+                Ext.create("Vede.view.pie.Frame")
             ]
         });
 

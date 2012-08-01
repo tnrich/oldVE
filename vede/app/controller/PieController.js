@@ -87,11 +87,6 @@ Ext.define('Vede.controller.PieController', {
         var el = this.pieManager.getPie().surface.el;
         var relEvtX = pEvt.getX()-el.getLeft();
         var relEvtY = pEvt.getY()-el.getTop();
-        var reManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
-            sequenceManager: this.pieManager.sequenceManager,
-            restrictionEnzymeGroup: this.groupMan.groupByName("Fermentas Fast Digest")
-        });
-        reManager.getAllCutSites();
         this.pieManager.render();
     }
 });
