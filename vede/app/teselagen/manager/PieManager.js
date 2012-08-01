@@ -4,6 +4,11 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.manager.PieManager", {
+    statics: {
+        X_PAD: 250,
+        Y_PAD: 260
+    },
+
     config: {
         sequenceManager: null,
         center: {x: 0, y: 0},
@@ -56,10 +61,10 @@ Ext.define("Teselagen.manager.PieManager", {
         this.initConfig(inData);
 
         this.pie = Ext.create("Vede.view.pie.Pie", {
-            items: [Ext.create("Vede.view.pie.Frame")]
+            items: [
+                Ext.create("Vede.view.pie.Frame")
+            ]
         });
-
-        console.log(this.pie.items[0].path);
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,

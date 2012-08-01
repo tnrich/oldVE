@@ -74,14 +74,19 @@ Ext.define("Teselagen.bio.orf.ORF", {
          */
         this.getStrand = function() {
             return strand;
-        }
+        };
         /**
          * Set the strand.
          * @param {Int} strand
          */
         this.setStrand = function(pStrand) {
             strand = pStrand;
-        }
+        };
+
+        this.toString = function() {
+            return "ORF on strand " + strand + " and start codon indices " 
+                + startCodons + " from " + inData.start + " to " + inData.end;
+        };
 
         return this;
     }
