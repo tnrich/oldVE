@@ -123,6 +123,11 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
             }
 
             return clonedFeature;
+        };
+
+        this.toString = function() {
+            return "Feature " + name + " of type " + type + " from " + 
+                inData.start + " to " + inData.end;
         }
 
 

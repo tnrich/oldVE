@@ -57,16 +57,9 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                       "L" + lineEnd.x + " " + lineEnd.y,
                 stroke: this.self.FRAME_COLOR,
                 "stroke-width": this.self.CUTSITE_LINE_WIDTH,
-                tooltip: this.getToolTip(site),
-                listeners: {
-                    render: function(me) {
-                        Ext.tip.QuickTipManager.register({
-                            target: me.el,
-                            text: me.tooltip
-                        });
-                    }
-                }
             });
+
+            this.addToolTip(siteSprite, this.getToolTip(site));
 
             sprites.push(siteSprite);
         }, this);
