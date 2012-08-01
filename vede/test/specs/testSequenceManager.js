@@ -969,18 +969,23 @@ Ext.onReady(function() {
                 expect(newSM.getCircular()).toBeTruthy();
                 expect(newSM.getSequence().seqString()).toBe("gattaca");
                 expect(newSM.getFeatures().length).toBe(2);
+
                 expect(newSM.getFeatures()[0].getName()).toBe("feat1");
+                expect(newSM.getFeatures()[1].getLocations().length).toBe(2);
                 expect(newSM.getFeatures()[0].getStart()).toBe(1);
                 expect(newSM.getFeatures()[0].getEnd()).toBe(3); //5
                 expect(newSM.getFeatures()[0].getLocations()[0].getStart()).toBe(1);
                 expect(newSM.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
+                expect(newSM.getFeatures()[0].getNotes()[0].getValue()).toBe("note1value");
 
-                /*expect(newSM.getFeatures()[1].getName()).toBe("feat3");
+                expect(newSM.getFeatures()[1].getName()).toBe("feat3");
+                expect(newSM.getFeatures()[1].getLocations().length).toBe(2);
                 expect(newSM.getFeatures()[1].getLocations()[0].getStart()).toBe(2); // 1
                 expect(newSM.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
                 expect(newSM.getFeatures()[1].getLocations()[1].getStart()).toBe(0); // 1
                 expect(newSM.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
-                */
+                expect(newSM.getFeatures()[1].getNotes().length).toBe(0);
+                
 
             });
 
