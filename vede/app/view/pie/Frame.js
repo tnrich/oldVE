@@ -37,8 +37,7 @@ Ext.define('Vede.view.pie.Frame', {
                   "L" + outerStartPoint.x + " " + outerStartPoint.y + 
                   "M" + innerStartPoint.x + " " + innerStartPoint.y +
                   "A" + innerRadius + " " + innerRadius + " 0 1 0 " +
-                  innerStartPoint.x + " " + (innerStartPoint.y - 0.0001) +
-                  "L" + innerStartPoint.x + " " + innerStartPoint.y,
+                  innerStartPoint.x + " " + (innerStartPoint.y - 0.0001),
             stroke: this.self.OUTLINE_COLOR,
             "stroke-width": this.self.OUTLINE_WIDTH,
             fill: this.self.RING_COLOR,

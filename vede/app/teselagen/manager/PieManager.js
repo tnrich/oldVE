@@ -5,8 +5,7 @@
  */
 Ext.define("Teselagen.manager.PieManager", {
     statics: {
-        X_PAD: 250,
-        Y_PAD: 260
+        PAD: 50
     },
 
     config: {
@@ -62,7 +61,13 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie = Ext.create("Vede.view.pie.Pie", {
             items: [
-                Ext.create("Vede.view.pie.Frame")
+                Ext.create("Vede.view.pie.Frame"),
+                Ext.create("Ext.draw.Sprite", {
+                    type: "circle",
+                    radius: this.railRadius + this.self.PAD,
+                    x: this.center.x,
+                    y: this.center.y
+                })
             ]
         });
 
