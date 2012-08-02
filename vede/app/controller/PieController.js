@@ -48,6 +48,7 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager.setSequenceManager(pSeqMan);
         this.pieManager.setOrfs(orfManager.getOrfs());
         this.pieManager.setCutSites(enzymeManager.getCutSites());
+        this.pieManager.setFeatures(pSeqMan.getFeatures());
 
         this.pieManager.render();
     },

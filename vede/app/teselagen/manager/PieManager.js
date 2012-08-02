@@ -6,8 +6,8 @@
 Ext.define("Teselagen.manager.PieManager", {
     statics: {
         PAD: 50,
-        LABEL_DISTANCE_FROM_RAIL: 5,
-        LABEL_HEIGHT: 5,
+        LABEL_DISTANCE_FROM_RAIL: 35,
+        LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#e2e2e2"
     },
@@ -407,7 +407,7 @@ Ext.define("Teselagen.manager.PieManager", {
             labels.push(Ext.create("Ext.draw.Sprite", {
                 type: "path",
                 path: "M" + labelX + " " + 
-                      (labelY + this.self.LABEL_HEIGHT / 2) +
+                      labelY + //(labelY + this.self.LABEL_HEIGHT / 2) +
                       "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + 
                       " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y,
                 stroke: "black",
