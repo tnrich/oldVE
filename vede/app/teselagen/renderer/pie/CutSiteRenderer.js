@@ -42,15 +42,13 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                                             this.railRadius + 10));
 
             var lineStart = Ext.create("Teselagen.bio.util.Point",
-                Math.floor(this.center.x + this.railRadius * Math.sin(angle)),
-                Math.floor(this.center.y - this.railRadius * Math.cos(angle))
+                this.center.x + this.railRadius * Math.sin(angle),
+                this.center.y - this.railRadius * Math.cos(angle)
             );
 
             var lineEnd = Ext.create("Teselagen.bio.util.Point", 
-                Math.floor(this.center.x + (this.railRadius + 10) * 
-                           Math.sin(angle)),
-                Math.floor(this.center.y - (this.railRadius + 10) * 
-                           Math.cos(angle))
+                this.center.x + (this.railRadius + 10) * Math.sin(angle),
+                this.center.y - (this.railRadius + 10) * Math.cos(angle)
             );
 
             var siteSprite = Ext.create("Ext.draw.Sprite", {

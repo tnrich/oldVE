@@ -7,7 +7,9 @@ Ext.define("Teselagen.manager.PieManager", {
     statics: {
         PAD: 50,
         LABEL_DISTANCE_FROM_RAIL: 5,
-        LABEL_HEIGHT: 5
+        LABEL_HEIGHT: 5,
+        LABEL_CONNECTION_WIDTH: 0.5,
+        LABEL_CONNECTION_COLOR: "#e2e2e2"
     },
 
     config: {
@@ -397,8 +399,8 @@ Ext.define("Teselagen.manager.PieManager", {
                       (labelY + this.self.LABEL_HEIGHT / 2) +
                       "L" + this.featureRenderer.middlePoints.get(label.annotation).x + 
                       " " + this.featureRenderer.middlePoints.get(label.annotation).y,
-                stroke: "black",
-                "stroke-width": 0.3,
+                stroke: this.self.LABEL_CONNECTION_COLOR,
+                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
                 "text-anchor": align 
             }));
         } else {
