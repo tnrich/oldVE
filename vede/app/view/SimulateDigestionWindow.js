@@ -42,6 +42,7 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
       {name: 'name', type: 'string'}
    ],
     data: [],
+            autoLoad: true,
     sorters: [{property: "name", direction: "ASC"}]
 });
 

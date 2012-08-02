@@ -10,7 +10,7 @@
  */
 Ext.define("Teselagen.bio.sequence.common.Annotation", {
 	requires: ["Teselagen.bio.sequence.common.Location", "Teselagen.bio.BioException"],
-	
+    circularAdjustment: 0,	
 	/**
 	 * Constructor
 	 * @param start Annotation start
@@ -272,14 +272,27 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			var normalizedCutStart = pCutStart - offset;
 			var circularAdjustment = 0;
 
-			if (end < start && pCutStart >= 0  && pCutStart < end) {
+            var hasCircularLocation = [];  
+            hasCircularLocation = Ext.Array.filter(locations, function(location){
+                console.log("The location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
+                    return location.getStart() > location.getEnd();
+            });
+
+            console.log("pCircular is: " + pCircular);
+            console.log(hasCircularLocation);
+            console.log(pCutStart);
+
+			if (pCircular && pCutStart >= 0 && hasCircularLocation && hasCircularLocation.length > 0 && pCutStart < hasCircularLocation[0].getEnd()) {
 				normalizedCutStart += pMaxLength;
 				circularAdjustment = pCutLength;
+                console.log("Setting circularAdjustment to: " + circularAdjustment);
 			}
+
+            this.circularAdjustment = circularAdjustment;
 
 			var newMinimum = 0;
 			var normalizedCutEnd = normalizedCutStart + pCutLength;
-			var tempLocations = getNormalizedLocations(pMaxLength);
+            			var tempLocations = getNormalizedLocations(pMaxLength);
             console.log("normalized cut end: " + normalizedCutEnd);
 
 			var normalizedStart = tempLocations[0].getStart();
@@ -305,7 +318,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				newMinimum = tempLocations[0].getStart();
 			}
 
-
+            console.log("Normalized cut end " + normalizedCutEnd + " and location start" + tempLocations[0].getStart());
 			// if deletion happened before feature, shift only, no delete
 			if (normalizedCutEnd <= tempLocations[0].getStart()) {
 				for (var j = 0; j < tempLocations.length; j++) {
@@ -389,7 +402,13 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				combinedLocations[combinedLocations.length - 1].setEnd( newMinimum + expectedNewLength );
 			}
 			var changedLength = pMaxLength - pCutLength;
-			locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, circularAdjustment);
+			Ext.each(combinedLocations, function(location){
+                console.log("The combined location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
+            });
+locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, this.circularAdjustment);
+            Ext.each(locations, function(location){
+                console.log("The combined location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
+            });
 
 		}
 
@@ -458,21 +477,28 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			for (var i = 0; i < pTempLocations.length; i++) {
 				location = pTempLocations[i];
 				newStart = location.getStart() + pOffset;
-				if (pCircular && newStart > pMaxLength) {
-					newStart -= (pMaxLength + pCircularAdjustment);
+			    console.log("Location start: " + location.getStart());
+			    console.log("Offset: " + pOffset);
+                console.log("newStart: " + newStart);
+                console.log("pMaxLength = " + pMaxLength);
+                console.log("pCircularAdjustment = " + pCircularAdjustment);
+	            if (pCircular && newStart > pMaxLength) {
+					newStart = newStart - (pMaxLength + pCircularAdjustment);
 				} else if (pCircular) {
 					newStart -= pCircularAdjustment;
 				}
 				
 				newEnd = location.getEnd() + pOffset;
-				if (pCircular && newEnd > pMaxLength) {
-					newEnd -= pMaxLength + pCircularAdjustment;
+                if (pCircular && newEnd > pMaxLength) {
+					newEnd = newEnd - (pMaxLength + pCircularAdjustment);
+                    console.log("The newEnd is: " + newEnd);
+                    
 				} else if (pCircular) {
 					newEnd -= pCircularAdjustment;
 				}
 				
 				// On rare occasions, the calculated value is two circular distances away. Handle this case.
-				if ( ( pCircular && location.getStart() + pOffset == pMaxLength ) && ( location.getEnd() + pOffset == pMaxLength + pMaxLength ) ) {
+				if ( ( pCircular && (location.getStart() + pOffset == pMaxLength ) )&& ( (location.getEnd() + pOffset) == (pMaxLength + pMaxLength )  ) ) {
 					newStart = 0;
 					newEnd = pMaxLength;
 				}

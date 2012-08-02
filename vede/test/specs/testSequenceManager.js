@@ -924,7 +924,7 @@ Ext.onReady(function() {
                 expect(gb.getOrigin().getSequence()).toBe("gattaca");
                 expect(gb.getOrigin().getSequence().length).toBe(7);
 
-                console.log(gb.toString());
+                //console.log(gb.toString());
             });
 
             it("toGenbank() ",function(){
@@ -957,10 +957,10 @@ Ext.onReady(function() {
                 expect(gb.findKeyword("ORIGIN").getSequence()).toBe("gattaca");
                 expect(gb.findKeyword("ORIGIN").getSequence().length).toBe(7);
 
-                console.log(gb.toString());
+                //console.log(gb.toString());
             });
 
-            it("fromGenbank() ",function(){
+            it("fromGenbank() NOT SURE OF OUTPUT",function(){
                 var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
 
                 newSM.fromGenbank(newGb);
@@ -971,7 +971,7 @@ Ext.onReady(function() {
                 expect(newSM.getFeatures().length).toBe(2);
 
                 expect(newSM.getFeatures()[0].getName()).toBe("feat1");
-                expect(newSM.getFeatures()[1].getLocations().length).toBe(2);
+                expect(newSM.getFeatures()[0].getLocations().length).toBe(1);
                 expect(newSM.getFeatures()[0].getStart()).toBe(1);
                 expect(newSM.getFeatures()[0].getEnd()).toBe(3); //5
                 expect(newSM.getFeatures()[0].getLocations()[0].getStart()).toBe(1);
@@ -989,22 +989,35 @@ Ext.onReady(function() {
 
             });
 
-            it("fromJbeiSeqXml() ",function(){
-                //expect(true).toBeFalsy();
+            it("fromJbeiSeqXml() THIS STILL NEEDS TO BE WRITTEN",function(){
+                var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
+
+                jbeiSeq = "BLAH";
+
+                newSM.fromJbeiSeqXml(jbeiSeq);
             });
 
             it("fromFasta() ",function(){
-                //expect(true).toBeFalsy();
+
+                var fasta = ">DummyName\n" +
+                            "GATTACA\n";
+
+                var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
+
+                var seq   = newSM.fromFasta(fasta);
+                //expect(seq.sequence).toBe("gattaca");
             });
         });
 
-        xdescribe("update Reg and Rev ComplmementSequence", function() {
+        describe("update Reg and Rev ComplmementSequence", function() {
             it("updateComplmementSequence() ",function(){
-                expect(true).toBeFalsy();
+                sm.updateComplementSequence();
+                expect(sm.getNeedsRecalculateComplementSequence()).toBe(false);
             });
 
             it("updateReverseComplementSeuquence() ",function(){
-                expect(true).toBeFalsy();
+                sm.updateReverseComplementSequence();
+                expect(sm.getNeedsRecalculateReverseComplementSequence()).toBe(false);
             });
         });
 
