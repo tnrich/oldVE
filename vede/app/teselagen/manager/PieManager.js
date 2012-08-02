@@ -9,7 +9,7 @@ Ext.define("Teselagen.manager.PieManager", {
         LABEL_DISTANCE_FROM_RAIL: 35,
         LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
-        LABEL_CONNECTION_COLOR: "#e2e2e2"
+        LABEL_CONNECTION_COLOR: "#d2d2d2"
     },
 
     config: {
@@ -175,6 +175,10 @@ Ext.define("Teselagen.manager.PieManager", {
         this.showSprites(this.orfSprites);
     },
 
+    /**
+     * Helper function which renders the sprites in a CompositeSprite.
+     * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
+     */
     showSprites: function(collection) {
         collection.each(function(sprite) {
             this.pie.surface.add(sprite);
@@ -182,6 +186,10 @@ Ext.define("Teselagen.manager.PieManager", {
         }, this);
     },
 
+    /**
+     * @private
+     * Renders the labels in this.labels.
+     */
     renderLabels: function() {
         var labels = [];
         var center;
@@ -222,6 +230,10 @@ Ext.define("Teselagen.manager.PieManager", {
         this.adjustLabelPositions(labels);
     },
 
+    /**
+     * @private
+     * Corrects label positions so they don't overlap.
+     */
     adjustLabelPositions: function(labels) {
         // Sort labels into four quadrants of the screen.
         var totalNumberOfLabels = labels.length;
@@ -283,7 +295,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            this.drawConnection(label, labels, xPosition, yPosition, "right");
+            labels.push(this.drawConnection(label, xPosition, yPosition, "start"));
         }
 
         // Scale Right Bottom Labels
@@ -314,7 +326,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            this.drawConnection(label, labels, xPosition, yPosition, "right");
+            labels.push(this.drawConnection(label, xPosition, yPosition, "start"));
         }
         
         // Scale Left Top Labels
@@ -345,7 +357,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            this.drawConnection(label, labels, xPosition, yPosition, "left");
+            labels.push(this.drawConnection(label, xPosition, yPosition, "end"));
         }
         
         // Scale Left Bottom Labels
@@ -376,7 +388,7 @@ Ext.define("Teselagen.manager.PieManager", {
               
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            this.drawConnection(label, labels, xPosition, yPosition, "left");
+            labels.push(this.drawConnection(label, xPosition, yPosition, "end"));
         }
 
         if(this.labelSprites) {
@@ -391,32 +403,44 @@ Ext.define("Teselagen.manager.PieManager", {
         this.showSprites(this.labelSprites);
     },
 
-    drawConnection: function(label, labels, labelX, labelY, align) {
+    /**
+     * @private
+     * Generates a path sprite as the connection between a label and its 
+     * annotation, and adds the sprite to labels.
+     * @param {Teselagen.renderer.common.Label} label The label to draw a
+     * connection from.
+     * @param {Int} labelX The label's x position.
+     * @param {Int} labelY The label's y position.
+     * @param {String} align The argument for the text-anchor property.
+     */
+    drawConnection: function(label, labelX, labelY, align) {
         if(label.annotation instanceof Teselagen.bio.sequence.dna.Feature) {
-            labels.push(Ext.create("Ext.draw.Sprite", {
+            return Ext.create("Ext.draw.Sprite", {
                 type: "path",
-                path: "M" + labelX + " " + 
-                      (labelY + this.self.LABEL_HEIGHT / 2) +
+                path: "M" + labelX + " " + labelY +
                       "L" + this.featureRenderer.middlePoints.get(label.annotation).x + 
                       " " + this.featureRenderer.middlePoints.get(label.annotation).y,
                 stroke: this.self.LABEL_CONNECTION_COLOR,
                 "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
                 "text-anchor": align 
-            }));
+            });
         } else {
-            labels.push(Ext.create("Ext.draw.Sprite", {
+            return Ext.create("Ext.draw.Sprite", {
                 type: "path",
-                path: "M" + labelX + " " + 
-                      labelY + //(labelY + this.self.LABEL_HEIGHT / 2) +
+                path: "M" + labelX + " " + labelY +
                       "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + 
                       " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y,
-                stroke: "black",
-                "stroke-width": 0.5,
+                stroke: this.self.LABEL_CONNECTION_COLOR,
+                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
                 "text-anchor": align
-            }));
+            });
         }
     },
 
+    /**
+     * @private
+     * Function for sorting labels based on their centers.
+     */
     labelSort: function(label1, label2) {
         var labelCenter1 = label1.center;
         var labelCenter2 = label2.center;
@@ -430,6 +454,12 @@ Ext.define("Teselagen.manager.PieManager", {
         }
     },
 
+    /**
+     * @private
+     * Calculates the center of an annotation.
+     * @param {Teselagen.bio.sequence.common.Annotation} annotation The annotation
+     * to determine the center of.
+     */
     annotationCenter: function(annotation) {
         var result;
 

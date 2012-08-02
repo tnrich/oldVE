@@ -634,7 +634,7 @@ Ext.onReady(function() {
             });
 
             it("can create sprite without dying", function() {
-                expect(label.getSprite()).toBeDefined();
+                expect(label.getAnnotation()).toBeDefined();
             });
         });
 
@@ -650,7 +650,6 @@ Ext.onReady(function() {
 
                 it("can generate labels and tooltips", function() {
                     console.log(csLabel.labelText());
-                    console.log(csLabel.tipText());
                 });
             });
 
@@ -665,7 +664,6 @@ Ext.onReady(function() {
 
                 it("can generate labels and tooltips", function() {
                     console.log(fLabel.labelText());
-                    console.log(fLabel.tipText());
                 });
             });
         });
@@ -686,14 +684,15 @@ Ext.onReady(function() {
                 expect(sg.length).toBeGreaterThan(0);
 
                 Ext.each(sg, function(group) {
-                    expect(group.getEnzymes()[0] instanceof Teselagen.bio.enzymes.RestrictionEnzyme);
+                    expect(group.getEnzymes()[0] instanceof 
+                           Teselagen.bio.enzymes.RestrictionEnzyme);
                 });
 
                 var ug = rem.getUserGroups();
                 expect(ug.length).toBe(0);
 
                 var ag = rem.getActiveGroup();
-                expect(ag).toEqual(sg[0].getEnzymes());
+                expect(ag).toEqual(sg[0]);
             });
 
             var user;
