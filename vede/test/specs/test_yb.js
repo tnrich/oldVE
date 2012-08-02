@@ -1,8 +1,10 @@
-Ext.onReady(function() {
+//Ext.onReady(function() {
+	var Point = "Teselagen.bio.util.Point";
+	var Caret = "Teselagen.view.pie.Caret";
     describe("Point", function() {
         var p, p2;
         it("Create", function() {
-            p = Ext.create("Teselagen.bio.util.Point", 1, 2);
+            p = Ext.create(Point, 1, 2);
             expect(p).toBeDefined();
         });
         it("Check values", function() {
@@ -19,4 +21,18 @@ Ext.onReady(function() {
             expect(p.equals(p2)).toBe(true);
         });
     });
-});
+    describe("pie.Caret", function() {
+    	var c;
+    	var centerPt = Ext.create(Point, 1, 2);
+    	c = Ext.create("Teselagen.view.pie.Caret", {
+    		angle = 50,
+    		center = centerPt,
+    		radius = 10,
+    	});
+    	it("Construct", function() {
+    		expect(c.angle).toBe(50);
+    		expect(c.center).toBe(centerPt);
+    		expect(c.radius).toBe(10);
+    	});
+    })
+//});
