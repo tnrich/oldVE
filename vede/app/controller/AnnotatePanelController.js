@@ -4,19 +4,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent"],
 
-    /*init: {
-        updateSequenceChanged: Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGED,
-        updateSequenceChanging:     Teselagen.manager.SequenceManagerEvent.SEQUENCE_CHANGING
-        //updateKindFeatureAdd:       Teselagen.manager.SequenceManagerEvent.KIND_FEATURE_ADD,
-        //updateKindFeatureRemove:    Teselagen.manager.SequenceManagerEvent.KIND_FEATURE_REMOVE,
-        //updateKindFeaturesAdd:      Teselagen.manager.SequenceManagerEvent.KIND_FEATURES_ADD,
-        //updateKindFeaturesRemove:   Teselagen.manager.SequenceManagerEvent.KIND_FEATURES_REMOVE,
-        //updateKindSequenceInsert:   Teselagen.manager.SequenceManagerEvent.KIND_SEQUENCE_INSERT,
-        //updateKindSequenceRemove:   Teselagen.manager.SequenceManagerEvent.KIND_SEQUENCE_REMOVE,
-        //updateKindKManualUpdate:    Teselagen.manager.SequenceManagerEvent.KIND_MANUAL_UPDATE,
-        //updateKindSetMeento:        Teselagen.manager.SequenceManagerEvent.KIND_SET_MEMENTO,
-        //updateKindInitialized:      Teselagen.manager.SequenceManagerEvent.KIND_INITIALIZED,
-    },*/
 
     AAManager: null,
     ORFManager: null,
@@ -76,6 +63,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
                                 this.onSequenceChanged, this);
 
+        this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
+                                this.onSequenceChanging, this);
+
         this.AAManager.on(Teselagen.event.MapperEvent.AA_MAPPER_UPDATED,
                           this.onAAManagerUpdated, this);
 
@@ -93,6 +83,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         Ext.each(this.Managers, function(manager) {
             manager.sequenceChanged();
         });
+    },
+
+    onSequenceChanging: function() {
     },
 
     onAAManagerUpdated: function() {
