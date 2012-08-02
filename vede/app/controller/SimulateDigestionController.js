@@ -11,6 +11,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
     GroupManager: null,
     DigestionCalculator: null,
     DNATools: null,
+    digestManager: null,
 
     managerWindow: null,
     digestPanel: null,
@@ -45,14 +46,19 @@ Ext.define('Vede.controller.SimulateDigestionController', {
         });
 
         this.application.on({
-            SequenceManagerChanged: this.onSequenceManagerChanged,
+            SequenceManagerChanged: this.getSequenceManagerData,
             SimulateDigestionWindowOpened: this.onSimulateDigestionOpened, 
             scope: this
         });
     },
 
-    onSequenceManagerChanged: function(pSequenceManager){
-        this.dnaSequence = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
+    getSequenceManagerData: function(pSequenceManager){
+        if (pSequenceManager.getSequence().seqString()){
+            this.dnaSequence = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
+        } else {
+           this.dnaSequence = ""; 
+        };
+        
         console.log("able to deal with completeSequence");
     },
 
@@ -102,9 +108,12 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
+        var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
+        this.enzymeListSelector.store.loadData(enzymeArray, false);
+        this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
 
-        this.enzymeListSelector.fromField.store.loadData(enzymeArray, false);
-        this.enzymeListSelector.fromField.bindStore(this.enzymeListSelector.fromField.store);
+        this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
+        this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
     },
 
     
@@ -141,6 +150,26 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
             x: 0,
             y: 0
         });
+/*
+       this.digestManager = Ext.create("Teselagen.manager.SimulateDigestManager", {
+            digestPanel: this.digestPanel,
+            background: Ext.create('Ext.draw.Sprite', {
+                type: 'rect',
+                height: 400,
+                width: 445,
+                fill: '#000',
+                x: 0,
+                y: 0
+            }),
+
+            sampleLane: Ext.create("Teselagen.models.digest.SampleLane", {
+                ladder: "1kb",
+            }),
+
+            ladderLane: Ext.create("Teselagen.models.digest.LadderLane", {
+                ladder: "1kb",
+            }),
+       });*/
         this.digestSpriteGroup.add(digestBG);
         this.showSprites(this.digestSpriteGroup);
        
