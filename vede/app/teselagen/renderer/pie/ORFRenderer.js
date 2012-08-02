@@ -8,14 +8,16 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
     extend: "Teselagen.renderer.pie.PieRenderer",
 
     statics: {
-        DISTANCE_FROM_RAIL: -15,
-        DISTANCE_BETWEEN_ORFS: -5,
+        DISTANCE_FROM_RAIL: 15,
+        DISTANCE_BETWEEN_ORFS: 5,
         ORF_FRAME_COLOR: ["#FF0000", "#31B440", "#3366CC"]
     },
 
     config: {
         orfs: null
     },
+
+    maxAlignmentRow: 0,
 
     /**
      * @param {Array<Teselagen.bio.orf.ORF>} The orfs to calculate sprites for.
@@ -32,10 +34,16 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
      */
     render: function() {
         var sprites = [];
+        var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, 
+                                                         this.sequenceManager);
+        this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
+
         var seqLen = this.sequenceManager.getSequence().seqString().length;
 
-        Ext.each(this.orfs, function(orf, index) {
+        Ext.each(this.orfs, function(orf) {
             var color = this.self.ORF_FRAME_COLOR[orf.getFrame()];
+            var tooltip = this.getToolTip(orf);
+            var index = orfAlignment.get(orf);
 
             var orfRadius = this.railRadius + this.self.DISTANCE_FROM_RAIL;
             if(index > 0) {
@@ -67,15 +75,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
 
             sprites.push(arcSprite);
 
-            // Attach a tooltip to the arc.
-            var tooltip = this.getToolTip(orf);
-            arcSprite.tooltip = tooltip;
-            arcSprite.on("render", function(me) {
-                Ext.tip.QuickTipManager.register({
-                    target: me.el,
-                    text: me.tooltip
-                });
-            });
+            this.addToolTip(arcSprite, tooltip);
 
             // Render start codons as bold dots.
             Ext.each(orf.getStartCodons(), function(codonIndex) {
@@ -91,13 +91,8 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                     y: codonY,
                     fill: color
                 });
-                codonSprite.tooltip = tooltip;
-                codonSprite.on("render", function(me) {
-                    Ext.tip.QuickTipManager.register({
-                        target: me.el,
-                        text: me.tooltip
-                    });
-                });
+
+                this.addToolTip(codonSprite, tooltip);
 
                 sprites.push(codonSprite);
             }, this);
@@ -117,23 +112,20 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 type: "path",
                 path: "M" + (this.center.x + (orfRadius + 2) * 
                       Math.sin(arrowShiftAngle)) + " " +
-                      (this.center.y - (orfRadius + 2) * Math.cos(arrowShiftAngle)) + 
-                      "L" + (this.center.x + orfRadius * Math.sin(lastAngle)) + 
+                      (this.center.y - (orfRadius + 2) * 
+                      Math.cos(arrowShiftAngle)) + "L" + 
+                      (this.center.x + orfRadius * Math.sin(lastAngle)) + 
                       " " + (this.center.y - orfRadius * Math.cos(lastAngle)) + 
-                      "L" + (this.center.x + (orfRadius - 2) * Math.sin(arrowShiftAngle)) +
-                      " " + (this.center.y - (orfRadius - 2) * Math.cos(arrowShiftAngle)) + 
+                      "L" + (this.center.x + (orfRadius - 2) * 
+                      Math.sin(arrowShiftAngle)) + " " + 
+                      (this.center.y - (orfRadius - 2) * 
+                      Math.cos(arrowShiftAngle)) + 
                       "z",
                 stroke: color,
                 fill: color
             });
 
-            stopSprite.tooltip = tooltip;
-            stopSprite.on("render", function(me) {
-                Ext.tip.QuickTipManager.register({
-                    target: me.el,
-                    text: me.tooltip
-                });
-            });
+            this.addToolTip(stopSprite, tooltip);
 
             sprites.push(stopSprite);
         }, this);
@@ -144,7 +136,6 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
     /**
      * @private
      * Creates a tooltip for a given orf.
-     * TODO: figure out what to do with the tooltip.
      * @param {Teselagen.bio.orf.ORF} orf The orf to calculate a tooltip for.
      * @return {String} The calculated tooltip.
      */
@@ -163,7 +154,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             ", " + aa + " AA" + complimentary;
 
         if(orf.getStartCodons().length > 1) {
-            tooltipLabel += "\n";
+            tooltipLabel += "\nStart Codons: ";
             
             var codonsArray = [];
             var codonString;

@@ -24,6 +24,10 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         KB_LADDER_BANDS: ['3000', '2000', '1500', '1200', '1000', '900', '800', '700', '600', '500', '400', '300', '200', '100'],
     },
 
+    /**
+     * Constructor
+     * @param  {String} ladder name of the ladder
+     */
     constructor: function(inData){
         this.initConfig(inData);
         this.statics();
@@ -35,6 +39,10 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         return this;
     },
     
+    /**
+     * Updates the ladder being used to calculate band placement
+     * @param  {String} pLadder new ladder
+     */
     updateLadderLane: function(pLadder){
         if (pLadder.indexOf('1kb') > -1 ){
             this.ladder = this.self.BP_LADDER_BANDS; 
@@ -46,6 +54,10 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         //redrawConnectors();*/
     },
 
+    /**
+     * Recalculates Band Y positions
+     * @return {[type]} [description]
+     */
     redrawBands: function(){
         var ladderHeight = this.actualHeight * 0.8;
         var ladderMin = this.ladder[this.ladder.length - 1]; 
@@ -62,6 +74,10 @@ Ext.define("Teselagen.models.digest.LadderLane", {
             this.bandYPositions.push(0.9 * this.actualHeight - (scalingFactor + normalizedLogDifference) * ladderHeight);
         }
     },
+
+    /**
+     *  Recalculates Band Size labels (deprecated)
+     */
     redrawBandSizeLabels: function(){
         this.bandSizeLabelYPositions = [];
         console.log("about to redraw bands");
@@ -79,10 +95,6 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         }
         console.log("redrew bands");
     },
-    /*
-    removeBandSizeLabels: function(){},
-    createBandSizeLabels: function(){},
-    redrawConnectors: function(){},*/
     
 
     

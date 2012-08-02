@@ -22,13 +22,17 @@ Ext.define('Vede.controller.MainMenuController', {
         }
         button.up('window').close();
 
+        var seqMgr;
+        var that = this;
+
         function processText() {
             var result  = fr.result;
             //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
             //var gb      = gbm.parseGenbankFile(result);
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
-            var seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
+            seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
             seqMgr.fromGenbank(gb);
+            that.application.fireEvent("SequenceManagerChanged", seqMgr);
             console.log(gb.toString());
             console.log(seqMgr.getName());
         }
@@ -89,9 +93,14 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
-            }
+            },
         });
 
+        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged); 
+    },
+
+    onSequenceManagerChanged: function(seqMgr) {
+        //alert("sequence manager created yay");
     }
 
 });

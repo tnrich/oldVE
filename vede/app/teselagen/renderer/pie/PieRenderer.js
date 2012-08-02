@@ -1,40 +1,31 @@
+/**
+ * @class Teselagen.renderer.pie.PieRenderer
+ * Parent class of all pie renderers. Stores the center and rail radius of the 
+ * pie.
+ * @author Nick Elsbree
+ */
 Ext.define("Teselagen.renderer.pie.PieRenderer", {
     extend: "Teselagen.renderer.common.AnnotationRenderer",
 
     requires: "Teselagen.utils.GraphicUtils",
 
-    inheritableStatics: {
-        FRAME_COLOR: "#606060"
-    },
-
     config: {
-        sequenceManager: null,
-        center: 0,
+        center: null,
         railRadius: 0,
-        needsMeasurement: true
     },
 
     GraphicUtils: null,
     StrandType: null,
 
+    /**
+     * @param {Teselagen.bio.util.Point} center The center point of the pie.
+     * @param {Int} railRadius The radius of the pie.
+     */
     constructor: function(inData) {
         this.callParent(arguments);
         this.initConfig(inData);
 
         this.GraphicUtils = Teselagen.utils.GraphicUtils;
-        this.StrandType = Teselagen.bio.sequence.common.StrandType;
-    },
-
-    applySequenceManager: function(pSeqMan) {
-        this.setNeedsMeasurement(true);
-
-        return pSeqMan;
-    },
-
-    applyCenter: function(pCenter) {
-        this.setNeedsMeasurement(true);
-
-        return pCenter;
     },
 
     applyRailRadius: function(pRailRadius) {

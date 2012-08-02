@@ -8,8 +8,8 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
     requires: ["Teselagen.bio.sequence.common.StrandType"],
 
     statics: {
-        DEFAULT_FEATURE_HEIGHT: 10,
-        DEFAULT_FEATURES_GAP: 5
+        DEFAULT_FEATURE_HEIGHT: 7,
+        DEFAULT_FEATURES_GAP: 3
     },
 
     config: {
@@ -37,10 +37,14 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      */
     render: function() {
         var sprites = [];
+        var featureAlignment = this.Alignment.buildAlignmentMap(this.features, 
+                                                         this.sequenceManager);
 
-        Ext.each(this.features, function(feature, index) {
+
+        Ext.each(this.features, function(feature) {
             var featureRadius = this.railRadius - this.self.DEFAULT_FEATURES_GAP - 
                                 2 * this.self.DEFAULT_FEATURES_GAP;
+            var index = featureAlignment.get(feature);
 
             if(index > 0) {
                 featureRadius -= index * (this.self.DEFAULT_FEATURE_HEIGHT + 
@@ -89,15 +93,9 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                                  startAngle, endAngle, direction, color);
                 }
 
-                arcSprite.tooltip = this.getToolTip(feature);
-                arcSprite.on("render", function(me) {
-                    Ext.tip.QuickTipManager.register({
-                        target: me.el,
-                        text: me.tooltip
-                    });
-                });
+                this.addToolTip(arcSprite, this.getToolTip(feature));
+
                 sprites.push(arcSprite);
-                console.log(arcSprite.path);
             }, this);
         }, this);
 
@@ -146,7 +144,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      */
     getToolTip: function(feature) {
         var nameString = "";
-        if(feature.getName() == "") {
+        if(feature.getName()) {
             nameString = " - " + feature.getName();
         }
 

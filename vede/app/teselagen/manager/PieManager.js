@@ -4,9 +4,17 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.manager.PieManager", {
+    statics: {
+        PAD: 50,
+        LABEL_DISTANCE_FROM_RAIL: 35,
+        LABEL_HEIGHT: 10,
+        LABEL_CONNECTION_WIDTH: 0.5,
+        LABEL_CONNECTION_COLOR: "#d2d2d2"
+    },
+
     config: {
         sequenceManager: null,
-        center: {x: 0, y: 0},
+        center: null,
         pie: null,
         railRadius: 0,
         cutSites: [],
@@ -32,6 +40,7 @@ Ext.define("Teselagen.manager.PieManager", {
     orfSprites: null,
     featureSprites: null,
     cutSiteSprites: null,
+    labelSprites: null,
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
@@ -56,10 +65,16 @@ Ext.define("Teselagen.manager.PieManager", {
         this.initConfig(inData);
 
         this.pie = Ext.create("Vede.view.pie.Pie", {
-            items: [Ext.create("Vede.view.pie.Frame")]
+            items: [
+                Ext.create("Vede.view.pie.Frame"),
+                Ext.create("Ext.draw.Sprite", {
+                    type: "circle",
+                    radius: this.railRadius + this.self.PAD,
+                    x: this.center.x,
+                    y: this.center.y
+                })
+            ]
         });
-
-        console.log(this.pie.items[0].path);
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,
@@ -109,7 +124,7 @@ Ext.define("Teselagen.manager.PieManager", {
         this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.pie.surface
         });
- 
+
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
                 if(this.sequenceManagerChanged) {
@@ -141,6 +156,10 @@ Ext.define("Teselagen.manager.PieManager", {
             this.orfRenderer.setOrfs(this.orfs);
         }
 
+        if(this.showOrfs) {
+            this.orfSprites.addAll(this.orfRenderer.render());
+        }
+
         if(this.showCutSites) {
             this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         } 
@@ -149,20 +168,315 @@ Ext.define("Teselagen.manager.PieManager", {
             this.featureSprites.addAll(this.featureRenderer.render());
         }
 
-        if(this.showOrfs) {
-            this.orfSprites.addAll(this.orfRenderer.render());
-        }
+        this.renderLabels();
 
         this.showSprites(this.cutSiteSprites);
         this.showSprites(this.featureSprites);
         this.showSprites(this.orfSprites);
     },
 
+    /**
+     * Helper function which renders the sprites in a CompositeSprite.
+     * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
+     */
     showSprites: function(collection) {
         collection.each(function(sprite) {
             this.pie.surface.add(sprite);
             sprite.show(true);
         }, this);
+    },
+
+    /**
+     * @private
+     * Renders the labels in this.labels.
+     */
+    renderLabels: function() {
+        var labels = [];
+        var center;
+
+        Ext.each(this.cutSites, function(site) {
+            center = this.cutSiteRenderer.middlePoints.get(site);
+
+            label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
+                annotation: site,
+                x: center.x,
+                y: center.y,
+                center: this.annotationCenter(site)
+            });
+
+            this.cutSiteRenderer.addToolTip(label, 
+                                        this.cutSiteRenderer.getToolTip(site));
+
+            labels.push(label);
+        }, this);
+
+        Ext.each(this.features, function(feature) {
+            center = this.featureRenderer.middlePoints.get(feature);
+
+            label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
+                annotation: feature,
+                x: center.x,
+                y: center.y,
+                center: this.annotationCenter(feature)
+            });
+
+            this.featureRenderer.addToolTip(label,
+                                    this.featureRenderer.getToolTip(feature));
+
+            labels.push(label);
+        }, this);
+
+        labels.sort(this.labelSort);
+        this.adjustLabelPositions(labels);
+    },
+
+    /**
+     * @private
+     * Corrects label positions so they don't overlap.
+     */
+    adjustLabelPositions: function(labels) {
+        // Sort labels into four quadrants of the screen.
+        var totalNumberOfLabels = labels.length;
+        var totalLength = this.sequenceManager.getSequence().toString().length;
+
+        var rightTopLabels = [];
+        var rightBottomLabels = [];
+        var leftTopLabels = [];
+        var leftBottomLabels = [];
+
+        Ext.each(labels, function(label) {
+            var labelCenter = label.center;
+            if(labelCenter < totalLength / 4) {
+                rightTopLabels.push(label);
+            } else if((labelCenter >= totalLength / 4) && 
+                      (labelCenter < totalLength / 2)) {
+                rightBottomLabels.push(label);
+            } else if((labelCenter >= totalLength / 2) && 
+                      (labelCenter < 3 * totalLength / 4)) {
+                leftBottomLabels.push(label);
+            } else {
+                leftTopLabels.push(label);
+            }
+        });
+
+        var labelRadius = this.railRadius + this.self.LABEL_DISTANCE_FROM_RAIL;
+
+        if(this.showOrfs && this.orfRenderer.maxAlignmentRow > 0) {
+            labelRadius += this.orfRenderer.maxAlignmentRow * 
+                           this.orfRenderer.self.DISTANCE_BETWEEN_ORFS;
+        }
+        
+        // Scale Right Top Labels
+        var lastLabelYPosition = this.center.y - 15; // -15 to count label height
+        var numberOfRightTopLabels = rightTopLabels.length;
+        var label;
+
+        for(var i = numberOfRightTopLabels - 1; i >= 0; i--) {
+            label = rightTopLabels[i];
+
+            if(!label.includeInView) {
+                return false; 
+            }
+            
+            var labelCenter = label.center;
+            var angle = labelCenter * 2 * Math.PI / 
+                         this.sequenceManager.getSequence().toString().length;
+            
+            var xPosition = this.center.x + Math.sin(angle) * labelRadius;
+            var yPosition = this.center.y - Math.cos(angle) * labelRadius;
+            
+            if(yPosition < lastLabelYPosition) {
+                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+            } else {
+                yPosition = lastLabelYPosition;
+                
+                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+            }
+
+            label.setAttributes({translate: {x: xPosition - label.x,
+                                              y: yPosition - label.y}});
+            labels.push(this.drawConnection(label, xPosition, yPosition, "start"));
+        }
+
+        // Scale Right Bottom Labels
+        lastLabelYPosition = this.center.y;
+        var numberOfRightBottomLabels = rightBottomLabels.length;
+
+        for(var j = 0; j < numberOfRightBottomLabels; j++) {
+            label = rightBottomLabels[j];
+
+            if(!label.includeInView) {
+                return false; 
+            }
+            
+            var labelCenter = label.center;
+            var angle = labelCenter * 2 * Math.PI / 
+                this.sequenceManager.getSequence().toString().length - Math.PI / 2;
+            
+            var xPosition = this.center.x + Math.cos(angle) * labelRadius;
+            var yPosition = this.center.y + Math.sin(angle) * labelRadius;
+            
+            if(yPosition > lastLabelYPosition) {
+                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+            } else {
+                yPosition = lastLabelYPosition;
+                
+                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+            }
+
+            label.setAttributes({translate: {x: xPosition - label.x,
+                                              y: yPosition - label.y}});
+            labels.push(this.drawConnection(label, xPosition, yPosition, "start"));
+        }
+        
+        // Scale Left Top Labels
+        lastLabelYPosition = this.center.y - 15; // -15 to count label totalHeight
+        var numberOfLeftTopLabels = leftTopLabels.length;
+
+        for(var k = 0; k < numberOfLeftTopLabels; k++) {
+            label = leftTopLabels[k];
+
+            if(!label.includeInView) {
+                return false; 
+            }
+            
+            var labelCenter = label.center;
+            var angle = 2 * Math.PI - labelCenter * 2 * Math.PI / 
+                         this.sequenceManager.getSequence().toString().length;
+            
+            var xPosition = this.center.x - Math.sin(angle) * labelRadius;
+            var yPosition = this.center.y - Math.cos(angle) * labelRadius;
+            
+            if(yPosition < lastLabelYPosition) {
+                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+            } else {
+                yPosition = lastLabelYPosition;
+                
+                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+            }
+
+            label.setAttributes({translate: {x: xPosition - label.x,
+                                              y: yPosition - label.y}});
+            labels.push(this.drawConnection(label, xPosition, yPosition, "end"));
+        }
+        
+        // Scale Left Bottom Labels
+        lastLabelYPosition = this.center.y;
+        var numberOfLeftBottomLabels = leftBottomLabels.length;
+            
+        for(var l = numberOfLeftBottomLabels - 1; l >= 0; l--) {
+            label = leftBottomLabels[l];
+
+            if(!label.includeInView) {
+                return false; 
+            }
+            
+            var labelCenter = label.center;
+            var angle = labelCenter * 2 * Math.PI / 
+                        this.sequenceManager.getSequence().toString().length - Math.PI;
+            
+            var xPosition = this.center.x - Math.sin(angle) * labelRadius;
+            var yPosition = this.center.y + Math.cos(angle) * labelRadius;
+            
+            if(yPosition > lastLabelYPosition) {
+                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+            } else {
+                yPosition = lastLabelYPosition;
+                
+                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+            }
+              
+            label.setAttributes({translate: {x: xPosition - label.x,
+                                              y: yPosition - label.y}});
+            labels.push(this.drawConnection(label, xPosition, yPosition, "end"));
+        }
+
+        if(this.labelSprites) {
+            this.labelSprites.destroy();
+        }
+
+        this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
+            surface: this.pie.surface
+        });
+        this.labelSprites.addAll(labels);
+
+        this.showSprites(this.labelSprites);
+    },
+
+    /**
+     * @private
+     * Generates a path sprite as the connection between a label and its 
+     * annotation, and adds the sprite to labels.
+     * @param {Teselagen.renderer.common.Label} label The label to draw a
+     * connection from.
+     * @param {Int} labelX The label's x position.
+     * @param {Int} labelY The label's y position.
+     * @param {String} align The argument for the text-anchor property.
+     */
+    drawConnection: function(label, labelX, labelY, align) {
+        if(label.annotation instanceof Teselagen.bio.sequence.dna.Feature) {
+            return Ext.create("Ext.draw.Sprite", {
+                type: "path",
+                path: "M" + labelX + " " + labelY +
+                      "L" + this.featureRenderer.middlePoints.get(label.annotation).x + 
+                      " " + this.featureRenderer.middlePoints.get(label.annotation).y,
+                stroke: this.self.LABEL_CONNECTION_COLOR,
+                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
+                "text-anchor": align 
+            });
+        } else {
+            return Ext.create("Ext.draw.Sprite", {
+                type: "path",
+                path: "M" + labelX + " " + labelY +
+                      "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + 
+                      " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y,
+                stroke: this.self.LABEL_CONNECTION_COLOR,
+                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
+                "text-anchor": align
+            });
+        }
+    },
+
+    /**
+     * @private
+     * Function for sorting labels based on their centers.
+     */
+    labelSort: function(label1, label2) {
+        var labelCenter1 = label1.center;
+        var labelCenter2 = label2.center;
+        
+        if(labelCenter1 > labelCenter2) {
+            return 1;
+        } else if(labelCenter1 < labelCenter2) {
+            return -1;
+        } else  {
+            return 0;
+        }
+    },
+
+    /**
+     * @private
+     * Calculates the center of an annotation.
+     * @param {Teselagen.bio.sequence.common.Annotation} annotation The annotation
+     * to determine the center of.
+     */
+    annotationCenter: function(annotation) {
+        var result;
+
+        if(annotation.getStart() > annotation.getEnd()) {
+            var virtualCenter = annotation.getEnd() - 
+                ((this.sequenceManager.getSequence().toString().length - 
+                  annotation.getStart()) + annotation.getEnd()) / 2 + 1;
+
+            if(virtualCenter >= 0) {
+                return virtualCenter;
+            } else {
+                return this.sequenceManager.getSequence().toString().length + 
+                    virtualCenter - 1;
+            }
+        } else {
+            return (annotation.getStart() + annotation.getEnd() - 1) / 2 + 1;
+        }
     },
 
     applySequenceManager: function(pSequenceManager) {

@@ -8,7 +8,8 @@
 Ext.define("Teselagen.utils.GraphicUtils", {
     singleton: true,
 
-    ARC_THRESHOLD: 8,
+    ARC_THRESHOLD: 5, // Minimum arc length of a feature to be drawn as a
+                      // full pie piece as opposed to a triangle.
     OUTLINE_COLOR: "black",
     OUTLINE_WIDTH: 0.5,
 
@@ -61,8 +62,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
             alpha = endAngle - startAngle;
         }
 
-        var startPoint = {};
-        var endPoint = {};
+        var startPoint = Ext.create("Teselagen.bio.util.Point");
+        var endPoint = Ext.create("Teselagen.bio.util.Point");
 
         var sprite;
         var path;
@@ -99,7 +100,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
      * Function which draws a portion of the pie with no directionality. Used in
      * FeatureRenderer to draw locations of a feature which do not contain either
      * the end or start of the feature.
-     * @param {Object} center The center of the pie. An object with attrs x and y.
+     * @param {Teselagen.bio.util.Point} center The center of the pie. An object 
+     * with attrs x and y.
      * @param {Int} radius The radius of the pie.
      * @param {Int} thickness The thickness of the pie piece to draw.
      * @param {Int} startAngle The start angle of the pie piece in radians. Angles
@@ -116,8 +118,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
         var outerRadius = radius + thickness / 2;
         var innerRadius = radius - thickness / 2;
 
-        var outerCorner = {}; 
-        var innerCorner = {};
+        var outerCorner = Ext.create("Teselagen.bio.util.Point"); 
+        var innerCorner = Ext.create("Teselagen.bio.util.Point");
         
         outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
         outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
@@ -125,12 +127,25 @@ Ext.define("Teselagen.utils.GraphicUtils", {
         innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
         innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
 
+        var sweep = true;
+        if(endAngle < startAngle) {
+            sweep = false;
+        }
+
+        // Determine whether we must set the large-arc-flag in SVG to 1.
+        var largeFlag = false;
+        if(Math.abs(endAngle - startAngle) > Math.PI) {
+            largeFlag = true;
+        }
+
         return Ext.create("Ext.draw.Sprite", {
             type: "path",
             path: "M" + outerCorner.x + " " + outerCorner.y + " " +
-                  this.drawArc(center, outerRadius, startAngle, endAngle, false, true) +
+                  this.drawArc(center, outerRadius, startAngle, endAngle, false,
+                               true, sweep, largeFlag) +
                   "L" + innerCorner.x + " " + innerCorner.y + " " +
-                  this.drawArc(center, innerRadius, startAngle, endAngle, true, true) +
+                  this.drawArc(center, innerRadius, startAngle, endAngle, true,
+                               true, !sweep, largeFlag) + 
                   "L" + outerCorner.x + " " + outerCorner.y,
             stroke: this.OUTLINE_COLOR,
             "stroke-width": this.OUTLINE_WIDTH,
@@ -141,7 +156,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
     /**
      * Function which draws a portion of the pie which has an arrow pointing in
      * one direction, determined by the "direction" argument.
-     * @param {Object} center The center of the pie. An object with attrs x and y.
+     * @param {Teselagen.bio.util.Point} center The center of the pie. An object 
+     * with attrs x and y.
      * @param {Int} radius The radius of the pie.
      * @param {Int} thickness The thickness of the pie piece to draw.
      * @param {Int} startAngle The start angle of the pie piece in radians. Angles
@@ -162,9 +178,11 @@ Ext.define("Teselagen.utils.GraphicUtils", {
         var innerRadius = radius - thickness / 2;
         var arcLength;
 
-        var outerCorner = {};
-        var innerCorner = {};
-        var middlePoint = {};
+        var outerCorner = Ext.create("Teselagen.bio.util.Point");
+        var innerCorner = Ext.create("Teselagen.bio.util.Point");
+
+        // The tip of the arrow.
+        var middlePoint = Ext.create("Teselagen.bio.util.Point");
 
         var sprite;
         if(direction > 0) {
@@ -178,6 +196,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
             // Draw triangle if arc is smaller than the threshold.
             if(arcLength > this.ARC_THRESHOLD) {
+                // The angle between the tip of the arrow and its end.
                 var alpha = this.ARC_THRESHOLD / radius;
 
                 var sweep = true;
@@ -209,8 +228,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                                     endAngle, false, true, sweep, largeFlag) + 
                               "L" + middlePoint.x + " " + middlePoint.y + " " +
                               "L" + innerCorner.x + " " + innerCorner.y + " " +
-                              this.drawArc(center, innerRadius, endAngle,
-                                    startAngle, false, true, !sweep, largeFlag) +
+                              this.drawArc(center, innerRadius, startAngle,
+                                    endAngle, true, true, !sweep, largeFlag) +
                               "L" + outerCorner.x + " " + outerCorner.y,
                         stroke: this.OUTLINE_COLOR,
                         "stroke-width": this.OUTLINE_WIDTH,
@@ -314,8 +333,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
     /**
      * Given the parameters defining a circle, returns a point object on that
      * circle at a given angle.
-     * @param {Object} center A point object defining the center of the object,
-     * with integer attributes x and y.
+     * @param {Teselagen.bio.util.Point} center A point object defining the 
+     * center of the object, with integer attributes x and y.
      * @param {Int} angle The angle at which to generate the point.
      * @param {Int} radius The radius of the circle.
      * @return {Object} The coordinates of the point on the given circle at the
@@ -326,7 +345,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
             angle = angle % (2 * Math.PI);
         }
 
-        var point = {};
+        var point = Ext.create("Teselagen.bio.util.Point");
 
         if(angle < Math.PI / 2) {
             point.x = center.x + Math.sin(angle) * radius;

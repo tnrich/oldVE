@@ -59,6 +59,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 */
 		this.setSymbols = function(pSymbols){
 			symbols = pSymbols;
+            this.sequenceChanged = true;
 		}
 
 		/**
@@ -114,12 +115,19 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 */	
 		this.seqString = function (){
 			var string = [];
-            symbols.forEach(function(element){
+            if(this.sequenceString && !this.sequenceChanged) {
+                return this.sequenceString;
+            }
+            else {
+                symbols.forEach(function(element){
+                    if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) {
+                        string.push(element.getValue());
+                    }
+                });        
+            }
 
-			if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) {
-                string.push(element.getValue());
-            }});        
-			return string.join("");
+			this.sequenceString = string.join("");
+            return this.sequenceString;
 		}
 
 		/**
@@ -127,6 +135,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 */
 		this.clear = function (){
 			symbols = [];
+            this.sequenceChanged = true;
 		}
 
 		/**
@@ -138,6 +147,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 				pSymbols.forEach(function(element){
 					symbols.push(element);
 				});
+                this.sequenceChanged = true;
 			}
 		}
 
@@ -157,6 +167,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 				for (var i=0; i < pSymbols.getSymbolsLength(); i++) {
 					symbols.push(pSymbols.getSymbols()[i]);
 				}
+                this.sequenceChanged = true;
 			}
 		}
 		/**
@@ -166,6 +177,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 */
 		this.deleteSymbols = function (pStart, pLength) {
 			symbols.splice(pStart, pLength);
+            this.sequenceChanged = true;
 		}
 
 		/**
@@ -178,6 +190,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 			var beforeInsert= symbols.slice(0, pPosition);
 			var afterInsert = symbols.slice(pPosition);
 			symbols = beforeInsert.concat(pNewSymbols).concat(afterInsert);
+            this.sequenceChanged = true;
 		}
 
 		/**

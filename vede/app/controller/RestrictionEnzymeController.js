@@ -35,7 +35,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
     /**
      * Populates the group selector combobox when the restriction enzyme
-     * manager window is opened.
+     * manage window is opened.
      */
     onEnzymeManagerOpened: function(manager) {
         this.managerWindow = manager;
