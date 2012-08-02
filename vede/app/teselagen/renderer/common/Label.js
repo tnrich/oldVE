@@ -6,6 +6,8 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.renderer.common.Label", {
+    extend: "Ext.draw.Sprite",
+
     requires: ["Teselagen.bio.util.StringUtil"],
 
     config: {
@@ -24,38 +26,23 @@ Ext.define("Teselagen.renderer.common.Label", {
      */
     constructor: function(inData) {
         this.initConfig(inData);
-
         this.StringUtil = Teselagen.bio.util.StringUtil;
-    },
 
-    tipText: function() {
-        return "";
+        this.callParent([Ext.create("Ext.draw.Sprite", {
+            type: "text",
+            text: this.labelText(),
+            fill: "black",
+            "font-size": "6px",
+            x: inData.x,
+            y: inData.y,
+        })]);
+
+        if(!this.labelText() || !this.StringUtil.trim(this.labelText())) {
+            this.setIncludeInView(false);
+        }
     },
 
     labelText: function() {
         return "";
-    },
-
-    /**
-     * Returns a text sprite holding the annotation label and a tooltip with
-     * more information.
-     * @return {Ext.draw.Sprite} The text sprite (without any position data).
-     */
-    getSprite: function() {
-        var sprite = Ext.create("Ext.draw.Sprite", {
-            type: "text",
-            text: this.labelText(),
-            toolTip: this.tipText(),
-            listeners: {
-                render: function(me) {
-                    Ext.QuickTip.register({
-                        target: me.el,
-                        text: me.toolTip
-                    });
-                }
-            }
-        });
-
-        return sprite;
     }
 });

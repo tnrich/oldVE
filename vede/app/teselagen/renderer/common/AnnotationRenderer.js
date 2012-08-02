@@ -60,7 +60,8 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
         sprite.on("render", function(me) {
             Ext.tip.QuickTipManager.register({
                 target: me.el,
-                text: me.tooltip
+                text: me.tooltip,
+                hideDelay: 0
             });
         });
     }

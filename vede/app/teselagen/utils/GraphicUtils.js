@@ -8,7 +8,8 @@
 Ext.define("Teselagen.utils.GraphicUtils", {
     singleton: true,
 
-    ARC_THRESHOLD: 8,
+    ARC_THRESHOLD: 5, // Minimum arc length of a feature to be drawn as a
+                      // full pie piece as opposed to a triangle.
     OUTLINE_COLOR: "black",
     OUTLINE_WIDTH: 0.5,
 
@@ -179,6 +180,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
         var outerCorner = Ext.create("Teselagen.bio.util.Point");
         var innerCorner = Ext.create("Teselagen.bio.util.Point");
+
+        // The tip of the arrow.
         var middlePoint = Ext.create("Teselagen.bio.util.Point");
 
         var sprite;
@@ -193,6 +196,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
             // Draw triangle if arc is smaller than the threshold.
             if(arcLength > this.ARC_THRESHOLD) {
+                // The angle between the tip of the arrow and its end.
                 var alpha = this.ARC_THRESHOLD / radius;
 
                 var sweep = true;

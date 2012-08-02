@@ -17,6 +17,8 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
         orfs: null
     },
 
+    maxAlignmentRow: 0,
+
     /**
      * @param {Array<Teselagen.bio.orf.ORF>} The orfs to calculate sprites for.
      */
@@ -34,6 +36,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
         var sprites = [];
         var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, 
                                                          this.sequenceManager);
+        this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
 
         var seqLen = this.sequenceManager.getSequence().seqString().length;
 
