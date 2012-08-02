@@ -91,8 +91,12 @@ Ext.onReady(function() {
 
 
                 runs(function() {
+                    console.log("ORIGINAL SBREDL FILE: GentR-Casette.gbk\n" + 
+                        "==================================================\n" + 
+                        text);     
+
                     // As an example of output, uncomment these two lines
-                    console.log("RECONSTRUCTED SBREDL FILE\: GentR-Casette.gbk\n" + 
+                    console.log("RECONSTRUCTED SBREDL FILE: GentR-Casette.gbk\n" + 
                         "==================================================\n" + 
                         tmp.toString());       
                     console.log("JSON SBREDL FILE: GentR-Casette.gbk\n" + 
@@ -134,6 +138,9 @@ Ext.onReady(function() {
 
 
                 runs(function() {
+                    console.log("ORIGINAL SBREDL FILE: TN7R.gbk\n" + 
+                        "==================================================\n" + 
+                        text);
                     // As an example of output, uncomment these two lines
                     console.log("RECONSTRUCTED SBREDL FILE\n" + 
                         "==================================================\n" + 
