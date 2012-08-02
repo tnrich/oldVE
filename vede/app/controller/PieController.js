@@ -37,7 +37,7 @@ Ext.define('Vede.controller.PieController', {
     onSequenceManagerChanged: function(pSeqMan) {
         var orfManager = Ext.create("Teselagen.manager.ORFManager", {
             sequenceManager: pSeqMan,
-            minORFSize: 10
+            minORFSize: 300
         });
 
         var enzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
