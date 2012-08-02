@@ -8,8 +8,8 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
     requires: ["Teselagen.bio.sequence.common.StrandType"],
 
     statics: {
-        DEFAULT_FEATURE_HEIGHT: 10,
-        DEFAULT_FEATURES_GAP: 5
+        DEFAULT_FEATURE_HEIGHT: 7,
+        DEFAULT_FEATURES_GAP: 3
     },
 
     config: {
@@ -144,7 +144,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      */
     getToolTip: function(feature) {
         var nameString = "";
-        if(feature.getName() == "") {
+        if(feature.getName()) {
             nameString = " - " + feature.getName();
         }
 

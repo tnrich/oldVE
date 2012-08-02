@@ -7,34 +7,18 @@
 Ext.define("Teselagen.renderer.pie.CutSiteLabel", {
     extend: "Teselagen.renderer.common.Label",
 
+    config: {
+        center: null,
+    },
+
     constructor: function(inData) {
         this.callParent(arguments);
 
-        if(this.annotation.getRestrictionEnzyme().getName() == null ||
-           this.annotation.getRestrictionEnzyme().getName() == "" ||
-           this.StringUtil.trim(this.annotation.getRestrictionEnzyme().getName()) == "") {
-
-            this.includeInView = false;
-        }
+        this.initConfig(inData);
     },
 
     /**
-     * Generates text for the cut site's tooltip.
-     * @return {String} The cut site tooltip.
-     */
-    tipText: function() {
-        var strand = ", complement";
-        if(this.annotation.getStrand() == 1) {
-            strand = "";
-        }
-
-        return this.annotation.getRestrictionEnzyme().getName() + ": " +
-            (this.annotation.getStart() + 1) + ".." + this.annotation.getEnd() +
-            strand + ", cuts " + this.annotation.getNumCuts() + " times";
-    },
-
-    /**
-     * Generates text for the cut site's label.
+     * Generates text for the cut site's label, which is just the enzyme name.
      * @return {String} The cut site label.
      */
     labelText: function() {

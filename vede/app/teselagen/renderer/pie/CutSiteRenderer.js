@@ -37,9 +37,9 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
             var angle = site.getStart() * 2 * Math.PI / 
                         this.sequenceManager.getSequence().seqString().length;
             
-            this.middlePoints.add(site, this.GraphicUtils.pointOnCircle(this.center,
-                                                              angle,
-                                                              this.railRadius + 10));
+            this.middlePoints.add(site, this.GraphicUtils.pointOnCircle(
+                                            this.center, angle,
+                                            this.railRadius + 10));
 
             var lineStart = Ext.create("Teselagen.bio.util.Point",
                 Math.floor(this.center.x + this.railRadius * Math.sin(angle)),
