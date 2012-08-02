@@ -88,7 +88,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         this.DNATools                   = Teselagen.bio.sequence.DNATools;
         this.updateSequenceChanged      = Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED;
-        this.updateSequenceChanging     = Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGIN;
+        this.updateSequenceChanging     = Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING;
         this.updateKindFeatureAdd       = Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD;
         this.updateKindFeatureRemove    = Teselagen.event.SequenceManagerEvent.KIND_FEATURE_REMOVE;
         this.updateKindFeaturesAdd      = Teselagen.event.SequenceManagerEvent.KIND_FEATURES_ADD;
@@ -616,7 +616,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             var feature = features[i];
             featStart = feature.getStart();
             featEnd   = feature.getEnd();
-            //console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
+            console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
             //console.log("remove Info " + pStartIndex + ":" + pEndIndex);
 
             if ( featStart < featEnd ) {
@@ -936,15 +936,31 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 if (DEBUG_MODE) console.log("case Fc,Sc 6");
                 var delLength1a = pEndIndex;
                 var delLength1b = featEnd - pStartIndex;
+                
                 delLengthBetween = featStart - featEnd;
+                console.log("delLength1a: " + delLength1a);
+                console.log("delLength1b: " + delLength1b);
+                console.log("delLengthBetween: " + delLengthBetween);
 
+                console.log("StartIndex of cut is less than the feature's end");
                 delLength2 = lengthBefore - featStart;
                 var newCutStart = pStartIndex - pEndIndex;
                 feature.deleteAt(0, delLength1a, lengthBefore, circular);
+                console.log("Current feature properties after deletion 1: " );
+                logFeatures();
+
                 lengthBefore2 = lengthBefore - delLength1a;
                 feature.deleteAt(newCutStart, delLength1b, lengthBefore2, circular);
+                console.log("Current feature properties after deletion 2: ");
+                logFeatures();
+
                 lengthBefore3 = lengthBefore2 - delLength1b;
                 feature.deleteAt(featEnd, lengthBefore3 - featEnd, lengthBefore3, circular);
+                console.log("Current feature properties after deletion 3: ");
+                logFeatures();
+                function logFeatures(){ Ext.each(feature.getLocations(), function(location){
+                console.log("The location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
+            });}
 
             }
             else {

@@ -11,6 +11,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
     GroupManager: null,
     DigestionCalculator: null,
     DNATools: null,
+    digestManager: null,
 
     managerWindow: null,
     digestPanel: null,
@@ -21,7 +22,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
     ladderLane: null,
     sampleLane: null,
-    tempDNA: null,
+    dnaSequence: null,
 
     groupSelector: null,
     sampleLaneInitialized: false,
@@ -45,9 +46,20 @@ Ext.define('Vede.controller.SimulateDigestionController', {
         });
 
         this.application.on({
+            SequenceManagerChanged: this.getSequenceManagerData,
             SimulateDigestionWindowOpened: this.onSimulateDigestionOpened, 
             scope: this
         });
+    },
+
+    getSequenceManagerData: function(pSequenceManager){
+        if (pSequenceManager.getSequence().seqString()){
+            this.dnaSequence = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
+        } else {
+           this.dnaSequence = ""; 
+        };
+        
+        console.log("able to deal with completeSequence");
     },
 
     onSimulateDigestionOpened: function(manager) {
@@ -81,11 +93,7 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
         this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
 
         this.initializeDigestDrawingPanel();
-        var completeSequence = String('gacgtcttatgacaacttgacggctacatcattcactttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgcgagaaatagagttgatcgtcaaaaccaacattgcgaccgacggtggcgataggcatccgggtggtgctcaaaagcagcttcgcctggctgatacgttggtcctcgcgccagcttaagacgctaatccctaactgctggcggaaaagatgtgacagacgcgacggcgacaagcaaacatgctgtgcgacgctggcgatatcaaaattgctgtctgccaggtgatcgctgatgtactgacaagcctcgcgtacccgattatccatcggtggatggagcgactcgttaatcgcttccatgcgccgcagtaacaattgctcaagcagatttatcgccagcagctccgaatagcgcccttccccttgcccggcgttaatgatttgcccaaacaggtcgctgaaatgcggctggtgcgcttcatccgggcgaaagaaccccgtattggcaaatattgacggccagttaagccattcatgccagtaggcgcgcggacgaaagtaaacccactggtgataccattcgcgagcctccggatgacgaccgtagtgatgaatctctcctggcgggaacagcaaaatatcacccggtcggcaaacaaattctcgtccctgatttttcaccaccccctgaccgcgaatggtgagattgagaatataacctttcattcccagcggtcggtcgataaaaaaatcgagataaccgttggcctcaatcggcgttaaacccgccaccagatgggcattaaacgagtatcccggcagcaggggatcattttgcgcttcagccatacttttcatactcccgccattcagagaagaaaccaattgtccatattgcatcagacattgccgtcactgcgtcttttactggctcttctcgctaaccaaaccggtaaccccgcttattaaaagcattctgtaacaaagcgggaccaaagccatgacaaaaacgcgtaacaaaagtgtctataatcacggcagaaaagtccacattgattatttgcacggcgtcacactttgctatgccatagcatttttatccataagattagcggattctacctgacgctttttatcgcaactctctactgtttctccatacccgtttttttgggaatttttaagaaggagatatacatatggaaaataacgctttattagaacaaataatcaatgaagttttaaaaaatatgggtggcagtggtagcgggagctcgggtggctcaggctctggttccagtaaaggagaagaacttttcactggagttgtcccaattcttgttg aattagatggtgatgttaatgggcacaaattttctgtcagtggagagggtgaaggtgatgcaacatacggaaaacttacccttaaatttatttgcactactggaaaactacctgttccatggccaacacttgtcactactttctcttatggtgttcaatgcttttcccgttatccggatcatatgaaacggcatgactttttcaagagtgccatgcccgaaggttatgtacaggaacgcactatatctttcaaagatgacgggaactacaagacgcgtgctgaagtcaagtttgaaggtgatacccttgttaatcgtatcgagttaaaaggtattgattttaaagaagatggaaacattctcggacacaaactcgaatacaactataactcacacaatgtatacatcacggcagacaaacaaaagaatggaatcaaagctaacttcaaaattcgccacaacattgaagatggatctgttcaactagcagaccattatcaacaaaatactccaattggcgatggccctgtccttttaccagacaaccattacctgtcgacacaatctgccctttcgaaagatcccaacgaaaagcgtgacc acatggtccttcttgagtttgtaactgctgctgggattacacatggcatggatgagctcggcggcggcgcggcgaacgatgaaaactatgcgctggcggcgtaaatcgagtaaggatctccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttg tttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctg cgtttatacctagggtacgggttttgctgcccgcaaacgggctgttctggtgttgctagtttgttatcagaatcgcagatccggcttcagccggtttgccggctgaaagcgctatttctt ccagaattgccatgattttttccccacgggaggcgtcactggctcccgtgttgtcggcag ctttgattcgataagcagcatcgcctgtttcaggctgtctatgtgtgactgttgagctgtaacaagttgtctcaggtgttcaatttcatgttctagttgctttgttttactggtttcacc tgttctattaggtgttacatgctgttcatctgttacattgtcgatctgttcatggtgaac agctttgaatgcaccaaaaactcgtaaaagctctgatgtatctatcttttttacaccgtt ttcatctgtgcatatggacagttttccctttgatatgtaacggtgaacagttgttctact tttgtttgttagtcttgatgcttcactgatagatacaagagccataagaacctcagatcc ttccgtatttagccagtatgttctctagtgtggttcgttgtttttgcgtgagccatgaga acgaaccattgagatcatacttactttgcatgtcactcaaaaattttgcctcaaaactgg tgagctgaatttttgcagttaaagcatcgtgtagtgtttttcttagtccgttatgtaggt aggaatctgatgtaatggttgttggtattttgtcaccattcatttttatctggttgttct caagttcggttacgagatccatttgtctatctagttcaacttggaaaatcaacgtatcag tcgggcggcctcgcttatcaaccaccaatttcatattgctgtaagtgtttaaatctttac ttattggtttcaaaacccattggttaagccttttaaactcatggtagttattttcaagca ttaacatgaacttaaattcatcaaggctaatctctatatttgccttgtgagttttctttt gtgttagttcttttaataaccactcataaatcctcatagagtatttgttttcaaaagact taacatgttccagattatattttatgaatttttttaactggaaaagataaggcaatatct cttcactaaaaactaattctaatttttcgcttgagaacttggcatagtttgtccactgga aaatctcaaagcctttaaccaaaggattcctgatttccacagttctcgtcatcagctctc tggttgctttagctaatacaccataagcattttccctactgatgttcatcatctgagcgt attggttataagtgaacgataccgtccgttctttccttgtagggttttcaatcgtggggt tgagtagtgccacacagcataaaattagcttggtttcatgctccgttaagtcatagcgac taatcgctagttcatttgctttgaaaacaactaattcagacatacatctcaattggtcta ggtgattttaatcactataccaattgagatgggctagtcaatgataattactagtccttt tcccgggtgatctgggtatctgtaaattctgctagacctttgctggaaaacttgtaaatt ctgctagaccctctgtaaattccgctagacctttgtgtgttttttttgtttatattcaag tggttataatttatagaataaagaaagaataaaaaaagataaaaagaatagatcccagcc ctgtgtataactcactactttagtcagttccgcagtattacaaaaggatgtcgcaaacgc tgtttgctcctctacaaaacagaccttaaaaccctaaaggcttaagtagcaccctcgcaa gctcgggcaaatcgctgaatattccttttgtctccgaccatcaggcacctgagtcgctgt ctttttcgtgacattcagttcgctgcgctcacggctctggcagtgaatgggggtaaatgg cactacaggcgccttttatggattcatgcaaggaaactacccataatacaagaaaagccc gtcacgggcttctcagggcgttttatggcgggtctgctatgtggtgctatctgacttttt gctgttcagcagttcctgccctctgattttccagtctgaccacttcggattatcccgtga caggtcattcagactggctaatgcacccagtaaggcagcggtatcatcaacaggcttacc cgtcttactgtccctagtgcttggattctcaccaataaaaaacgcccggcggcaaccgag cgttctgaacaaatccagatggagttctgaggtcattactggatctatcaacaggagtcc aagcgagctcgatatcaaattacgccccgccctgccactcatcgcagtactgttgtaatt cattaagcattctgccgacatggaagccatcacaaacggcatgatgaacctgaatcgcca gcggcatcagcaccttgtcgccttgcgtataatatttgcccatggtgaaaacgggggcga agaagttgtccatattggccacgtttaaatcaaaactggtgaaactcacccagggattgg ctgagacgaaaaacatattctcaataaaccctttagggaaataggccaggttttcaccgt aacacgccacatcttgcgaatatatgtgtagaaactgccggaaatcgtcgtggtattcac tccagagcgatgaaaacgtttcagtttgctcatggaaaacggtgtaacaagggtgaacac tatcccatatcaccagctcaccgtctttcattgccatacgaaattccggatgagcattca tcaggcgggcaagaatgtgaataaaggccggataaaacttgtgcttatttttctttacgg tctttaaaaaggccgtaatatccagctgaacggtctggttataggtacattgagcaactg actgaaatgcctcaaaatgttctttacgatgccattgggatatatcaacggtggtatatc cagtgatttttttctccattttagcttccttagctcctgaaaatctcgataactcaaaaa atacgcccggtagtgatcttatttcattatggtgaaagttggaacctcttacgtgccgat caacgtctcattttcgccagatatc');
         //'// Makes it look nicer in vim
-        completeSequence.replace(/\s+/g, '');
-        console.log("able to deal with completeSequence");
-        this.tempDNA = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", completeSequence);
         },
 
     /**
@@ -100,9 +108,12 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
+        var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
+        this.enzymeListSelector.store.loadData(enzymeArray, false);
+        this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
 
-        this.enzymeListSelector.fromField.store.loadData(enzymeArray, false);
-        this.enzymeListSelector.fromField.bindStore(this.enzymeListSelector.fromField.store);
+        this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
+        this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
     },
 
     
@@ -139,6 +150,26 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
             x: 0,
             y: 0
         });
+/*
+       this.digestManager = Ext.create("Teselagen.manager.SimulateDigestManager", {
+            digestPanel: this.digestPanel,
+            background: Ext.create('Ext.draw.Sprite', {
+                type: 'rect',
+                height: 400,
+                width: 445,
+                fill: '#000',
+                x: 0,
+                y: 0
+            }),
+
+            sampleLane: Ext.create("Teselagen.models.digest.SampleLane", {
+                ladder: "1kb",
+            }),
+
+            ladderLane: Ext.create("Teselagen.models.digest.LadderLane", {
+                ladder: "1kb",
+            }),
+       });*/
         this.digestSpriteGroup.add(digestBG);
         this.showSprites(this.digestSpriteGroup);
        
@@ -227,7 +258,7 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
 
         //Digest the sequence with all of the restriction enzymes you've
         //selected
-        var newFragments = this.DigestionCalculator.digestSequence(this.tempDNA, enzymes);
+        var newFragments = this.DigestionCalculator.digestSequence(this.dnaSequence, enzymes);
         this.sampleSpriteGroup.destroy();
         this.sampleSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
             surface: this.digestPanel.surface

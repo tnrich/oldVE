@@ -93,22 +93,27 @@ var searchStore = Ext.create("Ext.data.Store",{
                                     emptyText: 'Search for Enzyme',
                                     id: 'enzymeGroupSelector-search',
                                     mode: 'local',
+                                    disabled: true,
                                     store: ['One'], 
                                     //disabled: true,
                                     x: 235,
                                     y: 10
                                 },
                                 {
-                                   xtype: 'itemselector', 
-                    height: 370,
-                    width: 420,
-        id: 'enzymeListSelector-digest',
-                    imagePath: '../../extjs/examples/ux/css/images/',
-        store: enzymeListStore,
-        displayField: 'name',
-        valueField: 'name',
-        x: 10,
-        y: 40
+                                    xtype: 'itemselector', 
+                                    height: 370,
+                                    width: 420,
+                                    id: 'enzymeListSelector-digest',
+                                    imagePath: '../../extjs/examples/ux/css/images/',
+                                    store: enzymeListStore,
+                                    displayField: 'name',
+                                    buttons: ["oneRight", "allRight",
+                                              "oneLeft", "allLeft"],
+                                    buttonsText: {oneRight: ">", allRight: ">>",
+                                                  oneLeft: "<", allLeft: "<<"},
+                                     valueField: 'name',
+                                    x: 10,
+                                    y: 40
                                     
                                 },
                                 {
