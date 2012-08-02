@@ -32,7 +32,7 @@ Ext.define('Vede.controller.MainMenuController', {
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
             seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
             seqMgr.fromGenbank(gb);
-            that.application.fireEvent("SequenceManagerCreated", seqMgr);
+            that.application.fireEvent("SequenceManagerChanged", seqMgr);
             console.log(gb.toString());
             console.log(seqMgr.getName());
         }
@@ -96,10 +96,10 @@ Ext.define('Vede.controller.MainMenuController', {
             },
         });
 
-        this.application.on("SequenceManagerCreated", this.onSequenceManagerCreated); 
+        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged); 
     },
 
-    onSequenceManagerCreated: function(seqMgr) {
+    onSequenceManagerChanged: function(seqMgr) {
         //alert("sequence manager created yay");
     }
 

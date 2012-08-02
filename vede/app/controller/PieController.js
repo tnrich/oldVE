@@ -11,6 +11,8 @@ Ext.define('Vede.controller.PieController', {
 
     pieManager: null,
 
+    enzymeGroupManager: null,
+
     /**
      * @member Vede.controller.PieController
      */
@@ -21,11 +23,33 @@ Ext.define('Vede.controller.PieController', {
             }
         });
 
-        this.application.on("SequenceManagerCreated", this.onSequenceManagerCreated);
+        this.enzymeGroupManager = 
+            Teselagen.manager.RestrictionEnzymeGroupManager;
+
+        if(!this.enzymeGroupManager.getIsInitialized) {
+            this.enzymeGroupManager.initialize();
+        }
+
+        this.application.on("SequenceManagerChanged", 
+                            this.onSequenceManagerChanged, this);
     },
 
-    onSequenceManagerCreated: function(seqMan) {
-        alert(seqMan.getSequence().seqString());
+    onSequenceManagerChanged: function(pSeqMan) {
+        var orfManager = Ext.create("Teselagen.manager.ORFManager", {
+            sequenceManager: pSeqMan,
+            minORFSize: 300
+        });
+
+        var enzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
+            sequenceManager: pSeqMan,
+            restrictionEnzymeGroup: this.enzymeGroupManager.getActiveGroup()
+        });
+
+        this.pieManager.setSequenceManager(pSeqMan);
+        this.pieManager.setOrfs(orfManager.getOrfs());
+        this.pieManager.setCutSites(enzymeManager.getCutSites());
+
+        this.pieManager.render();
     },
     
     groupMan: null,
@@ -33,61 +57,19 @@ Ext.define('Vede.controller.PieController', {
     onLaunch: function() {
         var pieContainer, pie;
 
-        this.groupMan = Teselagen.manager.RestrictionEnzymeGroupManager;
-        this.groupMan.initialize();
-
-        var sequence = Teselagen.bio.sequence.DNATools.createDNA(
-                            "acgtcttatgacaacttgacggctacatcattcactttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgcgagaaatagagttgatcgtcaaaaccaacattgcgaccgacggtggcgataggcatccgggtggtgctcaaaagcagcttcgcctggctgatacgttggtcctcgcgccagcttaagacgctaatccctaactgctggcggaaaagatgtgacagacgcgacggcgacaagcaaacatgctgtgcgacgctggcgatatcaaaattgctgtctgccaggtgatcgctgatgtactgacaagcctcgcgtacccgattatccatcggtggatggagcgactcgttaatcgcttccatgcgccgcagtaacaattgctcaagcagatttatcgccagcagctccgaatagcgcccttccccttgcccggcgttaatgatttgcccaaacaggtcgctgaaatgcggctggtgcgcttcatccgggcgaaagaaccccgtattggcaaatattgacggccagttaagccattcatgccagtaggcgcgcggacgaaagtaaacccactggtgataccattcgcgagcctccggatgacgaccgtagtgatgaatctctcctggcgggaacagcaaaatatcacccggtcggcaaacaaattctcgtccctgatttttcaccaccccctgaccgcgaatggtgagattgagaatataacctttcattcccagcggtcggtcgataaaaaaatcgagataaccgttggcctcaatcggcgttaaacccgccaccagatgggcattaaacgagtatcccggcagcaggggatcattttgcgcttcagccatacttttcatactcccgccattcagagaagaaaccaattgtccatattgcatcagacattgccgtcactgcgtcttttactggctcttctcgctaaccaaaccggtaaccccgcttattaaaagcattctgtaacaaagcgggaccaaagccatgacaaaaacgcgtaacaaaagtgtctataatcacggcagaaaagtccacattgattatttgcacggcgtcacactttgctatgccatagcatttttatccataagattagcggattctacctgacgctttttatcgcaactctctactgtttctccatacccgtttttttgggaatttttaagaaggagatatacatatggaaaataacgctttattagaacaaataatcaatgaagttttaaaaaatatgggtggcagtggtagcgggagctcgggtggctcaggctctggttccagtaaaggagaagaacttttcactggagttgtcccaattcttgttgaattagatggtgatgttaatgggcacaaattttctgtcagtggagagggtgaaggtgatgcaacatacggaaaacttacccttaaatttatttgcactactggaaaactacctgttccatggccaacacttgtcactactttctcttatggtgttcaatgcttttcccgttatccggatcatatgaaacggcatgactttttcaagagtgccatgcccgaaggttatgtacaggaacgcactatatctttcaaagatgacgggaactacaagacgcgtgctgaagtcaagtttgaaggtgatacccttgttaatcgtatcgagttaaaaggtattgattttaaagaagatggaaacattctcggacacaaactcgaatacaactataactcacacaatgtatacatcacggcagacaaacaaaagaatggaatcaaagctaacttcaaaattcgccacaacattgaagatggatctgttcaactagcagaccattatcaacaaaatactccaattggcgatggccctgtccttttaccagacaaccattacctgtcgacacaatctgccctttcgaaagatcccaacgaaaagcgtgaccacatggtccttcttgagtttgtaactgctgctgggattacacatggcatggatgagctcggcggcggcgcggcgaacgatgaaaactataactatgcgctggcggcgtaaatcgagtaaggatctccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctgcgtttatacctagggtacgggttttgctgcccgcaaacgggctgttctggtgttgctagtttgttatcagaatcgcagatccggcttcagccggtttgccggctgaaagcgctatttcttccagaattgccatgattttttccccacgggaggcgtcactggctcccgtgttgtcggcagctttgattcgataagcagcatcgcctgtttcaggctgtctatgtgtgactgttgagctgtaacaagttgtctcaggtgttcaatttcatgttctagttgctttgttttactggtttcacctgttctattaggtgttacatgctgttcatctgttacattgtcgatctgttcatggtgaacagctttgaatgcaccaaaaactcgtaaaagctctgatgtatctatcttttttacaccgttttcatctgtgcatatggacagttttccctttgatatgtaacggtgaacagttgttctacttttgtttgttagtcttgatgcttcactgatagatacaagagccataagaacctcagatccttccgtatttagccagtatgttctctagtgtggttcgttgtttttgcgtgagccatgagaacgaaccattgagatcatacttact");
-
-        var orfs = Teselagen.bio.orf.ORFFinder.calculateORFBothDirections(sequence,
-                    Teselagen.bio.sequence.DNATools.reverseComplement(sequence),
-                    300);
-
-        var sequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
-            name: "seqman",
-            circular: true,
-            sequence: sequence
-        });
-
-        var reManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
-            sequenceManager: sequenceManager,
-            restrictionEnzymeGroup: this.groupMan.groupByName("Fermentas Fast Digest")
-        });
+        if(!this.enzymeGroupManager.isInitialized) {
+            this.enzymeGroupManager.initialize();
+        }
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
-            sequenceManager: sequenceManager,
             center: {x: 100, y: 100},
             railRadius: 100,
-            cutSites: reManager.getAllCutSites(),
-            features: [Ext.create("Teselagen.bio.sequence.dna.Feature", {
-                    name: "Super Awesome Feature",
-                    type: "misc_marker",
-                    start: 0,
-                    end: 5,
-                    strand: 1
-                }),
-                Ext.create("Teselagen.bio.sequence.dna.Feature", {
-                    name: "Reverse feature",
-                    type: "terminator",
-                    start: 38,
-                    end: 40,
-                    strand: -1 
-                }),
-                Ext.create("Teselagen.bio.sequence.dna.Feature", {
-                    name: "A long reversed feature",
-                    type: "promoter",
-                    start: 0,
-                    end: 37,
-                    strand: -1 
-                })
-            ],
-            orfs: orfs
         });
+
         pieContainer = Ext.getCmp('PieContainer');
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
         this.pieManager.initPie();
-        this.pieManager.render();
     },
 
     onClickPie: function(pEvt, pOpts) {

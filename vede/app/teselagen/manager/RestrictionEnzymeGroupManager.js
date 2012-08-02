@@ -14,7 +14,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     config: {
         systemGroups: [],
         userGroups: [],
-        activeGroup: [],
+        activeGroup: null,
         rebaseEnzymesDatabase: Ext.create("Ext.util.HashMap"),
         isInitialized: false
     },
@@ -24,7 +24,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     /**
      * @param {Array<Teselagen.models.RestrictionEnzymeGroup>} systemGroups Groups of enzymes which are pre-defined by the program.
      * @param {Array<Teselagen.models.RestrictionEnzymeGroup>} userGroups Groups defined by the user.
-     * @param {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} activeGroup A list of enzymes which is currently in use.
+     * @param {Teselagen.models.RestrictionEnzymeGroup} activeGroup A list of enzymes which is currently in use.
      * @param {Ext.util.HashMap} rebaseEnzymesDatabase A hashmap mapping enzyme names to the RestrictionEnzyme objects.
      * @param {Boolean} isInitialized Whether the database has already been read from the xml file.
      */
@@ -54,7 +54,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
         this.setRebaseEnzymesDatabase(newDatabase);
 
-        this.isInitialized = true;
+        this.setIsInitialized(true);
 
         this.registerSystemGroups();
         this.initializeDefaultActiveGroup();
@@ -198,7 +198,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
      * Initializes activeGroup by loading the first system group, the "common" group enzymes, into it.
      */
     initializeDefaultActiveGroup: function() {
-        var defaultGroupEnzymes = this.getSystemGroups()[0].getEnzymes();
+        var defaultGroupEnzymes = this.getSystemGroups()[0];
         this.setActiveGroup(defaultGroupEnzymes);
     },
 
