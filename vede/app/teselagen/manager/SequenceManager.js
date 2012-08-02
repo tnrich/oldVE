@@ -104,7 +104,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //this.addEvents("SequenceChanged");
         this.addEvents(this.updateSequenceChanged);
         this.addEvents(this.updateSequenceChanging);
-        this.addEvents(this.updateKindFeatureAdd);
+        /*this.addEvents(this.updateKindFeatureAdd);
         this.addEvents(this.updateKindFeatureRemove);
         this.addEvents(this.updateKindFeaturesAdd);
         this.addEvents(this.updateKindFeaturesRemove);
@@ -113,6 +113,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.addEvents(this.updateKindKManualUpdate);
         this.addEvents(this.updateKindSetMemento);
         this.addEvents(this.updateKindInitialized);
+        */
 
         this.initConfig(inData);
 
@@ -198,8 +199,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
-        this.fireEvent(this.updateSequenceChanged);
-        this.fireEvent(this.updateKindSetMemento);
+        this.fireEvent(this.updateSequenceChanged, updateKindSetMemento);
     },
 
     // to AnnotatePanelController.js
@@ -344,26 +344,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var evt;
 
         if (!quiet && !this.manualUpdateStarted) {
-            // console.log("launch sequence changing, kind feature add: createMemento");
-            //var evt = Ext.create("SequenceManagerEvent", {
-            //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
-            //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
-            //    blah3: createMemento()  
-            //}
-            //this.fireEvent(this.updateSequenceChanging);
-            //this.fireEvent(this.updateKindFeatureAdd);
+            this.fireEvent(this.updateSequenceChanging, this.updateKindFeatureAdd, createMemento() );
         }
         this.features.push(pFeature);
 
         if (!quiet && !this.manualUpdateStarted) {
-            // console.log("launch sequence changing, kind feature add: feature");
-            //var evt = Ext.create("SequenceManagerEvent", {
-            //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
-            //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
-            //    blah3: feature  
-            //}
-            //this.fireEvent(this.updateSequenceChanging);
-            //this.fireEvent(this.updateKindFeatureAdd);
+            this.fireEvent(this.updateSequenceChanged, this.updateKindFeatureAdd, pFeature);
         }
     },
 
@@ -379,12 +365,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             return false; //? null?
         }
         if ( !quiet && !this.manualUpdateStarted) {
-            //evt = Ext.create("SequenceManagerEvent", {
-            //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
-            //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
-            //    blah3: createMemento()  
-            //}
-            //dispatcher.dispatchEvent(evt)
+            this.fireEvent(this.updateSequence
 
         }
         for (var i=0; i < pFeaturesToAdd.length; i++) {
@@ -1279,7 +1260,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             if (feat.getNotes() !== null) {
                 for (var j=0; j < feat.getNotes().length; j++) {
                     var featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
-                        name: feat.getNotes()[j].getName(),
+                        name: feat.getNotes()[j].getType(),
                         value: feat.getNotes()[j].getValue(),
                         quoted: feat.getNotes()[j].getQuoted()
                     });
@@ -1319,6 +1300,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         for (var i=0; i < gbFeats.length; i++) {
             var locations   = [];
             var notes       = [];
+            var featName = "";
             //var tmpFeat = null;
 
             for (var j=0; j < gbFeats[i].getFeatureLocation().length; j++) {
@@ -1329,18 +1311,25 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 locations.push(tmpLoc);
             }
 
-            for (var k=0; k < gbFeats[i].getFeatureQualifier().length; k++) {
+            /*for (var k=0; k < gbFeats[i].getFeatureQualifier().length; k++) {
+                
+                var tmpName = gbFeats[i].getFeatureQualifier()[k].getName();
+                if (tmpName === ("label" || "ApEinfo_label" || "note" || "gene" || "organism" || "name") ) {
+                    featName = gbFeats[i].getFeatureQualifier()[k].getValue();
+                } else {
+                    tmpName = gbFeats[i].getKeyword();
+                }
                 var tmpNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
                     name:   gbFeats[i].getFeatureQualifier()[k].getName(),
                     value:  gbFeats[i].getFeatureQualifier()[k].getValue(),
                     quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted(),
                 });
                 notes.push(tmpNote);
-            }
+            }*/
 
             features[i] = Ext.create("Teselagen.bio.sequence.dna.Feature",{
-                name:   gbFeats[i].getKeyword(),
-                _type:  gbFeats[i].getKeyword(),
+                name:   featName,
+                type:   gbFeats[i].getKeyword(),
                 strand: gbFeats[i].getStrand(),
                 //start:  gbFeats[i].getFeatureLocation()[0].getStart(),
                 //end:    gbFeats[i].getFeatureLocation()[0].getEnd(),
