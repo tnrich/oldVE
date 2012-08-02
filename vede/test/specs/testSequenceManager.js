@@ -879,7 +879,7 @@ Ext.onReady(function() {
 
             beforeEach(function() {
                 var note1 = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
-                    name: "note1",
+                    name: "note",
                     value: "note1value",
                     quoted: true
                 });
@@ -890,7 +890,7 @@ Ext.onReady(function() {
                 var smLine =  'LOCUS       test                       7 bp ds-DNA     circular     30-JUL-2012\n' + 
                         'FEATURES             Location/Qualifiers\n' +
                         '     feat1           1..3\n' +
-                        '                     /note1="note1value"\n' +
+                        '                     /note="note1value"\n' +
                         '     feat3           join(2..5,0..1)\n' +
                         'ORIGIN      \n' +
                         '        1 gattaca     \n';
@@ -918,7 +918,7 @@ Ext.onReady(function() {
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
 
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note1");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note");
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
                 
                 expect(gb.getOrigin().getSequence()).toBe("gattaca");
@@ -951,7 +951,7 @@ Ext.onReady(function() {
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0); //"" <<<=== really broken...why???
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
 
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note1");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note");
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
                 
                 expect(gb.findKeyword("ORIGIN").getSequence()).toBe("gattaca");
@@ -970,7 +970,8 @@ Ext.onReady(function() {
                 expect(newSM.getSequence().seqString()).toBe("gattaca");
                 expect(newSM.getFeatures().length).toBe(2);
 
-                expect(newSM.getFeatures()[0].getName()).toBe("feat1");
+                expect(newSM.getFeatures()[0].getName()).toBe("note1value");
+                expect(newSM.getFeatures()[0].getType()).toBe("feat1");
                 expect(newSM.getFeatures()[0].getLocations().length).toBe(1);
                 expect(newSM.getFeatures()[0].getStart()).toBe(1);
                 expect(newSM.getFeatures()[0].getEnd()).toBe(3); //5
@@ -979,6 +980,7 @@ Ext.onReady(function() {
                 expect(newSM.getFeatures()[0].getNotes()[0].getValue()).toBe("note1value");
 
                 expect(newSM.getFeatures()[1].getName()).toBe("feat3");
+                expect(newSM.getFeatures()[1].getType()).toBe("feat3");
                 expect(newSM.getFeatures()[1].getLocations().length).toBe(2);
                 expect(newSM.getFeatures()[1].getLocations()[0].getStart()).toBe(2); // 1
                 expect(newSM.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
