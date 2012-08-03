@@ -154,7 +154,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             ", " + aa + " AA" + complimentary;
 
         if(orf.getStartCodons().length > 1) {
-            tooltipLabel += "\nStart Codons: ";
+            tooltipLabel += "<br>Start Codons: ";
             
             var codonsArray = [];
             var codonString;

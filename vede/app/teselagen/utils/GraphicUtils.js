@@ -186,9 +186,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
         var sprite;
         if(direction > 0) {
-            if(startAngle == endAngle) {
-                arcLength = 2 * Math.PI * radius;
-            } else if(startAngle > endAngle) {
+            if(startAngle > endAngle) {
                 arcLength = radius * (2 * Math.PI - (endAngle - startAngle));
             } else {
                 arcLength = radius * (endAngle - startAngle);
