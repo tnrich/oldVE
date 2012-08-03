@@ -1,0 +1,19 @@
+LOCUS       GentR Casette            761 bp    DNA     linear       31-JUL-2012
+FEATURES             Location/Qualifiers
+     misc_feature    207..740
+                     /label=Gentamycin R
+ORIGIN      
+          1 ctgttcggtt cgtaaactgt aatgcaagta gcgtatgcgc tcacgcaact ggtccagaac
+         61 cttgaccgaa cgcagcggtg gtaacggcgc agtggcggtt ttcatggctt gttatgactg
+        121 tttttttgta cagtctatgc ctcgggcatc caagcagcaa gcgcgttacg ccgtgggtcg
+        181 atgtttgatg ttatggagca gcaacgatgt tacgcagcag caacgatgtt acgcagcagg
+        241 gcagtcgccc taaaacaaag ttaggtggct caagtatggg catcattcgc acatgtaggc
+        301 tcggccctga ccaagtcaaa tccatgcggg ctgctcttga tcttttcggt cgtgagttcg
+        361 gagacgtagc cacctactcc caacatcagc cggactccga ttacctcggg aacttgctcc
+        421 gtagtaagac attcatcgcg cttgctgcct tcgaccaaga agcggttgtt ggcgctctcg
+        481 cggcttacgt tctgcccaag tttgagcagc cgcgtagtga gatctatatc tatgatctcg
+        541 cagtctccgg cgagcaccgg aggcagggca ttgccaccgc gctcatcaat ctcctcaagc
+        601 atgaggccaa cgcgcttggt gcttatgtga tctacgtgca agcagattac ggtgacgatc
+        661 ccgcagtggc tctctataca aagttgggca tacgggaaga agtgatgcac tttgatatcg
+        721 acccaagtac cgccacctaa caattcgttc aagccgagat c
+//
