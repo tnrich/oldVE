@@ -1,0 +1,14 @@
+LOCUS       TN7R                     265 bp ds-DNA     linear       31-JUL-2012
+ACCESSION   TN7R
+VERSION     TN7R
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     misc_feature    21..245
+                     /label="Tn7R"
+ORIGIN      
+        1 ggatgccctg cgtaagcggg tgtgggcgga caataaagtc ttaaactgaa caaaatagat
+       61 ctaaactatg acaataaagt cttaaactag acagaatagt tgtaaactga aatcagtcca
+      121 gttatgctgt gaaaaagcat actggacttt tgttatggct aaagcaaact cttcattttc
+      181 tgaagtgcaa attgcccgtc gtattaaaga ggggcgtggc caagggcatg gtaaagacta
+      241 tattcgcggc gttgtgacaa tttac   
+//

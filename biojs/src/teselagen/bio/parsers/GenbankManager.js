@@ -105,7 +105,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var tmp = null;
 
         // IGNORE LINES: DO NOT EVEN PROCESS
-        if (Ext.String.trim(line) === "" || key==="COMMENT") {
+        if (Ext.String.trim(line) === "" || key==="COMMENT" || key===";") {
             return null;
         }
 
