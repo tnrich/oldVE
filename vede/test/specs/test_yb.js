@@ -1,6 +1,6 @@
 //Ext.onReady(function() {
-	var Point = "Teselagen.bio.util.Point";
-	var Caret = "Teselagen.view.pie.Caret";
+    var Point = "Teselagen.bio.util.Point";
+	var Caret = "Vede.view.pie.Caret";
     describe("Point", function() {
         var p, p2;
         it("Create", function() {
@@ -24,15 +24,22 @@
     describe("pie.Caret", function() {
     	var c;
     	var centerPt = Ext.create(Point, 1, 2);
-    	c = Ext.create("Teselagen.view.pie.Caret", {
-    		angle = 50,
-    		center = centerPt,
-    		radius = 10,
+    	c = Ext.create(Caret, {
+    		angle : 50,
+    		center : centerPt,
+    		radius : 10,
+    		stroke : "red"
     	});
-    	it("Construct", function() {
+    	it("callParent initializes config", function() {
     		expect(c.angle).toBe(50);
     		expect(c.center).toBe(centerPt);
     		expect(c.radius).toBe(10);
     	});
-    })
+    	it("Default config", function() {
+    		expect(c.type).toBe("path");
+    	});
+    	it("Argument overrides default config", function() {
+    		expect(c.stroke).toBe("red");
+    	});
+    });
 //});
