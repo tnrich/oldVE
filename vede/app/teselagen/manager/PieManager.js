@@ -277,7 +277,7 @@ Ext.define("Teselagen.manager.PieManager", {
             if(!label.includeInView) {
                 return false; 
             }
-            
+
             var labelCenter = label.center;
             var angle = labelCenter * 2 * Math.PI / 
                          this.sequenceManager.getSequence().toString().length;
@@ -295,7 +295,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition, "start"));
+            labels.push(this.drawConnection(label, xPosition, yPosition));
         }
 
         // Scale Right Bottom Labels
@@ -326,7 +326,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition, "start"));
+            labels.push(this.drawConnection(label, xPosition, yPosition));
         }
         
         // Scale Left Top Labels
@@ -339,7 +339,7 @@ Ext.define("Teselagen.manager.PieManager", {
             if(!label.includeInView) {
                 return false; 
             }
-            
+
             var labelCenter = label.center;
             var angle = 2 * Math.PI - labelCenter * 2 * Math.PI / 
                          this.sequenceManager.getSequence().toString().length;
@@ -357,7 +357,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition, "end"));
+            labels.push(this.drawConnection(label, xPosition, yPosition)); 
         }
         
         // Scale Left Bottom Labels
@@ -370,7 +370,7 @@ Ext.define("Teselagen.manager.PieManager", {
             if(!label.includeInView) {
                 return false; 
             }
-            
+
             var labelCenter = label.center;
             var angle = labelCenter * 2 * Math.PI / 
                         this.sequenceManager.getSequence().toString().length - Math.PI;
@@ -388,7 +388,7 @@ Ext.define("Teselagen.manager.PieManager", {
               
             label.setAttributes({translate: {x: xPosition - label.x,
                                               y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition, "end"));
+            labels.push(this.drawConnection(label, xPosition, yPosition));
         }
 
         if(this.labelSprites) {
@@ -401,6 +401,14 @@ Ext.define("Teselagen.manager.PieManager", {
         this.labelSprites.addAll(labels);
 
         this.showSprites(this.labelSprites);
+
+        Ext.each(leftTopLabels, function(label) {
+            label.setStyle("text-anchor", "end");
+        });
+
+        Ext.each(leftBottomLabels, function(label) {
+            label.setStyle("text-anchor", "end");
+        });
     },
 
     /**
@@ -413,7 +421,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Int} labelY The label's y position.
      * @param {String} align The argument for the text-anchor property.
      */
-    drawConnection: function(label, labelX, labelY, align) {
+    drawConnection: function(label, labelX, labelY) {
         if(label.annotation instanceof Teselagen.bio.sequence.dna.Feature) {
             return Ext.create("Ext.draw.Sprite", {
                 type: "path",
@@ -422,7 +430,6 @@ Ext.define("Teselagen.manager.PieManager", {
                       " " + this.featureRenderer.middlePoints.get(label.annotation).y,
                 stroke: this.self.LABEL_CONNECTION_COLOR,
                 "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
-                "text-anchor": align 
             });
         } else {
             return Ext.create("Ext.draw.Sprite", {
@@ -432,7 +439,6 @@ Ext.define("Teselagen.manager.PieManager", {
                       " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y,
                 stroke: this.self.LABEL_CONNECTION_COLOR,
                 "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
-                "text-anchor": align
             });
         }
     },
