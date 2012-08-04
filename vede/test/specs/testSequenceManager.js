@@ -130,13 +130,15 @@ Ext.onReady(function() {
                 var smNew = Ext.create("Teselagen.manager.SequenceManager", {
                     name: "blah",
                     circular: true,
-                    sequence: null,
+                    sequence: Teselagen.bio.sequence.DNATools.createDNA(""),
                     features: []
                 });
-                sm.setMemento(smNew);
-                expect(sm.getName()).toBe(smNew.getName());
+                var smMemento = sm.createMemento();
+                var smNewMemento = smNew.createMemento();
+                sm.setMemento(smNewMemento);
+                expect(sm.getName()).toBe(smNewMemento.getName());
                 smNew.setName("foo");
-                expect(sm.getName()).toNotBe(smNew.getName());
+                expect(smMemento.getName()).toNotBe(smNewMemento.getName());
 
             });
 
