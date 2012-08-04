@@ -17,6 +17,7 @@ Ext.application({
         'SimulateDigestionWindow'
     ],
     controllers: [
+        'AppController',
         'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
