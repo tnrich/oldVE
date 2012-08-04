@@ -32,29 +32,14 @@ Ext.define('Vede.controller.PieController', {
             this.enzymeGroupManager.initialize();
         }
 
-        // DW Deleting this and putting in listeners gives me an error
         this.application.on("SequenceManagerChanged", 
                             this.onSequenceManagerChanged, this);
     },
 
     listeners: {
-        /*SequenceChanged: function(pSeqMan) {
-            //this.onSequenceManagerChanged(pSeqMan);
-            var orfManager = Ext.create("Teselagen.manager.ORFManager", {
-                sequenceManager: pSeqMan,
-                minORFSize: 300
-            });
-            var enzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
-                sequenceManager: pSeqMan,
-                restrictionEnzymeGroup: this.enzymeGroupManager.getActiveGroup()
-            });
-            this.pieManager.setSequenceManager(pSeqMan);
-            this.pieManager.setOrfs(orfManager.getOrfs());
-            this.pieManager.setCutSites(enzymeManager.getCutSites());
-            this.pieManager.setFeatures(pSeqMan.getFeatures());
-
-            this.pieManager.render();
-        }*/
+        SequenceManagerChanged: function(pSeqMan) {
+            this.onSequenceManagerChanged(pSeqMan);
+        }
     },
 
     onSequenceManagerChanged: function(pSeqMan) {

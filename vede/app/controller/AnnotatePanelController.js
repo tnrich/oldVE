@@ -80,9 +80,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     listeners: {
-        /*Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED: function(arg1, arg2) {
-            console.log("This works");
-        }*/
     },
 
     onSequenceChanged: function(kind, obj) {
