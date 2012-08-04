@@ -42,7 +42,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @cfg {Teselagen.bio.sequence.dna.DNASequence} sequence
      */
     config: {
-        name: null,
+        name: "",
         circular: false,
         sequence: null,
         features: [],
@@ -65,7 +65,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     updateKindSequenceInsert:   null, // Teselagen.event.SequenceManagerEvent.KIND_SEQUENCE_INSERT,
     updateKindSequenceRemove:   null, // Teselagen.event.SequenceManagerEvent.KIND_SEQUENCE_REMOVE,
     updateKindKManualUpdate:    null, // Teselagen.event.SequenceManagerEvent.KIND_MANUAL_UPDATE,
-    updateKindSetMemento:        null, // Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO,
+    updateKindSetMemento:       null, // Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO,
     updateKindInitialized:      null, // Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED,
 
 
@@ -86,8 +86,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //this.mixins.observable.constructor.call(this, inData);
 
         this.DNATools                   = Teselagen.bio.sequence.DNATools;
+        //These two are events
         this.updateSequenceChanged      = Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED;
         this.updateSequenceChanging     = Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING;
+        //The following are types of SequenceChanged and SequenceChanging
         this.updateKindFeatureAdd       = Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD;
         this.updateKindFeatureRemove    = Teselagen.event.SequenceManagerEvent.KIND_FEATURE_REMOVE;
         this.updateKindFeaturesAdd      = Teselagen.event.SequenceManagerEvent.KIND_FEATURES_ADD;
@@ -101,6 +103,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.mixins.observable.constructor.call(this, inData);
 
         //this.addEvents("SequenceChanged");
+        /*
         this.addEvents(this.updateSequenceChanged);
         this.addEvents(this.updateSequenceChanging);
         this.addEvents(this.updateKindFeatureAdd);
@@ -111,15 +114,16 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.addEvents(this.updateKindSequenceRemove);
         this.addEvents(this.updateKindKManualUpdate);
         this.addEvents(this.updateKindSetMemento);
-        this.addEvents(this.updateKindInitialized);
+        this.addEvents(this.updateKindInitialized);*/
 
+        this.callParent([inData]);
         this.initConfig(inData);
 
 
         if (inData) {
-            this.name     = inData.name     || null;
+            this.name     = inData.name     || "";
             this.circular = inData.circular || false;
-            this.sequence = inData.sequence || null;
+            this.sequence = inData.sequence || Teselagen.bio.sequence.DNATools.createDNA("");
             this.features = inData.features || [];
         }
         /**
@@ -172,6 +176,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 clonedFeatures.push(this.features[i].clone());
             }
         }
+
         var seq = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.toString());
         
         return Ext.create("Teselagen.manager.SequenceManagerMemento", {
@@ -197,7 +202,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
-        this.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento);
+        this.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento, null);
     },
 
     // to AnnotatePanelController.js
@@ -243,7 +248,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
 
         if( pStart > pEnd) {
-            result = Teselagen.bio.sequence.DNATools.createDNA(this.sequence.subList(pStart, this.sequence.getSymbolsLength()).seqString() + this.sequence.subList(0, pEnd).seqString());
+            result = this.DNATools.createDNA(this.sequence.subList(pStart, this.sequence.getSymbolsLength()).seqString() + this.sequence.subList(0, pEnd).seqString());
         } else {
             result = this.sequence.subList(pStart, pEnd);
         }
@@ -360,14 +365,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
             return false; //? null?
         }
         if ( !quiet && !this.manualUpdateStarted) {
-            //this.fireEvent(this.updateSequenceChanging, this.updateKindFeaturesAdd, createMemento());
+            this.fireEvent(this.updateSequenceChanging, this.updateKindFeaturesAdd, this.createMemento());
 
         }
         for (var i=0; i < pFeaturesToAdd.length; i++) {
             this.addFeature(pFeaturesToAdd[i], true);
         }
         if (!quiet && !this.manualUpdateStarted) {
-            //this.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesAdd, pFeaturesToAdd);
+            this.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesAdd, pFeaturesToAdd);
         }
         return true;
     },
@@ -489,12 +494,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateReverseComplementSequence = true;
 
         if(!pQuiet && !this.manualUpdateStarted) {
-            // evt = Ext.create("SequenceManagerEvent", {
-            //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
-            //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
-            //    blah3: createMemento()  
-            //}
-            //dispatcher.dispatchEvent(evt); //LAST HERE DW
+            this.fireEvent(this.updateSequenceChanging, this.updateKindSequenceInsert, this.createMemento());
         }
 
         lengthBefore = this.sequence.getSymbolsLength();
@@ -509,7 +509,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.features[i].insertAt(pPosition, insertSequenceLength, lengthBefore, this.circular);
         } 
         if(!pQuiet && !this.manualUpdateStarted) {
-            //SEQUENCE_CHANGED
+            this.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequence: pInsertSequence, position: pPosition});
         }
         return true;
     },
@@ -537,12 +537,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
         needsRecalculateReverseComplementSequence = true;
 
         if (!quiet && !this.manualUpdateStarted) {
-            //evt = Ext.create("SequenceManagerEvent", {
-            //    blah1: SequenceProviderEvent.SEQUENCE_CHANGING,
-            //    blah2: SequenceProviderEvent.KIND_FEATURE_ADD,
-            //    blah3: createMemento()  
-            //}
-            //dispatcher.dispatchEvent(evt);
+            this.fireEvent(this.updateSequenceChanging, this.updateKindSequenceRemove, this.createMemento());
+            //DW: Original has bug: used kindSequenceInsert instead
         }
         var DEBUG_MODE = true;
 
@@ -556,6 +552,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var sequence = this.sequence;
         var circular = this.circular;
         var feature, featStart, featEnd;
+
+        var removeSequenceLength;
 
         for (var i=0; i < features.length; i++) {
             var feature = features[i];
@@ -599,18 +597,20 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //}
 
         // Readjusting sequence indices
+
         if(pStartIndex > pEndIndex) {
             sequence.deleteSymbols(0, pEndIndex);
             sequence.deleteSymbols(pStartIndex - pEndIndex, lengthBefore - pStartIndex);
         } else {
-            var removeSequenceLength = pEndIndex - pStartIndex;
+            removeSequenceLength = pEndIndex - pStartIndex;
             sequence.deleteSymbols(pStartIndex, removeSequenceLength);
         }
 
 
         
         if(!quiet && !this.manualUpdateStarted) {
-            //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_SEQUENCE_REMOVE, {position : pStartIndex, length : length}));
+            this.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength}); 
+            //DW orig length was length...wrong?
         }
 
         return true;
@@ -1004,7 +1004,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     manualUpdateStart: function() {
         if(!this.manualUpdateStarted) {
             this.manualUpdateStarted = true;
-
+            this.fireEvent(this.updateSequenceChanging, this.updateKindKManualUpdate, this.createMemento());
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGING, SequenceProviderEvent.KIND_MANUAL_UPDATE, createMemento()));
         }
     },
@@ -1014,6 +1014,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     manualUpdateEnd: function() {
         if(this.manualUpdateStarted) {
+            this.fireEvent(this.updateSequenceChanged, this.updateKindKManualUpdate, null);
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_MANUAL_UPDATE, null));
 
             this.manualUpdateStarted = false;
@@ -1090,7 +1091,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.setSequence(revComSeq);
 
         seqLen = this.sequence.getSymbolsLength();
-        //console.log(" revComSeq " + seqLen);
 
         for (var i=0; i < this.features.length; i++) {
             revFeat = this.features[i].clone(); // DW: ORIG DOES NOT CLONE
@@ -1118,8 +1118,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var sequence = this.sequence;
         var seqLen   = this.sequence.getSymbolsLength();
 
-        //console.log(pRebasePosition + " : " + seqLen);
-
         if(pRebasePosition === undefined || pRebasePosition === 0 || seqLen === 0 || pRebasePosition === seqLen) {
             return false; // nothing to rebase;
         }
@@ -1139,11 +1137,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
         // rebase sequence
         var tmpSequence = sequence.subList(0, pRebasePosition); //symbolList
 
-        //console.log("***\n" + tmpSequence.seqString());
         sequence.deleteSymbols(0, pRebasePosition);
-        //console.log(sequence.seqString());
         sequence.addSymbolList(tmpSequence);  // DW 7.26.2012 added addSymbolList() to SymbolList class to make this work
-        //console.log(sequence.seqString());
 
         // rebase features
         if(features && features.length > 0) {

@@ -5,7 +5,8 @@
 Ext.define('Vede.controller.PieController', {
     requires: ["Teselagen.bio.sequence.DNATools",
                "Teselagen.bio.orf.ORFFinder",
-               "Teselagen.manager.RestrictionEnzymeGroupManager"],
+               "Teselagen.manager.RestrictionEnzymeGroupManager",
+               "Teselagen.event.SequenceManagerEvent"],
 
     extend: 'Ext.app.Controller',
 
@@ -17,6 +18,7 @@ Ext.define('Vede.controller.PieController', {
      * @member Vede.controller.PieController
      */
     init: function() {
+
         this.control({
             "#Pie" : {
                 click : this.onClickPie
@@ -30,8 +32,29 @@ Ext.define('Vede.controller.PieController', {
             this.enzymeGroupManager.initialize();
         }
 
+        // DW Deleting this and putting in listeners gives me an error
         this.application.on("SequenceManagerChanged", 
                             this.onSequenceManagerChanged, this);
+    },
+
+    listeners: {
+        /*SequenceChanged: function(pSeqMan) {
+            //this.onSequenceManagerChanged(pSeqMan);
+            var orfManager = Ext.create("Teselagen.manager.ORFManager", {
+                sequenceManager: pSeqMan,
+                minORFSize: 300
+            });
+            var enzymeManager = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
+                sequenceManager: pSeqMan,
+                restrictionEnzymeGroup: this.enzymeGroupManager.getActiveGroup()
+            });
+            this.pieManager.setSequenceManager(pSeqMan);
+            this.pieManager.setOrfs(orfManager.getOrfs());
+            this.pieManager.setCutSites(enzymeManager.getCutSites());
+            this.pieManager.setFeatures(pSeqMan.getFeatures());
+
+            this.pieManager.render();
+        }*/
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
