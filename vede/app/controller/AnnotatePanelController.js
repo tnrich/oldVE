@@ -5,34 +5,21 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                "Teselagen.event.MapperEvent"],
 
 
+    AnnotatePanel: null,
+
     AAManager: null,
     ORFManager: null,
     RestrictionEnzymeManager: null,
     SequenceManager: null,
     TraceManager: null,
+    SequenceAnnotationManager: null,
 
     Managers: null,
     
     onLaunch: function() {
-        var ap = Ext.getCmp('AnnotatePanel');
-        var box = Ext.create('Ext.draw.Sprite',{
-            type: 'rect',
-            fill: '#79BB3F',
-            width: 100,
-            height: 30,
-            x: 10,
-            y: 10,
-            listeners: {
-                //click: this.onClickPie
-            }
-        });
+        this.AnnotatePanel = Ext.getCmp('AnnotatePanel');
         
-        var drawComponent2 = Ext.create('Ext.draw.Component', {
-            items: [box]
-        });
-        ap.add(drawComponent2);
-        //console.log(ap);
-        
+
         // Instantiate the managers.
         this.SequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
             name: "Sequence Manager"
@@ -50,10 +37,32 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             sequenceManager: this.SequenceManager
         });
 
+        this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {
+            sequenceManager: this.SequenceManager,
+            orfManager: this.ORFManager,
+            aaManager: this.AAManager,
+            restrictionEnzymeManager: this.RestrictionEnzymeManager,
+            annotatePanel: this.AnnotatePanel,
+        });
+
         this.TraceManager = Ext.create("Teselagen.manager.TraceManager", {
             sequenceManager: this.SequenceManager
         });
 
+        var box = Ext.create('Ext.draw.Sprite',{
+            type: 'rect',
+            fill: '#79BB3F',
+            width: 100,
+            height: 30,
+            x: 10,
+            y: 10,
+            listeners: {
+                //click: this.onClickPie
+            }
+        });
+        
+        this.AnnotatePanel.add(this.SequenceAnnotationManager.getAnnotator());
+        this.AnnotatePanel.show(true);
         this.Managers = [this.AAManager, 
                          this.ORFManager, 
                          this.RestrictionEnzymeManager, 
