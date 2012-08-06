@@ -16,6 +16,7 @@ Ext.define("Teselagen.manager.PieManager", {
         sequenceManager: null,
         center: null,
         pie: null,
+        nameBox: null,
         railRadius: 0,
         cutSites: [],
         features: [],
@@ -183,6 +184,7 @@ Ext.define("Teselagen.manager.PieManager", {
         collection.each(function(sprite) {
             this.pie.surface.add(sprite);
             sprite.show(true);
+            this.pie.doComponentLayout();
         }, this);
     },
 
@@ -489,6 +491,16 @@ Ext.define("Teselagen.manager.PieManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
+        this.pie.surface.remove(this.nameBox);
+
+        this.setNameBox(Ext.create("Vede.view.pie.NameBox", {
+            center: this.center,
+            name: pSequenceManager.getName()
+        }));
+
+        this.pie.surface.add(this.nameBox);
+        this.nameBox.show(true);
+
         return pSequenceManager;
     },
 
@@ -524,9 +536,26 @@ Ext.define("Teselagen.manager.PieManager", {
         return pOrfs;
     },
     
+    /**
+     * @private
+     * Adds the caret to the pie.
+     */
     initPie: function() {
         var caret = Ext.create("Vede.view.pie.Caret");
         this.pie.surface.add(caret);
         caret.show(true);
+
+        var name = "";
+        if(this.sequenceManager) {
+            name = this.sequenceManager.getName();
+        }
+
+        this.setNameBox(Ext.create("Vede.view.pie.NameBox", {
+            center: this.center,
+            name: name
+        }));
+
+        this.pie.surface.add(this.nameBox);
+        this.nameBox.show(true);
     }
 });
