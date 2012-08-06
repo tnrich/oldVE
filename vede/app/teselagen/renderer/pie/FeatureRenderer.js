@@ -148,7 +148,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
             nameString = " - " + feature.getName();
         }
 
-        return feature.getType() + nameString + ": " + (feature.getStart() + 1) +
+        return feature.getType() + nameString + ": " + feature.getStart() +
                ".." + feature.getEnd();
     },
 

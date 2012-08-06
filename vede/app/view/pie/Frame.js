@@ -29,7 +29,7 @@ Ext.define('Vede.view.pie.Frame', {
         // fill computes properly. See the SVG documentation on fill-rule for more.
         // Basically, ExtJS doesn't let you set fill-rule, so we can only use the
         // default of "nonzero", while we would like to set it to "evenodd".
-        this.callParent([Ext.create("Ext.draw.Sprite", {
+        this.callParent([{
             type: "path",
             path: "M" + outerStartPoint.x + " " + outerStartPoint.y + 
                   "A" + outerRadius + " " + outerRadius + " 0 1 1 " + 
@@ -42,6 +42,6 @@ Ext.define('Vede.view.pie.Frame', {
             "stroke-width": this.self.OUTLINE_WIDTH,
             fill: this.self.RING_COLOR,
             "fill-rule": "evenodd"
-        })]);
+        }]);
     }
 });

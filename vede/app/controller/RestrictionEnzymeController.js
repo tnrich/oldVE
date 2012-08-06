@@ -64,15 +64,20 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector.store.loadData(groupArray);
         this.enzymeSelector.bindStore(this.enzymeSelector.store);
 
+        this.displayActiveGroup();
+
         // Add listeners to the 'toField' on the enzyme selector.
-        this.enzymeSelector.toField.store.on("add", this.onEnzymeAdded, this);
-        this.enzymeSelector.toField.store.on("remove", this.onEnzymeRemoved, this);
+        this.enzymeSelector.toField.store.un("add", this.onEnzymeAdded, this);
+        this.enzymeSelector.toField.store.un("remove", this.onEnzymeRemoved, this);
+
+        //this.enzymeSelector.toField.store.on("add", this.onEnzymeAdded, this);
+        //this.enzymeSelector.toField.store.on("remove", this.onEnzymeRemoved, this);
     },
 
     onEnzymeAdded: function(toStore, enzymes) {
         var newActive = [];
         toStore.each(function(rec) {
-            newActive.push(rec);
+            newActive.push(rec.data.name);
         });
 
         this.unsavedActiveEnzymes = newActive;
@@ -83,9 +88,22 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.unsavedActiveEnzymes.splice(enzIndex, 1);
     },
 
-    displayActiveGroups: function() {
+    displayActiveGroup: function() {
         if(this.unsavedActiveEnzymes.length == 0) {
+            var activeGroup = this.GroupManager.getActiveGroup();
+            var names = [];
 
+            Ext.each(activeGroup.getEnzymes(), function(enzyme) {
+                names.push({name: enzyme.getName()});
+                this.unsavedActiveEnzymes.push(enzyme.getName());
+            }, this);
+
+            this.enzymeSelector.toField.store.loadData(names, false);
+            this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
+        } else {
+            this.enzymeSelector.toField.store.loadData(
+                this.unsavedActiveEnzymes, false);
+            this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
         }
     },
 
@@ -113,11 +131,8 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Saves active enzymes and closes the window.
      */
     onOKButtonClick: function() {
-        var newActiveGroup = [];
-
-        Ext.each(this.unsavedActiveEnzymes, function(name) {
-            newActiveGroup.push(this.GroupManager.getEnzymeByName(name));
-        }, this);
+        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", 
+                                                this.unsavedActiveEnzymes);
 
         this.GroupManager.setActiveGroup(newActiveGroup);
         this.unsavedActiveEnzymes = [];

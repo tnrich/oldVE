@@ -88,13 +88,18 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                           this.onTraceManagerUpdated, this);
     },
 
-    onSequenceChanged: function() {
+    listeners: {
+    },
+
+    onSequenceChanged: function(kind, obj) {
         Ext.each(this.Managers, function(manager) {
             manager.sequenceChanged();
         });
+
+        console.log(kind);
     },
 
-    onSequenceChanging: function() {
+    onSequenceChanging: function(kind, obj) {
     },
 
     onAAManagerUpdated: function() {

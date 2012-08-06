@@ -14,11 +14,12 @@ Ext.define('Vede.view.AppViewport', {
                     xtype: 'panel',
                     id: 'ProjectPanel',
                     width: 150,
-                    resizable: true,
-                    resizeHandles: 'e',
+                    collapsible: true,
+                    split : true,
                     title: 'Project',
                     flex: 1,
-                    region: 'west'
+                    region: 'west',
+                    collapsible: true
                 },
                 {
                     xtype: 'panel',
@@ -33,8 +34,10 @@ Ext.define('Vede.view.AppViewport', {
                         {
                             xtype: 'container',
                             id: 'PieContainer',
+                            //autoScroll: true,
                             layout: {
-                                type: 'fit'
+                                type: 'fit',
+                                //manageOverflow: 1
                             }
                         },
                         {
@@ -54,11 +57,12 @@ Ext.define('Vede.view.AppViewport', {
                         type: 'fit'
                     },
                     width: 150,
-                    resizable: true,
-                    resizeHandles: 'w',
+                    collapsible: true,
+                    split: true,
                     title: 'Annotate',
                     flex: 2,
-                    region: 'east'
+                    region: 'east',
+                    collapsible: true
                 },
                 {
                     xtype: 'panel',
@@ -454,7 +458,7 @@ Ext.define('Vede.view.AppViewport', {
                                     id: 'reBtn',
                                     icon: 'resources/images/restriction_enzymes.png',
                                     scale: 'medium',
-                                    tooltip: 'Show Restriction Enzymes'
+                                    tooltip: 'Show Restriction Enzyme Manager'
                                 },
                                 {
                                     xtype: 'button',

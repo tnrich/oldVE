@@ -11,13 +11,26 @@ Ext.define('Vede.controller.MainToolbarController', {
         }
     },
 
+    onREButtonClick: function() {
+        var restrictionEnzymesManagerWindow = Ext.create(
+            "Vede.view.RestrictionEnzymesManagerWindow");
+
+        restrictionEnzymesManagerWindow.show();
+        restrictionEnzymesManagerWindow.center();
+
+        this.application.fireEvent("RestrictionEnzymeManagerOpened",
+                                   restrictionEnzymesManagerWindow);
+    },
+
     init: function() {
         this.control({
             "#featuresBtn": {
                 click: this.onFeaturesButtonClick
+            },
+            "#reBtn": {
+                click: this.onREButtonClick
             }
         });
-
     }
 
 });

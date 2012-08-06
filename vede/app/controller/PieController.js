@@ -5,7 +5,8 @@
 Ext.define('Vede.controller.PieController', {
     requires: ["Teselagen.bio.sequence.DNATools",
                "Teselagen.bio.orf.ORFFinder",
-               "Teselagen.manager.RestrictionEnzymeGroupManager"],
+               "Teselagen.manager.RestrictionEnzymeGroupManager",
+               "Teselagen.event.SequenceManagerEvent"],
 
     extend: 'Ext.app.Controller',
 
@@ -17,6 +18,7 @@ Ext.define('Vede.controller.PieController', {
      * @member Vede.controller.PieController
      */
     init: function() {
+
         this.control({
             "#Pie" : {
                 click : this.onClickPie
@@ -32,6 +34,12 @@ Ext.define('Vede.controller.PieController', {
 
         this.application.on("SequenceManagerChanged", 
                             this.onSequenceManagerChanged, this);
+    },
+
+    listeners: {
+        SequenceManagerChanged: function(pSeqMan) {
+            this.onSequenceManagerChanged(pSeqMan);
+        }
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
