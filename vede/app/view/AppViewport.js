@@ -18,7 +18,8 @@ Ext.define('Vede.view.AppViewport', {
                     resizeHandles: 'e',
                     title: 'Project',
                     flex: 1,
-                    region: 'west'
+                    region: 'west',
+                    collapsible: true
                 },
                 {
                     xtype: 'panel',
@@ -58,7 +59,8 @@ Ext.define('Vede.view.AppViewport', {
                     resizeHandles: 'w',
                     title: 'Annotate',
                     flex: 2,
-                    region: 'east'
+                    region: 'east',
+                    collapsible: true
                 },
                 {
                     xtype: 'panel',
@@ -454,7 +456,7 @@ Ext.define('Vede.view.AppViewport', {
                                     id: 'reBtn',
                                     icon: 'resources/images/restriction_enzymes.png',
                                     scale: 'medium',
-                                    tooltip: 'Show Restriction Enzymes'
+                                    tooltip: 'Show Restriction Enzyme Manager'
                                 },
                                 {
                                     xtype: 'button',
