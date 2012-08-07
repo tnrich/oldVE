@@ -1,7 +1,10 @@
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
-    requires: 'Teselagen.bio.parsers.GenbankManager',
+    requires: ['Teselagen.bio.parsers.GenbankManager',
+               'Teselagen.event.VisibilityEvent'],
+
+    VisibilityEvent: null,
 
     onCancelButtonClick: function(button, e, options) {
         button.up('window').close();
@@ -45,12 +48,38 @@ Ext.define('Vede.controller.MainMenuController', {
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
         var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
         if (checked) {
-            btn.toggle(true);
+            btn.toggle(true, true);
         }
         else {
-            btn.toggle(false);
+            btn.toggle(false, true);
         }
 
+        this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
+                                   checked);
+    },
+
+    onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var btn = Ext.ComponentQuery.query("#cutsitesBtn")[0];
+        if(checked) {
+            btn.toggle(true, true);
+        } else {
+            btn.toggle(false, true);
+        }
+        
+        this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
+                                   checked);
+    },
+
+    onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var btn = Ext.ComponentQuery.query("#orfsBtn")[0];
+        if(checked) {
+            btn.toggle(true, true);
+        } else {
+            btn.toggle(false, true);
+        }
+
+        this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
+                                   checked);
     },
 
         onSimulateDigestionMenuItemClick: function() {
@@ -87,7 +116,12 @@ Ext.define('Vede.controller.MainMenuController', {
             "#featuresMenuItem": {
                 checkchange: this.onFeaturesMenuItemCheckChange
             },
-
+            "#cutSitesMenuItem": {
+                checkchange: this.onCutSitesMenuItemCheckChange
+            },
+            "#orfsMenuItem": {
+                checkchange: this.onOrfsMenuItemCheckChange
+            },
                     "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
             },
@@ -95,6 +129,8 @@ Ext.define('Vede.controller.MainMenuController', {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             },
         });
+
+        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged); 
     },

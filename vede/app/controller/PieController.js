@@ -7,7 +7,8 @@ Ext.define('Vede.controller.PieController', {
                "Teselagen.bio.orf.ORFFinder",
                "Teselagen.manager.RestrictionEnzymeGroupManager",
                "Teselagen.event.SequenceManagerEvent",
-               "Teselagen.event.SelectionEvent"],
+               "Teselagen.event.SelectionEvent",
+               "Teselagen.event.VisibilityEvent"],
 
     extend: 'Ext.app.Controller',
 
@@ -26,6 +27,7 @@ Ext.define('Vede.controller.PieController', {
     selectionLayer: null,
 
     SelectionEvent: null,
+    VisibilityEvent: null,
 
     /**
      * @member Vede.controller.PieController
@@ -47,10 +49,17 @@ Ext.define('Vede.controller.PieController', {
             this.enzymeGroupManager.initialize();
         }
 
-        this.application.on("SequenceManagerChanged", 
-                            this.onSequenceManagerChanged, this);
-
         this.SelectionEvent = Teselagen.event.SelectionEvent;
+        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+
+        this.application.on("SequenceManagerChanged",
+                            this.onSequenceManagerChanged, this);
+        this.application.on(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
+                            this.onShowFeaturesChanged, this);
+        this.application.on(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
+                            this.onShowCutSitesChanged, this);
+        this.application.on(this.VisibilityEvent.SHOW_ORFS_CHANGED,
+                            this.onShowOrfsChanged, this);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -74,8 +83,30 @@ Ext.define('Vede.controller.PieController', {
         this.wireframeSelectionLayer.setSequenceManager(pSeqMan);
         this.selectionLayer.setSequenceManager(pSeqMan);
     },
-    
-    groupMan: null,
+
+    onShowFeaturesChanged: function(show) {
+        this.pieManager.setShowFeatures(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowCutSitesChanged: function(show) {
+        this.pieManager.setShowCutSites(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowOrfsChanged: function(show) {
+        this.pieManager.setShowOrfs(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
 
     onLaunch: function() {
         var pieContainer, pie;
@@ -87,6 +118,9 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
             center: {x: 100, y: 100},
             railRadius: 100,
+            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
+            showFeatures: Ext.getCmp("featuresMenuItem").checked,
+            showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
         pieContainer = Ext.getCmp('PieContainer');
@@ -175,7 +209,7 @@ Ext.define('Vede.controller.PieController', {
                 this.stickySelect(start, end);
             }
 
-            this.pieManager.adjustCaret(this.startSelectionAngle);
+            this.pieManager.adjustCaret(endSelectionAngle);
         }
     },
 
@@ -183,16 +217,20 @@ Ext.define('Vede.controller.PieController', {
         this.mouseIsDown = false;
 
         if(this.wireframeSelectionLayer.selected && 
-           this.wireframeSelectionLayer.selecting) {
+            this.wireframeSelectionLayer.selecting) {
 
             this.wireframeSelectionLayer.endSelecting();
             this.wireframeSelectionLayer.deselect();
 
             this.selectionLayer.endSelecting();
 
+            this.pieManager.adjustCaret(this.selectionLayer.startAngle);
+
             this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                        this.selectionLayer.start,
                                        this.selectionLayer.end);
+        } else {
+            this.selectionLayer.deselect();
         }
     },
 
