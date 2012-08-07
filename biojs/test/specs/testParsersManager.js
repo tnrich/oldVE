@@ -44,6 +44,7 @@ Ext.onReady(function() {
                 gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(gbStr);
 
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                //jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
             });
             
             it("checkGenbank() ",function(){
@@ -91,13 +92,13 @@ Ext.onReady(function() {
                 var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXml(jbeiXmlUrl);
                 console.log(jbeiXml);
 
-                var gbArr = Teselagen.bio.parsers.ParsersManager.parseJbeiseqxml(jbeiXml);
+                var gbArr = Teselagen.bio.parsers.ParsersManager.parseJbeiseqxml(jbeiXml, jbeiXmlUrl);
 
                 console.log(gbArr);
 
-                gbArr.each(function(gb) {
+                /*gbArr.each(function(gb) {
                     console.log(gb.toString());
-                })
+                })*/
 
                 
             });
@@ -119,7 +120,87 @@ Ext.onReady(function() {
             });
 
             it("genbankToJbeiseqxml", function() {
+
+            });
+
+            it("xml testing", function() {
+                var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
+
+                //console.log(xml);
+                var enzymeList = new Array();
                 
+                // Define an Ext model "Enzyme" to make reading from XML data possible.
+                Ext.define("Enzyme", {
+                    extend: "Ext.data.Model",
+                    fields: [{name: "name", mapping: "n"},
+                             {name: "site", mapping: "s"},
+                             {name: "forwardRegex", mapping: "fr"},
+                             {name: "reverseRegex", mapping: "rr"},
+                             {name: "cutType", type: "int", mapping: "c"},
+                             {name: "dsForward", type: "int", mapping: "ds > df"},
+                             {name: "dsReverse", type: "int", mapping: "ds > dr"},
+                             {name: "usForward", type: "int", mapping: "us > uf"},
+                             {name: "usReverse", type: "int", mapping: "us > ur"}]
+                });
+                
+                var doc = new DOMParser().parseFromString(xml, "text/xml");
+                //console.log(doc);
+                // Define a store which will hold the data read from XML.
+                var memstore = new Ext.data.Store({
+                    autoLoad: true,
+                    model: "Enzyme",
+                    data : doc,
+                    proxy: {
+                        type: "memory",
+                        reader: {
+                            type: "xml",
+                            record: "e",
+                            root: "enzymes"
+                        }
+                    }
+                });
+                //console.log(memstore.getCount());
+
+
+
+            });
+
+            it("xml testing", function() {
+                var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/test/data/jbeiseq/signal_peptide.xml");
+
+                //console.log(xml);
+                var enzymeList = new Array();
+                
+                // Define an Ext model "Enzyme" to make reading from XML data possible.
+                Ext.define("Jbei", {
+                    extend: "Ext.data.Model",
+                    fields: [{name: "name",     mapping: "seq:name"},
+                             {name: "circular", mapping: "seq:circular"},
+                             {name: "features", mapping: "seq:features"},
+                             {name: "sequence", mapping: "seq:sequence"}
+                             ]
+                });
+                
+                var doc = new DOMParser().parseFromString(xml, "text/xml");
+                //console.log(doc);
+                // Define a store which will hold the data read from XML.
+                var memstore = new Ext.data.Store({
+                    autoLoad: true,
+                    model: "Jbei",
+                    data : doc,
+                    proxy: {
+                        type: "memory",
+                        reader: {
+                            type: "xml",
+                            record: "seq:seq"//,
+                            //root: "enzymes"
+                        }
+                    }
+                });
+                //console.log(memstore.getCount());
+
+
+
             });
 
         });
