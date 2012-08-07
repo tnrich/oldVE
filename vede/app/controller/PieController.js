@@ -6,6 +6,7 @@ Ext.define('Vede.controller.PieController', {
     requires: ["Teselagen.bio.sequence.DNATools",
                "Teselagen.bio.orf.ORFFinder",
                "Teselagen.manager.RestrictionEnzymeGroupManager",
+               "Teselagen.event.CaretEvent",
                "Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.SelectionEvent",
                "Teselagen.event.VisibilityEvent"],
@@ -26,8 +27,12 @@ Ext.define('Vede.controller.PieController', {
     wireframeSelectionLayer: null,
     selectionLayer: null,
 
+    CaretEvent: null,
     SelectionEvent: null,
     VisibilityEvent: null,
+
+    clickedAnnotationStart: null,
+    clickedAnnotationEnd: null,
 
     /**
      * @member Vede.controller.PieController
@@ -49,17 +54,42 @@ Ext.define('Vede.controller.PieController', {
             this.enzymeGroupManager.initialize();
         }
 
+        this.CaretEvent = Teselagen.event.CaretEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
+        this.application.on("AnnotationClicked", this.onAnnotationClicked, this);
+
+        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+
         this.application.on("SequenceManagerChanged",
                             this.onSequenceManagerChanged, this);
+
         this.application.on(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
                             this.onShowFeaturesChanged, this);
         this.application.on(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
                             this.onShowCutSitesChanged, this);
         this.application.on(this.VisibilityEvent.SHOW_ORFS_CHANGED,
                             this.onShowOrfsChanged, this);
+    },
+
+    /**
+     * Catches events from the annotation sprites' onclick listeners. When a
+     * mouseup event is detected, we check to see if this.clickedAnnotationStart
+     * and end have been defined to see if an annotation has been clicked. If it
+     * has we can easily select it.
+     */
+    onAnnotationClicked: function(start, end) {
+        this.clickedAnnotationStart = start;
+        this.clickedAnnotationEnd = end;
+    },
+
+    onViewModeChanged: function(viewMode) {
+        if(viewMode == "linear") {
+            Ext.getCmp("PieContainer").hide();
+        } else {
+            Ext.getCmp("PieContainer").show();
+        }
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -139,19 +169,27 @@ Ext.define('Vede.controller.PieController', {
         });
     },
 
+    /**
+     * Initiates a click-and-drag sequence and moves the caret to click location.
+     */
     onMousedown: function(pEvt, pOpts) {
         this.startSelectionAngle = this.getClickAngle(pEvt);
         this.mouseIsDown = true;
 
-        this.pieManager.adjustCaret(this.startSelectionAngle);
 
         if(this.pieManager.sequenceManager) {
             this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
+            this.changeCaretPosition(this.startSelectionIndex);
         }
 
         this.selectionDirection = 0;
     },
 
+    /**
+     * Moves the caret along with the mouse, drawing the wireframe and doing a
+     * sticky select (when the ctrl key is not held) as the mouse moves during a
+     * click-and-drag.
+     */
     onMousemove: function(pEvt, pOpts) {
         var endSelectionAngle = this.getClickAngle(pEvt);
         var start;
@@ -190,7 +228,7 @@ Ext.define('Vede.controller.PieController', {
             }
 
             this.wireframeSelectionLayer.startSelecting();
-            this.wireframeSelectionLayer.select(start, end, this.selectionDirection);
+            this.wireframeSelectionLayer.select(start, end);
 
             this.pieManager.pie.surface.add(this.wireframeSelectionLayer.selectionSprite);
             this.wireframeSelectionLayer.selectionSprite.show(true);
@@ -208,32 +246,61 @@ Ext.define('Vede.controller.PieController', {
             } else {
                 this.stickySelect(start, end);
             }
-
-            this.pieManager.adjustCaret(endSelectionAngle);
+            this.changeCaretPosition(end);
         }
     },
 
+    /**
+     * Finalizes a selection at the end of a click-and-drag sequence.
+     */
     onMouseup: function(pEvt, pOpts) {
-        this.mouseIsDown = false;
 
-        if(this.wireframeSelectionLayer.selected && 
-            this.wireframeSelectionLayer.selecting) {
+        if(this.mouseIsDown) {
+            this.mouseIsDown = false;
 
-            this.wireframeSelectionLayer.endSelecting();
-            this.wireframeSelectionLayer.deselect();
+            if(this.wireframeSelectionLayer.selected && 
+                this.wireframeSelectionLayer.selecting) {
 
-            this.selectionLayer.endSelecting();
+                // If this is the end of a click-and-drag, fire a selection event.
+                this.wireframeSelectionLayer.endSelecting();
+                this.wireframeSelectionLayer.deselect();
 
-            this.pieManager.adjustCaret(this.selectionLayer.startAngle);
+                this.selectionLayer.endSelecting();
 
-            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
-                                       this.selectionLayer.start,
-                                       this.selectionLayer.end);
-        } else {
-            this.selectionLayer.deselect();
+                if(this.selectionLayer.endAngle) {
+                    this.changeCaretPosition(this.selectionLayer.end);
+                }
+
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this.selectionLayer.start,
+                                           this.selectionLayer.end);
+            } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
+                // If we've clicked a sprite, select it.
+                this.selectionLayer.select(this.clickedAnnotationStart,
+                                           this.clickedAnnotationEnd);
+
+                this.pieManager.pie.surface.add(this.selectionLayer.selectionSprite);
+                this.selectionLayer.selectionSprite.show(true);
+
+                this.changeCaretPosition(this.selectionLayer.end);
+
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this.selectionLayer.start,
+                                           this.selectionLayer.end);
+
+                this.clickedAnnotationStart = null;
+                this.clickedAnnotationEnd = null;
+            } else {
+                this.selectionLayer.deselect();
+            }
         }
     },
 
+    /**
+     * Given a click event, converts the document-relative coordinates to an
+     * angle relative to the vertical.
+     * @param {Ext.direct.Event} event The click event to determine the angle of.
+     */
     getClickAngle: function(event) {
         var el = this.pieManager.getPie().surface.el;
         var relX = event.getX() - (Math.round(el.getBox().width / 2) + el.getBox().x);
@@ -247,12 +314,34 @@ Ext.define('Vede.controller.PieController', {
         return angle;
     },
 
+    /**
+     * Returns the nucleotide index of a given angle.
+     * @param {Number} angle The angle to return the index of.
+     */
     bpAtAngle: function(angle) {
         return Math.floor(angle * 
             this.pieManager.sequenceManager.getSequence().seqString().length
             / (2 * Math.PI));
     },
 
+    /**
+     * Changes the caret position to a specified index.
+     * @param {Int} index The nucleotide index to move the caret to.
+     */
+    changeCaretPosition: function(index) {
+        this.pieManager.adjustCaret(index);
+        if(this.pieManager.sequenceManager) {
+            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
+                                       index);
+        }
+    },
+
+    /**
+     * Performs a "sticky select"- automatically locks the selection to ends of
+     * annotations enclosed in the selection.
+     * @param {Int} start The index of where dragging began.
+     * @param {Int} end The current index of the caret.
+     */
     stickySelect: function(start, end) {
         var annotations = this.pieManager.getAnnotationsInRange(start, end);
 

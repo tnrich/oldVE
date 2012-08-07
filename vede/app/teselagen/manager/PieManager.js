@@ -303,6 +303,9 @@ Ext.define("Teselagen.manager.PieManager", {
 
                 this.cutSiteRenderer.addToolTip(label, 
                                             this.cutSiteRenderer.getToolTip(site));
+                this.cutSiteRenderer.addClickListener(label,
+                                                label.annotation.getStart(),
+                                                label.annotation.getEnd());
 
                 labels.push(label);
             }, this);
@@ -321,6 +324,9 @@ Ext.define("Teselagen.manager.PieManager", {
 
                 this.featureRenderer.addToolTip(label,
                                         this.featureRenderer.getToolTip(feature));
+                this.featureRenderer.addClickListener(label,
+                                                label.annotation.getStart(),
+                                                label.annotation.getEnd());
 
                 labels.push(label);
             }, this);
@@ -643,7 +649,7 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     initPie: function() {
         this.caret = Ext.create("Vede.view.pie.Caret", {
-            angle: -45,
+            angle: 0,
             center: this.center,
             radius: this.railRadius + 10
         });
@@ -673,7 +679,10 @@ Ext.define("Teselagen.manager.PieManager", {
      * Repositions the caret to the given angle.
      * @param {Int} angle The angle of the caret to reposition to.
      */
-    adjustCaret: function(angle) {
+    adjustCaret: function(bp) {
+        var angle = bp * 2 * Math.PI / 
+            this.sequenceManager.getSequence().seqString().length;
+
         this.caret.destroy();
         this.caret = Ext.create("Vede.view.pie.Caret", {
             angle: angle,

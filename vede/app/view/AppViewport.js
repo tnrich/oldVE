@@ -125,7 +125,7 @@ Ext.define('Vede.view.AppViewport', {
                                                         },
                                                         {
                                                             xtype: 'menuitem',
-                                                            text: 'Circular View'
+                                                            text: 'Circular View',
                                                         },
                                                         {
                                                             xtype: 'menuitem',
@@ -218,11 +218,14 @@ Ext.define('Vede.view.AppViewport', {
                                             {
                                                 xtype: 'menucheckitem',
                                                 text: 'Circular',
+                                                id: 'circularViewMenuItem',
+                                                checked: true,
                                                 group: 'lineType'
                                             },
                                             {
                                                 xtype: 'menucheckitem',
                                                 text: 'Linear',
+                                                id: 'linearViewMenuItem',
                                                 group: 'lineType'
                                             },
                                             {
@@ -377,6 +380,8 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'circularViewBtn',
+                                    enableToggle: true,
+                                    pressed: true,
                                     icon: 'resources/images/pie.png',
                                     scale: 'medium',
                                     tooltip: 'Circular View'
@@ -384,6 +389,7 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'linearViewBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/rail.png',
                                     scale: 'medium',
                                     tooltip: 'Linear View'

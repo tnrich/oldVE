@@ -16,9 +16,9 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
     /**
      * Draws the shaded wedge-shaped selection area.
      */
-    drawSelectionPie: function(fromIndex, endIndex, direction) {
+    drawSelectionPie: function(fromIndex, endIndex) {
         var seqLen = this.sequenceManager.getSequence().toString().length;
-        if(seqLen == 0 || this.start == fromIndex && this.end == endIndex) {
+        if(seqLen == 0) {
             return;
         }
 

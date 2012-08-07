@@ -40,10 +40,9 @@ Ext.define("Teselagen.renderer.pie.Layer", {
      * Calls drawSelectionPie and sets relevant instance variables.
      * @param {Int} fromIndex The index where selection started.
      * @param {Int} toIndex The index where selection ended.
-     * @param {Int} direction The direction of selection: either 1 or -1.
      */
-    select: function(fromIndex, toIndex, direction) {
-        this.drawSelectionPie(fromIndex, toIndex, direction);
+    select: function(fromIndex, toIndex) {
+        this.drawSelectionPie(fromIndex, toIndex);
 
         this.selected = true;
         this.start = fromIndex;
@@ -81,6 +80,6 @@ Ext.define("Teselagen.renderer.pie.Layer", {
      * @private
      * Draws the wedge-shaped selection.
      */
-    drawSelectionPie: function(fromIndex, endIndex, direction) {
+    drawSelectionPie: function(fromIndex, endIndex) {
     }
 });
