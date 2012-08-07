@@ -288,28 +288,33 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         Ext.define("Jbeiseq", {
             extend: "Ext.data.Model",
             fields: [
+                "seq:name", "seq:circular", "seq:features", "seq:sequence"
+            ]
+            /*fields: [
                 {seq: "name",     type: "string"  },
                 {seq: "circular", type: "boolean"},
                 {seq: "sequence", type: "string"},
-                {seq: "features", type: "auto",  hasMany: { model: "Feature"} }
-            ]
+                {seq: "features", type: "auto"}//,  hasMany: { model: "Feature"} }
+            ]*/
         });
 
         Ext.define("Feature", {
             extend: "Ext.data.Model",
             fields: [
+                "seq:label",
+                "seq:complement",
+                "seq:type",
+                "seq:location",
+                "seq:attribute",
+                "seq:seqHash"
+                /*
                 {seq: "label",      type: "string"},
                 {seq: "complement", type: "boolean"},
                 {seq: "type",       type: "string"},
                 {seq: "location",   type: "auto"},
                 {seq: "attribute",  type: "auto"},
                 {seq: "seqHash",    type: "auto"}
-                /*{name: "seq:label",      type: "string",    defaultValue: ""},
-                {name: "seq:complement", type: "boolean",   defaultValue: false},
-                {name: "seq:type",       type: "string",    defaultValue: ""},
-                {name: "seq:location",   type: "auto",      defaultValue: ""},
-                {name: "seq:attribute",  type: "auto",      defaultValue: ""},
-                {name: "seq:seqHash",    type: "auto",      defaultValue: ""}*/
+                {name: "seq:label",      type: "string",    defaultValue: ""},*/
             ],
             belongsTo: "Jbeiseq"
         });
@@ -338,7 +343,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         console.log("here2");
 
         // For each item in the store, which is one record, create a genbank data model and add to list
-        myStore.each(function(jbei) {
+        /*myStore.each(function(jbei) {
             console.log(jbei);
             var name   = jbei.get("seq:name");
             var linear = !jbei.get("seq:circular");
@@ -353,7 +358,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
             var gb = Ext.create("Teselagen.bio.parsers.Genbank", {});
             list.push(gb);
-        });
+        });*/
 
         return list;
 
