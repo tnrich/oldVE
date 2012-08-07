@@ -231,15 +231,20 @@ Ext.define('Vede.view.AppViewport', {
                                             {
                                                 xtype: 'menucheckitem',
                                                 id: 'featuresMenuItem',
-                                                text: 'Features'
+                                                text: 'Features',
+                                                checked: true
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'Cut Sites'
+                                                id: 'cutSitesMenuItem',
+                                                text: 'Cut Sites',
+                                                checked: false
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'ORF'
+                                                id: 'orfsMenuItem',
+                                                text: 'ORF',
+                                                checked: false
                                             },
                                             {
                                                 xtype: 'menuseparator'
@@ -436,6 +441,7 @@ Ext.define('Vede.view.AppViewport', {
                                     xtype: 'button',
                                     id: 'featuresBtn',
                                     enableToggle: true,
+                                    pressed: true,
                                     icon: 'resources/images/features.png',
                                     scale: 'medium',
                                     tooltip: 'Show Features'
@@ -443,13 +449,15 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'cutsitesBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/cut_sites.png',
                                     scale: 'medium',
                                     tooltip: 'Show Cut Sites'
                                 },
                                 {
                                     xtype: 'button',
-                                    id: 'orfBtn',
+                                    id: 'orfsBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/orf.png',
                                     scale: 'medium',
                                     tooltip: 'Show ORF'

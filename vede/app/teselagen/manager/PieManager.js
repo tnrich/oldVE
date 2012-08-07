@@ -43,6 +43,7 @@ Ext.define("Teselagen.manager.PieManager", {
     orfSprites: null,
     featureSprites: null,
     cutSiteSprites: null,
+
     labelSprites: null,
 
     /**
@@ -155,22 +156,6 @@ Ext.define("Teselagen.manager.PieManager", {
      * renderers.
      */
     render: function() {
-        if(this.orfSprites) {
-            this.orfSprites.destroy();
-            this.featureSprites.destroy();
-            this.cutSiteSprites.destroy();
-        }
-
-        this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-        this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-        this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
                 if(this.sequenceManagerChanged) {
@@ -192,33 +177,68 @@ Ext.define("Teselagen.manager.PieManager", {
 
         if(this.cutSitesChanged) {
             this.cutSiteRenderer.setCutSites(this.cutSites);
+            this.cutSitesChanged = false;
+
+            if(this.cutSiteSprites) {
+                this.cutSiteSprites.destroy();
+            }
+
+            this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.pie.surface
+            });
+
+            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         }
 
         if(this.featuresChanged) {
             this.featureRenderer.setFeatures(this.features);
+            this.featuresChanged = false;
+
+            if(this.featureSprites) {
+                this.featureSprites.destroy();
+            }
+
+            this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.pie.surface
+            });
+
+            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
         if(this.orfsChanged) {
             this.orfRenderer.setOrfs(this.orfs);
-        }
+            this.orfsChanged = false;
 
-        if(this.showOrfs) {
+            if(this.orfSprites) {
+                this.orfSprites.destroy();
+            }
+
+            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.pie.surface
+            });
+
             this.orfSprites.addAll(this.orfRenderer.render());
         }
 
+        if(this.showOrfs) {
+            this.showSprites(this.orfSprites);
+        } else {
+            this.hideSprites(this.orfSprites);
+        }
+
         if(this.showCutSites) {
-            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
-        } 
+            this.showSprites(this.cutSiteSprites);
+        } else {
+            this.hideSprites(this.cutSiteSprites);
+        }
 
         if(this.showFeatures) {
-            this.featureSprites.addAll(this.featureRenderer.render());
+            this.showSprites(this.featureSprites);
+        } else {
+            this.hideSprites(this.featureSprites);
         }
 
         this.renderLabels();
-
-        this.showSprites(this.cutSiteSprites);
-        this.showSprites(this.featureSprites);
-        this.showSprites(this.orfSprites);
     },
 
     /**
@@ -253,44 +273,58 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     /**
+     * Helper function which hides the sprites in a CompositeSprite.
+     * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
+     */
+     hideSprites: function(collection) {
+         collection.each(function(sprite) {
+             sprite.hide(true);
+         });
+     },
+
+    /**
      * @private
-     * Renders the labels in this.labels.
+     * Renders cut site labels.
      */
     renderLabels: function() {
         var labels = [];
         var center;
 
-        Ext.each(this.cutSites, function(site) {
-            center = this.cutSiteRenderer.middlePoints.get(site);
+        if(this.showCutSites) {
+            Ext.each(this.cutSites, function(site) {
+                center = this.cutSiteRenderer.middlePoints.get(site);
 
-            label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
-                annotation: site,
-                x: center.x,
-                y: center.y,
-                center: this.annotationCenter(site)
-            });
+                label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
+                    annotation: site,
+                    x: center.x,
+                    y: center.y,
+                    center: this.annotationCenter(site)
+                });
 
-            this.cutSiteRenderer.addToolTip(label, 
-                                        this.cutSiteRenderer.getToolTip(site));
+                this.cutSiteRenderer.addToolTip(label, 
+                                            this.cutSiteRenderer.getToolTip(site));
 
-            labels.push(label);
-        }, this);
+                labels.push(label);
+            }, this);
+        }
 
-        Ext.each(this.features, function(feature) {
-            center = this.featureRenderer.middlePoints.get(feature);
+        if(this.showFeatures) {
+            Ext.each(this.features, function(feature) {
+                center = this.featureRenderer.middlePoints.get(feature);
 
-            label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
-                annotation: feature,
-                x: center.x,
-                y: center.y,
-                center: this.annotationCenter(feature)
-            });
+                label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
+                    annotation: feature,
+                    x: center.x,
+                    y: center.y,
+                    center: this.annotationCenter(feature)
+                });
 
-            this.featureRenderer.addToolTip(label,
-                                    this.featureRenderer.getToolTip(feature));
+                this.featureRenderer.addToolTip(label,
+                                        this.featureRenderer.getToolTip(feature));
 
-            labels.push(label);
-        }, this);
+                labels.push(label);
+            }, this);
+        }
 
         labels.sort(this.labelSort);
         this.adjustLabelPositions(labels);
@@ -341,7 +375,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = rightTopLabels[i];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
 
             var labelCenter = label.center;
@@ -372,7 +406,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = rightBottomLabels[j];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
             
             var labelCenter = label.center;
@@ -403,7 +437,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = leftTopLabels[k];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
 
             var labelCenter = label.center;
@@ -434,7 +468,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = leftBottomLabels[l];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
 
             var labelCenter = label.center;
@@ -464,8 +498,8 @@ Ext.define("Teselagen.manager.PieManager", {
         this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.pie.surface
         });
-        this.labelSprites.addAll(labels);
 
+        this.labelSprites.addAll(labels);
         this.showSprites(this.labelSprites);
 
         Ext.each(leftTopLabels, function(label) {
@@ -555,11 +589,14 @@ Ext.define("Teselagen.manager.PieManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-        this.pie.surface.remove(this.nameBox);
+        if(this.sequenceManager) {
+            this.pie.surface.remove(this.nameBox);
+        }
 
         this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
-            name: pSequenceManager.getName()
+            name: pSequenceManager.getName(),
+            length: pSequenceManager.getSequence().toString().length
         });
 
         this.pie.surface.add(this.nameBox);
@@ -617,15 +654,19 @@ Ext.define("Teselagen.manager.PieManager", {
         var name = "";
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
+            length = this.sequenceManager.getSequence().toString().length;
         }
 
         this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
-            name: name
+            name: name,
+            length: length
         });
 
-        this.pie.surface.add(this.nameBox);
-        this.nameBox.show(true);
+        if(this.sequenceManager) {
+            this.pie.surface.add(this.nameBox);
+            this.nameBox.show(true);
+        }
     },
 
     /**
