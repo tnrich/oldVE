@@ -57,12 +57,13 @@ Ext.define('Vede.view.AppViewport', {
                         type: 'fit'
                     },
                     width: 150,
+                    autoScroll: true,
                     collapsible: true,
+                    viewBox: true,
                     split: true,
                     title: 'Annotate',
                     flex: 2,
                     region: 'east',
-                    collapsible: true
                 },
                 {
                     xtype: 'panel',

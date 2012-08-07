@@ -22,13 +22,15 @@
         });
     });
     describe("pie.Caret", function() {
-    	var c;
-    	var centerPt = Ext.create(Point, 1, 2);
-    	c = Ext.create(Caret, {
-    		angle : 50,
-    		center : centerPt,
-    		radius : 10,
-    		stroke : "red"
+    	var c, centerPt;
+    	beforeEach(function() {
+	    	centerPt = Ext.create(Point, 1, 2);
+	    	c = Ext.create(Caret, {
+	    		angle : 50,
+	    		center : centerPt,
+	    		radius : 10,
+	    		stroke : "red"
+	    	});
     	});
     	it("callParent initializes config", function() {
     		expect(c.angle).toBe(50);
