@@ -16,6 +16,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     Managers: null,
     
+    init: function(){
+        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+    },
     onLaunch: function() {
         this.AnnotatePanel = Ext.getCmp('AnnotatePanel');
         
@@ -49,24 +52,14 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             sequenceManager: this.SequenceManager
         });
 
-        var box = Ext.create('Ext.draw.Sprite',{
-            type: 'rect',
-            fill: '#79BB3F',
-            width: 100,
-            height: 30,
-            x: 10,
-            y: 10,
-            listeners: {
-                //click: this.onClickPie
-            }
-        });
         
         this.AnnotatePanel.add(this.SequenceAnnotationManager.getAnnotator());
         this.AnnotatePanel.show(true);
         this.Managers = [this.AAManager, 
                          this.ORFManager, 
                          this.RestrictionEnzymeManager, 
-                         this.TraceManager];
+                         this.TraceManager,
+                         this.SequenceAnnotationManager];
 
         // Add event listeners to managers.
         this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
@@ -88,9 +81,15 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                           this.onTraceManagerUpdated, this);
     },
 
-    listeners: {
-    },
 
+    onSequenceManagerChanged: function(pSeqMan){
+        /*`Ext.each(this.Managers, function(manager){
+            manager.sequenceChanged();
+        });*/
+        console.log("Sequence changed!");
+        this.SequenceAnnotationManager.setSequenceManager(pSeqMan);
+        this.SequenceAnnotationManager.sequenceChanged();
+    },
     onSequenceChanged: function(kind, obj) {
         Ext.each(this.Managers, function(manager) {
             manager.sequenceChanged();
