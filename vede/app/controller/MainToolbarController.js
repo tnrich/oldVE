@@ -5,6 +5,19 @@ Ext.define('Vede.controller.MainToolbarController', {
 
     VisibilityEvent: null,
 
+    onCircularViewButtonClick: function(button, e, options) {
+        var viewMode;
+
+        if (button.pressed) {
+            viewMode = "circular";
+        }
+        else {
+            viewMode = "linear";
+        }
+
+        this.application.fireEvent("ViewModeChanged", viewMode);
+    },
+
     onFeaturesButtonClick: function(button, e, options) {
         var menuItem = Ext.ComponentQuery.query('#featuresMenuItem')[0];
         if (button.pressed) {
@@ -53,8 +66,24 @@ Ext.define('Vede.controller.MainToolbarController', {
                                    restrictionEnzymesManagerWindow);
     },
 
+    onViewModeChanged: function(viewMode) {
+        var circularButton = Ext.getCmp("circularViewBtn");
+        var linearButton = Ext.getCmp("linearViewBtn");
+
+        if(viewMode == "linear") {
+            circularButton.toggle(false, true);
+            linearButton.toggle(true, true);
+        } else {
+            circularButton.toggle(true, false);
+            linearButton.toggle(false, true);
+        }
+    },
+
     init: function() {
         this.control({
+            "#circularViewBtn": {
+                click: this.onCircularViewButtonClick
+            },
             "#featuresBtn": {
                 click: this.onFeaturesButtonClick
             },
@@ -70,6 +99,8 @@ Ext.define('Vede.controller.MainToolbarController', {
         });
 
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+
+        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     }
 
 });
