@@ -6,6 +6,7 @@ Ext.define('Vede.controller.PieController', {
     requires: ["Teselagen.bio.sequence.DNATools",
                "Teselagen.bio.orf.ORFFinder",
                "Teselagen.manager.RestrictionEnzymeGroupManager",
+               "Teselagen.event.CaretEvent",
                "Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.SelectionEvent",
                "Teselagen.event.VisibilityEvent"],
@@ -26,6 +27,7 @@ Ext.define('Vede.controller.PieController', {
     wireframeSelectionLayer: null,
     selectionLayer: null,
 
+    CaretEvent: null,
     SelectionEvent: null,
     VisibilityEvent: null,
 
@@ -49,17 +51,29 @@ Ext.define('Vede.controller.PieController', {
             this.enzymeGroupManager.initialize();
         }
 
+        this.CaretEvent = Teselagen.event.CaretEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
+        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+
         this.application.on("SequenceManagerChanged",
                             this.onSequenceManagerChanged, this);
+
         this.application.on(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
                             this.onShowFeaturesChanged, this);
         this.application.on(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
                             this.onShowCutSitesChanged, this);
         this.application.on(this.VisibilityEvent.SHOW_ORFS_CHANGED,
                             this.onShowOrfsChanged, this);
+    },
+
+    onViewModeChanged: function(viewMode) {
+        if(viewMode == "linear") {
+            Ext.getCmp("PieContainer").hide();
+        } else {
+            Ext.getCmp("PieContainer").show();
+        }
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -143,7 +157,7 @@ Ext.define('Vede.controller.PieController', {
         this.startSelectionAngle = this.getClickAngle(pEvt);
         this.mouseIsDown = true;
 
-        this.pieManager.adjustCaret(this.startSelectionAngle);
+        this.changeCaretPosition(this.startSelectionAngle);
 
         if(this.pieManager.sequenceManager) {
             this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
@@ -208,8 +222,7 @@ Ext.define('Vede.controller.PieController', {
             } else {
                 this.stickySelect(start, end);
             }
-
-            this.pieManager.adjustCaret(endSelectionAngle);
+            this.changeCaretPosition(endSelectionAngle);
         }
     },
 
@@ -224,7 +237,7 @@ Ext.define('Vede.controller.PieController', {
 
             this.selectionLayer.endSelecting();
 
-            this.pieManager.adjustCaret(this.selectionLayer.startAngle);
+            this.changeCaretPosition(this.selectionLayer.startAngle);
 
             this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                        this.selectionLayer.start,
@@ -251,6 +264,14 @@ Ext.define('Vede.controller.PieController', {
         return Math.floor(angle * 
             this.pieManager.sequenceManager.getSequence().seqString().length
             / (2 * Math.PI));
+    },
+
+    changeCaretPosition: function(angle) {
+        this.pieManager.adjustCaret(angle);
+        if(this.pieManager.sequenceManager) {
+            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
+                                       this.bpAtAngle(angle));
+        }
     },
 
     stickySelect: function(start, end) {

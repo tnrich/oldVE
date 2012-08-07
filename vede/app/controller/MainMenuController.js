@@ -45,6 +45,19 @@ Ext.define('Vede.controller.MainMenuController', {
         Ext.create("Vede.view.FileImportWindow").show();
     },
 
+    onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var viewMode;
+
+        if (checked) {
+            viewMode = "circular";
+        }
+        else {
+            viewMode = "linear";
+        }
+
+        this.application.fireEvent("ViewModeChanged", viewMode);
+    },
+
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
         var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
         if (checked) {
@@ -101,6 +114,18 @@ Ext.define('Vede.controller.MainMenuController', {
                                    restrictionEnzymesManagerWindow);
     },
 
+    onViewModeChanged: function(viewMode) {
+        var circularMenuItem = Ext.getCmp("circularViewMenuItem");
+        var linearMenuItem = Ext.getCmp("linearViewMenuItem");
+
+        if(viewMode == "linear") {
+            circularMenuItem.setChecked(false, true);
+            linearMenuItem.setChecked(true, true);
+        } else {
+            circularMenuItem.setChecked(true, false);
+            linearMenuItem.setChecked(false, true);
+        }
+    },
 
     init: function() {
         this.control({
@@ -112,6 +137,9 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#importMenuItem": {
                 click: this.onImportMenuItemClick
+            },
+            "#circularViewMenuItem": {
+                checkchange: this.onCircularViewMenuItemCheckChange
             },
             "#featuresMenuItem": {
                 checkchange: this.onFeaturesMenuItemCheckChange
@@ -132,11 +160,6 @@ Ext.define('Vede.controller.MainMenuController', {
 
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
-        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged); 
+        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     },
-
-    onSequenceManagerChanged: function(seqMgr) {
-        //alert("sequence manager created yay");
-    }
-
 });
