@@ -6,7 +6,6 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     GroupManager: null,
     managerWindow: null,
 
-    unsavedActiveEnzymes: [],
     enzymeSelector: null,
 
     init: function() {
@@ -65,46 +64,18 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector.bindStore(this.enzymeSelector.store);
 
         this.displayActiveGroup();
-
-        // Add listeners to the 'toField' on the enzyme selector.
-        this.enzymeSelector.toField.store.un("add", this.onEnzymeAdded, this);
-        this.enzymeSelector.toField.store.un("remove", this.onEnzymeRemoved, this);
-
-        //this.enzymeSelector.toField.store.on("add", this.onEnzymeAdded, this);
-        //this.enzymeSelector.toField.store.on("remove", this.onEnzymeRemoved, this);
-    },
-
-    onEnzymeAdded: function(toStore, enzymes) {
-        var newActive = [];
-        toStore.each(function(rec) {
-            newActive.push(rec.data.name);
-        });
-
-        this.unsavedActiveEnzymes = newActive;
-    },
-
-    onEnzymeRemoved: function(toStore, enzyme) {
-        var enzIndex = this.unsavedActiveEnzymes.indexOf(enzyme);
-        this.unsavedActiveEnzymes.splice(enzIndex, 1);
     },
 
     displayActiveGroup: function() {
-        if(this.unsavedActiveEnzymes.length == 0) {
-            var activeGroup = this.GroupManager.getActiveGroup();
-            var names = [];
+        var activeGroup = this.GroupManager.getActiveGroup();
+        var names = [];
 
-            Ext.each(activeGroup.getEnzymes(), function(enzyme) {
-                names.push({name: enzyme.getName()});
-                this.unsavedActiveEnzymes.push(enzyme.getName());
-            }, this);
+        Ext.each(activeGroup.getEnzymes(), function(enzyme) {
+            names.push({name: enzyme.getName()});
+        }, this);
 
-            this.enzymeSelector.toField.store.loadData(names, false);
-            this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
-        } else {
-            this.enzymeSelector.toField.store.loadData(
-                this.unsavedActiveEnzymes, false);
-            this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
-        }
+        this.enzymeSelector.toField.store.loadData(names, false);
+        this.enzymeSelector.toField.bindStore(this.enzymeSelector.toField.store);
     },
 
     /**
@@ -123,20 +94,23 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
         this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
         this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
-
-        //this.displayActiveGroups();
     },
 
     /**
      * Saves active enzymes and closes the window.
      */
     onOKButtonClick: function() {
+        var names = [];
+        this.enzymeSelector.toField.store.each(function(obj) {
+            names.push(obj.data.name);
+        });
+
         var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", 
-                                                this.unsavedActiveEnzymes);
+                                                                    names);
 
         this.GroupManager.setActiveGroup(newActiveGroup);
-        this.unsavedActiveEnzymes = [];
 
         this.managerWindow.close();
+        this.application.fireEvent("ActiveEnzymesChanged");
     }
 });

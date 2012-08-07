@@ -194,7 +194,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
             // Draw triangle if arc is smaller than the threshold.
             if(arcLength > this.ARC_THRESHOLD) {
-                // The angle between the tip of the arrow and its end.
+                // The angle between the tip of the arrow and its base.
                 var alpha = this.ARC_THRESHOLD / radius;
 
                 var sweep = true;

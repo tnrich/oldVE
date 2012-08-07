@@ -16,7 +16,6 @@ Ext.define("Teselagen.manager.PieManager", {
         sequenceManager: null,
         center: null,
         pie: null,
-        nameBox: null,
         railRadius: 0,
         cutSites: [],
         features: [],
@@ -25,6 +24,9 @@ Ext.define("Teselagen.manager.PieManager", {
         showFeatures: true,
         showOrfs: true
     },
+
+    nameBox: null,
+    caret: null,
 
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -104,6 +106,49 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     /**
+     * Function which gets all annotations in a range of indices. Only returns
+     * annotations which are currently visible.
+     * @param {Int} start The start of the range of nucleotides.
+     * @param {Int} end The end of the range of nucleotides.
+     * @return {Array<Teselagen.bio.sequence.common.Annotation>} All annotations
+     * (which are currently visible) that are contained in the range from start
+     * to end, according to Annotation.contains().
+     */
+    getAnnotationsInRange: function(start, end) {
+        var annotationsInRange = [];
+        var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+            start: start,
+            end: end
+        });
+
+        if(this.showFeatures) {
+            Ext.each(this.features, function(feature) {
+                if(selectionAnnotation.contains(feature)) {
+                    annotationsInRange.push(feature);
+                }
+            });
+        }
+
+        if(this.showCutSites) {
+            Ext.each(this.cutSites, function(site) {
+                if(selectionAnnotation.contains(site)) {
+                    annotationsInRange.push(site);
+                }
+            });
+        }
+
+        if(this.showOrfs) {
+            Ext.each(this.orfs, function(orf) {
+                if(selectionAnnotation.contains(orf)) {
+                    annotationsInRange.push(orf);
+                }
+            });
+        }
+
+        return annotationsInRange;
+    },
+
+    /**
      * First checks to see if any parameters need to be updated on renderers,
      * then returns a list of sprites from all renderers.
      * @return {Array<Ext.draw.Sprite>} A list of sprites aggregated from all
@@ -174,6 +219,25 @@ Ext.define("Teselagen.manager.PieManager", {
         this.showSprites(this.cutSiteSprites);
         this.showSprites(this.featureSprites);
         this.showSprites(this.orfSprites);
+    },
+
+    /**
+     * Function for debugging which draws coordinates on the pie.
+     */
+    drawCoordinates: function() {
+        for(var i = 0; i < 200; i += 20) {
+            for(var j = 0; j < 200; j += 20) {
+                var sprite = Ext.create("Ext.draw.Sprite", {
+                    type: "text",
+                    text: i + ", " + j,
+                    font: "4px monospace",
+                    x: i,
+                    y: j
+                });
+                this.pie.surface.add(sprite);
+                sprite.show(true);
+            }
+        }
     },
 
     /**
@@ -493,10 +557,10 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie.surface.remove(this.nameBox);
 
-        this.setNameBox(Ext.create("Vede.view.pie.NameBox", {
+        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
             name: pSequenceManager.getName()
-        }));
+        });
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
@@ -541,21 +605,42 @@ Ext.define("Teselagen.manager.PieManager", {
      * Adds the caret to the pie.
      */
     initPie: function() {
-        var caret = Ext.create("Vede.view.pie.Caret");
-        this.pie.surface.add(caret);
-        caret.show(true);
+        this.caret = Ext.create("Vede.view.pie.Caret", {
+            angle: -45,
+            center: this.center,
+            radius: this.railRadius + 10
+        });
+
+        this.pie.surface.add(this.caret);
+        this.caret.show(true);
 
         var name = "";
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
         }
 
-        this.setNameBox(Ext.create("Vede.view.pie.NameBox", {
+        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
             name: name
-        }));
+        });
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
+    },
+
+    /**
+     * Repositions the caret to the given angle.
+     * @param {Int} angle The angle of the caret to reposition to.
+     */
+    adjustCaret: function(angle) {
+        this.caret.destroy();
+        this.caret = Ext.create("Vede.view.pie.Caret", {
+            angle: angle,
+            center: this.center,
+            radius: this.railRadius + 10
+        });
+
+        this.pie.surface.add(this.caret);
+        this.caret.show(true);
     }
 });
