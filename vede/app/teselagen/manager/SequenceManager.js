@@ -1364,22 +1364,18 @@ Ext.define("Teselagen.manager.SequenceManager", {
             }
         }
 
-        console.log(lineArr.length);
-
         for (var i=0; i < lineArr.length; i++) {
-            console.log(sequence);
 
             if ( !lineArr[i].match(/^\>/) ) {
                 sequence += Ext.String.trim(lineArr[i]);
             }
-        }   
-        console.log(sequence);
-        sequence = sequence.replace(/[\d]|[\s]/g, ""); //remove whitespace and digits
+        }
+        sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
         if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
             //illegalcharacters
             return null;
         }
-        console.log(sequence);
+        //console.log(sequence);
 
         //result = Teselagen.bio.sequence.DNATools.createDNASequence(name, sequence);
 
@@ -1389,7 +1385,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
             isCiruclar: false, //assume linear
             features: [] //none
         });
-
 
         return result;
     },
