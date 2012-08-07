@@ -14,12 +14,17 @@ Ext.define("Vede.view.pie.Caret", {
     	CARET_WIDTH : 1
     },
     constructor: function(pConfig) {
+        this.initConfig(pConfig);
+
+        var x = this.radius * Math.cos(this.angle - Math.PI / 2) + this.center.x;
+        var y = this.radius * Math.sin(this.angle - Math.PI / 2) + this.center.y;
+
         var config = {
             type: 'path',
-            path: 'M 10 10 L 100 100',
+            path: 'M' + this.center.x + ' ' + this.center.y + 
+                  'L' + x + ' ' + y,
             stroke: this.self.CARET_COLOR
         }
-    	Ext.merge(config, pConfig);
     	this.callParent([config]);
-    }
+    },
 });
