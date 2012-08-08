@@ -13,6 +13,8 @@ Ext.define("Vede.controller.SequenceController", {
     RestrictionEnzymeManager: null,
     SequenceManager: null,
 
+    RestrictionEnzymeGroupManager: null,
+
     Managers: null,
 
     CaretEvent: null,
@@ -61,6 +63,13 @@ Ext.define("Vede.controller.SequenceController", {
     onLaunch: function() {
         // TODO: maybe put managers in statics so they are shared by all 
         // child constructors? 
+        
+        this.RestrictionEnzymeGroupManager = 
+            Teselagen.manager.RestrictionEnzymeGroupManager;
+
+        if(!this.RestrictionEnzymeGroupManager.isInitialized) {
+            this.RestrictionEnzymeGroupManager.initialize();
+        }
 
         this.AAManager = Ext.create("Teselagen.manager.AAManager", {
             sequenceManager: this.SequenceManager
@@ -74,7 +83,7 @@ Ext.define("Vede.controller.SequenceController", {
             Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
                 sequenceManager: this.SequenceManager,
                 restrictionEnzymeGroup: 
-                Teselagen.manager.RestrictionEnzymeGroupManager.getActiveGroup()
+                    this.RestrictionEnzymeGroupManager.getActiveGroup()
         });
 
         this.Managers = [this.AAManager, 
