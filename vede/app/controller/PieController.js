@@ -40,6 +40,13 @@ Ext.define('Vede.controller.PieController', {
             this.enzymeGroupManager.initialize();
         }
     },
+    
+    onActiveEnzymesChanged: function() {
+        this.callParent();
+
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.render();
+    },
 
     /**
      * Catches events from the annotation sprites' onclick listeners. When a

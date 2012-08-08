@@ -36,6 +36,7 @@ Ext.define("Vede.controller.SequenceController", {
 
         var listenersObject = {
             SequenceManagerChanged: this.onSequenceManagerChanged,
+            ActiveEnzymesChanged: this.onActiveEnzymesChanged,
             AnnotationClicked: this.onAnnotationClicked,
             ViewModeChanged: this.onViewModeChanged,
             SequenceManagerChanged: this.onSequenceManagerChanged,
@@ -89,6 +90,11 @@ Ext.define("Vede.controller.SequenceController", {
         this.Managers = [this.AAManager, 
                          this.RestrictionEnzymeManager,
                          this.ORFManager];
+    },
+
+    onActiveEnzymesChanged: function() {
+        this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(
+            this.RestrictionEnzymeGroupManager.getActiveGroup());
     },
 
     onSequenceManagerChanged: function(pSeqMan) {

@@ -107,10 +107,11 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
         var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", 
                                                                     names);
-
-        this.GroupManager.setActiveGroup(newActiveGroup);
-
         this.managerWindow.close();
-        this.application.fireEvent("ActiveEnzymesChanged");
+
+        if(newActiveGroup !== this.GroupManager.getActiveGroup()){
+            this.GroupManager.setActiveGroup(newActiveGroup);
+            this.application.fireEvent("ActiveEnzymesChanged");
+        }
     }
 });
