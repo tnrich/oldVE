@@ -44,7 +44,7 @@ Ext.onReady(function() {
                 gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(gbStr);
 
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                //jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
+                jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
             });
             
             it("checkGenbank() ",function(){
@@ -78,6 +78,7 @@ Ext.onReady(function() {
 
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
                 expect(newGb.getOrigin().getSequence()).toBe("gattaca");
+                console.log(newGb.toString());
             });
 
             it("genbankToFasta", function() {
@@ -159,6 +160,7 @@ Ext.onReady(function() {
                         }
                     }
                 });
+                console.log(memstore);
                 //console.log(memstore.getCount());
 
 
