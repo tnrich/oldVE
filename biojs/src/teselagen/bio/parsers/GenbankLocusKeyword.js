@@ -59,9 +59,9 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
             locusName 		= inData.locusName || "";
             sequenceLength 	= inData.sequenceLength || "";
             strandType		= inData.strandType || "";
-            naType			= inData.naType || "";
+            naType			= inData.naType || "DNA";
             linear			= inData.linear || false; // false or false; default is false, only a true can override this
-            circular		= !inData.linear || false; //untested
+            circular		= inData.circular || !inData.linear; //untested
             divisionCode	= inData.divisionCode || "";
             date			= inData.date || "";
         }
