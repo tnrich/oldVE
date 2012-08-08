@@ -30,7 +30,6 @@ Ext.define("Teselagen.manager.AAManager", {
     constructor: function(inData) {
         this.TranslationUtils = Teselagen.bio.sequence.TranslationUtils;
         this.mixins.observable.constructor.call(this, inData);
-        this.addEvents(this.updateEventString);
         
         this.callParent([inData]);
         this.initConfig(inData);
@@ -49,7 +48,7 @@ Ext.define("Teselagen.manager.AAManager", {
             this.recalculateNonCircular();
         }
 
-        this.fireEvent(this.updateEventString);
+        Vede.application.fireEvent(this.updateEventString);
     },
     
     /**

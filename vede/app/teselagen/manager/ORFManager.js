@@ -30,7 +30,6 @@ Ext.define("Teselagen.manager.ORFManager", {
         this.DNATools = Teselagen.bio.sequence.DNATools;
 
         this.mixins.observable.constructor.call(this, inData);
-        this.addEvents(this.updateEventString);
 
         this.callParent([inData]);
         this.initConfig(inData);
@@ -83,7 +82,7 @@ Ext.define("Teselagen.manager.ORFManager", {
             this.setOrfs(null);
         }
 
-        this.fireEvent(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED);
+        Vede.application.fireEvent(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED);
     },
 
     /**

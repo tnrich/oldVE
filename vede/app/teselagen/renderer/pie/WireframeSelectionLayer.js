@@ -1,12 +1,19 @@
+/**
+ * @class Teselagen.renderer.pie.WireframeSelectionLayer
+ * Renders the hollow selection region which appears when no feature is selected
+ * yet.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of WireframeSelectionLayer.as)
+ */
 Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
     extend: "Teselagen.renderer.pie.Layer",
 
     statics: {
         FRAME_COLOR: "#808080",
-        WIREFRAME_OFFSET: 10
+        WIREFRAME_OFFSET: 10 // Distance of wireframe from rail edge.
     },
 
-    drawSelectionPie: function(fromIndex, endIndex, direction) {
+    drawSelectionPie: function(fromIndex, endIndex) {
         var seqLen = this.sequenceManager.getSequence().toString().length;
         if(seqLen == 0 || (this.start == fromIndex && this.end == endIndex) ||
            fromIndex == endIndex) {
@@ -58,7 +65,5 @@ Ext.define("Teselagen.renderer.pie.WireframeSelectionLayer", {
             stroke: this.self.FRAME_COLOR,
             "stroke-opacity": this.self.STROKE_OPACITY,
         });
-
-        return this.selectionSprite;
     }
 });

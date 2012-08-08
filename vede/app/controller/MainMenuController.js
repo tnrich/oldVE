@@ -1,7 +1,10 @@
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
-    requires: 'Teselagen.bio.parsers.GenbankManager',
+    requires: ['Teselagen.bio.parsers.GenbankManager',
+               'Teselagen.event.VisibilityEvent'],
+
+    VisibilityEvent: null,
 
     onCancelButtonClick: function(button, e, options) {
         button.up('window').close();
@@ -42,15 +45,54 @@ Ext.define('Vede.controller.MainMenuController', {
         Ext.create("Vede.view.FileImportWindow").show();
     },
 
+    onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var viewMode;
+
+        if (checked) {
+            viewMode = "circular";
+        }
+        else {
+            viewMode = "linear";
+        }
+
+        this.application.fireEvent("ViewModeChanged", viewMode);
+    },
+
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
         var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
         if (checked) {
-            btn.toggle(true);
+            btn.toggle(true, true);
         }
         else {
-            btn.toggle(false);
+            btn.toggle(false, true);
         }
 
+        this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURES_CHANGED,
+                                   checked);
+    },
+
+    onCutSitesMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var btn = Ext.ComponentQuery.query("#cutsitesBtn")[0];
+        if(checked) {
+            btn.toggle(true, true);
+        } else {
+            btn.toggle(false, true);
+        }
+        
+        this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITES_CHANGED,
+                                   checked);
+    },
+
+    onOrfsMenuItemCheckChange: function(menucheckitem, checked, options) {
+        var btn = Ext.ComponentQuery.query("#orfsBtn")[0];
+        if(checked) {
+            btn.toggle(true, true);
+        } else {
+            btn.toggle(false, true);
+        }
+
+        this.application.fireEvent(this.VisibilityEvent.SHOW_ORFS_CHANGED,
+                                   checked);
     },
 
         onSimulateDigestionMenuItemClick: function() {
@@ -72,6 +114,18 @@ Ext.define('Vede.controller.MainMenuController', {
                                    restrictionEnzymesManagerWindow);
     },
 
+    onViewModeChanged: function(viewMode) {
+        var circularMenuItem = Ext.getCmp("circularViewMenuItem");
+        var linearMenuItem = Ext.getCmp("linearViewMenuItem");
+
+        if(viewMode == "linear") {
+            circularMenuItem.setChecked(false, true);
+            linearMenuItem.setChecked(true, true);
+        } else {
+            circularMenuItem.setChecked(true, false);
+            linearMenuItem.setChecked(false, true);
+        }
+    },
 
     init: function() {
         this.control({
@@ -84,10 +138,18 @@ Ext.define('Vede.controller.MainMenuController', {
             "#importMenuItem": {
                 click: this.onImportMenuItemClick
             },
+            "#circularViewMenuItem": {
+                checkchange: this.onCircularViewMenuItemCheckChange
+            },
             "#featuresMenuItem": {
                 checkchange: this.onFeaturesMenuItemCheckChange
             },
-
+            "#cutSitesMenuItem": {
+                checkchange: this.onCutSitesMenuItemCheckChange
+            },
+            "#orfsMenuItem": {
+                checkchange: this.onOrfsMenuItemCheckChange
+            },
                     "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
             },
@@ -96,11 +158,8 @@ Ext.define('Vede.controller.MainMenuController', {
             },
         });
 
-        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged); 
+        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+
+        this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     },
-
-    onSequenceManagerChanged: function(seqMgr) {
-        //alert("sequence manager created yay");
-    }
-
 });

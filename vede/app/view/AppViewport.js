@@ -125,7 +125,7 @@ Ext.define('Vede.view.AppViewport', {
                                                         },
                                                         {
                                                             xtype: 'menuitem',
-                                                            text: 'Circular View'
+                                                            text: 'Circular View',
                                                         },
                                                         {
                                                             xtype: 'menuitem',
@@ -218,11 +218,14 @@ Ext.define('Vede.view.AppViewport', {
                                             {
                                                 xtype: 'menucheckitem',
                                                 text: 'Circular',
+                                                id: 'circularViewMenuItem',
+                                                checked: true,
                                                 group: 'lineType'
                                             },
                                             {
                                                 xtype: 'menucheckitem',
                                                 text: 'Linear',
+                                                id: 'linearViewMenuItem',
                                                 group: 'lineType'
                                             },
                                             {
@@ -231,15 +234,20 @@ Ext.define('Vede.view.AppViewport', {
                                             {
                                                 xtype: 'menucheckitem',
                                                 id: 'featuresMenuItem',
-                                                text: 'Features'
+                                                text: 'Features',
+                                                checked: true
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'Cut Sites'
+                                                id: 'cutSitesMenuItem',
+                                                text: 'Cut Sites',
+                                                checked: false
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'ORF'
+                                                id: 'orfsMenuItem',
+                                                text: 'ORF',
+                                                checked: false
                                             },
                                             {
                                                 xtype: 'menuseparator'
@@ -372,6 +380,8 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'circularViewBtn',
+                                    enableToggle: true,
+                                    pressed: true,
                                     icon: 'resources/images/pie.png',
                                     scale: 'medium',
                                     tooltip: 'Circular View'
@@ -379,6 +389,7 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'linearViewBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/rail.png',
                                     scale: 'medium',
                                     tooltip: 'Linear View'
@@ -436,6 +447,7 @@ Ext.define('Vede.view.AppViewport', {
                                     xtype: 'button',
                                     id: 'featuresBtn',
                                     enableToggle: true,
+                                    pressed: true,
                                     icon: 'resources/images/features.png',
                                     scale: 'medium',
                                     tooltip: 'Show Features'
@@ -443,13 +455,15 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'cutsitesBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/cut_sites.png',
                                     scale: 'medium',
                                     tooltip: 'Show Cut Sites'
                                 },
                                 {
                                     xtype: 'button',
-                                    id: 'orfBtn',
+                                    id: 'orfsBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/orf.png',
                                     scale: 'medium',
                                     tooltip: 'Show ORF'

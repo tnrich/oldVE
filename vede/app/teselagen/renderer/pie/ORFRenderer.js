@@ -76,6 +76,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             sprites.push(arcSprite);
 
             this.addToolTip(arcSprite, tooltip);
+            this.addClickListener(arcSprite, orf.getStart(), orf.getEnd());
 
             // Render start codons as bold dots.
             Ext.each(orf.getStartCodons(), function(codonIndex) {
@@ -93,6 +94,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 });
 
                 this.addToolTip(codonSprite, tooltip);
+                this.addClickListener(codonSprite, orf.getStart(), orf.getEnd());
 
                 sprites.push(codonSprite);
             }, this);
@@ -126,6 +128,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             });
 
             this.addToolTip(stopSprite, tooltip);
+            this.addClickListener(stopSprite, orf.getStart(), orf.getEnd());
 
             sprites.push(stopSprite);
         }, this);
