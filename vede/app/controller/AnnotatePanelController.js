@@ -55,7 +55,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         
         this.AnnotatePanel.add(this.SequenceAnnotationManager.getAnnotator());
         this.AnnotatePanel.show(true);
-        this.Managers = [this.AAManager, 
+        this.Managers = [this.SequenceManager,
+                         this.AAManager, 
                          this.ORFManager, 
                          this.RestrictionEnzymeManager, 
                          this.TraceManager,
@@ -88,7 +89,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         });*/
         console.log("Sequence changed!");
         this.SequenceAnnotationManager.setSequenceManager(pSeqMan);
-        this.SequenceAnnotationManager.sequenceChanged();
+        this.SequenceAnnotationManager.sequenceChanged(pSeqMan);
+        /*Ext.each(this.Managers, function(manager) {
+            manager.sequenceChanged();
+        });*/
     },
     onSequenceChanged: function(kind, obj) {
         Ext.each(this.Managers, function(manager) {
