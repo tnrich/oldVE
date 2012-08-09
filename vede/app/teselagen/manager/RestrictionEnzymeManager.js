@@ -41,7 +41,6 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         this.DNATools = Teselagen.bio.sequence.DNATools;
 
         this.mixins.observable.constructor.call(this, inData);
-        this.addEvents(this.updateEventString);
         
         this.callParent([inData]);
         this.initConfig(inData);
@@ -132,7 +131,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
             this.cutSitesMap = null;
         }
 
-        this.fireEvent(this.updateEventString);
+        Vede.application.fireEvent(this.updateEventString);
     },
 
     /**

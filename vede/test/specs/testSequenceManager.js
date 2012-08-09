@@ -1008,8 +1008,9 @@ Ext.onReady(function() {
 
                 var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
 
-                var seq   = newSM.fromFasta(fasta);
-                //expect(seq.sequence).toBe("gattaca");
+                var seqFeatDNASeq = newSM.fromFasta(fasta);
+                expect(seqFeatDNASeq.get("name")).toBe("DummyName");
+                expect(seqFeatDNASeq.get("sequence")).toBe("gattaca");
             });
         });
 

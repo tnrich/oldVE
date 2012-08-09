@@ -60,6 +60,7 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
             });
 
             this.addToolTip(siteSprite, this.getToolTip(site));
+            this.addClickListener(siteSprite, site.getStart(), site.getEnd());
 
             sprites.push(siteSprite);
         }, this);

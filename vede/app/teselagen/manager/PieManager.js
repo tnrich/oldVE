@@ -16,7 +16,6 @@ Ext.define("Teselagen.manager.PieManager", {
         sequenceManager: null,
         center: null,
         pie: null,
-        nameBox: null,
         railRadius: 0,
         cutSites: [],
         features: [],
@@ -25,6 +24,9 @@ Ext.define("Teselagen.manager.PieManager", {
         showFeatures: true,
         showOrfs: true
     },
+
+    nameBox: null,
+    caret: null,
 
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -41,6 +43,7 @@ Ext.define("Teselagen.manager.PieManager", {
     orfSprites: null,
     featureSprites: null,
     cutSiteSprites: null,
+
     labelSprites: null,
 
     /**
@@ -104,28 +107,55 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     /**
+     * Function which gets all annotations in a range of indices. Only returns
+     * annotations which are currently visible.
+     * @param {Int} start The start of the range of nucleotides.
+     * @param {Int} end The end of the range of nucleotides.
+     * @return {Array<Teselagen.bio.sequence.common.Annotation>} All annotations
+     * (which are currently visible) that are contained in the range from start
+     * to end, according to Annotation.contains().
+     */
+    getAnnotationsInRange: function(start, end) {
+        var annotationsInRange = [];
+        var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+            start: start,
+            end: end
+        });
+
+        if(this.showFeatures) {
+            Ext.each(this.features, function(feature) {
+                if(selectionAnnotation.contains(feature)) {
+                    annotationsInRange.push(feature);
+                }
+            });
+        }
+
+        if(this.showCutSites) {
+            Ext.each(this.cutSites, function(site) {
+                if(selectionAnnotation.contains(site)) {
+                    annotationsInRange.push(site);
+                }
+            });
+        }
+
+        if(this.showOrfs) {
+            Ext.each(this.orfs, function(orf) {
+                if(selectionAnnotation.contains(orf)) {
+                    annotationsInRange.push(orf);
+                }
+            });
+        }
+
+        return annotationsInRange;
+    },
+
+    /**
      * First checks to see if any parameters need to be updated on renderers,
      * then returns a list of sprites from all renderers.
      * @return {Array<Ext.draw.Sprite>} A list of sprites aggregated from all
      * renderers.
      */
     render: function() {
-        if(this.orfSprites) {
-            this.orfSprites.destroy();
-            this.featureSprites.destroy();
-            this.cutSiteSprites.destroy();
-        }
-
-        this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-        this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-        this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
                 if(this.sequenceManagerChanged) {
@@ -147,33 +177,87 @@ Ext.define("Teselagen.manager.PieManager", {
 
         if(this.cutSitesChanged) {
             this.cutSiteRenderer.setCutSites(this.cutSites);
+            this.cutSitesChanged = false;
+
+            if(this.cutSiteSprites) {
+                this.cutSiteSprites.destroy();
+            }
+
+            this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.pie.surface
+            });
+
+            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         }
 
         if(this.featuresChanged) {
             this.featureRenderer.setFeatures(this.features);
+            this.featuresChanged = false;
+
+            if(this.featureSprites) {
+                this.featureSprites.destroy();
+            }
+
+            this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.pie.surface
+            });
+
+            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
         if(this.orfsChanged) {
             this.orfRenderer.setOrfs(this.orfs);
-        }
+            this.orfsChanged = false;
 
-        if(this.showOrfs) {
+            if(this.orfSprites) {
+                this.orfSprites.destroy();
+            }
+
+            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.pie.surface
+            });
+
             this.orfSprites.addAll(this.orfRenderer.render());
-        }
-
-        if(this.showCutSites) {
-            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
-        } 
-
-        if(this.showFeatures) {
-            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
         this.renderLabels();
 
-        this.showSprites(this.cutSiteSprites);
-        this.showSprites(this.featureSprites);
-        this.showSprites(this.orfSprites);
+        if(this.showOrfs) {
+            this.showSprites(this.orfSprites);
+        } else {
+            this.hideSprites(this.orfSprites);
+        }
+
+        if(this.showCutSites) {
+            this.showSprites(this.cutSiteSprites);
+        } else {
+            this.hideSprites(this.cutSiteSprites);
+        }
+
+        if(this.showFeatures) {
+            this.showSprites(this.featureSprites);
+        } else {
+            this.hideSprites(this.featureSprites);
+        }
+    },
+
+    /**
+     * Function for debugging which draws coordinates on the pie.
+     */
+    drawCoordinates: function() {
+        for(var i = 0; i < 200; i += 20) {
+            for(var j = 0; j < 200; j += 20) {
+                var sprite = Ext.create("Ext.draw.Sprite", {
+                    type: "text",
+                    text: i + ", " + j,
+                    font: "4px monospace",
+                    x: i,
+                    y: j
+                });
+                this.pie.surface.add(sprite);
+                sprite.show(true);
+            }
+        }
     },
 
     /**
@@ -189,44 +273,64 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     /**
+     * Helper function which hides the sprites in a CompositeSprite.
+     * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
+     */
+     hideSprites: function(collection) {
+         collection.each(function(sprite) {
+             sprite.hide(true);
+         });
+     },
+
+    /**
      * @private
-     * Renders the labels in this.labels.
+     * Renders cut site labels.
      */
     renderLabels: function() {
         var labels = [];
         var center;
 
-        Ext.each(this.cutSites, function(site) {
-            center = this.cutSiteRenderer.middlePoints.get(site);
+        if(this.showCutSites) {
+            Ext.each(this.cutSites, function(site) {
+                center = this.cutSiteRenderer.middlePoints.get(site);
 
-            label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
-                annotation: site,
-                x: center.x,
-                y: center.y,
-                center: this.annotationCenter(site)
-            });
+                label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
+                    annotation: site,
+                    x: center.x,
+                    y: center.y,
+                    center: this.annotationCenter(site)
+                });
 
-            this.cutSiteRenderer.addToolTip(label, 
-                                        this.cutSiteRenderer.getToolTip(site));
+                this.cutSiteRenderer.addToolTip(label, 
+                                            this.cutSiteRenderer.getToolTip(site));
+                this.cutSiteRenderer.addClickListener(label,
+                                                label.annotation.getStart(),
+                                                label.annotation.getEnd());
 
-            labels.push(label);
-        }, this);
+                labels.push(label);
+            }, this);
+        }
 
-        Ext.each(this.features, function(feature) {
-            center = this.featureRenderer.middlePoints.get(feature);
+        if(this.showFeatures) {
+            Ext.each(this.features, function(feature) {
+                center = this.featureRenderer.middlePoints.get(feature);
 
-            label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
-                annotation: feature,
-                x: center.x,
-                y: center.y,
-                center: this.annotationCenter(feature)
-            });
+                label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
+                    annotation: feature,
+                    x: center.x,
+                    y: center.y,
+                    center: this.annotationCenter(feature)
+                });
 
-            this.featureRenderer.addToolTip(label,
-                                    this.featureRenderer.getToolTip(feature));
+                this.featureRenderer.addToolTip(label,
+                                        this.featureRenderer.getToolTip(feature));
+                this.featureRenderer.addClickListener(label,
+                                                label.annotation.getStart(),
+                                                label.annotation.getEnd());
 
-            labels.push(label);
-        }, this);
+                labels.push(label);
+            }, this);
+        }
 
         labels.sort(this.labelSort);
         this.adjustLabelPositions(labels);
@@ -277,7 +381,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = rightTopLabels[i];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
 
             var labelCenter = label.center;
@@ -308,7 +412,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = rightBottomLabels[j];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
             
             var labelCenter = label.center;
@@ -339,7 +443,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = leftTopLabels[k];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
 
             var labelCenter = label.center;
@@ -370,7 +474,7 @@ Ext.define("Teselagen.manager.PieManager", {
             label = leftBottomLabels[l];
 
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
 
             var labelCenter = label.center;
@@ -400,8 +504,8 @@ Ext.define("Teselagen.manager.PieManager", {
         this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.pie.surface
         });
-        this.labelSprites.addAll(labels);
 
+        this.labelSprites.addAll(labels);
         this.showSprites(this.labelSprites);
 
         Ext.each(leftTopLabels, function(label) {
@@ -491,12 +595,14 @@ Ext.define("Teselagen.manager.PieManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-        this.pie.surface.remove(this.nameBox);
+        this.caret.show(true);
+        this.nameBox.destroy();
 
-        this.setNameBox(Ext.create("Vede.view.pie.NameBox", {
+        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
-            name: pSequenceManager.getName()
-        }));
+            name: pSequenceManager.getName(),
+            length: pSequenceManager.getSequence().toString().length
+        });
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
@@ -541,21 +647,47 @@ Ext.define("Teselagen.manager.PieManager", {
      * Adds the caret to the pie.
      */
     initPie: function() {
-        var caret = Ext.create("Vede.view.pie.Caret");
-        this.pie.surface.add(caret);
-        caret.show(true);
+        this.caret = Ext.create("Vede.view.pie.Caret", {
+            angle: 0,
+            center: this.center,
+            radius: this.railRadius + 10
+        });
 
-        var name = "";
+        this.pie.surface.add(this.caret);
+
+        var name = "unknown";
+        var length = 0
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
+            length = this.sequenceManager.getSequence().toString().length;
         }
 
-        this.setNameBox(Ext.create("Vede.view.pie.NameBox", {
+        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
-            name: name
-        }));
+            name: name,
+            length: length
+        });
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
+    },
+
+    /**
+     * Repositions the caret to the given angle.
+     * @param {Int} angle The angle of the caret to reposition to.
+     */
+    adjustCaret: function(bp) {
+        var angle = bp * 2 * Math.PI / 
+            this.sequenceManager.getSequence().seqString().length;
+
+        this.caret.destroy();
+        this.caret = Ext.create("Vede.view.pie.Caret", {
+            angle: angle,
+            center: this.center,
+            radius: this.railRadius + 10
+        });
+
+        this.pie.surface.add(this.caret);
+        this.caret.show(true);
     }
 });

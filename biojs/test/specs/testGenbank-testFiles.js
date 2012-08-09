@@ -20,7 +20,7 @@ Ext.onReady(function() {
 
                     setTimeout(function() {
                         flag = true;
-                    }, 20);
+                    }, 30);
                 });
 
                 waitsFor(function() {
@@ -40,7 +40,7 @@ Ext.onReady(function() {
                         }
                     });
                     return flag;
-                }, "Completed Reading file", 20);
+                }, "Completed Reading file", 30);
 
 
                 runs(function() {
@@ -74,7 +74,7 @@ Ext.onReady(function() {
 
                     setTimeout(function() {
                         flag = true;
-                    }, 20);
+                    }, 30);
                 });
 
                 waitsFor(function() {
@@ -87,7 +87,7 @@ Ext.onReady(function() {
                         }
                     });
                     return flag;
-                }, "Completed Reading file", 20);
+                }, "Completed Reading file", 30);
 
 
                 runs(function() {
@@ -121,7 +121,7 @@ Ext.onReady(function() {
 
                     setTimeout(function() {
                         flag = true;
-                    }, 20);
+                    }, 30);
                 });
 
                 waitsFor(function() {
@@ -134,7 +134,7 @@ Ext.onReady(function() {
                         }
                     });
                     return flag;
-                }, "Completed Reading file", 20);
+                }, "Completed Reading file", 30);
 
 
                 runs(function() {

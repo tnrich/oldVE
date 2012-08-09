@@ -202,7 +202,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateComplementSequence = true;
         this.needsRecalculateReverseComplementSequence = true;
 
-        this.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento, null);
+        Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSetMemento, null);
     },
 
     // to AnnotatePanelController.js
@@ -345,12 +345,12 @@ Ext.define("Teselagen.manager.SequenceManager", {
     addFeature: function(pFeature, quiet) {
 
         if (!quiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanging, this.updateKindFeatureAdd, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindFeatureAdd, this.createMemento());
         }
         this.features.push(pFeature);
 
         if (!quiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindFeatureAdd, pFeature);
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureAdd, pFeature);
         }
     },
 
@@ -365,14 +365,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
             return false; //? null?
         }
         if ( !quiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanging, this.updateKindFeaturesAdd, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindFeaturesAdd, this.createMemento());
 
         }
         for (var i=0; i < pFeaturesToAdd.length; i++) {
             this.addFeature(pFeaturesToAdd[i], true);
         }
         if (!quiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesAdd, pFeaturesToAdd);
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesAdd, pFeaturesToAdd);
         }
         return true;
     },
@@ -387,13 +387,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var index = Ext.Array.indexOf(this.features, pFeature);
         if ( index >= 0 ) {
             if (!quiet && !this.manualUpdateStarted) {
-                this.fireEvent(this.updateSequenceChanging, this.updateKindFeatureRemove, this.createMemento());
+                Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindFeatureRemove, this.createMemento());
             }
             //this.features.removeItemAt(index);
             Ext.Array.remove(this.features, pFeature);
 
             if (!quiet && !this.manualUpdateStarted) {
-                this.fireEvent(this.updateSequenceChanged, this.updateKindFeatureRemove, pFeature);
+                Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeatureRemove, pFeature);
             }
             return true;
         } else {
@@ -415,14 +415,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
             return false;
         }
         if (!pFeaturesToRemove && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanging, this.updateKindFeaturesRemove, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindFeaturesRemove, this.createMemento());
         }
         for (var i=0; i < pFeaturesToRemove.length; i++) {
             var success = this.removeFeature(pFeaturesToRemove[i], true);
             if (!success) console.warn("Could not remove Feature[" + i  + "] from Sequence.");
         }
         if (!pFeaturesToRemove && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesRemove, pFeaturesToRemove);
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindFeaturesRemove, pFeaturesToRemove);
         }
         return true;
     },
@@ -454,7 +454,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateReverseComplementSequence = true;
 
         if(!pQuiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanging, this.updateKindSequenceInsert, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindSequenceInsert, this.createMemento());
         }
         var success = this.insertSequence(pSequenceManager.getSequence(), pPosition, true);
 
@@ -470,7 +470,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         }
 
         if(!pQuiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequenceProvider: pSequenceManager, position: pPosition});
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequenceProvider: pSequenceManager, position: pPosition});
         }
 
     },
@@ -494,7 +494,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         this.needsRecalculateReverseComplementSequence = true;
 
         if(!pQuiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanging, this.updateKindSequenceInsert, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindSequenceInsert, this.createMemento());
         }
 
         lengthBefore = this.sequence.getSymbolsLength();
@@ -509,7 +509,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.features[i].insertAt(pPosition, insertSequenceLength, lengthBefore, this.circular);
         } 
         if(!pQuiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequence: pInsertSequence, position: pPosition});
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequence: pInsertSequence, position: pPosition});
         }
         return true;
     },
@@ -537,7 +537,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         needsRecalculateReverseComplementSequence = true;
 
         if (!quiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanging, this.updateKindSequenceRemove, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindSequenceRemove, this.createMemento());
             //DW: Original has bug: used kindSequenceInsert instead
         }
         var DEBUG_MODE = true;
@@ -609,7 +609,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         
         if(!quiet && !this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength}); 
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength}); 
             //DW orig length was length...wrong?
         }
 
@@ -1004,7 +1004,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     manualUpdateStart: function() {
         if(!this.manualUpdateStarted) {
             this.manualUpdateStarted = true;
-            this.fireEvent(this.updateSequenceChanging, this.updateKindKManualUpdate, this.createMemento());
+            Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindKManualUpdate, this.createMemento());
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGING, SequenceProviderEvent.KIND_MANUAL_UPDATE, createMemento()));
         }
     },
@@ -1014,7 +1014,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      */
     manualUpdateEnd: function() {
         if(this.manualUpdateStarted) {
-            this.fireEvent(this.updateSequenceChanged, this.updateKindKManualUpdate, null);
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindKManualUpdate, null);
             //dispatcher.dispatchEvent(new SequenceProviderEvent(SequenceProviderEvent.SEQUENCE_CHANGED, SequenceProviderEvent.KIND_MANUAL_UPDATE, null));
 
             this.manualUpdateStarted = false;
@@ -1364,22 +1364,18 @@ Ext.define("Teselagen.manager.SequenceManager", {
             }
         }
 
-        console.log(lineArr.length);
-
         for (var i=0; i < lineArr.length; i++) {
-            console.log(sequence);
 
             if ( !lineArr[i].match(/^\>/) ) {
                 sequence += Ext.String.trim(lineArr[i]);
             }
-        }   
-        console.log(sequence);
-        sequence = sequence.replace(/[\d]|[\s]/g, ""); //remove whitespace and digits
+        }
+        sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
         if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
             //illegalcharacters
             return null;
         }
-        console.log(sequence);
+        //console.log(sequence);
 
         //result = Teselagen.bio.sequence.DNATools.createDNASequence(name, sequence);
 
@@ -1389,7 +1385,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
             isCiruclar: false, //assume linear
             features: [] //none
         });
-
 
         return result;
     },

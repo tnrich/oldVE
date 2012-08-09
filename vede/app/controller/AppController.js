@@ -7,6 +7,6 @@ Ext.define('Vede.controller.AppController', {
     init: function() {
     },
     onLaunch: function() {
-        Vede.app = this.application;
+        Vede.application = this.application;
     }
 });
