@@ -55,6 +55,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     render: function(){
+       // this.updateAverageRowHeight();
         this.clean();
         var adjustedHeight, row;
         this.panel = Ext.getCmp('AnnotatePanel');
@@ -89,10 +90,10 @@ Ext.define("Vede.view.annotate.Annotator", {
             y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
             
         }
+        
         if(this.sequenceAnnotator.getSequenceManager()) {
             this.loadFeatureRenderers();
             this.renderFeatures();
-
             this.loadCutSiteRenderers();
             this.renderCutSites();
 
@@ -117,10 +118,11 @@ Ext.define("Vede.view.annotate.Annotator", {
             return;
         }
         
+        var that = this;
         for (var i = 0; i < retrievedFeatures.length; i++){
             var feature = retrievedFeatures[i];
             var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {
-                sequenceAnnotator: this,
+                sequenceAnnotator: that,
                 feature: feature
             });
             this.featureRenderers.push(featureRenderer);
@@ -138,6 +140,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             return;
         }
 
+        var that = this;
         Ext.each(retrievedCutSites, function(site) {
             var cutSiteRenderer = Ext.create("Teselagen.renderer.annotate.CutSiteRenderer", {
                 sequenceAnnotator: this,
@@ -172,6 +175,53 @@ Ext.define("Vede.view.annotate.Annotator", {
     removeOrfRenderers: function() {
         this.setOrfRenderers([]);
     },
+
+
+    /*
+    bpMetricsByIndex: function(pIndex){
+        if(!this.isValidIndex(index)){
+            throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
+        },
+
+        var row = this.rowByBpIndex(pIndex);
+        var resultsMetrics;
+
+        if (row == null){
+            throw new Error("Can't get bp point for index: " + String(pIndex));
+        }else{
+            var numberOfCharacters = pIndex - row.getIndex() * this.sequenceAnnotator.getBpPerRow();
+
+            
+            if(this.sequenceAnnotator.showSpaceEvery10Bp){
+                numberOfCharacters += Math.round(numberOfCharacters/10);
+            }
+
+            var bpX = row.getSequenceMetrics().getX() + numberOfCharacters * 3;//this.sequenceSymbolRenderer.getTextWidth();
+            var bpY = row.getSequenceMetrics().getY();
+            resultMetrics = Ext.create("Teselagen.models.Rectangle", {
+                x: bpX,
+                y: bpY,
+                width: 2, //fix to make resizable
+                height: 3,
+            });
+        }
+        return resultsMetrics;
+    },
+
+    rowByBpIndex: function(pIndex){
+        if(!this.isValidIndex(pIndex)){
+            throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
+        }
+        console.log("Row by bp Index result: " + this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())]);
+
+        return this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())];
+    },
+
+   
+    isValidIndex: function(pIndex){
+        return pIndex >= 0 && pIndex <= this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length;
+    },
+    */
 
     renderSequence: function(row, x, y){
         this.sequenceSVG.append("svg:text")
@@ -257,13 +307,13 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     renderFeatures: function(){
+            console.log("Tried to render featureRenderers");
         if (this.sequenceAnnotator.getShowFeatures()){
             for (var i = 0; i < this.featureRenderers.length; ++i){
                 var featureRenderer = this.featureRenderers[i];
                 featureRenderer.render();
                 
             }
-            console.log("Tried to render featureRenderers");
         }
     },
 
@@ -291,12 +341,25 @@ Ext.define("Vede.view.annotate.Annotator", {
             .attr("y2", y2)
             .attr("stroke", "lightgray");
     },
+
+    updateAverageRowHeight: function(){
+        var totalHeight = 0;
+        var retrievedRows = this.sequenceAnnotator.getRowManager().getRows();
+
+        for (var i = 0; i < retrievedRows.length; i++){
+            var row = retrievedRows[i];
+            totalHeight += row.getMetrics().height;
+
+            averageRowHeight = (retrievedRows.length > 0) ? (totalHeight / retrievedRows.length) : 0;
+        }
+    },
     clean: function(){
         console.log(d3.select("#annotationViz"));
         d3.select("#annotationViz").remove(); 
         d3.select("#sequenceSVG").remove(); 
         d3.select("#bpLabelsSVG").remove(); 
         d3.select("#aminoAcidsSVG").remove(); 
+        d3.select("#featuresSVG").remove(); 
 
         this.lines = this.annotateSVG.append("svg:g")
             .attr("id", "annotationViz");

@@ -1,10 +1,10 @@
 Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
-    extends: "Teselagen.renderer.common.AnnotationRenderer",
     config: {
         feature: null,
         sequenceAnnotator: null,
-        topBarY: 20
+        topBarY: 20,
+        featureGroupSVG: null,
     },
 
     statics: {
@@ -15,19 +15,17 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
     constructor: function(inData){
 
-        this.callParent([inData]);
         this.initConfig(inData);
-        this.statics();
     },
 
     update: function(){
-        this.setNeedsRemeasurement(true);
     },
 
 
     render: function(){
-        this.sequenceAnnotator.featuresSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
-                .attr("id", "featuresSVG");
+        console.log("Trying to render feature renderer");
+        this.featureGroupSVG = this.sequenceAnnotator.featuresSVG.append("svg:g")
+                .attr("id", "feature-" +this.feature.getName());
 
         console.log("Retrieving feature rows with this name: " + this.feature.getName());
         var featureRows = this.sequenceAnnotator.getSequenceAnnotator().getRowManager().getFeatureToRowMap()[this.feature.getName()];
