@@ -57,7 +57,9 @@ Ext.define("Vede.controller.SequenceController", {
         listenersObject[this.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED] =
             this.onRestrictionEnzymeManagerUpdated;
 
-        console.log(listenersObject);
+        listenersObject[this.SelectionEvent.SELECTION_CHANGED] = 
+            this.onSelectionChanged;
+
         this.application.on(listenersObject);
     },
 
@@ -79,6 +81,8 @@ Ext.define("Vede.controller.SequenceController", {
         this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {
             sequenceManager: this.SequenceManager
         });
+
+        console.log(this.ORFManager);
 
         this.RestrictionEnzymeManager = 
             Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
@@ -104,11 +108,13 @@ Ext.define("Vede.controller.SequenceController", {
             manager.setSequenceManager(pSeqMan);
         });
 
-        this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
-                                this.onSequenceChanged, this);
+        this.SequenceManager.on(
+            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
+            this.onSequenceChanged, this);
 
-        this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
-                                this.onSequenceChanging, this);
+        this.SequenceManager.on(
+            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
+            this.onSequenceChanging, this);
     },
 
 
@@ -137,7 +143,7 @@ Ext.define("Vede.controller.SequenceController", {
                 break;
             case Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO:
                 break;
-            case Teselagen.event.SequenceManagerEvent.KING_INITIALIZED:
+            case Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED:
                 break;
         };
 
@@ -162,7 +168,11 @@ Ext.define("Vede.controller.SequenceController", {
     onRestrictionEnzymeManagerUpdated: function() {
     },
 
-    onTraceManagerUpdated: function() {
+    onSelectionChanged: function(scope, start, end) {
+        if(scope != this) {
+            this.SelectionLayer.select(start, end);
+            this.changeCaretPosition(end);
+        }
     },
 
     onAnnotationClicked: function(start, end) {
@@ -178,5 +188,8 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onViewModeChanged: function(viewMode) {
+    },
+
+    changeCaretPosition: function(index) {
     },
 });

@@ -67,10 +67,16 @@ Ext.define('Vede.controller.PieController', {
         }
     },
 
+    onSelectionChanged: function(scope, start, end) {
+        this.callParent(arguments);
+
+        this.pie.surface.add(this.SelectionLayer.selectionSprite);
+        this.SelectionLayer.selectionSprite.show(true);
+    },
+
     onSequenceManagerChanged: function(pSeqMan) {
         this.callParent(arguments);
 
-        this.pieManager.setSequenceManager(pSeqMan);
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.pieManager.setFeatures(pSeqMan.getFeatures());
@@ -106,7 +112,7 @@ Ext.define('Vede.controller.PieController', {
     },
 
     onLaunch: function() {
-        this.callParent();
+        this.callParent(arguments);
 
         var pieContainer
         var pie;
@@ -123,6 +129,8 @@ Ext.define('Vede.controller.PieController', {
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
         this.pieManager.initPie();
+
+        this.Managers.push(this.pieManager);
 
         this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
             center: this.pieManager.center,
@@ -233,7 +241,7 @@ Ext.define('Vede.controller.PieController', {
 
                 this.SelectionLayer.endSelecting();
 
-                if(this.SelectionLayer.endAngle) {
+                if(this.SelectionLayer.end) {
                     this.changeCaretPosition(this.SelectionLayer.end);
                 }
 
