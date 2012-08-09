@@ -435,7 +435,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {String} xml XML file with one or more records in String format
      * @returns {Teselagen.bio.parsers.Genbank[]} genbank
      */
-     jbeiseqxmlToArray: function (xml) {
+     jbeiseqxmlsToGenbankArray: function (xml) {
         var xmlArray = [];
         var newxml = xml;
 
