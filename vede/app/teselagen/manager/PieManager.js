@@ -220,6 +220,8 @@ Ext.define("Teselagen.manager.PieManager", {
             this.orfSprites.addAll(this.orfRenderer.render());
         }
 
+        this.renderLabels();
+
         if(this.showOrfs) {
             this.showSprites(this.orfSprites);
         } else {
@@ -237,8 +239,6 @@ Ext.define("Teselagen.manager.PieManager", {
         } else {
             this.hideSprites(this.featureSprites);
         }
-
-        this.renderLabels();
     },
 
     /**

@@ -1,11 +1,11 @@
-Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
+Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
     statics: {
         ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"],
         ORF_STROKE_WIDTH: 2
     },
 
     config: {
-        contentHolder: null,
+        sequenceAnnotator: null,
         orf: null,
     },
 
@@ -21,13 +21,14 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
         this.orfSVG = this.annotateSVG.append("svg:g")
                            .attr("id", "orfsSVG");
 
-        var orfRows = this.contentHolder.RowManager.orfToRowMap[orf];
+        var orf = this.orf;
+        var orfRows = this.sequenceAnnotator.RowManager.orfToRowMap[orf];
 
         if(!orfRows) {
             return;
         }
 
-        var seqLen = this.contentHolder.sequenceManager.getSequence().toString().length;
+        var seqLen = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;
 
         var alignmentRowIndex;
         var startBP;
@@ -85,8 +86,8 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
                     }
 				}
 
-				var bpStartPoint = this.contentHolder.bpMetricsByIndex(startBP);
-				var bpEndPoint = this.contentHolder.bpMetricsByIndex(endBP);
+				var bpStartPoint = this.sequenceAnnotator.bpMetricsByIndex(startBP);
+				var bpEndPoint = this.sequenceAnnotator.bpMetricsByIndex(endBP);
 				
 				var upShift = 2 + alignmentRowIndex * 6;
 				
@@ -94,11 +95,11 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
 				
 				var orfY = bpStartPoint.y - upShift;
 				var currentHeight = 6;
-                var textWidth = this.contentHolder.sequenceSymbolRenderer.textWidth;
+                var textWidth = this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
 				
 				if(startBP > endBP) { // case when start and end are in the same row
-					var rowStartPoint = this.contentHolder.bpMetricsByIndex(row.rowData.getStart());
-					var rowEndPoint = this.contentHolder.bpMetricsByIndex(row.rowData.end);
+					var rowStartPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
+					var rowEndPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.end);
 
                     this.orfSVG.append("svg:path")
                         .attr("d", "M" + (rowStartPoint.x + 2) + " " + orfY +
@@ -121,7 +122,7 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
                 Ext.each(orf.getStartCodons(), function(startCodonIndex) {
                     if(startCodonIndex >= row.rowData.getStart() && 
                        startCodonIndex <= row.rowData.end) {
-                        var codonStartMetrics = this.contentHolder.bpMetricsByIndex(startCodonIndex);
+                        var codonStartMetrics = this.sequenceAnnotator.bpMetricsByIndex(startCodonIndex);
                         
                         var codonStartPointX = codonStartMetrics.x;
                         var codonStartPointY = codonStartMetrics.y - upShift;
@@ -143,7 +144,7 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
                 });
 				
 				if(orf.getStrand() == 1 && endBP == orf.getEnd() - 1) {
-					var codonEndPoint1 = this.contentHolder.bpMetricsByIndex(endBP);
+					var codonEndPoint1 = this.sequenceAnnotator.bpMetricsByIndex(endBP);
 					var codonEndPointX1 = codonEndPoint1.x + textWidth + 3;
 					var codonEndPointY1 = codonEndPoint1.y - upShift;
                     //draw arrow ends					
@@ -157,7 +158,7 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
                                    (codonEndPointY1 - 2))
                         .attr("fill", color);
 				} else if(orf.getStrand() == -1 && startBP == orf.getStart()) {
-					var codonEndPoint2 = this.contentHolder.bpMetricsByIndex(startBP);
+					var codonEndPoint2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
 					var codonEndPointX2 = codonEndPoint2.x + 3;
 					var codonEndPointY2 = codonEndPoint2.y - upShift;
                     //draw arrow ends

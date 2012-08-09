@@ -1,49 +1,123 @@
 Ext.define("Vede.controller.SequenceController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.event.SequenceManagerEvent",
-               "Teselagen.event.MapperEvent"],
+    requires: ["Teselagen.event.CaretEvent",
+               "Teselagen.event.MapperEvent",
+               "Teselagen.event.SequenceManagerEvent",
+               "Teselagen.event.SelectionEvent",
+               "Teselagen.event.VisibilityEvent",
+               "Teselagen.manager.RestrictionEnzymeGroupManager"],
 
-    SequenceManager: null,
     AAManager: null,
     ORFManager: null,
     RestrictionEnzymeManager: null,
-    TraceManager: null,
+    SequenceManager: null,
+
+    RestrictionEnzymeGroupManager: null,
 
     Managers: null,
 
+    CaretEvent: null,
+    MapperEvent: null,
+    SelectionEvent: null,
+    VisibilityEvent: null,
+
+    WireframeSelectionLayer: null,
+    SelectionLayer: null,
+
     listeners:{
+    },
 
+    init: function() {
+        this.CaretEvent = Teselagen.event.CaretEvent;
+        this.MapperEvent = Teselagen.event.MapperEvent;
+        this.SelectionEvent = Teselagen.event.SelectionEvent;
+        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
+        var listenersObject = {
+            SequenceManagerChanged: this.onSequenceManagerChanged,
+            ActiveEnzymesChanged: this.onActiveEnzymesChanged,
+            AnnotationClicked: this.onAnnotationClicked,
+            ViewModeChanged: this.onViewModeChanged,
+            SequenceManagerChanged: this.onSequenceManagerChanged,
+            scope: this
+        };
+
+        listenersObject[this.VisibilityEvent.SHOW_FEATURES_CHANGED] = 
+            this.onShowFeaturesChanged;
+        listenersObject[this.VisibilityEvent.SHOW_CUTSITES_CHANGED] = 
+            this.onShowCutSitesChanged;
+        listenersObject[this.VisibilityEvent.SHOW_ORFS_CHANGED] = 
+            this.onShowOrfsChanged;
+
+        listenersObject[this.MapperEvent.AA_MAPPER_UPDATED] = 
+            this.onAAManagerUpdated;
+        listenersObject[this.MapperEvent.ORF_MAPPER_UPDATED] = 
+            this.onORFManagerUpdated;
+        listenersObject[this.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED] =
+            this.onRestrictionEnzymeManagerUpdated;
+
+        listenersObject[this.SelectionEvent.SELECTION_CHANGED] = 
+            this.onSelectionChanged;
+
+        this.application.on(listenersObject);
     },
 
     onLaunch: function() {
-        this.SequenceManager = Ext.create("Teselagen.manager.SequenceManager", {
-            name: "sequenceManager",
-            circular: false,
+        // TODO: maybe put managers in statics so they are shared by all 
+        // child constructors? 
+        
+        this.RestrictionEnzymeGroupManager = 
+            Teselagen.manager.RestrictionEnzymeGroupManager;
+
+        if(!this.RestrictionEnzymeGroupManager.isInitialized) {
+            this.RestrictionEnzymeGroupManager.initialize();
+        }
+
+        this.AAManager = Ext.create("Teselagen.manager.AAManager", {
+            sequenceManager: this.SequenceManager
+        });
+        
+        this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {
+            sequenceManager: this.SequenceManager
         });
 
-        // Listeners in each Manager
+        console.log(this.ORFManager);
 
-        this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
-                                this.onSequenceChanged, this);
+        this.RestrictionEnzymeManager = 
+            Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
+                sequenceManager: this.SequenceManager,
+                restrictionEnzymeGroup: 
+                    this.RestrictionEnzymeGroupManager.getActiveGroup()
+        });
 
-        this.SequenceManager.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
-                                this.onSequenceChanging, this);
-
-        this.AAManager.on(Teselagen.event.MapperEvent.AA_MAPPER_UPDATED,
-                          this.onAAManagerUpdated, this);
-
-        this.ORFManager.on(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED,
-                          this.onORFManagerUpdated, this);
-
-        this.RestrictionEnzymeManager.on(Teselagen.event.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED,
-                          this.onRestrictionEnzymeManagerUpdated, this);
-
-        this.TraceManager.on(Teselagen.event.MapperEvent.ORF_MAPPER_UPDATED,
-                          this.onTraceManagerUpdated, this);
-
+        this.Managers = [this.AAManager, 
+                         this.RestrictionEnzymeManager,
+                         this.ORFManager];
     },
+
+    onActiveEnzymesChanged: function() {
+        this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(
+            this.RestrictionEnzymeGroupManager.getActiveGroup());
+    },
+
+    onSequenceManagerChanged: function(pSeqMan) {
+        this.SequenceManager = pSeqMan;
+
+        Ext.each(this.Managers, function(manager) {
+            manager.setSequenceManager(pSeqMan);
+        });
+
+        this.SequenceManager.on(
+            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
+            this.onSequenceChanged, this);
+
+        this.SequenceManager.on(
+            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
+            this.onSequenceChanging, this);
+    },
+
+
 
     // kind is the type of Sequence Changed/Changing that occurs
     // Obj is a SequenceManagerMemento, feature, or some other {} input that needs to be remembered
@@ -52,7 +126,7 @@ Ext.define("Vede.controller.SequenceController", {
             manager.sequenceChanged();
         });
 
-        swtich (kind) {
+        switch (kind) {
             case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD:
                 break;
             case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_REMOVE:
@@ -69,7 +143,7 @@ Ext.define("Vede.controller.SequenceController", {
                 break;
             case Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO:
                 break;
-            case Teselagen.event.SequenceManagerEvent.KING_INITIALIZED:
+            case Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED:
                 break;
         };
 
@@ -94,6 +168,28 @@ Ext.define("Vede.controller.SequenceController", {
     onRestrictionEnzymeManagerUpdated: function() {
     },
 
-    onTraceManagerUpdated: function() {
-    }
+    onSelectionChanged: function(scope, start, end) {
+        if(scope != this) {
+            this.SelectionLayer.select(start, end);
+            this.changeCaretPosition(end);
+        }
+    },
+
+    onAnnotationClicked: function(start, end) {
+    },
+
+    onShowCutSitesChanged: function(show) {
+    },
+
+    onShowFeaturesChanged: function(show) {
+    },
+
+    onShowOrfsChanged: function(show) {
+    },
+
+    onViewModeChanged: function(viewMode) {
+    },
+
+    changeCaretPosition: function(index) {
+    },
 });

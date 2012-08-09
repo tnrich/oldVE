@@ -12,6 +12,7 @@ Ext.require("Teselagen.bio.sequence.common.StrandType");
 Ext.require("Teselagen.bio.sequence.DNATools");
  
 Ext.require("Teselagen.bio.util.StringUtil");
+Ext.require("Teselagen.bio.util.XmlToJson");
 Ext.require("Teselagen.bio.parsers.GenbankManager");
 Ext.require("Teselagen.bio.parsers.ParsersManager");
 Ext.onReady(function() {
@@ -43,8 +44,8 @@ Ext.onReady(function() {
                         '        1 gattaca     \n';
                 gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(gbStr);
 
-                jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                //jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
+                //jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
             });
             
             it("checkGenbank() ",function(){
@@ -78,6 +79,7 @@ Ext.onReady(function() {
 
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
                 expect(newGb.getOrigin().getSequence()).toBe("gattaca");
+                console.log(newGb.toString());
             });
 
             it("genbankToFasta", function() {
@@ -92,9 +94,9 @@ Ext.onReady(function() {
                 var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXml(jbeiXmlUrl);
                 console.log(jbeiXml);
 
-                var gbArr = Teselagen.bio.parsers.ParsersManager.parseJbeiseqxml(jbeiXml, jbeiXmlUrl);
+                //var gbArr = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXml, jbeiXmlUrl);
 
-                console.log(gbArr);
+                //console.log(gbArr);
 
                 /*gbArr.each(function(gb) {
                     console.log(gb.toString());
@@ -105,8 +107,10 @@ Ext.onReady(function() {
 
             it("jbeiseqxmlToGenbank", function() {
 
-                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXml(jbeiXmlUrl);
-                //console.log(jbeiXml);
+                var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXml(jbeiXmlUrl);
+                var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+
+                console.log(gb.toString());
 
                 
             });
@@ -122,6 +126,39 @@ Ext.onReady(function() {
             it("genbankToJbeiseqxml", function() {
 
             });
+        });
+
+        xdescribe("Toy Testing: Xml2Json", function() {
+
+            it("XmlToJson: json2xml", function(){
+
+                var xmlDoc = Teselagen.bio.util.XmlToJson.json2xml_str(
+                    {
+                        MyRoot : {
+                            MyChild : 'my_child_value',
+                            MyAnotherChild: 10,
+                            MyArray : [ 'test', 'test2' ],
+                            MyArrayRecords : [ 
+                                {
+                                    ttt : 'vvvv' 
+                                },
+                                {
+                                    ttt : 'vvvv2' 
+                                }                     
+                            ]
+                        }
+                    }
+                );
+
+                console.log(xmlDoc);
+
+                var jsonObj = Teselagen.bio.util.XmlToJson.xml_str2json(xmlDoc);
+                console.log(JSON.stringify(jsonObj, null, "  "));
+
+            });
+        });
+
+        xdescribe("Toy Testing: Ext.data.Store", function() {
 
             it("xml testing", function() {
                 var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
@@ -159,6 +196,7 @@ Ext.onReady(function() {
                         }
                     }
                 });
+                //console.log(memstore);
                 //console.log(memstore.getCount());
 
 

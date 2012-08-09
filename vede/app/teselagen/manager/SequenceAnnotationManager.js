@@ -6,12 +6,14 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         aaManager: null,
         restrictionEnzymeManager: null,
         highlights: null,
+    
+        features: null,
         
         contentHolder: null,
         annotator: null,
 
         readOnly: null,
-        showFeatures: null,
+        showFeatures: true,
         showCutSites: null,
         showOrfs: null,
         showComplementarySequence: true,
@@ -78,6 +80,12 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     sequenceChanged: function(){
         this.RowManager.setSequenceAnnotator(this);
         this.RowManager.update();
+
+        this.aaManager.setSequenceManager(this.sequenceManager);
+        this.features = this.sequenceManager.getFeatures();
+
+        console.log(this.annotator.getSequenceAnnotator().getSequenceManager().getFeatures());
+
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
         console.log("Foo");

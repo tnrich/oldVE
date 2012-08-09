@@ -1,4 +1,4 @@
-Ext.define("Teselagen.renderer.annotate.TextRenderer", {
+Ext.define("Teselagen.renderer.common.TextRenderer", {
 
     config: {
         textWidth: -1,
