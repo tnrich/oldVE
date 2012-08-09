@@ -75,6 +75,20 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
     setSequenceManager: function(pSeqMan){
         this.sequenceManager = pSeqMan;
+
+        this.RowManager.setSequenceAnnotator(this);
+        this.RowManager.update();
+
+        this.aaManager.setSequenceManager(this.sequenceManager);
+        this.features = this.sequenceManager.getFeatures();
+
+        this.annotator.setSequenceAnnotator(this);
+        this.annotator.render();
+    },
+
+    render:function() {
+        this.RowManager.update();
+        this.annotator.render();
     },
 
     sequenceChanged: function(){

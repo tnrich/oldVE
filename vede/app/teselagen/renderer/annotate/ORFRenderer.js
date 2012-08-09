@@ -16,19 +16,19 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                            .attr("id", "orfsSVG");
     },
 
-    update: function() {
+    render: function() {
         d3.select("#orfsSVG").remove();
         this.orfSVG = this.annotateSVG.append("svg:g")
                            .attr("id", "orfsSVG");
 
         var orf = this.orf;
-        var orfRows = this.sequenceAnnotator.RowManager.orfToRowMap[orf];
+        var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap()[orf];
 
         if(!orfRows) {
             return;
         }
 
-        var seqLen = this.sequenceAnnotator.sequenceManager.getSequence().toString().length;
+        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().toString().length;
 
         var alignmentRowIndex;
         var startBP;
@@ -36,8 +36,9 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
         var upShift;
         Ext.each(orfRows, function(row) {
             alignmentRowIndex = -1;
+            var row = this.sequenceAnnotator.sequenceAnnotator.RowManager.getRows()[row];
 
-            Ext.each(row.rowData.orfAlignment, function(rowOrfs) {
+            Ext.each(row.getRowData().orfAlignment.getKeys(), function(rowOrfs) {
                 Ext.each(rowOrfs, function(rowOrf, index) {
                     if(rowOrf == orf) {
                         alignmentRowIndex = index;
