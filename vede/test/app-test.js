@@ -11,8 +11,13 @@ Ext.onReady(function() {
         ],
 
         launch: function() {
-            jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-            jasmine.getEnv().execute();
+    		var reporter = new jasmine.HtmlReporter();
+    		var jasmineEnv = jasmine.getEnv();
+    		jasmineEnv.addReporter(reporter);
+    		jasmineEnv.specFilter = function(spec) {
+    			return reporter.specFilter(spec);
+    		};
+    		jasmineEnv.execute();
         }
     });
 });
