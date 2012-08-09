@@ -5,6 +5,7 @@ Ext.define("Teselagen.manager.RowManager", {
         rows: [],
         featureToRowMap: null,
         cutSiteToRowMap: null,
+        orfToRowMap: null,
         showORFs: false,
         numRows: 10,
     },
@@ -12,7 +13,7 @@ Ext.define("Teselagen.manager.RowManager", {
     constructor: function(inData){
         this.initConfig(inData);
         this.sequenceAnnotator = inData.sequenceAnnotator;
-        console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
+        //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
     },
 
     update: function(){
@@ -104,14 +105,94 @@ Ext.define("Teselagen.manager.RowManager", {
 
     },
 
-    reloadCutSites: function(){},
+    reloadCutSites: function(){
+        if(!this.sequenceAnnotator.showCutSites ||
+           !this.sequenceAnnotator.restrictionEnzymeManager ||
+           !this.sequenceAnnotator.restrictionEnzymeManager.getCutSites()) {
+            return;
+        }
 
-    reloadORFs: function(){},
+        var cutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
+        var rowsCutSites = this.rowAnnotations(cutSites);
+        this.cutSiteToRowMap = [];
+        var start;
+        var end;
+        var cutSitesAlignment;
+
+        Ext.each(cutSites, function(site) {
+            this.cutSiteToRowMap[site.toString()] = [];
+        }, this);
+
+        Ext.each(rowsCutSites, function(row, i) {
+            start = i * this.sequenceAnnotator.getBpPerRow();
+            end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+
+            cutSitesAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(
+                                    row,
+                                    this.sequenceAnnotator.getSequenceManager());
+            this.rows[i].getRowData().setCutSitesAlignment(cutSitesAlignment.clone());
+
+            if(!row) {
+                return true;
+            }
+
+            Ext.each(row, function(site) {
+                if(!this.cutSiteToRowMap[site.toString()]) {
+                    this.cutSiteToRowMap[site.toString()] = [];
+                }
+
+                this.cutSiteToRowMap[site.toString()].push(i);
+            }, this);
+        }, this);
+    },
+
+    reloadORFs: function() {
+        if(!this.sequenceAnnotator.showOrfs ||
+           !this.sequenceAnnotator.orfManager ||
+           !this.sequenceAnnotator.orfManager.getOrfs()) {
+            return;
+        }
+
+        this.orfToRowMap = [];
+
+        var orfs = this.sequenceAnnotator.orfManager.getOrfs();
+        var rowsOrfs = this.rowAnnotations(orfs);
+        var start;
+        var end;
+        var orfAlignment;
+
+        Ext.each(orfs, function(orf) {
+            this.orfToRowMap[orf.toString()] = [];
+        }, this);
+
+        Ext.each(rowsOrfs, function(row, i) {
+            start = i * this.sequenceAnnotator.getBpPerRow();
+            end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+
+            orfAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(
+                                    row,
+                                    this.sequenceAnnotator.getSequenceManager());
+            this.rows[i].getRowData().setOrfAlignment(orfAlignment.clone());
+
+            if(!row) {
+                return true;
+            }
+
+            Ext.each(row, function(orf) {
+                if(!this.orfToRowMap[orf.toString()]) {
+                    this.orfToRowMap[orf.toString()] = [];
+                }
+
+                this.orfToRowMap[orf.toString()].push(i);
+            }, this);
+        }, this);
+    },
+
     rowAnnotations: function(pAnnotations){
         var rows = [];
         console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length);
 
-        var numRows = Math.round((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length / this.sequenceAnnotator.getBpPerRow()));
+        var numRows = Math.ceil((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length / this.sequenceAnnotator.getBpPerRow()));
         console.log("rowAnnotations, numRows: " + numRows);
 
         if (pAnnotations != null){
