@@ -202,10 +202,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
                 //loc += "\n";
             }
         }
-        if (join) { 
+        if (join === true) {  //explicit true because if complement is passed in a string, this won't work
             loc = "join(" + loc + ")"; 
         }
-        if (complement) {
+        if (complement === true) {
             loc = "complement(" + loc + ")"; 
         }
 
