@@ -12,7 +12,6 @@ Ext.define("Teselagen.manager.RowManager", {
     constructor: function(inData){
         this.initConfig(inData);
         this.sequenceAnnotator = inData.sequenceAnnotator;
-        console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
     },
 
     update: function(){
