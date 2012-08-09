@@ -97,8 +97,18 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
 
                 //Add functionality for drawing arrow directions
-                if (this.feature.getStran() === 0){
+                if (this.feature.getStrand() === 0){
+                    drawFeatureRect("", featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    drawFeatureRect("", featureX2, featureYCommon, featureRowWidth2, featureRowHeightCommon);
+                } else if (this.feature.getStrand() === 1){
+                    drawFeatureForwardArrow("", featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    drawFeatureForwardRect("", featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                } else if(this.feature.getStrand() === -1){
+                    drawFeatureBackwardRect("", featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    drawFeatureBackwardArrow("", featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 }
+            }else{
+
             }*/
 
         }
