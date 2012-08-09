@@ -10,8 +10,6 @@ Ext.define("Vede.view.annotate.Annotator", {
         bpLabelsSVG: null,
 
         featureRenderers: null,
-        cutSiteRenderers: null,
-        orfRenderers: null,
         yMax: null,
         xMax: null,
         id: null,
@@ -124,44 +122,6 @@ Ext.define("Vede.view.annotate.Annotator", {
         this.featureRenderers = [];
     },
 
-    loadCutSiteRenderers: function() {
-        this.removeCutSiteRenderers();
-        var retrievedCutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
-        if(!this.sequenceAnnotator.getShowCutSites() || !retrievedCutSites) {
-            return;
-        }
-
-        Ext.each(retrievedCutSites, function(site) {
-            var cutSiteRenderer = Ext.create("Teselagen.renderer.annotate.CutSiteRenderer", {
-                sequenceAnnotator: this,
-                cutSite: site
-            });
-
-            this.cutSiteRenderers.push(cutSiteRenderer);
-        }, this);
-    },
-
-    removeCutSiteRenderers: function() {
-        this.setCutSiteRenderers([]);
-    },
-
-    loadOrfRenderers: function() {
-        this.removeOrfRenderers();
-        var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
-        if(!this.sequenceAnnotator.getShowOrfs() || !retrievedOrfs) {
-            return;
-        }
-
-        Ext.each(retrievedOrfs, function(orf) {
-            var orfRenderer = Ext.create("Teselagen.renderer.annotate.ORFRenderer", {
-                sequenceAnnotator: this,
-                orf: orf
-            });
-
-            this.orfRenderers.push(orfRenderer);
-        }, this);
-    },
-
     renderSequence: function(row, x, y){
         this.sequenceSVG.append("svg:text")
             .attr("x", x)
@@ -253,22 +213,6 @@ Ext.define("Vede.view.annotate.Annotator", {
                 
             }
             console.log("Tried to render featureRenderers");
-        }
-    },
-
-    renderCutSites: function() {
-        if(this.sequenceAnnotator.getShowCutSites()) {
-            Ext.each(this.cutSiteRenderers, function(renderer) {
-                renderer.render();
-            });
-        }
-    },
-
-    renderOrfs: function() {
-        if(this.sequenceAnnotator.getShowOrfs()) {
-            Ext.each(this.orfRenderers, function(renderer) {
-                renderer.render();
-            });
         }
     },
 
