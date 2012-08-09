@@ -21,7 +21,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                                .attr("id", "cutSiteSVG");
     },
 
-    update: function() {
+    render: function() {
         d3.select("#cutSiteSVG").remove();
         this.cutSiteSVG = this.annotateSVG.append("svg:g")
                                .attr("id", "cutSiteSVG");
@@ -34,13 +34,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         var cutSite = this.cutSite;
 
         var cutSiteHeight = 8;//this.sequenceAnnotator.cutSiteTextRenderer.textHeight - 2 + 3;
-        var cutSiteRows = this.sequenceAnnotator.RowManager.cutSiteToRowMap[cutSite];
+        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap()[cutSite.toString()];
 
         if(!cutSiteRows) {
             return;
         }
 
-        var seqLen = this.sequenceAnnotator.sequenceManager.getSequence().length;
+        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().length;
         var rowIndex;
         var startBP;
         var endBP;
@@ -51,21 +51,22 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         var currentWidth;
         var currentHeight;
 
-        Ext.each(cutSiteRows, function(row) {
-            rowIndex = -1;
+        Ext.each(cutSiteRows, function(rowNumber) {
+            alignmentRowIndex = -1;
+            var row = this.sequenceAnnotator.sequenceAnnotator.RowManager.getRows()[rowNumber];
             
-            Ext.each(row.rowData.cutSitesAlignment, function(rowCutSites, index) {
+            Ext.each(row.getRowData().cutSitesAlignment.getKeys(), function(rowCutSites, index) {
                 Ext.each(rowCutSites, function(site) {
-                    if(site == cutSite) {
-                        rowIndex = row.rowData.cutSitesAlignment.length - index - 1;
+                    if(site == this.cutSite.toString()) {
+                        alignmentRowIndex = row.getRowData().cutSitesAlignment.getKeys().length - index - 1;
                         return false;
                     }
-                });
+                }, this);
 
-                if(rowIndex != -1) {
+                if(alignmentRowIndex != -1) {
                     return false;
                 }
-            });
+            }, this);
 
             startBP = 0;
             endBP = 0;

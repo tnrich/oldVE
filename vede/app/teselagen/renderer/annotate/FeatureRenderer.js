@@ -70,9 +70,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
                 }
             }
-            console.log("line? : " + row.getRowData().getFeaturesAlignment().getKeys());
+            /*console.log("line? : " + row.getRowData().getFeaturesAlignment().getKeys());
             console.log("Row keys? : " + row.getRowData().getFeaturesAlignment().getKeys());
-            console.log("StartBP: " + startBP + " EndBP: " + endBP);
+            console.log("StartBP: " + startBP + " EndBP: " + endBP);*/
 
             /*
             if (startBP > endBP){
