@@ -1,21 +1,18 @@
-//Ext.onReady(function() {
 describe('UI tests', function () {
 	var window, box;
 	beforeEach(function() {
-		console.log("beforeEach");
 		box = sandbox();
-		console.log(box);
 		setFixtures(box);
 		Ext.widget('window', {
 			title: 'Test Window',
-			x: 10,
+			x: 200,
 			renderTo: "sandbox"
-		});
-		window = Ext.create("Vede.view.FileImportWindow");
-		window.render("sandbox");
+		}).show();
+		Ext.create("Vede.view.FileImportWindow", {
+			renderTo: "sandbox"
+		}).show();
 	});
 	it("Sandbox exists", function () {
 		expect(Ext.get("sandbox")).toBeTruthy();
 	});
 });
-//});
