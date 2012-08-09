@@ -80,8 +80,6 @@ Ext.define('Vede.controller.PieController', {
     onSequenceManagerChanged: function(pSeqMan) {
         this.callParent(arguments);
 
-        this.pieManager.initPie();
-
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.pieManager.setFeatures(pSeqMan.getFeatures());
@@ -133,6 +131,8 @@ Ext.define('Vede.controller.PieController', {
         pieContainer = Ext.getCmp('PieContainer');
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
+
+        this.pieManager.initPie();
 
         this.Managers.push(this.pieManager);
 

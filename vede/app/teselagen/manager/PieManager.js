@@ -595,9 +595,8 @@ Ext.define("Teselagen.manager.PieManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-        if(this.sequenceManager) {
-            this.pie.surface.remove(this.nameBox);
-        }
+        this.caret.show(true);
+        this.nameBox.destroy();
 
         this.nameBox = Ext.create("Vede.view.pie.NameBox", {
             center: this.center,
@@ -655,9 +654,9 @@ Ext.define("Teselagen.manager.PieManager", {
         });
 
         this.pie.surface.add(this.caret);
-        this.caret.show(true);
 
-        var name = "";
+        var name = "unknown";
+        var length = 0
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
             length = this.sequenceManager.getSequence().toString().length;
@@ -669,10 +668,8 @@ Ext.define("Teselagen.manager.PieManager", {
             length: length
         });
 
-        if(this.sequenceManager) {
-            this.pie.surface.add(this.nameBox);
-            this.nameBox.show(true);
-        }
+        this.pie.surface.add(this.nameBox);
+        this.nameBox.show(true);
     },
 
     /**
