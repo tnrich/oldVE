@@ -169,6 +169,10 @@ Ext.define("Vede.view.annotate.Annotator", {
         }, this);
     },
 
+    removeOrfRenderers: function() {
+        this.setOrfRenderers([]);
+    },
+
     renderSequence: function(row, x, y){
         this.sequenceSVG.append("svg:text")
             .attr("x", x)
