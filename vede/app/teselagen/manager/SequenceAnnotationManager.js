@@ -13,7 +13,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         annotator: null,
 
         readOnly: null,
-        showFeatures: null,
+        showFeatures: true,
         showCutSites: null,
         showOrfs: null,
         showComplementarySequence: true,

@@ -11,11 +11,12 @@ Ext.define("Teselagen.renderer.common.Alignment", {
      */
     buildAlignmentMap: function(annotations, sequenceManager) {
         this.sequenceManager = sequenceManager;
-
-        if(this.SORT_BY_LENGTH) {
-            annotations.sort(this.sortByLength);
-        } else {
-            annotations.sort(this.sortByStart);
+        if (!!annotations) {
+            if(this.SORT_BY_LENGTH) {
+                annotations.sort(this.sortByLength);
+            } else{
+                annotations.sort(this.sortByStart);
+            }
         }
 
         var rows = [];
@@ -50,8 +51,12 @@ Ext.define("Teselagen.renderer.common.Alignment", {
     },
 
     sortByStart: function(a1, a2) {
-        a1Start = a1.getStart();
-        a2Start = a2.getStart();
+        // if (a1 === undefined || a2 === undefined) {
+        //     console.log("There was an undefined sorting value!!");
+        //     return 0;
+        // }
+        var a1Start = a1.getStart();
+        var a2Start = a2.getStart();
 
         if(a1Start > a2Start) {
             return 1;

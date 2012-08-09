@@ -8,6 +8,8 @@ Ext.define("Vede.view.annotate.Annotator", {
         sequenceSVG: null,
         annotateSVG: null,
         bpLabelsSVG: null,
+
+        featureRenderers: null,
         yMax: null,
         xMax: null,
         id: null,
@@ -45,6 +47,7 @@ Ext.define("Vede.view.annotate.Annotator", {
 
         this.featuresSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "featuresSVG");
+        this.loadFeatureRenderers();
     },
     
     sequenceChanged: function(){
@@ -85,6 +88,8 @@ Ext.define("Vede.view.annotate.Annotator", {
             y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
             
         }
+        this.loadFeatureRenderers();
+        this.renderFeatures();
 
         this.annotateSVG.attr("height", adjustedHeight);
         console.log(this.lines.length);
@@ -93,6 +98,28 @@ Ext.define("Vede.view.annotate.Annotator", {
             //line renderer
                 //text render
             //amino acid renderer
+    },
+
+    loadFeatureRenderers: function(){
+        this.removeFeatureRenderers();
+        var retrievedFeatures = this.sequenceAnnotator.getSequenceManager().getFeatures();
+        if (!this.sequenceAnnotator.getShowFeatures() 
+            || !retrievedFeatures){
+            return;
+        }
+        
+        for (var i = 0; i < retrievedFeatures.length; i++){
+            var feature = retrievedFeatures[i];
+            var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {
+                sequenceAnnotator: this,
+                feature: feature
+            });
+            this.featureRenderers.push(featureRenderer);
+        }
+    },
+
+    removeFeatureRenderers: function(){
+        this.featureRenderers = [];
     },
 
     renderSequence: function(row, x, y){
@@ -178,7 +205,15 @@ Ext.define("Vede.view.annotate.Annotator", {
             .text(aminoAcidsString3);
     },
 
-    renderFeature: function(){
+    renderFeatures: function(){
+        if (this.sequenceAnnotator.getShowFeatures()){
+            for (var i = 0; i < this.featureRenderers.length; ++i){
+                var featureRenderer = this.featureRenderers[i];
+                featureRenderer.render();
+                
+            }
+            console.log("Tried to render featureRenderers");
+        }
     },
 
     renderLine: function(x1, y1, x2, y2){
@@ -207,6 +242,8 @@ Ext.define("Vede.view.annotate.Annotator", {
 
         this.aminoAcidsSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "aminoAcidsSVG");
+        this.featuresSVG = this.annotateSVG.append("svg:g")
+                .attr("id", "featuresSVG");
     },
 
 });
