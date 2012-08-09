@@ -83,7 +83,8 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             fieldLabel: 'Label',
                                             hideLabel: true,
                                             emptyText: 'Enzyme name',
-                                            maxWidth: 150
+                                            maxWidth: 150,
+                                            enableKeyEvents: true
                                         },
                                         {
                                             xtype: 'itemselector',

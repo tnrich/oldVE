@@ -218,12 +218,12 @@ Ext.define("Teselagen.manager.RowManager", {
         console.log("Push in Row annotations before: " + pRows);
         if (pItemStart > pItemEnd){
             var rowStartIndex = Math.round(pItemStart/this.sequenceAnnotator.getBpPerRow());
-            var rowEndIndex = Math.round((this.sequenceAnnotator.getSequenceManager().getSequence().length - 1)/this.sequenceAnnotator.getBpPerRow());
+            var rowEndIndex = Math.round((this.sequenceAnnotator.getSequence().length - 1)/this.sequenceAnnotator.getBpPerRow());
 
             var rowStartIndex2 = 0;
-            var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getSequenceManager().getBpPerRow());
+            var rowEndIndex2 = Math.round(pItemEnd/this.sequenceAnnotator.getSequenceManager().getBpPerRow());
 
-            for (var z1 = rowStartIndex1; z1 < rowEndIndex1 + 1; z1++){
+            for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++){
                 pRows[z1].push(pAnnotation);
             }
             for (var z2 = rowStartIndex2; z2 < rowEndIndex2 + 1; z2++){

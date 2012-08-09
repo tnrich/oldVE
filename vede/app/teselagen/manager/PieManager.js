@@ -606,6 +606,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
 
         return pSequenceManager;
     },
@@ -670,6 +671,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
     },
 
     /**
