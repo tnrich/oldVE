@@ -169,10 +169,6 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onSelectionChanged: function(scope, start, end) {
-        if(scope != this) {
-            this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(end);
-        }
     },
 
     onAnnotationClicked: function(start, end) {

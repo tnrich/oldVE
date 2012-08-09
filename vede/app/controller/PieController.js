@@ -68,14 +68,19 @@ Ext.define('Vede.controller.PieController', {
     },
 
     onSelectionChanged: function(scope, start, end) {
-        this.callParent(arguments);
+        if(scope != this) {
+            this.SelectionLayer.select(start, end);
+            this.changeCaretPosition(end);
+        }
 
-        this.pie.surface.add(this.SelectionLayer.selectionSprite);
+        this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
         this.callParent(arguments);
+
+        this.pieManager.initPie();
 
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
@@ -128,7 +133,6 @@ Ext.define('Vede.controller.PieController', {
         pieContainer = Ext.getCmp('PieContainer');
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
-        this.pieManager.initPie();
 
         this.Managers.push(this.pieManager);
 
@@ -215,6 +219,7 @@ Ext.define('Vede.controller.PieController', {
                 this.SelectionLayer.selectionSprite.show(true);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, 
+                                           this,
                                            this.SelectionLayer.start, 
                                            this.SelectionLayer.end);
             } else {
@@ -246,8 +251,10 @@ Ext.define('Vede.controller.PieController', {
                 }
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this,
                                            this.SelectionLayer.start,
                                            this.SelectionLayer.end);
+
             } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
                 // If we've clicked a sprite, select it.
                 this.SelectionLayer.select(this.clickedAnnotationStart,
@@ -259,6 +266,7 @@ Ext.define('Vede.controller.PieController', {
                 this.changeCaretPosition(this.SelectionLayer.end);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this,
                                            this.SelectionLayer.start,
                                            this.SelectionLayer.end);
 

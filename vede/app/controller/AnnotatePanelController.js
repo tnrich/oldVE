@@ -102,6 +102,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         console.log(kind);
     },
 
+    onSelectionChanged: function() {
+    },
+
     onSequenceChanging: function(kind, obj) {
     },
 
