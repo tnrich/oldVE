@@ -47,7 +47,6 @@ Ext.define("Vede.view.annotate.Annotator", {
 
         this.featuresSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "featuresSVG");
-        this.loadFeatureRenderers();
     },
     
     sequenceChanged: function(){
@@ -88,8 +87,16 @@ Ext.define("Vede.view.annotate.Annotator", {
             y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
             
         }
-        this.loadFeatureRenderers();
-        this.renderFeatures();
+        if(this.sequenceAnnotator.getSequenceManager()) {
+            this.loadFeatureRenderers();
+            this.renderFeatures();
+
+            this.loadCutSiteRenderers();
+            this.renderCutSites();
+
+            this.loadOrfRenderers();
+            this.renderOrfs();
+        }
 
         this.annotateSVG.attr("height", adjustedHeight);
         console.log(this.lines.length);
