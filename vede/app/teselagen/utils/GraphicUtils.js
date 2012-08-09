@@ -96,6 +96,82 @@ Ext.define("Teselagen.utils.GraphicUtils", {
         }
     },
 
+     drawRect: function(xPos, yPos, width, color) {
+         var sprite;
+         var path;
+         var returnString = returnString || false;
+         
+         path = "M" + xPos + " " + yPos +
+                "L" + (xPos+width) + " " + yPos +
+                "L" + (xPos+width) + " " + (yPos+7) +
+                "L" + xPos + " " + (yPos+7) +
+                "L" + xPos + " " + yPos + " ";
+         
+             return Ext.create("Ext.draw.Sprite", {
+                 type: "path",
+                 path: path,
+                 stroke: this.OUTLINE_COLOR,
+                 "stroke-width": this.OUTLINE_WIDTH,
+                 fill: color
+             });
+     },
+     
+     drawFeaturePositiveArrow: function(xPos, yPos, width, color) {
+         var sprite;
+         var path;
+         var returnSTring = returnSTring || false;
+         
+         if (width>4) {
+         path =  "M" + xPos + " " + yPos +
+                 "L" + (xPos+(width-4)) + " " + yPos +
+                 "L" + (xPos+width) + " " + (yPos+((8)/2)) +
+                 "L" + (xPos+(width-4)) + " " + (yPos+8) +
+                 "L" + xPos + " " + (yPos+8) +
+                 "L" + xPos + " " + yPos + " ";
+         } else {
+             path =  "M" + xPos + " " + yPos +
+             "L" + (xPos+width) + " " + (yPos + ((8)/2)) +
+             "L" + xPos + " " + (yPos+8) +
+             "L" + xPos + " " + yPos + " ";
+         }
+         
+ 
+      return Ext.create("Ext.draw.Sprite", {
+          type: "path",
+          path: path,
+          stroke: this.OUTLINE_COLOR,
+          "stroke-width": this.OUTLINE_WIDTH,
+          fill: color
+      });
+},
+     
+     drawFeatureNegativeArrow: function(xPos, yPos, width, color) {
+         var sprite;
+         var path;
+         var returnSTring = returnSTring || false;
+         
+         if (width>4) {
+         path =  "M" + xPos + " " +  (yPos+((8)/2)) +
+                 "L" + (xPos+4) + " " + yPos +
+                 "L" + (xPos+(width)) + " " + yPos +
+                 "L" + (xPos+(width)) + " " + (yPos+8) +
+                 "L" + (xPos+4) + " " + (yPos+8) +
+                 "L" + xPos + " " + (yPos+((8)/2)) + " ";
+         } else {
+             path =  "M" + xPos + " " +  (yPos+((8)/2)) +
+             "L" + (xPos+width) + " " + yPos +
+             "L" + (xPos+width) + " " + (yPos+8) +
+             "L" + xPos + " " + (yPos+((8)/2)) + " ";
+         }
+         
+      return Ext.create("Ext.draw.Sprite", {
+          type: "path",
+          path: path,
+          stroke: this.OUTLINE_COLOR,
+          "stroke-width": this.OUTLINE_WIDTH,
+          fill: color 
+      });
+},
     /**
      * Function which draws a portion of the pie with no directionality. Used in
      * FeatureRenderer to draw locations of a feature which do not contain either
@@ -234,7 +310,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                         fill: color,
                         "fill-rule": "evenodd"
                     });
-				} else if(direction == 2) {
+                } else if(direction == 2) {
                     middlePoint.x = center.x + radius * Math.sin(startAngle);
                     middlePoint.y = center.y - radius * Math.cos(startAngle);
                     
@@ -261,7 +337,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                         fill: color,
                         "fill-rule": "evenodd"
                     });
-				}
+                }
             } else {
                 if(direction == 1) {
                     middlePoint.x = center.x + radius * Math.sin(endAngle);
@@ -359,6 +435,16 @@ Ext.define("Teselagen.utils.GraphicUtils", {
             point.y = center.y - Math.cos(2 * Math.PI - angle) * radius;
         }
 
+        return point;
+    },
+    
+    pointOnRect: function(reference, railwidth, location, gap) {
+        
+        var point = Ext.create("Teselagen.bio.util.Point");
+
+        point.x = reference.x + ((railwidth/location)*railwidth);
+        point.y = reference.y + gap;
+        
         return point;
     }
 });

@@ -21,6 +21,16 @@ Ext.define('Vede.controller.MainToolbarController', {
         this.application.fireEvent("RestrictionEnzymeManagerOpened",
                                    restrictionEnzymesManagerWindow);
     },
+    
+//    onLinearViewBtnClick: function() {
+//        var linearViewManagerWindow = Ext.create(
+//                "Vede.view.rail.LinearViewManagerWindow");
+//        
+//        linearViewManagerWindow.show();
+//        
+//        this.application.fireEvent("LinearViewManagerOpened,"
+//                                    linearViewManagerWindow);
+//    },
 
     init: function() {
         this.control({
@@ -29,7 +39,10 @@ Ext.define('Vede.controller.MainToolbarController', {
             },
             "#reBtn": {
                 click: this.onREButtonClick
-            }
+            },
+//            "#linearViewBtn": {
+//                click: this.onLinearViewBtnClick
+//            }
         });
     }
 

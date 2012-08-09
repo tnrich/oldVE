@@ -71,8 +71,8 @@ Ext.define('Vede.controller.PieController', {
         }
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
-            center: {x: 100, y: 100},
-            railRadius: 100,
+            reference: {x: 0, y: 0},
+            railGap: 3,
         });
 
         pieContainer = Ext.getCmp('PieContainer');
