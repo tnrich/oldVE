@@ -45,7 +45,10 @@ Ext.define('Vede.controller.PieController', {
         this.callParent();
 
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-        this.pieManager.render();
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
     },
 
     /**

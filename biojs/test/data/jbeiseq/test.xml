@@ -26,9 +26,8 @@
         <seq:type>CDS2</seq:type>
         <seq:location>
             <seq:genbankStart>20</seq:genbankStart>
-            <seq:end>30</seq:end>
         </seq:location>
-        <seq:complement>false0</seq:complement>
+        <seq:complement>true</seq:complement>
         <seq:label>signal_peptide0</seq:label>
         <seq:attribute name="translation">muahaha</seq:attribute>
     </seq:feature>

@@ -17,7 +17,7 @@ Ext.define("Vede.view.pie.NameBox", {
             "font-weight": "bold",
             x: this.center.x,
             y: this.center.y,
-            "text-anchor": "middle"
+            "text-anchor": "middle",
         }]);
     }
 });

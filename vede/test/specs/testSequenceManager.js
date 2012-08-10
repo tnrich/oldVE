@@ -84,6 +84,7 @@ Ext.onReady(function() {
         });
         describe("Init, Get, Set, createMemento", function() {
             it("Init?",function(){
+                //console.warn("==================" + Vede);
                 expect(sm.getName()).toBe("test");
                 expect(sm.getCircular()).toBeTruthy();
                 expect(sm.getSequence().seqString().toUpperCase()).toBe("GATTACA");
@@ -93,7 +94,6 @@ Ext.onReady(function() {
                 expect(sm.getFeatures()[0].getEnd()).toBe(3);
                 //console.log(sm.getFeatures()[0].toString());
                 expect(sm.getManualUpdateStarted()).toBeFalsy();
-
             });
             it("setName(), setCircular(), setFeatures() ",function(){
                 sm.setName("boo");
@@ -868,9 +868,9 @@ Ext.onReady(function() {
                 var pos = 10
                 try {
                     sm.rebaseSequence(10);
-                } catch (msg) {
+                } catch (bio) {
                     flag = true;
-                    console.warn("Caught: " + msg);
+                    console.warn("Caught: " + bio.message);
                 }
                 expect(flag).toBe(true);
             });
