@@ -34,7 +34,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         var cutSite = this.cutSite;
 
         var cutSiteHeight = 8;//this.sequenceAnnotator.cutSiteTextRenderer.textHeight - 2 + 3;
-        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap()[cutSite.toString()];
+        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap.get(cutSite);
 
         if(!cutSiteRows) {
             return;

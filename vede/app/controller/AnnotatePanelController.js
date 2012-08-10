@@ -33,8 +33,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onSequenceManagerChanged: function(pSeqMan){
         this.callParent(arguments);
-
-        this.SequenceAnnotationManager.setSequenceManager(pSeqMan);
     },
 
     onShowFeaturesChanged: function(show) {
