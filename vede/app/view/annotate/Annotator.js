@@ -182,7 +182,7 @@ Ext.define("Vede.view.annotate.Annotator", {
 
 
     bpMetricsByIndex: function(pIndex){
-        if(!this.isValidIndex(index)){
+        if(!this.isValidIndex(pIndex)){
             return null;
             throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
         }
@@ -202,7 +202,7 @@ Ext.define("Vede.view.annotate.Annotator", {
 
             var bpX = row.getSequenceMetrics().x + numberOfCharacters * 3;//this.sequenceSymbolRenderer.getTextWidth();
             var bpY = row.getSequenceMetrics().y;
-            resultMetrics = Ext.create("Teselagen.models.Rectangle", {
+            resultsMetrics = Ext.create("Teselagen.models.Rectangle", {
                 x: bpX,
                 y: bpY,
                 width: 2, //fix to make resizable
@@ -322,6 +322,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     renderCutSites: function() {
+        d3.selectAll("#cutSiteSVG").remove();
         if(this.sequenceAnnotator.getShowCutSites()) {
             Ext.each(this.cutSiteRenderers, function(renderer) {
                 renderer.render();
@@ -330,6 +331,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     renderOrfs: function() {
+        d3.selectAll("#orfSVG").remove();
         if(this.sequenceAnnotator.getShowOrfs()) {
             Ext.each(this.orfRenderers, function(renderer) {
                 renderer.render();

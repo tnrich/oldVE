@@ -11,15 +11,11 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 
     constructor: function(inData) {
         this.initConfig(inData);
-        this.annotateSVG = d3.select("#AnnotatePanel-body").append("svg:svg");
-        this.orfSVG = this.annotateSVG.append("svg:g")
-                           .attr("id", "orfsSVG");
     },
 
     render: function() {
-        d3.select("#orfsSVG").remove();
-        this.orfSVG = this.annotateSVG.append("svg:g")
-                           .attr("id", "orfsSVG");
+        this.orfSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
+                           .attr("id", "orfSVG");
 
         var orf = this.orf;
         var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap().get(orf);
@@ -96,7 +92,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 				
 				var orfY = bpStartPoint.y - upShift;
 				var currentHeight = 6;
-                var textWidth = this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+                var textWidth = 8;//this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
 				
 				if(startBP > endBP) { // case when start and end are in the same row
 					var rowStartPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
@@ -142,7 +138,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                                 .attr("fill", color);
                         }
                     }
-                });
+                }, this);
 				
 				if(orf.getStrand() == 1 && endBP == orf.getEnd() - 1) {
 					var codonEndPoint1 = this.sequenceAnnotator.bpMetricsByIndex(endBP);

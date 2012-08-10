@@ -11,19 +11,14 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         cutSite: []
     },
 
-    annotateSVG: null,
-    cutSitesSVG: null,
+    cutSiteSVG: null,
 
     constructor: function(inData) {
         this.initConfig(inData);
-        this.annotateSVG = d3.select("#AnnotatePanel-body").append("svg:svg");
-        this.cutSitesSVG = this.annotateSVG.append("svg:g")
-                               .attr("id", "cutSiteSVG");
     },
 
     render: function() {
-        d3.select("#cutSiteSVG").remove();
-        this.cutSiteSVG = this.annotateSVG.append("svg:g")
+        this.cutSiteSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
                                .attr("id", "cutSiteSVG");
 
         this.cutSiteSVG.append("svg:pattern")
@@ -34,13 +29,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         var cutSite = this.cutSite;
 
         var cutSiteHeight = 8;//this.sequenceAnnotator.cutSiteTextRenderer.textHeight - 2 + 3;
-        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap.get(cutSite);
+        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap().get(cutSite);
 
         if(!cutSiteRows) {
             return;
         }
 
-        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().length;
+        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().toString().length;
         var rowIndex;
         var startBP;
         var endBP;
@@ -162,7 +157,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             cutSiteY = row.metrics.y + alignmentRowIndex * cutSiteHeight;
 
             currentWidth = this.sequenceAnnotator.bpMetricsByIndex(endBP).x - 
-                cutSiteX + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+                cutSiteX + 5;//this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
             currentHeight = cutSiteHeight;
 
             var matrix = {};
@@ -216,7 +211,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
                 
                 var ds1X = dsForwardMetrics.x + 2;
-                var ds1Y = cutSiteY + cutSiteBitMap.height;
+                var ds1Y = cutSiteY + cutSiteHeight;
                 this.drawDsForwardPosition(ds1X, ds1Y);
             } 
             
@@ -224,7 +219,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
                 
                 var ds2X = dsReverseMetrics.x + 2;
-                var ds2Y = cutSiteY + cutSiteBitMap.height + 3;
+                var ds2Y = cutSiteY + cutSiteHeight + 3;
                 this.drawDsReversePosition(ds2X, ds2Y);
             } 
         }, this);
@@ -238,7 +233,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             color = this.self.MULTIPLE_CUT_COLOR;
         }
 
-        this.cutSitesSVG.append("svg:text")
+        this.cutSiteSVG.append("svg:text")
             .attr("x", x)
             .attr("y", y)
             .attr("font-color", color)
@@ -246,7 +241,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
     },
 
     drawCurvyLine: function(x, y, width, height) {
-        this.cutSitesSVG.append("svg:rect")
+        this.cutSiteSVG.append("svg:rect")
             .attr("x", x)
             .attr("y", y)
             .attr("width", width)
@@ -255,14 +250,14 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
     },
 
     drawDsForwardPosition: function(x, y) {
-        this.cutSitesSVG.append("svg:path")
+        this.cutSiteSVG.append("svg:path")
             .attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y - 4) + 
                   "L" + (x + 3) + " " + (y - 4))
             .attr("fill", this.self.CUT_SITE_COLOR);
     },
 
     drawDsReversePosition: function(x, y) {
-        this.cutSitesSVG.append("svg:path")
+        this.cutSiteSVG.append("svg:path")
             .attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y + 4) + 
                   "L" + (x + 3) + " " + (y + 4))
             .attr("fill", this.self.CUT_SITE_COLOR);
