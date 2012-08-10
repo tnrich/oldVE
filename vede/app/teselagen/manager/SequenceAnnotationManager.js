@@ -13,17 +13,18 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         annotator: null,
 
         readOnly: null,
-        showFeatures: true,
-        showCutSites: null,
-        showOrfs: null,
-        showComplementarySequence: true,
-        bpPerRow: 60,
-        sequenceFontSize: 11,
-        labelFontSize: 10,
+        showFeatures: false,
+        showCutSites: false,
+        showOrfs: false,
+        showComplementarySequence: false,
         showSpaceEvery10Bp: true,
         showAminoAcids1: false,
         showAminoAcids2: false,
         showAminoAcids3: false,
+
+        bpPerRow: 60,
+        sequenceFontSize: 11,
+        labelFontSize: 10,
 
         sequenceProviderChanged: false,
         orfMapperChanged: false,
@@ -84,13 +85,11 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     },
 
     render:function() {
-        this.RowManager.update();
         this.annotator.render();
     },
 
     sequenceChanged: function(){
         this.RowManager.setSequenceAnnotator(this);
-        this.RowManager.update();
 
         this.aaManager.setSequenceManager(this.sequenceManager);
         this.features = this.sequenceManager.getFeatures();

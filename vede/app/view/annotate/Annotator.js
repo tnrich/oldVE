@@ -59,7 +59,6 @@ Ext.define("Vede.view.annotate.Annotator", {
     render: function(){
        // this.updateAverageRowHeight();
         this.clean();
-        var adjustedHeight, row;
         this.panel = Ext.getCmp('AnnotatePanel');
         this.xMax = this.panel.getBox().width;
         this.yMax = this.panel.getBox().height;
@@ -70,14 +69,17 @@ Ext.define("Vede.view.annotate.Annotator", {
         var y = 20;
         
         if(this.sequenceAnnotator.getSequenceManager()) {
-            for ( var i = 0; i < this.sequenceAnnotator.getRowManager().getRows().length; ++i){
-                row = this.sequenceAnnotator.getRowManager().getRows()[i]; 
+            console.log(this.sequenceRenderer.getTotalHeight());
+            this.renderSequence();
+            //this.renderLines();
+            /*`for ( var i = 0; i < this.sequenceAnnotator.getRowManager().getRows().length; ++i){
+                var row = this.sequenceAnnotator.getRowManager().getRows()[i]; 
                 adjustedHeight =  y + (30 * (this.aminoSequencesShown + 1)); 
                 var distanceFromLine = y + 30;
                 var distanceFromAABottom = distanceFromLine + 60;
                 //Sequence will always be at 100 indented, but y might change based
                 //upon whether amino acids are being shown
-                this.renderSequence(row, 100, distanceFromAABottom);
+                //this.renderSequence(row, 100, distanceFromAABottom);
 
                 //BpLabel will always be indented 10, but y might change based upon
                 //whether amino acids are being shown
@@ -93,8 +95,7 @@ Ext.define("Vede.view.annotate.Annotator", {
                 //this.renderFeatures();
                 y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
                 
-            }
-            this.renderSequence();
+            }*/
 
             this.loadFeatureRenderers();
             this.renderFeatures();
@@ -103,9 +104,12 @@ Ext.define("Vede.view.annotate.Annotator", {
 
             this.loadOrfRenderers();
             this.renderOrfs();
+            this.drawSplitLines();
+            this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
+
         }
 
-        this.annotateSVG.attr("height", adjustedHeight);
+
         //console.log(this.lines.length);
         
         //console.log("rendered annotator");
@@ -227,7 +231,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         return pIndex >= 0 && pIndex <= this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length;
     },
 
-    renderSequence: function(row, x, y){
+    renderSequence: function(){
         this.sequenceRenderer.render();
         /*this.sequenceSVG.append("svg:text")
             .attr("x", x)
@@ -337,6 +341,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    drawSplitLines: function(){},
     renderLine: function(x1, y1, x2, y2){
         this.lines.append("svg:line")
             .attr("x1", x1)

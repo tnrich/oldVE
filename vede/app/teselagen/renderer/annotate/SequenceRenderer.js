@@ -14,12 +14,14 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         numRows: 0,
         totalHeight: 0,
         totalWidth: 0,
+        drawingPanel: null,
 
         needsMeasurement: false,
     },
 
     constructor: function(inData){
         this.initConfig(inData);
+        this.drawingPanel = this.sequenceAnnotator;
         this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
     },
 
@@ -40,6 +42,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var rows = this.sequenceAnnotator.getRowManager().getRows();
         var sequenceNucleotideMatrix = [];
 
+        console.log(rows.length);
         for (var i = 0; i < rows.length; i++){
             var row = rows[i];
 
@@ -80,10 +83,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 //console.log("show orfs");
                 this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
             }
-            for(var j = 0; j < sequenceStringLength; j++){
-            }
 
-            var sequenceX = 6 *3;
+            var sequenceX = 6 * 3;
             var sequenceY = this.totalHeight;
 
             if(this.totalWidth < (3 * sequenceStringLength)){
@@ -111,10 +112,27 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 }
             }
 
+
             this.totalHeight += 3;
 
             var rowWidth = this.totalWidth;
             var rowHeight = this.totalHeight - rowY;
+            //To adjust from top
+            sequenceY += 20;
+            for(var j = 0; j < row.getRowData().getSequence().length; j++){
+                var rowSequence = row.getRowData().getSequence();
+                var nucleotide = rowSequence.charAt(j);
+                var nucleotideSVGGroup = this.drawingPanel.sequenceSVG.append("svg:g")
+                .attr("id", "nucleotide-row" +i+"-base" + j);
+
+                nucleotideSVGGroup.append("svg:text")
+                    .attr("x", sequenceX + j*16)
+                    .attr("y", sequenceY + 20)
+                    .text(nucleotide)
+                    .attr("font-face", "Verdana")
+                    .attr("font-size", 20);
+
+            }
 
             row.metrics.x = rowX;
             row.metrics.y = rowY;
@@ -134,7 +152,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var stringLength = pString.length;
 
         if(stringLength <= 10 - pShift){
-            result += string;
+            result += pString;
         }else{
             var start = 0;
             var end = 10 - pShift;
