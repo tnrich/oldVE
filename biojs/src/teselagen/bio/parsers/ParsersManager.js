@@ -435,22 +435,22 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {String} xml XML file with one or more records in String format
      * @returns {Teselagen.bio.parsers.Genbank[]} genbank
      */
-     jbeiseqxmlToArray: function (xml) {
+     jbeiseqxmlsToXmlArray: function (xml) {
         var xmlArray = [];
         var newxml = xml;
 
         //newxml = newxml.replace(/\<seq\:name/gi, "BREAKRECORD<seq:name");
         newxml = newxml.replace(/\<\/seq\:seq\>/gi, "<\/seq:seq>BREAKRECORD");
 
-        console.log(newxml);
+        //console.log(newxml);
 
         var xmlArr = newxml.split("BREAKRECORD");
 
         for (var i=0; i<xmlArr.length; i++) {
-            if (xmlArr[i].match(/^\<seq\:name\>/)) {
+            //if (xmlArr[i].match(/^\<seq\:name\>/)) {
                 xmlArray.push(xmlArr[i]);
-                console.log(xmlArr[i]);
-            }
+                //console.log(xmlArr[i]);
+            //}
         }
 
         console.log(xmlArray.length);
@@ -459,7 +459,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      },
 
 
-    /**
+    /** THIS DOES NOT WORK
      * Converts an XML string format of JbeiSeqXML.
      * Currently eliminates the "seq:" namespace by replaceing it with "seq".
      * @param {String} xml XML file in String format
