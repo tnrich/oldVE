@@ -143,8 +143,25 @@ Ext.onReady(function() {
                 //} catch (bio) {
                 //    console.warn("Caught: " + bio.message);
                // }
+            });
 
-                
+            it("jbeiseqxmlToGenbank: Multiple records in .xml file", function() {
+                jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+
+                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
+                var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
+                jbeiXml += jbeiXml;
+                console.log(jbeiXml);
+                var xmlArr  = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlsToXmlArray(jbeiXml);
+                //try {
+                    for (var i=0; i < xmlArr.length; i++ ) {
+                        var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+                        if (LOG) console.log(gb.toString());
+                        if (LOG) console.log(JSON.stringify(gb, null, "    "));
+                    }
+                //} catch (bio) {
+                //    console.warn("Caught: " + bio.message);
+               // }
             });
 
             it("genbankToJbeiseqxml", function() {

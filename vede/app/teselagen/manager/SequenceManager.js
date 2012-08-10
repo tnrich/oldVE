@@ -1346,14 +1346,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         var xmlData;
 
-        /*if (window.DOMParser) {
-            parser=new DOMParser();
-            xmlDoc=parser.parseFromString(txt,"text/xml");
-        } else { // Internet Explorer
-            xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-            xmlDoc.async=false;
-            xmlDoc.loadXML(txt); 
-        }*/
+        //try {
+            var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+            //if (LOG) console.log(gb.toString());
+            //if (LOG) console.log(JSON.stringify(gb, null, "    "));
+        //} catch (bio) {
+        //    console.warn("Caught: " + bio.message);
+        //}
+
+        result = this.fromGenbank(gb);
 
 
         return result;
