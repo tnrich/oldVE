@@ -200,8 +200,8 @@ Ext.define("Vede.view.annotate.Annotator", {
                 numberOfCharacters += Math.round(numberOfCharacters/10);
             }
 
-            var bpX = row.getSequenceMetrics().getX() + numberOfCharacters * 3;//this.sequenceSymbolRenderer.getTextWidth();
-            var bpY = row.getSequenceMetrics().getY();
+            var bpX = row.getSequenceMetrics().x + numberOfCharacters * 3;//this.sequenceSymbolRenderer.getTextWidth();
+            var bpY = row.getSequenceMetrics().y;
             resultMetrics = Ext.create("Teselagen.models.Rectangle", {
                 x: bpX,
                 y: bpY,
