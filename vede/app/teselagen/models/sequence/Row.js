@@ -1,8 +1,8 @@
 Ext.define("Teselagen.models.sequence.Row", {
     config: {
         rowData: null,
-        metrics: {"height": 20, "width": 917},
-        sequenceMetrics: null,
+        metrics: {"x": 20, "y": 917, "width": 0, "height": 0},
+        sequenceMetrics: {"x": 20, "y": 917, "width": 0, "height": 0},
         index: null,
     },
 

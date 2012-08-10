@@ -59,18 +59,15 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
     constructor: function(inData){
         this.initConfig(inData);
-        console.log("Bar");
         var that = this;
         this.lineRenderer = Ext.create("Teselagen.renderer.annotate.LineRenderer");
         //this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.TextRenderer");
         this.RowManager = Ext.create("Teselagen.manager.RowManager", {
             sequenceAnnotator: that,
         });
-        console.log("syntax error");
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that,
         });
-        console.log("syntax error");
     },
 
     setSequenceManager: function(pSeqMan){
@@ -102,7 +99,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
-        console.log("Foo");
     }
 
 });
