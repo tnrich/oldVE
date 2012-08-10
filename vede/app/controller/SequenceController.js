@@ -39,7 +39,6 @@ Ext.define("Vede.controller.SequenceController", {
             ActiveEnzymesChanged: this.onActiveEnzymesChanged,
             AnnotationClicked: this.onAnnotationClicked,
             ViewModeChanged: this.onViewModeChanged,
-            SequenceManagerChanged: this.onSequenceManagerChanged,
             scope: this
         };
 
@@ -49,6 +48,11 @@ Ext.define("Vede.controller.SequenceController", {
             this.onShowCutSitesChanged;
         listenersObject[this.VisibilityEvent.SHOW_ORFS_CHANGED] = 
             this.onShowOrfsChanged;
+        
+        listenersObject[this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED] = 
+            this.onShowFeatureLabelsChanged;
+        listenersObject[this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED] =
+            this.onShowCutSiteLabelsChanged;
 
         listenersObject[this.MapperEvent.AA_MAPPER_UPDATED] = 
             this.onAAManagerUpdated;
@@ -181,6 +185,12 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onShowOrfsChanged: function(show) {
+    },
+
+    onShowFeatureLabelsChanged: function(show) {
+    },
+
+    onShowCutSiteLabelsChanged: function(show) {
     },
 
     onViewModeChanged: function(viewMode) {
