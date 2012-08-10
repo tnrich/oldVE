@@ -18,6 +18,7 @@ Ext.define("Teselagen.manager.RowManager", {
 
     update: function(){
         //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
+        this.rows = [];
         
         //console.log("Num rows: ");
         //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
@@ -114,14 +115,10 @@ Ext.define("Teselagen.manager.RowManager", {
 
         var cutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
         var rowsCutSites = this.rowAnnotations(cutSites);
-        this.cutSiteToRowMap = [];
+        this.cutSiteToRowMap = Ext.create("Ext.util.HashMap");
         var start;
         var end;
         var cutSitesAlignment;
-
-        Ext.each(cutSites, function(site) {
-            this.cutSiteToRowMap[site.toString()] = [];
-        }, this);
 
         Ext.each(rowsCutSites, function(row, i) {
             start = i * this.sequenceAnnotator.getBpPerRow();
@@ -137,11 +134,11 @@ Ext.define("Teselagen.manager.RowManager", {
             }
 
             Ext.each(row, function(site) {
-                if(!this.cutSiteToRowMap[site.toString()]) {
-                    this.cutSiteToRowMap[site.toString()] = [];
+                if(!this.cutSiteToRowMap.get(site)) {
+                    this.cutSiteToRowMap.add(site,[]);
                 }
 
-                this.cutSiteToRowMap[site.toString()].push(i);
+                this.cutSiteToRowMap.get(site).push(i);
             }, this);
         }, this);
     },
@@ -153,17 +150,13 @@ Ext.define("Teselagen.manager.RowManager", {
             return;
         }
 
-        this.orfToRowMap = [];
+        this.orfToRowMap = Ext.create("Ext.util.HashMap");
 
         var orfs = this.sequenceAnnotator.orfManager.getOrfs();
         var rowsOrfs = this.rowAnnotations(orfs);
         var start;
         var end;
         var orfAlignment;
-
-        Ext.each(orfs, function(orf) {
-            this.orfToRowMap[orf.toString()] = [];
-        }, this);
 
         Ext.each(rowsOrfs, function(row, i) {
             start = i * this.sequenceAnnotator.getBpPerRow();
@@ -179,11 +172,11 @@ Ext.define("Teselagen.manager.RowManager", {
             }
 
             Ext.each(row, function(orf) {
-                if(!this.orfToRowMap[orf.toString()]) {
-                    this.orfToRowMap[orf.toString()] = [];
+                if(!this.orfToRowMap.get(orf.toString())) {
+                    this.orfToRowMap.add(orf,[]);
                 }
 
-                this.orfToRowMap[orf.toString()].push(i);
+                this.orfToRowMap.get(orf.toString()).push(i);
             }, this);
         }, this);
     },
