@@ -8,6 +8,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         sequenceSVG: null,
         annotateSVG: null,
         bpLabelsSVG: null,
+        linesSVG: null,
 
         featureRenderers: null,
         cutSiteRenderers: null,
@@ -36,8 +37,8 @@ Ext.define("Vede.view.annotate.Annotator", {
         this.annotateSVG = d3.select("#AnnotatePanel-body")
             .append("svg:svg");
         
-        this.lines = this.annotateSVG.append("svg:g")
-            .attr("id", "annotationViz");
+        this.linesSVG = this.annotateSVG.append("svg:g")
+            .attr("id", "linesSVG");
 
         this.sequenceSVG = this.annotateSVG.append("svg:g")
             .attr("id", "sequenceSVG");
@@ -71,6 +72,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         if(this.sequenceAnnotator.getSequenceManager()) {
             console.log(this.sequenceRenderer.getTotalHeight());
             this.renderSequence();
+            this.drawSplitLines();
             //this.renderLines();
             /*`for ( var i = 0; i < this.sequenceAnnotator.getRowManager().getRows().length; ++i){
                 var row = this.sequenceAnnotator.getRowManager().getRows()[i]; 
@@ -104,7 +106,6 @@ Ext.define("Vede.view.annotate.Annotator", {
 
             this.loadOrfRenderers();
             this.renderOrfs();
-            this.drawSplitLines();
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
 
         }
@@ -233,6 +234,7 @@ Ext.define("Vede.view.annotate.Annotator", {
 
     renderSequence: function(){
         this.sequenceRenderer.render();
+        this.sequenceAnnotator.getRowManager().setRows( this.sequenceRenderer.getUpdatedRows());
         /*this.sequenceSVG.append("svg:text")
             .attr("x", x)
             .attr("y", y)
@@ -343,15 +345,27 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
-    drawSplitLines: function(){},
-    renderLine: function(x1, y1, x2, y2){
-        this.lines.append("svg:line")
-            .attr("x1", x1)
-            .attr("y1", y1)
-            .attr("x2", x2)
-            .attr("y2", y2)
-            .attr("stroke", "lightgray");
+    drawSplitLines: function(){
+        var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
+        for (var i = 0; i < rows.length; ++i){
+            var row = rows[i];
+            if( i != rows.length - 1){
+                var rowSequenceMetrics = row.getSequenceMetrics();
+                var rowMetrics = row.getMetrics();
+                console.log('Row sequence metrics y position: ' + rowSequenceMetrics.y);
+                console.log('Row metrics y position: ' + rowMetrics.y);
+                this.linesSVG.append("svg:line")
+                    .attr("x1", rowMetrics.x)
+                    .attr("y1", rowMetrics.y)
+                    .attr("x2", rowMetrics.x + (row.getRowData().getSequence().length* 16))
+                    .attr("y2", rowMetrics.y)
+                    .attr("stroke", "lightgray");
+
+            }
+        }
     },
+    renderLine: function(x1, y1, x2, y2){
+        this.lines    },
 
     updateAverageRowHeight: function(){
         var totalHeight = 0;
@@ -375,14 +389,14 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
     clean: function(){
-        d3.select("#annotationViz").remove(); 
+        d3.select("#linesSVG").remove(); 
         d3.select("#sequenceSVG").remove(); 
         d3.select("#bpLabelsSVG").remove(); 
         d3.select("#aminoAcidsSVG").remove(); 
         d3.select("#featuresSVG").remove(); 
 
-        this.lines = this.annotateSVG.append("svg:g")
-            .attr("id", "annotationViz");
+        this.linesSVG = this.annotateSVG.append("svg:g")
+            .attr("id", "linesSVG");
 
         this.sequenceSVG = this.annotateSVG.append("svg:g")
             .attr("id", "sequenceSVG");

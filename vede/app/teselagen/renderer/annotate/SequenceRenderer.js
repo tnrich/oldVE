@@ -33,6 +33,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     render: function(){
        // this.sequenceAnnotator.sequenceSVG.remove();
+        var newRows = [];
 
         this.totalWidth = 0;
         this.totalHeight = 0;
@@ -141,10 +142,22 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
            // console.log("Row metrics for "+i+": " + sequenceX + ", " + sequenceY + ", " + sequenceWidth + ", " + sequenceHeight);
             row.sequenceMetrics.x = sequenceX;
+            console.log("rendered sequence y: " + sequenceY);
             row.sequenceMetrics.y = sequenceY;
+            console.log(row.sequenceMetrics.y);
             row.sequenceMetrics.width = sequenceWidth;
             row.sequenceMetrics.height = sequenceHeight;
+            
+            newRows.push(row);
         }
+        
+        this.sequenceAnnotator.getRowManager().setRows( newRows);
+
+    },
+
+    getUpdatedRows: function(){
+        console.log(this.sequenceAnnotator.getRowManager().getRows());
+        return this.sequenceAnnotator.getRowManager().getRows();
     },
 
     splitWithSpaces: function(pString, pShift, pSplitLast){
