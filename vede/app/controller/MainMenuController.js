@@ -1,4 +1,4 @@
-Ext.define('Vede.controller.MainMenuController', {
+    Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
     requires: ['Teselagen.bio.parsers.GenbankManager',
@@ -56,7 +56,7 @@ Ext.define('Vede.controller.MainMenuController', {
         }
 
         this.application.fireEvent("ViewModeChanged", viewMode);
-    },
+    }, 
 
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
         var btn = Ext.ComponentQuery.query('#featuresBtn')[0];

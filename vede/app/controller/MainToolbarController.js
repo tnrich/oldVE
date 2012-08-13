@@ -66,15 +66,18 @@ Ext.define('Vede.controller.MainToolbarController', {
                                    restrictionEnzymesManagerWindow);
     },
     
-//    onLinearViewBtnClick: function() {
-//        var linearViewManagerWindow = Ext.create(
-//                "Vede.view.rail.LinearViewManagerWindow");
-//        
-//        linearViewManagerWindow.show();
-//        
-//        this.application.fireEvent("LinearViewManagerOpened,"
-//                                    linearViewManagerWindow);
-//    },
+    onLinearViewBtnClick: function(button, e, options) {
+        var viewMode;
+
+        if (button.pressed) {
+            viewMode = "linear";
+        }
+        else {
+            viewMode = "circular";
+        }
+
+        this.application.fireEvent("ViewModeChanged", viewMode);
+    },
 
     onViewModeChanged: function(viewMode) {
         var circularButton = Ext.getCmp("circularViewBtn");
@@ -106,9 +109,9 @@ Ext.define('Vede.controller.MainToolbarController', {
             "#reBtn": {
                 click: this.onREButtonClick
             },
-//            "#linearViewBtn": {
-//                click: this.onLinearViewBtnClick
-//            }
+            "#linearViewBtn": {
+                click: this.onLinearViewBtnClick
+            }
         });
 
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
