@@ -85,6 +85,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     },
 
     render:function() {
+        this.RowManager.update();
         this.annotator.render();
     },
 

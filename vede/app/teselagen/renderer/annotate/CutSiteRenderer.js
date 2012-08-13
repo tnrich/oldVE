@@ -23,8 +23,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
         this.cutSiteSVG.append("svg:pattern")
             .attr("id", "curvyLine")
-            .attr("width", 3)
-            .attr("height", 4);
+            .attr("width", 5)
+            .attr("height", 5)
+            .attr("patternUnits", "userSpaceOnUse")
+            .append("svg:path")
+            .attr("d", "M 0 0 L 2.5 5 L 5 0")
+            .attr("stroke", this.self.CURVY_LINE_COLOR)
+            .attr("fill", "none");
 
         var cutSite = this.cutSite;
 
@@ -118,7 +123,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             if(cutSite.getStrand() == 1) {
                 dsForwardPosition = cutSite.getStart() + 
                     cutSite.getRestrictionEnzyme().getDsForward();
-                dsReversePosition = cutSite.getEnd() + 
+                dsReversePosition = cutSite.getStart() + 
                     cutSite.getRestrictionEnzyme().getDsReverse();
             } else {
                 dsForwardPosition = cutSite.getEnd() -
@@ -143,13 +148,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 dsReversePosition -= seqLen;
             }
 
-            if(dsForwardPosition >= row.rowData.getStart() &&
-               dsForwardPosition <= row.rowData.getEnd()) {
+            if(dsForwardPosition <= row.rowData.getStart() &&
+               dsForwardPosition >= row.rowData.getEnd()) {
                 dsForwardPosition = -1;
             }
 
-            if(dsReversePosition >= row.rowData.getStart() &&
-               dsReversePosition <= row.rowData.getEnd()) {
+            if(dsReversePosition <= row.rowData.getStart() &&
+               dsReversePosition >= row.rowData.getEnd()) {
                 dsReversePosition = -1;
             }
 
@@ -172,7 +177,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
             if (startBP <= endBP) {
                 this.drawCurvyLine(cutSiteX + 2, cutSiteY + cutSiteHeight,
-                                   currentWidth - 2);
+                                   currentWidth - 2, cutSiteHeight);
             } else if (endBP >= row.rowData.getStart()){
                 this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2,
                                    cutSiteHeight);
@@ -222,6 +227,8 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 var ds2Y = cutSiteY + cutSiteHeight + 3;
                 this.drawDsReversePosition(ds2X, ds2Y);
             } 
+
+            this.addToolTip(cutSite);
         }, this);
     },
 
@@ -261,5 +268,19 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             .attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y + 4) + 
                   "L" + (x + 3) + " " + (y + 4))
             .attr("fill", this.self.CUT_SITE_COLOR);
+    },
+
+    addToolTip: function(cutSite) {
+        var complement = ", complement";
+        if(cutSite.getStrand() == 1) {
+            complement = "";
+        }
+
+        var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + 
+                      (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) +
+                      complement + ", cuts " + cutSite.getNumCuts() + " times";
+        
+        this.cutSiteSVG.append("svg:title")
+            .text(toolTip);
     }
 });
