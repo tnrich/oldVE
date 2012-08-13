@@ -234,7 +234,6 @@ Ext.define("Vede.view.annotate.Annotator", {
 
     renderSequence: function(){
         this.sequenceRenderer.render();
-        this.sequenceAnnotator.getRowManager().setRows( this.sequenceRenderer.getUpdatedRows());
         /*this.sequenceSVG.append("svg:text")
             .attr("x", x)
             .attr("y", y)
@@ -346,6 +345,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     drawSplitLines: function(){
+        console.log(this.sequenceRenderer.getSequenceAnnotationManager().sequenceAnnotator);
         var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
         for (var i = 0; i < rows.length; ++i){
             var row = rows[i];
