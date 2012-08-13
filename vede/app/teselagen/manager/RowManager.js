@@ -40,8 +40,8 @@ Ext.define("Teselagen.manager.RowManager", {
             var oppositeSequence = complementSeqString.substring(start, end + 1);
            
             var rowData = Ext.create("Teselagen.models.sequence.RowData", {
-                    start: (start + 1),
-                    end: (end + 1),
+                    start: start,
+                    end: end,
                     sequence: sequence,
                     oppositeSequence: oppositeSequence,
             });
