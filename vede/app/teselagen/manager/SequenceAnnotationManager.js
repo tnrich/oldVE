@@ -17,7 +17,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         showCutSites: false,
         showOrfs: false,
         showComplementarySequence: false,
-        showSpaceEvery10Bp: true,
+        showSpaceEvery10Bp: false,
         showAminoAcids1: false,
         showAminoAcidsRevCom: false,
         showAminoAcids2: false,

@@ -1,9 +1,11 @@
 Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
     statics: {
         CURVY_LINE_COLOR: "#FF0000",
+        CURVY_LINE_HEIGHT: 5,
         CUT_SITE_COLOR: "#625D5D",
         ONE_CUT_COLOR: "#E57676",
-        MULTIPLE_CUT_COLOR: "#888888"
+        MULTIPLE_CUT_COLOR: "#888888",
+        CUTSITE_HEIGHT_OFFSET: 45,
     },
 
     config: {
@@ -33,7 +35,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
         var cutSite = this.cutSite;
 
-        var cutSiteHeight = 8;//this.sequenceAnnotator.cutSiteTextRenderer.textHeight - 2 + 3;
+        var cutSiteHeight = this.self.CUTSITE_HEIGHT_OFFSET;
         var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap().get(cutSite);
 
         if(!cutSiteRows) {
@@ -162,25 +164,20 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             cutSiteY = row.metrics.y + alignmentRowIndex * cutSiteHeight;
 
             currentWidth = this.sequenceAnnotator.bpMetricsByIndex(endBP).x - 
-                cutSiteX + 5;//this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+                cutSiteX - 4;
             currentHeight = cutSiteHeight;
-
-            var matrix = {};
-            matrix.tx += cutSiteX;
-            matrix.ty += cutSiteY;
 
             var oneCut = cutSite.getNumCuts == 1;
 
-            this.drawName(cutSiteX, cutSiteY, 
+            this.drawName(cutSiteX, cutSiteY + cutSiteHeight, 
                           cutSite.getRestrictionEnzyme().getName(),
                           oneCut);
 
             if (startBP <= endBP) {
                 this.drawCurvyLine(cutSiteX + 2, cutSiteY + cutSiteHeight,
-                                   currentWidth - 2, cutSiteHeight);
+                                   currentWidth - 2);
             } else if (endBP >= row.rowData.getStart()){
-                this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2,
-                                   cutSiteHeight);
+                this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2);
                 /* Case when start and end are in the same row
                 * |----------------------------------------------------|
                 *  FFFFFFFFFFF|                     |FFFFFFFFFFFFFFFFFF  */
@@ -207,9 +204,9 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                     this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
 
                 this.drawCurvyLine(cutSiteX1 + 2, cutSiteY1,
-                                   currentWidth1 - 2, cutSiteHeight);
+                                   currentWidth1 - 2);
                 this.drawCurvyLine(cutSiteX2 + 2, cutSiteY2,
-                                   currentWidth2 - 2, cutSiteHeight);                   
+                                   currentWidth2 - 2);                   
            }
             
             if(dsForwardPosition != -1) {
@@ -242,17 +239,17 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
         this.cutSiteSVG.append("svg:text")
             .attr("x", x)
-            .attr("y", y)
+            .attr("y", y - 4) // -4 to move it off the curvy line a bit.
             .attr("font-color", color)
             .text(name);
     },
 
-    drawCurvyLine: function(x, y, width, height) {
+    drawCurvyLine: function(x, y, width) {
         this.cutSiteSVG.append("svg:rect")
             .attr("x", x)
             .attr("y", y)
             .attr("width", width)
-            .attr("height", height)
+            .attr("height", this.self.CURVY_LINE_HEIGHT)
             .attr("fill", "url(#curvyLine)");
     },
 
