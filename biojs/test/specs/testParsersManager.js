@@ -132,6 +132,7 @@ Ext.onReady(function() {
 
             it("jbeiseqxmlToGenbank: One record in .xml file", function() {
 
+                jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
 
                 //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
                 var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
@@ -147,21 +148,25 @@ Ext.onReady(function() {
 
             it("jbeiseqxmlToGenbank: Multiple records in .xml file", function() {
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                gbArr = []
 
                 //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
                 var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
                 jbeiXml += jbeiXml;
                 console.log(jbeiXml);
                 var xmlArr  = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlsToXmlArray(jbeiXml);
-                //try {
+                console.log(xmlArr);
+                try {
                     for (var i=0; i < xmlArr.length; i++ ) {
                         var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+                        gbArr.push(gb);
                         if (LOG) console.log(gb.toString());
-                        if (LOG) console.log(JSON.stringify(gb, null, "    "));
+                        //if (LOG) console.log(JSON.stringify(gb, null, "    "));
                     }
-                //} catch (bio) {
-                //    console.warn("Caught: " + bio.message);
-               // }
+                } catch (bio) {
+                    console.warn("Caught: " + bio.message);
+                }
+                expect(gbArr.length).toBe(2);
             });
 
             it("genbankToJbeiseqxml", function() {

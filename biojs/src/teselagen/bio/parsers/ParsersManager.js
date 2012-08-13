@@ -259,22 +259,42 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             return result;
         }
 
-        console.log(json["seq"]["features"]["feature_asArray"]);
+        //console.log(json["seq"]["features"]["feature_asArray"]);
 
         //===============
         // LOCUSKEYWORD
 
         var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
-        var name    = json["seq"]["name"]["__text"] || "no_name";
-        var linear  = json["seq"]["circular"]["__text"];
 
-        if (linear === "true") { //were strings for circular, convert to booleans
-            linear = false;
+        if (json["seq"]["name"] !== undefined) {
+            var name    = json["seq"]["name"]["__text"];
         } else {
-            linear = true;
+            var name = "no_name";
+            console.warn("jbeiseqxmlToGenbank: No sequence name detected");
         }
 
-        var seq     = json["seq"]["sequence"]["__text"] || "no_sequence";
+        if (json["seq"]["circular"] !== undefined) {
+            var circ  = json["seq"]["circular"]["__text"];
+        } else {
+            var circ  = false;
+            console.warn("jbeiseqxmlToGenbank: No linear status detected; default to linear");
+        }
+
+        if (circ === "true") { //were strings for circular, convert to booleans
+            var linear = false;
+        } else {
+            var linear = true;
+        }
+
+        if (json["seq"]["sequence"] !== undefined) {
+            var seq     = json["seq"]["sequence"]["__text"] || "no_sequence";
+        } else {
+            var seq     = "";
+            console.warn("jbeiseqxmlToGenbank: No sequence detected");
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid JbeiSeqXML file. No sequence detected"
+            });
+        }       
 
         var locus   = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
             locusName: name,
@@ -290,9 +310,17 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         // FEATURESKEYWORD
 
         var features = [];
-        var jFeats  = json["seq"]["features"]["feature_asArray"];
 
-        console.log(jFeats.length);
+        if (json["seq"]["features"]["feature_asArray"] === undefined) {
+            return result;
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid JbeiSeqXML file. No Features detected"
+            });
+        } else { 
+            var jFeats  = json["seq"]["features"]["feature_asArray"];
+        }
+
+        //console.log(jFeats.length);
 
         for (var i=0; i < jFeats.length; i++) {
 
@@ -304,21 +332,33 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             //console.log(ft);
             //console.log(JSON.stringify(ft, null, "   "));
 
-            var type        = ft["type"]["__text"];
+            if (ft["type"] !== undefined) {
+                var type = ft["type"]["__text"];
+            } else {
+                var type = "type_unknown";
+            }
 
-            var complement  = ft["complement"]["__text"];
+            if (ft["complement"] !== undefined) {
+                var complement = ft["complement"]["__text"];
+            } else {
+                var complement = false;
+            }
 
+            //===============
             //LOCATIONS
+            // asArray will detect if there are locations; ie length=0 means no locations
 
             for (var j=0; j < ft["location_asArray"].length; j++) {
-                //console.log(ft["location"][i]["genbankStart"]["__text"]);
-                //console.log(ft["location"][i]["end"]["__text"]);
+                //console.log(ft["location_asArray"][j]);
                 var start = ft["location_asArray"][j]["genbankStart"]["__text"];
-                var end   = ft["location_asArray"][j]["end"]["__text"] || "";
-                var to    = "..";
-                if (end === "") {
-                    to = "";
+
+                if (ft["location_asArray"][j]["end"] === undefined) {
+                    var end   = start;
+                } else {
+                    var end   = ft["location_asArray"][j]["end"]["__text"];
                 }
+                var to    = "..";
+
                 var loc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
                     start:  start,
                     end:    end,
@@ -326,15 +366,21 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 });
                 locations.push(loc);
             }
-
+            //===============
             // QUALIFIERS
-            var label       = ft["label"]["__text"];
+
+            if (ft["label"] !== undefined ) {
+                var label = ft["label"]["__text"];
+            } else {
+                var label = "name_unknown";
+            }
             var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
                 name:      "label",
                 value:      label,
                 quoted:     true
             });
             qualifiers.push(qual);
+
             //console.log(ft["attribute_asArray"]);
             for (var j=0; j < ft["attribute_asArray"].length; j++) {
                 var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
@@ -363,11 +409,11 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             }
 
             // THIS DOESNT WORK YET
-            if (seq.match(/[^URYMKSWHBVDN][ACGT]+/i)) {
+            if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) {
                 var na = "DNA";
-            } else if (seq.match(/[^TRYMKSWHBVDN][ACGU]+/i)) {
+            } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) {
                 var na = "RNA";
-            } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/)) {
+            } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) {
                 var na = "PRO";
             } else {
                 var na = "NAN";

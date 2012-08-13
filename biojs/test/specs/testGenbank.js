@@ -104,7 +104,7 @@ Ext.onReady(function() {
         });
         describe("Unit Testing: Creates dummy Genbank Package objects directly, tests properties/methods", function() {
 
-            it("Creates GenbankManager: This needs to be changed to a singleton***",function(){
+            it("Creates Empty Genbank from GenbankManager: This is a singleton",function(){
                 var line = "\n";
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 expect(tmp.getKeywords().length).toBe(0);
@@ -413,7 +413,7 @@ Ext.onReady(function() {
                 expect(featElm.getComplement()).toBe(false);
 
             });
-            it("parseFeatureLocation() 2",function(){
+            it("parseFeatureLocation() 2: with partials",function(){
                 var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
                 var locStr = "<100.>200";
                 tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
@@ -423,6 +423,15 @@ Ext.onReady(function() {
                 expect(tmp.getPreEnd()).toBe(">");
                 expect(tmp.getTo()).toBe(".");
             });
+            it("parseFeatureLocation() 3: no End",function(){
+                var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
+                var locStr = "100";
+                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
+                expect(tmp.getStart()).toBe(100);
+                expect(tmp.getEnd()).toBe(100);
+                expect(tmp.getTo()).toBe("..");
+            });
+
 
             it("parseFeatures()",function(){
                 var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
