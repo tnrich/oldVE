@@ -45,7 +45,10 @@ Ext.define('Vede.controller.PieController', {
         this.callParent();
 
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-        this.pieManager.render();
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
     },
 
     /**
@@ -114,10 +117,26 @@ Ext.define('Vede.controller.PieController', {
         }
     },
 
+    onShowFeatureLabelsChanged: function(show) {
+        this.pieManager.setShowFeatureLabels(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
+    onShowCutSiteLabelsChanged: function(show) {
+        this.pieManager.setShowCutSiteLabels(show);
+
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
+        }
+    },
+
     onLaunch: function() {
         this.callParent(arguments);
 
-        var pieContainer
+        var pieContainer;
         var pie;
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
@@ -246,14 +265,9 @@ Ext.define('Vede.controller.PieController', {
 
                 this.SelectionLayer.endSelecting();
 
-                if(this.SelectionLayer.end) {
+                if(this.SelectionLayer.end != -1) {
                     this.changeCaretPosition(this.SelectionLayer.end);
                 }
-
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
-                                           this,
-                                           this.SelectionLayer.start,
-                                           this.SelectionLayer.end);
 
             } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
                 // If we've clicked a sprite, select it.
@@ -347,6 +361,11 @@ Ext.define('Vede.controller.PieController', {
 
                 this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
                 this.SelectionLayer.selectionSprite.show(true);
+
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this,
+                                           this.SelectionLayer.start,
+                                           this.SelectionLayer.end);
             } else { // Selection crosses over the beginning of sequence.
                 var minStart1 = -1;
                 var maxEnd1 = -1;
@@ -419,6 +438,11 @@ Ext.define('Vede.controller.PieController', {
 
                     this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
                     this.SelectionLayer.selectionSprite.show(true);
+
+                    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                               this,
+                                               this.SelectionLayer.start,
+                                               this.SelectionLayer.end);
                 }
             }
         } else {

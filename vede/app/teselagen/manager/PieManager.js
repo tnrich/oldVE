@@ -22,7 +22,9 @@ Ext.define("Teselagen.manager.PieManager", {
         orfs: [],
         showCutSites: true,
         showFeatures: true,
-        showOrfs: true
+        showOrfs: true,
+        showFeatureLabels: true,
+        showCutSiteLabels: true
     },
 
     nameBox: null,
@@ -290,7 +292,7 @@ Ext.define("Teselagen.manager.PieManager", {
         var labels = [];
         var center;
 
-        if(this.showCutSites) {
+        if(this.showCutSites && this.showCutSiteLabels) {
             Ext.each(this.cutSites, function(site) {
                 center = this.cutSiteRenderer.middlePoints.get(site);
 
@@ -311,7 +313,7 @@ Ext.define("Teselagen.manager.PieManager", {
             }, this);
         }
 
-        if(this.showFeatures) {
+        if(this.showFeatures && this.showFeatureLabels) {
             Ext.each(this.features, function(feature) {
                 center = this.featureRenderer.middlePoints.get(feature);
 
@@ -606,6 +608,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
 
         return pSequenceManager;
     },
@@ -670,6 +673,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie.surface.add(this.nameBox);
         this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
     },
 
     /**

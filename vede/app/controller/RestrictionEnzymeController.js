@@ -15,6 +15,9 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             "#enzymeGroupSelector": {
                 change: this.onEnzymeGroupSelected
             },
+            "#enzymeSearchField": {
+                keyup: this.onEnzymeSearchFieldKeyup
+            },
             "#restrictionEnzymesManagerOKButton": {
                 click: this.onOKButtonClick
             },
@@ -93,6 +96,16 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         });
 
         this.enzymeSelector.fromField.store.loadData(enzymeArray, false);
+        this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+    },
+
+    onEnzymeSearchFieldKeyup: function(field) {
+        this.enzymeSelector.fromField.store.filterBy(function(rec) {
+            if(rec.data.name.search(new RegExp(field.getValue(), "i")) != -1) {
+                return true;
+            }
+        });
+
         this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
     },
 

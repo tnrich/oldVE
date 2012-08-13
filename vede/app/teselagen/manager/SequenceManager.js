@@ -672,7 +672,11 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 //if (DEBUG_MODE) trace("case Fn,Sn 6");
                 if (DEBUG_MODE) console.log("case Fn,Sn 6");
             } else {
-                Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                
+                throw Ext.create("Teselagen.bio.BioException", {
+                    message: "Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString()
+                });
             }
         };
 
@@ -726,7 +730,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 deletions.push(feature);
                 if (DEBUG_MODE) console.log("case Fn,Sc 5");
             } else {
-                Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                throw Ext.create("Teselagen.bio.BioException", {
+                    message: "Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString()
+                });
             }
         };
 
@@ -804,7 +811,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 }
 
             } else {
-                Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                throw Ext.create("Teselagen.bio.BioException", {
+                    message: "Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString()
+                });
             }
         };
 
@@ -909,7 +919,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
             }
             else {
-                Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                //Ext.Error.raise("Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString());
+                throw Ext.create("Teselagen.bio.BioException", {
+                    message: "Unhandled editing case!" + " Selection: [" + pStartIndex + ", " + pEndIndex + "], Feature: [" + featStart + ", " + featEnd + "], Sequence: " + sequence.seqString()
+                });
             }
         };
 
@@ -1125,7 +1138,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         if(pRebasePosition > seqLen) {
             //throw new Error("Invaid rebase position: " + rebasePosition);
-            Ext.Error.raise("Invaid rebase position: " + pRebasePosition);
+            //Ext.Error.raise("Invaid rebase position: " + pRebasePosition);
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invaid rebase position: " + pRebasePosition
+            });
             //console.warn("Invaid rebase position: " + pRebasePosition);
         }
 
@@ -1330,14 +1346,15 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         var xmlData;
 
-        /*if (window.DOMParser) {
-            parser=new DOMParser();
-            xmlDoc=parser.parseFromString(txt,"text/xml");
-        } else { // Internet Explorer
-            xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-            xmlDoc.async=false;
-            xmlDoc.loadXML(txt); 
-        }*/
+        //try {
+            var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+            //if (LOG) console.log(gb.toString());
+            //if (LOG) console.log(JSON.stringify(gb, null, "    "));
+        //} catch (bio) {
+        //    console.warn("Caught: " + bio.message);
+        //}
+
+        result = this.fromGenbank(gb);
 
 
         return result;

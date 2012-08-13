@@ -13,17 +13,18 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         annotator: null,
 
         readOnly: null,
-        showFeatures: true,
-        showCutSites: null,
-        showOrfs: null,
-        showComplementarySequence: true,
-        bpPerRow: 60,
-        sequenceFontSize: 11,
-        labelFontSize: 10,
-        showSpaceEvery10Bp: true,
+        showFeatures: false,
+        showCutSites: false,
+        showOrfs: false,
+        showComplementarySequence: false,
+        showSpaceEvery10Bp: false,
         showAminoAcids1: false,
         showAminoAcids2: false,
         showAminoAcids3: false,
+
+        bpPerRow: 60,
+        sequenceFontSize: 11,
+        labelFontSize: 10,
 
         sequenceProviderChanged: false,
         orfMapperChanged: false,
@@ -59,18 +60,15 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
     constructor: function(inData){
         this.initConfig(inData);
-        console.log("Bar");
         var that = this;
         this.lineRenderer = Ext.create("Teselagen.renderer.annotate.LineRenderer");
         //this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.TextRenderer");
         this.RowManager = Ext.create("Teselagen.manager.RowManager", {
             sequenceAnnotator: that,
         });
-        console.log("syntax error");
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that,
         });
-        console.log("syntax error");
     },
 
     setSequenceManager: function(pSeqMan){
@@ -93,7 +91,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
     sequenceChanged: function(){
         this.RowManager.setSequenceAnnotator(this);
-        this.RowManager.update();
 
         this.aaManager.setSequenceManager(this.sequenceManager);
         this.features = this.sequenceManager.getFeatures();
@@ -102,7 +99,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
-        console.log("Foo");
     }
 
 });

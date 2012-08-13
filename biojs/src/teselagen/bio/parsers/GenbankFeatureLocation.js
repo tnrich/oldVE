@@ -59,6 +59,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         				message: "Incorrect Usage of < in an end index in your Genbank file."
         			});
                 }*/
+            } else {
+                end = start;  // If there is no end, make it the same as start
+                to  = "..";
             }
             if (inData.preStart) {
                 preStart    = inData.preStart || ""; 

@@ -95,7 +95,17 @@
                                    checked);
     },
 
-        onSimulateDigestionMenuItemClick: function() {
+    onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED,
+                                   checked);
+    },
+
+    onCutSiteLabelsMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED,
+                                   checked);
+    },
+
+    onSimulateDigestionMenuItemClick: function() {
         console.log("called");
         var simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
         simulateDigestionWindow.show();
@@ -150,7 +160,13 @@
             "#orfsMenuItem": {
                 checkchange: this.onOrfsMenuItemCheckChange
             },
-                    "#simulateDigestionMenuItem": {
+            "#featureLabelsMenuItem": {
+                checkchange: this.onFeatureLabelsMenuItemCheckChange
+            },
+            "#cutSiteLabelsMenuItem": {
+                checkchange: this.onCutSiteLabelsMenuItemCheckChange
+            },
+            "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
             },
             "#restrictionEnzymesManagerMenuItem": {

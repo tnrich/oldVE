@@ -11,18 +11,14 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 
     constructor: function(inData) {
         this.initConfig(inData);
-        this.annotateSVG = d3.select("#AnnotatePanel-body").append("svg:svg");
-        this.orfSVG = this.annotateSVG.append("svg:g")
-                           .attr("id", "orfsSVG");
     },
 
     render: function() {
-        d3.select("#orfsSVG").remove();
-        this.orfSVG = this.annotateSVG.append("svg:g")
-                           .attr("id", "orfsSVG");
+        this.orfSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
+                           .attr("id", "orfSVG");
 
         var orf = this.orf;
-        var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap()[orf];
+        var orfRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getOrfToRowMap().get(orf);
 
         if(!orfRows) {
             return;
@@ -38,12 +34,17 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
             alignmentRowIndex = -1;
             var row = this.sequenceAnnotator.sequenceAnnotator.RowManager.getRows()[row];
 
-            Ext.each(row.getRowData().orfAlignment.getKeys(), function(rowOrfs) {
-                Ext.each(rowOrfs, function(rowOrf, index) {
+            Ext.each(row.getRowData().orfAlignment.getKeys(), function(rowOrfs, index) {
+                Ext.each(rowOrfs, function(rowOrf) {
                     if(rowOrf == orf) {
                         alignmentRowIndex = index;
+                        return false;
                     }
                 });
+
+                if(alignmentRowIndex != -1) {
+                    return false;
+                }
             });
 
             if(orf.getStart() > orf.getEnd()) { // circular case
@@ -96,7 +97,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 				
 				var orfY = bpStartPoint.y - upShift;
 				var currentHeight = 6;
-                var textWidth = this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+                var textWidth = 16;
 				
 				if(startBP > endBP) { // case when start and end are in the same row
 					var rowStartPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
@@ -130,45 +131,45 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         
                         if(orf.getStrand() == -1) {
                             this.orfSVG.append("svg:circle")
-                                .attr("x", codonStartPointX + textWidth - 2)
-                                .attr("y", codonStartPointY)
-                                .attr("radius", 2)
+                                .attr("cx", codonStartPointX + textWidth - 2)
+                                .attr("cy", codonStartPointY)
+                                .attr("r", 3)
                                 .attr("fill", color);
                         } else {
                             this.orfSVG.append("svg:circle")
-                                .attr("x", codonStartPointX + textWidth - 5)
-                                .attr("y", codonStartPointY)
-                                .attr("radius", 2)
+                                .attr("cx", codonStartPointX + textWidth - 5)
+                                .attr("cy", codonStartPointY)
+                                .attr("r", 3)
                                 .attr("fill", color);
                         }
                     }
-                });
+                }, this);
 				
 				if(orf.getStrand() == 1 && endBP == orf.getEnd() - 1) {
 					var codonEndPoint1 = this.sequenceAnnotator.bpMetricsByIndex(endBP);
-					var codonEndPointX1 = codonEndPoint1.x + textWidth + 3;
+					var codonEndPointX1 = codonEndPoint1.x + textWidth;
 					var codonEndPointY1 = codonEndPoint1.y - upShift;
                     //draw arrow ends					
                     this.orfSVG.append("svg:path")
-                        .attr("d", "M" + (codonEndPointX1 - 5) + " " + 
-                                   (codonEndPointY1 - 2) + 
+                        .attr("d", "M" + (codonEndPointX1 - 10) + " " + 
+                                   (codonEndPointY1 - 4) + 
                                    "L" + codonEndPointX1 + " " + codonEndPointY1 +
-                                   "L" + (codonEndPointX1 - 5) + " " + 
-                                   (codonEndPointY1 + 2) + 
-                                   "L" + (codonEndPointX1 - 5) + " " +
-                                   (codonEndPointY1 - 2))
+                                   "L" + (codonEndPointX1 - 10) + " " + 
+                                   (codonEndPointY1 + 4) + 
+                                   "L" + (codonEndPointX1 - 10) + " " +
+                                   (codonEndPointY1 - 4))
                         .attr("fill", color);
 				} else if(orf.getStrand() == -1 && startBP == orf.getStart()) {
 					var codonEndPoint2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
-					var codonEndPointX2 = codonEndPoint2.x + 3;
+					var codonEndPointX2 = codonEndPoint2.x;
 					var codonEndPointY2 = codonEndPoint2.y - upShift;
                     //draw arrow ends
                     this.orfSVG.append("svg:path")
                         .attr("d", "M" + codonEndPointX2 + " " + codonEndPointY2 + 
-                                   "L" + (codonEndPointX2 + 5) + " " + 
-                                   (codonEndPointY2 - 2) +
-                                   "L" + (codonEndPointX2 + 5) + " " + 
-                                   (codonEndPointY2 + 2) + 
+                                   "L" + (codonEndPointX2 + 10) + " " + 
+                                   (codonEndPointY2 - 4) +
+                                   "L" + (codonEndPointX2 + 10) + " " + 
+                                   (codonEndPointY2 + 4) + 
                                    "L" + codonEndPointX2 + " " + codonEndPointY2)
                         .attr("fill", color);
 				}

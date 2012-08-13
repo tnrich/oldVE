@@ -1,9 +1,11 @@
 Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
     statics: {
         CURVY_LINE_COLOR: "#FF0000",
+        CURVY_LINE_HEIGHT: 5,
         CUT_SITE_COLOR: "#625D5D",
         ONE_CUT_COLOR: "#E57676",
-        MULTIPLE_CUT_COLOR: "#888888"
+        MULTIPLE_CUT_COLOR: "#888888",
+        CUTSITE_HEIGHT_OFFSET: 45,
     },
 
     config: {
@@ -11,36 +13,36 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         cutSite: []
     },
 
-    annotateSVG: null,
-    cutSitesSVG: null,
+    cutSiteSVG: null,
 
     constructor: function(inData) {
         this.initConfig(inData);
-        this.annotateSVG = d3.select("#AnnotatePanel-body").append("svg:svg");
-        this.cutSitesSVG = this.annotateSVG.append("svg:g")
-                               .attr("id", "cutSiteSVG");
     },
 
     render: function() {
-        d3.select("#cutSiteSVG").remove();
-        this.cutSiteSVG = this.annotateSVG.append("svg:g")
+        this.cutSiteSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
                                .attr("id", "cutSiteSVG");
 
         this.cutSiteSVG.append("svg:pattern")
             .attr("id", "curvyLine")
-            .attr("width", 3)
-            .attr("height", 4);
+            .attr("width", 5)
+            .attr("height", 5)
+            .attr("patternUnits", "userSpaceOnUse")
+            .append("svg:path")
+            .attr("d", "M 0 0 L 2.5 5 L 5 0")
+            .attr("stroke", this.self.CURVY_LINE_COLOR)
+            .attr("fill", "none");
 
         var cutSite = this.cutSite;
 
-        var cutSiteHeight = 8;//this.sequenceAnnotator.cutSiteTextRenderer.textHeight - 2 + 3;
-        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap()[cutSite.toString()];
+        var cutSiteHeight = this.self.CUTSITE_HEIGHT_OFFSET;
+        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap().get(cutSite);
 
         if(!cutSiteRows) {
             return;
         }
 
-        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().length;
+        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().toString().length;
         var rowIndex;
         var startBP;
         var endBP;
@@ -123,7 +125,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             if(cutSite.getStrand() == 1) {
                 dsForwardPosition = cutSite.getStart() + 
                     cutSite.getRestrictionEnzyme().getDsForward();
-                dsReversePosition = cutSite.getEnd() + 
+                dsReversePosition = cutSite.getStart() + 
                     cutSite.getRestrictionEnzyme().getDsReverse();
             } else {
                 dsForwardPosition = cutSite.getEnd() -
@@ -148,13 +150,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 dsReversePosition -= seqLen;
             }
 
-            if(dsForwardPosition >= row.rowData.getStart() &&
-               dsForwardPosition <= row.rowData.getEnd()) {
+            if(dsForwardPosition <= row.rowData.getStart() &&
+               dsForwardPosition >= row.rowData.getEnd()) {
                 dsForwardPosition = -1;
             }
 
-            if(dsReversePosition >= row.rowData.getStart() &&
-               dsReversePosition <= row.rowData.getEnd()) {
+            if(dsReversePosition <= row.rowData.getStart() &&
+               dsReversePosition >= row.rowData.getEnd()) {
                 dsReversePosition = -1;
             }
 
@@ -162,16 +164,12 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             cutSiteY = row.metrics.y + alignmentRowIndex * cutSiteHeight;
 
             currentWidth = this.sequenceAnnotator.bpMetricsByIndex(endBP).x - 
-                cutSiteX + this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
+                cutSiteX - 4;
             currentHeight = cutSiteHeight;
-
-            var matrix = {};
-            matrix.tx += cutSiteX;
-            matrix.ty += cutSiteY;
 
             var oneCut = cutSite.getNumCuts == 1;
 
-            this.drawName(cutSiteX, cutSiteY, 
+            this.drawName(cutSiteX, cutSiteY + cutSiteHeight, 
                           cutSite.getRestrictionEnzyme().getName(),
                           oneCut);
 
@@ -179,8 +177,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 this.drawCurvyLine(cutSiteX + 2, cutSiteY + cutSiteHeight,
                                    currentWidth - 2);
             } else if (endBP >= row.rowData.getStart()){
-                this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2,
-                                   cutSiteHeight);
+                this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2);
                 /* Case when start and end are in the same row
                 * |----------------------------------------------------|
                 *  FFFFFFFFFFF|                     |FFFFFFFFFFFFFFFFFF  */
@@ -207,16 +204,16 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                     this.sequenceAnnotator.sequenceSymbolRenderer.textWidth;
 
                 this.drawCurvyLine(cutSiteX1 + 2, cutSiteY1,
-                                   currentWidth1 - 2, cutSiteHeight);
+                                   currentWidth1 - 2);
                 this.drawCurvyLine(cutSiteX2 + 2, cutSiteY2,
-                                   currentWidth2 - 2, cutSiteHeight);                   
+                                   currentWidth2 - 2);                   
            }
             
             if(dsForwardPosition != -1) {
                 var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
                 
                 var ds1X = dsForwardMetrics.x + 2;
-                var ds1Y = cutSiteY + cutSiteBitMap.height;
+                var ds1Y = cutSiteY + cutSiteHeight;
                 this.drawDsForwardPosition(ds1X, ds1Y);
             } 
             
@@ -224,9 +221,11 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
                 
                 var ds2X = dsReverseMetrics.x + 2;
-                var ds2Y = cutSiteY + cutSiteBitMap.height + 3;
+                var ds2Y = cutSiteY + cutSiteHeight + 3;
                 this.drawDsReversePosition(ds2X, ds2Y);
             } 
+
+            this.addToolTip(cutSite);
         }, this);
     },
 
@@ -238,33 +237,47 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             color = this.self.MULTIPLE_CUT_COLOR;
         }
 
-        this.cutSitesSVG.append("svg:text")
+        this.cutSiteSVG.append("svg:text")
             .attr("x", x)
-            .attr("y", y)
+            .attr("y", y - 4) // -4 to move it off the curvy line a bit.
             .attr("font-color", color)
             .text(name);
     },
 
-    drawCurvyLine: function(x, y, width, height) {
-        this.cutSitesSVG.append("svg:rect")
+    drawCurvyLine: function(x, y, width) {
+        this.cutSiteSVG.append("svg:rect")
             .attr("x", x)
             .attr("y", y)
             .attr("width", width)
-            .attr("height", height)
+            .attr("height", this.self.CURVY_LINE_HEIGHT)
             .attr("fill", "url(#curvyLine)");
     },
 
     drawDsForwardPosition: function(x, y) {
-        this.cutSitesSVG.append("svg:path")
+        this.cutSiteSVG.append("svg:path")
             .attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y - 4) + 
                   "L" + (x + 3) + " " + (y - 4))
             .attr("fill", this.self.CUT_SITE_COLOR);
     },
 
     drawDsReversePosition: function(x, y) {
-        this.cutSitesSVG.append("svg:path")
+        this.cutSiteSVG.append("svg:path")
             .attr("d", "M" + x + " " + y + "L" + (x - 3) + " " + (y + 4) + 
                   "L" + (x + 3) + " " + (y + 4))
             .attr("fill", this.self.CUT_SITE_COLOR);
+    },
+
+    addToolTip: function(cutSite) {
+        var complement = ", complement";
+        if(cutSite.getStrand() == 1) {
+            complement = "";
+        }
+
+        var toolTip = cutSite.getRestrictionEnzyme().getName() + ": " + 
+                      (cutSite.getStart() + 1) + ".." + (cutSite.getEnd()) +
+                      complement + ", cuts " + cutSite.getNumCuts() + " times";
+        
+        this.cutSiteSVG.append("svg:title")
+            .text(toolTip);
     }
 });

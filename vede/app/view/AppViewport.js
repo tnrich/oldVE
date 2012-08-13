@@ -273,11 +273,15 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'Feature Labels'
+                                                id: 'featureLabelsMenuItem',
+                                                text: 'Feature Labels',
+                                                checked: true
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'Cut Site Labels'
+                                                id: 'cutSiteLabelsMenuItem',
+                                                text: 'Cut Site Labels',
+                                                checked: true
                                             }
                                         ]
                                     }
