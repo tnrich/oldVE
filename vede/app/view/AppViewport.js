@@ -64,6 +64,15 @@ Ext.define('Vede.view.AppViewport', {
                     title: 'Annotate',
                     flex: 2,
                     region: 'east',
+                    items: [
+                        {
+                            xtype: 'container',
+                            id: 'AnnotateContainer',
+                            layout: {
+                                type: 'fit'
+                            }
+                        }
+                    ]
                 },
                 {
                     xtype: 'panel',

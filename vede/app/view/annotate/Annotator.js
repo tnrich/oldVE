@@ -26,16 +26,16 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     constructor: function(inData){
-        this.initConfig(inData);
         this.callParent([inData]);
+        this.initConfig(inData);
         this.id = "AnnotationSurface";
         //console.log("Created Annotator");
         this.sequenceAnnotator = inData.sequenceAnnotator;
 
-        this.panel = Ext.getCmp('AnnotatePanel-body');
         //this.lineRenderer = Ext.create("Teselagen.renderer.annotation.LineRender", {});
-        this.annotateSVG = d3.select("#AnnotatePanel-body")
-            .append("svg:svg");
+        this.annotateSVG = d3.select("#AnnotateContainer")
+            .append("svg:svg")
+            .attr("id", "annotateSVG");
         
         this.linesSVG = this.annotateSVG.append("svg:g")
             .attr("id", "linesSVG");

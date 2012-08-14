@@ -10,11 +10,22 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     init: function(){
         this.callParent();
+
+        this.control({
+            "#AnnotateContainer" : {
+                render: function(c) {
+                    c.el.on("mousedown", this.onMousedown, this);
+                    c.el.on("mouseup", this.onMouseup, this);
+                    c.el.on("mousemove", this.onMousemove, this);
+                }
+            }
+        });
     },
+
     onLaunch: function() {
         this.callParent();
 
-        this.AnnotatePanel = Ext.getCmp('AnnotatePanel');
+        this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
 
         this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {
             sequenceManager: this.SequenceManager,
@@ -24,10 +35,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             annotatePanel: this.AnnotatePanel,
         });
 
-        this.Managers.push(this.SequenceAnnotationManager);
+        console.log(this.SequenceAnnotationManager.annotator);
+        this.AnnotatePanel.add(this.SequenceAnnotationManager.annotator);
 
-        this.AnnotatePanel.add(this.SequenceAnnotationManager.getAnnotator());
-        this.AnnotatePanel.show(true);
+        this.Managers.push(this.SequenceAnnotationManager);
     },
 
 
@@ -56,6 +67,29 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
+        }
+    },
+
+    onMousedown: function(pEvt, pOpts) {
+        if(this.SequenceAnnotationManager.sequenceManager) {
+            var index = this.SequenceAnnotationManager.bpAtPoint(pEvt.getX(),
+                                                                 pEvt.getY());
+
+            this.changeCaretPosition(index);
+        }
+    },
+
+    onMousemove: function(pEvt, pOpts) {
+    },
+
+    onMouseup: function(pEvt, pOpts) {
+    },
+
+    changeCaretPosition: function(index) {
+        this.SequenceAnnotationManager.adjustCaret(index);
+        if(this.SequenceAnnotationManager.sequenceManager) {
+            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
+                                       index);
         }
     },
 
