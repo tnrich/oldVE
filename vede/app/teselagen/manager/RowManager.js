@@ -201,7 +201,10 @@ Ext.define("Teselagen.manager.RowManager", {
                 var itemStart = annotation.getStart();
                 var itemEnd = annotation.getEnd();
 
-                //if (annotation.getClassName()Teselagen.bio.enzymes.RestrictionCutSite){},
+                if(annotation instanceof Teselagen.bio.enzymes.RestrictionCutSite) {
+                    itemEnd -= 1;
+                }
+
                 this.pushInRow(itemStart, itemEnd, annotation, rows);
             }
         }
@@ -210,12 +213,13 @@ Ext.define("Teselagen.manager.RowManager", {
     },
     pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows){
         //console.log("Push in Row annotations before: " + pRows);
+        var bpPerRow = this.sequenceAnnotator.getBpPerRow();
         if (pItemStart > pItemEnd){
-            var rowStartIndex = Math.round(pItemStart/this.sequenceAnnotator.getBpPerRow());
-            var rowEndIndex = Math.round((this.sequenceAnnotator.getSequence().length - 1)/this.sequenceAnnotator.getBpPerRow());
+            var rowStartIndex = Math.floor(pItemStart/bpPerRow);
+            var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1)/bpPerRow);
 
             var rowStartIndex2 = 0;
-            var rowEndIndex2 = Math.round(pItemEnd/this.sequenceAnnotator.getSequenceManager().getBpPerRow());
+            var rowEndIndex2 = Math.floor(pItemEnd/bpPerRow);
 
             for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++){
                 pRows[z1].push(pAnnotation);
@@ -224,8 +228,8 @@ Ext.define("Teselagen.manager.RowManager", {
                 pRows[z2].push(pAnnotation);
             }
         } else {
-            var rowStartIndex = Math.round(pItemStart/this.sequenceAnnotator.getBpPerRow());
-            var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
+            var rowStartIndex = Math.floor(pItemStart/bpPerRow);
+            var rowEndIndex = Math.floor(pItemEnd/bpPerRow);
             //console.log("rowStartIndex: " + rowStartIndex);
             //console.log("rowEndIndex: " + rowEndIndex);
 
