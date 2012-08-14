@@ -53,7 +53,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var rowY = this.totalHeight;
 
             var sequenceString = "";
-            sequenceString += this.renderIndexString(row.getRowData().getStart() + 1) + " ";
+            //sequenceString += this.renderIndexString(row.getRowData().getStart() + 1) + " ";
 
 
             if(this.sequenceAnnotator.getShowSpaceEvery10Bp()){
@@ -90,16 +90,16 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
             }
 
-            var sequenceX = 6 * 3;
+            var sequenceX = 6 * 16;
             var sequenceY = this.totalHeight;
 
-            if(this.totalWidth < (3 * sequenceStringLength)){
-                this.totalWidth = (3* sequenceStringLength);
+            if(this.totalWidth < (16 * sequenceStringLength)){
+                this.totalWidth = (16 * sequenceStringLength);
             }
 
             this.totalHeight += 20;
 
-            var sequenceWidth = sequenceStringLength * 3 - sequenceX;
+            var sequenceWidth = sequenceStringLength * 16 - sequenceX;
             var sequenceHeight = this.totalHeight - sequenceY;
 
             console.log("Show comp sequence: " + this.sequenceAnnotator.getShowComplementarySequence());
@@ -125,6 +125,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var rowWidth = this.totalWidth;
             var rowHeight = this.totalHeight - rowY;
             //sequenceY += 20;
+
             var rowSequence = row.getRowData().getSequence();
             var complementarySequence = row.getRowData().getOppositeSequence();
             for(var j = 0; j < rowSequence.length; j++){
