@@ -111,6 +111,32 @@ Ext.onReady(function() {
             });
 
         });
+        
+
+        describe("Lacz file: ", function() {
+            var text, tmp;
+            it("Opens and JSON.stringifies: lacz.gb",function(){
+                var text, tmp;
+                var name = "Lac Z";
+                var url  = "../test/data/lacz.gb";
+
+                tmp = loadGenbankFile(url);
+
+                if (LOG) {
+                    logGenbank(name, url, tmp);
+                }
+                
+                expect(tmp.getKeywords().length).toBe(10);
+                // Can't verify this because of all the backslashes!!!!
+                //expect(tmp.findKeyword("LOCUS").getName()).toBe("pTT15d\\-\\VK1O2O12::[hu\\anti-<huCB1>\\10D10.1\\(huIgG2-TO\\desK)\\VH]::TTR3");
+                expect(tmp.findKeyword("LOCUS").getSequenceLength()).toBe(597);
+
+                expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(3);
+                expect(tmp.findKeyword("FEATURES").getFeaturesElements()[2].getFeatureQualifier().length).toBe(9);
+                    
+            });
+
+        });
 
 
 
