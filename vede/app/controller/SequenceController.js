@@ -70,7 +70,7 @@ Ext.define("Vede.controller.SequenceController", {
 
     onLaunch: function() {
         // TODO: maybe put managers in statics so they are shared by all 
-        // child constructors? 
+        // child controllers? 
         
         this.RestrictionEnzymeGroupManager = 
             Teselagen.manager.RestrictionEnzymeGroupManager;

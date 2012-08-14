@@ -10,7 +10,6 @@ Ext.define('Vede.controller.PieController', {
     },
 
     pieManager: null,
-    enzymeGroupManager: null,
 
     mouseIsDown: false,
     startSelectionAngle: 0,
@@ -32,15 +31,43 @@ Ext.define('Vede.controller.PieController', {
                 mouseup: this.onMouseup
             }
         });
-
-        this.enzymeGroupManager = 
-            Teselagen.manager.RestrictionEnzymeGroupManager;
-
-        if(!this.enzymeGroupManager.getIsInitialized) {
-            this.enzymeGroupManager.initialize();
-        }
     },
-    
+
+    onLaunch: function() {
+        this.callParent(arguments);
+
+        var pieContainer;
+        var pie;
+
+        this.pieManager = Ext.create("Teselagen.manager.PieManager", {
+            center: {x: 100, y: 100},
+            railRadius: 100,
+            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
+            showFeatures: Ext.getCmp("featuresMenuItem").checked,
+            showOrfs: Ext.getCmp("orfsMenuItem").checked
+        });
+
+        pieContainer = Ext.getCmp('PieContainer');
+        pie = this.pieManager.getPie();
+        pieContainer.add(pie);
+
+        console.log(pie);
+
+        this.pieManager.initPie();
+
+        this.Managers.push(this.pieManager);
+
+        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
+            center: this.pieManager.center,
+            radius: this.pieManager.railRadius
+        });
+
+        this.SelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {
+            center: this.pieManager.center,
+            radius: this.pieManager.railRadius
+        });
+    },
+
     onActiveEnzymesChanged: function() {
         this.callParent();
 
@@ -52,10 +79,10 @@ Ext.define('Vede.controller.PieController', {
     },
 
     /**
-     * Catches events from the annotation sprites' onclick listeners. When a
-     * mouseup event is detected, we check to see if this.clickedAnnotationStart
-     * and end have been defined to see if an annotation has been clicked. If it
-     * has we can easily select it.
+     * Catches events from the vector panel annotation sprites' onclick listeners. 
+     * When a mouseup event is detected, we check to see if 
+     * this.clickedAnnotationStart and end have been defined to see if an 
+     * annotation has been clicked. If it has we can easily select it.
      */
     onVectorPanelAnnotationClicked: function(start, end) {
         this.clickedAnnotationStart = start;
@@ -135,39 +162,6 @@ Ext.define('Vede.controller.PieController', {
         if(this.pieManager.sequenceManager) {
             this.pieManager.render();
         }
-    },
-
-    onLaunch: function() {
-        this.callParent(arguments);
-
-        var pieContainer;
-        var pie;
-
-        this.pieManager = Ext.create("Teselagen.manager.PieManager", {
-            center: {x: 100, y: 100},
-            railRadius: 100,
-            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
-            showFeatures: Ext.getCmp("featuresMenuItem").checked,
-            showOrfs: Ext.getCmp("orfsMenuItem").checked
-        });
-
-        pieContainer = Ext.getCmp('PieContainer');
-        pie = this.pieManager.getPie();
-        pieContainer.add(pie);
-
-        this.pieManager.initPie();
-
-        this.Managers.push(this.pieManager);
-
-        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
-            center: this.pieManager.center,
-            radius: this.pieManager.railRadius
-        });
-
-        this.SelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {
-            center: this.pieManager.center,
-            radius: this.pieManager.railRadius
-        });
     },
 
     /**
