@@ -73,7 +73,7 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
      */
     addClickListener: function(sprite, start, end) {
         sprite.on("mousedown", function() {
-            Vede.application.fireEvent("AnnotationClicked", start, end);
+            Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
         });
     },
 });

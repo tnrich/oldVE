@@ -5,7 +5,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         CUT_SITE_COLOR: "#625D5D",
         ONE_CUT_COLOR: "#E57676",
         MULTIPLE_CUT_COLOR: "#888888",
-        CUTSITE_HEIGHT_OFFSET: 45,
+        CUTSITE_HEIGHT_OFFSET: 55,
     },
 
     config: {
@@ -13,10 +13,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         cutSite: []
     },
 
+    sequenceAnnotationManager: null,
+
     cutSiteSVG: null,
 
     constructor: function(inData) {
         this.initConfig(inData);
+        this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
     },
 
     render: function() {
@@ -36,13 +39,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         var cutSite = this.cutSite;
 
         var cutSiteHeight = this.self.CUTSITE_HEIGHT_OFFSET;
-        var cutSiteRows = this.sequenceAnnotator.sequenceAnnotator.RowManager.getCutSiteToRowMap().get(cutSite);
+        var cutSiteRows = this.sequenceAnnotationManager.RowManager.getCutSiteToRowMap().get(cutSite);
 
         if(!cutSiteRows) {
             return;
         }
 
-        var seqLen = this.sequenceAnnotator.sequenceAnnotator.sequenceManager.getSequence().toString().length;
+        var seqLen = this.sequenceAnnotationManager.sequenceManager.getSequence().toString().length;
         var rowIndex;
         var startBP;
         var endBP;
@@ -52,26 +55,17 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         var cutSiteY;
         var currentWidth;
         var currentHeight;
+        var addToEnd;
 
+        // Iterate over every row the cut site is present in.
         Ext.each(cutSiteRows, function(rowNumber) {
-            alignmentRowIndex = -1;
-            var row = this.sequenceAnnotator.sequenceAnnotator.RowManager.getRows()[rowNumber];
+            var row = this.sequenceAnnotationManager.RowManager.getRows()[rowNumber];
+            alignmentRowIndex = row.rowData.cutSitesAlignment.get(cutSite);
             
-            Ext.each(row.getRowData().cutSitesAlignment.getKeys(), function(rowCutSites, index) {
-                Ext.each(rowCutSites, function(site) {
-                    if(site == this.cutSite.toString()) {
-                        alignmentRowIndex = row.getRowData().cutSitesAlignment.getKeys().length - index - 1;
-                        return false;
-                    }
-                }, this);
-
-                if(alignmentRowIndex != -1) {
-                    return false;
-                }
-            }, this);
 
             startBP = 0;
             endBP = 0;
+            addToEnd = false;
 
             if(cutSite.getStart() < cutSite.getEnd()) { // non-circular
                 if(cutSite.getStart() < row.rowData.getStart() &&
@@ -91,6 +85,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                         endBP = cutSite.getEnd();
                     } else {
                         endBP = row.rowData.getEnd();
+                        addToEnd = true;
                     }
                 }
             } else { // circular
@@ -98,10 +93,10 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                     *  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|           */
                 if(cutSite.getEnd() >= row.rowData.getStart() && 
                    cutSite.getEnd() <= row.rowData.getEnd()) {
-                    endBP = cutSite.getEnd() - 1;
+                    endBP = cutSite.getEnd();
                 }
                 else if(row.rowData.getEnd() >= seqLen) {
-                    endBP = seqLen - 1;
+                    endBP = seqLen;
                 }
                 /* |-------------------------------------------------------|
                 *  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
@@ -150,12 +145,12 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 dsReversePosition -= seqLen;
             }
 
-            if(dsForwardPosition <= row.rowData.getStart() &&
+            if(dsForwardPosition <= row.rowData.getStart() ||
                dsForwardPosition >= row.rowData.getEnd()) {
                 dsForwardPosition = -1;
             }
 
-            if(dsReversePosition <= row.rowData.getStart() &&
+            if(dsReversePosition <= row.rowData.getStart() ||
                dsReversePosition >= row.rowData.getEnd()) {
                 dsReversePosition = -1;
             }
@@ -165,16 +160,21 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
             currentWidth = this.sequenceAnnotator.bpMetricsByIndex(endBP).x - 
                 cutSiteX - 4;
+
+            if(addToEnd) {
+                currentWidth += 16;
+            }
+
             currentHeight = cutSiteHeight;
 
-            var oneCut = cutSite.getNumCuts == 1;
+            var oneCut = cutSite.getNumCuts() == 1;
 
             this.drawName(cutSiteX, cutSiteY + cutSiteHeight, 
                           cutSite.getRestrictionEnzyme().getName(),
                           oneCut);
 
             if (startBP <= endBP) {
-                this.drawCurvyLine(cutSiteX + 2, cutSiteY + cutSiteHeight,
+                this.drawCurvyLine(cutSiteX, cutSiteY + cutSiteHeight,
                                    currentWidth - 2);
             } else if (endBP >= row.rowData.getStart()){
                 this.drawCurvyLine(cutSiteX + 2, cutSiteY, currentWidth - 2);
@@ -207,12 +207,12 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                                    currentWidth1 - 2);
                 this.drawCurvyLine(cutSiteX2 + 2, cutSiteY2,
                                    currentWidth2 - 2);                   
-           }
+            }
             
             if(dsForwardPosition != -1) {
                 var dsForwardMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsForwardPosition);
                 
-                var ds1X = dsForwardMetrics.x + 2;
+                var ds1X = dsForwardMetrics.x - 5;
                 var ds1Y = cutSiteY + cutSiteHeight;
                 this.drawDsForwardPosition(ds1X, ds1Y);
             } 
@@ -220,12 +220,13 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
             if(dsReversePosition != -1) {
                 var dsReverseMetrics = this.sequenceAnnotator.bpMetricsByIndex(dsReversePosition);
                 
-                var ds2X = dsReverseMetrics.x + 2;
+                var ds2X = dsReverseMetrics.x;
                 var ds2Y = cutSiteY + cutSiteHeight + 3;
                 this.drawDsReversePosition(ds2X, ds2Y);
             } 
 
             this.addToolTip(cutSite);
+            this.addClickListener(cutSite);
         }, this);
     },
 
@@ -240,7 +241,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         this.cutSiteSVG.append("svg:text")
             .attr("x", x)
             .attr("y", y - 4) // -4 to move it off the curvy line a bit.
-            .attr("font-color", color)
+            .style("fill", color)
             .text(name);
     },
 
@@ -279,5 +280,12 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         
         this.cutSiteSVG.append("svg:title")
             .text(toolTip);
+    },
+
+    addClickListener: function(cutSite) {
+        this.cutSiteSVG.on("mousedown", function() {
+            Vede.application.fireEvent("AnnotatePanelAnnotationClicked", 
+                                       cutSite.getStart(), cutSite.getEnd());
+        });
     }
 });

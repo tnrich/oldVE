@@ -61,13 +61,38 @@ Ext.define("Teselagen.manager.RowManager", {
     },
 
     reloadFeatures: function(){
-        if (!this.sequenceAnnotator.getSequenceManager().getFeatures()){
+
+        if (!this.sequenceAnnotator.getSequenceManager().getFeatures()) {
             return;
         }
 
-        var rowsFeatures = this.rowAnnotations(this.sequenceAnnotator.getSequenceManager().getFeatures());
+        var features = this.sequenceAnnotator.getSequenceManager().getFeatures();
+        var rowsFeatures = this.rowAnnotations(features);
         //console.log("rowsFeatures: " + rowsFeatures);
-        this.featureToRowMap = [];
+        this.featureToRowMap = Ext.create("Ext.util.HashMap");
+        var start;
+        var end;
+        var featuresAlignment;
+        Ext.each(rowsFeatures, function(row, i){
+            start = i * this.sequenceAnnotator.getBpPerRow();
+            end = (i+1) * this.sequenceAnnotator.getBpPerRow();
+            featuresAlignment  = Teselagen.renderer.common.Alignment.buildAlignmentMap( row, this.sequenceAnnotator.getSequenceManager());
+
+            this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
+
+            if(!row){
+                return true;
+            }
+            Ext.each(row, function(feature){
+                if(!this.featureToRowMap.get(feature.getName())){
+                    this.featureToRowMap.add(feature.getName(), []);
+                }
+
+                this.featureToRowMap.get(feature.getName()).push(i);
+
+            }, this);
+        }, this);
+        /*//console.log("Feature to row Map: " + this.featureToRowMap.getKeys());
 
         for (var k = 0; k < this.sequenceAnnotator.getSequenceManager().getFeatures().length; k++){
             var feature = this.sequenceAnnotator.getSequenceManager().getFeatures()[k];
@@ -87,7 +112,7 @@ Ext.define("Teselagen.manager.RowManager", {
             /*console.log("# Rows in featuresAlignment: " + featuresAlignment.getValues());
             console.log("# Rows in this.rows[i]: " + this.rows[i].getRowData().getFeaturesAlignment().getValues());
             console.log("Row start #: " + start);
-            console.log("Row end #: " + end);*/
+            console.log("Row end #: " + end);
             var rowOwnedFeatures = rowsFeatures[i];
 
             if (rowOwnedFeatures == null){ continue; }
@@ -102,7 +127,7 @@ Ext.define("Teselagen.manager.RowManager", {
 
                 this.featureToRowMap[rowFeature.getName()].push(i);
             }
-        }
+        }*/
 
 
     },
@@ -201,7 +226,10 @@ Ext.define("Teselagen.manager.RowManager", {
                 var itemStart = annotation.getStart();
                 var itemEnd = annotation.getEnd();
 
-                //if (annotation.getClassName()Teselagen.bio.enzymes.RestrictionCutSite){},
+                if(annotation instanceof Teselagen.bio.enzymes.RestrictionCutSite) {
+                    itemEnd -= 1;
+                }
+
                 this.pushInRow(itemStart, itemEnd, annotation, rows);
             }
         }
@@ -210,12 +238,14 @@ Ext.define("Teselagen.manager.RowManager", {
     },
     pushInRow: function(pItemStart, pItemEnd, pAnnotation, pRows){
         //console.log("Push in Row annotations before: " + pRows);
+        var bpPerRow = this.sequenceAnnotator.getBpPerRow();
         if (pItemStart > pItemEnd){
-            var rowStartIndex = Math.round(pItemStart/this.sequenceAnnotator.getBpPerRow());
-            var rowEndIndex = Math.round((this.sequenceAnnotator.getSequence().length - 1)/this.sequenceAnnotator.getBpPerRow());
+            var rowStartIndex = Math.floor(pItemStart/bpPerRow);
+            var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1)/bpPerRow);
 
             var rowStartIndex2 = 0;
-            var rowEndIndex2 = Math.round(pItemEnd/this.sequenceAnnotator.getSequenceManager().getBpPerRow());
+            var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
+            var rowEndIndex2 = Math.floor(pItemEnd/bpPerRow);
 
             for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++){
                 pRows[z1].push(pAnnotation);
@@ -224,8 +254,8 @@ Ext.define("Teselagen.manager.RowManager", {
                 pRows[z2].push(pAnnotation);
             }
         } else {
-            var rowStartIndex = Math.round(pItemStart/this.sequenceAnnotator.getBpPerRow());
-            var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
+            var rowStartIndex = Math.floor(pItemStart/bpPerRow);
+            var rowEndIndex = Math.floor(pItemEnd/bpPerRow);
             //console.log("rowStartIndex: " + rowStartIndex);
             //console.log("rowEndIndex: " + rowEndIndex);
 

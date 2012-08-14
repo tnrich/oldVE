@@ -55,17 +55,20 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var sequenceString = "";
             sequenceString += this.renderIndexString(row.getRowData().getStart() + 1) + " ";
 
+
             if(this.sequenceAnnotator.getShowSpaceEvery10Bp()){
-                sequenceString += this.splitWithSpaces(row.getRowData().getSequence());
+                sequenceString += this.splitWithSpaces(row.getRowData().getSequence(), 0, false);
             } else {
                 sequenceString += row.getRowData().getSequence();
             }
 
             var sequenceStringLength = sequenceString.length;
 
-            if(this.sequenceAnnotator.getShowCutSites()){
+            if(this.sequenceAnnotator.getShowCutSites() &&
+               row.getRowData().getCutSitesAlignment()){
                 if(row.getRowData().getCutSitesAlignment().getCount() > 0){
-                    this.totalHeight += (row.getRowData().getCutSitesAlignment().getCount() * 20 * 3);
+                    this.totalHeight += (Math.max.apply(null, 
+                        row.getRowData().getCutSitesAlignment().getValues()) + 1) * 20 * 3;
                 }
             }
 
@@ -140,6 +143,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             row.metrics.y = rowY;
             row.metrics.width = rowWidth;
             row.metrics.height = rowHeight;
+
+            row.getRowData().sequenceString = sequenceString;
 
             var newMetrics = {"x": rowX, "y": rowY, "width": rowWidth, "height": rowHeight};
             var newSequenceMetrics = {"x": sequenceX, "y": sequenceY, "width": sequenceWidth, "height": sequenceHeight};

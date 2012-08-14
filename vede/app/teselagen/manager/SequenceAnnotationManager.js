@@ -13,12 +13,13 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         annotator: null,
 
         readOnly: null,
-        showFeatures: false,
+        showFeatures: true,
         showCutSites: false,
         showOrfs: false,
         showComplementarySequence: false,
         showSpaceEvery10Bp: false,
         showAminoAcids1: false,
+        showAminoAcidsRevCom: false,
         showAminoAcids2: false,
         showAminoAcids3: false,
 
@@ -54,6 +55,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         RowManager: null,
     },
     renderers: [],
+    caret: null,
     statics: {
        DEFAULT_BP_PER_ROW: 60,
     },
@@ -68,6 +70,15 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         });
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that,
+            items: [
+                Ext.create("Ext.draw.Sprite", {
+                    type: "path",
+                    path: ""
+                })
+            ]
+        });
+        this.caret = Ext.create("Vede.view.annotate.Caret", {
+            sequenceAnnotator: that.annotator
         });
     },
 
@@ -82,6 +93,8 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
+
+        this.caret.render();
     },
 
     render:function() {
@@ -99,6 +112,43 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
-    }
+    },
 
+    adjustCaret: function(index) {
+        this.caret.setPosition(index);
+        this.caret.render();
+    },
+
+    bpAtPoint: function(x, y) {
+        var numberOfRows = this.RowManager.rows.length;
+        var bpIndex = -1;
+        
+        for(var i = 0; i < numberOfRows; i++) {
+            var row = this.RowManager.rows[i];
+            
+            if((y >= row.metrics.y) && (y <= row.metrics.y + row.metrics.height)) {
+                bpIndex = i * this.bpPerRow;
+                
+                if(x < row.sequenceMetrics.x) {
+                } else if(x > row.sequenceMetrics.x + row.sequenceMetrics.width) {
+                    bpIndex += row.rowData.sequence.length;
+                } else {
+                    var numberOfCharactersFromBeginning = Math.floor((x - row.sequenceMetrics.x + 15 / 2) / 16);
+                    
+                    var numberOfSpaces = 0;
+                    
+                    if(this.showSpaceEvery10Bp) {
+                        numberOfSpaces = Math.round(numberOfCharactersFromBeginning / 11);
+                    }
+                    
+                    var numberOfValidCharacters = numberOfCharactersFromBeginning - numberOfSpaces;
+                    
+                    bpIndex += numberOfValidCharacters;
+                }
+                
+                break;
+            }
+        }
+        return bpIndex;
+    }
 });
