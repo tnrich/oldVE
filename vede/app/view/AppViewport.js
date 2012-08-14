@@ -263,18 +263,24 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'Complementary'
+                                                id: 'showComplementaryMenuItem',
+                                                text: 'Complementary',
+                                                checked: true
                                             },
                                             {
                                                 xtype: 'menucheckitem',
-                                                text: 'Spaces'
+                                                id: 'showSpacesMenuItem',
+                                                text: 'Spaces',
+                                                checked: true
                                             },
                                             {
                                                 xtype: 'menucheckitem',
+                                                id: 'showSequenceAAMenuItem',
                                                 text: 'Sequence AA'
                                             },
                                             {
                                                 xtype: 'menucheckitem',
+                                                id: 'showRevcomAAMenuItem',
                                                 text: 'Revcom AA'
                                             },
                                             {

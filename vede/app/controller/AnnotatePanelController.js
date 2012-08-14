@@ -20,6 +20,18 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 }
             }
         });
+
+        var listenersObject = {scope: this};
+        listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] = 
+            this.onShowComplementaryChanged;
+        listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] = 
+            this.onShowSpacesChanged;
+        listenersObject[this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED] = 
+            this.onShowSequenceAAChanged;
+        listenersObject[this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED] = 
+            this.onShowRevcomAAChanged;
+
+        this.application.on(listenersObject);
     },
 
     onLaunch: function() {
@@ -71,6 +83,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     onMousedown: function(pEvt, pOpts) {
+        console.log(pEvt.getX() + " " + pEvt.getY() + " " + Ext.getCmp("AnnotateContainer").el.getScroll().top);
         if(this.SequenceAnnotationManager.sequenceManager) {
             var index = this.SequenceAnnotationManager.bpAtPoint(pEvt.getX(),
                                                                  pEvt.getY());
@@ -125,6 +138,20 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onRestrictionEnzymeManagerUpdated: function() {
     },
 
-    onTraceManagerUpdated: function() {
-    }
+    onShowComplementaryChanged: function(show) {
+        this.SequenceAnnotationManager.setShowComplementarySequence(show);
+    },
+
+    onShowSpacesChanged: function(show) {
+        this.SequenceAnnotationManager.setShowSpaceEvery10Bp(show);
+    },
+
+    onShowSequenceAAChanged: function(show) {
+        this.SequenceAnnotationManager.setShowAminoAcids(show);
+        this.SequenceAnnotationManager.render();
+    },
+
+    onShowRevcomAAChanged: function(show) {
+        this.SequenceAnnotationManager.setShowAminoAcidsRevCom(show);
+    },
 });
