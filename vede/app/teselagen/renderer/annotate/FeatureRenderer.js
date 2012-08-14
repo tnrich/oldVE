@@ -12,7 +12,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     statics: {
         DEFAULT_FEATURE_HEIGHT: 6,
         DEFAULT_FEATURES_SEQUENCE_GAP: 3,
-        DEFAULT_FEATURES_GAP: 10,
+        DEFAULT_FEATURES_GAP: 2,
     },
 
     constructor: function(inData){
@@ -34,10 +34,11 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
         var g = this.featureGroupSVG;
 
+        var feature = this.feature;
         g.attr("fill", this.featureColor);
 
         //console.log("Retrieving feature rows with this name: " + this.feature.getName());
-        var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap()[this.feature.getName()];
+        var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
         console.log("Feature to Row Map: " + featureRows);
         if (!featureRows){
             return;
@@ -46,16 +47,19 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         for (var i = 0; i < featureRows.length; i++){
             var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
 
-            var feature = this.feature;
             var alignmentRowIndex = -1;
+            var fromSameFeatureIndex = 0;
 
             //for each row, get the features alignment
             var featuresAlignment = row.getRowData().getFeaturesAlignment();
             //console.log("New set of feature rows");
+            console.log(featuresAlignment.getKeys());
             Ext.each(featuresAlignment.getKeys(), function(rowFeatures, index){
                Ext.each(rowFeatures, function(rowFeature){
-                   if (rowFeature === feature.getName()){
-                       alignMentRowIndex = index;
+                   console.log("rowFeature: " + rowFeature + " feature name: " + feature.toString());
+                   if (rowFeature.indexOf(feature.toString()) != -1){
+                       console.log(alignmentRowIndex);
+                       alignmentRowIndex = index + fromSameFeatureIndex;
                        return false;
                    }
                });
@@ -65,9 +69,11 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                }
                 
             });
+            console.log("Alignment index: " + alignmentRowIndex);
 
             var startBP;
             var endBP;
+            var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
             if( this.feature.getStart() > this.feature.getEnd()){
                 if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()){
                     endBP = this.feature.getEnd() - 1;
@@ -106,7 +112,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
                 var featureX1 = bpStartMetrics1.getX() + 2;
                 var featureX2 = bpStartMetrics2.getX() + 2;
-                var featureYCommon = bpStartMetrics1.getY() + row.getSequenceMetrics().height + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP) + this.self.DEFAULT_FEATURES_SEQUENCE_GAP;
+                var featureYCommon = bpStartMetrics1.getY() + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
 
                 if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     //Add AminoAcidsTextRenderer
@@ -134,7 +140,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
                 
                 var featureX = bpStartMetrics.x + 2;
-                var featureY = bpStartMetrics.y  +2 + row.getSequenceMetrics().height + alignmentRowIndex * (6 + 2) + 3;
+                var featureY = bpStartMetrics.y  + downShift;
 
                 if (this.sequenceAnnotator.showAminoAcids1RevCom){
                     featureY += (3 * 20);
@@ -161,7 +167,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
             }
             
-            //render the locations
             for (var j = 0; j < this.feature.getLocations().length; j++){
 
                 var location = this.feature.getLocations()[j];
@@ -205,7 +210,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     featureX1 = bpStartMetrics1.x  + 2;
                     featureX2 = bpStartMetrics2.x + 2;
                     
-                    featureYCommon = bpStartMetrics1.y + row.getSequenceMetrics().height + alignmentRowIndex * (6 + 3) + 2;
+                    featureYCommon = bpStartMetrics1.y + downShift;
 
                     if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
                         featureY += (3*20);
@@ -230,7 +235,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     bpEndMetrics = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
                     featureX = bpStartMetrics.x + 2;
-                    featureY = bpStartMetrics.y + 2 + row.getSequenceMetrics().height + alignmentRowIndex * (6 + 3) + 2;
+                    featureY = bpStartMetrics.y + downShift;
                     
                     if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
                         featureY += (3* 20);
@@ -275,46 +280,48 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             console.log("Drew rect!!!");
             pGraphics.append("svg:rect")
                 .attr("x", pX)
-                .attr("y", pY + 10)
+                .attr("y", pY + 20)
                 .attr("stroke", this.featureColor)
                 .attr("width", pWidth)
-                .attr("height", pHeight);
+                .attr("height", 6);
         }
         function drawFeatureForwardRect(pGraphics, pX, pY, pWidth, pHeight){
-            drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
-            /*pGraphics.append("svg:line")
-                .attr("x", pX + 5)
-                .attr("y", pY + 10)
-                .attr("stroke", this.featureColor)
-                .attr("stroke-width", 10)
-                .attr("height", pHeight);
-                */
+            pY += 20;
+            pGraphics.append("svg:path")
+                .attr("d", " M " + (pX) + " " + (pY) + 
+                           " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + (pY + pHeight) + 
+                           " L " + (pX + pWidth) + " " + (pY + pHeight) +
+                           " L " + (pX + pWidth) + " " + (pY) + 
+                           " L " + (pX) + " " + (pY));
         }
         function drawFeatureBackwardRect(pGraphics, pX, pY, pWidth, pHeight){
-            drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
-        /*
-            pGraphics.append("svg:line")
-                .attr("x", pX + 5)
-                .attr("y", pY + 10)
-                .attr("stroke", this.featureColor)
-                .attr("stroke-width", 10)
-                .attr("height", pHeight);
-                */
-        }
-        function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight){
-            console.log(pGraphics);
-            drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
-            /*
-            pGraphics.append("svg:line")
-                .attr("x", pX+ 5)
-                .attr("y", pY + 10)
-                .attr("stroke", this.featureColor)
-                .attr("stroke-width", 10)
-                .attr("height", pHeight);
-                */
+            pY += 20;
+            pGraphics.append("svg:path")
+                .attr("d", " M " + (pX) + " " + (pY) + 
+                           " L " + (pX) + " " + (pY + pHeight) +
+                           " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                           " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY) + 
+                           " L " + (pX) + " " + (pY));
         }
         function drawFeatureForwardArrow(pGraphics, pX, pY, pWidth, pHeight){
-            drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+            pY += 20;
+            if(pWidth ){
+                
+                pGraphics.append("svg:path")
+                    .attr("d", " M " + (pX) + " " + (pY) + 
+                               " L " + (pX + pWidth - 8) + " " + (pY) +
+                               " L " + (pX + pWidth) + " " + (pY + pHeight / 2) + 
+                               " L " + (pX + pWidth - 8) + " " + (pY + pHeight) +
+                               " L " + (pX) + " " + (pY + pHeight) +
+                               " S " + (pX + 3) + " " + (pY + pHeight / 2) + " " + (pX) + " " + pY);
+            } else{
+
+                pGraphics.append("svg:path")
+                    .attr("d", " M " + (pX) + " " + (pY) + 
+                               " L " + (pX + pWidth) + " " + (pY + pHeight / 2) +
+                               " L " + (pX) + " " + (pY + pHeight) + 
+                               " L " + (pX) + " " + (pY));
+            }
         /*
             pGraphics.append("svg:line")
                 .attr("x", pX + 5)
@@ -324,8 +331,30 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 .attr("height", pHeight);
                 */
         }
+        function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight){
+            console.log(pGraphics);
+            //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+            pY += 20;
+            if(pWidth){
+                
+                pGraphics.append("svg:path")
+                    .attr("d", " M " + (pX + 8) + " " + (pY) + 
+                               " L " + (pX + pWidth) + " " + (pY) +
+                               " S " + (pX + pWidth - 3) + " " + (pY + pHeight / 2) + " " + (pX + pWidth) + " " + (pY + pHeight) + 
+                               " L " + (pX + 8) + " " + (pY + pHeight) + 
+                               " L " + (pX) + " " + (pY + pHeight / 2) + 
+                               " L " + (pX + 8) + " " + (pY));
+            } else{
+
+                pGraphics.append("svg:path")
+                    .attr("d", " M " + (pX) + " " + (pY + pHeight / 2) + 
+                               " L " + (pX + pWidth) + " " + (pY) +
+                               " L " + (pX + pWidth) + " " + (pY + pHeight) + 
+                               " L " + (pX) + " " + (pY + pHeight / 2));
+            }
+        }
         function drawFeatureForwardCurved(pGraphics, pX, pY, pWidth, pHeight){
-            drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+            //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
             /*
              pGraphics.append("svg:line")
                 .attr("x", pX + 5)
@@ -337,7 +366,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 */
         }
         function drawFeatureBackwardCurved(pGraphics, pX, pY, pWidth, pHeight){
-            drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
+            //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
             /*pGraphics.append("svg:line")
                 .attr("x", pX + 5)
                 .attr("y", pY + 10)

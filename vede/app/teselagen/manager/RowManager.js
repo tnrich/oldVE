@@ -73,7 +73,6 @@ Ext.define("Teselagen.manager.RowManager", {
         var start;
         var end;
         var featuresAlignment;
-        /*
         Ext.each(rowsFeatures, function(row, i){
             start = i * this.sequenceAnnotator.getBpPerRow();
             end = (i+1) * this.sequenceAnnotator.getBpPerRow();
@@ -93,8 +92,7 @@ Ext.define("Teselagen.manager.RowManager", {
 
             }, this);
         }, this);
-        */
-        //console.log("Feature to row Map: " + this.featureToRowMap.getKeys());
+        /*//console.log("Feature to row Map: " + this.featureToRowMap.getKeys());
 
         for (var k = 0; k < this.sequenceAnnotator.getSequenceManager().getFeatures().length; k++){
             var feature = this.sequenceAnnotator.getSequenceManager().getFeatures()[k];
@@ -114,7 +112,7 @@ Ext.define("Teselagen.manager.RowManager", {
             /*console.log("# Rows in featuresAlignment: " + featuresAlignment.getValues());
             console.log("# Rows in this.rows[i]: " + this.rows[i].getRowData().getFeaturesAlignment().getValues());
             console.log("Row start #: " + start);
-            console.log("Row end #: " + end);*/
+            console.log("Row end #: " + end);
             var rowOwnedFeatures = rowsFeatures[i];
 
             if (rowOwnedFeatures == null){ continue; }
@@ -129,7 +127,7 @@ Ext.define("Teselagen.manager.RowManager", {
 
                 this.featureToRowMap[rowFeature.getName()].push(i);
             }
-        }
+        }*/
 
 
     },
