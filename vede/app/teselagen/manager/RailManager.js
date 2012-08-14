@@ -6,7 +6,7 @@
 Ext.define("Teselagen.manager.RailManager", {
     statics: {
         PAD: 50,
-        LABEL_DISTANCE_FROM_RAIL: 35,
+        LABEL_DISTANCE_FROM_RAIL: 10,
         LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2"
@@ -228,12 +228,12 @@ Ext.define("Teselagen.manager.RailManager", {
 
         Ext.each(this.features, function(feature) {
             start = this.featureRenderer.startPoints.get(feature);
-
+            
             label = Ext.create("Teselagen.renderer.rail.FeatureLabel", {
                 annotation: feature,
                 x: start.x,
                 y: start.y,
-                start: start.x
+                start: start
             });
 
             this.featureRenderer.addToolTip(label,
@@ -241,7 +241,6 @@ Ext.define("Teselagen.manager.RailManager", {
             labels.push(label);
         }, this);
 
-        labels.sort(this.labelSort);
         this.adjustLabelPositions(labels);
     },
 
@@ -251,30 +250,26 @@ Ext.define("Teselagen.manager.RailManager", {
      */
     adjustLabelPositions: function(labels) {
         // Sort labels into four quadrants of the screen.
+        var railWidth = this.railWidth;
+        
         var totalNumberOfLabels = labels.length;
         var totalLength = this.sequenceManager.getSequence().toString().length;
         
-//        var rightTopLabels = [];
-//        var rightBottomLabels = [];
-//        var leftTopLabels = [];
-//        var leftBottomLabels = [];
-//
-//        Ext.each(labels, function(label) {
-//            var labelCenter = label.center;
-//            if(labelCenter < totalLength / 4) {
-//                rightTopLabels.push(label);
-//            } else if((labelCenter >= totalLength / 4) && 
-//                      (labelCenter < totalLength / 2)) {
-//                rightBottomLabels.push(label);
-//            } else if((labelCenter >= totalLength / 2) && 
-//                      (labelCenter < 3 * totalLength / 4)) {
-//                leftBottomLabels.push(label);
-//            } else {
-//                leftTopLabels.push(label);
-//            }
-//        });
+        
+        var rightLabels = [];
+        var leftLabels = [];
+        var labelIndex;
 
-        var labelHeight = this.railHeight + this.self.LABEL_DISTANCE_FROM_RAIL;
+        Ext.each(labels, function(label) {
+            labelIndex = labels.indexOf(label);
+            if(labelIndex < (totalNumberOfLabels/2)) {
+                leftLabels.push(label);
+            } else {
+                rightLabels.push(label);
+            }
+        });
+
+        var labelHeight = 3 + this.self.LABEL_DISTANCE_FROM_RAIL;
 
         if(this.showOrfs && this.orfRenderer.maxAlignmentRow > 0) {
             labelHeight += this.orfRenderer.maxAlignmentRow * 
@@ -282,22 +277,20 @@ Ext.define("Teselagen.manager.RailManager", {
         }
         
         
-        var lastLabelYPosition = this.reference.y - 15; // -15 to count label height
+        var lastLabelYPosition = this.reference.y - 10; // -10 to count label height
         var label;
+        
+        var numberOfLeftLabels = leftLabels.length;
 
-        for(var i = totalNumberOfLabels - 1; i >= 0; i--) {
-            label = labels[i];
+        for(var i = 0; i <= numberOfLeftLabels - 1; i++) {
+            label = leftLabels[i];
+            console.log(label);
             if(!label.includeInView) {
                 return false; 
             }
-
-            var labelStart = label.start;
             
-            var xPosition = this.reference.x + (labelStart.x * this.railWidth);
+            var xPosition = this.reference.x + (label.x);
             var yPosition = this.reference.y -  labelHeight;
-            
-            
-            
             
             if(yPosition < lastLabelYPosition) {
                 lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
@@ -305,6 +298,29 @@ Ext.define("Teselagen.manager.RailManager", {
                 yPosition = lastLabelYPosition;
                 
                 lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+            }
+
+            label.setAttributes({translate: {x: xPosition - label.x,
+                                              y: yPosition - label.y}});
+           
+            labels.push(this.drawConnection(label, xPosition, yPosition));
+        }
+        
+        for(var i = 0; i <= totalNumberOfLabels - numberOfLeftLabels - 1; i++) {
+            label = rightLabels[i];
+            if(!label.includeInView) {
+                return false; 
+            }
+            
+            var xPosition = this.reference.x + (label.x);
+            var yPosition = this.reference.y -  labelHeight;
+            
+            if(yPosition < lastLabelYPosition) {
+                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+            } else {
+                yPosition = lastLabelYPosition;
+                
+                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
             }
 
             label.setAttributes({translate: {x: xPosition - label.x,
@@ -323,6 +339,14 @@ Ext.define("Teselagen.manager.RailManager", {
         this.labelSprites.addAll(labels);
 
         this.showSprites(this.labelSprites);
+        
+        Ext.each(leftLabels, function(label) {
+            label.setStyle("text-anchor", "end");
+        });
+
+        Ext.each(rightLabels, function(label) {
+            label.setStyle("text-anchor", "start");
+        });
     },
 
     /**
