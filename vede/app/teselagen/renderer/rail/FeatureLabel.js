@@ -18,7 +18,6 @@ Ext.define("Teselagen.renderer.rail.FeatureLabel", {
 
     labelText: function() {
         var label = [];
-
         // If the name is null or empty, iterate through notes and attempt to
         // find a suitable note to use as a label.
         if(!this.annotation.getName() || !this.StringUtil.trim(this.annotation.getName())) {
