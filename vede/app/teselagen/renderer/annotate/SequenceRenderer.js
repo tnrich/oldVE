@@ -102,7 +102,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var sequenceWidth = sequenceStringLength * 3 - sequenceX;
             var sequenceHeight = this.totalHeight - sequenceY;
 
-            //console.log("Show comp sequence: " + this.sequenceAnnotator.getShowComplementarySequence());
+            console.log("Show comp sequence: " + this.sequenceAnnotator.getShowComplementarySequence());
             if(this.sequenceAnnotator.getShowComplementarySequence()){
 
                 //this.renderComplementarySequence(row);
