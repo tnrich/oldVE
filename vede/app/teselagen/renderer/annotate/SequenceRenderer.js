@@ -139,7 +139,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                     .text(nucleotide)
                     .attr("font-face", "Verdana")
                     .attr("font-size", 20);
-
             }
 
             row.metrics.x = rowX;
