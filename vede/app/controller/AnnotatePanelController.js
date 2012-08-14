@@ -140,7 +140,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onShowComplementaryChanged: function(show) {
         this.SequenceAnnotationManager.setShowComplementarySequence(show);
-        alert('hi');
+        this.SequenceAnnotationManager.render();
+        alert("hello!!!");
     },
 
     onShowSpacesChanged: function(show) {
@@ -150,7 +151,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onShowSequenceAAChanged: function(show) {
         this.SequenceAnnotationManager.setShowAminoAcids(show);
-        this.SequenceAnnotationManager.render();
     },
 
     onShowRevcomAAChanged: function(show) {
