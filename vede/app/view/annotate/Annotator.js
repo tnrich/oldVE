@@ -70,7 +70,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         var y = 20;
         
         if(this.sequenceAnnotator.getSequenceManager()) {
-            console.log(this.sequenceRenderer.getTotalHeight());
+            //console.log(this.sequenceRenderer.getTotalHeight());
             this.renderSequence();
             this.drawSplitLines();
             //this.renderLines();
@@ -362,8 +362,8 @@ Ext.define("Vede.view.annotate.Annotator", {
             if( i != rows.length ){
                 var rowSequenceMetrics = row.getSequenceMetrics();
                 var rowMetrics = row.getMetrics();
-                console.log('Row sequence metrics y position: ' + rowSequenceMetrics.y);
-                console.log('Row metrics y position: ' + rowMetrics.y);
+                //console.log('Row sequence metrics y position: ' + rowSequenceMetrics.y);
+                //console.log('Row metrics y position: ' + rowMetrics.y);
                 this.linesSVG.append("svg:line")
                     .attr("x1", rowMetrics.x)
                     .attr("y1", rowMetrics.y)
