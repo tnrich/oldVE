@@ -12,7 +12,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     statics: {
         DEFAULT_FEATURE_HEIGHT: 6,
         DEFAULT_FEATURES_SEQUENCE_GAP: 3,
-        DEFAULT_FEATURES_GAP: 2,
+        DEFAULT_FEATURES_GAP: 10,
     },
 
     constructor: function(inData){
@@ -38,6 +38,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
         //console.log("Retrieving feature rows with this name: " + this.feature.getName());
         var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap()[this.feature.getName()];
+        console.log("Feature to Row Map: " + featureRows);
         if (!featureRows){
             return;
         }
@@ -45,16 +46,25 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         for (var i = 0; i < featureRows.length; i++){
             var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
 
-
-            var alignmentRowIndex = 0;
+            var feature = this.feature;
+            var alignmentRowIndex = -1;
 
             //for each row, get the features alignment
             var featuresAlignment = row.getRowData().getFeaturesAlignment();
-            console.log("New set of feature rows");
-            featuresAlignment.each(function(key, value, length){
-                console.log("Key: " + key + " Value(s): " +value);
-            }, this);
-                //for each 
+            //console.log("New set of feature rows");
+            Ext.each(featuresAlignment.getKeys(), function(rowFeatures, index){
+               Ext.each(rowFeatures, function(rowFeature){
+                   if (rowFeature === feature.getName()){
+                       alignMentRowIndex = index;
+                       return false;
+                   }
+               });
+
+               if(alignmentRowIndex != -1){
+                   return false;
+               }
+                
+            });
 
             var startBP;
             var endBP;
@@ -103,8 +113,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     featureYCommon += 3 * 20;
                 }
 
-                var featureRowWidth1 = bpEndMetrics1.getX() - bpStartMetrics1.getX() + 917;
-                var featureRowWidth2 = bpEndMetrics2.getX() - bpStartMetrics2.getX() + 917;
+                var featureRowWidth1 = (bpEndMetrics1.getX() - bpStartMetrics1.getX()) * 16;
+                var featureRowWidth2 = (bpEndMetrics2.getX() - bpStartMetrics2.getX()) * 16;
 
                 var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
 
@@ -151,6 +161,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
             }
             
+            //render the locations
             for (var j = 0; j < this.feature.getLocations().length; j++){
 
                 var location = this.feature.getLocations()[j];
@@ -200,8 +211,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                         featureY += (3*20);
                     }
 
-                    featureRowWidth1 = bpEndMetrics1.x - bpStartMetrics1.x + 917;
-                    featureRowWidth2 = bpEndMetrics2.x - bpStartMetrics2.x + 917;
+                    featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16
+                    featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
                     var featureRowHeightCommon = 6;
 
                     if(this.feature.getStrand() == 0){
@@ -266,7 +277,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 .attr("x", pX)
                 .attr("y", pY + 10)
                 .attr("stroke", this.featureColor)
-                .attr("width", 917)
+                .attr("width", pWidth)
                 .attr("height", pHeight);
         }
         function drawFeatureForwardRect(pGraphics, pX, pY, pWidth, pHeight){
