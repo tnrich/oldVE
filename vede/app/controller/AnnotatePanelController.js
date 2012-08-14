@@ -67,6 +67,15 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         console.log(kind);
     },
 
+    onActiveEnzymesChanged: function() {
+        this.callParent();
+
+        if(this.SequenceAnnotationManager.sequenceManager && 
+           this.SequenceAnnotationManager.showCutSites) {
+            this.SequenceAnnotationManager.render();
+        }
+    },
+
     onSelectionChanged: function() {
     },
 

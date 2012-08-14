@@ -37,7 +37,8 @@ Ext.define("Vede.controller.SequenceController", {
         var listenersObject = {
             SequenceManagerChanged: this.onSequenceManagerChanged,
             ActiveEnzymesChanged: this.onActiveEnzymesChanged,
-            AnnotationClicked: this.onAnnotationClicked,
+            VectorPanelAnnotationClicked: this.onVectorPanelAnnotationClicked,
+            AnnotatePanelAnnotationClicked: this.onAnnotatePanelAnnotationClicked,
             ViewModeChanged: this.onViewModeChanged,
             scope: this
         };
@@ -175,7 +176,10 @@ Ext.define("Vede.controller.SequenceController", {
     onSelectionChanged: function(scope, start, end) {
     },
 
-    onAnnotationClicked: function(start, end) {
+    onVectorPanelAnnotationClicked: function(start, end) {
+    },
+
+    onAnnotatePanelAnnotationClicked: function(start, end) {
     },
 
     onShowCutSitesChanged: function(show) {
