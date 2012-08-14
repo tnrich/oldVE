@@ -1,5 +1,5 @@
 describe('UI tests', function () {
-    var fixtureAddress = '/vede/test/jasmine-uiSpec.html';
+    var fixtureAddress = '/vede/test/html/jasmine-uiSpec.html';
     describeUi("Basic tests", fixtureAddress, function () {
         function currentBaseUrl() {
             return window.location.pathname;
