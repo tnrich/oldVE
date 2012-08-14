@@ -98,7 +98,6 @@ Ext.define("Vede.view.annotate.Annotator", {
                 //this.renderBpLabels();
                 //this.renderFeatures();
                 y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
-                
             }
 
             this.loadFeatureRenderers();
