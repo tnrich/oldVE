@@ -26,16 +26,16 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     constructor: function(inData){
-        this.initConfig(inData);
         this.callParent([inData]);
+        this.initConfig(inData);
         this.id = "AnnotationSurface";
         //console.log("Created Annotator");
         this.sequenceAnnotator = inData.sequenceAnnotator;
 
-        this.panel = Ext.getCmp('AnnotatePanel-body');
         //this.lineRenderer = Ext.create("Teselagen.renderer.annotation.LineRender", {});
-        this.annotateSVG = d3.select("#AnnotatePanel-body")
-            .append("svg:svg");
+        this.annotateSVG = d3.select("#AnnotateContainer")
+            .append("svg:svg")
+            .attr("id", "annotateSVG");
         
         this.linesSVG = this.annotateSVG.append("svg:g")
             .attr("id", "linesSVG");
@@ -74,7 +74,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.renderSequence();
             this.drawSplitLines();
             //this.renderLines();
-            /*`for ( var i = 0; i < this.sequenceAnnotator.getRowManager().getRows().length; ++i){
+            for ( var i = 0; i < this.sequenceAnnotator.getRowManager().getRows().length; ++i){
                 var row = this.sequenceAnnotator.getRowManager().getRows()[i]; 
                 adjustedHeight =  y + (30 * (this.aminoSequencesShown + 1)); 
                 var distanceFromLine = y + 30;
@@ -85,19 +85,21 @@ Ext.define("Vede.view.annotate.Annotator", {
 
                 //BpLabel will always be indented 10, but y might change based upon
                 //whether amino acids are being shown
-                this.renderBpLabel(i * this.BP_PER_LINE + 1, 10, distanceFromAABottom);
+                //this.renderBpLabel(i * this.BP_PER_LINE + 1, 10, distanceFromAABottom);
 
                 //lines will always be rendered at the initial x mark, but
                 //y changes, and xMax changes (based on resizing of panel)
-                this.renderLine(x1, y, 1024, y);
+                //this.renderLine(x1, y, 1024, y);
                 
-                
-                this.renderAminoAcids(row, 100, distanceFromLine);
+                if(this.sequenceAnnotator.showAminoAcids) {
+                    this.renderAminoAcids(row, 100, distanceFromLine);
+                }
+
                 //this.renderBpLabels();
                 //this.renderFeatures();
                 y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
                 
-            }*/
+            }
 
             this.loadFeatureRenderers();
             this.renderFeatures();

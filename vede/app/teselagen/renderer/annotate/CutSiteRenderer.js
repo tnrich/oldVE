@@ -5,7 +5,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         CUT_SITE_COLOR: "#625D5D",
         ONE_CUT_COLOR: "#E57676",
         MULTIPLE_CUT_COLOR: "#888888",
-        CUTSITE_HEIGHT_OFFSET: 45,
+        CUTSITE_HEIGHT_OFFSET: 55,
     },
 
     config: {
@@ -19,11 +19,10 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
 
     constructor: function(inData) {
         this.initConfig(inData);
+        this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
     },
 
     render: function() {
-        this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
-
         this.cutSiteSVG = this.sequenceAnnotator.annotateSVG.append("svg:g")
                                .attr("id", "cutSiteSVG");
 

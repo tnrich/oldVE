@@ -17,33 +17,31 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         showCutSites: false,
         showOrfs: false,
         showComplementarySequence: false,
-        showSpaceEvery10Bp: false,
+        showSpaceEvery10Bp: true,
+        showAminoAcids: false,
         showAminoAcids1: false,
-        showAminoAcidsRevCom: false,
         showAminoAcids2: false,
         showAminoAcids3: false,
+        showAminoAcidsRevCom: false,
 
         bpPerRow: 60,
         sequenceFontSize: 11,
         labelFontSize: 10,
 
-        sequenceProviderChanged: false,
-        orfMapperChanged: false,
-        aaMapperChanged: false,
-        restrictionEnzymeMapperChanged: false,
-        highlightsChanged: false,
-        needsMeasurement: false,
+        sequenceManagerChanged: false,
+        orfManagerChanged: false,
+        aaManagerChanged: false,
+        restrictionEnzymeManagerChanged: false,
         bpPerRowChanged: false,
-        showFeaturesChanged: false,
-        showCutSitesChanged: false,
-        showComplementaryChanged: false,
         sequenceFontSizeChanged: false,
         labelFontSizeChanged: false,
-       showSpaceEvery10BpChanged: false,
-        showAminoAcids1Changed: false,
-        showAminoAcids2Changed: false,
-        showAminoAcids3Changed: false,
-        showORFsChanged: false,
+        showFeaturesChanged: false,
+        showCutSitesChanged: false,
+        showOrfsChanged: false,
+        showComplementarySequenceChanged: false,
+        showSpaceEvery10BpChanged: false,
+        showAminoAcidsChanged: false,
+        showAminoAcidsRevComChanged: false,
         editingMode: false,
         floatingWidthChanged: false,
 
@@ -55,6 +53,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         RowManager: null,
     },
     renderers: [],
+    caret: null,
     statics: {
        DEFAULT_BP_PER_ROW: 60,
     },
@@ -69,6 +68,15 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         });
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that,
+            items: [
+                Ext.create("Ext.draw.Sprite", {
+                    type: "path",
+                    path: ""
+                })
+            ]
+        });
+        this.caret = Ext.create("Vede.view.annotate.Caret", {
+            sequenceAnnotator: that.annotator
         });
     },
 
@@ -83,6 +91,8 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
+
+        this.caret.render();
     },
 
     render:function() {
@@ -100,6 +110,92 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
-    }
+    },
 
+    adjustCaret: function(index) {
+        this.caret.setPosition(index);
+        this.caret.render();
+    },
+
+    bpAtPoint: function(x, y) {
+        var numberOfRows = this.RowManager.rows.length;
+        var bpIndex = -1;
+        
+        for(var i = 0; i < numberOfRows; i++) {
+            var row = this.RowManager.rows[i];
+            
+            if((y >= row.metrics.y) && (y <= row.metrics.y + row.metrics.height)) {
+                bpIndex = i * this.bpPerRow;
+                
+                if(x < row.sequenceMetrics.x) {
+                } else if(x > row.sequenceMetrics.x + row.sequenceMetrics.width) {
+                    bpIndex += row.rowData.sequence.length;
+                } else {
+                    var numberOfCharactersFromBeginning = Math.floor((x - row.sequenceMetrics.x + 15 / 2) / 16);
+                    
+                    var numberOfSpaces = 0;
+                    
+                    if(this.showSpaceEvery10Bp) {
+                        numberOfSpaces = Math.round(numberOfCharactersFromBeginning / 11);
+                    }
+                    
+                    var numberOfValidCharacters = numberOfCharactersFromBeginning - numberOfSpaces;
+                    
+                    bpIndex += numberOfValidCharacters;
+                }
+                
+                break;
+            }
+        }
+        return bpIndex;
+    },
+
+    applySequenceManager: function(pSeqMan) {
+        if(this.SequenceManager !== pSeqMan) {
+            this.sequenceManagerChanged = true;
+        }
+        return pSeqMan;
+    },
+
+    applyBpPerRow: function(pBpPerRow) {
+        if(this.bpPerRow !== pBpPerRow) {
+            this.bpPerRowChanged = true;
+        }
+        return pBpPerRow;
+    },
+
+    applyShowFeatures: function(pShow) {
+        if(this.showFeatures !== pShow) {
+            this.showFeaturesChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowCutSites: function(pShow) {
+        if(this.showCutSites !== pShow) {
+            this.showCutSitesChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowOrfs: function(pShow) {
+        if(this.showOrfs !== pShow) {
+            this.showOrfsChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowComplementarySequence: function(pShow) {
+        if(this.showComplementarySequence !== pShow) {
+            this.showComplementarySequenceChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowSpaceEvery10Bp: function(pShow) {
+        if(this.showSpaceEvery10Bp !== pShow) {
+            this.showSpaceEvery10BpChanged = true;
+        }
+        return pShow;
+    },
 });

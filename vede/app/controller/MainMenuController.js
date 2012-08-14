@@ -95,6 +95,26 @@
                                    checked);
     },
 
+    onShowComplementaryMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED,
+                                   checked);
+    },
+
+    onShowSpacesMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_SPACES_CHANGED,
+                                   checked);
+    },
+
+    onShowSequenceAAMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_SEQUENCE_AA_CHANGED,
+                                   checked);
+    },
+
+    onShowRevcomAAMenuItemCheckChange: function(menucheckitem, checked) {
+        this.application.fireEvent(this.VisibilityEvent.SHOW_REVCOM_AA_CHANGED,
+                                   checked);
+    },
+    
     onFeatureLabelsMenuItemCheckChange: function(menucheckitem, checked) {
         this.application.fireEvent(this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED,
                                    checked);
@@ -159,6 +179,18 @@
             },
             "#orfsMenuItem": {
                 checkchange: this.onOrfsMenuItemCheckChange
+            },
+            "#showComplementaryMenuItem": {
+                checkchange: this.onShowComplementaryMenuItemCheckChange
+            },
+            "#showSpacesMenuItem": {
+                checkchange: this.onShowSpacesMenuItemCheckChange
+            },
+            "#showSequenceAAMenuItem": {
+                checkchange: this.onShowSequenceAAMenuItemCheckChange
+            },
+            "#showRevcomAAMenuItem": {
+                checkchange: this.onShowRevcomAAMenuItemCheckChange
             },
             "#featureLabelsMenuItem": {
                 checkchange: this.onFeatureLabelsMenuItemCheckChange
