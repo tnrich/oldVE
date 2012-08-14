@@ -20,6 +20,7 @@ Ext.define("Teselagen.manager.RowManager", {
         //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
         this.rows = [];
         
+        console.log("Rows junk");
         //console.log("Num rows: ");
         //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
         this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())))
@@ -39,8 +40,8 @@ Ext.define("Teselagen.manager.RowManager", {
             var oppositeSequence = complementSeqString.substring(start, end + 1);
            
             var rowData = Ext.create("Teselagen.models.sequence.RowData", {
-                    start: (start + 1),
-                    end: (end + 1),
+                    start: start,
+                    end: end,
                     sequence: sequence,
                     oppositeSequence: oppositeSequence,
             });

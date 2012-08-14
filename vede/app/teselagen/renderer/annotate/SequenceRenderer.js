@@ -14,12 +14,15 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         numRows: 0,
         totalHeight: 0,
         totalWidth: 0,
+        drawingPanel: null,
+        sequenceAnnotationManager: null,
 
         needsMeasurement: false,
     },
 
     constructor: function(inData){
         this.initConfig(inData);
+        this.sequenceAnnotationManager = this.sequenceAnnotator;
         this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
     },
 
@@ -31,15 +34,18 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     render: function(){
        // this.sequenceAnnotator.sequenceSVG.remove();
+        var newRows = [];
 
         this.totalWidth = 0;
         this.totalHeight = 0;
-
+        var sequenceX = 6*3;
+        var sequenceY = 0;
         var sequence = this.sequenceAnnotator.getSequenceManager().getSequence().seqString();
         //console.log(sequence);
         var rows = this.sequenceAnnotator.getRowManager().getRows();
         var sequenceNucleotideMatrix = [];
 
+        console.log(rows.length);
         for (var i = 0; i < rows.length; i++){
             var row = rows[i];
 
@@ -80,10 +86,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 //console.log("show orfs");
                 this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
             }
-            for(var j = 0; j < sequenceStringLength; j++){
-            }
 
-            var sequenceX = 6 *3;
+            var sequenceX = 6 * 3;
             var sequenceY = this.totalHeight;
 
             if(this.totalWidth < (3 * sequenceStringLength)){
@@ -111,22 +115,61 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 }
             }
 
+
             this.totalHeight += 3;
 
             var rowWidth = this.totalWidth;
             var rowHeight = this.totalHeight - rowY;
+            //sequenceY += 20;
+            for(var j = 0; j < row.getRowData().getSequence().length; j++){
+                var rowSequence = row.getRowData().getSequence();
+                var nucleotide = rowSequence.charAt(j);
+                var nucleotideSVGGroup = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
+                .attr("id", "nucleotide-row" +i+"-base" + j);
+
+                nucleotideSVGGroup.append("svg:text")
+                    .attr("x", sequenceX + j*16)
+                    .attr("y", sequenceY + 20)
+                    .text(nucleotide)
+                    .attr("font-face", "Verdana")
+                    .attr("font-size", 20);
+
+            }
 
             row.metrics.x = rowX;
             row.metrics.y = rowY;
             row.metrics.width = rowWidth;
             row.metrics.height = rowHeight;
 
+            var newMetrics = {"x": rowX, "y": rowY, "width": rowWidth, "height": rowHeight};
+            var newSequenceMetrics = {"x": sequenceX, "y": sequenceY, "width": sequenceWidth, "height": sequenceHeight};
            // console.log("Row metrics for "+i+": " + sequenceX + ", " + sequenceY + ", " + sequenceWidth + ", " + sequenceHeight);
             row.sequenceMetrics.x = sequenceX;
+            console.log("rendered sequence y: " + sequenceY);
             row.sequenceMetrics.y = sequenceY;
+            console.log(row.sequenceMetrics.y);
             row.sequenceMetrics.width = sequenceWidth;
             row.sequenceMetrics.height = sequenceHeight;
+            
+            var newRow = Ext.create("Teselagen.models.sequence.Row", {
+                rowData: row.getRowData(),
+                metrics: newMetrics,
+                sequenceMetrics: newSequenceMetrics,
+                index: i,
+            });
+            newRows.push(newRow);
         }
+        
+        console.log("Before set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
+        this.sequenceAnnotator.getRowManager().setRows(newRows);
+        this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
+
+        console.log("After set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
+    },
+
+    getUpdatedRows: function(){
+        console.log(this.sequenceAnnotator.getRowManager().getRows());
+        return this.sequenceAnnotator.getRowManager().getRows();
     },
 
     splitWithSpaces: function(pString, pShift, pSplitLast){
@@ -134,7 +177,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var stringLength = pString.length;
 
         if(stringLength <= 10 - pShift){
-            result += string;
+            result += pString;
         }else{
             var start = 0;
             var end = 10 - pShift;
