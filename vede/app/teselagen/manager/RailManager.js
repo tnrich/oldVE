@@ -133,7 +133,7 @@ Ext.define("Teselagen.manager.RailManager", {
                     renderer.setSequenceManager(this.sequenceManager);
                 }
                 if(this.railGapChanged) {
-                    renderer.setRailRadius(this.railRadius);
+                    renderer.setRailGap(this.railGap);
                 }
                 if(this.centerChanged) {
                     renderer.setCenter(this.center);
@@ -196,7 +196,6 @@ Ext.define("Teselagen.manager.RailManager", {
      */
     showSprites: function(collection) {
         collection.each(function(sprite) {
-            console.log(sprite);
             this.rail.surface.add(sprite);
             sprite.show(true);
             this.rail.doComponentLayout();

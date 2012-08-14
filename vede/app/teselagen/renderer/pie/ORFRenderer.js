@@ -151,7 +151,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             complimentary = ", complimentary";
         }
 
-        var tooltipLabel = (orf.getStart() + 1) + ".." + orf.getEnd() +
+        var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) +
             ", frame: " + orf.getFrame() + 
             ", length: " + bp + " BP" + 
             ", " + aa + " AA" + complimentary;

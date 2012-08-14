@@ -13,12 +13,13 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         annotator: null,
 
         readOnly: null,
-        showFeatures: false,
+        showFeatures: true,
         showCutSites: false,
         showOrfs: false,
         showComplementarySequence: false,
         showSpaceEvery10Bp: false,
         showAminoAcids1: false,
+        showAminoAcidsRevCom: false,
         showAminoAcids2: false,
         showAminoAcids3: false,
 

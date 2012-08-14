@@ -357,7 +357,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
         for (var i = 0; i < rows.length; ++i){
             var row = rows[i];
-            if( i != rows.length - 1){
+            if( i != rows.length ){
                 var rowSequenceMetrics = row.getSequenceMetrics();
                 var rowMetrics = row.getMetrics();
                 console.log('Row sequence metrics y position: ' + rowSequenceMetrics.y);
@@ -365,7 +365,7 @@ Ext.define("Vede.view.annotate.Annotator", {
                 this.linesSVG.append("svg:line")
                     .attr("x1", rowMetrics.x)
                     .attr("y1", rowMetrics.y)
-                    .attr("x2", rowMetrics.x + (row.getRowData().getSequence().length* 16))
+                    .attr("x2", rowMetrics.x + (row.getRowData().getSequence().length* 20))
                     .attr("y2", rowMetrics.y)
                     .attr("stroke", "lightgray");
 

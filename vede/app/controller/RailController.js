@@ -122,6 +122,7 @@ Ext.define('Vede.controller.RailController', {
 
         this.railManager = Ext.create("Teselagen.manager.RailManager", {
             reference: {x: 0, y: 0},
+            railGap: 0,
             showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
             showFeatures: Ext.getCmp("featuresMenuItem").checked,
             showOrfs: Ext.getCmp("orfsMenuItem").checked
