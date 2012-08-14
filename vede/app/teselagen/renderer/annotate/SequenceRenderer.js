@@ -64,9 +64,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             var sequenceStringLength = sequenceString.length;
 
-            if(this.sequenceAnnotator.getShowCutSites()){
+            if(this.sequenceAnnotator.getShowCutSites() &&
+               row.getRowData().getCutSitesAlignment()){
                 if(row.getRowData().getCutSitesAlignment().getCount() > 0){
-                    this.totalHeight += (row.getRowData().getCutSitesAlignment().getCount() * 20 * 3);
+                    this.totalHeight += (Math.max.apply(null, 
+                        row.getRowData().getCutSitesAlignment().getValues()) + 1) * 20 * 3;
                 }
             }
 

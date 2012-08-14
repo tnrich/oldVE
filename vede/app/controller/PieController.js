@@ -46,7 +46,7 @@ Ext.define('Vede.controller.PieController', {
 
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
 
-        if(this.pieManager.sequenceManager) {
+        if(this.pieManager.sequenceManager && this.pieManager.showCutSites) {
             this.pieManager.render();
         }
     },
@@ -57,9 +57,13 @@ Ext.define('Vede.controller.PieController', {
      * and end have been defined to see if an annotation has been clicked. If it
      * has we can easily select it.
      */
-    onAnnotationClicked: function(start, end) {
+    onVectorPanelAnnotationClicked: function(start, end) {
         this.clickedAnnotationStart = start;
         this.clickedAnnotationEnd = end;
+    },
+
+    onAnnotatePanelAnnotationClicked: function(start, end) {
+        this.select(start, end);
     },
 
     onViewModeChanged: function(viewMode) {
@@ -232,10 +236,8 @@ Ext.define('Vede.controller.PieController', {
 
             if(pEvt.ctrlKey) {
                 this.SelectionLayer.startSelecting();
-                this.SelectionLayer.select(start, end);
 
-                this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
-                this.SelectionLayer.selectionSprite.show(true);
+                this.select(start, end);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, 
                                            this,
@@ -271,13 +273,8 @@ Ext.define('Vede.controller.PieController', {
 
             } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
                 // If we've clicked a sprite, select it.
-                this.SelectionLayer.select(this.clickedAnnotationStart,
-                                           this.clickedAnnotationEnd);
-
-                this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
-                this.SelectionLayer.selectionSprite.show(true);
-
-                this.changeCaretPosition(this.SelectionLayer.end);
+                this.select(this.clickedAnnotationStart,
+                            this.clickedAnnotationEnd);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this,
@@ -290,6 +287,15 @@ Ext.define('Vede.controller.PieController', {
                 this.SelectionLayer.deselect();
             }
         }
+    },
+
+    select: function(start, end) {
+        this.SelectionLayer.select(start, end);
+
+        this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
+        this.SelectionLayer.selectionSprite.show(true);
+
+        this.changeCaretPosition(this.SelectionLayer.end);
     },
 
     /**
@@ -357,10 +363,7 @@ Ext.define('Vede.controller.PieController', {
                 });
 
                 this.SelectionLayer.startSelecting();
-                this.SelectionLayer.select(minStart, maxEnd);
-
-                this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
-                this.SelectionLayer.selectionSprite.show(true);
+                this.select(minStart, maxEnd);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this,
@@ -434,10 +437,7 @@ Ext.define('Vede.controller.PieController', {
                     this.SelectionLayer.deselect();
                 } else {
                     this.SelectionLayer.startSelecting();
-                    this.SelectionLayer.select(selStart, selEnd);
-
-                    this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
-                    this.SelectionLayer.selectionSprite.show(true);
+                    this.select(selStart, selEnd);
 
                     this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                                this,
