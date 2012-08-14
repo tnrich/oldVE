@@ -399,23 +399,24 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
     clean: function(){
-        d3.select("#linesSVG").remove(); 
-        d3.select("#sequenceSVG").remove(); 
-        d3.select("#bpLabelsSVG").remove(); 
-        d3.select("#aminoAcidsSVG").remove(); 
-        d3.select("#featuresSVG").remove(); 
 
+        d3.select("#linesSVG").remove(); 
         this.linesSVG = this.annotateSVG.append("svg:g")
             .attr("id", "linesSVG");
 
+        d3.select("#sequenceSVG").remove(); 
         this.sequenceSVG = this.annotateSVG.append("svg:g")
             .attr("id", "sequenceSVG");
         
+        d3.select("#bpLabelsSVG").remove(); 
         this.bpLabelsSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "bpLabelsSVG");
 
+        d3.select("#aminoAcidsSVG").remove(); 
         this.aminoAcidsSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "aminoAcidsSVG");
+
+        d3.select("#featuresSVG").remove(); 
         this.featuresSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "featuresSVG");
     },
