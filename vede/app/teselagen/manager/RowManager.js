@@ -244,6 +244,7 @@ Ext.define("Teselagen.manager.RowManager", {
             var rowEndIndex = Math.floor((this.sequenceAnnotator.sequenceManager.getSequence().toString().length - 1)/bpPerRow);
 
             var rowStartIndex2 = 0;
+            var rowEndIndex = Math.round(pItemEnd/this.sequenceAnnotator.getBpPerRow());
             var rowEndIndex2 = Math.floor(pItemEnd/bpPerRow);
 
             for (var z1 = rowStartIndex; z1 < rowEndIndex + 1; z1++){
