@@ -16,34 +16,29 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         showFeatures: true,
         showCutSites: false,
         showOrfs: false,
-        showComplementarySequence: false,
-        showSpaceEvery10Bp: false,
-        showAminoAcids1: false,
+        showComplementarySequence: true,
+        showSpaceEvery10Bp: true,
+        showAminoAcids: false,
         showAminoAcidsRevCom: false,
-        showAminoAcids2: false,
-        showAminoAcids3: false,
 
         bpPerRow: 60,
         sequenceFontSize: 11,
         labelFontSize: 10,
 
-        sequenceProviderChanged: false,
-        orfMapperChanged: false,
-        aaMapperChanged: false,
-        restrictionEnzymeMapperChanged: false,
-        highlightsChanged: false,
-        needsMeasurement: false,
+        sequenceManagerChanged: false,
+        orfManagerChanged: false,
+        aaManagerChanged: false,
+        restrictionEnzymeManagerChanged: false,
         bpPerRowChanged: false,
-        showFeaturesChanged: false,
-        showCutSitesChanged: false,
-        showComplementaryChanged: false,
         sequenceFontSizeChanged: false,
         labelFontSizeChanged: false,
-       showSpaceEvery10BpChanged: false,
-        showAminoAcids1Changed: false,
-        showAminoAcids2Changed: false,
-        showAminoAcids3Changed: false,
-        showORFsChanged: false,
+        showFeaturesChanged: false,
+        showCutSitesChanged: false,
+        showOrfsChanged: false,
+        showComplementarySequenceChanged: false,
+        showSpaceEvery10BpChanged: false,
+        showAminoAcidsChanged: false,
+        showAminoAcidsRevComChanged: false,
         editingMode: false,
         floatingWidthChanged: false,
 
@@ -150,5 +145,54 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
             }
         }
         return bpIndex;
-    }
+    },
+
+    applySequenceManager: function(pSeqMan) {
+        if(this.SequenceManager !== pSeqMan) {
+            this.sequenceManagerChanged = true;
+        }
+        return pSeqMan;
+    },
+
+    applyBpPerRow: function(pBpPerRow) {
+        if(this.bpPerRow !== pBpPerRow) {
+            this.bpPerRowChanged = true;
+        }
+        return pBpPerRow;
+    },
+
+    applyShowFeatures: function(pShow) {
+        if(this.showFeatures !== pShow) {
+            this.showFeaturesChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowCutSites: function(pShow) {
+        if(this.showCutSites !== pShow) {
+            this.showCutSitesChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowOrfs: function(pShow) {
+        if(this.showOrfs !== pShow) {
+            this.showOrfsChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowComplementarySequence: function(pShow) {
+        if(this.showComplementarySequence !== pShow) {
+            this.showComplementarySequenceChanged = true;
+        }
+        return pShow;
+    },
+
+    applyShowSpaceEvery10Bp: function(pShow) {
+        if(this.showSpaceEvery10Bp !== pShow) {
+            this.showSpaceEvery10BpChanged = true;
+        }
+        return pShow;
+    },
 });

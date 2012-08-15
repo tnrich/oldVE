@@ -49,7 +49,7 @@ Ext.define("Vede.controller.SequenceController", {
             this.onShowCutSitesChanged;
         listenersObject[this.VisibilityEvent.SHOW_ORFS_CHANGED] = 
             this.onShowOrfsChanged;
-        
+
         listenersObject[this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED] = 
             this.onShowFeatureLabelsChanged;
         listenersObject[this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED] =

@@ -115,7 +115,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 				} else {
                     this.orfSVG.append("svg:path")
                         .attr("d", "M" + (bpStartPoint.x + 2) + " " + orfY +
-                                   "L" + (bpEndPoint.x + textWidth) + 
+                                   "L" + (bpEndPoint.x + textWidth + 2) + 
                                    " " + orfY)
                         .attr("stroke", color)
                         .attr("stroke-width", this.self.ORF_STROKE_WIDTH);
@@ -131,15 +131,15 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         
                         if(orf.getStrand() == -1) {
                             this.orfSVG.append("svg:circle")
-                                .attr("cx", codonStartPointX + textWidth - 2)
+                                .attr("cx", codonStartPointX + textWidth - 10)
                                 .attr("cy", codonStartPointY)
-                                .attr("r", 3)
+                                .attr("r", 3.5)
                                 .attr("fill", color);
                         } else {
                             this.orfSVG.append("svg:circle")
-                                .attr("cx", codonStartPointX + textWidth - 5)
+                                .attr("cx", codonStartPointX + textWidth - 10)
                                 .attr("cy", codonStartPointY)
-                                .attr("r", 3)
+                                .attr("r", 3.5)
                                 .attr("fill", color);
                         }
                     }
