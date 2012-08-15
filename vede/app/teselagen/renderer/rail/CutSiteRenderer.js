@@ -36,24 +36,24 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
      */
     render: function() {
         var sprites = [];
-        var sitePos = {};
+        var labelPos = {};
         
         Ext.each(this.getCutSites(), function(site) {
             var startPos = site.getStart()  / 
                         this.sequenceManager.getSequence().seqString().length;
-            console.log(startPos);
-            sitePos.x = startPos;
-            sitePos.y = this.reference.y;
-            
-            this.startPoints.add(site, sitePos);
+
+            var xStartPosition =  this.reference.x + (startPos*this.railWidth);
+            var yPosition = this.reference.y;
+            labelPos = {x:xStartPosition, y:yPosition};
+            this.startPoints.add(site, labelPos);
             
             var lineStart = Ext.create("Teselagen.bio.util.Point",
-                this.reference.x + this.railWidth * sitePos.x,
+                xStartPosition,
                 this.reference.y - this.railHeight 
             );
 
             var lineEnd = Ext.create("Teselagen.bio.util.Point", 
-                this.reference.x + (this.railWidth * sitePos.x),
+                xStartPosition,
                 this.reference.y - (this.railHeight + 8)
             );
 
