@@ -11,7 +11,7 @@ Ext.require("Teselagen.bio.sequence.TranslationUtils");
 
 
 Ext.onReady(function() {
-    describe("Testing SequenceManager Classes pt2: ", function() {
+    xdescribe("Testing SequenceManager Classes pt2: ", function() {
 
         // =============================================
         //  SequenceManager.removeSequence Testing Suite

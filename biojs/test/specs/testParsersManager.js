@@ -22,7 +22,7 @@ Ext.onReady(function() {
     GenbankManager: Teselagen.bio.parsers.GenbankManager,
 
     describe("ParsersManager Unit Testing:", function() {
-        describe("Blah", function() {
+        describe("Teselagen.bio.parsers.ParsersManager.", function() {
             var seqStr, seq;
             var feat1, note1;
             var sm;
@@ -77,7 +77,7 @@ Ext.onReady(function() {
                 expect(gb.getOrigin().getSequence().length).toBe(7);
             });
 
-            it("fastaToGenbank", function() {
+            it("fastaToGenbank()", function() {
                 var newGb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(fastaStr);
 
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
@@ -86,14 +86,14 @@ Ext.onReady(function() {
                 jasmine.log(newGb.toString());
             });
 
-            it("genbankToFasta", function() {
+            it("genbankToFasta()", function() {
 
                 var newFasta = Teselagen.bio.parsers.ParsersManager.genbankToFasta(gb);
                 expect(newFasta).toBe(">test\ngattaca");
                 
             });
 
-            it("loadXmlFile: wrong url and right url", function() {
+            it("loadXmlFile(): wrong url and right url", function() {
                 //wrong
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal";
                 var flag = false;
@@ -130,7 +130,7 @@ Ext.onReady(function() {
                 expect(flag).toBe(false);
             });
 
-            it("jbeiseqxmlToGenbank: One record in .xml file", function() {
+            it("jbeiseqxmlToGenbank(): One record in .xml file", function() {
 
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
 
@@ -146,7 +146,7 @@ Ext.onReady(function() {
                // }
             });
 
-            it("jbeiseqxmlToGenbank: Multiple records in .xml file", function() {
+            it("jbeiseqxmlToGenbank(): Multiple records in .xml file", function() {
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 gbArr = []
 
@@ -169,15 +169,15 @@ Ext.onReady(function() {
                 expect(gbArr.length).toBe(2);
             });
 
-            it("genbankToJbeiseqxml", function() {
+            it("genbankToJbeiseqxml()", function() {
 
             });
 
-            it("genbankToSbol", function() {
+            it("genbankToSbol()", function() {
                 
             });
 
-            it("sbolToGenbank", function() {
+            it("sbolToGenbank()", function() {
                 
             });
 
