@@ -96,16 +96,17 @@ Ext.define("Teselagen.manager.RailManager", {
             features: this.features
         });
 
-//        this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {
-//            sequenceManager: this.sequenceManager,
-//            reference: this.reference,
-//            railGap: this.railGap,
-//            orfs: this.orfs
-//        });
+        this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {
+            sequenceManager: this.sequenceManager,
+            reference: this.reference,
+            railHeight: this.railGap,
+            railWidth: this.railWidth,
+            orfs: this.orfs
+        });
 
         this.renderers = [this.cutSiteRenderer,
-                          this.featureRenderer
-                          /*this.orfRenderer*/];
+                          this.featureRenderer,
+                          this.orfRenderer];
     },
 
     /**
@@ -164,28 +165,28 @@ Ext.define("Teselagen.manager.RailManager", {
             this.featureSprites.addAll(this.featureRenderer.render());
         }
 
-//        if(this.orfsChanged) {
-//            this.orfRenderer.setOrfs(this.orfs);
-//            this.orfsChanged = false;
-//
-//            if(this.orfSprites) {
-//                this.orfSprites.destroy();
-//            }
-//
-//            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-//                surface: this.rail.surface
-//            });
-//
-//            this.orfSprites.addAll(this.orfRenderer.render());
-//        }
+        if(this.orfsChanged) {
+            this.orfRenderer.setOrfs(this.orfs);
+            this.orfsChanged = false;
+
+            if(this.orfSprites) {
+                this.orfSprites.destroy();
+            }
+
+            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.rail.surface
+            });
+
+            this.orfSprites.addAll(this.orfRenderer.render());
+        }
 
         this.renderLabels();
 
-//        if(this.showOrfs) {
-//            this.showSprites(this.orfSprites);
-//        } else {
-//            this.hideSprites(this.orfSprites);
-//        }
+        if(this.showOrfs) {
+            this.showSprites(this.orfSprites);
+        } else {
+            this.hideSprites(this.orfSprites);
+        }
 
         if(this.showCutSites) {
             this.showSprites(this.cutSiteSprites);
