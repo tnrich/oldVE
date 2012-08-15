@@ -74,27 +74,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.renderSequence();
             this.drawSplitLines();
             //this.renderLines();
-            for ( var i = 0; i < this.sequenceAnnotator.getRowManager().getRows().length; ++i){
-                var row = this.sequenceAnnotator.getRowManager().getRows()[i]; 
-                adjustedHeight =  y + (30 * (this.aminoSequencesShown + 1)); 
-                var distanceFromLine = y + 30;
-                var distanceFromAABottom = distanceFromLine + 60;
-                //Sequence will always be at 100 indented, but y might change based
-                //upon whether amino acids are being shown
-                //this.renderSequence(row, 100, distanceFromAABottom);
-
-                //BpLabel will always be indented 10, but y might change based upon
-                //whether amino acids are being shown
-                //this.renderBpLabel(i * this.BP_PER_LINE + 1, 10, distanceFromAABottom);
-
-                //lines will always be rendered at the initial x mark, but
-                //y changes, and xMax changes (based on resizing of panel)
-                //this.renderLine(x1, y, 1024, y);
-                
-                //this.renderBpLabels();
-                //this.renderFeatures();
-                y += (20 * 1.5 * (this.aminoSequencesShown+ 1));
-            }
 
             if (this.sequenceAnnotator.getShowFeatures()){
                 this.loadFeatureRenderers();
