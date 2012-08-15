@@ -140,10 +140,13 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onShowComplementaryChanged: function(show) {
         this.SequenceAnnotationManager.setShowComplementarySequence(show);
+        this.SequenceAnnotationManager.render();
+        alert("hello!!!");
     },
 
     onShowSpacesChanged: function(show) {
         this.SequenceAnnotationManager.setShowSpaceEvery10Bp(show);
+        this.SequenceAnnotationManager.render();
     },
 
     onShowSequenceAAChanged: function(show) {

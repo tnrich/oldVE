@@ -45,7 +45,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var rows = this.sequenceAnnotator.getRowManager().getRows();
         var sequenceNucleotideMatrix = [];
 
-        console.log(rows.length);
+        //console.log(rows.length);
         for (var i = 0; i < rows.length; i++){
             var row = rows[i];
 
@@ -53,7 +53,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var rowY = this.totalHeight;
 
             var sequenceString = "";
-            sequenceString += this.renderIndexString(row.getRowData().getStart() + 1) + " ";
+            //sequenceString += this.renderIndexString(row.getRowData().getStart() + 1) + " ";
 
 
             if(this.sequenceAnnotator.getShowSpaceEvery10Bp()){
@@ -90,20 +90,21 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
             }
 
-            var sequenceX = 6 * 3;
+            var sequenceX = 6 * 16;
             var sequenceY = this.totalHeight;
 
-            if(this.totalWidth < (3 * sequenceStringLength)){
-                this.totalWidth = (3* sequenceStringLength);
+            if(this.totalWidth < (16 * sequenceStringLength)){
+                this.totalWidth = (16 * sequenceStringLength);
             }
 
             this.totalHeight += 20;
 
-            var sequenceWidth = sequenceStringLength * 3 - sequenceX;
+            var sequenceWidth = sequenceStringLength * 16 - sequenceX;
             var sequenceHeight = this.totalHeight - sequenceY;
 
-            if(this.sequenceAnnotator.showComplementary){
-                //console.log("render comp sequence");
+            console.log("Show comp sequence: " + this.sequenceAnnotator.getShowComplementarySequence());
+            if(this.sequenceAnnotator.getShowComplementarySequence()){
+
                 //this.renderComplementarySequence(row);
                 sequenceHeight = this.totalHeight - sequenceY;
             }
@@ -124,8 +125,10 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var rowWidth = this.totalWidth;
             var rowHeight = this.totalHeight - rowY;
             //sequenceY += 20;
-            for(var j = 0; j < row.getRowData().getSequence().length; j++){
-                var rowSequence = row.getRowData().getSequence();
+
+            var rowSequence = row.getRowData().getSequence();
+            var complementarySequence = row.getRowData().getOppositeSequence();
+            for(var j = 0; j < rowSequence.length; j++){
                 var nucleotide = rowSequence.charAt(j);
                 var nucleotideSVGGroup = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
                 .attr("id", "nucleotide-row" +i+"-base" + j);
@@ -150,9 +153,9 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var newSequenceMetrics = {"x": sequenceX, "y": sequenceY, "width": sequenceWidth, "height": sequenceHeight};
            // console.log("Row metrics for "+i+": " + sequenceX + ", " + sequenceY + ", " + sequenceWidth + ", " + sequenceHeight);
             row.sequenceMetrics.x = sequenceX;
-            console.log("rendered sequence y: " + sequenceY);
+            //console.log("rendered sequence y: " + sequenceY);
             row.sequenceMetrics.y = sequenceY;
-            console.log(row.sequenceMetrics.y);
+            //console.log(row.sequenceMetrics.y);
             row.sequenceMetrics.width = sequenceWidth;
             row.sequenceMetrics.height = sequenceHeight;
             
@@ -165,15 +168,15 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             newRows.push(newRow);
         }
         
-        console.log("Before set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
+        //console.log("Before set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
         this.sequenceAnnotator.getRowManager().setRows(newRows);
         this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
 
-        console.log("After set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
+        //console.log("After set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
     },
 
     getUpdatedRows: function(){
-        console.log(this.sequenceAnnotator.getRowManager().getRows());
+        //console.log(this.sequenceAnnotator.getRowManager().getRows());
         return this.sequenceAnnotator.getRowManager().getRows();
     },
 
