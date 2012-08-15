@@ -64,7 +64,6 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
                 direction = 2;
             }
 
-            // Draw a pie slice for each location in the feature.
             var recSprite;
             var featureWidth;
             var startPos;

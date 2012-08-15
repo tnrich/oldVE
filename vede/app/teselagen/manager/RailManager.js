@@ -76,12 +76,14 @@ Ext.define("Teselagen.manager.RailManager", {
             ]
         });
 
-//        this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {
-//            sequenceManager: this.sequenceManager,
-//            reference: this.reference,
-//            railGap: this.railGap,
-//            cutSites: this.cutSites
-//        });
+        this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {
+            sequenceManager: this.sequenceManager,
+            reference: this.reference,
+            railHeight: this.railHeight,
+            railWidth: this.railWidth,
+            railGap: this.railGap,
+            cutSites: this.cutSites 
+        });
 
         this.featureRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {
             sequenceManager: this.sequenceManager,
@@ -99,7 +101,7 @@ Ext.define("Teselagen.manager.RailManager", {
 //            orfs: this.orfs
 //        });
 
-        this.renderers = [/*this.cutSiteRenderer,*/
+        this.renderers = [this.cutSiteRenderer,
                           this.featureRenderer
                           /*this.orfRenderer*/];
     },
@@ -123,9 +125,9 @@ Ext.define("Teselagen.manager.RailManager", {
         this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.rail.surface
         });
-//        this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-//            surface: this.rail.surface
-//        });
+        this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
+            surface: this.rail.surface
+        });
 
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
@@ -146,9 +148,9 @@ Ext.define("Teselagen.manager.RailManager", {
             this.centerChanged = false;
         }
 
-//        if(this.cutSitesChanged) {
-//            this.cutSiteRenderer.setCutSites(this.cutSites);
-//        }
+        if(this.cutSitesChanged) {
+            this.cutSiteRenderer.setCutSites(this.cutSites);
+        }
 
         if(this.featuresChanged) {
             this.featureRenderer.setFeatures(this.features);
@@ -173,19 +175,19 @@ Ext.define("Teselagen.manager.RailManager", {
 //            this.orfSprites.addAll(this.orfRenderer.render());
 //        }
 //
-//        if(this.showCutSites) {
-//            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
-//        } 
+        if(this.showCutSites) {
+            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
+        } 
 
         if(this.showFeatures) {
             this.showSprites(this.featureSprites);
         } else {
             this.hideSprites(this.featureSprites);
         }
-//
+
         this.renderLabels();
-//
-//        this.showSprites(this.cutSiteSprites);
+
+        this.showSprites(this.cutSiteSprites);
           this.showSprites(this.featureSprites);
 //        this.showSprites(this.orfSprites);
     },
@@ -210,21 +212,22 @@ Ext.define("Teselagen.manager.RailManager", {
         var labels = [];
         var start;
 
-//        Ext.each(this.cutSites, function(site) {
-//            start = this.cutSiteRenderer.startPoints.get(site);
+        Ext.each(this.cutSites, function(site) {
+            start = this.cutSiteRenderer.startPoints.get(site);
+            console.log(start);
+            
+            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
+                annotation: site,
+                x: start.x,
+                y: start.y,
+                start: start.x
+            });
 
-//            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
-//                annotation: site,
-//                x: start.x,
-//                y: start.y,
-//                start: start.x
-//            });
-//
-//            this.cutSiteRenderer.addToolTip(label, 
-//                                        this.cutSiteRenderer.getToolTip(site));
-//
-//            labels.push(label);
-//        }, this);
+            this.cutSiteRenderer.addToolTip(label, 
+                                        this.cutSiteRenderer.getToolTip(site));
+
+            labels.push(label);
+        }, this);
 
         Ext.each(this.features, function(feature) {
             start = this.featureRenderer.startPoints.get(feature);

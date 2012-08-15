@@ -10,7 +10,6 @@ Ext.define('Vede.controller.RailController', {
     },
 
     railManager: null,
-    enzymeGroupManager: null,
 
     mouseIsDown: false,
     startSelectionAngle: 0,
@@ -32,31 +31,66 @@ Ext.define('Vede.controller.RailController', {
                 mouseup: this.onMouseup
             }
         });
-
-        this.enzymeGroupManager = 
-            Teselagen.manager.RestrictionEnzymeGroupManager;
-
-        if(!this.enzymeGroupManager.getIsInitialized) {
-            this.enzymeGroupManager.initialize();
-        }
     },
-    
+
+    onLaunch: function() {
+        this.callParent(arguments);
+
+        var railContainer;
+        var rail;
+
+        this.railManager = Ext.create("Teselagen.manager.RailManager", {
+            reference: {x: 0, y: 0},
+            railWidth: 300,
+            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
+            showFeatures: Ext.getCmp("featuresMenuItem").checked,
+            showOrfs: Ext.getCmp("orfsMenuItem").checked
+        });
+
+        railContainer = Ext.getCmp('RailContainer');
+        rail = this.railManager.getRail();
+        railContainer.add(rail);
+
+        console.log(rail);
+
+        this.railManager.initRail();
+
+        this.Managers.push(this.railManager);
+
+//        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
+//            reference: this.railManager.reference,
+//            radius: this.railManager.railRadius
+//        });
+//
+//        this.SelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {
+//            reference: this.railManager.reference,
+//            radius: this.railManager.railRadius
+//        });
+    },
+
     onActiveEnzymesChanged: function() {
         this.callParent();
 
         this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-        this.railManager.render();
+
+        if(this.railManager.sequenceManager && this.railManager.showCutSites) {
+            this.railManager.render();
+        }
     },
 
     /**
-     * Catches events from the annotation sprites' onclick listeners. When a
-     * mouseup event is detected, we check to see if this.clickedAnnotationStart
-     * and end have been defined to see if an annotation has been clicked. If it
-     * has we can easily select it.
+     * Catches events from the vector panel annotation sprites' onclick listeners. 
+     * When a mouseup event is detected, we check to see if 
+     * this.clickedAnnotationStart and end have been defined to see if an 
+     * annotation has been clicked. If it has we can easily select it.
      */
-    onAnnotationClicked: function(start, end) {
+    onVectorPanelAnnotationClicked: function(start, end) {
         this.clickedAnnotationStart = start;
         this.clickedAnnotationEnd = end;
+    },
+
+    onAnnotatePanelAnnotationClicked: function(start, end) {
+        this.select(start, end);
     },
 
     onViewModeChanged: function(viewMode) {
@@ -73,7 +107,7 @@ Ext.define('Vede.controller.RailController', {
             this.changeCaretPosition(end);
         }
 
-        this.railManager.Rail.surface.add(this.SelectionLayer.selectionSprite);
+        this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
     },
 
@@ -81,7 +115,7 @@ Ext.define('Vede.controller.RailController', {
         this.callParent(arguments);
 
 //        this.railManager.setOrfs(this.ORFManager.getOrfs());
-//        this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.railManager.setFeatures(pSeqMan.getFeatures());
 
         this.railManager.render();
@@ -114,37 +148,20 @@ Ext.define('Vede.controller.RailController', {
         }
     },
 
-    onLaunch: function() {
-        this.callParent(arguments);
+    onShowFeatureLabelsChanged: function(show) {
+        this.railManager.setShowFeatureLabels(show);
 
-        var railContainer
-        var rail;
+        if(this.railManager.sequenceManager) {
+            this.railManager.render();
+        }
+    },
 
-        this.railManager = Ext.create("Teselagen.manager.RailManager", {
-            reference: {x: 0, y: 0},
-            railGap: 0,
-            showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
-            showFeatures: Ext.getCmp("featuresMenuItem").checked,
-            showOrfs: Ext.getCmp("orfsMenuItem").checked
-        });
+    onShowCutSiteLabelsChanged: function(show) {
+        this.railManager.setShowCutSiteLabels(show);
 
-        railContainer = Ext.getCmp('RailContainer');
-        rail = this.railManager.getRail();
-        railContainer.add(rail);
-
-        this.railManager.initRail();
-
-        this.Managers.push(this.railManager);
-
-//        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.Rail.WireframeSelectionLayer", {
-//            center: this.railManager.center,
-//            radius: this.railManager.railRadius
-//        });
-//
-//        this.SelectionLayer = Ext.create("Teselagen.renderer.Rail.SelectionLayer", {
-//            center: this.railManager.center,
-//            radius: this.railManager.railRadius
-//        });
+        if(this.railManager.sequenceManager) {
+            this.railManager.render();
+        }
     },
 
     /**
@@ -178,7 +195,7 @@ Ext.define('Vede.controller.RailController', {
                     this.railManager.sequenceManager) {
 
             this.endSelectionIndex = this.bpAtAngle(endSelectionAngle);
-            this.railManager.Rail.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
+            this.railManager.rail.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
 
             // Set the direction of selection if it has not yet been determined.
             if(this.selectionDirection == 0) {
@@ -208,15 +225,13 @@ Ext.define('Vede.controller.RailController', {
             this.WireframeSelectionLayer.startSelecting();
             this.WireframeSelectionLayer.select(start, end);
 
-            this.railManager.Rail.surface.add(this.WireframeSelectionLayer.selectionSprite);
+            this.railManager.rail.surface.add(this.WireframeSelectionLayer.selectionSprite);
             this.WireframeSelectionLayer.selectionSprite.show(true);
 
             if(pEvt.ctrlKey) {
                 this.SelectionLayer.startSelecting();
-                this.SelectionLayer.select(start, end);
 
-                this.railManager.Rail.surface.add(this.SelectionLayer.selectionSprite);
-                this.SelectionLayer.selectionSprite.show(true);
+                this.select(start, end);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, 
                                            this,
@@ -246,24 +261,14 @@ Ext.define('Vede.controller.RailController', {
 
                 this.SelectionLayer.endSelecting();
 
-                if(this.SelectionLayer.end) {
+                if(this.SelectionLayer.end != -1) {
                     this.changeCaretPosition(this.SelectionLayer.end);
                 }
 
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
-                                           this,
-                                           this.SelectionLayer.start,
-                                           this.SelectionLayer.end);
-
             } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
                 // If we've clicked a sprite, select it.
-                this.SelectionLayer.select(this.clickedAnnotationStart,
-                                           this.clickedAnnotationEnd);
-
-                this.railManager.Rail.surface.add(this.SelectionLayer.selectionSprite);
-                this.SelectionLayer.selectionSprite.show(true);
-
-                this.changeCaretPosition(this.SelectionLayer.end);
+                this.select(this.clickedAnnotationStart,
+                            this.clickedAnnotationEnd);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this,
@@ -276,6 +281,15 @@ Ext.define('Vede.controller.RailController', {
                 this.SelectionLayer.deselect();
             }
         }
+    },
+
+    select: function(start, end) {
+        this.SelectionLayer.select(start, end);
+
+        this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
+        this.SelectionLayer.selectionSprite.show(true);
+
+        this.changeCaretPosition(this.SelectionLayer.end);
     },
 
     /**
@@ -343,10 +357,12 @@ Ext.define('Vede.controller.RailController', {
                 });
 
                 this.SelectionLayer.startSelecting();
-                this.SelectionLayer.select(minStart, maxEnd);
+                this.select(minStart, maxEnd);
 
-                this.railManager.Rail.surface.add(this.SelectionLayer.selectionSprite);
-                this.SelectionLayer.selectionSprite.show(true);
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this,
+                                           this.SelectionLayer.start,
+                                           this.SelectionLayer.end);
             } else { // Selection crosses over the beginning of sequence.
                 var minStart1 = -1;
                 var maxEnd1 = -1;
@@ -415,10 +431,12 @@ Ext.define('Vede.controller.RailController', {
                     this.SelectionLayer.deselect();
                 } else {
                     this.SelectionLayer.startSelecting();
-                    this.SelectionLayer.select(selStart, selEnd);
+                    this.select(selStart, selEnd);
 
-                    this.railManager.Rail.surface.add(this.SelectionLayer.selectionSprite);
-                    this.SelectionLayer.selectionSprite.show(true);
+                    this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                               this,
+                                               this.SelectionLayer.start,
+                                               this.SelectionLayer.end);
                 }
             }
         } else {

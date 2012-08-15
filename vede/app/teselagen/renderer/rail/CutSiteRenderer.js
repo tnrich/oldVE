@@ -3,7 +3,7 @@
  * Class which creates sprites to draw all given cut sites.
  */
 Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
-    extend: "Teselagen.renderer.rail.railRenderer",
+    extend: "Teselagen.renderer.rail.RailRenderer",
 
     statics: {
         CUTSITE_LINE_WIDTH: 0.5,
@@ -11,7 +11,10 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
     
     config: {
         cutSites: [],
-        middlePoints: null 
+        railWidth: null,
+        railHeight:null,
+        railGap: null,
+        startPoints: null 
     },
 
     /**
@@ -23,7 +26,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
 
         this.initConfig(inData);
 
-        this.middlePoints = Ext.create("Ext.util.HashMap");
+        this.startPoints = Ext.create("Ext.util.HashMap");
     },
 
     /**
@@ -32,23 +35,25 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
      */
     render: function() {
         var sprites = [];
-
+        var sitePos = {};
+        
         Ext.each(this.getCutSites(), function(site) {
-            var angle = site.getStart() * 2 * Math.PI / 
+            var startPos = site.getStart()  / 
                         this.sequenceManager.getSequence().seqString().length;
+            console.log(startPos);
+            sitePos.x = startPos;
+            sitePos.y = this.reference.y;
             
-            this.middlePoints.add(site, this.GraphicUtils.pointOnCircle(
-                                            this.center, angle,
-                                            this.railRadius + 10));
-
+            this.startPoints.add(site, sitePos);
+            
             var lineStart = Ext.create("Teselagen.bio.util.Point",
-                this.center.x + this.railRadius * Math.sin(angle),
-                this.center.y - this.railRadius * Math.cos(angle)
+                this.reference.x + this.railWidth * start.x,
+                this.reference.y - this.railHeight 
             );
 
             var lineEnd = Ext.create("Teselagen.bio.util.Point", 
-                this.center.x + (this.railRadius + 10) * Math.sin(angle),
-                this.center.y - (this.railRadius + 10) * Math.cos(angle)
+                this.reference.x + (this.railWidth * startPos.x),
+                this.reference.y - (this.railHeight + 10)
             );
 
             var siteSprite = Ext.create("Ext.draw.Sprite", {
@@ -62,6 +67,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
             this.addToolTip(siteSprite, this.getToolTip(site));
 
             sprites.push(siteSprite);
+            
         }, this);
 
         return sprites;
@@ -86,7 +92,6 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
     },
 
     applyCutSites: function(pCutSites) {
-        this.setNeedsMeasurement(true);
 
         return pCutSites;
     }
