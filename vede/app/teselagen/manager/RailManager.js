@@ -436,15 +436,14 @@ Ext.define("Teselagen.manager.RailManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-//        this.rail.surface.remove(this.nameBox);
-//
-//        this.setNameBox(Ext.create("Vede.view.rail.NameBox", {
-//            center: this.center,
-//            name: pSequenceManager.getName()
-//        }));
-//
-//        this.rail.surface.add(this.nameBox);
-//        this.nameBox.show(true);
+        this.rail.surface.remove(this.nameBox);
+
+        this.setNameBox(Ext.create("Vede.view.rail.NameBox", { 
+            name: pSequenceManager.getName()
+        }));
+
+        this.rail.surface.add(this.nameBox);
+        this.nameBox.show(true);
 
         return pSequenceManager;
     },
@@ -490,17 +489,21 @@ Ext.define("Teselagen.manager.RailManager", {
 //        this.rail.surface.add(this.caret);
 //        caret.show(true);
 
-        var name = "";
+        var name = "unknown";
+        var length = 0
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
+            length = this.sequenceManager.getSequence().toString().length;
         }
 
-        this.setNameBox(Ext.create("Vede.view.rail.NameBox", {
+        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
             center: this.center,
-            name: name
-        }));
+            name: name,
+            length: length
+        });
 
-//        this.rail.surface.add(this.nameBox);
-//        this.nameBox.show(true);
+        this.rail.surface.add(this.nameBox);
+        this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
     }
 });
