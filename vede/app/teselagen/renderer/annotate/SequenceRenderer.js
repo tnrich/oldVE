@@ -24,6 +24,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         this.initConfig(inData);
         this.sequenceAnnotationManager = this.sequenceAnnotator;
         this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
+        
     },
 
     update: function(){
@@ -90,9 +91,9 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var sequenceWidth = sequenceStringLength * 16 - sequenceX;
             var sequenceHeight = this.totalHeight - sequenceY;
 
-            console.log(this.sequenceAnnotator.getShowAminoAcids());
             if(this.sequenceAnnotator.getShowAminoAcids()){
                 this.renderAA(row);
+                sequenceY += 60;
             }
 
             if(this.sequenceAnnotator.getShowComplementarySequence()){
@@ -117,13 +118,14 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var rowHeight = this.totalHeight - rowY;
             //sequenceY += 20;
 
+            var nucleotideRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
+                .attr("id", "nucleotide-row" +i);
+
+
             var rowSequence = row.getRowData().getSequence();
             for(var j = 0; j < sequenceStringLength; j++){
                 var nucleotide = sequenceString.charAt(j);
-                var nucleotideSVGGroup = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
-                .attr("id", "nucleotide-row" +i+"-base" + j);
-
-                nucleotideSVGGroup.append("svg:text")
+                                nucleotideRowSVG.append("svg:text")
                     .attr("x", sequenceX + j*16)
                     .attr("y", sequenceY + 20)
                     .text(nucleotide)
@@ -195,7 +197,104 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     },
 
     renderAA: function(row){
+        var aaStart, aaEnd, 
+        //leftShift adjust the AA sequence positions
+        leftShift,
+        
+        //aaPadding moves the Amino acid rows into the correct places.
+        aaPadding;
+
+        var aminoAcids1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true).replace(/\s/g, '');
+        var aminoAcids2 = this.sequenceAnnotator.getAaManager().getSequenceFrame(1, true).replace(/\s/g, '');
+        var aminoAcids3 = this.sequenceAnnotator.getAaManager().getSequenceFrame(2, true).replace(/\s/g, '');
+
+        var start = row.getRowData().getStart();
+        var end = row.getRowData().getEnd();
+        var numberOfSpaces = 0;
+
+        if (start > 20){
+            aaStart = Math.floor((start ) / 3) ;
+        }else{
+            aaStart = start + 2;
+        }
+        if (end > 20){
+            aaEnd = Math.floor(end / 3);
+        }else{
+            aaEnd = end;
+        }
+        var aminoAcidsString1 = aminoAcids1.substring(aaStart, aaEnd  + 1).replace(/ /g, "      ");
+        
+        var aminoAcidsString2 = aminoAcids2.substring(aaStart, aaEnd + 1).replace(/ /g, "      ");
+        var aminoAcidsString3 = aminoAcids3.substring(aaStart, aaEnd + 1).replace(/ /g, "      ");
+        if(this.sequenceAnnotator.showSpaceEvery10Bp){
+            /*
+            aminoAcidsString1 = this.splitWithSpaces(aminoAcidsString1, 0, false);
+            aminoAcidsString2 = this.splitWithSpaces(aminoAcidsString2, 0, false);
+            aminoAcidsString3 = this.splitWithSpaces(aminoAcidsString3, 0, false);
+            */
+            numberOfSpaces = (row.getRowData().getSequence().length % 10) ? Math.round(row.getRowData().getSequence().length/10) : (Math.round(row.getRowData().getSequence().length/10) -1);
+        }
+
+
+        for (var i = 0; i < aminoAcidsString1.length; ++i){
+            leftShift = i * (18*3);
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("x", leftShift + 96)
+                .attr("y", this.totalHeight)
+                .attr("font-face", "Verdana")
+                .attr("font-size", 20)
+                .attr("xml:space", "preserve")
+                .attr("fill", "blue")
+                .text(aminoAcidsString1.charAt(i));
+        }
+        this.totalHeight += 20;
+        for (var i = 0; i < aminoAcidsString2.length; ++i){
+            leftShift = i * 16 * 3;
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("x", leftShift + 96 + 16)
+                .attr("y", this.totalHeight)
+                .attr("font-face", "Verdana")
+                .attr("font-size", 20)
+                .attr("xml:space", "preserve")
+                .attr("fill", "blue")
+                .text(aminoAcidsString2.charAt(i));
+        }
+        this.totalHeight += 20;
+        for (var i = 0; i < aminoAcidsString3.length; ++i){
+            leftShift = i * 16 * 3;
+            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+                .attr("x", leftShift + 96 + 16 + 16)
+                .attr("y", this.totalHeight)
+                .attr("font-face", "Verdana")
+                .attr("font-size", 20)
+                .attr("xml:space", "preserve")
+                .attr("fill", "blue")
+                .text(aminoAcidsString3.charAt(i));
+        }
+        this.totalHeight += 20;
+        /*
+
+            this.aminoAcidsSVG.append("svg:text")
+                .attr("x", labelX + 15)
+                .attr("y", labelY + 15)
+                .attr("font-face", "Verdana")
+                .attr("font-size", 20)
+                .attr("textLength", 917)
+                .attr("xml:space", "preserve")
+                .attr("fill", "blue")
+                .text(aminoAcidsString2);
+            this.aminoAcidsSVG.append("svg:text")
+                .attr("x", labelX + 32)
+                .attr("y", labelY + 40)
+                .attr("font-face", "Verdana")
+                .attr("font-size", 20)
+                .attr("textLength", 917)
+                .attr("xml:space", "preserve")
+                .attr("fill", "blue")
+                .text(aminoAcidsString3);
+                */
     },
+
     renderComplementarySequence: function(row) {
         var sequenceString = ["      "];
         var stringLength;
@@ -212,12 +311,12 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         sequenceString = sequenceString.join("");
         stringLength = sequenceString.length;
 
+        var complementRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
+            .attr("id", "nucleotide-comp-row" + row.getIndex());
         for(var i = 0; i < stringLength; i++) {
             leftShift = i * 16;
-            var nucleotideSVGGroup = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
-                .attr("id", "nucleotide-comp-row" + row.getIndex() + "-base" + i);
 
-            nucleotideSVGGroup.append("svg:text")
+            complementRowSVG.append("svg:text")
                 .attr("x", i*16)
                 .attr("y", this.totalHeight + 22)
                 .text(sequenceString.charAt(i))
