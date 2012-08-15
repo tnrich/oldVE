@@ -212,23 +212,25 @@ Ext.define("Teselagen.manager.RailManager", {
         var labels = [];
         var start;
 
-        Ext.each(this.cutSites, function(site) {
-            start = this.cutSiteRenderer.startPoints.get(site);
-            console.log(start);
-            
-            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
-                annotation: site,
-                x: start.x,
-                y: start.y,
-                start: start.x
-            });
+//        Ext.each(this.cutSites, function(site) {
+//            start = this.cutSiteRenderer.startPoints.get(site);
+//            console.log(start);
+//            
+//            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
+//                annotation: site,
+//                x: start.x,
+//                y: start.y,
+//                start: start.x
+//            });
+//
+//            this.cutSiteRenderer.addToolTip(label, 
+//                                        this.cutSiteRenderer.getToolTip(site));
+//
+//            labels.push(label);
+//        }, this);
+        
 
-            this.cutSiteRenderer.addToolTip(label, 
-                                        this.cutSiteRenderer.getToolTip(site));
-
-            labels.push(label);
-        }, this);
-
+        
         Ext.each(this.features, function(feature) {
             start = this.featureRenderer.startPoints.get(feature);
             
@@ -241,6 +243,25 @@ Ext.define("Teselagen.manager.RailManager", {
 
             this.featureRenderer.addToolTip(label,
                                     this.featureRenderer.getToolTip(feature));
+            labels.push(label);
+        }, this);
+        
+        Ext.each(this.cutSites, function(site) {
+            start = this.cutSiteRenderer.startPoints.get(site);
+            console.log(start.x);
+            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
+                annotation: site,
+                x: start.x,
+                y: start.y,
+                start: start
+            });
+
+            this.cutSiteRenderer.addToolTip(label, 
+                                        this.cutSiteRenderer.getToolTip(site));
+            this.cutSiteRenderer.addClickListener(label,
+                                            label.annotation.getStart(),
+                                            label.annotation.getEnd());
+            console.log(label);
             labels.push(label);
         }, this);
 

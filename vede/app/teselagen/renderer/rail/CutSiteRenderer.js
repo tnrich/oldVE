@@ -14,7 +14,8 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
         railWidth: null,
         railHeight:null,
         railGap: null,
-        startPoints: null 
+        startPoints: null,
+        reference: null,
     },
 
     /**
@@ -47,13 +48,13 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
             this.startPoints.add(site, sitePos);
             
             var lineStart = Ext.create("Teselagen.bio.util.Point",
-                this.reference.x + this.railWidth * start.x,
+                this.reference.x + this.railWidth * sitePos.x,
                 this.reference.y - this.railHeight 
             );
 
             var lineEnd = Ext.create("Teselagen.bio.util.Point", 
-                this.reference.x + (this.railWidth * startPos.x),
-                this.reference.y - (this.railHeight + 10)
+                this.reference.x + (this.railWidth * sitePos.x),
+                this.reference.y - (this.railHeight + 8)
             );
 
             var siteSprite = Ext.create("Ext.draw.Sprite", {

@@ -119,9 +119,9 @@ Ext.define('Vede.controller.RailController', {
         this.railManager.setFeatures(pSeqMan.getFeatures());
 
         this.railManager.render();
-
-        this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.SelectionLayer.setSequenceManager(pSeqMan);
+//
+//        this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
+//        this.SelectionLayer.setSequenceManager(pSeqMan);
     },
 
     onShowFeaturesChanged: function(show) {
