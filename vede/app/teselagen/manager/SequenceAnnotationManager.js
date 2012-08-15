@@ -19,9 +19,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         showComplementarySequence: true,
         showSpaceEvery10Bp: true,
         showAminoAcids: false,
-        showAminoAcids1: false,
-        showAminoAcids2: false,
-        showAminoAcids3: false,
         showAminoAcidsRevCom: false,
 
         bpPerRow: 60,

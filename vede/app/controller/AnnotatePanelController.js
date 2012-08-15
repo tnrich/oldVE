@@ -140,21 +140,29 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onShowComplementaryChanged: function(show) {
         this.SequenceAnnotationManager.setShowComplementarySequence(show);
-        this.SequenceAnnotationManager.render();
-        alert("hello!!!");
+        if(this.SequenceAnnotationManager.sequenceManager) {
+            this.SequenceAnnotationManager.render();
+        }
     },
 
     onShowSpacesChanged: function(show) {
         this.SequenceAnnotationManager.setShowSpaceEvery10Bp(show);
-        this.SequenceAnnotationManager.render();
+        if(this.SequenceAnnotationManager.sequenceManager) {
+            this.SequenceAnnotationManager.render();
+        }
     },
 
     onShowSequenceAAChanged: function(show) {
         this.SequenceAnnotationManager.setShowAminoAcids(show);
-        this.SequenceAnnotationManager.render();
+        if(this.SequenceAnnotationManager.sequenceManager) {
+            this.SequenceAnnotationManager.render();
+        }
     },
 
     onShowRevcomAAChanged: function(show) {
         this.SequenceAnnotationManager.setShowAminoAcidsRevCom(show);
+        if(this.SequenceAnnotationManager.sequenceManager) {
+            this.SequenceAnnotationManager.render();
+        }
     },
 });
