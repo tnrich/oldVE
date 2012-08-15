@@ -151,6 +151,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onShowSequenceAAChanged: function(show) {
         this.SequenceAnnotationManager.setShowAminoAcids(show);
+        this.SequenceAnnotationManager.render();
     },
 
     onShowRevcomAAChanged: function(show) {
