@@ -215,7 +215,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             nucleotideSVGGroup.append("svg:text")
                 .attr("x", i*16)
-                .attr("y", this.totalHeight + 25)
+                .attr("y", this.totalHeight + 22)
                 .text(sequenceString.charAt(i))
                 .attr("fill", "#b0b0b0")
                 .attr("font-face", "Verdana")

@@ -185,6 +185,18 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     applyShowComplementarySequence: function(pShow) {
         if(this.showComplementarySequence !== pShow) {
             this.showComplementarySequenceChanged = true;
+
+            if(this.caret) {
+                if(pShow) {
+                    this.caret.setHeight(40);
+                    this.caret.setPosition(this.caret.getPosition());
+                    this.caret.render();
+                } else {
+                    this.caret.setHeight(20);
+                    this.caret.setPosition(this.caret.getPosition());
+                    this.caret.render();
+                }
+            }
         }
         return pShow;
     },
