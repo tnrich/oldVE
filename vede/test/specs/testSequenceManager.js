@@ -17,7 +17,7 @@ Ext.onReady(function() {
     //   Sequence Manager Unit Testing
     // ====================================
 
-    xdescribe("Testing SequenceManager Classes pt1", function() {
+    xdescribe("Testing SequenceManager Classes pt1: Teselagen.manager.SequenceManager.", function() {
         var seq, feat1, feat2, feat3, sm;
 
         beforeEach(function() {
@@ -272,7 +272,7 @@ Ext.onReady(function() {
                 expect(tmp.getName()).toBe("Dummy");
                 expect(tmp.getCircular()).toBe(false);
                 expect(tmp.getSequence().seqString()).toBe("a");
-                expect(tmp.getFeatures().length).toBe(1);
+                expect(tmp.getFeatures().length).toBe(0);
                 //expect(tmp.getFeatures()[0].getStart()).toBe(0);
                 //expect(tmp.getFeatures()[0].getEnd()).toBe(1);
             });
@@ -998,7 +998,7 @@ Ext.onReady(function() {
 
                 jbeiSeq = "BLAH";
 
-                newSM.fromJbeiSeqXml(jbeiSeq);
+                //newSM.fromJbeiSeqXml(jbeiSeq);
             });
 
             it("fromFasta() ",function(){
