@@ -47,32 +47,21 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         for (var i = 0; i < featureRows.length; i++){
             var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
 
-            var alignmentRowIndex = -1;
+            var alignmentRowIndex = row.rowData.getFeaturesAlignment().get(feature);
             var fromSameFeatureIndex = 0;
 
             //for each row, get the features alignment
             var featuresAlignment = row.getRowData().getFeaturesAlignment();
             //console.log("New set of feature rows");
             //console.log(featuresAlignment.getKeys());
-            Ext.each(featuresAlignment.getKeys(), function(rowFeatures, index){
-               Ext.each(rowFeatures, function(rowFeature){
-                   if (rowFeature.indexOf(feature.toString()) != -1){
-                       //console.log(alignmentRowIndex);
-                       alignmentRowIndex = index + fromSameFeatureIndex;
-                       return false;
-                   }
-               });
-
-               if(alignmentRowIndex != -1){
-                   return false;
-               }
-                
-            });
 
             var startBP;
             var endBP;
             //downShift calculates the adjustedYPosition
             var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
+            if(this.sequenceAnnotationManager.showComplementarySequence) {
+                downShift += 30;
+            }
 
             if( this.feature.getStart() > this.feature.getEnd()){
                 if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()){

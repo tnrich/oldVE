@@ -72,17 +72,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 }
             }
 
-            if(this.sequenceAnnotator.getShowAminoAcids3()){
-                //console.log("show amino acids 3!");
-                //this.renderAA(row);
-            }
-            if(this.sequenceAnnotator.getShowAminoAcids2()){
-                //console.log("show amino acids 2!");
-                //this.renderAA(row);
-            }
-            if(this.sequenceAnnotator.getShowAminoAcids1()){
-                //console.log("show amino acids 1!");
-                //this.renderAA(row);
+            if(this.sequenceAnnotator.getShowAminoAcids()){
+                this.renderAA(row);
             }
 
             if (this.sequenceAnnotator.getShowOrfs() && row.getRowData().getOrfAlignment()){
@@ -102,10 +93,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             var sequenceWidth = sequenceStringLength * 16 - sequenceX;
             var sequenceHeight = this.totalHeight - sequenceY;
 
-            console.log("Show comp sequence: " + this.sequenceAnnotator.getShowComplementarySequence());
             if(this.sequenceAnnotator.getShowComplementarySequence()){
-
-                //this.renderComplementarySequence(row);
+                this.renderComplementarySequence(row);
                 sequenceHeight = this.totalHeight - sequenceY;
             }
 
@@ -127,9 +116,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             //sequenceY += 20;
 
             var rowSequence = row.getRowData().getSequence();
-            var complementarySequence = row.getRowData().getOppositeSequence();
-            for(var j = 0; j < rowSequence.length; j++){
-                var nucleotide = rowSequence.charAt(j);
+            for(var j = 0; j < sequenceStringLength; j++){
+                var nucleotide = sequenceString.charAt(j);
                 var nucleotideSVGGroup = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
                 .attr("id", "nucleotide-row" +i+"-base" + j);
 
@@ -203,6 +191,40 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         return result;
     },
+
+    renderComplementarySequence: function(row) {
+        var sequenceString = ["      "];
+        var stringLength;
+        var leftShift;
+
+        if(this.sequenceAnnotator.showSpaceEvery10Bp) {
+            sequenceString = sequenceString.concat([this.splitWithSpaces(
+                                            row.rowData.oppositeSequence,
+                                            0, false)]);
+        } else {
+            sequenceString = sequenceString.concat([row.rowData.oppositeSequence]);
+        }
+
+        sequenceString = sequenceString.join("");
+        stringLength = sequenceString.length;
+
+        for(var i = 0; i < stringLength; i++) {
+            leftShift = i * 16;
+            var nucleotideSVGGroup = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
+                .attr("id", "nucleotide-comp-row" + row.getIndex() + "-base" + i);
+
+            nucleotideSVGGroup.append("svg:text")
+                .attr("x", i*16)
+                .attr("y", this.totalHeight + 25)
+                .text(sequenceString.charAt(i))
+                .attr("fill", "#b0b0b0")
+                .attr("font-face", "Verdana")
+                .attr("font-size", 20);
+        }
+
+        this.totalHeight += 20;
+    },
+
     renderIndexString: function(pIndex){
         var result = String(pIndex);
 
