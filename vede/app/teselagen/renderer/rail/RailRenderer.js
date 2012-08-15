@@ -1,5 +1,5 @@
 /**
- * @class Teselagen.renderer.pie.RailRenderer
+ * @class Teselagen.renderer.rail.RailRenderer
  * Parent class of all pie renderers. Stores the center and rail radius of the 
  * pie.
  * @author Nick Elsbree
@@ -11,7 +11,7 @@ Ext.define("Teselagen.renderer.rail.RailRenderer", {
 
     config: {
         references: null,
-        railRadius: 0,
+        railWidth: 0,
     },
 
     GraphicUtils: null,
