@@ -72,9 +72,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 }
             }
 
-            if(this.sequenceAnnotator.getShowAminoAcids()){
-                this.renderAA(row);
-            }
 
             if (this.sequenceAnnotator.getShowOrfs() && row.getRowData().getOrfAlignment()){
                 //console.log("show orfs");
@@ -92,6 +89,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             var sequenceWidth = sequenceStringLength * 16 - sequenceX;
             var sequenceHeight = this.totalHeight - sequenceY;
+
+            console.log(this.sequenceAnnotator.getShowAminoAcids());
+            if(this.sequenceAnnotator.getShowAminoAcids()){
+                this.renderAA(row);
+            }
 
             if(this.sequenceAnnotator.getShowComplementarySequence()){
                 this.renderComplementarySequence(row);
@@ -192,6 +194,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         return result;
     },
 
+    renderAA: function(row){
+    },
     renderComplementarySequence: function(row) {
         var sequenceString = ["      "];
         var stringLength;
@@ -215,7 +219,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             nucleotideSVGGroup.append("svg:text")
                 .attr("x", i*16)
-                .attr("y", this.totalHeight + 25)
+                .attr("y", this.totalHeight + 22)
                 .text(sequenceString.charAt(i))
                 .attr("fill", "#b0b0b0")
                 .attr("font-face", "Verdana")

@@ -50,6 +50,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         console.log(this.SequenceAnnotationManager.annotator);
         this.AnnotatePanel.add(this.SequenceAnnotationManager.annotator);
 
+        // disable default selection action in the svg area
+        document.getElementById("annotateSVG").onselectstart = function(){return false;};
+
         this.Managers.push(this.SequenceAnnotationManager);
     },
 
@@ -83,10 +86,12 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     onMousedown: function(pEvt, pOpts) {
-        console.log(pEvt.getX() + " " + pEvt.getY() + " " + Ext.getCmp("AnnotateContainer").el.getScroll().top);
         if(this.SequenceAnnotationManager.sequenceManager) {
-            var index = this.SequenceAnnotationManager.bpAtPoint(pEvt.getX(),
-                                                                 pEvt.getY());
+            var adjustedX = pEvt.browserEvent.layerX + 10;
+            var adjustedY = pEvt.browserEvent.layerY;
+
+            var index = this.SequenceAnnotationManager.bpAtPoint(adjustedX,
+                                                                 adjustedY);
 
             this.changeCaretPosition(index);
         }
