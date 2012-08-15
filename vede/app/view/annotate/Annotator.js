@@ -109,6 +109,11 @@ Ext.define("Vede.view.annotate.Annotator", {
                 this.loadOrfRenderers();
                 this.renderOrfs();
             }
+
+            if(this.sequenceAnnotator.showAminoAcids) {
+                this.renderAminoAcids(row, 100, distanceFromLine);
+            }
+
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
 
         }
@@ -121,6 +126,64 @@ Ext.define("Vede.view.annotate.Annotator", {
                 //text render
             //amino acid renderer
     },
+
+    renderAminoAcids: function(row, labelX, labelY){
+        var aaStart, aaEnd;
+
+        var aminoAcids1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true).replace(/\s/g, '');
+        var aminoAcids2 = this.sequenceAnnotator.getAaManager().getSequenceFrame(1, true).replace(/\s/g, '');
+        var aminoAcids3 = this.sequenceAnnotator.getAaManager().getSequenceFrame(2, true).replace(/\s/g, '');
+
+        var start = row.getRowData().getStart();
+        var end = row.getRowData().getEnd();
+        /*console.log("Row start: " + (start));
+        console.log("Row end: " + (end));
+        console.log("Before substringing: " + aminoAcids1.replace(/\s/g, ''));*/
+        if (start > 3){
+            aaStart = (start - 1) / 3;
+        }else{
+            aaStart = start;
+        }
+        if (end > 3){
+            aaEnd = end / 3;
+        }else{
+            aaStart = end;
+        }
+        /*console.log("AA row start: " + aaStart); 
+        console.log("AA row end: " + aaEnd); */
+            var aminoAcidsString1 = aminoAcids1.substring(aaStart, aaEnd ).replace(/ /g, "      ");
+            //console.log("Frame 1: " + aminoAcidsString1);
+            var aminoAcidsString2 = aminoAcids2.substring(aaStart, aaEnd).replace(/ /g, "      ");
+            var aminoAcidsString3 = aminoAcids3.substring(aaStart, aaEnd).replace(/ /g, "      ");
+        this.aminoAcidsSVG.append("svg:text")
+            .attr("x", labelX)
+            .attr("y", labelY - 10)
+            .attr("font-face", "Verdana")
+            .attr("font-size", 20)
+            .attr("textLength", 917)
+            .attr("xml:space", "preserve")
+            .attr("fill", "blue")
+            .text(aminoAcidsString1);
+        this.aminoAcidsSVG.append("svg:text")
+            .attr("x", labelX + 15)
+            .attr("y", labelY + 15)
+            .attr("font-face", "Verdana")
+            .attr("font-size", 20)
+            .attr("textLength", 917)
+            .attr("xml:space", "preserve")
+            .attr("fill", "blue")
+            .text(aminoAcidsString2);
+        this.aminoAcidsSVG.append("svg:text")
+            .attr("x", labelX + 32)
+            .attr("y", labelY + 40)
+            .attr("font-face", "Verdana")
+            .attr("font-size", 20)
+            .attr("textLength", 917)
+            .attr("xml:space", "preserve")
+            .attr("fill", "blue")
+            .text(aminoAcidsString3);
+    },
+
 
     loadFeatureRenderers: function(){
         this.removeFeatureRenderers();
