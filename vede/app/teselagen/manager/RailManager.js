@@ -25,7 +25,9 @@ Ext.define("Teselagen.manager.RailManager", {
         showCutSites: false,
         showFeatures: true,
         showOrfs: false,
-        startPoints: null
+        startPoints: null,
+        showFeatureLabels: true,
+        showCutSiteLabels: true
     },
 
     nameBox: null,
@@ -94,16 +96,17 @@ Ext.define("Teselagen.manager.RailManager", {
             features: this.features
         });
 
-//        this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {
-//            sequenceManager: this.sequenceManager,
-//            reference: this.reference,
-//            railGap: this.railGap,
-//            orfs: this.orfs
-//        });
+        this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {
+            sequenceManager: this.sequenceManager,
+            reference: this.reference,
+            railHeight: this.railGap,
+            railWidth: this.railWidth,
+            orfs: this.orfs
+        });
 
         this.renderers = [this.cutSiteRenderer,
-                          this.featureRenderer
-                          /*this.orfRenderer*/];
+                          this.featureRenderer,
+                          this.orfRenderer];
     },
 
     /**
@@ -113,43 +116,38 @@ Ext.define("Teselagen.manager.RailManager", {
      * renderers.
      */
     render: function() {
-            if(this.orfSprites) {
-            this.orfSprites.destroy();
-            this.featureSprites.destroy();
-            this.cutSiteSprites.destroy();
-        }
-
-//        this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-//            surface: this.rail.surface
-//        });
-        this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.rail.surface
-        });
-        this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.rail.surface
-        });
-
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
                 if(this.sequenceManagerChanged) {
                     renderer.setSequenceManager(this.sequenceManager);
                 }
-                if(this.railGapChanged) {
-                    renderer.setRailGap(this.railGap);
+                if(this.railRadiusChanged) {
+                    renderer.setRailRadius(this.railRadius);
                 }
-                if(this.centerChanged) {
+                if(this.referenceChanged) {
                     renderer.setCenter(this.center);
                 }
             }, this);
 
             this.dirty = false;
             this.sequenceManagerChanged = false;
-            this.railGapChanged = false;
-            this.centerChanged = false;
+            this.railWidthChanged = false;
+            this.referenceChanged = false;
         }
 
         if(this.cutSitesChanged) {
             this.cutSiteRenderer.setCutSites(this.cutSites);
+            this.cutSitesChanged = false;
+
+            if(this.cutSiteSprites) {
+                this.cutSiteSprites.destroy();
+            }
+
+            this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.rail.surface
+            });
+
+            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         }
 
         if(this.featuresChanged) {
@@ -167,29 +165,40 @@ Ext.define("Teselagen.manager.RailManager", {
             this.featureSprites.addAll(this.featureRenderer.render());
         }
 
-//        if(this.orfsChanged) {
-//            this.orfRenderer.setOrfs(this.orfs);
-//        }
-//
-//        if(this.showOrfs) {
-//            this.orfSprites.addAll(this.orfRenderer.render());
-//        }
-//
+        if(this.orfsChanged) {
+            this.orfRenderer.setOrfs(this.orfs);
+            this.orfsChanged = false;
+
+            if(this.orfSprites) {
+                this.orfSprites.destroy();
+            }
+
+            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
+                surface: this.rail.surface
+            });
+
+            this.orfSprites.addAll(this.orfRenderer.render());
+        }
+
+        this.renderLabels();
+
+        if(this.showOrfs) {
+            this.showSprites(this.orfSprites);
+        } else {
+            this.hideSprites(this.orfSprites);
+        }
+
         if(this.showCutSites) {
-            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
-        } 
+            this.showSprites(this.cutSiteSprites);
+        } else {
+            this.hideSprites(this.cutSiteSprites);
+        }
 
         if(this.showFeatures) {
             this.showSprites(this.featureSprites);
         } else {
             this.hideSprites(this.featureSprites);
         }
-
-        this.renderLabels();
-
-        this.showSprites(this.cutSiteSprites);
-          this.showSprites(this.featureSprites);
-//        this.showSprites(this.orfSprites);
     },
 
     /**
@@ -203,6 +212,17 @@ Ext.define("Teselagen.manager.RailManager", {
             this.rail.doComponentLayout();
         }, this);
     },
+    
+    /**
+     * Helper function which hides the sprites in a CompositeSprite.
+     * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
+     */
+     hideSprites: function(collection) {
+         collection.each(function(sprite) {
+             sprite.hide(true);
+         });
+     },
+
 
     /**
      * @private
@@ -211,26 +231,25 @@ Ext.define("Teselagen.manager.RailManager", {
     renderLabels: function() {
         var labels = [];
         var start;
-
-//        Ext.each(this.cutSites, function(site) {
-//            start = this.cutSiteRenderer.startPoints.get(site);
-//            console.log(start);
-//            
-//            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
-//                annotation: site,
-//                x: start.x,
-//                y: start.y,
-//                start: start.x
-//            });
-//
-//            this.cutSiteRenderer.addToolTip(label, 
-//                                        this.cutSiteRenderer.getToolTip(site));
-//
-//            labels.push(label);
-//        }, this);
         
+        if(this.showCutSites && this.showCutSiteLabels) {
+            Ext.each(this.cutSites, function(site) {
+                start = this.cutSiteRenderer.startPoints.get(site);
+                label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
+                    annotation: site,
+                    x: start.x,
+                    y: start.y,
+                    start: start
+                });
 
+                this.cutSiteRenderer.addToolTip(label, 
+                                            this.cutSiteRenderer.getToolTip(site));
+     
+                labels.push(label);
+            }, this);
+            }
         
+        if(this.showFeatures && this.showFeatureLabels) {
         Ext.each(this.features, function(feature) {
             start = this.featureRenderer.startPoints.get(feature);
             
@@ -245,26 +264,10 @@ Ext.define("Teselagen.manager.RailManager", {
                                     this.featureRenderer.getToolTip(feature));
             labels.push(label);
         }, this);
-        
-        Ext.each(this.cutSites, function(site) {
-            start = this.cutSiteRenderer.startPoints.get(site);
-            console.log(start.x);
-            label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
-                annotation: site,
-                x: start.x,
-                y: start.y,
-                start: start
-            });
+        }
 
-            this.cutSiteRenderer.addToolTip(label, 
-                                        this.cutSiteRenderer.getToolTip(site));
-            this.cutSiteRenderer.addClickListener(label,
-                                            label.annotation.getStart(),
-                                            label.annotation.getEnd());
-            console.log(label);
-            labels.push(label);
-        }, this);
 
+        labels.sort(this.labelSort);
         this.adjustLabelPositions(labels);
     },
 
@@ -278,6 +281,7 @@ Ext.define("Teselagen.manager.RailManager", {
         
         var totalNumberOfLabels = labels.length;
         var totalLength = this.sequenceManager.getSequence().toString().length;
+        console.log(totalNumberOfLabels);
         
         
         var rightLabels = [];
@@ -308,9 +312,9 @@ Ext.define("Teselagen.manager.RailManager", {
 
         for(var i = 0; i <= numberOfLeftLabels - 1; i++) {
             label = leftLabels[i];
-            console.log(label);
+            
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
             
             var xPosition = this.reference.x + (label.x);
@@ -332,8 +336,9 @@ Ext.define("Teselagen.manager.RailManager", {
         
         for(var i = 0; i <= totalNumberOfLabels - numberOfLeftLabels - 1; i++) {
             label = rightLabels[i];
+            
             if(!label.includeInView) {
-                return false; 
+                continue; 
             }
             
             var xPosition = this.reference.x + (label.x);
@@ -357,11 +362,15 @@ Ext.define("Teselagen.manager.RailManager", {
             this.labelSprites.destroy();
         }
 
+        if(this.labelSprites) {
+            this.labelSprites.destroy();
+        }
+
         this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
             surface: this.rail.surface
         });
-        this.labelSprites.addAll(labels);
 
+        this.labelSprites.addAll(labels);
         this.showSprites(this.labelSprites);
         
         Ext.each(leftLabels, function(label) {
@@ -410,12 +419,12 @@ Ext.define("Teselagen.manager.RailManager", {
      * Function for sorting labels based on their centers.
      */
     labelSort: function(label1, label2) {
-        var labelCenter1 = label1.center;
-        var labelCenter2 = label2.center;
+        var labelStart1 = label1.start.x;
+        var labelStart2 = label2.start.x;
         
-        if(labelCenter1 > labelCenter2) {
+        if(labelStart1 > labelStart2) {
             return 1;
-        } else if(labelCenter1 < labelCenter2) {
+        } else if(labelStart1 < labelStart2) {
             return -1;
         } else  {
             return 0;
@@ -427,15 +436,14 @@ Ext.define("Teselagen.manager.RailManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-//        this.rail.surface.remove(this.nameBox);
-//
-//        this.setNameBox(Ext.create("Vede.view.rail.NameBox", {
-//            center: this.center,
-//            name: pSequenceManager.getName()
-//        }));
-//
-//        this.rail.surface.add(this.nameBox);
-//        this.nameBox.show(true);
+        this.rail.surface.remove(this.nameBox);
+
+        this.setNameBox(Ext.create("Vede.view.rail.NameBox", { 
+            name: pSequenceManager.getName()
+        }));
+
+        this.rail.surface.add(this.nameBox);
+        this.nameBox.show(true);
 
         return pSequenceManager;
     },
@@ -481,17 +489,21 @@ Ext.define("Teselagen.manager.RailManager", {
 //        this.rail.surface.add(this.caret);
 //        caret.show(true);
 
-        var name = "";
+        var name = "unknown";
+        var length = 0
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
+            length = this.sequenceManager.getSequence().toString().length;
         }
 
-        this.setNameBox(Ext.create("Vede.view.rail.NameBox", {
+        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
             center: this.center,
-            name: name
-        }));
+            name: name,
+            length: length
+        });
 
-//        this.rail.surface.add(this.nameBox);
-//        this.nameBox.show(true);
+        this.rail.surface.add(this.nameBox);
+        this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
     }
 });

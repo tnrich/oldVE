@@ -114,7 +114,7 @@ Ext.define('Vede.controller.RailController', {
     onSequenceManagerChanged: function(pSeqMan) {
         this.callParent(arguments);
 
-//        this.railManager.setOrfs(this.ORFManager.getOrfs());
+        this.railManager.setOrfs(this.ORFManager.getOrfs());
         this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.railManager.setFeatures(pSeqMan.getFeatures());
 
