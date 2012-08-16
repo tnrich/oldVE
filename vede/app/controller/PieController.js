@@ -46,8 +46,6 @@ Ext.define('Vede.controller.PieController', {
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
 
-        console.log(pie);
-
         this.pieManager.initPie();
 
         this.Managers.push(this.pieManager);

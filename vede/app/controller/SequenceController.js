@@ -102,8 +102,6 @@ Ext.define("Vede.controller.SequenceController", {
             sequenceManager: this.SequenceManager
         });
 
-        console.log(this.ORFManager);
-
         this.RestrictionEnzymeManager = 
             Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
                 sequenceManager: this.SequenceManager,

@@ -97,7 +97,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 				
 				var orfY = bpStartPoint.y - upShift;
 				var currentHeight = 6;
-                var textWidth = 16;
+                var textWidth = this.sequenceAnnotator.self.CHAR_WIDTH;
 				
 				if(startBP > endBP) { // case when start and end are in the same row
 					var rowStartPoint = this.sequenceAnnotator.bpMetricsByIndex(row.rowData.getStart());
@@ -121,6 +121,8 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         .attr("stroke-width", this.self.ORF_STROKE_WIDTH);
 				}
 				
+                var codonShift = -8;
+
                 Ext.each(orf.getStartCodons(), function(startCodonIndex) {
                     if(startCodonIndex >= row.rowData.getStart() && 
                        startCodonIndex <= row.rowData.end) {
@@ -131,13 +133,15 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         
                         if(orf.getStrand() == -1) {
                             this.orfSVG.append("svg:circle")
-                                .attr("cx", codonStartPointX + textWidth - 10)
+                                .attr("cx", codonStartPointX + textWidth + 
+                                            codonShift)
                                 .attr("cy", codonStartPointY)
                                 .attr("r", 3.5)
                                 .attr("fill", color);
                         } else {
                             this.orfSVG.append("svg:circle")
-                                .attr("cx", codonStartPointX + textWidth - 10)
+                                .attr("cx", codonStartPointX + textWidth +
+                                            codonShift)
                                 .attr("cy", codonStartPointY)
                                 .attr("r", 3.5)
                                 .attr("fill", color);

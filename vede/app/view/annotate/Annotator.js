@@ -2,6 +2,10 @@ Ext.define("Vede.view.annotate.Annotator", {
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
 
+    statics: {
+        CHAR_WIDTH: 10
+    },
+
     autoScroll: true,
     config: {
         sequenceAnnotator: null,
@@ -187,10 +191,12 @@ Ext.define("Vede.view.annotate.Annotator", {
 
             
             if(this.sequenceAnnotator.showSpaceEvery10Bp){
-                numberOfCharacters += Math.floor(numberOfCharacters/10);
+                numberOfCharacters += Math.floor(numberOfCharacters / 10);
             }
 
-            var bpX = row.getSequenceMetrics().x + numberOfCharacters * 16;//this.sequenceSymbolRenderer.getTextWidth();
+            var bpX = row.getSequenceMetrics().x + numberOfCharacters * 
+                this.self.CHAR_WIDTH;
+
             var bpY = row.getSequenceMetrics().y;
             resultsMetrics = Ext.create("Teselagen.models.Rectangle", {
                 x: bpX,
@@ -219,14 +225,15 @@ Ext.define("Vede.view.annotate.Annotator", {
 
     renderSequence: function(){
         this.sequenceRenderer.render();
-        for(var i = 0; i < this.sequenceAnnotator.sequenceManager.getSequence().toString().length; i++) {
+        // Uncomment to draw nucleotide indices for debugging.
+        /*for(var i = 0; i < this.sequenceAnnotator.sequenceManager.getSequence().toString().length; i++) {
             var metrics = this.bpMetricsByIndex(i);
             this.sequenceSVG.append("svg:text")
                 .attr("x", metrics.x)
                 .attr("y", metrics.y + 5)
                 .attr("font-size", "6px")
                 .text(i);
-        }
+        }*/
         /*this.sequenceSVG.append("svg:text")
             .attr("x", x)
             .attr("y", y)
@@ -281,7 +288,6 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     drawSplitLines: function(){
-        console.log(this.sequenceRenderer.getSequenceAnnotationManager().sequenceAnnotator);
         var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
         for (var i = 0; i < rows.length; ++i){
             var row = rows[i];

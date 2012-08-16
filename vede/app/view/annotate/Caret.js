@@ -5,7 +5,7 @@
 Ext.define("Vede.view.annotate.Caret", {
     statics: {
         CARET_COLOR: "#000000",
-        CARET_WIDTH: 2,
+        CARET_WIDTH: 1,
         TIMER_REFRESH_SPEED: "0.5s" // blink time of the caret, in seconds
     },
 
