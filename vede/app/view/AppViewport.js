@@ -68,6 +68,7 @@ Ext.define('Vede.view.AppViewport', {
                         {
                             xtype: 'container',
                             id: 'AnnotateContainer',
+                            overflowY: 'scroll',
                             layout: {
                                 type: 'fit'
                             }

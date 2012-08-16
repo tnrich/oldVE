@@ -11,7 +11,7 @@ Ext.define("Vede.view.annotate.Caret", {
 
     config: {
         position: 0,
-        height: 40,
+        height: 48,
         sequenceAnnotator: null
     },
 
