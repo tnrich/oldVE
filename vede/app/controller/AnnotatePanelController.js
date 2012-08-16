@@ -128,8 +128,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onMousedown: function(pEvt, pOpts) {
         if(this.SequenceAnnotationManager.sequenceManager) {
-            var adjustedX = pEvt.browserEvent.layerX + 10;
-            var adjustedY = pEvt.browserEvent.layerY;
+            var el = Ext.getCmp("AnnotateContainer").el;
+            var adjustedX = pEvt.getX() + 10 - el.getX();
+            var adjustedY = pEvt.getY() + el.getScroll().top - el.getY();
 
             var index = this.SequenceAnnotationManager.bpAtPoint(adjustedX,
                                                                  adjustedY);
@@ -153,8 +154,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onMousemove: function(pEvt, pOpts) {
         if(this.mouseIsDown) {
-            var x = pEvt.browserEvent.layerX + 10;
-            var y = pEvt.browserEvent.layerY;
+            var el = Ext.getCmp("AnnotateContainer").el;
+            var x = pEvt.getX() + 10 - el.getX();
+            var y = pEvt.getY() + el.getScroll().top - el.getY();
 
             var bpIndex = this.SequenceAnnotationManager.bpAtPoint(x, y);
 
@@ -241,12 +243,21 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     select: function(start, end) {
+        this.changeCaretPosition(start);
         this.SelectionLayer.select(start, end);
-        this.changeCaretPosition(this.SelectionLayer.end);
     },
 
     changeCaretPosition: function(index) {
         this.SequenceAnnotationManager.adjustCaret(index);
+
+        var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
+        var el = Ext.getCmp("AnnotateContainer").el;
+
+        if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
+             metrics.getY() > el.getScroll().top)) {
+            el.scrollTo("top", metrics.getY());
+        }
+
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
                                        index);
@@ -270,7 +281,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         }
     },
 
-    onSelectionChanged: function() {
+    onSelectionChanged: function(scope, start, end) {
+        if(scope !== this) {
+            this.select(start, end);
+        }
     },
 
     onSequenceChanging: function(kind, obj) {
