@@ -26,64 +26,88 @@ Ext.define('MyApp.view.AppViewport', {
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'panel',
-                    id: 'VectorPanel',
-                    layout: {
-                        align: 'stretch',
-                        type: 'hbox'
-                    },
-                    title: 'Vector',
-                    flex: 2,
+                    xtype: 'treepanel',
+                    id: 'ProjectPanel',
+                    width: 150,
+                    title: 'Project',
+                    flex: 1,
+                    region: 'west',
+                    viewConfig: {
+
+                    }
+                },
+                {
+                    xtype: 'tabpanel',
+                    id: 'EditorPanel',
+                    activeTab: 1,
+                    flex: 4,
                     region: 'center',
                     items: [
                         {
-                            xtype: 'container',
-                            id: 'PieContainer',
-                            layout: {
-                                type: 'fit'
-                            },
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    text: 'MyButton'
-                                }
-                            ]
+                            xtype: 'panel',
+                            title: 'DeviceEditor'
                         },
                         {
-                            xtype: 'container',
-                            hidden: true,
-                            id: 'RailContainer',
+                            xtype: 'panel',
                             layout: {
-                                type: 'fit'
+                                align: 'stretch',
+                                type: 'hbox'
                             },
+                            title: 'VectorEditor',
                             items: [
                                 {
-                                    xtype: 'button',
-                                    text: 'MyButton'
+                                    xtype: 'panel',
+                                    id: 'VectorPanel',
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'hbox'
+                                    },
+                                    title: 'Vector',
+                                    flex: 2,
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            id: 'PieContainer',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            flex: 1,
+                                            items: [
+                                                {
+                                                    xtype: 'button',
+                                                    text: 'MyButton'
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            xtype: 'container',
+                                            hidden: true,
+                                            id: 'RailContainer',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            flex: 1,
+                                            items: [
+                                                {
+                                                    xtype: 'button',
+                                                    text: 'MyButton'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'panel',
+                                    id: 'AnnotatePanel',
+                                    width: 150,
+                                    resizable: true,
+                                    resizeHandles: 'w',
+                                    title: 'Annotate',
+                                    flex: 2
                                 }
                             ]
                         }
                     ]
-                },
-                {
-                    xtype: 'panel',
-                    id: 'ProjectPanel',
-                    width: 150,
-                    resizable: true,
-                    resizeHandles: 'e',
-                    title: 'Project',
-                    flex: 1,
-                    region: 'west'
-                },
-                {
-                    xtype: 'panel',
-                    id: 'AnnotatePanel',
-                    width: 150,
-                    resizable: true,
-                    resizeHandles: 'w',
-                    title: 'Annotate',
-                    flex: 2,
-                    region: 'east'
                 },
                 {
                     xtype: 'panel',
