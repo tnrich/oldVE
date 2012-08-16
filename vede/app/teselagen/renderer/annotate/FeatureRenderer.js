@@ -103,6 +103,11 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureX2 = bpStartMetrics2.getX() + 2;
                 var featureYCommon = bpStartMetrics1.getY() + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
 
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureYCommon += 20;
+                }*/
+
                 if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     //Add AminoAcidsTextRenderer
                     featureYCommon += 3 * 20;
@@ -131,6 +136,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureX = bpStartMetrics.x + 2;
                 var featureY = bpStartMetrics.y  + downShift;
 
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureY += 20;
+                }*/
                 if (this.sequenceAnnotator.showAminoAcids1RevCom){
                     featureY += (3 * 20);
                 }
@@ -201,6 +210,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     
                     featureYCommon = bpStartMetrics1.y + downShift;
 
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureY += 20;
+                }*/
                     if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
                         featureY += (3*20);
                     }
@@ -226,6 +239,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     featureX = bpStartMetrics.x + 2;
                     featureY = bpStartMetrics.y + downShift;
                     
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureY +=  20;
+                }*/
                     if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
                         featureY += (3* 20);
                     }

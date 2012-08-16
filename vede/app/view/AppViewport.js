@@ -42,7 +42,7 @@ Ext.define('Vede.view.AppViewport', {
                         },
                         {
                             xtype: 'container',
-                            hidden: true,
+                            hidden: false,
                             id: 'RailContainer',
                             layout: {
                                 type: 'fit'

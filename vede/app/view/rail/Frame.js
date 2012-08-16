@@ -32,7 +32,7 @@ Ext.define('Vede.view.rail.Frame', {
         this.callParent([{
             type: "rect",
             x: reference.x,
-            y: reference.x,
+            y: reference.y,
             width: this.self.RECT_WIDTH,
             height: this.self.RECT_HEIGHT,
             stroke: this.self.OUTLINE_COLOR,
