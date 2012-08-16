@@ -11,67 +11,97 @@ Ext.define('Vede.view.AppViewport', {
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'panel',
+                    xtype: 'treepanel',
                     id: 'ProjectPanel',
-                    width: 150,
-                    collapsible: true,
-                    split : true,
                     title: 'Project',
                     flex: 1,
+                    collapsible: true,
+                    split : true,
                     region: 'west',
-                    collapsible: true
+                    viewConfig: {
+                        
+                    }
                 },
                 {
-                    xtype: 'panel',
-                    id: 'VectorPanel',
-                    layout: {
-                        type: 'fit'
-                    },
-                    title: 'Vector',
-                    flex: 2,
+                    xtype: 'tabpanel',
+                    id: 'EditorPanel',
+                    activeTab: 1,
+                    flex: 6,
                     region: 'center',
                     items: [
                         {
-                            xtype: 'container',
-                            id: 'PieContainer',
-                            //autoScroll: true,
-                            layout: {
-                                type: 'fit',
-                                //manageOverflow: 1
-                            }
+                            xtype: 'panel',
+                            title: 'DeviceEditor',
+                            items: [ 
+                                {
+                                    xtype: 'container',
+                                    id: 'DeviceContainer',
+                                    //layout: {
+                                    //    type: 'fit'
+                                    //}
+                                }
+                            ]
                         },
                         {
-                            xtype: 'container',
-                            hidden: false,
-                            id: 'RailContainer',
+                            xtype: 'panel',
+                            title: 'VectorEditor',
                             layout: {
-                                type: 'fit'
-                            }
-                        }
-                    ]
-                },
-                {
-                    xtype: 'panel',
-                    id: 'AnnotatePanel',
-                    layout: {
-                        type: 'fit'
-                    },
-                    width: 150,
-                    autoScroll: true,
-                    collapsible: true,
-                    viewBox: true,
-                    split: true,
-                    title: 'Annotate',
-                    flex: 2,
-                    region: 'east',
-                    items: [
-                        {
-                            xtype: 'container',
-                            id: 'AnnotateContainer',
-                            overflowY: 'scroll',
-                            layout: {
-                                type: 'fit'
-                            }
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
+                            items: [
+                                {
+                                    xtype: 'panel',
+                                    id: 'VectorPanel',
+                                    title: 'Vector',
+                                    flex: 1,
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'hbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            id: 'PieContainer',
+                                            //autoScroll: true,
+                                            layout: {
+                                                type: 'fit',
+                                                //manageOverflow: 1
+                                            }
+                                        },
+                                        {
+                                            xtype: 'container',
+                                            hidden: false,
+                                            id: 'RailContainer',
+                                            layout: {
+                                                type: 'fit'
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'splitter'
+                                },
+                                {
+                                    xtype: 'panel',
+                                    id: 'AnnotatePanel',
+                                    title: 'Annotate',
+                                    autoScroll: true,
+                                    flex: 1,
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            id: 'AnnotateContainer',
+                                            layout: {
+                                                type: 'fit'
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
