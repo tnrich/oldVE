@@ -188,11 +188,11 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
             if(this.caret) {
                 if(pShow) {
-                    this.caret.setHeight(40);
+                    this.caret.setHeight(48);
                     this.caret.setPosition(this.caret.getPosition());
                     this.caret.render();
                 } else {
-                    this.caret.setHeight(20);
+                    this.caret.setHeight(24);
                     this.caret.setPosition(this.caret.getPosition());
                     this.caret.render();
                 }

@@ -87,7 +87,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             this.totalHeight += 20;
 
-            var sequenceWidth = sequenceStringLength * 16 - sequenceX;
+            var sequenceWidth = sequenceStringLength * 16;
             var sequenceHeight = this.totalHeight - sequenceY;
 
             console.log(this.sequenceAnnotator.getShowAminoAcids());
@@ -218,7 +218,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 .attr("id", "nucleotide-comp-row" + row.getIndex() + "-base" + i);
 
             nucleotideSVGGroup.append("svg:text")
-                .attr("x", i*16)
+                .attr("x", i * 16)
                 .attr("y", this.totalHeight + 22)
                 .text(sequenceString.charAt(i))
                 .attr("fill", "#b0b0b0")

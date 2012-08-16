@@ -6,6 +6,6 @@ Ext.define("Teselagen.event.SelectionLayerEvent", {
     SELECT: "selectEvent",
     DESELECT: "deselectEvent",
     SELECTION_CHANGED: "selectionLayerSelectionChanged",
-    SELECTION_HANDLE_CLICKED: "handleClickedEvent",
-    SELECTION_HANDLE_RELEASED: "handleReleasedEvent"
+    HANDLE_CLICKED: "handleClickedEvent",
+    HANDLE_RELEASED: "handleReleasedEvent"
 });
