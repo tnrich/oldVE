@@ -27,7 +27,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
     /**
      * Creates a new GenbankFeatureElement from inData.
      * There can be multiple featureQualifier and featureLocations for each FeatureElement.
-     * @param {String} keyword e.g. source, CDS
+     * @param {String} keyword e.g. source, CDS. Equivalent to a "Type"
      * @param {String} strand 1 for normal read, -1 for complement
      * @param {Boolean} complement On complementary strand
      * @param {Boolean} join Location is not continuous
@@ -177,6 +177,29 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
             join = bool;
         }
         return this;
+    },
+
+    /**
+     * Within a Feature, locates the "label" in JbeiSeqXml model and "name" in
+     * SequenceManager and FeaturedDNA data models.
+     * This searches for the first Qualifier with the name (in this order):
+     *
+     * @param 
+     * @returns {String} name Name of Qualifier as used in Sequence Manager, FeaturedDNA, and JbeiSeq
+     */
+    findLabel: function() {
+        var name = "no_name";
+        for (var i=0; i < this.getFeatureQualifier().length; i++) {
+            var tmpName = this.getFeatureQualifier()[i].getName();
+
+            if (tmpName === "label" | tmpName === "ApEinfo_label" ||
+                    tmpName === "note" || tmpName === "gene" || 
+                    tmpName === "organism" || tmpName === "name" ) {
+
+                    name = this.getFeatureQualifier()[i].getValue();
+                }
+            }
+        return name;
     },
 
     /**

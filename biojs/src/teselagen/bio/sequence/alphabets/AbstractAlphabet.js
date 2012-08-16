@@ -9,15 +9,18 @@
  */ 
  Ext.define("Teselagen.bio.sequence.alphabets.AbstractAlphabet", {
 	require: ["Teselagen.bio.sequence.symbols.GapSymbol", "Teselagen.bio.BioException"],
+
+	symbolsMap: [],
+
 	constructor: function(inData){
 		var gap = Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
 			name: "Gap",
 			value: "-"
 		});
-		var symbolsMap = [];
+		//var symbolsMap = [];
 		var key = gap.getValue();
 
-		symbolsMap[key] = gap;
+		this.symbolsMap[key] = gap;
 
 		/**
 		 * Returns the list of the alphabet's symbols.
@@ -25,8 +28,8 @@
 		 */
 		this.getSymbols = function (){
 			var symbols = [];
-			for (var index in symbolsMap){
-				symbols.push(symbolsMap[index]);
+			for (var index in this.symbolsMap){
+				symbols.push(this.symbolsMap[index]);
 			}
 			return symbols;
 		}
@@ -50,7 +53,7 @@
 			//Check the type (in a roundabout kind of way)
 			if (Ext.getClassName(pSymbol).indexOf("Teselagen.bio.sequence.symbols") !== -1){
 				var key = pSymbol.getValue();
-				symbolsMap[key] = pSymbol;
+				this.symbolsMap[key] = pSymbol;
 			} else {
 				throw Ext.create("Teselagen.bio.BioException", {
 					message: "You tried adding a non-symbol to symbolsMap"

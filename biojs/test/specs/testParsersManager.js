@@ -19,7 +19,8 @@ Ext.onReady(function() {
 
     var LOG = true;
 
-    GenbankManager: Teselagen.bio.parsers.GenbankManager,
+    GenbankManager = Teselagen.bio.parsers.GenbankManager;
+    ParsersManager = Teselagen.bio.parsers.ParsersManager;
 
     describe("ParsersManager Unit Testing:", function() {
         describe("Teselagen.bio.parsers.ParsersManager.", function() {
@@ -41,7 +42,7 @@ Ext.onReady(function() {
                         'FEATURES             Location/Qualifiers\n' +
                         '     feat1           1..3\n' +
                         '                     /note="note1value"\n' +
-                        '     feat3           join(2..5,0..1)\n' +
+                        '     feat3           join(0..1,2..5)\n' +
                         'ORIGIN      \n' +
                         '        1 gattaca     \n';
                 gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(gbStr);
@@ -65,10 +66,10 @@ Ext.onReady(function() {
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
 
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(2);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(2);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(5);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(0);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(5);
 
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note");
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
@@ -82,7 +83,7 @@ Ext.onReady(function() {
 
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
                 expect(newGb.getOrigin().getSequence()).toBe("gattaca");
-                if (LOG) console.log(newGb.toString());
+                //if (LOG) console.log(newGb.toString());
                 jasmine.log(newGb.toString());
             });
 
@@ -93,12 +94,12 @@ Ext.onReady(function() {
                 
             });
 
-            it("loadXmlFile(): wrong url and right url", function() {
+            it("loadFile(): wrong url and right url", function() {
                 //wrong
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal";
                 var flag = false;
                 try {
-                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
+                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
                 } catch (bio) {
                     flag = true;
                     console.warn('Caught: ' + bio.message);
@@ -109,7 +110,7 @@ Ext.onReady(function() {
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var flag = false;
                 try {
-                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
+                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
                 } catch (bio) {
                     flag = true;
                     console.warn('Caught: ' + bio.message);
@@ -134,42 +135,102 @@ Ext.onReady(function() {
 
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
 
-                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
+                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
                 var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
-                console.log(jbeiXml);
-                //try {
+                //console.log(jbeiXml);
+                try {
                     var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
                     if (LOG) console.log(gb.toString());
                     if (LOG) console.log(JSON.stringify(gb, null, "    "));
-                //} catch (bio) {
-                //    console.warn("Caught: " + bio.message);
-               // }
+                } catch (e) {
+                    console.warn("Caught: " + e.message);
+                }
+                expect(gb.getLocus().getLocusName()).toBe("signal_pep");
+                expect(gb.getLocus().getStrandType()).toBe("");
+                expect(gb.getLocus().getSequenceLength()).toBe(64);
+                expect(gb.getLocus().getNaType()).toBe("DNA");
+                expect(gb.getLocus().getLinear()).toBe(true);
+                expect(gb.getLocus().getDivisionCode()).toBe("");
+
+                expect(gb.getFeatures().getFeaturesElements().length).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(63);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[1].getStart()).toBe(100);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[1].getEnd()).toBe(6300);
+
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(20);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(20);
+
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("signal_peptide");
+
+                expect(gb.getOrigin().getSequence().length).toBe(64);
             });
 
             it("jbeiseqxmlToGenbank(): Multiple records in .xml file", function() {
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                gbArr = []
+                gbArr = [];
 
-                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadXmlFile(jbeiXmlUrl);
+                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
                 var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
                 jbeiXml += jbeiXml;
-                console.log(jbeiXml);
+                //console.log(jbeiXml);
                 var xmlArr  = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlsToXmlArray(jbeiXml);
-                console.log(xmlArr);
+                //console.log(xmlArr);
                 try {
                     for (var i=0; i < xmlArr.length; i++ ) {
                         var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
                         gbArr.push(gb);
-                        if (LOG) console.log(gb.toString());
+                        //if (LOG) console.log(gb.toString());
                         //if (LOG) console.log(JSON.stringify(gb, null, "    "));
                     }
-                } catch (bio) {
-                    console.warn("Caught: " + bio.message);
+                } catch (e) {
+                    console.warn("Caught: " + e.message);
                 }
                 expect(gbArr.length).toBe(2);
             });
 
-            it("genbankToJbeiseqxml()", function() {
+            it("genbankToJbeiseqxml() --- NEEDS TESTS", function() {
+                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                //var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
+
+                if (LOG) console.log(jbeiXmlStr);
+               // if (LOG) console.log(JSON.stringify(jbeiXmlJson, null, "    "));
+
+                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
+                console.log(gb.toString());
+                var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
+                console.log(gb2xml);
+
+            });
+
+            it("genbankToJbeiseqJson() ---- NEEDS TESTS", function() {
+                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                //var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
+
+                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
+                console.log(gb.toString());
+                var gb2jbeiJSON      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
+                console.log(gb2jbeiJSON);
+
+            });
+
+            it("jbeiseqxmlToJson() -- cleaned NEEDS TESTS", function() {
+                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
+
+                if (LOG) console.log(jbeiXmlStr);
+                if (LOG) console.log(JSON.stringify(jbeiXmlJson, null, "    "));
+
+                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
+                console.log(gb.toString());
+                var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
+                console.log(gb2xml);
 
             });
 
