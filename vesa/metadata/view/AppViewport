@@ -17,99 +17,8 @@
     "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen2581",
-            "type": "panel",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "id": "VectorPanel",
-                "resizable": null,
-                "layout": "hbox",
-                "title": "Vector",
-                "titleCollapse": null,
-                "designer|userClassName": "MyPanel",
-                "layout|flex": 2,
-                "layout|region": "center",
-                "container|align": "stretch"
-            },
-            "customConfigs": [],
-            "expanded": true,
-            "cn": [
-                {
-                    "id": "ExtBox1-ext-gen3090",
-                    "type": "container",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "id": "PieContainer",
-                        "layout": "fit",
-                        "designer|userClassName": "MyContainer1"
-                    },
-                    "customConfigs": [],
-                    "expanded": true,
-                    "cn": [
-                        {
-                            "id": "ExtBox1-ext-gen4276",
-                            "type": "button",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "text": "MyButton",
-                                "designer|userClassName": "MyButton24"
-                            },
-                            "customConfigs": [],
-                            "expanded": true
-                        }
-                    ]
-                },
-                {
-                    "id": "ExtBox1-ext-gen3433",
-                    "type": "container",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "hidden": true,
-                        "id": "RailContainer",
-                        "layout": "fit",
-                        "designer|userClassName": "MyContainer2"
-                    },
-                    "customConfigs": [],
-                    "expanded": true,
-                    "cn": [
-                        {
-                            "id": "ExtBox1-ext-gen5072",
-                            "type": "button",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "text": "MyButton",
-                                "designer|userClassName": "MyButton25"
-                            },
-                            "customConfigs": [],
-                            "expanded": true
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "ExtBox1-ext-gen3484",
-            "type": "panel",
+            "id": "ExtBox1-ext-gen12825",
+            "type": "treepanel",
             "reference": {
                 "name": "items",
                 "type": "array"
@@ -118,36 +27,227 @@
             "userConfig": {
                 "id": "ProjectPanel",
                 "width": 150,
-                "resizable": "true",
-                "resizeHandles": "e",
                 "title": "Project",
-                "designer|userClassName": "MyPanel1",
+                "designer|userClassName": "MyTreePanel",
                 "layout|flex": 1,
                 "layout|region": "west"
             },
             "customConfigs": [],
-            "expanded": true
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen12844",
+                    "type": "treeview",
+                    "reference": {
+                        "name": "viewConfig",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyTreeView"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                }
+            ]
         },
         {
-            "id": "ExtBox1-ext-gen4829",
-            "type": "panel",
+            "id": "ExtBox1-ext-gen3274",
+            "type": "tabpanel",
             "reference": {
                 "name": "items",
                 "type": "array"
             },
             "codeClass": null,
             "userConfig": {
-                "id": "AnnotatePanel",
-                "width": 150,
-                "resizable": "true",
-                "resizeHandles": "w",
-                "title": "Annotate",
-                "designer|userClassName": "MyPanel2",
-                "layout|flex": 2,
-                "layout|region": "east"
+                "id": "EditorPanel",
+                "activeTab": 1,
+                "designer|userClassName": "MyTabPanel4",
+                "layout|flex": 4,
+                "layout|region": "center"
             },
             "customConfigs": [],
-            "expanded": true
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen3286",
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "title": "DeviceEditor",
+                        "designer|userClassName": "MyPanel5"
+                    },
+                    "customConfigs": [],
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen3298",
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig"
+                            },
+                            "customConfigs": [],
+                            "iconCls": "icon-tab-bar",
+                            "expanded": true
+                        }
+                    ]
+                },
+                {
+                    "id": "ExtBox1-ext-gen3303",
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout": "hbox",
+                        "title": "VectorEditor",
+                        "designer|userClassName": "MyPanel6",
+                        "container|align": "stretch"
+                    },
+                    "customConfigs": [],
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen3315",
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig1"
+                            },
+                            "customConfigs": [],
+                            "iconCls": "icon-tab-bar",
+                            "expanded": true
+                        },
+                        {
+                            "id": "ExtBox1-ext-gen2581",
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "id": "VectorPanel",
+                                "resizable": null,
+                                "layout": "hbox",
+                                "title": "Vector",
+                                "titleCollapse": null,
+                                "designer|userClassName": "MyPanel",
+                                "container|align": "stretch",
+                                "layout|flex": 2
+                            },
+                            "customConfigs": [],
+                            "expanded": false,
+                            "cn": [
+                                {
+                                    "id": "ExtBox1-ext-gen3090",
+                                    "type": "container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "id": "PieContainer",
+                                        "layout": "fit",
+                                        "designer|userClassName": "MyContainer1",
+                                        "layout|flex": 1
+                                    },
+                                    "customConfigs": [],
+                                    "expanded": false,
+                                    "cn": [
+                                        {
+                                            "id": "ExtBox1-ext-gen4276",
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "text": "MyButton",
+                                                "designer|userClassName": "MyButton24"
+                                            },
+                                            "customConfigs": [],
+                                            "expanded": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "ExtBox1-ext-gen3433",
+                                    "type": "container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "hidden": true,
+                                        "id": "RailContainer",
+                                        "layout": "fit",
+                                        "designer|userClassName": "MyContainer2",
+                                        "layout|flex": 1
+                                    },
+                                    "customConfigs": [],
+                                    "expanded": false,
+                                    "cn": [
+                                        {
+                                            "id": "ExtBox1-ext-gen5072",
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "text": "MyButton",
+                                                "designer|userClassName": "MyButton25"
+                                            },
+                                            "customConfigs": [],
+                                            "expanded": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "ExtBox1-ext-gen4829",
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "id": "AnnotatePanel",
+                                "width": 150,
+                                "resizable": "true",
+                                "resizeHandles": "w",
+                                "title": "Annotate",
+                                "designer|userClassName": "MyPanel2",
+                                "layout|flex": 2
+                            },
+                            "customConfigs": [],
+                            "expanded": true
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": "ExtBox1-ext-gen5136",
@@ -184,7 +284,7 @@
                         "layout|flex": 1
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen2938",
