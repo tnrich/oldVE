@@ -91,13 +91,13 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
     onMouseover: function() {
         if(!this.selecting && this.selected) {
-            this.showHandles();
+            //this.showHandles();
         }
     },
 
     onMouseout: function(event) {
         if(!this.selecting && this.selected) {
-            this.hideHandles();
+            //this.hideHandles();
         }
     },
 
@@ -156,32 +156,38 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
             this.drawRowSelectionRect(endRow.rowData.getStart(), toIndex);
         }
 
-        // Create handles to adjust selection.
+        // Create handles to adjust selection. Instead of using the image SVGs,
+        // which disappear when mouseover'd, we add invisible rectangles to the
+        // ends of the selection box.
         var that = this;
         var startMetrics = this.sequenceAnnotator.bpMetricsByIndex(fromIndex);
         d3.select("#selectionSVG").append("svg:rect")
+            .attr("id", "selectionRectangle")
             .attr("x", startMetrics.x - 10)
             .attr("y", startMetrics.y)
             .attr("width", 20)
             .attr("height", this.sequenceAnnotationManager.caret.height)
-            .attr("fill", "#000000")
-            .attr("fill-opacity", 0.1)
-            .on("mousedown", function() {
+            .attr("fill-opacity", 0)
+            .on("mousedown", function(e) {
+                // For some reason, changing the cursor is extremely slow.
                 //Ext.getBody().setStyle("cursor", "col-resize");
+                
                 Vede.application.fireEvent(
                     that.SelectionLayerEvent.HANDLE_CLICKED, "left");
             });
 
         var endMetrics = this.sequenceAnnotator.bpMetricsByIndex(toIndex);
         d3.select("#selectionSVG").append("svg:rect")
+            .attr("id", "selectionRectangle")
             .attr("x", endMetrics.x - 10)
             .attr("y", endMetrics.y)
             .attr("width", 20)
             .attr("height", this.sequenceAnnotationManager.caret.height)
-            .attr("fill", "#000000")
-            .attr("fill-opacity", 0.1)
-            .on("mousedown", function() {
+            .attr("fill-opacity", 0)
+            .on("mousedown", function(e) {
+                // For some reason, changing the cursor is extremely slow.
                 //Ext.getBody().setStyle("cursor", "col-resize");
+
                 Vede.application.fireEvent(
                     that.SelectionLayerEvent.HANDLE_CLICKED, "right");
             });
@@ -195,7 +201,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         // We need to add a character's width in order to highlight the last base.
         if(lastBaseInRow) {
-            endMetrics.x += 16;
+            endMetrics.x += this.sequenceAnnotator.self.CHAR_WIDTH;
         }
 
         d3.select("#selectionSVG").append("svg:rect")

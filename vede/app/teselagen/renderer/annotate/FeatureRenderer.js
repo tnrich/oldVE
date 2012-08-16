@@ -10,8 +10,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     },
 
     statics: {
-        DEFAULT_FEATURE_HEIGHT: 6,
-        DEFAULT_FEATURES_SEQUENCE_GAP: 3,
+        DEFAULT_FEATURE_HEIGHT: 8,
+        DEFAULT_FEATURES_SEQUENCE_GAP: 6,
         DEFAULT_FEATURES_GAP: 2,
     },
 
@@ -60,7 +60,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             //downShift calculates the adjustedYPosition
             var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
             if(this.sequenceAnnotationManager.showComplementarySequence) {
-                downShift += 30;
+                downShift += 4 + 
+                    this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
             }
 
             if( this.feature.getStart() > this.feature.getEnd()){

@@ -162,7 +162,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 cutSiteX - 4;
 
             if(addToEnd) {
-                currentWidth += 16;
+                currentWidth += this.sequenceAnnotator.self.CHAR_WIDTH;
             }
 
             currentHeight = cutSiteHeight;

@@ -11,6 +11,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     startHandleResizing: false,
     endHandleResizing: false,
 
+    endSelectionIndex: null,
+
     init: function(){
         this.callParent();
 
@@ -55,7 +57,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             annotatePanel: this.AnnotatePanel,
         });
 
-        console.log(this.SequenceAnnotationManager.annotator);
         this.AnnotatePanel.add(this.SequenceAnnotationManager.annotator);
 
         // disable default selection action on the page
@@ -129,7 +130,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onMousedown: function(pEvt, pOpts) {
         if(this.SequenceAnnotationManager.sequenceManager) {
             var el = Ext.getCmp("AnnotateContainer").el;
-            var adjustedX = pEvt.getX() + 10 - el.getX();
+            var adjustedX = pEvt.getX() - el.getX();
             var adjustedY = pEvt.getY() + el.getScroll().top - el.getY();
 
             var index = this.SequenceAnnotationManager.bpAtPoint(adjustedX,
@@ -139,7 +140,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
             this.changeCaretPosition(index);
 
-            if(this.SelectionLayer.selected) {
+            if(this.SelectionLayer.selected && 
+               pEvt.target.id !== "selectionRectangle") {
                 this.SelectionLayer.deselect();
                 this.application.fireEvent(
                     this.SelectionEvent.SELECTION_CANCELED);
@@ -155,7 +157,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onMousemove: function(pEvt, pOpts) {
         if(this.mouseIsDown) {
             var el = Ext.getCmp("AnnotateContainer").el;
-            var x = pEvt.getX() + 10 - el.getX();
+            var x = pEvt.getX() - el.getX();
             var y = pEvt.getY() + el.getScroll().top - el.getY();
 
             var bpIndex = this.SequenceAnnotationManager.bpAtPoint(x, y);
@@ -164,32 +166,30 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 return;
             }
 
-            var endSelectionIndex;
-
             if(this.startHandleResizing) {
                 this.startSelectionIndex = bpIndex;
                 this.selectionDirection = 1; // ignore direction on resizing
 
-                this.changeCaretPosition(bpIndex); //NEED TO SET ENDSELECTIONINDEX
+                this.changeCaretPosition(bpIndex); 
             } else if(this.endHandleResizing) {
-                endSelectionIndex = bpIndex;
+                this.endSelectionIndex = bpIndex;
                 this.selectionDirection = 1;
 
-                this.changeCaretPosition(endSelectionIndex);
+                this.changeCaretPosition(this.endSelectionIndex);
             } else {
-                endSelectionIndex = bpIndex; 
+                this.endSelectionIndex = bpIndex; 
 
-                this.changeCaretPosition(endSelectionIndex);
+                this.changeCaretPosition(this.endSelectionIndex);
             }
-
+                
             if(this.SequenceAnnotationManager.annotator.isValidIndex(this.startSelectionIndex) &&
-               this.SequenceAnnotationManager.annotator.isValidIndex(endSelectionIndex)) {
+               this.SequenceAnnotationManager.annotator.isValidIndex(this.endSelectionIndex)) {
                 var start = this.startSelectionIndex;
-                var end = endSelectionIndex;
+                var end = this.endSelectionIndex;
 
                 if(this.selectionDirection == 0 && 
-                   this.startSelectionIndex != endSelectionIndex) {
-                    if(this.startSelectionIndex < endSelectionIndex) {
+                   this.startSelectionIndex != this.endSelectionIndex) {
+                    if(this.startSelectionIndex < this.endSelectionIndex) {
                         this.selectionDirection = 1;
                     } else {
                         this.selectionDirection = -1;
@@ -197,7 +197,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 }
 
                 if(this.selectionDirection === -1) {
-                    start = endSelectionIndex;
+                    start = this.endSelectionIndex;
                     end = this.startSelectionIndex;
                 }
 
@@ -244,7 +244,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     select: function(start, end) {
         this.changeCaretPosition(start);
-        this.SelectionLayer.select(start, end);
+        this.SelectionLayer.select(start, end + 1);
     },
 
     changeCaretPosition: function(index) {
@@ -269,7 +269,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             manager.sequenceChanged();
         });
 
-        console.log(kind);
     },
 
     onActiveEnzymesChanged: function() {

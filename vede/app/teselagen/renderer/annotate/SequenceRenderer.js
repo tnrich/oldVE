@@ -1,8 +1,15 @@
 Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
-
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
                "Teselagen.bio.orf.ORF",
-               "Teselagen.bio.sequence.common.Annotation"],
+               "Teselagen.bio.sequence.common.Annotation",
+               "Teselagen.utils.SystemUtils"],
+
+    statics: {
+        FONT_SIZE: 12,
+        FONT_FAMILY: "Monaco",
+        COMPLEMENTARY_VERTICAL_OFFSET: 16
+    },
+
     config: {
         sequenceAnnotator: null,
 
@@ -24,7 +31,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         this.initConfig(inData);
         this.sequenceAnnotationManager = this.sequenceAnnotator;
         this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
-        
     },
 
     update: function(){
@@ -34,7 +40,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     },
 
     render: function(){
-       // this.sequenceAnnotator.sequenceSVG.remove();
+        // this.sequenceAnnotator.sequenceSVG.remove();
         var newRows = [];
 
         this.totalWidth = 0;
@@ -79,16 +85,16 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
             }
 
-            var sequenceX = 6 * 16;
+            var sequenceX = 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH;
             var sequenceY = this.totalHeight;
 
-            if(this.totalWidth < (16 * sequenceStringLength)){
-                this.totalWidth = (16 * sequenceStringLength);
+            if(this.totalWidth < (this.sequenceAnnotationManager.self.CHAR_WIDTH * sequenceStringLength)){
+                this.totalWidth = (this.sequenceAnnotationManager.self.CHAR_WIDTH * sequenceStringLength);
             }
 
             this.totalHeight += 20;
 
-            var sequenceWidth = sequenceStringLength * 16;
+            var sequenceWidth = sequenceStringLength * this.sequenceAnnotationManager.self.CHAR_WIDTH;
             var sequenceHeight = this.totalHeight - sequenceY;
 
             if(this.sequenceAnnotator.getShowAminoAcids()){
@@ -107,7 +113,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             if(this.sequenceAnnotator.showFeatures){
                 if(row.getRowData().getFeaturesAlignment() && row.getRowData().getFeaturesAlignment().getCount() > 0){
-                    this.totalHeight += row.getRowData().getFeaturesAlignment().getCount() * (6*3) + 2;
+                    this.totalHeight += row.getRowData().getFeaturesAlignment().getCount() * (10) + 2;
                 }
             }
 
@@ -126,11 +132,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             for(var j = 0; j < sequenceStringLength; j++){
                 var nucleotide = sequenceString.charAt(j);
                                 nucleotideRowSVG.append("svg:text")
-                    .attr("x", sequenceX + j*16)
+                    .attr("x", sequenceX + j*this.sequenceAnnotationManager.self.CHAR_WIDTH)
                     .attr("y", sequenceY + 20)
                     .text(nucleotide)
-                    .attr("font-face", "Verdana")
-                    .attr("font-size", 20);
+                    .attr("font-family", this.self.FONT_FAMILY)
+                    .attr("font-size", this.self.FONT_SIZE);
             }
 
             row.metrics.x = rowX;
@@ -241,32 +247,33 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
                 .attr("x", leftShift + 96)
                 .attr("y", this.totalHeight)
-                .attr("font-face", "Verdana")
-                .attr("font-size", 20)
+                .attr("font-family", this.self.FONT_FAMILY)
+                .attr("font-size", this.self.FONT_SIZE)
                 .attr("xml:space", "preserve")
                 .attr("fill", "blue")
                 .text(aminoAcidsString1.charAt(i));
         }
         this.totalHeight += 20;
         for (var i = 0; i < aminoAcidsString2.length; ++i){
-            leftShift = i * 16 * 3;
+            leftShift = i * this.sequenceAnnotationManager.self.CHAR_WIDTH * 3;
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-                .attr("x", leftShift + 96 + 16)
+                .attr("x", leftShift + 96 + this.sequenceAnnotationManager.self.CHAR_WIDTH)
                 .attr("y", this.totalHeight)
-                .attr("font-face", "Verdana")
-                .attr("font-size", 20)
+                .attr("font-family", this.self.FONT_FAMILY)
+                .attr("font-size", this.self.FONT_SIZE)
                 .attr("xml:space", "preserve")
                 .attr("fill", "blue")
                 .text(aminoAcidsString2.charAt(i));
         }
         this.totalHeight += 20;
         for (var i = 0; i < aminoAcidsString3.length; ++i){
-            leftShift = i * 16 * 3;
+            leftShift = i * this.sequenceAnnotationManager.self.CHAR_WIDTH * 3;
             this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-                .attr("x", leftShift + 96 + 16 + 16)
+                .attr("x", leftShift + 96 + 
+                      this.sequenceAnnotationManager.self.CHAR_WIDTH * 2) 
                 .attr("y", this.totalHeight)
-                .attr("font-face", "Verdana")
-                .attr("font-size", 20)
+                .attr("font-family", this.self.FONT_FAMILY)
+                .attr("font-size", this.self.FONT_SIZE)
                 .attr("xml:space", "preserve")
                 .attr("fill", "blue")
                 .text(aminoAcidsString3.charAt(i));
@@ -277,7 +284,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             this.aminoAcidsSVG.append("svg:text")
                 .attr("x", labelX + 15)
                 .attr("y", labelY + 15)
-                .attr("font-face", "Verdana")
+                .attr("font-family", this.self.FONT_FAMILY)
                 .attr("font-size", 20)
                 .attr("textLength", 917)
                 .attr("xml:space", "preserve")
@@ -286,7 +293,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             this.aminoAcidsSVG.append("svg:text")
                 .attr("x", labelX + 32)
                 .attr("y", labelY + 40)
-                .attr("font-face", "Verdana")
+                .attr("font-family", this.self.FONT_FAMILY)
                 .attr("font-size", 20)
                 .attr("textLength", 917)
                 .attr("xml:space", "preserve")
@@ -314,15 +321,16 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var complementRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g")
             .attr("id", "nucleotide-comp-row" + row.getIndex());
         for(var i = 0; i < stringLength; i++) {
-            leftShift = i * 16;
+            leftShift = i * this.sequenceAnnotationManager.self.CHAR_WIDTH;
 
             complementRowSVG.append("svg:text")
-                .attr("x", i*16)
-                .attr("y", this.totalHeight + 22)
+                .attr("x", i*this.sequenceAnnotationManager.self.CHAR_WIDTH)
+                .attr("y", this.totalHeight + 
+                      this.self.COMPLEMENTARY_VERTICAL_OFFSET)
                 .text(sequenceString.charAt(i))
                 .attr("fill", "#b0b0b0")
-                .attr("font-face", "Verdana")
-                .attr("font-size", 20);
+                .attr("font-family", this.self.FONT_FAMILY)
+                .attr("font-size", this.self.FONT_SIZE);
         }
 
         this.totalHeight += 20;
