@@ -11,7 +11,7 @@ Ext.require("Teselagen.bio.sequence.TranslationUtils");
 
 
 Ext.onReady(function() {
-    xdescribe("Testing SequenceManager Classes pt2", function() {
+    xdescribe("Testing SequenceManager Classes pt2: ", function() {
 
         // =============================================
         //  SequenceManager.removeSequence Testing Suite
@@ -19,7 +19,7 @@ Ext.onReady(function() {
         // =============================================
 
 
-        describe("Test cases from 'SequenceProviderTestCases.as'", function() {
+        describe("from 'SequenceProviderTestCases.as': ", function() {
             var seqStr, seq, feat1, feat2, sm, tmp;
 
             beforeEach(function() {
@@ -322,7 +322,7 @@ Ext.onReady(function() {
 
             });
 
-            it("testRemoveSequenceFcSn6",function(){   /// ALL WRONG
+            it("testRemoveSequenceFcSn6 **",function(){   /// ALL WRONG
                 // tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc
                 // 22222-----1111111111-----11111----------2222222222-----222222222
                 // 0123456789012345678901234567890123456789012345678901234567890123
@@ -446,7 +446,7 @@ Ext.onReady(function() {
                 //expect(features[1].getLocations()[1].getEnd()).toBe(5);
             });
 
-            it("testRemoveSequenceFcSc6",function(){
+            it("testRemoveSequenceFcSc6: ***",function(){
                 // tcgcgcgtttcggtgatgacggtgaaaacctctgacacatgcagctcccggagacggtcacagc
                 // 22222-----1111111111-----11111----------2222222222-----222222222
                 // 0123456789012345678901234567890123456789012345678901234567890123
@@ -459,7 +459,7 @@ Ext.onReady(function() {
                 var features = sm.getFeatures();
                 expect(features.length).toBe(1);
                 expect(features[0].getLocations().length).toBe(1);
-                expect(features[0].getLocations()[0].getStart()).toBe(0);
+                expect(features[0].getLocations()[0].getStart()).toBe(0); //5
                 expect(features[0].getLocations()[0].getEnd()).toBe(3);
                 console.log("========================================" +
                             "        End FcSc6 DEBUG               " +

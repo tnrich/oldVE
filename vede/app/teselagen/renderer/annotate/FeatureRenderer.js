@@ -39,7 +39,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
         //console.log("Retrieving feature rows with this name: " + this.feature.getName());
         var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
-        console.log("Feature to Row Map: " + featureRows);
+        //console.log("Feature to Row Map: " + featureRows);
         if (!featureRows){
             return;
         }
@@ -47,33 +47,22 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         for (var i = 0; i < featureRows.length; i++){
             var row = this.sequenceAnnotationManager.getRowManager().getRows()[featureRows[i]];
 
-            var alignmentRowIndex = -1;
+            var alignmentRowIndex = row.rowData.getFeaturesAlignment().get(feature);
             var fromSameFeatureIndex = 0;
 
             //for each row, get the features alignment
             var featuresAlignment = row.getRowData().getFeaturesAlignment();
             //console.log("New set of feature rows");
-            console.log(featuresAlignment.getKeys());
-            Ext.each(featuresAlignment.getKeys(), function(rowFeatures, index){
-               Ext.each(rowFeatures, function(rowFeature){
-                   console.log("rowFeature: " + rowFeature + " feature name: " + feature.toString());
-                   if (rowFeature.indexOf(feature.toString()) != -1){
-                       console.log(alignmentRowIndex);
-                       alignmentRowIndex = index + fromSameFeatureIndex;
-                       return false;
-                   }
-               });
-
-               if(alignmentRowIndex != -1){
-                   return false;
-               }
-                
-            });
-            console.log("Alignment index: " + alignmentRowIndex);
+            //console.log(featuresAlignment.getKeys());
 
             var startBP;
             var endBP;
+            //downShift calculates the adjustedYPosition
             var downShift = 2 + alignmentRowIndex * (this.self.DEFAULT_FEATURE_HEIGHT + this.self.DEFAULT_FEATURES_GAP);
+            if(this.sequenceAnnotationManager.showComplementarySequence) {
+                downShift += 30;
+            }
+
             if( this.feature.getStart() > this.feature.getEnd()){
                 if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()){
                     endBP = this.feature.getEnd() - 1;
@@ -102,9 +91,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
             console.log("Row keys? : " + row.getRowData().getFeaturesAlignment().getKeys());
             console.log("StartBP: " + startBP + " EndBP: " + endBP);*/
 
-            if (startBP > endBP){
+            if (startBP > endBP && this.feature.getType() != "misc_feature"){
                 var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
-                console.log("Min!");
+                //console.log("Min!");
                 var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
                 var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
@@ -113,6 +102,11 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureX1 = bpStartMetrics1.getX() + 2;
                 var featureX2 = bpStartMetrics2.getX() + 2;
                 var featureYCommon = bpStartMetrics1.getY() + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
+
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureYCommon += 20;
+                }*/
 
                 if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     //Add AminoAcidsTextRenderer
@@ -142,6 +136,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var featureX = bpStartMetrics.x + 2;
                 var featureY = bpStartMetrics.y  + downShift;
 
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureY += 20;
+                }*/
                 if (this.sequenceAnnotator.showAminoAcids1RevCom){
                     featureY += (3 * 20);
                 }
@@ -200,7 +198,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     }
                 }
 
-                if (startBP > endBP){
+                if (startBP > endBP && this.feature.getType() != "misc_feature"){
                     bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
                     bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
@@ -212,6 +210,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     
                     featureYCommon = bpStartMetrics1.y + downShift;
 
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureY += 20;
+                }*/
                     if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
                         featureY += (3*20);
                     }
@@ -237,6 +239,10 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     featureX = bpStartMetrics.x + 2;
                     featureY = bpStartMetrics.y + downShift;
                     
+                /*if(this.sequenceAnnotationManager.showAminoAcids){
+                    //Add AminoAcidsTextRenderer
+                    featureY +=  20;
+                }*/
                     if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
                         featureY += (3* 20);
                     }
@@ -271,13 +277,17 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     }
                 }
             }
+
+            //console.log("Feature type: " + this.feature.getType());
+            this.addToolTip(this.feature);
+            this.addClickListener(this.feature);
         
 
         }
 
 
         function drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight){
-            console.log("Drew rect!!!");
+            //console.log("Drew rect!!!");
             pGraphics.append("svg:rect")
                 .attr("x", pX)
                 .attr("y", pY + 20)
@@ -332,7 +342,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 */
         }
         function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight){
-            console.log(pGraphics);
+            //console.log(pGraphics);
             //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
             pY += 20;
             if(pWidth){
@@ -399,5 +409,19 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
     },
 
+    addToolTip: function(feature){
+        var featureToolTip = this.featureGroupSVG.append("svg:title")
+            .attr("id", "feature-tooltip-"+feature.getName());
+        var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
+        featureToolTip.text(toolTip);
+
+    },
+
+
+    addClickListener: function(feature){
+        this.featureGroupSVG.on("mousedown", function(){
+            Vede.application.fireEvent("AnnotatePanelAnnotationClicked", feature.getStart(), feature.getEnd());
+        });
+    },
 });
 

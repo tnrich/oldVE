@@ -8,7 +8,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteLabel", {
     extend: "Teselagen.renderer.common.Label",
 
     config: {
-        center: null,
+        start: null,
     },
 
     constructor: function(inData) {
@@ -22,6 +22,9 @@ Ext.define("Teselagen.renderer.rail.CutSiteLabel", {
      * @return {String} The cut site label.
      */
     labelText: function() {
-        return this.annotation.getRestrictionEnzyme().getName();
+        var label = [];
+        label =  this.annotation.getRestrictionEnzyme().getName();
+        
+        return label;
     },
 });

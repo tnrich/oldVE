@@ -31,13 +31,14 @@
 			return symbols;
 		}
 
-		/**
+		/** 
+		 * SYMBOLSMAP ARRAY IS AN EMPTY ARRAY WHEN CALLED FROM DNAAlphabet
 		 * Retrieves the symbol that corresponds to the input value.
 		 * @param  {Symbol} pValue corresponds to the key for a symbol in the map of symbols
 		 * @return {Symbol} a symbol in the symbol map.
 		 */
 		this.symbolByValue = function(pValue){
-			return symbolsMap[pValue];
+			return this.symbolsMap[pValue];
 		}
 
 		/**

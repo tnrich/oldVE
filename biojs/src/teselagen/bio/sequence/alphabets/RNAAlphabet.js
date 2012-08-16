@@ -28,6 +28,8 @@ Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
 	b: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'c' or 'g;' or 'u'}", value: "b", ambiguousMatches: []}), 
 	n: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Ambiguous {'a' or 'u;' or 'g' or 'c'}", value: "n", ambiguousMatches: [] }), 
 
+	symbolsMap: [],
+
 	//A workaround to set ambiguous matches.
 	constructor: function(){
 		var that = this;
@@ -41,7 +43,27 @@ Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
 		that.h.setAmbiguousMatches([that.a, that.c, that.u]);
 		that.d.setAmbiguousMatches([that.a, that.g, that.u]);
 		that.b.setAmbiguousMatches( [that.c, that.g, that.u]);
-		that.n.setAmbiguousMatches([that.a, that.c, that.g, that.u]);	
+		that.n.setAmbiguousMatches([that.a, that.c, that.g, that.u]);
+
+		that.callParent([]);
+
+		this.symbolsMap =  {
+                "a": this.getA(),
+                "g": this.getG(),
+                "c": this.getC(),
+                "u": this.getU(),
+                "m": this.getM(),
+                "r": this.getR(),
+                "w": this.getW(),
+                "s": this.getS(),
+                "y": this.getY(),
+                "k": this.getK(),
+                "v": this.getV(),
+                "h": this.getH(),
+                "d": this.getD(),
+                "b": this.getB(),
+                "n": this.getN(),
+        };
 	},
 /**
 		 * Returns data about the Adenine NucleotideSymbol

@@ -115,7 +115,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 				} else {
                     this.orfSVG.append("svg:path")
                         .attr("d", "M" + (bpStartPoint.x + 2) + " " + orfY +
-                                   "L" + (bpEndPoint.x + textWidth) + 
+                                   "L" + (bpEndPoint.x + textWidth + 2) + 
                                    " " + orfY)
                         .attr("stroke", color)
                         .attr("stroke-width", this.self.ORF_STROKE_WIDTH);
@@ -131,15 +131,15 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                         
                         if(orf.getStrand() == -1) {
                             this.orfSVG.append("svg:circle")
-                                .attr("cx", codonStartPointX + textWidth - 2)
+                                .attr("cx", codonStartPointX + textWidth - 10)
                                 .attr("cy", codonStartPointY)
-                                .attr("r", 3)
+                                .attr("r", 3.5)
                                 .attr("fill", color);
                         } else {
                             this.orfSVG.append("svg:circle")
-                                .attr("cx", codonStartPointX + textWidth - 5)
+                                .attr("cx", codonStartPointX + textWidth - 10)
                                 .attr("cy", codonStartPointY)
-                                .attr("r", 3)
+                                .attr("r", 3.5)
                                 .attr("fill", color);
                         }
                     }
@@ -173,6 +173,52 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
                                    "L" + codonEndPointX2 + " " + codonEndPointY2)
                         .attr("fill", color);
 				}
+
+                this.addClickListener(orf);
+                this.addToolTip(orf);
         }, this);
-    }
+    },
+
+    addClickListener: function(cutSite) {
+        this.orfSVG.on("mousedown", function() {
+            Vede.application.fireEvent("AnnotatePanelAnnotationClicked", 
+                                       cutSite.getStart(), cutSite.getEnd());
+        });
+    },
+
+    addToolTip: function(orf) {
+        var bp = Math.abs(orf.getEnd() - orf.getStart()) + 1;
+        var aa = Math.floor(bp / 3);
+        var complimentary = "";
+        
+        if(orf.getStrand() == 1 && orf.getStartCodons().length > 1) {
+            complimentary = ", complimentary";
+        }
+
+        var tooltipLabel = (orf.getStart() + 1) + ".." + (orf.getEnd() + 1) +
+            ", frame: " + orf.getFrame() + 
+            ", length: " + bp + " BP" + 
+            ", " + aa + " AA" + complimentary;
+
+        if(orf.getStartCodons().length > 1) {
+            tooltipLabel += "\nStart Codons: ";
+            
+            var codonsArray = [];
+            var codonString;
+            Ext.each(orf.getStartCodons(), function(codon, index) {
+                if(index != orf.getStartCodons().length - 1) {
+                    codonString = codon + ", ";
+                } else {
+                    codonString = codon;
+                }
+
+                codonsArray.push(codonString);
+            });
+
+            tooltipLabel = [tooltipLabel].concat(codonsArray).join("");
+        }
+
+        this.orfSVG.append("svg:title")
+            .text(tooltipLabel);
+    },
 });

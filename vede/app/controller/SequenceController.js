@@ -1,3 +1,6 @@
+/**
+ * Parent class of controllers which display sequence data.
+ */
 Ext.define("Vede.controller.SequenceController", {
     extend: "Ext.app.Controller",
 
@@ -5,6 +8,7 @@ Ext.define("Vede.controller.SequenceController", {
                "Teselagen.event.MapperEvent",
                "Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.SelectionEvent",
+               "Teselagen.event.SelectionLayerEvent",
                "Teselagen.event.VisibilityEvent",
                "Teselagen.manager.RestrictionEnzymeGroupManager"],
 
@@ -20,10 +24,18 @@ Ext.define("Vede.controller.SequenceController", {
     CaretEvent: null,
     MapperEvent: null,
     SelectionEvent: null,
+    SelectionLayerEvent: null,
     VisibilityEvent: null,
 
     WireframeSelectionLayer: null,
     SelectionLayer: null,
+
+    mouseIsDown: false,
+    startSelectionIndex: 0,
+    selectionDirection: 0,
+
+    clickedAnnotationStart: null,
+    clickedAnnotationEnd: null,
 
     listeners:{
     },
@@ -32,6 +44,7 @@ Ext.define("Vede.controller.SequenceController", {
         this.CaretEvent = Teselagen.event.CaretEvent;
         this.MapperEvent = Teselagen.event.MapperEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
+        this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         var listenersObject = {
@@ -49,7 +62,7 @@ Ext.define("Vede.controller.SequenceController", {
             this.onShowCutSitesChanged;
         listenersObject[this.VisibilityEvent.SHOW_ORFS_CHANGED] = 
             this.onShowOrfsChanged;
-        
+
         listenersObject[this.VisibilityEvent.SHOW_FEATURE_LABELS_CHANGED] = 
             this.onShowFeatureLabelsChanged;
         listenersObject[this.VisibilityEvent.SHOW_CUTSITE_LABELS_CHANGED] =
@@ -64,6 +77,8 @@ Ext.define("Vede.controller.SequenceController", {
 
         listenersObject[this.SelectionEvent.SELECTION_CHANGED] = 
             this.onSelectionChanged;
+        listenersObject[this.SelectionEvent.SELECTION_CANCELED] =
+            this.onSelectionCanceled;
 
         this.application.on(listenersObject);
     },
@@ -174,6 +189,12 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onSelectionChanged: function(scope, start, end) {
+    },
+
+    onSelectionCanceled: function() {
+        if(this.SelectionLayer && this.SelectionLayer.selected) {
+            this.SelectionLayer.deselect();
+        }
     },
 
     onVectorPanelAnnotationClicked: function(start, end) {
