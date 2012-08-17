@@ -132,7 +132,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     //Add AminoAcidsTextRenderer
                     featureY += 20;
                 }*/
-                if (this.sequenceAnnotator.showAminoAcids1RevCom){
+                if (this.sequenceAnnotationManager.showAminoAcidsRevCom){
                     featureY += (3 * 20);
                 }
 
@@ -206,8 +206,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     //Add AminoAcidsTextRenderer
                     featureY += 20;
                 }*/
-                    if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
-                        featureY += (3*20);
+                    if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
+                        featureYCommon += (3*20);
                     }
 
                     featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16
@@ -235,7 +235,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     //Add AminoAcidsTextRenderer
                     featureY +=  20;
                 }*/
-                    if(this.sequenceAnnotationManager.showAminoAcids1RevCom){
+                    if(this.sequenceAnnotationManager.showAminoAcidsRevCom){
                         featureY += (3* 20);
                     }
 

@@ -28,6 +28,14 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         needsMeasurement: false,
     },
 
+    aminoAcidsString1: null,
+    aminoAcidsString2: null,
+    aminoAcidsString3: null,
+
+    aminoAcidsStringRevCom1: null,
+    aminoAcidsStringRevCom2: null,
+    aminoAcidsStringRevCom3: null,
+
     constructor: function(inData){
         this.initConfig(inData);
         this.sequenceAnnotationManager = this.sequenceAnnotator;
@@ -44,16 +52,22 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         // this.sequenceAnnotator.sequenceSVG.remove();
         var newRows = [];
 
+        this.aminoAcidsString1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true);
+        this.aminoAcidsString2 = this.sequenceAnnotator.getAaManager().getSequenceFrame(1, true);
+        this.aminoAcidsString3 = this.sequenceAnnotator.getAaManager().getSequenceFrame(2, true);
+
+        this.aminoAcidsStringRevCom1 = this.sequenceAnnotator.getAaManager().getRevComFrame(0, true);
+        this.aminoAcidsStringRevCom2 = this.sequenceAnnotator.getAaManager().getRevComFrame(1, true);
+        this.aminoAcidsStringRevCom3 = this.sequenceAnnotator.getAaManager().getRevComFrame(2, true);
+
         this.totalWidth = 0;
         this.totalHeight = 0;
         var sequenceX = 6*3;
         var sequenceY = 0;
         var sequence = this.sequenceAnnotator.getSequenceManager().getSequence().seqString();
-        //console.log(sequence);
         var rows = this.sequenceAnnotator.getRowManager().getRows();
         var sequenceNucleotideMatrix = [];
 
-        //console.log(rows.length);
         for (var i = 0; i < rows.length; i++){
             var row = rows[i];
 
@@ -76,13 +90,12 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                row.getRowData().getCutSitesAlignment()){
                 if(row.getRowData().getCutSitesAlignment().getCount() > 0){
                     this.totalHeight += (Math.max.apply(null, 
-                        row.getRowData().getCutSitesAlignment().getValues()) + 1) * 20 * 3;
+                        row.getRowData().getCutSitesAlignment().getValues()) + 1) * 30;
                 }
             }
 
 
             if (this.sequenceAnnotator.getShowOrfs() && row.getRowData().getOrfAlignment()){
-                //console.log("show orfs");
                 this.totalHeight += (row.getRowData().getOrfAlignment().getCount() * 6);
             }
 
@@ -108,8 +121,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
                 sequenceHeight = this.totalHeight - sequenceY;
             }
 
-            if(this.sequenceAnnotator.showAminoAcids1RevCom){
-                //this.renderAARevCom(row);
+            if(this.sequenceAnnotator.showAminoAcidsRevCom){
+                this.renderAARevCom(row);
             }
 
             if(this.sequenceAnnotator.showFeatures){
@@ -147,11 +160,8 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
             var newMetrics = {"x": rowX, "y": rowY, "width": rowWidth, "height": rowHeight};
             var newSequenceMetrics = {"x": sequenceX, "y": sequenceY, "width": sequenceWidth, "height": sequenceHeight};
-           // console.log("Row metrics for "+i+": " + sequenceX + ", " + sequenceY + ", " + sequenceWidth + ", " + sequenceHeight);
             row.sequenceMetrics.x = sequenceX;
-            //console.log("rendered sequence y: " + sequenceY);
             row.sequenceMetrics.y = sequenceY;
-            //console.log(row.sequenceMetrics.y);
             row.sequenceMetrics.width = sequenceWidth;
             row.sequenceMetrics.height = sequenceHeight;
             
@@ -163,19 +173,15 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             });
             newRows.push(newRow);
 
-            this.renderBpLabel(row.getRowData().getStart() + 1, rowX, 
+            this.renderBpLabel(row.getRowData().getStart() + 1, rowX + 10, 
                                sequenceY + 20);
         }
         
-        //console.log("Before set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
         this.sequenceAnnotator.getRowManager().setRows(newRows);
         this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
-
-        //console.log("After set rows: " + this.sequenceAnnotator.getRowManager().getRows()[0].getSequenceMetrics().x);
     },
 
     getUpdatedRows: function(){
-        //console.log(this.sequenceAnnotator.getRowManager().getRows());
         return this.sequenceAnnotator.getRowManager().getRows();
     },
 
@@ -206,77 +212,138 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     renderAA: function(row){
         var aaStart, aaEnd, 
-        //leftShift adjust the AA sequence positions
-        leftShift,
         
         //aaPadding moves the Amino acid rows into the correct places.
         aaPadding;
-
-        var aminoAcidsString1 = this.sequenceAnnotator.getAaManager().getSequenceFrame(0, true).replace(/\s/g, '');
-        var aminoAcidsString2 = this.sequenceAnnotator.getAaManager().getSequenceFrame(1, true).replace(/\s/g, '');
-        var aminoAcidsString3 = this.sequenceAnnotator.getAaManager().getSequenceFrame(2, true).replace(/\s/g, '');
 
         var start = row.getRowData().getStart();
         var end = row.getRowData().getEnd();
         var numberOfSpaces = 0;
 
-        if (start > 20){
-            aaStart = Math.floor((start ) / 3) ;
-        }else{
-            aaStart = start + 2;
-        }
-        if (end > 20){
-            aaEnd = Math.floor(end / 3);
-        }else{
-            aaEnd = end;
-        }
+        aaStart = Math.floor(start / 3 * 2); // *2 to account for spaces in the aa sequence.
+        aaEnd = Math.floor(end / 3 * 2);
+
+        var aminoAcids1 = this.aminoAcidsString1.substring(aaStart, aaEnd);
+        var aminoAcids2 = this.aminoAcidsString2.substring(aaStart, aaEnd);
+        var aminoAcids3 = this.aminoAcidsString3.substring(aaStart, aaEnd);
+
+        aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
+        aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
+        aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
 
         if(this.sequenceAnnotator.showSpaceEvery10Bp){
-            aminoAcidsString1 = this.splitWithSpaces(aminoAcidsString1, 0, false);
-            aminoAcidsString2 = this.splitWithSpaces(aminoAcidsString2, 0, false);
-            aminoAcidsString3 = this.splitWithSpaces(aminoAcidsString3, 0, false);
+            aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0, false);
+            aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1, false);
+            aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2, false);
             numberOfSpaces = (row.getRowData().getSequence().length % 10) ? Math.round(row.getRowData().getSequence().length/10) : (Math.round(row.getRowData().getSequence().length/10) -1);
         }
 
-        var aminoAcidsString1 = aminoAcidsString1.replace(/ /g, "      ");
-        var aminoAcidsString2 = aminoAcidsString2.replace(/ /g, "      ");
-        var aminoAcidsString3 = aminoAcidsString3.replace(/ /g, "      ");
+        var verticalOffset = 0;
+        if(row.getRowData().getOrfAlignment()) {
+            verticalOffset = row.getRowData().getOrfAlignment().getCount() * 8;
+        }
 
-        for (var i = 0; i < aminoAcidsString1.length; ++i){
-            leftShift = i * (18*3);
-            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-                .attr("x", leftShift + 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-                .attr("y", this.totalHeight)
-                .attr("font-family", this.self.FONT_FAMILY)
-                .attr("font-size", this.self.FONT_SIZE)
-                .attr("xml:space", "preserve")
-                .attr("fill", "blue")
-                .text(aminoAcidsString1.charAt(i));
-        }
+        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+            .attr("y", this.totalHeight - verticalOffset)
+            .attr("font-family", this.self.FONT_FAMILY)
+            .attr("font-size", this.self.FONT_SIZE)
+            .attr("fill", "blue")
+            .attr("xml:space", "preserve")
+            .attr("letter-spacing", this.self.LETTER_SPACING)
+            .text(aminoAcids1);
+
         this.totalHeight += 20;
-        for (var i = 0; i < aminoAcidsString2.length; ++i){
-            leftShift = i * this.sequenceAnnotationManager.self.CHAR_WIDTH * 3;
-            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-                .attr("x", leftShift + 7 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
-                .attr("y", this.totalHeight)
-                .attr("font-family", this.self.FONT_FAMILY)
-                .attr("font-size", this.self.FONT_SIZE)
-                .attr("xml:space", "preserve")
-                .attr("fill", "blue")
-                .text(aminoAcidsString2.charAt(i));
-        }
+
+        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("x", 7 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+            .attr("y", this.totalHeight - verticalOffset)
+            .attr("font-family", this.self.FONT_FAMILY)
+            .attr("font-size", this.self.FONT_SIZE)
+            .attr("fill", "blue")
+            .attr("xml:space", "preserve")
+            .attr("letter-spacing", this.self.LETTER_SPACING)
+            .text(aminoAcids2);
+
         this.totalHeight += 20;
-        for (var i = 0; i < aminoAcidsString3.length; ++i){
-            leftShift = i * this.sequenceAnnotationManager.self.CHAR_WIDTH * 3;
-            this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-                .attr("x", leftShift + 8 * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
-                .attr("y", this.totalHeight)
-                .attr("font-family", this.self.FONT_FAMILY)
-                .attr("font-size", this.self.FONT_SIZE)
-                .attr("xml:space", "preserve")
-                .attr("fill", "blue")
-                .text(aminoAcidsString3.charAt(i));
+
+        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("x", 8 * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
+            .attr("y", this.totalHeight - verticalOffset)
+            .attr("font-family", this.self.FONT_FAMILY)
+            .attr("font-size", this.self.FONT_SIZE)
+            .attr("fill", "blue")
+            .attr("xml:space", "preserve")
+            .attr("letter-spacing", this.self.LETTER_SPACING)
+            .text(aminoAcids3);
+
+        this.totalHeight += 20;
+    },
+
+    renderAARevCom: function(row) {
+        var aaStart, aaEnd, 
+        
+        //aaPadding moves the Amino acid rows into the correct places.
+        aaPadding;
+
+        var start = row.getRowData().getStart();
+        var end = row.getRowData().getEnd();
+        var numberOfSpaces = 0;
+
+        aaStart = Math.floor(start / 3 * 2); // *2 to account for spaces in the aa sequence.
+        aaEnd = Math.floor(end / 3 * 2);
+
+        var aminoAcids1 = this.aminoAcidsStringRevCom1.substring(aaStart, aaEnd);
+        var aminoAcids2 = this.aminoAcidsStringRevCom2.substring(aaStart, aaEnd);
+        var aminoAcids3 = this.aminoAcidsStringRevCom3.substring(aaStart, aaEnd);
+
+        aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
+        aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
+        aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
+
+        if(this.sequenceAnnotator.showSpaceEvery10Bp){
+            aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0, false);
+            aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1, false);
+            aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2, false);
+            numberOfSpaces = (row.getRowData().getSequence().length % 10) ? Math.round(row.getRowData().getSequence().length/10) : (Math.round(row.getRowData().getSequence().length/10) -1);
         }
+
+        var verticalOffset = 15;
+
+        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+            .attr("y", this.totalHeight + verticalOffset)
+            .attr("font-family", this.self.FONT_FAMILY)
+            .attr("font-size", this.self.FONT_SIZE)
+            .attr("fill", "blue")
+            .attr("xml:space", "preserve")
+            .attr("letter-spacing", this.self.LETTER_SPACING)
+            .text(aminoAcids1);
+
+        this.totalHeight += 20;
+
+        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("x", 7 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+            .attr("y", this.totalHeight + verticalOffset)
+            .attr("font-family", this.self.FONT_FAMILY)
+            .attr("font-size", this.self.FONT_SIZE)
+            .attr("fill", "blue")
+            .attr("xml:space", "preserve")
+            .attr("letter-spacing", this.self.LETTER_SPACING)
+            .text(aminoAcids2);
+
+        this.totalHeight += 20;
+
+        this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
+            .attr("x", 8 * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
+            .attr("y", this.totalHeight + verticalOffset)
+            .attr("font-family", this.self.FONT_FAMILY)
+            .attr("font-size", this.self.FONT_SIZE)
+            .attr("fill", "blue")
+            .attr("xml:space", "preserve")
+            .attr("letter-spacing", this.self.LETTER_SPACING)
+            .text(aminoAcids3);
+
         this.totalHeight += 20;
     },
 

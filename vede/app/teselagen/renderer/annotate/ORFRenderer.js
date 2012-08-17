@@ -91,7 +91,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
 				var bpStartPoint = this.sequenceAnnotator.bpMetricsByIndex(startBP);
 				var bpEndPoint = this.sequenceAnnotator.bpMetricsByIndex(endBP);
 				
-				var upShift = 2 + alignmentRowIndex * 6;
+				var upShift = alignmentRowIndex * 8 - 6;
 				
 				var color = this.self.ORF_COLOR[orf.getFrame()];
 				

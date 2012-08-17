@@ -95,6 +95,9 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     render:function() {
         this.RowManager.update();
         this.annotator.render();
+
+        this.caret.setPosition(this.caret.getPosition());
+        this.caret.render();
     },
 
     sequenceChanged: function(){
