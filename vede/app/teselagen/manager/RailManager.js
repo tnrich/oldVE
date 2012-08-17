@@ -282,8 +282,6 @@ Ext.define("Teselagen.manager.RailManager", {
         
         var totalNumberOfLabels = labels.length;
         var totalLength = this.sequenceManager.getSequence().toString().length;
-        console.log(totalNumberOfLabels);
-        
         
         var rightLabels = [];
         var leftLabels = [];

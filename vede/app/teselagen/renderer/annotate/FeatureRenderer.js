@@ -27,7 +27,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
 
     render: function(){
-        //console.log("Trying to render feature renderer");
         this.featureGroupSVG = this.sequenceAnnotator.featuresSVG.append("svg:g")
                 .attr("id", "feature-" +this.feature.getName());
 
@@ -37,9 +36,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         var feature = this.feature;
         g.attr("fill", this.featureColor);
 
-        //console.log("Retrieving feature rows with this name: " + this.feature.getName());
         var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
-        //console.log("Feature to Row Map: " + featureRows);
         if (!featureRows){
             return;
         }
@@ -52,8 +49,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
             //for each row, get the features alignment
             var featuresAlignment = row.getRowData().getFeaturesAlignment();
-            //console.log("New set of feature rows");
-            //console.log(featuresAlignment.getKeys());
 
             var startBP;
             var endBP;
@@ -88,13 +83,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
                 }
             }
-            /*console.log("line? : " + row.getRowData().getFeaturesAlignment().getKeys());
-            console.log("Row keys? : " + row.getRowData().getFeaturesAlignment().getKeys());
-            console.log("StartBP: " + startBP + " EndBP: " + endBP);*/
 
             if (startBP > endBP && this.feature.getType() != "misc_feature"){
                 var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
-                //console.log("Min!");
                 var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
                 var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
@@ -279,7 +270,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 }
             }
 
-            //console.log("Feature type: " + this.feature.getType());
             this.addToolTip(this.feature);
             this.addClickListener(this.feature);
         
@@ -288,7 +278,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
 
         function drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight){
-            //console.log("Drew rect!!!");
             pGraphics.append("svg:rect")
                 .attr("x", pX)
                 .attr("y", pY + 20)
@@ -343,7 +332,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 */
         }
         function drawFeatureBackwardArrow(pGraphics, pX, pY, pWidth, pHeight){
-            //console.log(pGraphics);
             //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
             pY += 20;
             if(pWidth){
@@ -406,7 +394,6 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         return color;
     },
     findFeatureRowIndex: function(key, value, item){
-       // console.log("Value for findFeatureRowIndex: " + value);
 
     },
 

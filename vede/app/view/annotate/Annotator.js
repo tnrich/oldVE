@@ -33,13 +33,19 @@ Ext.define("Vede.view.annotate.Annotator", {
         this.callParent([inData]);
         this.initConfig(inData);
         this.id = "AnnotationSurface";
-        //console.log("Created Annotator");
+        
+        // Firefox doesn't support SVG's text-width, so we have to modify
+        // CHAR_WIDTH if the user is using Firefox.
+        if(Ext.isGecko) {
+            this.self.CHAR_WIDTH = 7.25;
+        }
+
         this.sequenceAnnotator = inData.sequenceAnnotator;
 
-        //this.lineRenderer = Ext.create("Teselagen.renderer.annotation.LineRender", {});
         this.annotateSVG = d3.select("#AnnotateContainer")
             .append("svg:svg")
-            .attr("id", "annotateSVG");
+            .attr("id", "annotateSVG")
+            .attr("width", "100%");
         
         this.linesSVG = this.annotateSVG.append("svg:g")
             .attr("id", "linesSVG");
@@ -68,21 +74,22 @@ Ext.define("Vede.view.annotate.Annotator", {
         this.xMax = this.panel.getBox().width;
         this.yMax = this.panel.getBox().height;
 
-        //console.log(this.lines); 
         var x1 = 10;
-        //console.log(this.yMax);
         var y = 20;
         
         if(this.sequenceAnnotator.getSequenceManager()) {
-            //console.log(this.sequenceRenderer.getTotalHeight());
             this.renderSequence();
             this.drawSplitLines();
             //this.renderLines();
+
+            d3.selectAll("#cutSiteSVG").remove();
+            d3.selectAll("#orfSVG").remove();
 
             if (this.sequenceAnnotator.getShowFeatures()){
                 this.loadFeatureRenderers();
                 this.renderFeatures();
             }
+
             if(this.sequenceAnnotator.getShowCutSites()){
                 this.loadCutSiteRenderers();
                 this.renderCutSites();
@@ -98,9 +105,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
 
 
-        //console.log(this.lines.length);
         
-        //console.log("rendered annotator");
             //line renderer
                 //text render
             //amino acid renderer
@@ -213,7 +218,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             return null;
             throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
         }
-    //    console.log("Row by bp Index result: " + this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())]);
 
         return this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())];
     },
@@ -234,29 +238,6 @@ Ext.define("Vede.view.annotate.Annotator", {
                 .attr("font-size", "6px")
                 .text(i);
         }*/
-        /*this.sequenceSVG.append("svg:text")
-            .attr("x", x)
-            .attr("y", y)
-            .text(row.getRowData().getSequence())
-            .attr("font-face", "Verdana")
-            .attr("textLength", 917)
-            .attr("font-size", 20);
-        this.sequenceSVG.append("svg:text")
-            .attr("x", x)
-            .attr("y", y + 25)
-            .text(row.getRowData().getOppositeSequence())
-             .attr("textLength", 917)
-            .attr("font-face", "Verdana")
-            .attr("font-size", 20);*/
-    },
-
-    renderBpLabel: function(basePairs, labelX, labelY){
-        this.bpLabelsSVG.append("svg:text")
-            .attr("x", labelX)
-            .attr("y", labelY)
-            .attr("font-face", "Verdana")
-            .attr("font-size", 20)
-            .text(String(basePairs));
     },
 
     renderFeatures: function(){
@@ -270,7 +251,6 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     renderCutSites: function() {
-        d3.selectAll("#cutSiteSVG").remove();
         if(this.sequenceAnnotator.getShowCutSites()) {
             Ext.each(this.cutSiteRenderers, function(renderer) {
                 renderer.render();
@@ -279,7 +259,6 @@ Ext.define("Vede.view.annotate.Annotator", {
     },
 
     renderOrfs: function() {
-        d3.selectAll("#orfSVG").remove();
         if(this.sequenceAnnotator.getShowOrfs()) {
             Ext.each(this.orfRenderers, function(renderer) {
                 renderer.render();
@@ -294,8 +273,6 @@ Ext.define("Vede.view.annotate.Annotator", {
             if( i != rows.length ){
                 var rowSequenceMetrics = row.getSequenceMetrics();
                 var rowMetrics = row.getMetrics();
-                //console.log('Row sequence metrics y position: ' + rowSequenceMetrics.y);
-                //console.log('Row metrics y position: ' + rowMetrics.y);
                 this.linesSVG.append("svg:line")
                     .attr("x1", rowMetrics.x)
                     .attr("y1", rowMetrics.y)
