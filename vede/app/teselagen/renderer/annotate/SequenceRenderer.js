@@ -1,3 +1,12 @@
+/**
+ * @class Teselagen.renderer.annotate.SequenceRenderer
+ * Class which handles SVG generating and rendering of the DNA sequence, both 
+ * forward and reverse, as well as miscellaneous features like the bp labels and
+ * amino acid sequences.
+ * @author Micah Lerner
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of SequenceRenderer.as)
+ */
 Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
                "Teselagen.bio.orf.ORF",
@@ -381,13 +390,13 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         var result = String(pIndex);
 
         if(pIndex < 10){
-            result = "    "  + result;
+            result = "   "  + result;
         } else if(pIndex < 100){
-            result = "   " + result;
-        }else if(pIndex < 1000){
             result = "  " + result;
-        } else if(pIndex < 10000){
+        }else if(pIndex < 1000){
             result = " " + result;
+        } else if(pIndex < 10000){
+            result = "" + result;
         }
 
         return result;
@@ -400,6 +409,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             .attr("font-family", this.self.FONT_FAMILY)
             .attr("font-size", this.self.FONT_SIZE)
             .attr("letter-spacing", this.self.LETTER_SPACING)
-            .text(String(basePairs));
+            .attr("xml:space", "preserve")
+            .text(this.renderIndexString(basePairs));
     },
 });

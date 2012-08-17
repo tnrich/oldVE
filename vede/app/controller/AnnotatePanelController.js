@@ -1,3 +1,7 @@
+/**
+ * @class Vede.controller.AnnotatePanelController
+ * Class which handles user input and events specific to the annotate panel.
+ */
 Ext.define('Vede.controller.AnnotatePanelController', {
     extend: 'Vede.controller.SequenceController',
 

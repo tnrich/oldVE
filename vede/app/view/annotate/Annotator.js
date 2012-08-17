@@ -1,3 +1,7 @@
+/**
+ * @class Vede.view.annotate.Annotator
+ * Class which handles rendering in the annotate panel.
+ */
 Ext.define("Vede.view.annotate.Annotator", {
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
@@ -67,8 +71,10 @@ Ext.define("Vede.view.annotate.Annotator", {
     sequenceChanged: function(){
     },
 
+    /**
+     * Renders all annotations.
+     */
     render: function(){
-       // this.updateAverageRowHeight();
         this.clean();
         this.panel = Ext.getCmp('AnnotatePanel');
         this.xMax = this.panel.getBox().width;
@@ -80,7 +86,6 @@ Ext.define("Vede.view.annotate.Annotator", {
         if(this.sequenceAnnotator.getSequenceManager()) {
             this.renderSequence();
             this.drawSplitLines();
-            //this.renderLines();
 
             d3.selectAll("#cutSiteSVG").remove();
             d3.selectAll("#orfSVG").remove();
@@ -103,16 +108,11 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
 
         }
-
-
-        
-            //line renderer
-                //text render
-            //amino acid renderer
     },
 
-
-
+    /**
+     * Instantiates feature renderers for all the features.
+     */
     loadFeatureRenderers: function(){
         this.removeFeatureRenderers();
         var retrievedFeatures = this.sequenceAnnotator.getSequenceManager().getFeatures();
@@ -132,10 +132,16 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Deletes all feature renderers.
+     */
     removeFeatureRenderers: function(){
         this.featureRenderers = [];
     },
 
+    /**
+     * Instantiates cut site renderers.
+     */
     loadCutSiteRenderers: function() {
         this.removeCutSiteRenderers();
         var retrievedCutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
@@ -154,10 +160,16 @@ Ext.define("Vede.view.annotate.Annotator", {
         }, this);
     },
 
+    /**
+     * Deletes cut site renderers.
+     */
     removeCutSiteRenderers: function() {
         this.setCutSiteRenderers([]);
     },
 
+    /**
+     * Instantiates orf renderers.
+     */
     loadOrfRenderers: function() {
         this.removeOrfRenderers();
         var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
@@ -175,11 +187,18 @@ Ext.define("Vede.view.annotate.Annotator", {
         }, this);
     },
 
+    /**
+     * Deletes orf renderers.
+     */
     removeOrfRenderers: function() {
         this.setOrfRenderers([]);
     },
 
-
+    /**
+     * Given the index of a nucleotide, returns its coordinates in the panel.
+     * @param {Int} index The index of the nucleotide to locate.
+     * @return {Teselagen.models.Rectangle} The nucleotide's location.
+     */
     bpMetricsByIndex: function(pIndex){
         if(!this.isValidIndex(pIndex)){
             return null;
@@ -213,6 +232,11 @@ Ext.define("Vede.view.annotate.Annotator", {
         return resultsMetrics;
     },
 
+    /**
+     * Given a nucleotide index, returns the row it lies in.
+     * @param {Int} pIndex The index of the nucleotide to determine the row of.
+     * @return {Teselagen.models.sequence.Row} The row object of the nucleotide.
+     */
     rowByBpIndex: function(pIndex){
         if(!this.isValidIndex(pIndex)){
             return null;
@@ -222,11 +246,19 @@ Ext.define("Vede.view.annotate.Annotator", {
         return this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())];
     },
 
-   
+    /**
+     * Returns true if the given nucleotide index is between 0 and the sequence
+     * length.
+     * @param {Int} pIndex The index to check for validity.
+     * @return {Boolean} True if the index is valid.
+     */
     isValidIndex: function(pIndex){
         return pIndex >= 0 && pIndex <= this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length;
     },
 
+    /**
+     * Renders sequence.
+     */
     renderSequence: function(){
         this.sequenceRenderer.render();
         // Uncomment to draw nucleotide indices for debugging.
@@ -240,6 +272,9 @@ Ext.define("Vede.view.annotate.Annotator", {
         }*/
     },
 
+    /**
+     * Renders features.
+     */
     renderFeatures: function(){
         if (this.sequenceAnnotator.getShowFeatures()){
             for (var i = 0; i < this.featureRenderers.length; ++i){
@@ -250,6 +285,9 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Renders cut sites.
+     */
     renderCutSites: function() {
         if(this.sequenceAnnotator.getShowCutSites()) {
             Ext.each(this.cutSiteRenderers, function(renderer) {
@@ -258,6 +296,9 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Renders orfs.
+     */
     renderOrfs: function() {
         if(this.sequenceAnnotator.getShowOrfs()) {
             Ext.each(this.orfRenderers, function(renderer) {
@@ -266,6 +307,9 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Draws lines in between rows.
+     */
     drawSplitLines: function(){
         var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
         for (var i = 0; i < rows.length; ++i){
@@ -283,21 +327,10 @@ Ext.define("Vede.view.annotate.Annotator", {
             }
         }
     },
-    renderLine: function(x1, y1, x2, y2){
-        this.lines    },
 
-    updateAverageRowHeight: function(){
-        var totalHeight = 0;
-        var retrievedRows = this.sequenceAnnotator.getRowManager().getRows();
-
-        for (var i = 0; i < retrievedRows.length; i++){
-            var row = retrievedRows[i];
-            totalHeight += row.getMetrics().height;
-
-            averageRowHeight = (retrievedRows.length > 0) ? (totalHeight / retrievedRows.length) : 0;
-        }
-    },
-
+    /**
+     * Instantiates the sequence renderer.
+     */
     createSequenceRenderer: function(){
         if (this.sequenceRenderer == null){
             this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.SequenceRenderer",
@@ -307,6 +340,10 @@ Ext.define("Vede.view.annotate.Annotator", {
             );
         }
     },
+
+    /**
+     * Removes all SVG objects and re-adds new ones.
+     */
     clean: function(){
 
         d3.select("#linesSVG").remove(); 

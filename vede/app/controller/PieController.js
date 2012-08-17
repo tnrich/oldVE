@@ -1,6 +1,6 @@
 /**
  * @class Vede.controller.PieController
- * Controller for Pie drawing.
+ * Class which handles user input and events specific to the Pie vector view.
  */
 Ext.define('Vede.controller.PieController', {
     extend: 'Vede.controller.SequenceController',

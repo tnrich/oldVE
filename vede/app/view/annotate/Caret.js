@@ -1,6 +1,8 @@
 /**
  * @class Vede.view.annotate.Caret
  * Selection line for the annotate panel.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of Caret.as)
  */
 Ext.define("Vede.view.annotate.Caret", {
     statics: {

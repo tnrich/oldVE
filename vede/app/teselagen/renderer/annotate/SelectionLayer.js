@@ -1,3 +1,9 @@
+/**
+ * @class Teselagen.renderer.annotate.SelectionLayer
+ * Class which handles generating and rendering the blue selection area.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of SelectionLayer.as)
+ */
 Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
     requires: ["Teselagen.event.SelectionLayerEvent"],
 
@@ -31,9 +37,6 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         this.initConfig(inData);
         this.sequenceAnnotationManager = this.sequenceAnnotator.sequenceAnnotator;
 
-        Vede.application.on("SelectionMouseOver", this.onMouseover, this);
-        Vede.application.on("SelectionMouseOut", this.onMouseout, this);
-
         this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
     },
 
@@ -47,13 +50,7 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
 
         d3.selectAll("#selectionSVG").remove();
         this.selectionSVG = d3.select("#annotateSVG").append("svg:g")
-            .attr("id", "selectionSVG")
-            .on("mouseover", function() {
-                Vede.application.fireEvent("SelectionMouseOver")
-            })
-            .on("mouseout", function() {
-                Vede.application.fireEvent("SelectionMouseOut");
-            });
+            .attr("id", "selectionSVG");
 
         if(fromIndex > toIndex) {
             this.drawSelection(0, toIndex);
@@ -101,6 +98,13 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         }
     },
 
+    /**
+     * Shows handles. At the moment I've decided not to use handles as the event
+     * handling was glitchy with them, but I'll leave this function in case we
+     * re-enable them at some point.
+     * 
+     * Currently the selection can be altered by dragging its edges.
+     */
     showHandles: function() {
         var leftMetrics = this.sequenceAnnotator.bpMetricsByIndex(this.start);
         var rightMetrics = this.sequenceAnnotator.bpMetricsByIndex(this.end);

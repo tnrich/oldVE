@@ -1,3 +1,9 @@
+/**
+ * @class Teselagen.renderer.annotate.FeatureRenderer
+ * Class which generates and renders SVG for a given feature.
+ * @author Micah Lerner
+ * @author Zinovii Dmytriv (original author of FeatureRenderer.as)
+ */
 Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
     config: {

@@ -1,3 +1,9 @@
+/**
+ * @class Teselagen.renderer.annotate.CutSiteRenderer
+ * Class which generates and renders SVG for a given cut site.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of CutSiteRenderer.as)
+ */
 Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
     statics: {
         CURVY_LINE_COLOR: "#FF0000",

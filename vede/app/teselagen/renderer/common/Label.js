@@ -31,7 +31,7 @@ Ext.define("Teselagen.renderer.common.Label", {
         this.callParent([Ext.create("Ext.draw.Sprite", {
             type: "text",
             text: this.labelText(),
-            fill: "black",
+            fill: inData.color || "black",
             "font-size": "6px",
             x: inData.x,
             y: inData.y,

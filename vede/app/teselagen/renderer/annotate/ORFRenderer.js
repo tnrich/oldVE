@@ -1,3 +1,9 @@
+/**
+ * @class Teselsagen.renderer.annotate.ORFRenderer
+ * Class which generates and renders SVG for a given ORF.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of ORFRenderer.as)
+ */
 Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
     statics: {
         ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"],
