@@ -95,6 +95,9 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
     render:function() {
         this.RowManager.update();
         this.annotator.render();
+
+        this.caret.setPosition(this.caret.getPosition());
+        this.caret.render();
     },
 
     sequenceChanged: function(){
@@ -102,8 +105,6 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
         this.aaManager.setSequenceManager(this.sequenceManager);
         this.features = this.sequenceManager.getFeatures();
-
-        console.log(this.annotator.getSequenceAnnotator().getSequenceManager().getFeatures());
 
         this.annotator.setSequenceAnnotator(this);
         this.annotator.render();
@@ -128,15 +129,18 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
                 } else if(x > row.sequenceMetrics.x + row.sequenceMetrics.width) {
                     bpIndex += row.rowData.sequence.length;
                 } else {
-                    var numberOfCharactersFromBeginning = Math.floor((x - row.sequenceMetrics.x + 15 / 2) / 16);
+                    var numberOfCharactersFromBeginning = Math.floor((x - 
+                                        row.sequenceMetrics.x + 15 / 2) / 
+                                        this.annotator.self.CHAR_WIDTH);
                     
                     var numberOfSpaces = 0;
                     
                     if(this.showSpaceEvery10Bp) {
-                        numberOfSpaces = Math.round(numberOfCharactersFromBeginning / 11);
+                        numberOfSpaces = Math.floor(numberOfCharactersFromBeginning / 11);
                     }
                     
-                    var numberOfValidCharacters = numberOfCharactersFromBeginning - numberOfSpaces;
+                    var numberOfValidCharacters = numberOfCharactersFromBeginning - 
+                                                  numberOfSpaces;
                     
                     bpIndex += numberOfValidCharacters;
                 }
@@ -188,11 +192,11 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
             if(this.caret) {
                 if(pShow) {
-                    this.caret.setHeight(48);
+                    this.caret.setHeight(this.caret.self.DOUBLE_HEIGHT);
                     this.caret.setPosition(this.caret.getPosition());
                     this.caret.render();
                 } else {
-                    this.caret.setHeight(24);
+                    this.caret.setHeight(this.caret.self.SINGLE_HEIGHT);
                     this.caret.setPosition(this.caret.getPosition());
                     this.caret.render();
                 }
