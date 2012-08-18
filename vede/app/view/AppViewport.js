@@ -63,7 +63,7 @@ Ext.define('Vede.view.AppViewport', {
                                         {
                                             xtype: 'container',
                                             id: 'PieContainer',
-                                            //autoScroll: true,
+                                            autoScroll: true,
                                             layout: {
                                                 type: 'fit',
                                                 //manageOverflow: 1
