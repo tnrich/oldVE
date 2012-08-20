@@ -7,5 +7,6 @@
 Ext.define("Teselagen.event.SelectionEvent", {
     singleton: true,
 
-    SELECTION_CHANGED: "SelectionChanged"
+    SELECTION_CHANGED: "SelectionChanged",
+    SELECTION_CANCELED: "SelectionCanceled"
 });

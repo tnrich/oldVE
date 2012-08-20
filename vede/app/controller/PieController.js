@@ -1,6 +1,6 @@
 /**
  * @class Vede.controller.PieController
- * Controller for Pie drawing.
+ * Class which handles user input and events specific to the Pie vector view.
  */
 Ext.define('Vede.controller.PieController', {
     extend: 'Vede.controller.SequenceController',
@@ -11,12 +11,7 @@ Ext.define('Vede.controller.PieController', {
 
     pieManager: null,
 
-    mouseIsDown: false,
     startSelectionAngle: 0,
-    startSelectionIndex: 0,
-
-    clickedAnnotationStart: null,
-    clickedAnnotationEnd: null,
 
     /**
      * @member Vede.controller.PieController
@@ -50,8 +45,6 @@ Ext.define('Vede.controller.PieController', {
         pieContainer = Ext.getCmp('PieContainer');
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
-
-        console.log(pie);
 
         this.pieManager.initPie();
 
@@ -102,7 +95,7 @@ Ext.define('Vede.controller.PieController', {
     },
 
     onSelectionChanged: function(scope, start, end) {
-        if(scope != this) {
+        if(scope !== this) {
             this.SelectionLayer.select(start, end);
             this.changeCaretPosition(end);
         }
@@ -194,7 +187,7 @@ Ext.define('Vede.controller.PieController', {
                     endSelectionAngle) > this.self.SELECTION_THRESHOLD &&
                     this.pieManager.sequenceManager) {
 
-            this.endSelectionIndex = this.bpAtAngle(endSelectionAngle);
+            var endSelectionIndex = this.bpAtAngle(endSelectionAngle);
             this.pieManager.pie.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
 
             // Set the direction of selection if it has not yet been determined.
@@ -215,11 +208,11 @@ Ext.define('Vede.controller.PieController', {
             }
 
             if(this.selectionDirection == -1) {
-                start = this.endSelectionIndex;
+                start = endSelectionIndex;
                 end = this.startSelectionIndex;
             } else {
                 start = this.startSelectionIndex;
-                end = this.endSelectionIndex;
+                end = endSelectionIndex;
             }
 
             this.WireframeSelectionLayer.startSelecting();
@@ -279,6 +272,7 @@ Ext.define('Vede.controller.PieController', {
                 this.clickedAnnotationEnd = null;
             } else {
                 this.SelectionLayer.deselect();
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
             }
         }
     },
@@ -429,6 +423,8 @@ Ext.define('Vede.controller.PieController', {
                 
                 if(selEnd == -1 || selStart == -1) {
                     this.SelectionLayer.deselect();
+                    this.application.fireEvent(
+                        this.SelectionEvent.SELECTION_CANCELED);
                 } else {
                     this.SelectionLayer.startSelecting();
                     this.select(selStart, selEnd);
@@ -441,6 +437,7 @@ Ext.define('Vede.controller.PieController', {
             }
         } else {
             this.SelectionLayer.deselect();
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
     }
 });

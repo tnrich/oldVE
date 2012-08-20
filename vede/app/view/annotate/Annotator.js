@@ -1,6 +1,14 @@
+/**
+ * @class Vede.view.annotate.Annotator
+ * Class which handles rendering in the annotate panel.
+ */
 Ext.define("Vede.view.annotate.Annotator", {
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
+
+    statics: {
+        CHAR_WIDTH: 10
+    },
 
     autoScroll: true,
     config: {
@@ -29,13 +37,19 @@ Ext.define("Vede.view.annotate.Annotator", {
         this.callParent([inData]);
         this.initConfig(inData);
         this.id = "AnnotationSurface";
-        //console.log("Created Annotator");
+        
+        // Firefox doesn't support SVG's text-width, so we have to modify
+        // CHAR_WIDTH if the user is using Firefox.
+        if(Ext.isGecko) {
+            this.self.CHAR_WIDTH = 7.25;
+        }
+
         this.sequenceAnnotator = inData.sequenceAnnotator;
 
-        //this.lineRenderer = Ext.create("Teselagen.renderer.annotation.LineRender", {});
         this.annotateSVG = d3.select("#AnnotateContainer")
             .append("svg:svg")
-            .attr("id", "annotateSVG");
+            .attr("id", "annotateSVG")
+            .attr("width", "100%");
         
         this.linesSVG = this.annotateSVG.append("svg:g")
             .attr("id", "linesSVG");
@@ -57,28 +71,30 @@ Ext.define("Vede.view.annotate.Annotator", {
     sequenceChanged: function(){
     },
 
+    /**
+     * Renders all annotations.
+     */
     render: function(){
-       // this.updateAverageRowHeight();
         this.clean();
         this.panel = Ext.getCmp('AnnotatePanel');
         this.xMax = this.panel.getBox().width;
         this.yMax = this.panel.getBox().height;
 
-        //console.log(this.lines); 
         var x1 = 10;
-        //console.log(this.yMax);
         var y = 20;
         
         if(this.sequenceAnnotator.getSequenceManager()) {
-            //console.log(this.sequenceRenderer.getTotalHeight());
             this.renderSequence();
             this.drawSplitLines();
-            //this.renderLines();
+
+            d3.selectAll("#cutSiteSVG").remove();
+            d3.selectAll("#orfSVG").remove();
 
             if (this.sequenceAnnotator.getShowFeatures()){
                 this.loadFeatureRenderers();
                 this.renderFeatures();
             }
+
             if(this.sequenceAnnotator.getShowCutSites()){
                 this.loadCutSiteRenderers();
                 this.renderCutSites();
@@ -92,18 +108,11 @@ Ext.define("Vede.view.annotate.Annotator", {
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
 
         }
-
-
-        //console.log(this.lines.length);
-        
-        //console.log("rendered annotator");
-            //line renderer
-                //text render
-            //amino acid renderer
     },
 
-
-
+    /**
+     * Instantiates feature renderers for all the features.
+     */
     loadFeatureRenderers: function(){
         this.removeFeatureRenderers();
         var retrievedFeatures = this.sequenceAnnotator.getSequenceManager().getFeatures();
@@ -123,10 +132,16 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Deletes all feature renderers.
+     */
     removeFeatureRenderers: function(){
         this.featureRenderers = [];
     },
 
+    /**
+     * Instantiates cut site renderers.
+     */
     loadCutSiteRenderers: function() {
         this.removeCutSiteRenderers();
         var retrievedCutSites = this.sequenceAnnotator.restrictionEnzymeManager.getCutSites();
@@ -145,10 +160,16 @@ Ext.define("Vede.view.annotate.Annotator", {
         }, this);
     },
 
+    /**
+     * Deletes cut site renderers.
+     */
     removeCutSiteRenderers: function() {
         this.setCutSiteRenderers([]);
     },
 
+    /**
+     * Instantiates orf renderers.
+     */
     loadOrfRenderers: function() {
         this.removeOrfRenderers();
         var retrievedOrfs = this.sequenceAnnotator.orfManager.getOrfs();
@@ -166,11 +187,18 @@ Ext.define("Vede.view.annotate.Annotator", {
         }, this);
     },
 
+    /**
+     * Deletes orf renderers.
+     */
     removeOrfRenderers: function() {
         this.setOrfRenderers([]);
     },
 
-
+    /**
+     * Given the index of a nucleotide, returns its coordinates in the panel.
+     * @param {Int} index The index of the nucleotide to locate.
+     * @return {Teselagen.models.Rectangle} The nucleotide's location.
+     */
     bpMetricsByIndex: function(pIndex){
         if(!this.isValidIndex(pIndex)){
             return null;
@@ -187,10 +215,12 @@ Ext.define("Vede.view.annotate.Annotator", {
 
             
             if(this.sequenceAnnotator.showSpaceEvery10Bp){
-                numberOfCharacters += Math.floor(numberOfCharacters/10);
+                numberOfCharacters += Math.floor(numberOfCharacters / 10);
             }
 
-            var bpX = row.getSequenceMetrics().x + numberOfCharacters * 16;//this.sequenceSymbolRenderer.getTextWidth();
+            var bpX = row.getSequenceMetrics().x + numberOfCharacters * 
+                this.self.CHAR_WIDTH;
+
             var bpY = row.getSequenceMetrics().y;
             resultsMetrics = Ext.create("Teselagen.models.Rectangle", {
                 x: bpX,
@@ -202,56 +232,49 @@ Ext.define("Vede.view.annotate.Annotator", {
         return resultsMetrics;
     },
 
+    /**
+     * Given a nucleotide index, returns the row it lies in.
+     * @param {Int} pIndex The index of the nucleotide to determine the row of.
+     * @return {Teselagen.models.sequence.Row} The row object of the nucleotide.
+     */
     rowByBpIndex: function(pIndex){
         if(!this.isValidIndex(pIndex)){
             return null;
             throw new Error("Can't get bp metrics for bp with index " + String(pIndex));
         }
-    //    console.log("Row by bp Index result: " + this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())]);
 
         return this.sequenceAnnotator.getRowManager().getRows()[Math.floor(pIndex/this.sequenceAnnotator.getBpPerRow())];
     },
 
-   
+    /**
+     * Returns true if the given nucleotide index is between 0 and the sequence
+     * length.
+     * @param {Int} pIndex The index to check for validity.
+     * @return {Boolean} True if the index is valid.
+     */
     isValidIndex: function(pIndex){
         return pIndex >= 0 && pIndex <= this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length;
     },
 
+    /**
+     * Renders sequence.
+     */
     renderSequence: function(){
         this.sequenceRenderer.render();
-        for(var i = 0; i < this.sequenceAnnotator.sequenceManager.getSequence().toString().length; i++) {
+        // Uncomment to draw nucleotide indices for debugging.
+        /*for(var i = 0; i < this.sequenceAnnotator.sequenceManager.getSequence().toString().length; i++) {
             var metrics = this.bpMetricsByIndex(i);
             this.sequenceSVG.append("svg:text")
                 .attr("x", metrics.x)
                 .attr("y", metrics.y + 5)
                 .attr("font-size", "6px")
                 .text(i);
-        }
-        /*this.sequenceSVG.append("svg:text")
-            .attr("x", x)
-            .attr("y", y)
-            .text(row.getRowData().getSequence())
-            .attr("font-face", "Verdana")
-            .attr("textLength", 917)
-            .attr("font-size", 20);
-        this.sequenceSVG.append("svg:text")
-            .attr("x", x)
-            .attr("y", y + 25)
-            .text(row.getRowData().getOppositeSequence())
-             .attr("textLength", 917)
-            .attr("font-face", "Verdana")
-            .attr("font-size", 20);*/
+        }*/
     },
 
-    renderBpLabel: function(basePairs, labelX, labelY){
-        this.bpLabelsSVG.append("svg:text")
-            .attr("x", labelX)
-            .attr("y", labelY)
-            .attr("font-face", "Verdana")
-            .attr("font-size", 20)
-            .text(String(basePairs));
-    },
-
+    /**
+     * Renders features.
+     */
     renderFeatures: function(){
         if (this.sequenceAnnotator.getShowFeatures()){
             for (var i = 0; i < this.featureRenderers.length; ++i){
@@ -262,8 +285,10 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Renders cut sites.
+     */
     renderCutSites: function() {
-        d3.selectAll("#cutSiteSVG").remove();
         if(this.sequenceAnnotator.getShowCutSites()) {
             Ext.each(this.cutSiteRenderers, function(renderer) {
                 renderer.render();
@@ -271,8 +296,10 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Renders orfs.
+     */
     renderOrfs: function() {
-        d3.selectAll("#orfSVG").remove();
         if(this.sequenceAnnotator.getShowOrfs()) {
             Ext.each(this.orfRenderers, function(renderer) {
                 renderer.render();
@@ -280,16 +307,16 @@ Ext.define("Vede.view.annotate.Annotator", {
         }
     },
 
+    /**
+     * Draws lines in between rows.
+     */
     drawSplitLines: function(){
-        console.log(this.sequenceRenderer.getSequenceAnnotationManager().sequenceAnnotator);
         var rows = this.sequenceRenderer.sequenceAnnotator.getRowManager().getRows();
         for (var i = 0; i < rows.length; ++i){
             var row = rows[i];
             if( i != rows.length ){
                 var rowSequenceMetrics = row.getSequenceMetrics();
                 var rowMetrics = row.getMetrics();
-                //console.log('Row sequence metrics y position: ' + rowSequenceMetrics.y);
-                //console.log('Row metrics y position: ' + rowMetrics.y);
                 this.linesSVG.append("svg:line")
                     .attr("x1", rowMetrics.x)
                     .attr("y1", rowMetrics.y)
@@ -300,21 +327,10 @@ Ext.define("Vede.view.annotate.Annotator", {
             }
         }
     },
-    renderLine: function(x1, y1, x2, y2){
-        this.lines    },
 
-    updateAverageRowHeight: function(){
-        var totalHeight = 0;
-        var retrievedRows = this.sequenceAnnotator.getRowManager().getRows();
-
-        for (var i = 0; i < retrievedRows.length; i++){
-            var row = retrievedRows[i];
-            totalHeight += row.getMetrics().height;
-
-            averageRowHeight = (retrievedRows.length > 0) ? (totalHeight / retrievedRows.length) : 0;
-        }
-    },
-
+    /**
+     * Instantiates the sequence renderer.
+     */
     createSequenceRenderer: function(){
         if (this.sequenceRenderer == null){
             this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.SequenceRenderer",
@@ -324,6 +340,10 @@ Ext.define("Vede.view.annotate.Annotator", {
             );
         }
     },
+
+    /**
+     * Removes all SVG objects and re-adds new ones.
+     */
     clean: function(){
 
         d3.select("#linesSVG").remove(); 
