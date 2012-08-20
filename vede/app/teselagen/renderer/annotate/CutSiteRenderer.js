@@ -1,3 +1,9 @@
+/**
+ * @class Teselagen.renderer.annotate.CutSiteRenderer
+ * Class which generates and renders SVG for a given cut site.
+ * @author Nick Elsbree
+ * @author Zinovii Dmytriv (original author of CutSiteRenderer.as)
+ */
 Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
     statics: {
         CURVY_LINE_COLOR: "#FF0000",
@@ -5,7 +11,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         CUT_SITE_COLOR: "#625D5D",
         ONE_CUT_COLOR: "#E57676",
         MULTIPLE_CUT_COLOR: "#888888",
-        CUTSITE_HEIGHT_OFFSET: 55,
+        CUTSITE_HEIGHT_OFFSET: 25,
     },
 
     config: {
@@ -162,7 +168,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
                 cutSiteX - 4;
 
             if(addToEnd) {
-                currentWidth += 16;
+                currentWidth += this.sequenceAnnotator.self.CHAR_WIDTH;
             }
 
             currentHeight = cutSiteHeight;

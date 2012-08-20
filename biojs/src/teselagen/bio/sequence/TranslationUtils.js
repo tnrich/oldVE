@@ -160,7 +160,9 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	dnaToProteinSymbol: function(pNucleotide1, pNucleotide2, pNucleotide3) {
 		this.initializeAminoAcidsTranslationTable();
 
-		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+        if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+           pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+           pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
 			return Ext.create("Teselagen.bio.sequence.symbols.GapSymbol", {
 										name: "Gap",
 										value: "-"
@@ -216,7 +218,9 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	isStartCodon: function (pNucleotide1, pNucleotide2, pNucleotide3) {
 		var result = false;
 
-		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+        if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+           pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+           pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
 			return result;
 		};
 
@@ -235,7 +239,9 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 	isStopCodon: function(pNucleotide1, pNucleotide2, pNucleotide3){
 		var result = false;
 
-		if (Ext.getClassName(pNucleotide1).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide2).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1 || Ext.getClassName(pNucleotide3).indexOf("Teselagen.bio.sequence.symbols.GapSymbol") !== -1) {
+        if(pNucleotide1 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+           pNucleotide2 instanceof Teselagen.bio.sequence.symbols.GapSymbol ||
+           pNucleotide3 instanceof Teselagen.bio.sequence.symbols.GapSymbol) {
 			return result;
 		};
 

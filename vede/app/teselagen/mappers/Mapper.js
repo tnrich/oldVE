@@ -37,4 +37,9 @@ Ext.define("Teselagen.mappers.Mapper", {
 	sequenceChanged: function() {
         this.dirty = true;
     },
+
+    setSequenceManager: function(pSeqMan) {
+        this.dirty = true;
+        this.sequenceManager = pSeqMan;
+    }
 });

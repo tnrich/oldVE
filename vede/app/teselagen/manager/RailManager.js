@@ -6,8 +6,8 @@
 Ext.define("Teselagen.manager.RailManager", {
     statics: {
         PAD: 50,
-        LABEL_DISTANCE_FROM_RAIL: 10,
-        LABEL_HEIGHT: 10,
+        LABEL_DISTANCE_FROM_RAIL: 3,
+        LABEL_HEIGHT: 7,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2"
     },
@@ -75,6 +75,7 @@ Ext.define("Teselagen.manager.RailManager", {
         this.rail = Ext.create("Vede.view.rail.Rail", {
             items: [
                 Ext.create("Vede.view.rail.Frame"),
+                
             ]
         });
 
@@ -281,8 +282,6 @@ Ext.define("Teselagen.manager.RailManager", {
         
         var totalNumberOfLabels = labels.length;
         var totalLength = this.sequenceManager.getSequence().toString().length;
-        console.log(totalNumberOfLabels);
-        
         
         var rightLabels = [];
         var leftLabels = [];

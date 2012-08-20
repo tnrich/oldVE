@@ -291,16 +291,24 @@ Ext.define("Teselagen.manager.PieManager", {
     renderLabels: function() {
         var labels = [];
         var center;
+        var color;
 
         if(this.showCutSites && this.showCutSiteLabels) {
             Ext.each(this.cutSites, function(site) {
                 center = this.cutSiteRenderer.middlePoints.get(site);
 
+                if(site.getNumCuts() == 1) {
+                    color = "#E57676";
+                } else {
+                    color = "#888888";
+                }
+
                 label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
                     annotation: site,
                     x: center.x,
                     y: center.y,
-                    center: this.annotationCenter(site)
+                    center: this.annotationCenter(site),
+                    color: color
                 });
 
                 this.cutSiteRenderer.addToolTip(label, 

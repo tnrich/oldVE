@@ -1,5 +1,7 @@
 /**
- * Parent class of controllers which display sequence data.
+ * @class Vede.controller.SequenceController
+ * Parent class of AnnotatePanelController, PieController, and RailController.
+ * Handles general user input and events for sequence display and manipulation.
  */
 Ext.define("Vede.controller.SequenceController", {
     extend: "Ext.app.Controller",
@@ -101,8 +103,6 @@ Ext.define("Vede.controller.SequenceController", {
         this.ORFManager = Ext.create("Teselagen.manager.ORFManager", {
             sequenceManager: this.SequenceManager
         });
-
-        console.log(this.ORFManager);
 
         this.RestrictionEnzymeManager = 
             Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
