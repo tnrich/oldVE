@@ -282,7 +282,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
             // Original code SeqMgr->jbeiSeq, seqHash needs to be made for the first location segment
             var ftSeq = "";
-            for (j=0; j < ft.getFeatureLocation().length; j++) {
+            for (var j=0; j < ft.getFeatureLocation().length; j++) {
                 var start = ft.getFeatureLocation()[j].getStart();
                 var end   = ft.getFeatureLocation()[j].getEnd();
 
@@ -312,7 +312,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
             //var loc = [];
             // Locations
-            for (j=0; j < ft.getFeatureLocation().length; j++) {
+            for (var j=0; j < ft.getFeatureLocation().length; j++) {
                 var start = ft.getFeatureLocation()[j].getStart();
                 var end   = ft.getFeatureLocation()[j].getEnd();
                 xml.push("        <seq:location>\n");
@@ -321,7 +321,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 xml.push("        </seq:location>\n");
             }
 
-            for (k=0; k < ft.getFeatureQualifier().length; k++) {
+            for (var k=0; k < ft.getFeatureQualifier().length; k++) {
                 var key    = ft.getFeatureQualifier()[k].getName();
                 var value  = ft.getFeatureQualifier()[k].getValue();
                 var quoted = ft.getFeatureQualifier()[k].getQuoted();
@@ -386,7 +386,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
             var newLoc = [];
             // Locations
-            for (j=0; j < ft.getFeatureLocation().length; j++) {
+            for (var j=0; j < ft.getFeatureLocation().length; j++) {
                 var start = ft.getFeatureLocation()[j].getStart();
                 var end   = ft.getFeatureLocation()[j].getEnd();
 
@@ -397,10 +397,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             }
 
             var newAttr = [];
-            for (k=0; k < ft.getFeatureQualifier().length; k++) {
+            for (var k=0; k < ft.getFeatureQualifier().length; k++) {
                 var key    = ft.getFeatureQualifier()[k].getName();
                 var value  = ft.getFeatureQualifier()[k].getValue();
                 var quoted = ft.getFeatureQualifier()[k].getQuoted();
+
+                //if (k==0 && key == ) //WAS LADT HERE
 
                 newAttr.push( {
                     "seq:attribute" : {
@@ -858,13 +860,13 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var xmlArr = newxml.split("BREAKRECORD");
 
         for (var i=0; i<xmlArr.length; i++) {
-            //if (xmlArr[i].match(/^\<seq\:name\>/)) {
-                xmlArray.push(xmlArr[i]);
+            if (xmlArr[i].match(/\<seq\:seq/g)) {
+                xmlArray.push(xmlArr[i].replace(/^[\n]*/g, ""));
                 //console.log(xmlArr[i]);
-            //}
+            }
         }
 
-        console.log(xmlArray.length);
+        //console.log(xmlArray.length);
 
         return xmlArray;
      },
@@ -1026,7 +1028,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * Uses a synchronus Ajax request.
      * @returns {String} xml XML string
      */
-     loadFile: function(url) {
+    loadFile: function(url) {
         // Doing XMLHttpRequest leads to loading from cash
 
         var str;
@@ -1054,10 +1056,26 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * Today's date
      * @returns {String} date Today's date in string format
      */
-     todayDate: function() {
+    todayDate: function() {
         var date    = (new Date()).toDateString().split(" ");
         var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
         return dateStr;
-     }
+     },
+
+    /**
+     * isALabel
+     * @param
+     * @return {Boolean} isALabel
+     */
+    isALabel: function(name) {
+        if (name === "label" | name === "ApEinfo_label" ||
+            name === "note" || name === "gene" || 
+            name === "organism" || name === "name" ) {
+
+            return true;
+        } else {
+            return false;
+        }
+      }
 
 });

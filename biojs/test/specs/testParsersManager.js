@@ -140,8 +140,8 @@ Ext.onReady(function() {
                 //console.log(jbeiXml);
                 try {
                     var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
-                    if (LOG) console.log(gb.toString());
-                    if (LOG) console.log(JSON.stringify(gb, null, "    "));
+                    //if (LOG) console.log(gb.toString());
+                    //if (LOG) console.log(JSON.stringify(gb, null, "    "));
                 } catch (e) {
                     console.warn("Caught: " + e.message);
                 }
@@ -169,19 +169,21 @@ Ext.onReady(function() {
                 expect(gb.getOrigin().getSequence().length).toBe(64);
             });
 
-            it("jbeiseqxmlToGenbank(): Multiple records in .xml file", function() {
-                jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                gbArr = [];
+            it("jbeiseqxmlToGenbank(): Multiple records in .xml file using jbeiseqxmlsToXmlArray()", function() {
+                var url1 = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var url2 = "/biojs/test/data/jbeiseq/test.xml";
+                var gbArr = [];
 
+                //alternative way to load it, not using jasmine
                 //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
-                var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
-                jbeiXml += jbeiXml;
-                //console.log(jbeiXml);
+
+                //using jasmine to load
+                var jbeiXml = jasmine.getFixtures().read(url1) + jasmine.getFixtures().read(url2);
                 var xmlArr  = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlsToXmlArray(jbeiXml);
-                //console.log(xmlArr);
                 try {
                     for (var i=0; i < xmlArr.length; i++ ) {
-                        var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+                        //if (LOG) console.log(xmlArr[i]);
+                        var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(xmlArr[i]);
                         gbArr.push(gb);
                         //if (LOG) console.log(gb.toString());
                         //if (LOG) console.log(JSON.stringify(gb, null, "    "));
@@ -191,22 +193,22 @@ Ext.onReady(function() {
                 }
                 expect(gbArr.length).toBe(2);
             });
-
+            
             it("genbankToJbeiseqxml() --- NEEDS TESTS", function() {
-                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                var url  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var jbei = Teselagen.bio.parsers.ParsersManager.loadFile(url);
                 //var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
 
-                if (LOG) console.log(jbeiXmlStr);
+                if (LOG) console.log(jbei);
                // if (LOG) console.log(JSON.stringify(jbeiXmlJson, null, "    "));
 
-                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
+                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbei);
                 console.log(gb.toString());
                 var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
                 console.log(gb2xml);
 
             });
-
+            /*
             it("genbankToJbeiseqJson() ---- NEEDS TESTS", function() {
                 var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
@@ -232,7 +234,7 @@ Ext.onReady(function() {
                 var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
                 console.log(gb2xml);
 
-            });
+            });*/
 
             it("genbankToSbol()", function() {
                 
