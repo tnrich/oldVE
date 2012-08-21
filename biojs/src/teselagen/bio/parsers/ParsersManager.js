@@ -325,7 +325,13 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 var key    = ft.getFeatureQualifier()[k].getName();
                 var value  = ft.getFeatureQualifier()[k].getValue();
                 var quoted = ft.getFeatureQualifier()[k].getQuoted();
-                xml.push("        <seq:attribute name=\"" + key + "\" quoted=\"" + quoted + "\" >" + value + "</seq:attribute>\n");
+
+                if (k==0 && this.isALabel(key) ) { //HERE 8/20
+                    console.log("found a label");
+                    //don't add as attribute
+                } else {
+                    xml.push("        <seq:attribute name=\"" + key + "\" quoted=\"" + quoted + "\" >" + value + "</seq:attribute>\n");
+                }
             }
 
             xml.push("        <seq:seqHash>" + seqHash + "</seq:seqHash>\n");
@@ -402,15 +408,21 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 var value  = ft.getFeatureQualifier()[k].getValue();
                 var quoted = ft.getFeatureQualifier()[k].getQuoted();
 
-                //if (k==0 && key == ) //WAS LADT HERE
+                console.log(key);
 
-                newAttr.push( {
-                    "seq:attribute" : {
-                        "_name" : key,
-                        "_quoted" : quoted,
-                        "__text" : value //USE __text
-                    }
-                });
+                if (k==0 && this.isALabel(key) ) { //HERE 8/20
+                    console.log("found a label");
+                    //don't add as attribute
+                } else {
+
+                    newAttr.push( {
+                        "seq:attribute" : {
+                            "_name" : key,
+                            "_quoted" : quoted,
+                            "__text" : value //USE __text
+                        }
+                    });
+                }
             }
 
             var newFeat = {
@@ -1068,7 +1080,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @return {Boolean} isALabel
      */
     isALabel: function(name) {
-        if (name === "label" | name === "ApEinfo_label" ||
+        if (name === "label" || name === "ApEinfo_label" ||
             name === "note" || name === "gene" || 
             name === "organism" || name === "name" ) {
 
