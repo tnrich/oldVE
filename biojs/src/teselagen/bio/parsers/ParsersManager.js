@@ -246,6 +246,482 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     },
 
     /**
+     * Converts an JbeiSeqXML in string format to JSON format.
+     * This checks for valid entries in the XML file. 
+     * If a required entry is not recognized, an error is thrown.
+     * If a non-required entry is not recognized, a default value is used.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * XXXXCurrently eliminates the "seq:" namespace by replaceing it with "seq".
+     * @param {String} xml XML file in String format
+     * @returns {JSON} json Cleaned JSON object of the JbeiSeqXml
+     */
+     jbeiseqxmlToJson: function (xmlStr) {
+        var result = {}; 
+
+        var json = XmlToJson.xml_str2json(xmlStr);
+        //console.log(JSON.stringify(json, null, "  "));
+
+        if (json["seq"] === undefined) {
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"
+            });
+            return result;
+        } else if (json["seq"] === undefined) {
+            return result;
+        }
+
+        //===============
+        // LOCUSKEYWORD
+
+        var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
+
+        if (json["seq"]["name"] !== undefined) {
+            var name    = json["seq"]["name"]["__text"];
+        } else {
+            var name = "no_name";
+            console.warn("jbeiseqxmlToGenbank: No sequence name detected");
+        }
+
+        if (json["seq"]["circular"] !== undefined) {
+            var circ  = json["seq"]["circular"]["__text"];
+        } else {
+            var circ  = false;
+            console.warn("jbeiseqxmlToGenbank: No linear status detected; default to linear");
+        }
+
+        if (circ === "true") { //were strings for circular, convert to booleans
+            var linear = false;
+        } else {
+            var linear = true;
+        }
+
+        if (json["seq"]["sequence"] !== undefined) {
+            var seq     = json["seq"]["sequence"]["__text"] || "no_sequence";
+        } else {
+            var seq     = "";
+            console.warn("jbeiseqxmlToGenbank: No sequence detected");
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid JbeiSeqXML file. No sequence detected"
+            });
+        }
+
+        if (json["seq"]["seqHash"] !== undefined) {
+            var seqHash = json["seq"]["seqHash"]["__text"];
+        } else {
+            var seqHash = "";
+        }
+
+
+        //===============
+        // FEATURESKEYWORD
+
+        var features = [];
+
+        if (json["seq"]["features"]["feature_asArray"] === undefined) {
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid JbeiSeqXML file. No Features detected"
+            });
+            return result;
+        } else { 
+            var jFeats  = json["seq"]["features"]["feature_asArray"];
+        }
+
+        //console.log(jFeats.length);
+
+        for (var i=0; i < jFeats.length; i++) {
+
+            var locations   = [];
+            var attributes  = []; //qualifiers  = [];
+            
+            var ft = jFeats[i];
+
+            if (ft["type"] !== undefined) {
+                var type = ft["type"]["__text"];
+            } else {
+                var type = "unsure"; //using seq.xsd
+            }
+
+            if (ft["complement"] !== undefined) {
+                var complement = ft["complement"]["__text"];
+            } else {
+                var complement = false;
+            }
+
+            //===============
+            //LOCATIONS
+            // asArray will detect if there are locations; ie length=0 means no locations
+
+            for (var j=0; j < ft["location_asArray"].length; j++) {
+                //console.log(ft["location_asArray"][j]);
+                var start = ft["location_asArray"][j]["genbankStart"]["__text"];
+
+                if (ft["location_asArray"][j]["end"] === undefined) {
+                    var end   = start;
+                } else {
+                    var end   = ft["location_asArray"][j]["end"]["__text"];
+                }
+                var to    = "..";
+
+                var loc = {
+                    "seq:genbankStart" : start,
+                    "seq:end" : end
+                };
+                locations.push(loc);
+            }
+            //===============
+            // QUALIFIERS
+
+            if (ft["label"] !== undefined ) {
+                var label = ft["label"]["__text"];
+            } else {
+                var label = "name_unknown";
+            }
+            /*var attr = {
+                "seq:attribute" : {
+                    "_name" : "label",
+                    "_quoted" : true,
+                    "__text" : label //USE __text
+                }
+            }*/
+            //attributes.push(qual);
+
+            //console.log(ft["attribute_asArray"]);
+            for (var j=0; j < ft["attribute_asArray"].length; j++) {
+                /*var attr = {
+                    "seq:attribute" : {
+                        "_name" : ft["attribute_asArray"][j]["_name"],
+                        "_quoted" : true,
+                        "__text" : ft["attribute_asArray"][j]["__text"], //USE __text
+                    }
+                }*/
+                var attr = {
+                    //"seq:attribute" : {
+                        "_name" : ft["attribute_asArray"][j]["_name"],
+                        "_quoted" : true,
+                        "value" : ft["attribute_asArray"][j]["__text"], //USE __text
+                    //}
+                }
+
+                attributes.push(attr);
+            }
+
+            // POST CALCULATIONS
+
+            if (complement === true) {
+                var strand = -1;
+                complement = true;
+            } else {
+                var strand = 1;
+                complement = false;
+            }
+
+            var feat = {
+                "seq:feature" : {
+                    "seq:label" : label,
+                    "seq:complement" : complement,
+                    "seq:type" : type,
+                    "seq:location": locations,
+                    "seq:attribute" : attributes //this should not be saved as a subset
+                }
+            }
+
+            features.push(feat);
+        }
+        // Setting final JSON object
+        var result = { 
+            "seq:seq" : {
+                "seq:name" : name,
+                "seq:circular" : circ,
+                "seq:sequence" : seq,
+                "seq:features" : features,
+                "seq:seqHash"  : seqHash,
+                "_xmlns:seq": "http://jbei.org/sequence",
+                "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"
+            }
+        }
+
+        return result;
+     },
+
+    /**
+     * Converts an JbeiSeqXML in string format to JSON format.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * @param {JSON} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {String} xml XML file in String format
+     */
+     jbeiseqjsonToXml: function(json) {
+
+        if (json === null) {
+            return null;
+        }
+        var xml = [];
+
+        xml.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        xml.push("<seq:seq\n");
+
+        xml.push("  xmlns:seq=\"http://jbei.org/sequence\"\n");
+        xml.push("  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+        xml.push("  xsi:schemaLocation=\"http://jbei.org/sequence seq.xsd\"\n");
+        xml.push(">\n");
+        
+        xml.push("<seq:name>" +     json["seq:seq"]["seq:name"] +       "</seq:name>\n");
+        xml.push("<seq:circular>" + json["seq:seq"]["seq:circular"] +   "</seq:circular>\n");
+        xml.push("<seq:sequence>" + json["seq:seq"]["seq:sequence"] +   "</seq:sequence>\n");
+        xml.push("<seq:features>\n");
+
+        var feat        = json["seq:seq"]["seq:features"];
+        var sequence    = json["seq:seq"]["seq:sequence"];
+
+        for (var i=0; i < feat.length; i++) {
+            var ft = feat[i]["seq:feature"];
+
+            // Feature Label/Complement/type population
+            xml.push("    <seq:feature>\n");
+            xml.push("        <seq:label>" +        ft["seq:label"] +       "</seq:label>\n");
+            xml.push("        <seq:complement>" +   ft["seq:complement"] +  "</seq:complement>\n");
+            xml.push("        <seq:type>" +         ft["seq:type"] +        "</seq:type>\n");
+
+            // Locations
+            for (var j=0; j < ft["seq:location"].length; j++) {
+                //console.log(ft["seq:location"][j]);
+                var start = ft["seq:location"][j]["seq:genbankStart"];
+                var end   = ft["seq:location"][j]["seq:end"];
+                //console.log(start + " : " + end );
+                xml.push("        <seq:location>\n");
+                xml.push("            <seq:genbankStart>" + start + "</seq:genbankStart>\n");
+                xml.push("            <seq:end>" + end + "</seq:end>\n");
+                xml.push("        </seq:location>\n");
+            }
+
+            // Attributes (qualifiers)
+            for (var k=0; k < ft["seq:attribute"].length; k++) {
+                var att    = ft["seq:attribute"][k]; //["seq:attribute"];
+                var key    = att["_name"];
+                var quoted = att["_quoted"];
+                var value  = att["value"];
+
+                if (k==0 && this.isALabel(key) ) { //HERE 8/20
+                    console.log("found a label");
+                    //don't add as attribute
+                } else {
+                    xml.push("        <seq:attribute name=\"" + key + "\" quoted=\"" + quoted + "\">" + value + "</seq:attribute>\n");
+                }
+            }
+
+            xml.push("        <seq:seqHash>" + json["seq:seq"]["seq:seqHash"] + "</seq:seqHash>\n");
+            xml.push("    </seq:feature>\n");
+        }
+
+        xml.push("</seq:features>\n");
+        xml.push("</seq:seq>\n");
+
+        return xml.join("");
+     },
+
+     /**
+     * Converts a JbeiSeq XML file into a Genbank model of the data.
+     * Only one record per xmlStr. Parse approriately with <seq:seq> RECORD </seq:seq> tags.
+     * @param {String} xml JbeiSeq XML file  with ONE record in String format
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
+     */
+    jbeiseqxmlToGenbank: function(xmlStr) {
+        var result = Ext.create("Teselagen.bio.parsers.Genbank", {});;
+
+        //var json = XmlToJson.xml_str2json(xmlStr);
+
+        // Use clean JSON version of the XML, NOT the XmlToJson.xml_str2json() version
+        // This checks and returns a useable format.
+        var json = this.jbeiseqxmlToJson(xmlStr);
+        //console.log(json["seq:seq"]["features"]["feature_asArray"]);
+
+        //===============
+        // LOCUSKEYWORD
+
+        var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
+        var name    = json["seq:seq"]["seq:name"];
+        var circ    = json["seq:seq"]["circular"];
+        var seq     = json["seq:seq"]["seq:sequence"]; 
+
+        var locus   = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+            locusName: name,
+            linear: !circ,
+            sequenceLength: seq.length,
+            naType: na,
+            date: date
+        });
+
+        result.addKeyword(locus);
+
+        //===============
+        // FEATURESKEYWORD
+
+        var features = [];
+        //console.log(json["seq:seq"]["seq:features"]);
+
+        /*if (json["seq:seq"]["seq:features"]["seq:feature"] === undefined) {
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid JbeiSeqXML file. No Features detected"
+            });
+            return result;
+        } else { 
+            var jFeats  = json["seq:seq"]["seq:features"]["seq:feature"];
+        }*/
+
+        var feats = json["seq:seq"]["seq:features"];
+
+        for (var i=0; i < feats.length; i++) {
+            var ft = feats[i]["seq:feature"];
+
+            var locations   = [];
+            var qualifiers  = [];
+            
+            if (ft["seq:type"] !== undefined) {
+                var type = ft["seq:type"];
+            } else {
+                var type = "unsure"; //using seq.xsd
+            }
+
+            if (ft["seq:complement"] !== undefined) {
+                var complement = ft["seq:complement"];
+            } else {
+                var complement = false;
+            }
+
+            //===============
+            // LOCATION
+            for (var j=0; j < ft["seq:location"].length; j++) {
+                //console.log(ft["seq:location"][j]);
+                var start = ft["seq:location"][j]["seq:genbankStart"];
+                var end   = ft["seq:location"][j]["seq:end"];
+
+                var to    = "..";
+
+                var loc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
+                    start:  start,
+                    end:    end,
+                    to:     to
+                });
+                locations.push(loc);
+            }
+            //===============
+            // ATTRIBUTES -> QUALIFIERS
+
+            if (ft["seq:label"] !== undefined ) {
+                var label = ft["seq:label"];
+            } else {
+                var label = "name_unknown";
+            }
+            var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
+                name:      "label",
+                value:      label,
+                quoted:     true
+            });
+            qualifiers.push(qual);
+
+            //console.log(ft["seq:attribute"]);
+            for (var j=0; j < ft["seq:attribute"].length; j++) {
+                var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
+                    name:   ft["seq:attribute"][j]["_name"],
+                    value:  ft["seq:attribute"][j]["value"],
+                    //quoted: true
+                    quoted: ft["seq:attribute"][j]["_quoted"]
+                });
+                //console.log(qual.toString());
+                qualifiers.push(qual);
+            }
+
+            // POST CALCULATIONS
+
+            if (complement === true) {
+                var strand = -1;
+                complement = true;
+            } else {
+                var strand = 1;
+                complement = false;
+            }
+
+            if (locations.length>1) {
+                var join = true;
+            } else {
+                var join = false;
+            }
+
+            // THIS DOESNT WORK YET
+            if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) {
+                var na = "DNA";
+            } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) {
+                var na = "RNA";
+            } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) {
+                var na = "PRO";
+            } else {
+                var na = "NAN";
+            }
+            
+            var feat = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
+                keyword:            type,
+                strand:             strand,
+                complement:         complement,
+                join:               join,
+                featureLocation:    locations,
+                featureQualifier:   qualifiers
+            });
+            features.push(feat);
+            //console.log(feat.toString());
+        }
+
+        var featureKW =  Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
+        featureKW.setFeaturesElements(features);
+        
+        result.addKeyword(featureKW);
+
+        //===============
+        // ORIGINKEYWORD
+
+        var origin =  Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+            sequence: seq
+        });
+        result.addKeyword(origin);
+
+        return result;
+    },
+
+
+    
+
+
+
+     /**
+     * Converts an JbeiSeqXML in string format with multiple records to array of Genbank models
+     * Currently eliminates the "seq:" namespace by replaceing it with "seq".
+     * @param {String} xml XML file with one or more records in String format
+     * @returns {Teselagen.bio.parsers.Genbank[]} genbank
+     */
+     jbeiseqxmlsToXmlArray: function (xml) {
+        var xmlArray = [];
+        var newxml = xml;
+
+        //newxml = newxml.replace(/\<seq\:name/gi, "BREAKRECORD<seq:name");
+        newxml = newxml.replace(/\<\/seq\:seq\>/gi, "<\/seq:seq>BREAKRECORD");
+
+        //console.log(newxml);
+
+        var xmlArr = newxml.split("BREAKRECORD");
+
+        for (var i=0; i<xmlArr.length; i++) {
+            if (xmlArr[i].match(/\<seq\:seq/g)) {
+                xmlArray.push(xmlArr[i].replace(/^[\n]*/g, ""));
+                //console.log(xmlArr[i]);
+            }
+        }
+
+        //console.log(xmlArray.length);
+
+        return xmlArray;
+     },
+
+
+    /**
      * Converts a Genbank model into a JbeiSeq XML formatted file.
      * Only one Genbank model at a time.
      * This is code adapted from IceXmlUtils.as
@@ -459,7 +935,214 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     },
 
 
+    // ===========================================================================
+    // UTILITY FUNCTIONS
+    // ===========================================================================
 
+    /**
+     * @param {String} url The url to retrieve data from.
+     * Uses a synchronus Ajax request.
+     * @returns {String} xml XML string
+     */
+    loadFile: function(url) {
+        // Doing XMLHttpRequest leads to loading from cash
+
+        var str;
+
+        Ext.Ajax.request({
+            url: url,
+            async: false,
+            disableCaching: true,
+            success: function(response) {
+                str = response.responseText;
+                //console.dir(xmlStr);
+            },
+            failure: function(response, opts) {
+                console.warn('Could not load: ' + url + '\nServer-side failure with status code ' + response.status);
+                throw Ext.create("Teselagen.bio.BioException", {
+                    message: 'Could not load: ' + url + '\nServer-side failure with status code ' + response.status
+                });
+            }
+        });
+        return str;
+     },
+
+
+    /**
+     * Today's date
+     * @returns {String} date Today's date in string format
+     */
+    todayDate: function() {
+        var date    = (new Date()).toDateString().split(" ");
+        var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
+        return dateStr;
+     },
+
+    /**
+     * isALabel
+     * @param
+     * @return {Boolean} isALabel
+     */
+    isALabel: function(name) {
+        if (name === "label" || name === "ApEinfo_label" ||
+            name === "note" || name === "gene" || 
+            name === "organism" || name === "name" ) {
+
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+// ===============================================================================================
+//  STUFF TO DUMP BUT WILL SAVE HERE FOR NOW
+// ===============================================================================================
+    /** THIS DOES NOT WORK--breaks with domainspace and sub-models
+     * Converts an XML string format of JbeiSeqXML.
+     * Currently eliminates the "seq:" namespace by replaceing it with "seq".
+     * @param {String} xml XML file in String format
+     * 
+     */
+    parseJbeiseqxml: function (xml, url) {
+        var list = [];
+
+        Ext.define("JbeiSeq", {
+            extend: "Ext.data.Model",
+            fields: [
+                "seqname", "seqcircular", "seqfeatures", "seqsequence"
+                //{name: "name",     mapping: "seqname"    ,  type: "string"},
+                //{name: "circular", mapping: "seqcircular",  type: "boolean"},
+                //{name: "features", mapping: "seqfeatures",  type: "auto"},
+                //{name: "sequence", mapping: "seqsequence",  type: "string"}
+            ],
+            proxy: {
+                type: "memory",
+                reader: {
+                    type: "xml",
+                    record: "seqseq"
+                }
+            },
+            associations: [
+                { type: 'belongsTo', model: 'Feature', name: "features" }
+            ]
+            /*hasMany: {
+                name: "features",
+                model: "Feature"
+            }*/
+        });
+
+        Ext.define("Feature", {
+            extend: "Ext.data.Model",
+            fields: [
+                "seqlabel",
+                "seqcomplement",
+                "seqtype",
+                "seqlocation",
+                "seqattribute",
+                "seqseqHash"
+                /*{name: "label",      mapping: "seqlabel",      type: "string"},
+                {name: "complement", mapping: "seqcomplement", type: "boolean"},
+                {name: "type",       mapping: "seqtype",       type: "string"},
+                //{name: "location",   mapping: "seqlocation",   type: "auto"},
+                {name: "attribute",  mapping: "seqattribute",  type: "auto"},
+                {name: "seqHash",    mapping: "seqseqHash",    type: "auto"}*/
+            ],
+            proxy: {
+                type: "memory",
+                reader: {
+                    type: "xml",
+                    record: "seqfeature"
+                }
+            },
+            /*hasMany: {
+                name: "location",
+                model: "Location"
+            },*/
+            belongsTo: "JbeiSeq"
+        });
+
+        Ext.define("Location", {
+            extend: "Ext.data.Model",
+            fields: [
+                "seqgenbankStart", "seqend"
+                //{name: "start",     mapping: "seq:location > seq:genbankStart"},
+                //{name: "end",       mapping: "seq: location > seq:end"}
+            ],
+            proxy: {
+                type: "memory",
+                reader: {
+                    type: "xml",
+                    record: "location"
+                }
+            },
+            belongsTo: "JbeiSeq"
+        });
+
+        console.log("here");
+
+        xml = xml.replace(/seq\:/g, "seq");
+        var doc = new DOMParser().parseFromString(xml, "text/xml");
+
+        var store = Ext.create("Ext.data.XmlStore", {
+            //autoDestroy: true,
+            autoLoad: true,
+            //model: "JbeiSeq",
+            //model: "Feature",
+            fields: [
+                "seqname", "seqcircular", "seqsequence", "seqfeatures"
+            ],
+            //fields: [
+            //    "seqlabel", "seqcomplement", "seqtype", "seqlocation", "seqattribute", "seqseqHash"
+            //],
+            data: doc,
+            proxy: {
+                type: "memory",
+                url: url,
+                reader: {
+                    type: "xml",
+                    record: "seqseq",
+                    //record: "seqfeature",
+                    root: "seqseq",
+                    totalProperty: "total",
+                    successProperty: "success"
+                }
+            }
+        });
+
+        //store.loadRawData(doc);
+        console.log(store.getCount());
+        console.log(store);
+
+        // For each item in the store, which is one record, create a genbank data model and add to list
+        store.each(function(jbei) {
+            console.log(jbei.get("seqtype"));
+            var name    = jbei.get("seqname");
+            var linear  = !jbei.get("seqcircular");
+            var seq     = jbei.get("seqsequence");
+            var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
+
+            var locus   = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+                locusName: name,
+                linear: linear,
+                sequenceLength: seq.length,
+                date: date
+            });
+            var origin =  Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+                sequence: jbei.get("seqsequence")
+            });
+
+
+            var gb = Ext.create("Teselagen.bio.parsers.Genbank", {});
+            gb.addKeyword(locus);
+            gb.addKeyword(origin);
+            list.push(gb);
+            console.log(gb.toString());
+        });
+
+        return list;
+
+
+    },
 
     /**
      * Converts a JbeiSeq XML file into a Genbank model of the data.
@@ -467,7 +1150,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @param {String} xml JbeiSeq XML file  with ONE record in String format
      * @returns {Teselagen.bio.parsers.Genbank} genbank
      */
-    jbeiseqxmlToGenbank: function(xmlStr) {
+    jbeiseqxmlToGenbankUSINGXMLTOJSON: function(xmlStr) {
         var result = Ext.create("Teselagen.bio.parsers.Genbank", {});;
 
         var json = XmlToJson.xml_str2json(xmlStr);
@@ -670,40 +1353,47 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         return result;
     },
 
-     /**
-     * Converts an JbeiSeqXML in string format to JSON format
-     * XXXXCurrently eliminates the "seq:" namespace by replaceing it with "seq".
-     * @param {String} xml XML file in String format
-     * @returns {JSON} json Cleaned JSON object of the JbeiSeqXml {@link Teselagen.bio.util.XmlToJson}
+    /**
+     * Converts a JbeiSeq XML file into a Genbank model of the data.
+     * Only one record per xmlStr. Parse approriately with <seq:seq> RECORD </seq:seq> tags.
+     * @param {String} xml JbeiSeq XML file  with ONE record in String format
+     * @returns {Teselagen.bio.parsers.Genbank} genbank
      */
-     jbeiseqxmlToJson: function (xmlStr) {
-        var result = {}; 
+    jbeiseqxmlToGenbank_WITHCHECKS: function(xmlStr) {
+        var result = Ext.create("Teselagen.bio.parsers.Genbank", {});;
 
-        var json = Teselagen.bio.util.XmlToJson.xml_str2json(xmlStr);
+        //var json = XmlToJson.xml_str2json(xmlStr);
 
-        if (json["seq"] === undefined) {
+        // Use clean JSON version of the XML, NOT the XmlToJson.xml_str2json() version
+        // This checks and returns a useable format.
+        var json = this.jbeiseqxmlToJson(xmlStr);
+        //console.log(JSON.stringify(json, null, "    "));
+
+        if (json["seq:seq"] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"
             });
             return result;
-        } else if (json["seq"] === undefined) {
+        } else if (json["seq:seq"] === undefined) {
             return result;
         }
+
+        //console.log(json["seq:seq"]["features"]["feature_asArray"]);
 
         //===============
         // LOCUSKEYWORD
 
         var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
 
-        if (json["seq"]["name"] !== undefined) {
-            var name    = json["seq"]["name"]["__text"];
+        if (json["seq:seq"]["seq:name"] !== undefined) {
+            var name    = json["seq:seq"]["seq:name"];
         } else {
             var name = "no_name";
             console.warn("jbeiseqxmlToGenbank: No sequence name detected");
         }
 
-        if (json["seq"]["circular"] !== undefined) {
-            var circ  = json["seq"]["circular"]["__text"];
+        if (json["seq:seq"]["seq:circular"] !== undefined) {
+            var circ  = json["seq:seq"]["circular"];
         } else {
             var circ  = false;
             console.warn("jbeiseqxmlToGenbank: No linear status detected; default to linear");
@@ -715,48 +1405,61 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             var linear = true;
         }
 
-        if (json["seq"]["sequence"] !== undefined) {
-            var seq     = json["seq"]["sequence"]["__text"] || "no_sequence";
+        if (json["seq:seq"]["seq:sequence"] !== undefined) {
+            var seq     = json["seq:seq"]["seq:sequence"];
         } else {
             var seq     = "";
             console.warn("jbeiseqxmlToGenbank: No sequence detected");
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No sequence detected"
             });
-        }
+        }       
 
+        var locus   = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+            locusName: name,
+            linear: linear,
+            sequenceLength: seq.length,
+            naType: na,
+            date: date
+        });
+
+        result.addKeyword(locus);
 
         //===============
         // FEATURESKEYWORD
 
         var features = [];
+        console.log(json["seq:seq"]["seq:features"]);
 
-        if (json["seq"]["features"]["feature_asArray"] === undefined) {
-            return result;
+        if (json["seq:seq"]["seq:features"]["seq:feature"] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No Features detected"
             });
+            return result;
         } else { 
-            var jFeats  = json["seq"]["features"]["feature_asArray"];
+            var jFeats  = json["seq:seq"]["seq:features"]["seq:feature"];
         }
 
-        //console.log(jFeats.length);
+        console.log(jFeats.length);
 
         for (var i=0; i < jFeats.length; i++) {
 
             var locations   = [];
-            var attributes  = []; //qualifiers  = [];
+            var qualifiers  = [];
             
             var ft = jFeats[i];
+            
+            //console.log(ft);
+            //console.log(JSON.stringify(ft, null, "   "));
 
-            if (ft["type"] !== undefined) {
-                var type = ft["type"]["__text"];
+            if (ft["seq:type"] !== undefined) {
+                var type = ft["seq:type"];
             } else {
                 var type = "type_unknown";
             }
 
-            if (ft["complement"] !== undefined) {
-                var complement = ft["complement"]["__text"];
+            if (ft["seq:complement"] !== undefined) {
+                var complement = ft["seq:complement"];
             } else {
                 var complement = false;
             }
@@ -765,51 +1468,47 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             //LOCATIONS
             // asArray will detect if there are locations; ie length=0 means no locations
 
-            for (var j=0; j < ft["location_asArray"].length; j++) {
-                //console.log(ft["location_asArray"][j]);
-                var start = ft["location_asArray"][j]["genbankStart"]["__text"];
+            for (var j=0; j < ft["seq:location"].length; j++) {
+                var start = ft["seq:location"][j]["seq:genbankStart"];
 
-                if (ft["location_asArray"][j]["end"] === undefined) {
+                if (ft["location"][j]["seq:end"] === undefined) {
                     var end   = start;
                 } else {
-                    var end   = ft["location_asArray"][j]["end"]["__text"];
+                    var end   = ft["seq:location"][j]["seq:end"];
                 }
                 var to    = "..";
 
-                var loc = {
-                    "genbankStart" :  start,
-                    "end" :    end
-                };
+                var loc = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {
+                    start:  start,
+                    end:    end,
+                    to:     to
+                });
                 locations.push(loc);
             }
             //===============
             // QUALIFIERS
 
-            if (ft["label"] !== undefined ) {
-                var label = ft["label"]["__text"];
+            if (ft["seq:label"] !== undefined ) {
+                var label = ft["seq:label"];
             } else {
                 var label = "name_unknown";
             }
-            /*var attr = {
-                "seq:attribute" : {
-                    "_name" : "label",
-                    "_quoted" : true,
-                    "__text" : label //USE __text
-                }
-            }*/
-            //attributes.push(qual);
+            var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
+                name:      "label",
+                value:      label,
+                quoted:     true
+            });
+            qualifiers.push(qual);
 
-            //console.log(ft["attribute_asArray"]);
-            for (var j=0; j < ft["attribute_asArray"].length; j++) {
-                var attr = {
-                    "seq:attribute" : {
-                        "_name" : ft["attribute_asArray"][j]["_name"],
-                        "_quoted" : true,
-                        "__text" : ft["attribute_asArray"][j]["__text"], //USE __text
-                    }
-                }
-
-                attributes.push(attr);
+            console.log(ft["seq:attribute"]);
+            for (var j=0; j < ft["seq:attribute"].length; j++) {
+                var qual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
+                    name:   ft["seq:attribute"][j]["_name"],
+                    value:  ft["seq:attribute"][j]["__text"],
+                    quoted: true
+                });
+                //console.log(qual.toString());
+                qualifiers.push(qual);
             }
 
             // POST CALCULATIONS
@@ -822,272 +1521,49 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 complement = false;
             }
 
-            var feat = {
-                "seq:feature" : {
-                    "seq:label" : label,
-                    "seq:complement" : complement,
-                    "seq:type" : type,
-                    "seq:location": locations,
-                    "seq:attribute" : attributes //this should not be saved as a subset
-                }
-
-
+            if (locations.length>1) {
+                var join = true;
+            } else {
+                var join = false;
             }
 
+            // THIS DOESNT WORK YET
+            if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) {
+                var na = "DNA";
+            } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) {
+                var na = "RNA";
+            } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) {
+                var na = "PRO";
+            } else {
+                var na = "NAN";
+            }
+            
+            var feat = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
+                keyword:            type,
+                strand:             strand,
+                complement:         complement,
+                join:               join,
+                featureLocation:    locations,
+                featureQualifier:   qualifiers
+            });
             features.push(feat);
-
+            //console.log(feat.toString());
         }
 
-        var result = { 
-            "seq:seq" : {
-                "seq:name" : name,
-                "seq:circular" : circ,
-                "seq:sequence" : seq,
-                "seq:features" : features,
-                "_xmlns:seq": "http://jbei.org/sequence",
-                "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"
-            }
-        }
+        var featureKW =  Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword");
+        featureKW.setFeaturesElements(features);
+        
+        result.addKeyword(featureKW);
+
+        //===============
+        // ORIGINKEYWORD
+
+        var origin =  Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
+            sequence: seq
+        });
+        result.addKeyword(origin);
 
         return result;
-     },
-
-
-     /**
-     * Converts an JbeiSeqXML in string format with multiple records to array of Genbank models
-     * Currently eliminates the "seq:" namespace by replaceing it with "seq".
-     * @param {String} xml XML file with one or more records in String format
-     * @returns {Teselagen.bio.parsers.Genbank[]} genbank
-     */
-     jbeiseqxmlsToXmlArray: function (xml) {
-        var xmlArray = [];
-        var newxml = xml;
-
-        //newxml = newxml.replace(/\<seq\:name/gi, "BREAKRECORD<seq:name");
-        newxml = newxml.replace(/\<\/seq\:seq\>/gi, "<\/seq:seq>BREAKRECORD");
-
-        //console.log(newxml);
-
-        var xmlArr = newxml.split("BREAKRECORD");
-
-        for (var i=0; i<xmlArr.length; i++) {
-            if (xmlArr[i].match(/\<seq\:seq/g)) {
-                xmlArray.push(xmlArr[i].replace(/^[\n]*/g, ""));
-                //console.log(xmlArr[i]);
-            }
-        }
-
-        //console.log(xmlArray.length);
-
-        return xmlArray;
-     },
-
-
-    /** THIS DOES NOT WORK--breaks with domainspace and sub-models
-     * Converts an XML string format of JbeiSeqXML.
-     * Currently eliminates the "seq:" namespace by replaceing it with "seq".
-     * @param {String} xml XML file in String format
-     * 
-     */
-    parseJbeiseqxml: function (xml, url) {
-        var list = [];
-
-        Ext.define("JbeiSeq", {
-            extend: "Ext.data.Model",
-            fields: [
-                "seqname", "seqcircular", "seqfeatures", "seqsequence"
-                //{name: "name",     mapping: "seqname"    ,  type: "string"},
-                //{name: "circular", mapping: "seqcircular",  type: "boolean"},
-                //{name: "features", mapping: "seqfeatures",  type: "auto"},
-                //{name: "sequence", mapping: "seqsequence",  type: "string"}
-            ],
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "xml",
-                    record: "seqseq"
-                }
-            },
-            associations: [
-                { type: 'belongsTo', model: 'Feature', name: "features" }
-            ]
-            /*hasMany: {
-                name: "features",
-                model: "Feature"
-            }*/
-        });
-
-        Ext.define("Feature", {
-            extend: "Ext.data.Model",
-            fields: [
-                "seqlabel",
-                "seqcomplement",
-                "seqtype",
-                "seqlocation",
-                "seqattribute",
-                "seqseqHash"
-                /*{name: "label",      mapping: "seqlabel",      type: "string"},
-                {name: "complement", mapping: "seqcomplement", type: "boolean"},
-                {name: "type",       mapping: "seqtype",       type: "string"},
-                //{name: "location",   mapping: "seqlocation",   type: "auto"},
-                {name: "attribute",  mapping: "seqattribute",  type: "auto"},
-                {name: "seqHash",    mapping: "seqseqHash",    type: "auto"}*/
-            ],
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "xml",
-                    record: "seqfeature"
-                }
-            },
-            /*hasMany: {
-                name: "location",
-                model: "Location"
-            },*/
-            belongsTo: "JbeiSeq"
-        });
-
-        Ext.define("Location", {
-            extend: "Ext.data.Model",
-            fields: [
-                "seqgenbankStart", "seqend"
-                //{name: "start",     mapping: "seq:location > seq:genbankStart"},
-                //{name: "end",       mapping: "seq: location > seq:end"}
-            ],
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "xml",
-                    record: "location"
-                }
-            },
-            belongsTo: "JbeiSeq"
-        });
-
-        console.log("here");
-
-        xml = xml.replace(/seq\:/g, "seq");
-        var doc = new DOMParser().parseFromString(xml, "text/xml");
-
-        var store = Ext.create("Ext.data.XmlStore", {
-            //autoDestroy: true,
-            autoLoad: true,
-            //model: "JbeiSeq",
-            //model: "Feature",
-            fields: [
-                "seqname", "seqcircular", "seqsequence", "seqfeatures"
-            ],
-            //fields: [
-            //    "seqlabel", "seqcomplement", "seqtype", "seqlocation", "seqattribute", "seqseqHash"
-            //],
-            data: doc,
-            proxy: {
-                type: "memory",
-                url: url,
-                reader: {
-                    type: "xml",
-                    record: "seqseq",
-                    //record: "seqfeature",
-                    root: "seqseq",
-                    totalProperty: "total",
-                    successProperty: "success"
-                }
-            }
-        });
-
-        //store.loadRawData(doc);
-        console.log(store.getCount());
-        console.log(store);
-
-        // For each item in the store, which is one record, create a genbank data model and add to list
-        store.each(function(jbei) {
-            console.log(jbei.get("seqtype"));
-            var name    = jbei.get("seqname");
-            var linear  = !jbei.get("seqcircular");
-            var seq     = jbei.get("seqsequence");
-            var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
-
-            var locus   = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
-                locusName: name,
-                linear: linear,
-                sequenceLength: seq.length,
-                date: date
-            });
-            var origin =  Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword", {
-                sequence: jbei.get("seqsequence")
-            });
-
-
-            var gb = Ext.create("Teselagen.bio.parsers.Genbank", {});
-            gb.addKeyword(locus);
-            gb.addKeyword(origin);
-            list.push(gb);
-            console.log(gb.toString());
-        });
-
-        return list;
-
-
-    },
-
-    // ===========================================================================
-    // UTILITY FUNCTIONS
-    // ===========================================================================
-
-    /**
-     * @param {String} url The url to retrieve data from.
-     * Uses a synchronus Ajax request.
-     * @returns {String} xml XML string
-     */
-    loadFile: function(url) {
-        // Doing XMLHttpRequest leads to loading from cash
-
-        var str;
-
-        Ext.Ajax.request({
-            url: url,
-            async: false,
-            disableCaching: true,
-            success: function(response) {
-                str = response.responseText;
-                //console.dir(xmlStr);
-            },
-            failure: function(response, opts) {
-                console.warn('Could not load: ' + url + '\nServer-side failure with status code ' + response.status);
-                throw Ext.create("Teselagen.bio.BioException", {
-                    message: 'Could not load: ' + url + '\nServer-side failure with status code ' + response.status
-                });
-            }
-        });
-        return str;
-     },
-
-
-    /**
-     * Today's date
-     * @returns {String} date Today's date in string format
-     */
-    todayDate: function() {
-        var date    = (new Date()).toDateString().split(" ");
-        var dateStr = date[2] + "-" + date[1].toUpperCase() + "-" + date[3];
-        return dateStr;
-     },
-
-    /**
-     * isALabel
-     * @param
-     * @return {Boolean} isALabel
-     */
-    isALabel: function(name) {
-        if (name === "label" || name === "ApEinfo_label" ||
-            name === "note" || name === "gene" || 
-            name === "organism" || name === "name" ) {
-
-            return true;
-        } else {
-            return false;
-        }
-      }
+    }
 
 });

@@ -131,20 +131,77 @@ Ext.onReady(function() {
                 expect(flag).toBe(false);
             });
 
-            it("jbeiseqxmlToGenbank(): One record in .xml file", function() {
-
-                jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
-
-                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
-                var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
-                //console.log(jbeiXml);
+            /* // THIS DOES NOT WORK CORRECTLY, ONLY USE THE xml2json utility
+            it("Can interchange xml<->json using Teselagen.bio.util.XmlToJson.js correctly", function() {
+                var url      = "/biojs/test/data/jbeiseq/test.xml";
+                var xmlStr   = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                if (LOG) console.log(xmlStr);
+                var json     = Teselagen.bio.util.XmlToJson.xml_str2json(xmlStr);
+                //if (LOG) console.log(JSON.stringify(json, null, "  "));
+                var xml2     = Teselagen.bio.util.XmlToJson.json2xml_str(json);
+                if (LOG) console.log(xml2);
+            });
+            */
+            it("jbeiseqxmlToJson(): Null case", function() {
                 try {
-                    var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
-                    //if (LOG) console.log(gb.toString());
-                    //if (LOG) console.log(JSON.stringify(gb, null, "    "));
+                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson("");
+                    var flag = false;
                 } catch (e) {
                     console.warn("Caught: " + e.message);
+                    var flag = true;
                 }
+                expect(flag).toBe(true);
+            });
+
+            it("jbeiseqxmlToJson(): Does xml->json->xml2->json2 yield json===json2?", function() {
+                var url      = "/biojs/test/data/jbeiseq/test.xml";
+                //var url      = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var jbeiXml  = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                var jbeiJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXml);
+
+                if (LOG) console.log(jbeiXml);
+                if (LOG) console.log(JSON.stringify(jbeiJson, null, "  "));
+
+                var jbeiXml2 = Teselagen.bio.parsers.ParsersManager.jbeiseqjsonToXml(jbeiJson);
+                //if (LOG) console.log(jbeiXml2);
+
+                var jbeiJson2 = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXml2);
+                if (LOG) console.log(JSON.stringify(jbeiJson2, null, "  "));
+                expect(jbeiJson).toEqual(jbeiJson2);
+
+
+                //var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
+                //console.log(gb.toString());
+                //var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
+                //console.log(gb2xml);
+
+            });
+
+            it("jbeiseqxmlToGenbank(): Null case", function() {
+                try {
+                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank("");
+                    var flag = false;
+                } catch (e) {
+                    console.warn("Caught: " + e.message);
+                    var flag = true;
+                }
+                expect(flag).toBe(true);
+            });
+
+            it("jbeiseqxmlToGenbank(): One record in .xml file", function() {
+
+                url = "/biojs/test/data/jbeiseq/test.xml";
+
+                //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                var jbeiXml = jasmine.getFixtures().read(url);
+                //console.log(jbeiXml);
+                //try {
+                    var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXml);
+                    if (LOG) console.log(gb.toString());
+                    //if (LOG) console.log(JSON.stringify(gb, null, "    "));
+                //} catch (e) {
+                //    console.warn("Caught: " + e.message);
+                //}
                 expect(gb.getLocus().getLocusName()).toBe("signal_pep");
                 expect(gb.getLocus().getStrandType()).toBe("");
                 expect(gb.getLocus().getSequenceLength()).toBe(64);
@@ -169,6 +226,7 @@ Ext.onReady(function() {
                 expect(gb.getOrigin().getSequence().length).toBe(64);
             });
 
+            /*
             it("jbeiseqxmlToGenbank(): Multiple records in .xml file using jbeiseqxmlsToXmlArray()", function() {
                 var url1 = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var url2 = "/biojs/test/data/jbeiseq/test.xml";
@@ -193,7 +251,20 @@ Ext.onReady(function() {
                 }
                 expect(gbArr.length).toBe(2);
             });
+
+            it("genbankToJbeiseqJson() ---- NEEDS TESTS", function() {
+                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                //var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
+
+                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
+                console.log(gb.toString());
+                var gb2jbeiJSON      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
+                console.log(gb2jbeiJSON);
+
+            });
             
+               
             it("genbankToJbeiseqxml() --- NEEDS TESTS", function() {
                 var url  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var jbei = Teselagen.bio.parsers.ParsersManager.loadFile(url);
@@ -206,35 +277,16 @@ Ext.onReady(function() {
                 console.log(gb.toString());
                 var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
                 console.log(gb2xml);
-
-            });
-            /*
-            it("genbankToJbeiseqJson() ---- NEEDS TESTS", function() {
-                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
-                //var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
-
-                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
-                console.log(gb.toString());
-                var gb2jbeiJSON      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
-                console.log(gb2jbeiJSON);
+                console.log(JSON.stringify(Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(gb2xml), null, "  "));
+                //console.log(JSON.stringify(XmlToJson.xml_str2json(gb2xml), null, "  "));
+                var gb2         = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(gb2xml);
+                console.log(gb2.toString());
 
             });
 
-            it("jbeiseqxmlToJson() -- cleaned NEEDS TESTS", function() {
-                var jbeiXmlUrl  = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                var jbeiXmlStr  = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
-                var jbeiXmlJson = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXmlStr);
+            
 
-                if (LOG) console.log(jbeiXmlStr);
-                if (LOG) console.log(JSON.stringify(jbeiXmlJson, null, "    "));
-
-                var gb          = Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToGenbank(jbeiXmlStr);
-                console.log(gb.toString());
-                var gb2xml      = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqxml(gb);
-                console.log(gb2xml);
-
-            });*/
+            */
 
             it("genbankToSbol()", function() {
                 
