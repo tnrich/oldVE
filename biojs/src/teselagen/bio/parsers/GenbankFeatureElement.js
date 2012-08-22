@@ -257,6 +257,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         
         var json = {
                 keyword: keyword,
+                //complement: complement,
                 strand: strand
         }
 
