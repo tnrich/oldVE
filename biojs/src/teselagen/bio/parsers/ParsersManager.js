@@ -605,7 +605,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 locations.push(loc);
             }
             //===============
-            // ATTRIBUTES -> QUALIFIERS
+            // ATTRIBUTES -> QUALIFIERS  (HERE LAST 8/21)
 
             if (ft["seq:label"] !== undefined ) {
                 var label = ft["seq:label"];
