@@ -313,7 +313,7 @@ Ext.onReady(function() {
             it("sbolXmlToJson()--- THIS DOES NOT WORK", function() {
                 var url = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
                 var xml = jasmine.getFixtures().read(url);
-                console.log(xml);
+                //console.log(xml);
 
                 var json = ParsersManager.sbolXmlToJson(xml);
 

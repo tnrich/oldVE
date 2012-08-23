@@ -822,7 +822,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var result = {};
 
         var json = XmlToJson.xml_str2json(xmlStr);
-        console.log(JSON.stringify(json, null, "  "));
+        //  console.log(JSON.stringify(json, null, "  "));
 
 
         if (json["RDF"] === undefined) {
