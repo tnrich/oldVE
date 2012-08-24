@@ -15,11 +15,8 @@
 
 Ext.define('MyApp.view.AppViewport', {
     extend: 'Ext.container.Viewport',
-
-    layout: {
-        type: 'border'
-    },
-
+    layout: 'border',
+    requires: ['MyApp.view.DeviceEditorView'],
     initComponent: function() {
         var me = this;
 
@@ -44,7 +41,7 @@ Ext.define('MyApp.view.AppViewport', {
                     region: 'center',
                     items: [
                         {
-                            xtype: 'panel',
+                            xtype: 'DeviceEditorPanel',
                             title: 'DeviceEditor'
                         },
                         {

@@ -876,7 +876,7 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
+        xdescribe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
             var newGb;
 
             beforeEach(function() {
