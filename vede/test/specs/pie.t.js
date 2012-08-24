@@ -1,5 +1,5 @@
-/*globals beforeEach, describe, expect, Ext, it, sandbox, setFixtures*/
-describe('Pie test', function () {
+/*global beforeEach, describe, expect, it, sandbox, setFixtures*/
+describe("Pie test", function () {
     var pie, pieContainer, pieManager, box;
     beforeEach(function() {
         box = sandbox();
@@ -12,8 +12,8 @@ describe('Pie test', function () {
             showOrfs: false
         });
         pie = pieManager.getPie();
-        pieContainer = Ext.widget('container', {
-            renderTo: 'sandbox',
+        pieContainer = Ext.widget("container", {
+            renderTo: "sandbox",
             layout: {
                 //type: 'fit'
                 //type: 'column'
