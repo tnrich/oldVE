@@ -1,3 +1,4 @@
+/*globals Ext, Teselagen, XmlToJson, DNATools*/
 /**
  * @class Teselagen.bio.parsers.ParsersManager
  *
