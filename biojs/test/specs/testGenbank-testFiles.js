@@ -35,7 +35,7 @@ Ext.onReady(function() {
             JSON.stringify(gb, null, "  "));
     };
 
-    describe("Opening Problematic Genbank Files: ", function() {
+    xdescribe("Opening Problematic Genbank Files: ", function() {
 
         describe("MarkDaris file: ", function() {
             var text, tmp;
