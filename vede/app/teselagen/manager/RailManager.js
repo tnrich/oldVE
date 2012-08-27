@@ -109,6 +109,49 @@ Ext.define("Teselagen.manager.RailManager", {
                           this.featureRenderer,
                           this.orfRenderer];
     },
+    
+    /**
+     * Function which gets all annotations in a range of indices. Only returns
+     * annotations which are currently visible.
+     * @param {Int} start The start of the range of nucleotides.
+     * @param {Int} end The end of the range of nucleotides.
+     * @return {Array<Teselagen.bio.sequence.common.Annotation>} All annotations
+     * (which are currently visible) that are contained in the range from start
+     * to end, according to Annotation.contains().
+     */
+    getAnnotationsInRange: function(start, end) {
+        var annotationsInRange = [];
+        var selectionAnnotation = Ext.create("Teselagen.bio.sequence.common.Annotation", {
+            start: start,
+            end: end
+        });
+
+        if(this.showFeatures) {
+            Ext.each(this.features, function(feature) {
+                if(selectionAnnotation.contains(feature)) {
+                    annotationsInRange.push(feature);
+                }
+            });
+        }
+
+        if(this.showCutSites) {
+            Ext.each(this.cutSites, function(site) {
+                if(selectionAnnotation.contains(site)) {
+                    annotationsInRange.push(site);
+                }
+            });
+        }
+
+        if(this.showOrfs) {
+            Ext.each(this.orfs, function(orf) {
+                if(selectionAnnotation.contains(orf)) {
+                    annotationsInRange.push(orf);
+                }
+            });
+        }
+
+        return annotationsInRange;
+    },
 
     /**
      * First checks to see if any parameters need to be updated on renderers,
@@ -435,14 +478,18 @@ Ext.define("Teselagen.manager.RailManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-        this.rail.surface.remove(this.nameBox);
+        this.caret.show(true);
+        this.nameBox.destroy();
 
-        this.setNameBox(Ext.create("Vede.view.rail.NameBox", { 
-            name: pSequenceManager.getName()
-        }));
+        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
+            center: this.center,
+            name: pSequenceManager.getName(),
+            length: pSequenceManager.getSequence().toString().length
+        });
 
         this.rail.surface.add(this.nameBox);
         this.nameBox.show(true);
+        this.nameBox.setStyle("dominant-baseline", "central");
 
         return pSequenceManager;
     },
@@ -484,9 +531,14 @@ Ext.define("Teselagen.manager.RailManager", {
      * Adds the caret to the rail.
      */
     initRail: function() {
-//        this.caret = Ext.create("Vede.view.rail.Caret");
-//        this.rail.surface.add(this.caret);
-//        caret.show(true);
+        this.caret = Ext.create("Vede.view.rail.Caret", {
+            start: 0,
+            reference: this.reference,
+            railWidth: this.railWidth,
+            length: 3
+        });
+
+        this.rail.surface.add(this.caret);
 
         var name = "unknown";
         var length = 0
@@ -504,5 +556,24 @@ Ext.define("Teselagen.manager.RailManager", {
         this.rail.surface.add(this.nameBox);
         this.nameBox.show(true);
         this.nameBox.setStyle("dominant-baseline", "central");
+    },
+    
+    /**
+     * Repositions the caret to the given angle.
+     * @param {Int} angle The angle of the caret to reposition to.
+     */
+    adjustCaret: function(bp) {
+        var start = bp / 
+            this.sequenceManager.getSequence().seqString().length;
+        this.caret.destroy();
+        this.caret = Ext.create("Vede.view.rail.Caret", {
+            start: start,
+            reference: this.reference,
+            railWidth: this.railWidth,
+            length: 3
+        });
+
+        this.rail.surface.add(this.caret);
+        this.caret.show(true);
     }
 });
