@@ -111,19 +111,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         this.setType(key, isKey);
 
-        //console.log(line);
-        //console.log(this.self.LASTTYPE);
-        // For Keyword Lines
-
-        /*var lineType = {
-            this.self.LOCUS_TAG: function() {
-                lastObj = this.parseLocus(line, gb);
-                return true;
-            }
-        }
-        lineType[key]();*/
-
-
         switch (this.self.LASTTYPE) {
         case this.self.LOCUS_TAG:
             lastObj = this.parseLocus(line, gb);
