@@ -12,7 +12,7 @@ Ext.define("Teselagen.renderer.pie.Layer", {
     config: {
         sequenceManager: null,
         center: {},
-        railWidth: null
+        radius: 0
     },
 
     start: -1,
