@@ -202,14 +202,12 @@ Ext.define('Vede.controller.RailController', {
             if(this.selectionDirection == 0) {
                 if(this.startSelectionAngle < endSelectionAngle) {
                     this.selectionDirection = -1;
-                    if(endSelectionAngle >= this.startSelectionAngle && 
-                       endSelectionAngle <= (this.startSelectionAngle + Math.PI)) {
+                    if(endSelectionAngle >= this.startSelectionAngle) {
                         this.selectionDirection = 1;
                     }
                 } else {
                     this.selectionDirection = 1;
-                    if(endSelectionAngle <= this.startSelectionAngle &&
-                       endSelectionAngle >= (this.startSelectionAngle - Math.PI)) {
+                    if(endSelectionAngle <= this.startSelectionAngle) {
                         this.selectionDirection = -1;
                     }
                 }
