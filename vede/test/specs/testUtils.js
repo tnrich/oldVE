@@ -11,16 +11,19 @@
 //Ext.require("Teselagen.bio.sequence.common.StrandType");
 //Ext.require("Teselagen.bio.sequence.DNATools");
  
+
+Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+
 Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.util.XmlToJson");
 Ext.require("Teselagen.bio.parsers.GenbankManager");
 Ext.require("Teselagen.bio.parsers.ParsersManager");
 
 Ext.require("Teselagen.utils.SequenceUtils");
-Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
+Ext.require("Teselagen.utils.FormatUtils");
 Ext.onReady(function() {
 
-    describe("Testing SequenceUtil.", function() {
+    describe("Testing Teselagen.utils.SequenceUtils.js", function() {
 
         describe("isCompatibleDNASequence(): ", function() {
 
@@ -155,7 +158,7 @@ Ext.onReady(function() {
         });
 	});
 
-    describe("Testing FormatUtils.js", function() {
+    describe("Testing Teselagen.utils.FormatUtils.js", function() {
 
         describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
             var newGb;
@@ -166,8 +169,8 @@ Ext.onReady(function() {
                     name: "feat1",
                     start: 1,
                     end: 3,
-                    _type: "CDS",
-                    strand: 1,
+                    type: "CDS",
+                    strand: -1,
                     notes: null
                 });
 
@@ -175,7 +178,7 @@ Ext.onReady(function() {
                     name: "feat3",
                     start: 2,
                     end: 5,
-                    _type: "CDS",
+                    type: "gene",
                     strand: 1,
                     notes: null
                 });
@@ -185,29 +188,52 @@ Ext.onReady(function() {
                     name: "test",
                     circular: true,
                     sequence: seq,
-                    features: [feat1]
+                    features: [feat1, feat3]
                 });
+                //sm.addFeature(feat3, false);
 
                 var note1 = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
                     name: "note",
-                    value: "note1value",
+                    value: "feat1Value",
+                    quoted: true
+                });
+                var note3 = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
+                    name: "name",
+                    value: "feat3Blah",
                     quoted: true
                 });
 
                 sm.getFeatures()[0].addNote(note1);
-                sm.addFeature(feat3, false);
+                sm.getFeatures()[1].addNote(note3);
+                
 
-                var smLine =  'LOCUS       test                       7 bp ds-DNA     circular     30-JUL-2012\n' + 
+                var smLine =  'LOCUS       test                       7 bp ds-DNA     circular     '+ Teselagen.bio.parsers.ParsersManager.todayDate() + '\n' + 
                         'FEATURES             Location/Qualifiers\n' +
-                        '     feat1           1..3\n' +
-                        '                     /note="note1value"\n' +
-                        '     feat3           join(2..5,0..1)\n' +
+                        '     CDS             complement(1..3)\n' +
+                        '                     /label="feat1"\n' +
+                        '                     /note="feat11value"\n' +
+                        '     gene            join(2..5,0..1)\n' +
+                        '                     /label="feat3"\n' +
+                        '                     /name="feat3Blah"\n' +
                         'ORIGIN      \n' +
                         '        1 gattaca     \n';
                 newGb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(smLine);
             });
+              
+            it("check SequenceManager ", function(){
+                expect(sm.getName()).toBe("test");
+                expect(sm.getCircular()).toBeTruthy();
+                expect(sm.getSequence().seqString().toUpperCase()).toBe("GATTACA");
+                expect(sm.getFeatures().length).toBe(2);
+                expect(sm.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm.getFeatures()[0].getStart()).toBe(1);
+                expect(sm.getFeatures()[0].getEnd()).toBe(3);
+                expect(sm.getFeatures()[1].getName()).toBe("feat3");
+                expect(sm.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
+                expect(sm.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
+            });
 
-            it("checkGenbank() ",function(){
+            it("check Genbank ",function(){
                 var gb = newGb;
                 
                 expect(gb.getLocus().getLocusName()).toBe("test");
@@ -218,27 +244,82 @@ Ext.onReady(function() {
                 expect(gb.getLocus().getDivisionCode()).toBe("");
 
                 expect(gb.getFeatures().getFeaturesElements().length).toBe(2);
+
+                expect(gb.getFeatures().getFeaturesElements()[0].getComplement()).toBe(true);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
 
+                expect(gb.getFeatures().getFeaturesElements()[1].getJoin()).toBe(true);
+                expect(gb.getFeatures().getFeaturesElements()[1].getComplement()).toBe(false);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(2);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(2);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(5);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
 
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("note");
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("note1value");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("feat1");
+                
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureQualifier()[0].getName()).toBe("label");
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureQualifier()[0].getValue()).toBe("feat3");
                 
                 expect(gb.getOrigin().getSequence()).toBe("gattaca");
                 expect(gb.getOrigin().getSequence().length).toBe(7);
 
                 //console.log(gb.toString());
             });
+            
+            it("fastaToFeaturedDNASequence() ",function(){
 
-            it("toGenbank() ",function(){
-                var gb = sm.toGenbank();
+                var fasta = ">DummyName\n" +
+                            "GATTACA\n";
+
+                //var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
+
+                var seqFeatDNASeq = Teselagen.utils.FormatUtils.fastaToFeaturedDNASequence(fasta);
+                expect(seqFeatDNASeq.get("name")).toBe("DummyName");
+                expect(seqFeatDNASeq.get("sequence")).toBe("gattaca");
+            });
+
+            it("sequenceManagerTojbeiseqJson() - Checked with jbeiseqJson2Genbank",function(){
+                var json  = Teselagen.utils.FormatUtils.sequenceManagerToJbeiseqJson(sm);
+                //console.log("sm-2-jbeiseqJson\n" + JSON.stringify(json, null, "  "));
+                
+                //var xml   = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToXml(json);
+                //console.log("sm-2-jbeiseqXml\n" + xml);
+                
+                var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
+                //console.log("jbeiseqJson-2-genbankJson\n" + JSON.stringify(gb, null, "  "));
+                //console.log(gb.toString());
+
+                //var gb2json = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
+                //console.log("genbank-2-jbeiseqJson\n" + JSON.stringify(gb2json, null, "  "));
+
+                //console.log(newGb.toString());
+                expect(gb.toString()).toEqual(newGb.toString());
+            });
+
+            it("jbeiseqJsonToSequenceManager",function(){
+                var json  = Teselagen.utils.FormatUtils.sequenceManagerToJbeiseqJson(sm);
+                var sm2   = Teselagen.utils.FormatUtils.jbeiseqJsonToSequenceManager(json);
+
+                expect(sm2.getName()).toBe("test");
+                expect(sm2.getCircular()).toBeTruthy();
+                expect(sm2.getSequence().seqString().toUpperCase()).toBe("GATTACA");
+                expect(sm2.getFeatures().length).toBe(2);
+                expect(sm2.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm2.getFeatures()[0].getStart()).toBe(1);
+                expect(sm2.getFeatures()[0].getEnd()).toBe(3);
+                expect(sm2.getFeatures()[1].getName()).toBe("feat3");
+                expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
+                expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
+                //expect(sm).toEqual(sm2);
+            });
+
+            /*it("toGenbank() ",function(){
+                //var gb = sm.toGenbank();
+                var gb = Teselagen.utils.FormatUtils.sequenceManagerToGenbank(sm);
                 
                 expect(gb.getLocus().getLocusName()).toBe("test");
                 expect(gb.getLocus().getStrandType()).toBe("ds");
@@ -267,7 +348,7 @@ Ext.onReady(function() {
                 expect(gb.findKeyword("ORIGIN").getSequence()).toBe("gattaca");
                 expect(gb.findKeyword("ORIGIN").getSequence().length).toBe(7);
 
-                //console.log(gb.toString());
+                console.log(gb.toString());
             });
 
             it("fromGenbank() NOT SURE OF OUTPUT",function(){
@@ -307,22 +388,12 @@ Ext.onReady(function() {
                 jbeiSeq = "BLAH";
 
                 //newSM.fromJbeiSeqXml(jbeiSeq);
-            });
+            });*/
 
-            it("fromFasta() ",function(){
-
-                var fasta = ">DummyName\n" +
-                            "GATTACA\n";
-
-                var newSM = Ext.create("Teselagen.manager.SequenceManager", {});
-
-                var seqFeatDNASeq = newSM.fromFasta(fasta);
-                expect(seqFeatDNASeq.get("name")).toBe("DummyName");
-                expect(seqFeatDNASeq.get("sequence")).toBe("gattaca");
-            });
+            
         });
 
-        describe("Blah", function() {
+        xdescribe("Blah", function() {
             it("blah",function(){
                 expect(false).toBe(false);
             });

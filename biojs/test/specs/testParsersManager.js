@@ -49,7 +49,7 @@ Ext.onReady(function() {
                         '        1 gattaca     \n';
                 gbA = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(gbStrA);*/
 
-                gbStrB = 'LOCUS       signal_pep                63 bp    DNA     linear       22-AUG-2012\n' +
+                gbStrB = 'LOCUS       signal_pep                63 bp    DNA     linear       '+ Teselagen.bio.parsers.ParsersManager.todayDate() + '\n' + 
                         'FEATURES             Location/Qualifiers\n' +
                         '     CDS             join(1..63,100..6300)\n' +
                         '                     /label="signal_peptide"\n' +

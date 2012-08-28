@@ -17,7 +17,7 @@ Ext.onReady(function() {
     //   Sequence Manager Unit Testing
     // ====================================
 
-    xdescribe("Testing SequenceManager Classes pt1: Teselagen.manager.SequenceManager.", function() {
+    describe("Testing Teselagen.manager.SequenceManager.js: SequenceManager Classes pt1: ", function() {
         var seq, feat1, feat2, feat3, sm;
 
         beforeEach(function() {
@@ -870,7 +870,7 @@ Ext.onReady(function() {
                     sm.rebaseSequence(10);
                 } catch (bio) {
                     flag = true;
-                    console.warn("Caught: " + bio.message);
+                    console.warn("Correctly Caught: " + bio.message);
                 }
                 expect(flag).toBe(true);
             });

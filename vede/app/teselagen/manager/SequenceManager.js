@@ -1200,14 +1200,17 @@ Ext.define("Teselagen.manager.SequenceManager", {
             var feat = this.features[i];
             var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
                 keyword: feat.getType(),
-                strand: this.strand,
+                //strand: this.strand,
+                strand: feat.getStand(),
                 complement: false,
                 join: false,
                 featureQualifier: [],
                 featureLocation: []
             });
 
-            if (this.strand === 1) {
+            if (feat.getStand() === 1) {
+                featElm.setCompelment(false);
+            } else {
                 featElm.setCompelment(true);
             }
 
