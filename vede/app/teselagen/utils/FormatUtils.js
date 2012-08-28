@@ -1,15 +1,14 @@
 
 /**
  * @class Teselagen.utils.FormatUtils
- *
  * 
+ * Converts SequenceManager to various file formats using 
+ * {@link Teselagen.bio.parsers.ParsersManager}
  * 
  * @author Diana Wong
  */
 
 Ext.define("Teselagen.utils.FormatUtils", {
-
-
     requires: [
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.util.XmlToJson",
@@ -17,21 +16,18 @@ Ext.define("Teselagen.utils.FormatUtils", {
         "Teselagen.bio.sequence.alphabets.DNAAlphabet",
         "Teselagen.bio.sequence.dna.DNASequence",
         "Teselagen.bio.parsers.GenbankManager",
-        "Teselagen.bio.parsers.ParsersManager"
-        
+        "Teselagen.bio.parsers.ParsersManager"       
     ],
 
     singleton: true,
 
     DNAAlphabet: null,
-
     StringUtil: null,
     XmlToJson: null,
     SequenceUtils: null,
     GenbankManager: null,
     ParsersManager: null,
     
-
     constructor: function() {
         DNAAlphabet     = Teselagen.bio.sequence.alphabets.DNAAlphabet;
 
@@ -49,9 +45,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
     // ===========================================================================
 
     /**
-     * Converts a FASTA file into a SequenceManager form of the data.
+     * Converts a FASTA file into a FeaturedDNASequence form of the data.
      * @param {String} pFasta FASTA formated string
-     * @returns {Teselagen.bio.sequence.common.Sequence} sequence A Sequence model of your data
      * @returns {Teselagen.models.FeaturedDNASequence} featuredDNASequence or this output
      */
     fastaToFeaturedDNASequence: function(pFasta) {
@@ -67,6 +62,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
             if (nameArr !== null && nameArr.length >= 1) {
                 name = nameArr[0].replace(/^>/, "");
             }
+        } else {
+            console.warn("fastaToFeaturedDNASequence: No '>' detected");
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid Fasta file. No '>' detected"
+            });
         }
 
         for (var i=0; i < lineArr.length; i++) {
@@ -90,35 +90,75 @@ Ext.define("Teselagen.utils.FormatUtils", {
             features: [] //none
         });
 
-        /*result = Ext.create("Teselagen.manager.SequenceManager", {
+        return result;
+    },
+
+    /**
+     * Converts a FASTA file into a SequenceManager form of the data.
+     * @param {String} pFasta FASTA formated string
+     * @returns Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     */
+    fastaToSequenceManager: function(pFasta) {
+        var result;
+
+        var lineArr = String(pFasta).split(/[\n]+|[\r]+/);
+        var seqArr  = [];
+        var name    = "";
+        var sequence = "";
+
+        if (Ext.String.trim(lineArr[0]).charAt(0) === ">") {
+            var nameArr = lineArr[0].match(/^>[\s]*[\S]*/);
+            if (nameArr !== null && nameArr.length >= 1) {
+                name = nameArr[0].replace(/^>/, "");
+            }
+        } else {
+            console.warn("fastaToFeaturedDNASequence: No '>' detected");
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Invalid Fasta file. No '>' detected"
+            });
+        }
+
+        for (var i=0; i < lineArr.length; i++) {
+
+            if ( !lineArr[i].match(/^\>/) ) {
+                sequence += Ext.String.trim(lineArr[i]);
+            }
+        }
+        sequence = sequence.replace(/[\d]|[\s]/g, "").toLowerCase(); //remove whitespace and digits
+        if (sequence.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {
+            //illegalcharacters
+            return null;
+        }
+
+        result = Ext.create("Teselagen.manager.SequenceManager", {
             name: name,
             circular: false,
-            sequence: eselagen.bio.sequence.DNATools.createDNASequence(name, sequence),
+            sequence: Teselagen.bio.sequence.DNATools.createDNASequence(name, sequence),
             features: []
-        });*/
+        });
 
         return result;
     },
 
     /**
      * Converts a JbeiSeq XML file into a SequenceManager form of the data.
-     * @param {JbeiSeq} jbeiSeqJson JbeiSeqJson model of data
+     * @param {JbeiSeqJson} jbeiSeqJson JbeiSeqJson model of data
      * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     jbeiseqJsonToSequenceManager: function(jbeiSeqJson) {
         var result = {}; /// original wants this to be a FeaturedDNASequence NOT SeqMgr!
         var json = jbeiSeqJson;
 
-        /*try {
-            var isJSON = Teselagen.bio.parsers.ParsersManager(jbeiSeqJson);
+        try {
+            var isJSON = Teselagen.bio.parsers.ParsersManager.verifyJbeiseqJson(json);
         } catch (e) {
-            console.warn(e.message);
+            console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
             return null; // jbeiSeq Structure is bad.
         }
 
         if ( isJSON === false) {
             return null;
-        }*/
+        }
 
         var name    = json["seq:seq"]["seq:name"];
         var circ    = (json["seq:seq"]["seq:circular"] === "true" || json["seq:seq"]["seq:circular"] === true);
@@ -180,6 +220,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
                 strand:             strand,
                 notes:              notes
             });
+            feat.setLocations(locations);
             features.push(feat);
         }
 
@@ -195,9 +236,9 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /**
      * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into 
-     * a Jbei-seq-Json.
+     * a JbeiSeqJson.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
-     * @returns {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
+     * @returns {JbeiSeqJson} jbeiSeqJson JbeiSeqJson model of data
      */
     sequenceManagerToJbeiseqJson: function(seqMan) {
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
@@ -247,7 +288,6 @@ Ext.define("Teselagen.utils.FormatUtils", {
             }
 
             // JOIN/COMPLEMENT
-
             if (newLoc.length > 1) {
                 var join = true;
             } else {
@@ -259,7 +299,6 @@ Ext.define("Teselagen.utils.FormatUtils", {
             } else {
                 var complement = true;
             }
-
 
             var newFeature = {
                 "seq:label" : feat.getName(),
@@ -290,6 +329,29 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
+     * Converts a JbeiSeqXML file into a SequenceManager form of the data.
+     * @param {JbeiSeqXml} jbeiSeqXml JbeiSeqXml model of data
+     * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     */
+    jbeiseqXmlToSequenceManager: function(jbeiSeqXml) {
+        var json = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(jbeiSeqXml);
+        var result = this.jbeiseqJsonToSequenceManager(json);
+        return result;
+    },
+
+    /**
+     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into 
+     * a JbeiSeqXML.
+     * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     * @returns {JbeiSeqXml} jbeiSeqXml JbeiSeqXml model of data
+     */
+    sequenceManagerToJbeiseqXml: function(seqMan) {
+        var json = this.sequenceManagerToJbeiseqJson(seqMan);
+        var result = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToXml(json);
+        return result;
+    },
+
+    /**
      * Converts a Genbank {@link Teselagen.bio.parsers.Genbank} into a 
      * SequenceManager {@link Teselagen.manager.SequenceManager}
      * @param {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
@@ -300,7 +362,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
             return null;
         }
 
-        var jbeiseqJson = this.ParsersManager.genbankToJbeiseqJson(genbank);
+        //var jbeiseqJson = this.ParsersManager.genbankToJbeiseqJson(genbank);
+        var jbeiseqJson = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(genbank);
 
         var result = this.jbeiseqJsonToSequenceManager(jbeiseqJson);
         
@@ -319,9 +382,10 @@ Ext.define("Teselagen.utils.FormatUtils", {
             return null;
         }
 
-        var jbeiseqJson = this.sequenceManagerTojbeiseqJson(seqMan);
+        var jbeiseqJson = this.sequenceManagerToJbeiseqJson(seqMan);
 
-        var result = this.ParsersManager.jbeiseqJsonToGenbank(jbeiseqJson);
+        //var result = this.ParsersManager.jbeiseqJsonToGenbank(jbeiseqJson);
+        var result = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(jbeiseqJson);
 
         return result;
     },
@@ -340,7 +404,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
             return false;
         }*/
 
-        return this.ParsersManager.isALabel(name);
+        //return this.ParsersManager.isALabel(name);
+        return Teselagen.bio.parsers.ParsersManager.isALabel(name);
     }
 
 

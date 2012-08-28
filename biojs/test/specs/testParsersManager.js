@@ -263,13 +263,36 @@ Ext.onReady(function() {
             });
             
             
-            it("genbankToJbeiseqJson() & jbeiseqJsonToGenbank(): back and forth", function() {
+            it("genbankToJbeiseqJson(): explicit json structure tests", function() {
                 var gb = gbB;
-                //console.log(gb.toString());
-                var jbeiJson = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
-                //console.log(JSON.stringify(jbeiJson, null, "  "));
-                var gb2      = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(jbeiJson);
-                //console.log(gb2.toString());
+                var json = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
+
+                expect(json["seq:seq"]["seq:name"]).toBe("signal_pep");
+                expect(json["seq:seq"]["seq:circular"]).toBe(false);
+                expect(json["seq:seq"]["seq:sequence"].length).toBe(63);
+                expect(json["seq:seq"]["seq:features"].length).toBe(1);
+
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:label"]).toBe("signal_peptide");
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:type"]).toBe("CDS");
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"].length).toBe(2);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(1);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:end"]).toBe(63);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(100);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(6300);
+
+                //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:label"]).toBe("signal_peptide0");
+                //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:type"]).toBe("CDS2");
+                //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"].length).toBe(1);
+                //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(20);
+                //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:end"]).toBe(20);
+            });
+            
+            
+            it("jbeiseqJsonToGenbank(): explicit genbank structure tests", function() {
+                var gb = gbB;
+                var json = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
+
+                var gb2      = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
                 expect(gb).toEqual(gb2);
 
                 var gb = gb2;
@@ -293,8 +316,6 @@ Ext.onReady(function() {
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("signal_peptide");
 
                 expect(gb.getOrigin().getSequence().length).toBe(63);
-
-
             });
             
             
