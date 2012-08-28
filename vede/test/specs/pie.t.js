@@ -1,5 +1,5 @@
 /*global beforeEach, describe, expect, it, sandbox, setFixtures*/
-describe("Pie test", function () {
+describe("Pie test.", function () {
     var pie, pieContainer, pieManager, box;
     beforeEach(function() {
         box = sandbox();
@@ -13,25 +13,21 @@ describe("Pie test", function () {
         });
         pie = pieManager.getPie();
         pieContainer = Ext.widget("container", {
-            renderTo: "sandbox",
-            layout: {
-                //type: 'fit'
-                //type: 'column'
-            }
+            renderTo: "sandbox"
+//            layout: {
+//                type: 'fit'
+//            }
         });
     });
-    it("Sandbox exists", function () {
+    it("Sandbox exists.", function () {
         expect(Ext.get("sandbox")).toBeTruthy();
     });
-    it("Show Pie", function() {
-        expect(pie.hidden).toBe(false);
-        pie.show();
+    it("Surface does not exist before rendering.", function() {
+        expect(pie.surface).toBeUndefined();
+    });
+    it("Add Pie to Container and Surface now exists.", function() {
         pieContainer.add(pie);
-        expect(pie.hidden).toBe(false);
-        console.log(pie.width);
-        //pie.width=100;
-        pieContainer.doLayout();
-        console.log(pie);
+        expect(pie.surface).toBeDefined();
     });
 });
 
