@@ -34,6 +34,26 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
         
         var wireWidth = (startAngle-endAngle) * this.railWidth;
 
+
+        if (endPoint<startPoint) {
+            this.selectionSprite = Ext.create("Ext.draw.Sprite", {
+                type: "path",
+                path: "M 0" + " " + wireHeight + 
+                      "L" + endPoint + " " + wireHeight + 
+                      "L" + endPoint  + " " + (-wireHeight) + 
+                      "L 0" +  " " + (-wireHeight) +
+                      "L 0" + " " + (wireHeight) +
+                      "M" + startPoint + " " + wireHeight +
+                      "L" + this.railWidth + " " + (wireHeight) +
+                      "L" + this.railWidth  + " " + (-wireHeight) +
+                      "L" + startPoint  + " " + (-wireHeight) +
+                      "L" + startPoint + " " + wireHeight,
+                stroke: this.self.FRAME_COLOR,
+                "stroke-opacity": this.self.STROKE_OPACITY,
+            });
+            
+        }else {
+        
         this.selectionSprite = Ext.create("Ext.draw.Sprite", {
             type: "path",
             path: "M" + startPoint + " " + wireHeight + 
@@ -44,5 +64,6 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
             stroke: this.self.FRAME_COLOR,
             "stroke-opacity": this.self.STROKE_OPACITY,
         });
+        }
     }
 });
