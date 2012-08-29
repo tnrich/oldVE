@@ -8,6 +8,13 @@ Ext.define('MyApp.view.DeviceEditor.MainToolBar', {
                     icon: 'resources/images/j5.png',
                     scale: 'medium',
                     tooltip: 'Save to Registry'
+                },
+                {
+                    xtype: 'button',
+                    id: 'saveDesignBtn',
+                    icon: 'resources/images/save.png',
+                    scale: 'medium',
+                    tooltip: 'Save Design'
                 }
            ]
 });

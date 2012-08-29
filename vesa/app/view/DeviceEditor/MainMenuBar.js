@@ -29,7 +29,7 @@ Ext.define('MyApp.view.DeviceEditor.MainMenuBar', {
                     },
                     {
                         xtype: 'menuitem',
-                        id: 'save',
+                        id: 'saveDesign',
                         text: 'Save'
                     }
                 ]

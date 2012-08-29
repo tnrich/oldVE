@@ -22,6 +22,9 @@ Ext.define('MyApp.controller.DeviceEditor.MainMenuController', {
     onOpenDesignClick: function(button, e, options) {
         $(document).trigger('openDesign');
     },
+    onSaveDesignClick: function(button, e, options) {
+        $(document).trigger('saveDesign');
+    },
 
     init: function() {
         this.control({
@@ -30,6 +33,9 @@ Ext.define('MyApp.controller.DeviceEditor.MainMenuController', {
             },
             "#openDesign": {
                 click: this.onOpenDesignClick
+            },
+            "#saveDesign": {
+                click: this.onSaveDesignClick
             }
         });
 

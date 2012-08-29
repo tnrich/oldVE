@@ -887,6 +887,10 @@ $( document ).bind( 'loadDE', function() {
                 _self.saveDesign();
             });
 
+            $(document).bind("saveDesign", function() {  
+                _self.saveDesign();
+            }); 
+
             $("#map-from-clipboard-save").click(function(){
                 var data = $("#map-from-clipboard-data").val();
 

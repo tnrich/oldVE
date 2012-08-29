@@ -1,4 +1,4 @@
-Ext.define('MyApp.controller.DeviceEditor.DevicePanelPanelController', {
+Ext.define('MyApp.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
 
     onLaunch: function() {

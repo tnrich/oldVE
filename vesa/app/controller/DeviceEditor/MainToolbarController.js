@@ -19,11 +19,16 @@ Ext.define('MyApp.controller.DeviceEditor.MainToolbarController', {
     onOpenj5Click: function(button, e, options) {
         $(document).trigger('openj5');
     },
-
+    onSaveDesignClick: function(button, e, options) {
+        $(document).trigger('saveDesign');
+    },
     init: function() {
         this.control({
             "#j5Btn": {
                 click: this.onOpenj5Click
+            },
+            "#saveDesignBtn": {
+                click: this.onSaveDesignClick
             }
         });
 
