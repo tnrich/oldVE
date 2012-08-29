@@ -242,6 +242,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      */
     sequenceManagerToJbeiseqJson: function(seqMan) {
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
+            console.warn("Invalid SequenceManager loaded in sequenceManagerToJbeiseqJson()");
             return null;
         }
 
@@ -346,6 +347,12 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * @returns {JbeiSeqXml} jbeiSeqXml JbeiSeqXml model of data
      */
     sequenceManagerToJbeiseqXml: function(seqMan) {
+
+        if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
+            console.warn("Invalid SequenceManager loaded in sequenceManagerToJbeiseqJson()");
+            return null;
+        }
+
         var json = this.sequenceManagerToJbeiseqJson(seqMan);
         var result = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToXml(json);
         return result;
@@ -359,6 +366,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      */
     genbankToSequenceManager: function(genbank) {
         if (Ext.getClassName(genbank) !== "Teselagen.bio.parsers.Genbank" ) {
+            console.warn("Invalid Genbank loaded in genbankToSequenceManager()");
             return null;
         }
 
@@ -379,6 +387,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
     sequenceManagerToGenbank: function(seqMan) {
 
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
+            console.warn("Invalid SequenceManager loaded in sequenceManagerToGenbank()");
             return null;
         }
 
