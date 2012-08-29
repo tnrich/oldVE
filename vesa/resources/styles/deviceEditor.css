@@ -1,6 +1,49 @@
+table.grid {
+margin-top: 10px;
+margin-bottom: 10px;
+width:1200px;
+}
+
+.icon{
+  margin-top: -23px;
+}
+
+table.grid td {
+border: 1px solid #CCC;
+width: 100px;
+height: 65px;
+text-align: center;
+}
+
+table.parts td,table.icons td{
+  display: inline-block;
+}
+
+table.grid td.active {
+  -moz-box-shadow: 0 0 10px 1px #0074CC;
+  -webkit-box-shadow: 0 0 10px 1px #0074CC;
+  box-shadow: 0 0 10px 1px #0074CC;
+  border-left: none;
+}
+
+#designCanvas {
+  width: 100%;
+  height: 44%;
+  overflow: scroll;
+  margin-top:60px;
+}
+
+.name_container{
+  height: 65px;
+}
+
 table.parts.grid td .name {
-margin-top: -10px;
-position: absolute;
+position: relative;
+margin-top: 18px;
+}
+
+.lights_container{
+  position: relative;
 }
 
 .eugene_light {
@@ -11,9 +54,8 @@ background: #F90;
 -moz-border-radius: 50px;
 -webkit-border-radius: 50px;
 border-radius: 50px;
-margin-top: 0px;
 box-shadow: 2px 2px 5px #888;
-margin-top: 10px;
+margin-top: 50px;
 margin-left: 86px;
 }
 
@@ -25,7 +67,7 @@ background: blue;
 -moz-border-radius: 50px;
 -webkit-border-radius: 50px;
 border-radius: 50px;
-margin-top: -20px;
+margin-top: 0px;
 box-shadow: 2px 2px 5px #888;
 }
 
@@ -44,9 +86,20 @@ line-height: 20px;
 vertical-align: text-top;
 }
 
+#part-toolbar{
+  padding-top:18px;
+}
+
 .toolbar {
 color: white;
 text-shadow: 1px -1px 1px black;
+background-color: #4D90FE;
+background-image: -webkit-linear-gradient(top,#4D90FE,#4787ED);
+background-image: -moz-linear-gradient(top,#4D90FE,#4787ED);
+background-image: -ms-linear-gradient(top,#4D90FE,#4787ED);
+background-image: -o-linear-gradient(top,#4D90FE,#4787ED);
+background-image: linear-gradient(top,#4D90FE,#4787ED);
+height: 62px;
 }
 
 .toolbar .btn.element {
@@ -54,10 +107,16 @@ padding: 2px;
 border-radius: 18px;
 }
 
+.js-elements-container
+{
+width: 488px;
+overflow: hidden;
+display: inline-block;
+}
+
 .elements {
-border-top: 1px #E5E5E5 solid;
-margin: 40px 0 0 0;
-padding-top: 10px;
+    width:1020px;
+margin-top:0px;
 }
 
 .elements a {
@@ -65,38 +124,15 @@ margin: 3px 3px 3px 0;
 }
 
 .toolbar {
-position: absolute;
-border: 1px #CCC solid;
-z-index: 10000;
 padding: 10px;
 color: white;
 text-shadow: 1px -1px 1px black;
-border-radius: 4px;
-margin-top: 10px;
+margin-top: 0px;
+width:100%;
 }
 
 .arrow_box {
 position: absolute;
-background: #424242;
-opacity: 0.95;
-border: 2px solid #EBEBEB;
--webkit-box-shadow: 0px 2px 2px rgba(50, 50, 50, 0.15);
--moz-box-shadow: 0px 2px 2px rgba(50, 50, 50, 0.15);
-box-shadow: 0px 2px 2px rgba(50, 50, 50, 0.15);
-}
-
-table.grid {
-margin-top: 10px;
-margin-bottom: 10px;
-border-radius: 0;
-border: 1px solid #CCC;
-}
-
-table.grid td {
-border: 1px solid #CCC;
-width: 100px;
-height: 49px;
-text-align: center;
 }
 
 .canvas{
@@ -121,10 +157,10 @@ height:1200px;
   display:block;
 }
 
-.icons.grid span.direction
+.icons.grid .direction
 {
-  position:absolute;
-  margin-top: -20px;
+  position:relative;
+  margin-top:  10px;
   margin-left: 76px;
 }
 

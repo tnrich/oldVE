@@ -1,4 +1,4 @@
-Ext.define('MyApp.view.DeviceEditorMainMenuBar', {
+Ext.define('MyApp.view.DeviceEditor.MainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
     alias: 'widget.DeviceEditorMainMenuBar',
     autoScroll: false,

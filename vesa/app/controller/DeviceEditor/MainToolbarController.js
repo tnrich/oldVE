@@ -13,24 +13,17 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('MyApp.controller.DeviceEditorMainMenuController', {
+Ext.define('MyApp.controller.DeviceEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    onNewDesignClick: function(button, e, options) {
-        $(document).trigger('newDesign');
+    onOpenj5Click: function(button, e, options) {
+        $(document).trigger('openj5');
     },
-    onOpenDesignClick: function(button, e, options) {
-        $(document).trigger('openDesign');
-    },
-
 
     init: function() {
         this.control({
-            "#newDesign": {
-                click: this.onNewDesignClick
-            },
-            "#openDesign": {
-                click: this.onOpenDesignClick
+            "#j5Btn": {
+                click: this.onOpenj5Click
             }
         });
 

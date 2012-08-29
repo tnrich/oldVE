@@ -368,10 +368,16 @@ $( document ).bind( 'loadDE', function() {
             j5Params["ASSEMBLY_PRODUCT_TYPE"] = "circular";
         });
 
+        console.log("Executing j5");
+
         $.ajax({
             type: "POST",
-            url: '/fullRPC',
-            data: {'_id':deviceeditor._id,'execParams':JSON.stringify(execParams),'j5Params':JSON.stringify(j5Params)},
+            url: "/node/fullRPC",
+            data: {
+              '_id':deviceeditor._id,
+              'j5Params':JSON.stringify(j5Params),
+              'execParams':JSON.stringify(execParams)
+            },
                 success: function(data) {
                     flashCallback("j5 Success!",true);
                     
@@ -559,7 +565,6 @@ $( document ).bind( 'loadDE', function() {
             $('#created').html(parseTimeStamp(model['created']));
             $('#modified').html(parseTimeStamp(model['last_modified']));
              
-            inspector.hide();
             flashCallback("Design loaded!",true);
             $('#loadModel').modal('hide');
             }
@@ -613,6 +618,12 @@ $( document ).bind( 'loadDE', function() {
         iconsCounter: 0,
         clipboard : {},
         EnableCheckAvailability : true,
+        getIconPlaceholder : function(){ 
+          return '<div class="direction"></div><div class="icon"></div><p class="name"></p>';
+        },
+        getPartPlaceholder : function(){
+          return '<div class="lights_container"><div class="fas_light hide"></div><div class="eugene_light hide"></div></div><div class="name_container"><p class="name break-word"></p></div>';
+        },
         init: function() {
             this._id = 0;
             this.isCircular = false;
@@ -685,35 +696,37 @@ $( document ).bind( 'loadDE', function() {
             inspector.renderCollection();
         },
         renderIcon: function(index) {
+              var self = this;
               var currentPosition = $('table.icons').find('td').eq(index-1);
               if(currentPosition.length>0)
               {
-                $('<td><div class="direction"></div><div class="icon"></div><p class="name"></p></td>').insertAfter(currentPosition);
+                $('<td>'+self.getIconPlaceholder()+'</td>').insertAfter(currentPosition);
               }
               else
               {
-                $('table.icons tr').eq(0).append('<td><div class="direction"></div><div class="icon"></div><p class="name"></p></td>');
+                $('table.icons tr').eq(0).append('<td>'+self.getIconPlaceholder()+'</td>');
               }
 
               $('table.parts tr').each(function(key, row) {
                 if(index!=0)
                 {
                   var currentPart = $(row).find('td').eq(index-1);
-                  $('<td><div class="fas_light hide"></div><div class="eugene_light hide"></div><p class="name break-word"></p><p class="info"></p></td>').insertAfter(currentPart);
+                  $('<td>'+self.getPartPlaceholder()+'</td>').insertAfter(currentPart);
                 }
                 else
                 {
-                  $(row).append('<td><div class="fas_light hide"></div><div class="eugene_light hide"></div><p class="name break-word"></p><p class="info"></p></td>')
+                  $(row).append('<td>'+self.getPartPlaceholder()+'</td>')
                 }
               });
               return $('table.icons td').eq(index);
         },
 
         renderPart: function(icon, part) {
+            var self = this;
             if ($('table.parts tr').length < part + 1) {
                 $('table.parts').append('<tr></tr>');
                 $(this.iconsVector).each(function(key, value) {
-                    $('table.parts tr').last().append('<td><div class="fas_light hide"></div><div class="eugene_light hide"></div><p class="name break-word"></p><p class="info"></p></td>');
+                    $('table.parts tr').last().append('<td>'+self.getPartPlaceholder()+'</td>');
                 });
             }
             return $('table.parts tr').eq(part).find('td').eq(icon);
@@ -730,7 +743,6 @@ $( document ).bind( 'loadDE', function() {
             });
         },
         checkAvailability: function(){
-          console.log("checking availables");
           if(this.iconsVector.length>0 && this.EnableCheckAvailability)
           {
             if($(this.iconsVector).last()[0].active) this.addCol();
@@ -744,6 +756,21 @@ $( document ).bind( 'loadDE', function() {
         bindUI: function() {
             var _self = this;
             this.resources = new Resources();
+
+            var currentScrollOffset = 50;
+
+            $('.elements-scroll').bind('click',function(evt){
+              var previousScrollOffset = 50;
+              if($(evt.currentTarget).attr('data')=="left"&&currentScrollOffset>=50) currentScrollOffset-=50;
+              else if(currentScrollOffset<=150){currentScrollOffset+=50;}
+              if(currentScrollOffset!=previousScrollOffset)
+              {
+                previousScrollOffset = currentScrollOffset;
+                $('.js-elements-container').animate({
+                scrollLeft: currentScrollOffset
+                }, 100);
+              }
+            });
 
             $("#genbankFile a").click(function(){
               $("#genbankFile").click()
@@ -839,6 +866,10 @@ $( document ).bind( 'loadDE', function() {
             $('#j5-config').click(function(){
                 $('#j5Modal').modal();
             });
+
+            $(document).bind("openj5", function() {  
+                $('#j5Modal').modal();
+            }); 
 
             $('#newDesign').click(function(){
                 _self.reset();
@@ -948,26 +979,29 @@ $( document ).bind( 'loadDE', function() {
             // For each bin (icon) in iconsVector (binsVector)
             for(var iconIndex in this.iconsVector)
             {
-                var bin = {};
-                bin["de:binName"] = this.iconsVector[iconIndex].data.name;
-                bin["de:iconID"] = this.iconsVector[iconIndex].data.iconID;
-                bin["de:direction"] = this.iconsVector[iconIndex].data.direction;
-                bin["de:dsf"] = this.iconsVector[iconIndex].data.dsf;
-                bin["de:fro"] = this.iconsVector[iconIndex].data.fro;
-                bin["de:binItems"] = {};
-                bin["de:binItems"]["de:partID"] = [];
-                
-                for(var partIndex in this.iconsVector[iconIndex].partsVector)
+                if(this.iconsVector[iconIndex].active)
                 {
-                    var currentPart = this.iconsVector[iconIndex].partsVector[partIndex];
-                    if(currentPart.active)
-                    {
-                        // Save the partID reference
-                        bin["de:binItems"]["de:partID"].push(currentPart.data.partID);
-                    }
-                }
+                  var bin = {};
+                  bin["de:binName"] = this.iconsVector[iconIndex].data.name;
+                  bin["de:iconID"] = this.iconsVector[iconIndex].data.iconID;
+                  bin["de:direction"] = this.iconsVector[iconIndex].data.direction;
+                  bin["de:dsf"] = this.iconsVector[iconIndex].data.dsf;
+                  bin["de:fro"] = this.iconsVector[iconIndex].data.fro;
+                  bin["de:binItems"] = {};
+                  bin["de:binItems"]["de:partID"] = [];
+                  
+                  for(var partIndex in this.iconsVector[iconIndex].partsVector)
+                  {
+                      var currentPart = this.iconsVector[iconIndex].partsVector[partIndex];
+                      if(currentPart.active)
+                      {
+                          // Save the partID reference
+                          bin["de:binItems"]["de:partID"].push(currentPart.data.partID);
+                      }
+                  }
 
-                rawJSON["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].push(bin);
+                  rawJSON["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].push(bin);
+                }
             }
 
             rawJSON["de:design"]["de:partVOs"] = {};
@@ -1027,7 +1061,7 @@ $( document ).bind( 'loadDE', function() {
                 var modelName = $('#design-name').val();
                 $.ajax({
                     type: "POST",
-                    url: '/saveData',
+                    url: '/node/saveData',
                     data: {'_id':deviceeditor._id,'name':modelName,'payload':JSON.stringify(model)},
                         success: function(data) {
                             deviceeditor._id = data["_id"];
@@ -1075,26 +1109,32 @@ $( document ).bind( 'loadDE', function() {
             this.dom.data('key',this);
 
             $(this.dom).click(function(event){
+
+                // Bind object with dom
                 var obj = $(this).data('key');
+
+                // Force render collection
                 inspector.renderCollection();
+
+                $('#icon-toolbar').show();
                 $('#part-toolbar').hide();
+
+                // Hide callback (Click outside)
                 hideCallback(obj,function(el){
                     $(el.dom).removeClass('active');
-                    if(!$(".js-elements").is(':visible')) $("#icon-toolbar").hide();
+                    //if(!$(".js-elements").is(':visible')) $("#icon-toolbar").hide();
                 });
 
-                $(".js-elements").hide();
-                $(".js-add-part").one("click", function(event){
-                    $(".js-elements").show();
-                    $(".js-elements a.element").one("click", function(){
-                    $('#icon-toolbar.arrow_box').data('key').setIcon(this);;
-                    obj.de.hideToolBars();
-                    return false;
-                    });
-                    hideCallback(this,function(el){$("#icon-toolbar").hide();});
-                    $(".js-elements i.part:first").closest('a').focus();
+                $(".js-elements a.element").one("click", function(){
+                $('#icon-toolbar.arrow_box').data('key').setIcon(this);
+                //obj.de.hideToolBars();
+                return false;
                 });
 
+                //hideCallback(this,function(el){$("#icon-toolbar").hide();});
+                
+                $(".js-elements i.part:first").closest('a').focus();
+          
                 $(".js-rotate").one("click",function(){
                   if (obj.data.direction=="forward") obj.data.direction = "reverse";
                   else obj.data.direction = "forward";
@@ -1109,9 +1149,9 @@ $( document ).bind( 'loadDE', function() {
                 });
 
                 $('#icon-toolbar.arrow_box').data('key',obj);
-                $('#icon-toolbar.arrow_box').css('position','absolute');
-                $('#icon-toolbar.arrow_box').css('margin-left',73+$(this).data('key').index*103+'px');
-                $('#icon-toolbar.arrow_box').css('margin-top','50px');
+                //$('#icon-toolbar.arrow_box').css('position','absolute');
+                //$('#icon-toolbar.arrow_box').css('margin-left',73+$(this).data('key').index*103+'px');
+                //$('#icon-toolbar.arrow_box').css('margin-top','50px');
                 $(this).addClass('active');
                 $('#icon-toolbar.arrow_box').show();
             });           
@@ -1177,13 +1217,21 @@ $( document ).bind( 'loadDE', function() {
             this.dom.css('background','#ddd');
             this.dom.data('key',this);
             $(this.dom).click(function(){
+
+                // Bind obj to dom
                 var obj = $(this).data('key');
+
+                // Force reRender
                 obj.reRender();
+
                 $('#icon-toolbar').hide();
+                $('#part-toolbar').show();
+
                 inspector.context(obj);
+                
                 hideCallback(obj,function(el){
                     $(el.dom).removeClass('active');
-                    $('#part-toolbar.arrow_box').hide();
+                    //$('#part-toolbar.arrow_box').hide();
                 });
                 
                 $("#map-from-clipboard").one("click", function(event){
@@ -1200,9 +1248,9 @@ $( document ).bind( 'loadDE', function() {
                 });
 
                 $('#part-toolbar.arrow_box').data('key',obj);
-                $('#part-toolbar.arrow_box').css('position','absolute');
-                $('#part-toolbar.arrow_box').css('margin-left',73+$(this).data('key').iconIndex*103+'px');
-                $('#part-toolbar.arrow_box').css('margin-top',(52+$(this).data('key').index*52)+'px');
+                //$('#part-toolbar.arrow_box').css('position','absolute');
+                //$('#part-toolbar.arrow_box').css('margin-left',73+$(this).data('key').iconIndex*103+'px');
+                //$('#part-toolbar.arrow_box').css('margin-top',(52+$(this).data('key').index*52)+'px');
                 $('#part-toolbar.arrow_box').show();
                 $(this).addClass('active');
             });

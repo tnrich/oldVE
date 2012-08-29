@@ -34,6 +34,8 @@ Ext.application({
         'MainMenuController',
         'MainToolbarController',
         'VectorPanelController',
-        'DeviceEditorMainMenuController'
+        'DeviceEditor.MainMenuController',
+        'DeviceEditor.MainToolbarController',
+        'DeviceEditor.DeviceEditorPanelController'
     ]
 });
