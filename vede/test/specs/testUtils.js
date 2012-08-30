@@ -161,7 +161,8 @@ Ext.onReady(function() {
     describe("Testing Teselagen.utils.FormatUtils.js", function() {
 
         describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
-            var newGb;
+            var sm;
+            var mewGb;
 
             beforeEach(function() {
                 seq = Teselagen.bio.sequence.DNATools.createDNA("GATTACA");
@@ -291,6 +292,39 @@ Ext.onReady(function() {
                 expect(newSM.getSequence().seqString()).toBe("gattaca");
             });
 
+            it("sequenceManagerToFeaturedDNASequence() TESTS FOR FEATURES ARE FAULTY",function(){
+                var featDNASeq = Teselagen.utils.FormatUtils.sequenceManagerToFeaturedDNASequence(sm);
+                //expect(true).toBe(false);
+
+                expect(featDNASeq.get("name")).toBe("test");
+                expect(featDNASeq.get("sequence")).toBe("gattaca");
+                expect(featDNASeq.get("isCircular")).toBe(true);
+                expect(featDNASeq.get("features").length).toBe(2);
+                expect(featDNASeq.get("features")).toEqual(sm.getFeatures());
+            });
+
+
+            it("jbeiseqJsonToSequenceManager()",function(){
+                var json  = Teselagen.utils.FormatUtils.sequenceManagerToJbeiseqJson(sm);
+                var sm2   = Teselagen.utils.FormatUtils.jbeiseqJsonToSequenceManager(json);
+
+                //console.log(JSON.stringify(json, null, "  "));
+
+                expect(sm2.getName()).toBe("test");
+                expect(sm2.getCircular()).toBeTruthy();
+                expect(sm2.getSequence().seqString()).toBe("gattaca");
+                expect(sm2.getFeatures().length).toBe(2);
+                expect(sm2.getFeatures()[0].getName()).toBe("feat1");
+                expect(sm2.getFeatures()[0].getType()).toBe("CDS");
+                expect(sm2.getFeatures()[0].getLocations()[0].getStart()).toBe(1);
+                expect(sm2.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
+                expect(sm2.getFeatures()[1].getName()).toBe("feat3");
+                expect(sm2.getFeatures()[1].getType()).toBe("gene");
+                expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
+                expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
+                expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(0);
+                expect(sm2.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
+            });
 
             it("sequenceManagerTojbeiseqJson() - double checked with jbeiseqJson2Genbank",function(){
                 var json  = Teselagen.utils.FormatUtils.sequenceManagerToJbeiseqJson(sm);
@@ -316,28 +350,6 @@ Ext.onReady(function() {
 
                 var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
                 expect(gb.toString()).toEqual(newGb.toString());
-            });
-
-            it("jbeiseqJsonToSequenceManager()",function(){
-                var json  = Teselagen.utils.FormatUtils.sequenceManagerToJbeiseqJson(sm);
-                var sm2   = Teselagen.utils.FormatUtils.jbeiseqJsonToSequenceManager(json);
-
-                //console.log(JSON.stringify(json, null, "  "));
-
-                expect(sm2.getName()).toBe("test");
-                expect(sm2.getCircular()).toBeTruthy();
-                expect(sm2.getSequence().seqString()).toBe("gattaca");
-                expect(sm2.getFeatures().length).toBe(2);
-                expect(sm2.getFeatures()[0].getName()).toBe("feat1");
-                expect(sm2.getFeatures()[0].getType()).toBe("CDS");
-                expect(sm2.getFeatures()[0].getLocations()[0].getStart()).toBe(1);
-                expect(sm2.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
-                expect(sm2.getFeatures()[1].getName()).toBe("feat3");
-                expect(sm2.getFeatures()[1].getType()).toBe("gene");
-                expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
-                expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
-                expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(0);
-                expect(sm2.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
             });
             
             it("sequenceManagerToJbeiseqXml() - checked with jbeiseqXmlToJson",function(){
