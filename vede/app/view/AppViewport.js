@@ -209,11 +209,13 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Reverse Complement'
+                                                text: 'Reverse Complement',
+                                                id: 'reverseComplementMenuItem'
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Rotate to Here'
+                                                text: 'Rotate to Here',
+                                                id: 'rebaseMenuItem'
                                             }
                                         ]
                                     }

@@ -2,9 +2,19 @@
     extend: 'Ext.app.Controller',
 
     requires: ['Teselagen.bio.parsers.GenbankManager',
+               'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent'],
 
+    MenuItemEvent: null,
     VisibilityEvent: null,
+
+    onReverseComplementMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
+    },
+
+    onRebaseMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REBASE_SEQUENCE);
+    },
 
     onCancelButtonClick: function(button, e, options) {
         button.up('window').close();
@@ -159,6 +169,12 @@
 
     init: function() {
         this.control({
+            "#reverseComplementMenuItem": {
+                click: this.onReverseComplementMenuItemClick
+            },
+            "#rebaseMenuItem": {
+                click: this.onRebaseMenuItemClick
+            },
             "button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
@@ -206,6 +222,7 @@
             },
         });
 
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
