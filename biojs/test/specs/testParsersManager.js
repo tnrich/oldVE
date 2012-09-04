@@ -28,7 +28,8 @@ Ext.onReady(function() {
             var feat1, note1;
             var sm;
             var fastaStr, fasta;
-            var gbStr, gb;
+            var gbStrl
+            var gb = null;
             //var gbA;
             var gbB;
             var jbeiXmlUrl;
@@ -64,9 +65,10 @@ Ext.onReady(function() {
                 jbeiXmlUrl = "/biojs/test/data/jbeiseq/test.xml";
             });
             
-            it("checkGenbank() ",function(){
+            it("check Genbank",function(){
 
-                var gb = gbB;
+                //var gb = null;
+                gb = gbB;
                 expect(gb.getLocus().getLocusName()).toBe("signal_pep");
                 expect(gb.getLocus().getStrandType()).toBe("");
                 expect(gb.getLocus().getSequenceLength()).toBe(63);

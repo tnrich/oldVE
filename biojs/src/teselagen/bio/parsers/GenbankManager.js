@@ -209,7 +209,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         naType = "";
         for (var i=1; i < lineArr.length; i++) {
             if (lineArr[i].match(/DNA$/gi)) {
-                naType = "DNA"
+                naType = "DNA";
             } else if (lineArr[i].match(/RNA$/gi)) {
                 naType = "RNA";
             }
@@ -251,7 +251,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
          */
 
         // Just rewrite the existing Locus object. It's easier than setting everything.
-        var result = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
+        result = Ext.create("Teselagen.bio.parsers.GenbankLocusKeyword", {
             locusName: locusName,
             sequenceLength: seqLen,
             strandType: strand,
@@ -415,7 +415,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var complement = false;
         var join       = false;
 
-        locStr = Ext.String.trim(locStr);
+        var locStr = Ext.String.trim(locStr);
 
         if (locStr.match(/complement/i) ) {
             complement = true;
@@ -458,16 +458,16 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @private
      */
     parseFeatureQualifier: function(line) {
-        var featQual, newLine, lineArr, quoted;
+        var featQual, newLine, lineArr;
 
         newLine = Ext.String.trim(line);
         newLine = newLine.replace(/^\/|"$/g, "");
         lineArr = newLine.split(/=\"|=/);
 
         if (line.match(/=\"/g)) {
-            quoted = true;
+            var quoted = true;
         } else { 
-            quoted = false;
+            var quoted = false;
         }
 
         featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {

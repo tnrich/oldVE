@@ -112,7 +112,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
                 name = nameArr[0].replace(/^>/, "");
             }
         } else {
-            console.warn("fastaToFeaturedDNASequence: No '>' detected");
+            console.warn("fastaToSequenceManager: No '>' detected");
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid Fasta file. No '>' detected"
             });
@@ -141,8 +141,25 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
+     * Converts a FASTA file into a FeaturedDNASequence form of the data.
+     * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
+     * @returns {Teselagen.models.FeaturedDNASequence} featuredDNASequence or this output
+     */
+    sequenceManagerToFeaturedDNASequence: function(seqMan) {
+
+        var result = Ext.create("Teselagen.models.FeaturedDNASequence", {
+            name: seqMan.getName(),
+            sequence: seqMan.getSequence().seqString(),
+            isCircular: seqMan.getCircular(),
+            features: seqMan.getFeatures(),
+        });
+
+        return result;
+    },
+
+    /**
      * Converts a JbeiSeq XML file into a SequenceManager form of the data.
-     * @param {JbeiSeqJson} jbeiSeqJson JbeiSeqJson model of data
+     * @param {JSON} jbeiSeqJson JbeiSeqJson model of data
      * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     jbeiseqJsonToSequenceManager: function(jbeiSeqJson) {
@@ -238,10 +255,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into 
      * a JbeiSeqJson.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
-     * @returns {JbeiSeqJson} jbeiSeqJson JbeiSeqJson model of data
+     * @returns {JSON} jbeiSeqJson JbeiSeqJson model of data
      */
     sequenceManagerToJbeiseqJson: function(seqMan) {
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
+            console.warn("Invalid SequenceManager loaded in sequenceManagerToJbeiseqJson()");
             return null;
         }
 
@@ -330,7 +348,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /**
      * Converts a JbeiSeqXML file into a SequenceManager form of the data.
-     * @param {JbeiSeqXml} jbeiSeqXml JbeiSeqXml model of data
+     * @param {String} jbeiSeqXml JbeiSeqXml model of data
      * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     jbeiseqXmlToSequenceManager: function(jbeiSeqXml) {
@@ -343,9 +361,15 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into 
      * a JbeiSeqXML.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
-     * @returns {JbeiSeqXml} jbeiSeqXml JbeiSeqXml model of data
+     * @returns {String} jbeiSeqXml JbeiSeqXml model of data
      */
     sequenceManagerToJbeiseqXml: function(seqMan) {
+
+        if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
+            console.warn("Invalid SequenceManager loaded in sequenceManagerToJbeiseqJson()");
+            return null;
+        }
+
         var json = this.sequenceManagerToJbeiseqJson(seqMan);
         var result = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToXml(json);
         return result;
@@ -359,6 +383,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      */
     genbankToSequenceManager: function(genbank) {
         if (Ext.getClassName(genbank) !== "Teselagen.bio.parsers.Genbank" ) {
+            console.warn("Invalid Genbank loaded in genbankToSequenceManager()");
             return null;
         }
 
@@ -379,6 +404,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
     sequenceManagerToGenbank: function(seqMan) {
 
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
+            console.warn("Invalid SequenceManager loaded in sequenceManagerToGenbank()");
             return null;
         }
 
