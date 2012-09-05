@@ -174,8 +174,9 @@ Ext.onReady(function() {
                 var jbeiXml  = Teselagen.bio.parsers.ParsersManager.loadFile(url);
                 var jbeiJson = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(jbeiXml);
 
-                //if (LOG) console.log(jbeiXml);
-                //if (LOG) console.log(JSON.stringify(jbeiJson, null, "  "));
+                //console.log(jbeiXml);
+                //console.log(JSON.stringify(XmlToJson.xml_str2json(jbeiXml), null, "  "));
+                //console.log(JSON.stringify(jbeiJson, null, "  "));
 
                 var jbeiXml2 = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToXml(jbeiJson);
                 //if (LOG) console.log(jbeiXml2);
