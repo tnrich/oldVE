@@ -16,25 +16,26 @@
 Ext.define('MyApp.view.AppViewport', {
     extend: 'Ext.container.Viewport',
     layout: 'border',
-    requires: ['MyApp.view.DeviceEditor.DeviceEditor',
+    requires: [
+    'MyApp.view.ProjectPanelView',
+    'MyApp.view.DeviceEditor.DeviceEditor',
     'MyApp.view.DeviceEditor.Inspector',
     'MyApp.view.DeviceEditor.MainMenuBar',
-    'MyApp.view.DeviceEditor.MainToolBar'],
+    'MyApp.view.DeviceEditor.MainToolBar'
+    ],
+    listeners: {
+        afterrender: function(){
+            myMask.destroy();
+        }
+    }
+    ,
     initComponent: function() {
         var me = this;
 
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'treepanel',
-                    id: 'ProjectPanel',
-                    width: 150,
-                    title: 'Project',
-                    flex: 1,
-                    region: 'west',
-                    viewConfig: {
-
-                    }
+                    xtype: 'ProjectPanel'
                 },
                 {
                     xtype: 'tabpanel',

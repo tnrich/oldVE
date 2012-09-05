@@ -13,6 +13,12 @@
  * Do NOT hand edit this file.
  */
 
+var myMask;
+Ext.onReady(function() {
+myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+myMask.show();
+});
+
 Ext.Loader.setConfig({
     enabled: true,
     paths: {

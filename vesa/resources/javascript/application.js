@@ -374,12 +374,12 @@ $( document ).bind( 'loadDE', function() {
             type: "POST",
             url: "/node/fullRPC",
             data: {
-              '_id':deviceeditor._id,
+              '_id':j5._id,
               'j5Params':JSON.stringify(j5Params),
               'execParams':JSON.stringify(execParams)
             },
                 success: function(data) {
-                    flashCallback("j5 Success!",true);
+                    Ext.getCmp('ProjectPanel').getStore().load();
                     
                     $("#download-zip").html('<button class="button" id="download-zip">Download ZIP</button>');
                     
@@ -548,16 +548,16 @@ $( document ).bind( 'loadDE', function() {
             deviceeditor.checkAvailability();
     }
 
-    $(document).bind("openDesign", function()
-    {
+    
         function loadModel(_id)
         {
         $.ajax({
         type: "POST",
-        url: '/node/getData',
+        url: '/node/getUserModel',
         data: {'_id':_id},
         success: function(model) {
             deviceeditor._id = model["_id"];
+            j5._id = model["_id"];
             console.log("Model ID: "+deviceeditor._id);
             decodeModel(model["payload"]);
             $('#design-name').val(model['name']);
@@ -570,7 +570,12 @@ $( document ).bind( 'loadDE', function() {
             }
         });
         }
-        
+
+    $(document).bind("openSelectedDesign", function(evt,_id) {
+      loadModel(_id);
+    });
+       
+    /* 
         $.ajax({
         type: "GET",
         url: '/node/getModels',
@@ -589,7 +594,7 @@ $( document ).bind( 'loadDE', function() {
 
             $('#loadModel').modal();
         }});
-    });
+    */
 
     // Provides method to hide on clickOut oof selector
     function hideCallback(el,fn)
@@ -745,10 +750,10 @@ $( document ).bind( 'loadDE', function() {
         checkAvailability: function(){
           if(this.iconsVector.length>0 && this.EnableCheckAvailability)
           {
-            if($(this.iconsVector).last()[0].active) this.addCol();
+            if($(this.iconsVector).last()[0]) if($(this.iconsVector).last()[0].active) this.addCol();
             var generateRow = false;
             $(this.iconsVector).each(function(key,icon){
-              if($(icon.partsVector).last()[0].active) generateRow = true;
+              if($(icon.partsVector).last()[0]) if($(icon.partsVector).last()[0].active) generateRow = true;
             });
             if(generateRow) this.addRow();
           }
@@ -777,9 +782,9 @@ $( document ).bind( 'loadDE', function() {
             });
 
             $("btn#j5-run").click(function(){
-                _self.saveDesign(function(){
+                  //_self.saveDesign(function(){
                   j5.j5Run();
-                });    
+                  //});    
             });
 
             $("#export-json-btn").click(function(){
@@ -1065,13 +1070,13 @@ $( document ).bind( 'loadDE', function() {
                 var modelName = $('#design-name').val();
                 $.ajax({
                     type: "POST",
-                    url: '/node/saveData',
+                    url: '/node/saveUserModel',
                     data: {'_id':deviceeditor._id,'name':modelName,'payload':JSON.stringify(model)},
                         success: function(data) {
                             deviceeditor._id = data["_id"];
                             if(data["created"]) $('#created').html(parseTimeStamp(data['created']));
                             if(data["last_modified"]) $('#modified').html(parseTimeStamp(data['last_modified']));
-                            flashCallback("Design saved!",true);
+                            Ext.getCmp('ProjectPanel').getStore().load();
                             if(cb) return cb();
                         },
                         statusCode: {

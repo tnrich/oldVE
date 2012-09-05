@@ -4,9 +4,9 @@ var inspectorHTML = '\
         <title></title> \
     </head> \
     <body> \
-        <div id="inspector" class="pull-right"> \
-            <div class="inspector-head"> \
-                <span class="pull-right context">Inspector</span> \
+        <div id="inspector"> \
+            <div class="inspector-head x-toolbar-default"> \
+                <span class="context">Inspector</span> \
             </div> \
             <div class="inspector-body hide" style="display: block;"> \
                 <ul id="inspector-tabs" class="nav nav-tabs ui-tabs ui-widget ui-widget-content ui-corner-all"> \
@@ -92,13 +92,10 @@ var inspectorHTML = '\
                             <form class="form-inline"> \
                                 <fieldset> \
                                     <div class="control-group"> \
-                                        <label for="Collection-Name" class="control-label">Design Name:</label><input id="design-name" class="input"></input> \
+                                        <label for="Collection-Name" class="control-label">Design Name:</label><input id="design-name" class="input" style="margin-left:5px;"></input> \
                                     </div> \
                                     <div class="control-group"> \
-                                        <label for="j5Ready" class="control-label">J5 Ready:</label><span id="j5Ready" class="checkbox">False</span> \
-                                    </div> \
-                                    <div class="control-group"> \
-                                        <label for="combinatorial" class="control-label">Combinatorial:</label><span id="combinatorial">False</span> \
+                                        <label for="combinatorial" class="control-label">Combinatorial:</label><span id="combinatorial" style="margin-left:5px; width:180px;">False</span> \
                                     </div> \
                                     <div class="control-group"> \
                                         <div class="controls"> \
@@ -183,5 +180,5 @@ Ext.define('MyApp.view.DeviceEditor.Inspector', {
     afterRender: function(){
         //window.setTimeout(function(){$( document ).trigger( 'loadDE' );},1000);
     },
-    style: {'overflow':'scroll !important'}
+    style: {'background':'whiteSmoke !important','overflow':'scroll !important'}
 });

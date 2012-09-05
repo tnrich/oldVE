@@ -1,6 +1,6 @@
 
 var iconsToolbarHTMLSource = ' \
-<div id="icon-toolbar" class="toolbar arrow_box"> \
+<div id="icon-toolbar" class="toolbar arrow_box x-toolbar-default"> \
 <a href="#" data-toggle="button" class="btn js-rotate"> \
 <i class="icon-repeat"></i> \
 </a> \
