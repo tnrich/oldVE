@@ -1,3 +1,11 @@
+
+// Loading Mask
+var myMask;
+Ext.onReady(function() {
+myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+myMask.show();
+});
+
 Ext.Loader.setConfig({
     enabled: true,
     paths: {
@@ -26,7 +34,10 @@ Ext.application({
         'RestrictionEnzymeController',
         'SequenceController',
         'VectorPanelController',
-        'SimulateDigestionController'
+        'SimulateDigestionController',
+        'Vede.controller.DeviceEditor.MainMenuController',
+        'Vede.controller.DeviceEditor.MainToolbarController',
+        'Vede.controller.DeviceEditor.DeviceEditorPanelController'
     ],
     errorHandler: function(err) {
         console.warn(err);
