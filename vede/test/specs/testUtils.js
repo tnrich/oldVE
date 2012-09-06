@@ -3,7 +3,7 @@
  * @author Diana Womg
  */
 
-//Ext.require("Ext.Ajax");
+Ext.require("Ext.Ajax");
 
 //Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 //Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
@@ -21,6 +21,8 @@ Ext.require("Teselagen.bio.parsers.ParsersManager");
 
 Ext.require("Teselagen.utils.SequenceUtils");
 Ext.require("Teselagen.utils.FormatUtils");
+Ext.require("Teselagen.utils.DeXmlUtils");
+
 Ext.onReady(function() {
 
     describe("Testing Teselagen.utils.SequenceUtils.js", function() {
@@ -468,10 +470,14 @@ Ext.onReady(function() {
     });
 
 
-    xdescribe("Testing XXXXXXX", function() {
+    describe("Testing  Teselagen.utils.DeXmlUtils.js", function() {
 
-        xdescribe("", function() {
-            it("",function(){
+        describe("First", function() {
+            it("BLAH",function(){
+                var url = "/vede/test/data/dexml/DeviceEditor_example.xml";
+                var xml = jasmine.getFixtures().read(url);
+
+                console.log(xml);
                 expect(false).toBe(false);
             });
 
