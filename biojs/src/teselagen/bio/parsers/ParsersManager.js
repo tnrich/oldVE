@@ -9,13 +9,15 @@
  */
 
 Ext.define("Teselagen.bio.parsers.ParsersManager", {
-    requires:  ["Teselagen.bio.util.StringUtil",
-                "Teselagen.bio.parsers.GenbankManager",
-                "Teselagen.bio.sequence.DNATools",
-                "Ext.Ajax", 
-                "Ext.data.Store",
-                "Ext.data.XmlStore",
-                "Ext.data.reader.Xml"
+    requires:  [
+        "Teselagen.bio.util.XmlToJson",
+        "Teselagen.bio.util.StringUtil",
+        "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.sequence.DNATools",
+        "Ext.Ajax", 
+        "Ext.data.Store",
+        "Ext.data.XmlStore",
+        "Ext.data.reader.Xml"
     ],
 
     singleton: true,
