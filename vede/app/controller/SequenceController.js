@@ -8,6 +8,7 @@ Ext.define("Vede.controller.SequenceController", {
 
     requires: ["Teselagen.event.CaretEvent",
                "Teselagen.event.MapperEvent",
+               "Teselagen.event.MenuItemEvent",
                "Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.SelectionEvent",
                "Teselagen.event.SelectionLayerEvent",
@@ -25,8 +26,10 @@ Ext.define("Vede.controller.SequenceController", {
 
     CaretEvent: null,
     MapperEvent: null,
+    MenuItemEvent: null,
     SelectionEvent: null,
     SelectionLayerEvent: null,
+    SequenceManagerEvent: null,
     VisibilityEvent: null,
 
     WireframeSelectionLayer: null,
@@ -45,8 +48,10 @@ Ext.define("Vede.controller.SequenceController", {
     init: function() {
         this.CaretEvent = Teselagen.event.CaretEvent;
         this.MapperEvent = Teselagen.event.MapperEvent;
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
         this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
+        this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         var listenersObject = {
@@ -82,7 +87,18 @@ Ext.define("Vede.controller.SequenceController", {
         listenersObject[this.SelectionEvent.SELECTION_CANCELED] =
             this.onSelectionCanceled;
 
+
         this.application.on(listenersObject);
+
+        this.application.on(this.MenuItemEvent.REVERSE_COMPLEMENT,
+            this.onReverseComplementSequence, this);
+        this.application.on(this.MenuItemEvent.REBASE_SEQUENCE, 
+            this.onRebaseSequence, this);
+
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGING,
+            this.onSequenceChanging, this);
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGED,
+            this.onSequenceChanged, this);
     },
 
     onLaunch: function() {
@@ -127,23 +143,29 @@ Ext.define("Vede.controller.SequenceController", {
         Ext.each(this.Managers, function(manager) {
             manager.setSequenceManager(pSeqMan);
         });
-
-        this.SequenceManager.on(
-            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
-            this.onSequenceChanged, this);
-
-        this.SequenceManager.on(
-            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
-            this.onSequenceChanging, this);
     },
 
+    onRebaseSequence: function() {
+    },
 
+    onReverseComplementSequence: function(e) {
+        if(this.SequenceManager) {
+            this.SequenceManager.doReverseComplementSequence();
+        }
+
+        // Return false to cancel the event. This makes sure the method is
+        // called only once per event.
+        return false;
+    },
 
     // kind is the type of Sequence Changed/Changing that occurs
     // Obj is a SequenceManagerMemento, feature, or some other {} input that needs to be remembered
     onSequenceChanged: function(kind, obj) {
+        console.log("parent of " + this.$className);
         Ext.each(this.Managers, function(manager) {
-            manager.sequenceChanged();
+            if(manager.sequenceChanged) {
+                manager.sequenceChanged();
+            }
         });
 
         switch (kind) {
@@ -172,8 +194,6 @@ Ext.define("Vede.controller.SequenceController", {
         if (objType.match(/SequenceManagerMemento/)) {
             // Put in stack of SeqMgr Mementos
         } // else ?
-
-
     },
 
     onSequenceChanging: function(kind, obj) {
