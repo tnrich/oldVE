@@ -43,7 +43,7 @@
                 {
                     "id": 1318886361742366,
                     "de:name": "pS8c-vector_backbone",
-                    "de:revComp": false,
+                    "de:revComp": true,
                     "de:startBP": 2016,
                     "de:stopBP": 1238,
                     "de:sequenceFileHash": "23d714d34632e24f53c2095f05e79f17aded7ec22651c20e4b320f82bc2bf731",
