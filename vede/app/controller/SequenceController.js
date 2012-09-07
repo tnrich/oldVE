@@ -161,6 +161,10 @@ Ext.define("Vede.controller.SequenceController", {
     // kind is the type of Sequence Changed/Changing that occurs
     // Obj is a SequenceManagerMemento, feature, or some other {} input that needs to be remembered
     onSequenceChanged: function(kind, obj) {
+        if(!this.SequenceManager) {
+            return;
+        }
+
         console.log("parent of " + this.$className);
         Ext.each(this.Managers, function(manager) {
             if(manager.sequenceChanged) {

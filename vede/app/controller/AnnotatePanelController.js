@@ -269,10 +269,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     onSequenceChanged: function(kind, obj) {
-        Ext.each(this.Managers, function(manager) {
-            manager.sequenceChanged();
-        });
-
+        this.callParent(arguments);
     },
 
     onActiveEnzymesChanged: function() {
