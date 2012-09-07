@@ -248,7 +248,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     select: function(start, end) {
         this.changeCaretPosition(start);
-        this.SelectionLayer.select(start, end + 1);
+        this.SelectionLayer.select(start, end);
     },
 
     changeCaretPosition: function(index) {
