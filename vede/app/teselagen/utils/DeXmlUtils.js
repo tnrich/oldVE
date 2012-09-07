@@ -15,7 +15,18 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
     singleton: true,
     constructor: function() {
         XmlToJson = Teselagen.bio.util.XmlToJson;
-    }
+    },
+
+
+    /**
+     * 
+     */
+     deXmlToJson: function(xmlStr) {
+
+        var json = XmlToJson.xml_str2json(xmlStr);
+
+        return json;
+     }
 
 
 });
