@@ -56,11 +56,13 @@ video {
 audio:not([controls]) {
   display: none;
 }
+/*
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
+*/
 a:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
@@ -132,6 +134,7 @@ textarea {
   overflow: auto;
   vertical-align: top;
 }
+/*
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -140,6 +143,7 @@ body {
   color: #333333;
   background-color: #ffffff;
 }
+*/
 a {
   color: #0088cc;
   text-decoration: none;

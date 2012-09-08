@@ -33,6 +33,7 @@ Ext.application({
     controllers: [
         'MainMenuController',
         'MainToolbarController',
-        'VectorPanelController'
+        'VectorPanelController',
+        'DeviceEditorMainMenuController'
     ]
 });
