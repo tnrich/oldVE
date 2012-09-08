@@ -192,9 +192,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         for (var i=0; i < this.getFeatureQualifier().length; i++) {
             var tmpName = this.getFeatureQualifier()[i].getName();
 
-            if (tmpName === "label" | tmpName === "ApEinfo_label" ||
-                    tmpName === "note" || tmpName === "gene" || 
-                    tmpName === "organism" || tmpName === "name" ) {
+            if (tmpName === "label" || tmpName === "name" || tmpName === "ApEinfo_label" ||
+                tmpName === "note" || tmpName === "gene" || tmpName === "organism" ) {
 
                     name = this.getFeatureQualifier()[i].getValue();
                 }
