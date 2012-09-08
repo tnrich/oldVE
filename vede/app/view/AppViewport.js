@@ -1,6 +1,12 @@
 Ext.define('Vede.view.AppViewport', {
     extend: 'Ext.container.Viewport',
-
+    requires: [
+    'Vede.view.ProjectPanelView',
+    'Vede.view.DeviceEditor.DeviceEditor',
+    'Vede.view.DeviceEditor.Inspector',
+    'Vede.view.DeviceEditor.MainMenuBar',
+    'Vede.view.DeviceEditor.MainToolBar'
+    ],
     layout: {
         type: 'border'
     },
@@ -11,98 +17,116 @@ Ext.define('Vede.view.AppViewport', {
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'treepanel',
+                    xtype: 'ProjectPanel',
                     id: 'ProjectPanel',
-                    title: 'Project',
-                    flex: 1,
+                    width: 150,
                     collapsible: true,
                     split : true,
-                    region: 'west',
-                    viewConfig: {
-                        
-                    }
+                    title: 'Project',
+                    flex: 1,
+                    region: 'west'
                 },
                 {
                     xtype: 'tabpanel',
-                    id: 'EditorPanel',
-                    activeTab: 1,
+                    //id: 'EditorPanel',
+                    activeTab: 0,
                     flex: 6,
                     region: 'center',
                     items: [
                         {
                             xtype: 'panel',
                             title: 'DeviceEditor',
-                            items: [ 
+                            layout: {
+                            type: 'hbox',
+                            pack : 'start',
+                            align: 'stretch'
+                            },
+                            items: [
                                 {
-                                    xtype: 'container',
-                                    id: 'DeviceContainer',
-                                    //layout: {
-                                    //    type: 'fit'
-                                    //}
-                                }
+                                    xtype: 'DeviceEditorPanel',
+                                    //id: 'DeviceEditor',
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    flex : 2,
+                                    title: 'DeviceEditor'
+                                },
+                                {
+                                    xtype: 'DeviceEditorInspectorPanel',
+                                    
+                                    width: '320px',
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    title: 'Inspector' 
+                                }                               
                             ]
                         },
                         {
                             xtype: 'panel',
-                            title: 'VectorEditor',
                             layout: {
-                                align: 'stretch',
-                                type: 'hbox'
+                            type: 'hbox',
+                            pack : 'start',
+                            align: 'stretch'
                             },
+                            title: 'VectorEditor',
+                            items: [
+                        {
+                            xtype: 'panel',
+                            id: 'AnnotatePanel',
+                            layout: {
+                                type: 'fit'
+                            },
+                            width: 150,
+                            autoScroll: true,
+                            collapsible: true,
+                            viewBox: true,
+                            split: true,
+                            title: 'Annotate',
+                            flex: 2,
+                            region: 'east',
                             items: [
                                 {
-                                    xtype: 'panel',
-                                    id: 'VectorPanel',
-                                    title: 'Vector',
-                                    flex: 1,
-                                    layout: {
-                                        align: 'stretch',
-                                        type: 'hbox'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'container',
-                                            id: 'PieContainer',
-                                            autoScroll: true,
-                                            layout: {
-                                                type: 'fit',
-                                                //manageOverflow: 1
-                                            }
-                                        },
-                                        {
-                                            xtype: 'container',
-                                            hidden: false,
-                                            id: 'RailContainer',
-                                            layout: {
-                                                type: 'fit'
-                                            }
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'splitter'
-                                },
-                                {
-                                    xtype: 'panel',
-                                    id: 'AnnotatePanel',
-                                    title: 'Annotate',
-                                    autoScroll: true,
-                                    flex: 1,
+                                    xtype: 'container',
+                                    id: 'AnnotateContainer',
+                                    overflowY: 'scroll',
                                     layout: {
                                         type: 'fit'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'container',
-                                            id: 'AnnotateContainer',
-                                            layout: {
-                                                type: 'fit'
-                                            }
-                                        }
-                                    ]
+                                    }
                                 }
                             ]
+                        },
+                        {
+                        xtype: 'panel',
+                        id: 'VectorPanel',
+                        layout: {
+                            type: 'fit'
+                        },
+                        title: 'Vector',
+                        flex: 2,
+                        region: 'center',
+                        items: [
+                            {
+                                xtype: 'container',
+                                id: 'PieContainer',
+                                //autoScroll: true,
+                                layout: {
+                                    type: 'fit'
+                                    //manageOverflow: 1
+                                }
+                            },
+                            {
+                                xtype: 'container',
+                                hidden: false,
+                                id: 'RailContainer',
+                                layout: {
+                                    type: 'fit'
+                                }
+                            }
+                        ]
                         }
+                        ]
+                    }
                     ]
                 },
                 {
@@ -116,8 +140,15 @@ Ext.define('Vede.view.AppViewport', {
                     region: 'north',
                     items: [
                         {
+                            xtype: 'DeviceEditorMainMenuBar'
+                        },
+                        {
+                            xtype: 'DeviceEditorMainToolBar'
+                        },
+                        {
                             xtype: 'toolbar',
                             id: 'MainMenuBar',
+                            hidden: true,
                             autoScroll: false,
                             flex: 1,
                             items: [
@@ -165,7 +196,7 @@ Ext.define('Vede.view.AppViewport', {
                                                         },
                                                         {
                                                             xtype: 'menuitem',
-                                                            text: 'Circular View',
+                                                            text: 'Circular View'
                                                         },
                                                         {
                                                             xtype: 'menuitem',
@@ -352,7 +383,7 @@ Ext.define('Vede.view.AppViewport', {
                                             {
                                                xtype: 'menuitem',
                                                 id: 'simulateDigestionMenuItem',
-                                                text: 'Simulate Digestion',
+                                                text: 'Simulate Digestion'
 /*                                                listeners: {
                                                     click: {
                                                         fn: me.onMenuitemClick,
@@ -404,6 +435,7 @@ Ext.define('Vede.view.AppViewport', {
                         {
                             xtype: 'toolbar',
                             id: 'MainToolBar',
+                            hidden:true,
                             flex: 1,
                             items: [
                                 {
@@ -589,6 +621,12 @@ Ext.define('Vede.view.AppViewport', {
         });
 
         me.callParent(arguments);
+    },
+    listeners: {
+        afterrender: function(){
+            myMask.destroy();
+        }
     }
+
 
 });

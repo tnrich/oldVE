@@ -15,10 +15,11 @@
 
 Ext.define('MyApp.view.AppViewport', {
     extend: 'Ext.container.Viewport',
-    layout: 'border',
-    requires: ['MyApp.view.DeviceEditorView',
-    'MyApp.view.DeviceEditorInspectorView',
-    'MyApp.view.DeviceEditorMainMenuBar'],
+
+    layout: {
+        type: 'border'
+    },
+
     initComponent: function() {
         var me = this;
 
@@ -38,36 +39,13 @@ Ext.define('MyApp.view.AppViewport', {
                 {
                     xtype: 'tabpanel',
                     id: 'EditorPanel',
-                    activeTab: 0,
+                    activeTab: 1,
                     flex: 4,
                     region: 'center',
                     items: [
                         {
                             xtype: 'panel',
-                            layout: {
-                                align: 'stretch',
-                                type: 'hbox',
-                                pack: 'start'
-                            },
-                            title: 'DeviceEditor',
-                            items: [
-                                {
-                                    xtype: 'DeviceEditorPanel',
-                                    id: 'DeviceEditor',
-                                    layout: {
-                                        type: 'fit'
-                                    },
-                                    flex: 2,
-                                    title: 'DeviceEditor'
-                                },
-                                {
-                                    xtype: 'DeviceEditorInspectorPanel',
-                                    width: '320px',
-                                    layout: {
-                                        type: 'fit'
-                                    },
-                                    title: 'Inspector'                                }
-                            ]
+                            title: 'DeviceEditor'
                         },
                         {
                             xtype: 'panel',
@@ -142,15 +120,10 @@ Ext.define('MyApp.view.AppViewport', {
                     region: 'north',
                     items: [
                         {
-                            xtype: 'DeviceEditorMainMenuBar'
-                        }
-                        ,
-                        {
                             xtype: 'toolbar',
                             id: 'MainMenuBar',
                             autoScroll: false,
                             flex: 1,
-                            hidden: true,
                             items: [
                                 {
                                     xtype: 'button',
@@ -423,7 +396,6 @@ Ext.define('MyApp.view.AppViewport', {
                             xtype: 'toolbar',
                             id: 'MainToolBar',
                             flex: 1,
-                            hidden: false,
                             items: [
                                 {
                                     xtype: 'button',
