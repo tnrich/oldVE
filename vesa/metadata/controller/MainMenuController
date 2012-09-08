@@ -1,0 +1,153 @@
+{
+    "id": "ExtBox1-ext-gen4007",
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "MainMenuController"
+    },
+    "customConfigs": [],
+    "designerId": "6df4157e-cc43-4496-82bc-1e7aa6ed6bc0",
+    "$viewOrder": 0,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen4157",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onCancelButtonClick",
+                "implHandler": [
+                    "button.up('window').close();"
+                ],
+                "name": "click",
+                "scope": "me",
+                "designer|targetType": "Ext.button.Button",
+                "designer|controlQuery": "button[text=Cancel]",
+                "designer|userClassName": "onCancelButtonClick"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen6232",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onImportButtonClick",
+                "implHandler": [
+                    "if (typeof window.FileReader !== 'function') {",
+                    "    Ext.Msg.alert('Browser does not support File API.');",
+                    "}",
+                    "else {",
+                    "    var form = button.up('form').getForm();",
+                    "    var fileField = form.findField('importedFile');",
+                    "    var fileInput = fileField.extractFileInput();",
+                    "    var file = fileInput.files[0];",
+                    "    fr = new FileReader();",
+                    "    fr.onload = processText;",
+                    "    fr.readAsText(file);",
+                    "}",
+                    "button.up('window').close();",
+                    "",
+                    "function processText() {",
+                    "    var result = fr.result;",
+                    "    var gb = Ext.create('Teselagen.Genbank', result);",
+                    "    console.log(gb);",
+                    "}"
+                ],
+                "name": "click",
+                "scope": "me",
+                "designer|targetType": "Ext.button.Button",
+                "designer|controlQuery": "button[text='Import']",
+                "designer|userClassName": "onImportButtonClick"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen4185",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onImportMenuItemClick",
+                "implHandler": [
+                    "Ext.create(\"MyApp.view.FileImportWindow\").show();"
+                ],
+                "name": "click",
+                "scope": "me",
+                "designer|targetType": "Ext.menu.Item",
+                "designer|controlQuery": "#importMenuItem",
+                "designer|userClassName": "onImportMenuItemClick"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen3556",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onFeaturesMenuItemCheckChange",
+                "implHandler": [
+                    "var btn = Ext.ComponentQuery.query('#featuresBtn')[0];",
+                    "if (checked) {",
+                    "    btn.toggle(true);",
+                    "}",
+                    "else {",
+                    "    btn.toggle(false);",
+                    "}",
+                    ""
+                ],
+                "name": "checkchange",
+                "scope": "me",
+                "designer|targetType": "Ext.menu.CheckItem",
+                "designer|controlQuery": "#featuresMenuItem",
+                "designer|userClassName": "onFeaturesMenuItemCheckChange"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen7850",
+            "type": "controlleraction",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onSimulateDigestionMenuItemClick",
+                "implHandler": [
+                    "Ext.create(\"MyApp.view.SimulateDigestionWindow\").show();"
+                ],
+                "name": "click",
+                "scope": "me",
+                "designer|targetType": "Ext.menu.Item",
+                "designer|controlQuery": "#simulateDigestionMenuItem",
+                "designer|userClassName": "onSimulateDigestionMenuItemClick"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}
