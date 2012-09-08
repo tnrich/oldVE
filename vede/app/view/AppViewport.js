@@ -31,11 +31,12 @@ Ext.define('Vede.view.AppViewport', {
                     items: [
                         {
                             xtype: 'panel',
+                            id: 'DeviceEditorPanel',
                             title: 'DeviceEditor',
-                            items: [ 
+                            items: [
                                 {
                                     xtype: 'container',
-                                    id: 'DeviceContainer',
+                                    id: 'DeviceContainer'
                                     //layout: {
                                     //    type: 'fit'
                                     //}
@@ -352,13 +353,7 @@ Ext.define('Vede.view.AppViewport', {
                                             {
                                                xtype: 'menuitem',
                                                 id: 'simulateDigestionMenuItem',
-                                                text: 'Simulate Digestion',
-/*                                                listeners: {
-                                                    click: {
-                                                        fn: me.onMenuitemClick,
-                                                        scope: me
-                                                    }
-                                                }*/
+                                                text: 'Simulate Digestion'
                                             },
                                             {
                                                 xtype: 'menuitem',
