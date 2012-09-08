@@ -51,11 +51,12 @@ Ext.define('Vede.controller.RailController', {
         rail = this.railManager.getRail();
         railContainer.add(rail);
 
-        console.log(rail);
+//        console.log(rail);
 
         this.railManager.initRail();
 
         this.Managers.push(this.railManager);
+        railContainer.hide();
 
 //        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
 //            reference: this.railManager.reference,
