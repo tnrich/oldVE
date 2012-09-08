@@ -2,22 +2,24 @@
  * @class Vede.controller.VectorPanelController
  * Controller for Vector Panel
  */
-Ext.define('Vede.controller.VectorPanelController', {
-    extend: 'Ext.app.Controller',
+Ext.define("Vede.controller.VectorPanelController", {
+    extend: "Ext.app.Controller",
 
     /**
      * @member Vede.controller.VectorPanelController
      */
     init: function() {
         this.control({
-//            '#ViewPanel' : {
-//                click : this.onClickPie
-//            }
+            "#VectorPanel" : {
+                resize : this.onResize
+            }
         });
     },
     
     onLaunch: function() {
-//        var vp = Ext.getCmp('VectorPanel');
     },
+    onResize: function() {
+        console.log("resize");
+    }
 
 });
