@@ -13,7 +13,7 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('MyApp.controller.DeviceEditorMainMenuController', {
+Ext.define('Vede.controller.DeviceEditor.MainMenuController', {
     extend: 'Ext.app.Controller',
 
     onNewDesignClick: function(button, e, options) {
@@ -22,8 +22,8 @@ Ext.define('MyApp.controller.DeviceEditorMainMenuController', {
     onOpenDesignClick: function(button, e, options) {
         $(document).trigger('openDesign');
     },
-    onOpenj5Click: function(button, e, options) {
-        $(document).trigger('openj5');
+    onSaveDesignClick: function(button, e, options) {
+        $(document).trigger('saveDesign');
     },
 
     init: function() {
@@ -34,8 +34,8 @@ Ext.define('MyApp.controller.DeviceEditorMainMenuController', {
             "#openDesign": {
                 click: this.onOpenDesignClick
             },
-            "#j5Btn": {
-                click: this.onOpenj5Click
+            "#saveDesign": {
+                click: this.onSaveDesignClick
             }
         });
 

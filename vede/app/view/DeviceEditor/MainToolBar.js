@@ -1,4 +1,4 @@
-Ext.define('MyApp.view.DeviceEditor.MainToolBar', {
+Ext.define('Vede.view.DeviceEditor.MainToolBar', {
     extend: 'Ext.toolbar.Toolbar',
     alias: 'widget.DeviceEditorMainToolBar',
     items: [

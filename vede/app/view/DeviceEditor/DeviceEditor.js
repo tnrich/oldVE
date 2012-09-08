@@ -33,7 +33,7 @@ var deviceEditorHTMLSource = iconsToolbarHTMLSource + partsToolbarHTMLSource+' \
 modalsHTML;
 
 
-Ext.define('MyApp.view.DeviceEditor.DeviceEditor', {
+Ext.define('Vede.view.DeviceEditor.DeviceEditor', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorPanel',
     title: 'Device Editor',

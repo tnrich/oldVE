@@ -25,6 +25,7 @@ Ext.application({
         'SimulateDigestionWindow'
     ],
     controllers: [
+    /*
         'AppController',
         'AnnotatePanelController',
         'MainMenuController',
@@ -34,10 +35,13 @@ Ext.application({
         'RestrictionEnzymeController',
         'SequenceController',
         'VectorPanelController',
-        'SimulateDigestionController',
+        'SimulateDigestionController'
+        */
+        /*
         'Vede.controller.DeviceEditor.MainMenuController',
         'Vede.controller.DeviceEditor.MainToolbarController',
         'Vede.controller.DeviceEditor.DeviceEditorPanelController'
+        */
     ],
     errorHandler: function(err) {
         console.warn(err);

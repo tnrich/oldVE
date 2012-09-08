@@ -13,28 +13,21 @@
  * Do NOT hand edit this file.
  */
 
-Ext.define('MyApp.controller.DeviceEditor.MainMenuController', {
+Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    onNewDesignClick: function(button, e, options) {
-        $(document).trigger('newDesign');
-    },
-    onOpenDesignClick: function(button, e, options) {
-        $(document).trigger('openDesign');
+    onOpenj5Click: function(button, e, options) {
+        $(document).trigger('openj5');
     },
     onSaveDesignClick: function(button, e, options) {
         $(document).trigger('saveDesign');
     },
-
     init: function() {
         this.control({
-            "#newDesign": {
-                click: this.onNewDesignClick
+            "#j5Btn": {
+                click: this.onOpenj5Click
             },
-            "#openDesign": {
-                click: this.onOpenDesignClick
-            },
-            "#saveDesign": {
+            "#saveDesignBtn": {
                 click: this.onSaveDesignClick
             }
         });

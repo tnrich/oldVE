@@ -171,7 +171,7 @@ var inspectorHTML = '\
     </body> \
 </html>';
 
-Ext.define('MyApp.view.DeviceEditor.Inspector', {
+Ext.define('Vede.view.DeviceEditor.Inspector', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorInspectorPanel',
     title: 'Device Editor',

@@ -21,7 +21,7 @@ function loadResults(record)
     }
     });
 
-    var plasmidsViewer = Ext.define('MyApp.view.PlasmidsViewer', {
+    var plasmidsViewer = Ext.define('Vede.view.PlasmidsViewer', {
         extend: 'Ext.tree.Panel',
         alias: 'widget.PlasmidsViewer',
         id: 'ProjectPanel',
@@ -104,7 +104,7 @@ var store = Ext.create('Ext.data.TreeStore', {
     }
 });
 
-Ext.define('MyApp.view.ProjectPanelView', {
+Ext.define('Vede.view.ProjectPanelView', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.ProjectPanel',
     id: 'ProjectPanel',
