@@ -9,6 +9,16 @@
     MenuItemEvent: null,
     VisibilityEvent: null,
 
+    onSelectMenuItemClick: function() {
+        var selectWindow = Ext.create("Vede.view.SelectWindow");
+
+        selectWindow.show();
+        selectWindow.center();
+
+        this.application.fireEvent("SelectWindowOpened",
+                                   selectWindow);
+    },
+
     onReverseComplementMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
     },
@@ -169,6 +179,9 @@
 
     init: function() {
         this.control({
+            "#selectMenuItem": {
+                click: this.onSelectMenuItemClick
+            },
             "#reverseComplementMenuItem": {
                 click: this.onReverseComplementMenuItemClick
             },

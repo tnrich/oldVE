@@ -24,6 +24,7 @@ Ext.application({
         'PieController',
         'RailController',
         'RestrictionEnzymeController',
+        'SelectWindowController',
         'SequenceController',
         'VectorPanelController',
         'SimulateDigestionController'
