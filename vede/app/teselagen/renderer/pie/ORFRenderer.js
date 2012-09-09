@@ -64,6 +64,11 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 largeArc = true;
             }
 
+            if(startAngle > endAngle) {
+                sweep = !sweep;
+                largeArc = !largeArc;
+            }
+
             // Generate the arc of the orf.
             var arcSprite = Ext.create("Ext.draw.Sprite", {
                 type: "path",

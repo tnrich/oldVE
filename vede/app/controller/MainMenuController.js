@@ -46,8 +46,8 @@
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
             seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
             that.application.fireEvent("SequenceManagerChanged", seqMgr);
-            console.log(gb.toString());
-            console.log(seqMgr.getName());
+            //console.log(gb.toString());
+            //console.log(seqMgr.getName());
         }
     },
 
