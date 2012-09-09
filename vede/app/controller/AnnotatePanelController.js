@@ -251,7 +251,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.SelectionLayer.select(start, end);
     },
 
-    changeCaretPosition: function(index) {
+    changeCaretPosition: function(index, silent) {
+        this.callParent(arguments);
         this.SequenceAnnotationManager.adjustCaret(index);
 
         var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
@@ -260,11 +261,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
              metrics.getY() > el.getScroll().top)) {
             el.scrollTo("top", metrics.getY());
-        }
-
-        if(this.SequenceAnnotationManager.sequenceManager) {
-            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       index);
         }
     },
 

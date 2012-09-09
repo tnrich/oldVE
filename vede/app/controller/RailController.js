@@ -318,11 +318,8 @@ Ext.define('Vede.controller.RailController', {
      * @param {Int} index The nucleotide index to move the caret to.
      */
     changeCaretPosition: function(index) {
+        this.callParent(arguments);
         this.railManager.adjustCaret(index);
-        if(this.railManager.sequenceManager) {
-            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       index);
-        }
     },
 
     /**

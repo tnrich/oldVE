@@ -38,6 +38,7 @@ Ext.define("Vede.controller.SequenceController", {
     mouseIsDown: false,
     startSelectionIndex: 0,
     selectionDirection: 0,
+    caretIndex: 0,
 
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
@@ -87,6 +88,8 @@ Ext.define("Vede.controller.SequenceController", {
         listenersObject[this.SelectionEvent.SELECTION_CANCELED] =
             this.onSelectionCanceled;
 
+        listenersObject[this.CaretEvent.CARET_POSITION_CHANGED] = 
+            this.onCaretPositionChanged;
 
         this.application.on(listenersObject);
 
@@ -146,6 +149,14 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onRebaseSequence: function() {
+        if(this.SequenceManager) {
+            this.SequenceManager.rebaseSequence(this.caretIndex);
+            this.changeCaretPosition(0);
+        }
+
+        // Return false to cancel the event. This makes sure the method is
+        // called only once per event.
+        return false;
     },
 
     onReverseComplementSequence: function(e) {
@@ -217,6 +228,13 @@ Ext.define("Vede.controller.SequenceController", {
         }
     },
 
+    onCaretPositionChanged: function(scope, index) {
+        if(scope !== this && this.SelectionLayer && 
+           !this.SelectionLayer.selecting) {
+            this.changeCaretPosition(index, true);
+        }
+    },
+
     onVectorPanelAnnotationClicked: function(start, end) {
     },
 
@@ -241,6 +259,13 @@ Ext.define("Vede.controller.SequenceController", {
     onViewModeChanged: function(viewMode) {
     },
 
-    changeCaretPosition: function(index) {
-    },
+    changeCaretPosition: function(index, silent) {
+        this.caretIndex = index;
+
+        if(!silent && this.SequenceManager) {
+            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
+                                       this,
+                                       index);
+        }
+    }
 });
