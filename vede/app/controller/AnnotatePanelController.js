@@ -248,10 +248,11 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     select: function(start, end) {
         this.changeCaretPosition(start);
-        this.SelectionLayer.select(start, end + 1);
+        this.SelectionLayer.select(start, end);
     },
 
-    changeCaretPosition: function(index) {
+    changeCaretPosition: function(index, silent) {
+        this.callParent(arguments);
         this.SequenceAnnotationManager.adjustCaret(index);
 
         var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
@@ -261,18 +262,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
              metrics.getY() > el.getScroll().top)) {
             el.scrollTo("top", metrics.getY());
         }
-
-        if(this.SequenceAnnotationManager.sequenceManager) {
-            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       index);
-        }
     },
 
     onSequenceChanged: function(kind, obj) {
-        Ext.each(this.Managers, function(manager) {
-            manager.sequenceChanged();
-        });
-
+        this.callParent(arguments);
     },
 
     onActiveEnzymesChanged: function() {

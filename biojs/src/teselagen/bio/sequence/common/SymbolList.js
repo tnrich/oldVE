@@ -123,7 +123,9 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
                     if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) {
                         string.push(element.getValue());
                     }
-                });        
+                });
+
+                this.sequenceChanged = false;
             }
 
 			this.sequenceString = string.join("");

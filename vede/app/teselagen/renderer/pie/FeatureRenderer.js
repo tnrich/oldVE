@@ -73,6 +73,10 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                 endAngle = location.getEnd() * 2 * Math.PI / 
                              this.sequenceManager.getSequence().seqString().length;
 
+                if(startAngle > endAngle) {
+                    console.log(feature.getName());
+                }
+
                 if(feature.getStart() == location.getStart() &&
                    feature.getStrand() == this.StrandType.BACKWARD) {
 

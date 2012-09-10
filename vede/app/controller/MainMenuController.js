@@ -3,10 +3,21 @@
 
     requires: ['Teselagen.bio.parsers.GenbankManager',
                'Teselagen.event.MenuItemEvent',
-               'Teselagen.event.VisibilityEvent'],
+               'Teselagen.event.VisibilityEvent',
+               'Teselagen.utils.FormatUtils'],
 
     MenuItemEvent: null,
     VisibilityEvent: null,
+
+    onSelectMenuItemClick: function() {
+        var selectWindow = Ext.create("Vede.view.SelectWindow");
+
+        selectWindow.show();
+        selectWindow.center();
+
+        this.application.fireEvent("SelectWindowOpened",
+                                   selectWindow);
+    },
 
     onReverseComplementMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
@@ -43,11 +54,10 @@
             //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
             //var gb      = gbm.parseGenbankFile(result);
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
-            seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
-            seqMgr.fromGenbank(gb);
+            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
             that.application.fireEvent("SequenceManagerChanged", seqMgr);
-            console.log(gb.toString());
-            console.log(seqMgr.getName());
+            //console.log(gb.toString());
+            //console.log(seqMgr.getName());
         }
     },
 
@@ -169,6 +179,9 @@
 
     init: function() {
         this.control({
+            "#selectMenuItem": {
+                click: this.onSelectMenuItemClick
+            },
             "#reverseComplementMenuItem": {
                 click: this.onReverseComplementMenuItemClick
             },

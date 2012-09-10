@@ -13,8 +13,6 @@ Ext.define('Vede.controller.PieController', {
 
     startSelectionAngle: 0,
 
-    caretIndex: 0,
-
     /**
      * @member Vede.controller.PieController
      */
@@ -64,18 +62,16 @@ Ext.define('Vede.controller.PieController', {
     },
 
     onSequenceChanged: function() {
+        if(!this.SequenceManager) {
+            return;
+        }
+
         this.callParent();
         this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
         this.pieManager.setOrfs(this.ORFManager.getOrfs());
         this.pieManager.setFeatures(this.SequenceManager.getFeatures());
 
         this.pieManager.render();
-    },
-
-    onRebaseSequence: function() {
-        if(this.pieManager.sequenceManager) {
-            this.pieManager.sequenceManager.rebaseSequence(this.caretIndex);
-        }
     },
 
     onActiveEnzymesChanged: function() {
@@ -334,14 +330,11 @@ Ext.define('Vede.controller.PieController', {
     /**
      * Changes the caret position to a specified index.
      * @param {Int} index The nucleotide index to move the caret to.
+     * @param {Boolean} silent If true, don't fire a position changed event.
      */
-    changeCaretPosition: function(index) {
-        this.caretIndex = index;
+    changeCaretPosition: function(index, silent) {
+        this.callParent(arguments);
         this.pieManager.adjustCaret(index);
-        if(this.pieManager.sequenceManager) {
-            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       index);
-        }
     },
 
     /**

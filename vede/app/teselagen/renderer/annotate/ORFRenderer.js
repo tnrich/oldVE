@@ -189,10 +189,18 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
         }, this);
     },
 
-    addClickListener: function(cutSite) {
+    addClickListener: function(orf) {
+        var end;
+
+        if(orf.getStrand() === -1) {
+            end = orf.getEnd() + 1; // Compensate for end index being adjusted by 1.
+        } else {
+            end = orf.getEnd();
+        }
+
         this.orfSVG.on("mousedown", function() {
             Vede.application.fireEvent("AnnotatePanelAnnotationClicked", 
-                                       cutSite.getStart(), cutSite.getEnd());
+                                       orf.getStart(), end);
         });
     },
 
@@ -217,9 +225,9 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
             var codonString;
             Ext.each(orf.getStartCodons(), function(codon, index) {
                 if(index != orf.getStartCodons().length - 1) {
-                    codonString = codon + ", ";
+                    codonString = (codon + 1) + ", ";
                 } else {
-                    codonString = codon;
+                    codonString = codon + 1;
                 }
 
                 codonsArray.push(codonString);

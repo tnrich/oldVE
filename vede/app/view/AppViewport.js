@@ -194,7 +194,8 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Select...'
+                                                text: 'Select...',
+                                                id: 'selectMenuItem'
                                             },
                                             {
                                                 xtype: 'menuitem',
