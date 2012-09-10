@@ -17,6 +17,7 @@ Ext.define('Vede.controller.PieController', {
      * @member Vede.controller.PieController
      */
     init: function() {
+        console.log("init pie");
         this.callParent();
 
         this.control({
@@ -29,6 +30,7 @@ Ext.define('Vede.controller.PieController', {
     },
 
     onLaunch: function() {
+        console.log("launch pie");
         this.callParent(arguments);
 
         var pieContainer;

@@ -1,10 +1,10 @@
 
 // Loading Mask
-var myMask;
-Ext.onReady(function() {
-myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
-myMask.show();
-});
+//var myMask;
+//Ext.onReady(function() {
+//myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+//myMask.show();
+//});
 
 Ext.Loader.setConfig({
     enabled: true,
@@ -25,8 +25,7 @@ Ext.application({
         'SimulateDigestionWindow'
     ],
     controllers: [
-    /*
-        'AppController',
+/*        'AppController',
         'AnnotatePanelController',
         'MainMenuController',
         'MainToolbarController',
@@ -35,8 +34,7 @@ Ext.application({
         'RestrictionEnzymeController',
         'SequenceController',
         'VectorPanelController',
-        'SimulateDigestionController'
-        */
+        'SimulateDigestionController'*/
         /*
         'Vede.controller.DeviceEditor.MainMenuController',
         'Vede.controller.DeviceEditor.MainToolbarController',
