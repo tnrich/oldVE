@@ -1,10 +1,10 @@
 
 /**
  * @class Teselagen.utils.FormatUtils
- * 
- * Converts SequenceManager to various file formats using 
+ *
+ * Converts SequenceManager to various file formats using
  * {@link Teselagen.bio.parsers.ParsersManager}
- * 
+ *
  * @author Diana Wong
  */
 
@@ -16,7 +16,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
         "Teselagen.bio.sequence.alphabets.DNAAlphabet",
         "Teselagen.bio.sequence.dna.DNASequence",
         "Teselagen.bio.parsers.GenbankManager",
-        "Teselagen.bio.parsers.ParsersManager"       
+        "Teselagen.bio.parsers.ParsersManager"
     ],
 
     singleton: true,
@@ -165,9 +165,10 @@ Ext.define("Teselagen.utils.FormatUtils", {
     jbeiseqJsonToSequenceManager: function(jbeiSeqJson) {
         var result = {}; /// original wants this to be a FeaturedDNASequence NOT SeqMgr!
         var json = jbeiSeqJson;
+        var isJSON;
 
         try {
-            var isJSON = Teselagen.bio.parsers.ParsersManager.verifyJbeiseqJson(json);
+            isJSON = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
         } catch (e) {
             console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
             return null; // jbeiSeq Structure is bad.
@@ -195,7 +196,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
             var locations   = [];
             var notes       = [];
 
-            var label      = ft["seq:label"];            
+            var label      = ft["seq:label"];
             var type       = ft["seq:type"];
             var complement = ft["seq:complement"];
 
@@ -224,11 +225,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
             }
 
             // POST CALCULATIONS
-
+            var strand;
             if (complement === true) {
-                var strand = -1;
+                strand = -1;
             } else {
-                var strand = 1;
+                strand = 1;
             }
 
             var feat = Ext.create("Teselagen.bio.sequence.dna.Feature", {
@@ -252,7 +253,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into 
+     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into
      * a JbeiSeqJson.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      * @returns {JSON} jbeiSeqJson JbeiSeqJson model of data
@@ -306,16 +307,18 @@ Ext.define("Teselagen.utils.FormatUtils", {
             }
 
             // JOIN/COMPLEMENT
+            var join;
             if (newLoc.length > 1) {
-                var join = true;
+                join = true;
             } else {
-                var join = false;
+                join = false;
             }
 
+            var complement;
             if (feat.getStrand() === 1) {
-                var complement = false;
+                complement = false;
             } else {
-                var complement = true;
+                complement = true;
             }
 
             var newFeature = {
@@ -325,14 +328,14 @@ Ext.define("Teselagen.utils.FormatUtils", {
                 "seq:location" : newLoc,
                 "seq:attribute" : newAttr,
                 "seq:seqHash" : seqHash
-            }
+            };
 
             newFeatures.push({
                 "seq:feature" : newFeature
             });
         }
 
-        var result = { 
+        result = {
             "seq:seq" : {
                 "seq:name" : newName,
                 "seq:circular" : newCirc,
@@ -358,7 +361,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into 
+     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into
      * a JbeiSeqXML.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      * @returns {String} jbeiSeqXml JbeiSeqXml model of data
@@ -376,7 +379,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * Converts a Genbank {@link Teselagen.bio.parsers.Genbank} into a 
+     * Converts a Genbank {@link Teselagen.bio.parsers.Genbank} into a
      * SequenceManager {@link Teselagen.manager.SequenceManager}
      * @param {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
      * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
@@ -396,11 +399,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into a 
+     * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into a
      * Genbank {@link Teselagen.bio.parsers.Genbank}.
      * @param {Teselagen.manager.SequenceManager} seqMan A SequenceManager model of the data
      * @returns {Teselagen.bio.parsers.Genbank} genbank A Genbank model of the data
-     */ 
+     */
     sequenceManagerToGenbank: function(seqMan) {
 
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
