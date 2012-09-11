@@ -5,7 +5,7 @@ function loadResults(record)
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: 'http://api.teselagen.com/openResult',
+        url: '/api/openResult',
         extraParams: {
             fileId: record.fileId
         },
@@ -71,8 +71,8 @@ function loadResults(record)
                     },
                     {
                         title: 'Configuration',
-                        html: ''
-                    },
+                        html: '' 
+                    }, 
                     {
                         title: 'Files',
                         html: 'Hello world 2'
@@ -80,16 +80,22 @@ function loadResults(record)
                 }]
             });
             
-            win.show();
-}
+            win.show();    
+};
 
 
 var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: 'http://api.teselagen.com/getTree',
-        method: 'GET'
+        url: '/api/getTree',
+        extraParams: {
+            mode: 'getTree'
+        },
+        actionMethods: 
+        {
+            read: 'GET'
+        }
     },
     root: {
         text: 'Tree',
@@ -122,7 +128,7 @@ Ext.define('Vede.view.ProjectPanelView', {
             {
                 console.log('opening protocol');
                 Ext.Ajax.request({
-                    url: 'http://api.teselagen.com/getProtocol',
+                    url: '/api/getProtocol',
                     params: {
                         _id: record.raw._id
                     },
