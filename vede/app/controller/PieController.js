@@ -17,7 +17,6 @@ Ext.define('Vede.controller.PieController', {
      * @member Vede.controller.PieController
      */
     init: function() {
-        console.log("init pie");
         this.callParent();
 
         this.control({
@@ -29,12 +28,15 @@ Ext.define('Vede.controller.PieController', {
         });
     },
 
+    initPie: function() {
+        this.pieManager.initPie();
+    },
+    
     onLaunch: function() {
-        console.log("launch pie");
-        this.callParent(arguments);
-
         var pieContainer;
         var pie;
+
+        this.callParent(arguments);
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
             center: {x: 100, y: 100},
@@ -44,13 +46,11 @@ Ext.define('Vede.controller.PieController', {
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
+        this.Managers.push(this.pieManager);
+
         pieContainer = Ext.getCmp('PieContainer');
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
-
-        this.pieManager.initPie();
-
-        this.Managers.push(this.pieManager);
 
         this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
             center: this.pieManager.center,

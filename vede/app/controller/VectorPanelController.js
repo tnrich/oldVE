@@ -1,3 +1,4 @@
+/*global Vede*/
 /**
  * @class Vede.controller.VectorPanelController
  * Controller for Vector Panel
@@ -5,12 +6,20 @@
 Ext.define("Vede.controller.VectorPanelController", {
     extend: "Ext.app.Controller",
 
+    isRendered: false,
+    
     /**
      * @member Vede.controller.VectorPanelController
      */
     init: function() {
         this.control({
             "#VectorPanel" : {
+                activate : function() {
+                    console.log("activate");
+                    var pie=Ext.getCmp("PieContainer").items.first();
+                    console.log(pie);
+                },
+                afterrender : this.onRender,
                 resize : this.onResize
             }
         });
@@ -18,6 +27,15 @@ Ext.define("Vede.controller.VectorPanelController", {
     
     onLaunch: function() {
     },
+
+    onRender: function() {
+        if (!this.isRendered) {
+            console.log("render");
+            Vede.application.getController("PieController").initPie();
+            this.isRendered = true;
+        }
+    },
+
     onResize: function() {
         console.log("resize");
     }

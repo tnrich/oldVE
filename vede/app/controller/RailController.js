@@ -53,7 +53,7 @@ Ext.define('Vede.controller.RailController', {
 
 //        console.log(rail);
 
-        this.railManager.initRail();
+//        this.railManager.initRail();
 
         this.Managers.push(this.railManager);
         railContainer.hide();

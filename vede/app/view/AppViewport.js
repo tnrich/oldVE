@@ -13,13 +13,12 @@ Ext.define('Vede.view.AppViewport', {
     },
 
     initComponent: function() {
-        console.log("viewport");
         var me = this;
 
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'ProjectPanel',
+                    xtype: 'panel',//'ProjectPanel',
                     id: 'ProjectPanel',
                     width: 150,
                     collapsible: true,
