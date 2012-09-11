@@ -135,6 +135,43 @@ Ext.define("Vede.controller.SequenceController", {
                          this.ORFManager];
     },
 
+    onKeydown: function(event) {
+        var character = String.fromCharCode(event.getCharCode());
+
+        console.log("character: " + character + " key code: " + event.getKey());
+        console.log("alt key: " + event.altKey + ", control key: " + event.ctrlKey);
+        console.log("nav key: " + event.isNavKeyPress());
+
+        if(event.ctrlKey && event.getKey() == event.LEFT) {
+            if(this.caretIndex % 10 == 0) {
+                this.changeCaretPosition(this.caretIndex - 10);
+            } else {
+                this.changeCaretPosition(Math.round(this.caretIndex / 10) * 10);
+            }
+        } else if(event.ctrlKey && event.getKey() == event.RIGHT) {
+            if(this.caretIndex % 10 == 0) {
+                this.changeCaretPosition(this.caretIndex + 10);
+            } else {
+                this.changeCaretPosition(Math.round(this.caretIndex / 10 + 1) * 10);
+            }
+        } else if(event.ctrlKey && event.getKey() == event.HOME) {
+            this.changeCaretPosition(0);
+        } else if(event.ctrlKey && event.getKey() == event.END) {
+            this.changeCaretPosition(
+                this.SequenceManager.getSequence().toString().length - 1);
+        } else if(event.getKey() == event.LEFT) {
+            this.changeCaretPosition(this.caretIndex - 1);
+        } else if(event.getKey() == event.UP) {
+            this.changeCaretPosition(this.caretIndex - 
+                Vede.controller.AnnotatePanelController.SequenceAnnotationManager.bpPerRow);
+        } else if(event.getKey() == event.RIGHT) {
+            this.changeCaretPosition(this.caretIndex + 1);
+        } else if(event.getKey() == event.DOWN) {
+            this.changeCaretPosition(this.caretIndex + 
+                Vede.controller.AnnotatePanelController.SequenceAnnotationManager.bpPerRow);
+        }
+    },
+
     onActiveEnzymesChanged: function() {
         this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(
             this.RestrictionEnzymeGroupManager.getActiveGroup());

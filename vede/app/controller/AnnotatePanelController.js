@@ -73,6 +73,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         });
     },
 
+    onKeydown: function(event) {
+        this.callParent(arguments);
+    },
+
     onHandleClicked: function(type) {
         if(type == "left") {
             this.startHandleResizing = true;

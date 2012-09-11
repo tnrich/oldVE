@@ -68,6 +68,10 @@ Ext.define('Vede.controller.RailController', {
         });
     },
 
+    onKeydown: function(event) {
+        this.callParent(arguments);
+    },
+
     onActiveEnzymesChanged: function() {
         this.callParent();
 
