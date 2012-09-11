@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl: '/resources/javascript/',
+    baseUrl: 'resources/javascript/',
     paths: {
         jquery: 'lib/jquery.min',
         jqueryui: 'lib/jquery-ui.min',

@@ -5,7 +5,7 @@ function loadResults(record)
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: '/node/openResult',
+        url: 'http://api.teselagen.com/openResult',
         extraParams: {
             fileId: record.fileId
         },
@@ -88,7 +88,7 @@ var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: '/node/getTree',
+        url: 'http://api.teselagen.com/getTree',
         extraParams: {
             mode: 'getTree'
         },
@@ -128,7 +128,7 @@ Ext.define('Vede.view.ProjectPanelView', {
             {
                 console.log('opening protocol');
                 Ext.Ajax.request({
-                    url: '/node/getProtocol',
+                    url: 'http://api.teselagen.com/getProtocol',
                     params: {
                         _id: record.raw._id
                     },
