@@ -71,8 +71,8 @@ function loadResults(record)
                     },
                     {
                         title: 'Configuration',
-                        html: '' 
-                    }, 
+                        html: ''
+                    },
                     {
                         title: 'Files',
                         html: 'Hello world 2'
@@ -80,26 +80,15 @@ function loadResults(record)
                 }]
             });
             
-            win.show();    
-};
+            win.show();
+}
 
 
 var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: 'http://api.teselagen.com/getTree',
-        extraParams: {
-            mode: 'getTree'
-        },
-        actionMethods: 
-        {
-            create: 'GET',
-            read: 'GET',
-            update: 'GET',
-            destroy: 'GET'
-
-        }
+        url: 'http://api.teselagen.com/getTree'
     },
     root: {
         text: 'Tree',
