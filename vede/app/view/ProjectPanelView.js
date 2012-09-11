@@ -88,7 +88,8 @@ var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: 'http://api.teselagen.com/getTree'
+        url: 'http://api.teselagen.com/getTree',
+        method: 'GET'
     },
     root: {
         text: 'Tree',
