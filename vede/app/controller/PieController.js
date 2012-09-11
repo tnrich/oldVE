@@ -341,8 +341,11 @@ Ext.define('Vede.controller.PieController', {
      * @param {Boolean} silent If true, don't fire a position changed event.
      */
     changeCaretPosition: function(index, silent) {
-        this.callParent(arguments);
-        this.pieManager.adjustCaret(index);
+        if(index >= 0 &&
+           index <= this.SequenceManager.getSequence().toString().length) {
+            this.callParent(arguments);
+            this.pieManager.adjustCaret(index);
+        }
     },
 
     /**
