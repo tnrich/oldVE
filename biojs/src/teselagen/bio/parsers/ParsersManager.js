@@ -253,6 +253,10 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         //===============
         // HEADER INFO
 
+        var schema = json["seq"]["_xsi:schemaLocation"];
+        var xmlns  = json["seq"]["_xmlns:seq"];
+        var xsi    = json["seq"]["_xmlns:xsi"];
+
         var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
 
         var name;
@@ -407,9 +411,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 "seq:sequence" : seq,
                 "seq:features" : features,
                 "seq:seqHash"  : seqHash,
-                "_xmlns:seq": "http://jbei.org/sequence",
-                "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"
+                "_xmlns:seq": xmlns, //"http://jbei.org/sequence",
+                "_xmlns:xsi": xsi, //"http://www.w3.org/2001/XMLSchema-instance",
+                "_xsi:schemaLocation": schema //"http://jbei.org/sequence seq.xsd"
             }
         }
 

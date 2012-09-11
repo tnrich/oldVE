@@ -474,13 +474,13 @@ Ext.onReady(function() {
 
         describe("First", function() {
             it("BLAH",function(){
-                var url = "/vede/test/data/dexml/DeviceEditor_example.xml";
+                var url = "/vede/test/data/dexml/DeviceEditor_forTest.xml";
                 var xml = jasmine.getFixtures().read(url);
 
                 var json = Teselagen.utils.DeXmlUtils.deXmlToJson(xml);
 
                 console.log(xml);
-                console.log(JSON.stringify(json, null, "  "));
+                console.log(JSON.stringify(json, null, "    "));
                 expect(false).toBe(false);
             });
 
