@@ -94,7 +94,11 @@ var store = Ext.create('Ext.data.TreeStore', {
         },
         actionMethods: 
         {
-            read: 'GET'
+            create: 'GET',
+            read: 'GET',
+            update: 'GET',
+            destroy: 'GET'
+
         }
     },
     root: {
