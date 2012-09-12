@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:Application 
+		layout="horizontal" 
+        width="100%" 
+        height="100%" 
+        
+        styleName="plain" 
+        backgroundGradientColors="[#ffffff, #ffffff]"
+        
+        xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:ui="org.jbei.registry.view.ui.*"
+        xmlns:objecthandles="com.roguedevelopment.objecthandles.*"
+        
+        creationComplete="onCreationComplete(event)"
+
+        >
+	
+		<mx:Script>
+    	<![CDATA[
+            import mx.controls.Alert;
+            
+            import org.jbei.registry.ApplicationFacade;
+            import org.jbei.registry.Constants;
+            import org.jbei.registry.Notifications;
+            import org.jbei.registry.mediators.ApplicationMediator;
+            import org.jbei.registry.utils.*;
+			
+			private var _facade:ApplicationFacade = ApplicationFacade.getInstance();
+            private var urlLoader:URLLoader;
+			
+			// Public Methods
+            public function disableApplication(message:String = null):void
+            {
+            	if(message) {
+                	lock();
+                                        
+                Alert.show(message);
+                }
+           	}
+           
+            // Private Methods
+            public function lock():void
+            {
+            	applicationBox.enabled = false;
+            }
+            
+            public function unlock():void
+            {
+                applicationBox.enabled = true;
+            }
+            
+            private function onLogMessage(event:LoggerEvent):void
+            {
+            	loggerTextArea.text += event.message + "\n";
+            }
+            
+            // Event Handlers
+            private function onCreationComplete(event:Event):void
+            {
+                processParameters();
+                
+                if(_facade.sessionId != null && _facade.sessionId.length > 0) {
+                    urlLoader = new URLLoader(new URLRequest(Constants.SERVER_PATH + _facade.rootDir + Constants.VERIFY_URL_RELATIVE_PATH + "?sessionId=" + _facade.sessionId));
+                    urlLoader.addEventListener(Event.COMPLETE, onUrlLoaderComplete);
+                }
+                
+                Logger.getInstance().addEventListener(LoggerEvent.LOG, onLogMessage);                             
+                 //Logger.getInstance().info("Build #: " + SystemUtils.applicationVersion(Constants.MAJOR_VERSION));
+                                
+                 _facade.initializeApplication(this);        
+                 _facade.registerMediator(new ApplicationMediator(this));
+                                               
+                 //Send the initialization command....
+                 //This will result in the facade setting the initialize controller function
+                 _facade.sendNotification(Notifications.INITIALIZATION, this);
+                 //_facade.sendNotification(Notifications.INIT_ICONS);
+                 
+				 _facade.initializeComponents(mainCanvas);
+            }
+
+            private function onUrlLoaderComplete(event:Event):void
+            {
+                try {
+                    if(urlLoader.data && (urlLoader.data as String).length > 0 && (urlLoader.data as String) == "true") {
+                        unlock();
+                    }
+                } catch (e:TypeError) {
+                    
+                }
+            }
+            
+            private function processParameters():void
+            {
+                lock();
+                
+                if(Application.application.parameters.sessionId && (Application.application.parameters.sessionId as String).length > 0) {
+                    _facade.sessionId = Application.application.parameters.sessionId;
+                } else {
+                    Alert.show("You must login to receive valid session id");
+                }
+                
+                if (Application.application.parameters.rootDir && (Application.application.parameters.rootDir as String).length > 0
+                        && Application.application.parameters.rootDir as String != "/") {
+                    _facade.rootDir = Application.application.parameters.rootDir;
+                } else {
+                    _facade.rootDir = "";
+                }
+            }
+           ]]>
+        </mx:Script>
+
+	<objecthandles:ObjectHandlesCanvas autoLayout="true" width="100%" height="100%" id="ohApplicationCanvas"  >
+		<mx:VDividedBox width="100%" height="100%" borderThickness="0" dividerThickness="0.5" dividerAffordance="3" verticalGap="3" paddingBottom="0" paddingTop="0" paddingLeft="0" paddingRight="0">
+                <mx:VBox id="applicationBox" width="100%" height="100%" verticalGap="0">
+                        <ui:TopMenuBar id="menuBar"/>
+                        
+                        <ui:MainControlBar id="mainControlBar"/>
+                        
+                        <ui:MainCanvas id="mainCanvas" paddingBottom="5" height="100%" width="100%" paddingTop="5"/>
+                        
+                        <ui:MappingBar id="mappingBar" width="100%" height="5%" paddingBottom="5" paddingTop="5"/>
+                </mx:VBox>
+                <mx:VBox width="100%" height="0%">
+                        <ui:StatusBar id="statusBar" width="100%" height="60" paddingBottom="0" paddingTop="5"/>
+                    
+                        <mx:TextArea id="loggerTextArea" width="100%" height="100%"/>
+                </mx:VBox>
+        </mx:VDividedBox>
+	</objecthandles:ObjectHandlesCanvas>
+	
+</mx:Application>

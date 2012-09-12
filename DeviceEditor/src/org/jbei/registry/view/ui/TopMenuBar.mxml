@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:MenuBar 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	labelField="@label" 
+    width="100%"
+
+	dataProvider="{menuBarCollection}"
+	creationComplete="initCollections();"
+	
+	itemClick="menuHandler(event);"
+    menuShow="menuShowHandler(event);"
+	borderColor="0xAAB3B3">
+	 
+    <mx:Script>
+        <![CDATA[
+            import flash.desktop.Clipboard;
+            
+            import mx.collections.*;
+            import mx.events.MenuEvent;
+            
+            import org.jbei.registry.ApplicationFacade;
+            import org.jbei.registry.Constants;
+            import org.jbei.registry.mediators.MainCanvasMediator;
+            import org.jbei.registry.view.ui.gridViewClasses.CellRenderer;
+
+			public static const MAP_GENBANK:String = "MapGenbank";
+			//public static const MAP_FASTA:String = "MapFasta";
+            public static const MAP_CLIPBOARD:String = "MapClipboard";
+			public static const HIDE_MAP:String = "HideMap";
+			public static const SHOW_MAP:String = "ShowMap";
+			public static const LOAD_XML:String = "LoadXML";
+			public static const LOAD_J5:String = "LoadJ5";
+            public static const LOAD_SLIC_EXAMPLE:String = "LoadSlicExample";
+            public static const LOAD_COMBINATORIAL_SLIC_EXAMPLE:String = "LoadCombinatorialSlicExample";
+            public static const LOAD_GOLDEN_GATE_EXAMPLE:String = "LoadGoldenGateExample";
+            public static const LOAD_COMBINATORIAL_GOLDEN_GATE_EXAMPLE:String = "LoadCombinatorialGoldenGateExample";
+			public static const SAVE:String = "Save";
+            public static const CLEAR_DESIGN:String = "ClearDesign";
+            public static const IMPORT_EUGENE_RULES:String = "ImportEugeneRules";
+			public static const TOP_MENU_PASTE:String = "TopMenuPaste";
+
+            [Bindable]
+            public var menuBarCollection:XMLListCollection;
+    
+            private var menubarXML:XMLList =
+                <>
+                        <menuitem label="File">
+                            <menuitem label="Save Design"/>
+                            <menuitem label="Load Design">
+                                <menuitem label="Design XML"/>
+                                <menuitem label="j5 Files"/>
+                                <menuitem label="Example Design">
+                                    <menuitem label="SLIC/Gibson/CPEC"/>
+                                    <menuitem label="Combinatorial SLIC/Gibson/CPEC"/>
+                                    <menuitem label="Golden Gate"/>
+                                    <menuitem label="Combinatorial Golden Gate"/>
+                                </menuitem>
+                            </menuitem>
+                            <menuitem label="Clear Design"/>
+                            <menuitem type="separator"/>
+                            <menuitem label="Import Eugene Rules"/>
+                            <menuitem type="separator"/>
+                            <menuitem label="Map from Genbank" enabled="false"/>
+                            <!-- <menuitem label="Map FASTA" enabled="false"/> -->
+                            <menuitem label="Map from Clipboard" enabled="false"/>
+                        </menuitem>
+                        <menuitem label="Edit">
+                            <menuitem label="Copy" enabled="false"/>
+                            <menuitem label="Paste" enabled="false"/>
+                        </menuitem>
+                        <!--<menuitem label="Controls">
+                            <menuitem label="Hide Mapping Bar"/>
+                            <menuitem label="Show Mapping Bar"/>
+                        </menuitem>-->
+                </>;
+            
+            // Event handler to initialize the MenuBar control.
+            private function initCollections():void {
+                menuBarCollection = new XMLListCollection(menubarXML);
+            }
+
+            // Event handler for the MenuBar control's itemClick event.
+            private function menuHandler(event:MenuEvent):void  {
+                if(event.item.@label == "Map from Genbank")
+                    dispatchEvent(new Event(MAP_GENBANK)); 
+                
+                //if(event.item.@label == "Map FASTA")
+                //    dispatchEvent(new Event(MAP_FASTA)); 
+                
+                if(event.item.@label == "Map from Clipboard")
+                    dispatchEvent(new Event(MAP_CLIPBOARD));
+                
+                if(event.item.@label == "Hide Mapping Bar")
+                    dispatchEvent(new Event(HIDE_MAP));
+                
+                if(event.item.@label == "Show Mapping Bar")
+                    dispatchEvent(new Event(SHOW_MAP));
+                
+                if(event.item.@label == "Save Design")
+                    dispatchEvent(new Event(SAVE));
+                
+                if (event.item.@label == "Design XML")
+                    dispatchEvent(new Event(LOAD_XML));
+                
+                if (event.item.@label == "j5 Files")
+                    dispatchEvent(new Event(LOAD_J5));
+                
+                if (event.item.@label == "SLIC/Gibson/CPEC")
+                    dispatchEvent(new Event(LOAD_SLIC_EXAMPLE));
+                
+                if (event.item.@label == "Combinatorial SLIC/Gibson/CPEC")
+                    dispatchEvent(new Event(LOAD_COMBINATORIAL_SLIC_EXAMPLE));
+                
+                if (event.item.@label == "Golden Gate")
+                    dispatchEvent(new Event(LOAD_GOLDEN_GATE_EXAMPLE));
+                
+                if (event.item.@label == "Combinatorial Golden Gate")
+                    dispatchEvent(new Event(LOAD_COMBINATORIAL_GOLDEN_GATE_EXAMPLE));
+                
+                if (event.item.@label == "Clear Design")
+                    dispatchEvent(new Event(CLEAR_DESIGN));
+                
+                if (event.item.@label == "Import Eugene Rules")
+                    dispatchEvent(new Event(IMPORT_EUGENE_RULES));
+                
+                if (event.item.@label == "Copy")
+                    dispatchEvent(new Event(Event.COPY));
+                
+                if (event.item.@label == "Paste")
+                    dispatchEvent(new Event(TOP_MENU_PASTE));
+            }
+            
+            private function menuShowHandler(event:MenuEvent):void
+            {
+                var fileMenuXML:XML = menuBarCollection.getItemAt(0) as XML;
+                var fileMenuItemsXML:XMLList = fileMenuXML.menuitem;
+                
+                var editMenuXML:XML = menuBarCollection.getItemAt(1) as XML;
+                var editMenuItemsXML:XMLList = editMenuXML.menuitem;
+                
+                var selectedPartRenderer:IPartRenderer = ApplicationFacade.getInstance().selectedPartRenderer;
+                
+                if (selectedPartRenderer != null) {
+                    for (var i:int = 0; i<fileMenuItemsXML.length(); i++) {
+                        if (fileMenuItemsXML[i].@label == "Map from Genbank") {
+                            fileMenuItemsXML[i].@enabled = true;
+                        }
+                        if (fileMenuItemsXML[i].@label == "Map from Clipboard") {
+                            fileMenuItemsXML[i].@enabled = true;
+                        }
+                    }
+                } else {
+                    for (i = 0; i<fileMenuItemsXML.length(); i++) {
+                        if (fileMenuItemsXML[i].@label == "Map from Genbank") {
+                            fileMenuItemsXML[i].@enabled = false;
+                        }
+                        if (fileMenuItemsXML[i].@label == "Map from Clipboard") {
+                            fileMenuItemsXML[i].@enabled = false;
+                        }
+                    }
+                }
+                
+                if (selectedPartRenderer != null && !selectedPartRenderer.part.isEmpty() //not empty and...
+                    && !(ApplicationFacade.getInstance().activeView == ApplicationFacade.GRID_VIEW 
+                        && (selectedPartRenderer as CellRenderer).column == -1) /*not in part holding area*/ ) {
+                    for (i = 0; i<editMenuItemsXML.length(); i++) {
+                        if (editMenuItemsXML[i].@label == "Copy") {
+                            editMenuItemsXML[i].@enabled = true;
+                        }
+                    }
+                } else {
+                    for (i = 0; i<editMenuItemsXML.length(); i++) {
+                        if (editMenuItemsXML[i].@label == "Copy") {
+                            editMenuItemsXML[i].@enabled = false;
+                        }
+                    }
+                }
+                
+                
+                if (Clipboard.generalClipboard.hasFormat(Constants.PART_CLIPBOARD_KEY)
+                    && selectedPartRenderer != null) { //can only paste into grid location in grid view
+                    for (i = 0; i<editMenuItemsXML.length(); i++) {
+                        if (editMenuItemsXML[i].@label == "Paste") {
+                            editMenuItemsXML[i].@enabled = true;
+                        }
+                    }
+                } else {
+                    for (i = 0; i<editMenuItemsXML.length(); i++) {
+                        if (editMenuItemsXML[i].@label == "Paste") {
+                            editMenuItemsXML[i].@enabled = false;
+                        }
+                    }
+                }
+            }
+         ]]>
+    </mx:Script>
+</mx:MenuBar>
