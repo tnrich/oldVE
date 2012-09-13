@@ -3,7 +3,7 @@
  * @author Diana Womg
  */
 
-//Ext.require("Ext.Ajax");
+Ext.require("Ext.Ajax");
 
 //Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
 //Ext.require("Teselagen.bio.sequence.alphabets.ProteinAlphabet");
@@ -21,6 +21,8 @@ Ext.require("Teselagen.bio.parsers.ParsersManager");
 
 Ext.require("Teselagen.utils.SequenceUtils");
 Ext.require("Teselagen.utils.FormatUtils");
+Ext.require("Teselagen.utils.DeXmlUtils");
+
 Ext.onReady(function() {
 
     describe("Testing Teselagen.utils.SequenceUtils.js", function() {
@@ -208,7 +210,7 @@ Ext.onReady(function() {
                 sm.getFeatures()[1].addNote(note3);
                 
 
-                var smLine =  'LOCUS       test                       7 bp ds-DNA     circular     '+ Teselagen.bio.parsers.ParsersManager.todayDate() + '\n' + 
+                var smLine =  'LOCUS       test                       7 bp ds-DNA     circular     '+ Teselagen.bio.parsers.ParsersManager.todayDate() + '\n' +
                         'FEATURES             Location/Qualifiers\n' +
                         '     CDS             complement(1..3)\n' +
                         '                     /label="feat1"\n' +
@@ -231,7 +233,7 @@ Ext.onReady(function() {
                 expect(sm.getFeatures()[0].getEnd()).toBe(3);
                 expect(sm.getFeatures()[1].getName()).toBe("feat3");
                 expect(sm.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
-                expect(sm.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);                
+                expect(sm.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
                 expect(sm.getFeatures()[1].getLocations()[1].getStart()).toBe(0);
                 expect(sm.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
             });
@@ -468,11 +470,57 @@ Ext.onReady(function() {
     });
 
 
-    xdescribe("Testing XXXXXXX", function() {
+    describe("Testing Teselagen.utils.DeXmlUtils.js", function() {
 
-        xdescribe("", function() {
-            it("",function(){
-                expect(false).toBe(false);
+        describe("First", function() {
+            it("checkDeXmlToJson() Correctly Identifies a good file",function(){
+                var url = "/vede/test/data/dexml/DeviceEditor_forTest.xml";
+                var xml = jasmine.getFixtures().read(url);
+                var rawJson = Teselagen.bio.util.XmlToJson.xml_str2json(xml);
+
+                var okJson = {};
+                var valid = true;
+                try {
+                    okJson   = Teselagen.utils.DeXmlUtils.checkDeXmlToJson(rawJson);
+                } catch (e) {
+                    console.warn("Incorrectly caught: " + e.message);
+                    valid = false;
+                }
+
+                expect(JSON.stringify(rawJson)).toBe(JSON.stringify(okJson));
+                expect(valid).toBe(true);
+            });
+
+            it("deXmlToJson()",function(){
+                var url = "/vede/test/data/dexml/DeviceEditor_forTest.xml";
+                var xml = jasmine.getFixtures().read(url);
+
+                var json = Teselagen.utils.DeXmlUtils.deXmlToJson(xml);
+
+                //console.log(xml);
+                //console.log(JSON.stringify(json, null, "    "));
+
+                expect(json["de:design"]["xsi:schemaLocation"]).toBe("http://jbei.org/device_editor design.xsd");
+                expect(json["de:design"]["de:sequenceFiles"]["de:sequenceFile"]).toNotBe(undefined);
+            });
+
+            it("deXmlToJson()",function(){
+
+                //var url = "/vede/test/data/dexml/Golden_Gate_example.xml";
+                //var url = "/vede/test/data/dexml/SLIC_Gibson_CPEC_example.xml";
+                var url = "/vede/test/data/dexml/Combinatorial_Golden_Gate_example.xml";
+                //var url = "/vede/test/data/dexml/Combinatorial_SLIC_Gibson_CPEC_example.xml";
+                var xml = jasmine.getFixtures().read(url);
+                //console.log(xml);
+
+                var json1 = Teselagen.bio.util.XmlToJson.xml_str2json(xml);
+                console.log(json1);
+                var cleanJson1 = Teselagen.utils.DeXmlUtils.checkDeXmlToJson(json1);
+                console.log(cleanJson1);
+                expect(json1).toBe(cleanJson1);
+
+                var json = Teselagen.utils.DeXmlUtils.deXmlToJson(xml);
+                console.log(JSON.stringify(json, null, "    "));
             });
 
         });
