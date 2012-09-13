@@ -6,7 +6,9 @@
 Ext.define("Vede.controller.SequenceController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.event.CaretEvent",
+    requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
+               "Teselagen.bio.sequence.DNATools",
+               "Teselagen.event.CaretEvent",
                "Teselagen.event.MapperEvent",
                "Teselagen.event.MenuItemEvent",
                "Teselagen.event.SequenceManagerEvent",
@@ -35,10 +37,15 @@ Ext.define("Vede.controller.SequenceController", {
     WireframeSelectionLayer: null,
     SelectionLayer: null,
 
+    DNAAlphabet: null,
+    DNATools: null,
+
     mouseIsDown: false,
     startSelectionIndex: 0,
     selectionDirection: 0,
     caretIndex: 0,
+
+    safeEditing: false,
 
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
@@ -47,6 +54,9 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     init: function() {
+        this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+        this.DNATools = Teselagen.bio.sequence.DNATools;
+
         this.CaretEvent = Teselagen.event.CaretEvent;
         this.MapperEvent = Teselagen.event.MapperEvent;
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
@@ -135,6 +145,110 @@ Ext.define("Vede.controller.SequenceController", {
                          this.ORFManager];
     },
 
+    onKeydown: function(event) {
+        var character = String.fromCharCode(event.getCharCode()).toLowerCase();
+
+        if(event.ctrlKey && event.getKey() == event.LEFT) {
+            // Ctrl + Left: Move caret to start of previous block of 10 bases.
+            if(this.caretIndex % 10 == 0) {
+                this.changeCaretPosition(this.caretIndex - 10);
+            } else {
+                this.changeCaretPosition(Math.round(this.caretIndex / 10) * 10);
+            }
+        } else if(event.ctrlKey && event.getKey() == event.RIGHT) {
+            // Ctrl + Right: Move caret to end of current block of 10 bases.
+            if(this.caretIndex % 10 == 0) {
+                this.changeCaretPosition(this.caretIndex + 10);
+            } else {
+                this.changeCaretPosition(Math.round(this.caretIndex / 10 + 1) * 10);
+            }
+        } else if(event.ctrlKey && event.getKey() == event.HOME) {
+            // Ctrl + Home: Move caret to start of sequence.
+            this.changeCaretPosition(0);
+        } else if(event.ctrlKey && event.getKey() == event.END) {
+            // Ctrl + End: Move caret to end of sequence.
+            this.changeCaretPosition(
+                this.SequenceManager.getSequence().toString().length - 1);
+        } else if(event.getKey() == event.LEFT) {
+            // Left: Move caret down one base.
+            this.changeCaretPosition(this.caretIndex - 1);
+        } else if(event.getKey() == event.RIGHT) {
+            // Right: Move caret right one base.
+            this.changeCaretPosition(this.caretIndex + 1);
+        } else if(!event.ctrlKey && !event.altKey) {
+            // This statement handles all key presses not accompanied by
+            // Control or Alt.
+
+            if(this.DNAAlphabet.symbolByValue(character)) {
+                // If key is a valid nucleotide, insert it.
+                if(this.safeEditing) {
+                    this.doInsertSequence(this.DNATools.createDNA(character), 
+                                          this.caretIndex);
+                } else {
+                    this.SequenceManager.insertSequence(
+                        this.DNATools.createDNA(character), this.caretIndex);
+
+                    this.changeCaretPosition(this.caretIndex + 1);
+                }
+            } else if(event.getKey() == event.DELETE) {
+                if(this.SelectionLayer.selected) {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.SelectionLayer.start,
+                                              this.SelectionLayer.end);
+                    } else {
+                        this.SequenceManager.removeSequence(
+                                            this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+
+                        this.changeCaretPosition(this.SelectionLayer.start);
+
+                        this.SelectionLayer.deselect();
+                        this.application.fireEvent(
+                            this.SelectionEvent.SELECTION_CANCELED);
+
+                    }
+
+                } else {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.caretIndex, 
+                                              this.caretIndex + 1);
+                    } else {
+                        this.SequenceManager.removeSequence(this.caretIndex,
+                                                            this.caretIndex + 1);
+                    }
+                }
+
+            } else if(event.getKey() == event.BACKSPACE && this.caretIndex > 0) {
+                if(this.SelectionLayer.selected) {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.SelectionLayer.start,
+                                              this.SelectionLayer.end);
+                    } else {
+                        this.SequenceManager.removeSequence(
+                                              this.SelectionLayer.start,
+                                              this.SelectionLayer.end);
+                        
+                        this.changeCaretPosition(this.SelectionLayer.start);
+
+                        this.SelectionLayer.deselect();
+                        this.application.fireEvent(
+                            this.SelectionEvent.SELECTION_CANCELED);
+                    }
+                } else {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.caretIndex - 1,
+                                              this.caretIndex);
+                    } else {
+                        this.SequenceManager.removeSequence(this.caretIndex - 1,
+                                                            this.caretIndex);
+
+                        this.changeCaretPosition(this.caretIndex - 1);
+                    }
+                }
+            }
+        }
+    },
+
     onActiveEnzymesChanged: function() {
         this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(
             this.RestrictionEnzymeGroupManager.getActiveGroup());
@@ -176,7 +290,6 @@ Ext.define("Vede.controller.SequenceController", {
             return;
         }
 
-        console.log("parent of " + this.$className);
         Ext.each(this.Managers, function(manager) {
             if(manager.sequenceChanged) {
                 manager.sequenceChanged();

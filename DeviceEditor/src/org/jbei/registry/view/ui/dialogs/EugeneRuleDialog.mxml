@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    layout="absolute" 
+    width="100%" 
+    height="100%"
+    title="{_titleText}"
+    showCloseButton="true"
+    creationComplete="onCreationComplete()"
+    close="exit()">
+    
+    <mx:VBox paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+        <mx:HBox>
+            <mx:Label id="nameLabel" text="Name:"/>
+            <mx:TextInput id="nameTextInput"/>
+        </mx:HBox>
+        <mx:HBox>
+            <mx:Label id="operand1Label" text="Operand 1:"/>
+            <mx:Label id="operand1PartName" text="{partName}"/>
+        </mx:HBox>
+        <mx:HBox>
+            <mx:Label id="operatorLabel" text="Operator:"/>
+            <mx:ComboBox id="operatorComboBox" dataProvider="{ruleKeywords}" change="operatorSelected(event)"/>
+        </mx:HBox>
+        <mx:HBox>
+            <mx:Label id="operand2Label" text="Operand 2:"/>
+            <mx:Box id="operand2StepperPlaceholder" width="0">
+                <mx:NumericStepper id="operand2NumericStepper" minimum="0"/>
+            </mx:Box>
+            <mx:Box id="operand2ComboBoxPlaceholder">
+                <mx:ComboBox id="operand2ComboBox" labelFunction="operand2LabelFunction"/>
+            </mx:Box>
+        </mx:HBox>
+        <mx:HRule width="100%"/>
+        <mx:HBox>
+            <mx:Button id="doneButton" label="Done" click="saveRule()"/>
+            <mx:Button id="cancelButton" label="Cancel" click="exit()"/>
+        </mx:HBox>
+    </mx:VBox>
+    
+    <mx:Script>
+        <![CDATA[
+            import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.managers.PopUpManager;
+            
+            import org.jbei.registry.ApplicationFacade;
+            import org.jbei.registry.models.EugeneRule;
+            import org.jbei.registry.models.Part;
+            import org.jbei.registry.models.PartVO;
+            import org.jbei.registry.proxies.PartProxy;
+            
+            public static const SAVE_EUGENE_RULE:String = "SaveEugeneRule";
+            public static const CLOSE_EUGENE_RULE_DIALOG:String = "CloseEugeneRuleDialog";
+            
+            private const ruleKeywords:ArrayCollection = new ArrayCollection(
+                [EugeneRule.AFTER, "NOT " + EugeneRule.AFTER,
+                    EugeneRule.BEFORE, "NOT " + EugeneRule.BEFORE,
+                    EugeneRule.WITH, "NOT " + EugeneRule.WITH,
+                    EugeneRule.THEN, "NOT " + EugeneRule.THEN,
+                    EugeneRule.NEXTTO, "NOT " + EugeneRule.NEXTTO,
+                    EugeneRule.MORETHAN, "NOT " + EugeneRule.MORETHAN]);
+            
+            [Bindable]
+            private var _titleText:String;
+            
+            [Bindable]
+            private var partName:String;
+            
+            private var _partVO:PartVO;
+            //private var _eugeneRule:EugeneRule;
+            
+            public function set titleText(text:String):void
+            {
+                _titleText = text;
+            }
+            
+            public function get partVO():PartVO
+            {
+                return _partVO;
+            }
+            
+            public function set partVO(partVO:PartVO):void
+            {
+                _partVO = partVO;
+                partName = partVO.name;
+                if (partName == "") {
+                    partName = "No name";
+                }
+            }
+            
+            /*public function get eugeneRule():EugeneRule
+            {
+                return _eugeneRule;
+            }
+            
+            public function set eugeneRule(eugeneRule:EugeneRule):void
+            {
+                _eugeneRule = eugeneRule;
+            }*/
+            
+            private function onCreationComplete():void
+            {
+                var partVOsList:Vector.<PartVO> = (ApplicationFacade.getInstance().retrieveProxy(PartProxy.NAME) as PartProxy).partVOs;
+                var operand2dp:ArrayCollection = new ArrayCollection();
+                for (var i:int = 0; i<partVOsList.length; i++) {
+                    if (partVOsList[i] != _partVO && !partVOsList[i].isEmpty()) {
+                        operand2dp.addItem(partVOsList[i]);
+                    }
+                }
+                operand2ComboBox.dataProvider = operand2dp;
+            }
+            
+            private function exit():void
+            {
+                dispatchEvent(new Event(CLOSE_EUGENE_RULE_DIALOG));
+            }
+            
+            private function operatorSelected(event:Event):void
+            {
+                //update Operand 2 display
+                var selectedKeyword:String = operatorComboBox.selectedItem as String;
+                if (selectedKeyword == EugeneRule.MORETHAN || selectedKeyword == "NOT " + EugeneRule.MORETHAN) {
+                    operand2StepperPlaceholder.width = NaN;  //sets to default width
+                    operand2ComboBoxPlaceholder.width = 0;
+                } else {
+                    operand2StepperPlaceholder.width = 0;
+                    operand2ComboBoxPlaceholder.width = NaN;  //sets to default width
+                }
+            }
+            
+            private function saveRule():void
+            {
+                dispatchEvent(new Event(SAVE_EUGENE_RULE));
+            }
+            
+            private function operand2LabelFunction(partVO:PartVO):String
+            {
+                var name:String = partVO.name;
+                if (name == "") {
+                    name = "No name";
+                }
+                return name;
+            }
+        ]]>
+    </mx:Script>
+    
+</mx:TitleWindow>

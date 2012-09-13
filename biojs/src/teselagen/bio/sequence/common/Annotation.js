@@ -262,7 +262,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 */
 		this.deleteAt = function(pCutStart, pCutLength, pMaxLength, pCircular){
 			if (pCutLength < 1) {
-				exit;
+                return;
 			}
 
 			var expectedNewLength = -1;
@@ -387,7 +387,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			var combinedLocations = [];
 			for (i = 0; i < tempLocations.length; i++) {
 				if (combinedLocations.length == 0) {
-					if (tempLocations[i].getLength() > 0) {
+					if (tempLocations[i].getLength() >= 0) {
 						combinedLocations.push(tempLocations[i]);	
 					}
 					continue;

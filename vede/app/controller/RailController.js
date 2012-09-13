@@ -51,6 +51,10 @@ Ext.define('Vede.controller.RailController', {
         rail = this.railManager.getRail();
         railContainer.add(rail);
 
+        // Set the tabindex attribute in order to receive keyboard events on the div.
+        railContainer.el.dom.setAttribute("tabindex", "0");
+        railContainer.el.on("keydown", this.onKeydown, this);
+
         console.log(rail);
 
         this.railManager.initRail();
@@ -66,6 +70,10 @@ Ext.define('Vede.controller.RailController', {
             reference: this.railManager.reference,
             railWidth: this.railManager.railWidth
         });
+    },
+
+    onKeydown: function(event) {
+        this.callParent(arguments);
     },
 
     onActiveEnzymesChanged: function() {
@@ -318,8 +326,11 @@ Ext.define('Vede.controller.RailController', {
      * @param {Int} index The nucleotide index to move the caret to.
      */
     changeCaretPosition: function(index) {
-        this.callParent(arguments);
-        this.railManager.adjustCaret(index);
+        if(index >= 0 && 
+           index <= this.SequenceManager.getSequence().toString().length) {
+            this.callParent(arguments);
+            this.railManager.adjustCaret(index);
+        }
     },
 
     /**

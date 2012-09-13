@@ -23,7 +23,7 @@ Ext.define('Vede.controller.PieController', {
             "#Pie" : {
                 mousedown: this.onMousedown,
                 mousemove: this.onMousemove,
-                mouseup: this.onMouseup
+                mouseup: this.onMouseup,
             }
         });
     },
@@ -46,6 +46,10 @@ Ext.define('Vede.controller.PieController', {
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
 
+        // Set the tabindex attribute in order to receive keyboard events on a div.
+        pieContainer.el.dom.setAttribute("tabindex", "0");
+        pieContainer.el.on("keydown", this.onKeydown, this);
+
         this.pieManager.initPie();
 
         this.Managers.push(this.pieManager);
@@ -59,6 +63,10 @@ Ext.define('Vede.controller.PieController', {
             center: this.pieManager.center,
             radius: this.pieManager.railRadius
         });
+    },
+
+    onKeydown: function(event) {
+        this.callParent(arguments);
     },
 
     onSequenceChanged: function() {
@@ -333,8 +341,11 @@ Ext.define('Vede.controller.PieController', {
      * @param {Boolean} silent If true, don't fire a position changed event.
      */
     changeCaretPosition: function(index, silent) {
-        this.callParent(arguments);
-        this.pieManager.adjustCaret(index);
+        if(index >= 0 &&
+           index <= this.SequenceManager.getSequence().toString().length) {
+            this.callParent(arguments);
+            this.pieManager.adjustCaret(index);
+        }
     },
 
     /**

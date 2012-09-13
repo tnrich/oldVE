@@ -760,10 +760,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
              * |--SSSSSSSSSSSSSSSSSS------------------------------------------------------------------------------|
              *  FFFFFFFFFFFFFFFFFFFFFFFFF|                                         |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
             else if((pEndIndex) <= featEnd) {
-                console.log(feature.getLocations()[1].getStart() +  " : " + feature.getLocations()[1].getEnd());
+                console.log(feature.getLocations()[0].getStart() +  " : " + feature.getLocations()[0].getEnd());
                 feature.deleteAt(pStartIndex, pEndIndex - pStartIndex, lengthBefore, circular);
                 if (DEBUG_MODE) console.log("case Fc,Sn 3 ");  ///DEBUGGING HERE
-                console.log(feature.getLocations()[1].getStart() +  " : " + feature.getLocations()[1].getEnd());
+                console.log(feature.getLocations()[0].getStart() +  " : " + feature.getLocations()[0].getEnd());
             }
             /* Selection in feature start
              * |----------------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS---|
