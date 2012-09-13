@@ -9,6 +9,14 @@
     MenuItemEvent: null,
     VisibilityEvent: null,
 
+    onUndoMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.UNDO);
+    },
+
+    onRedoMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REDO);
+    },
+
     onSelectMenuItemClick: function() {
         var selectWindow = Ext.create("Vede.view.SelectWindow");
 
@@ -179,6 +187,12 @@
 
     init: function() {
         this.control({
+            "#undoMenuItem": {
+                click: this.onUndoMenuItemClick
+            },
+            "#redoMenuItem": {
+                click: this.onRedoMenuItemClick
+            },
             "#selectMenuItem": {
                 click: this.onSelectMenuItemClick
             },

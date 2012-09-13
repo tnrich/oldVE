@@ -157,10 +157,12 @@ Ext.define('Vede.view.AppViewport', {
                                         items: [
                                             {
                                                 xtype: 'menuitem',
+                                                id: 'undoMenuItem',
                                                 text: 'Undo'
                                             },
                                             {
                                                 xtype: 'menuitem',
+                                                id: 'redoMenuItem',
                                                 text: 'Redo'
                                             },
                                             {

@@ -169,6 +169,12 @@ Ext.define("Vede.controller.SequenceController", {
             // Ctrl + End: Move caret to end of sequence.
             this.changeCaretPosition(
                 this.SequenceManager.getSequence().toString().length - 1);
+        } else if(event.ctrlKey && event.getKey() == event.Z) {
+            // Ctrl + Z: Undo last action.
+            this.application.fireEvent(this.MenuItemEvent.UNDO);
+        } else if(event.ctrlKey && event.getKey() == event.U) {
+            // Ctrl + U: Redo last action.
+            this.application.fireEvent(this.MenuItemEvent.REDO); 
         } else if(event.getKey() == event.LEFT) {
             // Left: Move caret down one base.
             this.changeCaretPosition(this.caretIndex - 1);
