@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="100%" 
+	height="100%"
+	title="J5 File Import"
+	showCloseButton="true"
+	close="exit()">
+	
+    <mx:VBox paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+        <mx:HBox width="100%">
+            <mx:Button id="seqImportButton" label="Import j5 Sequence List file" click="onSeqImportButtonClicked()" enabled="true"/>
+            <mx:Spacer width="100%"/>
+            <mx:Label id="seqImportLabel" text="Not ready" color="0xFF0000"/>
+        </mx:HBox>
+        <mx:HBox width="100%">
+            <mx:Button id="zippedImportButton" label="Import zipped sequence files" click="onZippedImportButtonClicked()" enabled="false" />
+            <mx:Spacer width="100%"/>
+            <mx:Label id="zippedImportLabel" text="Not ready" color="0xFF0000"/>
+        </mx:HBox>
+        <mx:HBox width="100%">
+            <mx:Button id="partImportButton" label="Import j5 Part List file" click="onPartImportButtonClicked()" enabled="false"/>
+            <mx:Spacer width="100%"/>
+            <mx:Label id="partImportLabel" text="Not ready" color="0xFF0000"/>	
+        </mx:HBox>
+        <mx:HBox width="100%">
+            <mx:Button id="targetImportButton" label="Import j5 Target Part Order file" click="onTargetImportButtonClicked()" enabled="false"/>
+            <mx:Spacer width="100%"/>
+            <mx:Label id="targetImportLabel" text="Not ready" color="0xFF0000"/>			
+        </mx:HBox>
+        <!-- <mx:HBox width="100%">
+            <mx:Button id="eugeneImportButton" label="Import Eugene Rules file" click="onEugeneImportButtonClicked()" enabled="false"/>
+            <mx:Spacer width="100%"/>
+            <mx:Label id="eugeneImportLabel" text="Not ready" color="0xFF0000"/>
+        </mx:HBox> -->
+        <mx:HRule width="100%"/>
+        <mx:HBox width="100%">
+            <mx:Button id="clearButton" label="Clear Imports" click="onClearButtonClicked()"/>
+            <mx:Spacer width="100%"/>
+            <mx:Button id="doneButton" label="Done" click="onDoneButtonClicked()" enabled="false"/>
+        </mx:HBox>
+    </mx:VBox>
+	
+    <mx:Script>
+		<![CDATA[
+            import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.managers.PopUpManager;
+            
+            import org.jbei.registry.ApplicationFacade;
+            import org.jbei.registry.api.Strain;
+            import org.jbei.registry.commands.FunctionMediator;
+            import org.jbei.registry.view.ui.Colors;
+            import org.jbei.registry.view.ui.MainCanvas;	
+			
+            public static const IMPORT_SEQ_FILE:String = "ImportSeqFile";
+            public static const IMPORT_ZIPPED_FILE:String = "ImportZippedFile";
+            public static const IMPORT_PART_FILE:String = "ImportPartFile";
+            public static const IMPORT_TARGET_FILE:String = "ImportTargetFile";
+            public static const IMPORT_EUGENE_FILE:String = "ImportEugeneFile";
+            public static const CLEAR_IMPORTS:String = "ClearImports";
+            public static const COMPLETE_IMPORT:String = "CompleteImport";
+            public static const CANCEL:String = "Cancel";
+
+            public function setSeqImportLabel(b:Boolean):void
+			{
+				if(b)
+				{
+					seqImportLabel.text = "Ready";
+					seqImportLabel.setStyle("color", Colors.GREEN);
+				}
+				else
+				{
+					seqImportLabel.text = "Not ready";
+					seqImportLabel.setStyle("color", Colors.RED); 
+				}
+			}
+			
+			public function setZippedImportLabel(b:Boolean):void
+			{
+				if(b)
+				{
+					zippedImportLabel.text = "Ready";
+					zippedImportLabel.setStyle("color", Colors.GREEN);
+				}
+				else
+				{
+					zippedImportLabel.text = "Not ready";
+					zippedImportLabel.setStyle("color", Colors.RED); 
+				}
+			}
+			
+			public function setPartImportLabel(b:Boolean):void
+			{
+				if(b)
+				{
+					partImportLabel.text = "Ready";
+					partImportLabel.setStyle("color", Colors.GREEN);
+				}
+				else
+				{
+					partImportLabel.text = "Not ready";
+					partImportLabel.setStyle("color", Colors.RED); 
+				}
+			}
+			
+			public function setTargetImportLabel(b:Boolean):void
+			{
+				if(b)
+				{
+					targetImportLabel.text = "Ready";
+					targetImportLabel.setStyle("color", Colors.GREEN);
+				}
+				else
+				{
+					targetImportLabel.text = "Not ready";
+					targetImportLabel.setStyle("color", Colors.RED); 
+				}
+			}
+			
+            /*public function setEugeneImportLabel(b:Boolean):void
+            {
+                if(b)
+                {
+                    eugeneImportLabel.text = "Ready";
+                    eugeneImportLabel.setStyle("color", Colors.GREEN);
+                }
+                else
+                {
+                    eugeneImportLabel.text = "Not ready";
+                    eugeneImportLabel.setStyle("color", Colors.RED); 
+                }
+            }*/
+            
+			public function seqButtonEnable(b:Boolean):void
+			{
+				seqImportButton.enabled = b;
+			}
+			
+			public function zippedButtonEnable(b:Boolean):void
+			{
+				zippedImportButton.enabled = b;
+			}
+			
+			public function partButtonEnable(b:Boolean):void
+			{
+				partImportButton.enabled = b;
+			}
+			
+			public function targetButtonEnable(b:Boolean):void
+			{
+				targetImportButton.enabled = b;
+			}
+			
+            /*public function eugeneButtonEnable(b:Boolean):void
+            {
+                eugeneImportButton.enabled = b;
+            }*/
+            
+            public function doneButtonEnable(b:Boolean):void
+            {
+                doneButton.enabled = b;
+            }
+            
+            public function open(parent:DisplayObject):void
+			{
+				PopUpManager.addPopUp(this, parent, true);
+				PopUpManager.centerPopUp(this);
+			}
+			
+			private function onSeqImportButtonClicked():void
+			{
+                dispatchEvent(new Event(IMPORT_SEQ_FILE));
+			}
+			
+			private function onZippedImportButtonClicked():void
+			{
+                dispatchEvent(new Event(IMPORT_ZIPPED_FILE));
+			}
+			
+			private function onPartImportButtonClicked():void
+			{
+                dispatchEvent(new Event(IMPORT_PART_FILE));
+			}
+			
+			private function onTargetImportButtonClicked():void
+			{
+                dispatchEvent(new Event(IMPORT_TARGET_FILE));
+			}
+			
+            /*private function onEugeneImportButtonClicked():void
+            {
+                dispatchEvent(new Event(IMPORT_EUGENE_FILE));
+            }*/
+            
+			private function onClearButtonClicked():void
+			{
+                dispatchEvent(new Event(CLEAR_IMPORTS));
+			}
+            
+            private function exit():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+            
+            private function onDoneButtonClicked():void
+            {
+                dispatchEvent(new Event(COMPLETE_IMPORT));
+            }
+            
+	    ]]>
+    </mx:Script>	
+	
+</mx:TitleWindow>

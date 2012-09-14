@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+@author Joanna Chen
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+           width="100%"
+           height="100%"
+           >
+    
+    <mx:VDividedBox width="100%" height="100%">
+        <mx:Canvas id="collectionGridCanvas" width="100%" height="80%" 
+                   backgroundColor="#EEF0F0" borderColor="#DDDDDD" borderStyle="solid" borderThickness="2" 
+                   horizontalScrollPolicy="off" verticalScrollPolicy="off">
+            <mx:Box id="headerBox" width="{collectionGridCanvas.width - 4}" 
+                    horizontalScrollPosition="{cellsBox.horizontalScrollPosition}" 
+                    horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                <mx:Canvas id="gridHeaderCanvas" width="{gridCellsCanvas.width + 20}" height="{HeaderRenderer.HEIGHT}"/>
+            </mx:Box>
+            <mx:Box id="cellsBox" y="{headerBox.height}" width="{collectionGridCanvas.width - 4}" 
+                    height="{collectionGridCanvas.height - gridHeaderCanvas.height - 4}">
+                <mx:Canvas id="gridCellsCanvas"/>
+            </mx:Box>
+        </mx:Canvas>
+        <mx:VBox width="100%" height="20%" verticalGap="0" borderStyle="solid">
+            <mx:Label text="Part Holding Area" fontWeight="bold" toolTip="For parts not in the collection"/>
+            <mx:Tile id="partHoldingArea" width="100%" height="100%" horizontalGap="0" verticalGap="0"/>
+        </mx:VBox>
+    </mx:VDividedBox>
+    
+</mx:Canvas>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Doug Densmore -->
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="{Math.min(850, parentApplication.width)}" 
+	height="{Math.min(600, parentApplication.height)}"
+    title="j5 controls"
+	showCloseButton="true"
+	close="exit()">
+	
+	<mx:TabNavigator width="100%" height="100%" id="j5Tabs" left="10" right="10" top="10" bottom="10" paddingTop="0" creationPolicy="all">	
+        <mx:Canvas id="runJ5Canvas" label="Run j5 on Server">
+            <mx:VBox width="100%" height="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                <mx:VBox id="runJ5SettingsVBox" width="100%">
+                    <mx:Grid>
+                        <mx:GridRow>
+                            <mx:GridItem>
+                            <mx:LinkButton id="editJ5ParametersButton" label="Edit j5 Parameters" enabled="false" toolTip="Fetching parameters from server, please wait" 
+                                           rollOverColor="0xFFFFFF" selectionColor="0xFFFFFF" textRollOverColor="0x0000FF" textSelectedColor="0x0000FF" 
+                                           color="0x0000FF" fontWeight="normal" textDecoration="underline" paddingLeft="0" />
+                            </mx:GridItem>
+                        </mx:GridRow>
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="Master Plasmids List: " fontWeight="bold" />
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:HBox horizontalGap="0">
+                                    <mx:RadioButtonGroup id="plasmidsListFileOptions"/>
+                                    <mx:RadioButton id="useServerPlasmidsListRadioButton" groupName="plasmidsListFileOptions" label="Use latest server version    or   " enabled="false"/>
+                                    <mx:RadioButton id="generatePlasmidsListRadioButton" groupName="plasmidsListFileOptions" label="Generate empty file    or   "/>
+                                    <mx:Button id="uploadMasterPlasmidsListButton" label="Choose File"/>
+                                    <mx:TextInput id="uploadMasterPlasmidsListTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                                </mx:HBox>
+                            </mx:GridItem>
+                        </mx:GridRow>
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="Master Oligos List: " fontWeight="bold" />
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:HBox horizontalGap="0">
+                                    <mx:RadioButtonGroup id="oligosListFileOptions"/>
+                                    <mx:RadioButton id="useServerOligosListRadioButton" groupName="oligosListFileOptions" label="Use latest server version    or   " enabled="false"/>
+                                    <mx:RadioButton id="generateOligosListRadioButton" groupName="oligosListFileOptions" label="Generate empty file    or   "/>
+                                    <mx:Button id="uploadMasterOligosListButton" label="Choose File"/>
+                                    <mx:TextInput id="uploadMasterOligosListTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                                </mx:HBox>
+                            </mx:GridItem>
+                        </mx:GridRow>
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="Master Direct Syntheses List: " fontWeight="bold" />
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:HBox horizontalGap="0">
+                                    <mx:RadioButtonGroup id="directSynthesesListFileOptions"/>
+                                    <mx:RadioButton id="useServerDirectSynthesesListRadioButton" groupName="directSynthesesListFileOptions" label="Use latest server version    or   " enabled="false"/>
+                                    <mx:RadioButton id="generateDirectSynthesesListRadioButton" groupName="directSynthesesListFileOptions" label="Generate empty file    or   "/>
+                                    <mx:Button id="uploadMasterDirectSynthesesListButton" label="Choose File"/>
+                                    <mx:TextInput id="uploadMasterDirectSynthesesListTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                                </mx:HBox>
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+                    <mx:HBox>
+                        <mx:Label text="Assembly Method: " fontWeight="bold" />
+                        <mx:ComboBox id="assemblyMethodComboBox"/>
+                    </mx:HBox>
+                    <mx:Spacer height="5"/>
+                    <mx:HBox horizontalGap="0">
+                        <mx:Button id="runJ5Button" label="Run j5" enabled="false"/>
+                        <mx:Button id="runJ5StopWaitingButton" label="Stop Waiting" visible="false" width="0"/>
+                        <mx:Label id="cannotRunJ5ReasonLabel" paddingLeft="8"/>
+                    </mx:HBox>
+                    <mx:HBox width="100%" horizontalGap="0">
+                        <mx:HBox id="runJ5ProgressHBox" width="0">
+                            <mx:ProgressBar id="runJ5ProgressBar" indeterminate="true" label="status" fontWeight="normal" visible="false"/>
+                        </mx:HBox>
+                        <mx:TextArea id="runJ5ErrorText" color="0xFF0000" width="100%" height="100%" editable="false" visible="false"/>
+                    </mx:HBox>
+                </mx:VBox>
+                <mx:HBox width="100%">
+                    <mx:Spacer width="100%"/>
+                    <mx:Button id="downloadRunJ5ResultsButton" label="Download Results" visible="false"/>
+                    <mx:Button id="loadUserAssemblyFileButton" label="Load Existing Assembly File"/>
+                </mx:HBox>
+                <mx:TabNavigator id="resultsTabNavigator" width="100%" height="100%">
+                    <mx:Canvas id="plasmidsCanvas" label="Plasmids" width="100%" height="100%" minHeight="85">
+                        <mx:DataGrid id="plasmidsDataGrid" width="100%" height="100%">
+                            <mx:columns>
+                                <mx:DataGridColumn headerText="Name" sortCompareFunction="sortPlasmidNames">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:HBox>
+                                                <mx:LinkButton label="{data.name}" paddingBottom="0" paddingTop="0"
+                                                               skin="{null}" textRollOverColor="0x0000FF" textSelectedColor="0x0000FF" 
+                                                               color="0x0000FF" fontWeight="normal" textDecoration="underline">
+                                                    <mx:click>
+                                                        <![CDATA[
+                                                        import org.jbei.registry.view.ui.PlasmidLinkButtonEvent;
+                                                        dispatchEvent(new PlasmidLinkButtonEvent(PlasmidLinkButtonEvent.BUTTON_CLICKED, data.name, true, true));
+                                                        ]]>
+                                                    </mx:click>
+                                                </mx:LinkButton>
+                                            </mx:HBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
+                                <mx:DataGridColumn/>
+                                <mx:DataGridColumn/>
+                            </mx:columns>
+                        </mx:DataGrid>
+                    </mx:Canvas>
+                    <!-- TODO
+                    <mx:Canvas id="oligosCanvas" label="Oligos" width="100%" height="100%">
+                        <mx:Label text="placeholder.........................................................................................................................................................................................................................................................................................."/>
+                    </mx:Canvas> -->
+                </mx:TabNavigator>
+            </mx:VBox>
+        </mx:Canvas>
+        <mx:Canvas id="condenseAssemblyFilesCanvas" label="Condense Assembly Files">
+            <mx:VBox height="100%" width="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                <mx:Grid>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="Assembly Files to Condense List: " fontWeight="bold" />
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:HBox horizontalGap="0">
+                                <mx:Button id="uploadAssemblyFilesListButton" label="Choose File"/>
+                                <mx:TextInput id="uploadAssemblyFilesListTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                            </mx:HBox>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="Zipped Assembly Files: " fontWeight="bold" />
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:HBox horizontalGap="0">
+                                <mx:Button id="uploadZippedAssemblyFilesButton" label="Choose File"/>
+                                <mx:TextInput id="uploadZippedAssemblyFilesTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                            </mx:HBox>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                </mx:Grid>
+                <mx:Spacer height="5" />
+                <mx:HBox horizontalGap="0">
+                    <mx:Button id="condenseAssembliesButton" label="Condense Assemblies" enabled="false"/>
+                    <mx:Button id="condenseAssembliesStopWaitingButton" label="Stop Waiting" visible="false" width="0"/>
+                    <mx:Label text="(This sends to server)" paddingLeft="8"/>
+                    <mx:Label id="cannotCondenseAssembliesReasonLabel" text="Cannot condense assemblies: No files specified" paddingLeft="8"/>
+                </mx:HBox>
+                <mx:HBox width="100%">
+                    <mx:HBox id="condenseAssembliesProgressHBox" width="0">
+                        <mx:ProgressBar id="condenseAssembliesProgressBar" indeterminate="true" label="status" fontWeight="normal" visible="false"/>
+                    </mx:HBox>
+                    <mx:TextArea id="condenseAssembliesErrorText" color="0xFF0000" width="100%" height="{condenseAssembliesProgressHBox.height}" editable="false" borderStyle="none" visible="false"/>
+                </mx:HBox>
+                <mx:Button id="downloadCondenseAssembliesResultsButton" label="Download Results" visible="false"/>
+            </mx:VBox>
+        </mx:Canvas>
+        <mx:Canvas id="downstreamAutomationCanvas" label="Downstream Automation">
+            <mx:VBox height="100%" width="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                <mx:Label text="DISTRIBUTE PCR REACTIONS" fontWeight="bold" />
+                <mx:HBox horizontalGap="0">
+                    <mx:Label text="Downstream Automation Parameters File: " fontWeight="bold" />
+                    <mx:RadioButtonGroup id="downstreamAutomationParametersFileOptions" />
+                    <mx:RadioButton id="useServerDownstreamAutomationParametersFileRadioButton" groupName="downstreamAutomationParametersFileOptions" label="Use latest server version    or   " enabled="false"/>
+                    <mx:RadioButton id="generateDownstreamAutomationParametersFileRadioButton" groupName="downstreamAutomationParametersFileOptions" label="Generate file"/>
+                    <mx:LinkButton id="editDownstreamAutomationParametersButton" label="from parameters" rollOverColor="0xFFFFFF" selectionColor="0xFFFFFF" 
+                                   textRollOverColor="0x0000FF" textSelectedColor="0x0000FF" color="0x0000FF" fontWeight="normal" textDecoration="underline" paddingLeft="0"/>
+                </mx:HBox>
+                <mx:Grid>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="Source Plate List: " fontWeight="bold" />
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:HBox horizontalGap="0">
+                                <mx:Button id="uploadSourcePlateListButton" label="Choose File"/>
+                                <mx:TextInput id="uploadSourcePlateListTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                            </mx:HBox>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="Zipped Plate Files: " fontWeight="bold" />
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:HBox horizontalGap="0">
+                                <mx:Button id="uploadZippedPlateFilesButton" label="Choose File"/>
+                                <mx:TextInput id="uploadZippedPlateFilesTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                            </mx:HBox>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="j5 Assembly File: " fontWeight="bold" />
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:HBox horizontalGap="0">
+                                <mx:Button id="uploadCondensedJ5AssemblyFileButton" label="Choose File"/>
+                                <mx:TextInput id="uploadCondensedJ5AssemblyFileTextInput" editable="false" width="170" backgroundColor="0xDDDDDD"/>
+                            </mx:HBox>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                </mx:Grid>
+                <mx:Spacer height="5" />
+                <mx:HBox horizontalGap="0">
+                    <mx:Button id="distributePcrReactionsButton" label="Distribute PCR Reactions" enabled="false"/>
+                    <mx:Button id="distributePcrStopWaitingButton" label="Stop Waiting" visible="false" width="0"/>
+                    <mx:Label text="(This sends to server)" paddingLeft="8"/>
+                    <mx:Label id="cannotDistributePcrReactionsReasonLabel" paddingLeft="8"/>
+                </mx:HBox>
+                <mx:HBox width="100%">
+                    <mx:HBox id="distributePcrProgressHBox" width="0">
+                        <mx:ProgressBar id="distributePcrProgressBar" indeterminate="true" label="status" fontWeight="normal" visible="false"/>
+                    </mx:HBox>
+                    <mx:TextArea id="distributePcrErrorText" color="0xFF0000" width="100%" height="{distributePcrProgressHBox.height}" editable="false" borderStyle="none" visible="false"/>
+                </mx:HBox>
+                <mx:Button id="downloadDistributePcrReactionsResultsButton" label="Download Results" visible="false"/>
+            </mx:VBox>
+        </mx:Canvas>
+        <mx:Canvas id="j5FilesCanvas" label="j5 Files">	
+            <mx:VBox height="100%" width="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                <mx:HBox>
+                    <mx:VBox>
+                        <mx:Button id="j5SeqFileGenerateButton" label="j5 Sequence File Generate" mouseOver="mouseOverButton(event)" enabled="false"/>
+                        <mx:Button id="j5PartsFileGenerateButton" label="j5 Parts File Generate" mouseOver="mouseOverButton(event)" enabled="false"/>
+                        <mx:Button id="j5TargetFileGenerateButton" label="j5 Target Parts File Generate" mouseOver="mouseOverButton(event)" enabled="false"/>
+                        <mx:Button id="j5EugeneFileGenerateButton" label="j5 Eugene Rules File Generate" mouseOver="mouseOverButton(event)"/>
+                    </mx:VBox>
+                    <mx:VBox>
+                        <mx:Button id="j5GenbankFileGenerateButton" label="Genbank File Create" mouseOver="mouseOverButton(event)" enabled="false"/>
+                        <mx:Button id="j5FastaFileGenerateButton" label="FASTA File Create" mouseOver="mouseOverButton(event)" enabled="false"/>
+                        <mx:Button id="j5JbeiSeqFileGenerateButton" label="jbei-seq File Create" mouseOver="mouseOverButton(event)" enabled="false"/>
+                    </mx:VBox>
+                    <mx:VBox>
+                        <mx:Button id="completeFileGenerateButton" label="Download" mouseOver="mouseOverButton(event)" enabled="false"/>
+                    </mx:VBox>
+                    <mx:VBox>
+                        <mx:Button id="j5ParametersGenerateButton" label="j5 Parameters Generate" mouseOver="mouseOverButton(event)"/>
+                        <mx:Button id="downstreamAutomationParametersGenerateButton" label="Downstream Automation Parameters Generate" mouseOver="mouseOverButton(event)"/>
+                    </mx:VBox>
+                </mx:HBox>
+                <mx:VBox width="100%" height="100%">
+                    <mx:Label text="Info" fontWeight = "bold"/>
+                    <mx:TextArea id="infoBox" width = "100%" height="100%" editable="false"/>
+                </mx:VBox>
+            </mx:VBox>
+        </mx:Canvas>
+	</mx:TabNavigator>
+	
+	<mx:Script>
+		<![CDATA[
+            import mx.managers.PopUpManager;
+            
+			private function mouseOverButton(event:Event):void
+			{
+				var button:Button = event.currentTarget as Button;
+				infoBox.text = button.label + "\n";  
+						
+				if(button.id == "j5PartsFileGenerateButton")
+					infoBox.text = infoBox.text + "The parts list file is a CSV file that contains the definitions of all of the DNA parts that may be utilized during the assembly process.\n\nCOLLECTION MUST BE J5 READY";
+				if(button.id == "j5SeqFileGenerateButton")
+					infoBox.text = infoBox.text + "The sequences list file is a CSV file that contains a list of all of the source/template sequences from which DNA parts will be defined.\n\nCOLLECTION MUST BE J5 READY";
+				if(button.id == "j5TargetFileGenerateButton")
+					infoBox.text = infoBox.text + "The target part order list file is a CSV file that determines how the DNA parts will be arranged in the assembly. The order of combinatorial bins or parts in the file matches the order of bins or parts in the resulting assembly (the last bin or part in the list will be cyclicly followed by the first bin or part). The same part may be utilized more than once in any given assembly.\n\nCOLLECTION MUST BE J5 READY";
+                if(button.id == "j5EugeneFileGenerateButton")
+                    infoBox.text = infoBox.text + "The Eugene (a biological design specification computer language) rules list file is a text file that contains a list of design rules. j5 checks that these rules are satisfied prior to designing an assembly. Currently, j5 only enforces three types of Eugene rules (NOTMORETHAN, NOTWITH, and WITH) and ignores all other rules and declarations; all lines that do not begin with \"Rule\" are ignored, as well as everything following the commenting escape characters \"//\".";
+				if(button.id == "j5GenbankFileGenerateButton")
+					infoBox.text = infoBox.text + "Genbank format sequence files generally contain a single sequence each (although at times, you may see multiple ORF translated sequences embedded as feature annotations within a long DNA sequence). " + 
+							"Feature annotations within Genbank format files are extremely useful for being able to view a DNA sequence at a higher/more functional level, and allow for rapidly checking if a designed DNA assembly process will result in the desired sequence.\n\n" + 
+							"Currently, j5 does not properly handle \"join\"-ed features (as may be used to annotate eukaryotic coding sequences where introns intersperse exons), and the \"label=\" field for a given feature annotation is used to determine if two features (with the same name/label) should be spliced at a DNA assembly junction.\n\n" + 
+							"For more information about the Genbank format, see:\n" + 
+							"http://www.bioperl.org/wiki/GenBank_sequence_format\n" + 
+							"http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html";
+				if(button.id == "j5FastaFileGenerateButton")
+					infoBox.text = infoBox.text + "A FASTA file is a text file that may contain one or more sequences. " + 
+							"FASTA files do not contain sequence annotation. For the purposes of j5, and for maintaining well documented sequences in general, the Genbank file format is much preferred.\n" + 
+							"Note that there is no standard file extension for FASTA files; j5 uses (.fas).\n\n" + 
+							"For information about the FASTA format, see:\n" + 
+							"http://www.ncbi.nlm.nih.gov/blast/fasta.shtml\n" + 
+							"http://www.bioperl.org/wiki/FASTA_sequence_format";
+                if(button.id == "j5JbeiSeqFileGenerateButton")
+                    infoBox.text = infoBox.text + "jbei-seq format sequence files generally contain a single sequence each (although at times, you may see multiple ORF translated sequences embedded as feature annotations within a long DNA sequence). " + 
+                            "Feature annotations within jbei-seq format files are extremely useful for being able to view a DNA sequence at a higher/more functional level, and allow for rapidly checking if a designed DNA assembly process will result in the desired sequence.\n\n" + 
+                            "Currently, the \"seq:label\" field for a given feature annotation is used to determine if two features (with the same name/label) should be spliced at a DNA assembly junction.\n\n" + 
+                            "The jbei-seq format is based upon XML. Unlike Genbank format files, there is no requisite white space character counts for formatting purposes, and it is much easier for a computer program to parse.\n\n" + 
+                            "For more information about the jbei-seq format, see the j5 manual";
+				
+				if(button.id == "completeFileGenerateButton")
+					infoBox.text = infoBox.text + "Create a zip file of all the required j5 files for the selected collection (recommended operation).\n\nCOLLECTION MUST BE J5 READY";
+                
+                if(button.id == "j5ParametersGenerateButton")
+                    infoBox.text = infoBox.text + "The j5 parameters file is a CSV file that contains a list of all of the parameters that controls how j5 designs DNA assemblies.\n\n" + 
+                            "The j5 parameters may be edited by clicking on the Edit Parameters button on the Run j5 on Server tab. Note that ASSEMBLY_PRODUCT_TYPE is the exception and is determined from the collection.\n\n";
+                if(button.id == "downstreamAutomationParametersGenerateButton")
+                    infoBox.text = infoBox.text + "The downstream parameters file is a CSV file that contains a list of all of the parameters that controls how j5 designs downstream automation processes (such as distributing PCR reactions across a thermocycler block annealing temperature gradient).\n\n" +
+                            "The downstream automation parameters may be edited by clicking on the Edit Parameters button on the Downstream Automation tab.";
+			}
+            
+            private function sortPlasmidNames(obj1:Object, obj2:Object):int
+            {
+                if (obj1.name < obj2.name) {
+                    return -1;
+                } else if (obj1.name == obj2.name) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+            
+			public function exit():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+            
+			]]>
+	</mx:Script>	
+	
+</mx:TitleWindow>

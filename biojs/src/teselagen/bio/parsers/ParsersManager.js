@@ -822,7 +822,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             } else {
                 var newRdfAbt = "";
             }
-            console.log(tmp["nucleotides"]);
+            //console.log(tmp["nucleotides"]);
 
             if (tmp["nucleotides"] !== undefined) {
                 var nucleotides = tmp["nucelotides"]; //seq:sequence

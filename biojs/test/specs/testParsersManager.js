@@ -341,7 +341,7 @@ Ext.onReady(function() {
 
                 var json = ParsersManager.sbolXmlToJson(xml);
 
-                console.log(JSON.stringify(json, null, "  "));
+                //console.log(JSON.stringify(json, null, "  "));
 
                 
             });
