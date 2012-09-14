@@ -312,16 +312,10 @@ Ext.define("Vede.controller.SequenceController", {
             case Teselagen.event.SequenceManagerEvent.KIND_MANUAL_UPDATE:
                 break;
             case Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO:
-                break;
+                break; // Handled in ActionStackController.
             case Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED:
                 break;
         };
-
-        var objType = Ext.getClassName(obj);
-
-        if (objType.match(/SequenceManagerMemento/)) {
-            // Put in stack of SeqMgr Mementos
-        } // else ?
     },
 
     onSequenceChanging: function(kind, obj) {
