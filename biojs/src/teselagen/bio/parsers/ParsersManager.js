@@ -4,18 +4,20 @@
  *
  * Converts input files into Genbank data models.
  * Converts back to other formats as needed.
- * 
+ *
  * @author Diana Wong
  */
 
 Ext.define("Teselagen.bio.parsers.ParsersManager", {
-    requires:  ["Teselagen.bio.util.StringUtil",
-                "Teselagen.bio.parsers.GenbankManager",
-                "Teselagen.bio.sequence.DNATools",
-                "Ext.Ajax", 
-                "Ext.data.Store",
-                "Ext.data.XmlStore",
-                "Ext.data.reader.Xml"
+    requires:  [
+        "Teselagen.bio.util.XmlToJson",
+        "Teselagen.bio.util.StringUtil",
+        "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.sequence.DNATools",
+        "Ext.Ajax",
+        "Ext.data.Store",
+        "Ext.data.XmlStore",
+        "Ext.data.reader.Xml"
     ],
 
     singleton: true,
@@ -130,8 +132,8 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
       * @param {JSON} json JbeiSeq JSON object
       * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
       */
-     verifyJbeiseqJson: function (json) {
-        var result = false; 
+     validateJbeiseqJson: function (json) {
+        var result = false;
 
         if (json["seq:seq"] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
@@ -171,14 +173,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         // FEATURES
 
         var features = [];
+        var jFeats;
 
         if (json["seq:seq"]["seq:features"] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No Features detected"
             });
             return result;
-        } else { 
-            var jFeats  = json["seq:seq"]["seq:features"];
+        } else {
+            jFeats  = json["seq:seq"]["seq:features"];
         }
 
         for (var i=0; i < jFeats.length; i++) {
@@ -224,7 +227,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     /**
      * Converts an JbeiSeqXML in string format to JSON format.
-     * This checks for valid entries in the XML file. 
+     * This checks for valid entries in the XML file.
      * If a required entry is not recognized, an error is thrown.
      * If a non-required entry is not recognized, a default value is used.
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
@@ -233,7 +236,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @returns {JSON} json Cleaned JSON object of the JbeiSeqXml
      */
      jbeiseqXmlToJson: function (xmlStr) {
-        var result = {}; 
+        var result = {};
 
         var json = XmlToJson.xml_str2json(xmlStr);
         //console.log(JSON.stringify(json, null, "  "));
@@ -242,7 +245,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"
             });
-            return result;
+            //eturn result;
         } else if (json["seq"] === undefined) {
             return result;
         }
@@ -252,17 +255,19 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
         var date    = Teselagen.bio.parsers.ParsersManager.todayDate();
 
+        var name;
         if (json["seq"]["name"] !== undefined) {
-            var name    = json["seq"]["name"]["__text"];
+            name    = json["seq"]["name"]["__text"];
         } else {
-            var name = "no_name";
+            name = "no_name";
             console.warn("jbeiseqXmlToJson: No sequence name detected");
         }
 
+        var circ;
         if (json["seq"]["circular"] !== undefined) {
-            var circ  = (json["seq"]["circular"]["__text"].toLowerCase() === "true");
+            circ  = (json["seq"]["circular"]["__text"].toLowerCase() === "true");
         } else {
-            var circ  = false;
+            circ  = false;
             console.warn("jbeiseqXmlToJson: No linear status detected; default to linear");
         }
         var linear = !circ;
@@ -422,6 +427,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         if (json === null) {
             return null;
         }
+
+        var isJSON;
+        try {
+            isJSON = Teselagen.bio.parsers.ParsersManager.validateJbeiseqJson(json);
+        } catch (e) {
+            console.warn("jbeiseqJsonToSequenceManager() failed: " + e.message);
+            return null; // jbeiSeq Structure is bad.
+        }
+
         var xml = [];
 
         xml.push("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
