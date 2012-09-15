@@ -20,6 +20,12 @@ Ext.onReady(function() {
 
     describe("Testing Teselagen.bio.parsers.SbolParser:", function() {
 
+        beforeEach(function() {
+            var url = null;
+            var xml = null;
+            var json = null;
+        });
+
 
         describe("sbolXmlToJson()", function() {
             
