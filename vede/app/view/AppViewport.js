@@ -3,10 +3,10 @@ Ext.define('Vede.view.AppViewport', {
     extend: 'Ext.container.Viewport',
     requires: [
 //    'Vede.view.ProjectPanelView',
-//    'Vede.view.DeviceEditor.DeviceEditor',
-//    'Vede.view.DeviceEditor.Inspector',
-//    'Vede.view.DeviceEditor.MainMenuBar',
-//    'Vede.view.DeviceEditor.MainToolBar'
+    'Vede.view.DeviceEditor.DeviceEditor',
+    'Vede.view.DeviceEditor.Inspector',
+    'Vede.view.DeviceEditor.MainMenuBar',
+    'Vede.view.DeviceEditor.MainToolBar'
     ],
     layout: {
         type: 'border'
@@ -45,7 +45,8 @@ Ext.define('Vede.view.AppViewport', {
                             },
                             items: [
                                 {
-                                    xtype: 'panel',//'DeviceEditorPanel',
+//                                    xtype: 'DeviceEditorPanel',
+                                    xtype: 'panel',
                                     //id: 'DeviceEditor',
                                     layout: {
                                         type: 'fit'
@@ -54,7 +55,7 @@ Ext.define('Vede.view.AppViewport', {
                                     title: 'DeviceEditor'
                                 },
                                 {
-                                    xtype: 'panel',//'DeviceEditorInspectorPanel',
+                                    xtype: 'DeviceEditorInspectorPanel',
                                     
                                     width: '320px',
                                     layout: {
@@ -145,10 +146,10 @@ Ext.define('Vede.view.AppViewport', {
                     region: 'north',
                     items: [
                         {
-                            xtype: 'panel'//'DeviceEditorMainMenuBar'
+                            xtype: 'DeviceEditorMainMenuBar'
                         },
                         {
-                            xtype: 'panel'//'DeviceEditorMainToolBar'
+                            xtype: 'DeviceEditorMainToolBar'
                         },
                         {
                             xtype: 'toolbar',
