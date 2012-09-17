@@ -66,10 +66,10 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
             sequenceAnnotator: that,
             items: [
-                Ext.create("Ext.draw.Sprite", {
-                    type: "path",
-                    path: ""
-                })
+//                Ext.create("Ext.draw.Sprite", {
+//                    type: "path",
+//                    path: ""
+//                })
             ]
         });
         this.caret = Ext.create("Vede.view.annotate.Caret", {
