@@ -14,11 +14,6 @@ Ext.define("Vede.controller.VectorPanelController", {
     init: function() {
         this.control({
             "#VectorPanel" : {
-                activate : function() {
-                    console.log("activate");
-                    var pie=Ext.getCmp("PieContainer").items.first();
-                    console.log(pie);
-                },
                 afterrender : this.onRender,
                 resize : this.onResize
             }
@@ -30,14 +25,14 @@ Ext.define("Vede.controller.VectorPanelController", {
 
     onRender: function() {
         if (!this.isRendered) {
-            console.log("render");
+//            console.log("render");
             Vede.application.getController("PieController").initPie();
             this.isRendered = true;
         }
     },
 
     onResize: function() {
-        console.log("resize");
+//        console.log("resize");
     }
 
 });
