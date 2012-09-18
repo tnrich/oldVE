@@ -33,11 +33,11 @@
             //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
             //var gb      = gbm.parseGenbankFile(result);
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
+//            console.log(gb.toString());
             seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
             seqMgr.fromGenbank(gb);
             that.application.fireEvent("SequenceManagerChanged", seqMgr);
-            console.log(gb.toString());
-            console.log(seqMgr.getName());
+//            console.log(seqMgr.getName());
         }
     },
 
