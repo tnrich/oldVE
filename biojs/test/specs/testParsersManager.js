@@ -359,7 +359,7 @@ Ext.onReady(function() {
 
 
 
-//===================================================================================================
+//===============================================================================
 
         xdescribe("Toy Testing: Xml2Json", function() {
 
@@ -391,10 +391,10 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Toy Testing: Ext.data.Store", function() {
+        describe("Toy Testing: Ext.data.Store", function() {
 
             it("xml testing", function() {
-                var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
+                var xml =Teselagen.bio.parsers.ParsersManager.loadFile("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
 
                 //console.log(xml);
                 var enzymeList = [];
@@ -431,13 +431,14 @@ Ext.onReady(function() {
                 });
                 //console.log(memstore);
                 //console.log(memstore.getCount());
-
-
-
             });
+        });
+
+        describe("Toy Testing: Ext.data.Store", function() {
 
             it("xml testing", function() {
-                var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/test/data/jbeiseq/signal_peptide.xml");
+                var url = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var xml = Teselagen.bio.parsers.ParsersManager.loadFile(url);
 
                 //console.log(xml);
                 var enzymeList = [];
@@ -445,11 +446,12 @@ Ext.onReady(function() {
                 // Define an Ext model "Enzyme" to make reading from XML data possible.
                 Ext.define("Jbei", {
                     extend: "Ext.data.Model",
-                    fields: [{name: "name",     mapping: "seq:name"},
-                             {name: "circular", mapping: "seq:circular"},
-                             {name: "features", mapping: "seq:features"},
-                             {name: "sequence", mapping: "seq:sequence"}
-                             ]
+                    //fields: [{name: "name",     mapping: "name"},
+                    //         {name: "circular", mapping: "seq:circular"},
+                    //         {name: "features", mapping: "seq:features"},
+                    //         {name: "sequence", mapping: "seq:sequence"}
+                    //         ]
+                    fields: ["name", "circular", "features", "sequence"]
                 });
                 
                 var doc = new DOMParser().parseFromString(xml, "text/xml");
@@ -461,6 +463,8 @@ Ext.onReady(function() {
                     data : doc,
                     proxy: {
                         type: "memory",
+                        //type: "ajax",
+                        //url: url,
                         reader: {
                             type: "xml",
                             record: "seq:seq"//,
@@ -468,14 +472,11 @@ Ext.onReady(function() {
                         }
                     }
                 });
-                //console.log(memstore.getCount());
-
-
-
+                console.log(memstore.getCount());
+                var tmp = memstore.getAt(0);
+                console.log(tmp);
             });
-
         });
-
 
     });
 });
