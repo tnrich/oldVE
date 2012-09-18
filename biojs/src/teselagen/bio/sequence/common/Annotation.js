@@ -262,7 +262,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		 */
 		this.deleteAt = function(pCutStart, pCutLength, pMaxLength, pCircular){
 			if (pCutLength < 1) {
-				exit;
+                return;
 			}
 
 			var expectedNewLength = -1;
@@ -387,7 +387,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			var combinedLocations = [];
 			for (i = 0; i < tempLocations.length; i++) {
 				if (combinedLocations.length == 0) {
-					if (tempLocations[i].getLength() > 0) {
+					if (tempLocations[i].getLength() >= 0) {
 						combinedLocations.push(tempLocations[i]);	
 					}
 					continue;
@@ -426,7 +426,7 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 		this.reverseLocations = function (pNewStartIndex, pNewMaxLength, pCircular){
 			var tempLocations = getNormalizedLocations(pNewMaxLength);
 			tempLocations = reverseNormalizedLocations(tempLocations);
-			tempLocations = deNormalizeLocations(tempLocations, pNewStartIndex, pNewMaxLength, pCircular);
+			tempLocations = deNormalizeLocations(tempLocations, pNewStartIndex, pNewMaxLength, pCircular, 0);
 			
 			locations = tempLocations;
 		}
@@ -486,7 +486,7 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 			    console.log("Location start: " + location.getStart());
 			    console.log("Offset: " + pOffset);
                 */
-                console.log("newStart: " + newStart);
+                //console.log("newStart: " + newStart);
                 /*
                 console.log("pMaxLength = " + pMaxLength);
                 console.log("pCircularAdjustment = " + pCircularAdjustment);*/
@@ -520,8 +520,8 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 					newEnd += pMaxLength;
 				}
 
-                console.log("The newEnd is: " + newEnd);
-                console.log("The newStart is: " + newStart);
+                //console.log("The newEnd is: " + newEnd);
+                //console.log("The newStart is: " + newStart);
 				result.push(Ext.create("Teselagen.bio.sequence.common.Location", {
 					start: newStart,
 					end: newEnd	

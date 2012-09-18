@@ -23,7 +23,7 @@ Ext.define('Vede.controller.PieController', {
             "#Pie" : {
                 mousedown: this.onMousedown,
                 mousemove: this.onMousemove,
-                mouseup: this.onMouseup
+                mouseup: this.onMouseup,
             }
         });
     },
@@ -52,6 +52,13 @@ Ext.define('Vede.controller.PieController', {
         pie = this.pieManager.getPie();
         pieContainer.add(pie);
 
+        // Set the tabindex attribute in order to receive keyboard events on a div.
+        pieContainer.el.dom.setAttribute("tabindex", "0");
+        pieContainer.el.on("keydown", this.onKeydown, this);
+
+//        this.pieManager.initPie();
+        this.Managers.push(this.pieManager);
+
         this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
             center: this.pieManager.center,
             radius: this.pieManager.railRadius
@@ -61,6 +68,23 @@ Ext.define('Vede.controller.PieController', {
             center: this.pieManager.center,
             radius: this.pieManager.railRadius
         });
+    },
+
+    onKeydown: function(event) {
+        this.callParent(arguments);
+    },
+
+    onSequenceChanged: function() {
+        if(!this.SequenceManager) {
+            return;
+        }
+
+        this.callParent();
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.setOrfs(this.ORFManager.getOrfs());
+        this.pieManager.setFeatures(this.SequenceManager.getFeatures());
+
+        this.pieManager.render();
     },
 
     onActiveEnzymesChanged: function() {
@@ -319,12 +343,13 @@ Ext.define('Vede.controller.PieController', {
     /**
      * Changes the caret position to a specified index.
      * @param {Int} index The nucleotide index to move the caret to.
+     * @param {Boolean} silent If true, don't fire a position changed event.
      */
-    changeCaretPosition: function(index) {
-        this.pieManager.adjustCaret(index);
-        if(this.pieManager.sequenceManager) {
-            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       index);
+    changeCaretPosition: function(index, silent) {
+        if(index >= 0 &&
+           index <= this.SequenceManager.getSequence().toString().length) {
+            this.callParent(arguments);
+            this.pieManager.adjustCaret(index);
         }
     },
 

@@ -53,6 +53,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
 
+        // Set the tabindex attribute in order to receive keyboard events on the div.
+        this.AnnotatePanel.el.dom.setAttribute("tabindex", "0");
+        this.AnnotatePanel.el.on("keydown", this.onKeydown, this);
+
         this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {
             sequenceManager: this.SequenceManager,
             orfManager: this.ORFManager,
@@ -71,6 +75,18 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.SelectionLayer = Ext.create("Teselagen.renderer.annotate.SelectionLayer", {
             sequenceAnnotator: this.SequenceAnnotationManager.annotator
         });
+    },
+
+    onKeydown: function(event) {
+        this.callParent(arguments);
+
+        if(event.getKey() == event.UP) {
+            this.changeCaretPosition(this.caretIndex -
+                                     this.SequenceAnnotationManager.bpPerRow);
+        } else if(event.getKey() == event.DOWN) {
+            this.changeCaretPosition(this.caretIndex +
+                                     this.SequenceAnnotationManager.bpPerRow);
+        }
     },
 
     onHandleClicked: function(type) {
@@ -248,31 +264,28 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     select: function(start, end) {
         this.changeCaretPosition(start);
-        this.SelectionLayer.select(start, end + 1);
+        this.SelectionLayer.select(start, end);
     },
 
-    changeCaretPosition: function(index) {
-        this.SequenceAnnotationManager.adjustCaret(index);
+    changeCaretPosition: function(index, silent) {
+        if(index >= 0 &&
+           index <= this.SequenceManager.getSequence().toString().length) {
+            
+            this.callParent(arguments);
+            this.SequenceAnnotationManager.adjustCaret(index);
 
-        var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
-        var el = Ext.getCmp("AnnotateContainer").el;
+            var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
+            var el = Ext.getCmp("AnnotateContainer").el;
 
-        if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
-             metrics.getY() > el.getScroll().top)) {
-            el.scrollTo("top", metrics.getY());
-        }
-
-        if(this.SequenceAnnotationManager.sequenceManager) {
-            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       index);
+            if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
+                 metrics.getY() > el.getScroll().top)) {
+                el.scrollTo("top", metrics.getY());
+            }
         }
     },
 
     onSequenceChanged: function(kind, obj) {
-        Ext.each(this.Managers, function(manager) {
-            manager.sequenceChanged();
-        });
-
+        this.callParent(arguments);
     },
 
     onActiveEnzymesChanged: function() {

@@ -51,6 +51,10 @@ Ext.define('Vede.controller.RailController', {
         rail = this.railManager.getRail();
         railContainer.add(rail);
 
+        // Set the tabindex attribute in order to receive keyboard events on the div.
+        railContainer.el.dom.setAttribute("tabindex", "0");
+        railContainer.el.on("keydown", this.onKeydown, this);
+
 //        console.log(rail);
 
 //        this.railManager.initRail();
@@ -58,15 +62,19 @@ Ext.define('Vede.controller.RailController', {
         this.Managers.push(this.railManager);
         railContainer.hide();
 
-//        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
-//            reference: this.railManager.reference,
-//            radius: this.railManager.railRadius
-//        });
-//
-//        this.SelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {
-//            reference: this.railManager.reference,
-//            radius: this.railManager.railRadius
-//        });
+        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
+            reference: this.railManager.reference,
+            railWidth: this.railManager.railWidth
+        });
+
+        this.SelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {
+            reference: this.railManager.reference,
+            railWidth: this.railManager.railWidth
+        });
+    },
+
+    onKeydown: function(event) {
+        this.callParent(arguments);
     },
 
     onActiveEnzymesChanged: function() {
@@ -120,9 +128,9 @@ Ext.define('Vede.controller.RailController', {
         this.railManager.setFeatures(pSeqMan.getFeatures());
 
         this.railManager.render();
-//
-//        this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-//        this.SelectionLayer.setSequenceManager(pSeqMan);
+
+        this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
+        this.SelectionLayer.setSequenceManager(pSeqMan);
     },
 
     onShowFeaturesChanged: function(show) {
@@ -190,7 +198,8 @@ Ext.define('Vede.controller.RailController', {
         var endSelectionAngle = this.getClickAngle(pEvt);
         var start;
         var end;
-
+        var multirend;
+        
         if(this.mouseIsDown && Math.abs(this.startSelectionAngle -
                     endSelectionAngle) > this.self.SELECTION_THRESHOLD &&
                     this.railManager.sequenceManager) {
@@ -200,16 +209,14 @@ Ext.define('Vede.controller.RailController', {
 
             // Set the direction of selection if it has not yet been determined.
             if(this.selectionDirection == 0) {
-                if(this.startSelectionAngle < Math.PI) {
+                if(this.startSelectionAngle < endSelectionAngle) {
                     this.selectionDirection = -1;
-                    if(endSelectionAngle >= this.startSelectionAngle && 
-                       endSelectionAngle <= (this.startSelectionAngle + Math.PI)) {
+                    if(endSelectionAngle >= this.startSelectionAngle) {
                         this.selectionDirection = 1;
                     }
                 } else {
                     this.selectionDirection = 1;
-                    if(endSelectionAngle <= this.startSelectionAngle &&
-                       endSelectionAngle >= (this.startSelectionAngle - Math.PI)) {
+                    if(endSelectionAngle <= this.startSelectionAngle) {
                         this.selectionDirection = -1;
                     }
                 }
@@ -300,14 +307,9 @@ Ext.define('Vede.controller.RailController', {
      */
     getClickAngle: function(event) {
         var el = this.railManager.getRail().surface.el;
-        var relX = event.getX() - (Math.round(el.getBox().width / 2) + el.getBox().x);
-        var relY = event.getY() - (Math.round(el.getBox().height / 2) + el.getBox().y);
-
-        var angle = Math.atan(relY / relX) + Math.PI / 2;
-        if(relX < 0) {
-            angle += Math.PI;
-        }
-
+        var relX = (event.getX() - (Math.round(el.getBox().x)))/(el.getBox().width);
+        var relY = event.getY() - (Math.round(el.getBox().height / 2) + el.getBox().y);;
+        var angle = relX;
         return angle;
     },
 
@@ -317,21 +319,20 @@ Ext.define('Vede.controller.RailController', {
      */
     bpAtAngle: function(angle) {
         return Math.floor(angle * 
-            this.railManager.sequenceManager.getSequence().seqString().length
-            / (2 * Math.PI));
+            this.railManager.sequenceManager.getSequence().seqString().length);
     },
 
     /**
      * Changes the caret position to a specified index.
      * @param {Int} index The nucleotide index to move the caret to.
      */
-//    changeCaretPosition: function(index) {
-//        this.railManager.adjustCaret(index);
-//        if(this.railManager.sequenceManager) {
-//            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-//                                       index);
-//        }
-//    },
+    changeCaretPosition: function(index) {
+        if(index >= 0 && 
+           index <= this.SequenceManager.getSequence().toString().length) {
+            this.callParent(arguments);
+            this.railManager.adjustCaret(index);
+        }
+    },
 
     /**
      * Performs a "sticky select"- automatically locks the selection to ends of

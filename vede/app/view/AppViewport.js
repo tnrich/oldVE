@@ -220,10 +220,12 @@ Ext.define('Vede.view.AppViewport', {
                                         items: [
                                             {
                                                 xtype: 'menuitem',
+                                                id: 'undoMenuItem',
                                                 text: 'Undo'
                                             },
                                             {
                                                 xtype: 'menuitem',
+                                                id: 'redoMenuItem',
                                                 text: 'Redo'
                                             },
                                             {
@@ -257,7 +259,8 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Select...'
+                                                text: 'Select...',
+                                                id: 'selectMenuItem'
                                             },
                                             {
                                                 xtype: 'menuitem',
@@ -272,11 +275,13 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Reverse Complement'
+                                                text: 'Reverse Complement',
+                                                id: 'reverseComplementMenuItem'
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Rotate to Here'
+                                                text: 'Rotate to Here',
+                                                id: 'rebaseMenuItem'
                                             }
                                         ]
                                     }

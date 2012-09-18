@@ -64,6 +64,11 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 largeArc = true;
             }
 
+            if(startAngle > endAngle) {
+                sweep = !sweep;
+                largeArc = !largeArc;
+            }
+
             // Generate the arc of the orf.
             var arcSprite = Ext.create("Ext.draw.Sprite", {
                 type: "path",
@@ -76,7 +81,14 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             sprites.push(arcSprite);
 
             this.addToolTip(arcSprite, tooltip);
-            this.addClickListener(arcSprite, orf.getStart(), orf.getEnd());
+            
+            var selectEnd;
+            if(orf.getStrand() == -1) {
+                selectEnd = orf.getEnd() + 1;
+            } else {
+                selectEnd = orf.getEnd();
+            }
+            this.addClickListener(arcSprite, orf.getStart(), selectEnd);
 
             // Render start codons as bold dots.
             Ext.each(orf.getStartCodons(), function(codonIndex) {
@@ -94,7 +106,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
                 });
 
                 this.addToolTip(codonSprite, tooltip);
-                this.addClickListener(codonSprite, orf.getStart(), orf.getEnd());
+                this.addClickListener(codonSprite, orf.getStart(), selectEnd);
 
                 sprites.push(codonSprite);
             }, this);
@@ -128,7 +140,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             });
 
             this.addToolTip(stopSprite, tooltip);
-            this.addClickListener(stopSprite, orf.getStart(), orf.getEnd());
+            this.addClickListener(stopSprite, orf.getStart(), selectEnd);
 
             sprites.push(stopSprite);
         }, this);
@@ -163,9 +175,9 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
             var codonString;
             Ext.each(orf.getStartCodons(), function(codon, index) {
                 if(index != orf.getStartCodons().length - 1) {
-                    codonString = codon + ", ";
+                    codonString = (codon + 1) + ", ";
                 } else {
-                    codonString = codon;
+                    codonString = codon + 1;
                 }
 
                 codonsArray.push(codonString);

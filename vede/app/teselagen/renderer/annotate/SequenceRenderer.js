@@ -15,7 +15,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     statics: {
         FONT_SIZE: 12,
-        FONT_FAMILY: "Monaco",
+        FONT_FAMILY: "Monospace",
         COMPLEMENTARY_VERTICAL_OFFSET: 16,
         LETTER_SPACING: 3
     },

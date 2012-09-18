@@ -2,9 +2,38 @@
     extend: 'Ext.app.Controller',
 
     requires: ['Teselagen.bio.parsers.GenbankManager',
-               'Teselagen.event.VisibilityEvent'],
+               'Teselagen.event.MenuItemEvent',
+               'Teselagen.event.VisibilityEvent',
+               'Teselagen.utils.FormatUtils'],
 
+    MenuItemEvent: null,
     VisibilityEvent: null,
+
+    onUndoMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.UNDO);
+    },
+
+    onRedoMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REDO);
+    },
+
+    onSelectMenuItemClick: function() {
+        var selectWindow = Ext.create("Vede.view.SelectWindow");
+
+        selectWindow.show();
+        selectWindow.center();
+
+        this.application.fireEvent("SelectWindowOpened",
+                                   selectWindow);
+    },
+
+    onReverseComplementMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
+    },
+
+    onRebaseMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REBASE_SEQUENCE);
+    },
 
     onCancelButtonClick: function(button, e, options) {
         button.up('window').close();
@@ -33,11 +62,10 @@
             //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
             //var gb      = gbm.parseGenbankFile(result);
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
-//            console.log(gb.toString());
-            seqMgr  = Ext.create("Teselagen.manager.SequenceManager", {}); 
-            seqMgr.fromGenbank(gb);
+            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
             that.application.fireEvent("SequenceManagerChanged", seqMgr);
-//            console.log(seqMgr.getName());
+            //console.log(gb.toString());
+            //console.log(seqMgr.getName());
         }
     },
 
@@ -159,6 +187,21 @@
 
     init: function() {
         this.control({
+            "#undoMenuItem": {
+                click: this.onUndoMenuItemClick
+            },
+            "#redoMenuItem": {
+                click: this.onRedoMenuItemClick
+            },
+            "#selectMenuItem": {
+                click: this.onSelectMenuItemClick
+            },
+            "#reverseComplementMenuItem": {
+                click: this.onReverseComplementMenuItemClick
+            },
+            "#rebaseMenuItem": {
+                click: this.onRebaseMenuItemClick
+            },
             "button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
@@ -206,6 +249,7 @@
             },
         });
 
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);

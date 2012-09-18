@@ -14,7 +14,6 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
     ],
 
     singleton: true,
-
     constructor: function() {
         XmlToJson = Teselagen.bio.util.XmlToJson;
     },
@@ -78,6 +77,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
 
             var pt = part[i]["parts"]["part_asArray"]; //NOT SURE where array will occur when ther is more than one part
             for (var j=0; j < pt.length; j++) {
+
                 var ptId    = parseInt(pt[j]["_id"]);
                 var fas     = pt[j]["fas"]["__text"] || "";
 
@@ -86,6 +86,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
                     "de:fas" : fas
                 });
             }
+
             partVOs.push({
                 "id": id,
                 "de:name":      name,

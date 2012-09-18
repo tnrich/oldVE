@@ -154,7 +154,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
     /**
      * First checks to see if any parameters need to be updated on renderers,
-     * then returns a list of sprites from all renderers.
+     * then renders a list of sprites from all renderers.
      * @return {Array<Ext.draw.Sprite>} A list of sprites aggregated from all
      * renderers.
      */
@@ -702,5 +702,5 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.pie.surface.add(this.caret);
         this.caret.show(true);
-    }
+    },
 });

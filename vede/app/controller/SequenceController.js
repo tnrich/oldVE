@@ -6,8 +6,11 @@
 Ext.define("Vede.controller.SequenceController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.event.CaretEvent",
+    requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
+               "Teselagen.bio.sequence.DNATools",
+               "Teselagen.event.CaretEvent",
                "Teselagen.event.MapperEvent",
+               "Teselagen.event.MenuItemEvent",
                "Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.SelectionEvent",
                "Teselagen.event.SelectionLayerEvent",
@@ -25,16 +28,24 @@ Ext.define("Vede.controller.SequenceController", {
 
     CaretEvent: null,
     MapperEvent: null,
+    MenuItemEvent: null,
     SelectionEvent: null,
     SelectionLayerEvent: null,
+    SequenceManagerEvent: null,
     VisibilityEvent: null,
 
     WireframeSelectionLayer: null,
     SelectionLayer: null,
 
+    DNAAlphabet: null,
+    DNATools: null,
+
     mouseIsDown: false,
     startSelectionIndex: 0,
     selectionDirection: 0,
+    caretIndex: 0,
+
+    safeEditing: false,
 
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
@@ -43,10 +54,15 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     init: function() {
+        this.DNAAlphabet = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+        this.DNATools = Teselagen.bio.sequence.DNATools;
+
         this.CaretEvent = Teselagen.event.CaretEvent;
         this.MapperEvent = Teselagen.event.MapperEvent;
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
         this.SelectionLayerEvent = Teselagen.event.SelectionLayerEvent;
+        this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         var listenersObject = {
@@ -82,7 +98,20 @@ Ext.define("Vede.controller.SequenceController", {
         listenersObject[this.SelectionEvent.SELECTION_CANCELED] =
             this.onSelectionCanceled;
 
+        listenersObject[this.CaretEvent.CARET_POSITION_CHANGED] = 
+            this.onCaretPositionChanged;
+
         this.application.on(listenersObject);
+
+        this.application.on(this.MenuItemEvent.REVERSE_COMPLEMENT,
+            this.onReverseComplementSequence, this);
+        this.application.on(this.MenuItemEvent.REBASE_SEQUENCE, 
+            this.onRebaseSequence, this);
+
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGING,
+            this.onSequenceChanging, this);
+        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGED,
+            this.onSequenceChanged, this);
     },
 
     onLaunch: function() {
@@ -116,6 +145,116 @@ Ext.define("Vede.controller.SequenceController", {
                          this.ORFManager];
     },
 
+    onKeydown: function(event) {
+        var character = String.fromCharCode(event.getCharCode()).toLowerCase();
+
+        if(event.ctrlKey && event.getKey() == event.LEFT) {
+            // Ctrl + Left: Move caret to start of previous block of 10 bases.
+            if(this.caretIndex % 10 == 0) {
+                this.changeCaretPosition(this.caretIndex - 10);
+            } else {
+                this.changeCaretPosition(Math.round(this.caretIndex / 10) * 10);
+            }
+        } else if(event.ctrlKey && event.getKey() == event.RIGHT) {
+            // Ctrl + Right: Move caret to end of current block of 10 bases.
+            if(this.caretIndex % 10 == 0) {
+                this.changeCaretPosition(this.caretIndex + 10);
+            } else {
+                this.changeCaretPosition(Math.round(this.caretIndex / 10 + 1) * 10);
+            }
+        } else if(event.ctrlKey && event.getKey() == event.HOME) {
+            // Ctrl + Home: Move caret to start of sequence.
+            this.changeCaretPosition(0);
+        } else if(event.ctrlKey && event.getKey() == event.END) {
+            // Ctrl + End: Move caret to end of sequence.
+            this.changeCaretPosition(
+                this.SequenceManager.getSequence().toString().length - 1);
+        } else if(event.ctrlKey && event.getKey() == event.Z) {
+            // Ctrl + Z: Undo last action.
+            this.application.fireEvent(this.MenuItemEvent.UNDO);
+        } else if(event.ctrlKey && event.getKey() == event.U) {
+            // Ctrl + U: Redo last action.
+            this.application.fireEvent(this.MenuItemEvent.REDO); 
+        } else if(event.getKey() == event.LEFT) {
+            // Left: Move caret down one base.
+            this.changeCaretPosition(this.caretIndex - 1);
+        } else if(event.getKey() == event.RIGHT) {
+            // Right: Move caret right one base.
+            this.changeCaretPosition(this.caretIndex + 1);
+        } else if(!event.ctrlKey && !event.altKey) {
+            // This statement handles all key presses not accompanied by
+            // Control or Alt.
+
+            if(this.DNAAlphabet.symbolByValue(character)) {
+                // If key is a valid nucleotide, insert it.
+                if(this.safeEditing) {
+                    this.doInsertSequence(this.DNATools.createDNA(character), 
+                                          this.caretIndex);
+                } else {
+                    this.SequenceManager.insertSequence(
+                        this.DNATools.createDNA(character), this.caretIndex);
+
+                    this.changeCaretPosition(this.caretIndex + 1);
+                }
+            } else if(event.getKey() == event.DELETE) {
+                if(this.SelectionLayer.selected) {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.SelectionLayer.start,
+                                              this.SelectionLayer.end);
+                    } else {
+                        this.SequenceManager.removeSequence(
+                                            this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+
+                        this.changeCaretPosition(this.SelectionLayer.start);
+
+                        this.SelectionLayer.deselect();
+                        this.application.fireEvent(
+                            this.SelectionEvent.SELECTION_CANCELED);
+
+                    }
+
+                } else {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.caretIndex, 
+                                              this.caretIndex + 1);
+                    } else {
+                        this.SequenceManager.removeSequence(this.caretIndex,
+                                                            this.caretIndex + 1);
+                    }
+                }
+
+            } else if(event.getKey() == event.BACKSPACE && this.caretIndex > 0) {
+                if(this.SelectionLayer.selected) {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.SelectionLayer.start,
+                                              this.SelectionLayer.end);
+                    } else {
+                        this.SequenceManager.removeSequence(
+                                              this.SelectionLayer.start,
+                                              this.SelectionLayer.end);
+                        
+                        this.changeCaretPosition(this.SelectionLayer.start);
+
+                        this.SelectionLayer.deselect();
+                        this.application.fireEvent(
+                            this.SelectionEvent.SELECTION_CANCELED);
+                    }
+                } else {
+                    if(this.safeEditing) {
+                        this.doDeleteSequence(this.caretIndex - 1,
+                                              this.caretIndex);
+                    } else {
+                        this.SequenceManager.removeSequence(this.caretIndex - 1,
+                                                            this.caretIndex);
+
+                        this.changeCaretPosition(this.caretIndex - 1);
+                    }
+                }
+            }
+        }
+    },
+
     onActiveEnzymesChanged: function() {
         this.RestrictionEnzymeManager.setRestrictionEnzymeGroup(
             this.RestrictionEnzymeGroupManager.getActiveGroup());
@@ -127,23 +266,40 @@ Ext.define("Vede.controller.SequenceController", {
         Ext.each(this.Managers, function(manager) {
             manager.setSequenceManager(pSeqMan);
         });
-
-        this.SequenceManager.on(
-            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGED, 
-            this.onSequenceChanged, this);
-
-        this.SequenceManager.on(
-            Teselagen.event.SequenceManagerEvent.SEQUENCE_CHANGING, 
-            this.onSequenceChanging, this);
     },
 
+    onRebaseSequence: function() {
+        if(this.SequenceManager) {
+            this.SequenceManager.rebaseSequence(this.caretIndex);
+            this.changeCaretPosition(0);
+        }
 
+        // Return false to cancel the event. This makes sure the method is
+        // called only once per event.
+        return false;
+    },
+
+    onReverseComplementSequence: function(e) {
+        if(this.SequenceManager) {
+            this.SequenceManager.doReverseComplementSequence();
+        }
+
+        // Return false to cancel the event. This makes sure the method is
+        // called only once per event.
+        return false;
+    },
 
     // kind is the type of Sequence Changed/Changing that occurs
     // Obj is a SequenceManagerMemento, feature, or some other {} input that needs to be remembered
     onSequenceChanged: function(kind, obj) {
+        if(!this.SequenceManager) {
+            return;
+        }
+
         Ext.each(this.Managers, function(manager) {
-            manager.sequenceChanged();
+            if(manager.sequenceChanged) {
+                manager.sequenceChanged();
+            }
         });
 
         switch (kind) {
@@ -162,18 +318,10 @@ Ext.define("Vede.controller.SequenceController", {
             case Teselagen.event.SequenceManagerEvent.KIND_MANUAL_UPDATE:
                 break;
             case Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO:
-                break;
+                break; // Handled in ActionStackController.
             case Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED:
                 break;
         };
-
-        var objType = Ext.getClassName(obj);
-
-        if (objType.match(/SequenceManagerMemento/)) {
-            // Put in stack of SeqMgr Mementos
-        } // else ?
-
-
     },
 
     onSequenceChanging: function(kind, obj) {
@@ -194,6 +342,13 @@ Ext.define("Vede.controller.SequenceController", {
     onSelectionCanceled: function() {
         if(this.SelectionLayer && this.SelectionLayer.selected) {
             this.SelectionLayer.deselect();
+        }
+    },
+
+    onCaretPositionChanged: function(scope, index) {
+        if(scope !== this && this.SelectionLayer && 
+           !this.SelectionLayer.selecting) {
+            this.changeCaretPosition(index, true);
         }
     },
 
@@ -221,6 +376,13 @@ Ext.define("Vede.controller.SequenceController", {
     onViewModeChanged: function(viewMode) {
     },
 
-    changeCaretPosition: function(index) {
-    },
+    changeCaretPosition: function(index, silent) {
+        this.caretIndex = index;
+
+        if(!silent && this.SequenceManager) {
+            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
+                                       this,
+                                       index);
+        }
+    }
 });

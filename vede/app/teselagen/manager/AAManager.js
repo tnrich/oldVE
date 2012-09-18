@@ -35,10 +35,6 @@ Ext.define("Teselagen.manager.AAManager", {
         this.initConfig(inData);
     },
 
-    sequenceChanged: function(){
-        this.recalculate();
-        console.log(this.aaSequence);
-    },
     /**
      * @private
      * Recalculates amino acid sequences.

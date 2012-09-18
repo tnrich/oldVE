@@ -263,7 +263,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
         var sprite;
         if(direction > 0) {
             if(startAngle > endAngle) {
-                arcLength = radius * (2 * Math.PI - (endAngle - startAngle));
+                arcLength = radius * (2 * Math.PI - startAngle + endAngle);
             } else {
                 arcLength = radius * (endAngle - startAngle);
             }
@@ -282,6 +282,11 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                 var largeFlag = false;
                 if(Math.abs(endAngle - startAngle) > Math.PI) {
                     largeFlag = true;
+                }
+
+                if(startAngle > endAngle) {
+                    sweep = !sweep;
+                    largeFlag = !largeFlag;
                 }
 
                 if(direction == 1) {

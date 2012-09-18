@@ -102,6 +102,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
 
     sequenceChanged: function(){
         this.RowManager.setSequenceAnnotator(this);
+        this.RowManager.update();
 
         this.aaManager.setSequenceManager(this.sequenceManager);
         this.features = this.sequenceManager.getFeatures();

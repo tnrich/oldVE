@@ -18,6 +18,7 @@ Ext.application({
         'SimulateDigestionWindow'
     ],
     controllers: [
+        'ActionStackController',
         'AppController',
         'AnnotatePanelController',
         'MainMenuController',
@@ -26,7 +27,7 @@ Ext.application({
         'PieController',
         'RailController',
         'RestrictionEnzymeController',
-//        'SelectWindowController',
+        'SelectWindowController',
         'SequenceController',
         'VectorPanelController',
         'SimulateDigestionController',
