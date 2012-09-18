@@ -5,7 +5,7 @@ function loadResults(record)
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: '/node/openResult',
+        url: '/api/openResult',
         extraParams: {
             fileId: record.fileId
         },
@@ -88,7 +88,7 @@ var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        url: '/node/getTree',
+        url: '/api/getTree',
         extraParams: {
             mode: 'getTree'
         },
@@ -128,7 +128,7 @@ Ext.define('Vede.view.ProjectPanelView', {
             {
                 console.log('opening protocol');
                 Ext.Ajax.request({
-                    url: '/node/getProtocol',
+                    url: '/api/getProtocol',
                     params: {
                         _id: record.raw._id
                     },
