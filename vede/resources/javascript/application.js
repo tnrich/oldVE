@@ -41,7 +41,7 @@ $( document ).bind( 'loadDE', function() {
           self.latest = {};
           $.ajax({
               type: "POST",
-              url: '/node/GetLastUpdatedUserFiles',
+              url: '/api/GetLastUpdatedUserFiles',
               data: {sessionID:sessionID},
                   success: function(data) {
                       flashCallback("Getting latest Success!",true);
@@ -372,7 +372,7 @@ $( document ).bind( 'loadDE', function() {
 
         $.ajax({
             type: "POST",
-            url: "/node/fullRPC",
+            url: "/api/fullRPC",
             data: {
               '_id':j5._id,
               'j5Params':JSON.stringify(j5Params),
@@ -553,7 +553,7 @@ $( document ).bind( 'loadDE', function() {
         {
         $.ajax({
         type: "POST",
-        url: '/node/getUserModel',
+        url: '/api/getUserModel',
         data: {'_id':_id},
         success: function(model) {
             deviceeditor._id = model["_id"];
@@ -578,7 +578,7 @@ $( document ).bind( 'loadDE', function() {
     /* 
         $.ajax({
         type: "GET",
-        url: '/node/getModels',
+        url: '/api/getModels',
         data: {},
         success: function(data) {
             $('#loadModelsTable tbody').html('');
@@ -1070,7 +1070,7 @@ $( document ).bind( 'loadDE', function() {
                 var modelName = $('#design-name').val();
                 $.ajax({
                     type: "POST",
-                    url: '/node/saveUserModel',
+                    url: '/api/saveUserModel',
                     data: {'_id':deviceeditor._id,'name':modelName,'payload':JSON.stringify(model)},
                         success: function(data) {
                             deviceeditor._id = data["_id"];

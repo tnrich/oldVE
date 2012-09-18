@@ -20,6 +20,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         $(document).trigger('openj5');
     },
     onSaveDesignClick: function(button, e, options) {
+        console.log('Trying to save design!');
         $(document).trigger('saveDesign');
     },
     init: function() {
