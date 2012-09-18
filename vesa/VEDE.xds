@@ -1,0 +1,57 @@
+{
+    "name": "VEDE",
+    "settings": {
+        "urlPrefix": "http://teselagen.arch",
+        "spacesToIndent": 4,
+        "exportPath": "",
+        "lineEnding": "LF",
+        "genTimestamps": false,
+        "cacheBust": false
+    },
+    "xdsVersion": "2.1.0",
+    "xdsBuild": 613,
+    "schemaVersion": 1,
+    "upgradeVersion": 210000000497,
+    "framework": "ext41",
+    "topInstanceFileMap": {
+        "b6529b0e-c13c-42d8-a853-c61e5b2c7eea": {
+            "paths": [
+                "metadata/view/DE",
+                "app/view/override/DE.js",
+                "app/view/DE.js",
+                "app/view/Viewport.js"
+            ],
+            "className": "DE"
+        },
+        "696f0eef-5a86-407a-8231-f56c4557616e": {
+            "paths": [
+                "metadata/resource/Library"
+            ],
+            "className": "Library"
+        },
+        "c1e9230e-35ca-4c02-9bd4-99f1f1402e7c": {
+            "paths": [
+                "metadata/model/MyModel",
+                "app/model/override/MyModel.js",
+                "app/model/MyModel.js"
+            ],
+            "className": "MyModel"
+        }
+    },
+    "viewOrderMap": {
+        "view": [
+            "b6529b0e-c13c-42d8-a853-c61e5b2c7eea"
+        ],
+        "store": [],
+        "controller": [],
+        "model": [
+            "c1e9230e-35ca-4c02-9bd4-99f1f1402e7c"
+        ],
+        "resource": [
+            "696f0eef-5a86-407a-8231-f56c4557616e"
+        ],
+        "app": [
+            "application"
+        ]
+    }
+}

@@ -25,7 +25,7 @@ Ext.application({
         'SimulateDigestionWindow'
     ],
     controllers: [
-    /*
+        /*
         'AppController',
         'AnnotatePanelController',
         'MainMenuController',
@@ -37,11 +37,11 @@ Ext.application({
         'VectorPanelController',
         'SimulateDigestionController'
         */
-        /*
+        
         'Vede.controller.DeviceEditor.MainMenuController',
         'Vede.controller.DeviceEditor.MainToolbarController',
         'Vede.controller.DeviceEditor.DeviceEditorPanelController'
-        */
+        
     ],
     errorHandler: function(err) {
         console.warn(err);
