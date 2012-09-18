@@ -29,7 +29,10 @@ Ext.application({
 //        'SelectWindowController',
         'SequenceController',
         'VectorPanelController',
-        'SimulateDigestionController'
+        'SimulateDigestionController',
+        'DeviceEditor.MainMenuController',
+        'DeviceEditor.MainToolbarController',
+        'DeviceEditor.DeviceEditorPanelController'
     ],
     errorHandler: function(err) {
         console.warn(err);

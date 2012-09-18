@@ -23,6 +23,7 @@ Ext.define('Vede.controller.DeviceEditor.MainMenuController', {
         $(document).trigger('openDesign');
     },
     onSaveDesignClick: function(button, e, options) {
+        console.log('Trying save design!');
         $(document).trigger('saveDesign');
     },
 

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    layout="absolute"
+    width="100%" 
+    height="100%"
+    title="Paste From Clipboard"
+    showCloseButton="true"
+    close="onCloseButtonClick()"
+    initialize="onInitialize()"
+    >
+    
+    <mx:VBox paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+        <mx:Label id="directions" text="Right-click Paste into the box"/>
+        <mx:Canvas
+            id="canvas"
+            width="100%" 
+            height="100"
+            backgroundColor="#FFFFFF"
+            borderColor="#DDDDDD" 
+            borderStyle="solid" 
+            borderThickness="1">
+        </mx:Canvas>
+        <mx:HBox horizontalAlign="right" width="100%">
+            <mx:Button label="Cancel" click="onCancelButtonClick()"/>
+        </mx:HBox>
+    </mx:VBox>
+    
+    <mx:Script>
+        <![CDATA[
+            import flash.desktop.Clipboard;
+            import flash.desktop.ClipboardFormats;
+            
+            import mx.controls.Alert;
+            
+            public static const CANCEL:String = "Cancel";
+            public static const DONE:String = "Done";
+            
+            private var _sequence:String = null;
+            private var _sequenceName:String = null;
+            private var _sourceName:String = null;
+            private var _genbankStart:int = 0;
+            private var _end:int = 0;
+            private var _jbeiSequenceXmlString:String = null;
+            
+            public function get sequence():String 
+            {
+                return _sequence;
+            }
+            
+            public function get sequenceName():String
+            {
+                return _sequenceName;
+            }
+            
+            public function get sourceName():String
+            {
+                return _sourceName;
+            }
+            
+            public function get genbankStart():int
+            {
+                return _genbankStart;
+            }
+            
+            public function get end():int
+            {
+                return _end;
+            }
+            
+            public function get jbeiSequenceXmlString():String
+            {
+                return _jbeiSequenceXmlString;
+            }
+                
+            private function onCancelButtonClick():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+            
+            private function onCloseButtonClick():void
+            {
+                dispatchEvent(new Event(CANCEL));
+            }
+            private function onPaste(event:Event):void
+            {
+                 // from JBEIR VectorEditor.VectorCommon
+                 // Define constants here so that the DE isn't directly dependent on VE libraries
+                 var SEQUENCE_PROVIDER_EXTERNAL_CONTEXT_CLIPBOARD_KEY:String = "SequenceProviderExternalContext";
+                 var JBEI_SEQUENCE_XML_CLIPBOARD_KEY:String = "jbei-sequence-xml";
+
+                 var clipboardData:Object = null;
+                 
+                 if (Clipboard.generalClipboard.hasFormat(SEQUENCE_PROVIDER_EXTERNAL_CONTEXT_CLIPBOARD_KEY)) {
+                     clipboardData = Clipboard.generalClipboard.getData(SEQUENCE_PROVIDER_EXTERNAL_CONTEXT_CLIPBOARD_KEY);
+                     // externalContext = {sequence: sequence, start:start, end:end, name:name};
+                     if (clipboardData.hasOwnProperty("sequence")) {
+                         _sequence = clipboardData.sequence;
+                         _genbankStart = clipboardData.start + 1;
+                         _end = clipboardData.end;
+                         _sequenceName = clipboardData.name;
+                         _sourceName = clipboardData.name;
+                     }
+                     
+                     if (Clipboard.generalClipboard.hasFormat(JBEI_SEQUENCE_XML_CLIPBOARD_KEY)) {
+                         _jbeiSequenceXmlString = Clipboard.generalClipboard.getData(JBEI_SEQUENCE_XML_CLIPBOARD_KEY) as String;
+                     }
+                 } else if (Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)) {
+                     var clipboardString:String = Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
+                     clipboardString = clipboardString.replace(/\s/g, "");  // remove whitespace
+                     if (clipboardString.match(/[^ACGTRYMKSWHBVDNacgtrymkswhbvdn]/)) {  // allow for degenerate codes
+                         Alert.show("A character that is not a nucleotide code has been found.  Please ensure that the pasted data contains only DNA sequence information.", "Error Message");
+                         return;
+                     }
+                     _sequence = clipboardString.toUpperCase();
+                     _genbankStart = 1;
+                     _end = sequence.length;
+                     _sequenceName = "";
+                     _sourceName = "";
+                 } else {
+                     dispatchEvent(new Event(CANCEL));
+                 }
+                 
+                 if ((_sequence != null) && _sequence.length >=1) {
+                    dispatchEvent(new Event(DONE));
+                 } else {
+                     dispatchEvent(new Event(CANCEL));
+                 }
+                
+            }
+            
+            private function onInitialize():void
+            {
+                var contextMenu:ContextMenu = new ContextMenu();
+                contextMenu.clipboardMenu = true;
+                contextMenu.clipboardItems.paste = true;
+                this.contextMenu = contextMenu;
+                this.addEventListener(Event.PASTE, onPaste);
+                this.setFocus();
+            }    
+            
+        ]]>
+    </mx:Script> 
+    
+</mx:TitleWindow>
