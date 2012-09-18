@@ -13,6 +13,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         "Teselagen.bio.util.XmlToJson",
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.parsers.SbolParser",
         "Teselagen.bio.sequence.DNATools",
         "Ext.Ajax",
         "Ext.data.Store",
@@ -22,12 +23,13 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     singleton: true,
 
-    XmlToJson: null,
-    DNATools: null,
+    //XmlToJson: null,
+    //DNATools: null,
 
     constructor: function() {
-        XmlToJson = Teselagen.bio.util.XmlToJson;
-        DNATools = Teselagen.bio.sequence.DNATools;
+        XmlToJson   = Teselagen.bio.util.XmlToJson;
+        DNATools    = Teselagen.bio.sequence.DNATools;
+        SbolParser  = Teselagen.bio.parsers.SbolParser;
     },
 
     // ===========================================================================
@@ -776,138 +778,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * @returns {JSON} json Cleaned JSON object of the Sbol XML
      */
     sbolXmlToJson: function(xmlStr) {
-        var result = {};
-
-        var json = XmlToJson.xml_str2json(xmlStr);
-        //  console.log(JSON.stringify(json, null, "  "));
-
-
-        if (json["RDF"] === undefined) {
-            throw Ext.create("Teselagen.bio.BioException", {
-                message: "Invalid SbolXML file. No root or record tag 'RDF'"
-            });
-            return result;
-        } else if (json["RDF"] === undefined) {
-            return result;
-        }
-
-        //===============
-        // HEADER INFO
-
-        if (json["RDF"]["DnaComponent"] === undefined) {
-            throw Ext.create("Teselagen.bio.BioException", {
-                message: "Invalid SbolXML file. No 'DnaComponent' tag found."
-            });
-            return result;
-        }
-
-
-
-        if (json["RDF"]["DnaComponent"]["displayId"] !== undefined) {
-            var displayId = json["RDF"]["DnaComponent"]["displayId"]; //seq:name
-        } else {
-            var displayId = "no_name";
-            console.warn("sbolXmlToJson: no displayId detected");
-        }
-
-        var dnaComp = json["RDF"]["DnaComponent"];
-
-        var newDnaSeq = [];
-        if (dnaComp["dnaSequence"] === undefined) {
-            console.warn("sbolXmlToJson: no 'dnaSequence' detected");
-        } else {
-            var tmp = json["RDF"]["DnaComponent"]["dnaSequence"]["DnaSequence"];
-            if (tmp["_rdf:about"] !== undefined) {
-                var newRdfAbt = tmp["_rdf:about"];
-            } else {
-                var newRdfAbt = "";
-            }
-            console.log(tmp["nucleotides"]);
-
-            if (tmp["nucleotides"] !== undefined) {
-                var nucleotides = tmp["nucelotides"]; //seq:sequence
-            } else {
-                var nucleotides = "";
-                console.warn("sbolXmlToJson: No sequence name detected");
-            }
-
-            newDnaSeq = {
-                //"dnaSequence" : {
-                    "DnaSequence" : {
-                        "nucleotides" : nucleotides,
-                        "_rdf:about" : newRdfAbt
-                        
-                    }
-                //}
-            };
-            
-        }
-
-        var newAnnot = [];
-        if (dnaComp["annotation"] === undefined && dnaComp["annotation"]["SequenceAnnotation_asArray"] === undefined ) {
-            console.warn("sbolXmlToJson: no 'annotation' detected");
-        } else {
-
-            var seqAnnot = json["RDF"]["DnaComponent"]["annotation"]["SequenceAnnotation"];
-            var newSeqAnnot = [];
-            for (var i=0; i < seqAnnot.length; i++) {
-                var annot = seqAnnot[i];
-
-                if (seqAnnot["bioStart"] !== undefined) {
-                    var bioStart = seqAnnot["bioStart"];
-                } else {
-                    var bioStart = "";
-                }
-                if (annot["bioEnd"] !== undefined) {
-                    var bioEnd = seqAnnot["bioEnd"];
-                } else {
-                    var bioEnd = "";
-                }
-                if (annot["strand"] !== undefined) {
-                    var strand = seqAnnot["strand"];
-                } else {
-                    var strand = "+";
-                }
-
-                var subComp =seqAnnot["subComponent"];
-                console.log(subComp);
-                var newSubComp = [];
-                if (annot["subComponent"] !== undefined) {
-                    var abt = subComp["DnaComponent"]["_rdf:about"];
-                    var type= subComp["DnaComponent"]["rdf:type"];
-                    var id  = subComp["DnaComponent"]["displayId"];
-
-                    var sub = {
-                        "DnaComponent" : {
-                            "_rdf:about" : abt,
-                            "rdf:type" : type,
-                            "displayId" : id
-                        }
-                    };
-                    newSubComp.push(sub);
-                }
-            }
-            newAnnot = {
-                "_rdf:about" : json["RDF"]["DnaComponent"]["annotation"]["SequenceAnnotation"]["_rdf:about"],
-                "bioStart" : bioStart,
-                "bioEnd"   : bioEnd,
-                "strand"   : strand,
-                "subComponent" : newSubComp
-            }
-        }
-
-        json = {
-            "DnaComponent" : {
-                "_rdf:about" : json["RDF"]["DnaComponent"]["_rdf:about"],
-                "displayId" : displayId,
-                "dnaSequence" : newDnaSeq,
-                "annotation" : newAnnot
-            }
-        }
-
-        //console.log(JSON.stringify(json, null, "  "));
-
-        return json;
+        return Teselagen.bio.parsers.SbolParser.sbolXmlToJson(xmlStr);
         
 
     },

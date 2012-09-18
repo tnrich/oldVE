@@ -14,6 +14,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
     ],
 
     singleton: true,
+
     constructor: function() {
         XmlToJson = Teselagen.bio.util.XmlToJson;
     },
@@ -30,7 +31,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
         var json = XmlToJson.xml_str2json(xmlStr);
 
         // make sure this file is ok
-        json = this.checkDeXmlToJson(json);
+        json = this.validateRawDeJson(json);
 
         if (json["design"] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
@@ -184,7 +185,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
       * //@returns {Boolean} isValid True if structure is good, false if missing key elements.
       * @returns {JSON} json Repaired raw DE-JSON object.
       */
-    checkDeXmlToJson: function(json) {
+    validateRawDeJson: function(json) {
         //var isValid = true;
         var i, j;
 

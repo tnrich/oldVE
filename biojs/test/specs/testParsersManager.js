@@ -28,7 +28,7 @@ Ext.onReady(function() {
             var feat1, note1;
             var sm;
             var fastaStr, fasta;
-            var gbStrl
+            var gbStrl;
             var gb = null;
             //var gbA;
             var gbB;
@@ -41,7 +41,7 @@ Ext.onReady(function() {
                 fastaStr = ">DummyName\n" +
                             "GATTACA\n";
 
-                /*gbStrA = 'LOCUS       test                       7 bp ds-DNA     circular     30-JUL-2012\n' + 
+                /*gbStrA = 'LOCUS       test                       7 bp ds-DNA     circular     30-JUL-2012\n' +
                         'FEATURES             Location/Qualifiers\n' +
                         '     feat1           1..3\n' +
                         '                     /note="note1value"\n' +
@@ -50,7 +50,7 @@ Ext.onReady(function() {
                         '        1 gattaca     \n';
                 gbA = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(gbStrA);*/
 
-                gbStrB = 'LOCUS       signal_pep                63 bp    DNA     linear       '+ Teselagen.bio.parsers.ParsersManager.todayDate() + '\n' + 
+                gbStrB = 'LOCUS       signal_pep                63 bp    DNA     linear       '+ Teselagen.bio.parsers.ParsersManager.todayDate() + '\n' +
                         'FEATURES             Location/Qualifiers\n' +
                         '     CDS             join(1..63,100..6300)\n' +
                         '                     /label="signal_peptide"\n' +
@@ -339,9 +339,9 @@ Ext.onReady(function() {
                 var xml = jasmine.getFixtures().read(url);
                 //console.log(xml);
 
-                var json = ParsersManager.sbolXmlToJson(xml);
+                //var json = ParsersManager.sbolXmlToJson(xml);
 
-                console.log(JSON.stringify(json, null, "  "));
+                //console.log(JSON.stringify(json, null, "  "));
 
                 
             });
@@ -359,7 +359,7 @@ Ext.onReady(function() {
 
 
 
-//===================================================================================================
+//===============================================================================
 
         xdescribe("Toy Testing: Xml2Json", function() {
 
@@ -371,13 +371,13 @@ Ext.onReady(function() {
                             MyChild : 'my_child_value',
                             MyAnotherChild: 10,
                             MyArray : [ 'test', 'test2' ],
-                            MyArrayRecords : [ 
+                            MyArrayRecords : [
                                 {
-                                    ttt : 'vvvv' 
+                                    ttt : 'vvvv'
                                 },
                                 {
-                                    ttt : 'vvvv2' 
-                                }                     
+                                    ttt : 'vvvv2'
+                                }
                             ]
                         }
                     }
@@ -391,13 +391,13 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Toy Testing: Ext.data.Store", function() {
+        describe("Toy Testing: Ext.data.Store", function() {
 
             it("xml testing", function() {
-                var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
+                var xml =Teselagen.bio.parsers.ParsersManager.loadFile("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
 
                 //console.log(xml);
-                var enzymeList = new Array();
+                var enzymeList = [];
                 
                 // Define an Ext model "Enzyme" to make reading from XML data possible.
                 Ext.define("Enzyme", {
@@ -431,25 +431,27 @@ Ext.onReady(function() {
                 });
                 //console.log(memstore);
                 //console.log(memstore.getCount());
-
-
-
             });
+        });
+
+        describe("Toy Testing: Ext.data.Store", function() {
 
             it("xml testing", function() {
-                var xml =Teselagen.bio.parsers.ParsersManager.loadXml("/biojs/test/data/jbeiseq/signal_peptide.xml");
+                var url = "/biojs/test/data/jbeiseq/signal_peptide.xml";
+                var xml = Teselagen.bio.parsers.ParsersManager.loadFile(url);
 
                 //console.log(xml);
-                var enzymeList = new Array();
+                var enzymeList = [];
                 
                 // Define an Ext model "Enzyme" to make reading from XML data possible.
                 Ext.define("Jbei", {
                     extend: "Ext.data.Model",
-                    fields: [{name: "name",     mapping: "seq:name"},
-                             {name: "circular", mapping: "seq:circular"},
-                             {name: "features", mapping: "seq:features"},
-                             {name: "sequence", mapping: "seq:sequence"}
-                             ]
+                    //fields: [{name: "name",     mapping: "name"},
+                    //         {name: "circular", mapping: "seq:circular"},
+                    //         {name: "features", mapping: "seq:features"},
+                    //         {name: "sequence", mapping: "seq:sequence"}
+                    //         ]
+                    fields: ["name", "circular", "features", "sequence"]
                 });
                 
                 var doc = new DOMParser().parseFromString(xml, "text/xml");
@@ -461,6 +463,8 @@ Ext.onReady(function() {
                     data : doc,
                     proxy: {
                         type: "memory",
+                        //type: "ajax",
+                        //url: url,
                         reader: {
                             type: "xml",
                             record: "seq:seq"//,
@@ -468,14 +472,11 @@ Ext.onReady(function() {
                         }
                     }
                 });
-                //console.log(memstore.getCount());
-
-
-
+                console.log(memstore.getCount());
+                var tmp = memstore.getAt(0);
+                console.log(tmp);
             });
-
         });
-
 
     });
 });
