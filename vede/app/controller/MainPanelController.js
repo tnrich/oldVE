@@ -5,10 +5,12 @@
 Ext.define("Vede.controller.MainPanelController", {
     extend: "Ext.app.Controller",
 
-    deMainMenuBar: null,
-    deMainToolBar: null,
-    veMainMenuBar: null,
-    veMainToolBar: null,
+    refs: [
+        {ref: "deMainMenuBar", selector:"#DeviceEditorMainMenuBar"},
+        {ref: "deMainToolBar", selector:"#DeviceEditorMainToolBar"},
+        {ref: "veMainMenuBar", selector:"#VectorEditorMainMenuBar"},
+        {ref: "veMainToolBar", selector:"#VectorEditorMainToolBar"}
+    ],
     
     /**
      * @member Vede.controller.MainPanelController
@@ -27,16 +29,16 @@ Ext.define("Vede.controller.MainPanelController", {
     onTabChange: function(pTabpanel, pNewcard) {
         // Todo: Match with ComponentQuery.is() instead of id after views are given xtypes
         if (pNewcard.id.indexOf("VectorEditor") === 0) {
-            Ext.getCmp("DeviceEditorMainMenuBar").hide();
-            Ext.getCmp("DeviceEditorMainToolBar").hide();
-            Ext.getCmp("VectorEditorMainMenuBar").show();
-            Ext.getCmp("VectorEditorMainToolBar").show();
+            this.getDeMainMenuBar().hide();
+            this.getDeMainToolBar().hide();
+            this.getVeMainMenuBar().show();
+            this.getVeMainToolBar().show();
         }
         else if (pNewcard.id.indexOf("DeviceEditor") === 0) {
-            Ext.getCmp("VectorEditorMainMenuBar").hide();
-            Ext.getCmp("VectorEditorMainToolBar").hide();
-            Ext.getCmp("DeviceEditorMainMenuBar").show();
-            Ext.getCmp("DeviceEditorMainToolBar").show();
+            this.getVeMainMenuBar().hide();
+            this.getVeMainToolBar().hide();
+            this.getDeMainMenuBar().show();
+            this.getDeMainToolBar().show();
         }
     }
 
