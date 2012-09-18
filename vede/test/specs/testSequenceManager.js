@@ -796,11 +796,12 @@ Ext.onReady(function() {
             it("reverseComplementSequence() ",function(){
                 //GATTACA
                 //CTAATGT
-                //console.log(sm.getSequence().seqString());
                 expect(sm.getSequence().seqString()).toBe("gattaca");
                 
-                sm.reverseComplementSequence();
-                //console.log(sm.getSequence().seqString());
+                // Changed function name by Nick, DW 9/10/12 
+                //sm.reverseComplementSequence();
+                sm.doReverseComplementSequence();
+
                 expect(sm.getSequence().seqString()).toBe("tgtaatc");
             });
         });

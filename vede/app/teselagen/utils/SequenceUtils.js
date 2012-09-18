@@ -1,8 +1,6 @@
 /**
  * @class Teselagen.utils.SequenceUtils
  *
- * 
- * 
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceUtils.as)
  */
@@ -28,40 +26,40 @@ Ext.define("Teselagen.utils.SequenceUtils", {
     },
 
     COMPATIBLE_SYMBOLS: [
-    	" ", 
-    	"\t", 
-    	"\n", 
-    	"\r", 
-    	"0", 
-    	"1", 
-    	"2", 
-    	"3", 
-    	"4", 
-    	"5", 
-    	"6", 
-    	"7", 
-    	"8", 
-    	"9"
-    ], 
+        " ",
+        "\t",
+        "\n",
+        "\r",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+    ],
 
     /**
-     * Determines if sequence compatible: 
+     * Determines if sequence compatible:
      * Has characters like 0-9, ATGCYRSWKMBVDHN, &lt;newline&gt;, &lt;space&gt;, &lt;tab&gt;, &lt;return&gt;
      * Original version includes "U" but this is an RNA nucleotide, so it is not included here.
      * @param {String} pSequence
      * @returns {Boolean} compatible Is or is not compatible.
      */
     isCompatibleSequence: function(pSequence) {
-    	var dnaResult = true;
+        var dnaResult = true;
         var rnaResult = true;
 
         dnaResult = this.isCompatibleDNASequence(pSequence);
         rnaResult = this.isCompatibleRNASequence(pSequence);
-    	return dnaResult || rnaResult;
+        return dnaResult || rnaResult;
     },
 
     /**
-     * Determines if DNA sequence iscompatible: 
+     * Determines if DNA sequence iscompatible:
      * Has characters like 0-9, ATGCYRSWKMBVDHN, &lt;newline&gt;, &lt;space&gt;, &lt;tab&gt;, &lt;return&gt;
      * @param {String} pSequence
      * @returns {Boolean} compatible Is or is not compatible.
@@ -84,7 +82,7 @@ Ext.define("Teselagen.utils.SequenceUtils", {
         return result;
     },
     /**
-     * Determines if RNA sequence iscompatible: 
+     * Determines if RNA sequence iscompatible:
      * Has characters like 0-9, AUGCYRSWKMBVDHN, &lt;newline&gt;, &lt;space&gt;, &lt;tab&gt;, &lt;return&gt;
      * @param {String} pSequence
      * @returns {Boolean} compatible Is or is not compatible.
@@ -115,24 +113,24 @@ Ext.define("Teselagen.utils.SequenceUtils", {
      * @returns {String} result Cleaned sequence
      */
     purifyCompatibleSequence: function(pSequence) {
-    	var result = [];
+        var result = [];
 
-    	pSequence = pSequence.toLowerCase();
+        pSequence = pSequence.toLowerCase();
 
-    	for (var i=0; i < pSequence.length; i++) {
-    		var currentCharacter = pSequence.charAt(i);
+        for (var i=0; i < pSequence.length; i++) {
+            var currentCharacter = pSequence.charAt(i);
 
-    		if (Ext.Array.contains(this.COMPATIBLE_SYMBOLS, pSequence.charAt(i))) {
-    			continue;
-    		} else if (DNAAlphabet.symbolByValue(pSequence.charAt(i))) {
-    			result.push(pSequence.charAt(i));
-    		} else if (RNAAlphabet.symbolByValue(pSequence.charAt(i))) {
-    			result.push(pSequence.charAt(i));
-    		} else {
-    			//result += "";
-    		}
-    	}
-    	return result.join("");
+            if (Ext.Array.contains(this.COMPATIBLE_SYMBOLS, pSequence.charAt(i))) {
+                continue;
+            } else if (DNAAlphabet.symbolByValue(pSequence.charAt(i))) {
+                result.push(pSequence.charAt(i));
+            } else if (RNAAlphabet.symbolByValue(pSequence.charAt(i))) {
+                result.push(pSequence.charAt(i));
+            } else {
+                //result += "";
+            }
+        }
+        return result.join("");
     },
 
     /**
@@ -143,21 +141,21 @@ Ext.define("Teselagen.utils.SequenceUtils", {
      * @returns {String} result Cleaned sequence
      */
     purifyCompatibleDNASequence: function(pSequence) {
-    	var result = [];
+        var result = [];
 
-    	pSequence = pSequence.toLowerCase();
+        pSequence = pSequence.toLowerCase();
 
-    	for (var i=0; i < pSequence.length; i++) {
-    		var currentCharacter = pSequence.charAt(i);
+        for (var i=0; i < pSequence.length; i++) {
+            var currentCharacter = pSequence.charAt(i);
 
-    		if (Ext.Array.contains(this.COMPATIBLE_SYMBOLS, pSequence.charAt(i))) {
-    			continue;
-    		} else if (DNAAlphabet.symbolByValue(pSequence.charAt(i))) {
-    			result.push(pSequence.charAt(i));
-    		} else {
-    		}
-    	}
-    	return result.join("");
+            if (Ext.Array.contains(this.COMPATIBLE_SYMBOLS, pSequence.charAt(i))) {
+                continue;
+            } else if (DNAAlphabet.symbolByValue(pSequence.charAt(i))) {
+                result.push(pSequence.charAt(i));
+            } else {
+            }
+        }
+        return result.join("");
     },
 
     /**
@@ -167,21 +165,21 @@ Ext.define("Teselagen.utils.SequenceUtils", {
      * @returns {String} result Cleaned sequence
      */
     purifyCompatibleRNASequence: function(pSequence) {
-    	var result = [];
+        var result = [];
 
-    	pSequence = pSequence.toLowerCase();
+        pSequence = pSequence.toLowerCase();
 
-    	for (var i=0; i < pSequence.length; i++) {
-    		var currentCharacter = pSequence.charAt(i);
+        for (var i=0; i < pSequence.length; i++) {
+            var currentCharacter = pSequence.charAt(i);
 
-    		if (Ext.Array.contains(this.COMPATIBLE_SYMBOLS, pSequence.charAt(i))) {
-    			continue;
-    		} else if (RNAAlphabet.symbolByValue(pSequence.charAt(i))) {
-    			result.push(pSequence.charAt(i));
-    		} else {
-    		}
-    	}
-    	return result.join("");
+            if (Ext.Array.contains(this.COMPATIBLE_SYMBOLS, pSequence.charAt(i))) {
+                continue;
+            } else if (RNAAlphabet.symbolByValue(pSequence.charAt(i))) {
+                result.push(pSequence.charAt(i));
+            } else {
+            }
+        }
+        return result.join("");
     }
 
 });
