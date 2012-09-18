@@ -19,7 +19,7 @@ Ext.onReady(function() {
     SbolParser      = Teselagen.bio.parsers.SbolParser;
     XmlToJson       = Teselagen.bio.util.XmlToJson;
 
-    xdescribe("Testing Teselagen.bio.parsers.SbolParser:", function() {
+    describe("Testing Teselagen.bio.parsers.SbolParser:", function() {
 
         beforeEach(function() {
             var url = null;

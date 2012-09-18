@@ -339,15 +339,15 @@ Ext.onReady(function() {
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:label"]).toBe("feat1");
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:type"]).toBe("CDS");
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"].length).toBe(1);
-                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(1);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(2); //toBe(1);
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:end"]).toBe(3);
 
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:label"]).toBe("feat3");
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:type"]).toBe("gene");
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"].length).toBe(2);
-                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(2);
+                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(3);//toBe(2);
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:end"]).toBe(5);
-                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(0);
+                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(1);//toBe(0);
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(1);
 
                 var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
@@ -366,15 +366,15 @@ Ext.onReady(function() {
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:label"]).toBe("feat1");
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:type"]).toBe("CDS");
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"].length).toBe(1);
-                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(1);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(2);//toBe(1);
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][0]["seq:end"]).toBe(3);
 
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:label"]).toBe("feat3");
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:type"]).toBe("gene");
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"].length).toBe(2);
-                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(2);
+                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:genbankStart"]).toBe(3);//toBe(2);
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][0]["seq:end"]).toBe(5);
-                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(0);
+                expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(1);//toBe(0);
                 expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(1);
 
                 var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
@@ -415,15 +415,15 @@ Ext.onReady(function() {
 
                 expect(gb.getFeatures().getFeaturesElements()[0].getComplement()).toBe(true);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(2);//toBe(1);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
 
                 expect(gb.getFeatures().getFeaturesElements()[1].getJoin()).toBe(true);
                 expect(gb.getFeatures().getFeaturesElements()[1].getComplement()).toBe(false);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(2);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(3);//toBe(2);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(5);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(1);//toBe(0);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
 
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
@@ -448,13 +448,13 @@ Ext.onReady(function() {
                 expect(sm2.getFeatures().length).toBe(2);
                 expect(sm2.getFeatures()[0].getName()).toBe("feat1");
                 expect(sm2.getFeatures()[0].getType()).toBe("CDS");
-                expect(sm2.getFeatures()[0].getLocations()[0].getStart()).toBe(1);
+                expect(sm2.getFeatures()[0].getLocations()[0].getStart()).toBe(0);//toBe(1);
                 expect(sm2.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
                 expect(sm2.getFeatures()[1].getName()).toBe("feat3");
                 expect(sm2.getFeatures()[1].getType()).toBe("gene");
-                expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
+                expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(1);//toBe(2);
                 expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
-                expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(0);
+                expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(-1);//toBe(0);
                 expect(sm2.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
             });
 
@@ -472,8 +472,8 @@ Ext.onReady(function() {
 
     describe("Testing Teselagen.utils.DeXmlUtils.js", function() {
 
-        describe("First", function() {
-            it("checkDeXmlToJson() Correctly Identifies a good file",function(){
+        describe("checkDeXmlToJson()", function() {
+            it("Correctly Identifies a good file",function(){
                 var url = "/vede/test/data/dexml/DeviceEditor_forTest.xml";
                 var xml = jasmine.getFixtures().read(url);
                 var rawJson = Teselagen.bio.util.XmlToJson.xml_str2json(xml);
@@ -481,7 +481,7 @@ Ext.onReady(function() {
                 var okJson = {};
                 var valid = true;
                 try {
-                    okJson   = Teselagen.utils.DeXmlUtils.checkDeXmlToJson(rawJson);
+                    okJson   = Teselagen.utils.DeXmlUtils.validateRawDeJson(rawJson);
                 } catch (e) {
                     console.warn("Incorrectly caught: " + e.message);
                     valid = false;
@@ -490,8 +490,11 @@ Ext.onReady(function() {
                 expect(JSON.stringify(rawJson)).toBe(JSON.stringify(okJson));
                 expect(valid).toBe(true);
             });
+        });
 
-            it("deXmlToJson()",function(){
+        describe("deXmlToJson()", function() {
+
+            it("Correctly opens DeviceEditor_forTest.xml",function(){
                 var url = "/vede/test/data/dexml/DeviceEditor_forTest.xml";
                 var xml = jasmine.getFixtures().read(url);
 
@@ -504,7 +507,7 @@ Ext.onReady(function() {
                 expect(json["de:design"]["de:sequenceFiles"]["de:sequenceFile"]).toNotBe(undefined);
             });
 
-            it("deXmlToJson()",function(){
+            it("Opens default examples from DE",function(){
 
                 //var url = "/vede/test/data/dexml/Golden_Gate_example.xml";
                 //var url = "/vede/test/data/dexml/SLIC_Gibson_CPEC_example.xml";
@@ -515,7 +518,7 @@ Ext.onReady(function() {
 
                 var json1 = Teselagen.bio.util.XmlToJson.xml_str2json(xml);
                 console.log(json1);
-                var cleanJson1 = Teselagen.utils.DeXmlUtils.checkDeXmlToJson(json1);
+                var cleanJson1 = Teselagen.utils.DeXmlUtils.validateRawDeJson(json1);
                 console.log(cleanJson1);
                 expect(json1).toBe(cleanJson1);
 
