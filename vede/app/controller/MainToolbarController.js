@@ -3,6 +3,7 @@ Ext.define('Vede.controller.MainToolbarController', {
 
     requires: ["Teselagen.event.VisibilityEvent"],
 
+    MenuItemEvent: null,
     VisibilityEvent: null,
 
     onCircularViewButtonClick: function(button, e, options) {
@@ -16,6 +17,14 @@ Ext.define('Vede.controller.MainToolbarController', {
         }
 
         this.application.fireEvent("ViewModeChanged", viewMode);
+    },
+
+    onUndoButtonClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.UNDO);
+    },
+
+    onRedoButtonClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.REDO);
     },
 
     onFeaturesButtonClick: function(button, e, options) {
@@ -97,6 +106,12 @@ Ext.define('Vede.controller.MainToolbarController', {
             "#circularViewBtn": {
                 click: this.onCircularViewButtonClick
             },
+            "#undoViewBtn": {
+                click: this.onUndoButtonClick
+            },
+            "#redoViewBtn": {
+                click: this.onRedoButtonClick
+            },
             "#featuresBtn": {
                 click: this.onFeaturesButtonClick
             },
@@ -114,6 +129,7 @@ Ext.define('Vede.controller.MainToolbarController', {
             }
         });
 
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);

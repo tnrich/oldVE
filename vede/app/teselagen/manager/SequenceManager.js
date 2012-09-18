@@ -565,7 +565,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
             //console.log("remove Info " + pStartIndex + ":" + pEndIndex);
 
-            if ( featStart < featEnd ) {
+            if ( featStart <= featEnd ) {
                 // Normal Feature
                 if ( pStartIndex < pEndIndex) {
                     // Normal Selection

@@ -169,6 +169,12 @@ Ext.define("Vede.controller.SequenceController", {
             // Ctrl + End: Move caret to end of sequence.
             this.changeCaretPosition(
                 this.SequenceManager.getSequence().toString().length - 1);
+        } else if(event.ctrlKey && event.getKey() == event.Z) {
+            // Ctrl + Z: Undo last action.
+            this.application.fireEvent(this.MenuItemEvent.UNDO);
+        } else if(event.ctrlKey && event.getKey() == event.U) {
+            // Ctrl + U: Redo last action.
+            this.application.fireEvent(this.MenuItemEvent.REDO); 
         } else if(event.getKey() == event.LEFT) {
             // Left: Move caret down one base.
             this.changeCaretPosition(this.caretIndex - 1);
@@ -312,16 +318,10 @@ Ext.define("Vede.controller.SequenceController", {
             case Teselagen.event.SequenceManagerEvent.KIND_MANUAL_UPDATE:
                 break;
             case Teselagen.event.SequenceManagerEvent.KIND_SET_MEMENTO:
-                break;
+                break; // Handled in ActionStackController.
             case Teselagen.event.SequenceManagerEvent.KIND_INITIALIZED:
                 break;
         };
-
-        var objType = Ext.getClassName(obj);
-
-        if (objType.match(/SequenceManagerMemento/)) {
-            // Put in stack of SeqMgr Mementos
-        } // else ?
     },
 
     onSequenceChanging: function(kind, obj) {
