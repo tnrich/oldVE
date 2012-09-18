@@ -17,6 +17,7 @@ Ext.onReady(function() {
     GenbankManager  = Teselagen.bio.parsers.GenbankManager;
     ParsersManager  = Teselagen.bio.parsers.ParsersManager;
     SbolParser      = Teselagen.bio.parsers.SbolParser;
+    XmlToJson       = Teselagen.bio.util.XmlToJson;
 
     describe("Testing Teselagen.bio.parsers.SbolParser:", function() {
 

@@ -38,61 +38,70 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         var i, j;
 
         var json = XmlToJson.xml_str2json(xmlStr);
-
         json     = this.checkRawSbolJson(json);
 
-        if (json["RDF"] === undefined) {
+        var name = "RDF";
+
+        if (json[name] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid SBOL-XML file. No root or record tag 'RDF'"
             });
         }
 
         // Header Information
-        var namespace = json["RDF"]["__prefix"]; //use a variable for the prefix
-        var xmlns   = json["RDF"]["_xmlns"];
-        var xrdf    = json["RDF"]["_xmlns:rdf"];
-        var xrdfs   = json["RDF"]["_xmlns:rdfs"];
-        var so      = json["RDF"]["_xmlns:so"];
+        var prefix  = json[name]["__prefix"]; //use a variable for the prefix
+        var namespace;
+        if (prefix === "") {
+            namespace = name;
+        } else {
+            namespace = prefix + ":" + name;
+        }
+
+        var xmlns   = json[name]["_xmlns"];
+        var xrdf    = json[name]["_xmlns:rdf"];
+        var xrdfs   = json[name]["_xmlns:rdfs"];
+        var so      = json[name]["_xmlns:so"];
 
         // Check Top Level: Collection || DnaComponent || DnaSequence ?
         // The hierarchy is Collection -> DnaComponent -> DnaSequence
         var top = [];
         var topName = "";
-        if ( json["RDF"]["Collection"] !== undefined) {
+
+        if ( json[name]["Collection"] !== undefined) {
             topName = "Collection";
 
-            if (json["RDF"]["Collection"] === "HASH") {
+            if (json[name]["Collection"] === "HASH") {
                 //top = {
                 //    "Collection" : this.collectionXmlToJson(json["RDF"]["Collection"])
                 //}
             }
 
-            if (json["RDF"]["Collection_asArray"] !== undefined) {
-                for (i = 0; i < json["RDF"]["Collection_asArray"].length; i++) {
+            if (json[name]["Collection_asArray"] !== undefined) {
+                for (i = 0; i < json[name]["Collection_asArray"].length; i++) {
                     top.push(
-                        this.parseRawCollection(json["RDF"]["Collection_asArray"][i])
+                        this.parseRawCollection(json[name]["Collection_asArray"][i], prefix)
                     );
                 }
             }
 
-        } else if ( json["RDF"]["DnaComponent"] !== undefined) {
+        } else if ( json[name]["DnaComponent"] !== undefined) {
             topName = "DnaComponent";
-            if (json["RDF"]["DnaComponent_asArray"] !== undefined) {
+            if (json[name]["DnaComponent_asArray"] !== undefined) {
                 top = [];
-                for (i = 0; i < json["RDF"]["DnaComponent_asArray"].length; i++) {
+                for (i = 0; i < json[name]["DnaComponent_asArray"].length; i++) {
                     top.push(
-                        this.parseRawDnaComponent(json["RDF"]["DnaComponent_asArray"][i])
+                        this.parseRawDnaComponent(json[name]["DnaComponent_asArray"][i], prefix)
                     );
                 }
             }
 
-        } else if ( json["RDF"]["DnaSequence"] !== undefined) {
+        } else if ( json[name]["DnaSequence"] !== undefined) {
             topName = "DnaSequence";
-            if (json["RDF"]["DnaSequence_asArray"] !== undefined) {
+            if (json[name]["DnaSequence_asArray"] !== undefined) {
                 top = [];
-                for (i = 0; i < json["RDF"]["DnaSequence_asArray"].length; i++) {
+                for (i = 0; i < json[name]["DnaSequence_asArray"].length; i++) {
                     top.push(
-                        this.parseRawDnaSequence(json["RDF"]["DnaSequence_asArray"][i])
+                        this.parseRawDnaSequence(json[name]["DnaSequence_asArray"][i], prefix)
                     );
                 }
             }
@@ -103,19 +112,14 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
             });
         }
 
+        // Fill in Result output
+        result[namespace]                           = {};
+        result[namespace]["_xmlns"]                 = xmlns;
+        result[namespace]["_xmlns:" + prefix]       = xrdf;
+        result[namespace]["_xmlns:" + prefix + "s"] = xrdfs;
+        result[namespace]["_xmlns_so"]              = so;
 
-
-
-
-        result = {
-            "RDF" : {
-                "_xmlns" :       xmlns,
-                "_xmlns:rdf" :   xrdf,
-                "_xmlns:rdfs" :  xrdfs,
-                "_xmlns:so" :    so,
-                topName :       top
-            }
-        };
+        result[namespace][topName]                  = top;
 
         return result;
     },
@@ -143,27 +147,39 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return json;
     },
 
-    parseRawCollection: function(coll) {
-        console.log("blah");
+    parseRawCollection: function(coll, prefix) {
+        var result = {};
 
-        return json;
+        var uri         = coll["_"+prefix+":about"];
+        var displayId   = coll["displayId"];
+        var name        = coll["name"]; //[0..1]
+        var description = coll["description"]; //[0..1]
+
+        var components;
+        if ( coll["components"] !== undefined) {
+            components  = this.parseRawDnaComponent(coll["components"]["DnaComponent"]);
+        }
+
+        // Fill in Result ouput
+        result["_"+prefix+":about"] = uri;
+        result["displayId"]         = displayId;
+        result["name"]              = name;
+        result["description"]       = description;
+
+        result["components"]        = components;
+
+        return result;
 
     },
 
-    parseRawDnaComponent: function(comp) {
-        //console.log(namespace);
-        var result;
+    parseRawDnaComponent: function(comp, prefix) {
+        var result      = {};
 
         // SBOL sequences are never circular
-        var circ = false;
-
-        // Other Header info
-        var display_id  = comp["displayId"];
-        var desc        = comp["description"];
-        var primary_id  = comp["name"];
+        var circ        = false;
 
         // Name space -- direct port, not sure how to use yet
-        var about         = comp["_rdf:about"];
+        var uri         = comp["_" + prefix + ":about"];
         /*var namespace, accession_number;
         if (tmp.match(/^(.*)#(-*)/)) {
             namespace           = about.split(/^(.*)#(-*)/)[0];
@@ -173,79 +189,93 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
             accession_number    = about.split(/^(.*)#(-*)$/)[1];
         }*/
 
-        result = {
-            "_rdf:about":   about,
-            "displayId":    display_id,
-            "name":         primary_id,
-            "description":  desc
-
-        };
+        // Other Header info
+        var displayId   = comp["displayId"];
+        var primaryId   = comp["name"];
+        var description = comp["description"];
+        
+        // Fill in Result ouput
+        result["_"+prefix+":about"] = uri;
+        result["displayId"]         = displayId;
+        result["name"]              = primaryId;
+        result["description"]       = description;
 
         // Type
-        var type = comp["_rdf:type"];
+        var type = comp["_" + prefix + ":type"];
         if (type !== undefined) {
-            var resource = type["_rdf:resource"];
-            result["rdf:type"] = {
-                "_rdf:resource" : resource
-            };
+            result[prefix + ":type"] = {};
+            result[prefix + ":type"]["_" + prefix + ":resource"] = type["_" + prefix + ":resource"];
         }
 
-        // Contains DnaSequence -- There should be only one or result["dnaSequence"] will be an array
+        // DnaSequence -- Contains 0..1
         if (comp["dnaSequence"] !== undefined) {
-            result["dnaSequence"] = this.parseRawDnaSequence(comp["dnaSequence"]);
+            result["dnaSequence"] = this.parseRawDnaSequence(comp["dnaSequence"], prefix);
         }
 
-        // Contains SequenceAnnotation
-        if (comp["annotation"] !== undefined) {
-            result["annotation"] = this.parseRawSequenceAnnotation(comp["annotation"]);
+        // SequenceAnnotation -- Contains 0..*
+        if (comp["annotation_asArray"] !== undefined) {
+            result["annotation"] = [];
+            for (var i=0; i < comp["annotation_asArray"].length; i++) {
+                result["annotation"].push(this.parseRawSequenceAnnotation(comp["annotation_asArray"][i], prefix));
+            }
         }
         return result;
     },
 
-    parseRawDnaSequence: function(seq) {
+    parseRawDnaSequence: function(seq, prefix) {
         var result;
 
-        var about       = seq["DnaSequence"]["_rdf:about"];
+        var about       = seq["DnaSequence"]["_" + prefix + ":about"];
         var nucleotides = seq["DnaSequence"]["nucleotides"];
 
-
+        // Fill in Result ouput
         result = {
-            "DnaSequence" : {
-                "_rdf:about" : about,
-                "nucleotides": nucleotides
-            }
+            "DnaSequence" : {}
         };
+
+        result["DnaSequence"]["_" + prefix + ":about"]  = about;
+        result["DnaSequence"]["nucleotides"]            = nucleotides;
 
         return result;
     },
 
-    parseRawSequenceAnnotation: function(annotation) {
-        var result;
-        var about       = annotation["_rdf:about"] || "";
+    parseRawSequenceAnnotation: function(annotation, prefix) {
+        var result = {};
+
+        var uri         = annotation["_" + prefix + ":about"];
         var annot       = annotation["SequenceAnnotation_asArray"];
         var seqAnnot    = [];
 
         for (var i=0; i < annot.length; i++) {
-            //var about       = annot["_rdf:about"] || "";
-            var bioStart    = parseInt(annot[i]["bioStart"]) || parseInt("");
-            var bioEnd      = parseInt(annot[i]["bioEnd"]) || parseInt("");
+            var bioStart    = parseInt(annot[i]["bioStart"]);// || parseInt("");
+            var bioEnd      = parseInt(annot[i]["bioEnd"]);// || parseInt("");
             var strand      = annot[i]["strand"] || "+";
             
-            var subComp     = this.parseRawDnaComponent(annot[i]["subComponent"]);
-            console.log(annot[i]["subComponent"]);
+            // DnaComponent -- Contains Exactly 1
+            var subComp     = this.parseRawDnaComponent(annot[i]["subComponent"]["DnaComponent"], prefix);
+
+            // Sequence Annotation -- Contains 0..*
+            var precedes;
+            if (annot[i]["precedes"] !== undefined ) {
+                precedes = [];
+                preSeqAn = annot[i]["precedes"]["SequenceAnnotation_asArray"];
+                for (var j=1; j < preSeqAn.length; j++) {
+                    precedes.push(this.parseRawSequenceAnnotation(preSeqAn[j], prefix));
+                }
+            }
 
             seqAnnot.push({
                 "bioStart"      : bioStart,
                 "bioEnd"        : bioEnd,
                 "strand"        : strand,
-                "subComponent"  : subComp
-            }
-            );
+                "subComponent"  : subComp,
+                "precedes"      : precedes
+            });
         }
-        result = {
-            "_rdf:about"            : about,
-            "SequenceAnnotation"    : seqAnnot
-        };
+
+        // Fill in Result ouput
+        result["_"+prefix+":about"]     = uri;
+        result["SequenceAnnotation"]    = seqAnnot;
         
         return result;
     }
