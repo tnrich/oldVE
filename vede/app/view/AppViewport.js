@@ -21,7 +21,6 @@ Ext.define('Vede.view.AppViewport', {
                     xtype: 'panel',
 //                    xtype: 'ProjectPanel',
                     id: 'ProjectPanel',
-                    width: 150,
                     collapsible: true,
                     split : true,
                     title: 'Project',
@@ -47,20 +46,19 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'DeviceEditorPanel',
                                     //id: 'DeviceEditor',
+                                    title: 'DeviceEditor',
+                                    flex : 1,
                                     layout: {
                                         type: 'fit'
-                                    },
-                                    flex : 2,
-                                    title: 'DeviceEditor'
+                                    }
                                 },
                                 {
                                     xtype: 'DeviceEditorInspectorPanel',
-                                    
                                     width: '320px',
+                                    title: 'Inspector',
                                     layout: {
                                         type: 'fit'
-                                    },
-                                    title: 'Inspector'
+                                    }
                                 }
                             ]
                         },
@@ -79,9 +77,10 @@ Ext.define('Vede.view.AppViewport', {
                                     layout: {
                                         type: 'fit'
                                     },
-                                    title: 'Vector',
-                                    flex: 2,
+                                    flex: 1,
                                     region: 'center',
+                                    collapsible: true,
+                                    collapseDirection: 'left',
                                     items: [
                                         {
                                             xtype: 'container',
@@ -94,7 +93,6 @@ Ext.define('Vede.view.AppViewport', {
                                         },
                                         {
                                             xtype: 'container',
-                                            hidden: false,
                                             id: 'RailContainer',
                                             layout: {
                                                 type: 'fit'
@@ -103,7 +101,8 @@ Ext.define('Vede.view.AppViewport', {
                                     ]
                                 },
                                 {
-                                    xtype: 'splitter'
+                                    xtype: 'splitter',
+                                    collapseTarget: 'prev'
                                 },
                                 {
                                     xtype: 'panel',
@@ -111,14 +110,10 @@ Ext.define('Vede.view.AppViewport', {
                                     layout: {
                                         type: 'fit'
                                     },
-                                    width: 150,
                                     autoScroll: true,
                                     collapsible: true,
-                                    viewBox: true,
-                                    split: true,
-                                    title: 'Annotate',
-                                    flex: 2,
-                                    region: 'east',
+                                    collapseDirection: 'right',
+                                    flex: 1,
                                     items: [
                                         {
                                             xtype: 'container',
