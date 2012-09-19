@@ -52,8 +52,8 @@ Ext.define('Vede.controller.RailController', {
         railContainer.add(rail);
 
         // Set the tabindex attribute in order to receive keyboard events on the div.
-        railContainer.el.dom.setAttribute("tabindex", "0");
-        railContainer.el.on("keydown", this.onKeydown, this);
+//        railContainer.el.dom.setAttribute("tabindex", "0");
+//        railContainer.el.on("keydown", this.onKeydown, this);
 
 //        console.log(rail);
 

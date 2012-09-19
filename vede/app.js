@@ -25,7 +25,7 @@ Ext.application({
         'MainPanelController',
         'MainToolbarController',
         'PieController',
-        'RailController',
+//        'RailController',
         'RestrictionEnzymeController',
         'SelectWindowController',
         'SequenceController',

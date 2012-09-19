@@ -54,8 +54,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
 
         // Set the tabindex attribute in order to receive keyboard events on the div.
-        this.AnnotatePanel.el.dom.setAttribute("tabindex", "0");
-        this.AnnotatePanel.el.on("keydown", this.onKeydown, this);
+//        this.AnnotatePanel.el.dom.setAttribute("tabindex", "0");
+//        this.AnnotatePanel.el.on("keydown", this.onKeydown, this);
 
         this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {
             sequenceManager: this.SequenceManager,
