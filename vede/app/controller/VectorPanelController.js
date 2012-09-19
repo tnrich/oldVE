@@ -25,8 +25,8 @@ Ext.define("Vede.controller.VectorPanelController", {
 
     onRender: function() {
         if (!this.isRendered) {
-//            console.log("render");
             Vede.application.getController("PieController").initPie();
+            Vede.application.getController("RailController").initRail();
             this.isRendered = true;
         }
     },
