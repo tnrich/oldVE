@@ -264,11 +264,13 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Select All'
+                                                text: 'Select All',
+                                                id: 'selectAllMenuItem'
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Select Inverse'
+                                                text: 'Select Inverse',
+                                                id: 'selectInverseMenuItem'
                                             },
                                             {
                                                 xtype: 'menuseparator'

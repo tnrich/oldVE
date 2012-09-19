@@ -287,7 +287,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				normalizedCutStart += pMaxLength;
 				circularAdjustment = pCutLength;
              			}
-  console.log("Setting circularAdjustment to: " + circularAdjustment);
+            //console.log("Setting circularAdjustment to: " + circularAdjustment);
             
             this.circularAdjustment = circularAdjustment;
 
@@ -347,22 +347,22 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 							shifting = pCutLength;
 						} else if (normalizedCutEnd <=tempLocations[i].getEnd()) {
 							if (normalizedCutStart < tempLocations[i].getStart()) {
-                                console.log("Making last cut");
+                                //console.log("Making last cut");
                                 logFeatures();
-                                console.log("Cut start before and ends within this location");
+                                //console.log("Cut start before and ends within this location");
 								// cut starts before and ends within this location
 								tempLocations[i].setStart( normalizedCutStart );
 								// currentLocation.start = normalizedCutStart;
 								tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
 								// currentLocation.end -= pCutLength;
-                                console.log("Deletion made");
+                                //console.log("Deletion made");
                                 logFeatures();
 
 								shifting = pCutLength;
 							} else if (normalizedCutStart >= tempLocations[i].getStart()) { 
 								// cut entirely within this location
 								// currentLocation.end -= pCutLength;
-                                console.log("Cut entirely within this location");
+                                //console.log("Cut entirely within this location");
 								tempLocations[i].setEnd( tempLocations[i].getEnd() - pCutLength);
 								shifting = pCutLength;
 							}
@@ -409,10 +409,10 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 			}
 			var changedLength = pMaxLength - pCutLength;
 locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, this.circularAdjustment);
-            console.log("Locations denormalized");
+            //console.log("Locations denormalized");
             logFeatures(locations);
           function logFeatures(pLocations){ Ext.each(pLocations, function(location){
-                console.log("The location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
+                //console.log("The location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
             });}
  
 		}

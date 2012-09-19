@@ -101,17 +101,20 @@ Ext.define("Vede.controller.SequenceController", {
         listenersObject[this.CaretEvent.CARET_POSITION_CHANGED] = 
             this.onCaretPositionChanged;
 
+        listenersObject[this.MenuItemEvent.SELECT_ALL] = this.onSelectAll;
+        listenersObject[this.MenuItemEvent.SELECT_INVERSE] = this.onSelectInverse;
+
+        listenersObject[this.MenuItemEvent.REVERSE_COMPLEMENT] = 
+            this.onReverseComplementSequence;
+        listenersObject[this.MenuItemEvent.REBASE_SEQUENCE] = 
+            this.onRebaseSequence;
+
+        listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGING] =
+            this.onSequenceChanging;
+        listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGED] =
+            this.onSequenceChanged;
+
         this.application.on(listenersObject);
-
-        this.application.on(this.MenuItemEvent.REVERSE_COMPLEMENT,
-            this.onReverseComplementSequence, this);
-        this.application.on(this.MenuItemEvent.REBASE_SEQUENCE, 
-            this.onRebaseSequence, this);
-
-        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGING,
-            this.onSequenceChanging, this);
-        this.application.on(this.SequenceManagerEvent.SEQUENCE_CHANGED,
-            this.onSequenceChanged, this);
     },
 
     onLaunch: function() {
@@ -175,6 +178,12 @@ Ext.define("Vede.controller.SequenceController", {
         } else if(event.ctrlKey && event.getKey() == event.U) {
             // Ctrl + U: Redo last action.
             this.application.fireEvent(this.MenuItemEvent.REDO); 
+        } else if(event.ctrlKey && event.getKey() == event.A) {
+            // Ctrl + A: Select everything.
+            this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
+        } else if(event.ctrlKey && event.getKey() == event.I) {
+            // Ctrl + I: Invert selection.
+            this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
         } else if(event.getKey() == event.LEFT) {
             // Left: Move caret down one base.
             this.changeCaretPosition(this.caretIndex - 1);
@@ -266,6 +275,18 @@ Ext.define("Vede.controller.SequenceController", {
         Ext.each(this.Managers, function(manager) {
             manager.setSequenceManager(pSeqMan);
         });
+    },
+
+    onSelectAll: function() {
+        if(this.SequenceManager) {
+            this.select(0, this.SequenceManager.getSequence().toString().length);
+        }
+    },
+
+    onSelectInverse: function() {
+        if(this.SequenceManager && this.SelectionLayer) {
+            this.select(this.SelectionLayer.end, this.SelectionLayer.start);
+        }
     },
 
     onRebaseSequence: function() {
@@ -384,5 +405,8 @@ Ext.define("Vede.controller.SequenceController", {
                                        this,
                                        index);
         }
-    }
+    },
+
+    select: function() {
+    },
 });
