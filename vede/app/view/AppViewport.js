@@ -185,7 +185,8 @@ Ext.define('Vede.view.AppViewport', {
                                             },
                                             {
                                                 xtype: 'menuitem',
-                                                text: 'Find...'
+                                                text: 'Find...',
+                                                id: 'findMenuItem'
                                             },
                                             {
                                                 xtype: 'menuitem',
@@ -466,6 +467,7 @@ Ext.define('Vede.view.AppViewport', {
                                 {
                                     xtype: 'button',
                                     id: 'findBtn',
+                                    enableToggle: true,
                                     icon: 'resources/images/find.png',
                                     scale: 'medium',
                                     tooltip: 'Find...'
@@ -510,6 +512,57 @@ Ext.define('Vede.view.AppViewport', {
                                     tooltip: 'Properties'
                                 }
                             ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    height: 28,
+                    id: 'FindPanel',
+                    layout: {
+                        type: 'hbox'
+                    },
+                    hidden: true,
+                    region: 'south',
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            id: 'findField',
+                            hideLabel: true,
+                            emptyText: 'Search...',
+                            width: 500,
+                            maxWidth: 600,
+                            margin: '2 4 2 4'
+                        },
+                        {
+                            xtype: 'button',
+                            id: 'findNextBtn',
+                            text: '<b>Find Next</b>',
+                            margin: '2 4 2 4'
+                        },
+                        {
+                            xtype: 'combobox',
+                            id: 'findInSelector',
+                            queryMode: 'local',
+                            editable: false,
+                            value: 'DNA',
+                            store: ['DNA', 'Amino Acids'],
+                            margin: '2 4 2 4'
+                        },
+                        {
+                            xtype: 'combobox',
+                            id: 'literalSelector',
+                            queryMode: 'local',
+                            editable: false,
+                            value: 'Literal',
+                            store: ['Literal', 'Ambiguous'],
+                            margin: '2 4 2 4'
+                        },
+                        {
+                            xtype: 'button',
+                            id: 'highlightAllBtn',
+                            text: '<b>Highlight All</b>',
+                            margin: '2 4 2 4'
                         }
                     ]
                 },

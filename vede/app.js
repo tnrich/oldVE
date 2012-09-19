@@ -20,6 +20,7 @@ Ext.application({
         'ActionStackController',
         'AppController',
         'AnnotatePanelController',
+        'FindPanelController',
         'MainMenuController',
         'MainToolbarController',
         'PieController',

@@ -1,8 +1,10 @@
 Ext.define("Vede.controller.SelectWindowController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.event.SelectionEvent"],
+    requires: ["Teselagen.event.SelectionEvent",
+               "Teselagen.event.MenuItemEvent"],
 
+    MenuItemEvent: null,
     SelectionEvent: null,
 
     selectWindow: null,
@@ -43,9 +45,12 @@ Ext.define("Vede.controller.SelectWindowController", {
             }
         });
 
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.SelectionEvent = Teselagen.event.SelectionEvent;
 
-        this.application.on("SelectWindowOpened", this.onSelectWindowOpened, this);
-        this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
+        this.application.on(this.MenuItemEvent.SELECT_WINDOW_OPENED,
+                            this.onSelectWindowOpened, this);
+        this.application.on("SequenceManagerChanged", 
+                            this.onSequenceManagerChanged, this);
     }
 });
