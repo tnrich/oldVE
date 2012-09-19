@@ -8,6 +8,10 @@ Ext.define('Vede.controller.RailController', {
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
+    
+    refs: [
+        {ref: "railContainer", selector: "#RailContainer"}
+    ],
 
     railManager: null,
 
@@ -33,11 +37,18 @@ Ext.define('Vede.controller.RailController', {
         });
     },
 
-    onLaunch: function() {
-        this.callParent(arguments);
+    initRail: function() {
+        this.railManager.initRail();
+        // Set the tabindex attribute in order to receive keyboard events on a div.
+        this.railContainer.el.dom.setAttribute("tabindex", "0");
+        this.railContainer.el.on("keydown", this.onKeydown, this);
+    },
 
-        var railContainer;
+    onLaunch: function() {
         var rail;
+
+        this.callParent(arguments);
+        this.railContainer = this.getRailContainer();
 
         this.railManager = Ext.create("Teselagen.manager.RailManager", {
             reference: {x: 0, y: 0},
@@ -47,20 +58,11 @@ Ext.define('Vede.controller.RailController', {
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
-        railContainer = Ext.getCmp('RailContainer');
         rail = this.railManager.getRail();
-        railContainer.add(rail);
-
-        // Set the tabindex attribute in order to receive keyboard events on the div.
-//        railContainer.el.dom.setAttribute("tabindex", "0");
-//        railContainer.el.on("keydown", this.onKeydown, this);
-
-//        console.log(rail);
-
-//        this.railManager.initRail();
+        this.railContainer.add(rail);
 
         this.Managers.push(this.railManager);
-        railContainer.hide();
+        this.railContainer.hide();
 
         this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
             reference: this.railManager.reference,
