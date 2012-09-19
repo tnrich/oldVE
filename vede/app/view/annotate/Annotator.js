@@ -33,6 +33,9 @@ Ext.define("Vede.view.annotate.Annotator", {
         aminoSequencesShown: 5,
     },
 
+    /**
+     * @member Vede.view.annotate.Annotator
+     */
     constructor: function(inData){
         this.callParent([inData]);
         this.initConfig(inData);
@@ -46,6 +49,10 @@ Ext.define("Vede.view.annotate.Annotator", {
 
         this.sequenceAnnotator = inData.sequenceAnnotator;
 
+        this.createSequenceRenderer();
+    },
+    
+    init: function() {
         this.annotateSVG = d3.select("#AnnotateContainer")
             .append("svg:svg")
             .attr("id", "annotateSVG")
@@ -65,7 +72,7 @@ Ext.define("Vede.view.annotate.Annotator", {
 
         this.featuresSVG = this.annotateSVG.append("svg:g")
                 .attr("id", "featuresSVG");
-        this.createSequenceRenderer();
+        
     },
     
     sequenceChanged: function(){

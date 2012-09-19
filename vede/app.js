@@ -1,3 +1,4 @@
+/*global console*/
 Ext.Loader.setConfig({
     enabled: true,
     paths: {
@@ -22,6 +23,7 @@ Ext.application({
         'AnnotatePanelController',
         'FindPanelController',
         'MainMenuController',
+        'MainPanelController',
         'MainToolbarController',
         'PieController',
         'RailController',
@@ -29,7 +31,10 @@ Ext.application({
         'SelectWindowController',
         'SequenceController',
         'VectorPanelController',
-        'SimulateDigestionController'
+        'SimulateDigestionController',
+        'DeviceEditor.MainMenuController',
+        'DeviceEditor.MainToolbarController',
+        'DeviceEditor.DeviceEditorPanelController'
     ],
     errorHandler: function(err) {
         console.warn(err);
@@ -38,6 +43,6 @@ Ext.application({
     launch: function() {
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
-    },
+    }
 });
 

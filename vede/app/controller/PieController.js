@@ -5,11 +5,16 @@
 Ext.define('Vede.controller.PieController', {
     extend: 'Vede.controller.SequenceController',
 
+    refs: [
+        {ref: "pieContainer", selector: "#PieContainer"}
+    ],
+    
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
 
     pieManager: null,
+    pieContainer: null,
 
     startSelectionAngle: 0,
 
@@ -28,11 +33,18 @@ Ext.define('Vede.controller.PieController', {
         });
     },
 
+    initPie: function() {
+        this.pieManager.initPie();
+        // Set the tabindex attribute in order to receive keyboard events on a div.
+        this.pieContainer.el.dom.setAttribute("tabindex", "0");
+        this.pieContainer.el.on("keydown", this.onKeydown, this);
+    },
+    
     onLaunch: function() {
-        this.callParent(arguments);
-
-        var pieContainer;
         var pie;
+
+        this.callParent(arguments);
+        this.pieContainer = this.getPieContainer();
 
         this.pieManager = Ext.create("Teselagen.manager.PieManager", {
             center: {x: 100, y: 100},
@@ -42,15 +54,10 @@ Ext.define('Vede.controller.PieController', {
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
-        pieContainer = Ext.getCmp('PieContainer');
+        this.Managers.push(this.pieManager);
+
         pie = this.pieManager.getPie();
-        pieContainer.add(pie);
-
-        // Set the tabindex attribute in order to receive keyboard events on a div.
-        pieContainer.el.dom.setAttribute("tabindex", "0");
-        pieContainer.el.on("keydown", this.onKeydown, this);
-
-        this.pieManager.initPie();
+        this.pieContainer.add(pie);
 
         this.Managers.push(this.pieManager);
 
