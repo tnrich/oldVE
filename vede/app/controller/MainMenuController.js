@@ -27,6 +27,14 @@
                                    selectWindow);
     },
 
+    onSelectAllMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
+    },
+
+    onSelectInverseMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
+    },
+
     onReverseComplementMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.REVERSE_COMPLEMENT);
     },
@@ -195,6 +203,12 @@
             },
             "#selectMenuItem": {
                 click: this.onSelectMenuItemClick
+            },
+            "#selectAllMenuItem": {
+                click: this.onSelectAllMenuItemClick
+            },
+            "#selectInverseMenuItem": {
+                click: this.onSelectInverseMenuItemClick
             },
             "#reverseComplementMenuItem": {
                 click: this.onReverseComplementMenuItemClick
