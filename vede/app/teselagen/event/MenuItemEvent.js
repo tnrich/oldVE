@@ -8,6 +8,9 @@ Ext.define("Teselagen.event.MenuItemEvent", {
     UNDO: "Undo",
     REDO: "Redo",
 
+    SELECT_ALL: "SelectAll",
+    SELECT_INVERSE: "SelectInverse",
+
     REVERSE_COMPLEMENT: "ReverseComplement",
     REBASE_SEQUENCE: "RebaseSequence",
 });

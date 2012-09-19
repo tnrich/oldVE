@@ -299,7 +299,11 @@ Ext.define('Vede.controller.PieController', {
     },
 
     select: function(start, end) {
-        this.SelectionLayer.select(start, end);
+        if(start == 0 && end == this.SequenceManager.getSequence().toString().length) {
+            this.SelectionLayer.select(start, end-1);
+        } else {
+            this.SelectionLayer.select(start, end);
+        }
 
         this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
