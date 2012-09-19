@@ -214,9 +214,9 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
 
         // SequenceAnnotation -- Contains 0..*
         if (comp["annotation_asArray"] !== undefined) {
-            result["annotation"] = [];
+            result["annotation"] = {"SequenceAnnotation" : [] };
             for (var i=0; i < comp["annotation_asArray"].length; i++) {
-                result["annotation"].push(this.parseRawSequenceAnnotation(comp["annotation_asArray"][i], prefix));
+                result["annotation"]["SequenceAnnotation"].push(this.parseRawSequenceAnnotation(comp["annotation_asArray"][i], prefix));
             }
         }
         return result;
@@ -242,40 +242,34 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
     parseRawSequenceAnnotation: function(annotation, prefix) {
         var result = {};
 
-        var uri         = annotation["_" + prefix + ":about"];
-        var annot       = annotation["SequenceAnnotation_asArray"];
-        var seqAnnot    = [];
+        var uri         = annotation["SequenceAnnotation"]["_" + prefix + ":about"];
+        var annot       = annotation["SequenceAnnotation"];//_asArray"];
+        //var seqAnnot    = {};//[];
 
-        for (var i=0; i < annot.length; i++) {
-            var bioStart    = parseInt(annot[i]["bioStart"]);// || parseInt("");
-            var bioEnd      = parseInt(annot[i]["bioEnd"]);// || parseInt("");
-            var strand      = annot[i]["strand"] || "+";
-            
-            // DnaComponent -- Contains Exactly 1
-            var subComp     = this.parseRawDnaComponent(annot[i]["subComponent"]["DnaComponent"], prefix);
+        var bioStart    = parseInt(annot["bioStart"]);
+        var bioEnd      = parseInt(annot["bioEnd"]);
+        var strand      = annot["strand"] || "+";
+        
+        // DnaComponent -- Contains Exactly 1
+        var subComp     = this.parseRawDnaComponent(annot["subComponent"]["DnaComponent"], prefix);
 
-            // Sequence Annotation -- Contains 0..*
-            var precedes;
-            if (annot[i]["precedes"] !== undefined ) {
-                precedes = [];
-                preSeqAn = annot[i]["precedes"]["SequenceAnnotation_asArray"];
-                for (var j=1; j < preSeqAn.length; j++) {
-                    precedes.push(this.parseRawSequenceAnnotation(preSeqAn[j], prefix));
-                }
+        // Sequence Annotation -- Contains 0..*
+        var precedes;
+        if (annot["precedes"] !== undefined ) {
+            precedes = [];
+            preSeqAn = annot["precedes"]["SequenceAnnotation"];
+            for (var j=0; j < preSeqAn.length; j++) {
+                precedes.push(this.parseRawSequenceAnnotation(preSeqAn[j], prefix));
             }
-
-            seqAnnot.push({
-                "bioStart"      : bioStart,
-                "bioEnd"        : bioEnd,
-                "strand"        : strand,
-                "subComponent"  : subComp,
-                "precedes"      : precedes
-            });
         }
 
         // Fill in Result ouput
-        result["_"+prefix+":about"]     = uri;
-        result["SequenceAnnotation"]    = seqAnnot;
+        result["_"+prefix+":about"] = uri;
+        result["bioStart"]          = bioStart;
+        result["bioEnd"]            = bioEnd;
+        result["strand"]            = strand;
+        result["subComponent"]      = subComp;
+        result["precedes"]          = precedes;
         
         return result;
     }

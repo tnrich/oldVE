@@ -439,9 +439,6 @@ Ext.onReady(function() {
             it("xml testing", function() {
                 var url = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var xml = Teselagen.bio.parsers.ParsersManager.loadFile(url);
-
-                //console.log(xml);
-                var enzymeList = [];
                 
                 // Define an Ext model "Enzyme" to make reading from XML data possible.
                 Ext.define("Jbei", {
