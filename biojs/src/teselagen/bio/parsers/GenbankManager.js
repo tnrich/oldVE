@@ -50,7 +50,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @param {FileInputHTMLElement} fileInput
      * @returns {String} genbankFileString
      */
-    loadFile : function(fileInput) {
+    loadFileInput : function(fileInput) {
         var genbankFileString;
         var file = fileInput.files[0];
         fr = new FileReader();
@@ -63,6 +63,34 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         return genbankFileString;
     },
+
+    /**
+     * @param {String} url The url to retrieve data from.
+     * Uses a synchronus Ajax request.
+     * @returns {String} xml XML string
+     */
+    loadFileFromUrl: function(url) {
+        // Doing XMLHttpRequest leads to loading from cash
+
+        var str;
+
+        Ext.Ajax.request({
+            url: url,
+            async: false,
+            disableCaching: true,
+            success: function(response) {
+                str = response.responseText;
+                //console.dir(xmlStr);
+            },
+            failure: function(response, opts) {
+                console.warn('Could not load: ' + url + '\nServer-side failure with status code ' + response.status);
+                throw Ext.create("Teselagen.bio.BioException", {
+                    message: 'Could not load: ' + url + '\nServer-side failure with status code ' + response.status
+                });
+            }
+        });
+        return str;
+     },
 
     /**
      * This is the main method in the GenbankFormat static class that performs the parsing. 
