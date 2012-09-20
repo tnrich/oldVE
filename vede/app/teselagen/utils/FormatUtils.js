@@ -203,7 +203,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
             //===============
             // LOCATION
             for (var j=0; j < ft["seq:location"].length; j++) {
-                var start = ft["seq:location"][j]["seq:genbankStart"];
+                var start = ft["seq:location"][j]["seq:genbankStart"] - 1; //fix 9/13/12
                 var end   = ft["seq:location"][j]["seq:end"];
 
                 var loc = Ext.create("Teselagen.bio.sequence.common.Location", {
@@ -281,7 +281,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
             // LOCATIONS
             var newLoc = [];
             for (var j=0; j < feat.getLocations().length; j++) {
-                var start = feat.getLocations()[j].getStart();
+                var start = feat.getLocations()[j].getStart() + 1; //fix 9/13/12
                 var end   = feat.getLocations()[j].getEnd();
 
                 newLoc.push( {

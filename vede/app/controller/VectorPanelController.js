@@ -1,23 +1,38 @@
+/*global Vede*/
 /**
  * @class Vede.controller.VectorPanelController
  * Controller for Vector Panel
  */
-Ext.define('Vede.controller.VectorPanelController', {
-    extend: 'Ext.app.Controller',
+Ext.define("Vede.controller.VectorPanelController", {
+    extend: "Ext.app.Controller",
 
+    isRendered: false,
+    
     /**
      * @member Vede.controller.VectorPanelController
      */
     init: function() {
         this.control({
-//            '#ViewPanel' : {
-//                click : this.onClickPie
-//            }
+            "#VectorPanel" : {
+                afterrender : this.onRender,
+                resize : this.onResize
+            }
         });
     },
     
     onLaunch: function() {
-//        var vp = Ext.getCmp('VectorPanel');
     },
+
+    onRender: function() {
+        if (!this.isRendered) {
+            Vede.application.getController("PieController").initPie();
+            Vede.application.getController("RailController").initRail();
+            this.isRendered = true;
+        }
+    },
+
+    onResize: function() {
+//        console.log("resize");
+    }
 
 });

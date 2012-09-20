@@ -1,4 +1,4 @@
-    Ext.define('Vede.controller.MainMenuController', {
+Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
     requires: ['Teselagen.bio.parsers.GenbankManager',
@@ -17,14 +17,26 @@
         this.application.fireEvent(this.MenuItemEvent.REDO);
     },
 
+    onFindMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
+    },
+
     onSelectMenuItemClick: function() {
         var selectWindow = Ext.create("Vede.view.SelectWindow");
 
         selectWindow.show();
         selectWindow.center();
 
-        this.application.fireEvent("SelectWindowOpened",
+        this.application.fireEvent(this.MenuItemEvent.SELECT_WINDOW_OPENED,
                                    selectWindow);
+    },
+
+    onSelectAllMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
+    },
+
+    onSelectInverseMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
     },
 
     onReverseComplementMenuItemClick: function() {
@@ -204,8 +216,17 @@
             "#redoMenuItem": {
                 click: this.onRedoMenuItemClick
             },
+            "#findMenuItem": {
+                click: this.onFindMenuItemClick
+            },
             "#selectMenuItem": {
                 click: this.onSelectMenuItemClick
+            },
+            "#selectAllMenuItem": {
+                click: this.onSelectAllMenuItemClick
+            },
+            "#selectInverseMenuItem": {
+                click: this.onSelectInverseMenuItemClick
             },
             "#reverseComplementMenuItem": {
                 click: this.onReverseComplementMenuItemClick

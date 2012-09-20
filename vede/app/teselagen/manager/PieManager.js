@@ -49,6 +49,7 @@ Ext.define("Teselagen.manager.PieManager", {
     labelSprites: null,
 
     /**
+     * @member Teselagen.manager.PieManager
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
      * SequenceManager to obtain the sequence from.
      * @param {Object} center An object with parameters x and y, containing the

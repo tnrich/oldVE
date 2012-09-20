@@ -27,6 +27,10 @@ Ext.define('Vede.controller.MainToolbarController', {
         this.application.fireEvent(this.MenuItemEvent.REDO);
     },
 
+    onFindButtonClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
+    },
+
     onFeaturesButtonClick: function(button, e, options) {
         var menuItem = Ext.ComponentQuery.query('#featuresMenuItem')[0];
         if (button.pressed) {
@@ -111,6 +115,9 @@ Ext.define('Vede.controller.MainToolbarController', {
             },
             "#redoViewBtn": {
                 click: this.onRedoButtonClick
+            },
+            "#findBtn": {
+                click: this.onFindButtonClick
             },
             "#featuresBtn": {
                 click: this.onFeaturesButtonClick

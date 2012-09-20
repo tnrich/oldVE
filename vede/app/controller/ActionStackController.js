@@ -37,6 +37,7 @@ Ext.define("Vede.controller.ActionStackController", {
     },
 
     onSequenceChanging: function(kind, memento) {
+        console.log("adding memento");
         this.ActionStackManager.add(memento);
     },
 
