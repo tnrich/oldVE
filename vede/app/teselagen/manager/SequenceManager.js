@@ -536,8 +536,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
             return false;
         }
 
-        needsRecalculateComplementSequence        = true;
-        needsRecalculateReverseComplementSequence = true;
+        this.needsRecalculateComplementSequence        = true;
+        this.needsRecalculateReverseComplementSequence = true;
 
         if (!quiet && !this.manualUpdateStarted) {
             Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindSequenceRemove, this.createMemento());
