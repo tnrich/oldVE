@@ -536,14 +536,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
             return false;
         }
 
-        needsRecalculateComplementSequence        = true;
-        needsRecalculateReverseComplementSequence = true;
+        this.needsRecalculateComplementSequence        = true;
+        this.needsRecalculateReverseComplementSequence = true;
 
         if (!quiet && !this.manualUpdateStarted) {
             Vede.application.fireEvent(this.updateSequenceChanging, this.updateKindSequenceRemove, this.createMemento());
             //DW: Original has bug: used kindSequenceInsert instead
         }
-        var DEBUG_MODE = true;
+        var DEBUG_MODE = false;
 
         var deletions = [];
         var delLength1, delLength2;
@@ -562,7 +562,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             var feature = features[i];
             featStart = feature.getStart();
             featEnd   = feature.getEnd();
-            console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
+            //console.log("Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
             //console.log("remove Info " + pStartIndex + ":" + pEndIndex);
 
             if ( featStart <= featEnd ) {
@@ -590,7 +590,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         // Deleting entire features if necessary 
         for (var d=0; d < deletions.length; d++) {
             //console.log(deletions.length);
-            var success = this.removeFeature(deletions[d], false);
+            var success = this.removeFeature(deletions[d], true);
             if (!success) console.warn("Could not delete Features when removing Sequence.");
         }
 

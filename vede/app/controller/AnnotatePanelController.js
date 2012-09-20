@@ -22,11 +22,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         this.control({
             "#AnnotateContainer" : {
-                render: function(c) {
-                    c.el.on("mousedown", this.onMousedown, this);
-                    c.el.on("mouseup", this.onMouseup, this);
-                    c.el.on("mousemove", this.onMousemove, this);
-                }
+                render: this.onRender
             }
         });
 
@@ -53,10 +49,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         this.AnnotatePanel = Ext.getCmp('AnnotateContainer');
 
-        // Set the tabindex attribute in order to receive keyboard events on the div.
-        this.AnnotatePanel.el.dom.setAttribute("tabindex", "0");
-        this.AnnotatePanel.el.on("keydown", this.onKeydown, this);
-
         this.SequenceAnnotationManager = Ext.create("Teselagen.manager.SequenceAnnotationManager", {
             sequenceManager: this.SequenceManager,
             orfManager: this.ORFManager,
@@ -65,7 +57,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             annotatePanel: this.AnnotatePanel,
         });
 
-        this.AnnotatePanel.add(this.SequenceAnnotationManager.annotator);
+//        this.AnnotatePanel.add(this.SequenceAnnotationManager.annotator);
 
         // disable default selection action on the page
         document.onselectstart = function(){return false;};
@@ -77,6 +69,16 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         });
     },
 
+    onRender: function(pCmp) {
+        pCmp.el.on("mousedown", this.onMousedown, this);
+        pCmp.el.on("mouseup", this.onMouseup, this);
+        pCmp.el.on("mousemove", this.onMousemove, this);
+        // Set the tabindex attribute in order to receive keyboard events on the div.
+        pCmp.el.dom.setAttribute("tabindex", "0");
+        pCmp.el.on("keydown", this.onKeydown, this);
+        this.SequenceAnnotationManager.annotator.init();
+    },
+    
     onKeydown: function(event) {
         this.callParent(arguments);
 
