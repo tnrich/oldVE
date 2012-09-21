@@ -8,6 +8,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.bio.util.Sha256"
     ],
 
     statics: {
@@ -30,6 +31,10 @@ Ext.define("Teselagen.models.SequenceFile", {
         {name: "hash",                  type: "string",     defaultValue: null}
     ],
 
+    belongsTo: [
+        "Teselagen.models.PartVO"
+    ],
+
     /**
      * Sets the sequenceFileContent for this part
      * NOTE: Must execute setSequenceFileContent() to set the hash from "" to a unique identifier.
@@ -39,10 +44,11 @@ Ext.define("Teselagen.models.SequenceFile", {
 
         this.set("sequenceFileContent", pContent);
 
+        // DO NOT NEED TO DO writeUTFBytes
         var contentByte = encodeURIComponent(pContent);
         //https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/encodeURIComponent
 
-        var hash;// = 
+        var hash = Teselagen.bio.util.Sha256.hex_sha256(pContent);
 
         this.set("hash", hash);
 

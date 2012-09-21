@@ -10,26 +10,10 @@ Ext.onReady(function() {
 
     GenbankManager: Teselagen.bio.parsers.GenbankManager,
 
-    describe("GENBANK PACKAGE UNIT TESTING:", function() {
+    describe("Teselagen.bio.parsers.Genbank/Manager: GENBANK PACKAGE UNIT TESTING:", function() {
 
         //var dt =  Ext.create("Data");
         var line, tmp;
-
-        describe("Teselagen.bio.util.StringUtil", function() {
-
-            it("trims and pads?",function(){
-                var str = "  black  ";
-                expect("a" + Teselagen.StringUtil.trim(str) + "b").toBe("ablackb");
-                expect(Ext.String.trim(str)).toBe("black");
-                expect("a" + Teselagen.StringUtil.ltrim(str) + "b").toBe("ablack  b");  //result "ablack b"
-                expect("a" + Teselagen.StringUtil.rtrim(str) + "b").toBe("a  blackb");  //result "a blackb"
-                var str = "5";
-                expect("" + Teselagen.StringUtil.lpad(str, "0", 5)).toBe("00005"); //result "00005"
-                expect("" + Teselagen.StringUtil.rpad(str, "0", 5)).toBe("50000"); //result "50000"
-                expect(false).toBe(false);
-            });
-
-        });
 
         describe("Creating classes correctly?", function() {
 

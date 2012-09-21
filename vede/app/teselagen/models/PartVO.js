@@ -35,6 +35,11 @@ Ext.define("Teselagen.models.PartVO", {
         {name: "id",                type: "string",     defaultValue: Date.now()}
     ],
 
+    belongsTo: [
+        "Teselagen.models.EugeneRule",
+        "Teselagen.models.Part"
+    ],
+
     /**
      * Sets the id for this part
      * NOTE: Must execute setId() to set the id from "" to a unique identifier.

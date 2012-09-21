@@ -8,7 +8,7 @@ Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.parsers.GenbankManager"); //will be a singleton
 Ext.onReady(function() {
 
-    describe("GENBANK PACKAGE INTEGRATIVE TESTING:", function() {
+    describe("Teselagen.bio.parsers.Genbank/Manager: GENBANK PACKAGE INTEGRATIVE TESTING:", function() {
         // =====================================================
         //   INTEGRATIVE TESTING
         // =====================================================
