@@ -1,4 +1,4 @@
-/*
+/**
  Copyright 2011 Abdulla Abdurakhmanov
  Original sources are available at https://code.google.com/p/x2js/
 
@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- * Edited by DWong to ExtJs format
+ * @author Adapted for ExtJs by Diana Wong
  */
 
 Ext.define("Teselagen.bio.util.XmlToJson", {
@@ -30,7 +30,7 @@ Ext.define("Teselagen.bio.util.XmlToJson", {
     
     getNodeLocalName: function( node ) {
         var nodeLocalName = node.localName;
-        if(nodeLocalName == null) // Yeah, this is IE!! 
+        if(nodeLocalName == null) // Yeah, this is IE!!
             nodeLocalName = node.baseName;
         if(nodeLocalName == null || nodeLocalName=="") // =="" is IE too
             nodeLocalName = node.nodeName;

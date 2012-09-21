@@ -2,7 +2,7 @@
  * @class Teselagen.models.PartVO
  * Class describing a PartVO for J5Parameters.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author)
+ * @author Zinovii Dmytriv (original author) ?
  */
 Ext.define("Teselagen.models.PartVO", {
     extend: "Ext.data.Model",
