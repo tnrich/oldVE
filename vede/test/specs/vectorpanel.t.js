@@ -1,12 +1,24 @@
 /*global beforeEach, describe, expect, it, sandbox, setFixtures*/
 describe("VectorPanel test", function () {
-    var pieCmp, railCmp, annotCmp, vecPanel, vePanel, annotPanel, pieCtr, railCtr, annotCtr, splitter;
+    var pieCmp, pieCmpAuto, railCmp, annotCmp, vecPanel, vePanel, annotPanel, pieCtr, railCtr, annotCtr, splitter;
     var editPanel, dePanel, projPanel, viewport;
 //    var onResize;
     beforeEach(function() {
         setFixtures(sandbox());
         pieCmp = Ext.widget("draw", {
             width: 100,
+            items: [{
+                type: "circle",
+                x: 100,
+                y: 100,
+                radius: 50,
+                stroke: "black"
+            }]
+        });
+        pieCmpAuto = Ext.widget("draw", {
+            width: 100,
+            autoSize: true,
+            viewBox: false,
             items: [{
                 type: "circle",
                 x: 100,
@@ -71,9 +83,11 @@ describe("VectorPanel test", function () {
         vePanel = Ext.widget("panel", {
             height: 400,
             layout: "hbox",
+            align: "stretch",
             items: [vecPanel, splitter, annotPanel]
         });
         pieCtr.add(pieCmp);
+//        pieCtr.add(pieCmpAuto);
         railCtr.add(railCmp);
         annotCtr.add(annotCmp);
         dePanel = Ext.widget("panel", {
@@ -111,6 +125,48 @@ describe("VectorPanel test", function () {
     it("Resize and hide", function() {
         pieCtr.setSize(400,400);
         railCtr.hide();
+    });
+    it("Add sprite", function() {
+        Ext.create("Ext.draw.Sprite", {
+            type: "circle",
+            x: 150,
+            y: 100,
+            radius: 25,
+            stroke: "green",
+            surface: pieCmp.surface
+        }).show(true);
+        pieCtr.doLayout();
+        //        console.log(pieCmp.surface.items.getCount());
+    });
+    it("Add group", function() {
+        var green = Ext.create("Ext.draw.Sprite", {
+            id: "green",
+            type: "circle",
+            x: 150,
+            y: 100,
+            radius: 25,
+            stroke: "green",
+            surface: pieCmp.surface
+        });
+        var red = Ext.create("Ext.draw.Sprite", {
+            id: "red",
+            type: "circle",
+            x: 50,
+            y: 100,
+            radius: 25,
+            stroke: "red",
+            surface: pieCmp.surface
+        });
+//        var gid = pieCmp.surface.getGroup("groupId");
+        var gid = Ext.create("Ext.draw.CompositeSprite", {
+            surface: pieCmp.surface
+        });
+        console.log(gid.getCount());
+        console.log(gid); 
+        gid.add(green);
+        gid.add(red);
+        gid.show(true); 
+        console.log(gid.getBBox());
     });
 });
 
