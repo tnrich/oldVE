@@ -336,5 +336,41 @@ Ext.onReady(function() {
             });
         });
 
+        describe("Teselagen.models.J5Bin.js", function() {
+
+            it("Creates J5Bin", function(){
+                var bin = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "binName1"
+                });
+                expect(bin).not.toBe(null);
+
+                console.log("J5Bin init");
+                console.log(bin);
+                
+                // check
+                expect(bin.get("binName")).toBe("binName1");
+                expect(bin.get("iconID")).toBe("");
+                expect(bin.get("directionForward")).toBe(true);
+                expect(bin.get("fas")).toBe("");
+            });
+
+            it("setDefaultValues()", function(){
+                var bin = Ext.create("Teselagen.models.J5Bin", {
+                    binItemsVector: []
+                });
+                bin.setDefaultValues();
+                console.log("J5Bin init");
+                console.log(bin);
+
+                // check
+                expect(bin.get("binName")).toBe("");
+                expect(bin.get("iconID")).toBe("generic");
+                expect(bin.get("directionForward")).toBe(true);
+                expect(bin.get("fas")).toBe("");
+
+
+            });
+        });
+
     });
 });

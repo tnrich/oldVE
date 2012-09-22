@@ -27,6 +27,9 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
         {name: "reversePath",           type: "string",     defaultValue: ""}
     ],
 
+    /**
+     * SetFields may not be neccessary since you should set these when creating this object.
+     */
     setFields: function(pId, pName, pForwardPath, pReversePath) {
         this.set("id", pId);
         this.set("name", pName);
