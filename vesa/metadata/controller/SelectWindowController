@@ -1,0 +1,13 @@
+{
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "SelectWindowController"
+    },
+    "id": "ExtBox1-ext-gen16166",
+    "designerId": "067d3bef-fd8a-413e-bbd3-48beb3b98121"
+}

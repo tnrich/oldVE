@@ -1,0 +1,1749 @@
+{
+    "type": "viewport",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "AppViewport",
+        "designer|initialView": true,
+        "layout": "border"
+    },
+    "id": "ExtBox1-ext-gen2867",
+    "designerId": "769f9c07-da27-4fec-8039-b923f3e3a5d5",
+    "cn": [
+        {
+            "type": "container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|region": "north",
+                "designer|userClassName": "MyContainer3",
+                "height": 49,
+                "id": "Header"
+            },
+            "designerId": "ea40ea05-e4a4-4711-81ac-4861628e355e",
+            "cn": [
+                {
+                    "type": "container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyContainer5"
+                    },
+                    "designerId": "72c95220-ba8d-42b4-91bd-a854bb91c6ad"
+                }
+            ]
+        },
+        {
+            "type": "treepanel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|floatable": false,
+                "layout|region": "west",
+                "designer|userClassName": "MyTreePanel",
+                "draggable": false,
+                "floating": false,
+                "frame": false,
+                "id": "ProjectPanel",
+                "width": 250,
+                "resizeHandles": "e",
+                "closable": false,
+                "collapseDirection": "left",
+                "collapsed": false,
+                "collapsible": true,
+                "title": "Project"
+            },
+            "designerId": "ae2089c7-ca41-4f85-bab3-505f08998ced",
+            "cn": [
+                {
+                    "type": "treeview",
+                    "reference": {
+                        "name": "viewConfig",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyTreeView",
+                        "draggable": false
+                    },
+                    "designerId": "4bc0cf61-1277-4397-8a5d-09e86a516547"
+                }
+            ]
+        },
+        {
+            "type": "tabpanel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|region": "center",
+                "designer|userClassName": "MyTabPanel6",
+                "activeTab": 0
+            },
+            "designerId": "5f826181-e792-4e62-90b2-56f369908544",
+            "cn": [
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel7",
+                        "title": "Dashboard"
+                    },
+                    "designerId": "6feb6c60-c280-4270-aaee-c4095fa9d402",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig",
+                                "designer|displayName": "Dashboard",
+                                "id": "DashboardTab",
+                                "scale": null,
+                                "tooltipType": null
+                            },
+                            "designerId": "01e8636b-b003-4607-97bc-f8859ec86735"
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel8",
+                        "id": "VectorEditorPanel",
+                        "layout": "fit",
+                        "title": "Vector Editor"
+                    },
+                    "designerId": "cb5ec85e-7014-47be-b2b3-5990993e7541",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig1"
+                            },
+                            "designerId": "296e6b52-a3fe-4e5d-a34a-de18d901eeb5"
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": "top",
+                                "container|align": "stretch",
+                                "designer|userClassName": "MyPanel3",
+                                "id": "MainMenuPanel",
+                                "layout": "vbox"
+                            },
+                            "designerId": "1b59da54-acd1-4fa5-8d8f-4bc6013ed419",
+                            "cn": [
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "container|align": null,
+                                        "designer|userClassName": "MyToolbar",
+                                        "height": null,
+                                        "hidden": true,
+                                        "id": "VectorEditorMenuBar",
+                                        "autoScroll": false
+                                    },
+                                    "designerId": "81bb3629-60cb-4f32-bc29-39c64ed7d08e",
+                                    "cn": [
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton",
+                                                "text": "File"
+                                            },
+                                            "designerId": "f424d966-0b5c-48db-9288-228db758c569",
+                                            "cn": [
+                                                {
+                                                    "type": "menu",
+                                                    "reference": {
+                                                        "name": "menu",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyMenu",
+                                                        "floating": true,
+                                                        "minWidth": 140,
+                                                        "style": null,
+                                                        "width": 120,
+                                                        "collapsed": false,
+                                                        "collapsible": false,
+                                                        "hideCollapseTool": false,
+                                                        "title": null,
+                                                        "titleCollapse": false,
+                                                        "plain": false
+                                                    },
+                                                    "designerId": "17432c9e-4030-4a57-8b99-cd64fd8d08ae",
+                                                    "cn": [
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem",
+                                                                "id": "importMenuItem",
+                                                                "plain": false,
+                                                                "text": "Import from File"
+                                                            },
+                                                            "designerId": "aff7931d-6191-4b72-a070-bd96debea2ae"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem1",
+                                                                "text": "Download Genbank"
+                                                            },
+                                                            "designerId": "c49f4645-fde8-4dae-9189-086662154f93"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator"
+                                                            },
+                                                            "designerId": "6d1606f1-720c-44b9-bc48-24cacec77e25"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem2",
+                                                                "text": "Project Properties"
+                                                            },
+                                                            "designerId": "7837a84c-b7a6-46a4-b001-d05d00b55ea8"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem3",
+                                                                "text": "Print"
+                                                            },
+                                                            "designerId": "9794f7e8-a933-4caf-a385-012ad5822675",
+                                                            "cn": [
+                                                                {
+                                                                    "type": "menu",
+                                                                    "reference": {
+                                                                        "name": "menu",
+                                                                        "type": "object"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyMenu1",
+                                                                        "minWidth": null,
+                                                                        "width": 120
+                                                                    },
+                                                                    "designerId": "4a91c3fc-699a-42fa-9992-cff932dde9a0",
+                                                                    "cn": [
+                                                                        {
+                                                                            "type": "menuitem",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "designer|userClassName": "MyMenuItem4",
+                                                                                "text": "Sequence"
+                                                                            },
+                                                                            "designerId": "b0c72c55-ebeb-4cd7-8c7e-2b1a0bb5b25e"
+                                                                        },
+                                                                        {
+                                                                            "type": "menuitem",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "designer|userClassName": "MyMenuItem5",
+                                                                                "text": "Circular View"
+                                                                            },
+                                                                            "designerId": "119ae9ea-9132-4468-823d-06f6f1a9571f"
+                                                                        },
+                                                                        {
+                                                                            "type": "menuitem",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "designer|userClassName": "MyMenuItem6",
+                                                                                "text": "Linear View"
+                                                                            },
+                                                                            "designerId": "08f427de-2b88-4186-8c1f-4b1a5ce43e6d"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton1",
+                                                "text": "Edit"
+                                            },
+                                            "designerId": "252c37c3-c54a-4fbf-a23a-0e80a5e33d1a",
+                                            "cn": [
+                                                {
+                                                    "type": "menu",
+                                                    "reference": {
+                                                        "name": "menu",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyMenu2",
+                                                        "minWidth": 150,
+                                                        "width": 120
+                                                    },
+                                                    "designerId": "89810835-bef2-4a0c-9bd3-b6a42cc99e8c",
+                                                    "cn": [
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem7",
+                                                                "id": "undoMenuItem",
+                                                                "text": "Undo"
+                                                            },
+                                                            "designerId": "4c3aa13e-7c22-43eb-ad20-c8fa5235cb0d"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem8",
+                                                                "id": "redoMenuItem",
+                                                                "text": "Redo"
+                                                            },
+                                                            "designerId": "a9a89fde-a172-4e21-85a1-e52d5ee0eb02"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator1"
+                                                            },
+                                                            "designerId": "175d869f-b369-4755-ba37-cfc227f2010f"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem9",
+                                                                "text": "Copy"
+                                                            },
+                                                            "designerId": "9733b51f-afd3-41f1-a8c9-71742ddc13c1"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem10",
+                                                                "text": "Cut"
+                                                            },
+                                                            "designerId": "b381ea45-15c2-4a1c-adfd-4767e0dc9606"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem11",
+                                                                "text": "Paste"
+                                                            },
+                                                            "designerId": "47339c11-1c9e-4802-97a9-dc0d6ec6d61f"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator2"
+                                                            },
+                                                            "designerId": "ab1ea5ca-4f6d-47ae-a114-ebb323bf94fd"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem12",
+                                                                "id": "findMenuItem",
+                                                                "text": "Find..."
+                                                            },
+                                                            "designerId": "8e57a5d7-5bca-4438-988d-7a29f8151bff"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem13",
+                                                                "text": "Go To..."
+                                                            },
+                                                            "designerId": "92f1cf62-5146-4ed4-8862-5aca3279c96b"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator3"
+                                                            },
+                                                            "designerId": "639ac3df-9eb1-4f0c-a560-35352835b1c9"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem14",
+                                                                "id": "selectMenuItem",
+                                                                "text": "Select..."
+                                                            },
+                                                            "designerId": "a64fea2e-b99e-465e-bf34-4e8fbdc391d1"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem14",
+                                                                "id": "selectAllMenuItem",
+                                                                "text": "Select All"
+                                                            },
+                                                            "designerId": "3171ea33-b524-4acc-91e6-bfc0af8f147b"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem14",
+                                                                "id": "selectInverseMenuItem",
+                                                                "text": "Select Inverse"
+                                                            },
+                                                            "designerId": "055c747f-48d2-447c-9784-a18d1e41bfcd"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator3"
+                                                            },
+                                                            "designerId": "cf9e97e0-1c90-4de8-9dae-c1c33ca0dd52"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem14",
+                                                                "itemId": "reverseComplementMenuItem",
+                                                                "text": "Reverse Complement"
+                                                            },
+                                                            "designerId": "d09eaa64-4f0d-48b9-a108-f56149a58616"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem14",
+                                                                "id": "rebaseMenuItem",
+                                                                "text": "Rotate to Here"
+                                                            },
+                                                            "designerId": "27ccf61d-3b9a-48b6-bb12-2b3a75d05e64"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton2",
+                                                "text": "View"
+                                            },
+                                            "designerId": "ccba9a4b-3b17-485b-bb15-1b022ffda1b2",
+                                            "cn": [
+                                                {
+                                                    "type": "menu",
+                                                    "reference": {
+                                                        "name": "menu",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyMenu4",
+                                                        "width": 120
+                                                    },
+                                                    "designerId": "7363806c-6652-41b8-be7d-09ffcf749ad6",
+                                                    "cn": [
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "circularViewMenuItem",
+                                                                "text": "Circular",
+                                                                "checked": true,
+                                                                "group": "lineType"
+                                                            },
+                                                            "designerId": "6524440e-5d7a-4e87-8a3b-42a3f082099a"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "linearViewMenuItem",
+                                                                "text": "Linear",
+                                                                "group": "lineType"
+                                                            },
+                                                            "designerId": "9cc27839-0424-4313-af4a-4838c7916851"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator5"
+                                                            },
+                                                            "designerId": "ccb0466d-d597-44e5-b685-46a5d5cd2dfe"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "featuresMenuItem",
+                                                                "text": "Features",
+                                                                "checked": true,
+                                                                "group": null
+                                                            },
+                                                            "designerId": "2d17f086-fbaf-44c0-9e07-e216e77d15ce"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "cutSitesMenuItem",
+                                                                "text": "Cut Sites",
+                                                                "group": null
+                                                            },
+                                                            "designerId": "94806b2c-a8bd-4e09-becb-ff5408df5682"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "orfsMenuItem",
+                                                                "text": "ORF",
+                                                                "group": null
+                                                            },
+                                                            "designerId": "8083b40e-cbb0-432a-a924-1b29b8dc6276"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator6"
+                                                            },
+                                                            "designerId": "6a0c2e8d-07d9-4ea8-bf8c-c9e15cea956e"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "showComplementaryMenuItem",
+                                                                "text": "Complementary",
+                                                                "checked": true,
+                                                                "group": null
+                                                            },
+                                                            "designerId": "40ff4687-bc90-4621-a9af-afba24f62c0b"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "showSpacesMenuItem",
+                                                                "text": "Spaces",
+                                                                "checked": true,
+                                                                "group": null
+                                                            },
+                                                            "designerId": "3a9ab448-4483-40aa-b9a0-add8b5ed9747"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "showSequenceAAMenuItem",
+                                                                "text": "Sequence AA",
+                                                                "group": null
+                                                            },
+                                                            "designerId": "9e35a094-13a3-4826-a705-9cba6078f634"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "showRevcomAAMenuItem",
+                                                                "text": "Revcom AA",
+                                                                "group": null
+                                                            },
+                                                            "designerId": "bca1b2b1-a1f5-4b2c-8149-e7481c1441e1"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator7"
+                                                            },
+                                                            "designerId": "c0b4920c-27d6-46fb-9a89-155a0d7d3576"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "featureLabelsMenuItem",
+                                                                "text": "Feature Labels",
+                                                                "checked": true,
+                                                                "group": null
+                                                            },
+                                                            "designerId": "c306fc43-8aee-4043-b93f-ad97328b166d"
+                                                        },
+                                                        {
+                                                            "type": "menucheckitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyCheckItem",
+                                                                "id": "cutSiteLabelsMenuItem",
+                                                                "text": "Cut Site Labels",
+                                                                "checked": true,
+                                                                "group": null
+                                                            },
+                                                            "designerId": "a900885b-7a0c-45b2-9cce-1fa466607541"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton3",
+                                                "text": "Tools"
+                                            },
+                                            "designerId": "f0d8525a-b559-43de-ba33-232d8bb7ba81",
+                                            "cn": [
+                                                {
+                                                    "type": "menu",
+                                                    "reference": {
+                                                        "name": "menu",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyMenu5",
+                                                        "minWidth": 140,
+                                                        "width": 120
+                                                    },
+                                                    "designerId": "4c455886-4415-4c18-983a-9802136de809",
+                                                    "cn": [
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem30",
+                                                                "text": "Create New Feature"
+                                                            },
+                                                            "designerId": "0e4e215e-795a-4fab-a323-9c1f8e428e09"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem31",
+                                                                "id": "restrictionEnzymesManagerMenuItem",
+                                                                "text": "Restriction Enzymes Manager"
+                                                            },
+                                                            "designerId": "02564539-4470-46ec-aee7-0d16af5644b0"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem32",
+                                                                "id": "simulateDigestionMenuItem",
+                                                                "text": "Simulate Digestion"
+                                                            },
+                                                            "designerId": "e5129e9c-0816-42e7-a8b4-083724f1ee9f"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem32",
+                                                                "text": "Properties"
+                                                            },
+                                                            "designerId": "0ac861ef-6236-45c7-b46b-60ce943b5f98"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator8"
+                                                            },
+                                                            "designerId": "af71b859-d63b-4272-b941-10eadabd92ed"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem32",
+                                                                "text": "Preferences"
+                                                            },
+                                                            "designerId": "0ae6a41b-93fc-42c0-a2f0-ef18eb367ea5"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton4",
+                                                "text": "Help"
+                                            },
+                                            "designerId": "1bfa564c-a27e-48a9-89ef-40323dc4239b",
+                                            "cn": [
+                                                {
+                                                    "type": "menu",
+                                                    "reference": {
+                                                        "name": "menu",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyMenu6",
+                                                        "width": 120
+                                                    },
+                                                    "designerId": "0c11afc0-6de7-4b7c-a3d2-2d5b7b4edd25",
+                                                    "cn": [
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem35",
+                                                                "text": "Suggest Feature"
+                                                            },
+                                                            "designerId": "1ee1cf37-3d1b-4369-b7ad-e45af591bebe"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem36",
+                                                                "text": "Report Bug"
+                                                            },
+                                                            "designerId": "774d1b22-c1c6-417a-bfa7-8586c4823a27"
+                                                        },
+                                                        {
+                                                            "type": "menuseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MySeparator9"
+                                                            },
+                                                            "designerId": "3e323eea-6c73-45bc-b666-05f2136c9818"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem37",
+                                                                "text": "About"
+                                                            },
+                                                            "designerId": "28908403-c86c-49ac-8f9b-0c1bf4fdbc43"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "designer|userClassName": "MyToolbar1",
+                                        "id": "MainToolBar"
+                                    },
+                                    "designerId": "af9012f1-4008-460d-a666-741360aeeae8",
+                                    "cn": [
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "exportBtn",
+                                                "icon": "resources/images/export.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Save to Registry"
+                                                ]
+                                            },
+                                            "designerId": "ce8b10f5-6d57-466d-8461-6e8be3338335"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "saveBtn",
+                                                "icon": "resources/images/save.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Save Project"
+                                                ]
+                                            },
+                                            "designerId": "e4d27f19-96c3-46c4-9692-39fd80e63e18"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "projectPropsBtn",
+                                                "icon": "resources/images/project_properties.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Project Properties"
+                                                ]
+                                            },
+                                            "designerId": "42e3f8b9-34c7-447d-8f23-29abff3b32d4"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "circularViewBtn",
+                                                "icon": "resources/images/pie.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Circular View"
+                                                ]
+                                            },
+                                            "designerId": "8a20ec7d-48e5-4f6f-ab09-0e556dd59aed"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "linearViewBtn",
+                                                "icon": "resources/images/rail.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Linear View"
+                                                ]
+                                            },
+                                            "designerId": "da6db366-aa33-4ae8-ab8d-8592910affbc"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "copyBtn",
+                                                "icon": "resources/images/copy.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Copy"
+                                                ]
+                                            },
+                                            "designerId": "fe02afbf-3967-4b08-bc79-99dfbe52b7c6"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "cutBtn",
+                                                "icon": "resources/images/cut.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Cut"
+                                                ]
+                                            },
+                                            "designerId": "11024d2a-f4fd-4fb2-bfd1-f100e70fc8fb"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "pasteBtn",
+                                                "icon": "resources/images/paste.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Paste"
+                                                ]
+                                            },
+                                            "designerId": "8830d4ca-a5ec-46d6-8d28-000808d35b20"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "undoBtn",
+                                                "icon": "resources/images/undo.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Undo"
+                                                ]
+                                            },
+                                            "designerId": "74eb2d7a-c0d8-44d5-a46b-b38e6dd2b896"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "redoBtn",
+                                                "icon": "resources/images/redo.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Redo"
+                                                ]
+                                            },
+                                            "designerId": "87e8f00b-b9de-4971-88fb-cbe91880607d"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "safeBtn",
+                                                "icon": "resources/images/safe_editing.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Safe Editing"
+                                                ]
+                                            },
+                                            "designerId": "6225f9f8-ffe3-4243-9228-3322f3cad4ea"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "findBtn",
+                                                "icon": "resources/images/find.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Find..."
+                                                ]
+                                            },
+                                            "designerId": "6190a50d-0052-47b9-98a2-cd7f9399c566"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "featuresBtn",
+                                                "enableToggle": true,
+                                                "icon": "resources/images/features.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Show Features"
+                                                ]
+                                            },
+                                            "designerId": "a0954ebc-96e2-4be3-b317-e606d65c2184"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "cutsitesBtn",
+                                                "icon": "resources/images/cut_sites.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Show Cut Sites"
+                                                ]
+                                            },
+                                            "designerId": "98607935-eced-407f-b130-8deeb4112748"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "orfBtn",
+                                                "icon": "resources/images/orf.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Show ORF"
+                                                ]
+                                            },
+                                            "designerId": "727d00cc-d515-46be-bf37-6d43ce0fe866"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "reBtn",
+                                                "icon": "resources/images/restriction_enzymes.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Show Restriction Enzymes"
+                                                ]
+                                            },
+                                            "designerId": "218f2c44-f4ef-4a28-ba36-1974a5540f74"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton5",
+                                                "id": "propsBtn",
+                                                "icon": "resources/images/properties.png",
+                                                "scale": "medium",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Properties"
+                                                ]
+                                            },
+                                            "designerId": "c5e5c917-3f30-4ddc-916f-9b7a40671185"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": "bottom",
+                                "designer|userClassName": "MyPanel4",
+                                "height": 23,
+                                "id": "StatusPanel",
+                                "layout": "fit",
+                                "headerPosition": "bottom",
+                                "title": null
+                            },
+                            "designerId": "73d893f9-8b2e-4267-bd5c-819ca3e88f22",
+                            "cn": [
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "dockedItems",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dock": "top",
+                                        "designer|userClassName": "MyToolbar6",
+                                        "id": "StatusBar"
+                                    },
+                                    "designerId": "aea80228-85dd-484d-88d1-f52f8274dc83",
+                                    "cn": [
+                                        {
+                                            "type": "tbfill",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyFill"
+                                            },
+                                            "designerId": "523c6f7d-7596-4b91-869f-c9b600f3f102"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "61ea19e3-06e6-4349-bb90-49facc91c7d7"
+                                        },
+                                        {
+                                            "type": "tbtext",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyTextItem",
+                                                "text": "Read only"
+                                            },
+                                            "designerId": "5bcc922a-68d8-4efe-ae87-dfe700db6c4b"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "b0ebc32f-bea9-4631-9190-cf0b6610832f"
+                                        },
+                                        {
+                                            "type": "tbspacer",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySpacer",
+                                                "width": 10
+                                            },
+                                            "designerId": "8234e674-b8da-4d14-a91e-4b57cbe8b0fd"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "225a5c38-4ed8-4383-9c42-9443fd557e21"
+                                        },
+                                        {
+                                            "type": "tbtext",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyTextItem",
+                                                "text": "- : -"
+                                            },
+                                            "designerId": "afc07349-7cb4-4f57-bcf9-0256716d79bf"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "0639f15d-3a76-41f5-b28f-5a20b11daf4a"
+                                        },
+                                        {
+                                            "type": "tbtext",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyTextItem",
+                                                "text": "0"
+                                            },
+                                            "designerId": "afcb3378-658d-4903-a891-ea6ddac5abfd"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": null,
+                                "container|align": "stretch",
+                                "designer|userClassName": "MyContainer",
+                                "id": "EditorContainer",
+                                "layout": "hbox"
+                            },
+                            "designerId": "9b2b97ed-2cee-46fc-b12a-287b8622b663",
+                            "cn": [
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "flex": 1,
+                                        "layout|flex": 1,
+                                        "container|align": "stretch",
+                                        "designer|userClassName": "MyPanel",
+                                        "floating": false,
+                                        "id": "VectorPanel",
+                                        "width": null,
+                                        "resizable": null,
+                                        "layout": "hbox",
+                                        "collapseDirection": "left",
+                                        "collapsed": false,
+                                        "collapsible": true,
+                                        "headerPosition": null,
+                                        "title": "Vector",
+                                        "titleCollapse": null
+                                    },
+                                    "configAlternates": {
+                                        "flex": "number"
+                                    },
+                                    "designerId": "01be68b7-22f9-45a8-88ba-5b4d620bfd03",
+                                    "customConfigs": [
+                                        {
+                                            "group": "(Custom Properties)",
+                                            "name": "flex",
+                                            "type": "string"
+                                        }
+                                    ],
+                                    "cn": [
+                                        {
+                                            "type": "container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyContainer1",
+                                                "id": "PieContainer",
+                                                "layout": "fit"
+                                            },
+                                            "designerId": "173a0394-03ca-4e78-88e8-f0e1bb753abc"
+                                        },
+                                        {
+                                            "type": "container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyContainer2",
+                                                "hidden": true,
+                                                "id": "RailContainer",
+                                                "layout": "fit"
+                                            },
+                                            "designerId": "d387a8ca-c041-46bc-a14d-d681d796b10a"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "splitter",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MySplitter",
+                                        "collapseTarget": "prev"
+                                    },
+                                    "designerId": "9ae11ef1-cdd6-40f0-8192-1e99f9e969e9"
+                                },
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "flex": null,
+                                        "layout|flex": 2,
+                                        "designer|userClassName": "MyPanel4",
+                                        "id": "AnnotatePanel",
+                                        "autoScroll": true,
+                                        "layout": "fit",
+                                        "collapseDirection": "right",
+                                        "collapsible": true,
+                                        "title": "Annotate"
+                                    },
+                                    "configAlternates": {
+                                        "flex": "number"
+                                    },
+                                    "designerId": "1ae7e1a1-0c78-444a-b95d-daaf87075706",
+                                    "customConfigs": [
+                                        {
+                                            "group": "(Custom Properties)",
+                                            "name": "flex",
+                                            "type": "string"
+                                        }
+                                    ],
+                                    "cn": [
+                                        {
+                                            "type": "container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "overflowY": "scroll",
+                                                "designer|userClassName": "MyContainer5",
+                                                "id": "AnnotateContainer",
+                                                "layout": "fit"
+                                            },
+                                            "designerId": "86134cf2-6f6f-41d8-8fc0-48bd752723b4",
+                                            "customConfigs": [
+                                                {
+                                                    "group": "(Custom Properties)",
+                                                    "name": "overflowY",
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel9",
+                        "layout": "fit",
+                        "title": "Device Editor"
+                    },
+                    "designerId": "225a5d76-bb4e-41d9-b4a1-770cbda815a0",
+                    "cn": [
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyPanel6",
+                                "hidden": false,
+                                "id": "DeviceEditor",
+                                "width": 150,
+                                "layout": "fit",
+                                "title": "Device Editor"
+                            },
+                            "designerId": "73eee35b-35c4-4407-a6bb-a4777021372b"
+                        },
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig2"
+                            },
+                            "designerId": "60e227dc-e10a-4303-b518-2350ede503cc"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

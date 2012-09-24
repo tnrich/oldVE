@@ -1,0 +1,13 @@
+{
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "VectorPanelController"
+    },
+    "id": "ExtBox1-ext-gen3429",
+    "designerId": "f835a9f2-f016-427b-bcde-f3f23c2ed3b7"
+}
