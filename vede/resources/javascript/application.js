@@ -551,50 +551,44 @@ $( document ).bind( 'loadDE', function() {
     
         function loadModel(_id)
         {
-        $.ajax({
-        type: "POST",
-        url: '/api/getUserModel',
-        data: {'_id':_id},
-        success: function(model) {
-            deviceeditor._id = model["_id"];
-            j5._id = model["_id"];
-            console.log("Model ID: "+deviceeditor._id);
-            decodeModel(model["payload"]);
-            $('#design-name').val(model['name']);
+          $.ajax({
+          type: "POST",
+          url: '/api/getUserModel',
+          data: {'_id':_id},
+          success: function(model) {
+              deviceeditor._id = model["_id"];
+              j5._id = model["_id"];
+              console.log("Model ID: "+deviceeditor._id);
+              decodeModel(model["payload"]);
+              $('#design-name').val(model['name']);
 
-            $('#created').html(parseTimeStamp(model['created']));
-            $('#modified').html(parseTimeStamp(model['last_modified']));
-             
-            flashCallback("Design loaded!",true);
-            $('#loadModel').modal('hide');
-            }
-        });
+              $('#created').html(parseTimeStamp(model['created']));
+              $('#modified').html(parseTimeStamp(model['last_modified']));
+               
+              flashCallback("Design loaded!",true);
+              $('#loadModel').modal('hide');
+              }
+          });
         }
 
     $(document).bind("openSelectedDesign", function(evt,_id) {
       loadModel(_id);
     });
        
-    /* 
-        $.ajax({
-        type: "GET",
-        url: '/api/getModels',
-        data: {},
-        success: function(data) {
-            $('#loadModelsTable tbody').html('');
-            $.each(data,function(key,value){
-                $('#loadModelsTable tbody').append('<tr data-id="'+value._id+'"><td>'+value.name+'</td><td>'+parseTimeStamp(value.created)+'</td><td>'+parseTimeStamp(value.last_modified)+'</td></tr>');
-            });
-
-            $('#loadModelsTable tbody tr').each(function(key,value){
-                $(value).click(function(){
-                    loadModel($(value).attr('data-id'));
-                });
-            });
-
-            $('#loadModel').modal();
-        }});
-    */
+    $(document).bind("openExampleDesign", function(evt,_id) {
+          console.log("Trying to open example");
+          $.ajax({
+          type: "POST",
+          url: '/api/getExampleModel',
+          data: {'_id':_id},
+          success: function(model) {
+              deviceeditor._id = model["_id"];
+              j5._id = model["_id"];
+              decodeModel(model["payload"]);
+              $('#design-name').val(model['name']);
+              }
+          });   
+    });
 
     // Provides method to hide on clickOut oof selector
     function hideCallback(el,fn)

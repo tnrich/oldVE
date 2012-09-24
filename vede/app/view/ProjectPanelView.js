@@ -120,8 +120,6 @@ Ext.define('Vede.view.ProjectPanelView', {
     listeners: {
         itemclick: function(view, record,item,index,e,eOpts)
         {
-            console.log(record.raw);
-
             if(record.raw.type == 'design') $(document).trigger('openSelectedDesign', record.raw._id);
 
             if(record.raw.type == 'protocol')
@@ -137,6 +135,12 @@ Ext.define('Vede.view.ProjectPanelView', {
                         loadResults(text);
                     }
                 });   
+            }
+
+            if(record.raw.type == 'example')
+            {
+                console.log("Trying to open example #"+record.raw._id);
+                $(document).trigger('openExampleDesign', record.raw._id);
             }
 
         }

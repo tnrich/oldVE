@@ -205,7 +205,7 @@ Ext.define('Vede.controller.MainMenuController', {
         var name = form.findField('Name');
         console.log(name.value);
         var gbMng = Teselagen.bio.parsers.GenbankManager;
-        console.log(gbMng.);
+        //console.log(gbMng.);
     },
 
     init: function() {

@@ -2,7 +2,7 @@
 Ext.define('Vede.view.AppViewport', {
     extend: 'Ext.container.Viewport',
     requires: [
-//    'Vede.view.ProjectPanelView',
+    'Vede.view.ProjectPanelView',
     'Vede.view.DeviceEditor.DeviceEditor',
     'Vede.view.DeviceEditor.Inspector',
     'Vede.view.DeviceEditor.MainMenuBar',
@@ -19,7 +19,7 @@ Ext.define('Vede.view.AppViewport', {
             items: [
                 {
                     xtype: 'panel',
-//                    xtype: 'ProjectPanel',
+                    xtype: 'ProjectPanel',
                     id: 'ProjectPanel',
                     collapsible: true,
                     split : true,
@@ -45,7 +45,7 @@ Ext.define('Vede.view.AppViewport', {
                             items: [
                                 {
                                     xtype: 'DeviceEditorPanel',
-                                    //id: 'DeviceEditor',
+                                    id: 'DeviceEditor',
                                     title: 'DeviceEditor',
                                     flex : 1,
                                     layout: {
