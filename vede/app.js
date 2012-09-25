@@ -10,6 +10,18 @@ Ext.onReady(function() {
     Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
         cls: 'x-splash-icon'
     });
+
+    console.log("Trying to get session data");
+        // Execute ajax to get data
+        Ext.Ajax.request({
+            url: '/deviceeditor',
+            params: {},
+            success: function(response){
+                var response = JSON.parse(response.responseText);
+                console.log(response);
+            }
+    });
+
 });
 
 /*global console*/
@@ -78,18 +90,7 @@ Ext.application({
             });
         });
         // Run the fade 500 milliseconds after launch.
-        //task.delay(500);
-
-        console.log("Trying to get session data");
-        // Execute ajax to get data
-        Ext.Ajax.request({
-            url: '/deviceeditor',
-            params: {},
-            success: function(response){
-                var response = JSON.parse(response.responseText);
-                console.log(response);
-            }
-        });
+        task.delay(500);
     }
 });
 
