@@ -1,4 +1,16 @@
 var splashscreen;
+var session;
+
+function showDevInfo(){
+    Ext.create("Ext.Window",{
+        title : 'Welcome '+session.username+'!',
+        width : 500,                            
+        height: 100,
+        closable : true,                           
+        html : 'sessionId:'+session.sessionId,                         
+        modal : true
+    }).show();
+}
 
 Ext.onReady(function() {
     // Start the mask on the body and get a reference to the mask
@@ -17,15 +29,7 @@ Ext.onReady(function() {
             url: '/deviceeditor',
             params: {},
             success: function(response){
-                var response = JSON.parse(response.responseText);
-                    Ext.create("Ext.Window",{
-                        title : 'Welcome '+response.username+'!',
-                        width : 500,                            
-                        height: 100,
-                        closable : true,                           
-                        html : 'sessionId:'+response.sessionId,                         
-                        modal : true
-                        }).show();
+                session = JSON.parse(response.responseText);
             }
     });
 
@@ -92,6 +96,7 @@ Ext.application({
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
                         Ext.getBody().unmask();
+                        showDevInfo();
                     }
                 }
             });
