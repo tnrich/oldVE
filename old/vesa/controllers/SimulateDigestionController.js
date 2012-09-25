@@ -1,8 +1,8 @@
-Ext.define('Vesa.controller.override.SimulateDigestionController', {
-    requires: 'Vesa.controller.SimulateDigestionController'
-}, function() {
-    Ext.override(Vesa.controller.SimulateDigestionController, {
-       extend: 'Ext.app.Controller',
+/*
+ * A controller that handles events in the SimulateDigestionWindow
+ */
+Ext.define('Vesa.controller.SimulateDigestionController', {
+    extend: 'Ext.app.Controller',
 
     requires: ["Teselagen.manager.RestrictionEnzymeGroupManager",
                "Teselagen.bio.tools.DigestionCalculator",
@@ -297,6 +297,7 @@ var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
        });
        pSpriteGroup.show(true);
 
-    } 
-    });
+    },
+
+
 });

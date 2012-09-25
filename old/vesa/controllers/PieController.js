@@ -1,76 +1,74 @@
-Ext.define('Vesa.controller.override.RailController', {
-    requires: 'Vesa.controller.RailController'
-}, function() {
-    Ext.override(Vesa.controller.RailController, {
-        extend: 'Vede.controller.SequenceController',
+/**
+ * @class Vesa.controller.PieController
+ * Class which handles user input and events specific to the Pie vector view.
+ */
+Ext.define('Vesa.controller.PieController', {
+    extend: 'Vesa.controller.SequenceController',
 
+    refs: [
+        {ref: "pieContainer", selector: "#PieContainer"}
+    ],
+    
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
-    
-    refs: [
-        {ref: "railContainer", selector: "#RailContainer"}
-    ],
 
-    railManager: null,
+    pieManager: null,
+    pieContainer: null,
 
-    mouseIsDown: false,
     startSelectionAngle: 0,
-    startSelectionIndex: 0,
-
-    clickedAnnotationStart: null,
-    clickedAnnotationEnd: null,
 
     /**
-     * @member Vede.controller.RailController
+     * @member Vesa.controller.PieController
      */
     init: function() {
         this.callParent();
 
         this.control({
-            "#Rail" : {
+            "#Pie" : {
                 mousedown: this.onMousedown,
                 mousemove: this.onMousemove,
-                mouseup: this.onMouseup
+                mouseup: this.onMouseup,
             }
         });
     },
 
-    initRail: function() {
-        this.railManager.initRail();
+    initPie: function() {
+        this.pieManager.initPie();
         // Set the tabindex attribute in order to receive keyboard events on a div.
-        this.railContainer.el.dom.setAttribute("tabindex", "0");
-        this.railContainer.el.on("keydown", this.onKeydown, this);
+        this.pieContainer.el.dom.setAttribute("tabindex", "0");
+        this.pieContainer.el.on("keydown", this.onKeydown, this);
     },
-
+    
     onLaunch: function() {
-        var rail;
+        var pie;
 
         this.callParent(arguments);
-        this.railContainer = this.getRailContainer();
+        this.pieContainer = this.getPieContainer();
 
-        this.railManager = Ext.create("Teselagen.manager.RailManager", {
-            reference: {x: 0, y: 0},
-            railWidth: 300,
+        this.pieManager = Ext.create("Teselagen.manager.PieManager", {
+            center: {x: 100, y: 100},
+            railRadius: 100,
             showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
             showFeatures: Ext.getCmp("featuresMenuItem").checked,
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
-        rail = this.railManager.getRail();
-        this.railContainer.add(rail);
+        this.Managers.push(this.pieManager);
 
-        this.Managers.push(this.railManager);
-        this.railContainer.hide();
+        pie = this.pieManager.getPie();
+        this.pieContainer.add(pie);
 
-        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.rail.WireframeSelectionLayer", {
-            reference: this.railManager.reference,
-            railWidth: this.railManager.railWidth
+        this.Managers.push(this.pieManager);
+
+        this.WireframeSelectionLayer = Ext.create("Teselagen.renderer.pie.WireframeSelectionLayer", {
+            center: this.pieManager.center,
+            radius: this.pieManager.railRadius
         });
 
-        this.SelectionLayer = Ext.create("Teselagen.renderer.rail.SelectionLayer", {
-            reference: this.railManager.reference,
-            railWidth: this.railManager.railWidth
+        this.SelectionLayer = Ext.create("Teselagen.renderer.pie.SelectionLayer", {
+            center: this.pieManager.center,
+            radius: this.pieManager.railRadius
         });
     },
 
@@ -78,13 +76,26 @@ Ext.define('Vesa.controller.override.RailController', {
         this.callParent(arguments);
     },
 
+    onSequenceChanged: function() {
+        if(!this.SequenceManager) {
+            return;
+        }
+
+        this.callParent();
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.setOrfs(this.ORFManager.getOrfs());
+        this.pieManager.setFeatures(this.SequenceManager.getFeatures());
+
+        this.pieManager.render();
+    },
+
     onActiveEnzymesChanged: function() {
         this.callParent();
 
-        this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
 
-        if(this.railManager.sequenceManager && this.railManager.showCutSites) {
-            this.railManager.render();
+        if(this.pieManager.sequenceManager && this.pieManager.showCutSites) {
+            this.pieManager.render();
         }
     },
 
@@ -104,73 +115,73 @@ Ext.define('Vesa.controller.override.RailController', {
     },
 
     onViewModeChanged: function(viewMode) {
-        if(viewMode == "circular") {
-            Ext.getCmp("RailContainer").hide();
+        if(viewMode == "linear") {
+            Ext.getCmp("PieContainer").hide();
         } else {
-            Ext.getCmp("RailContainer").show();
+            Ext.getCmp("PieContainer").show();
         }
     },
 
     onSelectionChanged: function(scope, start, end) {
-        if(scope != this) {
+        if(scope !== this) {
             this.SelectionLayer.select(start, end);
             this.changeCaretPosition(end);
         }
 
-        this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
+        this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
         this.callParent(arguments);
 
-        this.railManager.setOrfs(this.ORFManager.getOrfs());
-        this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
-        this.railManager.setFeatures(pSeqMan.getFeatures());
+        this.pieManager.setOrfs(this.ORFManager.getOrfs());
+        this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.pieManager.setFeatures(pSeqMan.getFeatures());
 
-        this.railManager.render();
+        this.pieManager.render();
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
         this.SelectionLayer.setSequenceManager(pSeqMan);
     },
 
     onShowFeaturesChanged: function(show) {
-        this.railManager.setShowFeatures(show);
+        this.pieManager.setShowFeatures(show);
 
-        if(this.railManager.sequenceManager) {
-            this.railManager.render();
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
         }
     },
 
     onShowCutSitesChanged: function(show) {
-        this.railManager.setShowCutSites(show);
+        this.pieManager.setShowCutSites(show);
 
-        if(this.railManager.sequenceManager) {
-            this.railManager.render();
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
         }
     },
 
     onShowOrfsChanged: function(show) {
-        this.railManager.setShowOrfs(show);
+        this.pieManager.setShowOrfs(show);
 
-        if(this.railManager.sequenceManager) {
-            this.railManager.render();
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
         }
     },
 
     onShowFeatureLabelsChanged: function(show) {
-        this.railManager.setShowFeatureLabels(show);
+        this.pieManager.setShowFeatureLabels(show);
 
-        if(this.railManager.sequenceManager) {
-            this.railManager.render();
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
         }
     },
 
     onShowCutSiteLabelsChanged: function(show) {
-        this.railManager.setShowCutSiteLabels(show);
+        this.pieManager.setShowCutSiteLabels(show);
 
-        if(this.railManager.sequenceManager) {
-            this.railManager.render();
+        if(this.pieManager.sequenceManager) {
+            this.pieManager.render();
         }
     },
 
@@ -182,7 +193,7 @@ Ext.define('Vesa.controller.override.RailController', {
         this.mouseIsDown = true;
 
 
-        if(this.railManager.sequenceManager) {
+        if(this.pieManager.sequenceManager) {
             this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
             this.changeCaretPosition(this.startSelectionIndex);
         }
@@ -199,42 +210,43 @@ Ext.define('Vesa.controller.override.RailController', {
         var endSelectionAngle = this.getClickAngle(pEvt);
         var start;
         var end;
-        var multirend;
-        
+
         if(this.mouseIsDown && Math.abs(this.startSelectionAngle -
                     endSelectionAngle) > this.self.SELECTION_THRESHOLD &&
-                    this.railManager.sequenceManager) {
+                    this.pieManager.sequenceManager) {
 
-            this.endSelectionIndex = this.bpAtAngle(endSelectionAngle);
-            this.railManager.rail.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
+            var endSelectionIndex = this.bpAtAngle(endSelectionAngle);
+            this.pieManager.pie.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
 
             // Set the direction of selection if it has not yet been determined.
             if(this.selectionDirection == 0) {
-                if(this.startSelectionAngle < endSelectionAngle) {
+                if(this.startSelectionAngle < Math.PI) {
                     this.selectionDirection = -1;
-                    if(endSelectionAngle >= this.startSelectionAngle) {
+                    if(endSelectionAngle >= this.startSelectionAngle && 
+                       endSelectionAngle <= (this.startSelectionAngle + Math.PI)) {
                         this.selectionDirection = 1;
                     }
                 } else {
                     this.selectionDirection = 1;
-                    if(endSelectionAngle <= this.startSelectionAngle) {
+                    if(endSelectionAngle <= this.startSelectionAngle &&
+                       endSelectionAngle >= (this.startSelectionAngle - Math.PI)) {
                         this.selectionDirection = -1;
                     }
                 }
             }
 
             if(this.selectionDirection == -1) {
-                start = this.endSelectionIndex;
+                start = endSelectionIndex;
                 end = this.startSelectionIndex;
             } else {
                 start = this.startSelectionIndex;
-                end = this.endSelectionIndex;
+                end = endSelectionIndex;
             }
 
             this.WireframeSelectionLayer.startSelecting();
             this.WireframeSelectionLayer.select(start, end);
 
-            this.railManager.rail.surface.add(this.WireframeSelectionLayer.selectionSprite);
+            this.pieManager.pie.surface.add(this.WireframeSelectionLayer.selectionSprite);
             this.WireframeSelectionLayer.selectionSprite.show(true);
 
             if(pEvt.ctrlKey) {
@@ -288,14 +300,19 @@ Ext.define('Vesa.controller.override.RailController', {
                 this.clickedAnnotationEnd = null;
             } else {
                 this.SelectionLayer.deselect();
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
             }
         }
     },
 
     select: function(start, end) {
-        this.SelectionLayer.select(start, end);
+        if(start == 0 && end == this.SequenceManager.getSequence().toString().length) {
+            this.SelectionLayer.select(start, end-1);
+        } else {
+            this.SelectionLayer.select(start, end);
+        }
 
-        this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
+        this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
 
         this.changeCaretPosition(this.SelectionLayer.end);
@@ -307,10 +324,15 @@ Ext.define('Vesa.controller.override.RailController', {
      * @param {Ext.direct.Event} event The click event to determine the angle of.
      */
     getClickAngle: function(event) {
-        var el = this.railManager.getRail().surface.el;
-        var relX = (event.getX() - (Math.round(el.getBox().x)))/(el.getBox().width);
-        var relY = event.getY() - (Math.round(el.getBox().height / 2) + el.getBox().y);;
-        var angle = relX;
+        var el = this.pieManager.getPie().surface.el;
+        var relX = event.getX() - (Math.round(el.getBox().width / 2) + el.getBox().x);
+        var relY = event.getY() - (Math.round(el.getBox().height / 2) + el.getBox().y);
+
+        var angle = Math.atan(relY / relX) + Math.PI / 2;
+        if(relX < 0) {
+            angle += Math.PI;
+        }
+
         return angle;
     },
 
@@ -320,18 +342,20 @@ Ext.define('Vesa.controller.override.RailController', {
      */
     bpAtAngle: function(angle) {
         return Math.floor(angle * 
-            this.railManager.sequenceManager.getSequence().seqString().length);
+            this.pieManager.sequenceManager.getSequence().seqString().length
+            / (2 * Math.PI));
     },
 
     /**
      * Changes the caret position to a specified index.
      * @param {Int} index The nucleotide index to move the caret to.
+     * @param {Boolean} silent If true, don't fire a position changed event.
      */
-    changeCaretPosition: function(index) {
-        if(index >= 0 && 
+    changeCaretPosition: function(index, silent) {
+        if(index >= 0 &&
            index <= this.SequenceManager.getSequence().toString().length) {
             this.callParent(arguments);
-            this.railManager.adjustCaret(index);
+            this.pieManager.adjustCaret(index);
         }
     },
 
@@ -342,7 +366,7 @@ Ext.define('Vesa.controller.override.RailController', {
      * @param {Int} end The current index of the caret.
      */
     stickySelect: function(start, end) {
-        var annotations = this.railManager.getAnnotationsInRange(start, end);
+        var annotations = this.pieManager.getAnnotationsInRange(start, end);
 
         if(annotations.length > 0) {
             if(start <= end) { // Selection doesn't touch beginning of sequence.
@@ -432,6 +456,8 @@ Ext.define('Vesa.controller.override.RailController', {
                 
                 if(selEnd == -1 || selStart == -1) {
                     this.SelectionLayer.deselect();
+                    this.application.fireEvent(
+                        this.SelectionEvent.SELECTION_CANCELED);
                 } else {
                     this.SelectionLayer.startSelecting();
                     this.select(selStart, selEnd);
@@ -444,8 +470,7 @@ Ext.define('Vesa.controller.override.RailController', {
             }
         } else {
             this.SelectionLayer.deselect();
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
     }
-
-    });
 });

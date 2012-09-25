@@ -1,8 +1,5 @@
-Ext.define('Vesa.controller.override.RestrictionEnzymeController', {
-    requires: 'Vesa.controller.RestrictionEnzymeController'
-}, function() {
-    Ext.override(Vesa.controller.RestrictionEnzymeController, {
-        extend: "Ext.app.Controller",
+Ext.define("Vesa.controller.RestrictionEnzymeController", {
+    extend: "Ext.app.Controller",
 
     requires: ["Teselagen.manager.RestrictionEnzymeGroupManager"],
 
@@ -130,6 +127,4 @@ Ext.define('Vesa.controller.override.RestrictionEnzymeController', {
             this.application.fireEvent("ActiveEnzymesChanged");
         }
     }
-
-    });
 });

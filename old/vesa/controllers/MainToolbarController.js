@@ -1,8 +1,5 @@
-Ext.define('Vesa.controller.override.MainToolbarController', {
-    requires: 'Vesa.controller.MainToolbarController'
-}, function() {
-    Ext.override(Vesa.controller.MainToolbarController, {
-        extend: 'Ext.app.Controller',
+Ext.define('Vesa.controller.MainToolbarController', {
+    extend: 'Ext.app.Controller',
 
     requires: ["Teselagen.event.VisibilityEvent"],
 
@@ -145,5 +142,4 @@ Ext.define('Vesa.controller.override.MainToolbarController', {
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     }
 
-    });
 });

@@ -182,7 +182,7 @@
                                         "container|align": null,
                                         "designer|userClassName": "MyToolbar",
                                         "height": null,
-                                        "hidden": true,
+                                        "hidden": false,
                                         "id": "VectorEditorMenuBar",
                                         "autoScroll": false
                                     },
@@ -1036,9 +1036,9 @@
                                     },
                                     "codeClass": null,
                                     "userConfig": {
-                                        "layout|flex": 1,
+                                        "layout|flex": 2,
                                         "designer|userClassName": "MyToolbar1",
-                                        "id": "MainToolBar"
+                                        "id": "VectorEditorMainToolBar"
                                     },
                                     "designerId": "af9012f1-4008-460d-a666-741360aeeae8",
                                     "cn": [
@@ -1113,7 +1113,9 @@
                                                 "layout|flex": null,
                                                 "designer|userClassName": "MyButton5",
                                                 "id": "circularViewBtn",
+                                                "enableToggle": true,
                                                 "icon": "resources/images/pie.png",
+                                                "pressed": true,
                                                 "scale": "medium",
                                                 "text": null,
                                                 "tooltip": [
@@ -1133,6 +1135,7 @@
                                                 "layout|flex": null,
                                                 "designer|userClassName": "MyButton5",
                                                 "id": "linearViewBtn",
+                                                "enableToggle": true,
                                                 "icon": "resources/images/rail.png",
                                                 "scale": "medium",
                                                 "text": null,
@@ -1295,6 +1298,7 @@
                                                 "id": "featuresBtn",
                                                 "enableToggle": true,
                                                 "icon": "resources/images/features.png",
+                                                "pressed": true,
                                                 "scale": "medium",
                                                 "text": null,
                                                 "tooltip": [
@@ -1314,6 +1318,7 @@
                                                 "layout|flex": null,
                                                 "designer|userClassName": "MyButton5",
                                                 "id": "cutsitesBtn",
+                                                "enableToggle": true,
                                                 "icon": "resources/images/cut_sites.png",
                                                 "scale": "medium",
                                                 "text": null,
@@ -1333,7 +1338,8 @@
                                             "userConfig": {
                                                 "layout|flex": null,
                                                 "designer|userClassName": "MyButton5",
-                                                "id": "orfBtn",
+                                                "id": "orfsBtn",
+                                                "enableToggle": true,
                                                 "icon": "resources/images/orf.png",
                                                 "scale": "medium",
                                                 "text": null,
@@ -1707,7 +1713,9 @@
                     "codeClass": null,
                     "userConfig": {
                         "designer|userClassName": "MyPanel9",
+                        "id": "DeviceEditorPanel",
                         "layout": "fit",
+                        "frameHeader": false,
                         "title": "Device Editor"
                     },
                     "designerId": "225a5d76-bb4e-41d9-b4a1-770cbda815a0",
@@ -1715,19 +1723,334 @@
                         {
                             "type": "panel",
                             "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": "top",
+                                "designer|userClassName": "MyPanel6",
+                                "hidden": false,
+                                "id": "DeviceEditorMenuPanel",
+                                "width": 150,
+                                "layout": "fit",
+                                "title": null
+                            },
+                            "designerId": "73eee35b-35c4-4407-a6bb-a4777021372b",
+                            "cn": [
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "dockedItems",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dock": "top",
+                                        "designer|userClassName": "MyToolbar4",
+                                        "id": "DeviceEditorMenuBar"
+                                    },
+                                    "designerId": "51aabc3c-c06b-468f-88bb-0f11371a9bc7",
+                                    "cn": [
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton22",
+                                                "designer|displayName": "New",
+                                                "text": "New"
+                                            },
+                                            "designerId": "a3e20f71-f99f-4c89-a80c-3d4d109ffd35"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton25",
+                                                "designer|displayName": "Load",
+                                                "text": "Load"
+                                            },
+                                            "designerId": "f606c272-a857-4618-a2b7-34f3a36006e5"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton26",
+                                                "designer|displayName": "Save",
+                                                "text": "Save"
+                                            },
+                                            "designerId": "f6d916d9-288b-4486-a962-585207cdf6e1"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton27",
+                                                "designer|displayName": "Export",
+                                                "text": "Export"
+                                            },
+                                            "designerId": "ec408624-7185-4148-80ed-39e1dd6a837c"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": "top",
+                                "designer|userClassName": "MyPanel8",
+                                "id": "DeviceEditorPartPanel",
+                                "title": null
+                            },
+                            "designerId": "88cd779c-e60d-4643-bf26-7674386d47cd",
+                            "cn": [
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "dockedItems",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dock": "top",
+                                        "designer|userClassName": "MyToolbar5",
+                                        "id": "DeviceEditorPartsBar"
+                                    },
+                                    "designerId": "40f1d048-130a-42ef-898c-be789dfc1ee5"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "container",
+                            "reference": {
                                 "name": "items",
                                 "type": "array"
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "designer|userClassName": "MyPanel6",
-                                "hidden": false,
-                                "id": "DeviceEditor",
-                                "width": 150,
-                                "layout": "fit",
-                                "title": "Device Editor"
+                                "container|align": "stretch",
+                                "designer|userClassName": "MyContainer6",
+                                "id": "DeviceEditorContainer",
+                                "layout": "hbox"
                             },
-                            "designerId": "73eee35b-35c4-4407-a6bb-a4777021372b"
+                            "designerId": "d926c3ed-e629-4da1-ad94-fadbf8afd977",
+                            "cn": [
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "designer|userClassName": "MyPanel10",
+                                        "id": "DeviceEditorCanvas",
+                                        "title": "Canvas"
+                                    },
+                                    "designerId": "18778696-a808-4a81-b49b-808bd237c540"
+                                },
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "designer|userClassName": "MyPanel11",
+                                        "collapseDirection": "right",
+                                        "collapsible": true,
+                                        "title": "My Panel"
+                                    },
+                                    "designerId": "7a6bb81f-4990-45a1-a5f3-4e3aa019983c"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": "bottom",
+                                "designer|userClassName": "MyPanel4",
+                                "height": 23,
+                                "id": "StatusPanel",
+                                "layout": "fit",
+                                "headerPosition": "bottom",
+                                "title": null
+                            },
+                            "designerId": "750d2686-44f0-4ec4-a0c1-2c49485c4811",
+                            "cn": [
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "dockedItems",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dock": "top",
+                                        "designer|userClassName": "MyToolbar6",
+                                        "id": "StatusBar"
+                                    },
+                                    "designerId": "3d9a4df5-fc83-4bd5-bbd3-87ceed9e29a6",
+                                    "cn": [
+                                        {
+                                            "type": "tbfill",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyFill"
+                                            },
+                                            "designerId": "71e90a10-8afe-4c4e-8a14-8bc116cfc1b1"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "c8550cd3-b71c-4a8c-840e-1c1c34f520e7"
+                                        },
+                                        {
+                                            "type": "tbtext",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyTextItem",
+                                                "text": "Read only"
+                                            },
+                                            "designerId": "3b3b0257-99f2-4327-b762-9b2793505bf4"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "12f8df66-30fc-48a9-89a7-bcba85622cb4"
+                                        },
+                                        {
+                                            "type": "tbspacer",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySpacer",
+                                                "width": 10
+                                            },
+                                            "designerId": "9e1c8bb4-3721-44ec-be17-b3c6a14e51d4"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "b71ee5fe-d0d7-4262-bbc1-fce63c636e77"
+                                        },
+                                        {
+                                            "type": "tbtext",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyTextItem",
+                                                "text": "- : -"
+                                            },
+                                            "designerId": "1181baa4-9f2e-4bec-a1e8-0dfe2b749557"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator30"
+                                            },
+                                            "designerId": "d819e19e-98f0-4ef2-b3ca-b9a215424315"
+                                        },
+                                        {
+                                            "type": "tbtext",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyTextItem",
+                                                "text": "0"
+                                            },
+                                            "designerId": "e7ae7498-4919-4234-8dc6-2b7b25dcf47d"
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
                             "type": "tab",

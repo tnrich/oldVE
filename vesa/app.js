@@ -27,18 +27,7 @@ Ext.application({
 
     requires: [
         'Vesa.view.override.RestrictionEnzymesManagerWindow',
-        'Vesa.view.override.SimulateDigestionWindow',
-        'Vesa.controller.override.MainToolbarController',
-        'Vesa.controller.override.VectorPanelController',
-        'Vesa.controller.override.FindPanelController',
-        'Vesa.controller.override.MainPanelController',
-        'Vesa.controller.override.PieController',
-        'Vesa.controller.override.RailController',
-        'Vesa.controller.override.RestrictionEnzymeController',
-        'Vesa.controller.override.SelectWindowController',
-        'Vesa.controller.override.SequenceController',
-        'Vesa.controller.override.AnnotatePanelController',
-        'Vesa.controller.override.SimulateDigestionController'
+        'Vesa.view.override.SimulateDigestionWindow'
     ],
     views: [
         'AppViewport',
@@ -61,8 +50,7 @@ Ext.application({
         'SequenceController',
         'RestrictionEnzymeController',
         'AnnotatePanelController',
-        'SimulateDigestionController',
-        'SelectWindowController'
+        'SimulateDigestionController'
     ],
 
     errorHandler: function(err) {

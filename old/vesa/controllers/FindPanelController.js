@@ -1,8 +1,5 @@
-Ext.define('Vesa.controller.override.FindPanelController', {
-    requires: 'Vesa.controller.FindPanelController'
-}, function() {
-    Ext.override(Vesa.controller.FindPanelController, {
-        extend: 'Ext.app.Controller',
+Ext.define('Vesa.controller.FindPanelController', {
+    extend: 'Ext.app.Controller',
 
     requires: ['Teselagen.event.CaretEvent',
                'Teselagen.event.MenuItemEvent',
@@ -83,6 +80,5 @@ Ext.define('Vesa.controller.override.FindPanelController', {
         this.literalSelector = Ext.getCmp("literalSelector");
 
         this.findManager = Ext.create("Teselagen.manager.FindManager");
-    }
-    });
+    },
 });

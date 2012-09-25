@@ -88,7 +88,7 @@ Ext.define('Vesa.view.AppViewport', {
                                         {
                                             xtype: 'toolbar',
                                             flex: 1,
-                                            hidden: true,
+                                            hidden: false,
                                             id: 'VectorEditorMenuBar',
                                             autoScroll: false,
                                             items: [
@@ -374,8 +374,8 @@ Ext.define('Vesa.view.AppViewport', {
                                         },
                                         {
                                             xtype: 'toolbar',
-                                            flex: 1,
-                                            id: 'MainToolBar',
+                                            flex: 2,
+                                            id: 'VectorEditorMainToolBar',
                                             items: [
                                                 {
                                                     xtype: 'button',
@@ -401,13 +401,16 @@ Ext.define('Vesa.view.AppViewport', {
                                                 {
                                                     xtype: 'button',
                                                     id: 'circularViewBtn',
+                                                    enableToggle: true,
                                                     icon: 'resources/images/pie.png',
+                                                    pressed: true,
                                                     scale: 'medium',
                                                     tooltip: 'Circular View'
                                                 },
                                                 {
                                                     xtype: 'button',
                                                     id: 'linearViewBtn',
+                                                    enableToggle: true,
                                                     icon: 'resources/images/rail.png',
                                                     scale: 'medium',
                                                     tooltip: 'Linear View'
@@ -466,19 +469,22 @@ Ext.define('Vesa.view.AppViewport', {
                                                     id: 'featuresBtn',
                                                     enableToggle: true,
                                                     icon: 'resources/images/features.png',
+                                                    pressed: true,
                                                     scale: 'medium',
                                                     tooltip: 'Show Features'
                                                 },
                                                 {
                                                     xtype: 'button',
                                                     id: 'cutsitesBtn',
+                                                    enableToggle: true,
                                                     icon: 'resources/images/cut_sites.png',
                                                     scale: 'medium',
                                                     tooltip: 'Show Cut Sites'
                                                 },
                                                 {
                                                     xtype: 'button',
-                                                    id: 'orfBtn',
+                                                    id: 'orfsBtn',
+                                                    enableToggle: true,
                                                     icon: 'resources/images/orf.png',
                                                     scale: 'medium',
                                                     tooltip: 'Show ORF'
@@ -625,20 +631,134 @@ Ext.define('Vesa.view.AppViewport', {
                         },
                         {
                             xtype: 'panel',
+                            id: 'DeviceEditorPanel',
                             layout: {
                                 type: 'fit'
                             },
+                            frameHeader: false,
                             title: 'Device Editor',
-                            items: [
+                            dockedItems: [
                                 {
                                     xtype: 'panel',
+                                    dock: 'top',
                                     hidden: false,
-                                    id: 'DeviceEditor',
+                                    id: 'DeviceEditorMenuPanel',
                                     width: 150,
                                     layout: {
                                         type: 'fit'
                                     },
-                                    title: 'Device Editor'
+                                    dockedItems: [
+                                        {
+                                            xtype: 'toolbar',
+                                            dock: 'top',
+                                            id: 'DeviceEditorMenuBar',
+                                            items: [
+                                                {
+                                                    xtype: 'button',
+                                                    text: 'New'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    text: 'Load'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    text: 'Save'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    text: 'Export'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'panel',
+                                    dock: 'top',
+                                    id: 'DeviceEditorPartPanel',
+                                    dockedItems: [
+                                        {
+                                            xtype: 'toolbar',
+                                            dock: 'top',
+                                            id: 'DeviceEditorPartsBar'
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'panel',
+                                    dock: 'bottom',
+                                    height: 23,
+                                    id: 'StatusPanel',
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    headerPosition: 'bottom',
+                                    dockedItems: [
+                                        {
+                                            xtype: 'toolbar',
+                                            dock: 'top',
+                                            id: 'StatusBar',
+                                            items: [
+                                                {
+                                                    xtype: 'tbfill'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'tbtext',
+                                                    text: 'Read only'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'tbspacer',
+                                                    width: 10
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'tbtext',
+                                                    text: '- : -'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'tbtext',
+                                                    text: '0'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            items: [
+                                {
+                                    xtype: 'container',
+                                    id: 'DeviceEditorContainer',
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'hbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            id: 'DeviceEditorCanvas',
+                                            title: 'Canvas'
+                                        },
+                                        {
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            collapseDirection: 'right',
+                                            collapsible: true,
+                                            title: 'My Panel'
+                                        }
+                                    ]
                                 }
                             ]
                         }

@@ -139,14 +139,6 @@
             ],
             "className": "RestrictionEnzymeController"
         },
-        "067d3bef-fd8a-413e-bbd3-48beb3b98121": {
-            "paths": [
-                "metadata/controller/SelectWindowController",
-                "app/controller/override/SelectWindowController.js",
-                "app/controller/SelectWindowController.js"
-            ],
-            "className": "SelectWindowController"
-        },
         "7d4fc686-038a-4c3d-8042-a955ea620820": {
             "paths": [
                 "metadata/controller/SequenceController",
@@ -179,11 +171,17 @@
             ],
             "className": "SimulateDigestionWindow"
         },
-        "41613e16-a1c0-4092-af3d-83aafc6066ea": {
+        "fbd2b5b8-1b30-431c-8cf6-b7ca258521a5": {
             "paths": [
-                "metadata/resource/direct"
+                "metadata/resource/js"
             ],
-            "className": "direct"
+            "className": "js"
+        },
+        "c345d05e-4bb1-4e81-a135-b5bfbb9c987d": {
+            "paths": [
+                "metadata/resource/js1"
+            ],
+            "className": "js1"
         }
     },
     "viewOrderMap": {
@@ -206,7 +204,6 @@
             "060bed49-c8dc-438b-9842-5d40f0693227",
             "fa5e1ae7-cb9e-44d4-9f05-66c6ba8fb9ba",
             "99989391-cc30-4d76-ba12-ebb1c186a668",
-            "067d3bef-fd8a-413e-bbd3-48beb3b98121",
             "7d4fc686-038a-4c3d-8042-a955ea620820",
             "4f66accb-c02c-4330-8a9c-ffeaecdfc38c",
             "3848615c-4532-4873-9594-46c97ffb674b"
@@ -214,7 +211,8 @@
         "model": [],
         "resource": [
             "eb88d82d-8bf8-4192-9d48-d0d198c847e3",
-            "41613e16-a1c0-4092-af3d-83aafc6066ea"
+            "fbd2b5b8-1b30-431c-8cf6-b7ca258521a5",
+            "c345d05e-4bb1-4e81-a135-b5bfbb9c987d"
         ],
         "app": [
             "application"

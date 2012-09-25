@@ -1,8 +1,10 @@
-Ext.define('Vesa.controller.override.SequenceController', {
-    requires: 'Vesa.controller.SequenceController'
-}, function() {
-    Ext.override(Vesa.controller.SequenceController, {
-        extend: "Ext.app.Controller",
+/**
+ * @class Vesa.controller.SequenceController
+ * Parent class of AnnotatePanelController, PieController, and RailController.
+ * Handles general user input and events for sequence display and manipulation.
+ */
+Ext.define("Vesa.controller.SequenceController", {
+    extend: "Ext.app.Controller",
 
     requires: ["Teselagen.bio.sequence.alphabets.DNAAlphabet",
                "Teselagen.bio.sequence.DNATools",
@@ -406,6 +408,5 @@ Ext.define('Vesa.controller.override.SequenceController', {
     },
 
     select: function() {
-    }
-    });
+    },
 });

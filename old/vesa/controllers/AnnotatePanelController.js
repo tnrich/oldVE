@@ -1,8 +1,9 @@
-Ext.define('Vesa.controller.override.AnnotatePanelController', {
-    requires: 'Vesa.controller.AnnotatePanelController'
-}, function() {
-    Ext.override(Vesa.controller.AnnotatePanelController, {
-        extend: 'Vesa.controller.SequenceController',
+/**
+ * @class Vesa.controller.AnnotatePanelController
+ * Class which handles user input and events specific to the annotate panel.
+ */
+Ext.define('Vesa.controller.AnnotatePanelController', {
+    extend: 'Vesa.controller.SequenceController',
 
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent"],
@@ -342,6 +343,5 @@ Ext.define('Vesa.controller.override.AnnotatePanelController', {
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
         }
-    }
-    });
+    },
 });

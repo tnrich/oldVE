@@ -28,8 +28,7 @@
             "SequenceController",
             "RestrictionEnzymeController",
             "AnnotatePanelController",
-            "SimulateDigestionController",
-            "SelectWindowController"
+            "SimulateDigestionController"
         ]
     },
     "configAlternates": {
