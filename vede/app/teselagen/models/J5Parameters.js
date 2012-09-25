@@ -8,6 +8,7 @@ Ext.define("Teselagen.models.J5Parameters", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.constants.Constants"
     ],
 
     statics: {
@@ -95,46 +96,53 @@ Ext.define("Teselagen.models.J5Parameters", {
         GOB_Default:            26,
         GOMT_Default:           60,
         GOMAXT_Default:         70,
+
         MOLB_Default:           110,
         MFSGB_Default:          250,
         GGOHB_Default:          4,
         GGRS_Default:           "GGTCTC",
         GGTES_Default:          "CACACCAGGTCTCA",
+
         MIGGOC_Default:         2,
         OSCPB_Default:          0.1,
         OPPCPP_Default:         40,
         OMLPPRB_Default:        60,
         MPPB_Default:           100,
+
         DSCPB_Default:          0.39,
         DSMCPP_Default:         159,
         PGC_Default:            2,
         PMS_Default:            18,
         PMAXS_Default:          36,
+
         PMT_Default:            60,
         PMAXT_Default:          70,
         PMDT_Default:           5,
         PMSAT_Default:          47,
         PMSET_Default:          47,
+
         PPMCAT_Default:         47,
         PPMCET_Default:         47,
         PTS_Default:            true,
         PSC_Default:            true,
         PDC_Default:            250,
+
         M3BBTWIH_Default:       4,
         MMT_Default:            45,
         MSC_Default:            0.05,
         MOC_Default:            0.00000025,
-        OSF_Default:            Constants.GENBANK,
+        OSF_Default:            Teselagen.constants.Constants.self.GENBANK,
+
         SPP_Default:            true,
         
         //combobox choices data providers
-        outputSequenceFormatOptions:   [Constants.GENBANK, Constants.FASTA, Constants.JBEI_SEQ, Constants.SBOL_XML],
-        booleanOptions:                [false, true],
+        outputSequenceFormatOptions:   [Teselagen.constants.Constants.self.GENBANK, Teselagen.constants.Constants.self.FASTA, Teselagen.constants.Constants.self.JBEI_SEQ, Teselagen.constants.Constants.self.SBOL_XML],
+        booleanOptions:         [false, true]
     },
 
     /**
      * Input parameters:
-     * J5 Parameter Values
+     * J5 Parameter Values. Default values DO NOT SET when creating this obect
      */
     fields: [
         {name: "masterOligoNumberOfDigitsValue",                   type: "int",        defaultValue: this.self.MONOD_Default},
@@ -180,6 +188,52 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "outputSequenceFormatValue",                        type: "String",     defaultValue: this.self.OSF_Default},
 
         {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default}
-    ]
+    ],
+
+    setDefaultValues: function() {
+        this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
+        this.set("masterPlasmidNumberOfDigitsValue", this.self.MPNOD_Default);
+        this.set("gibsonOverlapBPsValue", this.self.GOB_Default);
+        this.set("gibsonOverlapMinTmValue", this.self.GOMT_Default);
+        this.set("gibsonOverlapMaxTmValue", this.self.GOMAXT_Default);
+
+        this.set("maxOligoLengthBPsValue", this.self.MOLB_Default);
+        this.set("minFragmentSizeGibsonBPsValue", this.self.MFSGB_Default);
+        this.set("goldenGateOverhangBPsValue", this.self.GGOHB_Default);
+        this.set("goldenGateRecognitionSeqValue", this.self.GGRS_Default);
+        this.set("goldenGateTerminiExtraSeqValue", this.self.GGTES_Default);
+
+        this.set("maxIdentitiesGoldenGateOverhangsCompatibleValue", this.self.MIGGOC_Default);
+        this.set("oligoSynthesisCostPerBPUSDValue", this.self.OSCPB_Default);
+        this.set("oligoPagePurificationCostPerPieceUSDValue", this.self.OPPCPP_Default);
+        this.set("oligoMaxLengthNoPagePurificationRequiredBPsValue", this.self.OMLPPRB_Default);
+        this.set("minPCRProductBPsValue", this.self.MPPB_Default);
+
+        this.set("directSynthesisCostPerBPUSDValue", this.self.DSCPB_Default);
+        this.set("directSynthesisMinCostPerPieceUSDValue", this.self.DSMCPP_Default);
+        this.set("primerGCClampValue", this.self.PGC_Default);
+        this.set("primerMinSizeValue", this.self.PMS_Default);
+        this.set("primerMaxSizeValue", this.self.PMAXS_Default);
+
+        this.set("primerMinTmValue", this.self.PMT_Default);
+        this.set("primerMaxTmValue", this.self.PMAXT_Default);
+        this.set("primerMaxDiffTmValue", this.self.PMDT_Default);
+        this.set("primerMaxSelfAnyThValue", this.self.PMSAT_Default);
+        this.set("primerMaxSelfEndThValue", this.self.PMSET_Default);
+
+        this.set("primerPairMaxComplAnyThValue", this.self.PPMCAT_Default);
+        this.set("primerPairMaxComplEndThValue", this.self.PPMCET_Default);
+        this.set("primerTmSantaluciaValue", this.self.PTS_Default);
+        this.set("primerSaltCorrectionsValue", this.self.PSC_Default);
+        this.set("primerDnaConcValue", this.self.PDC_Default);
+
+        this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", this.self.M3BBTWIH_Default);
+        this.set("misprimingMinTmValue", this.self.MMT_Default);
+        this.set("misprimingSaltConcValue", this.self.MSC_Default);
+        this.set("misprimingOligoConcValue", this.self.MOC_Default);
+        this.set("outputSequenceFormatValue", this.self.OSF_Default);
+        
+        this.set("suppressPurePrimersValue", this.self.SPP_Default);
+    }
 
 });

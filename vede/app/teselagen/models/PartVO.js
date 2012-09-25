@@ -32,7 +32,7 @@ Ext.define("Teselagen.models.PartVO", {
         {name: "endBP",             type: "int",        defaultValue: 0},
         {name: "sequenceFile",      type: "auto",       defaultValue: null},
         {name: "iconID",            type: "string",     defaultValue: null},
-        {name: "id",                type: "string",     defaultValue: Date.now()}
+        {name: "id",                type: "string",     defaultValue: Date.now().toString()}
     ],
 
     belongsTo: [

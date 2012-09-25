@@ -29,6 +29,10 @@ Ext.define("Teselagen.models.Part", {
         {name: "id",                type: "string",     defaultValue: Date.now()}
     ],
 
+    belongsTo: [
+        "Teselagen.models.J5Bin"
+    ],
+
     /**
      * Sets the id for this part
      * NOTE: Must execute setId() to set the id from "" to a unique identifier.
