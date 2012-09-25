@@ -1,17 +1,6 @@
 var splashscreen;
 var session;
 
-function showDevInfo(){
-    Ext.create("Ext.Window",{
-        title : 'Welcome '+session.username+'!',
-        width : 500,                            
-        height: 100,
-        closable : true,                           
-        html : 'sessionId:'+session.sessionId,                         
-        modal : true
-    }).show();
-}
-
 Ext.onReady(function() {
     // Start the mask on the body and get a reference to the mask
     splashscreen = Ext.getBody().mask('Loading application', 'splashscreen');
@@ -80,6 +69,17 @@ Ext.application({
     launch: function() {
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
+
+        var showDevInfo = function(){
+            Ext.create("Ext.Window",{
+                title : 'Welcome '+session.username+'!',
+                width : 500,                            
+                height: 100,
+                closable : true,                           
+                html : 'sessionId:'+session.sessionId,                         
+                modal : true
+            }).show();
+        }
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
