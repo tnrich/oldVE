@@ -13,7 +13,7 @@ Ext.define("Teselagen.models.PartVO", {
 
     statics: {
     },
-
+    
     /**
      * Input parameters.
      * NOTE: Must execute setId() to set the id from "" to a unique identifier.
@@ -32,7 +32,19 @@ Ext.define("Teselagen.models.PartVO", {
         {name: "endBP",             type: "int",        defaultValue: 0},
         {name: "sequenceFile",      type: "auto",       defaultValue: null},
         {name: "iconID",            type: "string",     defaultValue: null},
-        {name: "id",                type: "string",     defaultValue: Date.now().toString()}
+        //{name: "id",                type: "string",     defaultValue: Date.now().toString()}
+        {
+            name: "id",
+            convert: function() {
+                var extraDigits = Math.floor(Math.random() * 1000).toString();
+
+                while (extraDigits.length < 3) {
+                    extraDigits = "0" + extraDigits;
+                }
+                var id = (Date.now()) + extraDigits;
+                return id;
+            }
+        }
     ],
 
     belongsTo: [
@@ -41,17 +53,25 @@ Ext.define("Teselagen.models.PartVO", {
     ],
 
     /**
-     * Sets the id for this part
-     * NOTE: Must execute setId() to set the id from "" to a unique identifier.
+     * Generates ID based on date + 3 random digits
+     * @returns {String} id
+     * @private
      */
-     setId: function() {
+    generateId: function() {
         var extraDigits = Math.floor(Math.random() * 1000).toString();
 
         while (extraDigits.length < 3) {
             extraDigits = "0" + extraDigits;
         }
-        var newId = (Date.now()) + extraDigits;
+        var id = (Date.now()) + extraDigits;
+        return id;
+    },
 
+    /**
+     * Sets a new id for this part, different than what was generated at object initiation.
+     */
+     setId: function() {
+        var newId = this.generateId();
         this.set("id", newId);
         return true;
      },

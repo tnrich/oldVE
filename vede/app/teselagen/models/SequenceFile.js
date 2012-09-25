@@ -18,17 +18,17 @@ Ext.define("Teselagen.models.SequenceFile", {
      * Input parameters.
      * NOTE: Must execute setId() to set the id from "" to a unique identifier.
      * @param {String} sequenceFileFormat
-     * @param {String} sequenceFileContent
+     * @param {String} sequenceFileContent This must be set using setSequenceFileContent()
      * @param {String} sequenceFileName
      * @param {String} partSource
      * @param {String} hash Hash code from sha256 encryption
      */
     fields: [
-        {name: "sequenceFileFormat",    type: "string",     defaultValue: null},
-        {name: "sequenceFileContent",   type: "string",     defaultValue: null},
-        {name: "sequenceFileName",      type: "string",     defaultValue: null},
-        {name: "partSource",            type: "string",     defaultValue: null},
-        {name: "hash",                  type: "string",     defaultValue: null}
+        {name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
+        {name: "sequenceFileContent",   type: "string",     defaultValue: ""},
+        {name: "sequenceFileName",      type: "string",     defaultValue: ""},
+        {name: "partSource",            type: "string",     defaultValue: ""},
+        {name: "hash",                  type: "string",     defaultValue: ""}
     ],
 
     belongsTo: [

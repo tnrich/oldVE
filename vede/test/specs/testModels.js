@@ -27,128 +27,6 @@ Ext.onReady(function() {
 
         describe("Teselagen.models.SequenceFile.js", function() {
 
-            it("Creates Empty SequenceFile", function(){
-                var part = Ext.create("Teselagen.models.PartVO");
-
-                expect(part.isEqual(part)).toBe(true);
-                expect(part.isEmpty()).toBe(true);
-
-            });
-
-            it("Creates SequenceFile", function(){
-                var part = Ext.create("Teselagen.models.PartVO", {
-                    name: "name1"
-                });
-
-                expect(part.isEqual(part)).toBe(true);
-                expect(part.isEmpty()).toBe(false);
-
-                //console.log(part);
-            });
-
-            it("Creates SequenceFile: setId()", function(){
-                var part = Ext.create("Teselagen.models.PartVO", {
-                    name: "name1"
-                });
-                expect(part.get("id").length).toBe(0);
-                part.setId();
-                expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
-            });
-        });
-
-        describe("Teselagen.models.PartVO.js", function() {
-
-            it("Creates Empty PartVO", function(){
-                var part = Ext.create("Teselagen.models.PartVO");
-
-                expect(part.isEqual(part)).toBe(true);
-                expect(part.isEmpty()).toBe(true);
-
-            });
-
-            it("Creates PartVO", function(){
-                var part = Ext.create("Teselagen.models.PartVO", {
-                    name: "name1"
-                });
-
-                expect(part.isEqual(part)).toBe(true);
-                expect(part.isEmpty()).toBe(false);
-
-                console.log("PartVO init");
-                console.log(part);
-            });
-
-            it("Creates PartVO: setId()", function(){
-                var part = Ext.create("Teselagen.models.PartVO", {
-                    name: "name1"
-                });
-                expect(part.get("id").length).toBe(0);
-                part.setId();
-                expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
-            });
-        });
-
-        describe("Teselagen.models.Part.js", function() {
-
-            it("Creates Empty Part", function(){
-                var part = Ext.create("Teselagen.models.Part");
-
-                expect(part.isEmpty()).toBe(true);
-            });
-
-            it("Creates Part", function(){
-                var part = Ext.create("Teselagen.models.Part", {
-                    fas: "fas1"
-                });
-
-                expect(part.isEmpty()).toBe(false);
-                expect(part.get("fas")).toBe("fas1");
-
-                console.log("Part init");
-                console.log(part);
-            });
-
-            it("Creates Part: setId()", function(){
-                var part = Ext.create("Teselagen.models.Part", {
-                    fas: "fas1"
-                });
-                expect(part.get("id").length).toBe(0); //toBe(13); // Date.now()
-                part.setId();
-                expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
-                //console.log(part.get("id"));
-            });
-        });
-
-
-        describe("Teselagen.models.EugeneRule.js", function() {
-
-            it("Creates EugeneRule", function(){
-                var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    name: "name1",
-                    operand2: 123
-                });
-                expect(eugene).not.toBe(null);
-
-                var flag = false;
-                try {
-                    eugene.setOperand2("bad string");
-                } catch (e) {
-                    flag = true;
-                    //console.log("Correctly caught: " + e.message);
-                }
-                expect(eugene.get("name")).toBe("name1");
-                expect(eugene).not.toBe(null);
-                expect(flag).toBe(true);
-
-                console.log("EugeneRule init");
-                console.log(eugene);
-
-            });
-        });
-        
-
-        describe("Teselagen.models.SequenceFile.js", function() {
-
             it("Test encodeUriComponent()", function(){
                 var test    = "GATTACA@#$%^&*()";
                 var encode  = encodeURIComponent(test);
@@ -185,6 +63,14 @@ Ext.onReady(function() {
                 expect(hash4).not.toBe(trueHash);
             });
 
+            it("Creates empty SequenceFile", function(){
+                var seq = Ext.create("Teselagen.models.SequenceFile");
+                expect(seq).not.toBe(null);
+
+                expect(seq.get("sequenceFileFormat")).toBe("");
+                expect(seq.get("hash")).toBe("");
+            });
+
             it("Creates SequenceFile", function(){
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var trueHash    =  "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3";
@@ -194,8 +80,116 @@ Ext.onReady(function() {
                 tmp.setSequenceFileContent(content);
 
                 expect(tmp.get("hash")).toBe(trueHash);
-                console.log("SequenceFile init");
-                console.log(tmp);
+                //console.log("SequenceFile init");
+                //console.log(tmp);
+            });
+        });
+
+        describe("Teselagen.models.PartVO.js", function() {
+
+            it("Creates Empty PartVO", function(){
+                var part = Ext.create("Teselagen.models.PartVO");
+
+                expect(part.isEqual(part)).toBe(true);
+                expect(part.isEmpty()).toBe(true);
+
+                expect(part.get("name")).toBe("");
+                expect(part.get("revComp")).toBe(false);
+                expect(part.get("genbankStartBP")).toBe(0);
+                expect(part.get("id")).not.toBe("");
+
+            });
+
+            it("Creates PartVO", function(){
+                var part = Ext.create("Teselagen.models.PartVO", {
+                    name: "name1"
+                });
+
+                expect(part.isEqual(part)).toBe(true);
+                expect(part.isEmpty()).toBe(false);
+
+                //console.log("PartVO init");
+                //console.log(part);
+            });
+
+            it("Creates PartVO: setId()", function(){
+                var part = Ext.create("Teselagen.models.PartVO", {
+                    name: "name1"
+                });
+                expect(part.get("id").length).toBe(16);
+                part.setId();
+                expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
+            });
+        });
+
+        describe("Teselagen.models.Part.js", function() {
+
+            it("Creates Empty Part", function(){
+                var part = Ext.create("Teselagen.models.Part");
+
+                expect(part.isEmpty()).toBe(true);
+
+                expect(part.get("partVO")).toBe(null);
+                expect(part.get("fas")).toBe("");
+                expect(part.get("id")).not.toBe("");
+            });
+
+            it("Creates Part", function(){
+                var part = Ext.create("Teselagen.models.Part", {
+                    fas: "fas1"
+                });
+
+                expect(part.isEmpty()).toBe(false);
+                expect(part.get("fas")).toBe("fas1");
+
+                //console.log("Part init");
+                //console.log(part);
+            });
+
+            it("Creates Part: setId()", function(){
+                var part = Ext.create("Teselagen.models.Part", {
+                    fas: "fas1"
+                });
+                //console.log(part.get("id"));
+                expect(part.get("id").length).toBe(16); //toBe(13); // Date.now()
+                part.setId();
+                expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
+                //console.log(part.get("id"));
+            });
+        });
+
+
+        describe("Teselagen.models.EugeneRule.js", function() {
+
+            it("Creates empty EugeneRule", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule");
+                expect(eugene).not.toBe(null);
+
+                expect(eugene.get("name")).toBe("");
+                expect(eugene.get("negationOperator")).toBe(false);
+            });
+
+            it("Creates EugeneRule", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "name1",
+                    operand2: 123
+                });
+                expect(eugene).not.toBe(null);
+
+                var flag = false;
+                try {
+                    eugene.setOperand2("bad string");
+                } catch (e) {
+                    flag = true;
+                    //console.log("Correctly caught: " + e.message);
+                }
+                expect(eugene.get("name")).toBe("name1");
+                expect(eugene).not.toBe(null);
+                expect(flag).toBe(true);
+
+                //console.log("EugeneRule init");
+                //console.log(eugene);
+
             });
         });
         
@@ -216,7 +210,7 @@ Ext.onReady(function() {
                 });
                 expect(param).not.toBe(null);
 
-                //Spot checking -- these are not correct
+                //Spot checking -- these are NOT correct
                 expect(param.get("masterOligoNumberOfDigitsValue")).toBe(1);
                 expect(param.get("maxOligoLengthBPsValue")).toBe(0);
                 expect(param.get("maxIdentitiesGoldenGateOverhangsCompatibleValue")).toBe(0);
@@ -289,14 +283,20 @@ Ext.onReady(function() {
                 });
                 expect(down).not.toBe(null);
                 expect(down.get("maxDeltaTemperatureAdjacentZonesValue")).toBe(100);
-                //console.log("DownstreamAutomationParameters init");
-                //console.log(down);
+                expect(down.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue")).toBe(down.self.MDTROZA_DEFAULT);
+                expect(down.get("maxMcStepsPerZoneValue")).toBe(down.self.MMCSPZ_DEFAULT);
+                console.log("DownstreamAutomationParameters init");
+                console.log(down);
             });
 
-            it("createParameterString()", function(){
+            /*it("createParameterString()", function(){
                 var down = Ext.create("Teselagen.models.DownstreamAutomationParameters", {});
+                down.setDefaultValues();
                 var str  = down.createParameterString();
                 var strArr = str.split(/[\n]+/g);
+
+                //console.log("DownstreamAutomationParameters createParamStr");
+                //console.log(down);
                 //console.log(str);
 
                 //var url  = "/vede/test/data/j5input/downstream_automation.csv";
@@ -315,7 +315,7 @@ Ext.onReady(function() {
                     'TRIALDELTATEMPERATURE,0.1,0.1,The Monte-Carlo step trial change in temperature for a thermocycler block zone\n' +
                     'WELLSPERTHERMOCYCLERZONE,16,16,The number of wells per thermocycler block zone\n' +
                     'ZONESPERTHERMOCYCLERBLOCK,6,6,The number of zones per thermocycler block\n';
-                var txtArr = str.split(/[\n]+/g);
+                var txtArr = txt.split(/[\n]+/g);
                 //console.log(txt);
 
                 for (var i=0; i < strArr.length; i++) {
@@ -333,7 +333,7 @@ Ext.onReady(function() {
 
                 expect(down.get("wellsPerThermocyclerZoneValue")).toBe(16);
                 expect(down.get("zonesPerThermocyclerBlockValue")).toBe(6);
-            });
+            });*/
         });
 
         describe("Teselagen.models.J5Bin.js", function() {
@@ -344,12 +344,12 @@ Ext.onReady(function() {
                 });
                 expect(bin).not.toBe(null);
 
-                console.log("J5Bin init");
-                console.log(bin);
+                //console.log("J5Bin init");
+                //console.log(bin);
                 
-                // check
+                // check -- Non-empty defaults do not work!
                 expect(bin.get("binName")).toBe("binName1");
-                expect(bin.get("iconID")).toBe("");
+                expect(bin.get("iconID")).toBe("generic");
                 expect(bin.get("directionForward")).toBe(true);
                 expect(bin.get("fas")).toBe("");
             });
@@ -359,18 +359,62 @@ Ext.onReady(function() {
                     binItemsVector: []
                 });
                 bin.setDefaultValues();
-                console.log("J5Bin init");
-                console.log(bin);
+                //console.log("J5Bin init");
+                //console.log(bin);
 
                 // check
                 expect(bin.get("binName")).toBe("");
                 expect(bin.get("iconID")).toBe("generic");
                 expect(bin.get("directionForward")).toBe(true);
+                expect(bin.get("dsf")).toBe(false);
                 expect(bin.get("fas")).toBe("");
+            });
 
+            it("addToBin()", function(){
+                var part = Ext.create("Teselagen.models.Part");
+                var bin = Ext.create("Teselagen.models.J5Bin", {
+                    binItemsVector: []
+                });
+                expect(bin.get("binItemsVector").length).toBe(0);
 
+                bin.addToBin(part, bin.get("binItemsVector").length);
+                //console.log("J5Bin init-add part");
+                //console.log(bin);
+
+                // check
+                expect(bin.get("binItemsVector").length).toBe(1);
+            });
+
+            it("removeFromBin()", function(){
+                var part  = Ext.create("Teselagen.models.Part");
+                var part2 = Ext.create("Teselagen.models.Part");
+                console.log(part.get("id"));
+                console.log(part2.get("id"));
+
+                var bin   = Ext.create("Teselagen.models.J5Bin", {
+                    binItemsVector: [part, part2]
+                });
+                //console.log("J5Bin init-remove part here");
+                //console.log(bin);
+                //console.log(bin.get("binItemsVector"));
+
+                expect(bin.get("binItemsVector").length).toBe(2);
+
+                bin.removeFromBin(part);
+                //console.log("J5Bin init-remove   part gone");
+                //console.log(bin);
+                expect(bin.get("binItemsVector").length).toBe(1);
+                bin.removeFromBin(part2);
+                //console.log("J5Bin init-remove   part2   gone");
+                //console.log(bin);
+
+                // check
+                //console.log(bin.get("binItemsVector"));
+                expect(bin.get("binItemsVector").length).toBe(0);
             });
         });
+
+
 
     });
 });

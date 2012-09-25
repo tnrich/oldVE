@@ -52,19 +52,37 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
         ZPTB_DEFAULT:     6
     },
 
+    //constructor: function(){
+    //},
+
     fields: [
-        {name: "maxDeltaTemperatureAdjacentZonesValue",                   type: "number",         defaultValue: 0},
-        {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",   type: "number",         defaultValue: 0},
-        {name: "maxMcStepsPerZoneValue",                                  type: "int",            defaultValue: 0},
-        {name: "maxWellVolumeMultiwellPlateValue",                        type: "int",            defaultValue: 0},
-        {name: "mcTemperatureFinalValue",                                 type: "number",         defaultValue: 0},
-        {name: "mcTemperatureInitialValue",                               type: "number",         defaultValue: 0},
-        {name: "minPipettingVolumeValue",                                 type: "number",         defaultValue: 0},
-        {name: "nColumnsMultiwellPlateValue",                             type: "int",            defaultValue: 0},
-        {name: "nRowsMultiwellPlateValue",                                type: "int",            defaultValue: 0},
-        {name: "trialDeltaTemperatureValue",                              type: "number",         defaultValue: 0},
-        {name: "wellsPerThermocyclerZoneValue",                           type: "int",            defaultValue: 0},
-        {name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: 0}
+        /*{
+            name: "maxDeltaTemperatureAdjacentZonesValue",
+            convert: function(v, record) {
+                console.log(v);
+                return v || this.self.MDTAZ_DEFAULT;
+            }
+        },*/
+        {name: "maxDeltaTemperatureAdjacentZonesValue",   type: "number",         defaultValue: this.self.MDTAZ},
+        {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",   type: "number",         defaultValue: this.self.MDTROZA},
+        {name: "maxMcStepsPerZoneValue",                                  type: "int",            defaultValue: this.self.MMCSPZ_DEFAULT},
+        {name: "maxWellVolumeMultiwellPlateValue",                        type: "int",            defaultValue: this.self.MWVMP_DEFAULT},
+        {name: "mcTemperatureFinalValue",                                 type: "number",         defaultValue: this.self.MCTF_DEFAULT},
+        {name: "mcTemperatureInitialValue",                               type: "number",         defaultValue: this.self.MCTI_DEFAULT},
+        {name: "minPipettingVolumeValue",                                 type: "number",         defaultValue: this.self.MPV_DEFAULT},
+        {name: "nColumnsMultiwellPlateValue",                             type: "int",            defaultValue: this.self.NCMP_DEFAULT},
+        {name: "nRowsMultiwellPlateValue",                                type: "int",            defaultValue: this.self.NRMP_DEFAULT},
+        {name: "trialDeltaTemperatureValue",                              type: "number",         defaultValue: this.self.TDT_DEFAULT},
+        {name: "wellsPerThermocyclerZoneValue",                           type: "int",            defaultValue: this.self.WPTZ_DEFAULT},
+        {name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: this.self.ZPTB_DEFAULT}
+
+
+        /*{
+            name: "id",
+            convert: function() {
+                return this.self.MDTAZ_DEFAULT;
+            }
+        }*/
     ],
 
 
@@ -73,6 +91,7 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
      * @return {String} paramString String form of parameters to pass to J5
      */
     createParameterString: function() {
+        console.log(this.get("maxDeltaTemperatureAdjacentZonesValue").toString());
         var returnString = "Parameter Name,Value,Default Value,Description\n"
             + this.self.MDTAZ + "," + this.get("maxDeltaTemperatureAdjacentZonesValue").toString() + "," + this.self.MDTAZ_DEFAULT + "," + this.self.MDTAZ_DESC + "\n"
             + this.self.MDTROZA + "," + this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue").toString() + "," + this.self.MDTROZA_DEFAULT + "," + this.self.MDTROZA_DESC + "\n"

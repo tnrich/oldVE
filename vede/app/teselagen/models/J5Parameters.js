@@ -140,6 +140,10 @@ Ext.define("Teselagen.models.J5Parameters", {
         booleanOptions:         [false, true]
     },
 
+    //constructor: function(){
+        //this.setDefaultValues();
+    //},
+
     /**
      * Input parameters:
      * J5 Parameter Values. Default values DO NOT SET when creating this obect
