@@ -87,7 +87,7 @@ Ext.application({
             params: {},
             success: function(response){
                 var response = Ext.JSON.decode('\''+response+'\'');
-                console.log(response);
+                console.log(response.data.username);
             }
         });
     }
