@@ -78,7 +78,17 @@ Ext.application({
             });
         });
         // Run the fade 500 milliseconds after launch.
-        task.delay(500);
+        //task.delay(500);
+
+        console.log("Trying to get session data");
+        // Execute ajax to get data
+        Ext.Ajax.request({
+            url: '/deviceeditor',
+            params: {},
+            success: function(response){
+                console.log(response);
+            }
+        });
     }
 });
 
