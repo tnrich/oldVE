@@ -776,9 +776,9 @@ $( document ).bind( 'loadDE', function() {
             });
 
             $("btn#j5-run").click(function(){
-                  //_self.saveDesign(function(){
+                  _self.saveDesign(function(){
                   j5.j5Run();
-                  //});    
+                  });    
             });
 
             $("#export-json-btn").click(function(){
@@ -887,6 +887,7 @@ $( document ).bind( 'loadDE', function() {
             });
 
             $(document).bind("saveDesign", function() {  
+              console.log("Received save design");
                 _self.saveDesign();
             }); 
 
@@ -1059,9 +1060,12 @@ $( document ).bind( 'loadDE', function() {
         },
         saveDesign : function(cb)
         {
-            this.encodeDesign(function(model){
 
-                var modelName = $('#design-name').val();
+            var modelName = $('#design-name').val();
+            console.log(modelName);
+            if(modelName=="") alert("No design name defined");
+            
+            this.encodeDesign(function(model){
                 $.ajax({
                     type: "POST",
                     url: '/api/saveUserModel',
