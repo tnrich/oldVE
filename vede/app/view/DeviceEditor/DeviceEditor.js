@@ -41,7 +41,7 @@ Ext.define('Vede.view.DeviceEditor.DeviceEditor', {
     html: deviceEditorHTMLSource,
     afterRender: function(){
         window.setTimeout(function(){$( document ).trigger( 'loadDE' );},1000);
-        /*
+        
         Ext.create("Ext.Window",{
 		    title : 'Development!',
 		    width : 500,                            
@@ -50,7 +50,7 @@ Ext.define('Vede.view.DeviceEditor.DeviceEditor', {
 		    html : 'This is a development version of teselagen VEDE. You will be logged in as a Guest user and a Guest sessionId for j5 testing. Teselagen Dev Team.',                         
 		    modal : true
 			}).show();
-		*/
+
     },
     renderTo: Ext.getBody()
 });
