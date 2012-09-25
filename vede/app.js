@@ -18,7 +18,14 @@ Ext.onReady(function() {
             params: {},
             success: function(response){
                 var response = JSON.parse(response.responseText);
-                console.log(response);
+                    Ext.create("Ext.Window",{
+                        title : 'Welcome '+response.username+'!',
+                        width : 500,                            
+                        height: 100,
+                        closable : true,                           
+                        html : 'sessionId:'+response.sessionId,                         
+                        modal : true
+                        }).show();
             }
     });
 
