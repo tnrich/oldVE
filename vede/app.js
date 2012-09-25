@@ -86,7 +86,7 @@ Ext.application({
             url: '/deviceeditor',
             params: {},
             success: function(response){
-                console.log(Ext.util.JSON.decode(response));
+                console.log(Ext.JSON.decode(response));
             }
         });
     }
