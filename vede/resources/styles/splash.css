@@ -1,0 +1,30 @@
+.x-mask.splashscreen {
+    background-color: white;
+    opacity: 1;
+}
+
+.x-mask-msg.splashscreen,
+.x-mask-msg.splashscreen div {
+    font-size: 16px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-left: -200px !important;
+    text-align: center;
+
+    border: none;
+    background-color: transparent;
+    background-position: top center;
+}
+
+.x-message-box .x-window-body .x-box-inner {
+    min-height: 110px !important;
+}
+
+.x-splash-icon {
+    /* Important required due to the loading symbols CSS selector */
+    background-image: url('../images/logo-splash.png') !important;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    width:400px;
+    height:200px;
+}

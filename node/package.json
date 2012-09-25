@@ -1,0 +1,17 @@
+{
+    "name": "DeviceEditor"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "=3.0.0rc3"
+    , "jade": ">= 0.0.1"
+    , "xmlrpc": ">=1.0.1"
+    , "mongodb":">=1.1.0-beta"
+    , "mongoose":">=3.1.0"
+    , "node-zip":">=0.0.1"
+    , "socket.io":"0.9.9"
+    , "markdown-js":">=0.0.3"
+    , "mysql":"2.0.0-alpha3"
+    , "require-all":"0.0.4"
+  }
+}
