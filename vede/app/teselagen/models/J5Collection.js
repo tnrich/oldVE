@@ -36,7 +36,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * Not sure if these are necessary
      * Original uses splice, but don't we want to insert it, not replace an item?
      */
-    addToBin: function(bin, position) {
+    addToBin: function(bin) { //, position) {
         //var newBin = Ext.Array.insert(this.get("binItemsVector"), 0, bin);
         //console.log(this.get("binsVector"));
         Ext.Array.include(this.get("binsVector"), bin);
