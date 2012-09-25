@@ -70,7 +70,7 @@ Ext.define('Vesa.view.AppViewport', {
                         },
                         {
                             xtype: 'panel',
-                            id: 'VectorEditorPanel',
+                            id: 'VectorEditor',
                             layout: {
                                 type: 'fit'
                             },
@@ -560,8 +560,8 @@ Ext.define('Vesa.view.AppViewport', {
                             ],
                             items: [
                                 {
-                                    xtype: 'container',
-                                    id: 'EditorContainer',
+                                    xtype: 'panel',
+                                    id: 'VectorEditorPanel',
                                     layout: {
                                         align: 'stretch',
                                         type: 'hbox'
@@ -574,8 +574,7 @@ Ext.define('Vesa.view.AppViewport', {
                                             floating: false,
                                             id: 'VectorPanel',
                                             layout: {
-                                                align: 'stretch',
-                                                type: 'hbox'
+                                                type: 'fit'
                                             },
                                             collapseDirection: 'left',
                                             collapsed: false,
@@ -591,7 +590,7 @@ Ext.define('Vesa.view.AppViewport', {
                                                 },
                                                 {
                                                     xtype: 'container',
-                                                    hidden: true,
+                                                    hidden: false,
                                                     id: 'RailContainer',
                                                     layout: {
                                                         type: 'fit'
@@ -611,8 +610,7 @@ Ext.define('Vesa.view.AppViewport', {
                                             layout: {
                                                 type: 'fit'
                                             },
-                                            collapseDirection: 'right',
-                                            collapsible: true,
+                                            collapsible: false,
                                             title: 'Annotate',
                                             items: [
                                                 {
@@ -754,8 +752,6 @@ Ext.define('Vesa.view.AppViewport', {
                                         {
                                             xtype: 'panel',
                                             flex: 1,
-                                            collapseDirection: 'right',
-                                            collapsible: true,
                                             title: 'My Panel'
                                         }
                                     ]

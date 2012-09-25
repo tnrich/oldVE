@@ -136,7 +136,7 @@
                     "codeClass": null,
                     "userConfig": {
                         "designer|userClassName": "MyPanel8",
-                        "id": "VectorEditorPanel",
+                        "id": "VectorEditor",
                         "layout": "fit",
                         "title": "Vector Editor"
                     },
@@ -1551,20 +1551,20 @@
                             ]
                         },
                         {
-                            "type": "container",
+                            "type": "panel",
                             "reference": {
                                 "name": "items",
                                 "type": "array"
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "dock": null,
                                 "container|align": "stretch",
-                                "designer|userClassName": "MyContainer",
-                                "id": "EditorContainer",
-                                "layout": "hbox"
+                                "designer|userClassName": "MyPanel12",
+                                "id": "VectorEditorPanel",
+                                "layout": "hbox",
+                                "title": null
                             },
-                            "designerId": "9b2b97ed-2cee-46fc-b12a-287b8622b663",
+                            "designerId": "7728113c-858c-442b-8f0e-3f76927bcfb2",
                             "cn": [
                                 {
                                     "type": "panel",
@@ -1576,13 +1576,12 @@
                                     "userConfig": {
                                         "flex": 1,
                                         "layout|flex": 1,
-                                        "container|align": "stretch",
                                         "designer|userClassName": "MyPanel",
                                         "floating": false,
                                         "id": "VectorPanel",
                                         "width": null,
                                         "resizable": null,
-                                        "layout": "hbox",
+                                        "layout": "fit",
                                         "collapseDirection": "left",
                                         "collapsed": false,
                                         "collapsible": true,
@@ -1625,7 +1624,7 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "designer|userClassName": "MyContainer2",
-                                                "hidden": true,
+                                                "hidden": false,
                                                 "id": "RailContainer",
                                                 "layout": "fit"
                                             },
@@ -1660,8 +1659,8 @@
                                         "id": "AnnotatePanel",
                                         "autoScroll": true,
                                         "layout": "fit",
-                                        "collapseDirection": "right",
-                                        "collapsible": true,
+                                        "collapseDirection": null,
+                                        "collapsible": false,
                                         "title": "Annotate"
                                     },
                                     "configAlternates": {
@@ -1887,8 +1886,6 @@
                                     "userConfig": {
                                         "layout|flex": 1,
                                         "designer|userClassName": "MyPanel11",
-                                        "collapseDirection": "right",
-                                        "collapsible": true,
                                         "title": "My Panel"
                                     },
                                     "designerId": "7a6bb81f-4990-45a1-a5f3-4e3aa019983c"
