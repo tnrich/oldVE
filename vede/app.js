@@ -71,6 +71,7 @@ Ext.application({
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
         var showDevInfo = function(){
+            console.log("Showing dev info");
             Ext.create("Ext.Window",{
                 title : 'Welcome '+session.username+'!',
                 width : 500,                            
@@ -95,8 +96,9 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        Ext.getBody().unmask();
                         showDevInfo();
+                        Ext.getBody().unmask();
+                        
                     }
                 }
             });
