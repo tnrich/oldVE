@@ -13,5 +13,6 @@
     , "markdown-js":">=0.0.3"
     , "mysql":"2.0.0-alpha3"
     , "require-all":"0.0.4"
+    , "soap":">=0.2.6"
   }
 }
