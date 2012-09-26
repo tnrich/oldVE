@@ -53,7 +53,7 @@ function restrict(req, res, next) {
       var sessionId = req.body.sessionId;
       // Check session id
       
-      var query = 'select * from j5sessions,tbl_users where j5session.user_id=tbl_users.id and session_id="'+sessionId+'";';
+      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
       
       app.mysql.query(query, function(err, rows, fields) {
         if (err) throw err;
