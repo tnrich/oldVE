@@ -19,6 +19,10 @@ Ext.onReady(function() {
             params: {},
             success: function(response){
                 session = JSON.parse(response.responseText);
+                Ext.define('session', {
+                    singleton: true,
+                    data: session
+                });
             }
     });
 
