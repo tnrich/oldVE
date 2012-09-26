@@ -52,14 +52,13 @@ function restrict(req, res, next) {
       // Check session id
       console.log("Checking: "+sessionId);
       var query = 'select * from j5sessions where session_id="'+sessionId+'";';
-      /*
+      
       app.mysql.connection.query(query, function(err, rows, fields) {
         if (err) throw err;
         console.log(rows);
-        res.json(rows);4
+        res.json(rows);
       });
-      */
-      res.json({'result':'ok'});
+
 
     }
     else
