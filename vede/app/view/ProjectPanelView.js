@@ -83,17 +83,13 @@ function loadResults(record)
             win.show();    
 };
 
-console.log(Ext.create('session'));
-var session = Ext.create('session').data.sessionId;
-
 var store = Ext.create('Ext.data.TreeStore', {
-    autoLoad: true,
+    autoLoad: false,
     proxy: {
         type: 'ajax',
         url: '/api/getTree',
         extraParams: {
-            mode: 'getTree',
-            sessionId : session
+            mode: 'getTree'
         },
         actionMethods: 
         {
@@ -104,6 +100,12 @@ var store = Ext.create('Ext.data.TreeStore', {
         text: 'Tree',
         expanded: true,
         id: 'src'
+    },
+    require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
+    listeners: {
+        'beforeload': function(store, options) {
+            if(sessionData.data) store.proxy.extraParams.sessionId=sessionData.data.sessionId;
+        }
     }
 });
 

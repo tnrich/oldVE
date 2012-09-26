@@ -1,9 +1,14 @@
 var splashscreen;
 var session;
 
+Ext.define('sessionData', { 
+          singleton: true, 
+          data: null
+      }); 
+
 Ext.onReady(function() {
     // Start the mask on the body and get a reference to the mask
-    splashscreen = Ext.getBody().mask('Loading application', 'splashscreen');
+    splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span>', 'splashscreen');
     // Add a new class to this mask as we want it to look different from the default.
     splashscreen.addCls('splashscreen');
 
@@ -11,21 +16,6 @@ Ext.onReady(function() {
     Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
         cls: 'x-splash-icon'
     });
-
-    console.log("Trying to get session data");
-        // Execute ajax to get data
-        Ext.Ajax.request({
-            url: '/deviceeditor',
-            params: {},
-            success: function(response){
-                session = JSON.parse(response.responseText);
-                Ext.define('session', {
-                    singleton: true,
-                    data: session
-                });
-            }
-    });
-
 });
 
 /*global console*/
@@ -35,80 +25,82 @@ Ext.Loader.setConfig({
         Ext: '.',
         'Ext.ux': '../extjs/examples/ux',
         Teselagen: './app/teselagen',
-        'Teselagen.bio':'../biojs/src/teselagen/bio'
+        'Teselagen.bio': '../biojs/src/teselagen/bio'
     }
 });
 
 Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
-    views: [
-        'AppViewport',
-        'FileImportWindow',
-        'SimulateDigestionWindow'
-    ],
-    controllers: [
-        'ActionStackController',
-        'AppController',
-        'AnnotatePanelController',
-        'FindPanelController',
-        'MainMenuController',
-        'MainPanelController',
-        'MainToolbarController',
-        'PieController',
-        'RailController',
-        'RestrictionEnzymeController',
-        'SelectWindowController',
-        'SequenceController',
-        'VectorPanelController',
-        'SimulateDigestionController',
-        'DeviceEditor.MainMenuController',
-        'DeviceEditor.MainToolbarController',
-        'DeviceEditor.DeviceEditorPanelController'
-    ],
+    views: ['AppViewport', 'FileImportWindow', 'SimulateDigestionWindow'],
+    controllers: ['ActionStackController', 'AppController', 'AnnotatePanelController', 'FindPanelController', 'MainMenuController', 'MainPanelController', 'MainToolbarController', 'PieController', 'RailController', 'RestrictionEnzymeController', 'SelectWindowController', 'SequenceController', 'VectorPanelController', 'SimulateDigestionController', 'DeviceEditor.MainMenuController', 'DeviceEditor.MainToolbarController', 'DeviceEditor.DeviceEditorPanelController'],
     errorHandler: function(err) {
         console.warn(err);
         return true;
     },
+    require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
     launch: function() {
+
+        this.authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager");
+        var that = this;
+
+        var showDevInfo = function() {
+                console.log("Showing dev info");
+                Ext.create("Ext.Window", {
+                    title: 'Welcome ' + session.username + '!',
+                    width: 500,
+                    height: 100,
+                    closable: true,
+                    html: 'J5 sessionId: ' + session.sessionId,
+                    modal: true
+                }).show();
+            }
+
+        var logIn = function() {
+                Ext.get('splash-text').update('Authenticating');
+                Ext.Ajax.request({
+                    url: '/deviceeditor',
+                    params: {},
+                    success: function(response) {
+                        session = JSON.parse(response.responseText);
+                        sessionData.data = session;
+                        that.authenticationManager.logIn("LoggedIn");
+                    }
+                });
+            };
+
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        var showDevInfo = function(){
-            console.log("Showing dev info");
-            Ext.create("Ext.Window",{
-                title : 'Welcome '+session.username+'!',
-                width : 500,                            
-                height: 100,
-                closable : true,                           
-                html : 'J5 sessionId: '+session.sessionId,                         
-                modal : true
-            }).show();
-        }
+        logIn();
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             // Fade out the body mask
             splashscreen.fadeOut({
                 duration: 1000,
-                remove:true
+                remove: true
             });
             // Fade out the icon and message
             splashscreen.next().fadeOut({
                 duration: 1000,
-                remove:true,
+                remove: true,
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        showDevInfo();
                         Ext.getBody().unmask();
-                        
+
                     }
                 }
             });
         });
         // Run the fade 500 milliseconds after launch.
-        task.delay(0);
+        //task.delay(0);
+
+        var AuthenticationEvent = Teselagen.event.AuthenticationEvent;
+        this.on(AuthenticationEvent.LOGGED_IN, function(){
+            task.delay(0);
+        });
+
     }
 });
-

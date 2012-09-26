@@ -7,10 +7,8 @@
 .x-mask-msg.splashscreen div {
     font-size: 16px;
     padding-top: 0px;
-    padding-bottom: 30px;
     margin-left: -200px !important;
     text-align: center;
-
     border: none;
     background-color: transparent;
     background-position: top center;
@@ -24,7 +22,10 @@
     /* Important required due to the loading symbols CSS selector */
     background-image: url('../images/logo-splash.png') !important;
     margin-top: 0px;
-    margin-bottom: 10px;
     width:400px;
     height:200px;
+}
+
+.x-mask-msg div:nth-child(2) {
+     background-position: 95px top !important;
 }

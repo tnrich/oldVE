@@ -48,15 +48,19 @@ function restrict(req, res, next) {
     if(!app.testing.enabled)
     {
       // Check sessionId and find or create an account
-
+      var sessionId = req.body.sessionId;
       // Check session id
       console.log("Checking: "+sessionId);
-      var query = 'select * from j5sessions where session_id="'+req.body.sessionId+'";';
+      var query = 'select * from j5sessions where session_id="'+sessionId+'";';
+      /*
       app.mysql.connection.query(query, function(err, rows, fields) {
         if (err) throw err;
         console.log(rows);
         res.json(rows);4
       });
+      */
+      res.json({'result':'ok'});
+
     }
     else
     {
@@ -144,6 +148,10 @@ app.all('/saveUserModel',restrict,function(req,res){
       res.send('not saved');
     }
   }
+});
+
+app.all('/deviceeditor',function(req,res){
+  res.json({'sessionId':'432424124'});
 });
 
 app.all('/getUserModels',restrict,function(req,res){
