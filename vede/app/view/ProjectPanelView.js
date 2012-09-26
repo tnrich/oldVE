@@ -83,8 +83,8 @@ function loadResults(record)
             win.show();    
 };
 
-console.log(Ext.create('My.computer.NoteBook'));
-var session = Ext.create('My.computer.NoteBook').data.sessionId;
+console.log(Ext.create('session'));
+var session = Ext.create('session').data.sessionId;
 
 var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: true,
