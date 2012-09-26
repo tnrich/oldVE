@@ -55,7 +55,7 @@ function restrict(req, res, next) {
       
       var query = 'select * from j5sessions where session_id="'+sessionId+'";';
       
-      app.mysql.connection.query(query, function(err, rows, fields) {
+      app.mysql.query(query, function(err, rows, fields) {
         if (err) throw err;
         console.log(rows);
         res.json(rows);
