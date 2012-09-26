@@ -1840,9 +1840,409 @@
                                     "userConfig": {
                                         "dock": "top",
                                         "designer|userClassName": "MyToolbar5",
+                                        "height": 45,
                                         "id": "DeviceEditorPartsBar"
                                     },
-                                    "designerId": "40f1d048-130a-42ef-898c-be789dfc1ee5"
+                                    "designerId": "40f1d048-130a-42ef-898c-be789dfc1ee5",
+                                    "cn": [
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "ori_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/origin-of-replication.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Origin of Replication"
+                                                ]
+                                            },
+                                            "designerId": "d0cb5b26-1ac5-4aad-bc9f-d3e507e9e429"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "cds_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/cds.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "CDS"
+                                                ]
+                                            },
+                                            "designerId": "757dbf5f-9a66-4c9b-9e58-362a83028c4e"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "five_prime_ov_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/five-prime-overhang.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "5' Overhang"
+                                                ]
+                                            },
+                                            "designerId": "de764c0a-3bc2-4118-b3c2-ebbdbcea2715"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "three_prime_ov_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/three-prime-overhang.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "3' Overhang"
+                                                ]
+                                            },
+                                            "designerId": "4622cc98-9506-4a88-93b8-2b17572e8943"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "translational_start_site_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/translational-start-site.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Translational Start Site"
+                                                ]
+                                            },
+                                            "designerId": "91d670c5-8766-4215-abce-1dff6cf7e2fe"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "promoter_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/promoter.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Promoter"
+                                                ]
+                                            },
+                                            "designerId": "47ededdd-0b1f-40c5-b2be-4168fc705f37"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "primer_binding_site_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/primer-binding-site.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Primer Binding Site"
+                                                ]
+                                            },
+                                            "designerId": "70089c4f-3108-4f57-8e66-01fab098efcf"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "restriction_enz_recog_site_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/restriction-enzyme-recognition-site.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Restriction Enzyme Recognition Site"
+                                                ]
+                                            },
+                                            "designerId": "5e647f5e-1dac-499b-b168-8e4c16f4633b"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "restriction_site_w_no_overhang_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/restriction-site-with-no-overhang.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Restriction Site With No Overhangs"
+                                                ]
+                                            },
+                                            "designerId": "109f0220-8c8d-4d60-a675-62ff2d047d67"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "protease_site_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/protease-site.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Protease Site"
+                                                ]
+                                            },
+                                            "designerId": "66b6fa90-06fa-408d-9a71-3358e7736910"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "protein_stability_element_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/protein-stability-element.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Protein Stability Element"
+                                                ]
+                                            },
+                                            "designerId": "3f4dd557-0604-4203-9d42-e6edbff79196"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "assembly_junction_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/assembly-junction.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Assembly Junction"
+                                                ]
+                                            },
+                                            "designerId": "3abf8858-b190-4c3e-b7e4-e3a60d4dd3e2"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "insulator_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/insulator.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Insulator"
+                                                ]
+                                            },
+                                            "designerId": "7aee03fe-64f1-43ee-b8f2-061530fad6d2"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "operator_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/operator.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Operator"
+                                                ]
+                                            },
+                                            "designerId": "199ac7ba-54ad-4f6b-8314-199bdca6efd2"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "ribonuclease_site_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/ribonuclease-site.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Ribonuclease Site"
+                                                ]
+                                            },
+                                            "designerId": "243d7290-65fe-47a4-8835-aa69823d071c"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "rna_stability_element_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/rna-stability-element.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "RNA Stability Element",
+                                                    ""
+                                                ]
+                                            },
+                                            "designerId": "eb9381fb-55ad-4f57-9260-84feb7eab73d"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "terminator_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/terminator.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Terminator"
+                                                ]
+                                            },
+                                            "designerId": "88f1efe0-82dd-4016-8b2b-e0137ef64f15"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton28",
+                                                "height": null,
+                                                "id": "signature_Btn",
+                                                "width": null,
+                                                "icon": "resources/images/symbols/signature.png",
+                                                "params": [
+                                                    "Signature"
+                                                ],
+                                                "scale": "large",
+                                                "text": null
+                                            },
+                                            "designerId": "4a090fb7-d71a-446c-99b1-e7aaad8f66eb"
+                                        }
+                                    ]
                                 }
                             ]
                         },
