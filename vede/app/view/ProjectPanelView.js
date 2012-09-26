@@ -93,7 +93,7 @@ var store = Ext.create('Ext.data.TreeStore', {
         url: '/api/getTree',
         extraParams: {
             mode: 'getTree',
-            sessionId : 'session
+            sessionId : session
         },
         actionMethods: 
         {
