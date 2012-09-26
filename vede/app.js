@@ -77,7 +77,7 @@ Ext.application({
                 width : 500,                            
                 height: 100,
                 closable : true,                           
-                html : 'sessionId:'+session.sessionId,                         
+                html : 'J5 sessionId: '+session.sessionId,                         
                 modal : true
             }).show();
         }
