@@ -55,7 +55,7 @@ function restrict(req, res, next) {
       app.mysql.connection.query(query, function(err, rows, fields) {
         if (err) throw err;
         console.log(rows);
-        res.json(rows);
+        res.json(rows);4
       });
     }
     else

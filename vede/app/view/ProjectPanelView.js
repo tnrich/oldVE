@@ -95,7 +95,7 @@ var store = Ext.create('Ext.data.TreeStore', {
         },
         actionMethods: 
         {
-            read: 'GET'
+            read: 'POST'
         }
     },
     root: {
