@@ -47,10 +47,12 @@ function restrict(req, res, next) {
   } else {
     if(!app.testing.enabled)
     {
+      console.log("Checking: "+sessionId);
+      if(!req.body.sessionId) return res.json({'fault':'wrong credentials'});
       // Check sessionId and find or create an account
       var sessionId = req.body.sessionId;
       // Check session id
-      console.log("Checking: "+sessionId);
+      
       var query = 'select * from j5sessions where session_id="'+sessionId+'";';
       
       app.mysql.connection.query(query, function(err, rows, fields) {
