@@ -154,7 +154,7 @@ app.all('/getUserModels',restrict,function(req,res){
   res.json(models);
 });
 
-app.get('/getTree',restrict,function(req,res){
+app.post('/getTree',restrict,function(req,res){
 
   var examplesTree = [];
 
