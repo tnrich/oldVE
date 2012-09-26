@@ -56,9 +56,41 @@ function restrict(req, res, next) {
       var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
       
       app.mysql.query(query, function(err, rows, fields) {
-        if (err) throw err;
-        console.log(rows);
-        res.json(rows);
+        if (err) res.json({'fault':'user not found'});
+
+        // User found!
+        var username = rows[0].username;
+        
+        // If user not found generate a new one
+        var User = app.db.model("Users");
+        User.findOne({'name':username},function(err,results){
+          if(results==null)
+          {
+              var newuser = new User({name:username});
+              User.create(newuser, function (err, user) {
+               console.log(username+' user created!');
+                req.session.regenerate(function(){
+                req.session.user = user;
+                req.user = user;
+                next();
+                //res.send('Authenticated!');
+
+                });
+            });
+          }
+          else
+          {
+            console.log("Guest user already exist");
+            req.session.regenerate(function(){
+            req.session.user = result;
+            req.user = result;
+            next();
+            //res.send('Authenticated!');
+
+            });
+          }
+        });
+
       });
 
 
