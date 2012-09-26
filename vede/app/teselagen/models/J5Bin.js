@@ -2,7 +2,7 @@
  * @class Teselagen.models.J5Bin
  * Class describing a j5Bin.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author)
  */
 Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
@@ -19,7 +19,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Input parameters.
-     * @param {Teselagen.models.Part} [binItemsVector]
+     * @param {Teselagen.models.Part[]} binItemsVector
      * @param {String} binName (REQUIRED)
      * @param {String} iconID
      * @param {Boolean} directionForward
@@ -34,25 +34,11 @@ Ext.define("Teselagen.models.J5Bin", {
         {
             name: "binItemsVector",
             convert: function(v, record) {
-                /*console.log(Ext.getClassName(v));
-                if (v.length = 1) {
-                    console.log("here");
-                    return [v];
-                } else {
-                    return v;
-                }*/
-                //console.log("bin: " + v);
-                //console.log(v);
-                return v;
+                return v || [];
             }
         },
         {name: "binName",           type: "string",     defaultValue: ""}, //required when making this object
-        {
-            name: "iconID",
-            convert: function() {
-                return "generic"; //Teselagen.models.SBOLvIcons.self.GENERIC}, //generic
-            }
-        },
+        {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "auto",       defaultValue: null},
@@ -68,11 +54,11 @@ Ext.define("Teselagen.models.J5Bin", {
         {type: "belongsTo", model: "Teselagen.models.J5Collection"}
     ],
 
-    /**
-     * This is Required
-     */
-    setDefaultValues: function() {
+    init: function() {
         this.set("iconID", this.self.GENERIC);
+        //if (this.get("binItemsVector") === null) {
+        //    this.set("binItemsVector", []);
+        //}
     },
 
     /**

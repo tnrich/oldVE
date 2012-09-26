@@ -2,7 +2,7 @@
  * @class Teselagen.models.Part
  * Class describing a Part for J5Parameters.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",

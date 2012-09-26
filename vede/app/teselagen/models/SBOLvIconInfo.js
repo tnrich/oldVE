@@ -2,7 +2,7 @@
  * @class Teselagen.models.SBOLvIconInfo
  * Class describing a SBOLvIconInfo.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 Ext.define("Teselagen.models.SBOLvIconInfo", {
     extend: "Ext.data.Model",

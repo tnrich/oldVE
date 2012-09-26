@@ -2,7 +2,7 @@
  * @class Teselagen.models.SequenceFile
  * Class describing a SequenceFile for J5Parameters.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",

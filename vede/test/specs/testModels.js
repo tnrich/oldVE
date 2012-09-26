@@ -204,41 +204,36 @@ Ext.onReady(function() {
 
         describe("Teselagen.models.J5Parameters.js", function() {
 
-            it("Creates J5Parameters", function(){
+            it("Creates J5Parameters with default values: setDefaultValues()", function(){
+                var param = Ext.create("Teselagen.models.J5Parameters", {});
+                expect(param).not.toBe(null);
+                // param.setDefaultValues(); <-- this is automatically called on init
+
+                //Spot checking
+                expect(param.get("masterOligoNumberOfDigitsValue")).toBe(param.self.MONOD_Default);
+                expect(param.get("maxOligoLengthBPsValue")).toBe(param.self.MOLB_Default);
+                expect(param.get("maxIdentitiesGoldenGateOverhangsCompatibleValue")).toBe(param.self.MIGGOC_Default);
+                expect(param.get("directSynthesisCostPerBPUSDValue")).toBe(param.self.DSCPB_Default);
+                expect(param.get("primerMinTmValue")).toBe(param.self.PMT_Default);
+                expect(param.get("primerPairMaxComplAnyThValue")).toBe(param.self.PPMCAT_Default);
+                expect(param.get("mispriming3PrimeBoundaryBPToWarnIfHitValue")).toBe(param.self.M3BBTWIH_Default);
+                expect(param.get("suppressPurePrimersValue")).toBe(param.self.SPP_Default);
+            });
+
+            it("Creates J5Parameters, changing a default parameter", function(){
                 var param = Ext.create("Teselagen.models.J5Parameters", {
                     masterOligoNumberOfDigitsValue: 1
                 });
-                expect(param).not.toBe(null);
 
                 //Spot checking -- these are NOT correct
+                
+                expect(param.get("masterOligoNumberOfDigitsValue")).toBe(param.self.MONOD_Default);
+                expect(param.get("maxOligoLengthBPsValue")).toBe(param.self.MOLB_Default);
+                expect(param.get("maxIdentitiesGoldenGateOverhangsCompatibleValue")).toBe(param.self.MIGGOC_Default);
+
+                param.set("masterOligoNumberOfDigitsValue", 1);
                 expect(param.get("masterOligoNumberOfDigitsValue")).toBe(1);
-                expect(param.get("maxOligoLengthBPsValue")).toBe(0);
-                expect(param.get("maxIdentitiesGoldenGateOverhangsCompatibleValue")).toBe(0);
-                expect(param.get("directSynthesisCostPerBPUSDValue")).toBe(0);
-                expect(param.get("primerMinTmValue")).toBe(0);
-                expect(param.get("primerPairMaxComplAnyThValue")).toBe(0);
-                expect(param.get("mispriming3PrimeBoundaryBPToWarnIfHitValue")).toBe(0);
-                expect(param.get("suppressPurePrimersValue")).toBe(false);
 
-            });
-
-            it("setDefaultValues()", function(){
-                var param = Ext.create("Teselagen.models.J5Parameters", {});
-
-                //console.log("J5Parameters init");
-                //console.log(param);
-
-                param.setDefaultValues();
-
-                //Spot checking
-                expect(param.get("masterOligoNumberOfDigitsValue")).toBe(5);
-                expect(param.get("maxOligoLengthBPsValue")).toBe(110);
-                expect(param.get("maxIdentitiesGoldenGateOverhangsCompatibleValue")).toBe(2);
-                expect(param.get("directSynthesisCostPerBPUSDValue")).toBe(0.39);
-                expect(param.get("primerMinTmValue")).toBe(60);
-                expect(param.get("primerPairMaxComplAnyThValue")).toBe(47);
-                expect(param.get("mispriming3PrimeBoundaryBPToWarnIfHitValue")).toBe(4);
-                expect(param.get("suppressPurePrimersValue")).toBe(true);
             });
         });
 
@@ -281,15 +276,20 @@ Ext.onReady(function() {
                 var down = Ext.create("Teselagen.models.DownstreamAutomationParameters", {
                     maxDeltaTemperatureAdjacentZonesValue: "100"
                 });
+
                 expect(down).not.toBe(null);
                 expect(down.get("maxDeltaTemperatureAdjacentZonesValue")).toBe(100);
                 expect(down.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue")).toBe(down.self.MDTROZA_DEFAULT);
                 expect(down.get("maxMcStepsPerZoneValue")).toBe(down.self.MMCSPZ_DEFAULT);
-                console.log("DownstreamAutomationParameters init");
-                console.log(down);
+                expect(down.get("maxWellVolumeMultiwellPlateValue")).toBe(down.self.MWVMP_DEFAULT);
+
+                expect(down.get("wellsPerThermocyclerZoneValue")).toBe(down.self.WPTZ_DEFAULT);
+                expect(down.get("zonesPerThermocyclerBlockValue")).toBe(down.self.ZPTB_DEFAULT);
+                //console.log("DownstreamAutomationParameters init");
+                //console.log(down);
             });
 
-            /*it("createParameterString()", function(){
+            it("createParameterString()", function(){
                 var down = Ext.create("Teselagen.models.DownstreamAutomationParameters", {});
                 down.setDefaultValues();
                 var str  = down.createParameterString();
@@ -328,12 +328,13 @@ Ext.onReady(function() {
                 down.setDefaultValues();
 
                 //spot check
-                expect(down.get("maxDeltaTemperatureAdjacentZonesValue")).toBe(5);
-                expect(down.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue")).toBe(5);
+                expect(down.get("maxDeltaTemperatureAdjacentZonesValue")).toBe(down.self.MDTAZ_DEFAULT);
+                expect(down.get("maxMcStepsPerZoneValue")).toBe(down.self.MMCSPZ_DEFAULT);
+                expect(down.get("maxWellVolumeMultiwellPlateValue")).toBe(down.self.MWVMP_DEFAULT);
 
-                expect(down.get("wellsPerThermocyclerZoneValue")).toBe(16);
-                expect(down.get("zonesPerThermocyclerBlockValue")).toBe(6);
-            });*/
+                expect(down.get("wellsPerThermocyclerZoneValue")).toBe(down.self.WPTZ_DEFAULT);
+                expect(down.get("zonesPerThermocyclerBlockValue")).toBe(down.self.ZPTB_DEFAULT);
+            });
         });
 
         describe("Teselagen.models.J5Bin.js", function() {
@@ -343,30 +344,11 @@ Ext.onReady(function() {
                     binName: "binName1"
                 });
                 expect(bin).not.toBe(null);
-
-                //console.log("J5Bin init");
-                //console.log(bin);
                 
                 // check -- Non-empty defaults do not work!
                 expect(bin.get("binName")).toBe("binName1");
                 expect(bin.get("iconID")).toBe("generic");
                 expect(bin.get("directionForward")).toBe(true);
-                expect(bin.get("fas")).toBe("");
-            });
-
-            it("setDefaultValues()", function(){
-                var bin = Ext.create("Teselagen.models.J5Bin", {
-                    binItemsVector: []
-                });
-                bin.setDefaultValues();
-                //console.log("J5Bin init");
-                //console.log(bin);
-
-                // check
-                expect(bin.get("binName")).toBe("");
-                expect(bin.get("iconID")).toBe("generic");
-                expect(bin.get("directionForward")).toBe(true);
-                expect(bin.get("dsf")).toBe(false);
                 expect(bin.get("fas")).toBe("");
             });
 
@@ -383,38 +365,82 @@ Ext.onReady(function() {
 
                 // check
                 expect(bin.get("binItemsVector").length).toBe(1);
+                expect(bin.get("binItemsVector")[0]).toBe(part);
             });
 
             it("removeFromBin()", function(){
                 var part  = Ext.create("Teselagen.models.Part");
                 var part2 = Ext.create("Teselagen.models.Part");
-                console.log(part.get("id"));
-                console.log(part2.get("id"));
+                //console.log(part.get("id"));
+                //console.log(part2.get("id"));
 
                 var bin   = Ext.create("Teselagen.models.J5Bin", {
                     binItemsVector: [part, part2]
                 });
-                //console.log("J5Bin init-remove part here");
-                //console.log(bin);
-                //console.log(bin.get("binItemsVector"));
 
                 expect(bin.get("binItemsVector").length).toBe(2);
+                expect(bin.get("binItemsVector")[0]).toBe(part);
+                expect(bin.get("binItemsVector")[1]).toBe(part2);
 
                 bin.removeFromBin(part);
-                //console.log("J5Bin init-remove   part gone");
-                //console.log(bin);
                 expect(bin.get("binItemsVector").length).toBe(1);
-                bin.removeFromBin(part2);
-                //console.log("J5Bin init-remove   part2   gone");
-                //console.log(bin);
+                expect(bin.get("binItemsVector")[0]).toBe(part2);
 
-                // check
-                //console.log(bin.get("binItemsVector"));
+                bin.removeFromBin(part2);
                 expect(bin.get("binItemsVector").length).toBe(0);
+                
             });
         });
 
+        describe("Teselagen.models.J5Collection.js", function() {
 
+            it("Creates J5Collection", function(){
+                var coll = Ext.create("Teselagen.models.J5Collection", {});
+                expect(coll).not.toBe(null);
+
+                // check
+                expect(coll.get("binsVector").length).toBe(0);
+                expect(coll.get("j5Ready")).toBe(false);
+                expect(coll.get("combinatorial")).toBe(false);
+                expect(coll.get("isCircular")).toBe(true);
+            });
+
+
+            it("addToBin()", function(){
+                var bin = Ext.create("Teselagen.models.J5Bin");
+                var coll = Ext.create("Teselagen.models.J5Collection", {});
+
+                expect(coll.get("binsVector").length).toBe(0);
+
+                //console.log(coll.get("binsVector"));
+
+                coll.addToBin(bin); //, coll.get("binItemsVector").length);
+
+                // check
+                expect(coll.get("binsVector").length).toBe(1);
+                expect(coll.get("binsVector")[0]).toBe(bin);
+            });
+
+            it("removeFromBin()", function(){
+                var bin   = Ext.create("Teselagen.models.J5Bin");
+                var bin2  = Ext.create("Teselagen.models.J5Bin");
+
+                var coll = Ext.create("Teselagen.models.J5Collection", {
+                    binsVector: [bin, bin2]
+                });
+
+                expect(coll.get("binsVector").length).toBe(2);
+                expect(coll.get("binsVector")[0]).toBe(bin);
+                expect(coll.get("binsVector")[1]).toBe(bin2);
+
+                coll.removeFromBin(bin);
+                expect(coll.get("binsVector").length).toBe(1);
+                expect(coll.get("binsVector")[0]).toBe(bin2);
+
+                coll.removeFromBin(bin2);
+                expect(coll.get("binsVector").length).toBe(0);
+            });
+        });
 
     });
 });

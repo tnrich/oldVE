@@ -2,7 +2,7 @@
  * @class Teselagen.models.J5Collection
  * Class describing a J5Collection.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author)
  */
 Ext.define("Teselagen.models.J5Collection", {
     extend: "Ext.data.Model",
@@ -16,13 +16,19 @@ Ext.define("Teselagen.models.J5Collection", {
 
     /**
      * Input parameters.
-     * @param {Boolean} binsVector
+     * @param {Teselagen.models.J5Bin[]} binsVector
      * @param {Boolean} j5Ready
      * @param {Boolean} combinatorial
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "binsVector",        type: "boolean",    defaultValue: false},
+        {
+            name: "binsVector",
+            convert: function(v, record) {
+                return v || [];
+            }
+        },
+        //{name: "binsVector",        type: "auto",       defaultValue: null},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
         {name: "isCircular",        type: "boolean",    defaultValue: true}
@@ -30,6 +36,12 @@ Ext.define("Teselagen.models.J5Collection", {
 
     associations: [
     ],
+
+    init: function() {
+        //if (this.get("binsVector").length === 0|| this.get("binsVector") === null) {
+        //    this.set("binsVector", []);
+        //}
+    },
 
     /**
      * Pushes a bin into the binsVector.
@@ -41,14 +53,14 @@ Ext.define("Teselagen.models.J5Collection", {
         //console.log(this.get("binsVector"));
         Ext.Array.include(this.get("binsVector"), bin);
         //Ext.Array.insert(this.get("binsVector"), position, bin);
-        console.log(this.get("binsVector"));
+        //console.log(this.get("binsVector")[0]);
     },
 
     /**
      * Removes an item from Bin
      */
      removeFromBin: function(bin) {
-        Ext.Array.remove(this.get("binItemsVector"), bin);
+        Ext.Array.remove(this.get("binsVector"), bin);
         //this.set("binItemsVector", newBin);
      },
 
