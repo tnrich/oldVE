@@ -47,8 +47,16 @@ function restrict(req, res, next) {
   } else {
     if(!app.testing.enabled)
     {
-      req.session.error = 'Access denied!';
-      res.redirect('/login');
+      // Check sessionId and find or create an account
+
+      // Check session id
+      console.log("Checking: "+sessionId);
+      var query = 'select * from j5sessions where session_id="'+req.body.sessionId+'";';
+      app.mysql.connection.query(query, function(err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+        res.json(rows);
+      });
     }
     else
     {
