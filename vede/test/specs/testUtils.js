@@ -512,9 +512,9 @@ Ext.onReady(function() {
 
                     it("Opens default examples from DE",function(){
 
-                        //var url = "/vede/test/data/dexml/Golden_Gate_example.xml";
+                        var url = "/vede/test/data/dexml/Golden_Gate_example.xml";
                         //var url = "/vede/test/data/dexml/SLIC_Gibson_CPEC_example.xml";
-                        var url = "/vede/test/data/dexml/Combinatorial_Golden_Gate_example.xml";
+                        //var url = "/vede/test/data/dexml/Combinatorial_Golden_Gate_example.xml";
                         //var url = "/vede/test/data/dexml/Combinatorial_SLIC_Gibson_CPEC_example.xml";
                         var xml = jasmine.getFixtures().read(url);
 
@@ -525,7 +525,7 @@ Ext.onReady(function() {
                         //expect(json1).toBe(cleanJson1);
 
                         var json = Teselagen.utils.DeXmlUtils.deXmlToJson(xml);
-                        //console.log(JSON.stringify(json, null, "    "));
+                        console.log(JSON.stringify(json, null, "    "));
                         expect(json).not.toBe(null);
                     });
 

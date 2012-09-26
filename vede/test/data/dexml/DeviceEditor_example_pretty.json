@@ -25,16 +25,16 @@
                     "de:fileName": "ccmN_nterm_sig_pep_GFPuv.gb"
                 },
                 {
-                    "hash": "de91216ea8484b510f9b055973f046ad3e8a11822971ca69e1029fd48f64c5b1",
-                    "de:format": "Genbank",
-                    "de:content": "LOCUS       ssrA_tag_GFPuv            33 bp    DNA     linear       26-FEB-2010\nDEFINITION  .\nSOURCE      .\n  ORGANISM  .\nCOMMENT     \n            ApEinfo:methylated:1\nCOMMENT     This file is created by Vector NTI\n            http://www.invitrogen.com/\nCOMMENT     ORIGDB|GenBank\nCOMMENT     VNTDBDATE|546964667|\nCOMMENT     LSOWNER|\nCOMMENT     VNTNAME|ssrA_tag_GFPuv|\nCOMMENT     VNTAUTHORNAME|Nathan Hillson|\nCOMMENT     VNTAUTHOREML|njhillson@lbl.gov|\nCOMMENT     VNTOAUTHORNAME|UNKNOWN|\nFEATURES             Location/Qualifiers\n     misc_feature    1..33\n                     /vntifkey=\"21\"\n                     /label=ssrA\\tag\n     CDS             1..33\n                     /vntifkey=\"4\"\n                     /label=GFPuv\nBASE COUNT        8 a         8 c        13 g         4 t \nORIGIN\n        1 gcggcgaacg atgaaaacta tgcgctggcg gcg \n//\n",
-                    "de:fileName": "ssrA_tag_GFPuv.gb"
+                    "hash": "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3",
+                    "de:format": "FASTA",
+                    "de:content": ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n",
+                    "de:fileName": "ssrA_tag_enhance.fas"
                 },
                 {
-                    "hash": "c3f5be2050eb4ff8857531a116a49c90984ddaf6a0493f649c6d43a3b5e11c65",
-                    "de:format": "Genbank",
-                    "de:content": "LOCUS       ssrA_tag_enhance          39 bp    DNA     linear       26-FEB-2010\nDEFINITION  .\nSOURCE      .\n  ORGANISM  .\nCOMMENT     \n            ApEinfo:methylated:1\nCOMMENT     This file is created by Vector NTI\n            http://www.invitrogen.com/\nCOMMENT     ORIGDB|GenBank\nCOMMENT     VNTDBDATE|546964735|\nCOMMENT     LSOWNER|\nCOMMENT     VNTNAME|ssrA_tag_enhanced_GFPuv|\nCOMMENT     VNTAUTHORNAME|Nathan Hillson|\nCOMMENT     VNTAUTHOREML|njhillson@lbl.gov|\nCOMMENT     VNTOAUTHORNAME|UNKNOWN|\nFEATURES             Location/Qualifiers\n     misc_feature    1..39\n                     /vntifkey=\"21\"\n                     /label=ssrA\\tag\\enhanced\n     CDS             1..39\n                     /vntifkey=\"4\"\n                     /label=GFPuv\nBASE COUNT       11 a         9 c        13 g         6 t \nORIGIN\n        1 gcggcgaacg atgaaaacta taactatgcg ctggcggcg \n//\n",
-                    "de:fileName": "ssrA_tag_enhanced_GFPuv.gb"
+                    "hash": "fbb4e8715b6352478db1561d7229d0ef46ff83412c188fd71352a1418ddb43ab",
+                    "de:format": "jbei-seq",
+                    "de:content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<seq:seq\n  xmlns:seq=\"http://jbei.org/sequence\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  xsi:schemaLocation=\"http://jbei.org/sequence seq.xsd\"\n>\n<seq:name>ssrA_tag_GFPuv</seq:name>\n<seq:circular>false</seq:circular>\n<seq:sequence>gcggcgaacgatgaaaactatgcgctggcggcg</seq:sequence>\n<seq:features>\n    <seq:feature>\n        <seq:label>ssrA tag</seq:label>\n        <seq:complement>false</seq:complement>\n        <seq:type>misc_feature</seq:type>\n        <seq:location>\n            <seq:genbankStart>1</seq:genbankStart>\n            <seq:end>33</seq:end>\n        </seq:location>\n        <seq:attribute name=\"vntifkey\" quoted=\"true\" >21</seq:attribute>\n        <seq:seqHash>0d5535e13cc9708d0ff0289af2fae27e564b6bcbcd9242f5140d96957744a517</seq:seqHash>\n    </seq:feature>\n    <seq:feature>\n        <seq:label>GFPuv</seq:label>\n        <seq:complement>false</seq:complement>\n        <seq:type>CDS</seq:type>\n        <seq:location>\n            <seq:genbankStart>1</seq:genbankStart>\n            <seq:end>33</seq:end>\n        </seq:location>\n        <seq:attribute name=\"vntifkey\" quoted=\"true\" >4</seq:attribute>\n        <seq:seqHash>0d5535e13cc9708d0ff0289af2fae27e564b6bcbcd9242f5140d96957744a517</seq:seqHash>\n    </seq:feature>\n</seq:features>\n</seq:seq>\n",
+                    "de:fileName": "ssrA_tag_GFPuv.xml"
                 }
             ]
         },
@@ -125,43 +125,43 @@
                     }
                 },
                 {
-                    "id": 1318886361778876,
+                    "id": 1320793316351870,
                     "de:name": "ssrA_tag_5prime",
                     "de:revComp": false,
                     "de:startBP": 1,
                     "de:stopBP": 15,
-                    "de:sequenceFileHash": "de91216ea8484b510f9b055973f046ad3e8a11822971ca69e1029fd48f64c5b1",
+                    "de:sequenceFileHash": "fbb4e8715b6352478db1561d7229d0ef46ff83412c188fd71352a1418ddb43ab",
                     "de:parts": {
                         "de:part": {
-                            "id": 1318886361778177,
-                            "de:fas": "Embed_in_primer_reverse"
+                            "id": 1320793316351783,
+                            "de:fas": ""
                         }
                     }
                 },
                 {
-                    "id": 1318886361784466,
+                    "id": 1320793317318921,
                     "de:name": "ssrA_tag_enhanced_5prime",
                     "de:revComp": false,
                     "de:startBP": 1,
                     "de:stopBP": 21,
-                    "de:sequenceFileHash": "c3f5be2050eb4ff8857531a116a49c90984ddaf6a0493f649c6d43a3b5e11c65",
+                    "de:sequenceFileHash": "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3",
                     "de:parts": {
                         "de:part": {
-                            "id": 1318886361784362,
+                            "id": 1320793317318572,
                             "de:fas": "Embed_in_primer_reverse"
                         }
                     }
                 },
                 {
-                    "id": 1318886361790379,
+                    "id": 1320793489598076,
                     "de:name": "ssrA_tag_3prime",
                     "de:revComp": false,
                     "de:startBP": 16,
                     "de:stopBP": 33,
-                    "de:sequenceFileHash": "de91216ea8484b510f9b055973f046ad3e8a11822971ca69e1029fd48f64c5b1",
+                    "de:sequenceFileHash": "fbb4e8715b6352478db1561d7229d0ef46ff83412c188fd71352a1418ddb43ab",
                     "de:parts": {
                         "de:part": {
-                            "id": 1318886361790741,
+                            "id": 1320793489598961,
                             "de:fas": "Embed_in_primer_forward"
                         }
                     }
@@ -169,7 +169,13 @@
             ]
         },
         "de:eugeneRules": {
-            "eugeneRule": []
+            "de:eugeneRule": {
+                "de:name": "Rule_1",
+                "de:negationOperator": false,
+                "de:operand1ID": 1318886361765194,
+                "de:compositionalOperator": "THEN",
+                "de:operand2ID": 1318886361747742
+            }
         },
         "de:j5Collection": {
             "de:isCircular": true,
@@ -180,10 +186,9 @@
                         "de:iconID": "origin_of_replication",
                         "de:direction": "forward",
                         "de:dsf": false,
+                        "de:fro": 2,
                         "de:binItems": {
-                            "de:partID": [
-                                1318886361742634
-                            ]
+                            "de:partID": 1318886361742634
                         }
                     },
                     {
@@ -216,9 +221,7 @@
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {
-                            "de:partID": [
-                                1318886361772744
-                            ]
+                            "de:partID": 1318886361772744
                         }
                     },
                     {
@@ -228,8 +231,8 @@
                         "de:dsf": true,
                         "de:binItems": {
                             "de:partID": [
-                                1318886361778177,
-                                1318886361784362
+                                1320793316351783,
+                                1320793317318572
                             ]
                         }
                     },
@@ -239,9 +242,7 @@
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {
-                            "de:partID": [
-                                1318886361790741
-                            ]
+                            "de:partID": 1320793489598961
                         }
                     }
                 ]
