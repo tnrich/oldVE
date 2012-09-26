@@ -48,7 +48,7 @@ function restrict(req, res, next) {
     if(!app.testing.enabled)
     {
       console.log("Checking: "+sessionId);
-      if(!req.body.sessionId) return res.json({'fault':'wrong credentials'});
+      if(req.body.sessionId == undefined) return res.json({'fault':'wrong credentials'});
       // Check sessionId and find or create an account
       var sessionId = req.body.sessionId;
       // Check session id
