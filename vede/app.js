@@ -47,11 +47,11 @@ Ext.application({
         var showDevInfo = function() {
                 console.log("Showing dev info");
                 Ext.create("Ext.Window", {
-                    title: 'Welcome ' + session.username + '!',
+                    title: 'Welcome ' + sessionData.data.username + '!',
                     width: 500,
                     height: 100,
                     closable: true,
-                    html: 'J5 sessionId: ' + session.sessionId,
+                    html: 'J5 sessionId: ' + sessionData.data.sessionId,
                     modal: true
                 }).show();
             }
@@ -89,6 +89,7 @@ Ext.application({
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
                         Ext.getBody().unmask();
+                        showDevInfo();
 
                     }
                 }
