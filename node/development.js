@@ -8,30 +8,25 @@ app.testing.sessionId = "a99be7833401c5b70de90060f3c4c82e";
 
 app.development = {};
 
-var examples = [
-'Combinatorial_Golden_Gate_example_parsed.json',
-'Combinatorial_SLIC_Gibson_CPEC_example_parsed.json',
-'DeviceEditor_example.json',
-'Golden_Gate_example.json',
-'Golden_Gate_example_idented_simplified.json',
-'Golden_Gate_example_parsed.json',
-'SLIC_Gibson_CPEC_example_parsed.json',
-'dexml_parsed.json',
-'dexml_raw.json'
-];
+
 
 app.development.reloadExamples = function(){
 
+	console.log('Dev: Checking examples collection');
 	var ExamplesModel = app.db.model("Examples");
 	ExamplesModel.find({},function(err,results){
 		if(results.length<5)
 		{
-			console.log('Re Loading Examples');	
+			console.log('Dev: Re Loading Examples');	
 			ExamplesModel.collection.drop(function(err){
-				console.log("Examples dropped");
+				console.log("Dev: Examples collection dropped");
 
+				app.fs.readdir(__dirname + "/resources/models/",function(err,examples){
+
+				examples = examples.filter(function(x){
+					if(x.indexOf(".json") != -1) return x;
+				});
 				examples.forEach(function(val){
-				//Golden Gate example
 				var rawmodel = app.fs.readFileSync(__dirname + "/resources/models/"+val, "utf8");
 				var payload = JSON.parse(rawmodel);
 				var name = val.replace(/\/"/g, '');
@@ -39,16 +34,18 @@ app.development.reloadExamples = function(){
 				name = name.replace(/.json/g, '');
 				var example = new ExamplesModel({'name':name,'payload':payload});
 				example.save(function(){
-					console.log('Example: '+example.name+' loaded');
+					console.log('Dev: Example '+example.name+' loaded');
 				});
 
 				});
 
 			});
+
+			});
 		}
 		else
 		{
-			console.log("Examples already loaded");
+			console.log("Dev: Examples already loaded");
 		}
 	});
 }
@@ -60,12 +57,12 @@ app.development.reloadUsers = function(){
 		{
 		    var newuser = new User({name:'Guest'});
 		    User.create(newuser, function (err, user) {
-		     console.log('Guest user created!');
+		     console.log("Dev: Guest user created!");
 		  });
 		}
 		else
 		{
-			console.log("Guest user already exist");
+			console.log("Dev: "+"Guest user already exist");
 		}
 	});
 }

@@ -47,7 +47,7 @@ module.exports = function(app, express){
 
   // Init MONGOOSE (ODM)
   app.db = app.mongoose.createConnection('localhost', 'deviceEditor',function(){
-    console.log('Mongoose is online');
+    console.log('MongoDB: Mongoose is online');
     app.development.reloadExamples();
     app.development.reloadUsers();
   });
@@ -77,7 +77,7 @@ module.exports = function(app, express){
 
       console.log('Re-connecting lost connection: ' + err.stack);
 
-      connection = mysql.createConnection(connection.config);
+      connection = app.mysql.createConnection(connection.config);
       handleDisconnect(connection);
       connection.connect();
     });
@@ -86,7 +86,7 @@ module.exports = function(app, express){
 
   // We will only connect to mysql and check for credetentials on production environment
   if(app.security) {
-    connection.connect();console.log("Mysql is online");
+    connection.connect();console.log("Mysql: Mysql is online");
     app.mysql.connection = connection;
     function keepAlive() {
     connection.query('SELECT 1');
@@ -105,7 +105,7 @@ module.exports = function(app, express){
       });
     }
   }
-  else {console.log("Mysql is offline (only stage env)");}
+  else {console.log("Mysql: Mysql is offline (only stage env)");}
   app.mysql = connection;
 
   // Init XML-RPC
@@ -114,11 +114,11 @@ module.exports = function(app, express){
   // Init SOAP Jbei-ICE Client
   app.soap.createClient('http://teselagen.com:8080/api/RegistryAPI?wsdl', function(err, client) {
     app.soap.client = client;
-    if(!err) console.log('JBEI-ICE SOAP Client started.');
+    if(!err) console.log('JBEI-ICE: SOAP Client started.');
     
     app.soap.client.login({login:'Administrator',password:'te#rocks'}, function(err, result) {
       app.soap.sessionId = result.return[0];
-      console.log('JBEI-ICE SOAP Authentication complete #'+app.soap.sessionId);
+      console.log('JBEI-ICE: SOAP Authentication complete #'+app.soap.sessionId);
     });
     
   });
