@@ -98,8 +98,8 @@ app.all('/login', function(req, res){
           {
             console.log("Guest user already exist");
             req.session.regenerate(function(){
-            req.session.user = result;
-            req.user = result;
+            req.session.user = results;
+            req.user = results;
             res.send('Welcome back '+username,200);
             });
           }
