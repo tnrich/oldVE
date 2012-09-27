@@ -92,7 +92,7 @@ app.all('/login', function(req, res){
                 req.session.regenerate(function(){
                 req.session.user = user;
                 req.user = user;
-                res.json({'firstTime':true,'msg':'Welcome back '+username});
+                res.json({'firstTime':true,'msg':'Welcome back '+username + '!'});
                 });
             });
           }
@@ -102,7 +102,7 @@ app.all('/login', function(req, res){
             req.session.regenerate(function(){
             req.session.user = results;
             req.user = results;
-            res.json({'firstTime':false,'msg':'Welcome back '+rows[0].username});
+            res.json({'firstTime':false,'msg':'Welcome back '+username + '!'});
             });
           }
         });

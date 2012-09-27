@@ -65,7 +65,7 @@ Ext.application({
                     },
                     success: function(response) {
                         var data = JSON.parse(response.responseText);
-                        sessionData.firstTime = data.firstTime;
+                        sessionData.data.firstTime = data.firstTime;
                         Ext.get('splash-text').update(data.msg);
                         that.authenticationManager.logIn("LoggedIn");
                     },
