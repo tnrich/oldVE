@@ -45,7 +45,7 @@ Ext.application({
         var that = this;
 
         var showDevInfo = function() {
-                console.log("Showing dev info");
+                //console.log("Showing dev info");
                 Ext.create("Ext.Window", {
                     title: 'Welcome ' + sessionData.data.username + '!',
                     width: 500,
@@ -120,7 +120,7 @@ Ext.application({
 
         var AuthenticationEvent = Teselagen.event.AuthenticationEvent;
         this.on(AuthenticationEvent.LOGGED_IN, function(){
-            task.delay(1000);
+            task.delay(1500);
         });
 
     }

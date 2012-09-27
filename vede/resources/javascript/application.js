@@ -1693,10 +1693,6 @@ $( document ).bind( 'loadDE', function() {
     var inspector = new Inspector();
     var deviceeditor = new DeviceEditor();
     var j5 = new J5();
-    var sessionID = $.url().param('sessionId');
-
-    if(!sessionID) {console.log('no session id');}
-
   });
 
 });
