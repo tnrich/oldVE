@@ -47,49 +47,7 @@ function restrict(req, res, next) {
   } else {
     if(!app.testing.enabled)
     {
-      console.log("Checking: "+sessionId);
-      if(req.body.sessionId == undefined) return res.json({'fault':'wrong credentials'});
-      // Check sessionId and find or create an account
-      var sessionId = req.body.sessionId;
-      // Check session id
-      
-      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
-      
-      app.mysql.query(query, function(err, rows, fields) {
-        if (err) res.json({'fault':'user not found'});
-
-        // User found!
-        var username = rows[0].username;
-        
-        // If user not found generate a new one
-        var User = app.db.model("Users");
-        User.findOne({'name':username},function(err,results){
-          if(results==null)
-          {
-              var newuser = new User({name:username});
-              User.create(newuser, function (err, user) {
-               console.log(username+' user created!');
-                req.session.regenerate(function(){
-                req.session.user = user;
-                req.user = user;
-                next();
-                });
-            });
-          }
-          else
-          {
-            console.log("Guest user already exist");
-            req.session.regenerate(function(){
-            req.session.user = result;
-            req.user = result;
-            next();
-            });
-          }
-        });
-
-      });
-
-
+      res.send('Wrong credentials');
     }
     else
     {
@@ -107,17 +65,47 @@ function restrict(req, res, next) {
 };
 
 app.all('/login', function(req, res){
-  authenticate(req.query.name, '', function(err, user){
-    if (user) {
-      req.session.regenerate(function(){
-        req.session.user = user;
-        res.send('Authenticated!');
+      
+      var sessionId = req.body.sessionId;
+
+      if(sessionId == undefined) return res.send('Credentials not sended',405);
+      
+      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
+      
+      app.mysql.query(query, function(err, rows, fields) {
+        if (err) res.send('sessionId not valid',405);
+
+        // Session ID is valid
+        var username = rows[0].username;
+        
+        // Check if user exist on mongoDB
+        var User = app.db.model("Users");
+        User.findOne({'name':username},function(err,results){
+          if(results==null)
+          {
+              // If user not found generate a new one
+              var newuser = new User({name:username});
+              User.create(newuser, function (err, user) {
+               console.log(username+' user created!');
+                req.session.regenerate(function(){
+                req.session.user = user;
+                req.user = user;
+                res.send('Welcome back '+username,200);
+                });
+            });
+          }
+          else
+          {
+            console.log("Guest user already exist");
+            req.session.regenerate(function(){
+            req.session.user = result;
+            req.user = result;
+            res.send('Welcome back '+username,200);
+            });
+          }
+        });
+
       });
-    } else {
-      req.session.error = 'Authentication failed';
-      res.send(req.session.error,401);
-    }
-  });
 });
 
 app.all('/addUser',function(req,res){
