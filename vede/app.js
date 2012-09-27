@@ -107,7 +107,7 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        console.log('First time user:'+data.firstTime);
+                        console.log('First time user:'+sessionData.data.firstTime);
                         showDevInfo();
                         Ext.getBody().unmask();
 
@@ -120,7 +120,7 @@ Ext.application({
 
         var AuthenticationEvent = Teselagen.event.AuthenticationEvent;
         this.on(AuthenticationEvent.LOGGED_IN, function(){
-            task.delay(0);
+            task.delay(500);
         });
 
     }
