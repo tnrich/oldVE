@@ -12,6 +12,9 @@ Ext.onReady(function() {
     // Add a new class to this mask as we want it to look different from the default.
     splashscreen.addCls('splashscreen');
 
+    Ext.select('.x-mask-msg').setStyle('top','60px');
+
+
     // Insert a new div before the loading icon where we can place our logo.
     Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
         cls: 'x-splash-icon'
@@ -108,7 +111,7 @@ Ext.application({
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
                         console.log('First time user:'+sessionData.data.firstTime);
-                        showDevInfo();
+                        //showDevInfo();
                         Ext.getBody().unmask();
 
                     }
