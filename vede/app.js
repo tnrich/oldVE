@@ -64,7 +64,9 @@ Ext.application({
                         sessionId: sessionData.data.sessionId
                     },
                     success: function(response) {
-                        Ext.get('splash-text').update(response.responseText);
+                        var data = JSON.parse(response.responseText);
+                        if(data.firstTime) sessionData.firstTime = data.firstTime;
+                        Ext.get('splash-text').update(data.msg);
                         that.authenticationManager.logIn("LoggedIn");
                     },
                    failure : function(response, options){ 
@@ -105,7 +107,7 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        showDevInfo();
+                        if(data.firstTime) showDevInfo();
                         Ext.getBody().unmask();
 
                     }
