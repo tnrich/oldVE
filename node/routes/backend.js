@@ -75,6 +75,8 @@ app.all('/login', function(req, res){
       app.mysql.query(query, function(err, rows, fields) {
         if (err) res.send('sessionId not valid',405);
 
+        console.log(rows[0]);
+
         // Session ID is valid
         var username = rows[0].username;
         
@@ -100,7 +102,7 @@ app.all('/login', function(req, res){
             req.session.regenerate(function(){
             req.session.user = results;
             req.user = results;
-            res.json({'firstTime':false,'msg':'Welcome back '+username});
+            res.json({'firstTime':false,'msg':'Welcome back '+rows[0].username});
             });
           }
         });
