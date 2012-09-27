@@ -100,7 +100,7 @@ app.all('/login', function(req, res){
             req.session.regenerate(function(){
             req.session.user = results;
             req.user = results;
-            res.json('Welcome back '+username,200);
+            res.json({'firstTime':false,'msg':'Welcome back '+username});
             });
           }
         });
