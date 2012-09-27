@@ -73,8 +73,6 @@ function restrict(req, res, next) {
                 req.session.user = user;
                 req.user = user;
                 next();
-                //res.send('Authenticated!');
-
                 });
             });
           }
@@ -85,8 +83,6 @@ function restrict(req, res, next) {
             req.session.user = result;
             req.user = result;
             next();
-            //res.send('Authenticated!');
-
             });
           }
         });
@@ -102,9 +98,7 @@ function restrict(req, res, next) {
       req.session.regenerate(function(){
         req.session.user = user;
         req.user = user;
-        next();
-        //res.send('Authenticated!');
-        
+        next();        
       });
     
     })

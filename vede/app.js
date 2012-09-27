@@ -56,15 +56,30 @@ Ext.application({
                 }).show();
             }
 
+        var authenticate =  function() {
+                Ext.get('splash-text').update('Authenticating to server');
+                Ext.Ajax.request({
+                    url: '/api/login',
+                    params: {
+                        sessionId: sessionData.data.sessionId
+                    },
+                    success: function(response) {
+                        session = JSON.parse(response.responseText);
+                        sessionData.data = session;
+                        that.authenticationManager.logIn("LoggedIn");
+                    }
+                }); 
+       };
+
         var logIn = function() {
-                Ext.get('splash-text').update('Authenticating');
+                Ext.get('splash-text').update('Getting authentication parameters');
                 Ext.Ajax.request({
                     url: '/deviceeditor',
                     params: {},
                     success: function(response) {
                         session = JSON.parse(response.responseText);
                         sessionData.data = session;
-                        that.authenticationManager.logIn("LoggedIn");
+                        authenticate();
                     }
                 });
             };
