@@ -67,7 +67,7 @@ describe("VectorPanel test", function () {
             items: [pieCtr, railCtr],
             listeners: {
                 resize: function() {
-                    console.log("resize");
+//                    console.log("resize");
                 }
             }
 
@@ -138,7 +138,17 @@ describe("VectorPanel test", function () {
         pieCtr.doLayout();
         //        console.log(pieCmp.surface.items.getCount());
     });
-    it("Add group", function() {
+    it("Add composite sprite and set draw component size", function() {
+        pieCmp.surface.removeAll(true);
+        var yellow = Ext.create("Ext.draw.Sprite", {
+            id: "yellow",
+            type: "circle",
+            x: 100,
+            y: 100,
+            radius:50,
+            stroke: "yellow",
+            surface: pieCmp.surface
+        });
         var green = Ext.create("Ext.draw.Sprite", {
             id: "green",
             type: "circle",
@@ -157,16 +167,54 @@ describe("VectorPanel test", function () {
             stroke: "red",
             surface: pieCmp.surface
         });
-//        var gid = pieCmp.surface.getGroup("groupId");
         var gid = Ext.create("Ext.draw.CompositeSprite", {
             surface: pieCmp.surface
         });
-        console.log(gid.getCount());
-        console.log(gid); 
+        gid.add(yellow);
         gid.add(green);
         gid.add(red);
-        gid.show(true); 
-        console.log(gid.getBBox());
+        gid.show(true);
+        var bbox = gid.getBBox(); console.log(bbox);
+        pieCmp.setSize(bbox.width, bbox.height);
+    });
+    it("Add composite sprite and set viewbox size", function() {
+        pieCmp.surface.removeAll(true);
+        var yellow = Ext.create("Ext.draw.Sprite", {
+            id: "yellow",
+            type: "circle",
+            x: 100,
+            y: 100,
+            radius:50,
+            stroke: "yellow",
+            surface: pieCmp.surface
+        });
+        var green = Ext.create("Ext.draw.Sprite", {
+            id: "green",
+            type: "circle",
+            x: 150,
+            y: 100,
+            radius: 25,
+            stroke: "green",
+            surface: pieCmp.surface
+        });
+        var red = Ext.create("Ext.draw.Sprite", {
+            id: "red",
+            type: "circle",
+            x: 50,
+            y: 100,
+            radius: 25,
+            stroke: "red",
+            surface: pieCmp.surface
+        });
+        var gid = Ext.create("Ext.draw.CompositeSprite", {
+            surface: pieCmp.surface
+        });
+        gid.add(yellow);
+        gid.add(green);
+        gid.add(red);
+        gid.show(true);
+        var bbox = gid.getBBox();
+        pieCmp.surface.setViewBox(bbox.x, bbox.y, bbox.width, bbox.height);
     });
 });
 
