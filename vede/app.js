@@ -107,7 +107,8 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        if(data.firstTime) showDevInfo();
+                        console.log('First time user:'+data.firstTime);
+                        showDevInfo();
                         Ext.getBody().unmask();
 
                     }
