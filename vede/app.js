@@ -120,7 +120,7 @@ Ext.application({
 
         var AuthenticationEvent = Teselagen.event.AuthenticationEvent;
         this.on(AuthenticationEvent.LOGGED_IN, function(){
-            task.delay(500);
+            task.delay(1000);
         });
 
     }
