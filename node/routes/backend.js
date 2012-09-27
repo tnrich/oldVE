@@ -115,7 +115,7 @@ app.all('/login', function(req, res){
       });
     } else {
       req.session.error = 'Authentication failed';
-      res.send(req.session.error);
+      res.send(req.session.error,401);
     }
   });
 });

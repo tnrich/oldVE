@@ -67,7 +67,10 @@ Ext.application({
                         session = JSON.parse(response.responseText);
                         sessionData.data = session;
                         that.authenticationManager.logIn("LoggedIn");
-                    }
+                    },
+                   failure : function(response, options){ 
+                       Ext.get('splash-text').update(response.responseText);
+                   }
                 }); 
        };
 
