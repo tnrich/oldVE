@@ -96,11 +96,11 @@ app.all('/login', function(req, res){
           }
           else
           {
-            console.log("Guest user already exist");
+            console.log("User already exist");
             req.session.regenerate(function(){
             req.session.user = results;
             req.user = results;
-            res.send('Welcome back '+username,200);
+            res.json('Welcome back '+username,200);
             });
           }
         });

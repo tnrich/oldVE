@@ -64,8 +64,7 @@ Ext.application({
                         sessionId: sessionData.data.sessionId
                     },
                     success: function(response) {
-                        session = JSON.parse(response.responseText);
-                        sessionData.data = session;
+                        Ext.get('splash-text').update(response.responseText);
                         that.authenticationManager.logIn("LoggedIn");
                     },
                    failure : function(response, options){ 
