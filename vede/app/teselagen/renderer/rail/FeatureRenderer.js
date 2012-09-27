@@ -118,7 +118,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
         }, this);
         
 
-        console.log("All sprites calculated.");
+//        console.log("All sprites calculated.");
         return sprites;
     },
 
