@@ -26,13 +26,54 @@ Ext.define('Vesa.view.AppViewport', {
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'container',
+                    xtype: 'panel',
                     region: 'north',
-                    height: 49,
-                    id: 'Header',
+                    height: 50,
+                    id: 'headerPanel',
+                    layout: {
+                        type: 'fit'
+                    },
                     items: [
                         {
-                            xtype: 'container'
+                            xtype: 'panel',
+                            id: 'headerMain',
+                            items: [
+                                {
+                                    xtype: 'image',
+                                    height: 32,
+                                    id: 'headerIcon',
+                                    margin: 10,
+                                    width: 201,
+                                    src: 'resources/images/teselagen_toplogo.png'
+                                }
+                            ]
+                        }
+                    ],
+                    dockedItems: [
+                        {
+                            xtype: 'panel',
+                            dock: 'right',
+                            id: 'headerSub',
+                            layout: {
+                                type: 'fit'
+                            },
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    styleHtmlContent: false,
+                                    iconAlign: 'right',
+                                    text: 'user_Name',
+                                    menu: {
+                                        xtype: 'menu',
+                                        items: [
+                                            {
+                                                xtype: 'menuitem',
+                                                text: 'Menu Item'
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
                         }
                     ]
                 },
@@ -734,7 +775,8 @@ Ext.define('Vesa.view.AppViewport', {
                                                     xtype: 'button',
                                                     id: 'add_column_Btn',
                                                     icon: 'resources/images/icons/device/add_column.png',
-                                                    scale: 'large'
+                                                    scale: 'large',
+                                                    tooltip: 'Add Column'
                                                 },
                                                 {
                                                     xtype: 'tbseparator'
@@ -743,7 +785,8 @@ Ext.define('Vesa.view.AppViewport', {
                                                     xtype: 'button',
                                                     id: 'add_row_Btn',
                                                     icon: 'resources/images/icons/device/add_row.png',
-                                                    scale: 'large'
+                                                    scale: 'large',
+                                                    tooltip: 'Add Row'
                                                 },
                                                 {
                                                     xtype: 'tbseparator'
@@ -753,6 +796,7 @@ Ext.define('Vesa.view.AppViewport', {
                                                     id: 've_init_Btn',
                                                     icon: 'resources/images/icons/device/ve_icon.png',
                                                     scale: 'large',
+                                                    tooltip: 'Vector Editor',
                                                     menu: {
                                                         xtype: 'menu',
                                                         id: 'de_ve_menu',
@@ -781,7 +825,8 @@ Ext.define('Vesa.view.AppViewport', {
                                                     xtype: 'button',
                                                     id: 'j5_init_Btn',
                                                     icon: 'resources/images/icons/device/j5_icon.png',
-                                                    scale: 'large'
+                                                    scale: 'large',
+                                                    tooltip: 'j5'
                                                 }
                                             ]
                                         }
@@ -1062,6 +1107,13 @@ Ext.define('Vesa.view.AppViewport', {
                                                         }
                                                     ]
                                                 }
+                                            ],
+                                            items: [
+                                                {
+                                                    xtype: 'container',
+                                                    id: 'designContainer',
+                                                    margin: 10
+                                                }
                                             ]
                                         },
                                         {
@@ -1079,6 +1131,7 @@ Ext.define('Vesa.view.AppViewport', {
                                             activeTab: 0,
                                             minTabWidth: 130,
                                             plain: false,
+                                            removePanelHeader: false,
                                             items: [
                                                 {
                                                     xtype: 'panel',
