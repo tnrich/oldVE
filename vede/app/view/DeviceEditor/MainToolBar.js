@@ -15,6 +15,6 @@ Ext.define('Vede.view.DeviceEditor.MainToolBar', {
                     icon: 'resources/images/save.png',
                     scale: 'medium',
                     tooltip: 'Save Design'
-                }
+                },
            ]
 });

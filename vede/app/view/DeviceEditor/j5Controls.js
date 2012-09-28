@@ -4,6 +4,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
     height: 412,
     width: 852,
     title: 'j5 Controls',
+    resizable: false,
 
     initComponent: function() {
         var me = this;
@@ -46,6 +47,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                     items: [
                                         {
                                             xtype: 'radiofield',
+                                            id: 'useServerPlasmidsRadioBtn',
                                             name: 'plasmidsListSource',
                                             fieldLabel: '<b>Master Plasmids List</b>',
                                             labelWidth: 200,
@@ -53,6 +55,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                         },
                                         {
                                             xtype: 'radiofield',
+                                            id: 'useEmptyPlasmidsRadioBtn',
                                             flex: 0.5,
                                             margin: 'left: 10px',
                                             name: 'plasmidsListSource',
@@ -90,6 +93,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                     items: [
                                         {
                                             xtype: 'radiofield',
+                                            id: 'useServerOligosRadioBtn',
                                             name: 'oligosListSource',
                                             fieldLabel: '<b>Master Oligos List</b>',
                                             labelWidth: 200,
@@ -97,6 +101,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                         },
                                         {
                                             xtype: 'radiofield',
+                                            id: 'useEmptyOligosRadioBtn',
                                             flex: 0.5,
                                             margin: 'left: 10px',
                                             name: 'oligosListSource',
@@ -134,6 +139,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                     items: [
                                         {
                                             xtype: 'radiofield',
+                                            id: 'useServerSynthesesRadioBtn',
                                             name: 'directSynthesesListSource',
                                             fieldLabel: '<b>Master Direct Syntheses List</b>',
                                             labelWidth: 200,
@@ -141,6 +147,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                         },
                                         {
                                             xtype: 'radiofield',
+                                            id: 'useEmptySynthesesRadioBtn',
                                             flex: 0.5,
                                             margin: 'left: 10px',
                                             name: 'directSynthesesListSource',
@@ -178,10 +185,11 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                     labelWidth: 120,
                                     queryMode: 'local',
                                     store: [
-                                        '<b>Mock Assembly</b>',
-                                        '<b>SLIC/Gibson/CPEC</b>',
+                                        'Mock Assembly',
+                                        'SLIC/Gibson/CPEC',
                                         'Golden Gate'
-                                    ]
+                                    ],
+                                    value: 'Mock Assembly'
                                 },
                                 {
                                     xtype: 'button',
@@ -333,6 +341,7 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                 },
                                 {
                                     xtype: 'button',
+                                    id: 'customizeAutomationParamsBtn',
                                     margin: '0 0 15 0',
                                     text: '<b>Customize Automation Parameters</b>'
                                 },
@@ -396,28 +405,32 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                                     flex: 1,
                                                     id: 'generatej5SequenceFileBtn',
                                                     margin: 3,
-                                                    text: '<b>Generate j5 Sequence File</b>'
+                                                    text: '<b>Generate j5 Sequence File</b>',
+                                                    tooltip: "The sequences list file is a CSV file that contains a list of all of the source/template sequences from which DNA parts will be defined."
                                                 },
                                                 {
                                                     xtype: 'button',
                                                     flex: 1,
                                                     id: 'generatej5PartsFileBtn',
                                                     margin: 3,
-                                                    text: '<b>Generate j5 Parts File</b>'
+                                                    text: '<b>Generate j5 Parts File</b>',
+                                                    tooltip: 'The parts list file is a CSV file that contains the definitions of all of the DNA parts that may be utilized during the assembly process.'
                                                 },
                                                 {
                                                     xtype: 'button',
                                                     flex: 1,
                                                     id: 'generatej5TargetPartsFileBtn',
                                                     margin: 3,
-                                                    text: '<b>Generate j5 Target Parts File</b>'
+                                                    text: '<b>Generate j5 Target Parts File</b>',
+                                                    tooltip: 'The target part order list file is a CSV file that determines how the DNA parts will be arranged in the assembly. The order of combinatorial bins or parts in the file matches the order of bins or parts in the resulting assembly (the last bin or part in the list will be cyclicly followed by the first bin or part). The same part may be utilized more than once in any given assembly.'
                                                 },
                                                 {
                                                     xtype: 'button',
                                                     flex: 1,
                                                     id: 'generatej5EugeneRulesFileBtn',
                                                     margin: 3,
-                                                    text: '<b>Generate j5 Eugene Rules File</b>'
+                                                    text: '<b>Generate j5 Eugene Rules File</b>',
+                                                    tooltip: 'The Eugene (a biological design specification computer language) rules list file is a text file that contains a list of design rules. j5 checks that these rules are satisfied prior to designing an assembly. Currently, j5 only enforces three types of Eugene rules (NOTMORETHAN, NOTWITH, and WITH) and ignores all other rules and declarations; all lines that do not begin with "Rule" are ignored, as well as everything following the commenting escape characters "//".'
                                                 }
                                             ]
                                         },
@@ -436,7 +449,8 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                                     id: 'generatej5GenbankFileBtn',
                                                     margin: 3,
                                                     maxHeight: 23,
-                                                    text: '<b>Generate Genbank File</b>'
+                                                    text: '<b>Generate Genbank File</b>',
+                                                    tooltip: 'Genbank format sequence files generally contain a single sequence each (although at times, you may see multiple ORF translated sequences embedded as feature annotations within a long DNA sequence). Feature annotations within Genbank format files are extremely useful for being able to view a DNA sequence at a higher/more functional level, and allow for rapidly checking if a designed DNA assembly process will result in the desired sequence.<br><br>Currently, j5 does not properly handle "join"-ed features (as may be used to annotate eukaryotic coding sequences where introns intersperse exons), and the "label=" field for a given feature annotation is used to determine if two features (with the same name/label) should be spliced at a DNA assembly junction.'
                                                 },
                                                 {
                                                     xtype: 'button',
@@ -444,7 +458,8 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                                     id: 'generatej5FastaFileBtn',
                                                     margin: 3,
                                                     maxHeight: 23,
-                                                    text: '<b>Generate FASTA File</b>'
+                                                    text: '<b>Generate FASTA File</b>',
+                                                    tooltip: 'A FASTA file is a text file that may contain one or more sequences. FASTA files do not contain sequence annotation. For the purposes of j5, and for maintaining well documented sequences in general, the Genbank file format is much preferred. Note that there is no standard file extension for FASTA files; j5 uses (.fas).'
                                                 },
                                                 {
                                                     xtype: 'button',
@@ -452,7 +467,8 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                                     id: 'generatej5jbeiSeqFileBtn',
                                                     margin: 3,
                                                     maxHeight: 23,
-                                                    text: '<b>Generate jbei-seq File</b>'
+                                                    text: '<b>Generate jbei-seq File</b>',
+                                                    tooltip: 'jbei-seq format sequence files generally contain a single sequence each (although at times, you may see multiple ORF translated sequences embedded as feature annotations within a long DNA sequence). Feature annotations within jbei-seq format files are extremely useful for being able to view a DNA sequence at a higher/more functional level, and allow for rapidly checking if a designed DNA assembly process will result in the desired sequence.<br><br>Currently, the "seq:label" field for a given feature annotation is used to determine if two features (with the same name/label) should be spliced at a DNA assembly junction.<br><br>The jbei-seq format is based upon XML. Unlike Genbank format files, there is no requisite white space character counts for formatting purposes, and it is much easier for a computer program to parse.<br><br>For more information about the jbei-seq format, see the j5 manual'
                                                 }
                                             ]
                                         },
@@ -471,7 +487,8 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                                     id: 'generatej5ParamsFileBtn',
                                                     margin: 3,
                                                     maxHeight: 23,
-                                                    text: '<b>Generate j5 Parameters File</b>'
+                                                    text: '<b>Generate j5 Parameters File</b>',
+                                                    tooltip: 'The j5 parameters file is a CSV file that contains a list of all of the parameters that controls how j5 designs DNA assemblies.<br><br>The j5 parameters may be edited by clicking on the Edit Parameters button on the Run j5 on Server tab. Note that ASSEMBLY_PRODUCT_TYPE is the exception and is determined from the collection.'
                                                 },
                                                 {
                                                     xtype: 'button',
@@ -479,7 +496,8 @@ Ext.define('Vede.view.DeviceEditor.j5Controls', {
                                                     id: 'generatej5AutomationParamsBtn',
                                                     margin: 3,
                                                     maxHeight: 23,
-                                                    text: '<b>Generate Downstream Automation Parameters File</b>'
+                                                    text: '<b>Generate Downstream Automation Parameters File</b>',
+                                                    tooltip: 'The downstream parameters file is a CSV file that contains a list of all of the parameters that controls how j5 designs downstream automation processes (such as distributing PCR reactions across a thermocycler block annealing temperature gradient).<br><br>The downstream automation parameters may be edited by clicking on the Edit Parameters button on the Downstream Automation tab.'
                                                 }
                                             ]
                                         }
