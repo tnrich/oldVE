@@ -17,6 +17,7 @@ Ext.define('MyApp.view.Viewport', {
     extend: 'MyApp.view.DE',
     renderTo: Ext.getBody(),
     requires: [
+        'MyApp.view.MyWindow',
         'MyApp.view.DE'
     ]
 });
