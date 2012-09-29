@@ -525,7 +525,7 @@ Ext.onReady(function() {
                         //expect(json1).toBe(cleanJson1);
 
                         var json = Teselagen.utils.DeXmlUtils.deXmlToJson(xml);
-                        console.log(JSON.stringify(json, null, "    "));
+                        //console.log(JSON.stringify(json, null, "    "));
                         expect(json).not.toBe(null);
                     });
 

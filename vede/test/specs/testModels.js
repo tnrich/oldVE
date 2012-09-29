@@ -68,7 +68,7 @@ Ext.onReady(function() {
                 expect(seq).not.toBe(null);
 
                 expect(seq.get("sequenceFileFormat")).toBe("");
-                expect(seq.get("hash")).toBe("");
+                expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256(""));
             });
 
             it("Creates SequenceFile", function(){

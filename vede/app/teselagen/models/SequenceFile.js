@@ -16,7 +16,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     /**
      * Input parameters.
-     * NOTE: Must execute setId() to set the id from "" to a unique identifier.
      * @param {String} sequenceFileFormat
      * @param {String} sequenceFileContent This must be set using setSequenceFileContent()
      * @param {String} sequenceFileName
@@ -35,12 +34,17 @@ Ext.define("Teselagen.models.SequenceFile", {
         "Teselagen.models.PartVO"
     ],
 
+    init: function() {
+        var hash = Teselagen.bio.util.Sha256.hex_sha256(this.get("sequenceFileContent"));
+        this.set("hash", hash);
+    },
+
     /**
      * Sets the sequenceFileContent for this part
      * NOTE: Must execute setSequenceFileContent() to set the hash from "" to a unique identifier.
      * @param {String} content Sequence File Content
      */
-     setSequenceFileContent: function(pContent) {
+    setSequenceFileContent: function(pContent) {
 
         this.set("sequenceFileContent", pContent);
 
@@ -53,5 +57,13 @@ Ext.define("Teselagen.models.SequenceFile", {
         this.set("hash", hash);
 
         return true;
-     }
+    }
+
+    /*addSequenceFile: function() {
+
+    },
+
+    deleteItem: function() {
+
+    },*/
 });
