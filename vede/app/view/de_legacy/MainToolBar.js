@@ -1,6 +1,6 @@
-Ext.define('Vede.view.DeviceEditor.MainToolBar', {
+Ext.define('Vede.view.de_legacy.MainToolBar', {
     extend: 'Ext.toolbar.Toolbar',
-    alias: 'widget.DeviceEditorMainToolBar',
+    alias: 'widget.DeviceEditorLegacyMainToolBar',
     items: [
                 {
                     xtype: 'button',

@@ -1,4 +1,4 @@
-Ext.define('Vede.view.DeviceEditor.j5AutomationParameters', {
+Ext.define('Vede.view.de.j5AutomationParameters', {
     extend: 'Ext.window.Window',
 
     height: 550,

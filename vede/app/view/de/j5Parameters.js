@@ -1,4 +1,4 @@
-Ext.define('Vede.view.DeviceEditor.j5Parameters', {
+Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
     height: 659,
