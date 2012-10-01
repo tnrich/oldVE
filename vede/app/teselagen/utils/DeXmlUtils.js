@@ -1,4 +1,3 @@
-
 /**
  * @class Teselagen.utils.DeXmlUtils
  * Converts formats for Device Editor.
@@ -7,13 +6,12 @@
 
 Ext.define("Teselagen.utils.DeXmlUtils", {
 
+    singleton: true,
 
     requires: [
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.util.XmlToJson"
     ],
-
-    singleton: true,
 
     constructor: function() {
         XmlToJson = Teselagen.bio.util.XmlToJson;
