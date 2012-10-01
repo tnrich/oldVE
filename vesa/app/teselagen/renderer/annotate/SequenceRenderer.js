@@ -9,13 +9,13 @@
  */
 Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
-               "Teselagen.bio.orf.ORF",
+               "Teselagen.bio.orf.ORF",	
                "Teselagen.bio.sequence.common.Annotation",
                "Teselagen.utils.SystemUtils"],
 
     statics: {
         FONT_SIZE: 12,
-        FONT_FAMILY: "Monospace",
+        FONT_FAMILY: "Ubuntu Mono",
         COMPLEMENTARY_VERTICAL_OFFSET: 16,
         LETTER_SPACING: 3
     },

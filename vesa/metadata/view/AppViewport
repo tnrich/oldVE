@@ -145,8 +145,8 @@
                 "designer|userClassName": "MyTabPanel2",
                 "id": "projectPanel",
                 "maxWidth": 230,
-                "minWidth": 230,
-                "width": 230,
+                "minWidth": 228,
+                "width": 228,
                 "collapseDirection": "left",
                 "collapsible": true,
                 "frameHeader": false,
@@ -426,6 +426,7 @@
             "userConfig": {
                 "layout|region": "center",
                 "designer|userClassName": "MyTabPanel6",
+                "id": "mainAppPanel",
                 "activeTab": 0
             },
             "designerId": "5f826181-e792-4e62-90b2-56f369908544",
@@ -546,7 +547,7 @@
                                                     "userConfig": {
                                                         "designer|userClassName": "MyMenu",
                                                         "floating": true,
-                                                        "minWidth": 140,
+                                                        "minWidth": 150,
                                                         "style": null,
                                                         "width": 120,
                                                         "collapsed": false,
@@ -708,7 +709,7 @@
                                                     "codeClass": null,
                                                     "userConfig": {
                                                         "designer|userClassName": "MyMenu2",
-                                                        "minWidth": 150,
+                                                        "minWidth": 160,
                                                         "width": 120
                                                     },
                                                     "designerId": "89810835-bef2-4a0c-9bd3-b6a42cc99e8c",
@@ -952,7 +953,8 @@
                                                     "codeClass": null,
                                                     "userConfig": {
                                                         "designer|userClassName": "MyMenu4",
-                                                        "width": 120
+                                                        "minWidth": 160,
+                                                        "width": null
                                                     },
                                                     "designerId": "7363806c-6652-41b8-be7d-09ffcf749ad6",
                                                     "cn": [
@@ -1190,8 +1192,8 @@
                                                     "codeClass": null,
                                                     "userConfig": {
                                                         "designer|userClassName": "MyMenu5",
-                                                        "minWidth": 140,
-                                                        "width": 120
+                                                        "minWidth": 150,
+                                                        "width": null
                                                     },
                                                     "designerId": "4c455886-4415-4c18-983a-9802136de809",
                                                     "cn": [
@@ -1301,7 +1303,7 @@
                                                     "codeClass": null,
                                                     "userConfig": {
                                                         "designer|userClassName": "MyMenu6",
-                                                        "width": 120
+                                                        "width": null
                                                     },
                                                     "designerId": "0c11afc0-6de7-4b7c-a3d2-2d5b7b4edd25",
                                                     "cn": [

@@ -83,8 +83,8 @@ Ext.define('Vesa.view.AppViewport', {
                     split: true,
                     id: 'projectPanel',
                     maxWidth: 230,
-                    minWidth: 230,
-                    width: 230,
+                    minWidth: 228,
+                    width: 228,
                     collapseDirection: 'left',
                     collapsible: true,
                     frameHeader: false,
@@ -195,6 +195,7 @@ Ext.define('Vesa.view.AppViewport', {
                 {
                     xtype: 'tabpanel',
                     region: 'center',
+                    id: 'mainAppPanel',
                     activeTab: 0,
                     items: [
                         {
@@ -235,7 +236,7 @@ Ext.define('Vesa.view.AppViewport', {
                                                     menu: {
                                                         xtype: 'menu',
                                                         floating: true,
-                                                        minWidth: 140,
+                                                        minWidth: 150,
                                                         width: 120,
                                                         collapsed: false,
                                                         collapsible: false,
@@ -290,7 +291,7 @@ Ext.define('Vesa.view.AppViewport', {
                                                     text: 'Edit',
                                                     menu: {
                                                         xtype: 'menu',
-                                                        minWidth: 150,
+                                                        minWidth: 160,
                                                         width: 120,
                                                         items: [
                                                             {
@@ -369,7 +370,7 @@ Ext.define('Vesa.view.AppViewport', {
                                                     text: 'View',
                                                     menu: {
                                                         xtype: 'menu',
-                                                        width: 120,
+                                                        minWidth: 160,
                                                         items: [
                                                             {
                                                                 xtype: 'menucheckitem',
@@ -451,8 +452,7 @@ Ext.define('Vesa.view.AppViewport', {
                                                     text: 'Tools',
                                                     menu: {
                                                         xtype: 'menu',
-                                                        minWidth: 140,
-                                                        width: 120,
+                                                        minWidth: 150,
                                                         items: [
                                                             {
                                                                 xtype: 'menuitem',
@@ -487,7 +487,6 @@ Ext.define('Vesa.view.AppViewport', {
                                                     text: 'Help',
                                                     menu: {
                                                         xtype: 'menu',
-                                                        width: 120,
                                                         items: [
                                                             {
                                                                 xtype: 'menuitem',
