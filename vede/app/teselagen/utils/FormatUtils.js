@@ -1,4 +1,3 @@
-
 /**
  * @class Teselagen.utils.FormatUtils
  *
@@ -12,11 +11,16 @@ Ext.define("Teselagen.utils.FormatUtils", {
     requires: [
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.util.XmlToJson",
-        "Teselagen.utils.SequenceUtils",
+        "Teselagen.bio.util.Sha256",
+
+        "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.parsers.ParsersManager",
+
         "Teselagen.bio.sequence.alphabets.DNAAlphabet",
         "Teselagen.bio.sequence.dna.DNASequence",
-        "Teselagen.bio.parsers.GenbankManager",
-        "Teselagen.bio.parsers.ParsersManager"
+        "Teselagen.bio.sequence.DNATools",
+
+        "Teselagen.utils.SequenceUtils"
     ],
 
     singleton: true,
@@ -24,15 +28,19 @@ Ext.define("Teselagen.utils.FormatUtils", {
     DNAAlphabet: null,
     StringUtil: null,
     XmlToJson: null,
+    Sha256: null,
     SequenceUtils: null,
     GenbankManager: null,
     ParsersManager: null,
     
     constructor: function() {
         DNAAlphabet     = Teselagen.bio.sequence.alphabets.DNAAlphabet;
+        DNATools        = Teselagen.bio.sequence.DNATools;
 
         StringUtil      = Teselagen.bio.util.StringUtil;
         XmlToJson       = Teselagen.bio.util.XmlToJson;
+        Sha256          = Teselagen.bio.util.Sha256;
+
         SequenceUtils   = Teselagen.utils.SequenceUtils;
 
         GenbankManager  = Teselagen.bio.parsers.GenbankManager;
@@ -272,17 +280,37 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         var newFeatures = [];
         for (var i=0; i < seqMan.features.length; i++) {
+            var j, k;
+            var start, end;
+            var name, value, quoted;
+
             var feat = seqMan.features[i];
 
             // SEQHASH
             //Code to turn ftSeq into unique id/hash goes here //DO SEQHASH HERE!
             var seqHash = "";
+            var seqHashStr = "";
+            for (j=0; j < feat.getLocations().length; j++) {
+                start = feat.getLocations()[j].getStart() + 1;
+                end   = feat.getLocations()[j].getEnd();
+
+                if (end < start) {
+                    seqHashStr += newSequence.substring(start, newSequence.length) + newSequence.substring(0, end);
+                } else {
+                    seqHashStr += newSequence.substring(start, end);
+                }
+            }
+            //Does not check for complement
+            
+            seqHash = Teselagen.bio.util.Sha256.hex_sha256(seqHashStr);
+            //console.log(seqHashStr);
+            //console.log(seqHash);
 
             // LOCATIONS
             var newLoc = [];
-            for (var j=0; j < feat.getLocations().length; j++) {
-                var start = feat.getLocations()[j].getStart() + 1; //fix 9/13/12
-                var end   = feat.getLocations()[j].getEnd();
+            for (j=0; j < feat.getLocations().length; j++) {
+                start = feat.getLocations()[j].getStart() + 1; //fix 9/13/12
+                end   = feat.getLocations()[j].getEnd();
 
                 newLoc.push( {
                     "seq:genbankStart" : start,
@@ -293,10 +321,10 @@ Ext.define("Teselagen.utils.FormatUtils", {
             // ATTRIBUTES/FEATURES
             var newAttr = [];
             if (feat.getNotes() !== null) {
-                for (var j=0; j < feat.getNotes().length; j++) {
-                    var name    = feat.getNotes()[j].getName();
-                    var value   = feat.getNotes()[j].getValue();
-                    var quoted  = feat.getNotes()[j].getQuoted();
+                for (j=0; j < feat.getNotes().length; j++) {
+                    name    = feat.getNotes()[j].getName();
+                    value   = feat.getNotes()[j].getValue();
+                    quoted  = feat.getNotes()[j].getQuoted();
                     
                     newAttr.push( {
                         "_name" : name,

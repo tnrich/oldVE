@@ -16,19 +16,19 @@
                     "hash": "033050572f16ae0a262603a655f9dcde9bc162aceb5f19d4d733a06a09f35f87",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       pGFPuv_cterm_signal     3338 bp    DNA     circular SYN 26-OCT-2009\nDEFINITION  Cloning vector pGFPuv, complete sequence.\nACCESSION   U62636\nVERSION     U62636.1  GI:1490528\nSOURCE      Cloning vector pGFPuv.\n  ORGANISM  Cloning vector pGFPuv\nFEATURES             Location/Qualifiers\n     gene            1538..2398\n                     /gene=\"bla\"\n                     /vntifkey=\"60\"\n     CDS             1538..2398\n                     /gene=\"bla\"\n                     /function=\"confers resistance to ampicillin\"\n                     /codon_start=1\n                     /transl_table=11\n                     /product=\"beta-lactamase\"\n                     /protein_id=\"AAB06049.1\"\n                     /db_xref=\"GI:1490530\"\n                     /vntifkey=\"4\"\n                     /label=bla\n     misc_feature    2546..3189\n                     /vntifkey=\"21\"\n                     /label=pUC\\ori\n     misc_feature    95..178\n                     /vntifkey=\"21\"\n                     /label=Plac\n     misc_feature    179..199\n                     /vntifkey=\"21\"\n                     /label=lac\\operator\n     CDS             289..1071\n                     /vntifkey=\"4\"\n                     /label=GFPuv\n     CDS             1006..1068\n                     /vntifkey=\"4\"\n                     /label=signal_peptide\nBASE COUNT      878 a       788 c       836 g       836 t \nORIGIN\n        1 agcgcccaat acgcaaaccg cctctccccg cgcgttggcc gattcattaa tgcagctggc \n       61 acgacaggtt tcccgactgg aaagcgggca gtgagcgcaa cgcaattaat gtgagttagc \n      121 tcactcatta ggcaccccag gctttacact ttatgcttcc ggctcgtatg ttgtgtggaa \n      181 ttgtgagcgg ataacaattt cacacaggaa acagctatga ccatgattac gccaagcttg \n      241 catgcctgca ggtcgactct agaggatccc cgggtaccgg tagaaaaaat gagtaaagga \n      301 gaagaacttt tcactggagt tgtcccaatt cttgttgaat tagatggtga tgttaatggg \n      361 cacaaatttt ctgtcagtgg agagggtgaa ggtgatgcaa catacggaaa acttaccctt \n      421 aaatttattt gcactactgg aaaactacct gttccatggc caacacttgt cactactttc \n      481 tcttatggtg ttcaatgctt ttcccgttat ccggatcata tgaaacggca tgactttttc \n      541 aagagtgcca tgcccgaagg ttatgtacag gaacgcacta tatctttcaa agatgacggg \n      601 aactacaaga cgcgtgctga agtcaagttt gaaggtgata cccttgttaa tcgtatcgag \n      661 ttaaaaggta ttgattttaa agaagatgga aacattctcg gacacaaact cgagtacaac \n      721 tataactcac acaatgtata catcacggca gacaaacaaa agaatggaat caaagctaac \n      781 ttcaaaattc gccacaacat tgaagatgga tccgttcaac tagcagacca ttatcaacaa \n      841 aatactccaa ttggcgatgg ccctgtcctt ttaccagaca accattacct gtcgacacaa \n      901 tctgcccttt cgaaagatcc caacgaaaag cgtgaccaca tggtccttct tgagtttgta \n      961 actgctgctg ggattacaca tggcatggat gagctcggcg gcggcggcag caaggtctac \n     1021 ggcaaggaac agtttttgcg gatgcgccag agcatgttcc ccgatcgcta aactagtcgg \n     1081 ccgtacgggc cctttcgtct cgcgcgtttc ggtgatgacg gtgaaaacct ctgacacatg \n     1141 cagctcccgg agacggtcac agcttgtctg taagcggatg ccgggagcag acaagcccgt \n     1201 cagggcgcgt cagcgggtgt tggcgggtgt cggggctggc ttaactatgc ggcatcagag \n     1261 cagattgtac tgagagtgca ccatatgcgg tgtgaaatac cgcacagatg cgtaaggaga \n     1321 aaataccgca tcaggcggcc ttaagggcct cgtgatacgc ctatttttat aggttaatgt \n     1381 catgataata atggtttctt agacgtcagg tggcactttt cggggaaatg tgcgcggaac \n     1441 ccctatttgt ttatttttct aaatacattc aaatatgtat ccgctcatga gacaataacc \n     1501 ctgataaatg cttcaataat attgaaaaag gaagagtatg agtattcaac atttccgtgt \n     1561 cgcccttatt cccttttttg cggcattttg ccttcctgtt tttgctcacc cagaaacgct \n     1621 ggtgaaagta aaagatgctg aagatcagtt gggtgcacga gtgggttaca tcgaactgga \n     1681 tctcaacagc ggtaagatcc ttgagagttt tcgccccgaa gaacgttttc caatgatgag \n     1741 cacttttaaa gttctgctat gtggcgcggt attatcccgt attgacgccg ggcaagagca \n     1801 actcggtcgc cgcatacact attctcagaa tgacttggtt gagtactcac cagtcacaga \n     1861 aaagcatctt acggatggca tgacagtaag agaattatgc agtgctgcca taaccatgag \n     1921 tgataacact gcggccaact tacttctgac aacgatcgga ggaccgaagg agctaaccgc \n     1981 ttttttgcac aacatggggg atcatgtaac tcgccttgat cgttgggaac cggagctgaa \n     2041 tgaagccata ccaaacgacg agcgtgacac cacgatgcct gtagcaatgg caacaacgtt \n     2101 gcgcaaacta ttaactggcg aactacttac tctagcttcc cggcaacaat taatagactg \n     2161 gatggaggcg gataaagttg caggaccact tctgcgctcg gcccttccgg ctggctggtt \n     2221 tattgctgat aaatctggag ccggtgagcg tgggtctcgc ggtatcattg cagcactggg \n     2281 gccagatggt aagccctccc gtatcgtagt tatctacacg acggggagtc aggcaactat \n     2341 ggatgaacga aatagacaga tcgctgagat aggtgcctca ctgattaagc attggtaact \n     2401 gtcagaccaa gtttactcat atatacttta gattgattta aaacttcatt tttaatttaa \n     2461 aaggatctag gtgaagatcc tttttgataa tctcatgacc aaaatccctt aacgtgagtt \n     2521 ttcgttccac tgagcgtcag accccgtaga aaagatcaaa ggatcttctt gagatccttt \n     2581 ttttctgcgc gtaatctgct gcttgcaaac aaaaaaacca ccgctaccag cggtggtttg \n     2641 tttgccggat caagagctac caactctttt tccgaaggta actggcttca gcagagcgca \n     2701 gataccaaat actgtccttc tagtgtagcc gtagttaggc caccacttca agaactctgt \n     2761 agcaccgcct acatacctcg ctctgctaat cctgttacca gtggctgctg ccagtggcga \n     2821 taagtcgtgt cttaccgggt tggactcaag acgatagtta ccggataagg cgcagcggtc \n     2881 gggctgaacg gggggttcgt gcacacagcc cagcttggag cgaacgacct acaccgaact \n     2941 gagataccta cagcgtgagc tatgagaaag cgccacgctt cccgaaggga gaaaggcgga \n     3001 caggtatccg gtaagcggca gggtcggaac aggagagcgc acgagggagc ttccaggggg \n     3061 aaacgcctgg tatctttata gtcctgtcgg gtttcgccac ctctgacttg agcgtcgatt \n     3121 tttgtgatgc tcgtcagggg ggcggagcct atggaaaaac gccagcaacg cggccttttt \n     3181 acggttcctg gccttttgct ggccttttgc tcacatgttc tttcctgcgt tatcccctga \n     3241 ttctgtggat aaccgtatta ccgcctttga gtgagctgat accgctcgcc gcagccgaac \n     3301 gaccgagcgc agcgagtcag tgagcgagga agcggaag \n//\n",
-                    "de:fileName": "pGFPuv_sig.pep.gb"
+                    "de:filename": "pGFPuv_sig.pep.gb"
                 },
                 {
                     "hash": "bf004ace274aa1b92c9ead1e9285eda16f3bc6f89df9c7a1d0a238da9a7439d5",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       gfpuv_sigpep_XhoI_           1 bp ds-DNA   linear       02-MAY-2010\nACCESSION   gfpuv_sigpep_XhoI_silent\nVERSION     gfpuv_sigpep_XhoI_silent.1\nKEYWORDS    .\nCOMMENT     \nFEATURES             Location/Qualifiers\n     CDS             1..1\n                     /label=GFPuv\n     misc_feature    1..1\n                     /label=XhoI_silent_mutation\nORIGIN\n        1 a     \n//\n",
-                    "de:fileName": "gfpuv_sigpep_XhoI_silent.gb"
+                    "de:filename": "gfpuv_sigpep_XhoI_silent.gb"
                 },
                 {
                     "hash": "32aac1429523cc64f38171f334c129fe410106c4ff87841b61da839952831f7a",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       gfpuv_sigpep_BamHI           1 bp ds-DNA   linear       02-MAY-2010\nACCESSION   gfpuv_sigpep_BamHI_silent\nVERSION     gfpuv_sigpep_BamHI_silent.1\nKEYWORDS    .\nCOMMENT     \nFEATURES             Location/Qualifiers\n     CDS             1..1\n                     /label=GFPuv\n     misc_feature    1..1\n                     /label=BamHI_silent_mutation\nORIGIN\n        1 t     \n//\n",
-                    "de:fileName": "gfpuv_sigpep_BamHI_silent.gb"
+                    "de:filename": "gfpuv_sigpep_BamHI_silent.gb"
                 }
             ]
         },
@@ -42,10 +42,12 @@
                     "de:stopBP": 1215,
                     "de:sequenceFileHash": "cb08daae272f4b48d69abea4726c48883985f04a0b907fa17deabe29c1a8ea7e",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476372040,
-                            "de:fas": "DIGEST"
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476372040,
+                                "de:fas": "DIGEST"
+                            }
+                        ]
                     }
                 },
                 {
@@ -56,10 +58,12 @@
                     "de:stopBP": 1245,
                     "de:sequenceFileHash": "cb08daae272f4b48d69abea4726c48883985f04a0b907fa17deabe29c1a8ea7e",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476377299,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476377299,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -70,10 +74,12 @@
                     "de:stopBP": 713,
                     "de:sequenceFileHash": "033050572f16ae0a262603a655f9dcde9bc162aceb5f19d4d733a06a09f35f87",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476387782,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476387782,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -84,10 +90,12 @@
                     "de:stopBP": 1,
                     "de:sequenceFileHash": "bf004ace274aa1b92c9ead1e9285eda16f3bc6f89df9c7a1d0a238da9a7439d5",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476399953,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476399953,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -98,10 +106,12 @@
                     "de:stopBP": 812,
                     "de:sequenceFileHash": "033050572f16ae0a262603a655f9dcde9bc162aceb5f19d4d733a06a09f35f87",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476404108,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476404108,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -112,10 +122,12 @@
                     "de:stopBP": 1,
                     "de:sequenceFileHash": "32aac1429523cc64f38171f334c129fe410106c4ff87841b61da839952831f7a",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476412289,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476412289,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -126,10 +138,12 @@
                     "de:stopBP": 1072,
                     "de:sequenceFileHash": "033050572f16ae0a262603a655f9dcde9bc162aceb5f19d4d733a06a09f35f87",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886476417400,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886476417400,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 }
             ]

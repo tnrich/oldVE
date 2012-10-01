@@ -966,7 +966,7 @@ Ext.onReady(function() {
 
                 expect(gb.getFeatures().getFeaturesElements().length).toBe(2);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(1);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(2);//1);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(3);
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("feat1");
@@ -974,9 +974,9 @@ Ext.onReady(function() {
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getValue()).toBe("feat1value");
 
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation().length).toBe(2);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(2);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getStart()).toBe(3);//2);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[0].getEnd()).toBe(5);
-                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(0);
+                expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getStart()).toBe(1);//0);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureLocation()[1].getEnd()).toBe(1);
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureQualifier()[0].getName()).toBe("label");
                 expect(gb.getFeatures().getFeaturesElements()[1].getFeatureQualifier()[0].getValue()).toBe("feat3");

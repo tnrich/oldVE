@@ -1,6 +1,6 @@
-Ext.define('Vede.view.DeviceEditor.MainMenuBar', {
+Ext.define('Vede.view.de_legacy.MainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
-    alias: 'widget.DeviceEditorMainMenuBar',
+    alias: 'widget.DeviceEditorLegacyMainMenuBar',
     autoScroll: false,
     items: [
         {

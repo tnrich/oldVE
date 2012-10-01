@@ -16,25 +16,25 @@
                     "hash": "46d943915b196da710b25db3127c75a1ba01da913d0b5bb2b17055f9b5a079a1",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       BMC_nterm_sig_pe         102 bp    DNA     linear       26-FEB-2010\nDEFINITION  promoter seq from pBAD33.\nACCESSION   unknown\nSOURCE      \n  ORGANISM  \nFEATURES             Location/Qualifiers\n     misc_feature    55..102\n                     /label=gly_ser_linker\n     CDS             1..102\n                     /label=GFPuv\n     misc_feature    4..54\n                     /label=Clostridium_BMC_sig_pep\nBASE COUNT       33 a        14 c        29 g        26 t \nORIGIN\n        1 atggaaaata acgctttatt agaacaaata atcaatgaag ttttaaaaaa tatgggtggc \n       61 agtggtagcg ggagctcggg tggctcaggc tctggttcca gt \n//\n",
-                    "de:fileName": "BMC_nterm_sig_pep_GFPuv.gb"
+                    "de:filename": "BMC_nterm_sig_pep_GFPuv.gb"
                 },
                 {
                     "hash": "fbdc0cd5591545b773bce0741569577663dd940ca88bfd3b3dca98a3fc20fc39",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       ccmN_nterm_sig_p         108 bp    DNA     linear       26-FEB-2010\nDEFINITION  promoter seq from pBAD33.\nACCESSION   unknown\nSOURCE      \n  ORGANISM  \nFEATURES             Location/Qualifiers\n     misc_feature    4..60\n                     /label=ccmN_sig_pep\n     misc_feature    61..108\n                     /label=gly_ser_linker\n     CDS             1..108\n                     /label=GFPuv\nBASE COUNT       20 a        25 c        40 g        23 t \nORIGIN\n        1 atgaaggtct acggcaagga acagtttttg cggatgcgcc agagcatgtt ccccgatcgc \n       61 ggtggcagtg gtagcgggag ctcgggtggc tcaggctctg gttccagt \n//\n",
-                    "de:fileName": "ccmN_nterm_sig_pep_GFPuv.gb"
+                    "de:filename": "ccmN_nterm_sig_pep_GFPuv.gb"
                 },
                 {
                     "hash": "de91216ea8484b510f9b055973f046ad3e8a11822971ca69e1029fd48f64c5b1",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       ssrA_tag_GFPuv            33 bp    DNA     linear       26-FEB-2010\nDEFINITION  .\nSOURCE      .\n  ORGANISM  .\nCOMMENT     \n            ApEinfo:methylated:1\nCOMMENT     This file is created by Vector NTI\n            http://www.invitrogen.com/\nCOMMENT     ORIGDB|GenBank\nCOMMENT     VNTDBDATE|546964667|\nCOMMENT     LSOWNER|\nCOMMENT     VNTNAME|ssrA_tag_GFPuv|\nCOMMENT     VNTAUTHORNAME|Nathan Hillson|\nCOMMENT     VNTAUTHOREML|njhillson@lbl.gov|\nCOMMENT     VNTOAUTHORNAME|UNKNOWN|\nFEATURES             Location/Qualifiers\n     misc_feature    1..33\n                     /vntifkey=\"21\"\n                     /label=ssrA\\tag\n     CDS             1..33\n                     /vntifkey=\"4\"\n                     /label=GFPuv\nBASE COUNT        8 a         8 c        13 g         4 t \nORIGIN\n        1 gcggcgaacg atgaaaacta tgcgctggcg gcg \n//\n",
-                    "de:fileName": "ssrA_tag_GFPuv.gb"
+                    "de:filename": "ssrA_tag_GFPuv.gb"
                 },
                 {
                     "hash": "c3f5be2050eb4ff8857531a116a49c90984ddaf6a0493f649c6d43a3b5e11c65",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       ssrA_tag_enhance          39 bp    DNA     linear       26-FEB-2010\nDEFINITION  .\nSOURCE      .\n  ORGANISM  .\nCOMMENT     \n            ApEinfo:methylated:1\nCOMMENT     This file is created by Vector NTI\n            http://www.invitrogen.com/\nCOMMENT     ORIGDB|GenBank\nCOMMENT     VNTDBDATE|546964735|\nCOMMENT     LSOWNER|\nCOMMENT     VNTNAME|ssrA_tag_enhanced_GFPuv|\nCOMMENT     VNTAUTHORNAME|Nathan Hillson|\nCOMMENT     VNTAUTHOREML|njhillson@lbl.gov|\nCOMMENT     VNTOAUTHORNAME|UNKNOWN|\nFEATURES             Location/Qualifiers\n     misc_feature    1..39\n                     /vntifkey=\"21\"\n                     /label=ssrA\\tag\\enhanced\n     CDS             1..39\n                     /vntifkey=\"4\"\n                     /label=GFPuv\nBASE COUNT       11 a         9 c        13 g         6 t \nORIGIN\n        1 gcggcgaacg atgaaaacta taactatgcg ctggcggcg \n//\n",
-                    "de:fileName": "ssrA_tag_enhanced_GFPuv.gb"
+                    "de:filename": "ssrA_tag_enhanced_GFPuv.gb"
                 }
             ]
         },
@@ -48,10 +48,12 @@
                     "de:stopBP": 1238,
                     "de:sequenceFileHash": "23d714d34632e24f53c2095f05e79f17aded7ec22651c20e4b320f82bc2bf731",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361742634,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361742634,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -62,10 +64,12 @@
                     "de:stopBP": 54,
                     "de:sequenceFileHash": "46d943915b196da710b25db3127c75a1ba01da913d0b5bb2b17055f9b5a079a1",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361747000,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361747000,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -76,10 +80,12 @@
                     "de:stopBP": 60,
                     "de:sequenceFileHash": "fbdc0cd5591545b773bce0741569577663dd940ca88bfd3b3dca98a3fc20fc39",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361752939,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361752939,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -90,10 +96,12 @@
                     "de:stopBP": 102,
                     "de:sequenceFileHash": "46d943915b196da710b25db3127c75a1ba01da913d0b5bb2b17055f9b5a079a1",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361759096,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361759096,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -104,10 +112,12 @@
                     "de:stopBP": 78,
                     "de:sequenceFileHash": "46d943915b196da710b25db3127c75a1ba01da913d0b5bb2b17055f9b5a079a1",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361765102,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361765102,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -118,10 +128,12 @@
                     "de:stopBP": 1952,
                     "de:sequenceFileHash": "23d714d34632e24f53c2095f05e79f17aded7ec22651c20e4b320f82bc2bf731",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361772744,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361772744,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -132,10 +144,12 @@
                     "de:stopBP": 15,
                     "de:sequenceFileHash": "de91216ea8484b510f9b055973f046ad3e8a11822971ca69e1029fd48f64c5b1",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361778177,
-                            "de:fas": "Embed_in_primer_reverse"
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361778177,
+                                "de:fas": "Embed_in_primer_reverse"
+                            }
+                        ]
                     }
                 },
                 {
@@ -146,10 +160,12 @@
                     "de:stopBP": 21,
                     "de:sequenceFileHash": "c3f5be2050eb4ff8857531a116a49c90984ddaf6a0493f649c6d43a3b5e11c65",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361784362,
-                            "de:fas": "Embed_in_primer_reverse"
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361784362,
+                                "de:fas": "Embed_in_primer_reverse"
+                            }
+                        ]
                     }
                 },
                 {
@@ -160,10 +176,12 @@
                     "de:stopBP": 33,
                     "de:sequenceFileHash": "de91216ea8484b510f9b055973f046ad3e8a11822971ca69e1029fd48f64c5b1",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1318886361790741,
-                            "de:fas": "Embed_in_primer_forward"
-                        }
+                        "de:part": [
+                            {
+                                "id": 1318886361790741,
+                                "de:fas": "Embed_in_primer_forward"
+                            }
+                        ]
                     }
                 }
             ]

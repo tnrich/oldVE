@@ -34,7 +34,7 @@ Ext.onReady(function() {
                 var url  = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
                 var xml  = jasmine.getFixtures().read(url);
                 var json = SbolParser.sbolXmlToJson(xml);
-                console.log(JSON.stringify(json, null, "  "));
+                //console.log(JSON.stringify(json, null, "  "));
 
                 expect(json["rdf:RDF"]["_xmlns"]).toBe("http://sbols.org/v1#");
 
@@ -49,7 +49,7 @@ Ext.onReady(function() {
                 expect(json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"][0]["strand"]).toBe("+");
                 expect(json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"][0]["subComponent"]["displayId"]).toBe("signal_peptide");
 
-                console.log(Ext.typeOf(123));
+                //console.log(Ext.typeOf(123));
             });
 
 

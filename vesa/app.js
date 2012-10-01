@@ -22,7 +22,8 @@ Ext.application({
         'MyModel'
     ],
     views: [
-        'DE'
+        'DE',
+        'MyWindow'
     ],
     autoCreateViewport: true,
     name: 'MyApp'

@@ -12,9 +12,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     requires:  [
         "Teselagen.bio.util.XmlToJson",
         "Teselagen.bio.util.StringUtil",
+        "Teselagen.bio.util.Sha256",
+
         "Teselagen.bio.parsers.GenbankManager",
         "Teselagen.bio.parsers.SbolParser",
         "Teselagen.bio.sequence.DNATools",
+
         "Ext.Ajax",
         "Ext.data.Store",
         "Ext.data.XmlStore",
@@ -30,6 +33,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         XmlToJson   = Teselagen.bio.util.XmlToJson;
         DNATools    = Teselagen.bio.sequence.DNATools;
         SbolParser  = Teselagen.bio.parsers.SbolParser;
+        Sha256      = Teselagen.bio.util.Sha256;
     },
 
     // ===========================================================================
@@ -581,28 +585,30 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             }
 
             // POST CALCULATIONS
-
+            var strand;
             if (complement === true) {
-                var strand = -1;
+                strand = -1;
             } else {
-                var strand = 1;
+                strand = 1;
             }
 
+            var join;
             if (locations.length>1) {
-                var join = true;
+                join = true;
             } else {
-                var join = false;
+                join = false;
             }
 
             // THIS DOESNT WORK YET
+            var na;
             if (seq.match(/[^U][^RYMKSWHBVDN][ACGT]/gi)) {
-                var na = "DNA";
+                na = "DNA";
             } else if (seq.match(/[^T][^RYMKSWHBVDN][ACGU]/gi)) {
-                var na = "RNA";
+                na = "RNA";
             } else if (seq.match(/[^U][ACGTRYMKSWHBVDNacgtrymkswhbvdn]+/gi)) {
-                var na = "PRO";
+                na = "PRO";
             } else {
-                var na = "NAN";
+                na = "NAN";
             }
             
             var feat = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {
@@ -667,23 +673,43 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var feat      = pGenbank.getFeatures().getFeaturesElements();
         var sequence  = pGenbank.getOrigin().getSequence();
 
-
         // FEATURES Label/Complement/type population
         var newFeatures = [];
 
         for (var i=0; i < feat.length; i++) {
+            var label, start, end, key, value, quoted;
+            var j, k;
+
             var ft    = feat[i];
             var newFt = [];
 
             // SEQHASH
             //Code to turn ftSeq into unique id/hash goes here //DO SEQHASH HERE!
             var seqHash = "";
+            var seqHashStr = "";
+            for (j=0; j < ft.getFeatureLocation().length; j++) {
+                start = ft.getFeatureLocation()[j].getStart();
+                end   = ft.getFeatureLocation()[j].getEnd();
+
+                if (end < start) {
+                    seqHashStr += sequence.substring(start, sequence.length) + sequence.substring(0, end);
+                } else {
+                    seqHashStr += sequence.substring(start, end);
+                }
+            }
+            if (feat[i].getStrand() === -1 || feat[i].getComplement()) {
+                seqHashStr = DNATools.reverseComplement(DNATools.createDNA(seqHashStr)).seqString();
+            }
+            seqHash = Teselagen.bio.util.Sha256.hex_sha256(seqHashStr);
+            //console.log(seqHashStr);
+            //console.log(seqHash);
+
 
             // LOCATIONS
             var newLoc = [];
-            for (var j=0; j < ft.getFeatureLocation().length; j++) {
-                var start = ft.getFeatureLocation()[j].getStart();
-                var end   = ft.getFeatureLocation()[j].getEnd();
+            for (j=0; j < ft.getFeatureLocation().length; j++) {
+                start = ft.getFeatureLocation()[j].getStart();
+                end   = ft.getFeatureLocation()[j].getEnd();
 
                 newLoc.push( {
                     "seq:genbankStart" : start,
@@ -692,14 +718,14 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             }
             // QUALIFIERS -> ATTRIBUTES
             var newAttr = [];
-            for (var k=0; k < ft.getFeatureQualifier().length; k++) {
-                var key    = ft.getFeatureQualifier()[k].getName();
-                var value  = ft.getFeatureQualifier()[k].getValue();
-                var quoted = ft.getFeatureQualifier()[k].getQuoted();
+            for (k=0; k < ft.getFeatureQualifier().length; k++) {
+                key    = ft.getFeatureQualifier()[k].getName();
+                value  = ft.getFeatureQualifier()[k].getValue();
+                quoted = ft.getFeatureQualifier()[k].getQuoted();
 
-                if (k==0 && this.isALabel(key) ) { //HERE 8/20
+                if (k===0 && this.isALabel(key) ) { //HERE 8/20
                     //console.log("found a label: " + key );
-                    var label = value;
+                    label = value;
                     //don't add as attribute
                 } else {
                     newAttr.push( {
@@ -712,7 +738,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                 }
             }
 
-            var newFt = {
+            newFt = {
                 "seq:label" : label, //ft.findLabel(),
                 "seq:complement" : ft.getComplement(),
                 "seq:type" : ft.getKeyword(),
@@ -728,7 +754,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         //console.log(pGenbank.getLocus().getLinear());
 
         // MAKE JSON
-        var json = { 
+        json = {
             "seq:seq" : {
                 "seq:name" : pGenbank.getLocus().getLocusName(),
                 "seq:circular" : !pGenbank.getLocus().getLinear(),
@@ -762,6 +788,15 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         return xml;
     },
 
+    /**
+     * Creates a Sequence Hash, from a sequence. Uses Sha256.js to create this id.
+     * @param {Teselagen.} pSequence Sequence string
+     * @returns {String} seqHash Hash of the sequence using sha256
+     *
+    makeSeqHash: function(pSequence) {
+        Teselagen.bio.util.Sha256
+    },*/
+
     // ===========================================================================
     //   SBOL & JbeiSeq Conversions
     //
@@ -770,7 +805,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     /** THIS DOES NOT WORK YET
      * Converts an SbolXML in string format to JSON format.
-     * This checks for valid entries in the XML file. 
+     * This checks for valid entries in the XML file.
      * If a required entry is not recognized, an error is thrown.
      * If a non-required entry is not recognized, a default value is used.
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})

@@ -16,7 +16,7 @@
                     "hash": "b32efd3a37fb03b72f325906d96d07aa4e6928292ed8c5b3cf918110590aaa6d",
                     "de:format": "Genbank",
                     "de:content": "LOCUS       umuD_tag_GFPuv           126 bp    DNA     linear   BCT 11-MAR-2010\nDEFINITION  Escherichia coli str. K-12 substr. MG1655, complete genome.\nACCESSION   U00096 REGION: 1229990..1230409\nVERSION     U00096.2  GI:48994873\nDBLINK      Project:225\nKEYWORDS    .\nSOURCE      Escherichia coli str. K-12 substr. MG1655\n  ORGANISM  Escherichia coli str. K-12 substr. MG1655\n            Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;\n            Enterobacteriaceae; Escherichia.\nFEATURES             Location/Qualifiers\n     CDS             1..126\n                     /label=GFPuv\n     misc_feature    1..120\n                     /vntifkey=\"21\"\n                     /label=umuD\\Lon\\tag\n     misc_feature    121..126\n                     /vntifkey=\"21\"\n                     /label=Gly\\Gly\\linker\nORIGIN      \n        1 atgttgttta tcaagcctgc ggatctccgc gaaattgtga cttttccgct atttagcgat\n       61 cttgttcagt gtggctttcc ttcaccggca gcagattacg ttgaacagcg catcgatctg\n      121 ggtggc\n//\n",
-                    "de:fileName": "umuD_tag_GFPuv.gb"
+                    "de:filename": "umuD_tag_GFPuv.gb"
                 }
             ]
         },
@@ -30,10 +30,12 @@
                     "de:stopBP": 1235,
                     "de:sequenceFileHash": "23d714d34632e24f53c2095f05e79f17aded7ec22651c20e4b320f82bc2bf731",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1319063547619561,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1319063547619561,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 },
                 {
@@ -44,10 +46,12 @@
                     "de:stopBP": 126,
                     "de:sequenceFileHash": "b32efd3a37fb03b72f325906d96d07aa4e6928292ed8c5b3cf918110590aaa6d",
                     "de:parts": {
-                        "de:part": {
-                            "id": 1319063547633909,
-                            "de:fas": ""
-                        }
+                        "de:part": [
+                            {
+                                "id": 1319063547633909,
+                                "de:fas": ""
+                            }
+                        ]
                     }
                 }
             ]

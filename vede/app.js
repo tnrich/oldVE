@@ -35,8 +35,31 @@ Ext.Loader.setConfig({
 Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
-    views: ['AppViewport', 'FileImportWindow', 'SimulateDigestionWindow'],
-    controllers: ['ActionStackController', 'AppController', 'AnnotatePanelController', 'FindPanelController', 'MainMenuController', 'MainPanelController', 'MainToolbarController', 'PieController', 'RailController', 'RestrictionEnzymeController', 'SelectWindowController', 'SequenceController', 'VectorPanelController', 'SimulateDigestionController', 'DeviceEditor.MainMenuController', 'DeviceEditor.MainToolbarController', 'DeviceEditor.DeviceEditorPanelController'],
+    views: [
+        'AppViewport',
+        'FileImportWindow',
+        'SimulateDigestionWindow'
+    ],
+    controllers: [
+        'ActionStackController',
+        'AppController',
+        'AnnotatePanelController',
+        'FindPanelController',
+        'MainMenuController',
+        'MainPanelController',
+        'MainToolbarController',
+        'PieController',
+        'RailController',
+        'RestrictionEnzymeController',
+        'SelectWindowController',
+        'SequenceController',
+        'VectorPanelController',
+        'SimulateDigestionController',
+        'DeviceEditor.J5Controller',
+        'DeviceEditor.MainMenuController',
+        'DeviceEditor.MainToolbarController',
+        'DeviceEditor.DeviceEditorPanelController'
+    ],
     errorHandler: function(err) {
         console.warn(err);
         return true;

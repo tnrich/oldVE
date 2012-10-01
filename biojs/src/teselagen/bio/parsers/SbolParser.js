@@ -1,4 +1,3 @@
-
 /**
  * @class Teselagen.bio.parsers.SbolParser
  * Converts SBOL formats.
