@@ -2,7 +2,7 @@
     "expandedState": {
         "data": true,
         "model": true,
-        "component": false,
+        "component": true,
         "controller": false,
         "resource": true,
         "769f9c07-da27-4fec-8039-b923f3e3a5d5": {
@@ -10,6 +10,7 @@
             "cn": [
                 {
                     "id": "0eb7ebe3-841a-4590-b130-8b8e3c2b08c2",
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "cd388f77-e2aa-442f-8373-517fb2c563bb",
@@ -40,15 +41,77 @@
                     ]
                 },
                 {
-                    "id": "ae2089c7-ca41-4f85-bab3-505f08998ced",
+                    "id": "ed4a0801-2a39-48a0-98f1-0903cdc24240",
                     "cn": [
                         {
-                            "id": "4bc0cf61-1277-4397-8a5d-09e86a516547"
+                            "id": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
+                            "cn": [
+                                {
+                                    "id": "4b2e104b-076e-4a79-aa94-88a5b139403b"
+                                },
+                                {
+                                    "id": "0c0f3dbf-3479-4891-be40-b3e9df1785f3",
+                                    "cn": [
+                                        {
+                                            "id": "bc865def-c23f-4923-a307-8cbf886f269d"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "65f7be72-2233-42b2-bff3-6087afacdb93",
+                            "cn": [
+                                {
+                                    "id": "76090913-638c-467b-b36d-3c04cd70f8b6"
+                                },
+                                {
+                                    "id": "6e8be2f7-7b74-4d20-b87d-3c3291910a14",
+                                    "cn": [
+                                        {
+                                            "id": "7bf04b07-7254-4635-ac22-c5c92c010790"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
+                            "cn": [
+                                {
+                                    "id": "3edbaa2f-c94c-4d18-ac62-b53b27144663"
+                                },
+                                {
+                                    "id": "5a07d9e8-2dcd-4529-b070-bec228044b89",
+                                    "cn": [
+                                        {
+                                            "id": "bc3c83e9-dec7-4690-b24a-775daf90f906"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
+                            "cn": [
+                                {
+                                    "id": "ee600f18-fffa-4c08-98f6-ee0161fee1a8"
+                                },
+                                {
+                                    "id": "1d4df9ec-49db-491d-8eb7-a921565a3864",
+                                    "cn": [
+                                        {
+                                            "id": "15e8c485-daf8-4ad6-a641-a32918fbf25c"
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
                 {
                     "id": "5f826181-e792-4e62-90b2-56f369908544",
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "6feb6c60-c280-4270-aaee-c4095fa9d402",

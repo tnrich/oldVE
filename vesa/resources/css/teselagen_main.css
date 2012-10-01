@@ -36,3 +36,25 @@
     font-size: 12px;
     color: #333;	
 }
+
+#projectTab1, #projectTab2, #projectTab3, #projectTab4 {
+	height: 36px;
+	width: 54px;
+}
+
+.projectBarButton {
+	width: 32px;
+	height: 32px;
+}
+
+#tabbar-1013-body {
+	height:40px;
+}
+
+#tabbar-1013-strip {
+	top:37px;
+}
+
+#tabbar-1013-innerCt {
+	height:50px;
+}

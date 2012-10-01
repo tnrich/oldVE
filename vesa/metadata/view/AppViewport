@@ -133,43 +133,286 @@
             ]
         },
         {
-            "type": "treepanel",
+            "type": "tabpanel",
             "reference": {
                 "name": "items",
                 "type": "array"
             },
             "codeClass": null,
             "userConfig": {
-                "layout|floatable": false,
                 "layout|region": "west",
-                "designer|userClassName": "MyTreePanel",
-                "draggable": false,
-                "floating": false,
-                "frame": false,
-                "id": "ProjectPanel",
-                "width": 250,
-                "resizeHandles": "e",
-                "closable": false,
+                "layout|split": true,
+                "designer|userClassName": "MyTabPanel2",
+                "id": "projectPanel",
+                "maxWidth": 230,
+                "minWidth": 230,
+                "width": 230,
                 "collapseDirection": "left",
-                "collapsed": true,
                 "collapsible": true,
+                "frameHeader": false,
+                "hideCollapseTool": false,
+                "minButtonWidth": null,
+                "preventHeader": false,
                 "title": "Project",
-                "titleCollapse": true
+                "activeTab": 0,
+                "minTabWidth": null,
+                "plain": false,
+                "removePanelHeader": false
             },
-            "designerId": "ae2089c7-ca41-4f85-bab3-505f08998ced",
+            "designerId": "ed4a0801-2a39-48a0-98f1-0903cdc24240",
             "cn": [
                 {
-                    "type": "treeview",
+                    "type": "panel",
                     "reference": {
-                        "name": "viewConfig",
-                        "type": "object"
+                        "name": "items",
+                        "type": "array"
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "designer|userClassName": "MyTreeView",
-                        "draggable": false
+                        "designer|userClassName": "MyPanel19",
+                        "id": "projectDesignTab",
+                        "layout": "fit",
+                        "minButtonWidth": 32,
+                        "title": null
                     },
-                    "designerId": "4bc0cf61-1277-4397-8a5d-09e86a516547"
+                    "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig5",
+                                "componentCls": null,
+                                "height": null,
+                                "id": "projectTab1",
+                                "minHeight": null,
+                                "minWidth": null,
+                                "autoWidth": true,
+                                "icon": "resources/images/ux/designTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "4b2e104b-076e-4a79-aa94-88a5b139403b"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel",
+                                "id": "projectDesignPanel",
+                                "title": "Your Designs"
+                            },
+                            "designerId": "0c0f3dbf-3479-4891-be40-b3e9df1785f3",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView"
+                                    },
+                                    "designerId": "bc865def-c23f-4923-a307-8cbf886f269d"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel20",
+                        "id": "projectAnalysisTab",
+                        "layout": "fit",
+                        "title": null
+                    },
+                    "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig6",
+                                "id": "projectTab2",
+                                "icon": "resources/images/ux/graphTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "76090913-638c-467b-b36d-3c04cd70f8b6"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel1",
+                                "id": "projectAnalysisPanel",
+                                "title": "j5 Results"
+                            },
+                            "designerId": "6e8be2f7-7b74-4d20-b87d-3c3291910a14",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView1"
+                                    },
+                                    "designerId": "7bf04b07-7254-4635-ac22-c5c92c010790"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel21",
+                        "id": "projectPartsTab",
+                        "layout": "fit",
+                        "title": null
+                    },
+                    "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig7",
+                                "id": "projectTab3",
+                                "icon": "resources/images/ux/partsTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "3edbaa2f-c94c-4d18-ac62-b53b27144663"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel2",
+                                "id": "projectPartsPanel",
+                                "title": "Your Parts"
+                            },
+                            "designerId": "5a07d9e8-2dcd-4529-b070-bec228044b89",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView2"
+                                    },
+                                    "designerId": "bc3c83e9-dec7-4690-b24a-775daf90f906"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel21",
+                        "id": "projectRegistryTab",
+                        "layout": "fit",
+                        "title": null
+                    },
+                    "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig7",
+                                "id": "projectTab4",
+                                "minHeight": null,
+                                "minWidth": null,
+                                "autoWidth": false,
+                                "icon": "resources/images/ux/registryTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "ee600f18-fffa-4c08-98f6-ee0161fee1a8"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel3",
+                                "id": "projectsRegistryPanel",
+                                "title": "Registry"
+                            },
+                            "designerId": "1d4df9ec-49db-491d-8eb7-a921565a3864",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView3"
+                                    },
+                                    "designerId": "15e8c485-daf8-4ad6-a641-a32918fbf25c"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
