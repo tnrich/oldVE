@@ -21,5 +21,7 @@ Ext.define('Vesa.view.Viewport', {
         'Vesa.view.FileImportWindow',
         'Vesa.view.RestrictionEnzymesManagerWindow',
         'Vesa.view.SimulateDigestionWindow'
+        'MyApp.view.MyWindow',
+        'MyApp.view.DE'
     ]
 });

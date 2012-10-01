@@ -59,7 +59,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
            this.dnaSequence = ""; 
         };
         
-        console.log("able to deal with completeSequence");
+//        console.log("able to deal with completeSequence");
     },
 
     onSimulateDigestionOpened: function(manager) {

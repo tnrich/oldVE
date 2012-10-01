@@ -20,7 +20,7 @@ Ext.define("Teselagen.manager.RowManager", {
         //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
         this.rows = [];
         
-        console.log("Rows junk");
+//        console.log("Rows junk");
         //console.log("Num rows: ");
         //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
         this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())))

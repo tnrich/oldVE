@@ -1,0 +1,62 @@
+!!! 5
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title Device Editor
+    meta(name='apptype', content='de')
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width')
+    script(src="/assets/js/lib/jquery.min.js")
+
+    script
+        $(function() {
+
+        function updateRegisteredApps()
+        {
+            // Clear registered Apps
+            registeredApps = [];
+
+            // Capture all iframes on parent
+            var activeFrames = window.parent.frames;
+
+            // Select frames that are either DE or VE
+            for(var i=0;i<activeFrames.length;i++)
+            {
+                var val = activeFrames[i];
+                var appType = $(val.document).find('meta[name="apptype"]').attr('content');
+                var appURL = val.document.URL;
+                registeredApps.push({appType:appType,reference:val,URL:appURL});
+            }
+
+            return registeredApps;
+        }
+
+        function findAppsByType(type)
+        {
+            var registeredApps = updateRegisteredApps();
+            var selectedApps = [];
+            $(registeredApps).each(function(key,val){
+                if(val.appType == type) selectedApps.push(val);
+            });
+            return selectedApps;
+        }
+
+        $("#sendMessageToA").click(function(){
+        var apps = findAppsByType('ve');
+        $(apps).each(function(k,val){
+            var data = {event:'triggerAction',action:'openSequence',data:'example data'};
+            val.reference.postMessage(data, val.URL); 
+        });
+
+        });
+        
+        window.addEventListener('message', receiver, false);
+        function receiver(e) {
+            alert(e.data);
+        }
+
+        });
+  body
+    h2 Device Editor
+    button#sendMessageToA Send message to VE

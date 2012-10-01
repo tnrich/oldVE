@@ -1,8 +1,13 @@
 /**
  * @class Teselagen.models.J5Parameters
  * Class describing J5Parameters.
+ * Creating a J5Parameters results in default values, regardless if parameters are included in 
+ * Ext.create("Teselagen.models.J5Parameters", {PARAMETERS}).
+ * User must specify non-default values by creating the object and calling:
+ *          j5param = Ext.create("Teselagen.models.J5Parameters");
+ *          j5param.set("FILEDNAME", newParameter);
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 Ext.define("Teselagen.models.J5Parameters", {
     extend: "Ext.data.Model",
@@ -189,6 +194,18 @@ Ext.define("Teselagen.models.J5Parameters", {
 
         {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default}
     ],
+
+    // Need this because fields:[] does not actually set the defaults!
+    // Keep the inputted values if they are not undefined
+    init: function() {
+        //console.log("init J5 Param");
+        //console.log(this.data);
+
+        /*if (this.get("masterOligoNumberOfDigitsValue") === undefined) {
+            this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
+        }*/
+        this.setDefaultValues();
+    },
 
     setDefaultValues: function() {
         this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);

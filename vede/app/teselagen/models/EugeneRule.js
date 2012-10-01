@@ -2,7 +2,7 @@
  * @class Teselagen.models.EugeneRule
  * Class describing a Eugene Rule for J5Parameters.
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
@@ -35,7 +35,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      */
     fields: [
         {name: "name",                  type: "string",     defaultValue: ""},
-        {name: "negationOperator",      type: "boolean",    defaultValue: null},
+        {name: "negationOperator",      type: "boolean",    defaultValue: false},
         {name: "operand1",              type: "auto",       defaultValue: null},
         {name: "compositionalOperator", type: "String",     defaultValue: ""},
         {name: "operand2",              type: "auto",       defaultValue: null}

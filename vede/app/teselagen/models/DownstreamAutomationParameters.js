@@ -1,8 +1,12 @@
 /**
  * @class Teselagen.models.DownstreamAutomationParameters
  * Class describing DownstreamAutomationParameters.
+ * Use:
+ *          downstream = Ext.create("Teselagen.models.DownstreamAutomationParameters", {
+ *                  FIELDNAME: newParameter
+ *          });
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 
 Ext.define("Teselagen.models.DownstreamAutomationParameters", {
@@ -10,6 +14,8 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
 
     requires: [
     ],
+
+    //MDTAZ_DEFAULT:    5,
 
     statics: {
         MDTAZ:            "MAXDELTATEMPERATUREADJACENTZONES",
@@ -43,30 +49,150 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
         MMCSPZ_DEFAULT:   1000,
         MWVMP_DEFAULT:    100,
         MCTF_DEFAULT:     0.0001,
+
         MCTI_DEFAULT:     0.1,
         MPV_DEFAULT:      5,
         NCMP_DEFAULT:     12,
         NRMP_DEFAULT:     8,
         TDT_DEFAULT:      0.1,
+
         WPTZ_DEFAULT:     16,
         ZPTB_DEFAULT:     6
     },
 
+    // The Defaults will not kick in. Init will set them if fields are not supplied.
     fields: [
-        {name: "maxDeltaTemperatureAdjacentZonesValue",                   type: "number",         defaultValue: 0},
-        {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",   type: "number",         defaultValue: 0},
-        {name: "maxMcStepsPerZoneValue",                                  type: "int",            defaultValue: 0},
-        {name: "maxWellVolumeMultiwellPlateValue",                        type: "int",            defaultValue: 0},
-        {name: "mcTemperatureFinalValue",                                 type: "number",         defaultValue: 0},
-        {name: "mcTemperatureInitialValue",                               type: "number",         defaultValue: 0},
-        {name: "minPipettingVolumeValue",                                 type: "number",         defaultValue: 0},
-        {name: "nColumnsMultiwellPlateValue",                             type: "int",            defaultValue: 0},
-        {name: "nRowsMultiwellPlateValue",                                type: "int",            defaultValue: 0},
-        {name: "trialDeltaTemperatureValue",                              type: "number",         defaultValue: 0},
-        {name: "wellsPerThermocyclerZoneValue",                           type: "int",            defaultValue: 0},
-        {name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: 0}
+        {
+            name: "maxDeltaTemperatureAdjacentZonesValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MDTAZ_DEFAULT;
+            }
+        },
+        //{name: "maxDeltaTemperatureAdjacentZonesValue",   type: "number",         defaultValue: this.self.MDTAZ_DEFAULT},
+        {
+            name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MDTROZA_DEFAULT;
+            }
+        },
+        //  {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",   type: "number",         defaultValue: this.self.MDTROZA_DEFAULT},
+        {
+            name: "maxMcStepsPerZoneValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MMCSPZ_DEFAULT;
+            }
+        },
+        //{name: "maxMcStepsPerZoneValue",                                  type: "int",            defaultValue: this.self.MMCSPZ_DEFAULT},
+        {
+            name: "maxWellVolumeMultiwellPlateValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MWVMP_DEFAULT;
+            }
+        },
+        //{name: "maxWellVolumeMultiwellPlateValue",                        type: "int",            defaultValue: this.self.MWVMP_DEFAULT},
+        {
+            name: "mcTemperatureFinalValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MCTF_DEFAULT;
+            }
+        },
+        //{name: "mcTemperatureFinalValue",                                 type: "number",         defaultValue: this.self.MCTF_DEFAULT},
+        {
+            name: "mcTemperatureInitialValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MCTI_DEFAULT;
+            }
+        },
+        //{name: "mcTemperatureInitialValue",                               type: "number",         defaultValue: this.self.MCTI_DEFAULT},
+        {
+            name: "minPipettingVolumeValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.MPV_DEFAULT;
+            }
+        },
+        //{name: "minPipettingVolumeValue",                                 type: "number",         defaultValue: this.self.MPV_DEFAULT},
+        {
+            name: "nColumnsMultiwellPlateValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.NCMP_DEFAULT;
+            }
+        },
+        //{name: "nColumnsMultiwellPlateValue",                             type: "int",            defaultValue: this.self.NCMP_DEFAULT},
+        {
+            name: "nRowsMultiwellPlateValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.NRMP_DEFAULT;
+            }
+        },
+        //{name: "nRowsMultiwellPlateValue",                                type: "int",            defaultValue: this.self.NRMP_DEFAULT},
+        {
+            name: "trialDeltaTemperatureValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.TDT_DEFAULT;
+            }
+        },
+        //{name: "trialDeltaTemperatureValue",                              type: "number",         defaultValue: this.self.TDT_DEFAULT},
+        {
+            name: "wellsPerThermocyclerZoneValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.WPTZ_DEFAULT;
+            }
+        },
+        //{name: "wellsPerThermocyclerZoneValue",                           type: "int",            defaultValue: this.self.WPTZ_DEFAULT},
+        {
+            name: "zonesPerThermocyclerBlockValue",
+            convert: function(v, record) {
+                return parseFloat(v) || this.self.ZPTB_DEFAULT;
+            }
+        },
+        //{name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: this.self.ZPTB_DEFAULT}
     ],
 
+    // Need this because fields:[] does not actually set the defaults!
+    // Keep the inputted values if they are not undefined
+    init: function() {
+        //console.log("init");
+        //console.log(this.data);
+
+        if (this.get("maxDeltaTemperatureAdjacentZonesValue") === undefined) {
+            this.set("maxDeltaTemperatureAdjacentZonesValue", this.self.MDTAZ_DEFAULT);
+        }
+        if (this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue") === undefined) {
+            this.set("maxDeltaTemperatureReactionOptimumZoneAcceptableValue", this.self.MDTROZA_DEFAULT);
+        }
+        if (this.get("maxMcStepsPerZoneValue") === undefined) {
+            this.set("maxMcStepsPerZoneValue", this.self.MMCSPZ_DEFAULT);
+        }
+        if (this.get("maxWellVolumeMultiwellPlateValue") === undefined) {
+            this.set("maxWellVolumeMultiwellPlateValue", this.self.MWVMP_DEFAULT);
+        }
+        if (this.get("mcTemperatureFinalValue") === undefined) {
+            this.set("mcTemperatureFinalValue", this.self.MCTF_DEFAULT);
+        }
+        if (this.get("mcTemperatureInitialValue") === undefined) {
+            this.set("mcTemperatureInitialValue", this.self.MCTI_DEFAULT);
+        }
+        if (this.get("minPipettingVolumeValue") === undefined) {
+            this.set("minPipettingVolumeValue", this.self.MPV_DEFAULT);
+        }
+        if (this.get("nColumnsMultiwellPlateValue") === undefined) {
+            this.set("nColumnsMultiwellPlateValue", this.self.NCMP_DEFAULT);
+        }
+        if (this.get("nRowsMultiwellPlateValue") === undefined) {
+            this.set("nRowsMultiwellPlateValue", this.self.NRMP_DEFAULT);
+        }
+        if (this.get("trialDeltaTemperatureValue") === undefined) {
+            this.set("trialDeltaTemperatureValue", this.self.TDT_DEFAULT);
+        }
+        if (this.get("wellsPerThermocyclerZoneValue") === undefined) {
+            this.set("wellsPerThermocyclerZoneValue", this.self.WPTZ_DEFAULT);
+        }
+        if (this.get("zonesPerThermocyclerBlockValue") === undefined) {
+            this.set("zonesPerThermocyclerBlockValue", this.self.ZPTB_DEFAULT);
+        }
+        //console.log("init");
+        //console.log(this.data);
+    },
 
     /**
      * Stringifies the Parameters
