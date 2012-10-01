@@ -15,9 +15,9 @@
         "appName": "MyApp"
     },
     "xdsVersion": "2.1.0",
-    "xdsBuild": 613,
+    "xdsBuild": 637,
     "schemaVersion": 1,
-    "upgradeVersion": 210000000497,
+    "upgradeVersion": 210000000498,
     "framework": "ext40",
     "topInstanceFileMap": {
         "769f9c07-da27-4fec-8039-b923f3e3a5d5": {
@@ -182,6 +182,24 @@
                 "metadata/resource/js1"
             ],
             "className": "js1"
+        },
+        "5c7afb4a-331f-47e6-b7dc-74ffca366be0": {
+            "paths": [
+                "metadata/resource/css"
+            ],
+            "className": "css"
+        },
+        "0642f570-f4b0-4524-849d-e2d031863cf8": {
+            "paths": [
+                "metadata/resource/css1"
+            ],
+            "className": "css1"
+        },
+        "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf": {
+            "paths": [
+                "metadata/resource/css2"
+            ],
+            "className": "css2"
         }
     },
     "viewOrderMap": {
@@ -212,7 +230,10 @@
         "resource": [
             "eb88d82d-8bf8-4192-9d48-d0d198c847e3",
             "fbd2b5b8-1b30-431c-8cf6-b7ca258521a5",
-            "c345d05e-4bb1-4e81-a135-b5bfbb9c987d"
+            "c345d05e-4bb1-4e81-a135-b5bfbb9c987d",
+            "5c7afb4a-331f-47e6-b7dc-74ffca366be0",
+            "0642f570-f4b0-4524-849d-e2d031863cf8",
+            "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf"
         ],
         "app": [
             "application"
