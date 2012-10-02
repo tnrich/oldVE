@@ -50,14 +50,7 @@ Ext.define('Vede.view.AuthWindow', {
 						]
 					}]
 				},
-
 				{
-					xtype: 'checkboxfield',
-					anchor: '100%',
-					margin: 10,
-					boxLabel: 'Remember',
-					name: 'remember'
-				}, {
 					xtype: 'button',
 					id: 'auth-login-btn',
 					margin: '0 0 0 10',
@@ -67,7 +60,15 @@ Ext.define('Vede.view.AuthWindow', {
 					xtype: 'button',
 					id: 'auth-guest-btn',
 					margin: '0 10',
-					text: 'Use Guest Account (Development)',
+					text: 'Guest (Dev)',
+					style: {
+						background: 'yellow;'
+					}
+				}, {
+					xtype: 'button',
+					id: 'auth-nosession-btn',
+					margin: '0 0',
+					text: 'No session (Dev)',
 					style: {
 						background: 'yellow;'
 					}

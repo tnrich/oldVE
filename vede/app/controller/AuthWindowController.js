@@ -18,6 +18,11 @@ Ext.define('Vede.controller.AuthWindowController', {
 		var server = form.findField('server').getRawValue();
         Vede.application.authenticationManager.guestAuth(server);
     },
+    onNoSessionClick: function(button, e, options) {
+    	console.log('no auth');
+        Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+        Ext.getCmp('AuthWindow').destroy();
+    },
     init: function() {
         this.control({
             "#auth-login-btn": {
@@ -25,6 +30,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-guest-btn": {
                 click: this.onAuthGuestClick
+            },
+            "#auth-nosession-btn": {
+                click: this.onNoSessionClick
             }
     	});
     }
