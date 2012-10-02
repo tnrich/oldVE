@@ -7,6 +7,8 @@ Ext.define('Vede.view.AuthWindow', {
 	bodyBorder: false,
 	closable: false,
 	title: 'Authentication',
+	x: 80,
+	y: 30,
 
 	initComponent: function() {
 		var me = this;
@@ -15,7 +17,7 @@ Ext.define('Vede.view.AuthWindow', {
 			items: [{
 				xtype: 'form',
 				id: 'auth-form',
-				height: 220,
+				height: 280,
 				items: [{
 					xtype: 'fieldset',
 					margin: '10 10 10 10',
@@ -47,6 +49,14 @@ Ext.define('Vede.view.AuthWindow', {
 							['Pushscience', 'http://rp.teselagen.com/api/']
 						]
 					}]
+				},
+
+				{
+					xtype: 'checkboxfield',
+					anchor: '100%',
+					margin: 10,
+					boxLabel: 'Remember',
+					name: 'remember'
 				}, {
 					xtype: 'button',
 					id: 'auth-login-btn',

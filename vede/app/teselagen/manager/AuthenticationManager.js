@@ -39,7 +39,12 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         Ext.getCmp('AuthWindow').destroy();
       },
       failure: function(response, options) {
-        Ext.get('splash-text').update(response.responseText);
+        if(response.responseText != '')
+        {
+          var parsedResponse = JSON.parse(response.responseText);
+          Ext.get('splash-text').update(parsedResponse.msg);
+        }
+        if( response.status == 0 ) Ext.get('splash-text').update('Server offline.');
       }
     });
   },
@@ -53,7 +58,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       sessionId: "000",
       userId: "0"
     };
-    Ext.getCmp('AuthWindow').destroy();
     this.authenticate();    
   }
   ,
@@ -70,9 +74,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             sessionData.data.firstTime = parsedResponse.firstTime;
             Ext.get('splash-text').update(parsedResponse.msg);
             Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+            Ext.getCmp('AuthWindow').destroy();
           },
           failure: function(response, options) {
             Ext.get('splash-text').update(response.responseText);
+            if( response.status == 0 ) Ext.get('splash-text').update('Server offline.');
           }
         });
       }
@@ -118,6 +124,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             that.authenticate();
           },
           failure: function(response, options) {
+            Ext.get('splash-text').update('Automatic login failed.');
             var authDialog = Ext.create('Vede.view.AuthWindow');
             authDialog.show(); 
             console.log('Fetching userdata failed.');
