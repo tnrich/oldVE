@@ -1,9 +1,16 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 659,
-    width: 857,
+    height: 600,
+    maxHeight: 830,
+    width: 845,
+    maxWidth: 845,
     title: 'j5 Parameters',
+    autoScroll: true,
+    draggable: false,
+    resizable: false,
+    modal: true,
+    maximizable: true,
 
     initComponent: function() {
         var me = this;
@@ -16,6 +23,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         align: 'stretch',
                         type: 'hbox'
                     },
+                    autoScroll: true,
                     items: [
                         {
                             xtype: 'container',
@@ -23,6 +31,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                             items: [
                                 {
                                     xtype: 'numberfield',
+                                    id: 'masterOligoNumberOfDigitsValue',
                                     padding: 3,
                                     fieldLabel: 'Master Oligo Num of Digits (5)',
                                     labelSeparator: ' ',
@@ -33,6 +42,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'masterPlasmidNumberOfDigitsValue',
                                     padding: 3,
                                     fieldLabel: 'Master Plasmid Num of Digits (5)',
                                     labelSeparator: ' ',
@@ -42,6 +52,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'gibsonOverlapBPsValue',
                                     padding: 3,
                                     fieldLabel: 'Gibson Overlap BPs (26)',
                                     labelSeparator: ' ',
@@ -51,6 +62,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'gibsonOverlapMinTmValue',
                                     padding: 3,
                                     fieldLabel: 'Gibson Overlap Min Tm (60)',
                                     labelSeparator: ' ',
@@ -60,6 +72,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'gibsonOverlapMaxTmValue',
                                     padding: 3,
                                     fieldLabel: 'Gibson Overlap Max Tm (70)',
                                     labelSeparator: ' ',
@@ -69,6 +82,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'maxOligoLengthBPsValue',
                                     padding: 3,
                                     fieldLabel: 'Maximum Num of Oligo BPs (110)',
                                     labelSeparator: ' ',
@@ -78,6 +92,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'minFragmentSizeGibsonBPsValue',
                                     padding: 3,
                                     fieldLabel: 'Minimum Gibson Fragment Size BPs (250)',
                                     labelSeparator: ' ',
@@ -87,6 +102,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'goldenGateOverhangBPsValue',
                                     padding: 3,
                                     fieldLabel: 'Golden Gate Overhang BPs (4)',
                                     labelSeparator: ' ',
@@ -96,6 +112,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'textfield',
+                                    id: 'goldenGateRecognitionSeqValue',
                                     padding: 3,
                                     fieldLabel: 'Golden Gate Recognition Sequence (GGTCTC)',
                                     labelSeparator: ' ',
@@ -104,6 +121,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'textfield',
+                                    id: 'goldenGateTerminiExtraSeqValue',
                                     padding: 3,
                                     fieldLabel: 'Golden Gate Term Extra Seq (CACACCAGGTCTCA)',
                                     labelSeparator: ' ',
@@ -112,6 +130,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'maxIdentitiesGoldenGateOverhangsCompatibleValue',
                                     padding: 3,
                                     fieldLabel: 'Max Identities Golden Gate Overhangs (2)',
                                     labelSeparator: ' ',
@@ -121,6 +140,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'oligoSynthesisCostPerBPUSDValue',
                                     padding: 3,
                                     fieldLabel: 'Oligo Synthesis Cost Per BP (US) (0.1)',
                                     labelSeparator: ' ',
@@ -132,6 +152,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'oligoPagePurificationCostPerPieceUSDValue',
                                     padding: 3,
                                     fieldLabel: 'Oligo Purification Cost Per Piece (US) (40)',
                                     labelSeparator: ' ',
@@ -143,6 +164,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'oligoMaxLengthNoPagePurificationRequiredBPsValue',
                                     padding: 3,
                                     fieldLabel: 'Oligo Max Length No Page Purification (60)',
                                     labelSeparator: ' ',
@@ -152,6 +174,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'minPCRProductBPsValue',
                                     padding: 3,
                                     fieldLabel: 'Minimum PCR Product BPs (100)',
                                     labelSeparator: ' ',
@@ -161,6 +184,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'directSynthesisCostPerBPUSDValue',
                                     padding: 3,
                                     fieldLabel: 'Direct Synthesis Cost Per BP (US) (0.39)',
                                     labelSeparator: ' ',
@@ -172,6 +196,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'directSynthesisMinCostPerPieceUSDValue',
                                     padding: 3,
                                     fieldLabel: 'Direct Synthesis Min. Cost Per Piece (US) (159)',
                                     labelSeparator: ' ',
@@ -183,16 +208,19 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'combobox',
+                                    id: 'outputSequenceFormatValue',
                                     padding: 3,
                                     fieldLabel: 'Output Sequence Format (Genbank)',
                                     labelSeparator: ' ',
                                     labelWidth: 270,
+                                    queryMode: 'local',
                                     store: [
-                                        '<b>Genbank</b>',
-                                        '<b>FASTA</b>',
-                                        '<b>jbei-seq</b>',
-                                        '<b>SBOLXML</b>'
-                                    ]
+                                        'Genbank',
+                                        'FASTA',
+                                        'jbei-seq',
+                                        'SBOLXML'
+                                    ],
+                                    value: 'Genbank'
                                 }
                             ]
                         },
@@ -203,6 +231,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                             items: [
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerGCClampValue',
                                     padding: 3,
                                     fieldLabel: 'Primer GC Clamp (2)',
                                     labelSeparator: ' ',
@@ -213,6 +242,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMinSizeValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Min Size (18)',
                                     labelSeparator: ' ',
@@ -222,6 +252,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMaxSizeValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Max Size (36)',
                                     labelSeparator: ' ',
@@ -231,6 +262,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMinTmValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Min Tm (60)',
                                     labelSeparator: ' ',
@@ -240,6 +272,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMaxTmValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Max Tm (70)',
                                     labelSeparator: ' ',
@@ -249,6 +282,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMaxDiffTmValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Max Tm Diff (5)',
                                     labelSeparator: ' ',
@@ -258,6 +292,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMaxSelfAnyThValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Max Self Compl Any TH (47)',
                                     labelSeparator: ' ',
@@ -267,6 +302,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerMaxSelfEndThValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Max Self Compl End TH (47)',
                                     labelSeparator: ' ',
@@ -276,6 +312,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerPairMaxComplAnyThValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Pair Max Compl Any TH (47)',
                                     labelSeparator: ' ',
@@ -285,6 +322,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerPairMaxComplEndThValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Pair Max Compl End TH (47)',
                                     labelSeparator: ' ',
@@ -294,6 +332,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'checkboxfield',
+                                    id: 'primerTmSantaluciaValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Tm Santa Lucia (enabled)',
                                     labelSeparator: ' ',
@@ -302,6 +341,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'checkboxfield',
+                                    id: 'primerSaltCorrectionsValue',
                                     padding: 3,
                                     fieldLabel: 'Primer Salt Corrections (enabled)',
                                     labelSeparator: ' ',
@@ -310,6 +350,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'primerDnaConcValue',
                                     padding: 3,
                                     fieldLabel: 'Primer DNA Conc (250)',
                                     labelSeparator: ' ',
@@ -319,6 +360,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'mispriming3PrimeBoundaryBPToWarnIfHitValue',
                                     padding: 3,
                                     fieldLabel: 'MisPriming 3\' Boundary (4)',
                                     labelSeparator: ' ',
@@ -328,6 +370,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'misprimingMinTmValue',
                                     padding: 3,
                                     fieldLabel: 'MisPriming Min Tm (45)',
                                     labelSeparator: ' ',
@@ -337,24 +380,30 @@ Ext.define('Vede.view.de.j5Parameters', {
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'misprimingSaltConcValue',
                                     padding: 3,
                                     fieldLabel: 'MisPriming Salt Conc (0.05)',
                                     labelSeparator: ' ',
                                     labelWidth: 200,
                                     emptyText: '100',
-                                    minValue: 0
+                                    minValue: 0,
+                                    step: 0.01,
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    id: 'misprimingOligoConcValue',
                                     padding: 3,
                                     fieldLabel: 'MisPriming Oligo Conc (2.5e-7)',
                                     labelSeparator: ' ',
                                     labelWidth: 200,
                                     emptyText: '100',
+                                    decimalPrecision: 8,
+                                    step: 0.00000001,
                                     minValue: 0
                                 },
                                 {
                                     xtype: 'checkboxfield',
+                                    id: 'suppressPurePrimersValue',
                                     padding: 3,
                                     fieldLabel: 'Suppress Pure Primers (enabled)',
                                     labelSeparator: ' ',
@@ -367,13 +416,14 @@ Ext.define('Vede.view.de.j5Parameters', {
                 },
                 {
                     xtype: 'container',
-                    height: 95,
+                    height: 60,
                     layout: {
                         type: 'absolute'
                     },
                     items: [
                         {
                             xtype: 'button',
+                            id: 'resetj5DefaultParamsBtn',
                             x: 0,
                             y: 40,
                             margin: 5,
@@ -384,6 +434,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         },
                         {
                             xtype: 'button',
+                            id: 'resetj5ServerParamsBtn',
                             x: 120,
                             y: 40,
                             margin: 5,
@@ -394,6 +445,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         },
                         {
                             xtype: 'button',
+                            id: 'j5ParamsCancelBtn',
                             x: 640,
                             y: 40,
                             margin: 5,
@@ -405,6 +457,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                         },
                         {
                             xtype: 'button',
+                            id: 'j5ParamsOKBtn',
                             x: 730,
                             y: 40,
                             margin: 5,
@@ -420,6 +473,15 @@ Ext.define('Vede.view.de.j5Parameters', {
         });
 
         me.callParent(arguments);
+        me.center();
+
+        me.on("maximize", function(me) {
+            me.center();
+        });
+
+        me.on("restore", function(me) {
+            me.center();
+        });
     }
 
 });
