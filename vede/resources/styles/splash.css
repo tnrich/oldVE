@@ -12,6 +12,7 @@
     border: none;
     background-color: transparent;
     background-position: top center;
+        z-index: 100;
 }
 
 .x-mask-msg.splashscreen span {

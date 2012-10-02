@@ -64,50 +64,85 @@ function restrict(req, res, next) {
   }
 };
 
-app.all('/login', function(req, res){
+//CORS middleware
+var allowCrossDomain = function(req, res, next) {
+console.log(req.method);
+if (req.method === 'OPTIONS') {
+      var headers = {};
+      // IE8 does not allow domains to be specified, just the *
+      // headers["Access-Control-Allow-Origin"] = req.headers.origin;
+      headers["Access-Control-Allow-Origin"] = "*";
+      headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+      headers["Access-Control-Allow-Credentials"] = false;
+      headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+      headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+      res.writeHead(200, headers);
+      res.end();
+} else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      next();
+  }
+};
+
+app.all('/login', allowCrossDomain, function(req, res){
       
       var sessionId = req.body.sessionId;
+      var username = req.body.username;
+      var password = req.body.password;
 
-      if(sessionId == undefined) return res.send('Credentials not sended',405);
+      console.log(req.body);
+
+      if(username && password)
+      {
+        return res.json({'firstTime':true,'msg':'Welcome cool User !'});
+      }
+
+      if(sessionId == '000') return res.json({'firstTime':true,'msg':'Welcome back Guest !'});
+
+      if(sessionId == undefined) return res.json({'msg':'Credentials not sended'},405);
+
+      if(sessionId)
+      {
       
-      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
-      
-      app.mysql.query(query, function(err, rows, fields) {
-        if (err) res.send('sessionId not valid',405);
-
-        console.log(rows[0]);
-
-        // Session ID is valid
-        var username = rows[0].username;
+        var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
         
-        // Check if user exist on mongoDB
-        var User = app.db.model("Users");
-        User.findOne({'name':username},function(err,results){
-          if(results==null)
-          {
-              // If user not found generate a new one
-              var newuser = new User({name:username});
-              User.create(newuser, function (err, user) {
-               console.log(username+' user created!');
-                req.session.regenerate(function(){
-                req.session.user = user;
-                req.user = user;
-                res.json({'firstTime':true,'msg':'Welcome back '+username + '!'});
-                });
-            });
-          }
-          else
-          {
-            console.log("User already exist");
-            req.session.regenerate(function(){
-            req.session.user = results;
-            req.user = results;
-            res.json({'firstTime':false,'msg':'Welcome back '+username + '!'});
-            });
-          }
-        });
+        app.mysql.query(query, function(err, rows, fields) {
+          if (err) res.json({'msg':'Invalid session'},405);
 
-      });
+          // Session ID is valid
+          var username = rows[0].username;
+          
+          // Check if user exist on mongoDB
+          var User = app.db.model("Users");
+          User.findOne({'name':username},function(err,results){
+            if(results==null)
+            {
+                // If user not found generate a new one
+                var newuser = new User({name:username});
+                User.create(newuser, function (err, user) {
+                 console.log(username+' user created!');
+                  req.session.regenerate(function(){
+                  req.session.user = user;
+                  req.user = user;
+                  res.json({'firstTime':true,'msg':'Welcome back '+username + '!'});
+                  });
+              });
+            }
+            else
+            {
+              console.log("User already exist");
+              req.session.regenerate(function(){
+              req.session.user = results;
+              req.user = results;
+              res.json({'firstTime':false,'msg':'Welcome back '+username + '!'});
+              });
+            }
+          });
+
+        });
+      }
+
 });
 
 app.all('/addUser',function(req,res){

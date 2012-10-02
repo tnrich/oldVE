@@ -29,6 +29,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 		},
 		items: [{
 			xtype: 'button',
+			id: 'username',
 			styleHtmlContent: false,
 			iconAlign: 'right',
 			text: 'user_Name',

@@ -14,7 +14,9 @@ Ext.define('Vede.controller.AuthWindowController', {
     },
     onAuthGuestClick: function(button, e, options) {
         var authenticationManager = Ext.get("Teselagen.manager.AuthenticationManager");
-        Vede.application.authenticationManager.guestAuth();
+		var form = Ext.getCmp('auth-form').getForm();
+		var server = form.findField('server').getRawValue();
+        Vede.application.authenticationManager.guestAuth(server);
     },
     init: function() {
         this.control({

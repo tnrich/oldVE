@@ -3,8 +3,9 @@ var session;
 
 Ext.define('sessionData', { 
           singleton: true, 
-          data: null
-      }); 
+          data: null,
+          baseURL: 'http://localhost:3000/'
+}); 
 
 Ext.onReady(function() {
     // Start the mask on the body and get a reference to the mask
@@ -55,6 +56,7 @@ Ext.application({
         'SequenceController',
         'VectorPanelController',
         'SimulateDigestionController',
+        'Vede.controller.AuthWindowController',
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
@@ -67,57 +69,14 @@ Ext.application({
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
     launch: function() {
 
-        this.authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager");
-        var that = this;
-
-        var showDevInfo = function() {
-                //console.log("Showing dev info");
-                Ext.create("Ext.Window", {
-                    title: 'Welcome ' + sessionData.data.username + '!',
-                    width: 500,
-                    height: 100,
-                    closable: true,
-                    html: 'J5 sessionId: ' + sessionData.data.sessionId,
-                    modal: true
-                }).show();
-            }
-
-        var authenticate =  function() {
-                Ext.get('splash-text').update('Authenticating to server');
-                Ext.Ajax.request({
-                    url: '/api/login',
-                    params: {
-                        sessionId: sessionData.data.sessionId
-                    },
-                    success: function(response) {
-                        var data = JSON.parse(response.responseText);
-                        sessionData.data.firstTime = data.firstTime;
-                        Ext.get('splash-text').update(data.msg);
-                        that.authenticationManager.logIn("LoggedIn");
-                    },
-                   failure : function(response, options){ 
-                       Ext.get('splash-text').update(response.responseText);
-                   }
-                }); 
-       };
-
-        var logIn = function() {
-                Ext.get('splash-text').update('Getting authentication parameters');
-                Ext.Ajax.request({
-                    url: '/deviceeditor',
-                    params: {},
-                    success: function(response) {
-                        session = JSON.parse(response.responseText);
-                        sessionData.data = session;
-                        authenticate();
-                    }
-                });
-            };
+        Ext.Ajax.cors = true; // Allow CORS
+        Ext.Ajax.method = 'POST'; // Set POST as default Method
 
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        logIn();
+        this.authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager"); // Created Auth manager
+        this.authenticationManager.login(); // Start Auth process
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
@@ -133,19 +92,14 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        console.log('First time user:'+sessionData.data.firstTime);
-                        //showDevInfo();
                         Ext.getBody().unmask();
 
                     }
                 }
             });
         });
-        // Run the fade 500 milliseconds after launch.
-        //task.delay(0);
 
-        var AuthenticationEvent = Teselagen.event.AuthenticationEvent;
-        this.on(AuthenticationEvent.LOGGED_IN, function(){
+        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){
             task.delay(1500);
         });
 
