@@ -37,6 +37,10 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
         //console.log(inData.sequenceFiles);
     },
 
+
+    /**
+     * @returns {RegExp} regex
+     */
     getDefaultNamePattern: function() {
         var regex = new RegExp( "^" + this.defaultNamePrefix + "(\\d+)$" );
         return regex;
@@ -112,9 +116,76 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
         this.eugeneRules.push(newEugeneRule);
 
         // If the name follows the default name pattern, update highest default name index
-        //if ( this.getDefaultNamePattern().exec(pName) !== null &&  )
-    }
+        // NOT SURE ABOUT THIS ONE YET
+        var tmp = this.getDefaultNamePattern().exec(pName);
+        if ( tmp !== null &&  parseInt(tmp[1]) > this.highestDefaultNameIndex ) {
+            this.highestDefaultNameIndex = parseInt(tmp[1]);
+        }
 
+        // DW: NEED TO FIRE EVENT NEW_EUGENE_RULE_ADDED_DELETED.
+
+        return newEugeneRule;
+    },
+
+    /**
+     * @param {Teselagen.models.EugeneRule} pRule
+     */
+    deleteItem: function(pRule) {
+        for (var i = 0; i < this.eugeneRules.length; i++) {
+            if (this.eugeneRules[i] === pRule) {
+                this.eugeneRules.splice(i, 1);
+                break;
+            }
+        }
+        // DW: NEED TO FIRE EVENT NEW_EUGENE_RULE_ADDED_DELETED.
+    },
+
+    deleteAllItems: function() {
+        this.eugeneRules = [];
+        this.highestDefaultNameIndex = 0;
+
+        // DW: NEED TO FIRE EVENT NEW_EUGENE_RULE_ADDED_DELETED.
+    },
+
+    /**
+     * @param {Teselagen.models.EugeneRule} pRule
+     * @returns {String} ruleText
+     */
+    generateRuleText: function(pRule) {
+
+    },
+
+    /**
+     * @param {String} name
+     * @returns {Teselagen.models.EugeneRule} eugeneRule
+     */
+    getRuleByName: function(pName) {
+
+    },
+
+    /**
+     * @param {Teselagen.models.PartVO} pPartVO
+     * @return {Teselagen.models.EugeneRule[]} partRules
+     */
+    getRulesByPartVO: function(pPartVO) {
+
+    },
+
+    /**
+     * @param {Teselagen.models.PartVO} pPartVO
+     * @return {Teselagen.models.EugeneRule[]} partRules
+     */
+    getRulesInvolvingPartVO: function(pPartVO) {
+
+    },
+
+    /**
+     * @param {String.models.PartVO} pName
+     * @return {Boolean}
+     */
+    isUniqueRuleName: function(pName) {
+
+    }
 
 
 });
