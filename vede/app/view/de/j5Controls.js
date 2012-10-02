@@ -5,6 +5,8 @@ Ext.define('Vede.view.de.j5Controls', {
     width: 852,
     title: 'j5 Controls',
     resizable: false,
+    draggable: false,
+    modal: true,
 
     initComponent: function() {
         var me = this;
@@ -70,6 +72,7 @@ Ext.define('Vede.view.de.j5Controls', {
                                             xtype: 'filefield',
                                             flex: 1,
                                             id: 'plasmidsListFileSelector',
+                                            allowBlank: false,
                                             margin: '',
                                             fieldLabel: 'or',
                                             hideLabel: false,
