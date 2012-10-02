@@ -46,7 +46,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   guestAuth: function(server){
 
     sessionData.baseURL = server;
-    
+
     Ext.get('splash-text').update('Logging in as Guest');
     sessionData.data = {
       username: "Guest",
@@ -115,7 +115,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
           success: function(response) {
             session = JSON.parse(response.responseText);
             sessionData.data = session;
-            authenticate();
+            that.authenticate();
           },
           failure: function(response, options) {
             var authDialog = Ext.create('Vede.view.AuthWindow');
