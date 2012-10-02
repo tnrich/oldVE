@@ -1,0 +1,13 @@
+{
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "SequenceController"
+    },
+    "id": "ExtBox1-ext-gen16342",
+    "designerId": "7d4fc686-038a-4c3d-8042-a955ea620820"
+}

@@ -1,0 +1,13 @@
+{
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "AppTabController"
+    },
+    "id": "ExtBox1-ext-gen7018",
+    "designerId": "cc197c6f-a9d6-48ef-bc91-84f1591fa3fe"
+}
