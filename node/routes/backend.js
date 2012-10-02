@@ -86,33 +86,9 @@ if (req.method === 'OPTIONS') {
 };
 
 app.all('/login', allowCrossDomain, function(req, res){
+
       
-      var sessionId = req.body.sessionId;
-      var username = req.body.username;
-      var password = req.body.password;
-
-      console.log(req.body);
-
-      if(username && password)
-      {
-        return res.json({'firstTime':true,'msg':'Welcome cool User !'});
-      }
-
-      if(sessionId == '000') return res.json({'firstTime':true,'msg':'Welcome back Guest !'});
-
-      if(sessionId == undefined) return res.json({'msg':'Credentials not sended'},405);
-
-      if(sessionId)
-      {
-      
-        var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
-        
-        app.mysql.query(query, function(err, rows, fields) {
-          if (err) res.json({'msg':'Invalid session'},405);
-
-          // Session ID is valid
-          var username = rows[0].username;
-          
+      function getOrCreateUser(username) {    
           // Check if user exist on mongoDB
           var User = app.db.model("Users");
           User.findOne({'name':username},function(err,results){
@@ -139,7 +115,37 @@ app.all('/login', allowCrossDomain, function(req, res){
               });
             }
           });
+      }
+     
+      
+      var sessionId = req.body.sessionId;
+      var username = req.body.username;
+      var password = req.body.password;
 
+      if(!sessionId && (!username || !password) ) return res.json({'msg':'Credentials not sended'},405);
+      if(sessionId == '000') return res.json({'firstTime':true,'msg':'Welcome back Guest !'});
+
+      if(username && password)
+      {
+
+        var crypto = require('crypto');
+
+        var hash = crypto.createHash('md5').update('rodrigo#rocks').digest("hex");
+
+        var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password="'+hash+'" order by j5sessions.id desc limit 1;';
+
+        app.mysql.query(query, function(err, rows, fields) {
+          if (err) res.json({'msg':'Invalid session'},405);
+          getOrCreateUser(rows[0].username)
+        });
+      }
+
+      if(sessionId)
+      {
+        var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="'+sessionId+'";';
+        app.mysql.query(query, function(err, rows, fields) {
+          if (err) res.json({'msg':'Invalid session'},405);
+          getOrCreateUser(rows[0].username)
         });
       }
 
