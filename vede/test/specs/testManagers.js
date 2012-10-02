@@ -193,7 +193,8 @@ Ext.onReady(function() {
             it("getDefaultNamePattern()", function(){
 
                 console.log(Teselagen.models.EugeneRule.MORETHAN);
-                console.log(!(typeof(123) === "number"));
+                console.log((typeof(123) === "number"));
+                console.log(Teselagen.constants.Constants.self.GENBANK);
             });
 
             it("getDefaultNamePattern()", function(){
@@ -209,6 +210,18 @@ Ext.onReady(function() {
             });
 
             it("generateRuleText()", function(){
+                
+                var eug = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "eug",
+                    operand1: Ext.create("Teselagen.models.PartVO", { name: "partvo"}),
+                    compositionalOperator: "compOp",
+                    operand2: 123
+                });
+                var tmp = Ext.create("Teselagen.manager.EugeneRuleManager",{
+                    eugeneRules: [eug]
+                });
+                var str = tmp.generateRuleText(eug);
+                expect(str).toBe("Rule eug(partvo compOp 123);");
             });
 
             it("getRuleByName()", function(){
@@ -227,7 +240,11 @@ Ext.onReady(function() {
             });
         });
 
+        describe("Teselagen.manager.J5CollectionManager.js", function() {
 
+            it("()", function(){
+            });
+        });
 
         xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
 

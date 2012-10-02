@@ -1,7 +1,7 @@
 /**
  * @class Teselagen.models.J5Parameters
  * Class describing J5Parameters.
- * Creating a J5Parameters results in default values, regardless if parameters are included in 
+ * Creating a J5Parameters results in default values, regardless if parameters are included in
  * Ext.create("Teselagen.models.J5Parameters", {PARAMETERS}).
  * User must specify non-default values by creating the object and calling:
  *          j5param = Ext.create("Teselagen.models.J5Parameters");
@@ -204,6 +204,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         /*if (this.get("masterOligoNumberOfDigitsValue") === undefined) {
             this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
         }*/
+        //console.log(Teselagen.constants.Constants.self.GENBANK);
         this.setDefaultValues();
     },
 

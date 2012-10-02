@@ -59,14 +59,14 @@ Ext.define("Teselagen.models.J5Collection", {
     /**
      * Removes an item from Bin
      */
-     removeFromBin: function(bin) {
+    removeFromBin: function(bin) {
         Ext.Array.remove(this.get("binsVector"), bin);
         //this.set("binItemsVector", newBin);
-     },
+    },
 
-     binCount: function() {
+    binCount: function() {
         return this.get("binsVector").length;
-     }
+    }
 
 
 
