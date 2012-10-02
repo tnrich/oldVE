@@ -6,16 +6,99 @@
     },
     "codeClass": null,
     "userConfig": {
-        "models": [
-            "MyModel"
-        ],
+        "paths": null,
         "views": [
+            "AppViewport",
+            "FileImportWindow",
+            "SimulateDigestionWindow",
+            "RestrictionEnzymesManagerWindow"
             "DE",
             "MyWindow"
         ],
         "autoCreateViewport": true,
-        "name": "MyApp"
+        "name": "Vesa",
+        "controllers": [
+            "MainToolbarController",
+            "MainMenuController",
+            "VectorPanelController",
+            "AppTabController",
+            "ActionStackController",
+            "AppController",
+            "MainPanelController",
+            "PieController",
+            "RailController",
+            "SequenceController",
+            "RestrictionEnzymeController",
+            "AnnotatePanelController",
+            "SimulateDigestionController"
+        ]
     },
-    "id": "ExtBox1-ext-gen1734",
-    "designerId": "application"
+    "configAlternates": {
+        "paths": "array"
+    },
+    "id": "ExtBox1-ext-gen2524",
+    "designerId": "application",
+    "customConfigs": [
+        {
+            "group": "(Custom Properties)",
+            "name": "paths",
+            "type": "string"
+        }
+    ],
+    "cn": [
+        {
+            "type": "loader",
+            "reference": {
+                "name": "loader",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|userClassName": "Loader",
+                "enabled": true,
+                "paths": [
+                    "{Ext: '.','Ext.ux': '../extjs/examples/ux', Teselagen: './app/teselagen','Teselagen.bio':'../biojs/src/teselagen/bio'}"
+                ]
+            },
+            "designerId": "0feb16f1-ad5a-46e6-af2b-491d531d100b"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|userClassName": "errorHandler",
+                "fn": "errorHandler",
+                "designer|params": [
+                    "err"
+                ],
+                "implHandler": [
+                    "console.warn(err);",
+                    "return true;"
+                ]
+            },
+            "designerId": "123ffb4e-5dcc-4557-b340-b6da0dd68f5e"
+        },
+        {
+            "type": "fixedfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|userClassName": "launch",
+                "fn": "launch",
+                "implHandler": [
+                    " Ext.Error.notify = false; // prevent ie6 and ie7 popup",
+                    " Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error",
+                    ""
+                ]
+            },
+            "designerId": "2dc2a510-e9b6-4287-91f6-e9e4046dce1e"
+        }
+    ]
 }
