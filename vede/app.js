@@ -71,7 +71,7 @@ Ext.application({
 
         Ext.Ajax.cors = true; // Allow CORS
         Ext.Ajax.method = 'POST'; // Set POST as default Method
-        sessionData.baseURL = location.href.substring(0,location.href.lastIndexOf("/")+1) + '/api/';
+        sessionData.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + '/api/';
 
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
