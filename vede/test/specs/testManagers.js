@@ -195,13 +195,43 @@ Ext.onReady(function() {
                 console.log(Teselagen.models.EugeneRule.MORETHAN);
                 console.log(!(typeof(123) === "number"));
             });
+
+            it("getDefaultNamePattern()", function(){
+            });
+
+            it("addRule()", function(){
+            });
+
+            it("deleteItem()", function(){
+            });
+
+            it("deleteAllItems()", function(){
+            });
+
+            it("generateRuleText()", function(){
+            });
+
+            it("getRuleByName()", function(){
+            });
+
+            it("getRulesByPartVO()", function(){
+            });
+
+            it("getRulesInvolvingPartVO()", function(){
+            });
+
+            it("isUniqueRuleName()", function(){
+            });
+
+            it("()", function(){
+            });
         });
 
 
 
         xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
 
-            it("createSequenceFile()", function(){
+            it("()", function(){
             });
         });
 
