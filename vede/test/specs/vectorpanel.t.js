@@ -1,24 +1,12 @@
 /*global beforeEach, describe, expect, it, sandbox, setFixtures*/
 describe("VectorPanel test", function () {
-    var pieCmp, pieCmpAuto, railCmp, annotCmp, vecPanel, vePanel, annotPanel, pieCtr, railCtr, annotCtr, splitter;
+    var pieCmp, railCmp, annotCmp, vecPanel, vePanel, annotPanel, pieCtr, railCtr, annotCtr, splitter;
     var editPanel, dePanel, projPanel, viewport;
 //    var onResize;
     beforeEach(function() {
         setFixtures(sandbox());
         pieCmp = Ext.widget("draw", {
             width: 100,
-            items: [{
-                type: "circle",
-                x: 100,
-                y: 100,
-                radius: 50,
-                stroke: "black"
-            }]
-        });
-        pieCmpAuto = Ext.widget("draw", {
-            width: 100,
-            autoSize: true,
-            viewBox: false,
             items: [{
                 type: "circle",
                 x: 100,
@@ -38,20 +26,21 @@ describe("VectorPanel test", function () {
             }]
         });
         annotCmp = Ext.widget("draw", {
-            width: 100,
+//            width: 100,
+            viewBox: false,
             items: [{
                 type: "circle",
                 x: 100,
                 y: 100,
-                radius: 50,
+                radius: 100,
                 stroke: "blue"
             }]
         });
         pieCtr = Ext.widget("container", {
 //            width: 100,
-            layout: {
-                type: "fit"
-            }
+//            layout: {
+//                type: "fit"
+//            }
         });
         railCtr = Ext.widget("container", {
 //           width: 100,
@@ -64,6 +53,7 @@ describe("VectorPanel test", function () {
         vecPanel = Ext.widget("panel", {
             flex: 1,
             layout: "hbox",
+            autoScroll:true,
             items: [pieCtr, railCtr],
             listeners: {
                 resize: function() {
@@ -75,19 +65,16 @@ describe("VectorPanel test", function () {
         splitter = Ext.widget("splitter");
         annotPanel = Ext.widget("panel", {
             flex: 1,
-            layout: {
-                type: "fit"
-            },
+            autoScroll:true,
+            height: 150,
             items: [annotCtr]
         });
         vePanel = Ext.widget("panel", {
-            height: 400,
             layout: "hbox",
-            align: "stretch",
+//            align: "stretch",
             items: [vecPanel, splitter, annotPanel]
         });
         pieCtr.add(pieCmp);
-//        pieCtr.add(pieCmpAuto);
         railCtr.add(railCmp);
         annotCtr.add(annotCmp);
         dePanel = Ext.widget("panel", {
@@ -100,12 +87,12 @@ describe("VectorPanel test", function () {
         editPanel = Ext.widget("tabpanel", {
             items: [vePanel, dePanel],
             region: "center",
-            height: 400,
+//            height: 200,
             flex: 6
         });
         projPanel = Ext.widget("treepanel", {
             region: "west",
-            height: 400,
+//            height: 200,
             flex:1
         });
         viewport = Ext.widget("panel", {
@@ -117,6 +104,16 @@ describe("VectorPanel test", function () {
     });
     it("Sandbox exists", function () {
         expect(Ext.get("sandbox")).toBeTruthy();
+    });
+    it("Display only vePanel", function() {
+        setFixtures(sandbox());
+        vePanel = Ext.widget("panel", {
+//                height: 200,
+            layout: "hbox",
+//            align: "stretch",
+            items: [vecPanel, splitter, annotPanel],
+            renderTo: "sandbox"
+        });
     });
     it("Resize containers", function() {
         pieCtr.setSize(400,400);

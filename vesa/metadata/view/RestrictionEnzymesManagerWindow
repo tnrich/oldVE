@@ -1,0 +1,16 @@
+{
+    "type": "window",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "RestrictionEnzymesManagerWindow",
+        "height": 250,
+        "width": 400,
+        "title": "Restriction Enzyme Manager"
+    },
+    "id": "ExtBox1-ext-gen16854",
+    "designerId": "80fca5e0-4950-4656-b37a-ee0401bd3048"
+}

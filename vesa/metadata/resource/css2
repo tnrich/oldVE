@@ -1,0 +1,13 @@
+{
+    "type": "cssresource",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "url": "http://fonts.googleapis.com/css?family=Ubuntu+Mono"
+    },
+    "id": "ExtBox1-ext-gen45099",
+    "designerId": "aab9b1d2-bb4a-42da-9f89-7fd27ada40bf"
+}
