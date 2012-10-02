@@ -78,7 +78,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
           },
           failure: function(response, options) {
             Ext.get('splash-text').update(response.responseText);
-            if( response.status == 0 ) Ext.get('splash-text').update('Server offline.');
+            if( response.status == 0 ||  response.status == 503 ||  response.status == 404 ) Ext.get('splash-text').update('Server offline.');
           }
         });
       }
