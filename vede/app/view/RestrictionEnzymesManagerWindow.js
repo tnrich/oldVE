@@ -62,6 +62,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             xtype: 'container',
                                             id: 'leftDropdownContainer',
                                             flex: 0.15,
+                                            margin: 10,
                                             items: [
                                                 {
                                                     xtype: 'combobox',
@@ -82,6 +83,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             id: 'enzymeSearchField',
                                             fieldLabel: 'Label',
                                             hideLabel: true,
+                                            margin: 10,
                                             emptyText: 'Enzyme name',
                                             maxWidth: 150,
                                             enableKeyEvents: true
