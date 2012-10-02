@@ -18,8 +18,11 @@ Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
 //Ext.require("Teselagen.models.J5Parameters");
+Ext.require("Teselagen.models.EugeneRule");
 
 Ext.require("Teselagen.manager.SequenceFileManager");
+Ext.require("Teselagen.manager.PartManager");
+Ext.require("Teselagen.manager.EugeneRuleManager");
 
 Ext.onReady(function() {
 
@@ -122,7 +125,7 @@ Ext.onReady(function() {
                 });
                 expect(seqFileMan.getSequenceFiles().length).toBe(1);
                 seqFileMan.deleteItem(seq);
-                expect(seqFileMan.getSequenceFiles().length).toBe(0);                
+                expect(seqFileMan.getSequenceFiles().length).toBe(0);
             });
 
             it("deleteAllItems(): no filename", function(){
@@ -154,9 +157,47 @@ Ext.onReady(function() {
                 var tmp2 = seqFileMan.getItemByHash(Teselagen.bio.util.Sha256.hex_sha256("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n"));
                 expect(tmp1).toBe(tmp2);
             });
-
-
         });
+
+
+        describe("Teselagen.manager.PartManager.js", function() {
+
+            it("getPartVOs()", function(){
+            });
+
+            it("getPartById()", function(){
+            });
+
+            it("getParVOByName()", function(){
+            });
+
+            it("getParVOById()", function(){
+            });
+
+            it("deleteItem()", function(){
+            });
+
+            it("deleteAllItems()", function(){
+            });
+
+            it("createPart()", function(){
+            });
+
+            it("isUniquePartName()", function(){
+            });
+        });
+
+
+        describe("Teselagen.manager.EugeneRuleManager.js", function() {
+
+            it("getDefaultNamePattern()", function(){
+
+                console.log(Teselagen.models.EugeneRule.MORETHAN);
+                console.log(!(typeof(123) === "number"));
+            });
+        });
+
+
 
         xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
 
