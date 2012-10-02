@@ -31,10 +31,26 @@
 
 .x-btn,
 .x-btn-center,
-.x-btn-default-toolbar-small .x-btn-inner {
+.x-btn-default-toolbar-small .x-btn-inner,
+.x-btn-default-small .x-btn-inner {
 	font-family: 'Quicksand', sans-serif;
     font-size: 12px;
     color: #333;	
+}
+
+#headerPanel-body, #headerMain-body, #headerSub-body {
+	border: none;
+}
+
+#headerPanel-body, #headerMain-body, #headerSub-body {
+	background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+}
+
+#headerUserIcon {
+	border: none;
+	background: none;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 #projectTab1, #projectTab2, #projectTab3, #projectTab4 {
@@ -47,14 +63,14 @@
 	height: 32px;
 }
 
-#tabbar-1013-body {
+#tabbar-1012-body {
 	height:40px;
 }
 
-#tabbar-1013-strip {
+#tabbar-1012-strip {
 	top:37px;
 }
 
-#tabbar-1013-innerCt {
+#tabbar-1012-innerCt {
 	height:50px;
 }
