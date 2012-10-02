@@ -1,6 +1,8 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
+    requires: ["Teselagen.constants.Constants"],
+
     j5Window: null,
     j5ParamsWindow: null,
     automationParamsWindow: null,
