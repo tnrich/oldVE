@@ -5,6 +5,10 @@
         "type": "array"
     },
     "codeClass": null,
-    "id": "ExtBox1-ext-gen1742",
-    "designerId": "696f0eef-5a86-407a-8231-f56c4557616e"
+    "userConfig": {
+        "basePath": "../extjs/",
+        "debug": true
+    },
+    "id": "ExtBox1-ext-gen1818",
+    "designerId": "eb88d82d-8bf8-4192-9d48-d0d198c847e3"
 }

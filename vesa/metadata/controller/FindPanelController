@@ -1,0 +1,14 @@
+{
+    "type": "controller",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "FindPanelController",
+        "mixins": null
+    },
+    "id": "ExtBox1-ext-gen15106",
+    "designerId": "ed227e0b-50cf-4b8c-87db-4cb9f8abd78c"
+}
