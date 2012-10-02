@@ -31,36 +31,13 @@ var deviceEditorHTMLSource = iconsToolbarHTMLSource + partsToolbarHTMLSource+' \
 <table class="parts grid"></table> \
 </div>'+ modalsHTML;
 
-<<<<<<< HEAD:vede/app/view/DeviceEditor/DeviceEditor.js
-Ext.define('Vede.view.DeviceEditor.DeviceEditor', {
-=======
 
 Ext.define('Vede.view.de_legacy.DeviceEditor', {
->>>>>>> master:vede/app/view/de_legacy/DeviceEditor.js
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorLegacyPanel',
     title: 'Device Editor Legacy',
     html: deviceEditorHTMLSource,
-    require: ['Ext.window.MessageBox','Ext.tip.*'],
     afterRender: function(){
         window.setTimeout(function(){$( document ).trigger( 'loadDE' );},1000);
-<<<<<<< HEAD:vede/app/view/DeviceEditor/DeviceEditor.js
-        
-        /*
-        Ext.create("Ext.Window",{
-		    title : 'Development!',
-		    width : 500,                            
-		    height: 100,
-		    closable : true,                           
-		    html : 'This is a development version of teselagen VEDE. You will be logged in as a Guest user and a Guest sessionId for j5 testing. Teselagen Dev Team.',                         
-		    modal : true
-			}).show();
-		*/
-		//Ext.Msg.alert('Status', 'Changes saved successfully.');
-    },
-    renderTo: Ext.getBody()
-});
-=======
     }
 });
->>>>>>> master:vede/app/view/de_legacy/DeviceEditor.js

@@ -15,17 +15,7 @@
 
 Ext.define('Vede.view.AppViewport', {
     extend: 'Ext.container.Viewport',
-<<<<<<< HEAD
-    requires: [
-    'Vede.view.ProjectPanelView',
-    'Vede.view.DeviceEditor.DeviceEditor',
-    'Vede.view.DeviceEditor.Inspector',
-    'Vede.view.DeviceEditor.MainMenuBar',
-    'Vede.view.DeviceEditor.MainToolBar'
-    ],
-=======
 
->>>>>>> master
     layout: {
         type: 'border'
     },
@@ -47,22 +37,11 @@ Ext.define('Vede.view.AppViewport', {
         Ext.applyIf(me, {
             items: [
                 {
-<<<<<<< HEAD
-                    xtype: 'panel',
-                    xtype: 'ProjectPanel',
-                    id: 'ProjectPanel',
-                    collapsible: true,
-                    split : true,
-                    title: 'Project',
-                    flex: 1,
-                    region: 'west'
-=======
                     xtype: 'HeaderPanelView'
                 }
                 ,
                 {
                     xtype: 'ProjectPanelView'
->>>>>>> master
                 },
                 {
                     xtype: 'tabpanel',
@@ -71,120 +50,11 @@ Ext.define('Vede.view.AppViewport', {
                     items: [
                         {
                             xtype: 'panel',
-<<<<<<< HEAD
-                            id: 'DeviceEditorPanel',
-                            title: 'DeviceEditor',
-                            layout: {
-                                type: 'hbox',
-                                align: 'stretch'
-                            },
-                            items: [
-                                {
-                                    xtype: 'DeviceEditorPanel',
-                                    id: 'DeviceEditor',
-                                    title: 'DeviceEditor',
-                                    flex : 1,
-                                    layout: {
-                                        type: 'fit'
-                                    }
-                                },
-                                {
-                                    xtype: 'DeviceEditorInspectorPanel',
-                                    width: '320px',
-                                    title: 'Inspector',
-                                    layout: {
-                                        type: 'fit'
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'panel',
-                            id: 'VectorEditorPanel',
-                            title: 'VectorEditor',
-                            layout: {
-                                type: 'hbox',
-                                align: 'stretch'
-                            },
-                            items: [
-                                {
-                                    xtype: 'panel',
-                                    id: 'VectorPanel',
-                                    layout: {
-                                        type: 'fit'
-                                    },
-                                    flex: 1,
-                                    region: 'center',
-                                    collapsible: true,
-                                    collapseDirection: 'left',
-                                    items: [
-                                        {
-                                            xtype: 'container',
-                                            id: 'PieContainer',
-                                            //autoScroll: true,
-                                            layout: {
-                                                type: 'fit'
-                                                //manageOverflow: 1
-                                            }
-                                        },
-                                        {
-                                            xtype: 'container',
-                                            id: 'RailContainer',
-                                            layout: {
-                                                type: 'fit'
-                                            }
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'splitter',
-                                    collapseTarget: 'prev'
-                                },
-                                {
-                                    xtype: 'panel',
-                                    id: 'AnnotatePanel',
-                                    layout: {
-                                        type: 'fit'
-                                    },
-                                    autoScroll: true,
-                                    collapsible: true,
-                                    collapseDirection: 'right',
-                                    flex: 1,
-                                    items: [
-                                        {
-                                            xtype: 'container',
-                                            id: 'AnnotateContainer',
-                                            overflowY: 'scroll',
-                                            layout: {
-                                                type: 'fit'
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    xtype: 'panel',
-                    height: 75,
-                    id: 'MainMenuPanel',
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    region: 'north',
-                    items: [
-                        {
-                            xtype: 'DeviceEditorMainMenuBar',
-                            id: 'DeviceEditorMainMenuBar'
-=======
                             title: 'Dashboard',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'DashboardTab'
                             }
->>>>>>> master
                         },
                         {
                             xtype: 'VectorEditorPanel'
