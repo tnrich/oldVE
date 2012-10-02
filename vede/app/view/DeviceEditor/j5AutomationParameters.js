@@ -6,6 +6,8 @@ Ext.define('Vede.view.DeviceEditor.j5AutomationParameters', {
     width: 490,
     title: 'Downstream Automation Parameters',
     resizable: false,
+    draggable: false,
+    modal: true,
 
     initComponent: function() {
         var me = this;
