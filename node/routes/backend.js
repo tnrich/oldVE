@@ -130,7 +130,7 @@ app.all('/login', allowCrossDomain, function(req, res){
 
         var crypto = require('crypto');
 
-        var hash = crypto.createHash('md5').update('rodrigo#rocks').digest("hex");
+        var hash = crypto.createHash('md5').update(password).digest("hex");
 
         var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password="'+hash+'" order by j5sessions.id desc limit 1;';
 
