@@ -83,43 +83,13 @@ function loadResults(record)
             win.show();    
 };
 
-var store = Ext.create('Ext.data.TreeStore', {
-    autoLoad: false,
-    autoAbort: true,
-    proxy: {
-        type: 'ajax',
-        url: '/api/getTree',
-        extraParams: {
-            mode: 'getTree'
-        },
-        actionMethods: 
-        {
-            read: 'POST'
-        }
-    },
-    root: {
-        text: 'Tree',
-        expanded: true,
-        id: 'src'
-    },
-    require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
-    listeners: {
-        'beforeload': function(store, options) {
-            if(sessionData.data) store.proxy.extraParams.sessionId = sessionData.data.sessionId;
-            //else Ext.Ajax.abort(store.proxy.activeRequest.load);
-        }
-    }
-});
 
 Ext.define('Vede.view.common.ProjectPanelView', {
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.ProjectPanelView',
-
-
-				
                     region: 'west',
                     split: true,
-                    id: 'projectPanel',
+                    id: 'ProjectPanel',
                     maxWidth: 230,
                     minWidth: 228,
                     width: 228,
@@ -152,8 +122,9 @@ Ext.define('Vede.view.common.ProjectPanelView', {
                                     xtype: 'treepanel',
                                     id: 'projectDesignPanel',
                                     title: 'Your Designs',
+                                    rootVisible: false,
+                                    store: 'ProjectDesignStore',
                                     viewConfig: {
-
                                     }
                                 }
                             ]
