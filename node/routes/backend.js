@@ -136,7 +136,8 @@ app.all('/login', allowCrossDomain, function(req, res){
 
         app.mysql.query(query, function(err, rows, fields) {
           if (err) res.json({'msg':'Invalid session'},405);
-          getOrCreateUser(rows[0].username)
+          if (rows[0]) getOrCreateUser(rows[0].username)
+          else return res.json({'msg':'Username or password invalid'},405);
         });
       }
 
