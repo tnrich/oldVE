@@ -1,4 +1,4 @@
-/**
+/** HAS NOT BEEN FULLY TESTED YET
  * @class Teselagen.manager.EugeneRuleManager
  * Class describing a EugeneRuleManager.
  * EugeneRuleManager holds an array of EugeneRules, for a given design project.

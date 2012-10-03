@@ -240,10 +240,47 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Teselagen.manager.J5CollectionManager.js", function() {
+        describe("Teselagen.manager.J5Manager.js", function() {
+
+            it("addItem()", function(){
+            });
+
+            it("createNewCollection()", function(){
+            });
+
+            it("deleteItem()", function(){
+            });
+
+            it("isInCollection()", function(){
+            });
+
+            it("isCircular()", function(){
+            });
+
+            it("addBin()", function(){
+            });
+
+            it("deleteBin()", function(){
+            });
+
+            it("getBinIndex()", function(){
+            });
+
+            it("addToBin()", function(){
+            });
+
+            it("removeFromBin()", function(){
+            });
+
+            it("getBinAssignment()", function(){
+            });
 
             it("()", function(){
             });
+
+            it("()", function(){
+            });
+
         });
 
         xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
