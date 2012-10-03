@@ -131,7 +131,7 @@ app.all('/login', allowCrossDomain, function(req, res){
         getOrCreateUser(username);
       }
 
-      if(username && password)
+      if(username && password && app.security)
       {
 
         var crypto = require('crypto');
