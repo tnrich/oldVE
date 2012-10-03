@@ -32,6 +32,7 @@ Ext.application({
         'SequenceController',
         'VectorPanelController',
         'SimulateDigestionController',
+        'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
         'DeviceEditor.DeviceEditorPanelController'
