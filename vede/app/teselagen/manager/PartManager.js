@@ -1,4 +1,4 @@
-/**
+/** HAS NOT BEEN FULLY TESTED YET
  * @class Teselagen.manager.PartManager
  * Class describing a PartManager.
  * PartManager holds an array of Parts, for a given design project.

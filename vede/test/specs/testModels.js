@@ -233,7 +233,18 @@ Ext.onReady(function() {
 
                 param.set("masterOligoNumberOfDigitsValue", 1);
                 expect(param.get("masterOligoNumberOfDigitsValue")).toBe(1);
+            });
 
+            it("createParameterString()", function(){
+                var param   = Ext.create("Teselagen.models.J5Parameters");
+                var parStr  = param.createJ5ParametersString("circular");
+
+                console.log(parStr);
+
+                var url  = "/vede/test/data/j5input/j5_parameters.csv";
+                var txt  = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+
+                console.log(txt);
             });
         });
 

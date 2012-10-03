@@ -1,4 +1,4 @@
-/**
+/** HAS NOT BEEN FULLY TESTED YET
  * @class Teselagen.manager.EugeneRuleManager
  * Class describing a EugeneRuleManager.
  * EugeneRuleManager holds an array of EugeneRules, for a given design project.
@@ -33,7 +33,14 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
     constructor: function(inData) {
         this.Sha256         = Teselagen.bio.util.Sha256;
         this.Constants      = Teselagen.constants.Constants;
-        this.eugeneRules    = inData.eugeneRules || [];
+        this.EugeneRule     = Teselagen.models.EugeneRule;
+        //console.log(inData);
+
+        if (inData !== undefined && inData.eugeneRules !== undefined) {
+            this.eugeneRules    = inData.eugeneRules;
+        } else {
+            this.EugeneRules    = [];
+        }
         //console.log(inData.sequenceFiles);
     },
 
@@ -86,14 +93,14 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
             });
         }
 
-        if (pCompositionalOperator === Teselagen.models.EugeneRule.MORETHAN) {
+        if (pCompositionalOperator === this.EugeneRule.MORETHAN) {
 
             if (typeof(pOperand2) !== "number") {
                 throw Ext.create("Teselagen.bio.BioException", {
                     message: "Invalid operand 2. Must be a number if using operator NOTMORETHAN."
                 });
             }
-        } else if (pCompositionalOperator === Teselagen.models.EugeneRule.AFTER || pCompositionalOperator === Teselagen.models.EugeneRule.BEFORE || pCompositionalOperator === Teselagen.models.EugeneRule.NEXTTO) {
+        } else if (pCompositionalOperator === this.EugeneRule.AFTER || pCompositionalOperator === this.EugeneRule.BEFORE || pCompositionalOperator === this.EugeneRule.NEXTTO) {
             if (Ext.getClassName(operand2) !== "Teselagen.models.PartVO") {
                 throw Ext.create("Teselagen.bio.BioException", {
                     message: "Invalid or missing operand 2."
@@ -152,7 +159,32 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
      * @returns {String} ruleText
      */
     generateRuleText: function(pRule) {
+        var ruleText = ["Rule " , pRule.get("name") , "(" ];
 
+        if (pRule.get("negationOperator")) {
+            ruleText.push("NOT ");
+        }
+
+        if ( pRule.get("operand1") !== null) {
+            ruleText.push( pRule.get("operand1").get("name") );
+            ruleText.push( " " );
+        }
+        ruleText.push( pRule.get("compositionalOperator") );
+        ruleText.push( " " );
+
+        if (typeof(pRule.get("operand2")) === "number") {
+            ruleText.push( pRule.get("operand2").toString());
+        } else if ( Ext.getClassName(pRule.get("operand2")) === "Teselagen.models.PartVO") {
+            ruleText.push( pRule.get("name"));
+        } else {
+            /*throw Ext.create("Teselagen.bio.BioException", {
+                message: "generateRuleText(): Cannot generate rule. Operand2 must be a Number or a PartVO."
+            });*/
+        }
+
+        ruleText.push(");");
+
+        return ruleText.join("");
     },
 
     /**
@@ -160,23 +192,58 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
      * @returns {Teselagen.models.EugeneRule} eugeneRule
      */
     getRuleByName: function(pName) {
-
+        for (var i = 0; i < this.eugeneRules.length; i++) {
+            if (this.eugeneRules[i].get("name") === pName) {
+                return this.eugeneRules[i];
+            }
+        }
+        return null;
     },
 
     /**
+     * Returns the eugeneRules that apply to the given PartVO.
+     * This includes all rules where the PartVO is the first operand,
+     * as well as all AFTER, NOT AFTER, BEFORE, NOT BEFORE, WITH, NOT WITH,
+     * NOT THEN, and NOT NEXTTO rules where the PartVO is the second operand
+     * (since the listed rules are symmetric).
+     *
      * @param {Teselagen.models.PartVO} pPartVO
      * @return {Teselagen.models.EugeneRule[]} partRules
      */
     getRulesByPartVO: function(pPartVO) {
+        var partRules = [];
 
+        for (var i = 0; i < this.eugeneRules.length; i++) {
+            if (this.eugeneRules[i] === pPartVO) {
+                partRules.push(this.eugeneRules[i]);
+            } else if (this.eugeneRules[i].get("operand2") === pPartVO) {
+
+                var op = this.eugeneRules[i].get("operand2");
+                if ( op === this.EugeneRule.AFTER || op === this.EugeneRule.BEFORE || op === this.EugeneRule.WITH ) {
+                    partRules.push(this.eugeneRules[i]);
+                } else if ( op === this.EugeneRule.THEN || op === this.EugeneRule.NEXTTO || this.eugeneRules[i].get("negationOperator") === true) {
+                    partRules.push(this.eugeneRules[i]);
+                }
+            }
+        }
+        return partRules;
     },
 
     /**
+     * Returns the eugeneRules that involve the PartVO in either operand.
+     *
      * @param {Teselagen.models.PartVO} pPartVO
      * @return {Teselagen.models.EugeneRule[]} partRules
      */
     getRulesInvolvingPartVO: function(pPartVO) {
+        var rulesInvolvingPartVO = [];
 
+        for (var i = 0; i < this.eugeneRules.length; i++) {
+            if (this.eugeneRules[i].get("operand1") === pPartVO || this.eugeneRules[i].get("operand2") === pPartVO) {
+                rulesInvolvingPartVO.push(this.eugeneRules[i]);
+            }
+        }
+        return rulesInvolvingPartVO;
     },
 
     /**
@@ -184,7 +251,12 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
      * @return {Boolean}
      */
     isUniqueRuleName: function(pName) {
-
+        for (var i = 0; i < this.eugeneRules.length; i++) {
+            if (eugeneRules[i].get("name") === pName) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
