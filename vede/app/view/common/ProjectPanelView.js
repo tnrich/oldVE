@@ -104,7 +104,8 @@ var store = Ext.create('Ext.data.TreeStore', {
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
     listeners: {
         'beforeload': function(store, options) {
-            if(sessionData.data) store.proxy.extraParams.sessionId=sessionData.data.sessionId;
+            if(sessionData.data) store.proxy.extraParams.sessionId = sessionData.data.sessionId;
+            else Ext.Ajax.abort(store.proxy.activeRequest.load);
         }
     }
 });
