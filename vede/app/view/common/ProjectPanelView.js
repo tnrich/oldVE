@@ -85,6 +85,7 @@ function loadResults(record)
 
 var store = Ext.create('Ext.data.TreeStore', {
     autoLoad: false,
+    autoAbort: true,
     proxy: {
         type: 'ajax',
         url: '/api/getTree',
@@ -105,7 +106,7 @@ var store = Ext.create('Ext.data.TreeStore', {
     listeners: {
         'beforeload': function(store, options) {
             if(sessionData.data) store.proxy.extraParams.sessionId = sessionData.data.sessionId;
-            else Ext.Ajax.abort(store.proxy.activeRequest.load);
+            //else Ext.Ajax.abort(store.proxy.activeRequest.load);
         }
     }
 });
