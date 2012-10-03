@@ -56,11 +56,21 @@
 #projectTab1, #projectTab2, #projectTab3, #projectTab4 {
 	height: 36px;
 	width: 54px;
+	border: none;
+	background: none;
+	box-shadow: none;
+	border-radius: none;
 }
+
+
 
 .projectBarButton {
 	width: 32px;
 	height: 32px;
+}
+
+#tabbar-1012 { 
+	background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
 }
 
 #tabbar-1012-body {
