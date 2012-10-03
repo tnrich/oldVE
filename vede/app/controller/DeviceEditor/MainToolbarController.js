@@ -26,7 +26,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
     init: function() {
         this.control({
-            "#j5Btn": {
+            "#j5_init_Btn": {
                 click: this.onOpenj5Click
             },
             "#saveDesignBtn": {

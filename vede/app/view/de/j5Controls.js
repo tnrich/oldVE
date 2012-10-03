@@ -198,7 +198,7 @@ Ext.define('Vede.view.de.j5Controls', {
                                     xtype: 'button',
                                     flex: 1,
                                     height: 23,
-                                    id: 'runj5Btn',
+                                    id: 'runJ5Btn',
                                     maxHeight: 23,
                                     maxWidth: 60,
                                     minHeight: 23,

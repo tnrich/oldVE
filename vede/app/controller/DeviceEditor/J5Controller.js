@@ -27,11 +27,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     oligosListText: null,
 
     onOpenJ5: function() {
-        this.j5Window = Ext.create("Vede.view.DeviceEditor.j5Controls").show();
+        this.j5Window = Ext.create("Vede.view.de.j5Controls").show();
     },
 
     onEditJ5ParamsBtnClick: function() {
-        this.j5ParamsWindow = Ext.create("Vede.view.DeviceEditor.j5Parameters").show();
+        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
 
         this.populateJ5ParametersDialog();
     },
@@ -152,7 +152,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onCustomizeAutomationParamsBtnClick: function() {
         this.automationParamsWindow = 
-            Ext.create("Vede.view.DeviceEditor.j5AutomationParameters").show();
+            Ext.create("Vede.view.de.j5AutomationParameters").show();
         this.populateAutomationParametersDialog();
     },
 

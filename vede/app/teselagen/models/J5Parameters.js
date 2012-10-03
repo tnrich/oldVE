@@ -136,12 +136,12 @@ Ext.define("Teselagen.models.J5Parameters", {
         MMT_Default:            45,
         MSC_Default:            0.05,
         MOC_Default:            0.00000025,
-        OSF_Default:            Teselagen.constants.Constants.self.GENBANK,
+        OSF_Default:            "Genbank",//Teselagen.constants.Constants.self.GENBANK,
 
         SPP_Default:            true,
         
         //combobox choices data providers
-        outputSequenceFormatOptions:   [Teselagen.constants.Constants.self.GENBANK, Teselagen.constants.Constants.self.FASTA, Teselagen.constants.Constants.self.JBEI_SEQ, Teselagen.constants.Constants.self.SBOL_XML],
+        //outputSequenceFormatOptions:   [Teselagen.constants.Constants.self.GENBANK, Teselagen.constants.Constants.self.FASTA, Teselagen.constants.Constants.self.JBEI_SEQ, Teselagen.constants.Constants.self.SBOL_XML],
         booleanOptions:         [false, true]
     },
 
