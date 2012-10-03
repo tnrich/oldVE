@@ -24,6 +24,7 @@ Ext.define('Vede.controller.AuthWindowController', {
         Ext.getCmp('AuthWindow').destroy();
     },
     init: function() {
+        var that = this;
         this.control({
             "#auth-login-btn": {
                 click: this.onAuthLoginClick
@@ -33,6 +34,16 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-nosession-btn": {
                 click: this.onNoSessionClick
+            },
+            "#auth-username-field": { 
+                specialkey: function(field, e) { 
+                if(e.getKey() == e.ENTER) that.onAuthLoginClick();
+                }
+            },
+            "#auth-password-field": { 
+                specialkey: function(field, e) { 
+                if(e.getKey() == e.ENTER) that.onAuthLoginClick();
+                }
             }
     	});
     }

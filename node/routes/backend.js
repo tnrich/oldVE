@@ -122,8 +122,14 @@ app.all('/login', allowCrossDomain, function(req, res){
       var username = req.body.username;
       var password = req.body.password;
 
-      if(!sessionId && (!username || !password) ) return res.json({'msg':'Credentials not sended'},405);
+      if(!sessionId && (!username || !password) && app.security) return res.json({'msg':'Credentials not sended'},405);
       if(sessionId == '000') return res.json({'firstTime':true,'msg':'Welcome back Guest !'});
+
+      if(username && password!=undefined && !app.security)
+      {
+        console.log('got here');
+        getOrCreateUser(username);
+      }
 
       if(username && password)
       {
