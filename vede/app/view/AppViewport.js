@@ -23,12 +23,9 @@ Ext.define('Vede.view.AppViewport', {
     requires: [
         'Vede.view.common.HeaderPanelView',
         'Vede.view.common.ProjectPanelView',
-        'Vede.view.ve.VectorEditor',
-        'Vede.view.de_legacy.DeviceEditor',
         'Vede.view.de.DeviceEditor',
-        'Vede.view.de.Inspector',
-        'Vede.view.de.MainMenuBar',
-        'Vede.view.de.MainToolBar'
+        'Vede.view.de_legacy.DeviceEditor',
+        'Vede.view.ve.VectorEditorPanel'
     ],
 
     initComponent: function() {
@@ -38,8 +35,7 @@ Ext.define('Vede.view.AppViewport', {
             items: [
                 {
                     xtype: 'HeaderPanelView'
-                }
-                ,
+                },
                 {
                     xtype: 'ProjectPanelView'
                 },

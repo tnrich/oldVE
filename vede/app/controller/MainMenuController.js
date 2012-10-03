@@ -196,6 +196,17 @@ Ext.define('Vede.controller.MainMenuController', {
             linearMenuItem.setChecked(false, true);
         }
     },
+    onSaveToRegistryButtonClick: function(){
+        Ext.create("Vede.view.SaveToRegistryWindow").show();
+    },
+
+    onSaveToRegistryConfirmationButtonClick: function(button, e, options) {
+        var form = button.up('form').getForm();
+        var name = form.findField('Name');
+        console.log(name.value);
+        var gbMng = Teselagen.bio.parsers.GenbankManager;
+        //console.log(gbMng.);
+    },
 
     init: function() {
         this.control({
@@ -267,6 +278,12 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
+            },
+            "#exportBtn": {
+                click: this.onSaveToRegistryButtonClick
+            },
+            "#saveToRegistryConfirmation": {
+                click: this.onSaveToRegistryConfirmationButtonClick
             },
         });
 

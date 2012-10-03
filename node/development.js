@@ -3,7 +3,7 @@ module.exports = function(app){
 var development = this;
 
 app.testing = {};
-app.testing.enabled = false;
+app.testing.enabled = true;
 app.testing.sessionId = "a99be7833401c5b70de90060f3c4c82e";
 
 app.development = {};
