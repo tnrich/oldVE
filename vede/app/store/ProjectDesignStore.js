@@ -4,7 +4,7 @@ Ext.define("Vede.store.ProjectDesignStore", {
   	autoLoad: false,
     proxy: {
         type: 'ajax',
-        url: '/api/getTree',
+        url: 'getTree',
         extraParams: {
             mode: 'getTree'
         },
@@ -18,7 +18,8 @@ Ext.define("Vede.store.ProjectDesignStore", {
         visible: false,
     },
     listeners: {
-        'beforeload': function(store, options) {
+        'beforeload': function(store, operation, options) {
+            store.getProxy().url = sessionData.baseURL + 'getTree';
             return sessionData.data? true : false;
         }
     }
