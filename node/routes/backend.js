@@ -64,28 +64,7 @@ function restrict(req, res, next) {
   }
 };
 
-//CORS middleware
-var allowCrossDomain = function(req, res, next) {
-console.log(req.method);
-if (req.method === 'OPTIONS') {
-      var headers = {};
-      // IE8 does not allow domains to be specified, just the *
-      // headers["Access-Control-Allow-Origin"] = req.headers.origin;
-      headers["Access-Control-Allow-Origin"] = "*";
-      headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
-      headers["Access-Control-Allow-Credentials"] = false;
-      headers["Access-Control-Max-Age"] = '86400'; // 24 hours
-      headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
-      res.writeHead(200, headers);
-      res.end();
-} else {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "X-Requested-With");
-      next();
-  }
-};
-
-app.all('/login', allowCrossDomain, function(req, res){
+app.all('/login', function(req, res){
 
       
       function getOrCreateUser(username) {    
@@ -227,7 +206,7 @@ app.all('/getUserModels',restrict,function(req,res){
   res.json(models);
 });
 
-app.post('/getTree',allowCrossDomain,restrict,function(req,res){
+app.post('/getTree',restrict,function(req,res){
 
   var examplesTree = [];
 
