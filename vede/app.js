@@ -36,6 +36,9 @@ Ext.Loader.setConfig({
 Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
+    stores: [
+        'ProjectDesignStore'
+    ],
     views: [
         'AppViewport',
         'FileImportWindow',
@@ -60,7 +63,8 @@ Ext.application({
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
-        'DeviceEditor.DeviceEditorPanelController'
+        'DeviceEditor.DeviceEditorPanelController',
+        'Vede.controller.AuthEventDispatcherController'
     ],
     errorHandler: function(err) {
         console.warn(err);
@@ -100,9 +104,7 @@ Ext.application({
             });
         });
 
-        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){
-            task.delay(1500);
-        });
+        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});
 
     }
 });

@@ -192,9 +192,9 @@ Ext.onReady(function() {
 
             it("getDefaultNamePattern()", function(){
 
-                console.log(Teselagen.models.EugeneRule.MORETHAN);
-                console.log((typeof(123) === "number"));
-                console.log(Teselagen.constants.Constants.self.GENBANK);
+                //console.log(Teselagen.models.EugeneRule.MORETHAN);
+                //console.log((typeof(123) === "number"));
+                //console.log(Teselagen.constants.Constants.self.GENBANK);
             });
 
             it("getDefaultNamePattern()", function(){

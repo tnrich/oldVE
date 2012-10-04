@@ -249,11 +249,8 @@ app.post('/getTree',restrict,function(req,res){
 
   var tree = {
         children : [
-            { text: "Models", expanded: true , children: [
                 { text: "My Models", expanded: true, children: models },
                 { text: "Examples", expanded: true, children: examplesTree }
-            ]},
-            { text: "Protocols", expanded: true, children: protocols }
         ]
   };
 
