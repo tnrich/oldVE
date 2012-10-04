@@ -469,13 +469,14 @@ Ext.define('Vede.view.de.DeviceEditor', {
                                                         type: 'vbox'
                                                     },
                                                     title: 'Part Info',
+                                                    preventHeader: true,
                                                     items: [
                                                         {
                                                             xtype: 'form',
                                                             flex: 1,
-                                                            height: 160,
+                                                            height: 200,
                                                             id: 'PartPropertiesForm',
-                                                            maxHeight: 170,
+                                                            maxHeight: 200,
                                                             width: 287,
                                                             layout: {
                                                                 align: 'stretch',
@@ -486,33 +487,38 @@ Ext.define('Vede.view.de.DeviceEditor', {
                                                             items: [
                                                                 {
                                                                     xtype: 'textfield',
+                                                                    height:25,
                                                                     id: 'partNameField',
-                                                                    fieldLabel: 'Part Name'
+                                                                    fieldLabel: 'Part Name',
+                                                                    labelWidth: 150
                                                                 },
                                                                 {
                                                                     xtype: 'displayfield',
-                                                                    height: 20,
+                                                                    height: 25,
                                                                     id: 'partSourceField',
-                                                                    fieldLabel: 'Part Source'
+                                                                    fieldLabel: 'Part Source',
+                                                                    labelWidth: 150
                                                                 },
                                                                 {
                                                                     xtype: 'displayfield',
-                                                                    height: 20,
+                                                                    height: 25,
                                                                     id: 'reverseComplementField',
                                                                     fieldLabel: 'Reverse Complement',
-                                                                    labelWidth: 120
+                                                                    labelWidth: 150
                                                                 },
                                                                 {
                                                                     xtype: 'displayfield',
-                                                                    height: 20,
+                                                                    height: 25,
                                                                     id: 'startBPField',
-                                                                    fieldLabel: 'Start BP'
+                                                                    fieldLabel: 'Start BP',
+                                                                    labelWidth: 150
                                                                 },
                                                                 {
                                                                     xtype: 'displayfield',
-                                                                    height: 20,
+                                                                    height: 25,
                                                                     id: 'stopBPField',
-                                                                    fieldLabel: 'End BP'
+                                                                    fieldLabel: 'End BP',
+                                                                    labelWidth: 150
                                                                 }
                                                             ]
                                                         },
