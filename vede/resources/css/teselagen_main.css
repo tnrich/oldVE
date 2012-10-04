@@ -75,18 +75,14 @@
 	height: 32px;
 }
 
-#tabbar-1012 { 
+#projectPanel .x-tab-bar { 
 	background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
 }
 
-#tabbar-1012-body {
+#projectPanel .x-tab-bar-body {
 	height:40px;
 }
 
-#tabbar-1012-strip {
+#projectPanel .x-tab-bar-strip {
 	top:37px;
-}
-
-#tabbar-1012-innerCt {
-	height:50px;
 }
