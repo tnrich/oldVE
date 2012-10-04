@@ -32,7 +32,8 @@
 .x-btn,
 .x-btn-center,
 .x-btn-default-toolbar-small .x-btn-inner,
-.x-btn-default-small .x-btn-inner {
+.x-btn-default-small .x-btn-inner,
+.x-grid-row .x-grid-cell {
 	font-family: 'Quicksand', sans-serif;
     font-size: 12px;
     color: #333;	
@@ -68,7 +69,12 @@
 	border-radius: none;
 }
 
+#DeviceEditorToolPanel .x-toolbar-default {
+}
 
+#DeviceEditorPartsBar-innerCt {
+	background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
+}
 
 .projectBarButton {
 	width: 32px;
