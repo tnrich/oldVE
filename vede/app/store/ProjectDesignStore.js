@@ -4,7 +4,7 @@ Ext.define("Vede.store.ProjectDesignStore", {
   	autoLoad: false,
     proxy: {
         type: 'ajax',
-        url: '/api/getTree',
+        url: sessionData.baseURL + 'api/getTree',
         extraParams: {
             mode: 'getTree'
         },
