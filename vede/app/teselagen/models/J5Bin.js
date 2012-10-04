@@ -55,34 +55,69 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     init: function() {
-        this.set("iconID", this.self.GENERIC);
+        if (this.get("iconID") === "") {
+            this.set("iconID", this.self.GENERIC);
+        }
         //if (this.get("binItemsVector") === null) {
         //    this.set("binItemsVector", []);
         //}
     },
 
     /**
-     * Pushes a part onto the binItemsVector.
-     * Not sure if these are necessary
-     * Original uses splice, but don't we want to insert it, not replace an item?
+     * @returns {int} count Number of Parts in binItemsVector
      */
-    addToBin: function(part) { //, position) {
-        //var newBin = Ext.Array.insert(this.get("binItemsVector"), 0, part);
-        //console.log(this.get("binItemsVector"));
-        Ext.Array.include(this.get("binItemsVector"), part);
-        //Ext.Array.insert(this.get("binItemsVector"), position, part);
-        //console.log(this.get("binItemsVector"));
+    binCount: function() {
+        return this.get("binItemsVector").length;
     },
 
     /**
-     * Removes an item from Bin
+     * Adds a Part into the binItemsVector.
+     * @param {Teselagen.models.Part} pPart
+     * @param {int} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
+     * @returns {Boolean} added True if added, false if not.
      */
-     removeFromBin: function(part) {
+    addToBin: function(pPart, pPosition) {
+        var added = false;
+
+        var cnt = this.binCount();
+
+        if (pPosition >= 0 && pPosition < cnt) {
+            //Ext.Array.insert(this.get("binItemsVector"), pPosition, pPart);
+            this.get("binItemsVector").splice(pPosition, 0, pPart);
+        } else {
+            //Ext.Array.include(this.get("binItemsVector"), pPart);
+            this.get("binItemsVector").push(pPart);
+        }
+
+        var newCnt  = this.binCount();
+        if (newCnt > cnt) {
+            added = true;
+        }
+        return added;
+    },
+
+    /**
+     * Removes a Part from the binItemsVector.
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Boolean} removed True if removed, false if not.
+     */
+    removeFromBin: function(pPart) {
+        var removed = false;
+
+        var cnt = this.binCount();
+        Ext.Array.remove(this.get("binItemsVector"), pPart);
+
         //console.log(this.get("binItemsVector"));
         //console.log(part.get("id"));
-        var newBin = Ext.Array.remove(this.get("binItemsVector"), part);
+        //var newBin = Ext.Array.remove(this.get("binItemsVector"), pPart);
         //this.set("binItemsVector", newBin);
-     }
+
+        var newCnt  = this.binCount();
+        if (newCnt < cnt) {
+            addd = true;
+        }
+        return removed;
+    }
 
 
 });
