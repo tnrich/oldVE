@@ -227,7 +227,7 @@ app.all('/getUserModels',restrict,function(req,res){
   res.json(models);
 });
 
-app.post('/getTree',restrict,function(req,res){
+app.post('/getTree',allowCrossDomain,restrict,function(req,res){
 
   var examplesTree = [];
 
