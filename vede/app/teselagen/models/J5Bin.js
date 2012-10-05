@@ -71,6 +71,40 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Boolean} partIsPresent True is in this J5Bin, False if not.
+     */
+    isPartInBin: function(pPart) {
+        if (this.get("binItemsVector") === null || this.get("binItemsVector").length === 0) {
+            return false;
+        }
+
+        for (var i = 0; i < this.get("binItemsVector").length; i++) {
+            if (this.get("binItemsVector")[i] === pPart) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    /**
+     * @param {Teselagen.models.Part} pPart
+     * @returns {int} index Index of Part in Bin. -1 if not present.
+     */
+    indexOfPartInBin: function(pPart) {
+        var index = -1;
+        if (this.get("binItemsVector") === null || this.get("binItemsVector").length === 0) {
+            return index;
+        }
+        for (var i = 0; i < this.get("binItemsVector").length; i++) {
+            if (this.get("binItemsVector")[i] === pPart) {
+                index = i;
+            }
+        }
+        return index;
+    },
+
+    /**
      * Adds a Part into the binItemsVector.
      * @param {Teselagen.models.Part} pPart
      * @param {int} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
@@ -114,7 +148,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
         var newCnt  = this.binCount();
         if (newCnt < cnt) {
-            addd = true;
+            removed = true;
         }
         return removed;
     }

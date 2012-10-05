@@ -159,6 +159,7 @@ Ext.onReady(function() {
             });
         });
 
+//LAST HERE  DW: 10.4.2012
 
         describe("Teselagen.manager.PartManager.js", function() {
 
@@ -242,40 +243,13 @@ Ext.onReady(function() {
 
         describe("Teselagen.manager.J5Manager.js", function() {
 
-            it("addItem()", function(){
-            });
-
             it("createNewCollection()", function(){
             });
 
+            it("addItem()", function(){
+            });
+
             it("deleteItem()", function(){
-            });
-
-            it("isInCollection()", function(){
-            });
-
-            it("isCircular()", function(){
-            });
-
-            it("addBin()", function(){
-            });
-
-            it("deleteBin()", function(){
-            });
-
-            it("getBinIndex()", function(){
-            });
-
-            it("addToBin()", function(){
-            });
-
-            it("removeFromBin()", function(){
-            });
-
-            it("getBinAssignment()", function(){
-            });
-
-            it("()", function(){
             });
 
             it("()", function(){
