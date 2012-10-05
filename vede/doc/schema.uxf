@@ -234,7 +234,7 @@ m2=*</panel_attributes>
       <w>120</w>
       <h>90</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;-
 m2=*</panel_attributes>
     <additional_attributes>30;70;100;30</additional_attributes>
   </element>
@@ -428,7 +428,7 @@ r2=*</panel_attributes>
       <w>100</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>J5Results</panel_attributes>
+    <panel_attributes>J5Result</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -463,5 +463,17 @@ r2=*</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>30;30;100;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>320</x>
+      <y>160</y>
+      <w>110</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m2=*</panel_attributes>
+    <additional_attributes>30;30;90;80</additional_attributes>
   </element>
 </diagram>
