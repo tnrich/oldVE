@@ -41,8 +41,8 @@ Ext.define("Teselagen.models.Part", {
         }
     ],
 
-    belongsTo: [
-        "Teselagen.models.J5Bin"
+    associations: [
+        {type: "belongsTo", model: "Teselagen.models.J5Bin"}
     ],
 
     /**

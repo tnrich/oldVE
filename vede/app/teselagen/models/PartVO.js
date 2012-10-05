@@ -47,9 +47,9 @@ Ext.define("Teselagen.models.PartVO", {
         }
     ],
 
-    belongsTo: [
-        "Teselagen.models.EugeneRule",
-        "Teselagen.models.Part"
+    associations: [
+        {type: "belongsTo", model: "Teselagen.models.EugeneRule"},
+        {type: "belongsTo", model: "Teselagen.models.Part"}
     ],
 
     /**
