@@ -95,7 +95,7 @@ Ext.define("Teselagen.models.J5Collection", {
 
         var newCnt  = this.binCount();
         if (newCnt < cnt) {
-            addd = true;
+            removed = true;
         }
         return removed;
     },
@@ -108,29 +108,31 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Teselagen.models.Part} pPart
      * @returns {Boolean} partIsPresent True is in the J5Bins, False if not.
      */
-    isInCollection: function(pPart) {
-        if (this.get("binsVector").length > 0 || this === null) {
+    isPartInCollection: function(pPart) {
+        var partIsPresent = false;
+        if (this.get("binsVector") === null || this.get("binsVector").length === 0) {
             return false;
         }
         var bin, j5Bin; //j5 bin
 
-        for (var j = 0; j < this.get("binsVector").length; j++) {
-            bin = this.get("binsVector")[j];
-            for (var k = 0; k < bin.get("binItemsVector").length; k++) {
+        for (var i = 0; i < this.get("binsVector").length; i++) {
+            bin = this.get("binsVector")[i];
+            partIsPresent = bin.isPartInBin(pPart);
+            /*for (var k = 0; k < bin.get("binItemsVector").length; k++) {
                 j5Bin = bin.get("binItemsVector")[k];
                 if (j5Bin === pPart) {
                     return true;
                 }
-            }
+            }*/
         }
-        return false;
+        return partIsPresent;
     },
 
     /**
      * @returns {Boolean} isCircular
      */
     isCircular: function() {
-        return this.isCircular;
+        return this.get("isCircular");
     },
 
     /**
@@ -157,9 +159,8 @@ Ext.define("Teselagen.models.J5Collection", {
      * @returns {Boolean} added True if added, false if not.
      */
     addNewBinByIndex: function(pName, pIndex) {
-
-        var added = false;
-
+        var added   = false;
+        
         if (this.get("binsVector") === null) {
             /*throw Ext.create("Teselagen.bio.BioException", {
                 message: "No collection exists. Cannot add bin"
@@ -171,14 +172,19 @@ Ext.define("Teselagen.models.J5Collection", {
             binName: pName
         });
 
-        if (pIndex >= 0 && pIndex < this.j5Collection.length) {
-            Ext.Array.insert(this.get("binsVector"), pIndex, j5Bin);
-            added = true;
-        } else {//if (pIndex === -1) {
+        var cnt     = this.binCount();
+        if (pIndex >= 0 && pIndex < this.get("binsVector").length) {
+            //Ext.Array.insert(this.get("binsVector"), pIndex, j5Bin);
+            this.get("binsVector").splice(pIndex, 0, j5Bin);
+        } else {
             Ext.Array.include(this.get("binsVector"), j5Bin);
+            console.log("here");
+        }
+
+        var newCnt  = this.binCount();
+        if (newCnt < cnt) {
             added = true;
         }
-        //not sure above will work
 
         // DW: NEED TO FIRE EVENT NEW_BIN_ADDED
 
@@ -197,13 +203,12 @@ Ext.define("Teselagen.models.J5Collection", {
         if (this.get("binsVector") === null) {
             this.set("binsVector", []);
         }
-
         var cnt     = this.binCount();
         if (pIndex >= 0 && pIndex < cnt) {
-            this.j5Collection.get("binsVector").slice(pIndex, 1); //DOES THIS WORK?
-            //Ext.Array.remove(this.get("binsVector"), pJ5Bin);\
+            this.get("binsVector").splice(pIndex, 1); //Don't use slice
+            //Ext.Array.remove(this.get("binsVector"), pJ5Bin);
         } else {
-            this.j5Collection.get("binsVector").pop();
+            this.get("binsVector").pop();
         }
         var newCnt  = this.binCount();
         if (newCnt < cnt) {
@@ -246,7 +251,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {int} pPosition The position within the J5Bin at which to add the Part. Defaults to end of array if invalid or undefined value.
      * @returns {Boolean} removed True if added, False if not.
      */
-    removePartFromBin: function(pPart, pBinItem) {
+    removePartFromBin: function(pPart, pBinIndex) {
         var j5Bin;
         var cnt     = this.binCount();
 
@@ -268,15 +273,16 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Teselagen.models.J5Bin} J5Bin The first J5Bin Part belongs to, null if not in J5Collection.
      */
     getBinAssignment: function(pPart) {
+        var bin = null;
 
         for (var i = 0; i < this.binCount(); i++) {
             var j5Bin = this.get("binsVector")[i];
             for (var j = 0; j < j5Bin.binCount(); j++) {
                 if (j5Bin.get("binItemsVector")[j] === pPart) {
-                    return j5Bin.get("binItemsVector")[j];
+                    bin = j5Bin.get("binItemsVector")[j];
                 }
             }
         }
-        return null;
+        return bin;
     }
 });
