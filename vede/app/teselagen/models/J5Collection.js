@@ -31,10 +31,12 @@ Ext.define("Teselagen.models.J5Collection", {
         //{name: "binsVector",        type: "auto",       defaultValue: null},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
-        {name: "isCircular",        type: "boolean",    defaultValue: true}
+        {name: "isCircular",        type: "boolean",    defaultValue: true},
+        {name: 'DeviceEditorProject_id', type: 'int' }
     ],
 
     associations: [
+        { type: 'belongsTo', model: 'DeviceEditorProject', primaryKey: 'deproject_id', foreignKey: 'j5collection_id' }
     ],
 
     init: function() {

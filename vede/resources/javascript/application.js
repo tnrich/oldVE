@@ -776,9 +776,7 @@ $( document ).bind( 'loadDE', function() {
             });
 
             $("btn#j5-run").click(function(){
-                  _self.saveDesign(function(){
-                  j5.j5Run();
-                  });    
+                  j5.j5Run();    
             });
 
             $("#export-json-btn").click(function(){

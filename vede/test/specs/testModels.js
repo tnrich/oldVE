@@ -158,7 +158,6 @@ Ext.onReady(function() {
             });
         });
 
-
         describe("Teselagen.models.EugeneRule.js", function() {
 
             it("Creates empty EugeneRule", function(){
@@ -653,6 +652,35 @@ Ext.onReady(function() {
 
             it("()", function(){
             });
+        });
+
+        describe("Teselagen.models.DeviceEditorProject.js", function() {
+
+            var proj;
+
+            it("Create DeviceEditorProject", function(){
+                proj = Ext.create("Teselagen.models.DeviceEditorProject");
+                expect(proj).not.toBe(null);
+            });
+        
+            it("Set and get a ProjectName", function(){
+                proj.set("ProjectName","My example project");
+                expect(proj.get("ProjectName")).toBe("My example project");
+            });
+
+            it("Set and get a DateCreated/DateModified", function(){
+                var now = new Date();
+                proj.set("DateCreated",now);
+                expect(proj.get("DateCreated")).toBe(now);
+
+                var d1 = new Date("October 13, 1975 11:13:00")
+                proj.set("DateModified",d1);
+                expect(proj.get("DateModified")).toBe(d1);
+            });
+
+
+            
+
         });
 
     });
