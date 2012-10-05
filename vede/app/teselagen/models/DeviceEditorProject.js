@@ -1,10 +1,21 @@
+var userNoteStore = new Ext.data.Store({
+model: 'DeviceEditorProject',
+storeId: 'userNoteStore',
+remoteSort: false,
+autoLoad: false,
+proxy: {
+type: 'localstorage',
+id: 'ingenix-ic9expert.usernotes',
+} 
+});
+
 Ext.define("Teselagen.models.DeviceEditorProject", {
     extend: "Ext.data.Model",
 
     requires: [
         "Teselagen.models.J5Collection"
     ],
-
+    proxy: userNoteStore.proxy,
     fields: [
         { name: "ProjectName", type: "String", defaultValue: ""},
         { name: "DateCreated", type: "date"},

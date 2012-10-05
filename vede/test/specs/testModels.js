@@ -704,5 +704,49 @@ Ext.onReady(function() {
             });
         });
 
+        describe("Teselagen.models.Project.js", function() {
+
+            var proj;
+            var newDeviceEditorProject
+
+            it("Create Project", function(){
+                proj = Ext.create("Teselagen.models.Project");
+                expect(proj).not.toBe(null);
+            });
+        
+            it("Set and get a ProjectName", function(){
+                proj.set("ProjectName","My example project");
+                expect(proj.get("ProjectName")).toBe("My example project");
+            });
+
+            it("Set and get a DateCreated/DateModified", function(){
+                var now = new Date();
+                proj.set("DateCreated",now);
+                expect(proj.get("DateCreated")).toBe(now);
+
+                var d1 = new Date("October 13, 1975 11:13:00")
+                proj.set("DateModified",d1);
+                expect(proj.get("DateModified")).toBe(d1);
+            });
+            
+            it("Create a DeviceEditorProject and add to Project", function(){
+                var projects = proj.DeviceEditorProjects();
+                newDeviceEditorProject  = Ext.create("Teselagen.models.Project",
+                {
+                    ProjectName: 'My DeviceEditorProject'
+                });
+
+                projects.add(newDeviceEditorProject);
+                projects.sync();
+            });
+          
+            it("Check if DeviceEditorProject is in the array", function(){
+                var projects = proj.DeviceEditorProjects();
+                expect(proj.DeviceEditorProjects().getAt( 0 )).toBe(newDeviceEditorProject);
+                console.log(proj.DeviceEditorProjects().getAt( 0 ));
+            });
+
+        });
+
     });
 });
