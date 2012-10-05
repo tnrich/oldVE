@@ -365,9 +365,17 @@ Ext.onReady(function() {
                 expect(bin.get("fas")).toBe("");
 
                 expect(bin.binCount()).toBe(0);
+                //console.log(bin.parts());
+                var part1   = Ext.create("Teselagen.models.Part");
+                //bin.addToBin(part1);
+                //console.log(bin);
+                console.log(Ext.getClassName(bin.parts()));
             });
 
-            it("TEST ASSOCIATIONS HERE()", function(){
+            it("TEST ASSOCIATIONS HERE() ???", function(){
+            });
+
+            it("indexOfPartInBin()", function(){
             });
 
             it("addToBin()", function(){
@@ -375,9 +383,9 @@ Ext.onReady(function() {
                 var part2   = Ext.create("Teselagen.models.Part");
                 var part3   = Ext.create("Teselagen.models.Part");
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
-                    binItemsVector: []
+                    parts: []
                 });
-                expect(bin.get("binItemsVector").length).toBe(0);
+                expect(bin.binCount()).toBe(0);
 
                 var success = bin.addToBin(part1);
                 //console.log("J5Bin init-add part");
@@ -385,54 +393,56 @@ Ext.onReady(function() {
 
                 // check
                 expect(success).toBe(true);
-                expect(bin.get("binItemsVector").length).toBe(1);
-                expect(bin.get("binItemsVector")[0]).toBe(part1);
+                expect(bin.binCount()).toBe(1);
+                expect(bin.parts().getAt(0)).toBe(part1);
 
                 // add a second part, insert in front of previous part
                 success = bin.addToBin(part2, 0);
                 expect(success).toBe(true);
-                expect(bin.get("binItemsVector").length).toBe(2);
-                expect(bin.get("binItemsVector")[0]).toBe(part2);
-                expect(bin.get("binItemsVector")[1]).toBe(part1);
+                expect(bin.binCount()).toBe(2);
+                expect(bin.parts().getAt(0)).toBe(part2);
+                expect(bin.parts().getAt(1)).toBe(part1);
 
                 // add a third in between
                 success = bin.addToBin(part3, 1);
                 expect(success).toBe(true);
-                expect(bin.get("binItemsVector").length).toBe(3);
+                expect(bin.binCount()).toBe(3);
 
-                expect(bin.get("binItemsVector")[0]).toBe(part2);
-                expect(bin.get("binItemsVector")[1]).toBe(part3);
-                expect(bin.get("binItemsVector")[2]).toBe(part1);
+                expect(bin.parts().getAt(0)).toBe(part2);
+                expect(bin.parts().getAt(1)).toBe(part3);
+                expect(bin.parts().getAt(2)).toBe(part1);
+                //console.log(bin.parts());
+                console.log(bin);
                 
             });
-
+            
             it("removeFromBin()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
 
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
-                    binItemsVector: [part1, part2]
+                    parts: [part1, part2]
                 });
 
-                expect(bin.get("binItemsVector").length).toBe(2);
-                expect(bin.get("binItemsVector")[0]).toBe(part1);
-                expect(bin.get("binItemsVector")[1]).toBe(part2);
+                expect(bin.binCount()).toBe(2);
+                expect(bin.parts().getAt(0)).toBe(part1);
+                expect(bin.parts().getAt(1)).toBe(part2);
 
                 var success = bin.removeFromBin(part1);
                 expect(success).toBe(true);
-                expect(bin.get("binItemsVector").length).toBe(1);
-                expect(bin.get("binItemsVector")[0]).toBe(part2);
+                expect(bin.binCount()).toBe(1);
+                expect(bin.parts().getAt(0)).toBe(part2);
                 // should fail to remove it again
                 success = bin.removeFromBin(part1);
                 expect(success).toBe(false);
 
                 success = bin.removeFromBin(part2);
                 expect(success).toBe(true);
-                expect(bin.get("binItemsVector").length).toBe(0);
+                expect(bin.binCount()).toBe(0);
             });
         });
 
-        describe("Teselagen.models.J5Collection.js", function() {
+        xdescribe("Teselagen.models.J5Collection.js", function() {
 
             beforeEach(function() {
             });
@@ -517,7 +527,7 @@ Ext.onReady(function() {
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    binItemsVector: [part1]
+                    parts: [part1]
                 });
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     binsVector: [bin1]
@@ -619,7 +629,7 @@ Ext.onReady(function() {
                 //var part2   = Ext.create("Teselagen.models.Part");
 
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    binItemsVector: [part1]
+                    parts: [part1]
                 });
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     binsVector: [bin1]
@@ -638,7 +648,7 @@ Ext.onReady(function() {
                 var part1   = Ext.create("Teselagen.models.Part");
 
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    binItemsVector: [part1]
+                    parts: [part1]
                 });
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     binsVector: [bin1]
