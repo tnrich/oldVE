@@ -13,12 +13,6 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
 
 
     init: function() {
-    },
-    setCollection: function(pJ5Collection, pIndex) {
-        
-        var added = false;
-
-        
-    },
+    }
 
 });
