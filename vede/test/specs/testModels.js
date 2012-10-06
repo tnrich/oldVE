@@ -366,10 +366,11 @@ Ext.onReady(function() {
 
                 expect(bin.binCount()).toBe(0);
                 //console.log(bin.parts());
-                var part1   = Ext.create("Teselagen.models.Part");
+
+                //var part1   = Ext.create("Teselagen.models.Part");
                 //bin.addToBin(part1);
                 //console.log(bin);
-                console.log(Ext.getClassName(bin.parts()));
+                //console.log(Ext.getClassName(bin.parts()));
             });
 
             it("TEST ASSOCIATIONS HERE() ???", function(){
@@ -412,8 +413,31 @@ Ext.onReady(function() {
                 expect(bin.parts().getAt(1)).toBe(part3);
                 expect(bin.parts().getAt(2)).toBe(part1);
                 //console.log(bin.parts());
-                console.log(bin);
-                
+            });
+
+
+            it("addToBin(): Is Part1 and the bin.part1 linked or cloned?", function(){
+                var part1   = Ext.create("Teselagen.models.Part", {
+                    fas: "tmpname"
+                });
+                var bin     = Ext.create("Teselagen.models.J5Bin", {
+                    //parts: []
+                });
+                expect(bin.binCount()).toBe(0);
+
+                var success = bin.addToBin(part1);
+
+                // check if the structure is correct.
+                expect(success).toBe(true);
+                expect(bin.binCount()).toBe(1);
+                expect(bin.parts().getAt(0)).toBe(part1);
+                expect(bin.parts().getAt(0).get("fas")).toBe("tmpname");
+
+                // change part 1. Change should be reflected in the bin's parts
+                part1.set("fas", "blahblah");
+                expect(bin.parts().getAt(0)).toBe(part1);
+                expect(bin.parts().getAt(0).get("fas")).toBe("blahblah"); //double check change
+
             });
             
             it("removeFromBin()", function(){
@@ -421,8 +445,9 @@ Ext.onReady(function() {
                 var part2   = Ext.create("Teselagen.models.Part");
 
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
-                    parts: [part1, part2]
+                    //parts: [part1, part2]
                 });
+                bin.addToBin([part1, part2]);
 
                 expect(bin.binCount()).toBe(2);
                 expect(bin.parts().getAt(0)).toBe(part1);
@@ -442,7 +467,7 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Teselagen.models.J5Collection.js", function() {
+        describe("Teselagen.models.J5Collection.js", function() {
 
             beforeEach(function() {
             });
@@ -452,13 +477,10 @@ Ext.onReady(function() {
                 expect(coll).not.toBe(null);
 
                 // check
-                expect(coll.get("binsVector").length).toBe(0);
+                expect(coll.bins().count()).toBe(0);
                 expect(coll.get("j5Ready")).toBe(false);
                 expect(coll.get("combinatorial")).toBe(false);
                 expect(coll.get("isCircular")).toBe(true);
-            });
-
-            it("TEST ASSOCIATIONS HERE()", function(){
             });
 
 
@@ -468,51 +490,52 @@ Ext.onReady(function() {
                 var bin3    = Ext.create("Teselagen.models.J5Bin");
                 var coll    = Ext.create("Teselagen.models.J5Collection", {});
 
-                expect(coll.get("binsVector").length).toBe(0);
+                expect(coll.bins().count()).toBe(0);
 
                 var success = coll.addToBin(bin1);
 
                 // check
-                expect(coll.get("binsVector").length).toBe(1);
-                expect(coll.get("binsVector")[0]).toBe(bin1);
+                expect(coll.bins().count()).toBe(1);
+                expect(coll.bins().getAt(0)).toBe(bin1);
 
                 // check
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(1);
-                expect(coll.get("binsVector")[0]).toBe(bin1);
+                expect(coll.bins().count()).toBe(1);
+                expect(coll.bins().getAt(0)).toBe(bin1);
 
                 // add a second bin, insert in front of previous bin
                 success = coll.addToBin(bin2, 0);
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(2);
-                expect(coll.get("binsVector")[0]).toBe(bin2);
-                expect(coll.get("binsVector")[1]).toBe(bin1);
+                expect(coll.bins().count()).toBe(2);
+                expect(coll.bins().getAt(0)).toBe(bin2);
+                expect(coll.bins().getAt(1)).toBe(bin1);
 
                 // add a third in between
                 success = coll.addToBin(bin3, 1);
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(3);
+                expect(coll.bins().count()).toBe(3);
 
-                expect(coll.get("binsVector")[0]).toBe(bin2);
-                expect(coll.get("binsVector")[1]).toBe(bin3);
-                expect(coll.get("binsVector")[2]).toBe(bin1);
+                expect(coll.bins().getAt(0)).toBe(bin2);
+                expect(coll.bins().getAt(1)).toBe(bin3);
+                expect(coll.bins().getAt(2)).toBe(bin1);
             });
 
             it("removeFromBin() removes a J5Bin", function(){
                 var bin1    = Ext.create("Teselagen.models.J5Bin");
                 var bin2    = Ext.create("Teselagen.models.J5Bin");
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1, bin2]
+                    //binsVector: [bin1, bin2]
                 });
+                coll.addToBin([bin1, bin2]);
 
-                expect(coll.get("binsVector").length).toBe(2);
-                expect(coll.get("binsVector")[0]).toBe(bin1);
-                expect(coll.get("binsVector")[1]).toBe(bin2);
+                expect(coll.bins().count()).toBe(2);
+                expect(coll.bins().getAt(0)).toBe(bin1);
+                expect(coll.bins().getAt(1)).toBe(bin2);
 
                 var success = coll.removeFromBin(bin1);
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(1);
-                expect(coll.get("binsVector")[0]).toBe(bin2);
+                expect(coll.bins().count()).toBe(1);
+                expect(coll.bins().getAt(0)).toBe(bin2);
 
                 // should fail to remove it again
                 success = coll.removeFromBin(bin1);
@@ -520,18 +543,21 @@ Ext.onReady(function() {
 
                 success = coll.removeFromBin(bin2);
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(0);
+                expect(coll.bins().count()).toBe(0);
             });
 
+            
             it("isPartInCollection() detects a part correctly.", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    parts: [part1]
+                    //parts: [part1]
                 });
+                bin1.addToBin(part1);
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1]
+                    //binsVector: [bin1]
                 });
+                coll.addToBin(bin1);
 
                 // Detects a part is in collection
                 var success = coll.isPartInCollection(part1);
@@ -555,8 +581,9 @@ Ext.onReady(function() {
                 var bin1    = Ext.create("Teselagen.models.J5Bin");
                 var bin2    = Ext.create("Teselagen.models.J5Bin");
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1]
+                    //binsVector: [bin1]
                 });
+                coll.addToBin(bin1);
 
                 // bin1 that is present
                 var index   = coll.getBinIndex(bin1);
@@ -566,53 +593,56 @@ Ext.onReady(function() {
                 index   = coll.getBinIndex(bin2);
                 expect(index).toBe(-1);
             });
-
+            
             it("addNewBinByIndex()", function(){
                 var bin1    = Ext.create("Teselagen.models.J5Bin");
                 var bin2    = Ext.create("Teselagen.models.J5Bin");
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1, bin2]
+                    //binsVector: [bin1, bin2]
                 });
+                coll.addToBin([bin1, bin2]);
 
                 // add new bin between bin1 and bin2
                 var success = coll.addNewBinByIndex("newBin", 1);
 
-                expect(coll.get("binsVector").length).toBe(3);
-                expect(coll.get("binsVector")[0]).toBe(bin1);
-                expect(coll.get("binsVector")[1].get("binName")).toBe("newBin");
-                expect(coll.get("binsVector")[2]).toBe(bin2);
+                expect(coll.bins().count()).toBe(3);
+                expect(coll.bins().getAt(0)).toBe(bin1);
+                expect(coll.bins().getAt(1).get("binName")).toBe("newBin");
+                expect(coll.bins().getAt(2)).toBe(bin2);
             });
-
+            
             it("deleteBinByIndex()", function(){
                 var bin1    = Ext.create("Teselagen.models.J5Bin");
                 var bin2    = Ext.create("Teselagen.models.J5Bin");
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1, bin2]
+                    //binsVector: [bin1, bin2]
                 });
+                coll.addToBin([bin1, bin2]);
 
-                expect(coll.get("binsVector").length).toBe(2);
-                expect(coll.get("binsVector")[0]).toBe(bin1);
-                expect(coll.get("binsVector")[1]).toBe(bin2);
+                expect(coll.bins().count()).toBe(2);
+                expect(coll.bins().getAt(0)).toBe(bin1);
+                expect(coll.bins().getAt(1)).toBe(bin2);
 
                 var success = coll.deleteBinByIndex(0);
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(1);
-                expect(coll.get("binsVector")[0]).toBe(bin2);
+                expect(coll.bins().count()).toBe(1);
+                expect(coll.bins().getAt(0)).toBe(bin2);
 
                 // 2 is out of range, will pop the remaining bin
                 success = coll.deleteBinByIndex(-1);
                 expect(success).toBe(true);
-                expect(coll.get("binsVector").length).toBe(0);
+                expect(coll.bins().count()).toBe(0);
             });
-
+            
             it("addPartToBin()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 //var part2   = Ext.create("Teselagen.models.Part");
 
                 var bin1    = Ext.create("Teselagen.models.J5Bin");
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1]
+                    //binsVector: [bin1]
                 });
+                coll.addToBin([bin1]);
 
                 expect(coll.binCount()).toBe(1);
                 expect(bin1.binCount()).toBe(0);
@@ -620,7 +650,7 @@ Ext.onReady(function() {
                 expect(success).toBe(true);
                 expect(coll.binCount()).toBe(1);
                 expect(bin1.binCount()).toBe(1);
-                expect(coll.get("binsVector")[0].binCount()).toBe(1);
+                expect(coll.bins().getAt(0).binCount()).toBe(1);
             });
 
             
@@ -629,11 +659,14 @@ Ext.onReady(function() {
                 //var part2   = Ext.create("Teselagen.models.Part");
 
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    parts: [part1]
+                    //parts: [part1]
                 });
+                bin1.addToBin(part1);
+
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1]
+                    //binsVector: [bin1]
                 });
+                coll.addToBin(bin1);
 
                 expect(coll.binCount()).toBe(1);
                 expect(bin1.binCount()).toBe(1);
@@ -641,30 +674,35 @@ Ext.onReady(function() {
                 expect(success).toBe(true);
                 expect(coll.binCount()).toBe(1);
                 expect(bin1.binCount()).toBe(0);
-                expect(coll.get("binsVector")[0].binCount()).toBe(0);
+                expect(coll.bins().getAt(0).binCount()).toBe(0);
             });
             
             it("getBinAssignment()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
 
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    parts: [part1]
+                    //parts: [part1]
                 });
+                bin1.addToBin(part1);
+
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
-                    binsVector: [bin1]
+                    //binsVector: [bin1]
                 });
+                bin1.addToBin(bin1);
 
                 var tmp = coll.getBinAssignment(part1);
-                //console.log(tmp);
-                //console.log(bin1);
                 expect(tmp).toBe(part1);
             });
 
             it("()", function(){
             });
-        });
+        }); 
+//LAST HERE  DW: 10.5.2012
 
-        describe("Teselagen.models.DeviceEditorProject.js", function() {
+
+        // RODRIGO'S TEST CODE
+        
+        xdescribe("Teselagen.models.DeviceEditorProject.js", function() {
 
             var proj;
 
@@ -683,13 +721,13 @@ Ext.onReady(function() {
                 proj.set("DateCreated",now);
                 expect(proj.get("DateCreated")).toBe(now);
 
-                var d1 = new Date("October 13, 1975 11:13:00")
+                var d1 = new Date("October 13, 1975 11:13:00");
                 proj.set("DateModified",d1);
                 expect(proj.get("DateModified")).toBe(d1);
             });
         });
 
-        describe("Teselagen.models.VectorEditorProject.js", function() {
+        xdescribe("Teselagen.models.VectorEditorProject.js", function() {
 
             var proj;
 
@@ -708,16 +746,16 @@ Ext.onReady(function() {
                 proj.set("DateCreated",now);
                 expect(proj.get("DateCreated")).toBe(now);
 
-                var d1 = new Date("October 13, 1975 11:13:00")
+                var d1 = new Date("October 13, 1975 11:13:00");
                 proj.set("DateModified",d1);
                 expect(proj.get("DateModified")).toBe(d1);
             });
         });
 
-        describe("Teselagen.models.Project.js", function() {
+        xdescribe("Teselagen.models.Project.js", function() {
 
             var proj;
-            var newDeviceEditorProject
+            var newDeviceEditorProject;
 
             it("Create Project", function(){
                 proj = Ext.create("Teselagen.models.Project");
@@ -734,7 +772,7 @@ Ext.onReady(function() {
                 proj.set("DateCreated",now);
                 expect(proj.get("DateCreated")).toBe(now);
 
-                var d1 = new Date("October 13, 1975 11:13:00")
+                var d1 = new Date("October 13, 1975 11:13:00");
                 proj.set("DateModified",d1);
                 expect(proj.get("DateModified")).toBe(d1);
             });

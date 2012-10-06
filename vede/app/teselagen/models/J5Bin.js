@@ -19,7 +19,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Input parameters.
-     * @param {Teselagen.models.Part[]} parts
+     * @param {Ext.data.Store} parts A store of many(@link Teselagen.models.Part}
      * @param {String} binName (REQUIRED)
      * @param {String} iconID
      * @param {Boolean} directionForward
@@ -30,7 +30,6 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        //{name: "parts",    type: "auto",       defaultValue: null},
         /*{
             name: "parts",
             convert: function(v, record) {
@@ -48,14 +47,12 @@ Ext.define("Teselagen.models.J5Bin", {
         
     ],
 
-    // This actually doesn't work...
     associations: [
         {type: "hasMany", model: "Teselagen.models.Part", name: "parts", defaultValue: []},
         {type: "belongsTo", model: "Teselagen.models.J5Collection"}
     ],
 
     init: function(inData) {
-        console.log(inData);
         if (this.get("iconID") === "") {
             this.set("iconID", this.self.GENERIC);
         }
@@ -104,7 +101,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Adds a Part into the parts.
-     * @param {Teselagen.models.Part} pPart
+     * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
      * @param {int} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
      * @returns {Boolean} added True if added, false if not.
      */
