@@ -273,8 +273,8 @@ Ext.define("Teselagen.models.J5Collection", {
         for (var i = 0; i < this.binCount(); i++) {
             var j5Bin = this.bins().getAt(i);
             for (var j = 0; j < j5Bin.binCount(); j++) {
-                if (j5Bin.get("binItemsVector")[j] === pPart) {
-                    bin = j5Bin.get("binItemsVector")[j];
+                if (j5Bin.parts().getAt(i) === pPart) {
+                    bin = j5Bin.parts().getAt(i);
                 }
             }
         }

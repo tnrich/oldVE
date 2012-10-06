@@ -466,7 +466,7 @@ Ext.onReady(function() {
                 expect(bin.binCount()).toBe(0);
             });
         });
-
+        
         describe("Teselagen.models.J5Collection.js", function() {
 
             beforeEach(function() {
@@ -653,7 +653,6 @@ Ext.onReady(function() {
                 expect(coll.bins().getAt(0).binCount()).toBe(1);
             });
 
-            
             it("removePartFromBin()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 //var part2   = Ext.create("Teselagen.models.Part");
@@ -688,15 +687,12 @@ Ext.onReady(function() {
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     //binsVector: [bin1]
                 });
-                bin1.addToBin(bin1);
+                coll.addToBin(bin1);
 
                 var tmp = coll.getBinAssignment(part1);
                 expect(tmp).toBe(part1);
             });
-
-            it("()", function(){
-            });
-        }); 
+        });
 //LAST HERE  DW: 10.5.2012
 
 
