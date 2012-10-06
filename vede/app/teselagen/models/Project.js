@@ -25,8 +25,14 @@ Ext.define("Teselagen.models.Project", {
     proxy: ProjectStore.proxy,
     associations: [
         { type: 'hasMany'
-        , model: 'Teselagen.models.DeviceEditorProject'
+        , model: 'Teselagen.models.DeviceDesign'
         , name: 'DeviceEditorProjects'
+        , defaultValue: [] 
+    }],
+    associations: [
+        { type: 'hasMany'
+        , model: 'Teselagen.models.Part'
+        , name: 'parts'
         , defaultValue: [] 
     }]
 
