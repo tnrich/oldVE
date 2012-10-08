@@ -23,7 +23,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             convert: function(v, record) {
                 return v || null; //Ext.create("Teselagen.models.J5Collection");
             }
-        },
+        }
+        //,
         //{
         //    name: "sequenceFiles",
         //    convert: function(v, record) {
@@ -39,6 +40,18 @@ Ext.define("Teselagen.models.DeviceDesign", {
     ],
 
     init: function() {
+    },
+
+    createNewCollection: function(pNumBins) {
+        if (this.get("j5Collection").binCount() > 0) {
+            console.warn("Warning. Overwriting existing J5Collection");
+        }
+        var j5Coll = Ext.create("Teselagen.models.J5Collection");
+        for (var i = 0; i < pNumBins; i++) {
+            j5Coll.addBin("No_Name" + i);
+        }
+        this.set("j5Collection", j5Coll);
+        return j5Coll;
     }
 
 });

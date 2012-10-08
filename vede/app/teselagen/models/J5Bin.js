@@ -49,10 +49,10 @@ Ext.define("Teselagen.models.J5Bin", {
         ,{
             name: "SBOLvIconInfo",
             convert: function(v, record) {
-                if (v !== undefined || v !== null) {
-                    return v;
+                if (v === undefined || v === null || v === "") {
+                    return Ext.create("Teselagen.models.SBOLvIconsInfo");
                 } else {
-                    return Ext.create("Teselagen.models.SBOLvIconsInfo")
+                    return v;
                 }
             }
         }*/

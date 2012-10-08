@@ -1,4 +1,5 @@
 /** HAS NOT BEEN FULLY TESTED YET
+ * THIS CLASS MAY BE UNNCESSARY
  * @class Teselagen.manager.J5Manager
  * Class describing a J5Manager.
  * J5Manager holds an array of J5Collection, for a given design project.
@@ -46,10 +47,6 @@ Ext.define("Teselagen.manager.J5Manager", {
                 //this.j5Collection.addBin("No_Name" + i); //FIX ME
             }
         }
-
-        /*if (inData !== undefined && inData.isCircular !== undefined){
-            this.isCircular = inData.isCircular || true;
-        }*/
     },
 
     /**

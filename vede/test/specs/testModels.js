@@ -128,6 +128,7 @@ Ext.onReady(function() {
                 var part = Ext.create("Teselagen.models.Part");
 
                 expect(part.isEmpty()).toBe(true);
+                expect(part.isPartVOEmpty()).toBe(true);
 
                 expect(part.get("partVO")).toBe(null);
                 expect(part.get("fas")).toBe("");
@@ -140,6 +141,8 @@ Ext.onReady(function() {
                 });
 
                 expect(part.isEmpty()).toBe(false);
+                expect(part.isPartVOEmpty()).toBe(false);
+
                 expect(part.get("fas")).toBe("fas1");
 
                 //console.log("Part init");
@@ -155,6 +158,15 @@ Ext.onReady(function() {
                 part.setId();
                 expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
                 //console.log(part.get("id"));
+            });
+
+            it("isPartVOEmpty()", function(){
+            });
+
+            it("isEmpty()", function(){
+            });
+
+            it("isEqual()", function(){
             });
         });
 
@@ -695,9 +707,44 @@ Ext.onReady(function() {
         });
 //LAST HERE  DW: 10.5.2012
 
+        describe("Teselagen.models.J5Run.js", function() {
+
+            it("Create J5Run", function(){
+                var run = Ext.create("Teselagen.models.J5Run");
+
+                var j5p = Ext.create("Teselagen.models.J5Parameters");
+                var dsa = Ext.create("Teselagen.models.DownstreamAutomationParameters");
+
+                // run should have default j5 and downstream parameters
+                expect(run.get("j5Parameters").get("masterOligoNumberOfDigitsValue")).toBe(j5p.self.MONOD_Default);
+                expect(run.get("downstreamAutomationParameters").get("maxDeltaTemperatureAdjacentZonesValue")).toBe(dsa.self.MDTAZ_DEFAULT);
+                expect(run.get("j5Results")).toBe(null);
+            });
+        });
+
+        describe("Teselagen.models.J5Results.js", function() {
+
+            it("Create J5Results", function(){
+                var results = Ext.create("Teselagen.models.J5Results");
+
+                expect(results).not.toBe(null);
+            });
+        });
+
+        describe("Teselagen.models.DeviceDesign.js", function() {
+
+            it("Create DeviceDesign", function(){
+
+                var device = Ext.create("Teselagen.models.DeviceDesign");
+
+                expect(device).not.toBe(null);
+
+            });
+        });
+
 
         // RODRIGO'S TEST CODE
-        
+        /*
         xdescribe("Teselagen.models.DeviceEditorProject.js", function() {
 
             var proj;
@@ -790,7 +837,7 @@ Ext.onReady(function() {
                 console.log(proj.DeviceEditorProjects().getAt( 0 ));
             });
 
-        });
+        });*/
 
     });
 });

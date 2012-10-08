@@ -24,20 +24,20 @@ Ext.define("Teselagen.models.J5Run", {
         {
             name: "j5Parameters",
             convert: function(v, record) {
-                if (v !== undefined || v !== null) {
-                    return v;
-                } else {
+                if (v === undefined || v === null || v === "") {
                     return Ext.create("Teselagen.models.J5Parameters");
+                } else {
+                    return v;
                 }
             }
         },
         {
-            name: "downstreamAutomation",
+            name: "downstreamAutomationParameters",
             convert: function(v, record) {
-                if (v !== undefined || v !== null) {
-                    return v;
-                } else {
+                if (v === undefined || v === null || v === "") {
                     return Ext.create("Teselagen.models.DownstreamAutomationParameters");
+                } else {
+                    return v;
                 }
             }
         },
