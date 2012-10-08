@@ -30,16 +30,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
         //        return v || null;
         //    }
         //},
-        {
-            name: "SBOLvIconInfo",
-            convert: function(v, record) {
-                if (v !== undefined || v !== null) {
-                    return null;
-                } else {
-                    return 
-                }
-            }
-        }
     ],
 
     associations: [
