@@ -20,7 +20,7 @@ Ext.define("Teselagen.models.Part", {
      * @param {Teselagen.models.PartVO} partVO PartVO.
      * @param {Boolean} directionForward Direction forward.
      * @param {String} fas
-     * @param {String} id ID is composed of the Date.toString + 4 random digits
+     * @param {String} id ID is composed of the Date.toString + 3 random digits
      */
     fields: [
         {name: "partVO",            type: "auto",       defaultValue: null},

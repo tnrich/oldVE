@@ -27,6 +27,10 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
         {name: "reversePath",           type: "string",     defaultValue: ""}
     ],
 
+    associations: [
+        {type: "belongsTo", model: "Teselagen.models.DeviceDesign"}
+    ],
+
     /**
      * SetFields may not be neccessary since you should set these when creating this object.
      */

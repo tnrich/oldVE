@@ -15,8 +15,6 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
     requires: [
     ],
 
-    //MDTAZ_DEFAULT:    5,
-
     statics: {
         MDTAZ:            "MAXDELTATEMPERATUREADJACENTZONES",
         MDTROZA:          "MAXDELTATEMPERATUREREACTIONOPTIMUMZONEACCEPTABLE",
