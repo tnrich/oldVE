@@ -8,7 +8,7 @@ Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.SBOLvIcons",
+        "Teselagen.constants.SBOLvIcons",
         "Teselagen.models.Part",
         "Teselagen.utils.NullableInt"
     ],
@@ -44,6 +44,18 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "fas",               type: "string",     defaultValue: ""},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
+
+        /* worry about this later. Original does not include this field.
+        ,{
+            name: "SBOLvIconInfo",
+            convert: function(v, record) {
+                if (v !== undefined || v !== null) {
+                    return v;
+                } else {
+                    return Ext.create("Teselagen.models.SBOLvIconsInfo")
+                }
+            }
+        }*/
         
     ],
 
