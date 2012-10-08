@@ -12,7 +12,7 @@ describe("Store tests.", function () {
                id: 'projectDesignPanel',
                title: 'Your Designs',
                rootVisible: false,
-               store: Ext.create('Teselagen.store.DeviceEditorProjectStore'),
+               store: store,
                viewConfig: {}
         });
     });
