@@ -19,7 +19,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Input parameters.
-     * @param {Teselagen.models.Part[]} binItemsVector
+     * @param {Ext.data.Store} parts A store of many(@link Teselagen.models.Part}
      * @param {String} binName (REQUIRED)
      * @param {String} iconID
      * @param {Boolean} directionForward
@@ -30,13 +30,12 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        //{name: "binItemsVector",    type: "auto",       defaultValue: null},
-        {
-            name: "binItemsVector",
+        /*{
+            name: "parts",
             convert: function(v, record) {
                 return v || [];
             }
-        },
+        },*/
         {name: "binName",           type: "string",     defaultValue: ""}, //required when making this object
         {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
@@ -48,26 +47,22 @@ Ext.define("Teselagen.models.J5Bin", {
         
     ],
 
-    // This actually doesn't work...
     associations: [
-        {type: "hasMany", model: "Teselagen.models.Part", name: "binItemsVector", defaultValue: []},
+        {type: "hasMany", model: "Teselagen.models.Part", name: "parts", defaultValue: []},
         {type: "belongsTo", model: "Teselagen.models.J5Collection"}
     ],
 
-    init: function() {
+    init: function(inData) {
         if (this.get("iconID") === "") {
             this.set("iconID", this.self.GENERIC);
         }
-        //if (this.get("binItemsVector") === null) {
-        //    this.set("binItemsVector", []);
-        //}
     },
 
     /**
-     * @returns {int} count Number of Parts in binItemsVector
+     * @returns {int} count Number of Parts in parts
      */
     binCount: function() {
-        return this.get("binItemsVector").length;
+        return this.parts().count();
     },
 
     /**
@@ -75,12 +70,12 @@ Ext.define("Teselagen.models.J5Bin", {
      * @returns {Boolean} partIsPresent True is in this J5Bin, False if not.
      */
     isPartInBin: function(pPart) {
-        if (this.get("binItemsVector") === null || this.get("binItemsVector").length === 0) {
+        if (this.parts() === null || this.parts().count() === 0) {
             return false;
         }
 
-        for (var i = 0; i < this.get("binItemsVector").length; i++) {
-            if (this.get("binItemsVector")[i] === pPart) {
+        for (var i = 0; i < this.parts().count(); i++) {
+            if (this.parts().getAt(i) === pPart) {
                 return true;
             }
         }
@@ -93,11 +88,11 @@ Ext.define("Teselagen.models.J5Bin", {
      */
     indexOfPartInBin: function(pPart) {
         var index = -1;
-        if (this.get("binItemsVector") === null || this.get("binItemsVector").length === 0) {
+        if (this.parts() === null || this.parts().count() === 0) {
             return index;
         }
-        for (var i = 0; i < this.get("binItemsVector").length; i++) {
-            if (this.get("binItemsVector")[i] === pPart) {
+        for (var i = 0; i < this.parts().count(); i++) {
+            if (this.parts().getAt(i) === pPart) {
                 index = i;
             }
         }
@@ -105,8 +100,8 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
-     * Adds a Part into the binItemsVector.
-     * @param {Teselagen.models.Part} pPart
+     * Adds a Part into the parts.
+     * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
      * @param {int} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
      * @returns {Boolean} added True if added, false if not.
      */
@@ -116,11 +111,11 @@ Ext.define("Teselagen.models.J5Bin", {
         var cnt = this.binCount();
 
         if (pPosition >= 0 && pPosition < cnt) {
-            //Ext.Array.insert(this.get("binItemsVector"), pPosition, pPart);
-            this.get("binItemsVector").splice(pPosition, 0, pPart);
+            //this.parts().splice(pPosition, 0, pPart);
+            this.parts().insert(pPosition, pPart);
         } else {
-            //Ext.Array.include(this.get("binItemsVector"), pPart);
-            this.get("binItemsVector").push(pPart);
+            //this.parts().push(pPart);
+            this.parts().add(pPart);
         }
 
         var newCnt  = this.binCount();
@@ -131,7 +126,7 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
-     * Removes a Part from the binItemsVector.
+     * Removes a Part from the parts.
      * @param {Teselagen.models.Part} pPart
      * @returns {Boolean} removed True if removed, false if not.
      */
@@ -139,12 +134,9 @@ Ext.define("Teselagen.models.J5Bin", {
         var removed = false;
 
         var cnt = this.binCount();
-        Ext.Array.remove(this.get("binItemsVector"), pPart);
+        //Ext.Array.remove(this.parts(), pPart);
+        this.parts().remove(pPart);
 
-        //console.log(this.get("binItemsVector"));
-        //console.log(part.get("id"));
-        //var newBin = Ext.Array.remove(this.get("binItemsVector"), pPart);
-        //this.set("binItemsVector", newBin);
 
         var newCnt  = this.binCount();
         if (newCnt < cnt) {
