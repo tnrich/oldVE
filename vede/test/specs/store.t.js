@@ -5,16 +5,14 @@ describe("Store tests.", function () {
         
     });
     it("Create store.", function() {
-//        store = Ext.create("Teselagen.store.DeviceEditorProjectStore");
-        store = Ext.create("Teselagen.store.ProjectStore");
+        store = Ext.create("Teselagen.store.DeviceEditorProjectStore");
     });
     it("Create panel with store", function() {
         Ext.widget("treepanel", {
                id: 'projectDesignPanel',
                title: 'Your Designs',
                rootVisible: false,
-//               store: Ext.create('Vede.store.ProjectDesignStore'),
-               store: Ext.create('Teselagen.store.ProjectStore'),
+               store: Ext.create('Teselagen.store.DeviceEditorProjectStore'),
                viewConfig: {}
         });
     });
