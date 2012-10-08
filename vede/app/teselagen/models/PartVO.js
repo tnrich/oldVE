@@ -16,7 +16,6 @@ Ext.define("Teselagen.models.PartVO", {
     
     /**
      * Input parameters.
-     * NOTE: Must execute setId() to set the id from "" to a unique identifier.
      * @param {String} name The name of the PartVO.
      * @param {Boolean} revComp Reverse Complement.
      * @param {Number} genbankStartBP Genbank basepair starting index

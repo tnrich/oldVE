@@ -29,7 +29,7 @@ Ext.onReady(function() {
     Sha256              = Teselagen.bio.util.Sha256;
     SequenceFileManager = Teselagen.manager.SequenceFileManager;
 
-    xdescribe("Testing Teselagen.managers", function() {
+    describe("Testing Teselagen.managers", function() {
 
         describe("Teselagen.manager.SequenceFileManager.js", function() {
 
@@ -241,23 +241,14 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Teselagen.manager.J5Manager.js", function() {
-
-            it("createNewCollection()", function(){
-            });
-
-            it("addItem()", function(){
-            });
-
-            it("deleteItem()", function(){
-            });
+        xdescribe("Teselagen.manager.J5Manager.js", function() {
 
             it("()", function(){
             });
 
         });
 
-        xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
+        xdescribe("Teselagen.manager..js", function() {
 
             it("()", function(){
             });
