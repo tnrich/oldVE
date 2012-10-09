@@ -116,7 +116,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             id: 'projectDesignPanel',
             title: 'Your Designs',
             rootVisible: false,
-            store: 'ProjectDesignStore',
+            store: Ext.create('Teselagen.store.ProjectDesignStore'),
             viewConfig: {}
         }]
     }, {
