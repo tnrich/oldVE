@@ -116,8 +116,21 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             id: 'projectDesignPanel',
             title: 'Your Designs',
             rootVisible: false,
-            store: Ext.create('Teselagen.store.ProjectDesignStore'),
-            viewConfig: {}
+            store: Ext.create('Teselagen.store.ProjectTreeStore'),
+            viewConfig: {
+                markDirty: false
+            },
+            listeners: {
+                itemclick: function(view, record, item, index, e, eOpts) {
+                   //console.log(JSON.stringify(record.raw));
+                   //console.log(record.fields.getCount());
+                   //console.log(record);
+                   console.log(record.store);
+                   console.log(record.parentNode);
+                   var parts = record.parentNode.parts();
+                   var part = parts.findRecord('id',record.data.id);
+                }
+            }
         }]
     }, {
         xtype: 'panel',
@@ -180,30 +193,5 @@ Ext.define('Vede.view.common.ProjectPanelView', {
 
             }
         }]
-    }],
-    listeners: {
-        itemclick: function(view, record, item, index, e, eOpts) {
-            if (record.raw.type == 'design') $(document).trigger('openSelectedDesign', record.raw._id);
-
-            if (record.raw.type == 'protocol') {
-                console.log('opening protocol');
-                Ext.Ajax.request({
-                    url: '/api/getProtocol',
-                    params: {
-                        _id: record.raw._id
-                    },
-                    success: function(response) {
-                        var text = jQuery.parseJSON(response.responseText);
-                        loadResults(text);
-                    }
-                });
-            }
-
-            if (record.raw.type == 'example') {
-                console.log("Trying to open example #" + record.raw._id);
-                $(document).trigger('openExampleDesign', record.raw._id);
-            }
-
-        }
-    }
+    }]
 });
