@@ -15,7 +15,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     /**
      * Input parameters.
      * @param {Teselagen.models.J5Collection} j5Collection
-     * @param {Teselagen.models.J5Parameters
+     * @param {Teselagen.models.EugeneRules}
+     * @param {Teselagen.models.J5Run}
      */
     fields: [
         {

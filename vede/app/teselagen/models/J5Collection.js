@@ -115,7 +115,7 @@ Ext.define("Teselagen.models.J5Collection", {
 
         for (var i = 0; i < this.bins().count(); i++) {
             bin = this.bins().getAt(i);
-            partIsPresent = bin.isPartInBin(pPart);
+            partIsPresent = bin.hasPart(pPart);
             /*for (var k = 0; k < bin.get("binItemsVector").length; k++) {
                 j5Bin = bin.get("binItemsVector")[k];
                 if (j5Bin === pPart) {
@@ -158,13 +158,6 @@ Ext.define("Teselagen.models.J5Collection", {
      */
     addNewBinByIndex: function(pName, pIndex) {
         var added   = false;
-        
-        if (this.bins() === null) {
-            /*throw Ext.create("Teselagen.bio.BioException", {
-                message: "No collection exists. Cannot add bin"
-            });*/
-            this.set("binsVector", []);
-        }
 
         var j5Bin = Ext.create("Teselagen.models.J5Bin", {
             binName: pName
@@ -232,7 +225,7 @@ Ext.define("Teselagen.models.J5Collection", {
             j5Bin = this.bins().getAt(cnt);
         }
 
-        var added = j5Bin.addToBin(pPart, pPosition);
+        var added = j5Bin.addToParts(pPart, pPosition);
 
         return added;
     },
@@ -256,7 +249,7 @@ Ext.define("Teselagen.models.J5Collection", {
             j5Bin = this.bins().getAt(cnt);
         }
 
-        var removed = j5Bin.removeFromBin(pPart);
+        var removed = j5Bin.removeFromParts(pPart);
 
         return removed;
     },
@@ -272,7 +265,7 @@ Ext.define("Teselagen.models.J5Collection", {
 
         for (var i = 0; i < this.binCount(); i++) {
             var j5Bin = this.bins().getAt(i);
-            for (var j = 0; j < j5Bin.binCount(); j++) {
+            for (var j = 0; j < j5Bin.partCount(); j++) {
                 if (j5Bin.parts().getAt(i) === pPart) {
                     bin = j5Bin.parts().getAt(i);
                 }
