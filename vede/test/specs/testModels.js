@@ -139,7 +139,6 @@ Ext.onReady(function() {
                 var part = Ext.create("Teselagen.models.Part", {
                     fas: "fas1"
                 });
-
                 expect(part.isEmpty()).toBe(false);
                 expect(part.isPartVOEmpty()).toBe(false);
 
@@ -376,11 +375,11 @@ Ext.onReady(function() {
                 expect(bin.get("directionForward")).toBe(true);
                 expect(bin.get("fas")).toBe("");
 
-                expect(bin.binCount()).toBe(0);
+                expect(bin.partCount()).toBe(0);
                 //console.log(bin.parts());
 
                 //var part1   = Ext.create("Teselagen.models.Part");
-                //bin.addToBin(part1);
+                //bin.addToParts(part1);
                 //console.log(bin);
                 //console.log(Ext.getClassName(bin.parts()));
             });
@@ -388,38 +387,41 @@ Ext.onReady(function() {
             it("TEST ASSOCIATIONS HERE() ???", function(){
             });
 
-            it("indexOfPartInBin()", function(){
+            it("hasPart()", function(){
             });
 
-            it("addToBin()", function(){
+            it("indexOfPart()", function(){
+            });
+
+            it("addToParts()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
                 var part3   = Ext.create("Teselagen.models.Part");
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
                     parts: []
                 });
-                expect(bin.binCount()).toBe(0);
+                expect(bin.partCount()).toBe(0);
 
-                var success = bin.addToBin(part1);
+                var success = bin.addToParts(part1);
                 //console.log("J5Bin init-add part");
                 //console.log(bin);
 
                 // check
                 expect(success).toBe(true);
-                expect(bin.binCount()).toBe(1);
+                expect(bin.partCount()).toBe(1);
                 expect(bin.parts().getAt(0)).toBe(part1);
 
                 // add a second part, insert in front of previous part
-                success = bin.addToBin(part2, 0);
+                success = bin.addToParts(part2, 0);
                 expect(success).toBe(true);
-                expect(bin.binCount()).toBe(2);
+                expect(bin.partCount()).toBe(2);
                 expect(bin.parts().getAt(0)).toBe(part2);
                 expect(bin.parts().getAt(1)).toBe(part1);
 
                 // add a third in between
-                success = bin.addToBin(part3, 1);
+                success = bin.addToParts(part3, 1);
                 expect(success).toBe(true);
-                expect(bin.binCount()).toBe(3);
+                expect(bin.partCount()).toBe(3);
 
                 expect(bin.parts().getAt(0)).toBe(part2);
                 expect(bin.parts().getAt(1)).toBe(part3);
@@ -428,20 +430,20 @@ Ext.onReady(function() {
             });
 
 
-            it("addToBin(): Is Part1 and the bin.part1 linked or cloned?", function(){
+            it("addToParts(): Is Part1 and the bin.part1 linked or cloned?", function(){
                 var part1   = Ext.create("Teselagen.models.Part", {
                     fas: "tmpname"
                 });
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
                     //parts: []
                 });
-                expect(bin.binCount()).toBe(0);
+                expect(bin.partCount()).toBe(0);
 
-                var success = bin.addToBin(part1);
+                var success = bin.addToParts(part1);
 
                 // check if the structure is correct.
                 expect(success).toBe(true);
-                expect(bin.binCount()).toBe(1);
+                expect(bin.partCount()).toBe(1);
                 expect(bin.parts().getAt(0)).toBe(part1);
                 expect(bin.parts().getAt(0).get("fas")).toBe("tmpname");
 
@@ -452,30 +454,61 @@ Ext.onReady(function() {
 
             });
             
-            it("removeFromBin()", function(){
+            it("removeFromParts()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
 
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
                     //parts: [part1, part2]
                 });
-                bin.addToBin([part1, part2]);
+                bin.addToParts([part1, part2]);
 
-                expect(bin.binCount()).toBe(2);
+                expect(bin.partCount()).toBe(2);
                 expect(bin.parts().getAt(0)).toBe(part1);
                 expect(bin.parts().getAt(1)).toBe(part2);
 
-                var success = bin.removeFromBin(part1);
+                var success = bin.removeFromParts(part1);
                 expect(success).toBe(true);
-                expect(bin.binCount()).toBe(1);
+                expect(bin.partCount()).toBe(1);
                 expect(bin.parts().getAt(0)).toBe(part2);
                 // should fail to remove it again
-                success = bin.removeFromBin(part1);
+                success = bin.removeFromParts(part1);
                 expect(success).toBe(false);
 
-                success = bin.removeFromBin(part2);
+                success = bin.removeFromParts(part2);
                 expect(success).toBe(true);
-                expect(bin.binCount()).toBe(0);
+                expect(bin.partCount()).toBe(0);
+            });
+
+            it("getPartById()", function(){
+                var part1   = Ext.create("Teselagen.models.Part");
+                var part2   = Ext.create("Teselagen.models.Part");
+
+                var bin     = Ext.create("Teselagen.models.J5Bin", {
+                    //parts: [part1, part2]
+                });
+                bin.addToParts([part1, part2]);
+
+                var id1     = bin.getPartById(part1.get("id"));
+                expect(id1).toBe(part1);
+
+                var id2     = bin.getPartById(part2.get("id"));
+                expect(id2).toBe(part2);
+
+                expect(id1).not.toBe(part2);
+                expect(id2).not.toBe(part1);
+            });
+//LAST HERE  DW: 10.8.2012
+            it("deleteItem()", function(){
+            });
+
+            it("createPart()", function(){
+            });
+
+            it("isUniquePartName()", function(){
+            });
+
+            it("()", function(){
             });
         });
         
@@ -565,7 +598,7 @@ Ext.onReady(function() {
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
                     //parts: [part1]
                 });
-                bin1.addToBin(part1);
+                bin1.addToParts(part1);
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     //binsVector: [bin1]
                 });
@@ -657,12 +690,12 @@ Ext.onReady(function() {
                 coll.addToBin([bin1]);
 
                 expect(coll.binCount()).toBe(1);
-                expect(bin1.binCount()).toBe(0);
+                expect(bin1.partCount()).toBe(0);
                 var success = coll.addPartToBin(part1, 0, 0);
                 expect(success).toBe(true);
                 expect(coll.binCount()).toBe(1);
-                expect(bin1.binCount()).toBe(1);
-                expect(coll.bins().getAt(0).binCount()).toBe(1);
+                expect(bin1.partCount()).toBe(1);
+                expect(coll.bins().getAt(0).partCount()).toBe(1);
             });
 
             it("removePartFromBin()", function(){
@@ -672,7 +705,7 @@ Ext.onReady(function() {
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
                     //parts: [part1]
                 });
-                bin1.addToBin(part1);
+                bin1.addToParts(part1);
 
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     //binsVector: [bin1]
@@ -680,12 +713,12 @@ Ext.onReady(function() {
                 coll.addToBin(bin1);
 
                 expect(coll.binCount()).toBe(1);
-                expect(bin1.binCount()).toBe(1);
+                expect(bin1.partCount()).toBe(1);
                 var success = coll.removePartFromBin(part1, 0);
                 expect(success).toBe(true);
                 expect(coll.binCount()).toBe(1);
-                expect(bin1.binCount()).toBe(0);
-                expect(coll.bins().getAt(0).binCount()).toBe(0);
+                expect(bin1.partCount()).toBe(0);
+                expect(coll.bins().getAt(0).partCount()).toBe(0);
             });
             
             it("getBinAssignment()", function(){
@@ -694,7 +727,7 @@ Ext.onReady(function() {
                 var bin1    = Ext.create("Teselagen.models.J5Bin", {
                     //parts: [part1]
                 });
-                bin1.addToBin(part1);
+                bin1.addToParts(part1);
 
                 var coll    = Ext.create("Teselagen.models.J5Collection", {
                     //binsVector: [bin1]
@@ -705,7 +738,6 @@ Ext.onReady(function() {
                 expect(tmp).toBe(part1);
             });
         });
-//LAST HERE  DW: 10.5.2012
 
         describe("Teselagen.models.J5Run.js", function() {
 

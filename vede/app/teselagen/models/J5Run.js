@@ -7,7 +7,6 @@ Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.J5Bin"
     ],
 
     statics: {

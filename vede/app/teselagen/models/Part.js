@@ -59,6 +59,10 @@ Ext.define("Teselagen.models.Part", {
         {type: "belongsTo", model: "Teselagen.models.J5Bin"}
     ],
 
+    init: function() {
+        
+    },
+
     /**
      * Generates ID based on date + 3 random digits
      * @returns {String} id
@@ -95,14 +99,14 @@ Ext.define("Teselagen.models.Part", {
         } else if (this.get("partVO").isEmpty()) {
             partEmpty = true;
         }
-        console.log(partEmpty);
         
-        if (  partEmpty
-            && this.get("directionForward") === true
-            && this.get("fas") === "" ) {
+        if (partEmpty &&
+            this.get("directionForward") === true &&
+            this.get("fas") === "" ) {
             partEmpty = true;
+        } else {
+            partEmpty = false;
         }
-        console.log(partEmpty);
         return partEmpty;
     },
 
@@ -113,18 +117,20 @@ Ext.define("Teselagen.models.Part", {
     isEmpty: function() {
         var partEmpty = false;
 
-        if (this.get("name") === ""
-            && this.get("revComp") === false
-            && this.get("genbankStartBP") === 0
-            && this.get("endBP") === 0
-            && this.get("sequenceFile") === null) {
+        if (this.get("name") === "" &&
+            this.get("revComp") === false &&
+            this.get("genbankStartBP") === 0 &&
+            this.get("endBP") === 0 &&
+            this.get("sequenceFile") === null) {
             partEmpty = true;
         }
         
-        if (  partEmpty
-            && this.get("directionForward") === true
-            && this.get("fas") === "" ) {
+        if (partEmpty &&
+            this.get("directionForward") === true &&
+            this.get("fas") === "" ) {
             partEmpty = true;
+        } else {
+            partEmpty = false;
         }
         return partEmpty;
     },
@@ -142,12 +148,12 @@ Ext.define("Teselagen.models.Part", {
             return true;
         }
 
-        if (   this.get("name") === otherPart.get("name")
-            && this.get("revComp") === otherPart.get("revComp")
-            && this.get("genbankStartBP") === otherPart.get("genbankStartBP")
-            && this.get("endBP") === otherPart.get("endBP")
-            && this.get("sequenceFile") === otherPart.get("sequenceFile")
-            && this.get("iconID") === otherPart.get("iconID") ) {
+        if (this.get("name") === otherPart.get("name") &&
+            this.get("revComp") === otherPart.get("revComp") &&
+            this.get("genbankStartBP") === otherPart.get("genbankStartBP") &&
+            this.get("endBP") === otherPart.get("endBP") &&
+            this.get("sequenceFile") === otherPart.get("sequenceFile") &&
+            this.get("iconID") === otherPart.get("iconID") ) {
             return true;
         }
         return false;
