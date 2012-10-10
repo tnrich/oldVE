@@ -31,22 +31,7 @@ Ext.onReady(function() {
 
     describe("Testing Teselagen.managers", function() {
 
-        describe("Teselagen.manager.SequenceFileManager.js", function() {
-
-            /*it("createSequenceFile()", function(){
-                var seq = SequenceFileManager.createSequenceFile();
-                expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256(""));
-            });
-
-            it("createSequenceFile(data)", function(){
-                var data = {
-                    sequenceFileFormat: "blah",
-                    sequenceFileContent: "blah"
-                };
-                var seq = SequenceFileManager.createSequenceFile(data);
-                console.log(seq);
-                expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256("blah"));
-            });*/
+        xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
 
             it("addSequenceFile(): add to empty SequenceFileManager array", function(){
                 var seqFileMan = Ext.create("Teselagen.manager.SequenceFileManager", {});
@@ -159,37 +144,7 @@ Ext.onReady(function() {
             });
         });
 
-//LAST HERE  DW: 10.4.2012
-
-        describe("Teselagen.manager.PartManager.js", function() {
-
-            it("getPartVOs()", function(){
-            });
-
-            it("getPartById()", function(){
-            });
-
-            it("getParVOByName()", function(){
-            });
-
-            it("getParVOById()", function(){
-            });
-
-            it("deleteItem()", function(){
-            });
-
-            it("deleteAllItems()", function(){
-            });
-
-            it("createPart()", function(){
-            });
-
-            it("isUniquePartName()", function(){
-            });
-        });
-
-
-        describe("Teselagen.manager.EugeneRuleManager.js", function() {
+        xdescribe("Teselagen.manager.EugeneRuleManager.js", function() {
 
             it("getDefaultNamePattern()", function(){
 
@@ -241,7 +196,19 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Teselagen.manager.J5Manager.js", function() {
+
+
+//LAST HERE  DW: 10.10.2012
+        describe("Teselagen.manager.DeviceDesignManager.js", function() {
+
+            it("checkCombinatorial()", function(){
+            });
+
+            it("checkJ5Ready()", function(){
+            });
+
+            it("()", function(){
+            });
 
             it("()", function(){
             });

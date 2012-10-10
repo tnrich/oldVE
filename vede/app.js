@@ -36,9 +36,6 @@ Ext.Loader.setConfig({
 Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
-    stores: [
-        'ProjectDesignStore'
-    ],
     views: [
         'AppViewport',
         'FileImportWindow',

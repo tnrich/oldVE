@@ -1,4 +1,4 @@
-/**
+/** HAS BEEN REFACTORED INTO Teselagen.models.Part
  * @class Teselagen.models.PartVO
  * Class describing a PartVO for J5Parameters.
  * @author Diana Wong
