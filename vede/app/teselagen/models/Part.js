@@ -38,8 +38,9 @@ Ext.define("Teselagen.models.Part", {
      * @param {String}  iconID iconID
      */
     fields: [
-        {name: "id",        type: "int",                         },
-        {name: "project_id",        type: "int",                         },
+        {name: "id",                type: "int"},
+        {name: "project_id",        type: "int"},
+        
         {name: "partVO",            type: "auto",       defaultValue: null},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "fas",               type: "string",     defaultValue: ""},
