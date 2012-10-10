@@ -30,12 +30,13 @@ Ext.define("Teselagen.models.J5Collection", {
         },*/
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
-        {name: "isCircular",        type: "boolean",    defaultValue: true}
+        {name: "isCircular",        type: "boolean",    defaultValue: true},
+        {name: "deviceDesign_id",   type: "int"}
     ],
 
     associations: [
-        {type: "hasMany", model: "Teselagen.models.J5Bin", name: "bins", defaultValue: null},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign"}
+        {type: "hasMany", model: "Teselagen.models.J5Bin", name: "bins"},
+        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
     ],
 
     init: function() {

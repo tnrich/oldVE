@@ -43,7 +43,8 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "fro",               type: "auto",       defaultValue: null},
         {name: "fas",               type: "string",     defaultValue: ""},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
+        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null},
+        {name: "collection_id",     type: "int"}
 
         /* worry about this later. Original does not include this field.
         ,{
@@ -60,8 +61,9 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     associations: [
-        {type: "hasMany", model: "Teselagen.models.Part", name: "parts", defaultValue: []},
-        {type: "belongsTo", model: "Teselagen.models.J5Collection"}
+        {type: "hasMany",   model: "Teselagen.models.Part",         name: "parts"},
+        {type: "belongsTo", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"}
+        //this.getCollection() works
     ],
 
     init: function(inData) {
@@ -82,16 +84,11 @@ Ext.define("Teselagen.models.J5Bin", {
      * @returns {Boolean} partIsPresent True is in this J5Bin, False if not.
      */
     hasPart: function(pPart) {
-        if (this.parts() === null || this.parts().count() === 0) {
+        if (this.indexOfPart(pPart) === -1) {
             return false;
+        } else {
+            return true;
         }
-
-        for (var i = 0; i < this.parts().count(); i++) {
-            if (this.parts().getAt(i) === pPart) {
-                return true;
-            }
-        }
-        return false;
     },
 
     /**
@@ -100,14 +97,15 @@ Ext.define("Teselagen.models.J5Bin", {
      */
     indexOfPart: function(pPart) {
         var index = -1;
-        if (this.parts() === null || this.parts().count() === 0) {
+        /*if (this.parts() === null || this.parts().count() === 0) {
             return index;
         }
         for (var i = 0; i < this.parts().count(); i++) {
             if (this.parts().getAt(i) === pPart) {
                 index = i;
             }
-        }
+        }*/
+        index = this.parts().indexOf(pPart);
         return index;
     },
 
@@ -139,6 +137,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Removes a Part from the parts.
+     * This DOES NOT check if parts are in EugeneRules. Use deleteItem to check.
      * @param {Teselagen.models.Part} pPart
      * @returns {Boolean} removed True if removed, false if not.
      */
@@ -196,7 +195,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.models.Part} pPart Part to be deleted.
      * @param {Teselagen.manager.Store} pRulesStore List of EugeneRules in this design.
      */
-    deleteItem: function(pPart, pSequenceFileManager, pRulesStore) {
+    deletePart: function(pPart, pDeviceDesign) {
         var linkedPartsExist = false;
         //var isSequenceFileUsedElsewhere = false;
 
@@ -204,12 +203,11 @@ Ext.define("Teselagen.models.J5Bin", {
             if (this.parts().getAt(i) === pPart ) {
                 // want to delete this Part
 
-                var rulesToDelete = pRulesStore.getRulesInvolvingPart(pPart);
-                for (var j = 0; j < rulesToDelete.count(); j++) {
-                    pRulesStore.removeAt(j);
-                }
+                var rulesToDelete = pDeviceDesign.getRulesInvolvingPart(pPart);
+                //console.log(rulesToDelete);
+                pDeviceDesign.removeFromRules(rulesToDelete);
 
-                this.parts().remove(i);
+                this.parts().removeAt(i);
 
                 // If no linked Parks,
                 // Determine if there are parts with the same SequenceFile. If yes, cannot remove.
@@ -247,13 +245,14 @@ Ext.define("Teselagen.models.J5Bin", {
     },
     
 
+    /** IS THIS NECESSARY?
+     *
+     */
     createPart: function(pPart) {
         // If none passed in, create new part, create a new PartVO
         var newPart = pPart;
         if (pPart === null) {
-            newPart = Ext.create("Teselagen.models.Part", {
-                partVO: pPartVO
-            });
+            newPart = Ext.create("Teselagen.models.Part", {});
         }
 
         // Create new Part containing PartVO
@@ -263,19 +262,25 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     // This differs from flex implementation
+    /**
+     * Checks to see if a given name is unique within the Parts names.
+     * @param {String} pName Name to check against parts.
+     * @returns {Boolean} True if unique, false if not.
+     */
     isUniquePartName: function(pName) {
 
-        for (var i = 0; i < this.parts().count(); i++) {
+        /*for (var i = 0; i < this.parts().count(); i++) {
             if (this.parts().getAt(i).get("name") === pName) {
                 return false;
             }
         }
-        return true;
+        return true;*/
+        var index = this.parts().find("name", pName);
+
+        if (index === -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
-
-
-
-
-
 });

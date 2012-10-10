@@ -1,5 +1,5 @@
 /** HAS NOT BEEN FULLY TESTED YET
- * THIS CLASS MAY BE UNNCESSARY
+ * THIS CLASS WILL BE ELIMINATED AND FUNCTIONS WILL BE PUT IN J5COLLECTION.JS
  * @class Teselagen.manager.J5Manager
  * Class describing a J5Manager.
  * J5Manager holds an array of J5Collection, for a given design project.
