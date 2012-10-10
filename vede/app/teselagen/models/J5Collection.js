@@ -34,6 +34,13 @@ Ext.define("Teselagen.models.J5Collection", {
         {name: "deviceDesign_id",   type: "int"}
     ],
 
+    validations: [
+        {field: "j5Ready",          type: "presence"},
+        {field: "combinatorial",    type: "presence"},
+        {field: "isCircular",       type: "presence"},
+        {field: "deviceDesign_id",  type: "presence"}
+    ],
+
     associations: [
         {type: "hasMany", model: "Teselagen.models.J5Bin", name: "bins"},
         {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}

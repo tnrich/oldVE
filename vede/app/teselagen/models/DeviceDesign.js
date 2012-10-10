@@ -27,11 +27,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
     ],
 
+    validations: [
+        {field: "j5Collection",         type: "presence"}
+    ],
+
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject"},
         //{type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
+
         {type: "hasMany",   model: "Teselagen.models.EugeneRule",   name: "rules"},
-        {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"}
+        {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"},
+
+        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject"}
     ],
 
     init: function() {

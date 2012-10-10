@@ -13,6 +13,7 @@ Ext.define("Teselagen.models.Part", {
 
     statics: {
     },
+
     proxy: {
         type: 'rest',
         url: 'getParts.json',
@@ -67,10 +68,22 @@ Ext.define("Teselagen.models.Part", {
         {name: "j5bin_id",          type: "int"}
     ],
 
+    validations: [
+        {field: "name",             type: "presence"},
+        {field: "revComp",          type: "presence"},
+        {field: "genbankStartBP",   type: "presence"},
+        {field: "endBP",            type: "presence"},
+        {field: "sequenceFile",     type: "presence"},
+        {field: "iconID",           type: "presence"}
+        //{field: "j5bin_id",         type: ""}
+    ],
+
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.Project"},
         //{type: "hasOne",    model: "Teselagen.models.SequenceFile", getterName: "getSequenceFile", setterName: "setSequenceFile"},
-        {type: "belongsTo", model: "Teselagen.models.J5Bin", name: "bin", getterName: "getJ5Bin", setterName: "setJ5Bin"}
+
+        {type: "belongsTo", model: "Teselagen.models.J5Bin", getterName: "getJ5Bin", setterName: "setJ5Bin"},
+        {type: "belongsTo", model: "Teselagen.models.EugeneRule", getterName: "getEugeneRule", setterName: "setEugeneRule"},
+        {type: "belongsTo", model: "Teselagen.models.Project"}
     ],
 
     init: function() {
@@ -173,5 +186,37 @@ Ext.define("Teselagen.models.Part", {
             return true;
         }
         return false;
+    },
+
+
+
+    // SOME METHODS FROM SEQUENCEFILEMANAGER/SEQUENCEFILEPROXY
+
+    /** NEEDS TESTING
+     * Adds a SequenceFile to Part.
+     * @param {Teselagen.models.SequenceFile} pSequenceFile
+     * @returns {Boolean} added True if added, false if not.
+     */
+    addSequenceFile: function(pSequenceFile) {
+        this.setSequenceFile(pSequenceFile);
+        if (this.getSequenceFile() === null || this.getSequenceFile() === undefined) {
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    /** NEEDS TESTING
+     * Removes the SequenceFile of Part.
+     * @returns {Boolean} removed True if removed, false if not.
+     */
+    removeSequenceFile: function() {
+        this.setSequenceFile(null);
+        if (this.getSequenceFile() === null || this.getSequenceFile() === undefined) {
+            return false;
+        } else {
+            return true;
+        }
     }
+
 });

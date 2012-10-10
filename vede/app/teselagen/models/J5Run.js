@@ -48,11 +48,15 @@ Ext.define("Teselagen.models.J5Run", {
         }
     ],
 
+    validations: [
+        {field: "j5Collection",         type: "presence"}
+    ],
+
     associations: [
         //{type: "hasOne",    model: "Teselagen.models.J5Parameters", getterName: "getJ5Parameters", setterName: "setJ5Parameters"},
         //{type: "hasOne",    model: "Teselagen.models.DownstreamAutomationParameters", getterName: "getDownstreamAutomationParameters", setterName: "setDownstreamAutomationParameters"},
         //{type: "hasOne",    model: "Teselagen.models.J5Results", getterName: "getJ5Results", setterName: "setJ5Results"},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign"}
+        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
     ],
 
     init: function() {
