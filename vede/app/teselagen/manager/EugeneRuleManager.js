@@ -1,4 +1,5 @@
 /** HAS NOT BEEN FULLY TESTED YET
+ * THIS CLASS WILL BE ELIMINATED AND FUNCTIONS WILL BE PUT IN DEVICEDESIGN.JS
  * @class Teselagen.manager.EugeneRuleManager
  * Class describing a EugeneRuleManager.
  * EugeneRuleManager holds an array of EugeneRules, for a given design project.
@@ -200,7 +201,7 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
         return null;
     },
 
-    /**
+    /** THIS SEEMS REDUNDANT OF getRulesInvolvingPartVO
      * Returns the eugeneRules that apply to the given PartVO.
      * This includes all rules where the PartVO is the first operand,
      * as well as all AFTER, NOT AFTER, BEFORE, NOT BEFORE, WITH, NOT WITH,
@@ -247,7 +248,7 @@ Ext.define("Teselagen.manager.EugeneRuleManager", {
     },
 
     /**
-     * @param {String.models.PartVO} pName
+     * @param {String} pName
      * @return {Boolean}
      */
     isUniqueRuleName: function(pName) {
