@@ -68,7 +68,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         this.set("sequenceFileContent", pContent);
 
         // DO NOT NEED TO DO writeUTFBytes
-        var contentByte = encodeURIComponent(pContent);
+        //var contentByte = encodeURIComponent(pContent);
         //https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/encodeURIComponent
 
         var hash = Teselagen.bio.util.Sha256.hex_sha256(pContent);

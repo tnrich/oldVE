@@ -47,10 +47,6 @@ Ext.define("Teselagen.models.J5Collection", {
     ],
 
     init: function() {
-        //if (this.bins().count() === 0|| this.bins() === null) {
-        //    this.set("binsVector", []);
-        //}
-        //console.log(this.binsVector); //does not work
     },
 
     /**
@@ -280,5 +276,20 @@ Ext.define("Teselagen.models.J5Collection", {
             }
         }
         return bin;
+    },
+
+    /**
+     * Checks to see if a given name is unique within the J5Bins names.
+     * @param {String} pName Name to check against bins.
+     * @returns {Boolean} True if unique, false if not.
+     */
+    isUniqueBinName: function(pName) {
+        var index = this.bins().find("name", pName);
+
+        if (index === -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 });

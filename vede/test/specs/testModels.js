@@ -225,7 +225,7 @@ Ext.onReady(function() {
                 expect(tmp.get("sequenceFileName")).toBe("ssrA_tag_enhance.fas");
                 expect(tmp.get("partSource")).toBe("ssrA_tag_enhance");
                 expect(tmp.get("hash")).toBe(trueHash);
-                
+
                 console.log(tmp);
             });
         });
@@ -428,6 +428,8 @@ Ext.onReady(function() {
                     compositionalOperator: "BEFORE",
                     operand2: 123
                 });
+                console.log(eug);
+                console.log(eug.validate());
                 var str = eug.generateText();
                 expect(str).toBe("Rule eug(part BEFORE 123);");
             });

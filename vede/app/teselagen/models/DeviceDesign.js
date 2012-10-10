@@ -32,7 +32,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     ],
 
     associations: [
-        //{type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
+        {type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
 
         {type: "hasMany",   model: "Teselagen.models.EugeneRule",   name: "rules"},
         {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"},
