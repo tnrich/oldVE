@@ -173,7 +173,7 @@
                         "id": "projectDesignTab",
                         "layout": "fit",
                         "minButtonWidth": 32,
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
                     "cn": [
@@ -239,7 +239,7 @@
                         "designer|userClassName": "MyPanel20",
                         "id": "projectAnalysisTab",
                         "layout": "fit",
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
                     "cn": [
@@ -300,7 +300,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectPartsTab",
                         "layout": "fit",
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
                     "cn": [
@@ -361,7 +361,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectRegistryTab",
                         "layout": "fit",
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
                     "cn": [
@@ -439,7 +439,9 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "container|align": "stretch",
                         "designer|userClassName": "MyPanel7",
+                        "layout": "hbox",
                         "title": "Dashboard"
                     },
                     "designerId": "6feb6c60-c280-4270-aaee-c4095fa9d402",
@@ -459,6 +461,72 @@
                                 "tooltipType": null
                             },
                             "designerId": "01e8636b-b003-4607-97bc-f8859ec86735"
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": 1,
+                                "container|align": "stretch",
+                                "designer|userClassName": "MyPanel22",
+                                "layout": "vbox",
+                                "title": null
+                            },
+                            "designerId": "010cf8b0-d713-4785-a2a9-196285fe7a55",
+                            "cn": [
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "designer|userClassName": "MyPanel24",
+                                        "layout": "fit",
+                                        "title": "My Panel"
+                                    },
+                                    "designerId": "240cb9b7-26e9-4fbb-b14a-0d2829f5504b"
+                                },
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 2,
+                                        "designer|userClassName": "MyPanel25",
+                                        "maxHeight": 300,
+                                        "layout": "fit",
+                                        "title": "My Panel"
+                                    },
+                                    "designerId": "47d51005-3cf6-4628-a00b-11b4d104c6b3"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": 2,
+                                "designer|userClassName": "MyPanel23",
+                                "maxWidth": 200,
+                                "minWidth": null,
+                                "layout": "fit",
+                                "title": "My Panel"
+                            },
+                            "designerId": "817e75a8-dec1-4297-88a9-5c8d958c7c8c"
                         }
                     ]
                 },

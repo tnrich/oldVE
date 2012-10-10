@@ -102,6 +102,7 @@ Ext.define('Vesa.view.AppViewport', {
                                 type: 'fit'
                             },
                             minButtonWidth: 32,
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'projectTab1',
@@ -126,6 +127,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'projectTab2',
@@ -149,6 +151,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'projectTab3',
@@ -172,6 +175,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'projectTab4',
@@ -200,11 +204,53 @@ Ext.define('Vesa.view.AppViewport', {
                     items: [
                         {
                             xtype: 'panel',
+                            layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
                             title: 'Dashboard',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'DashboardTab'
-                            }
+                            },
+                            items: [
+                                {
+                                    xtype: 'panel',
+                                    flex: 1,
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            title: 'My Panel'
+                                        },
+                                        {
+                                            xtype: 'panel',
+                                            flex: 2,
+                                            maxHeight: 300,
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            title: 'My Panel'
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'panel',
+                                    flex: 2,
+                                    maxWidth: 200,
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    title: 'My Panel'
+                                }
+                            ]
                         },
                         {
                             xtype: 'panel',
