@@ -35,6 +35,7 @@ Ext.onReady(function() {
         describe("Create Project Store", function() {
 
             var store;
+            var value,flag;
 
             it("Create Project Store", function(){
                 store = Ext.create("Teselagen.store.ProjectStore");
@@ -42,31 +43,47 @@ Ext.onReady(function() {
             });
         
             it("Load the data", function(){
-                store.load();
-                expect(store.getTotalCount()).toBe(2);
+            
+              runs(function() {
+                    flag = false;
+                    store.load({
+                        scope: this,
+                        callback: function(records, operation, success) {
+                            flag = true;
+                        }
+                    });
+                    setTimeout(function() {
+                      flag = true;
+                    }, 500);
+              });
+
+              waitsFor(function() {return flag;}, "The json should be loaded", 750);
+
+
+              runs(function() {
+                    expect(store.getTotalCount()).toBe(2);
+              });
+
             });
 
+            
             it("Load Nested Data", function(){
                 var firstRecord = store.data.items[0];
-                //console.log(firstRecord);
+                console.log(firstRecord);
                 var parts = firstRecord.parts();
-                console.log(parts);
-                
-                store.load({
-                  params: {
-                    group: 3,
-                    type: 'user'
-                  },
-                  callback: function(records, operation, success){
-                    //console.log("Nested data loaded");
-                    //console.log(success);
-                    //console.log(records);
-                  },
-                  scope: this
+
+                if(parts.isLoading()) {
+                    console.log('Parts are loading');
+                }
+                parts.on('load', function() {
+                    console.log('Parts Loaded');
+                    parts.clearFilter();
+                    var firstPart = parts.data.items[0];
+                    console.log(firstPart);
                 });
                 
             });
-
+            
             
         });
 

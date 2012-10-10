@@ -13,6 +13,14 @@ Ext.define("Teselagen.models.Part", {
 
     statics: {
     },
+    proxy: {
+        type: 'rest',
+        url: 'getParts.json',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
 
     /**
      * Input parameters.
@@ -30,10 +38,12 @@ Ext.define("Teselagen.models.Part", {
      * @param {String}  iconID iconID
      */
     fields: [
+        {name: "id",        type: "int",                         },
+        {name: "project_id",        type: "int",                         },
         {name: "partVO",            type: "auto",       defaultValue: null},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "fas",               type: "string",     defaultValue: ""},
-        {
+        /*{
             name: "id",
             convert: function() {
                 var extraDigits = Math.floor(Math.random() * 1000).toString();
@@ -45,7 +55,7 @@ Ext.define("Teselagen.models.Part", {
                 return id;
             }
         },
-
+        */
         // Fields from PartVO
         {name: "name",              type: "string",     defaultValue: ""},      //name
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
@@ -56,7 +66,8 @@ Ext.define("Teselagen.models.Part", {
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.J5Bin"}
+        {type: "belongsTo", model: "Teselagen.models.J5Bin"},
+        {type: "belongsTo", model: "Teselagen.models.Project"}
     ],
 
     init: function() {
