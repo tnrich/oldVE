@@ -12,6 +12,11 @@ Ext.define("Teselagen.models.EugeneRule", {
     ],
 
     statics: {
+        // For Default Names
+        // This Differs from EugeneRules.as
+        defaultNamePrefix: "rule",
+        highestDefaultNameIndex: 0,
+
         // Deprecated
         NOTMORETHAN: "NOTMORETHAN",
         // Deprecated
@@ -27,7 +32,7 @@ Ext.define("Teselagen.models.EugeneRule", {
 
     /**
      * Input parameters.
-     * @param {String} name The name of the Eugene Rule. Must contain only alphanumeric/underscore/hyphen characters.
+     * @param {String} name The name of the Eugene Rule. Must contain only alphanumeric/underscore/hyphen characters. Will default to "rule"+i when name is empty string.
      * @param {Boolean} negationOperator
      * @param {Teselagen.models.Part} operand1
      * @param {String} compositionalOperator
@@ -41,7 +46,7 @@ Ext.define("Teselagen.models.EugeneRule", {
                     console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
                     v = v.replace(/[^a-zA-Z0-9_\-]*/g, "");
                 }
-                return v || "";
+                return v;
             }
         },
         
@@ -65,8 +70,29 @@ Ext.define("Teselagen.models.EugeneRule", {
 
         //console.log(pDeviceDesign.isUniqueRuleName(this));
 
+
+        // If Name is "", use default + number as name
+        if (this.get("name") === "") {
+            this.set("name", this.self.defaultNamePrefix + this.self.highestDefaultNameIndex);
+                this.self.highestDefaultNameIndex += 1;
+        }
+
         // Check Operand2
         this.setOperand2(this.get("operand2"));
+
+        // Check CompositionalOperator
+        var compOp = this.get("compositionalOperator");
+        if (compOp === this.self.AFTER || compOp === this.self.BEFORE || compOp === this.self.WITH || compOp === this.self.THEN || compOp === this.self.NEXTTO || compOp === this.self.MORETHAN ) {
+            // These check out
+        } else if (compOp === this.self.NOTMORETHAN || compOp === this.self.NOTWITH) {
+            // These are ok, just deprecated
+        } else {
+            // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
+            console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
+            /*throw Ext.create("Teselagen.bio.BioException", {
+                message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
+            });*/
+        }
 
     },
 

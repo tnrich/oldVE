@@ -344,11 +344,12 @@ Ext.onReady(function() {
 
             it("Creates EugeneRule", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
                 });
                 expect(eugene).not.toBe(null);
 
-                expect(eugene.get("name")).toBe("");
+                expect(eugene.get("name")).toBe("rule0"); //
                 expect(eugene.get("negationOperator")).toBe(false);
             });
 
@@ -356,7 +357,9 @@ Ext.onReady(function() {
                 var eugene, e;
                 var flag = false;
                 try {
-                    eugene = Ext.create("Teselagen.models.EugeneRule");
+                    eugene = Ext.create("Teselagen.models.EugeneRule", {
+                        compositionalOperator: "AFTER"
+                    } );
                 } catch (bio) {
                     flag = true;
                     expect(bio.message).toBe("Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part.");
@@ -367,15 +370,17 @@ Ext.onReady(function() {
             it("Repairs a bad name", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     name: "blah blah",
-                    operand2: 123
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
                 });
                 expect(eugene.get("name")).toBe("blahblah");
             });
 
-            it("setOperand2()", function(){
+            it("setOperand2() (test to make sure its ok)", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     name: "name1",
-                    operand2: 123
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
                 });
                 expect(eugene).not.toBe(null);
 
@@ -396,11 +401,11 @@ Ext.onReady(function() {
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
                     operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
-                    compositionalOperator: "compOp",
+                    compositionalOperator: "BEFORE",
                     operand2: 123
                 });
                 var str = eug.generateText();
-                expect(str).toBe("Rule eug(part compOp 123);");
+                expect(str).toBe("Rule eug(part BEFORE 123);");
             });
 
             it("", function(){
@@ -578,7 +583,8 @@ Ext.onReady(function() {
                 var rule1   = Ext.create("Teselagen.models.EugeneRule", {
                     name: "rule1",
                     operand1: part1,
-                    operand2: part2
+                    operand2: part2,
+                    compositionalOperator: "AFTER"
                 });
 
                 // Create a bin with parts
