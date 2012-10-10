@@ -62,12 +62,14 @@ Ext.define("Teselagen.models.Part", {
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
         {name: "sequenceFile",      type: "auto",       defaultValue: null},    //sequenceFileHash
-        {name: "iconID",            type: "string",     defaultValue: null}
+        {name: "iconID",            type: "string",     defaultValue: ""},
+        {name: "j5bin_id",          type: "int"}
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.J5Bin"},
-        {type: "belongsTo", model: "Teselagen.models.Project"}
+        {type: "belongsTo", model: "Teselagen.models.Project"},
+        //{type: "hasOne",    model: "Teselagen.models.SequenceFile", getterName: "getSequenceFile", setterName: "setSequenceFile"},
+        {type: "belongsTo", model: "Teselagen.models.J5Bin", name: "bin", getterName: "getJ5Bin", setterName: "setJ5Bin"}
     ],
 
     init: function() {
@@ -133,6 +135,7 @@ Ext.define("Teselagen.models.Part", {
             this.get("genbankStartBP") === 0 &&
             this.get("endBP") === 0 &&
             this.get("sequenceFile") === null) {
+            //this.getSequenceFile() === null) {
             partEmpty = true;
         }
         
@@ -164,6 +167,7 @@ Ext.define("Teselagen.models.Part", {
             this.get("genbankStartBP") === otherPart.get("genbankStartBP") &&
             this.get("endBP") === otherPart.get("endBP") &&
             this.get("sequenceFile") === otherPart.get("sequenceFile") &&
+            //this.getSequenceFile() === otherPart.getSequenceFile() &&
             this.get("iconID") === otherPart.get("iconID") ) {
             return true;
         }

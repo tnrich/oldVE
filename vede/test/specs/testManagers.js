@@ -29,7 +29,7 @@ Ext.onReady(function() {
     Sha256              = Teselagen.bio.util.Sha256;
     SequenceFileManager = Teselagen.manager.SequenceFileManager;
 
-    describe("Testing Teselagen.managers", function() {
+    xdescribe("Testing Teselagen.managers", function() {
 
         describe("Teselagen.manager.SequenceFileManager.js", function() {
 
