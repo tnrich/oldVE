@@ -30,7 +30,7 @@ Ext.define("Teselagen.models.J5Results", {
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.J5Run"}
+        {type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", assocationKey: "run"}
     ],
 
     init: function() {

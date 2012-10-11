@@ -78,10 +78,10 @@ Ext.define("Teselagen.models.EugeneRule", {
     ],
 
     associations: [
-        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand1", setterName: "setOperand1"},
-        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand2", setterName: "setOperand2"},
+        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand1", setterName: "setOperand1", associationKey: "operand1"},
+        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand2", setterName: "setOperand2", associationKey: "operand2"},
         
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
+        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign", associationKey: "deviceDesign"}
     ],
 
 

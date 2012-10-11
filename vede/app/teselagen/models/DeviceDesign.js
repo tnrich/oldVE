@@ -19,12 +19,13 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        {
+        {name: "deviceName",           type: "boolean",    defaultValue: false}
+        /*{
             name: "j5Collection",
             convert: function(v, record) {
                 return v || null; //Ext.create("Teselagen.models.J5Collection");
             }
-        }
+        }*/
     ],
 
     validations: [
@@ -32,12 +33,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
     ],
 
     associations: [
-        {type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
+        //{type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5Collection"},
 
         {type: "hasMany",   model: "Teselagen.models.EugeneRule",   name: "rules"},
         {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"},
 
-        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject"}
+        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject", associationKey: "project"}
     ],
 
     init: function() {
