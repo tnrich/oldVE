@@ -111,7 +111,53 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             }
         }
         return count;
+    },
+
+
+    parseSeqCsv: function(pCsv) {
+
+    },
+
+    parsePartCsv: function(pCsv) {
+
+    },
+
+    parseTargetCsv: function(pCsv) {
+
+    },
+
+    reverseComplement: function(pSeq) {
+        var revComp = [];
+        pSeq = pSeq.toLowerCase();
+
+        for (var i = pSeq.length-1; i >= 0; i--) {
+            switch (pSeq.charAt(i)) {
+                case "a":
+                    revComp.push("t");
+                    break;
+                case "c":
+                    revComp.push("g");
+                    break;
+                case "g":
+                    revComp.push("a");
+                    break;
+                case "t":
+                    revComp.push("a");
+                    break;
+            }
+        }
+        return revComp.join("");
+    },
+
+    isLegalName: function(pName) {
+        if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
+            return false;
+        } else {
+            return true;
+        }
     }
+
+
 
 
 });

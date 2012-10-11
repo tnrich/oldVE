@@ -77,6 +77,42 @@ function loadResults(record) {
     win.show();
 };
 
+var data = {
+  "designs": [
+    {
+        "text": "Design 1",
+        "leaf": true
+    },
+    {
+        "text": "Design 2",
+        "leaf": true
+    }
+  ],
+  "j5results": [
+    {
+        "text": "Result 1",
+        "leaf": true
+    },
+    {
+        "text": "Result 2",
+        "leaf": true
+    }
+  ]
+};
+
+var store = 
+Ext.create("Teselagen.store.ProjectTreeStore", {
+    extend: 'Ext.data.TreeStore',
+    autoLoad: false,
+    proxy: {
+        type: 'memory',
+        data: data,
+        reader: {
+            type: 'json',
+            root: 'designs'
+        }
+    }
+    });
 
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.tab.Panel',
@@ -116,19 +152,12 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             id: 'projectDesignPanel',
             title: 'Your Designs',
             rootVisible: false,
-            store: Ext.create('Teselagen.store.ProjectTreeStore'),
-            viewConfig: {
-                markDirty: false
-            },
             listeners: {
                 itemclick: function(view, record, item, index, e, eOpts) {
                    //console.log(JSON.stringify(record.raw));
-                   //console.log(record.fields.getCount());
-                   //console.log(record);
-                   console.log(record.store);
-                   console.log(record.parentNode);
-                   var parts = record.parentNode.parts();
-                   var part = parts.findRecord('id',record.data.id);
+                },
+                render: function(){
+                    
                 }
             }
         }]

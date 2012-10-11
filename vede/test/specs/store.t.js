@@ -42,7 +42,7 @@ Ext.onReady(function() {
                 expect(store).not.toBe(null);
             });
         
-            it("Load the data", function(){
+            it("Load Projects", function(){
             
               runs(function() {
                     flag = false;
@@ -67,23 +67,40 @@ Ext.onReady(function() {
             });
 
             
-            it("Load Nested Data", function(){
+            it("Load Specific Project", function(){
                 var firstRecord = store.data.items[0];
-                console.log(firstRecord);
+                //console.log(firstRecord);
                 var parts = firstRecord.parts();
 
                 if(parts.isLoading()) {
-                    console.log('Parts are loading');
+                    //console.log('Parts are loading');
                 }
                 parts.on('load', function() {
-                    console.log('Parts Loaded');
+                    //console.log('Parts Loaded');
                     parts.clearFilter();
                     var firstPart = parts.data.items[0];
-                    console.log(firstPart);
+                    expect(firstPart).not.toBe(null);
                 });
                 
             });
             
+            it("Load Designs of a Project", function(){
+              var firstRecord = store.data.items[0];
+              
+                var designs = firstRecord.designs();
+
+                if(designs.isLoading()) {
+                    console.log('Designs are loading');
+                }
+                designs.on('load', function() {
+                    console.log('Designs Loaded');
+                    designs.clearFilter();
+                    var firstDesign = designs.data.items[0];
+                    expect(firstDesign).not.toBe(null);
+                    console.log(firstDesign);
+                });
+
+            });
             
         });
 

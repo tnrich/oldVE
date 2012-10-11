@@ -94,8 +94,10 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
+                        console.log('Execute app');
+                        var store = Ext.create("Teselagen.store.ProjectStore");
+                        store.load();
                         Ext.getBody().unmask();
-
                     }
                 }
             });

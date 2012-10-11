@@ -11,6 +11,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     statics: {
     },
+    proxy: {
+        type: 'rest',
+        url: 'getDesign.json',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
 
     /**
      * Input parameters.
@@ -19,6 +27,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
+        { name: "DesignName", type: "String", defaultValue: ""},
         {
             name: "j5Collection",
             convert: function(v, record) {
@@ -27,17 +36,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
     ],
 
-    validations: [
-        {field: "j5Collection",         type: "presence"}
-    ],
-
     associations: [
-        {type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
-
+        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject"},
+        //{type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
         {type: "hasMany",   model: "Teselagen.models.EugeneRule",   name: "rules"},
-        {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"},
-
-        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject"}
+        {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"}
     ],
 
     init: function() {

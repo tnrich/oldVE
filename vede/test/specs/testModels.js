@@ -308,7 +308,7 @@ Ext.onReady(function() {
                 expect(part.isEmpty()).toBe(true);
                 expect(part.isPartVOEmpty()).toBe(true);
 
-                expect(part.get("partVO")).toBe(null);
+                //expect(part.get("partVO")).toBe(null);
                 expect(part.get("fas")).toBe("");
                 expect(part.get("id")).not.toBe("");
 

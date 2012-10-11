@@ -43,7 +43,7 @@ Ext.define("Teselagen.models.J5Collection", {
 
     associations: [
         {type: "hasMany", model: "Teselagen.models.J5Bin", name: "bins"},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
+        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign", associationKey: "deviceDesign"}
     ],
 
     init: function() {
