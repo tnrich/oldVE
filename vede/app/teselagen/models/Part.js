@@ -8,7 +8,8 @@ Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.PartVO"
+        "Teselagen.models.PartVO",
+        "Teselagen.models.SequenceFile"
     ],
 
     proxy: {
@@ -67,7 +68,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        //{name: "sequenceFile",      type: "auto"},
+        {name: "sequenceFile_id",   type: "int"},
         {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "j5bin_id",          type: "int"}
     ],
@@ -77,7 +78,6 @@ Ext.define("Teselagen.models.Part", {
         {field: "revComp",          type: "presence"},
         {field: "genbankStartBP",   type: "presence"},
         {field: "endBP",            type: "presence"},
-        {field: "sequenceFile",     type: "presence"},
         {field: "iconID",           type: "presence"}
     ],
 
