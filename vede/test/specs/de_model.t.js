@@ -1,8 +1,9 @@
 /*global beforeEach, describe, expect, it, runs, waitsFor*/
-var userStore;
+var userStore, partStore;
 describe("Device Editor models tests.", function () {
 //    var bin, part, partvo, seqfile;
-    var user, orders, order, data, address;
+    var part, partData;
+    var user, orders, order, userData, address;
     beforeEach(function() {
         Ext.define("User", {
             extend: 'Ext.data.Model',
@@ -24,7 +25,7 @@ describe("Device Editor models tests.", function () {
                      'street'
                      ]
         });
-        data = {
+        userData = {
                 "users": [{
                     "id": 123,
                     "name": "Ed",
@@ -41,7 +42,7 @@ describe("Device Editor models tests.", function () {
             Ext.onReady(function() {
                 userStore = Ext.create('Ext.data.Store', {
                     model: "User",
-                    data: data,
+                    data: userData,
                     proxy: {
                         type: 'memory',
                         reader: {type:'json', root: 'users'}
@@ -83,27 +84,48 @@ describe("Device Editor models tests.", function () {
             expect(address.data.street).toBe("Embarcadero");
         });
     });
-    xit("Create SequenceFile.", function() {
-//        seqfile = Ext.create("Teselagen.models.SequenceFile", {
-//            sequenceFileName: "Testfile"
-//        });
-        seqfileStore = Ext.create("Ext.data.Store", {
-            model: "Teselagen.models.SequenceFile",
-            data: [
-                {sequenceFileName: "file1"},
-                {sequenceFileName: "file2"}
-            ]
+    it("Part test", function() {
+        partData = {
+                "parts": [{
+                    "id": 123,
+                    "name": "mypart",
+                    "sequenceFile": {
+                        "id": 10,
+                        "sequenceFileName": "myFasta",
+                        "sequenceFileFormat": "FASTA",
+                        "sequenceFileContent": ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n"
+
+                    }
+                }]
+        };
+        runs(function() {
+            Ext.onReady(function() {
+                partStore = Ext.create('Ext.data.Store', {
+                    model: "Teselagen.models.Part",
+                    data: partData,
+                    proxy: {
+                        type: 'memory',
+                        reader: {type:'json', root: 'parts'}
+                    }
+                });
+            });
+        });
+        waitsFor(function() {
+            if (partStore) {
+                return true;
+            }
+        });
+        runs(function() {
+            part = partStore.first();
+            expect(part).toBeDefined();
+            expect(part.data.id).toBe(123);
+            expect(part.data.name).toBe("mypart");
+            seqfile = part.getSequenceFile();
+            expect(seqfile).toBeDefined();
+            expect(seqfile.data.sequenceFileName).toBe("myGenbank");
         });
     });
-    it("Create PartVO.", function() {
-        partvo = Ext.create("Teselagen.models.PartVO", {
-            name: "mypartvo"
-        });
-    });
-    it("Create Part.", function() {
-        part = Ext.create("Teselagen.models.Part");
-    });
-    it("Create J5Bin.", function() {
+    xit("Create J5Bin.", function() {
         bin = Ext.create("Teselagen.models.J5Bin");
     });
 });
