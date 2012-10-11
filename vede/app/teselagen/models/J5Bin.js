@@ -60,9 +60,21 @@ Ext.define("Teselagen.models.J5Bin", {
         
     ],
 
+    validations: [
+        {field: "binName",          type: "presence"},
+        {field: "iconID",           type: "presence"},
+        {field: "directionForward", type: "presence"},
+        {field: "dsf",              type: "presence"},
+        {field: "fro",              type: "presence"},
+        {field: "fas",              type: "presence"},
+        {field: "extra5PrimeBps",   type: "presence"},
+        {field: "extra3PrimeBps",   type: "presence"},
+        {field: "collection_id",    type: "presence"}
+    ],
+
     associations: [
         {type: "hasMany",   model: "Teselagen.models.Part",         name: "parts"},
-        {type: "belongsTo", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"}
+        {type: "belongsTo", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5Collection"}
         //this.getCollection() works
     ],
 

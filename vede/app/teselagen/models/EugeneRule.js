@@ -57,9 +57,31 @@ Ext.define("Teselagen.models.EugeneRule", {
         {name: "operand2",              type: "auto",       defaultValue: null}
     ],
 
+    validations: [
+        {field: "name",             type: "presence"},
+        //{field: "negationOperator", type: "presence"},
+        {field: "operand1",         type: "presence"},
+        {field: "compositionalOperator",    type: "presence"},
+        {field: "compositionalOperator",    type: "inclusion",
+                list: [             //Cannot access the statics, hard coding for now.
+                    "AFTER",
+                    "BEFORE",
+                    "WITH",
+                    "THEN",
+                    "NEXTTO",
+                    "MORETHAN",
+                    this.self.NOTMORETHAN,
+                    this.self.NOTWITH
+                ]
+        },
+        {field: "operand2",         type: "presence"}
+    ],
+
     associations: [
-        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getPart", setterName: "setPart"},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
+        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand1", setterName: "setOperand1", associationKey: "operand1"},
+        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand2", setterName: "setOperand2", associationKey: "operand2"},
+        
+        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign", associationKey: "deviceDesign"}
     ],
 
 
