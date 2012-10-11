@@ -15,6 +15,10 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
     requires: [
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
         MDTAZ:            "MAXDELTATEMPERATUREADJACENTZONES",
         MDTROZA:          "MAXDELTATEMPERATUREREACTIONOPTIMUMZONEACCEPTABLE",

@@ -16,6 +16,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         "Teselagen.constants.Constants"
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
         //NAME: "SequenceFileProxy"
     },

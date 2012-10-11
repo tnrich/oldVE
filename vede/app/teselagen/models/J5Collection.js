@@ -8,8 +8,11 @@ Ext.define("Teselagen.models.J5Collection", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.J5Bin"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
     },
@@ -42,8 +45,18 @@ Ext.define("Teselagen.models.J5Collection", {
     ],
 
     associations: [
-        {type: "hasMany", model: "Teselagen.models.J5Bin", name: "bins"},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign", associationKey: "deviceDesign"}
+        {
+            type: "hasMany",
+            model: "Teselagen.models.J5Bin",
+            name: "bins"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceDesign",
+            getterName: "getDeviceDesign",
+            setterName: "setDeviceDesign",
+            associationKey: "deviceDesign"
+        }
     ],
 
     init: function() {

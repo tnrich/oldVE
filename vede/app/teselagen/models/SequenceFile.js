@@ -12,6 +12,10 @@ Ext.define("Teselagen.models.SequenceFile", {
         "Teselagen.constants.Constants"
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
     },
 
@@ -40,8 +44,22 @@ Ext.define("Teselagen.models.SequenceFile", {
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.Part", name: "bin", getterName: "getPart", setterName: "setPart", associationKey: "part"},
-        {type: "belongsTo", model: "Teselagen.models.PartVO", name: "bin", getterName: "getPartVO", setterName: "setPartVO", associationKey: "partVO"}
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Part",
+            name: "part",
+            getterName: "getPart",
+            setterName: "setPart",
+            associationKey: "part"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Project",
+            name: "project",
+            getterName: "getProject",
+            setterName: "setProject",
+            associationKey: "project"
+        }
     ],
     
     proxy: {
@@ -69,6 +87,10 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @returns {String} hash SequenceHash
      */
     setSequenceFileContent: function(pContent) {
+
+        if (pContent === undefined || pContent === null) {
+            pContnent = "";
+        }
 
         this.set("sequenceFileContent", pContent);
 
@@ -132,7 +154,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                console.warn("File format for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
+                console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
             }
         }
         this.set("sequenceFileName", name);

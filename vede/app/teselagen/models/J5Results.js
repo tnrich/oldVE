@@ -9,6 +9,10 @@ Ext.define("Teselagen.models.J5Results", {
     requires: [
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
     },
 
@@ -16,6 +20,7 @@ Ext.define("Teselagen.models.J5Results", {
      * Input parameters.
      */
     fields: [
+        {name: "ResultsName", type: "String", defaultValue: ""},
         {name: "eugeneruleslist",   type: "string",     defaultValue: ""}, //.eug
         {name: "j5parameters",      type: "string",     defaultValue: ""}, //.csv
         {name: "masterplasmidlist", type: "string",     defaultValue: ""}, //.csv
@@ -30,7 +35,13 @@ Ext.define("Teselagen.models.J5Results", {
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.J5Run", getterName: "getJ5Run", setterName: "setJ5Run", assocationKey: "run"}
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            assocationKey: "j5run"
+        }
     ],
 
     init: function() {

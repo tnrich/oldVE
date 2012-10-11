@@ -9,9 +9,12 @@ Ext.define("Teselagen.models.J5Bin", {
 
     requires: [
         "Teselagen.constants.SBOLvIcons",
-        "Teselagen.models.Part",
         "Teselagen.utils.NullableInt"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
         GENERIC: "generic"
@@ -73,9 +76,18 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     associations: [
-        {type: "hasMany",   model: "Teselagen.models.Part",         name: "parts"},
-        {type: "belongsTo", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5Collection"}
-        //this.getCollection() works
+        {
+            type: "hasMany",
+            model: "Teselagen.models.Part",
+            name: "parts"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Collection",
+            getterName: "getJ5Collection",
+            setterName: "setJ5Collection",
+            associationKey: "j5Collection"
+        }
     ],
 
     init: function(inData) {

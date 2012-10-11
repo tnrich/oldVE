@@ -11,6 +11,10 @@ Ext.define("Teselagen.models.EugeneRule", {
         "Teselagen.models.PartVO"
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
         // For Default Names
         // This Differs from EugeneRules.as
@@ -78,10 +82,28 @@ Ext.define("Teselagen.models.EugeneRule", {
     ],
 
     associations: [
-        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand1", setterName: "setOperand1", associationKey: "operand1"},
-        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getOperand2", setterName: "setOperand2", associationKey: "operand2"},
-        
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign", associationKey: "deviceDesign"}
+        /*{
+            type: "hasOne",
+            model: "Teselagen.models.Part",
+            getterName: "getOperand1",
+            setterName: "setOperand1",
+            associationKey: "operand1"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.Part",
+            getterName: "getOperand2",
+            setterName: "setOperand2",
+            associationKey: "operand2"
+        },
+        */
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceDesign",
+            getterName: "getDeviceDesign",
+            setterName: "setDeviceDesign",
+            associationKey: "deviceDesign"
+        }
     ],
 
 
