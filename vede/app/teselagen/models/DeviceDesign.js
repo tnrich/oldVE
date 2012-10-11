@@ -27,34 +27,54 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        { name: "DesignName", type: "String", defaultValue: ""},
-        {
+        { name: "DesignName", type: "String", defaultValue: ""}
+        /*{
             name: "j5Collection",
             convert: function(v, record) {
                 return v || null; //Ext.create("Teselagen.models.J5Collection");
             }
-        }
+        }*/
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterNme: "setProject"},
-        //{type: "hasOne",    model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"},
-        {type: "hasMany",   model: "Teselagen.models.EugeneRule",   name: "rules"},
-        {type: "hasMany",   model: "Teselagen.models.J5Run",        name: "runs"}
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Project",
+            getterName: "getProject",
+            setterNme: "setProject"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.J5Collection",
+            getterName: "getJ5Collection",
+            setterName: "setJ5Collection",
+            associationKey: "j5collection"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.EugeneRule",
+            name: "rules"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.J5Run",
+            name: "runs"
+        }
     ],
 
     init: function() {
     },
 
     createNewCollection: function(pNumBins) {
-        if (this.get("j5Collection").binCount() > 0) {
+        if (this.getJ5Collection().binCount() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
         }
         var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
             j5Coll.addBin("No_Name" + i);
         }
-        this.set("j5Collection", j5Coll);
+        //this.set("j5Collection", j5Coll);
+        this.setJ5Collection(j5Coll);
         return j5Coll;
     },
 

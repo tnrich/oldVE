@@ -40,8 +40,22 @@ Ext.define("Teselagen.models.SequenceFile", {
     ],
 
     associations: [
-        {type: "belongsTo", model: "Teselagen.models.Part", name: "bin", getterName: "getPart", setterName: "setPart", associationKey: "part"},
-        {type: "belongsTo", model: "Teselagen.models.PartVO", name: "bin", getterName: "getPartVO", setterName: "setPartVO", associationKey: "partVO"}
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Part",
+            name: "part",
+            getterName: "getPart",
+            setterName: "setPart",
+            associationKey: "part"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Project",
+            name: "project",
+            getterName: "getProject",
+            setterName: "setProject",
+            associationKey: "project"
+        }
     ],
 
 

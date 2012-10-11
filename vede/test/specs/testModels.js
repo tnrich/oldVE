@@ -226,7 +226,7 @@ Ext.onReady(function() {
                 expect(tmp.get("partSource")).toBe("ssrA_tag_enhance");
                 expect(tmp.get("hash")).toBe(trueHash);
 
-                console.log(tmp);
+                //console.log(tmp);
             });
         });
 
@@ -428,8 +428,8 @@ Ext.onReady(function() {
                     compositionalOperator: "BEFORE",
                     operand2: 123
                 });
-                console.log(eug);
-                console.log(eug.validate());
+                //console.log(eug);
+                //console.log(eug.validate());
                 var str = eug.generateText();
                 expect(str).toBe("Rule eug(part BEFORE 123);");
             });
@@ -914,7 +914,17 @@ Ext.onReady(function() {
                 var device = Ext.create("Teselagen.models.DeviceDesign");
 
                 expect(device).not.toBe(null);
+                console.log(device.j5Collection());
 
+            });
+
+            it("Create DeviceDesign", function(){
+
+                var device = Ext.create("Teselagen.models.DeviceDesign");
+
+                expect(device).not.toBe(null);
+                //device.createNewCollection(3);
+                //console.log(device);
             });
         });
 
