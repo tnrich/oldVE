@@ -13,7 +13,8 @@ Ext.define("Teselagen.models.SequenceFile", {
     ],
 
     proxy: {
-        type: "memory"
+        type: "memory",
+        reader: {type: "json"}
     },
 
     statics: {
@@ -62,10 +63,6 @@ Ext.define("Teselagen.models.SequenceFile", {
         }
     ],
     
-    proxy: {
-        type: "memory",
-        reader: {type: "json"}
-    },
 
 
     // Some of these taken from SequenceFileManager/SequenceProxy
@@ -89,7 +86,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     setSequenceFileContent: function(pContent) {
 
         if (pContent === undefined || pContent === null) {
-            pContnent = "";
+            pContent = "";
         }
 
         this.set("sequenceFileContent", pContent);
