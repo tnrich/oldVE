@@ -43,6 +43,11 @@ Ext.define("Teselagen.models.SequenceFile", {
         {type: "belongsTo", model: "Teselagen.models.Part", name: "bin", getterName: "getPart", setterName: "setPart", associationKey: "part"},
         {type: "belongsTo", model: "Teselagen.models.PartVO", name: "bin", getterName: "getPartVO", setterName: "setPartVO", associationKey: "partVO"}
     ],
+    
+    proxy: {
+        type: "memory",
+        reader: {type: "json"}
+    },
 
 
     // Some of these taken from SequenceFileManager/SequenceProxy
