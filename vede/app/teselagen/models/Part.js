@@ -11,16 +11,20 @@ Ext.define("Teselagen.models.Part", {
         "Teselagen.models.PartVO"
     ],
 
-    statics: {
+    proxy: {
+        type: "memory"
     },
 
-    proxy: {
+    /*proxy: {
         type: "rest",
         url: "getParts.json",
         reader: {
             type: "json",
             root: "data"
         }
+    },*/
+
+    statics: {
     },
 
     /**
@@ -63,7 +67,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        {name: "sequenceFile_id",   type: "int"},
+        //{name: "sequenceFile",      type: "auto"},
         {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "j5bin_id",          type: "int"}
     ],
@@ -75,15 +79,38 @@ Ext.define("Teselagen.models.Part", {
         {field: "endBP",            type: "presence"},
         {field: "sequenceFile",     type: "presence"},
         {field: "iconID",           type: "presence"}
-        //{field: "j5bin_id",         type: ""}
     ],
 
     associations: [
-        {type: "hasOne",    model: "Teselagen.models.SequenceFile", associationKey:"sequenceFile", foreignKey:"sequenceFile_id",
-            getterName: "getSequenceFile", setterName: "setSequenceFile" },
-        {type: "belongsTo", model: "Teselagen.models.J5Bin", getterName: "getJ5Bin", setterName: "setJ5Bin"},
-        {type: "belongsTo", model: "Teselagen.models.EugeneRule", getterName: "getEugeneRule", setterName: "setEugeneRule"},
-        {type: "belongsTo", model: "Teselagen.models.Project"}
+        {
+            type: "hasOne",
+            model: "Teselagen.models.SequenceFile",
+            associationKey:"sequenceFile",
+            foreignKey:"sequenceFile_id",
+            getterName: "getSequenceFile",
+            setterName: "setSequenceFile"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Bin",
+            getterName: "getJ5Bin",
+            setterName: "setJ5Bin",
+            associationKey: "j5Bin"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.EugeneRule",
+            getterName: "getEugeneRule",
+            setterName: "setEugeneRule",
+            associationKey: "eugeneRule"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Project",
+            getterName: "getProject",
+            setterName: "setProject",
+            associationKey: "project"
+        }
     ],
 
     init: function() {
@@ -148,8 +175,8 @@ Ext.define("Teselagen.models.Part", {
             this.get("revComp") === false &&
             this.get("genbankStartBP") === 0 &&
             this.get("endBP") === 0 &&
-            this.get("sequenceFile") === null) {
-            //this.getSequenceFile() === null) {
+            //this.get("sequenceFile") === null) {
+            this.getSequenceFile().get("sequenceFileContent") === "") {
             partEmpty = true;
         }
         
@@ -180,8 +207,9 @@ Ext.define("Teselagen.models.Part", {
             this.get("revComp") === otherPart.get("revComp") &&
             this.get("genbankStartBP") === otherPart.get("genbankStartBP") &&
             this.get("endBP") === otherPart.get("endBP") &&
-            this.get("sequenceFile") === otherPart.get("sequenceFile") &&
-            //this.getSequenceFile() === otherPart.getSequenceFile() &&
+            //this.get("sequenceFile") === otherPart.get("sequenceFile") &&
+            this.getSequenceFile() === otherPart.getSequenceFile() &&
+            //this.getSequenceFile().get("sequenceFileContent") === otherPart.getSequenceFile().get("sequenceFileContent") &&
             this.get("iconID") === otherPart.get("iconID") ) {
             return true;
         }
@@ -199,7 +227,7 @@ Ext.define("Teselagen.models.Part", {
      */
     addSequenceFile: function(pSequenceFile) {
         this.setSequenceFile(pSequenceFile);
-        if (this.getSequenceFile() === null || this.getSequenceFile() === undefined) {
+        if (this.getSequenceFile() === pSequenceFile) {
             return false;
         } else {
             return true;

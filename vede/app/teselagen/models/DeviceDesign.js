@@ -9,8 +9,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     requires: [
     ],
 
-    statics: {
+    proxy: {
+        type: "memory"
     },
+    /*
     proxy: {
         type: 'rest',
         url: 'getDesign.json',
@@ -18,6 +20,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: 'json',
             root: 'data'
         }
+    },*/
+
+    statics: {
     },
 
     /**
@@ -28,7 +33,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     fields: [
         { name: "DesignName", type: "String", defaultValue: ""}
-        /*{
+        /*,{
             name: "j5Collection",
             convert: function(v, record) {
                 return v || null; //Ext.create("Teselagen.models.J5Collection");

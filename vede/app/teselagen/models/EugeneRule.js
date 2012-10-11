@@ -11,6 +11,10 @@ Ext.define("Teselagen.models.EugeneRule", {
         "Teselagen.models.PartVO"
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
         // For Default Names
         // This Differs from EugeneRules.as

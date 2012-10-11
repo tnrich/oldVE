@@ -12,6 +12,10 @@ Ext.define("Teselagen.models.SequenceFile", {
         "Teselagen.constants.Constants"
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
     },
 
@@ -79,6 +83,10 @@ Ext.define("Teselagen.models.SequenceFile", {
      */
     setSequenceFileContent: function(pContent) {
 
+        if (pContent === undefined || pContent === null) {
+            pContnent = "";
+        }
+
         this.set("sequenceFileContent", pContent);
 
         // DO NOT NEED TO DO writeUTFBytes
@@ -141,7 +149,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                console.warn("File format for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
+                console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
             }
         }
         this.set("sequenceFileName", name);

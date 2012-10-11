@@ -8,8 +8,11 @@ Ext.define("Teselagen.models.PartVO", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.SequenceFile"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
     },
