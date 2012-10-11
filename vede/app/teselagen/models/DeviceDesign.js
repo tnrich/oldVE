@@ -11,6 +11,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     statics: {
     },
+    proxy: {
+        type: 'rest',
+        url: 'getDesign.json',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
 
     /**
      * Input parameters.
@@ -19,6 +27,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
+        { name: "DesignName", type: "String", defaultValue: ""},
         {
             name: "j5Collection",
             convert: function(v, record) {
