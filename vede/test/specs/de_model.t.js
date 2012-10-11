@@ -114,7 +114,7 @@ describe("Device Editor models tests.", function () {
             if (partStore) {
                 return true;
             }
-        });
+        }, "partStore to be defined.");
         runs(function() {
             part = partStore.first();
             expect(part).toBeDefined();
@@ -122,7 +122,7 @@ describe("Device Editor models tests.", function () {
             expect(part.data.name).toBe("mypart");
             seqfile = part.getSequenceFile();
             expect(seqfile).toBeDefined();
-            expect(seqfile.data.sequenceFileName).toBe("myGenbank");
+            expect(seqfile.data.sequenceFileName).toBe("myFasta");
         });
     });
     xit("Create J5Bin.", function() {
