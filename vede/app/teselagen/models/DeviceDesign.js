@@ -4,22 +4,12 @@ var data = {
         {
             "id": 1,
             "project_id": 1,
-            "name": "Design 1"
-        },
-        {
-            "id": 2,
-            "project_id": 1,
-            "name": "Design 2"
-        },
-        {
-            "id": 3,
-            "project_id": 2,
-            "name": "Design 3"
-        },
-        {
-            "id": 4,
-            "project_id": 3,
-            "name": "Design 4"
+            "name": "Design 1",
+            "runs":[
+                {
+                    "name" : "Today tests"
+                }
+            ]
         }
     ]
 };
@@ -30,14 +20,11 @@ var data = {
  */
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
-
     requires: [
-        //"Teselagen.models.Project",
         //"Teselagen.models.J5Collection",
         //"Teselagen.models.EugeneRule",
-        //"Teselagen.models.J5Run"
+        "Teselagen.models.J5Run"
     ],
-
     proxy: {
         type: "memory",
         data: data,
@@ -106,7 +93,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
         {
             type: "hasMany",
             model: "Teselagen.models.J5Run",
-            name: "runs"
+            name: "runs",
+            associationKey: "runs"
         }
     ],
 

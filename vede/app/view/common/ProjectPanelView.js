@@ -138,8 +138,11 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             xtype: 'treepanel',
             id: 'projectAnalysisPanel',
             title: 'j5 Results',
-            viewConfig: {
-
+            rootVisible: false,
+            listeners: {
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //console.log(JSON.stringify(record.raw));
+                }
             }
         }]
     }, {

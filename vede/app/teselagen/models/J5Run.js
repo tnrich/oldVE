@@ -5,11 +5,6 @@
  */
 Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
-
-    requires: [
-        "Teselagen.models.DeviceDesign"
-    ],
-
     proxy: {
         type: "memory"
     },
@@ -25,7 +20,7 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "RunName", type: "String", defaultValue: ""}
+        {name: "name", type: "String", defaultValue: ""}
         /*{
             name: "j5Parameters",
             convert: function(v, record) {

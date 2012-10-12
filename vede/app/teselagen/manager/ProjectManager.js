@@ -23,34 +23,34 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		this.projects = Ext.create("Teselagen.store.ProjectStore");
 		this.projects.load();
 	},
-
-	loadAndRenderProjectPanelCollection: function (collection, target) {
-		collection.load();
+	DesignAndChildResources: function(designs){
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
-		if(collection.isLoading()) {
-			collection.on('load', function () {
-				projectController.renderProjectPaneSection(collection,target);
-			});
-		} else projectController.renderProjectPaneSection(collection,target);
+		var self = this;
+		var designs = this.workingProject.designs().load({
+    		callback: function() {
+    			projectController.renderDesignsSection(designs);
+    			projectController.renderPartsSection(self.workingProject);
+    			projectController.renderJ5ResultsSection(designs);
+    	}});
+
 	},
 
 	/**
 	 * Open a Project
 	 */
 	openProject: function (project) {
-		console.log('PM: Opening a project ' + project.data.ProjectName);
+		console.log('PM: Opening a project ' + project.data.name);
 		this.workingProject = project;
 
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
-		// Load Designs and Render into ProjectPanel
-		this.loadAndRenderProjectPanelCollection(this.workingProject.designs(),'projectDesignPanel');
+		// Load Designs And Design Child Resources and Render into ProjectPanel
+		this.DesignAndChildResources(this.workingProject.designs());
 
-		// Load Parts and Render into ProjectPanel
-		this.loadAndRenderProjectPanelCollection(this.workingProject.parts(),'projectPartsPanel');
-
+		// Load j5 Results
+		//this.loadAndRenderj5Results();
 
 	}
 });
