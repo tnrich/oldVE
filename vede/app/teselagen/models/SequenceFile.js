@@ -9,7 +9,9 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     requires: [
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Teselagen.models.Part",
+        "Teselagen.models.Project"
     ],
 
     proxy: {

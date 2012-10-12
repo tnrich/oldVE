@@ -9,7 +9,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
     requires: [
         "Teselagen.constants.SBOLvIcons",
-        "Teselagen.utils.NullableInt"
+        "Teselagen.utils.NullableInt",
+        "Teselagen.models.J5Collection"
     ],
 
     proxy: {

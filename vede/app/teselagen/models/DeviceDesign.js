@@ -7,6 +7,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
 
     requires: [
+        //"Teselagen.models.Project",
+        //"Teselagen.models.J5Collection",
+        //"Teselagen.models.EugeneRule",
+        //"Teselagen.models.J5Run"
     ],
 
     proxy: {
@@ -136,7 +140,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     getRulesInvolvingPart: function(pPart) {
         var rules = [];
         for (var i = 0; i < this.rules().count(); i++) {
-            if (this.rules().getAt(i).get("operand1") === pPart || this.rules().getAt(i).get("operand2") === pPart) {
+            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).get("operand2") === pPart) {
                 rules.push(this.rules().getAt(i));
             }
         }

@@ -184,6 +184,13 @@ Ext.onReady(function() {
                 expect(hash3).not.toBe(trueHash);
                 expect(hash4).not.toBe(trueHash);
             });
+            it("Test Associations *** NOT PASSING FOR PART ONLY", function(){
+                var seq = Ext.create("Teselagen.models.SequenceFile");
+                expect(seq).not.toBe(null);
+
+                expect(Ext.getClassName(seq.getPart())).toBe("Teselagen.models.Part");
+                expect(Ext.getClassName(seq.getProject())).toBe("Teselagen.models.Project");
+            });
 
             it("Creates empty SequenceFile", function(){
                 var seq = Ext.create("Teselagen.models.SequenceFile");
@@ -315,7 +322,7 @@ Ext.onReady(function() {
                 // Checking Associations
                 // FILL IN TESTS FOR SEQUENCE FILE HERE!!!!
                 expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
-                //expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
             it("Creates Empty Part, isPartVOEmpty()/isEmpty", function(){
@@ -355,7 +362,7 @@ Ext.onReady(function() {
                 expect(part.isPartVOEmpty()).toBe(true);
             });
 
-            it("isEqual() ***", function(){
+            it("isEqual()", function(){
                 var part1 = Ext.create("Teselagen.models.Part");
                 var part2 = Ext.create("Teselagen.models.Part");
                 var part3 = Ext.create("Teselagen.models.Part", {
@@ -379,6 +386,18 @@ Ext.onReady(function() {
 
                 expect(eugene.get("name")).toBe("rule0"); //
                 expect(eugene.get("negationOperator")).toBe(false);
+            });
+
+            it("Test Associations *** NOT PASSING DEVICE DESIGN", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+
+                console.log(eugene);
+
+                expect(Ext.getClassName(eugene.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
+                expect(Ext.getClassName(eugene.getOperand1())).toBe("Teselagen.models.Part");
             });
 
             it("Rejects unacceptable operand2", function(){
@@ -428,10 +447,13 @@ Ext.onReady(function() {
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
-                    operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
+                    //operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
                     compositionalOperator: "BEFORE",
                     operand2: 123
                 });
+
+                var op1 = Ext.create("Teselagen.models.Part", { name: "part"});
+                eug.setOperand1(op1);
                 //console.log(eug);
                 //console.log(eug.validate());
                 var str = eug.generateText();
@@ -463,8 +485,6 @@ Ext.onReady(function() {
 
                 expect(bin.partCount()).toBe(0);
             });
-
-            
 
             it("Test Associations() *** NOT PASSING", function(){
                 var part1   = Ext.create("Teselagen.models.Part");

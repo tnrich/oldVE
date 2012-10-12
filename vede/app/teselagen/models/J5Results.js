@@ -7,6 +7,7 @@ Ext.define("Teselagen.models.J5Results", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.models.J5Run"
     ],
 
     proxy: {
