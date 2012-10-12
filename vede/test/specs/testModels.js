@@ -184,6 +184,13 @@ Ext.onReady(function() {
                 expect(hash3).not.toBe(trueHash);
                 expect(hash4).not.toBe(trueHash);
             });
+            it("Test Associations *** NOT PASSING FOR PART ONLY", function(){
+                var seq = Ext.create("Teselagen.models.SequenceFile");
+                expect(seq).not.toBe(null);
+
+                expect(Ext.getClassName(seq.getPart())).toBe("Teselagen.models.Part");
+                expect(Ext.getClassName(seq.getProject())).toBe("Teselagen.models.Project");
+            });
 
             it("Creates empty SequenceFile", function(){
                 var seq = Ext.create("Teselagen.models.SequenceFile");
@@ -191,6 +198,7 @@ Ext.onReady(function() {
 
                 expect(seq.get("sequenceFileFormat")).toBe("");
                 expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256(""));
+                expect(seq.get("hash")).toBe("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
             });
             
             it("setSequenceFileContent(), setPartSource(), setSequenceFileName()", function(){
@@ -302,8 +310,25 @@ Ext.onReady(function() {
 
         describe("Teselagen.models.Part.js", function() {
 
+            it("Creates Part, Test Associations ***", function(){
+                var part = Ext.create("Teselagen.models.Part", {
+                    fas: "fas1"
+                });
+                expect(part.isEmpty()).toBe(false);
+                expect(part.isPartVOEmpty()).toBe(false);
+
+                expect(part.get("fas")).toBe("fas1");
+
+                // Checking Associations
+                // FILL IN TESTS FOR SEQUENCE FILE HERE!!!!
+                expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
+                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+            });
+
             it("Creates Empty Part, isPartVOEmpty()/isEmpty", function(){
                 var part = Ext.create("Teselagen.models.Part");
+
+                //console.log(part.getSequenceFile());
 
                 expect(part.isEmpty()).toBe(true);
                 expect(part.isPartVOEmpty()).toBe(true);
@@ -318,22 +343,6 @@ Ext.onReady(function() {
                 expect(part.get("genbankStartBP")).toBe(0);
                 expect(part.get("endBP")).toBe(0);
                 expect(part.get("iconID")).toBe("");
-            });
-
-            it("Creates Part, Test Associations ***", function(){
-                var part = Ext.create("Teselagen.models.Part", {
-                    fas: "fas1"
-                });
-                expect(part.isEmpty()).toBe(false);
-                expect(part.isPartVOEmpty()).toBe(false);
-
-                expect(part.get("fas")).toBe("fas1");
-                expect(part.get("sequenceFile")).toBe(null);
-
-                //console.log(part);
-
-                // Checking Associations
-                // FILL IN TESTS FOR SEQUENCE FILE HERE!!!!
             });
 
             it("Creates Part: setId() --- FIX THIS AFTER RODRIGO IS DONE WITH ID GENERATOR", function(){
@@ -353,13 +362,15 @@ Ext.onReady(function() {
                 expect(part.isPartVOEmpty()).toBe(true);
             });
 
-            it("isEqual() ***", function(){
+            it("isEqual()", function(){
                 var part1 = Ext.create("Teselagen.models.Part");
                 var part2 = Ext.create("Teselagen.models.Part");
                 var part3 = Ext.create("Teselagen.models.Part", {
                     name: "blah"
                 });
-                expect(part1.isEqual(part2)).toBe(true);
+
+                expect(part1.isEqual(part1)).toBe(true);
+                expect(part1.isEqual(part2)).toBe(false); // Should this be equal??? They have different SeqFiles.
                 expect(part1.isEqual(part3)).toBe(false);
             });
         });
@@ -375,6 +386,18 @@ Ext.onReady(function() {
 
                 expect(eugene.get("name")).toBe("rule0"); //
                 expect(eugene.get("negationOperator")).toBe(false);
+            });
+
+            it("Test Associations *** NOT PASSING DEVICE DESIGN", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+
+                console.log(eugene);
+
+                expect(Ext.getClassName(eugene.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
+                expect(Ext.getClassName(eugene.getOperand1())).toBe("Teselagen.models.Part");
             });
 
             it("Rejects unacceptable operand2", function(){
@@ -424,10 +447,13 @@ Ext.onReady(function() {
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
-                    operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
+                    //operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
                     compositionalOperator: "BEFORE",
                     operand2: 123
                 });
+
+                var op1 = Ext.create("Teselagen.models.Part", { name: "part"});
+                eug.setOperand1(op1);
                 //console.log(eug);
                 //console.log(eug.validate());
                 var str = eug.generateText();
@@ -460,9 +486,7 @@ Ext.onReady(function() {
                 expect(bin.partCount()).toBe(0);
             });
 
-            
-
-            it("Test Associations() *** NOT COMPLETE", function(){
+            it("Test Associations() *** NOT PASSING", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
 
@@ -473,10 +497,7 @@ Ext.onReady(function() {
 
                 expect(bin.parts()).not.toBe(null);
                 expect(Ext.getClassName(bin.parts())).toBe("Ext.data.Store");
-
-                //console.log(part1.getBin()); // DW COMEBACKHERE
-
-                //expect(part1.getJ5Bin()).not.toBe(null); //NOT WORK
+                expect(Ext.getClassName(bin.getJ5Collection())).toBe("Teselagen.models.J5Collection");
             });
 
             it("indexOfPart()//hasPart()", function(){
@@ -661,7 +682,7 @@ Ext.onReady(function() {
             beforeEach(function() {
             });
 
-            it("Creates J5Collection", function(){
+            it("Creates J5Collection and Check Associations", function(){
                 var coll = Ext.create("Teselagen.models.J5Collection", {});
                 expect(coll).not.toBe(null);
 
@@ -670,6 +691,10 @@ Ext.onReady(function() {
                 expect(coll.get("j5Ready")).toBe(false);
                 expect(coll.get("combinatorial")).toBe(false);
                 expect(coll.get("isCircular")).toBe(true);
+
+                expect(Ext.getClassName(coll.bins())).toBe("Ext.data.Store");
+                expect(Ext.getClassName(coll.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
+                console.log(coll.getDeviceDesign());
             });
 
 
@@ -885,16 +910,29 @@ Ext.onReady(function() {
 
         describe("Teselagen.models.J5Run.js", function() {
 
-            it("Create J5Run", function(){
+            it("Create J5Run, Check Associations", function(){
+                var run = Ext.create("Teselagen.models.J5Run");
+
+                console.log(run);
+
+                expect(Ext.getClassName(run.getJ5Parameters())).toBe("Teselagen.models.J5Parameters");
+                expect(Ext.getClassName(run.getDownstreamAutomationParameters())).toBe("Teselagen.models.DownstreamAutomationParameters");
+                expect(Ext.getClassName(run.getJ5Results())).toBe("Teselagen.models.J5Results");
+
+                expect(Ext.getClassName(run.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
+            });
+            it("Create J5Run, Check Parameter files.", function(){
                 var run = Ext.create("Teselagen.models.J5Run");
 
                 var j5p = Ext.create("Teselagen.models.J5Parameters");
                 var dsa = Ext.create("Teselagen.models.DownstreamAutomationParameters");
 
+                run.setJ5Parameters(j5p);
+                run.setDownstreamAutomationParameters(dsa);
+
                 // run should have default j5 and downstream parameters
-                expect(run.get("j5Parameters").get("masterOligoNumberOfDigitsValue")).toBe(j5p.self.MONOD_Default);
-                expect(run.get("downstreamAutomationParameters").get("maxDeltaTemperatureAdjacentZonesValue")).toBe(dsa.self.MDTAZ_DEFAULT);
-                expect(run.get("j5Results")).toBe(null);
+                expect(run.getJ5Parameters().get("masterOligoNumberOfDigitsValue")).toBe(j5p.self.MONOD_Default);
+                expect(run.getDownstreamAutomationParameters().get("maxDeltaTemperatureAdjacentZonesValue")).toBe(dsa.self.MDTAZ_DEFAULT);
             });
         });
 
@@ -904,17 +942,23 @@ Ext.onReady(function() {
                 var results = Ext.create("Teselagen.models.J5Results");
 
                 expect(results).not.toBe(null);
+
+                console.log(results);
+                expect(Ext.getClassName(results.getJ5Run())).toBe("Teselagen.models.J5Run");
             });
         });
 
         describe("Teselagen.models.DeviceDesign.js", function() {
 
-            it("Create DeviceDesign", function(){
+            it("Create DeviceDesign and check Associations", function(){
 
                 var device = Ext.create("Teselagen.models.DeviceDesign");
 
                 expect(device).not.toBe(null);
-                console.log(device.j5Collection());
+                expect(Ext.getClassName(device.getJ5Collection())).toBe("Teselagen.models.J5Collection");
+                expect(Ext.getClassName(device.rules())).toBe("Ext.data.Store");
+                expect(Ext.getClassName(device.runs())).toBe("Ext.data.Store");
+                //console.log(device.j5Collection());
 
             });
 

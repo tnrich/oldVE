@@ -7,7 +7,12 @@ Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.models.DeviceDesign"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
     },
@@ -20,7 +25,8 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {
+        {name: "RunName", type: "String", defaultValue: ""}
+        /*{
             name: "j5Parameters",
             convert: function(v, record) {
                 if (v === undefined || v === null || v === "") {
@@ -45,13 +51,14 @@ Ext.define("Teselagen.models.J5Run", {
             convert: function(v, record) {
                 return v || null;
             }
-        }
+        }*/
     ],
 
     validations: [
-        {field: "j5Parameters",                     type: "presence"},
+        /*{field: "j5Parameters",                     type: "presence"},
         {field: "downstreamAutomationParameters",   type: "presence"},
         {field: "j5Results",                        type: "presence"}
+        */
     ],
 
     associations: [

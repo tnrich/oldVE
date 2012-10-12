@@ -9,8 +9,15 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     requires: [
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Teselagen.models.Part",
+        "Teselagen.models.Project"
     ],
+
+    proxy: {
+        type: "memory",
+        reader: {type: "json"}
+    },
 
     statics: {
     },
@@ -57,6 +64,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             associationKey: "project"
         }
     ],
+    
 
 
     // Some of these taken from SequenceFileManager/SequenceProxy
@@ -78,6 +86,10 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @returns {String} hash SequenceHash
      */
     setSequenceFileContent: function(pContent) {
+
+        if (pContent === undefined || pContent === null) {
+            pContent = "";
+        }
 
         this.set("sequenceFileContent", pContent);
 
@@ -141,7 +153,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                console.warn("File format for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
+                console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
             }
         }
         this.set("sequenceFileName", name);

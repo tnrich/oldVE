@@ -10,6 +10,10 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
     requires: [
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
     },
 

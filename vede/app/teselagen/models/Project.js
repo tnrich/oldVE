@@ -16,7 +16,8 @@ Ext.define("Teselagen.models.Project", {
             associationKey: 'designs', 
             autoLoad: true,
             foreignKey: 'design_id'
-        },
+        }
+        /*,
         { 
             type: 'hasMany', 
             model: 'Teselagen.models.Part', 
@@ -24,7 +25,7 @@ Ext.define("Teselagen.models.Project", {
             associationKey: 'parts', 
             autoLoad: true,
             foreignKey: 'part_id'
-        }
+        }*/
     ],
     proxy: {
         type: 'rest',

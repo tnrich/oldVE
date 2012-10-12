@@ -8,8 +8,13 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.PartVO"
+        "Teselagen.models.PartVO",
+        "Teselagen.models.DeviceDesign"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
         // For Default Names
@@ -51,7 +56,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         },
         
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
-        {name: "operand1",              type: "auto",       defaultValue: null},
+        //{name: "operand1",              type: "auto",       defaultValue: null},
         {name: "compositionalOperator", type: "String",     defaultValue: ""},
         
         {name: "operand2",              type: "auto",       defaultValue: null}
@@ -60,7 +65,7 @@ Ext.define("Teselagen.models.EugeneRule", {
     validations: [
         {field: "name",             type: "presence"},
         //{field: "negationOperator", type: "presence"},
-        {field: "operand1",         type: "presence"},
+        //{field: "operand1",         type: "presence"},
         {field: "compositionalOperator",    type: "presence"},
         {field: "compositionalOperator",    type: "inclusion",
                 list: [             //Cannot access the statics, hard coding for now.
@@ -78,14 +83,14 @@ Ext.define("Teselagen.models.EugeneRule", {
     ],
 
     associations: [
-        /*{
+        {
             type: "hasOne",
             model: "Teselagen.models.Part",
             getterName: "getOperand1",
             setterName: "setOperand1",
             associationKey: "operand1"
         },
-        {
+        /*{
             type: "hasOne",
             model: "Teselagen.models.Part",
             getterName: "getOperand2",
@@ -158,8 +163,9 @@ Ext.define("Teselagen.models.EugeneRule", {
             ruleText.push("NOT ");
         }
 
-        if ( this.get("operand1") !== null) {
-            ruleText.push( this.get("operand1").get("name") );
+        if ( this.getOperand1() !== null) {
+            console.log(this.getOperand1());
+            ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }
         ruleText.push( this.get("compositionalOperator") );

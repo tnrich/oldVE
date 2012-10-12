@@ -19,6 +19,10 @@ Ext.define("Teselagen.models.J5Parameters", {
         "Teselagen.constants.Constants"
     ],
 
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
         //parameter names
         MONOD:      "MASTEROLIGONUMBEROFDIGITS",
