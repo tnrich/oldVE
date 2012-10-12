@@ -13,8 +13,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
 		id: 'projectsWidget',
 		columns: [{
 			xtype: 'gridcolumn',
-			dataIndex: 'ProjectName',
-			text: 'Project Name'
+			dataIndex: 'name',
+			text: 'Name'
 		}, {
 			xtype: 'datecolumn',
 			dataIndex: 'DateCreated',

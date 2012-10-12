@@ -77,34 +77,6 @@ function loadResults(record) {
     win.show();
 };
 
-var data = {
-    "designs": [{
-        "text": "Design 1",
-        "leaf": true
-    }, {
-        "text": "Design 2",
-        "leaf": true
-    }],
-    "j5results": [{
-        "text": "Result 1",
-        "leaf": true
-    }, {
-        "text": "Result 2",
-        "leaf": true
-    }]
-};
-
-var store = Ext.create("Ext.data.TreeStore", {
-    autoLoad: false,
-    proxy: {
-        type: 'memory',
-        data: data,
-        reader: {
-            type: 'json',
-            root: 'designs'
-        }
-    }
-});
 
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.tab.Panel',
@@ -147,9 +119,6 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             listeners: {
                 itemclick: function (view, record, item, index, e, eOpts) {
                     //console.log(JSON.stringify(record.raw));
-                },
-                render: function () {
-
                 }
             }
         }]
@@ -189,8 +158,11 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             xtype: 'treepanel',
             id: 'projectPartsPanel',
             title: 'Your Parts',
-            viewConfig: {
-
+            rootVisible: false,
+            listeners: {
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //console.log(JSON.stringify(record.raw));
+                }
             }
         }]
     }, {

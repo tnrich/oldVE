@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	require: ["Teselagen.event.ProjectEvent","Teselagen.store.ProjectStore"],
+	require: ["Teselagen.event.ProjectEvent", "Teselagen.store.ProjectStore"],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -12,8 +12,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	projects: null,
 	workingProject: null,
 
-	constructor: function (inData) {
-	},
+	constructor: function (inData) {},
 
 	/**
 	 * Render User Projects
@@ -21,30 +20,37 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	loadProjects: function () {
 		console.log('PM: Showing projects');
 
-	    this.projects = Ext.create("Teselagen.store.ProjectStore");
-	    this.projects.load();
+		this.projects = Ext.create("Teselagen.store.ProjectStore");
+		this.projects.load();
+	},
+
+	loadAndRenderProjectPanelCollection: function (collection, target) {
+		collection.load();
+
+		var projectController = Vede.application.getController('Vede.controller.ProjectController');
+
+		if(collection.isLoading()) {
+			collection.on('load', function () {
+				projectController.renderProjectPaneSection(collection,target);
+			});
+		} else projectController.renderProjectPaneSection(collection,target);
 	},
 
 	/**
 	 * Open a Project
 	 */
 	openProject: function (project) {
-		console.log('PM: Opening a project '+ project.data.ProjectName);
+		console.log('PM: Opening a project ' + project.data.ProjectName);
 		this.workingProject = project;
 
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
-		var projectController = Vede.application.getController('Vede.controller.ProjectController');
+		// Load Designs and Render into ProjectPanel
+		this.loadAndRenderProjectPanelCollection(this.workingProject.designs(),'projectDesignPanel');
 
-		// Load Designs
-		var designs = this.workingProject.designs();
-		designs.load();
+		// Load Parts and Render into ProjectPanel
+		this.loadAndRenderProjectPanelCollection(this.workingProject.parts(),'projectPartsPanel');
 
-		if(designs.isLoading()) {
-        	designs.on('load', function () {
-        		projectController.renderDesigns(designs);
-        	});
-        }
-        else projectController.renderDesigns(designs);
+
 	}
 });

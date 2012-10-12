@@ -4,22 +4,22 @@ var data = {
         {
             "id": 1,
             "project_id": 1,
-            "DesignName": "Design 1"
+            "name": "Design 1"
         },
         {
             "id": 2,
             "project_id": 1,
-            "DesignName": "Design 2"
+            "name": "Design 2"
         },
         {
             "id": 3,
             "project_id": 2,
-            "DesignName": "Design 3"
+            "name": "Design 3"
         },
         {
             "id": 4,
             "project_id": 3,
-            "DesignName": "Design 4"
+            "name": "Design 4"
         }
     ]
 };
@@ -71,7 +71,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [{
-        name: "DesignName",
+        name: "name",
         type: "String",
         defaultValue: ""
     },

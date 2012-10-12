@@ -1,3 +1,29 @@
+var data = {
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "project_id": 1,
+            "name": "Part 1"
+        },
+        {
+            "id": 2,
+            "project_id": 1,
+            "name": "Part 2"
+        },
+        {
+            "id": 3,
+            "project_id": 2,
+            "name": "Part 3"
+        },
+        {
+            "id": 4,
+            "project_id": 3,
+            "name": "Part 4"
+        }
+    ]
+};
+
 /**
  * @class Teselagen.models.Part
  * Class describing a Part for J5Parameters.
@@ -12,7 +38,12 @@ Ext.define("Teselagen.models.Part", {
     "Teselagen.models.J5Bin", "Teselagen.models.EugeneRule"],
 
     proxy: {
-        type: "memory"
+        type: "memory",
+        data: data,
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     },
 
     /*proxy: {

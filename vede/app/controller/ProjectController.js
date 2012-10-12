@@ -5,19 +5,17 @@ Ext.define("Vede.controller.ProjectController", {
     openProject: function (project) {
         Vede.application.projectManager.openProject(project);
     },
-    renderDesigns: function (designs) {
-        console.log(designs.getModifiedRecords());
-        Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
-        designs.data.items.forEach(function (rec) {
-            Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
-                text: rec.data.DesignName,
+    renderProjectPaneSection: function (Collection,SectionPanelName) {
+        Ext.getCmp(SectionPanelName).getRootNode().removeAll();
+        Collection.data.items.forEach(function (rec) {
+            Ext.getCmp(SectionPanelName).getRootNode().appendChild({
+                text: rec.data.name,
                 leaf: true,
                 id: rec.data.id
             });
         });
 
-        Ext.getCmp('projectDesignPanel').setLoading(false);
-
+        Ext.getCmp(SectionPanelName).setLoading(false);
     },
     init: function () {
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,this.openProject, this);
