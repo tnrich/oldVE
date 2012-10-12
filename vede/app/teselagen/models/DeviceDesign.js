@@ -1,3 +1,28 @@
+var data = {
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "project_id": 1,
+            "DesignName": "Design 1"
+        },
+        {
+            "id": 2,
+            "project_id": 1,
+            "DesignName": "Design 2"
+        },
+        {
+            "id": 3,
+            "project_id": 2,
+            "DesignName": "Design 3"
+        },
+        {
+            "id": 4,
+            "project_id": 3,
+            "DesignName": "Design 4"
+        }
+    ]
+};
 /**
  * @class Teselagen.models.DeviceDesign
  * Class describing a DeviceDesign.
@@ -14,17 +39,27 @@ Ext.define("Teselagen.models.DeviceDesign", {
     ],
 
     proxy: {
-        type: "memory"
-    },
-    /*
-    proxy: {
-        type: 'rest',
-        url: 'getDesign.json',
+        type: "memory",
+        data: data,
         reader: {
             type: 'json',
             root: 'data'
         }
-    },*/
+    },
+    
+    /*
+    proxy: {
+        type: 'ajax',
+        url: 'getDesign.json',
+        reader: {
+            type: 'json',
+            root: 'data',
+            successProperty: 'success',
+            model: "Teselagen.models.DeviceDesign"
+        },
+        remoteFilter: false
+    },
+    */
 
     statics: {
     },
@@ -36,7 +71,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        { name: "DesignName", type: "String", defaultValue: ""}
+        {name: "DesignName", type: "String", defaultValue: ""},
+        {name : "id", type: "Integer"},
+        {name : "project_id", type: "Integer"}
         /*,{
             name: "j5Collection",
             convert: function(v, record) {
@@ -50,7 +87,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: "belongsTo",
             model: "Teselagen.models.Project",
             getterName: "getProject",
-            setterNme: "setProject"
+            setterNme: "setProject",
+            applicationKey: "project"
         },
         {
             type: "hasOne",

@@ -136,7 +136,7 @@ Ext.define("Teselagen.models.Part", {
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
      */
-     setId: function() {
+    setId: function() {
         var newId = this.generateId();
         this.set("id", newId);
         return true;

@@ -1,6 +1,6 @@
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
-    requires: ['Teselagen.models.Part','Teselagen.models.DeviceDesign'],
+    requires: ['Teselagen.models.DeviceDesign'],
     fields: [
         { name: "id", type: "int"},
         { name: "ProjectName", type: "String", defaultValue: ""},
@@ -9,27 +9,32 @@ Ext.define("Teselagen.models.Project", {
         { name: "Path", type: "String", defaultValue: "Project"},
     ],
     associations: [
-        { 
+       
+       { 
             type: 'hasMany', 
             model: 'Teselagen.models.DeviceDesign', 
             name: 'designs', 
             associationKey: 'designs', 
-            autoLoad: true
-        },
+            autoLoad: true,
+            foreignKey: 'project_id'
+        }
+        
+        /*,
         { 
             type: 'hasMany', 
             model: 'Teselagen.models.Part', 
             name: 'parts', 
             associationKey: 'parts', 
-            autoLoad: true
-        }
+            autoLoad: true,
+            foreignKey: 'part_id'
+        }*/
     ],
     proxy: {
         type: 'rest',
-        url: 'getTree.json',
+        url: 'getProjects.json',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'projects'
         }
     }
 });

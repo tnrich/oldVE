@@ -32,7 +32,7 @@ function loadResults(record) {
         renderTo: Ext.getBody(),
         viewConfig: {},
         listeners: {
-            itemclick: function(view, record, item, index, e, eOpts) {
+            itemclick: function (view, record, item, index, e, eOpts) {
                 Ext.getCmp('rawpanel').update(record.raw.data);
             }
         }
@@ -78,31 +78,23 @@ function loadResults(record) {
 };
 
 var data = {
-  "designs": [
-    {
+    "designs": [{
         "text": "Design 1",
         "leaf": true
-    },
-    {
+    }, {
         "text": "Design 2",
         "leaf": true
-    }
-  ],
-  "j5results": [
-    {
+    }],
+    "j5results": [{
         "text": "Result 1",
         "leaf": true
-    },
-    {
+    }, {
         "text": "Result 2",
         "leaf": true
-    }
-  ]
+    }]
 };
 
-var store = 
-Ext.create("Teselagen.store.ProjectTreeStore", {
-    extend: 'Ext.data.TreeStore',
+var store = Ext.create("Ext.data.TreeStore", {
     autoLoad: false,
     proxy: {
         type: 'memory',
@@ -112,7 +104,7 @@ Ext.create("Teselagen.store.ProjectTreeStore", {
             root: 'designs'
         }
     }
-    });
+});
 
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.tab.Panel',
@@ -153,11 +145,11 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             title: 'Your Designs',
             rootVisible: false,
             listeners: {
-                itemclick: function(view, record, item, index, e, eOpts) {
-                   //console.log(JSON.stringify(record.raw));
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //console.log(JSON.stringify(record.raw));
                 },
-                render: function(){
-                    
+                render: function () {
+
                 }
             }
         }]
