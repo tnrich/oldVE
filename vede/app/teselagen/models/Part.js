@@ -82,8 +82,7 @@ Ext.define("Teselagen.models.Part", {
         {type: "hasOne",    model: "Teselagen.models.SequenceFile", associationKey:"sequenceFile", foreignKey:"sequenceFile_id",
             getterName: "getSequenceFile", setterName: "setSequenceFile" },
         {type: "belongsTo", model: "Teselagen.models.J5Bin", getterName: "getJ5Bin", setterName: "setJ5Bin"},
-        {type: "belongsTo", model: "Teselagen.models.EugeneRule", getterName: "getEugeneRule", setterName: "setEugeneRule"},
-        {type: "belongsTo", model: "Teselagen.models.Project"}
+        {type: "belongsTo", model: "Teselagen.models.EugeneRule", getterName: "getEugeneRule", setterName: "setEugeneRule"}
     ],
 
     init: function() {

@@ -12,12 +12,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
     statics: {
     },
     proxy: {
-        type: 'rest',
+        type: 'ajax',
         url: 'getDesign.json',
         reader: {
             type: 'json',
-            root: 'data'
-        }
+            root: 'data',
+            successProperty: 'success',
+            model: "Teselagen.models.DeviceDesign"
+        },
+        remoteFilter: false
     },
 
     /**

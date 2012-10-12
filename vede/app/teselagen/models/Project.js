@@ -14,22 +14,25 @@ Ext.define("Teselagen.models.Project", {
             model: 'Teselagen.models.DeviceDesign', 
             name: 'designs', 
             associationKey: 'designs', 
-            autoLoad: true
+            autoLoad: true,
+            foreignKey: 'design_id'
         },
         { 
             type: 'hasMany', 
             model: 'Teselagen.models.Part', 
             name: 'parts', 
             associationKey: 'parts', 
-            autoLoad: true
+            autoLoad: true,
+            foreignKey: 'part_id'
         }
     ],
     proxy: {
         type: 'rest',
-        url: 'getTree.json',
+        url: 'getProjects.json',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'projects',
+            model: "Teselagen.models.Project"
         }
     }
 });
