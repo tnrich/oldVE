@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.ProjectStore"],
+	require: ["Teselagen.event.ProjectEvent","Teselagen.store.ProjectStore"],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -23,8 +23,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 	    this.projects = Ext.create("Teselagen.store.ProjectStore");
 	    this.projects.load();
-
-		//Vede.application.fireEvent(this.ActionStackEvent.ACTION_STACK_CHANGED);
 	},
 
 	/**

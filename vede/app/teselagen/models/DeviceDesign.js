@@ -1,3 +1,29 @@
+var data = {
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "project_id": 1,
+            "DesignName": "Design 1"
+        },
+        {
+            "id": 2,
+            "project_id": 1,
+            "DesignName": "Design 2"
+        },
+        {
+            "id": 3,
+            "project_id": 2,
+            "DesignName": "Design 3"
+        },
+        {
+            "id": 4,
+            "project_id": 3,
+            "DesignName": "Design 4"
+        }
+    ]
+};
+
 /**
  * @class Teselagen.models.DeviceDesign
  * Class describing a DeviceDesign.
@@ -6,14 +32,20 @@
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
 
-    requires: ["Teselagen.models.Project"
+    require: [
+    //"Teselagen.models.Project"
     //"Teselagen.models.J5Collection",
     //"Teselagen.models.EugeneRule",
     //"Teselagen.models.J5Run"
     ],
     
     proxy: {
-        type: "memory"
+        type: "memory",
+        data: data,
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     },
     
     /*
@@ -42,7 +74,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
         name: "DesignName",
         type: "String",
         defaultValue: ""
-    }
+    },
+    {name : "id", type: "Integer"},
+    {name : "project_id", type: "Integer"}
     /*,{
             name: "j5Collection",
             convert: function(v, record) {
