@@ -64,6 +64,37 @@ function restrict(req, res, next) {
   }
 };
 
+
+app.all('/getDesigns', function(req, res){
+  res.json(
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "project_id":1,
+            "DesignName": "Design 1"
+        },
+        {
+            "id": 2,
+            "project_id":1,
+            "DesignName": "Design 2"
+        },
+        {
+            "id": 3,
+            "project_id":2,
+            "DesignName": "Design 3"
+        },
+        {
+            "id": 4,
+            "project_id":3,
+            "DesignName": "Design 4"
+        }
+    ]
+}
+  );
+});
+
 app.all('/login', function(req, res){
 
       
