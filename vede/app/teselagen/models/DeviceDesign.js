@@ -11,11 +11,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
     //"Teselagen.models.EugeneRule",
     //"Teselagen.models.J5Run"
     ],
-
+    
     proxy: {
         type: "memory"
     },
-
+    
     /*
     proxy: {
         type: 'ajax',
@@ -27,7 +27,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.DeviceDesign"
         },
         remoteFilter: false
-        }
     },
     */
 

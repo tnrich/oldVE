@@ -3,14 +3,13 @@ Ext.define("Teselagen.store.ProjectStore", {
     extend: 'Ext.data.Store',
     autoLoad: false,
     model: 'Teselagen.models.Project',
-
     listeners: {
         beforeload: function (store, operation, options) {
-            //store.getProxy().url = 'data/' + operation.node.get('Path') + '/level1.json';
-            //Ext.getCmp('projectDesignPanel').setLoading(true);
             return true;
+            //store.getProxy().url = 'data/' + operation.node.get('Path') + '/level1.json';
         },
         load: function (records, successful, eOpts) {
+            console.log('Project Store loaded');
             Ext.getCmp('projectsWidget').reconfigure(records);
         }
     }

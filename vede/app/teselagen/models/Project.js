@@ -32,8 +32,7 @@ Ext.define("Teselagen.models.Project", {
         url: 'getProjects.json',
         reader: {
             type: 'json',
-            root: 'projects',
-            model: "Teselagen.models.Project"
+            root: 'projects'
         }
     }
 });
