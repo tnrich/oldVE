@@ -8,13 +8,15 @@ Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
 
     requires: [
+        //"Teselagen.models.J5Collection",
+        "Teselagen.models.Part",
         "Teselagen.constants.SBOLvIcons",
-        "Teselagen.utils.NullableInt",
-        "Teselagen.models.J5Collection"
+        "Teselagen.utils.NullableInt"
     ],
 
     proxy: {
-        type: "memory"
+        type: "memory",
+        reader: {type: "json"}
     },
 
     statics: {

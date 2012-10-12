@@ -33,9 +33,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     requires: [
         //"Teselagen.models.Project",
-        //"Teselagen.models.J5Collection",
+        "Teselagen.models.J5Collection",
         //"Teselagen.models.EugeneRule",
-        //"Teselagen.models.J5Run"
+        "Teselagen.models.J5Run"
     ],
 
     proxy: {
@@ -71,9 +71,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        {name: "DesignName", type: "String", defaultValue: ""},
-        {name : "id", type: "Integer"},
-        {name : "project_id", type: "Integer"}
+        {name: "name", type: "String", defaultValue: ""},
+        {name: "id", type: "Integer"},
+        {name: "project_id", type: "Integer"}
         /*,{
             name: "j5Collection",
             convert: function(v, record) {

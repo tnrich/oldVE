@@ -17,7 +17,23 @@ Ext.require("Teselagen.utils.FormatUtils");
 Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
-//Ext.require("Teselagen.models.J5Parameters");
+
+
+Ext.require("Teselagen.models.SequenceFile");
+Ext.require("Teselagen.models.Part");
+Ext.require("Teselagen.models.J5Bin");
+Ext.require("Teselagen.models.J5Collection");
+Ext.require("Teselagen.models.EugeneRule");
+Ext.require("Teselagen.models.SBOLvIconInfo");
+
+Ext.require("Teselagen.models.J5Run");
+Ext.require("Teselagen.models.J5Parameters");
+Ext.require("Teselagen.models.DownstreamAutomationParameters");
+Ext.require("Teselagen.models.J5Results");
+
+Ext.require("Teselagen.models.DeviceDesign");
+Ext.require("Teselagen.models.Project");
+
 
 Ext.onReady(function() {
 
@@ -162,13 +178,13 @@ Ext.onReady(function() {
             it("Testing which encryption to use: Sha256.hex_sha256(content)", function() {
 
                 // This is from /vede/test/data/dexml/DeviceEditor_example.xml
-                /*    <de:sequenceFile hash="7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3">
-                      <de:format>FASTA</de:format>
-                      <de:content><![CDATA[>ssrA_tag_enhance
-                GCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG
-                ]]></de:content>
-                      <de:fileName>ssrA_tag_enhance.fas</de:fileName>
-                    </de:sequenceFile>*/
+                //    <de:sequenceFile hash="7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3">
+                //      <de:format>FASTA</de:format>
+                //      <de:content><![CDATA[>ssrA_tag_enhance
+                //GCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG
+                //]]></de:content>
+                //      <de:fileName>ssrA_tag_enhance.fas</de:fileName>
+                //    </de:sequenceFile>*/
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var trueHash    =  "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3";
 
@@ -614,15 +630,14 @@ Ext.onReady(function() {
                 });
                 bin.addToParts([part1, part2]);
 
-                /*var id1     = bin.getPartById(part1.get("id"));
-                expect(id1).toBe(part1);
+                //var id1     = bin.getPartById(part1.get("id"));
+                //expect(id1).toBe(part1);
 
-                var id2     = bin.getPartById(part2.get("id"));
-                expect(id2).toBe(part2);
+                //var id2     = bin.getPartById(part2.get("id"));
+                //expect(id2).toBe(part2);
 
-                expect(id1).not.toBe(part2);
-                expect(id2).not.toBe(part1);
-                */
+                //expect(id1).not.toBe(part2);
+                //expect(id2).not.toBe(part1);
             });
 //LAST HERE  DW: 10.11.2012
             it("deletePart() -- Depends on EugeneRule.getRulesInvolvingPart() and removeFromRules()", function(){

@@ -17,7 +17,7 @@ Ext.require("Teselagen.utils.FormatUtils");
 Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
-//Ext.require("Teselagen.models.J5Parameters");
+Ext.require("Teselagen.models.J5Parameters");
 Ext.require("Teselagen.models.EugeneRule");
 
 Ext.require("Teselagen.manager.SequenceFileManager");
