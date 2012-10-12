@@ -6,7 +6,7 @@ Ext.define("Vede.controller.ProjectController", {
         Vede.application.projectManager.openProject(project);
     },
     renderDesigns: function (designs) {
-        console.log(designs);
+        console.log(designs.getModifiedRecords());
         Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
         designs.data.items.forEach(function (rec) {
             Ext.getCmp('projectDesignPanel').getRootNode().appendChild({

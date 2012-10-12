@@ -16,7 +16,7 @@ Ext.define("Teselagen.models.Project", {
             name: 'designs', 
             associationKey: 'designs', 
             autoLoad: true,
-            foreignKey: 'design_id'
+            foreignKey: 'project_id'
         }
         
         /*,
