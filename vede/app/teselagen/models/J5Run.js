@@ -5,6 +5,12 @@
  */
 Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
+    requires: [
+        //"Teselagen.models.DeviceDesign",
+        "Teselagen.models.J5Parameters",
+        "Teselagen.models.DownstreamAutomationParameters",
+        "Teselagen.models.J5Results"
+    ],
     proxy: {
         type: "memory"
     },

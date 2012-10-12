@@ -21,7 +21,8 @@ var data = {
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
-        //"Teselagen.models.J5Collection",
+        //"Teselagen.models.Project",
+        "Teselagen.models.J5Collection",
         //"Teselagen.models.EugeneRule",
         "Teselagen.models.J5Run"
     ],
@@ -61,13 +62,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
         {name: "name", type: "String", defaultValue: ""},
         {name: "id", type: "Integer"},
         {name: "project_id", type: "Integer"}
-        /*
-        {
-            name: "j5Collection",
-            convert: function(v, record) {
-                return v || null; //Ext.create("Teselagen.models.J5Collection");
-            }
-        }*/
     ],
 
     associations: [

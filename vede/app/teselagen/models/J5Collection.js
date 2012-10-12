@@ -8,7 +8,8 @@ Ext.define("Teselagen.models.J5Collection", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.DeviceDesign"
+        //"Teselagen.models.DeviceDesign",
+        "Teselagen.models.J5Bin"
     ],
 
     proxy: {
