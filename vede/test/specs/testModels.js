@@ -442,7 +442,7 @@ Ext.onReady(function() {
                 expect(eugene).not.toBe(null);
                 expect(flag).toBe(true);
             });
-
+//LAST HERE  DW: 10.11.2012
             it("generateText()", function(){
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
@@ -454,7 +454,8 @@ Ext.onReady(function() {
 
                 var op1 = Ext.create("Teselagen.models.Part", { name: "part"});
                 eug.setOperand1(op1);
-                //console.log(eug);
+                console.log(op1);
+                console.log(eug);
                 //console.log(eug.validate());
                 var str = eug.generateText();
                 expect(str).toBe("Rule eug(part BEFORE 123);");
@@ -623,7 +624,7 @@ Ext.onReady(function() {
                 expect(id2).not.toBe(part1);
                 */
             });
-//LAST HERE  DW: 10.8.2012
+//LAST HERE  DW: 10.11.2012
             it("deletePart() -- Depends on EugeneRule.getRulesInvolvingPart() and removeFromRules()", function(){
 
                 var part1   = Ext.create("Teselagen.models.Part");
@@ -943,7 +944,7 @@ Ext.onReady(function() {
 
                 expect(results).not.toBe(null);
 
-                console.log(results);
+                //console.log(results);
                 expect(Ext.getClassName(results.getJ5Run())).toBe("Teselagen.models.J5Run");
             });
         });
