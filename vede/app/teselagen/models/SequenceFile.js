@@ -7,11 +7,11 @@
 Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
-    requires: [
+    requires: [//,
+        //"Teselagen.models.Part",
+        //"Teselagen.models.Project,
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants",
-        "Teselagen.models.Part",
-        "Teselagen.models.Project"
+        "Teselagen.constants.Constants"
     ],
 
     proxy: {

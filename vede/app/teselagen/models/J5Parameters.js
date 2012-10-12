@@ -20,8 +20,19 @@ Ext.define("Teselagen.models.J5Parameters", {
     ],
 
     proxy: {
-        type: "memory"
+        type: "memory",
+        reader: {type: "json"}
     },
+
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run"
+        }
+    ],
 
     statics: {
         //parameter names
