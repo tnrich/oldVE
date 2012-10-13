@@ -21,18 +21,13 @@ Ext.define("Teselagen.models.J5Collection", {
 
     /**
      * Input parameters.
-     * @param {Ext.data.bins} binsVector A store of many {@link Teselagen.models.J5Bin}
+     * @param {Ext.data.bins} bins A store of many {@link Teselagen.models.J5Bin}
      * @param {Boolean} j5Ready
      * @param {Boolean} combinatorial
      * @param {Boolean} isCircular
      */
     fields: [
-        /*{
-            name: "binsVector",
-            convert: function(v, record) {
-                return v || [];
-            }
-        },*/
+        {name: "id",                type: "int"},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
         {name: "isCircular",        type: "boolean",    defaultValue: true},
@@ -65,14 +60,14 @@ Ext.define("Teselagen.models.J5Collection", {
     },
 
     /**
-     * @returns {int} count Number of J5Bins in binsVector
+     * @returns {int} count Number of J5Bins in bins
      */
     binCount: function() {
         return this.bins().count();
     },
 
     /**
-     * Pushes a J5bin into the binsVector.
+     * Pushes a J5bin into the bins.
      * Original uses splice, but don't we want to insert it, not replace an item?
      * @param {Teselagen.models.J5Bin} pJ5Bin Bin to add to collection. Can be one or array of bins.
      * @param {int} pIndex Index to insert pJ5Bin. Optional. Defaults to end of of array if invalid or undefined value.

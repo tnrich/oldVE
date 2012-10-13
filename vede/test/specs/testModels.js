@@ -341,6 +341,32 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
+            it("Creates Part, Can Set SequenceFile", function(){
+                var part = Ext.create("Teselagen.models.Part", {
+                    id: 5,
+                    fas: "fas1"
+                });
+
+                var newSeq = Ext.create("Teselagen.models.SequenceFile", {
+                    id: 10,
+                    sequenceFileName: "newSeq",
+                    sequenceFileContent: "gattaca"
+                });
+//LAST HERE  DW: 10.12.2012
+                console.log("part-newSeq");
+
+                part.setSequenceFile(10);
+
+                console.log(part);
+                console.log(newSeq);
+                console.log(part.get("sequenceFile_id"));
+                console.log(part.get("sequenceFile"));
+                expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
+                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+
+                console.log("part-seqfile-end");
+            });
+
             it("Creates Empty Part, isPartVOEmpty()/isEmpty", function(){
                 var part = Ext.create("Teselagen.models.Part");
 
@@ -404,7 +430,7 @@ Ext.onReady(function() {
                 expect(eugene.get("negationOperator")).toBe(false);
             });
 
-            it("Test Associations *** NOT PASSING DEVICE DESIGN", function(){
+            it("Test Associations", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     operand2: 123,
                     compositionalOperator: "AFTER"
@@ -414,6 +440,17 @@ Ext.onReady(function() {
 
                 expect(Ext.getClassName(eugene.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
                 expect(Ext.getClassName(eugene.getOperand1())).toBe("Teselagen.models.Part");
+            });
+
+            it("Creates EugeneRule", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+                expect(eugene).not.toBe(null);
+
+                expect(eugene.get("name").match(/rule/).length).toBe(1); //
+                expect(eugene.get("negationOperator")).toBe(false);
             });
 
             it("Rejects unacceptable operand2", function(){
@@ -503,7 +540,7 @@ Ext.onReady(function() {
                 expect(bin.partCount()).toBe(0);
             });
 
-            it("Test Associations() *** NOT PASSING", function(){
+            it("Test Associations()", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
 
@@ -640,16 +677,17 @@ Ext.onReady(function() {
                 //expect(id2).not.toBe(part1);
             });
 //LAST HERE  DW: 10.11.2012
-            it("deletePart() -- Depends on EugeneRule.getRulesInvolvingPart() and removeFromRules()", function(){
+            it("deletePart() -- Depends on DeviceDesign.getRulesInvolvingPart() and removeFromRules()", function(){
 
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
                 var rule1   = Ext.create("Teselagen.models.EugeneRule", {
                     name: "rule1",
-                    operand1: part1,
+                    //operand1: part1,
                     operand2: part2,
                     compositionalOperator: "AFTER"
                 });
+                rule1.setOperand1(part1);
 
                 // Create a bin with parts
                 var bin     = Ext.create("Teselagen.models.J5Bin", {
@@ -710,7 +748,7 @@ Ext.onReady(function() {
 
                 expect(Ext.getClassName(coll.bins())).toBe("Ext.data.Store");
                 expect(Ext.getClassName(coll.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
-                console.log(coll.getDeviceDesign());
+                //console.log(coll.getDeviceDesign());
             });
 
 
@@ -929,7 +967,7 @@ Ext.onReady(function() {
             it("Create J5Run, Check Associations", function(){
                 var run = Ext.create("Teselagen.models.J5Run");
 
-                console.log(run);
+                //console.log(run);
 
                 expect(Ext.getClassName(run.getJ5Parameters())).toBe("Teselagen.models.J5Parameters");
                 expect(Ext.getClassName(run.getDownstreamAutomationParameters())).toBe("Teselagen.models.DownstreamAutomationParameters");
@@ -985,6 +1023,30 @@ Ext.onReady(function() {
                 expect(device).not.toBe(null);
                 //device.createNewCollection(3);
                 //console.log(device);
+            });
+
+            it("getRulesInvolvingPart() -- Depends on DeviceDesign.getRulesInvolvingPart() and removeFromRules()", function(){
+
+                var part1   = Ext.create("Teselagen.models.Part");
+                var part2   = Ext.create("Teselagen.models.Part");
+                var rule1   = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "rule1",
+                    operand1: part1,
+                    operand2: part2,
+                    compositionalOperator: "AFTER"
+                });
+
+                // Create a bin with parts
+                var bin     = Ext.create("Teselagen.models.J5Bin", {
+                    //parts: [part1, part2]
+                });
+                bin.addToParts([part1, part2]);
+
+                // Create a Device with eugene rules that include the parts
+                var device  = Ext.create("Teselagen.models.DeviceDesign");
+                device.addToRules(rule1);
+//LAST HERE  DW: 10.12.2012
+
             });
         });
 

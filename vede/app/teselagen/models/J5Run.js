@@ -28,6 +28,7 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
+        {name: "id",                type: "int"},
         {name: "name", type: "String", defaultValue: ""}
         /*{
             name: "j5Parameters",
