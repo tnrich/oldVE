@@ -44,6 +44,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
+        {name: "id",                type: "int"},
         {
             name: "name",
             convert: function(v, record) {
@@ -175,7 +176,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
 
         if ( this.getOperand1() !== null) {
-            console.log(this.getOperand1());
+            //console.log(this.getOperand1());
             ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }

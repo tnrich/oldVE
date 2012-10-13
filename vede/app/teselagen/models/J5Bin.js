@@ -36,12 +36,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        /*{
-            name: "parts",
-            convert: function(v, record) {
-                return v || [];
-            }
-        },*/
+        {name: "id",                type: "int"},
         {name: "binName",           type: "string",     defaultValue: ""}, //required when making this object
         {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
