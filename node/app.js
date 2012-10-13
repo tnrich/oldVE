@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
   Teselagen
   Device Editor MongoDB Backend
@@ -20,6 +22,19 @@ app.mysql = require('mysql');
 app.markdown = require("markdown-js");
 app.soap = require("soap");
 app.xml2js = require('xml2js');
+app.program = require('commander');
+
+app.program
+  .version('0.0.1')
+  .option('-d, --dev', 'Run Production environment')
+  .option('-s, --stage', 'Run Production environment')
+  .option('-p, --prod', 'Run Production environment')
+  .parse(process.argv);
+
+if (app.program.dev) process.env.NODE_ENV = "Development";
+else if (app.program.stage) process.env.NODE_ENV = "Stage";
+else if (app.program.prod) process.env.NODE_ENV = "Production";
+else process.env.NODE_ENV = "Development";
 
 app.use(function (req, res, next) {
   //console.log('using cors');
@@ -50,5 +65,5 @@ require('./routes/backend.js')(app);
 require('./routes/j5.js')(app);
 // Listen Local Port on environment port or default 3000
 app.listen(process.env.NODE_PORT || 3000, function () {
-  //console.log("Nodejs server is listening on port %d in %s mode (For another port use run.sh <Port>)", app.address().port, app.settings.env);
+  console.log("OPTIONS: Nodejs server is running in %s mode",process.env.NODE_ENV);
 });
