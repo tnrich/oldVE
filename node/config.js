@@ -58,8 +58,8 @@ module.exports = function (app, express) {
   // Init MONGOOSE (ODM)
   app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
     console.log('MONGODB: MONGODB is online');
-    if(app.program.examples||app.program.all) app.development.reloadExamples();
-    if(app.program.guest||app.program.all) app.development.reloadUsers();
+    if(app.program.examples) app.development.reloadExamples();
+    if(app.program.guest) app.development.reloadUsers();
   });
 
   // Load MONGOOSE SCHEMAS

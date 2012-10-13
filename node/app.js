@@ -26,6 +26,8 @@ app.program = require('commander');
 
 app.program
   .version('0.0.1')
+  .option('-e, --examples', 'Load Examples')
+  .option('-g, --guest', 'Create Guest User')
   .option('-d, --dev', 'Run Production environment')
   .option('-s, --stage', 'Run Production environment')
   .option('-p, --prod', 'Run Production environment')
