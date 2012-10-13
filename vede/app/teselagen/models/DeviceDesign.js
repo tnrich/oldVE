@@ -59,8 +59,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
+        {name: "id", type: "int"},
         {name: "name", type: "String", defaultValue: ""},
-        {name: "id", type: "Integer"},
         {name: "project_id", type: "Integer"}
     ],
 

@@ -101,9 +101,9 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        {name: "sequenceFile_id",   type: "int"},
-        {name: "iconID",            type: "string",     defaultValue: ""},
-        {name: "j5bin_id",          type: "int"}
+        //{name: "sequenceFile_id",   type: "int"},
+        {name: "iconID",            type: "string",     defaultValue: ""}//,
+        //{name: "j5bin_id",          type: "int"}
     ],
 
     validations: [

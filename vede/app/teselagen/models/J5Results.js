@@ -21,7 +21,8 @@ Ext.define("Teselagen.models.J5Results", {
      * Input parameters.
      */
     fields: [
-        {name: "name", type: "String", defaultValue: ""},
+        {name: "id",                type: "int"},
+        {name: "name",              type: "String",     defaultValue: ""},
         {name: "eugeneruleslist",   type: "string",     defaultValue: ""}, //.eug
         {name: "j5parameters",      type: "string",     defaultValue: ""}, //.csv
         {name: "masterplasmidlist", type: "string",     defaultValue: ""}, //.csv
