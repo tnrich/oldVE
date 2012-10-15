@@ -100,7 +100,8 @@ Ext.application({
                         // Set the body as unmasked after the animation
                         console.log('Execute app...');
                         self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
-                        self.projectManager.loadProjects(); // Load User Projects
+                        self.projectManager.loadUser();
+                        //self.projectManager.loadProjects(); // Load User Projects
                         Ext.getBody().unmask();
                     }
                 }

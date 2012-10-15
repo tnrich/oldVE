@@ -5,6 +5,9 @@ Ext.define("Teselagen.models.Project", {
         name: "id",
         type: "int"
     }, {
+        name: "user_id",
+        type: "int"
+    }, {
         name: "name",
         type: "String",
         defaultValue: ""

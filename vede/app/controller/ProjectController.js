@@ -23,7 +23,6 @@ Ext.define("Vede.controller.ProjectController", {
         var parts = project.parts();
         parts.load({
             callback: function() {
-            console.log(parts);
             parts.each(function(part){
                 Ext.getCmp('projectPartsPanel').getRootNode().appendChild({
                     text: part.data.name,

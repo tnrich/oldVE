@@ -3,37 +3,64 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	require: ["Teselagen.event.ProjectEvent", "Teselagen.store.ProjectStore"],
+	require: ["Teselagen.event.ProjectEvent", "Teselagen.store.ProjectStore", "Teselagen.store.UserStore"],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
 	},
 
 	projects: null,
+	currentUser: null,
 	workingProject: null,
 
 	constructor: function (inData) {},
 
 	/**
-	 * Render User Projects
+	 * Load User Info
+	 */
+	loadUser: function () {
+		console.log('PM: Loading User');
+		var users = Ext.create("Teselagen.store.UserStore");
+		var self = this;
+		users.load({
+			callback: function (records,operation,success) {
+				if(records.length != 1) return console.log('Error loading user');
+				self.currentUser = users.first();
+				self.loadProjects();
+				//console.log(self.currentUser.getPreferences());
+			}
+		});
+	},
+
+	/**
+	 * Load User Projects
 	 */
 	loadProjects: function () {
 		console.log('PM: Showing projects');
-
-		this.projects = Ext.create("Teselagen.store.ProjectStore");
-		this.projects.load();
+		
+		var projects = this.currentUser.projects().load({
+			callback: function () {
+				Ext.getCmp('projectsWidget').reconfigure(projects);
+			}
+		});
+		
 	},
-	DesignAndChildResources: function(designs){
+
+	/**
+	 *	Load Project Child Resources
+	 */	
+	DesignAndChildResources: function (designs) {
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
 		var designs = this.workingProject.designs().load({
-    		callback: function() {
-    			projectController.renderDesignsSection(designs);
-    			projectController.renderPartsSection(self.workingProject);
-    			projectController.renderJ5ResultsSection(designs);
-    	}});
+			callback: function () {
+				projectController.renderDesignsSection(designs);
+				projectController.renderPartsSection(self.workingProject);
+				projectController.renderJ5ResultsSection(designs);
+			}
+		});
 
 	},
 
@@ -48,9 +75,5 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
 		this.DesignAndChildResources(this.workingProject.designs());
-
-		// Load j5 Results
-		//this.loadAndRenderj5Results();
-
 	}
 });
