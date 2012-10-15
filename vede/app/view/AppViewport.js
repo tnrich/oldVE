@@ -45,12 +45,7 @@ Ext.define('Vede.view.AppViewport', {
                     activeTab: 0,
                     items: [
                         {
-                            xtype: 'panel',
-                            title: 'Dashboard',
-                            tabConfig: {
-                                xtype: 'tab',
-                                id: 'DashboardTab'
-                            }
+                            xtype: 'DashbaordPanel'
                         },
                         {
                             xtype: 'VectorEditorPanel'

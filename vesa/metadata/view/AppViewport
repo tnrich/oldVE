@@ -488,8 +488,9 @@
                                     "userConfig": {
                                         "layout|flex": 1,
                                         "designer|userClassName": "MyPanel24",
+                                        "width": 1513,
                                         "layout": "fit",
-                                        "title": "My Panel"
+                                        "title": "Project Info"
                                     },
                                     "designerId": "240cb9b7-26e9-4fbb-b14a-0d2829f5504b"
                                 },
@@ -505,7 +506,7 @@
                                         "designer|userClassName": "MyPanel25",
                                         "maxHeight": 300,
                                         "layout": "fit",
-                                        "title": "My Panel"
+                                        "title": "Analysis"
                                     },
                                     "designerId": "47d51005-3cf6-4628-a00b-11b4d104c6b3"
                                 }
@@ -524,7 +525,7 @@
                                 "maxWidth": 200,
                                 "minWidth": null,
                                 "layout": "fit",
-                                "title": "My Panel"
+                                "title": "Help"
                             },
                             "designerId": "817e75a8-dec1-4297-88a9-5c8d958c7c8c"
                         }

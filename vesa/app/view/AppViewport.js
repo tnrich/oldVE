@@ -225,10 +225,11 @@ Ext.define('Vesa.view.AppViewport', {
                                         {
                                             xtype: 'panel',
                                             flex: 1,
+                                            width: 1513,
                                             layout: {
                                                 type: 'fit'
                                             },
-                                            title: 'My Panel'
+                                            title: 'Project Info'
                                         },
                                         {
                                             xtype: 'panel',
@@ -237,7 +238,7 @@ Ext.define('Vesa.view.AppViewport', {
                                             layout: {
                                                 type: 'fit'
                                             },
-                                            title: 'My Panel'
+                                            title: 'Analysis'
                                         }
                                     ]
                                 },
@@ -248,7 +249,7 @@ Ext.define('Vesa.view.AppViewport', {
                                     layout: {
                                         type: 'fit'
                                     },
-                                    title: 'My Panel'
+                                    title: 'Help'
                                 }
                             ]
                         },
