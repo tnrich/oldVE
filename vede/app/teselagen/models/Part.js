@@ -8,23 +8,14 @@ Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.SequenceFile",
-        "Teselagen.models.J5Bin",
-        "Teselagen.models.EugeneRule"
+        "Teselagen.models.SequenceFile",
+//        "Teselagen.models.J5Bin",
+//        "Teselagen.models.EugeneRule"
     ],
 
     proxy: {
         type: "memory"
     },
-
-    /*proxy: {
-        type: "rest",
-        url: "getParts.json",
-        reader: {
-            type: "json",
-            root: "data"
-        }
-    },*/
 
     statics: {
     },
