@@ -23,6 +23,7 @@ Ext.define('Vede.view.AppViewport', {
     requires: [
         'Vede.view.common.HeaderPanelView',
         'Vede.view.common.ProjectPanelView',
+        'Vede.view.common.DashboardPanelView',
         'Vede.view.de.DeviceEditor',
         'Vede.view.de_legacy.DeviceEditor',
         'Vede.view.ve.VectorEditorPanel'
@@ -45,12 +46,7 @@ Ext.define('Vede.view.AppViewport', {
                     activeTab: 0,
                     items: [
                         {
-                            xtype: 'panel',
-                            title: 'Dashboard',
-                            tabConfig: {
-                                xtype: 'tab',
-                                id: 'DashboardTab'
-                            }
+                            xtype: 'DashboardPanelView'
                         },
                         {
                             xtype: 'VectorEditorPanel'
