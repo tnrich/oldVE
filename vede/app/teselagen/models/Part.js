@@ -1,29 +1,3 @@
-var data = {
-    "success": true,
-    "data": [
-        {
-            "id": 1,
-            "veproject_id": 1,
-            "name": "Part 1"
-        },
-        {
-            "id": 2,
-            "veproject_id": 1,
-            "name": "Part 2"
-        },
-        {
-            "id": 3,
-            "veproject_id": 2,
-            "name": "Part 3"
-        },
-        {
-            "id": 4,
-            "veproject_id": 3,
-            "name": "Part 4"
-        }
-    ]
-};
-
 /**
  * @class Teselagen.models.Part
  * Class describing a Part for J5Parameters.
@@ -39,13 +13,12 @@ Ext.define("Teselagen.models.Part", {
 //        "Teselagen.models.EugeneRule"
     ],
 
-    // This proxy should be deleted
     proxy: {
-        type: "memory",
-        data: data,
+        type: "rest",
+        url: "getParts.json",
         reader: {
-            type: 'json',
-            root: 'data'
+            type: "json",
+            root: "data"
         }
     },
 
