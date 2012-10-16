@@ -31,9 +31,9 @@ Ext.define('Vede.view.de.j5Controls', {
                         flex: 1,
                         id: 'editj5ParamsBtn',
                         maxHeight: 23,
-                        maxWidth: 100,
+                        maxWidth: 130,
                         minHeight: 23,
-                        text: 'Edit j5 Parameters'
+                        text: '<b>Edit j5 Parameters</b>'
                     }, {
                         xtype: 'container',
                         flex: 1,
@@ -65,6 +65,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             xtype: 'filefield',
                             flex: 1,
                             id: 'plasmidsListFileSelector',
+                            validateOnChange: false,
                             allowBlank: false,
                             margin: '',
                             fieldLabel: 'or',
@@ -107,6 +108,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             xtype: 'filefield',
                             flex: 1,
                             id: 'oligosListFileSelector',
+                            validateOnChange: false,
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
@@ -148,6 +150,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             xtype: 'filefield',
                             flex: 1,
                             id: 'directSynthesesFileSelector',
+                            validateOnChange: false,
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
@@ -197,25 +200,23 @@ Ext.define('Vede.view.de.j5Controls', {
                             type: 'hbox'
                         },
                         items: [{
-                            xtype: 'button',
-                            flex: 1,
-                            floating: false,
+                            xtype: 'filefield',
                             height: 23,
-                            id: 'loadAssemblyBtn',
+                            buttonOnly: true,
+                            id: 'loadAssemblyFileField',
+                            validateOnChange: false,
                             margin: '10 0 10 0',
                             maxHeight: 23,
-                            maxWidth: 200,
                             minHeight: 23,
-                            width: 100,
-                            text: '<b>Load Existing Assembly File</b>'
+                            buttonText: '<b>Load Existing Assembly File</b>'
                         }]
                     }, {
                         xtype: 'gridpanel',
                         flex: 1,
-                        height: 100,
+                        height: 90,
                         id: 'plasmidsGrid',
                         margin: '10 0 5 0',
-                        minHeight: 110,
+                        minHeight: 100,
                         width: 786,
                         title: 'Plasmids',
                         columnLines: true,
@@ -257,6 +258,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     items: [{
                         xtype: 'filefield',
                         id: 'condenseAssemblyFilesSelector',
+                        validateOnChange: false,
                         maxWidth: 500,
                         width: 500,
                         fieldLabel: '<b>Assembly Files To Condense List:</b>',
@@ -266,6 +268,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'filefield',
                         id: 'zippedAssemblyFilesSelector',
+                        validateOnChange: false,
                         width: 500,
                         fieldLabel: '<b>Zipped Assembly Files:</b>',
                         labelSeparator: ' ',
@@ -291,10 +294,12 @@ Ext.define('Vede.view.de.j5Controls', {
                         labelWidth: 265,
                         items: [{
                             xtype: 'radiofield',
-                            boxLabel: 'Use latest server version'
+                            boxLabel: 'Use latest server version',
+                            name: 'automationParamsFileSource'
                         }, {
                             xtype: 'radiofield',
                             boxLabel: 'Use custom parameters',
+                            name: 'automationParamsFileSource',
                             checked: true
                         }]
                     }, {
@@ -305,6 +310,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'filefield',
                         id: 'sourcePlateListSelector',
+                        validateOnChange: false,
                         width: 350,
                         fieldLabel: '<b>Source Plate List:</b>',
                         labelSeparator: ' ',
@@ -313,6 +319,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'filefield',
                         id: 'zippedPlateFilesSelector',
+                        validateOnChange: false,
                         width: 350,
                         fieldLabel: '<b>Zipped Plate Files:</b>',
                         labelSeparator: ' ',
@@ -321,6 +328,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'filefield',
                         id: 'assemblyFileSelector',
+                        validateOnChange: false,
                         width: 350,
                         fieldLabel: '<b>j5 Assembly File:</b>',
                         labelSeparator: ' ',
@@ -335,13 +343,19 @@ Ext.define('Vede.view.de.j5Controls', {
                 }, {
                     xtype: 'panel',
                     title: 'j5 Files',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
                     items: [{
                         xtype: 'container',
+                        flex: 1,
                         layout: {
                             align: 'stretch',
                             type: 'hbox'
                         },
-                        items: [{
+                        items: [
+                            {
                             xtype: 'container',
                             flex: 1,
                             padding: 5,
@@ -349,271 +363,13 @@ Ext.define('Vede.view.de.j5Controls', {
                                 align: 'stretch',
                                 type: 'vbox'
                             },
-                            title: 'Run j5 on Server',
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    flex: 1,
-                                    id: 'editj5ParamsBtn',
-                                    maxHeight: 23,
-                                    maxWidth: 100,
-                                    minHeight: 23,
-                                    text: 'Edit j5 Parameters'
-                                },
-                                {
-                                    xtype: 'container',
-                                    flex: 1,
-                                    padding: 2,
-                                    layout: {
-                                        align: 'stretch',
-                                        type: 'hbox'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'radiofield',
-                                            id: 'useServerPlasmidsRadioBtn',
-                                            name: 'plasmidsListSource',
-                                            fieldLabel: '<b>Master Plasmids List</b>',
-                                            labelWidth: 200,
-                                            boxLabel: 'Use latest server version'
-                                        },
-                                        {
-                                            xtype: 'radiofield',
-                                            id: 'useEmptyPlasmidsRadioBtn',
-                                            flex: 0.5,
-                                            margin: 'left: 10px',
-                                            name: 'plasmidsListSource',
-                                            fieldLabel: 'or',
-                                            labelPad: 15,
-                                            labelSeparator: ' ',
-                                            labelWidth: 10,
-                                            boxLabel: 'Generate empty file',
-                                            checked: true
-                                        },
-                                        {
-                                            xtype: 'filefield',
-                                            flex: 1,
-                                            id: 'plasmidsListFileSelector',
-                                            allowBlank: false,
-                                            margin: '',
-                                            fieldLabel: 'or',
-                                            hideLabel: false,
-                                            labelPad: 15,
-                                            labelSeparator: ' ',
-                                            labelWidth: 10,
-                                            preventMark: false,
-                                            buttonOnly: false,
-                                            buttonText: '<b>Choose File</b>'
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    flex: 1,
-                                    padding: 2,
-                                    layout: {
-                                        align: 'stretch',
-                                        type: 'hbox'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'radiofield',
-                                            id: 'useServerOligosRadioBtn',
-                                            name: 'oligosListSource',
-                                            fieldLabel: '<b>Master Oligos List</b>',
-                                            labelWidth: 200,
-                                            boxLabel: 'Use latest server version'
-                                        },
-                                        {
-                                            xtype: 'radiofield',
-                                            id: 'useEmptyOligosRadioBtn',
-                                            flex: 0.5,
-                                            margin: 'left: 10px',
-                                            name: 'oligosListSource',
-                                            fieldLabel: 'or',
-                                            labelPad: 15,
-                                            labelSeparator: ' ',
-                                            labelWidth: 10,
-                                            boxLabel: 'Generate empty file',
-                                            checked: true
-                                        },
-                                        {
-                                            xtype: 'filefield',
-                                            flex: 1,
-                                            id: 'oligosListFileSelector',
-                                            margin: '',
-                                            fieldLabel: 'or',
-                                            hideLabel: false,
-                                            labelPad: 15,
-                                            labelSeparator: ' ',
-                                            labelWidth: 10,
-                                            preventMark: false,
-                                            buttonOnly: false,
-                                            buttonText: '<b>Choose File</b>'
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    flex: 1,
-                                    padding: 2,
-                                    layout: {
-                                        align: 'stretch',
-                                        type: 'hbox'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'radiofield',
-                                            id: 'useServerSynthesesRadioBtn',
-                                            name: 'directSynthesesListSource',
-                                            fieldLabel: '<b>Master Direct Syntheses List</b>',
-                                            labelWidth: 200,
-                                            boxLabel: 'Use latest server version'
-                                        },
-                                        {
-                                            xtype: 'radiofield',
-                                            id: 'useEmptySynthesesRadioBtn',
-                                            flex: 0.5,
-                                            margin: 'left: 10px',
-                                            name: 'directSynthesesListSource',
-                                            fieldLabel: 'or',
-                                            labelPad: 15,
-                                            labelSeparator: ' ',
-                                            labelWidth: 10,
-                                            boxLabel: 'Generate empty file',
-                                            checked: true
-                                        },
-                                        {
-                                            xtype: 'filefield',
-                                            flex: 1,
-                                            id: 'directSynthesesFileSelector',
-                                            margin: '',
-                                            fieldLabel: 'or',
-                                            hideLabel: false,
-                                            labelPad: 15,
-                                            labelSeparator: ' ',
-                                            labelWidth: 10,
-                                            preventMark: false,
-                                            buttonOnly: false,
-                                            buttonText: '<b>Choose File</b>'
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'combobox',
-                                    flex: 1,
-                                    id: 'assemblyMethodSelector',
-                                    maxWidth: 300,
-                                    padding: 2,
-                                    fieldLabel: '<b>Assembly Method:</b>',
-                                    labelSeparator: ' ',
-                                    labelWidth: 120,
-                                    queryMode: 'local',
-                                    store: [
-                                        'Mock Assembly',
-                                        'SLIC/Gibson/CPEC',
-                                        'Golden Gate'
-                                    ],
-                                    value: 'Mock Assembly'
-                                },
-                                {
-                                    xtype: 'button',
-                                    flex: 1,
-                                    height: 23,
-                                    id: 'runJ5Btn',
-                                    maxHeight: 23,
-                                    maxWidth: 60,
-                                    minHeight: 23,
-                                    enableToggle: true,
-                                    pressed: false,
-                                    text: '<b>Run j5</b>'
-                                },
-                                {
-                                    xtype: 'displayfield',
-                                    flex: 1,
-                                    hidden: true,
-                                    id: 'j5ResponseTextField',
-                                    value: 'Display Field',
-                                    hideLabel: true
-                                },
-                                {
-                                    xtype: 'container',
-                                    flex: 1,
-                                    layout: {
-                                        align: 'stretch',
-                                        pack: 'end',
-                                        type: 'hbox'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'button',
-                                            flex: 1,
-                                            floating: false,
-                                            height: 23,
-                                            id: 'loadAssemblyBtn',
-                                            margin: '10 0 10 0',
-                                            maxHeight: 23,
-                                            maxWidth: 200,
-                                            minHeight: 23,
-                                            width: 100,
-                                            text: '<b>Load Existing Assembly File</b>'
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'gridpanel',
-                                    flex: 1,
-                                    height: 100,
-                                    id: 'plasmidsGrid',
-                                    margin: '10 0 5 0',
-                                    minHeight: 110,
-                                    width: 786,
-                                    title: 'Plasmids',
-                                    columnLines: true,
-                                    disableSelection: true,
-                                    enableColumnHide: false,
-                                    enableColumnMove: false,
-                                    forceFit: true,
-                                    rowLines: false,
-                                    columns: [
-                                        {
-                                            xtype: 'gridcolumn',
-                                            dataIndex: 'string',
-                                            text: '<b>Name</b>'
-                                        },
-                                        {
-                                            xtype: 'gridcolumn',
-                                            draggable: false,
-                                            resizable: false,
-                                            sortable: false,
-                                            hideable: false,
-                                            text: ''
-                                        },
-                                        {
-                                            xtype: 'gridcolumn',
-                                            draggable: false,
-                                            resizable: false,
-                                            sortable: false,
-                                            hideable: false,
-                                            text: ''
-                                        }
-                                    ],
-                                    viewConfig: {
-                                        deferEmptyText: false,
-                                        emptyText: '',
-                                        enableTextSelection: true
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'panel',
                             height: 366,
                             items: [{
                                 xtype: 'button',
                                 flex: 1,
                                 id: 'generatej5SequenceFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Sequence File</b>',
                                 tooltip: "The sequences list file is a CSV file that contains a list of all of the source/template sequences from which DNA parts will be defined."
                             }, {
@@ -621,6 +377,7 @@ Ext.define('Vede.view.de.j5Controls', {
                                 flex: 1,
                                 id: 'generatej5PartsFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Parts File</b>',
                                 tooltip: 'The parts list file is a CSV file that contains the definitions of all of the DNA parts that may be utilized during the assembly process.'
                             }, {
@@ -628,6 +385,7 @@ Ext.define('Vede.view.de.j5Controls', {
                                 flex: 1,
                                 id: 'generatej5TargetPartsFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Target Parts File</b>',
                                 tooltip: 'The target part order list file is a CSV file that determines how the DNA parts will be arranged in the assembly. The order of combinatorial bins or parts in the file matches the order of bins or parts in the resulting assembly (the last bin or part in the list will be cyclicly followed by the first bin or part). The same part may be utilized more than once in any given assembly.'
                             }, {
@@ -635,6 +393,7 @@ Ext.define('Vede.view.de.j5Controls', {
                                 flex: 1,
                                 id: 'generatej5EugeneRulesFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Eugene Rules File</b>',
                                 tooltip: 'The Eugene (a biological design specification computer language) rules list file is a text file that contains a list of design rules. j5 checks that these rules are satisfied prior to designing an assembly. Currently, j5 only enforces three types of Eugene rules (NOTMORETHAN, NOTWITH, and WITH) and ignores all other rules and declarations; all lines that do not begin with "Rule" are ignored, as well as everything following the commenting escape characters "//".'
                             }]
@@ -700,6 +459,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     }, {
                         xtype: 'container',
+                        flex: 0.3,
                         margin: 20,
                         layout: {
                             align: 'stretch',
@@ -710,6 +470,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             xtype: 'button',
                             id: 'downloadAllj5FilesBtn',
                             maxWidth: 150,
+                            maxHeight: 23,
                             text: '<b>Download All Files</b>'
                         }]
                     }]

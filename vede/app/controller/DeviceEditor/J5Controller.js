@@ -56,9 +56,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onUseServerPlasmidsRadioBtnChange: function(e) {
+        Ext.getCmp("plasmidsListFileSelector").reset();
     },
 
     onUseEmptyPlasmidsRadioBtnChange: function(e) {
+        Ext.getCmp("plasmidsListFileSelector").reset();
     },
 
     onPlasmidsListFileSelectorChange: function(me, value) {
@@ -88,9 +90,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onUseServerOligosRadioBtnChange: function() {
+        Ext.getCmp("oligosListFileSelector").reset();
     },
 
     onUseEmptyOligosRadioBtnChange: function() {
+        Ext.getCmp("oligosListFileSelector").reset();
     },
 
     onOligosListFileSelectorChange: function(me) {
@@ -121,9 +125,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onUseServerSynthesesRadioBtnChange: function() {
+        Ext.getCmp("directSynthesesFileSelector").reset();
     },
 
     onUseEmptySynthesesRadioBtnChange: function() {
+        Ext.getCmp("directSynthesesFileSelector").reset();
     },
 
     onDirectSynthesesFileSelectorChange: function(me) {
