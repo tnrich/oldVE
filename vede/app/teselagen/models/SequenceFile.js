@@ -10,13 +10,12 @@ Ext.define("Teselagen.models.SequenceFile", {
     requires: [
         "Teselagen.bio.util.Sha256",
         "Teselagen.constants.Constants",
-        "Teselagen.models.Part",
-        "Teselagen.models.Project"
+//        "Teselagen.models.Part",
+//        "Teselagen.models.Project"
     ],
 
     proxy: {
-        type: "memory",
-        reader: {type: "json"}
+        type: "memory"
     },
 
     statics: {
