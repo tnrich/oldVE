@@ -8,13 +8,15 @@ Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
 
     requires: [
+        //"Teselagen.models.J5Collection",
+        "Teselagen.models.Part",
         "Teselagen.constants.SBOLvIcons",
-        "Teselagen.utils.NullableInt",
-        "Teselagen.models.J5Collection"
+        "Teselagen.utils.NullableInt"
     ],
 
     proxy: {
-        type: "memory"
+        type: "memory",
+        reader: {type: "json"}
     },
 
     statics: {
@@ -34,12 +36,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        /*{
-            name: "parts",
-            convert: function(v, record) {
-                return v || [];
-            }
-        },*/
+        {name: "id",                type: "int"},
         {name: "binName",           type: "string",     defaultValue: ""}, //required when making this object
         {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "directionForward",  type: "boolean",    defaultValue: true},

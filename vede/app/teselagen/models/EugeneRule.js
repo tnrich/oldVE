@@ -8,7 +8,7 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.PartVO",
+        //"Teselagen.models.Part",
         "Teselagen.models.DeviceDesign"
     ],
 
@@ -44,6 +44,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
+        {name: "id",                type: "int"},
         {
             name: "name",
             convert: function(v, record) {
@@ -151,6 +152,17 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
     },
 
+    /*setOperand1: function(pOperand1) {
+        console.log("here");
+        if (Ext.getClassName(pOperand1) === "Teselagen.models.Part") {
+            this.setOperand1(pOperand1);
+        } else {
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
+            });
+        }
+    },*/
+
 
     /** (From EugeneRulesManager.js/EugeneProxy.as)
      * Converts EugeneRule into text
@@ -164,7 +176,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
 
         if ( this.getOperand1() !== null) {
-            console.log(this.getOperand1());
+            //console.log(this.getOperand1());
             ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }

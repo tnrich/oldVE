@@ -61,7 +61,9 @@ Ext.application({
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
         'DeviceEditor.DeviceEditorPanelController',
-        'Vede.controller.AuthEventDispatcherController'
+        'Vede.controller.AuthEventDispatcherController',
+        'ProjectController',
+        'DashboardPanelController'
     ],
     errorHandler: function(err) {
         console.warn(err);
@@ -84,6 +86,8 @@ Ext.application({
         this.authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager"); // Created Auth manager
         this.authenticationManager.login(); // Start Auth process
 
+        var self = this;
+
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             // Fade out the body mask
@@ -98,9 +102,10 @@ Ext.application({
                 listeners: {
                     afteranimate: function() {
                         // Set the body as unmasked after the animation
-                        console.log('Execute app');
-                        var store = Ext.create("Teselagen.store.ProjectStore");
-                        store.load();
+                        console.log('Execute app...');
+                        self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
+                        self.projectManager.loadUser();
+                        //self.projectManager.loadProjects(); // Load User Projects
                         Ext.getBody().unmask();
                     }
                 }

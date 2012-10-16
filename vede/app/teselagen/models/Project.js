@@ -1,35 +1,42 @@
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
-    requires: ['Teselagen.models.Part','Teselagen.models.DeviceDesign'],
-    fields: [
-        { name: "id", type: "int"},
-        { name: "ProjectName", type: "String", defaultValue: ""},
-        { name: "DateCreated", type: "date"},
-        { name: "DateModified", type: "date"},
-        { name: "Path", type: "String", defaultValue: "Project"},
-    ],
-    associations: [
-        { 
-            type: 'hasMany', 
-            model: 'Teselagen.models.DeviceDesign', 
-            name: 'designs', 
-            associationKey: 'designs', 
-            autoLoad: true
-        },
-        { 
-            type: 'hasMany', 
-            model: 'Teselagen.models.Part', 
-            name: 'parts', 
-            associationKey: 'parts', 
-            autoLoad: true
-        }
-    ],
+    requires: ['Teselagen.models.DeviceEditorProject', 'Teselagen.models.VectorEditorProject'],
+    fields: [{
+        name: "id",
+        type: "int"
+    }, {
+        name: "user_id",
+        type: "int"
+    }, {
+        name: "name",
+        type: "String",
+        defaultValue: ""
+    }, {
+        name: "DateCreated",
+        type: "date"
+    }, {
+        name: "DateModified",
+        type: "date"
+    }],
+    associations: [{
+        type: 'hasMany',
+        model: 'Teselagen.models.DeviceEditorProject',
+        name: 'deprojects',
+        associationKey: 'deprojects',
+        autoLoad: true,
+        foreignKey: 'project_id'
+    }, {
+        type: 'hasMany',
+        model: 'Teselagen.models.VectorEditorProject',
+        name: 'veprojects',
+        associationKey: 'veprojects'
+    }],
     proxy: {
         type: 'rest',
-        url: 'getTree.json',
+        url: 'getProjects.json',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'projects'
         }
     }
 });

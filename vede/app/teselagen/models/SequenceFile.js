@@ -8,10 +8,10 @@ Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
     requires: [
+        //"Teselagen.models.Part",
+        //"Teselagen.models.Project,
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants",
-//        "Teselagen.models.Part",
-//        "Teselagen.models.Project"
+        "Teselagen.constants.Constants"
     ],
 
     proxy: {
@@ -30,6 +30,7 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {String} hash Hash code from sha256 encryption (Generated upon creating this object)
      */
     fields: [
+        {name: "id",                    type: "int"},
         {name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
         {name: "sequenceFileContent",   type: "string",     defaultValue: ""},
         {name: "sequenceFileName",      type: "string",     defaultValue: ""},
@@ -141,7 +142,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         var format      = this.get("sequenceFileFormat");
         var constants   = Teselagen.constants.Constants;
         var displayID   = this.get("partSource");
-        var name        = "";
+        var name        = this.get("sequenceFileName");
 
         if (this.get("sequenceFileName") === "" || this.get("sequenceFileName") === undefined ) {
             if (format === constants.self.GENBANK) {
@@ -152,7 +153,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
+                //console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
             }
         }
         this.set("sequenceFileName", name);

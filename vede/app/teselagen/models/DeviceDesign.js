@@ -1,3 +1,18 @@
+var data = {
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "project_id": 1,
+            "name": "Design 1",
+            "runs":[
+                {
+                    "name" : "Today tests"
+                }
+            ]
+        }
+    ]
+};
 /**
  * @class Teselagen.models.DeviceDesign
  * Class describing a DeviceDesign.
@@ -5,27 +20,22 @@
  */
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
-
     requires: [
         //"Teselagen.models.Project",
-        //"Teselagen.models.J5Collection",
+        "Teselagen.models.J5Collection",
         //"Teselagen.models.EugeneRule",
-        //"Teselagen.models.J5Run"
     ],
-
-    proxy: {
-        type: "memory"
-    },
     /*
     proxy: {
-        type: 'rest',
-        url: 'getDesign.json',
+        type: "memory",
+        data: data,
         reader: {
             type: 'json',
             root: 'data'
         }
-    },*/
-
+    },
+    */
+        
     statics: {
     },
 
@@ -36,22 +46,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        { name: "DesignName", type: "String", defaultValue: ""}
-        /*,{
-            name: "j5Collection",
-            convert: function(v, record) {
-                return v || null; //Ext.create("Teselagen.models.J5Collection");
-            }
-        }*/
+        {name: "id", type: "int"}
     ],
 
     associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.Project",
-            getterName: "getProject",
-            setterNme: "setProject"
-        },
         {
             type: "hasOne",
             model: "Teselagen.models.J5Collection",
@@ -63,11 +61,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             name: "rules"
-        },
-        {
-            type: "hasMany",
-            model: "Teselagen.models.J5Run",
-            name: "runs"
         }
     ],
 

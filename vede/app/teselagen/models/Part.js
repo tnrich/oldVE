@@ -1,3 +1,29 @@
+var data = {
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "veproject_id": 1,
+            "name": "Part 1"
+        },
+        {
+            "id": 2,
+            "veproject_id": 1,
+            "name": "Part 2"
+        },
+        {
+            "id": 3,
+            "veproject_id": 2,
+            "name": "Part 3"
+        },
+        {
+            "id": 4,
+            "veproject_id": 3,
+            "name": "Part 4"
+        }
+    ]
+};
+
 /**
  * @class Teselagen.models.Part
  * Class describing a Part for J5Parameters.
@@ -13,8 +39,14 @@ Ext.define("Teselagen.models.Part", {
 //        "Teselagen.models.EugeneRule"
     ],
 
+    // This proxy should be deleted
     proxy: {
-        type: "memory"
+        type: "memory",
+        data: data,
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     },
 
     statics: {
@@ -37,7 +69,7 @@ Ext.define("Teselagen.models.Part", {
      */
     fields: [
         {name: "id",                type: "int"},
-        {name: "project_id",        type: "int"},
+        {name: "veproject_id",        type: "int"},
         
         //{name: "partVO",            type: "auto",       defaultValue: null},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
@@ -60,9 +92,9 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        {name: "sequenceFile_id",   type: "int"},
-        {name: "iconID",            type: "string",     defaultValue: ""},
-        {name: "j5bin_id",          type: "int"}
+        //{name: "sequenceFile_id",   type: "int"},
+        {name: "iconID",            type: "string",     defaultValue: ""}//,
+        //{name: "j5bin_id",          type: "int"}
     ],
 
     validations: [
@@ -127,7 +159,7 @@ Ext.define("Teselagen.models.Part", {
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
      */
-     setId: function() {
+    setId: function() {
         var newId = this.generateId();
         this.set("id", newId);
         return true;

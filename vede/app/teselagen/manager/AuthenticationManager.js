@@ -88,7 +88,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             Ext.get('splash-text').update(parsedResponse.msg);
             that.loggedIn();
             Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
-            Ext.getCmp('AuthWindow').destroy();
+            if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();
           },
           failure: function(response, options) {
             Ext.get('splash-text').update(response.responseText);
