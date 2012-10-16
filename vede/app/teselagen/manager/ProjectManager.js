@@ -92,14 +92,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var id = item.data.id;
 		var projects = this.workingProject.deprojects();
 		var selectedDesign = projects.getById(id);
-
 		var tabPanel = Ext.getCmp('tabpanel');
-
-		//Ext.require(, function() {
-			tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design'})).show(); ;
-			//tabPanel.setActiveTab(newTab);
-		//});
-		
+		tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDesign})).show();		
 	}
 
 
