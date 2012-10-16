@@ -38,8 +38,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 				xtype: 'menu',
 				items: [{
 					xtype: 'menuitem',
-					id: 'auth-logout-btn',
-					text: 'Logout'
+					text: 'Menu Item'
 				}]
 			}
 		}]

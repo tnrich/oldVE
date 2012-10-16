@@ -18,18 +18,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   constructor: function() {
   },
 
-
-  /**
-   * Fires event to init all ajax calls that depend on an active sessionId
-   */
-  loggedIn: function() {
-
-        //if (sessionData.data.firstTime) showDevInfo.delay(1500);
-        Ext.getCmp('headerUserIcon').setText(sessionData.data.username);
-        //Ext.getCmp("projectDesignPanel").store.load();        
-
-        //Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
-  },
   manualAuth: function(username,password,server) {
     
     sessionData.baseURL = server;
@@ -74,7 +62,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   }
   ,
   authenticate: function() {
-        var that = this;
         Ext.get('splash-text').update('Authenticating to server');
         Ext.Ajax.request({
           url: sessionData.baseURL + 'login',
@@ -86,9 +73,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             sessionData.AuthResponse = parsedResponse;
             sessionData.data.firstTime = parsedResponse.firstTime;
             Ext.get('splash-text').update(parsedResponse.msg);
-            that.loggedIn();
             Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
-            if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();
+            Ext.getCmp('AuthWindow').destroy();
           },
           failure: function(response, options) {
             Ext.get('splash-text').update(response.responseText);
@@ -98,6 +84,9 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       }
   ,
 
+  /**
+   * Fires event to init all ajax calls that depend on an active sessionId
+   */
   login: function() {
 
     var that = this;
@@ -113,6 +102,15 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       }).show();
     });
 
+    var loggedIn = function() {
+        Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+        
+        /*
+        Ext.getCmp("ProjectPanel").store.load();
+        if (sessionData.data.firstTime) showDevInfo.delay(1500);
+        Ext.getCmp('username').setText(sessionData.data.username);
+        */
+      }
 
     var fetchVariables = function() {
         Ext.get('splash-text').update('Getting authentication parameters');
@@ -129,7 +127,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             Ext.get('splash-text').update('Automatic login failed.');
             var authDialog = Ext.create('Vede.view.AuthWindow');
             authDialog.show(); 
-            console.log('Automatic login failed. Starting StandAlone Authentication.');
+            console.log('Fetching userdata failed.');
           }
         });
       };

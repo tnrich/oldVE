@@ -38,12 +38,6 @@
     color: #333;	
 }
 
-.x-form-field, .x-form-text, .x-form-item-label, .x-boundlist-item {
-	font-family: 'Quicksand', sans-serif;
-    font-size: 12px;
-    color: #111;
-}
-
 #headerPanel-body, #headerMain-body, #headerSub-body {
 	border: none;
 }
@@ -75,14 +69,18 @@
 	height: 32px;
 }
 
-#ProjectPanel .x-tab-bar { 
+#tabbar-1012 { 
 	background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
 }
 
-#ProjectPanel .x-tab-bar-body {
+#tabbar-1012-body {
 	height:40px;
 }
 
-#ProjectPanel .x-tab-bar-strip {
+#tabbar-1012-strip {
 	top:37px;
+}
+
+#tabbar-1012-innerCt {
+	height:50px;
 }

@@ -10,10 +10,6 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
     requires: [
     ],
 
-    proxy: {
-        type: "memory"
-    },
-
     statics: {
     },
 
@@ -29,10 +25,6 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
         {name: "name",                  type: "string",     defaultValue: ""},
         {name: "forwardPath",           type: "string",     defaultValue: ""},
         {name: "reversePath",           type: "string",     defaultValue: ""}
-    ],
-
-    associations: [
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign"}
     ],
 
     /**

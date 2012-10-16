@@ -17,7 +17,7 @@ Ext.require("Teselagen.utils.FormatUtils");
 Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
-Ext.require("Teselagen.models.J5Parameters");
+//Ext.require("Teselagen.models.J5Parameters");
 Ext.require("Teselagen.models.EugeneRule");
 
 Ext.require("Teselagen.manager.SequenceFileManager");
@@ -31,7 +31,22 @@ Ext.onReady(function() {
 
     describe("Testing Teselagen.managers", function() {
 
-        xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
+        describe("Teselagen.manager.SequenceFileManager.js", function() {
+
+            /*it("createSequenceFile()", function(){
+                var seq = SequenceFileManager.createSequenceFile();
+                expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256(""));
+            });
+
+            it("createSequenceFile(data)", function(){
+                var data = {
+                    sequenceFileFormat: "blah",
+                    sequenceFileContent: "blah"
+                };
+                var seq = SequenceFileManager.createSequenceFile(data);
+                console.log(seq);
+                expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256("blah"));
+            });*/
 
             it("addSequenceFile(): add to empty SequenceFileManager array", function(){
                 var seqFileMan = Ext.create("Teselagen.manager.SequenceFileManager", {});
@@ -144,13 +159,41 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Teselagen.manager.EugeneRuleManager.js", function() {
+
+        describe("Teselagen.manager.PartManager.js", function() {
+
+            it("getPartVOs()", function(){
+            });
+
+            it("getPartById()", function(){
+            });
+
+            it("getParVOByName()", function(){
+            });
+
+            it("getParVOById()", function(){
+            });
+
+            it("deleteItem()", function(){
+            });
+
+            it("deleteAllItems()", function(){
+            });
+
+            it("createPart()", function(){
+            });
+
+            it("isUniquePartName()", function(){
+            });
+        });
+
+
+        describe("Teselagen.manager.EugeneRuleManager.js", function() {
 
             it("getDefaultNamePattern()", function(){
 
-                //console.log(Teselagen.models.EugeneRule.MORETHAN);
-                //console.log((typeof(123) === "number"));
-                //console.log(Teselagen.constants.Constants.self.GENBANK);
+                console.log(Teselagen.models.EugeneRule.MORETHAN);
+                console.log(!(typeof(123) === "number"));
             });
 
             it("getDefaultNamePattern()", function(){
@@ -166,18 +209,6 @@ Ext.onReady(function() {
             });
 
             it("generateRuleText()", function(){
-                
-                var eug = Ext.create("Teselagen.models.EugeneRule", {
-                    name: "eug",
-                    operand1: Ext.create("Teselagen.models.PartVO", { name: "partvo"}),
-                    compositionalOperator: "compOp",
-                    operand2: 123
-                });
-                var tmp = Ext.create("Teselagen.manager.EugeneRuleManager",{
-                    eugeneRules: [eug]
-                });
-                var str = tmp.generateRuleText(eug);
-                expect(str).toBe("Rule eug(partvo compOp 123);");
             });
 
             it("getRuleByName()", function(){
@@ -198,24 +229,7 @@ Ext.onReady(function() {
 
 
 
-//LAST HERE  DW: 10.10.2012
-        describe("Teselagen.manager.DeviceDesignManager.js", function() {
-
-            it("checkCombinatorial()", function(){
-            });
-
-            it("checkJ5Ready()", function(){
-            });
-
-            it("()", function(){
-            });
-
-            it("()", function(){
-            });
-
-        });
-
-        xdescribe("Teselagen.manager..js", function() {
+        xdescribe("Teselagen.manager.SequenceFileManager.js", function() {
 
             it("()", function(){
             });

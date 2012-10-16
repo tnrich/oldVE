@@ -8,6 +8,8 @@ app.testing.sessionId = "a99be7833401c5b70de90060f3c4c82e";
 
 app.development = {};
 
+
+
 app.development.reloadExamples = function(){
 
 	console.log('Dev: Checking examples collection');

@@ -1,4 +1,3 @@
-/*global beforeEach, describe, expect, it*/
 describe("Test loading of xml", function() {
     var myStore;
     beforeEach(function() {
@@ -23,7 +22,7 @@ describe("Test loading of xml", function() {
            autoLoad: true
        });
     });
-   xit("Test store", function() {
+   it("Test store", function() {
        expect(myStore.data.length).toBeGreaterThan(0);
    })
 });

@@ -52,12 +52,6 @@ Ext.onReady(function() {
                 ];
             });
 
-            it("Sha256.hex_sha256 on Empty String ''", function() {
-                //console.log(Sha256.hex_sha256(""));
-                expect(Sha256.hex_sha256("")).toBe("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
-            });
-
-
             it("Runs sha256_vm_test() correctly", function() {
                 expect(Sha256.sha256_vm_test()).toBe(true);
             });

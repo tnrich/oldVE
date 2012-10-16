@@ -1,4 +1,4 @@
-/** HAS BEEN REFACTORED INTO Teselagen.models.Part
+/**
  * @class Teselagen.models.PartVO
  * Class describing a PartVO for J5Parameters.
  * @author Diana Wong
@@ -8,17 +8,15 @@ Ext.define("Teselagen.models.PartVO", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.models.SequenceFile"
     ],
-
-    proxy: {
-        type: "memory"
-    },
 
     statics: {
     },
     
     /**
      * Input parameters.
+     * NOTE: Must execute setId() to set the id from "" to a unique identifier.
      * @param {String} name The name of the PartVO.
      * @param {Boolean} revComp Reverse Complement.
      * @param {Number} genbankStartBP Genbank basepair starting index
@@ -49,9 +47,9 @@ Ext.define("Teselagen.models.PartVO", {
         }
     ],
 
-    associations: [
-        {type: "belongsTo", model: "Teselagen.models.EugeneRule"},
-        {type: "belongsTo", model: "Teselagen.models.Part"}
+    belongsTo: [
+        "Teselagen.models.EugeneRule",
+        "Teselagen.models.Part"
     ],
 
     /**

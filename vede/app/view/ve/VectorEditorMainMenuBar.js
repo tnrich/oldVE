@@ -8,6 +8,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 140,
+            width: 120,
             items: [{
                 xtype: 'menuitem',
                 id: 'importMenuItem',
@@ -45,6 +46,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 150,
+            width: 120,
             items: [{
                 xtype: 'menuitem',
                 id: 'undoMenuItem',
@@ -104,7 +106,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         text: 'View',
         menu: {
             xtype: 'menu',
-            minWidth: 140,
+            width: 120,
             items: [{
                 xtype: 'menucheckitem',
                 id: 'circularViewMenuItem',
@@ -171,6 +173,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 140,
+            width: 120,
             items: [{
                 xtype: 'menuitem',
                 text: 'Create New Feature'
@@ -197,7 +200,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         text: 'Help',
         menu: {
             xtype: 'menu',
-            minWidth: 140,
+            width: 120,
             items: [{
                 xtype: 'menuitem',
                 text: 'Suggest Feature'

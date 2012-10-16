@@ -1,5 +1,4 @@
-/** HAS NOT BEEN FULLY TESTED YET
- * THIS CLASS WILL BE ELIMINATED AND FUNCTIONS WILL BE PUT IN J5BIN.JS
+/**
  * @class Teselagen.manager.PartManager
  * Class describing a PartManager.
  * PartManager holds an array of Parts, for a given design project.
@@ -169,7 +168,6 @@ Ext.define("Teselagen.manager.PartManager", {
                 return false;
             }
         }
-        return true;
     }
 
 

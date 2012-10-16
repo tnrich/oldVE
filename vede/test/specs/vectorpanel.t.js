@@ -49,9 +49,6 @@ describe("VectorPanel test", function () {
             }
           });
         annotCtr = Ext.widget("container", {
-            layout: {
-                type: "fit"
-            }
           });
         vecPanel = Ext.widget("panel", {
             flex: 1,
