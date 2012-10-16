@@ -3,7 +3,7 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 	alias: 'widget.DeviceEditorCanvasPanel',
 
 	flex: 1,
-	id: 'DeviceEditorCanvas',
+	//id: 'DeviceEditorCanvas',
 	width: 159,
 	layout: {
 		type: 'fit'
@@ -14,7 +14,7 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 	}],
 	items: [{
 		xtype: 'container',
-		id: 'designContainer',
+		//id: 'designContainer',
 		margin: 10
 	}]
 }

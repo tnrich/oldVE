@@ -201,7 +201,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             this.j5Parameters.set(key, Ext.getCmp(key).getValue());
         }, this);
     },
-
+    /*
     init: function() {
         this.control({
             "#editj5ParamsBtn": {
@@ -283,4 +283,5 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         this.resetAutomationParams();
     }
+    */
 });

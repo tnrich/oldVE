@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore"],
+	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor'],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -21,7 +21,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	loadUser: function () {
 		console.log('PM: Loading User');
 		var users = Ext.create("Teselagen.store.UserStore");
-		console.log('Hola');
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
@@ -87,5 +86,28 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
 		this.DesignAndChildResources();
+	},
+
+	openDesign: function (item) {
+		var id = item.data.id;
+		var projects = this.workingProject.deprojects();
+		var selectedDesign = projects.getById(id);
+
+		var tabPanel = Ext.getCmp('tabpanel');
+
+		//Ext.require(, function() {
+			tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design'})).show(); ;
+			//tabPanel.setActiveTab(newTab);
+		//});
+		
 	}
+
+
+
+
+
+
+
+
+
 });

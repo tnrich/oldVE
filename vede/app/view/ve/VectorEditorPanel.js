@@ -6,6 +6,7 @@ Ext.define("Vede.view.ve.VectorEditorPanel", {
         type: "fit"
     },
     title: "Vector Editor",
+    closable: true,
     requires: [
         "Vede.view.ve.AnnotatePanel",
         "Vede.view.ve.VectorEditorFindPanel",

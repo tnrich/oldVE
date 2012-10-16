@@ -15,7 +15,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
         Ext.applyIf(me, {
             items: [{
                 xtype: 'numberfield',
-                id: 'maxDeltaTempAdjacentZonesField',
+                //id: 'maxDeltaTempAdjacentZonesField',
                 padding: 3,
                 fieldLabel: 'Max Delta Temp Adjacent Zones (5)',
                 labelSeparator: ' ',
@@ -26,7 +26,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 0.1
             }, {
                 xtype: 'numberfield',
-                id: 'maxDeltaTempZoneAcceptableField',
+                //id: 'maxDeltaTempZoneAcceptableField',
                 padding: 3,
                 fieldLabel: 'Max Delta Temp Reaction Optimum Zone Acceptable (5)',
                 labelSeparator: ' ',
@@ -35,7 +35,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 0.1
             }, {
                 xtype: 'numberfield',
-                id: 'maxMCStepsPerZoneField',
+                //id: 'maxMCStepsPerZoneField',
                 padding: 3,
                 fieldLabel: 'Max MC Steps Per Zone (1000)',
                 labelSeparator: ' ',
@@ -45,7 +45,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 minValue: 0
             }, {
                 xtype: 'numberfield',
-                id: 'maxWellVolumeField',
+                //id: 'maxWellVolumeField',
                 padding: 3,
                 fieldLabel: 'Max Well Volume Multi-well Plate (100)',
                 labelSeparator: ' ',
@@ -54,7 +54,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 minValue: 0
             }, {
                 xtype: 'numberfield',
-                id: 'finalMCTempField',
+                //id: 'finalMCTempField',
                 padding: 3,
                 fieldLabel: 'MC Temp Final (0.0001)',
                 labelSeparator: ' ',
@@ -65,7 +65,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 0.00001
             }, {
                 xtype: 'numberfield',
-                id: 'initialMCTempField',
+                //id: 'initialMCTempField',
                 padding: 3,
                 fieldLabel: 'MC Temp Initial (0.1)',
                 labelSeparator: ' ',
@@ -76,7 +76,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 0.01
             }, {
                 xtype: 'numberfield',
-                id: 'minPipettingVolumeField',
+                //id: 'minPipettingVolumeField',
                 padding: 3,
                 fieldLabel: 'Min Pipetting Volume (5)',
                 labelSeparator: ' ',
@@ -87,7 +87,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 0.1
             }, {
                 xtype: 'numberfield',
-                id: 'numColumnsField',
+                //id: 'numColumnsField',
                 padding: 3,
                 fieldLabel: 'Num Columns in Multi-well Plate (12)',
                 labelSeparator: ' ',
@@ -98,7 +98,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 1
             }, {
                 xtype: 'numberfield',
-                id: 'trialDeltaTempField',
+                //id: 'trialDeltaTempField',
                 padding: 3,
                 fieldLabel: 'Trial Delta Temp (0.1)',
                 labelSeparator: ' ',
@@ -109,7 +109,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 0.1
             }, {
                 xtype: 'numberfield',
-                id: 'wellsPerZoneField',
+                //id: 'wellsPerZoneField',
                 padding: 3,
                 fieldLabel: 'Wells Per Thermocycler Zone (16)',
                 labelSeparator: ' ',
@@ -120,7 +120,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 step: 1
             }, {
                 xtype: 'numberfield',
-                id: 'zonesPerBlockField',
+                //id: 'zonesPerBlockField',
                 padding: 3,
                 fieldLabel: 'Zones Per Thermocycler Block (6)',
                 labelSeparator: ' ',
@@ -137,7 +137,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                 },
                 items: [{
                     xtype: 'button',
-                    id: 'automationParamsCancelBtn',
+                    //id: 'automationParamsCancelBtn',
                     x: 300,
                     y: 50,
                     margin: 5,
@@ -148,7 +148,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                     text: '<b>Cancel</b>'
                 }, {
                     xtype: 'button',
-                    id: 'automationParamsOKBtn',
+                    //id: 'automationParamsOKBtn',
                     x: 390,
                     y: 50,
                     margin: 5,
@@ -159,7 +159,7 @@ Ext.define('Vede.view.de.j5AutomationParameters', {
                     text: '<b>OK</b>'
                 }, {
                     xtype: 'button',
-                    id: 'automationParamsResetBtn',
+                    //id: 'automationParamsResetBtn',
                     x: 0,
                     y: 50,
                     margin: 5,
