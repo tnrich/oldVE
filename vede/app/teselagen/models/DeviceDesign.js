@@ -24,7 +24,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
         //"Teselagen.models.Project",
         "Teselagen.models.J5Collection",
         //"Teselagen.models.EugeneRule",
-        "Teselagen.models.J5Run"
     ],
     /*
     proxy: {
@@ -36,17 +35,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
     },
     */
-    
-    proxy: {
-        type: 'ajax',
-        url: 'getDesign.json',
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    },
-    
-
+        
     statics: {
     },
 
@@ -57,19 +46,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        {name: "id", type: "int"},
-        {name: "name", type: "String", defaultValue: ""},
-        {name: "project_id", type: "Integer"}
+        {name: "id", type: "int"}
     ],
 
     associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.Project",
-            getterName: "getProject",
-            setterNme: "setProject",
-            applicationKey: "project"
-        },
         {
             type: "hasOne",
             model: "Teselagen.models.J5Collection",
@@ -81,12 +61,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             name: "rules"
-        },
-        {
-            type: "hasMany",
-            model: "Teselagen.models.J5Run",
-            name: "runs",
-            associationKey: "runs"
         }
     ],
 

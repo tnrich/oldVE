@@ -3,22 +3,22 @@ var data = {
     "data": [
         {
             "id": 1,
-            "project_id": 1,
+            "veproject_id": 1,
             "name": "Part 1"
         },
         {
             "id": 2,
-            "project_id": 1,
+            "veproject_id": 1,
             "name": "Part 2"
         },
         {
             "id": 3,
-            "project_id": 2,
+            "veproject_id": 2,
             "name": "Part 3"
         },
         {
             "id": 4,
-            "project_id": 3,
+            "veproject_id": 3,
             "name": "Part 4"
         }
     ]
@@ -40,6 +40,7 @@ Ext.define("Teselagen.models.Part", {
         
     ],
 
+    // This proxy should be deleted
     proxy: {
         type: "memory",
         data: data,
@@ -78,7 +79,7 @@ Ext.define("Teselagen.models.Part", {
      */
     fields: [
         {name: "id",                type: "int"},
-        {name: "project_id",        type: "int"},
+        {name: "veproject_id",        type: "int"},
         
         //{name: "partVO",            type: "auto",       defaultValue: null},
         {name: "directionForward",  type: "boolean",    defaultValue: true},

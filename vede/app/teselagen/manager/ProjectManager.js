@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	require: ["Teselagen.event.ProjectEvent", "Teselagen.store.ProjectStore", "Teselagen.store.UserStore"],
+	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore"],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -21,6 +21,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	loadUser: function () {
 		console.log('PM: Loading User');
 		var users = Ext.create("Teselagen.store.UserStore");
+		console.log('Hola');
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
@@ -49,19 +50,30 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 *	Load Project Child Resources
 	 */	
-	DesignAndChildResources: function (designs) {
+	DesignAndChildResources: function () {
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
-		var designs = this.workingProject.designs().load({
+		var deprojects = this.workingProject.deprojects().load({
 			callback: function () {
-				projectController.renderDesignsSection(designs);
-				projectController.renderPartsSection(self.workingProject);
-				projectController.renderJ5ResultsSection(designs);
+				projectController.renderDesignsSection(deprojects);
+				//projectController.renderPartsSection(self.workingProject);
+				projectController.renderJ5ResultsSection(deprojects);
 			}
 		});
 
+		var veprojects = this.workingProject.veprojects();
+		projectController.renderPartsSection(veprojects);
+		
+
+		/*
+		var veprojects = this.workingProject.designs().load({
+			callback: function () {
+				projectController.renderJ5ResultsSection(designs);
+			}
+		});
+		*/
 	},
 
 	/**
@@ -74,6 +86,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
-		this.DesignAndChildResources(this.workingProject.designs());
+		this.DesignAndChildResources();
 	}
 });
