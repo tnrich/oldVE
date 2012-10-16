@@ -82,7 +82,8 @@ Ext.define("Teselagen.manager.PieManager", {
                 })
             ],
             autoScroll: true,
-            overflowXY: "scroll",
+            overflowX: "scroll",
+            overflowY: "scroll"
         });
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
@@ -244,10 +245,6 @@ Ext.define("Teselagen.manager.PieManager", {
         } else {
             this.hideSprites(this.featureSprites);
         }
-
-        //var svgEl = document.getElementById(this.pie.surface.el.id);
-        //svgEl.setAttribute("style", "width:" + svgEl.width.baseVal.value +"px;" + 
-        //                   "height:" + this.labelSprites.getBBox().height + "px;");
     },
 
     /**

@@ -26,14 +26,17 @@ Ext.define('Vede.view.AuthWindow', {
 						anchor: '100%',
 						width: '330px',
 						fieldLabel: 'Username',
-						name: 'username'
+						name: 'username',
+						id: 'auth-username-field'
 					}, {
 						xtype: 'textfield',
 						inputType: 'password',
 						anchor: '100%',
 						width: '330px',
 						fieldLabel: 'Password',
-						name: 'password'
+						name: 'password',
+						id: 'auth-password-field',
+  						readOnly: false
 					}]
 				}, {
 					xtype: 'fieldset',

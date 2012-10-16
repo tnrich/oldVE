@@ -1,7 +1,7 @@
 Ext.define('Vede.view.FileImportWindow', {
     extend: 'Ext.window.Window',
 
-    height: 100,
+    height: 110,
     width: 400,
     layout: {
         type: 'anchor'

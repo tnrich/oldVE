@@ -15,7 +15,20 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
     requires: [
     ],
 
-    //MDTAZ_DEFAULT:    5,
+    proxy: {
+        type: "memory",
+        reader: {type: "json"}
+    },
+
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run"
+        }
+    ],
 
     statics: {
         MDTAZ:            "MAXDELTATEMPERATUREADJACENTZONES",
@@ -144,7 +157,7 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
             convert: function(v, record) {
                 return parseFloat(v) || this.self.ZPTB_DEFAULT;
             }
-        },
+        }
         //{name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: this.self.ZPTB_DEFAULT}
     ],
 
@@ -199,20 +212,20 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
      * @return {String} paramString String form of parameters to pass to J5
      */
     createParameterString: function() {
-        var returnString = "Parameter Name,Value,Default Value,Description\n"
-            + this.self.MDTAZ + "," + this.get("maxDeltaTemperatureAdjacentZonesValue").toString() + "," + this.self.MDTAZ_DEFAULT + "," + this.self.MDTAZ_DESC + "\n"
-            + this.self.MDTROZA + "," + this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue").toString() + "," + this.self.MDTROZA_DEFAULT + "," + this.self.MDTROZA_DESC + "\n"
-            + this.self.MMCSPZ + "," + this.get("maxMcStepsPerZoneValue").toString() + "," + this.self.MMCSPZ_DEFAULT + "," + this.self.MMCSPZ_DESC + "\n"
-            + this.self.MWVMP + "," + this.get("maxWellVolumeMultiwellPlateValue").toString() + "," + this.self.MWVMP_DEFAULT + "," + this.self.MWVMP_DESC + "\n"
-            + this.self.MCTF + "," + this.get("mcTemperatureFinalValue").toString() + "," + this.self.MCTF_DEFAULT + "," + this.self.MCTF_DESC + "\n"
-            + this.self.MCTI + "," + this.get("mcTemperatureInitialValue").toString() + "," + this.self.MCTI_DEFAULT + "," + this.self.MCTI_DESC + "\n"
-            + this.self.MPV + "," + this.get("minPipettingVolumeValue").toString() + "," + this.self.MPV_DEFAULT + "," + this.self.MPV_DESC + "\n"
-            + this.self.NCMP + "," + this.get("nColumnsMultiwellPlateValue").toString() + "," + this.self.NCMP_DEFAULT + "," + this.self.NCMP_DESC + "\n"
-            + this.self.NRMP + "," + this.get("nRowsMultiwellPlateValue").toString() + "," + this.self.NRMP_DEFAULT + "," + this.self.NRMP_DESC + "\n"
-            + this.self.TDT + "," + this.get("trialDeltaTemperatureValue").toString() + "," + this.self.TDT_DEFAULT + "," + this.self.TDT_DESC + "\n"
-            + this.self.WPTZ + "," + this.get("wellsPerThermocyclerZoneValue").toString() + "," + this.self.WPTZ_DEFAULT + "," + this.self.WPTZ_DESC + "\n"
-            + this.self.ZPTB + "," + this.get("zonesPerThermocyclerBlockValue").toString() + "," + this.self.ZPTB_DEFAULT + "," + this.self.ZPTB_DESC + "\n";
-        return returnString; 
+        var returnString = "Parameter Name,Value,Default Value,Description\n" +
+            this.self.MDTAZ + "," + this.get("maxDeltaTemperatureAdjacentZonesValue").toString() + "," + this.self.MDTAZ_DEFAULT + "," + this.self.MDTAZ_DESC + "\n" +
+            this.self.MDTROZA + "," + this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue").toString() + "," + this.self.MDTROZA_DEFAULT + "," + this.self.MDTROZA_DESC + "\n" +
+            this.self.MMCSPZ + "," + this.get("maxMcStepsPerZoneValue").toString() + "," + this.self.MMCSPZ_DEFAULT + "," + this.self.MMCSPZ_DESC + "\n" +
+            this.self.MWVMP + "," + this.get("maxWellVolumeMultiwellPlateValue").toString() + "," + this.self.MWVMP_DEFAULT + "," + this.self.MWVMP_DESC + "\n" +
+            this.self.MCTF + "," + this.get("mcTemperatureFinalValue").toString() + "," + this.self.MCTF_DEFAULT + "," + this.self.MCTF_DESC + "\n" +
+            this.self.MCTI + "," + this.get("mcTemperatureInitialValue").toString() + "," + this.self.MCTI_DEFAULT + "," + this.self.MCTI_DESC + "\n" +
+            this.self.MPV + "," + this.get("minPipettingVolumeValue").toString() + "," + this.self.MPV_DEFAULT + "," + this.self.MPV_DESC + "\n" +
+            this.self.NCMP + "," + this.get("nColumnsMultiwellPlateValue").toString() + "," + this.self.NCMP_DEFAULT + "," + this.self.NCMP_DESC + "\n" +
+            this.self.NRMP + "," + this.get("nRowsMultiwellPlateValue").toString() + "," + this.self.NRMP_DEFAULT + "," + this.self.NRMP_DESC + "\n" +
+            this.self.TDT + "," + this.get("trialDeltaTemperatureValue").toString() + "," + this.self.TDT_DEFAULT + "," + this.self.TDT_DESC + "\n" +
+            this.self.WPTZ + "," + this.get("wellsPerThermocyclerZoneValue").toString() + "," + this.self.WPTZ_DEFAULT + "," + this.self.WPTZ_DESC + "\n" +
+            this.self.ZPTB + "," + this.get("zonesPerThermocyclerBlockValue").toString() + "," + this.self.ZPTB_DEFAULT + "," + this.self.ZPTB_DESC + "\n";
+        return returnString;
     },
 
     setDefaultValues: function() {
