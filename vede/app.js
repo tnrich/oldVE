@@ -69,7 +69,11 @@ Ext.application({
         console.warn(err);
         return true;
     },
-    require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
+    require: [
+        "Teselagen.event.AuthenticationEvent", 
+        "Teselagen.manager.AuthenticationManager", 
+        "Teselagen.models.SequenceFile"
+    ],
     launch: function() {
 
         Ext.Ajax.cors = true; // Allow CORS

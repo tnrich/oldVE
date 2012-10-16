@@ -7,7 +7,7 @@
 Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
-    requires: [//,
+    requires: [
         //"Teselagen.models.Part",
         //"Teselagen.models.Project,
         "Teselagen.bio.util.Sha256",
@@ -15,8 +15,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     ],
 
     proxy: {
-        type: "memory",
-        reader: {type: "json"}
+        type: "memory"
     },
 
     statics: {
