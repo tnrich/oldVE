@@ -7,7 +7,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     managerWindow: null,
 
     enzymeSelector: null,
-
+    /*
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
 
@@ -34,7 +34,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             scope: this
         });
     },
-
+    */
     /**
      * Populates the group selector combobox when the restriction enzyme
      * manage window is opened.

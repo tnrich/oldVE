@@ -4,7 +4,7 @@ Ext.define('Vede.view.de.DeviceEditorStatusPanel', {
 
         dock: 'bottom',
         height: 23,
-        id: 'StatusPanel',
+        //id: 'StatusPanel',
         layout: {
             type: 'fit'
         },
@@ -12,7 +12,7 @@ Ext.define('Vede.view.de.DeviceEditorStatusPanel', {
         dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',
-            id: 'StatusBar',
+            //id: 'StatusBar',
             items: [{
                 xtype: 'tbfill'
             }, {
