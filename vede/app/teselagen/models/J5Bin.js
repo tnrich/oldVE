@@ -103,7 +103,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * @param {Teselagen.models.Part} pPart
-     * @returns {Boolean} partIsPresent True is in this J5Bin, False if not.
+     * @returns {Boolean} True is in this J5Bin, False if not.
      */
     hasPart: function(pPart) {
         if (this.indexOfPart(pPart) === -1) {
@@ -115,7 +115,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * @param {Teselagen.models.Part} pPart
-     * @returns {int} index Index of Part in Bin. -1 if not present.
+     * @returns {int} Index of Part in Bin. -1 if not present.
      */
     indexOfPart: function(pPart) {
         var index = -1;
@@ -135,7 +135,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * Adds a Part into the parts.
      * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
      * @param {int} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
-     * @returns {Boolean} added True if added, false if not.
+     * @returns {Boolean} True if added, false if not.
      */
     addToParts: function(pPart, pPosition) {
         var added = false;
@@ -161,7 +161,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * Removes a Part from the parts.
      * This DOES NOT check if parts are in EugeneRules. Use deleteItem to check.
      * @param {Teselagen.models.Part} pPart
-     * @returns {Boolean} removed True if removed, false if not.
+     * @returns {Boolean} True if removed, false if not.
      */
     removeFromParts: function(pPart) {
         var removed = false;
@@ -287,7 +287,7 @@ Ext.define("Teselagen.models.J5Bin", {
     /**
      * Checks to see if a given name is unique within the Parts names.
      * @param {String} pName Name to check against parts.
-     * @returns {Boolean} True if unique, false if not.
+     * @returns {Boolean} if unique, false if not.
      */
     isUniquePartName: function(pName) {
 

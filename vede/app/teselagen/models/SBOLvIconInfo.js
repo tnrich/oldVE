@@ -31,6 +31,10 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
         {name: "reversePath",           type: "string",     defaultValue: ""}
     ],
 
+    validations: [
+        {field: "id", type: "presence"}
+    ],
+
     associations: [
         {type: "belongsTo", model: "Teselagen.models.DeviceDesign"}
     ],

@@ -1,6 +1,21 @@
+/**
+ * @class Teselagen.models.DeviceEditorProject
+ * @author
+ */
 Ext.define("Teselagen.models.DeviceEditorProject", {
     extend: "Ext.data.Model",
-    requires: ['Teselagen.models.DeviceDesign', "Teselagen.models.J5Run"],
+    requires: [
+        'Teselagen.models.DeviceDesign',
+        "Teselagen.models.J5Run"
+    ],
+
+
+    /**
+     * Input parameters.
+     * @param {int} id
+     * @param {in} project_id
+     * @param {String} name
+     */
     fields: [{
         name: "id",
         type: "int"
@@ -12,6 +27,14 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         type: "String",
         defaultValue: ""
     }],
+
+    validations: [
+        {field: "id", type: "presence"},
+        {field: "project_id", type: "presence"},
+        {field: "name", type: "presence"}
+    ],
+
+
     associations: [{
         type: 'hasOne',
         model: 'Teselagen.models.DeviceDesign',
