@@ -1,0 +1,23 @@
+{
+    "success": true,
+    "projects": [
+        {
+        	"id": 1,
+            "name": "Project A",
+            "DateCreated":"Thu Oct 11 2012 14:49:27 GMT-0700 (PDT)",
+            "DateModified":"Thu Oct 12 2012 14:49:27 GMT-0700 (PDT)"
+        },
+        {
+        	"id": 2,
+            "name": "Project B",
+            "DateCreated":"Thu Oct 1 2012 14:49:27 GMT-0700 (PDT)",
+            "DateModified":"Thu Oct 11 2012 14:49:27 GMT-0700 (PDT)"
+        },
+        {
+            "id": 3,
+            "name": "Project C",
+            "DateCreated":"Thu Oct 3 2012 14:49:27 GMT-0700 (PDT)",
+            "DateModified":"Thu Oct 4 2012 14:49:27 GMT-0700 (PDT)"
+        }
+    ]
+}

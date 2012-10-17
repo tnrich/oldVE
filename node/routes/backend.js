@@ -64,6 +64,37 @@ function restrict(req, res, next) {
   }
 };
 
+
+app.all('/getDesigns', function(req, res){
+  res.json(
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "project_id":1,
+            "DesignName": "Design 1"
+        },
+        {
+            "id": 2,
+            "project_id":1,
+            "DesignName": "Design 2"
+        },
+        {
+            "id": 3,
+            "project_id":2,
+            "DesignName": "Design 3"
+        },
+        {
+            "id": 4,
+            "project_id":3,
+            "DesignName": "Design 4"
+        }
+    ]
+}
+  );
+});
+
 app.all('/login', function(req, res){
 
       
@@ -101,16 +132,16 @@ app.all('/login', function(req, res){
       var username = req.body.username;
       var password = req.body.password;
 
-      if(!sessionId && (!username || !password) && app.security) return res.json({'msg':'Credentials not sended'},405);
+      if(!sessionId && (!username || !password) && app.program.prod) return res.json({'msg':'Credentials not sended'},405);
       if(sessionId == '000') return res.json({'firstTime':true,'msg':'Welcome back Guest !'});
 
-      if(username && password!=undefined && !app.security)
+      if(username && password!=undefined && !app.program.prod)
       {
         console.log('got here');
         getOrCreateUser(username);
       }
 
-      if(username && password && app.security)
+      if(username && password && app.production)
       {
 
         var crypto = require('crypto');

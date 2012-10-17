@@ -8,8 +8,13 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.PartVO"
+        //"Teselagen.models.Part",
+        "Teselagen.models.DeviceDesign"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
         // For Default Names
@@ -39,6 +44,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
+        {name: "id",                type: "int"},
         {
             name: "name",
             convert: function(v, record) {
@@ -51,15 +57,55 @@ Ext.define("Teselagen.models.EugeneRule", {
         },
         
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
-        {name: "operand1",              type: "auto",       defaultValue: null},
+        //{name: "operand1",              type: "auto",       defaultValue: null},
         {name: "compositionalOperator", type: "String",     defaultValue: ""},
         
         {name: "operand2",              type: "auto",       defaultValue: null}
     ],
 
+    validations: [
+        {field: "name",             type: "presence"},
+        //{field: "negationOperator", type: "presence"},
+        //{field: "operand1",         type: "presence"},
+        {field: "compositionalOperator",    type: "presence"},
+        {field: "compositionalOperator",    type: "inclusion",
+                list: [             //Cannot access the statics, hard coding for now.
+                    "AFTER",
+                    "BEFORE",
+                    "WITH",
+                    "THEN",
+                    "NEXTTO",
+                    "MORETHAN",
+                    this.self.NOTMORETHAN,
+                    this.self.NOTWITH
+                ]
+        },
+        {field: "operand2",         type: "presence"}
+    ],
+
     associations: [
-        //{type: "hasOne",    model: "Teselagen.models.Part", getterName: "getPart", setterName: "setPart"},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
+        {
+            type: "hasOne",
+            model: "Teselagen.models.Part",
+            getterName: "getOperand1",
+            setterName: "setOperand1",
+            associationKey: "operand1"
+        },
+        /*{
+            type: "hasOne",
+            model: "Teselagen.models.Part",
+            getterName: "getOperand2",
+            setterName: "setOperand2",
+            associationKey: "operand2"
+        },
+        */
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceDesign",
+            getterName: "getDeviceDesign",
+            setterName: "setDeviceDesign",
+            associationKey: "deviceDesign"
+        }
     ],
 
 
@@ -106,6 +152,17 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
     },
 
+    /*setOperand1: function(pOperand1) {
+        console.log("here");
+        if (Ext.getClassName(pOperand1) === "Teselagen.models.Part") {
+            this.setOperand1(pOperand1);
+        } else {
+            throw Ext.create("Teselagen.bio.BioException", {
+                message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
+            });
+        }
+    },*/
+
 
     /** (From EugeneRulesManager.js/EugeneProxy.as)
      * Converts EugeneRule into text
@@ -118,8 +175,9 @@ Ext.define("Teselagen.models.EugeneRule", {
             ruleText.push("NOT ");
         }
 
-        if ( this.get("operand1") !== null) {
-            ruleText.push( this.get("operand1").get("name") );
+        if ( this.getOperand1() !== null) {
+            //console.log(this.getOperand1());
+            ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }
         ruleText.push( this.get("compositionalOperator") );

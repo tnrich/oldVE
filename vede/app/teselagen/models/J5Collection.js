@@ -8,53 +8,66 @@ Ext.define("Teselagen.models.J5Collection", {
     extend: "Ext.data.Model",
 
     requires: [
+        //"Teselagen.models.DeviceDesign",
         "Teselagen.models.J5Bin"
     ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
     },
 
     /**
      * Input parameters.
-     * @param {Ext.data.bins} binsVector A store of many {@link Teselagen.models.J5Bin}
+     * @param {Ext.data.bins} bins A store of many {@link Teselagen.models.J5Bin}
      * @param {Boolean} j5Ready
      * @param {Boolean} combinatorial
      * @param {Boolean} isCircular
      */
     fields: [
-        /*{
-            name: "binsVector",
-            convert: function(v, record) {
-                return v || [];
-            }
-        },*/
+        {name: "id",                type: "int"},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
         {name: "isCircular",        type: "boolean",    defaultValue: true},
         {name: "deviceDesign_id",   type: "int"}
     ],
 
+    validations: [
+        {field: "j5Ready",          type: "presence"},
+        {field: "combinatorial",    type: "presence"},
+        {field: "isCircular",       type: "presence"},
+        {field: "deviceDesign_id",  type: "presence"}
+    ],
+
     associations: [
-        {type: "hasMany", model: "Teselagen.models.J5Bin", name: "bins"},
-        {type: "belongsTo", model: "Teselagen.models.DeviceDesign", getterName: "getDeviceDesign", setterName: "setDeviceDesign"}
+        {
+            type: "hasMany",
+            model: "Teselagen.models.J5Bin",
+            name: "bins"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceDesign",
+            getterName: "getDeviceDesign",
+            setterName: "setDeviceDesign",
+            associationKey: "deviceDesign"
+        }
     ],
 
     init: function() {
-        //if (this.bins().count() === 0|| this.bins() === null) {
-        //    this.set("binsVector", []);
-        //}
-        //console.log(this.binsVector); //does not work
     },
 
     /**
-     * @returns {int} count Number of J5Bins in binsVector
+     * @returns {int} count Number of J5Bins in bins
      */
     binCount: function() {
         return this.bins().count();
     },
 
     /**
-     * Pushes a J5bin into the binsVector.
+     * Pushes a J5bin into the bins.
      * Original uses splice, but don't we want to insert it, not replace an item?
      * @param {Teselagen.models.J5Bin} pJ5Bin Bin to add to collection. Can be one or array of bins.
      * @param {int} pIndex Index to insert pJ5Bin. Optional. Defaults to end of of array if invalid or undefined value.
@@ -273,5 +286,20 @@ Ext.define("Teselagen.models.J5Collection", {
             }
         }
         return bin;
+    },
+
+    /**
+     * Checks to see if a given name is unique within the J5Bins names.
+     * @param {String} pName Name to check against bins.
+     * @returns {Boolean} True if unique, false if not.
+     */
+    isUniqueBinName: function(pName) {
+        var index = this.bins().find("name", pName);
+
+        if (index === -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 });

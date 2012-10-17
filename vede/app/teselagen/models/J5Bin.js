@@ -8,10 +8,16 @@ Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.constants.SBOLvIcons",
+        //"Teselagen.models.J5Collection",
         "Teselagen.models.Part",
+        "Teselagen.constants.SBOLvIcons",
         "Teselagen.utils.NullableInt"
     ],
+
+    proxy: {
+        type: "memory",
+        reader: {type: "json"}
+    },
 
     statics: {
         GENERIC: "generic"
@@ -30,12 +36,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        /*{
-            name: "parts",
-            convert: function(v, record) {
-                return v || [];
-            }
-        },*/
+        {name: "id",                type: "int"},
         {name: "binName",           type: "string",     defaultValue: ""}, //required when making this object
         {name: "iconID",            type: "string",     defaultValue: ""},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
@@ -60,10 +61,31 @@ Ext.define("Teselagen.models.J5Bin", {
         
     ],
 
+    validations: [
+        {field: "binName",          type: "presence"},
+        {field: "iconID",           type: "presence"},
+        {field: "directionForward", type: "presence"},
+        {field: "dsf",              type: "presence"},
+        {field: "fro",              type: "presence"},
+        {field: "fas",              type: "presence"},
+        {field: "extra5PrimeBps",   type: "presence"},
+        {field: "extra3PrimeBps",   type: "presence"},
+        {field: "collection_id",    type: "presence"}
+    ],
+
     associations: [
-        {type: "hasMany",   model: "Teselagen.models.Part",         name: "parts"},
-        {type: "belongsTo", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection"}
-        //this.getCollection() works
+        {
+            type: "hasMany",
+            model: "Teselagen.models.Part",
+            name: "parts"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Collection",
+            getterName: "getJ5Collection",
+            setterName: "setJ5Collection",
+            associationKey: "j5Collection"
+        }
     ],
 
     init: function(inData) {

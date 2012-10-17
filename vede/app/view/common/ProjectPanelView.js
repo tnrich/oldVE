@@ -32,7 +32,7 @@ function loadResults(record) {
         renderTo: Ext.getBody(),
         viewConfig: {},
         listeners: {
-            itemclick: function(view, record, item, index, e, eOpts) {
+            itemclick: function (view, record, item, index, e, eOpts) {
                 Ext.getCmp('rawpanel').update(record.raw.data);
             }
         }
@@ -116,19 +116,9 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             id: 'projectDesignPanel',
             title: 'Your Designs',
             rootVisible: false,
-            store: Ext.create('Teselagen.store.ProjectTreeStore'),
-            viewConfig: {
-                markDirty: false
-            },
             listeners: {
-                itemclick: function(view, record, item, index, e, eOpts) {
-                   //console.log(JSON.stringify(record.raw));
-                   //console.log(record.fields.getCount());
-                   //console.log(record);
-                   console.log(record.store);
-                   console.log(record.parentNode);
-                   var parts = record.parentNode.parts();
-                   var part = parts.findRecord('id',record.data.id);
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //console.log(JSON.stringify(record.raw));
                 }
             }
         }]
@@ -148,8 +138,11 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             xtype: 'treepanel',
             id: 'projectAnalysisPanel',
             title: 'j5 Results',
-            viewConfig: {
-
+            rootVisible: false,
+            listeners: {
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //console.log(JSON.stringify(record.raw));
+                }
             }
         }]
     }, {
@@ -168,8 +161,11 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             xtype: 'treepanel',
             id: 'projectPartsPanel',
             title: 'Your Parts',
-            viewConfig: {
-
+            rootVisible: false,
+            listeners: {
+                itemclick: function (view, record, item, index, e, eOpts) {
+                    //console.log(JSON.stringify(record.raw));
+                }
             }
         }]
     }, {
