@@ -26,34 +26,9 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "id",                type: "int"},
+        {name: "id", type: "int"},
         {name: "name", type: "String", defaultValue: ""}
-        /*{
-            name: "j5Parameters",
-            convert: function(v, record) {
-                if (v === undefined || v === null || v === "") {
-                    return Ext.create("Teselagen.models.J5Parameters");
-                } else {
-                    return v;
-                }
-            }
-        },
-        {
-            name: "downstreamAutomationParameters",
-            convert: function(v, record) {
-                if (v === undefined || v === null || v === "") {
-                    return Ext.create("Teselagen.models.DownstreamAutomationParameters");
-                } else {
-                    return v;
-                }
-            }
-        },
-        {
-            name: "j5Results",
-            convert: function(v, record) {
-                return v || null;
-            }
-        }*/
+
     ],
 
     validations: [
@@ -85,14 +60,21 @@ Ext.define("Teselagen.models.J5Run", {
             setterName: "setJ5Results",
             associationKey: "j5Results"
         },
-
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceEditorProject",
+            getterName: "getDeviceEditorProject",
+            setterName: "setDeviceEditorProject",
+            associationKey: "deviceEditorProject"
+        }
+        /*,
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
             associationKey: "deviceDesign"
-        }
+        }*/
     ],
 
     init: function() {

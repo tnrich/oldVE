@@ -141,7 +141,7 @@ Ext.define("Teselagen.models.Part", {
     /**
      * Determines if PartVO is empty.
      * @returns {Boolean} equal True if empty, false if not.
-     */
+     *
     isPartVOEmpty: function() {
         var partEmpty = false;
 
@@ -159,7 +159,7 @@ Ext.define("Teselagen.models.Part", {
             partEmpty = false;
         }
         return partEmpty;
-    },
+    },*/
 
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.
