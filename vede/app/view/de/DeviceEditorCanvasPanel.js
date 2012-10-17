@@ -13,8 +13,9 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 		xtype: 'DeviceEditorPartPanel'
 	}],
 	items: [{
-		xtype: 'container',
-		//id: 'designContainer',
+		title: 'Canvas',
+		xtype: 'draw',
+		cls: 'designCanvas',
 		margin: 10
 	}]
 }
