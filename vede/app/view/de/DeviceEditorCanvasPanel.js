@@ -10,13 +10,16 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 	},
 	animCollapse: false,
 	dockedItems: [{
-		xtype: 'DeviceEditorPartPanel'
+		xtype: 'DeviceEditorPartPanel',
+	},{
+		xtype: 'container',
+		title: 'Canvas container'
 	}],
 	items: [{
 		title: 'Canvas',
 		xtype: 'draw',
+		layout: 'fit',
 		cls: 'designCanvas',
-		margin: 10
 	}]
 }
 
