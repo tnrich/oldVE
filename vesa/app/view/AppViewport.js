@@ -107,6 +107,7 @@ Ext.define('Vesa.view.AppViewport', {
                                 xtype: 'tab',
                                 id: 'projectTab1',
                                 autoWidth: true,
+                                focusCls: 'project-tab-focus',
                                 icon: 'resources/images/ux/designTab.png',
                                 iconCls: 'projectBarButton'
                             },
@@ -229,7 +230,38 @@ Ext.define('Vesa.view.AppViewport', {
                                             layout: {
                                                 type: 'fit'
                                             },
-                                            title: 'Project Info'
+                                            title: 'Project Info',
+                                            items: [
+                                                {
+                                                    xtype: 'gridpanel',
+                                                    title: 'My Grid Panel',
+                                                    columns: [
+                                                        {
+                                                            xtype: 'gridcolumn',
+                                                            dataIndex: 'string',
+                                                            text: 'String'
+                                                        },
+                                                        {
+                                                            xtype: 'numbercolumn',
+                                                            dataIndex: 'number',
+                                                            text: 'Number'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            dataIndex: 'date',
+                                                            text: 'Date'
+                                                        },
+                                                        {
+                                                            xtype: 'booleancolumn',
+                                                            dataIndex: 'bool',
+                                                            text: 'Boolean'
+                                                        }
+                                                    ],
+                                                    viewConfig: {
+
+                                                    }
+                                                }
+                                            ]
                                         },
                                         {
                                             xtype: 'panel',
@@ -247,9 +279,49 @@ Ext.define('Vesa.view.AppViewport', {
                                     flex: 2,
                                     maxWidth: 200,
                                     layout: {
-                                        type: 'fit'
+                                        align: 'stretch',
+                                        padding: 10,
+                                        type: 'vbox'
                                     },
-                                    title: 'Help'
+                                    title: 'Help',
+                                    items: [
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'j5_Manual_Btn',
+                                            text: 'j5 Manual'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'VE_Manual_Btn',
+                                            text: 'Vector Editor Manual'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'DE_Manual_Btn',
+                                            text: 'Device Editor Manual'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'tutorials_Btn',
+                                            text: 'Tutorials'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'support_Btn',
+                                            text: 'Get Support'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'feedback_Btn',
+                                            text: 'Submit Feedback'
+                                        }
+                                    ]
                                 }
                             ]
                         },
