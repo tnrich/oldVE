@@ -65,14 +65,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var veprojects = this.workingProject.veprojects();
 		projectController.renderPartsSection(veprojects);
 		
-
-		/*
-		var veprojects = this.workingProject.designs().load({
-			callback: function () {
-				projectController.renderJ5ResultsSection(designs);
-			}
-		});
-		*/
 	},
 
 	/**
@@ -94,6 +86,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var selectedDesign = projects.getById(id);
 		var tabPanel = Ext.getCmp('tabpanel');
 		tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDesign})).show();		
+	
+		var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
+		deController.renderDesignInContext();
 	}
 
 

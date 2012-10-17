@@ -22,10 +22,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
         //"Teselagen.models.Project",
-        "Teselagen.models.J5Collection",
+        "Teselagen.models.J5Collection"//,
         //"Teselagen.models.EugeneRule",
     ],
-    /*
+    // The models will break if there is not proxy defined here. Please define appropriately. DW
     proxy: {
         type: "memory",
         data: data,
@@ -34,7 +34,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             root: 'data'
         }
     },
-    */
         
     statics: {
     },
@@ -61,6 +60,13 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             name: "rules"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceEditorProject",
+            getterName: "getDeviceEditorProject",
+            setterName: "setDeviceEditorProject",
+            associationKey: "deviceEditorProject"
         }
     ],
 
@@ -73,7 +79,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
         var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
-            j5Coll.addBin("No_Name" + i);
+            var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
+            j5Coll.addToBin(bin, i);
         }
         //this.set("j5Collection", j5Coll);
         this.setJ5Collection(j5Coll);
