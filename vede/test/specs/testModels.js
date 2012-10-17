@@ -1044,6 +1044,39 @@ Ext.onReady(function() {
                 expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
             });
 
+
+            it("addToRules() & removeFromRules()", function(){
+                var rule1   = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "rule1",
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+                var rule2   = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "rule2",
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+
+                // Create a Device, add rule1
+                var device  = Ext.create("Teselagen.models.DeviceDesign");
+                expect(device.rules().count()).toBe(0);
+                var success = device.addToRules(rule1);
+
+                expect(success).toBe(true);
+                expect(device.rules().count()).toBe(1);
+
+                // Remove a non-existant rule
+                success = device.removeFromRules(rule2);
+                expect(success).toBe(false);
+                expect(device.rules().count()).toBe(1);
+
+                // Remove the rules
+                success = device.removeFromRules(rule1);
+                expect(success).toBe(true);
+                expect(device.rules().count()).toBe(0);
+
+            });
+
             it("getRuleByName()", function(){
                 var rule1   = Ext.create("Teselagen.models.EugeneRule", {
                     name: "rule1",
@@ -1058,13 +1091,14 @@ Ext.onReady(function() {
                 var foundRule = device.getRuleByName("rule1");
                 expect(foundRule).toBe(rule1);
 
-//LAST HERE  DW: 10.16.2012
+                foundRule = device.getRuleByName("rule100");
+                expect(foundRule).toBe(null);
 
             });
 
             it("getRulesInvolvingPart() -- Depends on DeviceDesign.getRulesInvolvingPart() and removeFromRules()", function(){
 
-                var part1   = Ext.create("Teselagen.models.Part");
+                var part1   = Ext.create("Teselagen.models.Part", {name: "part1"});
                 var part2   = Ext.create("Teselagen.models.Part");
                 var rule1   = Ext.create("Teselagen.models.EugeneRule", {
                     name: "rule1",
@@ -1075,17 +1109,42 @@ Ext.onReady(function() {
                 rule1.setOperand1(part1);
 
                 // Create a bin with parts
-                var bin     = Ext.create("Teselagen.models.J5Bin", {
-                    //parts: [part1, part2]
-                });
+                var bin     = Ext.create("Teselagen.models.J5Bin");
                 bin.addToParts([part1, part2]);
 
                 // Create a Device with eugene rules that include the parts
                 var device  = Ext.create("Teselagen.models.DeviceDesign");
                 device.addToRules(rule1);
 
-                var eugParts = device.getRulesInvolvingPart();
+                // Search for rules that have part1
+                var eugRules = device.getRulesInvolvingPart(part1);
+
+                expect(eugRules[0]).toBe(rule1);
 //LAST HERE  DW: 10.16.2012
+
+            });
+
+            it("isUniqueRuleName()", function(){
+                var rule1   = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "rule1",
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+                var rule2   = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "rule2",
+                    operand2: 123,
+                    compositionalOperator: "AFTER"
+                });
+
+                // Create a Device, add rule1
+                var device  = Ext.create("Teselagen.models.DeviceDesign");
+                device.addToRules(rule1);
+                device.addToRules(rule2);
+
+                var unique = device.isUniqueRuleName("rule1");
+                expect(unique).toBe(false);
+                unique = device.isUniqueRuleName("rule3");
+                expect(unique).toBe(true);
 
             });
         });

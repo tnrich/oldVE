@@ -1,31 +1,38 @@
 {
     "success": true,
-    "data": [
-        {
+    "data": [{
+        "id": 1,
+        "project_id": 1,
+        "name": "DE Proj 1",
+        "j5runs": [{
             "id": 1,
-            "project_id": 1,
-            "name": "DE Proj 1",
-            "j5runs": [
-                {
-                    "id" : 1,
-                    "name" : "j5 Run 1"
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "project_id": 1,
-            "name": "DE Proj 2"
-        },
-        {
-            "id": 3,
-            "project_id": 2,
-            "name": "DE Proj 3"
-        },
-        {
-            "id": 4,
-            "project_id": 3,
-            "name": "DE Proj 4"
+            "name": "j5 Run 1"
+        }],
+        "design": {
+            "id": 32131,
+            "j5collection": {
+                "bins": [{
+                    "binName": "Bin #1"
+                }, {
+                    "binName": "Bin #2"
+                }, {
+                    "binName": "Bin #3"
+                }, {
+                    "binName": "Bin #4"
+                }]
+            }
         }
-    ]
+    }, {
+        "id": 2,
+        "project_id": 1,
+        "name": "DE Proj 2"
+    }, {
+        "id": 3,
+        "project_id": 2,
+        "name": "DE Proj 3"
+    }, {
+        "id": 4,
+        "project_id": 3,
+        "name": "DE Proj 4"
+    }]
 }

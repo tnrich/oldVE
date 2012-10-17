@@ -1,18 +1,3 @@
-var data = {
-    "success": true,
-    "data": [
-        {
-            "id": 1,
-            "project_id": 1,
-            "name": "Design 1",
-            "runs":[
-                {
-                    "name" : "Today tests"
-                }
-            ]
-        }
-    ]
-};
 /**
  * @class Teselagen.models.DeviceDesign
  * Class describing a DeviceDesign.
@@ -28,10 +13,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     // The models will break if there is not proxy defined here. Please define appropriately. DW
     proxy: {
         type: "memory",
-        data: data,
         reader: {
-            type: 'json',
-            root: 'data'
+            type: 'json'
         }
     },
         
@@ -40,12 +23,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /**
      * Input parameters.
-     * @param {Teselagen.models.J5Collection} j5Collection
-     * @param {Teselagen.models.EugeneRules}
-     * @param {Teselagen.models.J5Run}
+     * @param {int} id
      */
     fields: [
         {name: "id", type: "int"}
+    ],
+
+    validations: [
+        {field: "id", type: "presence"}
     ],
 
     associations: [
@@ -90,13 +75,13 @@ Ext.define("Teselagen.models.DeviceDesign", {
     /**
      * Adds a EugeneRule into the Rules Store.
      * @param {Teselagen.models.EugeneRule} pRule. Can be a single part or an array of parts.
-     * @returns {Boolean} added True if added, false if not.
+     * @returns {Boolean} True if added, false if not.
      */
     addToRules: function(pRule) {
-        var cnt = this.rules();
+        var cnt = this.rules().count();
         this.rules().add(pRule);
 
-        if (cnt < this.rules()) {
+        if (cnt < this.rules().count()) {
             return true;
         } else {
             return false;
@@ -106,12 +91,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
     /**
      * Removes a EugeneRule from the Rules Store.
      * @param {Teselagen.models.EugeneRule} pRule. Can be a single part or an array of parts.
-     * @returns {Boolean} removed True if removed, false if not.
+     * @returns {Boolean} True if removed, false if not.
      */
     removeFromRules: function(pRule) {
-        var cnt = this.rules();
+        var cnt = this.rules().count();
         this.rules().remove(pRule);
-        if (cnt < this.rules()) {
+        if (cnt > this.rules().count()) {
             return true;
         } else {
             return false;
@@ -135,7 +120,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * Returns the EugeneRules Store of EugeneRules that containt the Part in either operand.
      *
      * @param {Teselagen.models.Part} pPart
-     * @return {Teselagen.models.EugeneRule[]} rules Array of EugeneRules containing pPart
+     * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
         var rules = [];
@@ -150,10 +135,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /**
      * @param {String} name
-     * @returns {Teselagen.models.EugeneRule} eugeneRule Returns null if none found.
+     * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pName) {
-        var index = this.rules().find(name, pName);
+        var index = this.rules().find("name", pName);
         if ( index !== -1) {
             return this.rules().getAt(index);
         } else {

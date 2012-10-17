@@ -1,4 +1,4 @@
-/** HAS NOT BEEN FULLY TESTED YET
+/** HAS NOT BEEN FULLY TESTED YET.
  * THIS CLASS WILL BE ELIMINATED AND FUNCTIONS WILL BE PUT IN DEVICEDESIGN.JS
  * @class Teselagen.manager.EugeneRuleManager
  * Class describing a EugeneRuleManager.

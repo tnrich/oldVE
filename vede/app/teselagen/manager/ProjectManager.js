@@ -49,7 +49,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 *	Load Project Child Resources
 	 */	
-	DesignAndChildResources: function () {
+	designAndChildResources: function () {
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
@@ -77,7 +77,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
-		this.DesignAndChildResources();
+		this.designAndChildResources();
 	},
 
 	openDesign: function (item) {
