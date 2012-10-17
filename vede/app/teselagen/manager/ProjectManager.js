@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	require: ["Teselagen.event.ProjectEvent", "Teselagen.store.ProjectStore", "Teselagen.store.UserStore"],
+	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor'],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -49,19 +49,22 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 *	Load Project Child Resources
 	 */	
-	DesignAndChildResources: function (designs) {
+	DesignAndChildResources: function () {
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
-		var designs = this.workingProject.designs().load({
+		var deprojects = this.workingProject.deprojects().load({
 			callback: function () {
-				projectController.renderDesignsSection(designs);
-				projectController.renderPartsSection(self.workingProject);
-				projectController.renderJ5ResultsSection(designs);
+				projectController.renderDesignsSection(deprojects);
+				//projectController.renderPartsSection(self.workingProject);
+				projectController.renderJ5ResultsSection(deprojects);
 			}
 		});
 
+		var veprojects = this.workingProject.veprojects();
+		projectController.renderPartsSection(veprojects);
+		
 	},
 
 	/**
@@ -74,6 +77,26 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
-		this.DesignAndChildResources(this.workingProject.designs());
+		this.DesignAndChildResources();
+	},
+
+	openDesign: function (item) {
+		var id = item.data.id;
+		var projects = this.workingProject.deprojects();
+		var selectedDesign = projects.getById(id);
+		var tabPanel = Ext.getCmp('tabpanel');
+		tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDesign})).show();		
+	
+		var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
+		deController.renderDesignInContext();
 	}
+
+
+
+
+
+
+
+
+
 });

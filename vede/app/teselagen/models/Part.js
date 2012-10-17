@@ -1,29 +1,3 @@
-var data = {
-    "success": true,
-    "data": [
-        {
-            "id": 1,
-            "project_id": 1,
-            "name": "Part 1"
-        },
-        {
-            "id": 2,
-            "project_id": 1,
-            "name": "Part 2"
-        },
-        {
-            "id": 3,
-            "project_id": 2,
-            "name": "Part 3"
-        },
-        {
-            "id": 4,
-            "project_id": 3,
-            "name": "Part 4"
-        }
-    ]
-};
-
 /**
  * @class Teselagen.models.Part
  * Class describing a Part for J5Parameters.
@@ -34,29 +8,19 @@ Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.J5Bin",
-        //"Teselagen.models.EugeneRule",
         "Teselagen.models.SequenceFile"
-        
+//        "Teselagen.models.J5Bin",
+//        "Teselagen.models.EugeneRule"
     ],
 
     proxy: {
-        type: "memory",
-        data: data,
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    },
-
-    /*proxy: {
         type: "rest",
         url: "getParts.json",
         reader: {
             type: "json",
             root: "data"
         }
-    },*/
+    },
 
     statics: {
     },
@@ -78,7 +42,7 @@ Ext.define("Teselagen.models.Part", {
      */
     fields: [
         {name: "id",                type: "int"},
-        {name: "project_id",        type: "int"},
+        {name: "veproject_id",        type: "int"},
         
         //{name: "partVO",            type: "auto",       defaultValue: null},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
@@ -177,7 +141,7 @@ Ext.define("Teselagen.models.Part", {
     /**
      * Determines if PartVO is empty.
      * @returns {Boolean} equal True if empty, false if not.
-     */
+     *
     isPartVOEmpty: function() {
         var partEmpty = false;
 
@@ -195,7 +159,7 @@ Ext.define("Teselagen.models.Part", {
             partEmpty = false;
         }
         return partEmpty;
-    },
+    },*/
 
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.

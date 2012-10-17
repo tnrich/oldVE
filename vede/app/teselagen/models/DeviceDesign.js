@@ -22,11 +22,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
         //"Teselagen.models.Project",
-        "Teselagen.models.J5Collection",
+        "Teselagen.models.J5Collection"//,
         //"Teselagen.models.EugeneRule",
-        "Teselagen.models.J5Run"
     ],
-    /*
+    // The models will break if there is not proxy defined here. Please define appropriately. DW
     proxy: {
         type: "memory",
         data: data,
@@ -35,18 +34,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             root: 'data'
         }
     },
-    */
-    
-    proxy: {
-        type: 'ajax',
-        url: 'getDesign.json',
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    },
-    
-
+        
     statics: {
     },
 
@@ -57,19 +45,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {Teselagen.models.J5Run}
      */
     fields: [
-        {name: "id", type: "int"},
-        {name: "name", type: "String", defaultValue: ""},
-        {name: "project_id", type: "Integer"}
+        {name: "id", type: "int"}
     ],
 
     associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.Project",
-            getterName: "getProject",
-            setterNme: "setProject",
-            applicationKey: "project"
-        },
         {
             type: "hasOne",
             model: "Teselagen.models.J5Collection",
@@ -83,10 +62,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
             name: "rules"
         },
         {
-            type: "hasMany",
-            model: "Teselagen.models.J5Run",
-            name: "runs",
-            associationKey: "runs"
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceEditorProject",
+            getterName: "getDeviceEditorProject",
+            setterName: "setDeviceEditorProject",
+            associationKey: "deviceEditorProject"
         }
     ],
 
@@ -99,7 +79,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
         var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
-            j5Coll.addBin("No_Name" + i);
+            var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
+            j5Coll.addToBin(bin, i);
         }
         //this.set("j5Collection", j5Coll);
         this.setJ5Collection(j5Coll);

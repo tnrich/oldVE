@@ -1,6 +1,6 @@
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
-    requires: ['Teselagen.models.DeviceDesign', 'Teselagen.models.Part'],
+    requires: ['Teselagen.models.DeviceEditorProject', 'Teselagen.models.VectorEditorProject'],
     fields: [{
         name: "id",
         type: "int"
@@ -20,18 +20,16 @@ Ext.define("Teselagen.models.Project", {
     }],
     associations: [{
         type: 'hasMany',
-        model: 'Teselagen.models.DeviceDesign',
-        name: 'designs',
-        associationKey: 'designs',
+        model: 'Teselagen.models.DeviceEditorProject',
+        name: 'deprojects',
+        associationKey: 'deprojects',
         autoLoad: true,
         foreignKey: 'project_id'
     }, {
         type: 'hasMany',
-        model: 'Teselagen.models.Part',
-        name: 'parts',
-        associationKey: 'parts',
-        autoLoad: true,
-        foreignKey: 'project_id'
+        model: 'Teselagen.models.VectorEditorProject',
+        name: 'veprojects',
+        associationKey: 'veprojects'
     }],
     proxy: {
         type: 'rest',

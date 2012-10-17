@@ -1,6 +1,6 @@
 Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
-    requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
+    requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager","Teselagen.models.DeviceEditorProject"],
 
     openProject: function (project) {
         Vede.application.projectManager.openProject(project);
@@ -17,33 +17,29 @@ Ext.define("Vede.controller.ProjectController", {
 
         Ext.getCmp('projectDesignPanel').setLoading(false);
     },
-    renderPartsSection: function(project){
+    renderPartsSection: function(veprojects){
         Ext.getCmp('projectPartsPanel').getRootNode().removeAll();
 
-        var parts = project.parts();
-        parts.load({
-            callback: function() {
-            parts.each(function(part){
-                Ext.getCmp('projectPartsPanel').getRootNode().appendChild({
-                    text: part.data.name,
-                    leaf: true,
-                    id: part.data.id
-                });
+        veprojects.each(function(veproject){
+            Ext.getCmp('projectPartsPanel').getRootNode().appendChild({
+                text: veproject.data.name,
+                leaf: true,
+                id: veproject.data.id
             });
-        }});
+        });
 
     },
-    renderJ5ResultsSection: function(designs){
+    renderJ5ResultsSection: function(deprojects){
         Ext.getCmp('projectAnalysisPanel').getRootNode().removeAll();
 
-        designs.each(function(design){
+        deprojects.each(function(deproject){
             var designNode = Ext.getCmp('projectAnalysisPanel').getRootNode().appendChild({
-                text: design.data.name,
+                text: deproject.data.name,
                 leaf: false,
                 expanded: true
             });
 
-            design.runs().each(function (run) {
+            deproject.j5runs().each(function (run) {
                 designNode.appendChild({
                     text: run.data.name,
                     leaf: true,
@@ -51,8 +47,17 @@ Ext.define("Vede.controller.ProjectController", {
                 });
             });
         });
+        
     },
     init: function () {
+        this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,this.openProject, this);
+
+        this.control({
+            '#projectDesignPanel': {
+                itemclick: function(store,record) { Vede.application.projectManager.openDesign(record); }
+
+            }
+        });
     }
 });

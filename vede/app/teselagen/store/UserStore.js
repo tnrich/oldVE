@@ -1,5 +1,5 @@
 Ext.define("Teselagen.store.UserStore", {
-    requires: ["Teselagen.models.Project"],
+    requires: ["Teselagen.models.User"],
     extend: 'Ext.data.Store',
     autoLoad: false,
     model: 'Teselagen.models.User',

@@ -115,12 +115,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             xtype: 'treepanel',
             id: 'projectDesignPanel',
             title: 'Your Designs',
-            rootVisible: false,
-            listeners: {
-                itemclick: function (view, record, item, index, e, eOpts) {
-                    //console.log(JSON.stringify(record.raw));
-                }
-            }
+            rootVisible: false
         }]
     }, {
         xtype: 'panel',

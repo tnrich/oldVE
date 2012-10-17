@@ -3,11 +3,12 @@ Ext.define('Vede.view.de.DeviceEditor', {
     alias: 'widget.DeviceEditorPanel',
     requires: ["Vede.view.de.InspectorPanel", "Vede.view.de.DeviceEditorPartPanel", "Vede.view.de.DeviceEditorMenuPanel", "Vede.view.de.DeviceEditorToolPanel", "Vede.view.de.DeviceEditorStatusPanel", "Vede.view.de.DeviceEditorCanvasPanel"],
 
-    id: 'DeviceEditorPanel',
+    //id: 'DeviceEditorPanel',
     layout: {
         type: 'fit'
     },
     frameHeader: false,
+    closable: true,
     title: 'Device Editor',
     dockedItems: [{
         xtype: 'DeviceEditorMenuPanel'
@@ -18,18 +19,23 @@ Ext.define('Vede.view.de.DeviceEditor', {
     }],
     items: [{
         xtype: 'container',
-        id: 'DeviceEditorContainer',
+        //id: 'DeviceEditorContainer',
         layout: {
             align: 'stretch',
             type: 'hbox'
         },
         items: [{
             xtype: 'DeviceEditorCanvasPanel'
-        }, {
-            xtype: 'InspectorPanel',
-            flex: 2
-        }]
-    }]
+        },
+        //Ext.create('Vede.view.de.InspectorPanel') 
+        { xtype: 'InspectorPanel', flex: 2 }
+        ]
+    }],
+    listeners: {
+    afterrender: function(win) {
+        win.down('InspectorPanel').doLayout();
+    }
+}
 }
 
 );

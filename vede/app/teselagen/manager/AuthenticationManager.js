@@ -73,7 +73,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     this.authenticate();    
   }
   ,
-  authenticate: function() {
+  authenticate: function(app) {
         var that = this;
         Ext.get('splash-text').update('Authenticating to server');
         Ext.Ajax.request({
@@ -87,7 +87,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             sessionData.data.firstTime = parsedResponse.firstTime;
             Ext.get('splash-text').update(parsedResponse.msg);
             that.loggedIn();
-            Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+            if(Vede.application) Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+            else app.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
             if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();
           },
           failure: function(response, options) {
@@ -98,7 +99,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       }
   ,
 
-  login: function() {
+  login: function(app) {
 
     var that = this;
 
@@ -123,7 +124,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
           success: function(response) {
             session = JSON.parse(response.responseText);
             sessionData.data = session;
-            that.authenticate();
+            that.authenticate(app);
           },
           failure: function(response, options) {
             Ext.get('splash-text').update('Automatic login failed.');

@@ -6,7 +6,18 @@
             "name": "Project A",
             "user_id": 1,
             "DateCreated":"Thu Oct 11 2012 14:49:27 GMT-0700 (PDT)",
-            "DateModified":"Thu Oct 12 2012 14:49:27 GMT-0700 (PDT)"
+            "DateModified":"Thu Oct 12 2012 14:49:27 GMT-0700 (PDT)",
+            "veprojects" : 
+            [
+                {
+                    "id": 1,
+                    "name": "VE Project A",
+                    "part" :  {
+                        "id" : 1,
+                        "name" : "Part 1"
+                    }
+                }
+            ]
         },
         {
         	"id": 2,
