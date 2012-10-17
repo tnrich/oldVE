@@ -833,13 +833,12 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     //      UTILITY FUNCTIONS
     // ===========================================================================
 
-    /**
+    /** TO BE MOVED TO Teselagen.util.FileUtils.js.
      * @param {String} url The url to retrieve data from.
-     * Uses a synchronus Ajax request.
      * @returns {String} xml XML string
      */
     loadFile: function(url) {
-        // Doing XMLHttpRequest leads to loading from cash
+        // Doing XMLHttpRequest leads to loading from cache
 
         var str;
 

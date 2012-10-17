@@ -36,6 +36,59 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //this.Constants       = Teselagen.constants.Constants;
     },
 
+
+    //================================================================
+    // DeviceDesign management
+    //================================================================
+
+    createDeviceDesign: function(pNumBins) {
+        var device = Ext.create("Teselagen.models.DeviceDesign");
+        device.createNewCollection(pNumBins);
+        return device;
+    },
+
+    createNewCollection: function(pDesign, pNumBins) {
+        return pDesign.createNewCollection(pNumBins);
+    },
+
+    addToRules: function(pDesign, pRule) {
+        return pDesign.addToRules(pRule);
+    },
+
+    removeFromRules: function(pDesign, pRule) {
+        return pDesign.removeFromRules(pRule);
+    },
+
+    removeAllRules: function(pDesign) {
+        return pDesign.removeAllRules();
+    },
+
+    getRulesInvolvingPart: function(pDesign, pPart) {
+        return pDesign.getRulesInvolvingPart(pPart);
+    },
+
+    getRuleByName: function(pDesign, pName) {
+        return pDesign.getRuleByName(pName);
+    },
+
+    isUniqueRuleName: function(pDesign, pName) {
+        return pDesign.isUniqueRuleName(pName);
+    },
+
+
+    //================================================================
+    // J5Collection management
+    //================================================================
+
+    createJ5Collection: function(pNumBins, pIsCircular) {
+        var collection = Ext.create("Teselagen.models.J5Collection", {
+            isCircular: pIsCircular
+        });
+
+        collection.createEmptyCollection(pNumBins);
+        return collection;
+    },
+
     /** NEEDS TESTING
      * Checks if J5Collection is combinatorial: There are more than one
      * Part in a J5Bin.
@@ -103,6 +156,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return ready;
     },
 
+    //================================================================
+    // J5Bin management
+    //================================================================
     /** NEEDS TESTING
      * @param {Teselagen.models.J5Bin} pJ5Bin
      * @returns {int}
@@ -118,6 +174,14 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
 
+    //================================================================
+    // Parts/SequenceFile management
+    //================================================================
+
+
+    //================================================================
+    // CSV Readers
+    //================================================================
     parseSeqCsv: function(pCsv) {
 
     },
@@ -130,6 +194,17 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     },
 
+
+
+    //================================================================
+    // Helper Functions
+    //================================================================
+
+    /**
+     * Finds reverse complement of a sequence.
+     * @param {String} pSeq
+     * @returns {String} reverse complement sequence
+     */
     reverseComplement: function(pSeq) {
         var revComp = [];
         pSeq = pSeq.toLowerCase();
@@ -153,6 +228,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return revComp.join("");
     },
 
+    /**
+     * Determines if string is only alphanumeric with underscores "_" or hyphens "-".
+     * @param {String} pName
+     * @returns {Boolean}
+     */
     isLegalName: function(pName) {
         if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
             return false;
