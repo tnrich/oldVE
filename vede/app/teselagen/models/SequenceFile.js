@@ -83,7 +83,8 @@ Ext.define("Teselagen.models.SequenceFile", {
     /**
      * Sets the sequenceFileContent for this part
      * NOTE: Must execute setSequenceFileContent() to set the hash from "" to a unique identifier.
-     * @returns {String} hash SequenceHash
+     * @param {String} pContent The sequence file, in string form.
+     * @returns {String} SequenceHash
      */
     setSequenceFileContent: function(pContent) {
 
@@ -106,7 +107,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     /**
      * Sets PartSource based on FileFormat and FileContent.
      * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} displayID Name of the PartSource
+     * @returns {String} Name of the PartSource
      */
     setPartSource: function() {
         var displayID = "";
@@ -136,7 +137,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     /**
      * Sets FileName based on PartSource
      * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} name SequenceFileName
+     * @returns {String} SequenceFileName
      */
     setSequenceFileName: function() {
         var format      = this.get("sequenceFileFormat");
