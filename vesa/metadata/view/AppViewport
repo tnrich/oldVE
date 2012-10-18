@@ -170,6 +170,8 @@
                     "codeClass": null,
                     "userConfig": {
                         "designer|userClassName": "MyPanel19",
+                        "baseCls": "sfsdf",
+                        "cls": "sfs",
                         "id": "projectDesignTab",
                         "layout": "fit",
                         "minButtonWidth": 32,
@@ -191,6 +193,7 @@
                                 "id": "projectTab1",
                                 "minHeight": null,
                                 "minWidth": null,
+                                "overCls": "project-tab-focus",
                                 "autoWidth": true,
                                 "focusCls": "project-tab-focus",
                                 "icon": "resources/images/ux/designTab.png",
