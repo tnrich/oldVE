@@ -52,6 +52,9 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onImportButtonClick: function(button, e, options) {
+        // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
+        // Change this at a later date when that class is tested. --DW 10.17.2012
+
         if (typeof window.FileReader !== 'function') {
             Ext.Msg.alert('Browser does not support File API.');
         }
@@ -96,7 +99,7 @@ Ext.define('Vede.controller.MainMenuController', {
         }
 
         this.application.fireEvent("ViewModeChanged", viewMode);
-    }, 
+    },
 
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
         var btn = Ext.ComponentQuery.query('#featuresBtn')[0];

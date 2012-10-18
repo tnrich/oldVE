@@ -1,1 +1,0 @@
-../../../../../dwong-tests/javascript/loadFile.js

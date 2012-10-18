@@ -1,4 +1,4 @@
-/**
+/** THIS CLASS WILL BE ELIMINATED AND FUNCTIONS WILL BE PUT IN Part.js AND VectorEditorProject.js ???
  * @class Teselagen.manager.SequenceFileManager
  * Class describing a SequenceFileManager.
  * SequenceFileManager holds an array of SequenceFiles, for a given design project.

@@ -7,6 +7,13 @@
 Ext.define("Teselagen.constants.SBOLvIcons", {
     singleton: true,
 
+    requires: [
+    ],
+
+    proxy: {
+        type: "memory"
+    },
+
     statics: {
         ASSEMBLY_JUNCTION:                      "assembly_junction",
         CDS:                                    "cds",
@@ -32,6 +39,9 @@ Ext.define("Teselagen.constants.SBOLvIcons", {
         //private static var _sbolvIconsDataProvider:ArrayCollection,
 
 
-    }
+    },
+
+    validations: [
+    ]
 
 });

@@ -64,9 +64,49 @@ Ext.define('Vede.view.common.DashboardPanelView', {
 		                                    flex: 2,
 		                                    maxWidth: 200,
 		                                    layout: {
-		                                        type: 'fit'
+		                                    	align: 'stretch',
+		                                    	padding: 10,
+		                                        type: 'vbox'
 		                                    },
-		                                    title: 'Help'
+		                                    title: 'Help',
+		                                    items: [
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'j5_Manual_Btn',
+                                            text: 'j5 Manual'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'VE_Manual_Btn',
+                                            text: 'Vector Editor Manual'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'DE_Manual_Btn',
+                                            text: 'Device Editor Manual'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'tutorials_Btn',
+                                            text: 'Tutorials'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'support_Btn',
+                                            text: 'Get Support'
+                                        },
+                                        {
+                                            xtype: 'button',
+                                            margins: '5',
+                                            id: 'feedback_Btn',
+                                            text: 'Submit Feedback'
+                                        }
+                                    ]
 		                                }
                             ],
 		require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],

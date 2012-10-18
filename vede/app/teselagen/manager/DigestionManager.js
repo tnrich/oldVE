@@ -62,7 +62,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
 
         if (pType == matchReverseComOnly){
             //reverseComplementSequence();
-        },
+        };
         var startPosition = destinationStartCutSite.getStart();
         var endPosition = destinationStartCutSite.getEnd() 
             + destinationStartCutSite.getRestrictionEnzyme.getDsForward();
