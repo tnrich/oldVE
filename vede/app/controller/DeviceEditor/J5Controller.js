@@ -29,7 +29,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5Parameters: null,
     j5ParameterFields: [],
 
-    automationParameters: {},
+    automationParameters: null,
+    automationParameterFields: [],
 
     plasmidsListText: null,
     oligosListText: null,
@@ -205,27 +206,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onResetAutomationParamsBtnClick: function() {
-        this.resetAutomationParams();
+        this.automationParameters.setDefaultValues();
         this.populateAutomationParametersDialog();
     },
 
-    resetAutomationParams: function() {
-        Ext.each(Object.keys(this.self.defaultAutomationParameters), function(key) {
-            this.automationParameters[key] = this.self.defaultAutomationParameters[key];
-        }, this);
-    },
-
     populateAutomationParametersDialog: function() {
-        Ext.each(Object.keys(this.automationParameters), function(key) {
-            Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
-                this.automationParameters[key]);
+        this.automationParameters.fields.eachKey(function(key) {
+            if(key !== "id") {
+                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
+                    this.automationParameters.get(key));
+            }
         }, this);
     },
 
     saveAutomationParams: function() {
-        Ext.each(Object.keys(this.automationParameters), function(key) {
-            this.automationParameters[key] = 
-                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
+        this.automationParameters.fields.eachKey(function(key) {
+            if(key !== "id") {
+                this.automationParameters.set(key, 
+                    Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
+            }
         }, this);
     },
 
@@ -322,16 +321,20 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     populateJ5ParametersDialog: function() {
-        Ext.each(this.j5ParameterFields, function(key) {
-            Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
-                this.j5Parameters.get(key));
+        this.j5Parameters.fields.eachKey(function(key) {
+            if(key !== "id") {
+                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
+                    this.j5Parameters.get(key));
+            }
         }, this);
     },
 
     saveJ5Parameters: function() {
-        Ext.each(this.j5ParameterFields, function(key) {
-            this.j5Parameters.set(key, 
-                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
+        this.j5Parameters.fields.eachKey(function(key) {
+            if(key !== "id") {
+                this.j5Parameters.set(key, 
+                    Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
+            }
         }, this);
     },
     
@@ -402,19 +405,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.application.on("openj5", this.onOpenJ5, this);
 
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
+
         this.j5Parameters = Ext.create("Teselagen.models.J5Parameters");
+        this.j5Parameters.setDefaultValues();
 
-        // j5ParameterFields will be all the keys in j5Parameters except for 'id'.
-        this.j5Parameters.fields.eachKey(function(key) {
-            if(key !== "id") {
-                this.j5ParameterFields.push(key);
-            }
-        }, this);
-
-        // Set tooltips of input fields automatically.
-        Ext.each(this.j5ParameterFields, function(key) {
-        });
-
-        this.resetAutomationParams();
+        this.automationParameters = Ext.create("Teselagen.models.DownstreamAutomationParameters");
+        this.automationParameters.setDefaultValues();
     }
 });
