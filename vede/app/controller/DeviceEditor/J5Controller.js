@@ -2,24 +2,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
     requires: ["Teselagen.constants.Constants",
+               "Teselagen.manager.DeviceDesignManager",
                "Teselagen.utils.J5ControlsUtils"],
 
-    statics: {
-        defaultAutomationParameters: {
-            "maxDeltaTempAdjacentZonesField": 5,
-            "maxDeltaTempZoneAcceptableField": 5,
-            "maxMCStepsPerZoneField": 1000,
-            "maxWellVolumeField": 100,
-            "finalMCTempField": 0.0001,
-            "initialMCTempField": 0.1,
-            "minPipettingVolumeField": 5,
-            "numColumnsField": 12,
-            "trialDeltaTempField": 0.1,
-            "wellsPerZoneField": 16,
-            "zonesPerBlockField": 6
-        }
-    },
-
+    DeviceDesignManager: null,
     J5ControlsUtils: null,
 
     j5Window: null,
@@ -404,6 +390,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         
         this.application.on("openj5", this.onOpenJ5, this);
 
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
 
         this.j5Parameters = Ext.create("Teselagen.models.J5Parameters");
