@@ -57,6 +57,10 @@
 	padding:5px;
 }
 
+.x-tab-close-btn {
+	background-image: url(../images/ux/tab-default-close.png);
+}
+
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerSub-body {
 	border: none;
