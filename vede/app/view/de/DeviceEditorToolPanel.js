@@ -4,7 +4,7 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 
 	dock: 'top',
 	hidden: false,
-	//id: 'DeviceEditorToolPanel',
+	cls: 'DeviceEditorToolPanel',
 	width: 150,
 	layout: {
 		type: 'fit'
@@ -14,7 +14,7 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 		dock: 'top',
 		items: [{
 			xtype: 'button',
-			//id: 'add_column_Btn',
+			cls: 'add_column_Btn',
 			icon: 'resources/images/icons/device/add_column.png',
 			scale: 'large',
 			tooltip: 'Add Column'
@@ -22,7 +22,7 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 			xtype: 'tbseparator'
 		}, {
 			xtype: 'button',
-			//id: 'add_row_Btn',
+			cls: 'add_row_Btn',
 			icon: 'resources/images/icons/device/add_row.png',
 			scale: 'large',
 			tooltip: 'Add Row'
@@ -30,13 +30,13 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 			xtype: 'tbseparator'
 		}, {
 			xtype: 'button',
-			//id: 've_init_Btn',
+			cls: 've_init_Btn',
 			icon: 'resources/images/icons/device/ve_icon.png',
 			scale: 'large',
 			tooltip: 'Vector Editor',
 			menu: {
 				xtype: 'menu',
-				//id: 'de_ve_menu',
+				cls: 'de_ve_menu',
 				minWidth: 160,
 				width: 120,
 				items: [{
@@ -54,7 +54,7 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 			xtype: 'tbseparator'
 		}, {
 			xtype: 'button',
-			//id: 'j5_init_Btn',
+			cls: 'j5_init_Btn',
 			icon: 'resources/images/icons/device/j5_icon.png',
 			scale: 'large',
 			tooltip: 'j5'

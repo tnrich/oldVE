@@ -1,7 +1,26 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants"],
+    requires: ["Teselagen.constants.Constants",
+               "Teselagen.utils.J5ControlsUtils"],
+
+    statics: {
+        defaultAutomationParameters: {
+            "maxDeltaTempAdjacentZonesField": 5,
+            "maxDeltaTempZoneAcceptableField": 5,
+            "maxMCStepsPerZoneField": 1000,
+            "maxWellVolumeField": 100,
+            "finalMCTempField": 0.0001,
+            "initialMCTempField": 0.1,
+            "minPipettingVolumeField": 5,
+            "numColumnsField": 12,
+            "trialDeltaTempField": 0.1,
+            "wellsPerZoneField": 16,
+            "zonesPerBlockField": 6
+        }
+    },
+
+    J5ControlsUtils: null,
 
     j5Window: null,
     j5ParamsWindow: null,
@@ -10,23 +29,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5Parameters: null,
     j5ParameterFields: [],
 
-    defaultAutomationParameters: {
-        "maxDeltaTempAdjacentZonesField": 5,
-        "maxDeltaTempZoneAcceptableField": 5,
-        "maxMCStepsPerZoneField": 1000,
-        "maxWellVolumeField": 100,
-        "finalMCTempField": 0.0001,
-        "initialMCTempField": 0.1,
-        "minPipettingVolumeField": 5,
-        "numColumnsField": 12,
-        "trialDeltaTempField": 0.1,
-        "wellsPerZoneField": 16,
-        "zonesPerBlockField": 6
-    },
     automationParameters: {},
 
     plasmidsListText: null,
     oligosListText: null,
+    directSynthesesListText: null,
 
     onOpenJ5: function() {
         this.j5Window = Ext.create("Vede.view.de.j5Controls").show();
@@ -56,19 +63,28 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onUseServerPlasmidsRadioBtnChange: function(e) {
-        Ext.getCmp("plasmidsListFileSelector").reset();
+        // We only want to reset the file field if we are checking the radio button.
+        if(e.getValue()) {
+            Ext.ComponentQuery.query("component[cls='plasmidsListFileSelector']")[0].reset();
+        }
     },
 
     onUseEmptyPlasmidsRadioBtnChange: function(e) {
-        Ext.getCmp("plasmidsListFileSelector").reset();
+        if(e.getValue()) {
+            Ext.ComponentQuery.query("component[cls='plasmidsListFileSelector']")[0].reset();
+        }
     },
 
     onPlasmidsListFileSelectorChange: function(me, value) {
-        var plasmidsFile = me.extractFileInput().files[0];
+        var plasmidsFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        fr.onload = processPlasmidsFile;
-        fr.readAsText(plasmidsFile);
+        Ext.ComponentQuery.query("radio[cls='useServerPlasmidsRadioBtn']")[0].setValue(false);
+        Ext.ComponentQuery.query("radio[cls='useEmptyPlasmidsRadioBtn']")[0].setValue(false);
+
+        me.inputEl.dom.value = this.getFileNameFromField(me);
+
+        var that = this;
 
         function processPlasmidsFile() {
             var result = fr.result;
@@ -82,27 +98,39 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 alert("Invalid headers in master plasmids list file.\n" +
                       "Please check the formatting of the file.");
 
-                this.plasmidsListText = null;
+                that.plasmidsListText = null;
             } else {
-                this.plasmidsListText = result;
+                that.plasmidsListText = result;
+                console.log(that);
+                console.log(this);
             }
+        }
+
+        fr.onload = processPlasmidsFile;
+        fr.readAsText(plasmidsFile);
+
+    },
+
+    onUseServerOligosRadioBtnChange: function(e) {
+        if(e.getValue()) {
+            Ext.ComponentQuery.query("component[cls='oligosListFileSelector']")[0].reset();
         }
     },
 
-    onUseServerOligosRadioBtnChange: function() {
-        Ext.getCmp("oligosListFileSelector").reset();
-    },
-
-    onUseEmptyOligosRadioBtnChange: function() {
-        Ext.getCmp("oligosListFileSelector").reset();
+    onUseEmptyOligosRadioBtnChange: function(e) {
+        if(e.getValue()) {
+            Ext.ComponentQuery.query("component[cls='oligosListFileSelector']")[0].reset();
+        }
     },
 
     onOligosListFileSelectorChange: function(me) {
-        var oligosFile = me.extractFileInput().files[0];
+        var oligosFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        fr.onload = processOligosFile;
-        fr.readAsText(oligosFile);
+        Ext.ComponentQuery.query("radio[cls='useServerOligosRadioBtn']")[0].setValue(false);
+        Ext.ComponentQuery.query("radio[cls='useEmptyOligosRadioBtn']")[0].setValue(false);
+        
+        me.inputEl.dom.value = this.getFileNameFromField(me);
 
         function processOligosFile() {
             var result = fr.result;
@@ -122,22 +150,31 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 this.oligosListText = result;
             }
         }
+
+        fr.onload = processOligosFile;
+        fr.readAsText(oligosFile);
     },
 
-    onUseServerSynthesesRadioBtnChange: function() {
-        Ext.getCmp("directSynthesesFileSelector").reset();
+    onUseServerSynthesesRadioBtnChange: function(e) {
+        if(e.getValue()) {
+            Ext.ComponentQuery.query("component[cls='directSynthesesFileSelector']")[0].reset();
+        }
     },
 
-    onUseEmptySynthesesRadioBtnChange: function() {
-        Ext.getCmp("directSynthesesFileSelector").reset();
+    onUseEmptySynthesesRadioBtnChange: function(e) {
+        if(e.getValue()) {
+            Ext.ComponentQuery.query("component[cls='directSynthesesFileSelector']")[0].reset();
+        }
     },
 
     onDirectSynthesesFileSelectorChange: function(me) {
-        var synthesesFile = me.extractFileInput().files[0];
+        var synthesesFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        fr.onload = processOligosFile;
-        fr.readAsText(synthesesFile);
+        Ext.ComponentQuery.query("radio[cls='useServerSynthesesRadioBtn']")[0].setValue(false);
+        Ext.ComponentQuery.query("radio[cls='useEmptySynthesesRadioBtn']")[0].setValue(false);
+
+        me.inputEl.dom.value = this.getFileNameFromField(me);
 
         function processSynthesesFile() {
             var result = fr.result;
@@ -151,11 +188,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 alert("Invalid headers in master syntheses list file.\n" +
                       "Please check the formatting of the file.");
 
-                this.synthesesListText = null;
+                this.directSynthesesListText = null;
             } else {
-                this.synthesesListText = result;
+                this.directSynthesesListText = result;
             }
         }
+
+        fr.onload = processSynthesesFile;
+        fr.readAsText(synthesesFile);
     },
 
     onCustomizeAutomationParamsBtnClick: function() {
@@ -170,21 +210,106 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     resetAutomationParams: function() {
-        Ext.each(Object.keys(this.defaultAutomationParameters), function(key) {
-            this.automationParameters[key] = this.defaultAutomationParameters[key];
+        Ext.each(Object.keys(this.self.defaultAutomationParameters), function(key) {
+            this.automationParameters[key] = this.self.defaultAutomationParameters[key];
         }, this);
     },
 
     populateAutomationParametersDialog: function() {
         Ext.each(Object.keys(this.automationParameters), function(key) {
-            Ext.getCmp(key).setValue(this.automationParameters[key]);
+            Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
+                this.automationParameters[key]);
         }, this);
     },
 
     saveAutomationParams: function() {
         Ext.each(Object.keys(this.automationParameters), function(key) {
-            this.automationParameters[key] = Ext.getCmp(key).getValue();
+            this.automationParameters[key] = 
+                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue();
         }, this);
+    },
+
+    onRunJ5BtnClick: function() {
+        console.log(this.automationParameters);
+        console.log(this.j5Parameters.data);
+
+        var masterPlasmidsList;
+        var masterPlasmidsListFileName;
+
+        var masterOligosList;
+        var masterOligosListFileName;
+
+        var masterDirectSynthesesList;
+        var masterDirectSynthesesListFileName;
+
+        if(Ext.ComponentQuery.query("radio[cls='useServerPlasmidsRadioBtn']")[0].getValue()) {
+            masterPlasmidsList = "";
+            masterPlasmidsListFileName = "";
+        } else if(Ext.ComponentQuery.query("radio[cls='useEmptyPlasmidsRadioBtn']")[0].getValue()) {
+            masterPlasmidsList = this.J5ControlsUtils.generateEmptyPlasmidsList();
+            masterPlasmidsListFileName = "j5_plasmids.csv";
+        } else {
+            masterPlasmidsList = this.plasmidsListText;
+            masterPlasmidsListFileName = this.getFileNameFromField(
+                Ext.ComponentQuery.query("component[cls='plasmidsListFileSelector']")[0]);
+        }
+
+        if(Ext.ComponentQuery.query("radio[cls='useServerOligosRadioBtn']")[0].getValue()) {
+            masterOligosList = "";
+            masterOligosListFileName = "";
+        } else if(Ext.ComponentQuery.query("radio[cls='useEmptyOligosRadioBtn']")[0].getValue()) {
+            masterOligosList = this.J5ControlsUtils.generateEmptyOligosList();
+            masterOligosListFileName = "j5_oligos.csv";
+        } else {
+            masterOligosList = this.plasmidsListText;
+            masterOligosListFileName = this.getFileNameFromField(
+                Ext.ComponentQuery.query("component[cls='oligosListFileSelector']")[0]);
+        }
+
+        if(Ext.ComponentQuery.query("radio[cls='useServerSynthesesRadioBtn']")[0].getValue()) {
+            masterDirectSynthesesList = "";
+            masterDirectSynthesesListFileName = "";
+        } else if(Ext.ComponentQuery.query("radio[cls='useEmptySynthesesRadioBtn']")[0].getValue()) {
+            masterDirectSynthesesList = this.J5ControlsUtils.generateEmptyDirectSynthesesList();
+            masterDirectSynthesesListFileName = "j5_directsyntheses.csv";
+        } else {
+            masterDirectSynthesesList = this.plasmidsListText;
+            masterDirectSynthesesListFileName = this.getFileNameFromField(
+                Ext.ComponentQuery.query("component[cls='directSynthesesListFileSelector']")[0]);
+        }
+
+        console.log(masterPlasmidsList);
+        console.log(masterPlasmidsListFileName);
+        console.log(masterOligosList);
+        console.log(masterOligosListFileName);
+        console.log(masterDirectSynthesesList);
+        console.log(masterDirectSynthesesListFileName);
+    },
+
+    /**
+     * Given a filefield Component, returns the name of the file selected,
+     * filtering out the directory information.
+     *
+     * TODO: maybe move to a utils file so we can set the display value to this
+     * whenever the onchange event of a file input field is fired? This would
+     * prevent the 'fakepath' directory from showing up on some browsers.
+     */
+    getFileNameFromField: function(field) {
+        var rawValue = field.getValue();
+        var fileName;
+
+        if(rawValue.indexOf("\\") != -1) {
+            fileName = rawValue.substr(rawValue.lastIndexOf("\\") + 1);
+        } else if (rawValue.indexOf("/") != -1) {
+            fileName = rawValue.substr(rawValue.lastIndexOf("/") + 1);
+        } else {
+            fileName = rawValue;
+        }
+
+        return fileName;
+    },
+
+    onLoadAssemblyBtnClick: function() {
     },
 
     onAutomationParamsCancelClick: function() {
@@ -198,82 +323,85 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     populateJ5ParametersDialog: function() {
         Ext.each(this.j5ParameterFields, function(key) {
-            Ext.getCmp(key).setValue(this.j5Parameters.get(key));
+            Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
+                this.j5Parameters.get(key));
         }, this);
     },
 
     saveJ5Parameters: function() {
         Ext.each(this.j5ParameterFields, function(key) {
-            this.j5Parameters.set(key, Ext.getCmp(key).getValue());
+            this.j5Parameters.set(key, 
+                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
         }, this);
     },
-    /*
+    
     init: function() {
         this.control({
-            "#editj5ParamsBtn": {
+            "button[cls='editj5ParamsBtn']": {
                 click: this.onEditJ5ParamsBtnClick
             },
-            "#resetj5DefaultParamsBtn": {
+            "button[cls='resetj5DefaultParamsBtn']": {
                 click: this.resetDefaultj5Params
             },
-            "#resetj5ServerParamsBtn": {
+            "button[cls='resetj5ServerParamsBtn']": {
                 click: this.resetServerj5Params
             },
-            "#j5ParamsCancelBtn": {
+            "button[cls='j5ParamsCancelBtn']": {
                 click: this.onj5ParamsCancelBtnClick
             },
-            "#j5ParamsOKBtn": {
+            "button[cls='j5ParamsOKBtn']": {
                 click: this.onj5ParamsOKBtnClick
             },
-            "#useServerPlasmidsRadioBtn": {
+            "radio[cls='useServerPlasmidsRadioBtn']": {
                 change: this.onUseServerPlasmidsRadioBtnChange
             },
-            "#useEmptyPlasmidsRadioBtn": {
+            "radio[cls='useEmptyPlasmidsRadioBtn']": {
                 change: this.onUseEmptyPlasmidsRadioBtnChange
             },
-            "#plasmidsListFileSelector": {
+            "component[cls='plasmidsListFileSelector']": {
                 change: this.onPlasmidsListFileSelectorChange
             },
-            "#useServerOligosRadioBtn": {
+            "radio[cls='useServerOligosRadioBtn']": {
                 change: this.onUseServerOligosRadioBtnChange
             },
-            "#useEmptyOligosRadioBtn": {
+            "radio[cls='useEmptyOligosRadioBtn']": {
                 change: this.onUseEmptyOligosRadioBtnChange
             },
-            "#oligosListFileSelector": {
+            "component[cls='oligosListFileSelector']": {
                 change: this.onOligosListFileSelectorChange
             },
-            "#useServerSynthesesRadioBtn": {
+            "radio[cls='useServerSynthesesRadioBtn']": {
                 change: this.onUseServerSynthesesRadioBtnChange
             },
-            "#useEmptySynthesesRadioBtn": {
+            "radio[cls='useEmptySynthesesRadioBtn']": {
                 change: this.onUseEmptySynthesesRadioBtnChange
             },
-            "#directSynthesesFileSelector": {
+            "component[cls='directSynthesesFileSelector']": {
                 change: this.onDirectSynthesesFileSelectorChange
             },
-            "#customizeAutomationParamsBtn": {
+            "button[cls='customizeAutomationParamsBtn']": {
                 click: this.onCustomizeAutomationParamsBtnClick
             },
-            "#runj5Btn": {
+            "button[cls='runj5Btn']": {
                 click: this.onRunJ5BtnClick
             },
-            "#loadAssemblyBtn": {
+            "button[cls='loadAssemblyBtn']": {
                 click: this.onLoadAssemblyBtnClick
             },
-            "#automationParamsCancelBtn": {
+            "button[cls='automationParamsCancelBtn']": {
                 click: this.onAutomationParamsCancelClick
             },
-            "#automationParamsOKBtn": {
+            "button[cls='automationParamsOKBtn']": {
                 click: this.onAutomationParamsOKClick
             },
-            "#automationParamsResetBtn": {
+            "button[cls='automationParamsResetBtn']": {
                 click: this.onResetAutomationParamsBtnClick
             },
         });
         
         this.application.on("openj5", this.onOpenJ5, this);
 
+        this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
         this.j5Parameters = Ext.create("Teselagen.models.J5Parameters");
 
         // j5ParameterFields will be all the keys in j5Parameters except for 'id'.
@@ -289,5 +417,4 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         this.resetAutomationParams();
     }
-    */
 });
