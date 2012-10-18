@@ -112,7 +112,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             overCls: 'project-tab-focus',
             autoWidth: true,
             icon: 'resources/images/ux/designTab.png',
-            iconCls: 'projectBarButton'
+            iconCls: 'projectBarButton',
+            activeCls: 'project-tab-active'
         },
         items: [{
             xtype: 'treepanel',
@@ -132,7 +133,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             cls: 'projectBarButton',
             overCls: 'project-tab-focus',
             icon: 'resources/images/ux/graphTab.png',
-            iconCls: 'projectBarButton'
+            iconCls: 'projectBarButton',
+            activeCls: 'project-tab-active'
         },
         items: [{
             xtype: 'treepanel',
@@ -157,7 +159,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             cls: 'projectBarButton',
             overCls: 'project-tab-focus',
             icon: 'resources/images/ux/partsTab.png',
-            iconCls: 'projectBarButton'
+            iconCls: 'projectBarButton',
+            activeCls: 'project-tab-active'
         },
         items: [{
             xtype: 'treepanel',
@@ -183,7 +186,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
             cls: 'projectBarButton',
             overCls: 'project-tab-focus',
             icon: 'resources/images/ux/registryTab.png',
-            iconCls: 'projectBarButton'
+            iconCls: 'projectBarButton',
+            activeCls: 'project-tab-active'
         },
         items: [{
             xtype: 'treepanel',
