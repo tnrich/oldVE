@@ -67,6 +67,22 @@ Ext.define("Teselagen.models.J5Collection", {
     },
 
     /**
+     * Creates an empty collection with the given number of bins.
+     * @param {int} pNumBins Number of empty bins to be created.
+     * @returns {Ext.data.Store} Bins created.
+     */
+    createEmptyCollection: function(pNumBins) {
+        if (this.binCount() > 0) {
+            console.warn("Warning. Overwriting existing J5Collection");
+        }
+        for (var i = 0; i < pNumBins; i++) {
+            var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
+            this.addToBin(bin, i);
+        }
+        return this.bins();
+    },
+
+    /**
      * Pushes a J5bin into the bins.
      * Original uses splice, but don't we want to insert it, not replace an item?
      * @param {Teselagen.models.J5Bin} pJ5Bin Bin to add to collection. Can be one or array of bins.
