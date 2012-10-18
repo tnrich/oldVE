@@ -20,9 +20,9 @@ Ext.define("Teselagen.manager.PieManager", {
         cutSites: [],
         features: [],
         orfs: [],
-        showCutSites: true,
+        showCutSites: false,
         showFeatures: true,
-        showOrfs: true,
+        showOrfs: false,
         showFeatureLabels: true,
         showCutSiteLabels: true
     },
@@ -82,6 +82,8 @@ Ext.define("Teselagen.manager.PieManager", {
                 })
             ],
             autoScroll: true,
+            overflowX: "scroll",
+            overflowY: "scroll"
         });
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
@@ -243,10 +245,6 @@ Ext.define("Teselagen.manager.PieManager", {
         } else {
             this.hideSprites(this.featureSprites);
         }
-
-        var svgEl = document.getElementById(this.pie.surface.el.id);
-        svgEl.setAttribute("style", "width:" + svgEl.width.baseVal.value +"px;" + 
-                           "height:" + this.labelSprites.getBBox().height + "px;");
     },
 
     /**

@@ -29,11 +29,11 @@ Ext.define('Vede.view.de.j5Controls', {
                     items: [{
                         xtype: 'button',
                         flex: 1,
-                        //id: 'editj5ParamsBtn',
+                        cls: 'editj5ParamsBtn',
                         maxHeight: 23,
-                        maxWidth: 100,
+                        maxWidth: 130,
                         minHeight: 23,
-                        text: 'Edit j5 Parameters'
+                        text: '<b>Edit j5 Parameters</b>'
                     }, {
                         xtype: 'container',
                         flex: 1,
@@ -44,14 +44,14 @@ Ext.define('Vede.view.de.j5Controls', {
                         },
                         items: [{
                             xtype: 'radiofield',
-                            //id: 'useServerPlasmidsRadioBtn',
+                            cls: 'useServerPlasmidsRadioBtn',
                             name: 'plasmidsListSource',
                             fieldLabel: '<b>Master Plasmids List</b>',
                             labelWidth: 200,
                             boxLabel: 'Use latest server version'
                         }, {
                             xtype: 'radiofield',
-                            //id: 'useEmptyPlasmidsRadioBtn',
+                            cls: 'useEmptyPlasmidsRadioBtn',
                             flex: 0.5,
                             margin: 'left: 10px',
                             name: 'plasmidsListSource',
@@ -64,7 +64,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'filefield',
                             flex: 1,
-                            //id: 'plasmidsListFileSelector',
+                            cls: 'plasmidsListFileSelector',
+                            validateOnChange: false,
                             allowBlank: false,
                             margin: '',
                             fieldLabel: 'or',
@@ -86,14 +87,14 @@ Ext.define('Vede.view.de.j5Controls', {
                         },
                         items: [{
                             xtype: 'radiofield',
-                            //id: 'useServerOligosRadioBtn',
+                            cls: 'useServerOligosRadioBtn',
                             name: 'oligosListSource',
                             fieldLabel: '<b>Master Oligos List</b>',
                             labelWidth: 200,
                             boxLabel: 'Use latest server version'
                         }, {
                             xtype: 'radiofield',
-                            //id: 'useEmptyOligosRadioBtn',
+                            cls: 'useEmptyOligosRadioBtn',
                             flex: 0.5,
                             margin: 'left: 10px',
                             name: 'oligosListSource',
@@ -106,7 +107,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'filefield',
                             flex: 1,
-                            //id: 'oligosListFileSelector',
+                            cls: 'oligosListFileSelector',
+                            validateOnChange: false,
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
@@ -127,14 +129,14 @@ Ext.define('Vede.view.de.j5Controls', {
                         },
                         items: [{
                             xtype: 'radiofield',
-                            //id: 'useServerSynthesesRadioBtn',
+                            cls: 'useServerSynthesesRadioBtn',
                             name: 'directSynthesesListSource',
                             fieldLabel: '<b>Master Direct Syntheses List</b>',
                             labelWidth: 200,
                             boxLabel: 'Use latest server version'
                         }, {
                             xtype: 'radiofield',
-                            //id: 'useEmptySynthesesRadioBtn',
+                            cls: 'useEmptySynthesesRadioBtn',
                             flex: 0.5,
                             margin: 'left: 10px',
                             name: 'directSynthesesListSource',
@@ -147,7 +149,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'filefield',
                             flex: 1,
-                            //id: 'directSynthesesFileSelector',
+                            cls: 'directSynthesesFileSelector',
+                            validateOnChange: false,
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
@@ -161,7 +164,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'combobox',
                         flex: 1,
-                        //id: 'assemblyMethodSelector',
+                        cls: 'assemblyMethodSelector',
                         maxWidth: 300,
                         padding: 2,
                         fieldLabel: '<b>Assembly Method:</b>',
@@ -174,7 +177,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         xtype: 'button',
                         flex: 1,
                         height: 23,
-                        //id: 'runj5Btn',
+                        cls: 'runj5Btn',
                         maxHeight: 23,
                         maxWidth: 60,
                         minHeight: 23,
@@ -185,7 +188,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         xtype: 'displayfield',
                         flex: 1,
                         hidden: true,
-                        //id: 'j5ResponseTextField',
+                        cls: 'j5ResponseTextField',
                         value: 'Display Field',
                         hideLabel: true
                     }, {
@@ -197,25 +200,23 @@ Ext.define('Vede.view.de.j5Controls', {
                             type: 'hbox'
                         },
                         items: [{
-                            xtype: 'button',
-                            flex: 1,
-                            floating: false,
+                            xtype: 'filefield',
                             height: 23,
-                            //id: 'loadAssemblyBtn',
+                            buttonOnly: true,
+                            cls: 'loadAssemblyBtn',
+                            validateOnChange: false,
                             margin: '10 0 10 0',
                             maxHeight: 23,
-                            maxWidth: 200,
                             minHeight: 23,
-                            width: 100,
-                            text: '<b>Load Existing Assembly File</b>'
+                            buttonText: '<b>Load Existing Assembly File</b>'
                         }]
                     }, {
                         xtype: 'gridpanel',
                         flex: 1,
-                        height: 100,
-                        //id: 'plasmidsGrid',
+                        height: 90,
+                        cls: 'plasmidsGrid',
                         margin: '10 0 5 0',
-                        minHeight: 110,
+                        minHeight: 100,
                         width: 786,
                         title: 'Plasmids',
                         columnLines: true,
@@ -256,7 +257,8 @@ Ext.define('Vede.view.de.j5Controls', {
                     title: 'Condense Assembly Files',
                     items: [{
                         xtype: 'filefield',
-                        //id: 'condenseAssemblyFilesSelector',
+                        cls: 'condenseAssemblyFilesSelector',
+                        validateOnChange: false,
                         maxWidth: 500,
                         width: 500,
                         fieldLabel: '<b>Assembly Files To Condense List:</b>',
@@ -265,7 +267,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'filefield',
-                        //id: 'zippedAssemblyFilesSelector',
+                        cls: 'zippedAssemblyFilesSelector',
+                        validateOnChange: false,
                         width: 500,
                         fieldLabel: '<b>Zipped Assembly Files:</b>',
                         labelSeparator: ' ',
@@ -273,7 +276,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'button',
-                        //id: 'condenseAssembliesBtn',
+                        cls: 'condenseAssembliesBtn',
                         text: '<b>Condense Assemblies</b>'
                     }]
                 }, {
@@ -291,20 +294,23 @@ Ext.define('Vede.view.de.j5Controls', {
                         labelWidth: 265,
                         items: [{
                             xtype: 'radiofield',
-                            boxLabel: 'Use latest server version'
+                            boxLabel: 'Use latest server version',
+                            name: 'automationParamsFileSource'
                         }, {
                             xtype: 'radiofield',
                             boxLabel: 'Use custom parameters',
+                            name: 'automationParamsFileSource',
                             checked: true
                         }]
                     }, {
                         xtype: 'button',
-                        //id: 'customizeAutomationParamsBtn',
+                        cls: 'customizeAutomationParamsBtn',
                         margin: '0 0 15 0',
                         text: '<b>Customize Automation Parameters</b>'
                     }, {
                         xtype: 'filefield',
-                        //id: 'sourcePlateListSelector',
+                        cls: 'sourcePlateListSelector',
+                        validateOnChange: false,
                         width: 350,
                         fieldLabel: '<b>Source Plate List:</b>',
                         labelSeparator: ' ',
@@ -312,7 +318,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'filefield',
-                        //id: 'zippedPlateFilesSelector',
+                        cls: 'zippedPlateFilesSelector',
+                        validateOnChange: false,
                         width: 350,
                         fieldLabel: '<b>Zipped Plate Files:</b>',
                         labelSeparator: ' ',
@@ -320,7 +327,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'filefield',
-                        //id: 'assemblyFileSelector',
+                        cls: 'assemblyFileSelector',
+                        validateOnChange: false,
                         width: 350,
                         fieldLabel: '<b>j5 Assembly File:</b>',
                         labelSeparator: ' ',
@@ -328,20 +336,26 @@ Ext.define('Vede.view.de.j5Controls', {
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'button',
-                        //id: 'distributePCRBtn',
+                        cls: 'distributePCRBtn',
                         margin: '15 0 0 0',
                         text: '<b>Distribute PCR Reactions</b>'
                     }]
                 }, {
                     xtype: 'panel',
                     title: 'j5 Files',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
                     items: [{
                         xtype: 'container',
+                        flex: 1,
                         layout: {
                             align: 'stretch',
                             type: 'hbox'
                         },
-                        items: [{
+                        items: [
+                            {
                             xtype: 'container',
                             flex: 1,
                             padding: 5,
@@ -349,36 +363,42 @@ Ext.define('Vede.view.de.j5Controls', {
                                 align: 'stretch',
                                 type: 'vbox'
                             },
+                            height: 366,
                             items: [{
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5SequenceFileBtn',
+                                cls: 'generatej5SequenceFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Sequence File</b>',
                                 tooltip: "The sequences list file is a CSV file that contains a list of all of the source/template sequences from which DNA parts will be defined."
                             }, {
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5PartsFileBtn',
+                                cls: 'generatej5PartsFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Parts File</b>',
                                 tooltip: 'The parts list file is a CSV file that contains the definitions of all of the DNA parts that may be utilized during the assembly process.'
                             }, {
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5TargetPartsFileBtn',
+                                cls: 'generatej5TargetPartsFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Target Parts File</b>',
                                 tooltip: 'The target part order list file is a CSV file that determines how the DNA parts will be arranged in the assembly. The order of combinatorial bins or parts in the file matches the order of bins or parts in the resulting assembly (the last bin or part in the list will be cyclicly followed by the first bin or part). The same part may be utilized more than once in any given assembly.'
                             }, {
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5EugeneRulesFileBtn',
+                                cls: 'generatej5EugeneRulesFileBtn',
                                 margin: 3,
+                                maxHeight: 23,
                                 text: '<b>Generate j5 Eugene Rules File</b>',
                                 tooltip: 'The Eugene (a biological design specification computer language) rules list file is a text file that contains a list of design rules. j5 checks that these rules are satisfied prior to designing an assembly. Currently, j5 only enforces three types of Eugene rules (NOTMORETHAN, NOTWITH, and WITH) and ignores all other rules and declarations; all lines that do not begin with "Rule" are ignored, as well as everything following the commenting escape characters "//".'
                             }]
-                        }, {
+                        }, 
+                        {
                             xtype: 'container',
                             flex: 1,
                             padding: 5,
@@ -389,7 +409,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             items: [{
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5GenbankFileBtn',
+                                cls: 'generatej5GenbankFileBtn',
                                 margin: 3,
                                 maxHeight: 23,
                                 text: '<b>Generate Genbank File</b>',
@@ -397,7 +417,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             }, {
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5FastaFileBtn',
+                                cls: 'generatej5FastaFileBtn',
                                 margin: 3,
                                 maxHeight: 23,
                                 text: '<b>Generate FASTA File</b>',
@@ -405,7 +425,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             }, {
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5jbeiSeqFileBtn',
+                                cls: 'generatej5jbeiSeqFileBtn',
                                 margin: 3,
                                 maxHeight: 23,
                                 text: '<b>Generate jbei-seq File</b>',
@@ -422,7 +442,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             items: [{
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5ParamsFileBtn',
+                                cls: 'generatej5ParamsFileBtn',
                                 margin: 3,
                                 maxHeight: 23,
                                 text: '<b>Generate j5 Parameters File</b>',
@@ -430,7 +450,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             }, {
                                 xtype: 'button',
                                 flex: 1,
-                                //id: 'generatej5AutomationParamsBtn',
+                                cls: 'generatej5AutomationParamsBtn',
                                 margin: 3,
                                 maxHeight: 23,
                                 text: '<b>Generate Downstream Automation Parameters File</b>',
@@ -439,6 +459,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     }, {
                         xtype: 'container',
+                        flex: 0.3,
                         margin: 20,
                         layout: {
                             align: 'stretch',
@@ -447,8 +468,9 @@ Ext.define('Vede.view.de.j5Controls', {
                         },
                         items: [{
                             xtype: 'button',
-                            //id: 'downloadAllj5FilesBtn',
+                            cls: 'downloadAllj5FilesBtn',
                             maxWidth: 150,
+                            maxHeight: 23,
                             text: '<b>Download All Files</b>'
                         }]
                     }]
