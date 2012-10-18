@@ -97,6 +97,8 @@ Ext.define('Vesa.view.AppViewport', {
                     items: [
                         {
                             xtype: 'panel',
+                            baseCls: 'sfsdf',
+                            cls: 'sfs',
                             id: 'projectDesignTab',
                             layout: {
                                 type: 'fit'
@@ -106,6 +108,7 @@ Ext.define('Vesa.view.AppViewport', {
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'projectTab1',
+                                overCls: 'project-tab-focus',
                                 autoWidth: true,
                                 focusCls: 'project-tab-focus',
                                 icon: 'resources/images/ux/designTab.png',
