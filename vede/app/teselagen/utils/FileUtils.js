@@ -1,25 +1,23 @@
 /**
  * @class Teselagen.utils.FileUtils
  *
- * 
+ *
  *
  * @author Diana Wong
  */
 
 Ext.define("Teselagen.utils.FileUtils", {
 
-	singleton: true,
+    singleton: true,
 
     requires: [
-    	"Ext.Ajax"
+        "Ext.Ajax"
     ],
 
 
     /**
      * Loads a file using an Ajax request, synchronously.
-     * @param {String} url The url to retrieve data from.
-     * Uses a synchronus Ajax request.
-     * @param {String} url Url path to file
+     * @param {String} url The url from which to retrieve data.
      * @returns {String} file as a string
      */
     loadFile: function(url) {
