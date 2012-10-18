@@ -38,6 +38,7 @@ else if (app.program.stage) process.env.NODE_ENV = "Stage";
 else if (app.program.prod) process.env.NODE_ENV = "Production";
 else process.env.NODE_ENV = "Development";
 
+
 app.use(function (req, res, next) {
   //console.log('using cors');
   if(req.method === 'OPTIONS') {
