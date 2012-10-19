@@ -72,7 +72,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       sessionId: "000",
       userId: "0"
     };
-    this.z();    
+    this.authenticate();  
   }
   ,
   authenticate: function(app) {
