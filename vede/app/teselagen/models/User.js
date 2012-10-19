@@ -23,10 +23,15 @@ Ext.define("Teselagen.models.User", {
     }],
     proxy: {
         type: 'rest',
-        url: sessionData.baseURL+'getUser',
+        url: 'getUser.json',
         reader: {
             type: 'json',
             root: 'user'
+        },
+        buildUrl: function() {
+            console.log(sessionData.baseURL);
+            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
+            return sessionData.baseURL + 'getUser';
         }
     }
 });

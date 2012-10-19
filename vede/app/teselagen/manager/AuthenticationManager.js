@@ -10,7 +10,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   mixins: {
     observable: "Ext.util.Observable"
   },
-  baseURL: null,
   /**
    * @param {Teselagen.manager.SequenceManager} sequenceManager The
    * SequenceManager to undo/redo actions for.

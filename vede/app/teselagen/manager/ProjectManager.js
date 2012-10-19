@@ -38,10 +38,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 */
 	loadProjects: function (cb) {
 		console.log('PM: Showing projects');
-		
+		var self = this;
 		this.projects = this.currentUser.projects().load({
 			callback: function () {
-				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(this.projects);
+				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
 				if(cb) return cb(); // For Testing
 			}
 		});
