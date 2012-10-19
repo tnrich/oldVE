@@ -23,7 +23,7 @@ Ext.define("Teselagen.models.User", {
     }],
     proxy: {
         type: 'rest',
-        url: 'getUser.json',
+        url: sessionData.baseURL+'getUser',
         reader: {
             type: 'json',
             root: 'user'

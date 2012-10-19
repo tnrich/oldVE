@@ -19,7 +19,7 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 		title: 'Canvas',
 		xtype: 'draw',
 		layout: 'fit',
-		cls: 'designCanvas',
+		cls: 'designCanvas'
 	}]
 }
 

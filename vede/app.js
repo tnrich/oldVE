@@ -1,5 +1,4 @@
 var splashscreen;
-var session;
 
 Ext.define('sessionData', { 
           singleton: true, 

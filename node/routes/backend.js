@@ -193,7 +193,64 @@ module.exports = function (app) {
 
   app.all('/getUser', restrict, function (req, res) {
     console.log(req.user);
-    res.send('ok');
+
+    var ajaxResponse = {
+    "success": true,
+    "user": [
+        {
+            "id": 1,
+            "name": "Rodrigo Pavez",
+            "preferences" :
+            {
+              "TestPreference" : "Preference Test"
+            }
+        }
+    ]
+};
+
+    res.send(ajaxResponse);
+  });
+
+  app.all('/getProjects', restrict, function (req, res) {
+    var ajaxResponse = {
+    "success": true,
+    "projects": [
+        {
+          "id": 1,
+            "name": "Project A",
+            "user_id": 1,
+            "DateCreated":"Thu Oct 11 2012 14:49:27 GMT-0700 (PDT)",
+            "DateModified":"Thu Oct 12 2012 14:49:27 GMT-0700 (PDT)",
+            "veprojects" : 
+            [
+                {
+                    "id": 1,
+                    "name": "VE Project A",
+                    "part" :  {
+                        "id" : 1,
+                        "name" : "Part 1"
+                    }
+                }
+            ]
+        },
+        {
+          "id": 2,
+            "name": "Project B",
+            "user_id": 1,
+            "DateCreated":"Thu Oct 1 2012 14:49:27 GMT-0700 (PDT)",
+            "DateModified":"Thu Oct 11 2012 14:49:27 GMT-0700 (PDT)"
+        },
+        {
+            "id": 3,
+            "name": "Project C",
+            "user_id": 1,
+            "DateCreated":"Thu Oct 3 2012 14:49:27 GMT-0700 (PDT)",
+            "DateModified":"Thu Oct 4 2012 14:49:27 GMT-0700 (PDT)"
+        }
+    ]
+};
+
+    res.send(ajaxResponse);
   });
 
   app.all('/addModel', restrict, function (req, res) {
