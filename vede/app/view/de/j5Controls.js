@@ -187,9 +187,14 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'displayfield',
                         flex: 1,
-                        hidden: true,
+                        //hidden: true,
+                        border: 1,
+                        style: {
+                            borderColor: '#c5c5c5',
+                            borderStyle: 'solid'
+                        },
                         cls: 'j5ResponseTextField',
-                        value: 'Display Field',
+                        value: '',
                         hideLabel: true
                     }, {
                         xtype: 'container',

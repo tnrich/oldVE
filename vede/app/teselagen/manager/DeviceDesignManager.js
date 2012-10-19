@@ -80,58 +80,95 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     // J5Collection management
     //================================================================
 
-    createJ5Collection: function(pNumBins, pIsCircular) {
+    createEmptyJ5Collection: function(pDesign, pNumBins, pIsCircular) {
         var collection = Ext.create("Teselagen.models.J5Collection", {
             isCircular: pIsCircular
         });
 
         collection.createEmptyCollection(pNumBins);
+
+        pDesign.setJ5Collection(collection);
         return collection;
+    },
+
+    isCircular: function(pDevice) {
+        return pDevice.getJ5Collection().isCircular();
+    },
+
+    binCount: function(pDevice) {
+        return pDevice.getJ5Collection().binCount();
     },
 
     /** NEEDS TESTING
      * Checks if J5Collection is combinatorial: There are more than one
      * Part in a J5Bin.
-     * @param {Teselagen.models.J5Collection} pJ5Collection
+     * @param {Teselagen.models.DeviceDesign}
      * @returns {Boolean}
      */
-    checkCombinatorial: function(pJ5Collection) {
+    checkCombinatorial: function(pDesign) {
+        var collection = pDesign.getJ5Collection();
         var combo   = false;
 
-        if (pJ5Collection === null || pJ5Collection === undefined) {
+        if (collection === null || collection === undefined) {
             return combo;
         }
 
-        if (pJ5Collection.bins() === null || pJ5Collection.bins() === undefined) {
+        if (collection.bins() === null || collection.bins() === undefined) {
             return combo;
         }
 
-        for (var i = 0; i < pJ5Collection.bins().count(); i++) {
-            if (pJ5Collection.bins().getAt(i).parts().count() > 1) {
+        for (var i = 0; i < collection.bins().count(); i++) {
+            if (collection.bins().getAt(i).parts().count() > 1) {
                 combo = true;
             }
         }
-        pJ5Collection.set("combinatorial", combo);
+        collection.set("combinatorial", combo);
         return combo;
+    },
+
+    /** NEEDS TESTING
+     * Finds the maximum number of parts in a bin in a collection.
+     * @param {Teselagen.models.DeviceDesign}
+     * @returns {int}
+     */
+    findMaxNumParts: function(pDesign) {
+        var collection = pDesign.getJ5Collection();
+        var num = 0;
+
+        if (collection === null || collection === undefined) {
+            return num;
+        }
+
+        if (collection.bins() === null || collection.bins() === undefined) {
+            return num;
+        }
+
+        for (var i = 0; i < collection.bins().count(); i++) {
+            if (collection.bins().getAt(i).parts().count() > num) {
+                num = collection.bins().getAt(i).parts().count();
+            }
+        }
+        return num;
     },
 
     /** NEEDS TESTING
      * Checks if each J5Bin has at least one Part and one accompanying SequenceFile.
      * Sets j5Read flag on collection: true if conditions are true, false if not.
-     * @param {Teselagen.models.J5Collection} pJ5Collection
+     * @param {Teselagen.models.DeviceDesign} pDesign
      * @returns {Boolean}
      */
-    checkJ5Ready: function(pJ5Collection) {
+    checkJ5Ready: function(pDesign) {
+        var collection = pDesign.getJ5Collection();
         var ready = true;
 
-        if (pJ5Collection === null || pJ5Collection === undefined) {
+        if (collection === null || collection === undefined) {
             return false;
         }
 
-        if (pJ5Collection.bins() === null || pJ5Collection.bins() === undefined) {
+        if (collection.bins() === null || collection.bins() === undefined) {
             return false;
         }
-        var bins = pJ5Collection.bins();
+        var bins = collection.bins();
 
         for (var i = 0; i < bins.count(); i++) {
             if (bins.getAt(i).parts() === undefined) {
@@ -143,44 +180,122 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             var parts = bins.getAt(i);
             for (var j = 0; j < parts.count(); j++) {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
-                if (Ext.getClassName(parts.getAt(j).get("sequenceFile")) !== "Teselagen.models.SequenceFile") {
+                if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
                     ready = false;
                 }
-
                 if (parts.getAt(i).isEmpty() === true) {
                     ready = false;
                 }
             }
         }
-        pJ5Collection.set("j5Ready", ready);
+        collection.set("j5Ready", ready);
         return ready;
     },
-
     //================================================================
     // J5Bin management
     //================================================================
+
+    createEmptyJ5Bin: function(pDevice, pIndex, pBinName) {
+        var bin = Ext.create("Teselagen.models.J5Bin", {
+            binName: pBinName
+        });
+
+        pDevice.getJ5Collection().addToBin(bin, pIndex);
+        return bin;
+    },
+
+    getBinIndex: function(pDevice, pJ5Bin) {
+        return pDevice.getJ5Collection().getBinIndex(pJ5Bin);
+    },
+
+    isUniqueBinName: function(pDevice, pName){
+        return pDevice.getJ5Collection().isUniqueBinName(pName);
+    },
+
+    addBin: function(pDevice, pIndex, pJ5Bin) {
+        var success = pDevice.getJ5Collection().addToBin(pJ5Bin, pIndex);
+        return success;
+    },
+
+    addBinByIndex: function(pDevice, pIndex) {
+        var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex);
+        return success;
+    },
+
+    removeBin: function(pDevice, pJ5Bin) {
+        var success = pDevice.getJ5Collection().removeFromBin(pJ5Bin);
+        return success;
+    },
+
+    removeBinByIndex: function(pDevice, pIndex) {
+        var success = pDevice.getJ5Collection().deleteBinByIndex(pIndex);
+        return success;
+    },
+
+
     /** NEEDS TESTING
      * @param {Teselagen.models.J5Bin} pJ5Bin
      * @returns {int}
      */
-    countNonEmptyParts: function(pJ5Bin) {
+    countNonEmptyParts: function(pDevice, pBinIndex) {
+        var bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
         var count = 0;
-        for (var i = 0; i < pJ5Bin.parts().count(); i++) {
-            if (!pJ5Bin.parts().getAt(i).isEmpty()) {
+        for (var i = 0; i < bin.parts().count(); i++) {
+            if (!bin.parts().getAt(i).isEmpty()) {
                 count += 1;
             }
         }
         return count;
     },
 
+    //addPart
+
 
     //================================================================
     // Parts/SequenceFile management
     //================================================================
+    /**
+     * Create a Part. Optional parameters require a "null" in its place.
+     * @param {String} pName
+     * @param {int} pStart
+     * @param {int} pEnd
+     * @param {[Boolean]} pRevComp Reverse Complement. Default is false.
+     * @param {[Boolean]} pDirectionForward Direction Forward. Default is true.
+     * @param {String} fas (?)
+     * @param {pIconID} pIconID (?)
+     */
+    createPart: function(pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
+        var part = Ext.create("Teselagen.models.J5Bin", {
+            name: pName,
+            genbankStartBP: pStart,
+            endBP: pEnd,
+            revComp: pRevComp,
+            directionForward: pDirectionForward,
+            fas: pFas,
+            iconID: pIconID
+        });
+        return part;
+    },
 
+    /**
+     * Create a SequenceFile. Optional parameters require an empty string "" in its place.
+     * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "jbei-seq"
+     * @param {String} pSequenceFileContent The content of the file in string form
+     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
+     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     */
+    createSequenceFile: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
+        var seq = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileFormat: pSequenceFileFormat,
+            sequenceFileContent: pSequeneceFileContent,
+            sequenceFileName: pSequenceFileName,
+            partSource: pPartSource
+        });
+        return seq;
+    },
 
     //================================================================
-    // CSV Readers
+    // CSV Readers --> Refactor to Parsers?
     //================================================================
     parseSeqCsv: function(pCsv) {
 
@@ -200,7 +315,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     // Helper Functions
     //================================================================
 
-    /**
+    /** REFACTOR INTO FormatUtils.js?
      * Finds reverse complement of a sequence.
      * @param {String} pSeq
      * @returns {String} reverse complement sequence

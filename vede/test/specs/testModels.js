@@ -237,7 +237,7 @@ Ext.onReady(function() {
                 expect(seq.get("hash")).toBe("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
             });
             
-            it("setSequenceFileContent(), setPartSource(), setSequenceFileName()", function(){
+            it("setSequenceFileContent(), setPartSource(), setSequenceFileName(), test validate()", function(){
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var trueHash    =  "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3";
 
@@ -254,6 +254,8 @@ Ext.onReady(function() {
 
                 var name = seq.setSequenceFileName();
                 expect(name).toBe("ssrA_tag_enhance.fas");
+
+                expect(seq.validate().length).toBe(0);
             });
 
             it("Creates SequenceFile: depends on setSequenceFileContent, setPartSource, setSequenceFileName", function(){
