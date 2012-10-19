@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.models.SequenceFile
- * Class describing a SequenceFile for J5Parameters.
+ * Class describing a SequenceFile.
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */
@@ -79,18 +79,18 @@ Ext.define("Teselagen.models.SequenceFile", {
     // Some of these taken from SequenceFileManager/SequenceProxy
     init: function() {
 
+        // Set the Hash Field
+        this.setSequenceFileContent(this.get("sequenceFileContent"));
+
         // Set PartSource with Display ID
         this.setPartSource();
 
         // Set FileName if given ""
         this.setSequenceFileName();
-
-        // Set the Hash Field
-        this.setSequenceFileContent(this.get("sequenceFileContent"));
     },
 
     /**
-     * Sets the sequenceFileContent for this part
+     * Sets the sequenceFileContent for thi
      * NOTE: Must execute setSequenceFileContent() to set the hash from "" to a unique identifier.
      * @param {String} pContent The sequence file, in string form.
      * @returns {String} SequenceHash

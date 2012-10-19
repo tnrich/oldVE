@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.constants.SBOLvIcons
- * Class with constants
+ * Class with constants.
  * @author Diana Wong
  * @author ? original
  */

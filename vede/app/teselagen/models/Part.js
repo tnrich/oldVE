@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.models.Part
- * Class describing a Part for J5Parameters.
+ * Class describing a Part.
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */

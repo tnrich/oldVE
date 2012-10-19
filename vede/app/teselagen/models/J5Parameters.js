@@ -1,8 +1,8 @@
 /**
  * @class Teselagen.models.J5Parameters
  * Class describing J5Parameters.
- * Creating a J5Parameters results in default values, regardless if parameters are included in
- * Ext.create("Teselagen.models.J5Parameters", {PARAMETERS}).
+ * Creating a J5Parameters results in default values, regardless if parameters are included as seen in:
+ *          Ext.create("Teselagen.models.J5Parameters", {PARAMETERS}).
  * User must specify non-default values by creating the object and calling:
  *          j5param = Ext.create("Teselagen.models.J5Parameters");
  *          j5param.set("FILEDNAME", newParameter);

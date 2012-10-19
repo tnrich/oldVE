@@ -212,7 +212,7 @@ Ext.define("Teselagen.models.J5Collection", {
         return deleted;
     },
 
-    /**
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Adds a Part to the J5Bin specified by binIndex at the position specified,
      * or to the end of the J5Bin if no position specified.
      *
@@ -223,7 +223,7 @@ Ext.define("Teselagen.models.J5Collection", {
      */
     addPartToBin: function(pPart, pBinIndex, pPosition) {
         var j5Bin;
-        var cnt     = this.binCount();
+        var cnt = this.binCount();
 
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = this.bins().getAt(pBinIndex);
@@ -269,17 +269,8 @@ Ext.define("Teselagen.models.J5Collection", {
         if (this.bins() === null || this.bins().count() === 0) {
             return false;
         }
-        var bin, j5Bin; //j5 bin
-
         for (var i = 0; i < this.bins().count(); i++) {
-            bin = this.bins().getAt(i);
-            partIsPresent = bin.hasPart(pPart);
-            /*for (var k = 0; k < bin.get("binItemsVector").length; k++) {
-                j5Bin = bin.get("binItemsVector")[k];
-                if (j5Bin === pPart) {
-                    return true;
-                }
-            }*/
+            partIsPresent = this.bins().getAt(i).hasPart(pPart);
         }
         return partIsPresent;
     },
@@ -296,7 +287,8 @@ Ext.define("Teselagen.models.J5Collection", {
         for (var i = 0; i < this.binCount(); i++) {
             var j5Bin = this.bins().getAt(i);
             for (var j = 0; j < j5Bin.partCount(); j++) {
-                if (j5Bin.parts().getAt(i) === pPart) {
+                //if (j5Bin.parts().getAt(i) === pPart) {
+                    if (j5Bin.parts().getAt(i).isEqual(pPart)) {
                     bin = j5Bin.parts().getAt(i);
                 }
             }
