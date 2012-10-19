@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.models.EugeneRule
- * Class describing a Eugene Rule for J5Parameters.
+ * Class describing a Eugene Rule.
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */

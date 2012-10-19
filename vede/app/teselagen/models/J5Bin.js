@@ -119,14 +119,6 @@ Ext.define("Teselagen.models.J5Bin", {
      */
     indexOfPart: function(pPart) {
         var index = -1;
-        /*if (this.parts() === null || this.parts().count() === 0) {
-            return index;
-        }
-        for (var i = 0; i < this.parts().count(); i++) {
-            if (this.parts().getAt(i) === pPart) {
-                index = i;
-            }
-        }*/
         index = this.parts().indexOf(pPart);
         return index;
     },
@@ -210,18 +202,19 @@ Ext.define("Teselagen.models.J5Bin", {
         }
     },
 
-    /**
+    /** From PartProxy.as.
      * Deletes a Part after checking if a EugeneRule should also be deleted.
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
      * No need to actually delete SequenceFiles or Parts.
      * @param {Teselagen.models.Part} pPart Part to be deleted.
-     * @param {Teselagen.manager.Store} pRulesStore List of EugeneRules in this design.
+     * @param {Teselagen.manager.DeviceDesign}
+     * @returns {Boolean} True if removed, false if not.
      */
     deletePart: function(pPart, pDeviceDesign) {
-        var linkedPartsExist = false;
-        //var isSequenceFileUsedElsewhere = false;
+        var cnt = this.partCount(); //this.parts().count()
+        var deleted = false;
 
-        for (var i = 0; i < this.parts().count(); i++) {
+        for (var i = 0; i < cnt; i++) {
             if (this.parts().getAt(i) === pPart ) {
                 // want to delete this Part
 
@@ -230,39 +223,15 @@ Ext.define("Teselagen.models.J5Bin", {
                 pDeviceDesign.removeFromRules(rulesToDelete);
 
                 this.parts().removeAt(i);
-
-                // If no linked Parks,
-                // Determine if there are parts with the same SequenceFile. If yes, cannot remove.
-                // Determine if there are EugeneRules that will become obsolete. If yes, remove them.
-                /*if (!linkedPartsExist) {
-                    isSequenceFileUsedElsewhere = false;
-
-                    // SequenceFile
-                    for (var k = 0; k < this.parts().count(); k++) {
-                        if (i!==k && this.parts().getAt(i).get("sequenceFile") === this.parts().getAt(k).get("sequenceFile")) {
-                            isSequenceFileUsedElsewhere = true;
-                            break;
-                        }
-                    }
-                    if(!isSequenceFileUsedElsewhere) {
-                        pSequenceFileManager.deleteItem(pPart.get("partVO").get("sequenceFile"));
-                    }
-
-                    // Eugene Rules
-                    var eugeneRules = pRulesStore.getRulesInvolvingPartVO(pPart.get("partVO"));
-                    for (k = 0; k < eugeneRules.length; k++) {
-                        pRulesStore.deleteItem(eugeneRules[k]);
-                    }
-                }
-
-                // Delete the Part (and PartVO will also be deleted if no other part is using it).
-                this.parts.splice(i, 1);
-                break;*/
             }
         }
+        var newCnt  = this.partCount();
+        if (newCnt < cnt) {
+            deleted = true;
+        }
+        return deleted;
 
         // Refresh all parts (to change colors, etc)
-
         // DW: NEED TO FIRE EVENT TO REFRESH THE VIEW.
     },
     
@@ -290,13 +259,6 @@ Ext.define("Teselagen.models.J5Bin", {
      * @returns {Boolean} if unique, false if not.
      */
     isUniquePartName: function(pName) {
-
-        /*for (var i = 0; i < this.parts().count(); i++) {
-            if (this.parts().getAt(i).get("name") === pName) {
-                return false;
-            }
-        }
-        return true;*/
         var index = this.parts().find("name", pName);
 
         if (index === -1) {
