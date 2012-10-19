@@ -133,30 +133,6 @@ Ext.define("Teselagen.models.J5Collection", {
     // It makes more sense to put these methods here.
 
     /**
-     * @param {Teselagen.models.Part} pPart
-     * @returns {Boolean} True is in the J5Bins, False if not.
-     */
-    isPartInCollection: function(pPart) {
-        var partIsPresent = false;
-        if (this.bins() === null || this.bins().count() === 0) {
-            return false;
-        }
-        var bin, j5Bin; //j5 bin
-
-        for (var i = 0; i < this.bins().count(); i++) {
-            bin = this.bins().getAt(i);
-            partIsPresent = bin.hasPart(pPart);
-            /*for (var k = 0; k < bin.get("binItemsVector").length; k++) {
-                j5Bin = bin.get("binItemsVector")[k];
-                if (j5Bin === pPart) {
-                    return true;
-                }
-            }*/
-        }
-        return partIsPresent;
-    },
-
-    /**
      * @returns {Boolean} isCircular
      */
     isCircular: function() {
@@ -260,7 +236,7 @@ Ext.define("Teselagen.models.J5Collection", {
         return added;
     },
 
-    /**
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Adds a Part to the J5Bin specified by binIndex at the position specified,
      * or to the end of the J5Bin if no position specified
      *
@@ -284,7 +260,31 @@ Ext.define("Teselagen.models.J5Collection", {
         return removed;
     },
 
-    /**
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Boolean} True is in the J5Bins, False if not.
+     */
+    isPartInCollection: function(pPart) {
+        var partIsPresent = false;
+        if (this.bins() === null || this.bins().count() === 0) {
+            return false;
+        }
+        var bin, j5Bin; //j5 bin
+
+        for (var i = 0; i < this.bins().count(); i++) {
+            bin = this.bins().getAt(i);
+            partIsPresent = bin.hasPart(pPart);
+            /*for (var k = 0; k < bin.get("binItemsVector").length; k++) {
+                j5Bin = bin.get("binItemsVector")[k];
+                if (j5Bin === pPart) {
+                    return true;
+                }
+            }*/
+        }
+        return partIsPresent;
+    },
+
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Determines the J5Bin a Part is in.
      *
      * @param {Teselagen.models.Part} pPart The part whose J5Bin it belongs to.
