@@ -1,3 +1,8 @@
+/**
+ * @class Teselagen.models.User
+ * Class describing a User.
+ * @author Rodrigo Pavez
+ */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
     requires: ['Teselagen.models.Project','Teselagen.models.ApplicationPreferences'],
