@@ -40,6 +40,15 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     validations: [
         {field: "sequenceFileFormat",   type: "presence"},
+        {
+            field: "sequenceFileFormat",
+            type: "inclusion",
+            list: [
+                Teselagen.constants.Constants.self.GENBANK,     // "Genbank"
+                Teselagen.constants.Constants.self.FASTA,       // "FASTA"
+                Teselagen.constants.Constants.self.JBEI_SEQ     // "jbei-seq"
+            ]
+        },
         {field: "sequenceFileContent",  type: "presence"},
         {field: "sequenceFileName",     type: "presence"},
         {field: "partSource",           type: "presence"},
@@ -113,6 +122,10 @@ Ext.define("Teselagen.models.SequenceFile", {
         var displayID = "";
         var cnt;
         var content = this.get("sequenceFileContent");
+
+        if (this.get("partSource") !== "") {
+            return this.get("partSource");
+        }
 
         if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.self.GENBANK) {
             cnt = content.match(/LOCUS *(\S*)/);
