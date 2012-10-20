@@ -171,8 +171,8 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "masterOligoNumberOfDigitsValue",                   type: "int",        defaultValue: this.self.MONOD_Default},
         {name: "masterPlasmidNumberOfDigitsValue",                 type: "int",        defaultValue: this.self.MPNOD_Default},
         {name: "gibsonOverlapBPsValue",                            type: "int",        defaultValue: this.self.GOB_Default},
-        {name: "gibsonOverlapMinTmValue",                          type: "Number",     defaultValue: this.self.GOMT_Default},
-        {name: "gibsonOverlapMaxTmValue",                          type: "Number",     defaultValue: this.self.MOLB_Default},
+        {name: "gibsonOverlapMinTmValue",                          type: "Float",      defaultValue: this.self.GOMT_Default},
+        {name: "gibsonOverlapMaxTmValue",                          type: "Float",      defaultValue: this.self.MOLB_Default},
 
         {name: "maxOligoLengthBPsValue",                           type: "int",        defaultValue: this.self.MFSGB_Default},
         {name: "minFragmentSizeGibsonBPsValue",                    type: "int",        defaultValue: this.self.GGOHB_Default},
@@ -181,20 +181,20 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "goldenGateTerminiExtraSeqValue",                   type: "String",     defaultValue: this.self.GGTES_Default},
 
         {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue",  type: "int",        defaultValue: this.self.MIGGOC_Default},
-        {name: "oligoSynthesisCostPerBPUSDValue",                  type: "Number",     defaultValue: this.self.OSCPB_Default},
-        {name: "oligoPagePurificationCostPerPieceUSDValue",        type: "Number",     defaultValue: this.self.OPPCPP_Default},
+        {name: "oligoSynthesisCostPerBPUSDValue",                  type: "Float",      defaultValue: this.self.OSCPB_Default},
+        {name: "oligoPagePurificationCostPerPieceUSDValue",        type: "Float",      defaultValue: this.self.OPPCPP_Default},
         {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int",        defaultValue: this.self.OMLPPRB_Default},
         {name: "minPCRProductBPsValue",                            type: "int",        defaultValue: this.self.MPPB_Default},
 
-        {name: "directSynthesisCostPerBPUSDValue",                 type: "Number",     defaultValue: this.self.DSCPB_Default},
-        {name: "directSynthesisMinCostPerPieceUSDValue",           type: "Number",     defaultValue: this.self.DSMCPP_Default},
+        {name: "directSynthesisCostPerBPUSDValue",                 type: "Float",      defaultValue: this.self.DSCPB_Default},
+        {name: "directSynthesisMinCostPerPieceUSDValue",           type: "Float",      defaultValue: this.self.DSMCPP_Default},
         {name: "primerGCClampValue",                               type: "int",        defaultValue: this.self.PGC_Default},
         {name: "primerMinSizeValue",                               type: "int",        defaultValue: this.self.PMS_Default},
         {name: "primerMaxSizeValue",                               type: "int",        defaultValue: this.self.PMAXS_Default},
 
-        {name: "primerMinTmValue",                                 type: "Number",     defaultValue: this.self.PMT_Default},
-        {name: "primerMaxTmValue",                                 type: "Number",     defaultValue: this.self.PMAXT_Default},
-        {name: "primerMaxDiffTmValue",                             type: "Number",     defaultValue: this.self.PMDT_Default},
+        {name: "primerMinTmValue",                                 type: "Float",      defaultValue: this.self.PMT_Default},
+        {name: "primerMaxTmValue",                                 type: "Float",      defaultValue: this.self.PMAXT_Default},
+        {name: "primerMaxDiffTmValue",                             type: "Float",      defaultValue: this.self.PMDT_Default},
         {name: "primerMaxSelfAnyThValue",                          type: "int",        defaultValue: this.self.PMSAT_Default},
         {name: "primerMaxSelfEndThValue",                          type: "int",        defaultValue: this.self.PMSET_Default},
 
@@ -205,12 +205,15 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "primerDnaConcValue",                               type: "int",        defaultValue: this.self.PDC_Default},
 
         {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue",       type: "int",        defaultValue: this.self.M3BBTWIH_Default},
-        {name: "misprimingMinTmValue",                             type: "Number",     defaultValue: this.self.MMT_Default},
-        {name: "misprimingSaltConcValue",                          type: "Number",     defaultValue: this.self.MSC_Default},
-        {name: "misprimingOligoConcValue",                         type: "Number",     defaultValue: this.self.MOC_Default},
+        {name: "misprimingMinTmValue",                             type: "Float",      defaultValue: this.self.MMT_Default},
+        {name: "misprimingSaltConcValue",                          type: "Float",      defaultValue: this.self.MSC_Default},
+        {name: "misprimingOligoConcValue",                         type: "Float",      defaultValue: this.self.MOC_Default},
         {name: "outputSequenceFormatValue",                        type: "String",     defaultValue: this.self.OSF_Default},
 
         {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default}
+    ],
+
+    validation: [
     ],
 
     // Need this because fields:[] does not actually set the defaults!
