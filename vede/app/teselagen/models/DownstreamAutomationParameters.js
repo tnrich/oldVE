@@ -161,6 +161,9 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
         //{name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: this.self.ZPTB_DEFAULT}
     ],
 
+    validations: [
+    ],
+
     // Need this because fields:[] does not actually set the defaults!
     // Keep the inputted values if they are not undefined
     init: function() {

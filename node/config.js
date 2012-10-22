@@ -73,13 +73,15 @@ module.exports = function (app, express) {
 
 
   // MONGODB CONNECTION
-
+  /*
   var opts = {
     getlasterror: 1,
     j: true,
     wtimeout: 10000
   };
-  app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', '62631', opts, function () {
+  */
+
+  app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
     console.log('MONGODB: MONGODB is online');
     if(app.program.examples) app.development.reloadExamples();
     if(app.program.guest) app.development.reloadUsers();

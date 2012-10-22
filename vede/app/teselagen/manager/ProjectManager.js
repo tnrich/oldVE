@@ -18,7 +18,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 * Load User Info
 	 */
-	loadUser: function () {
+	loadUser: function (cb) {
 		console.log('PM: Loading User');
 		var users = Ext.create("Teselagen.store.UserStore");
 		var self = this;
@@ -26,6 +26,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			callback: function (records,operation,success) {
 				if(records.length != 1) return console.log('Error loading user');
 				self.currentUser = users.first();
+				if(cb) self.loadProjects(cb); // For Testing
 				self.loadProjects();
 				//console.log(self.currentUser.getPreferences());
 			}
@@ -35,12 +36,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 * Load User Projects
 	 */
-	loadProjects: function () {
+	loadProjects: function (cb) {
 		console.log('PM: Showing projects');
-		
-		var projects = this.currentUser.projects().load({
+		var self = this;
+		this.projects = this.currentUser.projects().load({
 			callback: function () {
-				Ext.getCmp('projectsWidget').reconfigure(projects);
+				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
+				if(cb) return cb(); // For Testing
 			}
 		});
 		
