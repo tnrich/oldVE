@@ -31,9 +31,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             },
             "button[cls='saveDesignBtn']": {
                 click: this.onSaveDesignClick
-            }
+            },
         });
-
     }
-
 });

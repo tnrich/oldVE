@@ -57,6 +57,8 @@ Ext.application({
         'VectorPanelController',
         'SimulateDigestionController',
         'Vede.controller.AuthWindowController',
+        'DeviceEditor.GridController',
+        'DeviceEditor.InspectorController',
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
