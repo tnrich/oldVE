@@ -148,20 +148,7 @@
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>299</x>
-      <y>728</y>
-      <w>286</w>
-      <h>65</h>
-    </coordinates>
-    <panel_attributes>UserRestrictionEnzymes
---
--activeEnzymeNames: String[]</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>325</x>
-      <y>936</y>
+      <y>702</y>
       <w>260</w>
       <h>39</h>
     </coordinates>
@@ -169,17 +156,27 @@
     <additional_attributes/>
   </element>
   <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>325</x>
+      <y>845</y>
+      <w>221</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>UserRestrictionEnzyme</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>442</x>
-      <y>754</y>
-      <w>90</w>
-      <h>207</h>
+      <x>390</x>
+      <y>702</y>
+      <w>64</w>
+      <h>168</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-r2=groups
+    <panel_attributes>lt=&lt;&lt;&lt;-
 m2=n</panel_attributes>
-    <additional_attributes>52;39;52;182</additional_attributes>
+    <additional_attributes>39;39;39;143</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -210,8 +207,8 @@ m2=n</panel_attributes>
     <coordinates>
       <x>104</x>
       <y>416</y>
-      <w>169</w>
-      <h>65</h>
+      <w>168</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m2=n</panel_attributes>
@@ -234,10 +231,11 @@ m2=n</panel_attributes>
       <x>299</x>
       <y>442</y>
       <w>103</w>
-      <h>311</h>
+      <h>285</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;78;286</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=n</panel_attributes>
+    <additional_attributes>39;39;78;260</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -493,8 +491,8 @@ m2=n</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>65</y>
-      <w>273</w>
-      <h>65</h>
+      <w>272</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;247;39</additional_attributes>
@@ -537,11 +535,11 @@ m2=n</panel_attributes>
     <coordinates>
       <x>1378</x>
       <y>910</y>
-      <w>312</w>
+      <w>260</w>
       <h>65</h>
     </coordinates>
     <panel_attributes>MongoDB Database Diagram
-October 5, 2012</panel_attributes>
+October 22, 2012</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -549,8 +547,8 @@ October 5, 2012</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>26</y>
-      <w>273</w>
-      <h>65</h>
+      <w>272</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;247;39</additional_attributes>
