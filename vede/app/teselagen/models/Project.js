@@ -29,11 +29,14 @@ Ext.define("Teselagen.models.Project", {
         type: 'hasMany',
         model: 'Teselagen.models.VectorEditorProject',
         name: 'veprojects',
-        associationKey: 'veprojects'
+        foreignKey: 'project_id',
+        associationKey: 'veprojects',
+        autoLoad: true
     }],
     proxy: {
-        type: 'rest',
-        url: 'getProjects.json',
+        type: 'ajax',
+//        url: '/vede/test/data/getProjects.json',
+        url: '/vede/test/data/projects.json',
         reader: {
             type: 'json',
             root: 'projects'
