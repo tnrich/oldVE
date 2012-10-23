@@ -47,20 +47,10 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         associationKey: "j5runs"
     }],
     proxy: {
-/*
         type: 'memory',
         reader: {
             type: 'json',
             root: 'deprojects'
-*/
-        type: "ajax",
-        url: "/vede/test/data/json/getDEProjects.json",
-        reader: {
-            type: "json",
-            root: "data"
-        },
-        buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("getProjects", this.url);
         }
     }
 });

@@ -8,7 +8,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	mixins: {
 		observable: "Ext.util.Observable"
 	},
-
+	//singleton: true,
 	projects: null,
 	currentUser: null,
 	workingProject: null,
