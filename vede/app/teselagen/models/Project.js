@@ -48,13 +48,7 @@ Ext.define("Teselagen.models.Project", {
             root: "projects"
         },
         buildUrl: function() {
-            var sm = Teselagen.manager.SessionManager;
-            var constants = Teselagen.constants.Constants;
-            var url = sm.baseURL + "getProjects";
-            if (sm.getEnv() === constants.ENV_TEST) {
-                url = this.url;
-            }
-            return url;
+            return Teselagen.manager.SessionManager.buildUrl("getProjects", this.url);
         }
             
     }
