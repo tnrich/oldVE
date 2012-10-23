@@ -1,11 +1,18 @@
 /**
  * @class Teselagen.constants.SBOLvIcons
- * Class with constants
+ * Class with constants.
  * @author Diana Wong
  * @author ? original
  */
 Ext.define("Teselagen.constants.SBOLvIcons", {
     singleton: true,
+
+    requires: [
+    ],
+
+    proxy: {
+        type: "memory"
+    },
 
     statics: {
         ASSEMBLY_JUNCTION:                      "assembly_junction",
@@ -32,6 +39,9 @@ Ext.define("Teselagen.constants.SBOLvIcons", {
         //private static var _sbolvIconsDataProvider:ArrayCollection,
 
 
-    }
+    },
+
+    validations: [
+    ]
 
 });

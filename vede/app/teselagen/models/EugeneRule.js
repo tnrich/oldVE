@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.models.EugeneRule
- * Class describing a Eugene Rule for J5Parameters.
+ * Class describing a Eugene Rule.
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */
@@ -166,7 +166,7 @@ Ext.define("Teselagen.models.EugeneRule", {
 
     /** (From EugeneRulesManager.js/EugeneProxy.as)
      * Converts EugeneRule into text
-     * @returns {String} ruleText
+     * @returns {String}
      */
     generateText: function() {
         var ruleText = ["Rule " , this.get("name") , "(" ];
@@ -189,7 +189,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             ruleText.push( this.get("name"));
         } else {
             /*throw Ext.create("Teselagen.bio.BioException", {
-                message: "generateRuleText(): Cannot generate rule. Operand2 must be a Number or a PartVO."
+                message: "generateRuleText(): Cannot generate rule. Operand2 must be a Number or a Part."
             });*/
         }
 

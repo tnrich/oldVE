@@ -47,6 +47,35 @@ Ext.define("Teselagen.utils.FormatUtils", {
         ParsersManager  = Teselagen.bio.parsers.ParsersManager;
     },
 
+    /** REFACTORED FROM DEVICEDESIGNMANAGER -- NEEDS TESTING.
+     * Finds reverse complement of a sequence.
+     * @param {String} pSeq
+     * @returns {String} reverse complement sequence
+     */
+    reverseComplement: function(pSeq) {
+        var revComp = [];
+        pSeq = pSeq.toLowerCase();
+
+        for (var i = pSeq.length-1; i >= 0; i--) {
+            switch (pSeq.charAt(i)) {
+                case "a":
+                    revComp.push("t");
+                    break;
+                case "c":
+                    revComp.push("g");
+                    break;
+                case "g":
+                    revComp.push("a");
+                    break;
+                case "t":
+                    revComp.push("a");
+                    break;
+            }
+        }
+        return revComp.join("");
+    },
+
+
 
     // ===========================================================================
     //   SequenceManager  Conversions

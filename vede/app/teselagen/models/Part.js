@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.models.Part
- * Class describing a Part for J5Parameters.
+ * Class describing a Part.
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */
@@ -141,7 +141,7 @@ Ext.define("Teselagen.models.Part", {
     /**
      * Determines if PartVO is empty.
      * @returns {Boolean} equal True if empty, false if not.
-     */
+     *
     isPartVOEmpty: function() {
         var partEmpty = false;
 
@@ -159,11 +159,11 @@ Ext.define("Teselagen.models.Part", {
             partEmpty = false;
         }
         return partEmpty;
-    },
+    },*/
 
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.
-     * @returns {Boolean} equal True if empty, false if not.
+     * @returns {Boolean} True if empty, false if not.
      */
     isEmpty: function() {
         var partEmpty = false;
@@ -190,7 +190,7 @@ Ext.define("Teselagen.models.Part", {
     /*
      * Compares another Part and determines if they are the same.
      * @param {Teselagen.models.PartVO} otherPart Part to compare to.
-     * @returns {Boolean} equal True if the same, false if not.
+     * @returns {Boolean} True if the same, false if not.
      */
     isEqual: function(otherPart) {
         if (Ext.getClassName(otherPart) !== "Teselagen.models.Part") {
@@ -220,7 +220,7 @@ Ext.define("Teselagen.models.Part", {
     /** NEEDS TESTING
      * Adds a SequenceFile to Part.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Boolean} added True if added, false if not.
+     * @returns {Boolean} True if added, false if not.
      */
     addSequenceFile: function(pSequenceFile) {
         this.setSequenceFile(pSequenceFile);
@@ -233,7 +233,7 @@ Ext.define("Teselagen.models.Part", {
 
     /** NEEDS TESTING
      * Removes the SequenceFile of Part.
-     * @returns {Boolean} removed True if removed, false if not.
+     * @returns {Boolean} True if removed, false if not.
      */
     removeSequenceFile: function() {
         this.setSequenceFile(null);

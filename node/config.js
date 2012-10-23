@@ -10,7 +10,6 @@ module.exports = function (app, express) {
   // Socket io Config
   var server = require('http').createServer(app);
   //app.io = require('socket.io').listen(server);
-
   // Express Framework Configuration
   app.configure(function () {
     app.set('views', __dirname + '/views');
@@ -56,6 +55,32 @@ module.exports = function (app, express) {
   */
 
   // Init MONGOOSE (ODM)
+  //host, database, port, options
+
+
+  /*
+  J:true is specified, the getlasterror call awaits the journal commit before returning. 
+  If the server is running without journaling, it returns immediately, and successfully.
+  
+  W:2 A client can block until a write operation has been replicated to N servers.
+
+  majority: waits for more than 50% of the members to acknowledge the write 
+  (until replication is applied to the point of that write).
+  
+  fsync (Not recommended. Use j instead.) When running with journaling, the fsync option awaits the next group commit before returning.
+
+  */
+
+
+  // MONGODB CONNECTION
+  /*
+  var opts = {
+    getlasterror: 1,
+    j: true,
+    wtimeout: 10000
+  };
+  */
+
   app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
     console.log('MONGODB: MONGODB is online');
     if(app.program.examples) app.development.reloadExamples();
@@ -65,47 +90,54 @@ module.exports = function (app, express) {
   // Load MONGOOSE SCHEMAS
   require('./schemas.js')(app);
 
-  if(app.program.stage||app.program.production) {
-  // Init MYSQL
-  var connection = app.mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'tesela#rocks',
-    database: 'teselagen',
-    insecureAuth: true
-  });
+  
+
+
+
+
+  // MYSQL CONNECTION
+  if(app.program.stage || app.program.production) {
+    // Init MYSQL
+    var connection = app.mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: 'tesela#rocks',
+      database: 'teselagen',
+      insecureAuth: true
+    });
 
   function handleDisconnect(connection) {
-    connection.on('error', function (err) {
-      if(!err.fatal) {
-        return;
-      }
+      connection.on('error', function (err) {
+        if(!err.fatal) {
+          return;
+        }
 
-      if(err.code !== 'PROTOCOL_CONNECTION_LOST') {
-        throw err;
-      }
+        if(err.code !== 'PROTOCOL_CONNECTION_LOST') {
+          throw err;
+        }
 
-      console.log('Re-connecting lost connection: ' + err.stack);
+        console.log('Re-connecting lost connection: ' + err.stack);
 
-      connection = app.mysql.createConnection(connection.config);
-      handleDisconnect(connection);
-      connection.connect();
-    });
+        connection = app.mysql.createConnection(connection.config);
+        handleDisconnect(connection);
+        connection.connect();
+      });
   }
+  
   handleDisconnect(connection);
 
   // We will only connect to mysql and check for credetentials on production environment
-    connection.connect();
-    console.log('OPTIONS: MYSQL started');
-    app.mysql.connection = connection;
+  connection.connect();
+  console.log('OPTIONS: MYSQL started');
+  app.mysql.connection = connection;
 
-    function keepAlive() {
+  function keepAlive() {
       connection.query('SELECT 1');
       console.log("Fired Keep-Alive");
       return;
-    }
-    setInterval(keepAlive, 60000);
-    if(app.testing.enabled) {
+  }
+  setInterval(keepAlive, 60000);
+  if(app.testing.enabled) {
       console.log("Retrieving a valid sessionId");
       var query = 'select * from j5sessions order by id desc limit 1;';
       connection.query(query, function (err, rows, fields) {
@@ -113,10 +145,11 @@ module.exports = function (app, express) {
         app.testing.sessionId = rows[0].session_id;
         console.log("Using sessionId: " + app.testing.sessionId);
       });
-    }
   }
-  else
-  {console.log('OPTIONS: MYSQL OMMITED');}
+  } 
+  else {
+    console.log('OPTIONS: MYSQL OMMITED');
+  }
   app.mysql = connection;
 
   // Init XML-RPC
@@ -124,10 +157,11 @@ module.exports = function (app, express) {
     host: 'eaa.teselagen.com',
     port: 80,
     path: '/bin/j5_xml_rpc.pl'
-  })
+  });
 
-  if(app.program.stage||app.program.production) {
-    // Init SOAP Jbei-ICE Client
+
+  // SOAP Jbei-ICE Client
+  if(app.program.stage || app.program.production) {
     app.soap.createClient('http://teselagen.com:8080/api/RegistryAPI?wsdl', function (err, client) {
       app.soap.client = client;
       if(!err) console.log('OPTIONS: SOAP CLIENT started');
@@ -141,9 +175,9 @@ module.exports = function (app, express) {
         console.log('SOAP CLIENT: Jbei-ice Authentication complete #' + app.soap.sessionId);
       });
     });
+  } else {
+    console.log('OPTIONS: SOAP CLIENT OMMITED');
   }
-  else
-  {console.log('OPTIONS: SOAP CLIENT OMMITED');}
 
   app.xmlparser = new app.xml2js.Parser();
 

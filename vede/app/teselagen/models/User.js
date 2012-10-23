@@ -1,3 +1,8 @@
+/**
+ * @class Teselagen.models.User
+ * Class describing a User.
+ * @author Rodrigo Pavez
+ */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
     requires: ['Teselagen.models.Project','Teselagen.models.ApplicationPreferences'],
@@ -27,6 +32,11 @@ Ext.define("Teselagen.models.User", {
         reader: {
             type: 'json',
             root: 'user'
+        },
+        buildUrl: function() {
+            console.log(sessionData.baseURL);
+            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
+            return sessionData.baseURL + 'getUser';
         }
     }
 });

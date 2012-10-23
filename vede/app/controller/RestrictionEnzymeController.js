@@ -7,7 +7,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     managerWindow: null,
 
     enzymeSelector: null,
-
+    
     init: function() {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
 
@@ -34,7 +34,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             scope: this
         });
     },
-
+    
     /**
      * Populates the group selector combobox when the restriction enzyme
      * manage window is opened.
@@ -107,6 +107,20 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         });
 
         this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
+    },
+
+    /**
+     * Saves the active enzymes to a group.
+     * Not implemented in the flex version.
+     */
+    onSaveButtonClick: function() {
+    },
+
+    /**
+     * Deletes the current active enzyme group.
+     * Also not implemented in the flex version.
+     */
+    onDeleteGroupButtonClick: function() {
     },
 
     /**

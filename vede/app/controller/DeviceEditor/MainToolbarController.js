@@ -26,10 +26,10 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
     init: function() {
         this.control({
-            "#j5Btn": {
+            "button[cls='j5_init_Btn']": {
                 click: this.onOpenj5Click
             },
-            "#saveDesignBtn": {
+            "button[cls='saveDesignBtn']": {
                 click: this.onSaveDesignClick
             }
         });

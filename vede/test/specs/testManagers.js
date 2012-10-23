@@ -201,13 +201,73 @@ Ext.onReady(function() {
 //LAST HERE  DW: 10.10.2012
         describe("Teselagen.manager.DeviceDesignManager.js", function() {
 
-            it("checkCombinatorial()", function(){
+            describe("DeviceDesign Management", function() {
+                it("createDeviceDesign()", function(){
+                });
+
+
+                it("()", function(){
+                });
             });
 
-            it("checkJ5Ready()", function(){
+            describe("DeviceDesign Management", function() {
+                it("createEmptyJ5Collection()", function(){
+                });
+
+                it("checkCombinatorial()", function(){
+                });
+
+                it("findMaxNumParts()", function(){
+                });
+
+                it("checkJ5Ready()", function(){
+                });
             });
 
-            it("()", function(){
+            describe("J5Bin Management", function() {
+                it("createEmptyJ5Bin()", function(){
+                });
+
+                it("countNonEmptyParts()", function(){
+                });
+
+                it("())", function(){
+                });
+
+                it("()", function(){
+                });
+            });
+
+            describe("Part/SequenceFile Management", function() {
+                it("createPart()", function(){
+                });
+
+                it("createSequenceFile()", function(){
+                });
+
+                it(")", function(){
+                });
+
+                it("()", function(){
+                });
+            });
+
+            describe("CSV", function() {
+
+                it(")", function(){
+                });
+
+                it("()", function(){
+                });
+            });
+
+            describe("Helper Functions", function() {
+
+                it("reverseComplement()", function(){
+                });
+
+                it("isLegalName()", function(){
+                });
             });
 
             it("()", function(){

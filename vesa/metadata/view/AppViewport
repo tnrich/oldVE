@@ -170,10 +170,12 @@
                     "codeClass": null,
                     "userConfig": {
                         "designer|userClassName": "MyPanel19",
+                        "baseCls": "sfsdf",
+                        "cls": "sfs",
                         "id": "projectDesignTab",
                         "layout": "fit",
                         "minButtonWidth": 32,
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
                     "cn": [
@@ -191,7 +193,9 @@
                                 "id": "projectTab1",
                                 "minHeight": null,
                                 "minWidth": null,
+                                "overCls": "project-tab-focus",
                                 "autoWidth": true,
+                                "focusCls": "project-tab-focus",
                                 "icon": "resources/images/ux/designTab.png",
                                 "iconCls": "projectBarButton",
                                 "scale": null
@@ -239,7 +243,7 @@
                         "designer|userClassName": "MyPanel20",
                         "id": "projectAnalysisTab",
                         "layout": "fit",
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
                     "cn": [
@@ -300,7 +304,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectPartsTab",
                         "layout": "fit",
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
                     "cn": [
@@ -361,7 +365,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectRegistryTab",
                         "layout": "fit",
-                        "title": null
+                        "title": ""
                     },
                     "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
                     "cn": [
@@ -439,7 +443,9 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "container|align": "stretch",
                         "designer|userClassName": "MyPanel7",
+                        "layout": "hbox",
                         "title": "Dashboard"
                     },
                     "designerId": "6feb6c60-c280-4270-aaee-c4095fa9d402",
@@ -459,6 +465,258 @@
                                 "tooltipType": null
                             },
                             "designerId": "01e8636b-b003-4607-97bc-f8859ec86735"
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": 1,
+                                "container|align": "stretch",
+                                "designer|userClassName": "MyPanel22",
+                                "layout": "vbox",
+                                "title": null
+                            },
+                            "designerId": "010cf8b0-d713-4785-a2a9-196285fe7a55",
+                            "cn": [
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "designer|userClassName": "MyPanel24",
+                                        "width": 1513,
+                                        "layout": "fit",
+                                        "title": "Project Info"
+                                    },
+                                    "designerId": "240cb9b7-26e9-4fbb-b14a-0d2829f5504b",
+                                    "cn": [
+                                        {
+                                            "type": "gridpanel",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyGridPanel1",
+                                                "title": "My Grid Panel"
+                                            },
+                                            "designerId": "b30bff8e-3033-4426-8124-4fcd409611cf",
+                                            "cn": [
+                                                {
+                                                    "type": "gridcolumn",
+                                                    "reference": {
+                                                        "name": "columns",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyColumn3",
+                                                        "dataIndex": "string",
+                                                        "text": "String"
+                                                    },
+                                                    "designerId": "d5056c45-5911-4591-aa46-782a747dc083"
+                                                },
+                                                {
+                                                    "type": "numbercolumn",
+                                                    "reference": {
+                                                        "name": "columns",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyNumberColumn3",
+                                                        "dataIndex": "number",
+                                                        "text": "Number"
+                                                    },
+                                                    "designerId": "07d23273-4b33-4220-91a3-56dbe2590c44"
+                                                },
+                                                {
+                                                    "type": "datecolumn",
+                                                    "reference": {
+                                                        "name": "columns",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyDateColumn",
+                                                        "dataIndex": "date",
+                                                        "text": "Date"
+                                                    },
+                                                    "designerId": "c8466840-d364-48ad-9f11-ca241c90dfdd"
+                                                },
+                                                {
+                                                    "type": "booleancolumn",
+                                                    "reference": {
+                                                        "name": "columns",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyBooleanColumn1",
+                                                        "dataIndex": "bool",
+                                                        "text": "Boolean"
+                                                    },
+                                                    "designerId": "a7ec4350-e387-4cf0-8d55-05ebaf5d0090"
+                                                },
+                                                {
+                                                    "type": "gridview",
+                                                    "reference": {
+                                                        "name": "viewConfig",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyGridView1"
+                                                    },
+                                                    "designerId": "9ead2a11-c4ba-4b9c-bf95-11012745ceff"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 2,
+                                        "designer|userClassName": "MyPanel25",
+                                        "maxHeight": 300,
+                                        "layout": "fit",
+                                        "title": "Analysis"
+                                    },
+                                    "designerId": "47d51005-3cf6-4628-a00b-11b4d104c6b3"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": 2,
+                                "container|align": "stretch",
+                                "container|padding": 10,
+                                "designer|userClassName": "MyPanel23",
+                                "maxWidth": 200,
+                                "minWidth": null,
+                                "layout": "vbox",
+                                "title": "Help"
+                            },
+                            "designerId": "817e75a8-dec1-4297-88a9-5c8d958c7c8c",
+                            "cn": [
+                                {
+                                    "type": "button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|margins": "5",
+                                        "designer|userClassName": "MyButton55",
+                                        "id": "j5_Manual_Btn",
+                                        "text": "j5 Manual"
+                                    },
+                                    "designerId": "91812526-b9b1-4951-93c3-1835ab547dd3"
+                                },
+                                {
+                                    "type": "button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": null,
+                                        "layout|margins": "5",
+                                        "designer|userClassName": "MyButton56",
+                                        "id": "VE_Manual_Btn",
+                                        "text": "Vector Editor Manual"
+                                    },
+                                    "designerId": "0b2ac504-dfcc-4bff-93cc-b2bb1147edea"
+                                },
+                                {
+                                    "type": "button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": null,
+                                        "layout|margins": "5",
+                                        "designer|userClassName": "MyButton57",
+                                        "id": "DE_Manual_Btn",
+                                        "text": "Device Editor Manual"
+                                    },
+                                    "designerId": "05464a54-ec40-4bff-8e1b-4a833c8c1a65"
+                                },
+                                {
+                                    "type": "button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": null,
+                                        "layout|margins": "5",
+                                        "designer|userClassName": "MyButton58",
+                                        "id": "tutorials_Btn",
+                                        "text": "Tutorials"
+                                    },
+                                    "designerId": "f9220e61-53f9-460d-bca0-8a80e004ae19"
+                                },
+                                {
+                                    "type": "button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": null,
+                                        "layout|margins": "5",
+                                        "designer|userClassName": "MyButton59",
+                                        "id": "support_Btn",
+                                        "text": "Get Support"
+                                    },
+                                    "designerId": "fab9f36b-2087-461b-83c6-37f61aac0038"
+                                },
+                                {
+                                    "type": "button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": null,
+                                        "layout|margins": "5",
+                                        "designer|userClassName": "MyButton60",
+                                        "id": "feedback_Btn",
+                                        "margin": null,
+                                        "text": "Submit Feedback"
+                                    },
+                                    "designerId": "56b5d4cf-943b-4511-9372-e768b1911054"
+                                }
+                            ]
                         }
                     ]
                 },

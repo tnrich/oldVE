@@ -114,7 +114,8 @@ Ext.onReady(function() {
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal";
                 var flag = false;
                 try {
-                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                    //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                    var jbeiXml = jasmine.getFixtures().read(url);
                 } catch (bio) {
                     flag = true;
                     console.warn('Correctly Caught: ' + bio.message);
@@ -125,7 +126,8 @@ Ext.onReady(function() {
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var flag = false;
                 try {
-                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                    //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                    var jbeiXml = jasmine.getFixtures().read(url);
                 } catch (bio) {
                     flag = true;
                     console.warn('Unexpectedly Caught: ' + bio.message);
@@ -171,7 +173,8 @@ Ext.onReady(function() {
             it("jbeiseqXmlToJson() & jbeiseqJsonToXml(): Does xml->json->xml2->json2 yield json===json2?", function() {
                 var url      = "/biojs/test/data/jbeiseq/test.xml";
                 //var url      = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                var jbeiXml  = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                //var jbeiXml  = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                var jbeiXml = jasmine.getFixtures().read(url);
                 var jbeiJson = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(jbeiXml);
 
                 //console.log(jbeiXml);
@@ -438,7 +441,8 @@ Ext.onReady(function() {
 
             it("xml testing", function() {
                 var url = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                var xml = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                //var xml = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                var xml = jasmine.getFixtures().read(url);
                 
                 // Define an Ext model "Enzyme" to make reading from XML data possible.
                 Ext.define("Jbei", {

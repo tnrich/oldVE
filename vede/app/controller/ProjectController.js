@@ -19,7 +19,6 @@ Ext.define("Vede.controller.ProjectController", {
     },
     renderPartsSection: function(veprojects){
         Ext.getCmp('projectPartsPanel').getRootNode().removeAll();
-        console.log(veprojects);
 
         veprojects.each(function(veproject){
             Ext.getCmp('projectPartsPanel').getRootNode().appendChild({
@@ -51,6 +50,14 @@ Ext.define("Vede.controller.ProjectController", {
         
     },
     init: function () {
+        this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,this.openProject, this);
+
+        this.control({
+            '#projectDesignPanel': {
+                itemclick: function(store,record) { Vede.application.projectManager.openDesign(record); }
+
+            }
+        });
     }
 });

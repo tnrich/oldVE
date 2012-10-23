@@ -67,11 +67,27 @@ Ext.define("Teselagen.models.J5Collection", {
     },
 
     /**
+     * Creates an empty collection with the given number of bins.
+     * @param {int} pNumBins Number of empty bins to be created.
+     * @returns {Ext.data.Store} Bins created.
+     */
+    createEmptyCollection: function(pNumBins) {
+        if (this.binCount() > 0) {
+            console.warn("Warning. Overwriting existing J5Collection");
+        }
+        for (var i = 0; i < pNumBins; i++) {
+            var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
+            this.addToBin(bin, i);
+        }
+        return this.bins();
+    },
+
+    /**
      * Pushes a J5bin into the bins.
      * Original uses splice, but don't we want to insert it, not replace an item?
      * @param {Teselagen.models.J5Bin} pJ5Bin Bin to add to collection. Can be one or array of bins.
      * @param {int} pIndex Index to insert pJ5Bin. Optional. Defaults to end of of array if invalid or undefined value.
-     * @preturns {Boolean} added True if added, False if not.
+     * @preturns {Boolean} True if added, False if not.
      */
     addToBin: function(pJ5Bin, pIndex) {
         var added = false;
@@ -96,7 +112,7 @@ Ext.define("Teselagen.models.J5Collection", {
     /**
      * Removes a J5Bin from Collection.
      * @param {Teselagen.models.J5Bin} pJ5Bin Bin to remove to collection
-     * @returns {Boolean} removed True if removed, False if not.
+     * @returns {Boolean} True if removed, False if not.
      */
     removeFromBin: function(pJ5Bin) {
         var removed = false;
@@ -117,30 +133,6 @@ Ext.define("Teselagen.models.J5Collection", {
     // It makes more sense to put these methods here.
 
     /**
-     * @param {Teselagen.models.Part} pPart
-     * @returns {Boolean} partIsPresent True is in the J5Bins, False if not.
-     */
-    isPartInCollection: function(pPart) {
-        var partIsPresent = false;
-        if (this.bins() === null || this.bins().count() === 0) {
-            return false;
-        }
-        var bin, j5Bin; //j5 bin
-
-        for (var i = 0; i < this.bins().count(); i++) {
-            bin = this.bins().getAt(i);
-            partIsPresent = bin.hasPart(pPart);
-            /*for (var k = 0; k < bin.get("binItemsVector").length; k++) {
-                j5Bin = bin.get("binItemsVector")[k];
-                if (j5Bin === pPart) {
-                    return true;
-                }
-            }*/
-        }
-        return partIsPresent;
-    },
-
-    /**
      * @returns {Boolean} isCircular
      */
     isCircular: function() {
@@ -150,7 +142,7 @@ Ext.define("Teselagen.models.J5Collection", {
     /**
      * Given a J5Bin, returns the index
      * @param {Teselagen.models.J5Bin} pJ5Bin
-     * @returns {int} index Index of bin. -1 if not found.
+     * @returns {int} Index of bin. -1 if not found.
      */
     getBinIndex: function(pJ5Bin) {
         var index = -1;
@@ -168,7 +160,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {String} pName
      * @param {int} pIndex Index to insert new J5Bin. Optional. Defaults to end of of array if invalid or undefined value.
      * ///@returns {Teselagen.models.J5Bin}
-     * @returns {Boolean} added True if added, false if not.
+     * @returns {Boolean} True if added, false if not.
      */
     addNewBinByIndex: function(pName, pIndex) {
         var added   = false;
@@ -200,7 +192,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * Remove a J5Bin by index.
      * @param {int} pIndex Index of J5Bin. Optional. Defaults to last item of bin array if invalid or undefined value.
      * ////@param {Teselagen.models.J5Bin}
-     * @returns {Boolean} deleted True if deleted, false if not.
+     * @returns {Boolean} True if deleted, false if not.
      */
     deleteBinByIndex: function(pIndex) {
         var deleted = false;
@@ -220,18 +212,18 @@ Ext.define("Teselagen.models.J5Collection", {
         return deleted;
     },
 
-    /**
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Adds a Part to the J5Bin specified by binIndex at the position specified,
      * or to the end of the J5Bin if no position specified.
      *
      * @param {Teselagen.models.Part} pPart The part to add to a J5Bin
      * @param {int} pBinIndex The index of the J5Bin in which to add the part. Defaults to end of of array if invalid or undefined value.
      * @param {int} pPosition The position within the bin at which to add the Part. Defaults to end of array if invalid or undefined value.
-     * @returns {Boolean} added True if added, False if not.
+     * @returns {Boolean} True if added, False if not.
      */
     addPartToBin: function(pPart, pBinIndex, pPosition) {
         var j5Bin;
-        var cnt     = this.binCount();
+        var cnt = this.binCount();
 
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = this.bins().getAt(pBinIndex);
@@ -244,14 +236,14 @@ Ext.define("Teselagen.models.J5Collection", {
         return added;
     },
 
-    /**
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Adds a Part to the J5Bin specified by binIndex at the position specified,
      * or to the end of the J5Bin if no position specified
      *
      * @param {Teselagen.models.Part} pPart The part to add to a J5Bin
      * @param {int} pBinIndex The index of the J5Bin in which to add the Part. Defaults to end of of array if invalid or undefined value.
      * @param {int} pPosition The position within the J5Bin at which to add the Part. Defaults to end of array if invalid or undefined value.
-     * @returns {Boolean} removed True if added, False if not.
+     * @returns {Boolean} True if added, False if not.
      */
     removePartFromBin: function(pPart, pBinIndex) {
         var j5Bin;
@@ -268,11 +260,26 @@ Ext.define("Teselagen.models.J5Collection", {
         return removed;
     },
 
-    /**
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Boolean} True is in the J5Bins, False if not.
+     */
+    isPartInCollection: function(pPart) {
+        var partIsPresent = false;
+        if (this.bins() === null || this.bins().count() === 0) {
+            return false;
+        }
+        for (var i = 0; i < this.bins().count(); i++) {
+            partIsPresent = this.bins().getAt(i).hasPart(pPart);
+        }
+        return partIsPresent;
+    },
+
+    /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Determines the J5Bin a Part is in.
      *
      * @param {Teselagen.models.Part} pPart The part whose J5Bin it belongs to.
-     * @param {Teselagen.models.J5Bin} J5Bin The first J5Bin Part belongs to, null if not in J5Collection.
+     * @param {Teselagen.models.J5Bin} The first J5Bin Part belongs to, null if not in J5Collection.
      */
     getBinAssignment: function(pPart) {
         var bin = null;
@@ -280,7 +287,8 @@ Ext.define("Teselagen.models.J5Collection", {
         for (var i = 0; i < this.binCount(); i++) {
             var j5Bin = this.bins().getAt(i);
             for (var j = 0; j < j5Bin.partCount(); j++) {
-                if (j5Bin.parts().getAt(i) === pPart) {
+                //if (j5Bin.parts().getAt(i) === pPart) {
+                    if (j5Bin.parts().getAt(i).isEqual(pPart)) {
                     bin = j5Bin.parts().getAt(i);
                 }
             }

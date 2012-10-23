@@ -10,7 +10,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   mixins: {
     observable: "Ext.util.Observable"
   },
-  baseURL: null,
   /**
    * @param {Teselagen.manager.SequenceManager} sequenceManager The
    * SequenceManager to undo/redo actions for.
@@ -30,11 +29,11 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
         //Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
   },
-  manualAuth: function(username,password,server) {
+  manualAuth: function(username,password,server,cb) {
     
     sessionData.baseURL = server;
 
-    Ext.get('splash-text').update('Authenticating to server');
+    if(Ext.get('splash-text')) Ext.get('splash-text').update('Authenticating to server');
     Ext.Ajax.request({
       url: sessionData.baseURL + 'login',
       params: {
@@ -46,13 +45,15 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         sessionData.AuthResponse = parsedResponse;
         sessionData.data = {};
         sessionData.data.firstTime = parsedResponse.firstTime;
-        Ext.get('splash-text').update(parsedResponse.msg);
+        if(Ext.get('splash-text')) Ext.get('splash-text').update(parsedResponse.msg);
         Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
-        Ext.getCmp('AuthWindow').destroy();
+        if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();
+        if (cb) return cb(true); // for testing
       },
       failure: function(response, options) {
         if(response.responseText != '')
         {
+          console.log(response.responseText);
           var parsedResponse = JSON.parse(response.responseText);
           Ext.get('splash-text').update(parsedResponse.msg);
         }
@@ -70,10 +71,10 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       sessionId: "000",
       userId: "0"
     };
-    this.authenticate();    
+    this.authenticate();  
   }
   ,
-  authenticate: function() {
+  authenticate: function(app) {
         var that = this;
         Ext.get('splash-text').update('Authenticating to server');
         Ext.Ajax.request({
@@ -87,7 +88,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             sessionData.data.firstTime = parsedResponse.firstTime;
             Ext.get('splash-text').update(parsedResponse.msg);
             that.loggedIn();
-            Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+            if(Vede.application) Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+            else app.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
             if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();
           },
           failure: function(response, options) {
@@ -98,7 +100,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       }
   ,
 
-  login: function() {
+  login: function(app) {
 
     var that = this;
 
@@ -123,7 +125,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
           success: function(response) {
             session = JSON.parse(response.responseText);
             sessionData.data = session;
-            that.authenticate();
+            that.authenticate(app);
           },
           failure: function(response, options) {
             Ext.get('splash-text').update('Automatic login failed.');

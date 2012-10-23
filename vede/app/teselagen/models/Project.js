@@ -40,6 +40,12 @@ Ext.define("Teselagen.models.Project", {
         reader: {
             type: 'json',
             root: 'projects'
+        },
+        buildUrl: function() {
+            console.log(sessionData.baseURL);
+            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
+            return sessionData.baseURL + 'getProjects';
         }
+            
     }
 });

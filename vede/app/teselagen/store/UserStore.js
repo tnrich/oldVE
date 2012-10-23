@@ -5,7 +5,7 @@ Ext.define("Teselagen.store.UserStore", {
     model: 'Teselagen.models.User',
     listeners: {
         beforeload: function (store, operation, options) {
-            //store.getProxy().url = 'data/' + operation.node.get('Path') + '/level1.json';
+            //store.getProxy().url =  sessionData.baseURL+'getUser';
         }
     }
 

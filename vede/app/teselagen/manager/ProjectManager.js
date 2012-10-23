@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore"],
+	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor'],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -18,15 +18,15 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 * Load User Info
 	 */
-	loadUser: function () {
+	loadUser: function (cb) {
 		console.log('PM: Loading User');
 		var users = Ext.create("Teselagen.store.UserStore");
-		console.log('Hola');
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
 				if(records.length != 1) return console.log('Error loading user');
 				self.currentUser = users.first();
+				if(cb) self.loadProjects(cb); // For Testing
 				self.loadProjects();
 				//console.log(self.currentUser.getPreferences());
 			}
@@ -36,12 +36,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 * Load User Projects
 	 */
-	loadProjects: function () {
+	loadProjects: function (cb) {
 		console.log('PM: Showing projects');
-		
-		var projects = this.currentUser.projects().load({
+		var self = this;
+		this.projects = this.currentUser.projects().load({
 			callback: function () {
-				Ext.getCmp('projectsWidget').reconfigure(projects);
+				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
+				if(cb) return cb(); // For Testing
 			}
 		});
 		
@@ -50,7 +51,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 *	Load Project Child Resources
 	 */	
-	DesignAndChildResources: function () {
+	designAndChildResources: function () {
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
@@ -66,14 +67,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var veprojects = this.workingProject.veprojects();
 		projectController.renderPartsSection(veprojects);
 		
-
-		/*
-		var veprojects = this.workingProject.designs().load({
-			callback: function () {
-				projectController.renderJ5ResultsSection(designs);
-			}
-		});
-		*/
 	},
 
 	/**
@@ -86,6 +79,17 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
-		this.DesignAndChildResources();
+		this.designAndChildResources();
+	},
+
+	openDesign: function (item) {
+		var id = item.data.id;
+		var projects = this.workingProject.deprojects();
+		var selectedDesign = projects.getById(id);
+		var tabPanel = Ext.getCmp('tabpanel');
+		tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDesign})).show();		
+	
+		var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
+		deController.renderDesignInContext();
 	}
 });

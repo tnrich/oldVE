@@ -13,3 +13,4 @@ node/run.sh
 node/upload.sh
 node/node_modules
 node/localResources
+vede/deviceeditor

@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.models.SequenceFile
- * Class describing a SequenceFile for J5Parameters.
+ * Class describing a SequenceFile.
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */
@@ -40,6 +40,15 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     validations: [
         {field: "sequenceFileFormat",   type: "presence"},
+        {
+            field: "sequenceFileFormat",
+            type: "inclusion",
+            list: [
+                Teselagen.constants.Constants.self.GENBANK,     // "Genbank"
+                Teselagen.constants.Constants.self.FASTA,       // "FASTA"
+                Teselagen.constants.Constants.self.JBEI_SEQ     // "jbei-seq"
+            ]
+        },
         {field: "sequenceFileContent",  type: "presence"},
         {field: "sequenceFileName",     type: "presence"},
         {field: "partSource",           type: "presence"},
@@ -70,20 +79,21 @@ Ext.define("Teselagen.models.SequenceFile", {
     // Some of these taken from SequenceFileManager/SequenceProxy
     init: function() {
 
+        // Set the Hash Field
+        this.setSequenceFileContent(this.get("sequenceFileContent"));
+
         // Set PartSource with Display ID
         this.setPartSource();
 
         // Set FileName if given ""
         this.setSequenceFileName();
-
-        // Set the Hash Field
-        this.setSequenceFileContent(this.get("sequenceFileContent"));
     },
 
     /**
-     * Sets the sequenceFileContent for this part
+     * Sets the sequenceFileContent for thi
      * NOTE: Must execute setSequenceFileContent() to set the hash from "" to a unique identifier.
-     * @returns {String} hash SequenceHash
+     * @param {String} pContent The sequence file, in string form.
+     * @returns {String} SequenceHash
      */
     setSequenceFileContent: function(pContent) {
 
@@ -106,12 +116,16 @@ Ext.define("Teselagen.models.SequenceFile", {
     /**
      * Sets PartSource based on FileFormat and FileContent.
      * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} displayID Name of the PartSource
+     * @returns {String} Name of the PartSource
      */
     setPartSource: function() {
         var displayID = "";
         var cnt;
         var content = this.get("sequenceFileContent");
+
+        if (this.get("partSource") !== "") {
+            return this.get("partSource");
+        }
 
         if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.self.GENBANK) {
             cnt = content.match(/LOCUS *(\S*)/);
@@ -136,7 +150,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     /**
      * Sets FileName based on PartSource
      * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} name SequenceFileName
+     * @returns {String} SequenceFileName
      */
     setSequenceFileName: function() {
         var format      = this.get("sequenceFileFormat");

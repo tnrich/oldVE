@@ -1,3 +1,5 @@
+/*Font Families*/
+
 @font-face {
   font-family: 'Quicksand';
   font-style: normal;
@@ -10,6 +12,8 @@
   font-weight: 700;
   src: local('Quicksand Bold'), local('Quicksand-Bold'), url(http://themes.googleusercontent.com/static/fonts/quicksand/v2/32nyIRHyCu6iqEka_hbKsqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
 }
+
+/*Global Theme Vars*/
 
 .x-body {
 	font-family: 'Quicksand', sans-serif;
@@ -32,7 +36,8 @@
 .x-btn,
 .x-btn-center,
 .x-btn-default-toolbar-small .x-btn-inner,
-.x-btn-default-small .x-btn-inner {
+.x-btn-default-small .x-btn-inner,
+.x-grid-row .x-grid-cell {
 	font-family: 'Quicksand', sans-serif;
     font-size: 12px;
     color: #333;	
@@ -44,6 +49,19 @@
     color: #111;
 }
 
+.x-grid-tree-node-expanded	 .x-tree-icon-parent {
+	background-image: url(../images/ux/tree-node-parent.png);
+}
+
+.x-grid-row .x-grid-cell {
+	padding:5px;
+}
+
+.x-tab-close-btn {
+	background-image: url(../images/ux/tab-default-close.png);
+}
+
+/*Header*/
 #headerPanel-body, #headerMain-body, #headerSub-body {
 	border: none;
 }
@@ -59,16 +77,46 @@
 	padding-right: 10px;
 }
 
+/*Project Panel*/
+#projectDesignPanel-body div table td div .x-tree-icon-leaf {
+	background-image: url(../images/ux/design-tree-icon-leaf.png);
+}
+
+#projectAnalysisPanel-body div table td div .x-tree-icon-leaf {
+	background-image: url(../images/ux/j5-tree-icon-leaf.png);
+}
+
+#projectPartsPanel-body div table td div .x-tree-icon-leaf {
+	background-image: url(../images/ux/ve-tree-icon-leaf.png);
+}
+
 #projectTab1, #projectTab2, #projectTab3, #projectTab4 {
 	height: 36px;
 	width: 54px;
 	border: none;
-	background: none;
-	box-shadow: none;
 	border-radius: none;
 }
 
+.projectBarButton {
+	border-radius: none;
+	box-shadow: none;
+	background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
+}
 
+.project-tab-focus {
+	border-radius: 0;
+	background: rgba(0,0,0,0.2);
+}
+
+.x-tab-project-tab-active {
+	border-radius: 0;
+	background: rgba(0,0,0,0.3);
+	box-shadow: inset 1px 1px 10px 1px rgba(0,0,0,0.5);
+}
+
+.projectTab {
+	background: none;
+}
 
 .projectBarButton {
 	width: 32px;
@@ -86,3 +134,13 @@
 #ProjectPanel .x-tab-bar-strip {
 	top:37px;
 }
+
+/*Device Editor*/
+
+#DeviceEditorToolPanel .x-toolbar-default {
+}
+
+#DeviceEditorPartsBar-innerCt {
+	background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
+}
+

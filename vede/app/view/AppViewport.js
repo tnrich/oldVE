@@ -42,6 +42,7 @@ Ext.define('Vede.view.AppViewport', {
                 },
                 {
                     xtype: 'tabpanel',
+                    id: 'tabpanel',
                     region: 'center',
                     activeTab: 0,
                     items: [
@@ -55,7 +56,8 @@ Ext.define('Vede.view.AppViewport', {
                             xtype: 'DeviceEditorPanel'
                         },
                         {
-                            xtype: 'DeviceEditorLegacyPanel'
+                            xtype: 'DeviceEditorLegacyPanel',
+                            hidden: true
                         }
                     ]
                 }
