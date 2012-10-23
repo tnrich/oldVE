@@ -7,10 +7,10 @@ Ext.define("Teselagen.models.Project", {
 
     fields: [{
         name: "id",
-        type: "int"
+        type: "long"
     }, {
         name: "user_id",
-        type: "int"
+        type: "long"
     }, {
         name: "name",
         type: "String",
