@@ -44,7 +44,7 @@ Ext.define('Vede.view.AuthWindow', {
 					items: [{
 						xtype: 'combobox',
 						anchor: '100%',
-						value: 'http://localhost:3000/',
+						value: 'http://teselagen.local/api/',
 						fieldLabel: 'Server',
 						name: 'server',
 						store: [

@@ -7,6 +7,10 @@
 Ext.define("Teselagen.constants.Constants", {
     singleton: true,
 
+    ENV_DEV: "dev",
+    ENV_PROD: "prod",
+    ENV_TEST: "test",
+    
     statics: {
         VERSION:                "2.0.4",
         
