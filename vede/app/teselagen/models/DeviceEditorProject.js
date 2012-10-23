@@ -48,7 +48,7 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
     }],
     proxy: {
         type: 'ajax',
-        url: '/vede/test/data/getDEProjects.json',
+        url: '/vede/test/data/json/getDEProjects.json',
         reader: {
             type: 'json',
             root: 'data'
