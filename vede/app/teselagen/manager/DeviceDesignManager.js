@@ -34,38 +34,42 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     createDeviceDesign: function(pNumBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
         device.createNewCollection(pNumBins);
-        device.validate();
+
+        var err = device.validate();
+        if (err.length > 0) {
+            console.warn("Creating DeviceDesign: " + err.length + " errors found.");
+        }
         return device;
     },
     /**
      */
-    addToRules: function(pDesign, pRule) {
-        return pDesign.addToRules(pRule);
+    addToRules: function(pDevice, pRule) {
+        return pDevice.addToRules(pRule);
     },
     /**
      */
-    removeFromRules: function(pDesign, pRule) {
-        return pDesign.removeFromRules(pRule);
+    removeFromRules: function(pDevice, pRule) {
+        return pDevice.removeFromRules(pRule);
     },
     /**
      */
-    removeAllRules: function(pDesign) {
-        return pDesign.removeAllRules();
+    removeAllRules: function(pDevice) {
+        return pDevice.removeAllRules();
     },
     /**
      */
-    getRulesInvolvingPart: function(pDesign, pPart) {
-        return pDesign.getRulesInvolvingPart(pPart);
+    getRulesInvolvingPart: function(pDevice, pPart) {
+        return pDevice.getRulesInvolvingPart(pPart);
     },
     /**
      */
-    getRuleByName: function(pDesign, pName) {
-        return pDesign.getRuleByName(pName);
+    getRuleByName: function(pDevice, pName) {
+        return pDevice.getRuleByName(pName);
     },
     /**
      */
-    isUniqueRuleName: function(pDesign, pName) {
-        return pDesign.isUniqueRuleName(pName);
+    isUniqueRuleName: function(pDevice, pName) {
+        return pDevice.isUniqueRuleName(pName);
     },
 
     //================================================================
@@ -82,8 +86,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         });
         rule.setOperand1(pOperand1);
 
-        rule.validate();
-
+        var err = rule.validate();
+        if (err.length > 0) {
+            console.warn("Creating EugeneRule: " + err.length + " errors found.");
+        }
         pDevice.addToRules(pRule); //put this here?
         return rule;
     },
@@ -92,22 +98,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     // J5Collection Management
     //================================================================
     // ? keep this?
-    /**
+    /** Wipe out existing J5Collection
      */
-    createNewCollection: function(pDesign, pNumBins) {
-        return pDesign.createNewCollection(pNumBins);
+    createNewCollection: function(pDevice, pNumBins) {
+        return pDevice.createNewCollection(pNumBins);
     },
-    /**
+    /** Wipe out existing J5Collection.
      */
-    createEmptyJ5Collection: function(pDesign, pNumBins, pIsCircular) {
+    createEmptyJ5Collection: function(pDevice, pNumBins, pIsCircular) {
         var collection = Ext.create("Teselagen.models.J5Collection", {
             isCircular: pIsCircular
         });
 
         collection.createEmptyCollection(pNumBins);
-        collection.validate();
 
-        pDesign.setJ5Collection(collection); //put this here?
+        var err = collection.validate();
+        if (err.length > 0) {
+            console.warn("Creating J5Collection: " + err.length + " errors found.");
+        }
+
+        pDevice.setJ5Collection(collection); //put this here?
         return collection;
     },
     /**
@@ -127,8 +137,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign}
      * @returns {Boolean}
      */
-    checkCombinatorial: function(pDesign) {
-        var collection = pDesign.getJ5Collection();
+    checkCombinatorial: function(pDevice) {
+        var collection = pDevice.getJ5Collection();
         var combo   = false;
 
         if (collection === null || collection === undefined) {
@@ -153,8 +163,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign}
      * @returns {int}
      */
-    findMaxNumParts: function(pDesign) {
-        var collection = pDesign.getJ5Collection();
+    findMaxNumParts: function(pDevice) {
+        var collection = pDevice.getJ5Collection();
         var num = 0;
 
         if (collection === null || collection === undefined) {
@@ -176,11 +186,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     /** NEEDS TESTING
      * Checks if each J5Bin has at least one Part and one accompanying SequenceFile.
      * Sets j5Read flag on collection: true if conditions are true, false if not.
-     * @param {Teselagen.models.DeviceDesign} pDesign
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @returns {Boolean}
      */
-    checkJ5Ready: function(pDesign) {
-        var collection = pDesign.getJ5Collection();
+    checkJ5Ready: function(pDevice) {
+        var collection = pDevice.getJ5Collection();
         var ready = true;
 
         if (collection === null || collection === undefined) {
@@ -199,13 +209,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             if (bins.getAt(i).parts().count() < 1) {
                 ready = false;
             }
-            var parts = bins.getAt(i);
+            var parts = bins.getAt(i).parts();
             for (var j = 0; j < parts.count(); j++) {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
                 if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
                     ready = false;
                 }
-                if (parts.getAt(i).isEmpty() === true) {
+                if (parts.getAt(j).isEmpty() === true) {
                     ready = false;
                 }
             }
@@ -215,8 +225,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     /**
      */
-    getBinByCollection: function(pJ5Collection, pBinIndex) {
-        return pJ5Collection.bins().getAt(pBinIndex);
+    getBinByIndex: function(pDevice, pBinIndex) {
+        return pDevice().getJ5Collection().bins().getAt(pBinIndex);
     },
 
     //================================================================
@@ -340,9 +350,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             fas: pFas,
             iconID: pIconID
         });
-        parte.validate();
+        part.validate();
 
-        pDevice.bins().getAt(pBinIndex).addToParts(part, -1); // put this here?
+        pDevice.getJ5Collection().bins().getAt(pBinIndex).addToParts(part, -1); // put this here?
         return part;
     },
     /**

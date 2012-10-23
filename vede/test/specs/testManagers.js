@@ -23,11 +23,13 @@ Ext.require("Teselagen.models.EugeneRule");
 Ext.require("Teselagen.manager.SequenceFileManager");
 Ext.require("Teselagen.manager.PartManager");
 Ext.require("Teselagen.manager.EugeneRuleManager");
+Ext.require("Teselagen.manager.DeviceDesignManager");
 
 Ext.onReady(function() {
 
     Sha256              = Teselagen.bio.util.Sha256;
     SequenceFileManager = Teselagen.manager.SequenceFileManager;
+    DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
     describe("Testing Teselagen.managers", function() {
 
@@ -196,31 +198,98 @@ Ext.onReady(function() {
             });
         });
 
-
-
-//LAST HERE  DW: 10.10.2012
         describe("Teselagen.manager.DeviceDesignManager.js", function() {
 
             describe("DeviceDesign Management", function() {
                 it("createDeviceDesign()", function(){
+                    var device = DeviceDesignManager.createDeviceDesign(3);
+                    expect(device.validate().length).toBe(0);
                 });
-
 
                 it("()", function(){
                 });
             });
 
-            describe("DeviceDesign Management", function() {
-                it("createEmptyJ5Collection()", function(){
+            describe("J5Collection Management", function() {
+
+                beforeEach(function() {
+                    design      = DeviceDesignManager.createDeviceDesign(2);
+                });
+
+                it("isCircular()", function(){
+                    expect(DeviceDesignManager.isCircular(design)).toBe(true);
+                    expect(DeviceDesignManager.binCount(design)).toBe(2);
+                });
+
+                it("isCircular()", function(){
+                    expect(DeviceDesignManager.isCircular(design)).toBe(true);
+                });
+
+                it("createEmptyJ5Collection()--overwrites existing collection", function(){
+                    var coll = DeviceDesignManager.createEmptyJ5Collection(design, 3, false);
+
+                    expect(design.getJ5Collection().binCount()).toBe(3);
+                    expect(DeviceDesignManager.binCount(design)).toBe(3);
+
+                    expect(DeviceDesignManager.isCircular(design)).toBe(false);
                 });
 
                 it("checkCombinatorial()", function(){
+                    expect(DeviceDesignManager.checkCombinatorial(design)).toBe(false);
+
+                    // Make it combinatorial by manually going into the models to add a part to bin #0
+                    var part1 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart1"
+                    });
+                    var part2 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart2"
+                    });
+
+                    var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2], -1);
+                    expect(success).toBe(true);
+
+                    expect(DeviceDesignManager.checkCombinatorial(design)).toBe(true);
                 });
 
                 it("findMaxNumParts()", function(){
+                    expect(DeviceDesignManager.findMaxNumParts(design)).toBe(0);
+
+                    var part1 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart1"
+                    });
+                    var success = design.getJ5Collection().bins().getAt(0).addToParts([part1], -1);
+                    expect(DeviceDesignManager.findMaxNumParts(design)).toBe(1);
+
+                    var part2 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart2"
+                    });
+                    success = design.getJ5Collection().bins().getAt(0).addToParts([part2], -1);
+
+                    expect(DeviceDesignManager.findMaxNumParts(design)).toBe(2);
+
                 });
 
                 it("checkJ5Ready()", function(){
+                    expect(DeviceDesignManager.checkJ5Ready(design)).toBe(false);
+
+                    var part1 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart1"
+                    });
+                    var part2 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart2"
+                    });
+
+                    design.getJ5Collection().bins().getAt(0).addToParts([part1], -1);
+                    expect(DeviceDesignManager.checkJ5Ready(design)).toBe(false);
+
+                    design.getJ5Collection().bins().getAt(1).addToParts([part2], -1);
+                    expect(DeviceDesignManager.checkJ5Ready(design)).toBe(true);
+                });
+
+//LAST HERE  DW: 10.22.2012
+                it("getBinByIndex()", function(){
+                    var bin = DeviceDesignManager.getBinByIndex(design, 0);
+                    console.log(bin);
                 });
             });
 
@@ -238,7 +307,28 @@ Ext.onReady(function() {
                 });
             });
 
-            describe("Part/SequenceFile Management", function() {
+            describe("SequenceFile Management", function() {
+
+                beforeEach(function() {
+                    design      = DeviceDesignManager.createDeviceDesign(2);
+                });
+
+                it("createPart()", function(){
+                    //var seq = DeviceDesignManager.createSequenceFile(design, )
+
+                });
+
+                it("createSequenceFile()", function(){
+                });
+
+                it(")", function(){
+                });
+
+                it("()", function(){
+                });
+            });
+
+            describe("Part Management", function() {
                 it("createPart()", function(){
                 });
 
@@ -251,6 +341,29 @@ Ext.onReady(function() {
                 it("()", function(){
                 });
             });
+
+            describe("EugeneRules Management", function() {
+
+                beforeEach(function() {
+                    design      = DeviceDesignManager.createDeviceDesign(2);
+                    name1       = "";
+                    negOp       = true;
+                    operand1    = DeviceDesignManager.createPart(design, 0, "operand1", 1, 10, false, true, "fas", null);
+                    compOp      = true;
+                    operand2    = DeviceDesignManager.createPart(design, 1, "operand2", 2, 20, false, true, "fas", null);
+                });
+
+                it("createEugeneRule()", function(){
+                    //console.log(design);
+                    var rule = DeviceDesignManager.createEugeneRule(design, name1, negOp, operand1, compOp, operand2);
+                });
+
+
+                it("()", function(){
+                });
+            });
+
+            
 
             describe("CSV", function() {
 
