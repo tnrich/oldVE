@@ -25,7 +25,7 @@ Ext.define("Teselagen.models.VectorEditorProject", {
     }],
     proxy: {
         type: 'ajax',
-        url: '/vede/test/data/getVEProjects.json',
+        url: '/vede/test/data/json/getVEProjects.json',
         reader: {
             type: 'json',
             root: 'data'
