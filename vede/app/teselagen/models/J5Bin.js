@@ -88,6 +88,8 @@ Ext.define("Teselagen.models.J5Bin", {
         }
     ],
 
+    // Tried using Constructor and it doesn't work.
+    // Read on forums to use init as a way to execute methods after the fields block. --DW
     init: function(inData) {
         if (this.get("iconID") === "") {
             this.set("iconID", this.self.GENERIC);
@@ -95,7 +97,7 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
-     * @returns {int} count Number of Parts in parts
+     * @returns {Number} count Number of Parts in parts
      */
     partCount: function() {
         return this.parts().count();
@@ -115,7 +117,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * @param {Teselagen.models.Part} pPart
-     * @returns {int} Index of Part in Bin. -1 if not present.
+     * @returns {Number} Index of Part in Bin. -1 if not present.
      */
     indexOfPart: function(pPart) {
         var index = -1;
@@ -126,7 +128,7 @@ Ext.define("Teselagen.models.J5Bin", {
     /**
      * Adds a Part into the parts.
      * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
-     * @param {int} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
+     * @param {Number} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
      * @returns {Boolean} True if added, false if not.
      */
     addToParts: function(pPart, pPosition) {
@@ -174,7 +176,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /** (From PartProxy)
      * Returns first matching Part with given Id number.
-     * @param {int} pId Index of Part in Bin.
+     * @param {Number} pId Index of Part in Bin.
      * @returns {Teselagen.models.Part}
      */
     getPartById: function(pId) {
@@ -189,7 +191,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /** (From PartProxy)
      * Returns first matching Part with given name.
-     * @param {int} pName Name of Part in Bin.
+     * @param {Number} pName Name of Part in Bin.
      * @returns {Teselagen.models.Part}
      */
     getPartByName: function(pName) {

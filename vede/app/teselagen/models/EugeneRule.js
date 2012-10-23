@@ -110,6 +110,8 @@ Ext.define("Teselagen.models.EugeneRule", {
 
 
     // EVENTUALLY USE THE BELONGS TO THING TO DO THIS
+    // Tried using Constructor and it doesn't work.
+    // Read on forums to use init as a way to execute methods after the fields block. --DW
     init: function() {
         //device = this.getDeviceDesign().isUniqueRuleName(this));
         //console.log(device);
@@ -185,8 +187,8 @@ Ext.define("Teselagen.models.EugeneRule", {
 
         if (typeof(this.get("operand2")) === "number") {
             ruleText.push( this.get("operand2").toString());
-        } else if ( Ext.getClassName(this.get("operand2")) === "Teselagen.models.PartVO") {
-            ruleText.push( this.get("name"));
+        } else if ( Ext.getClassName(this.get("operand2")) === "Teselagen.models.Part") {
+            ruleText.push( this.get("operand2").get("name"));
         } else {
             /*throw Ext.create("Teselagen.bio.BioException", {
                 message: "generateRuleText(): Cannot generate rule. Operand2 must be a Number or a Part."
