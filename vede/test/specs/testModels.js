@@ -1,6 +1,6 @@
 /**
  * Unit Tests
- * @author Diana Womg
+ * @author Diana Wong
  */
 
 Ext.require("Ext.Ajax");
@@ -130,7 +130,7 @@ Ext.onReady(function() {
 
             it("Calls Constants", function(){
 
-                expect(Teselagen.constants.Constants.self.GENBANK).toBe("Genbank");
+                expect(Teselagen.constants.Constants.GENBANK).toBe("Genbank");
 
             });
         });
@@ -807,6 +807,10 @@ Ext.onReady(function() {
                 coll.getDeviceDesign().setProxy(modelProxy);
                 expect(Ext.getClassName(coll.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
                 //console.log(coll.getDeviceDesign());
+
+                // Do validation
+                var err = coll.validate();
+                expect(err.length).toBe(0);
             });
 
 

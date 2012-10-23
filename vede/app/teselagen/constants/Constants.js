@@ -7,7 +7,7 @@
 Ext.define("Teselagen.constants.Constants", {
     singleton: true,
 
-    statics: {
+    //field: {
         VERSION:                "2.0.4",
         
         //AUTHORS:    "Joanna Chen, Douglas Densmore, Zinovii Dmytriv, Timothy Ham",
@@ -30,10 +30,14 @@ Ext.define("Teselagen.constants.Constants", {
         BIN_MARGIN:                     5,
         COLLECTION_OUTSIDE_MARGIN:      20,
         RECT_SHAPE_DEFAULT_SIZE:        56,
-        RECT_SHAPE_MIN_SIZE:            this.self.RECT_SHAPE_DEFAULT_SIZE / 2,
+        RECT_SHAPE_MIN_SIZE:            this.RECT_SHAPE_DEFAULT_SIZE / 2,
         
         CIRCULAR:   "circular",
-        LINEAR:     "linear"
+        LINEAR:     "linear",
+    //}
+
+    constructor: function() {
+        this.RECT_SHAPE_MIN_SIZE = this.RECT_SHAPE_DEFAULT_SIZE / 2;
     }
 
 });

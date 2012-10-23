@@ -21,6 +21,8 @@ Ext.define("Teselagen.models.SequenceFile", {
     statics: {
     },
 
+    Constants: null,
+
     /**
      * Input parameters.
      * @param {String} sequenceFileFormat (required)
@@ -44,9 +46,9 @@ Ext.define("Teselagen.models.SequenceFile", {
             field: "sequenceFileFormat",
             type: "inclusion",
             list: [
-                Teselagen.constants.Constants.self.GENBANK,     // "Genbank"
-                Teselagen.constants.Constants.self.FASTA,       // "FASTA"
-                Teselagen.constants.Constants.self.JBEI_SEQ     // "jbei-seq"
+                Teselagen.constants.Constants.GENBANK,     // "Genbank"
+                Teselagen.constants.Constants.FASTA,       // "FASTA"
+                Teselagen.constants.Constants.JBEI_SEQ     // "jbei-seq"
             ]
         },
         {field: "sequenceFileContent",  type: "presence"},
@@ -73,11 +75,19 @@ Ext.define("Teselagen.models.SequenceFile", {
             associationKey: "project"
         }
     ],
-    
+
+    /*constructor: function() {
+        console.log("constructor");
+    },*/
 
 
     // Some of these taken from SequenceFileManager/SequenceProxy
+
+    // Tried using Constructor and it doesn't work.
+    // Read on forums to use init as a way to execute methods after the fields block. --DW
     init: function() {
+        //console.log("init");
+        this.Constants = Teselagen.constants.Constants;
 
         // Set the Hash Field
         this.setSequenceFileContent(this.get("sequenceFileContent"));
@@ -127,17 +137,17 @@ Ext.define("Teselagen.models.SequenceFile", {
             return this.get("partSource");
         }
 
-        if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.self.GENBANK) {
+        if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.GENBANK) {
             cnt = content.match(/LOCUS *(\S*)/);
             if (cnt.length > 1) {
                 displayID = cnt[1].toString();
             }
-        } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.self.FASTA) {
+        } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.FASTA) {
             cnt = content.match(/>\s*(\S*)/);
             if (cnt.length > 1) {
                 displayID = cnt[1].toString();
             }
-        } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.self.JBEI_SEQ) {
+        } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.JBEI_SEQ) {
             cnt = content.match(/<seq:name>(.*)<\/seq:name>/);
             if (cnt.length > 1) {
                 displayID = cnt[1].toString();
@@ -154,16 +164,16 @@ Ext.define("Teselagen.models.SequenceFile", {
      */
     setSequenceFileName: function() {
         var format      = this.get("sequenceFileFormat");
-        var constants   = Teselagen.constants.Constants;
+        //var constants   = Teselagen.constants.Constants;
         var displayID   = this.get("partSource");
         var name        = this.get("sequenceFileName");
 
         if (this.get("sequenceFileName") === "" || this.get("sequenceFileName") === undefined ) {
-            if (format === constants.self.GENBANK) {
+            if (format === Teselagen.constants.Constants.GENBANK) {
                 name = displayID + ".gb";
-            } else if (format === constants.self.FASTA) {
+            } else if (format === Teselagen.constants.Constants.FASTA) {
                 name = displayID + ".fas";
-            } else if (format === constants.self.JBEI_SEQ) {
+            } else if (format === Teselagen.constants.Constants.JBEI_SEQ) {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
