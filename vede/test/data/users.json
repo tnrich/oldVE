@@ -1,0 +1,10 @@
+data = {
+                "users": [{
+                    "id": 123,
+                    "name": "Ed",
+                    "orders": [{
+                        "id": 50,
+                        "total": 100
+                    }]
+                }]
+        };
