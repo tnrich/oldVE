@@ -26,26 +26,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			callback: function (records,operation,success) {
 				if(records.length != 1) return console.log('Error loading user');
 				self.currentUser = users.first();
-				if(cb) self.loadProjects(cb); // For Testing
-				self.loadProjects();
+				self.projects = self.currentUser.projects();
+				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
 				//console.log(self.currentUser.getPreferences());
 			}
 		});
-	},
-
-	/**
-	 * Load User Projects
-	 */
-	loadProjects: function (cb) {
-		console.log('PM: Showing projects');
-		var self = this;
-		this.projects = this.currentUser.projects().load({
-			callback: function () {
-				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
-				if(cb) return cb(); // For Testing
-			}
-		});
-		
 	},
 
 	/**
@@ -56,13 +41,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
-		var deprojects = this.workingProject.deprojects().load({
-			callback: function () {
-				projectController.renderDesignsSection(deprojects);
-				//projectController.renderPartsSection(self.workingProject);
-				projectController.renderJ5ResultsSection(deprojects);
-			}
-		});
+
+		var deprojects = this.workingProject.deprojects();
+		//console.log(this.workingProject);
+		//console.log(deprojects);
+		projectController.renderDesignsSection(deprojects);
+		projectController.renderJ5ResultsSection(deprojects);
 
 		var veprojects = this.workingProject.veprojects();
 		projectController.renderPartsSection(veprojects);
@@ -84,12 +68,24 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 	openDesign: function (item) {
 		var id = item.data.id;
-		var projects = this.workingProject.deprojects();
-		var selectedDesign = projects.getById(id);
+		var deprojects = this.workingProject.deprojects();
+		var selectedDEProject = deprojects.getById(id);
+		console.log(selectedDEProject);
+		//selectedDEProject.designs();
+		
+		var selectedDesign = selectedDEProject.getDesign({
+			callback: function (record,operation,success) {
+				console.log(record);
+				selectedDesign = record;
+			}
+		});
+		
+		/*		
 		var tabPanel = Ext.getCmp('tabpanel');
 		tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDesign})).show();		
 	
 		var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
 		deController.renderDesignInContext();
+		*/
 	}
 });

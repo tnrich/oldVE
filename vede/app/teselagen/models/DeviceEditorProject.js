@@ -33,13 +33,13 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         {field: "project_id", type: "presence"},
         {field: "name", type: "presence"}
     ],
-
-
     associations: [{
         type: 'hasOne',
         model: 'Teselagen.models.DeviceDesign',
         associationKey: 'design',
-        getterName: 'getDesign'
+        name: 'design',
+        getterName: 'getDesign',
+        foreignKey: 'id'
     }, {
         type: 'hasMany',
         model: "Teselagen.models.J5Run",
@@ -47,16 +47,10 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         associationKey: 'j5runs'
     }],
     proxy: {
-        type: 'ajax',
-        url: 'getDEProjects.json',
+        type: 'memory',
         reader: {
             type: 'json',
-            root: 'data'
-        },
-        buildUrl: function() {
-            //console.log(sessionData.baseURL);
-            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
-            return sessionData.baseURL + 'getDEProjects';
+            root: 'deprojects'
         }
     }
 });

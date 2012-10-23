@@ -60,30 +60,6 @@ module.exports = function (app) {
     res.send('', 200)
   })
 
-  // Dummy Method
-  app.all('/getDesigns', function (req, res) {
-    res.json({
-      "success": true,
-      "data": [{
-        "id": 1,
-        "project_id": 1,
-        "DesignName": "Design 1"
-      }, {
-        "id": 2,
-        "project_id": 1,
-        "DesignName": "Design 2"
-      }, {
-        "id": 3,
-        "project_id": 2,
-        "DesignName": "Design 3"
-      }, {
-        "id": 4,
-        "project_id": 3,
-        "DesignName": "Design 4"
-      }]
-    });
-  });
-
   app.all('/login', function (req, res) {
 
     // Get parameters
@@ -184,9 +160,18 @@ module.exports = function (app) {
 
   // Dummy method
   app.all('/getUser', restrict, function (req, res) {
+    
+    var User = app.db.model("User");
+    User.findById(req.user._id).populate('projects')
+    .exec(function (err, user) {
+      res.json({"user":user});
+    });
+
+    /*
     res.json({
       "user": req.session.user
     });
+    */
   });
 
 
@@ -201,12 +186,12 @@ module.exports = function (app) {
 
   });
 
-  app.all('/getDEProjects', restrict, function (req, res) {
-    var filter = JSON.parse(req.query.filter)[0].value;
-    var DEProject = app.db.model("DEProject");
-    DEProject.find({"project_id":filter}, function (err, projects) {
-      res.json({"data":projects});
+  app.all('/getDeviceDesign', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.findById(req.query.id, function (err, project) {
+      res.json({"design":project.design});
     });
+  
   });
 
 

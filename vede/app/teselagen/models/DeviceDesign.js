@@ -11,10 +11,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
         //"Teselagen.models.EugeneRule",
     ],
     // The models will break if there is not proxy defined here. Please define appropriately. DW
+    // We need a rest proxy here to load designs from here. RP
+    
     proxy: {
-        type: "memory",
+        type: 'rest',
+        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
         reader: {
-            type: 'json'
+            type: 'json',
+            root: 'design'
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'getDeviceDesign'; // This method reBuild the URL for ajax requests from parents models
         }
     },
         
@@ -26,7 +33,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {name: "id", type: "int"}
+        {
+            name: "id", type: "long"
+        },
+        {
+            name: "payload", type: "string" // This is temporary, not really needed
+        }
     ],
 
     validations: [

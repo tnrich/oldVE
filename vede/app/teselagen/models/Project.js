@@ -22,9 +22,7 @@ Ext.define("Teselagen.models.Project", {
         type: 'hasMany',
         model: 'Teselagen.models.DeviceEditorProject',
         name: 'deprojects',
-        associationKey: 'deprojects',
-        autoLoad: true,
-        foreignKey: 'project_id'
+        associationKey: 'deprojects'
     }, {
         type: 'hasMany',
         model: 'Teselagen.models.VectorEditorProject',
@@ -32,17 +30,10 @@ Ext.define("Teselagen.models.Project", {
         associationKey: 'veprojects'
     }],
     proxy: {
-        type: 'rest',
-        url: 'getProjects.json',
+        type: 'memory',
         reader: {
             type: 'json',
             root: 'projects'
-        },
-        buildUrl: function() {
-            //console.log(sessionData.baseURL);
-            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
-            return sessionData.baseURL + 'getProjects';
         }
-            
     }
 });
