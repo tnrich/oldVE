@@ -49,7 +49,7 @@ app.development.reloadExamples = function(){
 }
 
 app.development.reloadUsers = function(){
-	var User = app.db.model("Users");
+	var User = app.db.model("User");
 	User.findOne({'name':'Guest'},function(err,results){
 		if(results==null)
 		{

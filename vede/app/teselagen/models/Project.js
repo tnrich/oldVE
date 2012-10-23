@@ -3,10 +3,10 @@ Ext.define("Teselagen.models.Project", {
     requires: ['Teselagen.models.DeviceEditorProject', 'Teselagen.models.VectorEditorProject'],
     fields: [{
         name: "id",
-        type: "int"
+        type: "long"
     }, {
         name: "user_id",
-        type: "int"
+        type: "long"
     }, {
         name: "name",
         type: "String",
@@ -39,7 +39,7 @@ Ext.define("Teselagen.models.Project", {
             root: 'projects'
         },
         buildUrl: function() {
-            console.log(sessionData.baseURL);
+            //console.log(sessionData.baseURL);
             //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
             return sessionData.baseURL + 'getProjects';
         }

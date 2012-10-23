@@ -88,8 +88,8 @@ module.exports = function (app, express) {
   });
 
   // Load MONGOOSE SCHEMAS
-  require('./schemas.js')(app);
-
+  //require('./schemas/schemas.js')(app);
+  require('./schemas/DBSchemas.js')(app);
   
 
 

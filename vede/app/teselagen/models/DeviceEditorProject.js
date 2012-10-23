@@ -18,10 +18,10 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
      */
     fields: [{
         name: "id",
-        type: "int"
+        type: "long"
     }, {
         name: "project_id",
-        type: "int"
+        type: "long"
     }, {
         name: "name",
         type: "String",
@@ -52,6 +52,11 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         reader: {
             type: 'json',
             root: 'data'
+        },
+        buildUrl: function() {
+            //console.log(sessionData.baseURL);
+            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
+            return sessionData.baseURL + 'getDEProjects';
         }
     }
 });

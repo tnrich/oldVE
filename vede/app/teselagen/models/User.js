@@ -8,9 +8,9 @@ Ext.define("Teselagen.models.User", {
     requires: ['Teselagen.models.Project','Teselagen.models.ApplicationPreferences'],
     fields: [{
         name: "id",
-        type: "int"
+        type: "long"
     }, {
-        name: "name",
+        name: "username",
         type: "String"
     }],
     associations: [{
@@ -34,7 +34,7 @@ Ext.define("Teselagen.models.User", {
             root: 'user'
         },
         buildUrl: function() {
-            console.log(sessionData.baseURL);
+            //console.log(sessionData.baseURL);
             //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
             return sessionData.baseURL + 'getUser';
         }

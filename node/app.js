@@ -63,8 +63,11 @@ require('./development.js')(app);
 var config = require('./config.js')(app, express);
 
 // Routes
-require('./routes/backend.js')(app);
-require('./routes/j5.js')(app);
+require('./routes/api.js')(app);
+require('./routes/testing.js')(app);
+//require('./routes/backend.js')(app);
+//require('./routes/j5.js')(app);
+
 // Listen Local Port on environment port or default 3000
 app.listen(process.env.NODE_PORT || 3000, function () {
   console.log("OPTIONS: Nodejs server is running in %s mode",process.env.NODE_ENV);
