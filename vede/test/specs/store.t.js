@@ -22,14 +22,17 @@ Ext.onReady(function () {
             it("Load Specific Project", function () {
                 projStore.on("load", function() {
                     project = projStore.first();
-                    expect(project.getId()).toBe(1);
-                    expect(project.get("name")).toBe("Project A");
+                    expect(project).toBeDefined();
+                    if (project) {
+                        expect(project.getId()).toBe(1);
+                        expect(project.get("name")).toBe("Project A");
+                    }
                 });
             });
             it("Get VE projects", function() {
                 waitsFor(function() {
                     return Ext.isDefined(project);
-                }, "Project is not defined.", 500);
+                }, "Project to be defined.", 500);
                 runs(function() {
                     var veprojects = project.veprojects();
                     veprojects.on("load", function() {
@@ -44,18 +47,20 @@ Ext.onReady(function () {
             it("Get Part from VE project", function() {
                 waitsFor(function() {
                     return Ext.isDefined(veproject);
-                });
+                }, "VE project to be defined", 500);
                 runs(function() {
                     veproject.getPart(function(pModel) {
                         expect(pModel).toBeDefined();
-                        expect(pModel.get("name")).toBe("Part 1");
+                        if (pModel) {
+                            expect(pModel.get("name")).toBe("Part 1");
+                        }
                     });
                 });
             });
             it("Get DE projects", function() {
                 waitsFor(function() {
                     return Ext.isDefined(project);
-                }, "Project is not defined.", 500);
+                }, "Project to be defined", 500);
                 runs(function() {
                     var deprojects = project.deprojects();
                     deprojects.on("load", function() {
@@ -63,14 +68,16 @@ Ext.onReady(function () {
                         expect(deprojects.count()).toBe(2);
                         deproject = deprojects.first();
                         expect(deproject).toBeDefined();
-                        expect(deproject.get("name")).toBe("DE Proj 1");
+                        if (deproject) {
+                            expect(deproject.get("name")).toBe("DE Proj 1");
+                        }
                     });
                 });
             });
             it("Get j5 run from DE project", function() {
                 waitsFor(function() {
                     return Ext.isDefined(deproject);
-                });
+                }, "DE Project to be defined", 500);
                 runs(function() {
                     var j5runs, j5run;
                     j5runs = deproject.j5runs();
@@ -80,14 +87,16 @@ Ext.onReady(function () {
                     expect(j5run.get("name")).toBe("j5 Run 1");
                 });
             });
-            it("Load device design", function () {
+            xit("Load device design", function () {
                 waitsFor(function() {
                     return Ext.isDefined(deproject);
-                });
+                }, "DE Project to be defined", 500);
                 runs(function() {
                     deproject.getDesign(function(pModel) {
                         expect(pModel).toBeDefined();
-                        expect(pModel.getId()).toBe(1);
+                        if (pModel) {
+                            expect(pModel.getId()).toBe(1);
+                        }
                     });
                 });
             });
