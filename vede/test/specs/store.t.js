@@ -1,9 +1,5 @@
-/**
- * Unit Tests
- */
-
+/*global describe, expect, it, runs, waitsFor*/
 Ext.require("Ext.Ajax");
-
 Ext.require("Teselagen.constants.Constants");
 Ext.require("Teselagen.store.ProjectStore");
 
@@ -11,71 +7,98 @@ Ext.onReady(function () {
 
     describe("Store tests - ", function () {
 
-        describe("Create Project Store", function () {
+        describe("Project.", function () {
 
-            var store, value, flag;
+            var projStore;
+            var project, veproject, deproject;
 
-            it("Create Project Store", function () {
-                store = Ext.create("Teselagen.store.ProjectStore");
-                expect(store).not.toBe(null);
-            });
-
-            it("Load Projects", function () {
-
-                runs(function () {
-                    flag = false;
-                    store.load({
-                        scope: this,
-                        callback: function (records, operation, success) {
-                            flag = true;
-                        }
-                    });
-                    setTimeout(function () {
-                        flag = true;
-                    }, 500);
+            it("Load ProjectStore", function () {
+                projStore = Ext.create("Teselagen.store.ProjectStore");
+                projStore.load(function() {
+                    expect(projStore.getCount()).toBe(3);
                 });
-
-                waitsFor(function () {
-                    return flag;
-                }, "The json should be loaded", 750);
-
-
-                runs(function () {
-                    expect(store.getTotalCount()).toBe(2);
-                });
-
             });
-
 
             it("Load Specific Project", function () {
-                var firstRecord = store.data.items[0];
-                //console.log(firstRecord);
-                var parts = firstRecord.parts();
-
-                parts.on('load', function () {
-                    //console.log('Parts Loaded');
-                    parts.clearFilter();
-                    var firstPart = parts.data.items[0];
-                    expect(firstPart).not.toBe(null);
+                projStore.on("load", function() {
+                    project = projStore.first();
+                    expect(project).toBeDefined();
+                    if (project) {
+                        expect(project.getId()).toBe(1);
+                        expect(project.get("name")).toBe("Project A");
+                    }
                 });
-
             });
-
-            it("Load Designs of a Project", function () {
-                var firstRecord = store.data.items[0];
-
-                var designs = firstRecord.designs();
-
-                if (designs.isLoading()) {
-                    console.log('Designs are loading');
-                }
-                designs.on('load', function () {
-                    console.log('Designs are loaded');
-                    designs.clearFilter();
-                    var firstDesign = designs.data.items[0];
-                    expect(firstDesign).not.toBe(null);
+            it("Get VE projects", function() {
+                waitsFor(function() {
+                    return Ext.isDefined(project);
+                }, "Project to be defined.", 500);
+                runs(function() {
+                    var veprojects = project.veprojects();
+                    veprojects.on("load", function() {
+                        expect(veprojects).toBeDefined();
+                        expect(veprojects.count()).toBe(2);
+                        veproject = veprojects.first();
+                        expect(veproject).toBeDefined();
+                        expect(veproject.get("name")).toBe("VE Proj 1");
+                    });
                 });
-
+            });
+            it("Get Part from VE project", function() {
+                waitsFor(function() {
+                    return Ext.isDefined(veproject);
+                }, "VE project to be defined", 500);
+                runs(function() {
+                    veproject.getPart(function(pModel) {
+                        expect(pModel).toBeDefined();
+                        if (pModel) {
+                            expect(pModel.get("name")).toBe("Part 1");
+                        }
+                    });
+                });
+            });
+            it("Get DE projects", function() {
+                waitsFor(function() {
+                    return Ext.isDefined(project);
+                }, "Project to be defined", 500);
+                runs(function() {
+                    var deprojects = project.deprojects();
+                    deprojects.on("load", function() {
+                        expect(deprojects).toBeDefined();
+                        expect(deprojects.count()).toBe(2);
+                        deproject = deprojects.first();
+                        expect(deproject).toBeDefined();
+                        if (deproject) {
+                            expect(deproject.get("name")).toBe("DE Proj 1");
+                        }
+                    });
+                });
+            });
+            it("Get j5 run from DE project", function() {
+                waitsFor(function() {
+                    return Ext.isDefined(deproject);
+                }, "DE Project to be defined", 500);
+                runs(function() {
+                    var j5runs, j5run;
+                    j5runs = deproject.j5runs();
+                    expect(j5runs).toBeDefined();
+                    j5run = j5runs.first();
+                    expect(j5run).toBeDefined();
+                    expect(j5run.get("name")).toBe("j5 Run 1");
+                });
+            });
+            xit("Load device design", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(deproject);
+                }, "DE Project to be defined", 500);
+                runs(function() {
+                    deproject.getDesign(function(pModel) {
+                        expect(pModel).toBeDefined();
+                        if (pModel) {
+                            expect(pModel.getId()).toBe(1);
+                        }
+                    });
+                });
             });
 
         });

@@ -14,8 +14,8 @@ Ext.define("Teselagen.models.Part", {
     ],
 
     proxy: {
-        type: "rest",
-        url: "getParts.json",
+        type: "ajax",
+        url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
             root: "data"

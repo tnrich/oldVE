@@ -155,5 +155,18 @@ Ext.onReady(function() {
             expect(seqfile).toBeDefined();
             expect(Ext.getClassName(seqfile)).toBe("Teselagen.models.SequenceFile");
         });
+        describe("Ajax tests.", function() {
+            var proj, veprojs;
+            it("Project", function() {
+                proj = Ext.create("Teselagen.models.Project", {id:1, name: "Project Z"});
+            });
+            it("VEProjects store", function() {
+                veprojs = proj.veprojects();
+                veprojs.on("load", function() {
+                    expect(veprojs).toBeDefined();
+                    expect(veprojs.count()).toBe(2);
+                });
+            });
+        });
     });
 });
