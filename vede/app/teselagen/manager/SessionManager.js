@@ -18,12 +18,20 @@ Ext.define("Teselagen.manager.SessionManager", {
     
     constants: Teselagen.constants.Constants,
     
+    /**
+     * @memberOf Teselagen.manager.SessionManager
+     */
     constructor: function() {
         this.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + "api/";
         this.env = this.constants.ENV_DEV;
 //        console.log(this.baseURL);
     },
     
+    /**
+     * Builds a URL for Proxies.
+     * @param {String} pAction The action to be added to base URL.
+     * @param {String} pDefault The default URL used for testing environment.
+     */
     buildUrl: function(pAction, pDefault) {
         var url = this.baseURL + pAction;
         if (this.getEnv() === this.constants.ENV_TEST) {
