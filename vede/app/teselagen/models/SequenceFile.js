@@ -40,7 +40,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     validations: [
         {field: "sequenceFileFormat",   type: "presence"},
-        /*
         {
             field: "sequenceFileFormat",
             type: "inclusion",
@@ -49,7 +48,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 Teselagen.constants.Constants.FASTA,       // "FASTA"
                 Teselagen.constants.Constants.JBEI_SEQ     // "jbei-seq"
             ]
-        },*/
+        },
         {field: "sequenceFileContent",  type: "presence"},
         {field: "sequenceFileName",     type: "presence"},
         {field: "partSource",           type: "presence"},
