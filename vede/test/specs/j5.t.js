@@ -124,9 +124,13 @@ Ext.onReady(function() {
         describe("Test the Model", function() {
             it("Design", function(){
                 //console.log(Ext.getClassName(design));
+
                 console.log(design.getJ5Collection());
                 console.log(design.getJ5Collection().bins());
                 //console.log(design.getJ5Collection().rules());
+
+                //console.log(design);
+
                 //design.save();
                 //console.log(DeviceDesignManager.generateRuleText(design, rule1));
             });

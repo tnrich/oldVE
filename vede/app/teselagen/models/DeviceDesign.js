@@ -1,4 +1,4 @@
-Ext.onReady(function() {
+/*Ext.onReady(function() {
 Ext.data.writer.Json.override({
     getRecordData: function(record, getEverything) {
         //return record.getAllData();
@@ -25,7 +25,7 @@ Ext.data.Model.addMembers({
         //return dataMerged;
     }
 });
-});
+});*/
 
 /**
  * @class Teselagen.models.DeviceDesign
@@ -46,34 +46,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
     proxy: {
         type: "memory"
     },
-    /*
-    proxy: {
-        type: 'rest',
-        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
-        reader: {
-            type: 'json',
-            root: 'design'
-        },
-        writer: {
-            type: 'json',
-            
-            //getRecordData: This method should resolve associations and prepare data before saving design
-            
-            getRecordData: function(record, getEverything) {
-                var designFields = record.getData()
-                var associatedData = record.getAssociatedData();
-                var j5Collection = associatedData["Teselagen.models.J5Collection"];
-                var rules = associatedData["rules"];
-
-                //console.log(Ext.getClassName(j5Collection));
-                console.log(j5Collection);
-            }
-        },
-        buildUrl: function() {
-            return sessionData.baseURL + 'getDeviceDesign'; // This method reBuild the URL for ajax requests from parents models
-        }
-    },
-    */    
     statics: {
     },
 
