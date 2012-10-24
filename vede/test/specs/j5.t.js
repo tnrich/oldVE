@@ -124,7 +124,7 @@ Ext.onReady(function() {
             it("Design", function(){
                 //console.log(Ext.getClassName(design));
                 //console.log(design);
-                design.save();
+                //design.save();
                 //console.log(DeviceDesignManager.generateRuleText(design, rule1));
             });
         });

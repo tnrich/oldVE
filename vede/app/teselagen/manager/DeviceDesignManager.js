@@ -339,15 +339,23 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return pDevice.getJ5Collection().isUniqueBinName(pBinName);
     },
     /**
+     * Sets the name for a bin, by the bin's index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex
+     * @param {String} pBinName New name for bin
+     * @returns {Boolean} True if successful.
      */
-    setBinName: function(pDevice, pJ5Bin, pBinName){
+    setBinName: function(pDevice, pBinIndex, pBinName){
         var unique = this.isUniqueBinName(pDevice, pBinName);
         if (!unique) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.J5Bin.setBinName(): File name already exists in Design."
             });
         }
-        pJ5Bin.set("binName", pBinName);
+        var bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
+        bin.set("binName", pBinName);
+
+        return true;
     },
     /** UNTESTED
      */
