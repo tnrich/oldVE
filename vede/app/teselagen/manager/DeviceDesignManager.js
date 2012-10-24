@@ -69,16 +69,16 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var rule = Ext.create("Teselagen.models.EugeneRule", {
             name: pRuleName,
             negationOperator: pNegationOperator,
-            compositionalOperator: pCompositionalOperator,
-            operand2: pOperand2
+            compositionalOperator: pCompositionalOperator
         });
         rule.setOperand1(pOperand1);
+        rule.setOperand2(pOperand2);
 
         var err = rule.validate();
         if (err.length > 0) {
             console.warn("Creating EugeneRule: " + err.length + " errors found.");
         }
-        pDevice.addToRules(pRule); //put this here?
+        pDevice.addToRules(rule); //put this here?
         return rule;
     },
     /** UNTESTED
@@ -425,7 +425,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {pIconID} pIconID (?)
      */
     createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
-        var part = Ext.create("Teselagen.models.J5Bin", {
+        var part = Ext.create("Teselagen.models.Part", {
             name: pName,
             genbankStartBP: pStart,
             endBP: pEnd,
