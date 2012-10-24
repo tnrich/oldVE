@@ -8,8 +8,6 @@ Ext.define("Teselagen.models.SequenceFile", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.Part",
-        //"Teselagen.models.Project,
         "Teselagen.bio.util.Sha256",
         "Teselagen.constants.Constants"
     ],
@@ -44,9 +42,9 @@ Ext.define("Teselagen.models.SequenceFile", {
             field: "sequenceFileFormat",
             type: "inclusion",
             list: [
-                Teselagen.constants.Constants.self.GENBANK,     // "Genbank"
-                Teselagen.constants.Constants.self.FASTA,       // "FASTA"
-                Teselagen.constants.Constants.self.JBEI_SEQ     // "jbei-seq"
+                Teselagen.constants.Constants.GENBANK,     // "Genbank"
+                Teselagen.constants.Constants.FASTA,       // "FASTA"
+                Teselagen.constants.Constants.JBEI_SEQ     // "jbei-seq"
             ]
         },
         {field: "sequenceFileContent",  type: "presence"},
