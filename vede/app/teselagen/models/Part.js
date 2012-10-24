@@ -9,8 +9,6 @@ Ext.define("Teselagen.models.Part", {
 
     requires: [
         "Teselagen.models.SequenceFile"
-//        "Teselagen.models.J5Bin",
-//        "Teselagen.models.EugeneRule"
     ],
 
     proxy: {
