@@ -10,12 +10,11 @@ Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.util.XmlToJson");
 Ext.require("Teselagen.bio.util.Sha256");
 
-//Ext.require("Teselagen.bio.parsers.GenbankManager");
-//Ext.require("Teselagen.bio.parsers.ParsersManager");
-
-//Ext.require("Teselagen.utils.SequenceUtils");
-//Ext.require("Teselagen.utils.FormatUtils");
-//Ext.require("Teselagen.utils.DeXmlUtils");
+Ext.require("Teselagen.bio.parsers.GenbankManager");
+Ext.require("Teselagen.bio.parsers.ParsersManager");
+Ext.require("Teselagen.utils.SequenceUtils");
+Ext.require("Teselagen.utils.FormatUtils");
+Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
 
@@ -37,6 +36,13 @@ Ext.require("Teselagen.models.Project");
 Ext.require("Teselagen.manager.SequenceFileManager");
 Ext.require("Teselagen.manager.EugeneRuleManager");
 Ext.require("Teselagen.manager.DeviceDesignManager");
+
+Ext.define('sessionData', { 
+          singleton: true, 
+          data: null,
+          baseURL: 'http://teselagen.com/api/'
+}); 
+
 
 Ext.onReady(function() {
 
@@ -115,7 +121,9 @@ Ext.onReady(function() {
         
         describe("Test the Model", function() {
             it("Design", function(){
+                console.log(Ext.getClassName(design));
                 console.log(design);
+                design.save();
                 console.log(DeviceDesignManager.generateRuleText(design, rule1));
             });
         });
