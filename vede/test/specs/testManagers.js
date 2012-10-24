@@ -172,14 +172,14 @@ Ext.onReady(function() {
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
                     operand1: Ext.create("Teselagen.models.PartVO", { name: "partvo"}),
-                    compositionalOperator: "compOp",
+                    compositionalOperator: "AFTER",
                     operand2: 123
                 });
                 var tmp = Ext.create("Teselagen.manager.EugeneRuleManager",{
                     eugeneRules: [eug]
                 });
                 var str = tmp.generateRuleText(eug);
-                expect(str).toBe("Rule eug(partvo compOp 123);");
+                expect(str).toBe("Rule eug(partvo AFTER 123);");
             });
 
             it("getRuleByName()", function(){
@@ -202,10 +202,33 @@ Ext.onReady(function() {
 
             describe("DeviceDesign Management", function() {
                 it("createDeviceDesign()", function(){
-                    var device = DeviceDesignManager.createDeviceDesign(3);
-                    expect(device.validate().length).toBe(0);
+                    var design = DeviceDesignManager.createDeviceDesign(3);
 
-                    var err = device.validate();
+                    expect(design.getJ5Collection().isCircular()).toBe(true);
+                    expect(design.getJ5Collection().get("combinatorial")).toBe(false);
+
+                    var err = design.validate();
+                    console.log(err);
+                    expect(err.length).toBe(0);
+                });
+
+                it("createDeviceDesignFromBins()", function(){
+                    var part1 = Ext.create("Teselagen.models.Part");
+                    var part2 = Ext.create("Teselagen.models.Part");
+                    var bin = Ext.create("Teselagen.models.J5Bin", {
+                        binName: "newBin"
+                    });
+                    bin.addToParts([part1, part2]);
+                    var design = DeviceDesignManager.createDeviceDesignFromBins([bin]);
+
+                    expect(design.getJ5Collection().binCount()).toBe(1);
+                    expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("newBin");
+
+                    expect(design.getJ5Collection().isCircular()).toBe(true);
+                    expect(design.getJ5Collection().get("combinatorial")).toBe(true);
+                    expect(DeviceDesignManager.checkCombinatorial(design)).toBe(true);
+
+                    var err = design.validate();
                     expect(err.length).toBe(0);
                 });
 
@@ -219,24 +242,30 @@ Ext.onReady(function() {
                     design      = DeviceDesignManager.createDeviceDesign(2);
                 });
 
-                it("isCircular()", function(){
-                    expect(DeviceDesignManager.isCircular(design)).toBe(true);
-                    expect(DeviceDesignManager.binCount(design)).toBe(2);
-                });
-
-                it("isCircular()", function(){
-                    expect(DeviceDesignManager.isCircular(design)).toBe(true);
-                });
-
                 it("createEmptyJ5Collection()--overwrites existing collection", function(){
                     var coll = DeviceDesignManager.createEmptyJ5Collection(design, 3, false);
 
                     expect(design.getJ5Collection().binCount()).toBe(3);
+                    expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
                     expect(DeviceDesignManager.binCount(design)).toBe(3);
 
                     expect(DeviceDesignManager.isCircular(design)).toBe(false);
 
                     expect(coll.validate().length).toBe(0);
+                });
+
+                it("isCircular()", function(){
+                    expect(DeviceDesignManager.isCircular(design)).toBe(true);
+                });
+
+                it("setCircular()", function(){
+                    expect(DeviceDesignManager.isCircular(design)).toBe(true);
+                    DeviceDesignManager.setCircular(design, false);
+                    expect(DeviceDesignManager.isCircular(design)).toBe(false);
+                });
+
+                it("binCount()", function(){
+                    expect(DeviceDesignManager.binCount(design)).toBe(2);
                 });
 
                 it("checkCombinatorial()", function(){
@@ -253,7 +282,16 @@ Ext.onReady(function() {
                     var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2], -1);
                     expect(success).toBe(true);
 
+                    // Note that adding parts does not trigger a setting of Combinatorial
+                    // Need to run DeviceDesignManager.checkCombinatorial() to set and check
+                    expect(design.getJ5Collection().get("combinatorial")).toBe(false);
+
                     expect(DeviceDesignManager.checkCombinatorial(design)).toBe(true);
+
+                    expect(design.getJ5Collection().get("combinatorial")).toBe(true);
+                });
+
+                it("setCombinatorial() *** Test Not written", function(){
                 });
 
                 it("findMaxNumParts()", function(){
@@ -289,6 +327,7 @@ Ext.onReady(function() {
 
                     design.getJ5Collection().bins().getAt(1).addToParts([part2], -1);
                     expect(DeviceDesignManager.checkJ5Ready(design)).toBe(true);
+                    // Adding a part in each of the two bins will make this Design ready
                 });
             });
 
@@ -332,32 +371,34 @@ Ext.onReady(function() {
                     var success = design.getJ5Collection().addToBin(bin, 0);
                     expect(success).toBe(true);
 
+                    console.log(design.getJ5Collection().bins().getAt(0));
                     var unique = DeviceDesignManager.isUniqueBinName(design, "newBin");
+                    unique = design.getJ5Collection().isUniqueBinName("newBin");
                     expect(unique).toBe(false);
 
                     unique = DeviceDesignManager.isUniqueBinName(design, "blahblah");
                     expect(unique).toBe(true);
                 });
 
-                it("()", function(){
+                it("setBinName()***", function(){
                 });
 
-                it("()", function(){
+                it("addBin()", function(){
                 });
 
-                it("()", function(){
+                it("addEmptyBinByIndex()", function(){
                 });
 
-                it("()", function(){
+                it("removeBin()", function(){
                 });
 
-                it("()", function(){
+                it("removeBinByIndex()", function(){
                 });
 
                 it("countNonEmptyParts()", function(){
                 });
 
-                it("()", function(){
+                it("getPartByBin()", function(){
                 });
             });
 

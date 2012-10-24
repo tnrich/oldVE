@@ -42,6 +42,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     ],
     // The models will break if there is not proxy defined here. Please define appropriately. DW
     // We need a rest proxy here to load designs from here. RP
+
+    /*proxy: {
+        type: "memory"
+    },*/
     
     proxy: {
         type: 'rest',
@@ -68,7 +72,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     fields: [
         {
-            name: "id", type: "long"
+            name: "id",
+            type: "long",
+            defaultValue: 0
         },
         {
             name: "payload", type: "string" // This is temporary, not really needed
@@ -76,7 +82,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     ],
 
     validations: [
-        {field: "id", type: "presence"}
+        //{field: "id", type: "presence"}
     ],
 
     associations: [

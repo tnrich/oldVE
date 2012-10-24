@@ -51,6 +51,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var combo = this.checkCombinatorial(device);
         //console.log(combo);
         device.getJ5Collection().set("combinatorial", combo);
+        //this.setCombinatorial(device);
 
         var err = device.validate();
         if (err.length > 0) {
@@ -160,6 +161,14 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     isCircular: function(pDevice) {
         return pDevice.getJ5Collection().isCircular();
     },
+
+    /**
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Boolean} pCircular
+     */
+    setCircular: function(pDevice, pCircular) {
+        pDevice.getJ5Collection().set("isCircular", pCircular);
+    },
     /**
      * Returns the number of J5Bins in a J5Collection
      * @param {Teselagen.models.DeviceDesign} pDevice
@@ -170,9 +179,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
-     * Checks if J5Collection is combinatorial, i.e. if there is more than one
-     * Part in a J5Bin.
-     * @param {Teselagen.models.DeviceDesign}
+     * Checks if J5Collection is combinatorial, i.e. if there is more than one Part in a J5Bin.
+     * NOTE: After checking for combinatorial, this method also sets the status of "combinatorial"
+     * J5Collection.
+     * If more than one part is added to a bin through the models, the combinatorial flag may not be triggered.
+     * Using this function would be necessary to set the flags correctly and to check the status.
+     *
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @returns {Boolean}
      */
     checkCombinatorial: function(pDevice) {
@@ -194,6 +207,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         collection.set("combinatorial", combo);
         return combo;
+    },
+
+    /** UNTESTED
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Boolean} pCircular
+     */
+    setCombinatorial: function(pDevice) {
+        var combo = this.checkCombinatorial(pDevice);
+        pDevice.getJ5Collection().set("combinatorial", combo);
     },
 
     /**
