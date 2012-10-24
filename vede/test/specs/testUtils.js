@@ -1,6 +1,6 @@
 /**
  * Unit Tests
- * @author Diana Womg
+ * @author Diana Wong
  */
 
 Ext.require("Ext.Ajax");

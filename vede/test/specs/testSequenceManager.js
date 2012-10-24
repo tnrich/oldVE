@@ -1,5 +1,5 @@
 /* 
- * @author Diana Womg
+ * @author Diana Wong
  */
 
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
@@ -39,7 +39,7 @@ Ext.onReady(function() {
             //console.log(feat1.getLocations());
 
 
-            // NOTE: If you only have one location, then 
+            // NOTE: If you only have one location, then
             //          sm.getFeatures()[0].getName()
             // works fine.
             // If you add locations (see testSeqMgr-removeSequence.js), then  you have to do:

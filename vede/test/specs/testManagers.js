@@ -1,6 +1,6 @@
 /**
  * Unit Tests
- * @author Diana Womg
+ * @author Diana Wong
  */
 
 Ext.require("Ext.Ajax");
@@ -204,6 +204,9 @@ Ext.onReady(function() {
                 it("createDeviceDesign()", function(){
                     var device = DeviceDesignManager.createDeviceDesign(3);
                     expect(device.validate().length).toBe(0);
+
+                    var err = device.validate();
+                    expect(err.length).toBe(0);
                 });
 
                 it("()", function(){
@@ -232,6 +235,8 @@ Ext.onReady(function() {
                     expect(DeviceDesignManager.binCount(design)).toBe(3);
 
                     expect(DeviceDesignManager.isCircular(design)).toBe(false);
+
+                    expect(coll.validate().length).toBe(0);
                 });
 
                 it("checkCombinatorial()", function(){
@@ -285,33 +290,79 @@ Ext.onReady(function() {
                     design.getJ5Collection().bins().getAt(1).addToParts([part2], -1);
                     expect(DeviceDesignManager.checkJ5Ready(design)).toBe(true);
                 });
-
-//LAST HERE  DW: 10.22.2012
-                it("getBinByIndex()", function(){
-                    var bin = DeviceDesignManager.getBinByIndex(design, 0);
-                    console.log(bin);
-                });
             });
 
             describe("J5Bin Management", function() {
+
+                beforeEach(function() {
+                    design  = DeviceDesignManager.createDeviceDesign(2);
+                    bin     = Ext.create("Teselagen.models.J5Bin", {
+                        binName: "newBin"
+                    });
+                });
+
                 it("createEmptyJ5Bin()", function(){
+                    expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
+                    expect(design.getJ5Collection().bins().count(0)).toBe(2);
+
+                    var bin = DeviceDesignManager.createEmptyJ5Bin(design, "TestBin", 0);
+                    var tmpBin = design.getJ5Collection().bins().getAt(0);
+
+                    expect(tmpBin.get("binName")).toBe("TestBin");
+                    expect(design.getJ5Collection().bins().count(0)).toBe(3);
+                });
+
+                it("getBinByIndex()", function(){
+                    design.getJ5Collection().addToBin(bin, 0);
+
+                    var tmpBin = DeviceDesignManager.getBinByIndex(design, 0);
+                    expect(tmpBin.get("binName")).toBe("newBin");
+                });
+
+                it("getBinIndex()", function(){
+                    var success = design.getJ5Collection().addToBin(bin, 1);
+                    expect(success).toBe(true);
+
+                    var index = DeviceDesignManager.getBinIndex(design, bin);
+                    //console.log(DeviceDesignManager.getBinByIndex(design,1)===bin);
+                    expect(index).toBe(1);
+                });
+
+                it("isUniqueBinName()", function(){
+                    var success = design.getJ5Collection().addToBin(bin, 0);
+                    expect(success).toBe(true);
+
+                    var unique = DeviceDesignManager.isUniqueBinName(design, "newBin");
+                    expect(unique).toBe(false);
+
+                    unique = DeviceDesignManager.isUniqueBinName(design, "blahblah");
+                    expect(unique).toBe(true);
+                });
+
+                it("()", function(){
+                });
+
+                it("()", function(){
+                });
+
+                it("()", function(){
+                });
+
+                it("()", function(){
+                });
+
+                it("()", function(){
                 });
 
                 it("countNonEmptyParts()", function(){
-                });
-
-                it("())", function(){
                 });
 
                 it("()", function(){
                 });
             });
 
+//LAST HERE  DW: 10.23.2012
             describe("SequenceFile Management", function() {
-
-                beforeEach(function() {
-                    design      = DeviceDesignManager.createDeviceDesign(2);
-                });
 
                 it("createPart()", function(){
                     //var seq = DeviceDesignManager.createSequenceFile(design, )
@@ -365,7 +416,7 @@ Ext.onReady(function() {
 
             
 
-            describe("CSV", function() {
+            xdescribe("CSV", function() {
 
                 it(")", function(){
                 });
@@ -374,7 +425,7 @@ Ext.onReady(function() {
                 });
             });
 
-            describe("Helper Functions", function() {
+            xdescribe("Helper Functions", function() {
 
                 it("reverseComplement()", function(){
                 });

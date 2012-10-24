@@ -11,10 +11,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
         //"Teselagen.models.EugeneRule",
     ],
     // The models will break if there is not proxy defined here. Please define appropriately. DW
+    // We need a rest proxy here to load designs from here. RP
+    
     proxy: {
-        type: "memory",
+        type: 'rest',
+        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
         reader: {
-            type: 'json'
+            type: 'json',
+            root: 'design'
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'getDeviceDesign'; // This method reBuild the URL for ajax requests from parents models
         }
     },
         
@@ -26,7 +33,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {name: "id", type: "int"}
+        {
+            name: "id", type: "long"
+        },
+        {
+            name: "payload", type: "string" // This is temporary, not really needed
+        }
     ],
 
     validations: [
@@ -58,6 +70,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
     init: function() {
     },
 
+    /**
+     * Creates a J5Collection with pNumBins empty J5Bins.
+     * @param {Number} pNumBins Number of empty J5Bins to make in Collection
+     * @returns {Teselagen.models.J5Collection}
+     */
     createNewCollection: function(pNumBins) {
         if (this.getJ5Collection().binCount() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
@@ -68,6 +85,23 @@ Ext.define("Teselagen.models.DeviceDesign", {
             j5Coll.addToBin(bin, i);
         }
         //this.set("j5Collection", j5Coll);
+        this.setJ5Collection(j5Coll);
+        return j5Coll;
+    },
+
+    /** NOT TESTED
+     * Creates a J5Collection from given J5Bins.
+     * @param {Teselagen.models.J5Bins[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
+     * @returns {Teselagen.models.J5Collection}
+     */
+    createCollectionFromBins: function(pBins) {
+        if (this.getJ5Collection().binCount() > 0) {
+            console.warn("Warning. Overwriting existing J5Collection");
+        }
+        var j5Coll = Ext.create("Teselagen.models.J5Collection");
+        for (var i = 0; i < pBins.length; i++) {
+            j5Coll.addToBin(pBins[i], i);
+        }
         this.setJ5Collection(j5Coll);
         return j5Coll;
     },
