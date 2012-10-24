@@ -16,12 +16,13 @@ Ext.define("Teselagen.manager.SessionManager", {
         env: null
     },
     
-    constants: Teselagen.constants.Constants,
+    constants: null,
     
     /**
      * @memberOf Teselagen.manager.SessionManager
      */
     constructor: function() {
+        this.constants = Teselagen.constants.Constants;
         this.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + "api/";
         this.env = this.constants.ENV_DEV;
 //        console.log(this.baseURL);
