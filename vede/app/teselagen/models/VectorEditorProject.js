@@ -15,11 +15,9 @@ Ext.define("Teselagen.models.VectorEditorProject", {
         defaultValue: ""
     }],
     associations: [{
-        type: 'hasOne',
+        type: 'hasMany',
         model: 'Teselagen.models.Part',
-        name: 'part',
-        associationKey: 'part',
-        getterName: 'getPart',
+        name: 'parts',
         autoLoad: true,
         foreignKey: 'veproject_id'
     }],
