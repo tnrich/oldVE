@@ -36,8 +36,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
         //"Teselagen.models.Project",
-        "Teselagen.models.J5Collection"//,
-        //"Teselagen.models.EugeneRule",
+        "Teselagen.models.J5Collection",
+        "Teselagen.models.EugeneRule"//,
         //,'custom.JsonWriterOverride'
     ],
     // The models will break if there is not proxy defined here. Please define appropriately. DW

@@ -448,19 +448,16 @@ Ext.onReady(function() {
 
             it("Creates EugeneRule", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123,
                     compositionalOperator: "AFTER"
                 });
-                eugene.setProxy(modelProxy);
                 expect(eugene).not.toBe(null);
 
                 expect(eugene.get("name")).toBe("rule0"); //
                 expect(eugene.get("negationOperator")).toBe(false);
             });
             
-            it("Test Associations -- DEVICE DESIGN MUST HAVE PROXY", function(){
+            it("Test Associations", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123,
                     compositionalOperator: "AFTER"
                 });
                 eugene.setProxy(modelProxy);
@@ -474,27 +471,16 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(eugene.getOperand1())).toBe("Teselagen.models.Part");
             });
 
-            it("Creates EugeneRule", function(){
-                var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123,
-                    compositionalOperator: "AFTER"
-                });
-                expect(eugene).not.toBe(null);
-
-                expect(eugene.get("name").match(/rule/).length).toBe(1); //
-                expect(eugene.get("negationOperator")).toBe(false);
-            });
-
-            it("Rejects unacceptable operand2", function(){
+            it("Rejects unacceptable compositionalOperator", function(){
                 var eugene, e;
                 var flag = false;
                 try {
                     eugene = Ext.create("Teselagen.models.EugeneRule", {
-                        compositionalOperator: "AFTER"
-                    } );
+                        compositionalOperator: ""
+                    });
                 } catch (bio) {
                     flag = true;
-                    expect(bio.message).toBe("Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part.");
+                    //expect(bio.message).toBe("Teselagen.models.EugeneRule: Illegal CompositionalOperator: ");
                 }
                 expect(flag).toBe(true);
             });
@@ -502,21 +488,17 @@ Ext.onReady(function() {
             it("Repairs a bad name", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     name: "blah blah",
-                    operand2: 123,
                     compositionalOperator: "AFTER"
                 });
                 expect(eugene.get("name")).toBe("blahblah");
             });
 
-            it("setOperand1() -- Using hasOne", function(){
+            it("setOperand1()", function(){
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
-                    //operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
-                    compositionalOperator: "BEFORE",
-                    operand2: 123
+                    compositionalOperator: "BEFORE"
                 });
-                eug.setProxy(modelProxy);
 
                 expect(eug.getOperand1().get("name")).toBe("");
 
@@ -525,40 +507,55 @@ Ext.onReady(function() {
                 expect(eug.getOperand1().get("name")).toBe("part");
             });
 
-            it("setOperand2() (test to make sure its ok)", function(){
-                var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    name: "name1",
-                    operand2: 123,
-                    compositionalOperator: "AFTER"
-                });
-                expect(eugene).not.toBe(null);
-
+            it("setOperand2(): Rejects unacceptable operand2", function(){
+                var eugene, e;
                 var flag = false;
                 try {
-                    eugene.setOperand2("bad string");
-                } catch (e) {
+                    eugene = Ext.create("Teselagen.models.EugeneRule", {
+                        compositionalOperator: "AFTER"
+                    });
+                    eugene.setOperand2("badString");
+                } catch (bio) {
                     flag = true;
-                    //console.log("Correctly caught: " + e.message);
+                    expect(bio.message).toBe("Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part.");
                 }
-                eugene.setOperand2(567);
-                expect(eugene.get("name")).toBe("name1");
-                expect(eugene.get("operand2")).toBe(567);
-                expect(eugene).not.toBe(null);
                 expect(flag).toBe(true);
+            });
+
+            it("setOperand2()/getOperand2(): accepts Number", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "name1",
+                    compositionalOperator: "AFTER"
+                });
+
+                eugene.setOperand2(567);
+                expect(eugene.get("operand2isNumber")).toBe(true); //do not use outside of model
+                expect(eugene.getOperand2()).toBe(567);
+            });
+
+            it("setOperand2()/getOperand2(): accepts Part", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "name1",
+                    compositionalOperator: "AFTER"
+                });
+
+                var part = Ext.create("Teselagen.models.Part");
+
+                eugene.setOperand2(part);
+                expect(eugene.get("operand2isNumber")).toBe(false); //do not use outside of model
+                expect(eugene.getOperand2()).toBe(part);
             });
 
             it("generateText()", function(){
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
-                    //operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
-                    compositionalOperator: "BEFORE",
-                    operand2: 123
+                    compositionalOperator: "BEFORE"
                 });
-                eug.setProxy(modelProxy);
 
                 var op1 = Ext.create("Teselagen.models.Part", { name: "part", genbankStartBP: 200});
                 eug.setOperand1(op1);
+                eug.setOperand2(123);
 
                 //console.log(eug.validate());
                 var str = eug.generateText();
