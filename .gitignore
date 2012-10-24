@@ -14,3 +14,5 @@ node/upload.sh
 node/node_modules
 node/localResources
 vede/deviceeditor
+vede/extjs
+vede/extjs*

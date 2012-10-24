@@ -123,9 +123,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
           params: {},
           method: 'GET',
           success: function(response) {
-            session = JSON.parse(response.responseText);
-            sessionData.data = session;
-            that.authenticate(app);
+            //session = JSON.parse(response.responseText);
+            //sessionData.data = session;
+            //that.authenticate(app);
+            Ext.get('splash-text').update('Automatic login failed.');
+            var authDialog = Ext.create('Vede.view.AuthWindow');
+            authDialog.show(); 
+            console.log('Automatic login failed. Starting StandAlone Authentication.');
           },
           failure: function(response, options) {
             Ext.get('splash-text').update('Automatic login failed.');
