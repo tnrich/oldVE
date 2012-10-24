@@ -172,14 +172,14 @@ Ext.onReady(function() {
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
                     operand1: Ext.create("Teselagen.models.PartVO", { name: "partvo"}),
-                    compositionalOperator: "compOp",
+                    compositionalOperator: "AFTER",
                     operand2: 123
                 });
                 var tmp = Ext.create("Teselagen.manager.EugeneRuleManager",{
                     eugeneRules: [eug]
                 });
                 var str = tmp.generateRuleText(eug);
-                expect(str).toBe("Rule eug(partvo compOp 123);");
+                expect(str).toBe("Rule eug(partvo AFTER 123);");
             });
 
             it("getRuleByName()", function(){
@@ -208,6 +208,7 @@ Ext.onReady(function() {
                     expect(design.getJ5Collection().get("combinatorial")).toBe(false);
 
                     var err = design.validate();
+                    console.log(err);
                     expect(err.length).toBe(0);
                 });
 
