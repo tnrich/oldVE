@@ -1,3 +1,32 @@
+Ext.onReady(function() {
+Ext.data.writer.Json.override({
+    getRecordData: function(record, getEverything) {
+        return record.getAllData();
+        //return this.callOverridden(arguments);
+        /*
+        if(this.writeEverything || record.writeEverything){
+            console.log('getRecordData', this,arguments);
+            return record.getAllData();
+        }else{
+            return this.callOverridden(arguments);
+        }
+        */
+        
+    }
+});
+
+Ext.data.Model.addMembers({
+    getAllData: function() {
+        var data1 = this.getData();
+        var data2 = this.getAssociatedData( );
+        console.log(data1);
+        console.log(data2);
+        var dataMerged = Ext.Object.merge(data1, data2);
+        return dataMerged;
+    }
+});
+});
+
 /**
  * @class Teselagen.models.DeviceDesign
  * Class describing a DeviceDesign.
@@ -9,6 +38,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         //"Teselagen.models.Project",
         "Teselagen.models.J5Collection"//,
         //"Teselagen.models.EugeneRule",
+        //,'custom.JsonWriterOverride'
     ],
     // The models will break if there is not proxy defined here. Please define appropriately. DW
     // We need a rest proxy here to load designs from here. RP
@@ -19,6 +49,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
         reader: {
             type: 'json',
             root: 'design'
+        },
+        writer: {
+            type: 'json',
+            writeEverything: true
         },
         buildUrl: function() {
             return sessionData.baseURL + 'getDeviceDesign'; // This method reBuild the URL for ajax requests from parents models

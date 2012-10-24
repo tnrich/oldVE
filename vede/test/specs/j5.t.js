@@ -40,7 +40,7 @@ Ext.require("Teselagen.manager.DeviceDesignManager");
 Ext.define('sessionData', { 
           singleton: true, 
           data: null,
-          baseURL: 'http://teselagen.com/api/'
+          baseURL: 'http://teselagen.local/api/'
 }); 
 
 
@@ -121,10 +121,10 @@ Ext.onReady(function() {
         
         describe("Test the Model", function() {
             it("Design", function(){
-                console.log(Ext.getClassName(design));
-                console.log(design);
+                //console.log(Ext.getClassName(design));
+                //console.log(design);
                 design.save();
-                console.log(DeviceDesignManager.generateRuleText(design, rule1));
+                //console.log(DeviceDesignManager.generateRuleText(design, rule1));
             });
         });
 

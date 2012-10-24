@@ -186,13 +186,20 @@ module.exports = function (app) {
 
   });
 
-  app.all('/getDeviceDesign', restrict, function (req, res) {
+  app.post('/getDeviceDesign', function (req, res) {
+    console.log(req.body);
+    res.send('ok');
+  });
+
+  
+  app.get('/getDeviceDesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id, function (err, project) {
       res.json({"design":project.design});
     });
   
   });
+  
 
 
   app.all('/getExampleModel', restrict, function (req, res) {
