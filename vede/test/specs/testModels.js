@@ -768,7 +768,6 @@ Ext.onReady(function() {
                 expect(bin.parts().count()).toBe(1);
                 expect(bin.parts().getAt(0)).toBe(part2);
                 expect(device.rules().count()).toBe(0);
-//LAST HERE  DW: 10.11.2012
             });
 
             it("createPart() ***", function(){
@@ -778,7 +777,7 @@ Ext.onReady(function() {
                 var part1   = Ext.create("Teselagen.models.Part", {
                     name: "blah"
                 });
-                var bin     = Ext.create("Teselagen.models.J5Bin", {parts: [part1]});
+                var bin     = Ext.create("Teselagen.models.J5Bin");
                 bin.addToParts([part1]);
 
                 var unique  = bin.isUniquePartName("blah");
@@ -1021,6 +1020,20 @@ Ext.onReady(function() {
 
                 var tmp = coll.getBinAssignment(part1);
                 expect(tmp).toBe(part1);
+            });
+
+            it("isUniqueBinName()", function(){
+                var bin     = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "newBinName"
+                });
+
+                var coll    = Ext.create("Teselagen.models.J5Collection");
+                coll.addToBin(bin);
+
+                var unique  = coll.isUniqueBinName("newBinName");
+                expect(unique).toBe(false);
+                unique      = bin.isUniquePartName("blah");
+                expect(unique).toBe(true);
             });
         });
 

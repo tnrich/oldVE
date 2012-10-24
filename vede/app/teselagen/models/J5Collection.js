@@ -34,10 +34,11 @@ Ext.define("Teselagen.models.J5Collection", {
         {name: "deviceDesign_id",   type: "int"}
     ],
 
+    // GO BACK AND FIX THESE VALIDATIONS. CURRENTLY FAILS. IF NOT SET TO NON-DEFAULT, IT BECOMES AN ERROR
     validations: [
-        {field: "j5Ready",          type: "presence"},
-        {field: "combinatorial",    type: "presence"},
-        {field: "isCircular",       type: "presence"},
+        //{field: "j5Ready",          type: "presence"},
+        //{field: "combinatorial",    type: "presence"},
+        //{field: "isCircular",       type: "presence"},
         {field: "deviceDesign_id",  type: "presence"}
     ],
 
@@ -302,7 +303,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * @returns {Boolean} True if unique, false if not.
      */
     isUniqueBinName: function(pName) {
-        var index = this.bins().find("name", pName);
+        var index = this.bins().find("binName", pName);
 
         if (index === -1) {
             return true;

@@ -10,12 +10,12 @@ Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.util.XmlToJson");
 Ext.require("Teselagen.bio.util.Sha256");
 
-//Ext.require("Teselagen.bio.parsers.GenbankManager");
-//Ext.require("Teselagen.bio.parsers.ParsersManager");
+Ext.require("Teselagen.bio.parsers.GenbankManager");
+Ext.require("Teselagen.bio.parsers.ParsersManager");
 
-//Ext.require("Teselagen.utils.SequenceUtils");
-//Ext.require("Teselagen.utils.FormatUtils");
-//Ext.require("Teselagen.utils.DeXmlUtils");
+Ext.require("Teselagen.utils.SequenceUtils");
+Ext.require("Teselagen.utils.FormatUtils");
+Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
 
