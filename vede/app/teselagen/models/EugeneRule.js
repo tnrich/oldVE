@@ -9,7 +9,7 @@ Ext.define("Teselagen.models.EugeneRule", {
 
     requires: [
         //"Teselagen.models.Part",
-        "Teselagen.models.DeviceDesign"
+        //"Teselagen.models.DeviceDesign"
     ],
 
     proxy: {

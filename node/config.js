@@ -20,7 +20,8 @@ module.exports = function (app, express) {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({
-      secret: 'supersecretkeygoeshere'
+      secret: 'supersecretkeygoeshere',
+      httpOnly: false
     }));
     app.use(express.methodOverride());
 

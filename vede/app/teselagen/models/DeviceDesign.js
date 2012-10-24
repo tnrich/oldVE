@@ -1,32 +1,3 @@
-/*Ext.onReady(function() {
-Ext.data.writer.Json.override({
-    getRecordData: function(record, getEverything) {
-        //return record.getAllData();
-        //return this.callOverridden(arguments);
-        
-        if(this.writeEverything || record.writeEverything){
-            console.log('getRecordData', this,arguments);
-            return record.getAllData();
-        }else{
-            return this.callOverridden(arguments);
-        }
-        
-        
-    }
-});
-
-Ext.data.Model.addMembers({
-    getAllData: function() {
-        var data1 = this.getData();
-        var data2 = this.getAssociatedData( );
-        console.log(data1);
-        console.log(data2);
-        //var dataMerged = Ext.Object.merge(data1, data2);
-        //return dataMerged;
-    }
-});
-});*/
-
 /**
  * @class Teselagen.models.DeviceDesign
  * Class describing a DeviceDesign.
@@ -43,10 +14,40 @@ Ext.define("Teselagen.models.DeviceDesign", {
     // The models will break if there is not proxy defined here. Please define appropriately. DW
     // We need a rest proxy here to load designs from here. RP
 
+    /*
     proxy: {
         type: "memory"
     },
     statics: {
+    },
+    */
+
+    /* Comment this proxy for testing - Use memory instead */
+    proxy: {
+        type: 'rest',
+        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
+        reader: {
+            type: 'json',
+            root: 'design'
+        },
+        writer: {
+            type: 'json',
+            //This method should resolve associations and prepare data before saving design
+            getRecordData: function(record, getEverything) {
+                var data;
+
+                var data = record.getData()
+                var associatedData = record.getAssociatedData();
+                var j5Collection = associatedData["j5collection"];
+                var rules = associatedData["rules"];
+                data.j5collection = j5Collection;
+                data.rules = rules;
+                return data;
+            }
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'DeviceDesign'; // This method reBuild the URL for ajax requests from parents models
+        }
     },
 
     /**
@@ -56,11 +57,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
     fields: [
         {
             name: "id",
-            type: "long",
-            defaultValue: 0
+            type: "long" 
         },
         {
-            name: "payload", type: "string" // This is temporary, not really needed
+            name: "deproject_id",
+            type: "long"
         }
     ],
 
@@ -74,11 +75,13 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5collection"
+            associationKey: "j5collection",
+            name: "j5collection"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
+            associationKey: "rules",
             name: "rules"
         },
         {
@@ -86,7 +89,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
+            associationKey: "deviceEditorProject",
+            name: "deviceEditorProject"
         }
     ],
 

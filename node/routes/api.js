@@ -27,6 +27,7 @@ module.exports = function (app) {
    */
 
   function restrict(req, res, next) {
+    if(!req.session.user) console.log("Session not found");
     if(req.session.user) {
       var User = app.db.model("User");
       User.findOne({
@@ -39,17 +40,6 @@ module.exports = function (app) {
       if(!app.testing.enabled) {
         res.send('Wrong credentials');
       } else {
-        /*
-        console.log("Logged as Guest user");
-        authenticate("Guest", "", function (err, user) {
-          req.session.regenerate(function () {
-            req.session.user = user;
-            req.user = user;
-            next();
-          });
-
-        });
-        */
         res.send("Wrong credentials", 405);
       }
     }
@@ -86,9 +76,9 @@ module.exports = function (app) {
             req.session.regenerate(function () {
               req.session.user = user;
               req.user = user;
-              res.json({
+              return res.json({
                 'firstTime': true,
-                'msg': 'Welcome back ' + username + '!'
+                'msg': 'Welcome ' + username + '!'
               });
             });
           });
@@ -97,7 +87,7 @@ module.exports = function (app) {
           req.session.regenerate(function () {
             req.session.user = results;
             req.user = results;
-            res.json({
+            return res.json({
               'firstTime': false,
               'msg': 'Welcome back ' + username + '!'
             });
@@ -122,7 +112,7 @@ module.exports = function (app) {
 
     // Loggin using just username (for Testing)
     if(username && password != undefined && !app.program.prod) {
-      getOrCreateUser(username);
+      return getOrCreateUser(username);
     }
 
     // Happy path of Login
@@ -160,18 +150,12 @@ module.exports = function (app) {
 
   // Dummy method
   app.all('/getUser', restrict, function (req, res) {
-    
+    console.log(req.session.user);
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
       res.json({"user":user});
     });
-
-    /*
-    res.json({
-      "user": req.session.user
-    });
-    */
   });
 
 
@@ -186,18 +170,21 @@ module.exports = function (app) {
 
   });
 
-  app.post('/getDeviceDesign', function (req, res) {
-    console.log(req.body);
-    res.send('ok');
+  app.post('/DeviceDesign', function (req, res) {
+    //console.log(req.body);
+    res.json({});
   });
 
-  
-  app.get('/getDeviceDesign', restrict, function (req, res) {
+  var design = {"id":"50870a24f1b5b1d809000007","deproject_id":"50870a24f1b5b1d809000006","j5collection":{"id":0,"j5Ready":false,"combinatorial":true,"isCircular":true,"deviceDesign_id":0,"bins":[{"binName":"bin1","iconID":"generic","directionForward":true,"dsf":false,"fro":null,"fas":"","extra5PrimeBps":null,"extra3PrimeBps":null,"collection_id":0,"parts":[{"id":0,"veproject_id":0,"directionForward":true,"fas":"","name":"part1a","revComp":false,"genbankStartBP":1,"endBP":10,"iconID":"","Teselagen.models.SequenceFile":{"id":0,"sequenceFileFormat":"Fasta","sequenceFileContent":"","sequenceFileName":"","partSource":"","hash":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}},{"id":0,"veproject_id":0,"directionForward":true,"fas":"","name":"part1b","revComp":false,"genbankStartBP":20,"endBP":30,"iconID":"","Teselagen.models.SequenceFile":{"id":0,"sequenceFileFormat":"Fasta","sequenceFileContent":">seq1b\nTTTTTTTTTT","sequenceFileName":"","partSource":"","hash":"42aa8c642ea293713a0b9c7e5f5b33c7068c4d7281dd688a0b824c71ffd2637c"}}]},{"binName":"bin2","iconID":"generic","directionForward":true,"dsf":false,"fro":null,"fas":"","extra5PrimeBps":null,"extra3PrimeBps":null,"collection_id":0,"parts":[{"id":0,"veproject_id":0,"directionForward":true,"fas":"","name":"part2a","revComp":false,"genbankStartBP":1,"endBP":10,"iconID":"","Teselagen.models.SequenceFile":{"id":0,"sequenceFileFormat":"Fasta","sequenceFileContent":">seq1b\nAAAAAAAAA","sequenceFileName":"","partSource":"","hash":"2f143139671619f741f91f31e82d168eadd2ae3d4ac4815931be0f51bd3ce5c9"}}]}]}};
+
+  app.get('/DeviceDesign', restrict, function (req, res) {
+    res.json({"design":design});
+    /*   
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id, function (err, project) {
       res.json({"design":project.design});
     });
-  
+    */
   });
   
 
