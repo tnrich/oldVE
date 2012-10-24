@@ -38,12 +38,13 @@ Ext.require("Teselagen.manager.SequenceFileManager");
 Ext.require("Teselagen.manager.EugeneRuleManager");
 Ext.require("Teselagen.manager.DeviceDesignManager");
 
+/*
 Ext.define('sessionData', { 
           singleton: true, 
           data: null,
           baseURL: 'http://teselagen.local/api/'
 }); 
-
+*/
 
 Ext.onReady(function() {
 
@@ -123,8 +124,10 @@ Ext.onReady(function() {
         describe("Test the Model", function() {
             it("Design", function(){
                 //console.log(Ext.getClassName(design));
-                //console.log(design);
-                design.save();
+                console.log(design.getJ5Collection());
+                console.log(design.getJ5Collection().bins());
+                //console.log(design.getJ5Collection().rules());
+                //design.save();
                 //console.log(DeviceDesignManager.generateRuleText(design, rule1));
             });
         });

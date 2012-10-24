@@ -1,16 +1,16 @@
 Ext.onReady(function() {
 Ext.data.writer.Json.override({
     getRecordData: function(record, getEverything) {
-        return record.getAllData();
+        //return record.getAllData();
         //return this.callOverridden(arguments);
-        /*
+        
         if(this.writeEverything || record.writeEverything){
             console.log('getRecordData', this,arguments);
             return record.getAllData();
         }else{
             return this.callOverridden(arguments);
         }
-        */
+        
         
     }
 });
@@ -21,8 +21,8 @@ Ext.data.Model.addMembers({
         var data2 = this.getAssociatedData( );
         console.log(data1);
         console.log(data2);
-        var dataMerged = Ext.Object.merge(data1, data2);
-        return dataMerged;
+        //var dataMerged = Ext.Object.merge(data1, data2);
+        //return dataMerged;
     }
 });
 });
@@ -43,10 +43,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     // The models will break if there is not proxy defined here. Please define appropriately. DW
     // We need a rest proxy here to load designs from here. RP
 
-    /*proxy: {
+    proxy: {
         type: "memory"
-    },*/
-    
+    },
+    /*
     proxy: {
         type: 'rest',
         url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
@@ -56,13 +56,24 @@ Ext.define("Teselagen.models.DeviceDesign", {
         },
         writer: {
             type: 'json',
-            writeEverything: true
+            
+            //getRecordData: This method should resolve associations and prepare data before saving design
+            
+            getRecordData: function(record, getEverything) {
+                var designFields = record.getData()
+                var associatedData = record.getAssociatedData();
+                var j5Collection = associatedData["Teselagen.models.J5Collection"];
+                var rules = associatedData["rules"];
+
+                //console.log(Ext.getClassName(j5Collection));
+                console.log(j5Collection);
+            }
         },
         buildUrl: function() {
             return sessionData.baseURL + 'getDeviceDesign'; // This method reBuild the URL for ajax requests from parents models
         }
     },
-        
+    */    
     statics: {
     },
 
