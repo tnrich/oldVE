@@ -1,7 +1,6 @@
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
-    requires: ["Teselagen.constants.Constants",
-               "Teselagen.manager.SessionManager",
+    requires: ["Teselagen.manager.SessionManager",
                "Teselagen.models.DeviceEditorProject",
                "Teselagen.models.VectorEditorProject"],
 
