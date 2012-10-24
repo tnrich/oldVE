@@ -6,14 +6,9 @@
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
-        //"Teselagen.models.Project",
-        "Teselagen.models.J5Collection"//,
-        //"Teselagen.models.EugeneRule",
-        //,'custom.JsonWriterOverride'
+        "Teselagen.models.J5Collection",
+        "Teselagen.models.EugeneRule"
     ],
-    // The models will break if there is not proxy defined here. Please define appropriately. DW
-    // We need a rest proxy here to load designs from here. RP
-
     /*
     proxy: {
         type: "memory"

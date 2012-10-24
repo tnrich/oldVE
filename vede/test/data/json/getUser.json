@@ -6,7 +6,15 @@
             "name": "Rodrigo Pavez",
             "preferences" :
             {
-            	"TestPreference" : "Preference Test"
+            	"testPreference" : "Preference Test"
+            }
+        },
+        {
+            "id": 2,
+            "name": "Diana Wong",
+            "preferences" :
+            {
+            	"testPreference" : "obama"
             }
         }
     ]

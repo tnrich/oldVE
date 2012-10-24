@@ -20,9 +20,16 @@ module.exports = function (app, express) {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({
-      secret: 'supersecretkeygoeshere',
-      httpOnly: false
+      secret: 'j5',
+      cookie: { httpOnly: false }
     }));
+    /*
+    app.use(express.cookieSession({
+      key: 'teselagen',
+      secret: 'j5',
+      cookie: { httpOnly: false }
+    }));
+    */
     app.use(express.methodOverride());
 
     app.use(app.router);

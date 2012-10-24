@@ -1,14 +1,13 @@
 /*global describe, expect, it, runs, waitsFor*/
-Ext.require("Ext.Ajax");
 Ext.require("Teselagen.constants.Constants");
+Ext.require("Teselagen.store.PartStore");
 Ext.require("Teselagen.store.ProjectStore");
+Ext.require("Teselagen.store.UserStore");
 
 Ext.onReady(function () {
-
     describe("Store tests - ", function () {
 
         describe("Project.", function () {
-
             var projStore;
             var project, veproject, deproject;
 
@@ -18,7 +17,6 @@ Ext.onReady(function () {
                     expect(projStore.getCount()).toBe(3);
                 });
             });
-
             it("Load Specific Project", function () {
                 projStore.on("load", function() {
                     project = projStore.first();
@@ -87,7 +85,7 @@ Ext.onReady(function () {
                     expect(j5run.get("name")).toBe("j5 Run 1");
                 });
             });
-            xit("Load device design", function () {
+            it("Load device design", function () {
                 waitsFor(function() {
                     return Ext.isDefined(deproject);
                 }, "DE Project to be defined", 500);
@@ -102,6 +100,29 @@ Ext.onReady(function () {
             });
 
         });
+        
+        describe("Part.", function () {
+            var partStore;
+
+            it("Load PartStore", function () {
+                partStore = Ext.create("Teselagen.store.PartStore");
+                partStore.load(function() {
+                    expect(partStore.getCount()).toBe(2);
+                });
+            });
+        });
+
+        describe("User.", function () {
+            var userStore;
+
+            it("Load UserStore", function () {
+                userStore = Ext.create("Teselagen.store.UserStore");
+                userStore.load(function() {
+                    expect(userStore.getCount()).toBe(2);
+                });
+            });
+        });
 
     });
+    
 });

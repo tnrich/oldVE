@@ -27,7 +27,6 @@ module.exports = function (app) {
    */
 
   function restrict(req, res, next) {
-    if(!req.session.user) console.log("Session not found");
     if(req.session.user) {
       var User = app.db.model("User");
       User.findOne({
@@ -40,7 +39,18 @@ module.exports = function (app) {
       if(!app.testing.enabled) {
         res.send('Wrong credentials');
       } else {
-        res.send("Wrong credentials", 405);
+        /*
+        console.log("Logged as Guest user");
+        authenticate("Guest", "", function (err, user) {
+          req.session.regenerate(function () {
+            req.session.user = user;
+            req.user = user;
+            next();
+          });
+
+        });
+        */
+        res.send("Wrong credentials",401);
       }
     }
   };
@@ -76,9 +86,9 @@ module.exports = function (app) {
             req.session.regenerate(function () {
               req.session.user = user;
               req.user = user;
-              return res.json({
+              res.json({
                 'firstTime': true,
-                'msg': 'Welcome ' + username + '!'
+                'msg': 'Welcome back ' + username + '!'
               });
             });
           });
@@ -87,7 +97,7 @@ module.exports = function (app) {
           req.session.regenerate(function () {
             req.session.user = results;
             req.user = results;
-            return res.json({
+            res.json({
               'firstTime': false,
               'msg': 'Welcome back ' + username + '!'
             });
@@ -112,7 +122,7 @@ module.exports = function (app) {
 
     // Loggin using just username (for Testing)
     if(username && password != undefined && !app.program.prod) {
-      return getOrCreateUser(username);
+      getOrCreateUser(username);
     }
 
     // Happy path of Login
@@ -150,7 +160,6 @@ module.exports = function (app) {
 
   // Dummy method
   app.all('/getUser', restrict, function (req, res) {
-    console.log(req.session.user);
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
@@ -171,7 +180,7 @@ module.exports = function (app) {
   });
 
   app.post('/DeviceDesign', function (req, res) {
-    //console.log(req.body);
+    console.log(req.body);
     res.json({});
   });
 

@@ -371,7 +371,6 @@ Ext.onReady(function() {
                     var success = design.getJ5Collection().addToBin(bin, 0);
                     expect(success).toBe(true);
 
-                    console.log(design.getJ5Collection().bins().getAt(0));
                     var unique = DeviceDesignManager.isUniqueBinName(design, "newBin");
                     unique = design.getJ5Collection().isUniqueBinName("newBin");
                     expect(unique).toBe(false);
@@ -438,16 +437,18 @@ Ext.onReady(function() {
 
                 beforeEach(function() {
                     design      = DeviceDesignManager.createDeviceDesign(2);
-                    name1       = "";
+                    name1       = "rule";
                     negOp       = true;
                     operand1    = DeviceDesignManager.createPart(design, 0, "operand1", 1, 10, false, true, "fas", null);
-                    compOp      = true;
+                    compOp      = "AFTER";
                     operand2    = DeviceDesignManager.createPart(design, 1, "operand2", 2, 20, false, true, "fas", null);
                 });
 
                 it("createEugeneRule()", function(){
-                    //console.log(design);
+                    console.log(operand1);
+                    console.log(operand2);
                     var rule = DeviceDesignManager.createEugeneRule(design, name1, negOp, operand1, compOp, operand2);
+                    expect(rule.generateText()).toBe("Rule rule(NOT operand2 AFTER operand2);");
                 });
 
 
