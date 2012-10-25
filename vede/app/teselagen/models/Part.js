@@ -9,13 +9,11 @@ Ext.define("Teselagen.models.Part", {
 
     requires: [
         "Teselagen.models.SequenceFile"
-//        "Teselagen.models.J5Bin",
-//        "Teselagen.models.EugeneRule"
     ],
 
     proxy: {
-        type: "rest",
-        url: "getParts.json",
+        type: "ajax",
+        url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
             root: "data"
@@ -103,10 +101,17 @@ Ext.define("Teselagen.models.Part", {
         },
         {
             type: "belongsTo",
-            model: "Teselagen.models.Project",
-            getterName: "getProject",
-            setterName: "setProject",
-            associationKey: "project"
+            model: "Teselagen.models.VectorEditorProject",
+            getterName: "getVectorEditorProject",
+            setterName: "setVectorEditorProject",
+            associationKey: "vectorEditorProject"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.DeviceEditorProject",
+            getterName: "getDeviceEditorProject",
+            setterName: "setDeviceEditorProject",
+            associationKey: "deviceEditorProject"
         }
     ],
 

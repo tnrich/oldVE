@@ -8,8 +8,7 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.Part",
-        "Teselagen.models.DeviceDesign"
+        "Teselagen.models.Part"
     ],
 
     proxy: {
@@ -44,7 +43,6 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
-        {name: "id",                type: "int"},
         {
             name: "name",
             convert: function(v, record) {
@@ -58,9 +56,17 @@ Ext.define("Teselagen.models.EugeneRule", {
         
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
         //{name: "operand1",              type: "auto",       defaultValue: null},
-        {name: "compositionalOperator", type: "String",     defaultValue: ""},
+        //{name: "compositionalOperator", type: "String",     defaultValue: ""},
+        {
+            name: "compositionalOperator",
+            convert: function(v, record) {
+                v.toUpperCase();
+                return v;
+            }
+        },
         
-        {name: "operand2",              type: "auto",       defaultValue: null}
+        {name: "operand2isNumber",      type: "boolean",    defaultValue: false},
+        {name: "operand2Number",       type: "number",     defaultValue: 0}
     ],
 
     validations: [
@@ -80,10 +86,11 @@ Ext.define("Teselagen.models.EugeneRule", {
                     this.self.NOTWITH
                 ]
         },
-        {field: "operand2",         type: "presence"}
+        {field: "operand2Number",         type: "presence"}
     ],
 
     associations: [
+        // Operand1 is always a Part
         {
             type: "hasOne",
             model: "Teselagen.models.Part",
@@ -91,14 +98,14 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand1",
             associationKey: "operand1"
         },
-        /*{
+        // Operand2 can be a Part or a Number; If Part, then store here.
+        {
             type: "hasOne",
             model: "Teselagen.models.Part",
-            getterName: "getOperand2",
-            setterName: "setOperand2",
-            associationKey: "operand2"
+            getterName: "getOperand2Part",
+            setterName: "setOperand2Part",
+            associationKey: "operand2Part"
         },
-        */
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
@@ -108,14 +115,9 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
     ],
 
-
-    // EVENTUALLY USE THE BELONGS TO THING TO DO THIS
+    // Tried using Constructor and it doesn't work.
+    // Read on forums to use init as a way to execute methods after the fields block. --DW
     init: function() {
-        //device = this.getDeviceDesign().isUniqueRuleName(this));
-        //console.log(device);
-
-        //console.log(pDeviceDesign.isUniqueRuleName(this));
-
 
         // If Name is "", use default + number as name
         if (this.get("name") === "") {
@@ -124,7 +126,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
 
         // Check Operand2
-        this.setOperand2(this.get("operand2"));
+        //this.setOperand2(this.getOperand2());
 
         // Check CompositionalOperator
         var compOp = this.get("compositionalOperator");
@@ -135,16 +137,36 @@ Ext.define("Teselagen.models.EugeneRule", {
         } else {
             // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
             console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
-            /*throw Ext.create("Teselagen.bio.BioException", {
+            throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
-            });*/
+            });
         }
 
     },
 
+    /**
+     * Gets Operand2. Must use this method to obtain Operand2 correctly.
+     * @returns {Teselagen.models.Part|Number} Operand2 can be a Part or a Number
+     */
+    getOperand2: function() {
+        if (this.get("operand2isNumber")) {
+            return this.get("operand2Number");
+        } else {
+            return this.getOperand2Part();
+        }
+    },
+
+    /**
+     * Set Operand2. Input can be Part or a Number. This method will set them appropriately.
+     * @param {Teselagen.models.Part|Number} pOperand2 can be a Part or a Number
+     */
     setOperand2: function(pOperand2) {
-        if (Ext.typeOf(pOperand2) === "number" || Ext.getClassName(pOperand2) === "Teselagen.models.Part") {
-            this.set("operand2", pOperand2);
+        if (Ext.typeOf(pOperand2) === "number") {
+            //console.log(pOperand2);
+            this.set("operand2Number", pOperand2);
+            this.set("operand2isNumber", true);
+        } else if (Ext.getClassName(pOperand2) === "Teselagen.models.Part") {
+            this.setOperand2Part(pOperand2);
         } else {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
@@ -183,11 +205,12 @@ Ext.define("Teselagen.models.EugeneRule", {
         ruleText.push( this.get("compositionalOperator") );
         ruleText.push( " " );
 
-        if (typeof(this.get("operand2")) === "number") {
-            ruleText.push( this.get("operand2").toString());
-        } else if ( Ext.getClassName(this.get("operand2")) === "Teselagen.models.PartVO") {
-            ruleText.push( this.get("name"));
+        if (typeof(this.getOperand2()) === "number") {
+            ruleText.push( this.getOperand2().toString());
+        } else if ( Ext.getClassName(this.getOperand2()) === "Teselagen.models.Part") {
+            ruleText.push( this.getOperand2().get("name"));
         } else {
+            console.warn("Teselagen.models.EugeneRule.generateRuleText(): Cannot generate rule. Operand2 must be a Number or a Part.");
             /*throw Ext.create("Teselagen.bio.BioException", {
                 message: "generateRuleText(): Cannot generate rule. Operand2 must be a Number or a Part."
             });*/

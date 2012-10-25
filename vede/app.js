@@ -89,23 +89,18 @@ Ext.application({
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
-            // Fade out the body mask
             splashscreen.fadeOut({
                 duration: 1000,
                 remove: true
             });
-            // Fade out the icon and message
             splashscreen.next().fadeOut({
                 duration: 1000,
                 remove: true,
                 listeners: {
                     afteranimate: function() {
-                        // Set the body as unmasked after the animation
-                        console.log('Execute app...');
                         self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
                         self.projectManager.loadUser();
-                        //self.projectManager.loadProjects(); // Load User Projects
-                        Ext.getBody().unmask();
+                        //Ext.getBody().unmask();
                     }
                 }
             });

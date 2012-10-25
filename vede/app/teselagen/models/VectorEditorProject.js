@@ -4,7 +4,12 @@ Ext.define("Teselagen.models.VectorEditorProject", {
     fields: [{
         name: "id",
         type: "int"
-    }, {
+    },
+    {
+        name: "project_id",
+        type: "int"
+    },
+    {
         name: "name",
         type: "String",
         defaultValue: ""
@@ -20,7 +25,7 @@ Ext.define("Teselagen.models.VectorEditorProject", {
     }],
     proxy: {
         type: 'ajax',
-        url: 'getVEProjects.json',
+        url: '/vede/test/data/json/getVEProjects.json',
         reader: {
             type: 'json',
             root: 'data'

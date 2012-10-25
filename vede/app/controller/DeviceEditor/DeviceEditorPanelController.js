@@ -48,12 +48,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var currentModel = currentTab.model;
 
         var surface = currentTab.query('draw[cls=designCanvas]')[0].surface;
-
         var bins = currentModel.getDesign().getJ5Collection().bins();
         
         var xPos = 0;
         bins.each(function(bin){
-            console.log(bin);
             var binDraw = new Bin(surface,bin,xPos,10);
             xPos += 110;
         });

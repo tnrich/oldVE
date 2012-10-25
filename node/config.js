@@ -20,8 +20,16 @@ module.exports = function (app, express) {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({
-      secret: 'supersecretkeygoeshere'
+      secret: 'j5',
+      cookie: { httpOnly: false }
     }));
+    /*
+    app.use(express.cookieSession({
+      key: 'teselagen',
+      secret: 'j5',
+      cookie: { httpOnly: false }
+    }));
+    */
     app.use(express.methodOverride());
 
     app.use(app.router);
@@ -88,8 +96,8 @@ module.exports = function (app, express) {
   });
 
   // Load MONGOOSE SCHEMAS
-  require('./schemas.js')(app);
-
+  //require('./schemas/schemas.js')(app);
+  require('./schemas/DBSchemas.js')(app);
   
 
 
