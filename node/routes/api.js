@@ -158,8 +158,13 @@ module.exports = function (app) {
 
   });
 
+  app.put('/getUser', restrict, function (req, res) {
+    console.log(req.body);
+    res.json({});
+  });
+
   // Dummy method
-  app.all('/getUser', restrict, function (req, res) {
+  app.get('/getUser', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {

@@ -28,7 +28,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				self.currentUser = users.first();
 				self.projects = self.currentUser.projects();
 				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
-				//console.log(self.currentUser.getPreferences());
+				if(cb) return cb(true);
 			}
 		});
 	},

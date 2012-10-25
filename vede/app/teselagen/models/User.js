@@ -35,6 +35,14 @@ Ext.define("Teselagen.models.User", {
             type: "json",
             root: "user"
         },
+        writer: {
+            type: 'json',
+            getRecordData: function(record, getEverything) {
+                var data = record.getData()
+                data.projects = record.getAssociatedData()["projects"];
+                return data;
+            }
+        },
         buildUrl: function() {
             //return Teselagen.manager.SessionManager.buildUrl("getUser", this.url);
             return sessionData.baseURL + 'getUser';
