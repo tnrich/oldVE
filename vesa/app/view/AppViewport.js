@@ -143,6 +143,20 @@ Ext.define('Vesa.view.AppViewport', {
                                     xtype: 'treepanel',
                                     id: 'projectAnalysisPanel',
                                     title: 'j5 Results',
+                                    root: {
+                                        text: 'Design 1',
+                                        expanded: true,
+                                        children: [
+                                            {
+                                                text: 'j5 Run 1',
+                                                leaf: true
+                                            },
+                                            {
+                                                text: 'j5 Run 2',
+                                                leaf: true
+                                            }
+                                        ]
+                                    },
                                     viewConfig: {
 
                                     }

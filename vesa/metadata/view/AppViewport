@@ -273,7 +273,17 @@
                             "userConfig": {
                                 "designer|userClassName": "MyTreePanel1",
                                 "id": "projectAnalysisPanel",
-                                "title": "j5 Results"
+                                "title": "j5 Results",
+                                "root": [
+                                    "{",
+                                    "text: \"Design 1\",",
+                                    "expanded: true,",
+                                    "children: [",
+                                    "            { text: \"j5 Run 1\", leaf: true },",
+                                    "            { text: \"j5 Run 2\", leaf: true }",
+                                    "        ]",
+                                    "}"
+                                ]
                             },
                             "designerId": "6e8be2f7-7b74-4d20-b87d-3c3291910a14",
                             "cn": [
