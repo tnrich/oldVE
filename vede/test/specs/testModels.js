@@ -934,6 +934,7 @@ Ext.onReady(function() {
                 expect(coll.bins().getAt(0)).toBe(bin1);
                 expect(coll.bins().getAt(1).get("binName")).toBe("newBin");
                 expect(coll.bins().getAt(2)).toBe(bin2);
+                expect(success).toBe(true);
             });
             
             it("deleteBinByIndex()", function(){
@@ -1015,7 +1016,7 @@ Ext.onReady(function() {
                 coll.addToBin(bin1);
 
                 var tmp = coll.getBinAssignment(part1);
-                expect(tmp).toBe(part1);
+                expect(tmp).toBe(0);
             });
 
             it("isUniqueBinName()", function(){

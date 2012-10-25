@@ -30,6 +30,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
 
     /** UNTESTED
+     * @param {Number}} pNumBins Number of J5Bins to put into Collection
+     * @returns {Teselagen.models.DeviceDesign}
      */
     createDeviceDesign: function(pNumBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
@@ -42,7 +44,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return device;
     },
 
-    /** UNTESTED
+    /**
+     * Creates a DeviceDesign using a given set of J5Bins.
+     * The order in the array determines the order in the Collection.
+     * @param {Teselagen.models.J5Bin[]} pBins One or an array of J5Bins
+     * @returns {Teselagen.models.DeviceDesign}
      */
     createDeviceDesignFromBins: function(pBins) {
         var device = Ext.create("Teselagen.models.DeviceDesign");
@@ -64,6 +70,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     // EugeneRules Management
     //================================================================
     /** UNTESTED
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {String} pRuleName
+     * @param {Boolean} pNegationOperator
+     * @param {Teselagen.models.Part} pOperand1
+     * @param {String} pCompositionalOperator
+     * @param {Teselagen.models.Part|Number} pOperand2
+     * @returns {Teselagen.models.EugeneRule}
      */
     createEugeneRule: function(pDevice, pRuleName, pNegationOperator, pOperand1, pCompositionalOperator, pOperand2) {
         var rule = Ext.create("Teselagen.models.EugeneRule", {
@@ -290,7 +303,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     /**
      * Creates an empty J5Bin with the name pBinName at the index of pIndex.
      * @param {Teselagen.models.DeviceDesign} pDevice
-     * @param {Strinb} pBinName Name of bin
+     * @param {String} pBinName Name of bin
      */
     createEmptyJ5Bin: function(pDevice, pBinName, pIndex) {
         var unique = this.isUniqueBinName(pDevice, pBinName);
@@ -318,6 +331,16 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     getBinByIndex: function(pDevice, pBinIndex) {
         return pDevice.getJ5Collection().bins().getAt(pBinIndex);
+    },
+
+    /**
+     * Returns the bin's name at pBinIndex. (Indices begin at 0.)
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex
+     * @returns {Teselagen.models.J5Bin}
+     */
+    getBinNameByIndex: function(pDevice, pBinIndex) {
+        return pDevice.getJ5Collection().bins().getAt(pBinIndex).get("binName");
     },
 
     /**
@@ -357,10 +380,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         return true;
     },
-    /** UNTESTED
+    /**
+     * Add a bin to the collection at specified index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.J5Bin} pJ5Bin
+     * @param {Number} pIndex
+     * @returns {Boolean} True if successful, false if not.
      */
     addBin: function(pDevice, pJ5Bin, pIndex) {
-        var unique = this.isUniqueBinName(pDevice, pBinName);
+        var unique = this.isUniqueBinName(pDevice, pJ5Bin.get("binName"));
         if (!unique) {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.J5Bin.addBin(): File name already exists in Design."
@@ -370,19 +398,28 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var success = pDevice.getJ5Collection().addToBin(pJ5Bin, pIndex);
         return success;
     },
-    /** UNTESTED
+    /**
+     * Add an empty bin to the collection, by index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pIndex
      */
     addEmptyBinByIndex: function(pDevice, pIndex) {
         var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex);
         return success;
     },
-    /** UNTESTED
+    /**
+     * Remove a bin from a collection.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.J5Bin} pJ5Bin
      */
     removeBin: function(pDevice, pJ5Bin) {
         var success = pDevice.getJ5Collection().removeFromBin(pJ5Bin);
         return success;
     },
-    /** UNTESTED
+    /**
+     * Remove a bin from a collection by index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pIndex
      */
     removeBinByIndex: function(pDevice, pIndex) {
         var success = pDevice.getJ5Collection().deleteBinByIndex(pIndex);
@@ -390,9 +427,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
 
-    /**  UNTESTED
-     * @param {Teselagen.models.J5Bin} pJ5Bin
-     * @returns {int}
+    /**
+     * Returns the number of parts in a bin, given its index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex Index of bin.
+     * @returns {Number} Count of parts in a bin
      */
     countNonEmptyParts: function(pDevice, pBinIndex) {
         var bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
@@ -404,10 +443,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return count;
     },
-    /** UNTESTED
+    /**
+     * Returns the part given a bin index and part index.
+     * @param {Teselagen.models.J5Bin} pJ5Bin
+     * @param {Number} pBinIndex Bin index in collection.
+     * @param {Number} pPartIndex Part index in bin.
+     * @returns {Teselagen.models.Part}
      */
-    getPartByBin: function(pJ5Bin, pPartIndex) {
-        return pJ5Bin.parts().getAt(pPartIndex);
+    getPartByBin: function(pDevice, pBinIndex, pPartIndex) {
+        return pDevice.getJ5Collection().bins().getAt(pBinIndex).parts().getAt(pPartIndex);
     },
 
 
@@ -416,9 +460,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     /** UNTESTED
      * Create a Part. Optional parameters require a "null" in its place.
-     * @param {String} pName
-     * @param {int} pStart
-     * @param {int} pEnd
+     * @param {String} pName Name of Part
+     * @param {int} pStart Genbank start index
+     * @param {int} pEnd Genbank end index
      * @param {[Boolean]} pRevComp Reverse Complement. Default is false.
      * @param {[Boolean]} pDirectionForward Direction Forward. Default is true.
      * @param {String} fas (?)
@@ -439,49 +483,72 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         pDevice.getJ5Collection().bins().getAt(pBinIndex).addToParts(part, -1); // put this here?
         return part;
     },
-    /** UNTESTED
+    /**
+     * Determines if a Part is in the Collection.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Boolean} True if pPart is present
      */
     isPartInCollection: function(pDevice, pPart) {
         var partIsPresent = false;
         if (pDevice.getJ5Collection().bins() === null || pDevice.getJ5Collection().bins().count() === 0) {
             return false;
         }
+        
         for (var i = 0; i < pDevice.getJ5Collection().bins().count(); i++) {
             partIsPresent = pDevice.getJ5Collection().bins().getAt(i).hasPart(pPart);
+            if (partIsPresent) {
+                return partIsPresent;
+            }
         }
         return partIsPresent;
 
         //return pDevice.isPartInCollection(pPart);
     },
-    /** UNTESTED
+    /**
+     * Determines the bin that pPart is in and returns its index.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Number} Index of bin.
      */
     getBinAssignment: function(pDevice, pPart) {
-        var bin = null;
+        var binIndex = -1;
         for (var i = 0; i < pDevice.getJ5Collection().binCount(); i++) {
-            var j5Bin = pDevice.getJ5Collection().bins().getAt(i);
-            for (var j = 0; j < j5Bin.partCount(); j++) {
-                if (j5Bin.parts().getAt(i) === pPart) {
-                //if (j5Bin.parts().getAt(i).isEqual(pPart)) {
-                    bin = j5Bin.parts().getAt(i);
-                }
+            if (pDevice.getJ5Collection().bins().getAt(i).indexOfPart(pPart) !== -1) {
+                binIndex = i;
             }
+            /*var j5Bin = pDevice.getJ5Collection().bins().getAt(i);
+            for (var j = 0; j < j5Bin.partCount(); j++) {
+                if (j5Bin.parts().getAt(j) === pPart) {
+                //if (j5Bin.parts().getAt(j).isEqual(pPart)) {
+                    binIndex = i;//j5Bin.parts().getAt(i);
+                }
+            }*/
         }
-        return bin;
-        //return pDevice.getBinAssignment(pPart);
+        return binIndex;
+        //return pDevice.getJ5Collection().getBinAssignment(pPart);
     },
-    /** UNTESTED
+    /**
+     * Determines if a given part name is unique.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {String} pPartName
+     * @returns {Boolean}
      */
-    isUniquePartName: function(pDevice, pName) {
+    isUniquePartName: function(pDevice, pPartName) {
         var unique = true;
         for (var i =0; i < pDevice.getJ5Collection().binCount(); i++) {
-            unique = pDevice.bins().getAt(i).isUniquePartName(pName);
+            unique = pDevice.getJ5Collection().bins().getAt(i).isUniquePartName(pPartName);
             if (unique === false) {
                 return unique;
             }
         }
         return true;
     },
-    /** UNTESTED
+    /** NOT TESTED--CANT UNTIL DB IS DONE
+     * Get a part given its Part ID
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Long}  pPartId
+     * @returns {Teselagen.models.Part}
      */
     getPartById: function(pDevice, pPartId) {
         var part, id;
@@ -495,24 +562,33 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return part;
     },
-    /** UNTESTED
+    /**
+     * Get a part by its name
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {String} pPartName
+     * @returns {Teselagen.models.Part}
      */
     getPartByName: function(pDevice, pPartName) {
         var part, id;
         for (var i =0; i < pDevice.getJ5Collection().binCount(); i++) {
-            var bin = pDevice.getJ5Collection().binCount().getAt(i);
-            part = bin.getPartByName(pName);
+            var bin = pDevice.getJ5Collection().bins().getAt(i);
+            part = bin.getPartByName(pPartName);
             if (part !== null) {
                 return part;
             }
         }
         return part;
     },
-    /** UNTESTED
+    /**
+     * Add a part to a J5Bin
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @param {Number} pBinIndex If invalid number, puts part in last bin.
+     * @param {[Number]} pPosition Optional index.
      */
     addPartToBin: function(pDevice, pPart, pBinIndex, pPosition) {
         var j5Bin;
-        var cnt = pDevice.binCount();
+        var cnt = pDevice.getJ5Collection().binCount();
 
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
@@ -522,9 +598,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var added = j5Bin.addToParts(pPart, pPosition);
         return added;
 
-        //return pDevice.addPartToBin(pPart, pBinIndex, pPosition);
+        //return pDevice.getJ5Collection().addPartToBin(pPart, pBinIndex, pPosition);
     },
-
+//LAST HERE  DW: 10.23.2012
     /** UNTESTED
      * Deletes a Part after checking if a EugeneRule should also be deleted.
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
