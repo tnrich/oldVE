@@ -60,7 +60,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         {
             name: "compositionalOperator",
             convert: function(v, record) {
-                v.toUpperCase();
+                v = v.toUpperCase();
                 return v;
             }
         },

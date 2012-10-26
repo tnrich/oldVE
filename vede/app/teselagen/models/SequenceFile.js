@@ -31,7 +31,14 @@ Ext.define("Teselagen.models.SequenceFile", {
      */
     fields: [
         {name: "id",                    type: "int"},
-        {name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
+        //{name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
+        {
+            name: "sequenceFileFormat",
+            convert: function(v, record) {
+                v = v.toUpperCase();
+                return v;
+            }
+        },
         {name: "sequenceFileContent",   type: "string",     defaultValue: ""},
         {name: "sequenceFileName",      type: "string",     defaultValue: ""},
         {name: "partSource",            type: "string",     defaultValue: ""},
@@ -131,23 +138,23 @@ Ext.define("Teselagen.models.SequenceFile", {
         var cnt;
         var content = this.get("sequenceFileContent");
 
-        if (this.get("partSource") !== "") {
+        if (!(this.get("partSource") === "" || this.get("partSource") === undefined || this.get("partSource" === null))) {
             return this.get("partSource");
         }
 
         if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.GENBANK) {
             cnt = content.match(/LOCUS *(\S*)/);
-            if (cnt.length > 1) {
+            if (cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.FASTA) {
             cnt = content.match(/>\s*(\S*)/);
-            if (cnt.length > 1) {
+            if (cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.JBEI_SEQ) {
             cnt = content.match(/<seq:name>(.*)<\/seq:name>/);
-            if (cnt.length > 1) {
+            if (cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         }
@@ -175,7 +182,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                //console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
+                console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. SequenceFileName not set.");
             }
         }
         this.set("sequenceFileName", name);

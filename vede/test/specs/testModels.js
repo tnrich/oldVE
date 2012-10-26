@@ -129,7 +129,7 @@ Ext.onReady(function() {
 
             it("Calls Constants", function(){
 
-                expect(Teselagen.constants.Constants.GENBANK).toBe("Genbank");
+                expect(Teselagen.constants.Constants.GENBANK).toBe("GENBANK");
 
             });
         });
@@ -353,7 +353,6 @@ Ext.onReady(function() {
                 var part = Ext.create("Teselagen.models.Part", {
                     fas: "fas1"
                 });
-                part.setProxy(modelProxy);
                 expect(part.isEmpty()).toBe(false);
 
                 expect(part.get("fas")).toBe("fas1");
@@ -376,7 +375,6 @@ Ext.onReady(function() {
                     sequenceFileName: "newSeq",
                     sequenceFileContent: "gattaca"
                 });
-                newSeq.setProxy(modelProxy);
 
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("");
@@ -392,7 +390,6 @@ Ext.onReady(function() {
 
             it("Creates Empty Part, isEmpty", function(){
                 var part = Ext.create("Teselagen.models.Part");
-                part.setProxy(modelProxy);
 
                 expect(part.isEmpty()).toBe(true);
                 //expect(part.isPartVOEmpty()).toBe(true);
@@ -420,12 +417,10 @@ Ext.onReady(function() {
                 //expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
             });
 
-            it("isEmpty() ***", function(){
+            it("isEmpty() *** Check to see if this is a good definition", function(){
                 var part = Ext.create("Teselagen.models.Part");
-                part.setProxy(modelProxy);
 
                 expect(part.isEmpty()).toBe(true);
-                //expect(part.isPartVOEmpty()).toBe(true);
             });
 
             it("isEqual()", function(){
@@ -434,9 +429,6 @@ Ext.onReady(function() {
                 var part3 = Ext.create("Teselagen.models.Part", {
                     name: "blah"
                 });
-                //part1.setProxy(modelProxy);
-                //part2.setProxy(modelProxy);
-                //part3.setProxy(modelProxy);
 
                 expect(part1.isEqual(part1)).toBe(true);
                 expect(part1.isEqual(part2)).toBe(false); // Should this be equal??? They have different SeqFiles.

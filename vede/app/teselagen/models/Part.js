@@ -226,7 +226,7 @@ Ext.define("Teselagen.models.Part", {
      * Adds a SequenceFile to Part.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @returns {Boolean} True if added, false if not.
-     */
+     *
     addSequenceFile: function(pSequenceFile) {
         this.setSequenceFile(pSequenceFile);
         if (this.getSequenceFile() === pSequenceFile) {
@@ -234,7 +234,7 @@ Ext.define("Teselagen.models.Part", {
         } else {
             return true;
         }
-    },
+    },*/
 
     /** NEEDS TESTING
      * Removes the SequenceFile of Part.
