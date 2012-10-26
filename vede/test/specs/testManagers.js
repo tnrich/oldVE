@@ -349,8 +349,8 @@ Ext.onReady(function() {
 
                 beforeEach(function() {
                     design  = DeviceDesignManager.createDeviceDesign(2);
-                    bin     = Ext.create("Teselagen.models.J5Bin", {
-                        binName: "newBin"
+                    bin1     = Ext.create("Teselagen.models.J5Bin", {
+                        binName: "bin1"
                     });
                 });
 
@@ -371,30 +371,30 @@ Ext.onReady(function() {
                 });
 
                 it("getBinByIndex()/getBinNameByIndex()", function(){
-                    design.getJ5Collection().addToBin(bin, 0);
+                    design.getJ5Collection().addToBin(bin1, 0);
 
                     var tmpBin = DeviceDesignManager.getBinByIndex(design, 0);
-                    expect(tmpBin.get("binName")).toBe("newBin");
+                    expect(tmpBin.get("binName")).toBe("bin1");
 
                     var name = DeviceDesignManager.getBinNameByIndex(design, 0);
-                    expect(name).toBe("newBin");
+                    expect(name).toBe("bin1");
                 });
 
                 it("getBinIndex()", function(){
-                    var success = design.getJ5Collection().addToBin(bin, 1);
+                    var success = design.getJ5Collection().addToBin(bin1, 1);
                     expect(success).toBe(true);
 
-                    var index = DeviceDesignManager.getBinIndex(design, bin);
+                    var index = DeviceDesignManager.getBinIndex(design, bin1);
                     //console.log(DeviceDesignManager.getBinByIndex(design,1)===bin);
                     expect(index).toBe(1);
                 });
 
                 it("isUniqueBinName()", function(){
-                    var success = design.getJ5Collection().addToBin(bin, 0);
+                    var success = design.getJ5Collection().addToBin(bin1, 0);
                     expect(success).toBe(true);
 
-                    var unique = DeviceDesignManager.isUniqueBinName(design, "newBin");
-                    unique = design.getJ5Collection().isUniqueBinName("newBin");
+                    var unique = DeviceDesignManager.isUniqueBinName(design, "bin1");
+                    unique = design.getJ5Collection().isUniqueBinName("bin1");
                     expect(unique).toBe(false);
 
                     unique = DeviceDesignManager.isUniqueBinName(design, "blahblah");
@@ -416,12 +416,12 @@ Ext.onReady(function() {
 
                 it("addBin()", function(){
                     expect(design.getJ5Collection().binCount()).toBe(2);
-                    var success = DeviceDesignManager.addBin(design, bin, 0);
+                    var success = DeviceDesignManager.addBin(design, bin1, 0);
                     expect(design.getJ5Collection().binCount()).toBe(3);
                     expect(success).toBe(true);
 
                     try {
-                        DeviceDesignManager.addBin(design, bin, 0);
+                        DeviceDesignManager.addBin(design, bin1, 0);
                     } catch (bio) {
                         success = true;
                         //console.log(bio.message);
@@ -436,9 +436,9 @@ Ext.onReady(function() {
                 });
 
                 it("removeBin()", function(){
-                    design.getJ5Collection().addToBin(bin);
+                    design.getJ5Collection().addToBin(bin1);
                     expect(design.getJ5Collection().binCount()).toBe(3);
-                    var success = DeviceDesignManager.removeBin(design, bin);
+                    var success = DeviceDesignManager.removeBin(design, bin1);
 
                     expect(design.getJ5Collection().binCount()).toBe(2);
                     expect(success).toBe(true);
@@ -451,16 +451,29 @@ Ext.onReady(function() {
                     expect(success).toBe(true);
                 });
 
-                it("countNonEmptyParts()", function(){
+                it("nonEmptyPartCount()", function(){
                     var part = Ext.create("Teselagen.models.Part", {
                         name: "blah"
                     });
                     design.getJ5Collection().bins().getAt(0).addToParts(part);
 
-                    var num = DeviceDesignManager.countNonEmptyParts(design, 0);
+                    var num = DeviceDesignManager.nonEmptyPartCount(design, 0);
                     expect(num).toBe(1);
 
-                    num = DeviceDesignManager.countNonEmptyParts(design, 1);
+                    num = DeviceDesignManager.nonEmptyPartCount(design, 1);
+                    expect(num).toBe(0);
+                });
+
+                it("partCount()", function(){
+                    var part = Ext.create("Teselagen.models.Part", {
+                        name: "blah"
+                    });
+                    design.getJ5Collection().bins().getAt(0).addToParts(part);
+
+                    var num = DeviceDesignManager.partCount(design, 0);
+                    expect(num).toBe(1);
+
+                    num = DeviceDesignManager.partCount(design, 1);
                     expect(num).toBe(0);
                 });
 
@@ -480,6 +493,7 @@ Ext.onReady(function() {
             //================================================================
             describe("Part Management", function() {
 
+                // Depends on DeviceDesignManager.createDeviceDesignFromBins()
                 beforeEach(function() {
                     
                     bin1    = Ext.create("Teselagen.models.J5Bin", {
@@ -549,17 +563,18 @@ Ext.onReady(function() {
                     expect(design.getJ5Collection().bins().getAt(1).parts().getAt(0).get("name")).toBe("newPart2");
                 });
                 
-//LAST HERE  DW: 10.23.2012
                 it("removePartFromBin()", function(){
-                });
+                    
+                    // Remove a part in a bin
+                    expect(design.getJ5Collection().bins().getAt(0).parts().count()).toBe(1);
+                    var success = DeviceDesignManager.removePartFromBin(design, part1, 0);
+                    expect(design.getJ5Collection().bins().getAt(0).parts().count()).toBe(0);
+                    expect(success).toBe(true);
 
-                it("getSequenceFileByPartName()", function(){
-                });
-
-                it("getSequenceFileByPart()", function(){
-                });
-
-                it("()", function(){
+                    // Remove a nonexisting part in a bin
+                    success = DeviceDesignManager.removePartFromBin(design, part1, 1);
+                    expect(design.getJ5Collection().bins().getAt(1).parts().count()).toBe(0);
+                    expect(success).toBe(false);
                 });
             });
 
@@ -569,19 +584,92 @@ Ext.onReady(function() {
             //================================================================
             describe("SequenceFile Management", function() {
 
-                it("createSequenceFile()", function(){
+                // Depends on   DeviceDesignManager.createDeviceDesignFromBins()
+                //              DeviceDesignManager.createPart()
+                beforeEach(function() {
+                    
+                    bin1    = Ext.create("Teselagen.models.J5Bin", {
+                        binName: "newBin1"
+                    });
+                    
+                    design  = DeviceDesignManager.createDeviceDesignFromBins([bin1]);
+                    
+                    part1   = DeviceDesignManager.createPart(design, 0, "newPart1", 1, 10, false, true, "fas", "icon");
+                    part2 = Ext.create("Teselagen.models.Part", {
+                        name: "newPart2"
+                    });
+
+                    seq1    = DeviceDesignManager.createSequenceFile(design, part1, "FASTA", ">seq1\nGATTACA", null, null);
+                    seq2    = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "FASTA",
+                        sequenceFileContent: ">seq2\naaaaaaa"
+                    });
                 });
 
-                it("addSequenceFile())", function(){
+                it("createSequenceFile()", function(){
+
+                    expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
+                    expect(seq1.get("sequenceFileContent")).toBe(">seq1\nGATTACA");
+
+                    // FIX THIS WHEN THE J5Bin VALIDATORS ARE DONE
+                    var err = seq1.validate();
+                    expect(err.length).toBe(0);
+                    console.log(err);
+                });
+
+                it("getSequenceFileByPartName()", function(){
+                    var seq1 = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "Fasta",
+                        sequenceFileContent: ">seq1\ngattaca"
+                    });
+                    part1.setSequenceFile(seq1);
+                    var tmpSeq = DeviceDesignManager.getSequenceFileByPartName(design, "newPart1");
+                    expect(tmpSeq.get("sequenceFileName")).toBe("seq1.fas");
+                });
+
+                it("getSequenceFileByPart()", function(){
+                    part1.setSequenceFile(seq1);
+                    var tmpSeq = DeviceDesignManager.getSequenceFileByPart(design, part1);
+
+                    expect(tmpSeq.get("sequenceFileName")).toBe("seq1.fas");
+                });
+
+                it("setSequenceFile()", function(){
+                    var seq2 = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "Fasta",
+                        sequenceFileContent: ">seq2NEW\naaaaaaa"
+                    });
+                    part1.setSequenceFile(seq1);
+                    var tmpSeq = DeviceDesignManager.getSequenceFileByPart(design, part1);
+                    expect(tmpSeq.get("sequenceFileName")).toBe("seq1.fas");
+
+                    // run this method
+                    DeviceDesignManager.setSequenceFile(design, part1, seq2);
+                    tmpSeq = DeviceDesignManager.getSequenceFileByPart(design, part1);
+                    expect(tmpSeq.get("sequenceFileName")).toBe("seq2NEW.fas");
                 });
 
                 it("removeSequenceFile()", function(){
+                    var tmpSeq = design.getJ5Collection().bins().getAt(0).parts().getAt(0).getSequenceFile();
+                    expect(tmpSeq.get("sequenceFileContent")).toBe(">seq1\nGATTACA");
+
+                    var success = DeviceDesignManager.removeSequenceFile(design, part1);
+                    tmpSeq = design.getJ5Collection().bins().getAt(0).parts().getAt(0).getSequenceFile();
+                    console.log(tmpSeq);
+                    expect(tmpSeq.get("sequenceFileContent")).toBe("");
                 });
 
                 it("setSequenceFileContent()", function(){
+                    expect(seq1.get("sequenceFileContent")).toBe(">seq1\nGATTACA");
+                    var tmpSeq = DeviceDesignManager.setSequenceFileContent(seq1, ">newSeq1\nttttt");
+                    expect(seq1.get("sequenceFileContent")).toBe(">newSeq1\nttttt");
                 });
 
                 it("setPartSource()", function(){
+                    expect(seq1.get("partSource")).toBe("seq1");
+
+                    var tmpSeq = DeviceDesignManager.setPartSource(seq1, "newPartSource");
+                    expect(seq1.get("partSource")).toBe("newPartSource");
                 });
 
                 it("setSequenceFileName()", function(){
@@ -590,7 +678,10 @@ Ext.onReady(function() {
                 it("()", function(){
                 });
             });
-
+//LAST HERE  DW: 10.23.2012
+            //================================================================
+            // EugeneRule Management
+            //================================================================
             describe("EugeneRules Management", function() {
 
                 beforeEach(function() {
