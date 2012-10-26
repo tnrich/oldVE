@@ -173,7 +173,7 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             // Create Bin1 with 2 Part with 1 SequenceFile each
             seq1a = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Fasta",
-                sequenceFileConttent: ">seq1a\nGATTACA"
+                sequenceFileContent: ">seq1a\nGATTACA"
             });
             part1a = Ext.create("Teselagen.models.Part", {
                 name: "part1a",
