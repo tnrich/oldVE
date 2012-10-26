@@ -128,8 +128,8 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
                 
                 var project = Ext.create("Teselagen.models.Project", {
                     name: "My Project #"+Math.floor(Math.random()*11),
-                    DateCreated: new Date(2011,10,30),
-                    DateModified: new Date()
+                    DateCreated: new Date((new Date).getTime()*Math.random()),
+                    DateModified: new Date((new Date).getTime()*Math.random())
                 });
 
                 projectManager.currentUser.projects().add(project);
