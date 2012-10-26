@@ -614,7 +614,6 @@ Ext.onReady(function() {
                     // FIX THIS WHEN THE J5Bin VALIDATORS ARE DONE
                     var err = seq1.validate();
                     expect(err.length).toBe(0);
-                    console.log(err);
                 });
 
                 it("getSequenceFileByPartName()", function(){
@@ -655,8 +654,8 @@ Ext.onReady(function() {
 
                     var success = DeviceDesignManager.removeSequenceFile(design, part1);
                     tmpSeq = design.getJ5Collection().bins().getAt(0).parts().getAt(0).getSequenceFile();
-                    console.log(tmpSeq);
                     expect(tmpSeq.get("sequenceFileContent")).toBe("");
+                    expect(success).toBe(true);
                 });
 
                 it("setSequenceFileContent()", function(){
@@ -665,20 +664,25 @@ Ext.onReady(function() {
                     expect(seq1.get("sequenceFileContent")).toBe(">newSeq1\nttttt");
                 });
 
-                it("setPartSource()", function(){
+                it("setPartSource() ***", function(){
                     expect(seq1.get("partSource")).toBe("seq1");
 
                     var tmpSeq = DeviceDesignManager.setPartSource(seq1, "newPartSource");
                     expect(seq1.get("partSource")).toBe("newPartSource");
                 });
 
-                it("setSequenceFileName()", function(){
+                it("setSequenceFileName() ***", function(){
+                    expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
+                    
+                    var name = DeviceDesignManager.setSequenceFileName(design, seq1, "blah");
+                    expect(seq1.get("sequenceFileName")).toBe("blah");
+                    expect(name).toBe("blah");
                 });
 
                 it("()", function(){
                 });
             });
-//LAST HERE  DW: 10.23.2012
+//LAST HERE  DW: 10.25.2012
             //================================================================
             // EugeneRule Management
             //================================================================

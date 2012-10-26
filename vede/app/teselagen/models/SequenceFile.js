@@ -165,11 +165,18 @@ Ext.define("Teselagen.models.SequenceFile", {
     /**
      * Sets FileName based on PartSource
      * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} SequenceFileName
+     * @returns {[String]} pSequenceFileName If undefined, will set based on SequenceFileContent and SequenceFileFormat.
      */
-    setSequenceFileName: function() {
+    setSequenceFileName: function(pName) {
+
+        // In The case where there is an input
+        if (pName !== undefined) {
+            this.set("sequenceFileName", pName);
+            return pName;
+        }
+
+        // Setting name based on SequenceFileContent and Format
         var format      = this.get("sequenceFileFormat");
-        //var constants   = Teselagen.constants.Constants;
         var displayID   = this.get("partSource");
         var name        = this.get("sequenceFileName");
 

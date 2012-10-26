@@ -745,17 +745,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     setPartSource: function(pSequenceFile, pPartSource) {
         return pSequenceFile.setPartSource(pPartSource);
     },
-    /** UNTESTED
+    /**
+     * Sets the sequenceFileName for a SequenceFile.
+     * NOTE: Does not reset any other properties.
+     *
+     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.SequenceFile} pSequenceFile
+     * @param {String} pSequenceFileName
+     * @return {Boolean} True if name is set, false if not. (Throw and error if not set?)
      */
     setSequenceFileName: function(pDevice, pSequenceFile, pSequenceFileName) {
-        var unique = this.isUniquePartName(pDevice, pSequenceFileName);
+        return pSequenceFile.setSequenceFileName(pSequenceFileName);
+        /*var unique = this.isUniquePartName(pDevice, pSequenceFileName);
         if (unique) {
             pSequenceFile.set("sequenceFileName", pSequenceFileName);
+            return true;
         } else {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.SequenceFile: File name already exists in Design."
             });
-        }
+        }*/
     },
 //LAST HERE  DW: 10.25.2012
     //================================================================
