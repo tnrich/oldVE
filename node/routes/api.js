@@ -248,7 +248,6 @@ module.exports = function (app) {
     var model = req.body;
     var DEProject = app.db.model("deproject");
 
-
     /*
     DEProject.findById(id,function(err,proj){
       proj.design = req.body;
@@ -265,7 +264,6 @@ module.exports = function (app) {
         res.json({"design":req.body});
       });
     */
-
 
     console.log(model);
 
