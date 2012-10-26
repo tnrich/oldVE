@@ -127,7 +127,7 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             runs(function () {
                 
                 var project = Ext.create("Teselagen.models.Project", {
-                    name: "My Project",
+                    name: "My Project #"+Math.floor(Math.random()*11),
                     DateCreated: new Date(2011,10,30),
                     DateModified: new Date()
                 });
@@ -148,10 +148,10 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             runs(function () {
                 
                 deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-                    name: "My DE Project"
+                    name: "My DE Project #"+Math.floor(Math.random()*11)
                 });
                 
-                var currentProject = projectManager.currentUser.projects().first();
+                var currentProject = projectManager.currentUser.projects().last();
                 currentProject.deprojects().add(deproject);
 
                 deproject.save({

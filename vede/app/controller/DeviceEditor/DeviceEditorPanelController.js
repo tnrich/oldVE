@@ -29,7 +29,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     type: "text",
                     text: this.bin.data.binName,
                     fill: "black",
-                    font: "10px monospace",
+                    font: "14px arial",
                     x: this.x + 30,
                     y: this.y + 15
                 }));
@@ -50,7 +50,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var surface = currentTab.query('draw[cls=designCanvas]')[0].surface;
         var bins = currentModel.getDesign().getJ5Collection().bins();
         
-        var xPos = 0;
+        var xPos = 10;
         bins.each(function(bin){
             var binDraw = new Bin(surface,bin,xPos,10);
             xPos += 110;
