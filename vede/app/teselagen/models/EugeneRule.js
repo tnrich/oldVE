@@ -96,7 +96,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand1",
             setterName: "setOperand1",
-            associationKey: "operand1"
+            associationKey: "operand1",
+            name: "operand1"
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -104,7 +105,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
-            associationKey: "operand2Part"
+            associationKey: "operand2Part",
+            name: "operand2Part"
         },
         {
             type: "belongsTo",

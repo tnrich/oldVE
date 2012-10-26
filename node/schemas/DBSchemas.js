@@ -7,30 +7,34 @@ module.exports = function (app) {
 
 	var Schema = app.mongoose.Schema;
 	var oIDRef = app.mongoose.Schema.Types.ObjectId;
-	var Mixed  = app.mongoose.Schema.Types.Mixed;
+	var oMixed = app.mongoose.Schema.Types.Mixed;
 
 	app.db.model('Examples', new Schema({
 		name: String,
-		payload: Mixed
+		payload: oMixed
 	}));
 
 	var VEProjectSchema = new Schema({
-		name: String
+		name: String,
+		project_id : { type: oIDRef, ref: 'project' },
+		design: {}
 	});
 	app.db.model('veproject', VEProjectSchema);
 
 	var DEProjectSchema = new Schema({
 		project_id : { type: oIDRef, ref: 'project' },
-		design: Mixed,
+		design: app.mongoose.Schema.Types.Mixed,
 		name: String
-	});
+	}, { strict: false });
 	app.db.model('deproject', DEProjectSchema);
 
 	var ProjectSchema = new Schema({
 		user_id : { type: oIDRef, ref: 'User' },
+		DateCreated: Date,
+		DateModified: Date,
 		name: String,
-		deprojects : [DEProjectSchema],
-		veprojects : [VEProjectSchema],
+		deprojects : [{ type: oIDRef, ref: 'deproject' }],
+		veprojects : [{ type: oIDRef, ref: 'veproject' }]
 	});
 	app.db.model('project', ProjectSchema);
 

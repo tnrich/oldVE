@@ -43,7 +43,7 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
     };
 
 
-    var design, deproject, projectManager;
+    var design, deproject, projectManager, deprojectsaved;
     var server = 'http://teselagen.local/api/';
 
     describe("Connection to server", function () {
@@ -84,22 +84,16 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
 
     });
 
-    describe("Create Project Manager, Get User Profile and Projects", function () {
-
+    describe("Get User Profile and Projects", function () {
         it("Create Project Manager", function () {
             projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
         });
 
         it("Get User Profile and Get User Projects", function () {
-
             runs(function () {
-
                 projectManager.loadUser(function () {
                     expect(projectManager.currentUser).toBeDefined();
-                    expect(projectManager.projects).toBeDefined();
                 });
-
-
             });
 
             waitsFor(function () {
@@ -109,18 +103,68 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
 
         });
 
-        it("", function () {
+        it("Check if projects loaded", function () {
+            waits(500);
 
+            runs(function () {
+                expect(projectManager.projects).toBeDefined();
+            });
         });
-
     });
 
     //Sha256              = Teselagen.bio.util.Sha256;
     //SequenceFileManager = Teselagen.manager.SequenceFileManager;
     DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-    describe("Create DeviceEditor Project and Design and Attach to project", function () {
+    
+    describe("Create new Project, De Project and DE Design", function () {
 
+
+        it("Create new Project", function () {
+
+            waits(1000);
+
+            runs(function () {
+                
+                var project = Ext.create("Teselagen.models.Project", {
+                    name: "My Project",
+                    DateCreated: new Date(2011,10,30),
+                    DateModified: new Date()
+                });
+
+                projectManager.currentUser.projects().add(project);
+
+                project.save();
+                
+            });
+
+        });
+
+        
+        it("Create DE Project", function () {
+
+            waits(500);
+
+            runs(function () {
+                
+                deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+                    name: "My DE Project"
+                });
+                
+                var currentProject = projectManager.currentUser.projects().first();
+                currentProject.deprojects().add(deproject);
+
+                deproject.save({
+                    callback: function(){
+                        console.log("DE project saved");
+                        deprojectsaved = true;
+                    }
+                });
+
+            });
+        });
+        
+        
         it("Generate in-memory DE Design", function () {
 
             // In creating this design, use bare minimum required fields
@@ -187,46 +231,28 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
 
         });
 
-        it("Generate DE Project and Save to Server", function () {
-
-            waits(500);
-
-            runs(function () {
-                
-                deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-                    id: undefined,
-                    project_id: undefined,
-                    name: "My Project"
-                });
-
-                //deproject.save();
-                deproject.setDesign(design);
-                projectManager.currentUser.projects().add(deproject);
-                projectManager.currentUser.save(); 
-
-
-            });
-
-        });
-
-    });
-
-    describe("Save the design to server", function () {
 
         it("Save DE Design to Server", function () {
 
-            runs(function () {
-                design.save();
-            });
-
             waitsFor(function () {
-                if(design) return true;
+                if(design&&deprojectsaved&&deproject) return true;
                 else return false;
             }, "DE Project creation took too much time", 100);
 
 
+            runs(function () {
+                design.set( 'deproject_id', deproject.get('id') )
+                deproject.setDesign(design);
+                
+                design.save(function(){
+                    console.log("Design saved!");
+                });
+            });
+
         });
+
 
     });
 
+    
 });

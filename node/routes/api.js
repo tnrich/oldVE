@@ -159,7 +159,6 @@ module.exports = function (app) {
   });
 
   app.put('/getUser', restrict, function (req, res) {
-    console.log(req.body);
     res.json({});
   });
 
@@ -173,20 +172,108 @@ module.exports = function (app) {
   });
 
 
-  // Dummy method
-  app.all('/getProjects', restrict, function (req, res) {
+  // Add new Project to Current User
+  app.post('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var newProject = new Project({
+      name: req.body.name,
+      user_id : req.user,
+      DateCreated: req.body.DateCreated,
+      DateModified: req.body.DateModified
+    });
+    newProject.save(function(){
+      req.user.projects.push(newProject);
+      req.user.save(function(){
+        console.log("New project Saved");
+        res.json({"projects":newProject});
+      });
+    });
+  });
 
+  // Update Project to Current User
+  app.put('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.findById(req.body.id,function(err,proj){
+      proj.name = req.body.name;
+      proj.DateCreated = req.body.DateCreated;
+      proj.DateModified = req.body.DateModified;
+      var projects = de.body.deprojects;
+      //projec
+    });
+  });
+  
+
+  app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
+      console.log("Returning "+user.projects.length+" projects");
       res.json({"projects":user.projects});
     });
-
   });
 
-  app.post('/DeviceDesign', function (req, res) {
-    console.log(req.body);
-    res.json({});
+
+  // CREATE
+  app.post('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var DEProject = app.db.model("deproject");
+    Project.findById(req.body.project_id,function(err,proj){
+      var newProj = new DEProject({
+        name : req.body.name,
+        project_id: proj
+      });
+      newProj.save(function(){
+        proj.deprojects.push(newProj);
+        proj.save(function(){
+          console.log("New DE Project Saved!");
+          res.json({"projects":newProj});
+        });
+      });
+    });
+  });
+
+  // GET
+  app.get('/user/projects/deprojects', restrict, function (req, res) {
+    var id = JSON.parse(req.query.filter)[0].value;
+    var Project = app.db.model("project");
+    Project.findById(id).populate('deprojects').exec(function(err,proj){
+      console.log("Returning "+proj.deprojects.length+" deprojects");
+      res.json({"projects":proj.deprojects});
+    });
+  });
+
+  //CREATE
+  app.post('/user/projects/deprojects/devicedesign', function (req, res) {
+    var id = req.body["deproject_id"];
+    var model = req.body;
+    var DEProject = app.db.model("deproject");
+
+    /*
+    DEProject.findById(id,function(err,proj){
+      proj.design = req.body;
+      proj.save(function(){;
+        console.log("New Design Saved!");
+        console.log(proj);
+        res.json({"design":proj.design});
+      })
+    });
+    */
+    /*
+    DEProject.update({ _id: id }, { $set: { design: req.body }}).exec(function(){;
+        console.log("New Design Saved!");
+        res.json({"design":req.body});
+      });
+    */
+
+    console.log(model);
+
+    DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("New Design Saved!");
+        res.json({"design":req.body});
+      });
+
   });
 
   var design = {"id":"50870a24f1b5b1d809000007","deproject_id":"50870a24f1b5b1d809000006","j5collection":{"id":0,"j5Ready":false,"combinatorial":true,"isCircular":true,"deviceDesign_id":0,"bins":[{"binName":"bin1","iconID":"generic","directionForward":true,"dsf":false,"fro":null,"fas":"","extra5PrimeBps":null,"extra3PrimeBps":null,"collection_id":0,"parts":[{"id":0,"veproject_id":0,"directionForward":true,"fas":"","name":"part1a","revComp":false,"genbankStartBP":1,"endBP":10,"iconID":"","Teselagen.models.SequenceFile":{"id":0,"sequenceFileFormat":"Fasta","sequenceFileContent":"","sequenceFileName":"","partSource":"","hash":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}},{"id":0,"veproject_id":0,"directionForward":true,"fas":"","name":"part1b","revComp":false,"genbankStartBP":20,"endBP":30,"iconID":"","Teselagen.models.SequenceFile":{"id":0,"sequenceFileFormat":"Fasta","sequenceFileContent":">seq1b\nTTTTTTTTTT","sequenceFileName":"","partSource":"","hash":"42aa8c642ea293713a0b9c7e5f5b33c7068c4d7281dd688a0b824c71ffd2637c"}}]},{"binName":"bin2","iconID":"generic","directionForward":true,"dsf":false,"fro":null,"fas":"","extra5PrimeBps":null,"extra3PrimeBps":null,"collection_id":0,"parts":[{"id":0,"veproject_id":0,"directionForward":true,"fas":"","name":"part2a","revComp":false,"genbankStartBP":1,"endBP":10,"iconID":"","Teselagen.models.SequenceFile":{"id":0,"sequenceFileFormat":"Fasta","sequenceFileContent":">seq1b\nAAAAAAAAA","sequenceFileName":"","partSource":"","hash":"2f143139671619f741f91f31e82d168eadd2ae3d4ac4815931be0f51bd3ce5c9"}}]}]}};

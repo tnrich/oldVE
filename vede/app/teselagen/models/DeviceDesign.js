@@ -29,8 +29,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             type: 'json',
             //This method should resolve associations and prepare data before saving design
             getRecordData: function(record, getEverything) {
-                var data;
-
                 var data = record.getData()
                 var associatedData = record.getAssociatedData();
                 var j5Collection = associatedData["j5collection"];
@@ -41,7 +39,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         },
         buildUrl: function() {
-            return sessionData.baseURL + 'DeviceDesign'; // This method reBuild the URL for ajax requests from parents models
+            return sessionData.baseURL + 'user/projects/deprojects/devicedesign'; // This method reBuild the URL for ajax requests from parents models
         }
     },
 
@@ -50,10 +48,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {
-            name: "id",
-            type: "long" 
-        },
         {
             name: "deproject_id",
             type: "long"
@@ -85,7 +79,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
             associationKey: "deviceEditorProject",
-            name: "deviceEditorProject"
+            name: "deviceEditorProject",
+            foreignKey: 'deproject_id'
         }
     ],
 
