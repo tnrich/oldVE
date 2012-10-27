@@ -18,7 +18,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     ],
 
     statics: {
-        //NAME: "SequenceFileProxy"
     },
 
     constructor: function() {
@@ -69,7 +68,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     // EugeneRules Management
     //================================================================
-    /** UNTESTED
+    /**
+     * Create a new EugeneRule in DeviceDesign.
+     *
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pRuleName
      * @param {Boolean} pNegationOperator
@@ -224,6 +225,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /** UNTESTED
+     * Set the Combinatorial flag in a collection based on checkCombinatorial()
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Boolean} pCircular
      */
@@ -752,21 +754,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.manager.DeviceDesign} pDevice
      * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @param {String} pSequenceFileName
-     * @return {Boolean} True if name is set, false if not. (Throw and error if not set?)
+     * @return {Boolean} True if name is set, false if not. (Throw an error if not set?)
      */
     setSequenceFileName: function(pDevice, pSequenceFile, pSequenceFileName) {
         return pSequenceFile.setSequenceFileName(pSequenceFileName);
-        /*var unique = this.isUniquePartName(pDevice, pSequenceFileName);
-        if (unique) {
-            pSequenceFile.set("sequenceFileName", pSequenceFileName);
-            return true;
-        } else {
-            throw Ext.create("Teselagen.bio.BioException", {
-                message: "Teselagen.models.SequenceFile: File name already exists in Design."
-            });
-        }*/
     },
 //LAST HERE  DW: 10.25.2012
+
     //================================================================
     // CSV Readers --> Refactor to Parsers?
     //================================================================

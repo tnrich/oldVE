@@ -64,6 +64,13 @@ Ext.define("Teselagen.models.EugeneRule", {
                 return v;
             }
         },
+        {
+            name: "operand2isNumber",
+            convert: function(v, record) {
+                if (this.get("operand2Number") === undefine)
+                return v;
+            }
+        },
         
         {name: "operand2isNumber",      type: "boolean",    defaultValue: false},
         {name: "operand2Number",       type: "number",     defaultValue: 0}
@@ -96,7 +103,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand1",
             setterName: "setOperand1",
-            associationKey: "operand1"
+            associationKey: "operand1",
+            instanceName: "operand1"
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -104,7 +112,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
-            associationKey: "operand2Part"
+            associationKey: "operand2Part",
+            instanceName: "operand2"
         },
         {
             type: "belongsTo",
@@ -198,7 +207,6 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
 
         if ( this.getOperand1() !== null) {
-            //console.log(this.getOperand1());
             ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }

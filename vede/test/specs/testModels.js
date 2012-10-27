@@ -438,6 +438,11 @@ Ext.onReady(function() {
 
         describe("Teselagen.models.EugeneRule.js", function() {
 
+            beforeEach(function() {
+                operand1 = Ext.create("Teselagen.models.Part", {name: "op1"});
+                operand2 = Ext.create("Teselagen.models.Part", {name: "op2"});
+            });
+
             it("Creates EugeneRule", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     compositionalOperator: "AFTER"
@@ -452,15 +457,12 @@ Ext.onReady(function() {
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     compositionalOperator: "AFTER"
                 });
-                eugene.setProxy(modelProxy);
-
-                //expect(eugene.getDeviceDesign().getProxy().type).toBe("memory");
-                eugene.getDeviceDesign().setProxy(modelProxy);
-                
+                eugene.setOperand1(operand1);
+                eugene.setOperand2(operand2);
 
                 expect(Ext.getClassName(eugene.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
-                expect(eugene.getDeviceDesign().getProxy().type).toBe("memory");
                 expect(Ext.getClassName(eugene.getOperand1())).toBe("Teselagen.models.Part");
+                expect(Ext.getClassName(eugene.getOperand2())).toBe("Teselagen.models.Part");
             });
 
             it("Rejects unacceptable compositionalOperator", function(){
@@ -506,6 +508,7 @@ Ext.onReady(function() {
                     eugene = Ext.create("Teselagen.models.EugeneRule", {
                         compositionalOperator: "AFTER"
                     });
+                    eugene.setOperand1(operand1);
                     eugene.setOperand2("badString");
                 } catch (bio) {
                     flag = true;
@@ -519,8 +522,9 @@ Ext.onReady(function() {
                     name: "name1",
                     compositionalOperator: "AFTER"
                 });
-
+                eugene.setOperand1(operand1);
                 eugene.setOperand2(567);
+
                 expect(eugene.get("operand2isNumber")).toBe(true); //do not use outside of model
                 expect(eugene.getOperand2()).toBe(567);
             });
@@ -530,28 +534,40 @@ Ext.onReady(function() {
                     name: "name1",
                     compositionalOperator: "AFTER"
                 });
+                eugene.setOperand1(operand1);
+                eugene.setOperand2(operand2);
 
-                var part = Ext.create("Teselagen.models.Part");
-
-                eugene.setOperand2(part);
                 expect(eugene.get("operand2isNumber")).toBe(false); //do not use outside of model
-                expect(eugene.getOperand2()).toBe(part);
+                expect(eugene.getOperand1().get("name")).toBe("op1");
+                expect(eugene.getOperand2().get("name")).toBe("op2");
             });
 
-            it("generateText()", function(){
+            it("generateText(): Operand2 is number", function(){
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
                     compositionalOperator: "BEFORE"
                 });
 
-                var op1 = Ext.create("Teselagen.models.Part", { name: "part", genbankStartBP: 200});
-                eug.setOperand1(op1);
+                eug.setOperand1(operand1);
                 eug.setOperand2(123);
 
-                //console.log(eug.validate());
                 var str = eug.generateText();
-                expect(str).toBe("Rule eug(part BEFORE 123);");
+                expect(str).toBe("Rule eug(op1 BEFORE 123);");
+            });
+
+            it("generateText(): Operand2 is Part", function(){
+
+                var eug = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "eug",
+                    compositionalOperator: "BEFORE"
+                });
+
+                eug.setOperand1(operand1);
+                eug.setOperand2(operand2);
+
+                var str = eug.generateText();
+                expect(str).toBe("Rule eug(op1 BEFORE op2);");
             });
         });
         
@@ -1041,7 +1057,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(device.getDeviceEditorProject())).toBe("Teselagen.models.DeviceEditorProject");
             });
 
-            it("Create DeviceDesign", function(){
+            it("Create DeviceDesign: createNewCollection()", function(){
 
                 var device = Ext.create("Teselagen.models.DeviceDesign");
 
@@ -1050,6 +1066,19 @@ Ext.onReady(function() {
 
                 expect(device.getJ5Collection().binCount()).toBe(3);
                 expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
+            });
+
+            it("Create DeviceDesign: createCollectionFromBins()", function(){
+
+                var device  = Ext.create("Teselagen.models.DeviceDesign");
+
+                var bin1    = Ext.create("Teselagen.models.J5Bin", {binName: "bin1"});
+                var bin2    = Ext.create("Teselagen.models.J5Bin");
+
+                device.createCollectionFromBins([bin1, bin2]);
+
+                expect(device.getJ5Collection().binCount()).toBe(2);
+                expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("bin1");
             });
 
 

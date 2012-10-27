@@ -31,7 +31,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record, getEverything) {
                 var data;
 
-                var data = record.getData()
+                var data = record.getData();
                 var associatedData = record.getAssociatedData();
                 var j5Collection = associatedData["j5collection"];
                 var rules = associatedData["rules"];
@@ -52,7 +52,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     fields: [
         {
             name: "id",
-            type: "long" 
+            type: "long"
         },
         {
             name: "deproject_id",
@@ -106,12 +106,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
             var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
             j5Coll.addToBin(bin, i);
         }
-        //this.set("j5Collection", j5Coll);
         this.setJ5Collection(j5Coll);
         return j5Coll;
     },
 
-    /** NOT TESTED
+    /**
      * Creates a J5Collection from given J5Bins.
      * @param {Teselagen.models.J5Bins[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
      * @returns {Teselagen.models.J5Collection}
