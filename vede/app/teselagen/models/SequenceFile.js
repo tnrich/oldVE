@@ -19,8 +19,10 @@ Ext.define("Teselagen.models.SequenceFile", {
     statics: {
     },
 
-    Constants: null,
-
+    //This makes a copy of the constants part of this model. Is that bad? -DW
+    config: {
+        Constants: null,
+    },
     /**
      * Input parameters.
      * @param {String} sequenceFileFormat (required)
@@ -130,10 +132,19 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     /**
      * Sets PartSource based on FileFormat and FileContent.
-     * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} Name of the PartSource
+     * DOES NOT CHECK FOR UNIQUENESS OF NAME.
+     *
+     * @param {[String]} pPartSource Optional. Name of the PartSource. If undefined, will set based on SequenceFileContent and SequenceFileFormat properties.
+     * @returns {String} Name of the set partSource
      */
-    setPartSource: function() {
+    setPartSource: function(pPartSource) {
+
+        // In The case where there is an input
+        if (pPartSource !== undefined) {
+            this.set("partSource", pPartSource);
+            return pPartSource;
+        }
+
         var displayID = "";
         var cnt;
         var content = this.get("sequenceFileContent");
@@ -164,8 +175,10 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     /**
      * Sets FileName based on PartSource
-     * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {[String]} pSequenceFileName If undefined, will set based on SequenceFileContent and SequenceFileFormat.
+     * DOES NOT CHECK FOR UNIQUENESS OF NAME.
+     *
+     * @params {[String]} pSequenceFileName Optional. Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
+     * @returns {[String]} Set sequenceFileName.
      */
     setSequenceFileName: function(pName) {
 

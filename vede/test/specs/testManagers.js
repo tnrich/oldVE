@@ -146,59 +146,6 @@ Ext.onReady(function() {
             });
         });
 
-        xdescribe("Teselagen.manager.EugeneRuleManager.js", function() {
-
-            it("getDefaultNamePattern()", function(){
-
-                //console.log(Teselagen.models.EugeneRule.MORETHAN);
-                //console.log((typeof(123) === "number"));
-                //console.log(Teselagen.constants.Constants.self.GENBANK);
-            });
-
-            it("getDefaultNamePattern()", function(){
-            });
-
-            it("addRule()", function(){
-            });
-
-            it("deleteItem()", function(){
-            });
-
-            it("deleteAllItems()", function(){
-            });
-
-            it("generateRuleText()", function(){
-                
-                var eug = Ext.create("Teselagen.models.EugeneRule", {
-                    name: "eug",
-                    operand1: Ext.create("Teselagen.models.PartVO", { name: "partvo"}),
-                    compositionalOperator: "AFTER",
-                    operand2: 123
-                });
-                var tmp = Ext.create("Teselagen.manager.EugeneRuleManager",{
-                    eugeneRules: [eug]
-                });
-                var str = tmp.generateRuleText(eug);
-                expect(str).toBe("Rule eug(partvo AFTER 123);");
-            });
-
-            it("getRuleByName()", function(){
-            });
-
-            it("getRulesByPartVO()", function(){
-            });
-
-            it("getRulesInvolvingPartVO()", function(){
-            });
-
-            it("isUniqueRuleName()", function(){
-            });
-
-            it("()", function(){
-            });
-        });
-
-
         //================================================================
         // DeviceDesignManagement
         //================================================================
@@ -664,22 +611,19 @@ Ext.onReady(function() {
                     expect(seq1.get("sequenceFileContent")).toBe(">newSeq1\nttttt");
                 });
 
-                it("setPartSource() ***", function(){
+                it("setPartSource()", function(){
                     expect(seq1.get("partSource")).toBe("seq1");
 
                     var tmpSeq = DeviceDesignManager.setPartSource(seq1, "newPartSource");
                     expect(seq1.get("partSource")).toBe("newPartSource");
                 });
 
-                it("setSequenceFileName() ***", function(){
+                it("setSequenceFileName()", function(){
                     expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
                     
                     var name = DeviceDesignManager.setSequenceFileName(design, seq1, "blah");
                     expect(seq1.get("sequenceFileName")).toBe("blah");
                     expect(name).toBe("blah");
-                });
-
-                it("()", function(){
                 });
             });
 //LAST HERE  DW: 10.25.2012
@@ -690,22 +634,59 @@ Ext.onReady(function() {
 
                 beforeEach(function() {
                     design      = DeviceDesignManager.createDeviceDesign(2);
-                    name1       = "rule";
+                    name1       = "rule1";
                     negOp       = true;
                     operand1    = DeviceDesignManager.createPart(design, 0, "operand1", 1, 10, false, true, "fas", null);
                     compOp      = "AFTER";
                     operand2    = DeviceDesignManager.createPart(design, 1, "operand2", 2, 20, false, true, "fas", null);
+
+                    // Rule that is already in the design, with 2 parts
+                    rule1 = DeviceDesignManager.createEugeneRule(design, name1, negOp, operand1, compOp, operand2);
+
+                    // Rule that is not in the design, with 1 part, 1 number
+                    rule2 = Ext.create("Teselagen.models.EugeneRule", {
+                        name: "rule2",
+                        negationOperator: true,
+                        compositionalOperator: "BEFORE"
+                    });
+                    rule2.setOperand1(operand1);
+                    rule2.setOperand2(123);
+
                 });
 
-                it("createEugeneRule()", function(){
-                    //console.log(operand1);
-                    //console.log(operand2);
-                    var rule = DeviceDesignManager.createEugeneRule(design, name1, negOp, operand1, compOp, operand2);
-                    expect(rule.generateText()).toBe("Rule rule(NOT operand2 AFTER operand2);");
+                it("createEugeneRule(): Two parts", function(){
+                    
+                    expect(rule1.generateText()).toBe("Rule rule1(NOT operand1 AFTER operand2);");
+                    console.log(rule1);
+
+                    expect(design.rules().count()).toBe(1);
+                    expect(design.rules().getAt(0).getOperand1().get("name")).toBe("operand1");
+                    expect(design.rules().getAt(0).getOperand2().get("name")).toBe("operand2");
+
+                    // FIX THIS WHEN THE EugeneRule VALIDATORS ARE DONE
+                    var err = rule1.validate();
+                    expect(err.length).toBe(0);
                 });
 
+                it("addToRules()", function(){
+                });
 
-                it("()", function(){
+                it("removeFromRules()", function(){
+                });
+
+                it("removeAllRules()", function(){
+                });
+
+                it("getRulesInvolvingPart()", function(){
+                });
+
+                it("getRuleByName()", function(){
+                });
+
+                it("isUniqueRuleName()", function(){
+                });
+
+                it("generateRuleText()", function(){
                 });
             });
 
