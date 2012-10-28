@@ -62,7 +62,7 @@
 }
 
 /*Header*/
-#headerPanel-body, #headerMain-body, #headerSub-body {
+#headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
 	border: none;
 }
 

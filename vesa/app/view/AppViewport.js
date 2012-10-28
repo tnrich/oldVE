@@ -31,12 +31,15 @@ Ext.define('Vesa.view.AppViewport', {
                     height: 50,
                     id: 'headerPanel',
                     layout: {
-                        type: 'fit'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
                     items: [
                         {
                             xtype: 'panel',
+                            flex: 1,
                             id: 'headerMain',
+                            maxWidth: 220,
                             items: [
                                 {
                                     xtype: 'image',
@@ -47,12 +50,35 @@ Ext.define('Vesa.view.AppViewport', {
                                     src: 'resources/images/teselagen_toplogo.png'
                                 }
                             ]
+                        },
+                        {
+                            xtype: 'panel',
+                            flex: 2,
+                            id: 'headerButs',
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    id: 'newProject_Btn',
+                                    margin: 3,
+                                    icon: 'resources/images/add_project.png',
+                                    scale: 'large',
+                                    tooltip: 'New Project'
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: 'newDE_Btn',
+                                    icon: 'resources/images/add_DE.png',
+                                    scale: 'large',
+                                    tooltip: 'New Device Editor Design'
+                                }
+                            ]
                         }
                     ],
                     dockedItems: [
                         {
                             xtype: 'panel',
                             dock: 'right',
+                            flex: 3,
                             id: 'headerSub',
                             layout: {
                                 type: 'fit'
