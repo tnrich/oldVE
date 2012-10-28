@@ -26,8 +26,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			callback: function (records,operation,success) {
 				if(records.length != 1) console.log('Error loading user');
 				self.currentUser = users.first();
-				self.projects = self.currentUser.projects();
-				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
+				self.currentUser.projects().load({
+					callback: function(record,operation,success){
+						self.projects = self.currentUser.projects();
+						if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
+					}
+				});
 				if(cb) return cb(true);
 			}
 		});
@@ -43,10 +47,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var self = this;
 
 		var deprojects = this.workingProject.deprojects();
-		//console.log(this.workingProject);
-		//console.log(deprojects);
-		projectController.renderDesignsSection(deprojects);
-		projectController.renderJ5ResultsSection(deprojects);
+		deprojects.load({
+			callback: function (records,operation,success) {
+				projectController.renderDesignsSection(deprojects);
+				projectController.renderJ5ResultsSection(deprojects);
+			}
+		});
+
+
 
 		var veprojects = this.workingProject.veprojects();
 		projectController.renderPartsSection(veprojects);
@@ -72,11 +80,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var selectedDEProject = deprojects.getById(id);
 		
 		var selectedDesign = selectedDEProject.getDesign({
-			callback: function (record,operation,success) {
+			callback: function (record,operation) {
+				console.log(operation);
 				selectedDesign = selectedDEProject.getDesign();
-				console.log(selectedDesign);
 				var tabPanel = Ext.getCmp('tabpanel');
-				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDEProject})).show();		
+				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
 			
 				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
 				deController.renderDesignInContext();

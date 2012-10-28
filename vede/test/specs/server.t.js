@@ -43,7 +43,7 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
     };
 
 
-    var design, deproject, projectManager;
+    var design, deproject, projectManager, deprojectsaved;
     var server = 'http://teselagen.local/api/';
 
     describe("Connection to server", function () {
@@ -84,22 +84,16 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
 
     });
 
-    describe("Create Project Manager, Get User Profile and Projects", function () {
-
+    describe("Get User Profile and Projects", function () {
         it("Create Project Manager", function () {
             projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
         });
 
         it("Get User Profile and Get User Projects", function () {
-
             runs(function () {
-
                 projectManager.loadUser(function () {
                     expect(projectManager.currentUser).toBeDefined();
-                    expect(projectManager.projects).toBeDefined();
                 });
-
-
             });
 
             waitsFor(function () {
@@ -109,18 +103,68 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
 
         });
 
-        it("", function () {
+        it("Check if projects loaded", function () {
+            waits(500);
 
+            runs(function () {
+                expect(projectManager.projects).toBeDefined();
+            });
         });
-
     });
 
     //Sha256              = Teselagen.bio.util.Sha256;
     //SequenceFileManager = Teselagen.manager.SequenceFileManager;
     DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-    describe("Create DeviceEditor Project and Design and Attach to project", function () {
+    
+    describe("Create new Project, De Project and DE Design", function () {
 
+
+        it("Create new Project", function () {
+
+            waits(1000);
+
+            runs(function () {
+                
+                var project = Ext.create("Teselagen.models.Project", {
+                    name: "My Project #"+Math.floor(Math.random()*11),
+                    DateCreated: new Date((new Date).getTime()*Math.random()),
+                    DateModified: new Date((new Date).getTime()*Math.random())
+                });
+
+                projectManager.currentUser.projects().add(project);
+
+                project.save();
+                
+            });
+
+        });
+
+        
+        it("Create DE Project", function () {
+
+            waits(500);
+
+            runs(function () {
+                
+                deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+                    name: "My DE Project #"+Math.floor(Math.random()*11)
+                });
+                
+                var currentProject = projectManager.currentUser.projects().last();
+                currentProject.deprojects().add(deproject);
+
+                deproject.save({
+                    callback: function(){
+                        console.log("DE project saved");
+                        deprojectsaved = true;
+                    }
+                });
+
+            });
+        });
+        
+        
         it("Generate in-memory DE Design", function () {
 
             // In creating this design, use bare minimum required fields
@@ -129,7 +173,7 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             // Create Bin1 with 2 Part with 1 SequenceFile each
             seq1a = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Fasta",
-                sequenceFileConttent: ">seq1a\nGATTACA"
+                sequenceFileContent: ">seq1a\nGATTACA"
             });
             part1a = Ext.create("Teselagen.models.Part", {
                 name: "part1a",
@@ -187,46 +231,28 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
 
         });
 
-        it("Generate DE Project and Save to Server", function () {
-
-            waits(500);
-
-            runs(function () {
-                
-                deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-                    id: undefined,
-                    project_id: undefined,
-                    name: "My Project"
-                });
-
-                //deproject.save();
-                deproject.setDesign(design);
-                projectManager.currentUser.projects().add(deproject);
-                projectManager.currentUser.save(); 
-
-
-            });
-
-        });
-
-    });
-
-    describe("Save the design to server", function () {
 
         it("Save DE Design to Server", function () {
 
-            runs(function () {
-                design.save();
-            });
-
             waitsFor(function () {
-                if(design) return true;
+                if(design&&deprojectsaved&&deproject) return true;
                 else return false;
             }, "DE Project creation took too much time", 100);
 
 
+            runs(function () {
+                design.set( 'deproject_id', deproject.get('id') )
+                deproject.setDesign(design);
+                
+                design.save(function(){
+                    console.log("Design saved!");
+                });
+            });
+
         });
+
 
     });
 
+    
 });

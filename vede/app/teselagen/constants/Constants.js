@@ -17,9 +17,9 @@ Ext.define("Teselagen.constants.Constants", {
     
     ENTRY_REGISTRY_URL:     "",
     
-    GENBANK:                "Genbank",
+    GENBANK:                "GENBANK",
     FASTA:                  "FASTA",
-    JBEI_SEQ:               "jbei-seq",
+    JBEI_SEQ:               "JBEI-SEQ",
     SBOL_XML:               "SBOLXML",
     
     REPORT_BUG_URL:         "",

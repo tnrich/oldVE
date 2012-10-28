@@ -60,7 +60,14 @@ Ext.define("Teselagen.models.EugeneRule", {
         {
             name: "compositionalOperator",
             convert: function(v, record) {
-                v.toUpperCase();
+                v = v.toUpperCase();
+                return v;
+            }
+        },
+        {
+            name: "operand2isNumber",
+            convert: function(v, record) {
+                if (this.get("operand2Number") === undefine)
                 return v;
             }
         },
@@ -96,7 +103,10 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand1",
             setterName: "setOperand1",
-            associationKey: "operand1"
+            associationKey: "operand1",
+
+            name: "operand1", //RP
+            instanceName: "operand1" //DW
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -104,7 +114,10 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
-            associationKey: "operand2Part"
+            associationKey: "operand2Part",
+
+            name: "operand2Part", //RP
+            instanceName: "operand2" //DW
         },
         {
             type: "belongsTo",
@@ -198,7 +211,6 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
 
         if ( this.getOperand1() !== null) {
-            //console.log(this.getOperand1());
             ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }
