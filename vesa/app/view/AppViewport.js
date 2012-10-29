@@ -276,7 +276,64 @@ Ext.define('Vesa.view.AppViewport', {
                                             title: 'Project Info',
                                             items: [
                                                 {
+                                                    xtype: 'tabpanel',
+                                                    activeTab: 0,
+                                                    items: [
+                                                        {
+                                                            xtype: 'panel',
+                                                            title: 'Info',
+                                                            items: [
+                                                                {
+                                                                    xtype: 'fieldcontainer',
+                                                                    height: 120,
+                                                                    width: 400,
+                                                                    layout: {
+                                                                        align: 'stretch',
+                                                                        type: 'vbox'
+                                                                    },
+                                                                    fieldLabel: 'j5 Run Info',
+                                                                    labelAlign: 'top',
+                                                                    items: [
+                                                                        {
+                                                                            xtype: 'displayfield',
+                                                                            flex: 1,
+                                                                            value: 'Display Field',
+                                                                            fieldLabel: 'Status'
+                                                                        },
+                                                                        {
+                                                                            xtype: 'displayfield',
+                                                                            flex: 2,
+                                                                            value: 'Display Field',
+                                                                            fieldLabel: 'Run Date'
+                                                                        },
+                                                                        {
+                                                                            xtype: 'displayfield',
+                                                                            flex: 3,
+                                                                            value: 'Display Field',
+                                                                            fieldLabel: 'Run Time'
+                                                                        },
+                                                                        {
+                                                                            xtype: 'displayfield',
+                                                                            value: 'Display Field',
+                                                                            fieldLabel: 'Assembly Type'
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            xtype: 'panel',
+                                                            title: 'Design Overview'
+                                                        },
+                                                        {
+                                                            xtype: 'panel',
+                                                            title: 'Sequences'
+                                                        }
+                                                    ]
+                                                },
+                                                {
                                                     xtype: 'gridpanel',
+                                                    hidden: true,
                                                     title: 'My Grid Panel',
                                                     columns: [
                                                         {
@@ -303,12 +360,21 @@ Ext.define('Vesa.view.AppViewport', {
                                                     viewConfig: {
 
                                                     }
+                                                },
+                                                {
+                                                    xtype: 'form',
+                                                    layout: {
+                                                        type: 'fit'
+                                                    },
+                                                    bodyPadding: 10,
+                                                    title: 'My Form'
                                                 }
                                             ]
                                         },
                                         {
                                             xtype: 'panel',
                                             flex: 2,
+                                            hidden: true,
                                             maxHeight: 300,
                                             layout: {
                                                 type: 'fit'
