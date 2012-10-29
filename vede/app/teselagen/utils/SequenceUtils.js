@@ -43,6 +43,35 @@ Ext.define("Teselagen.utils.SequenceUtils", {
     ],
 
     /**
+     * Finds reverse complement of a sequence.
+     * (REFACTORED FROM DEVICEDESIGNMANAGER)
+     * @param {String} pSeq
+     * @returns {String} reverse complement sequence
+     */
+    reverseComplement: function(pSeq) {
+        var revComp = [];
+        pSeq = pSeq.toLowerCase();
+
+        for (var i = pSeq.length-1; i >= 0; i--) {
+            switch (pSeq.charAt(i)) {
+                case "a":
+                    revComp.push("t");
+                    break;
+                case "c":
+                    revComp.push("g");
+                    break;
+                case "g":
+                    revComp.push("c");
+                    break;
+                case "t":
+                    revComp.push("a");
+                    break;
+            }
+        }
+        return revComp.join("");
+    },
+
+    /**
      * Determines if sequence compatible:
      * Has characters like 0-9, ATGCYRSWKMBVDHN, &lt;newline&gt;, &lt;space&gt;, &lt;tab&gt;, &lt;return&gt;
      * Original version includes "U" but this is an RNA nucleotide, so it is not included here.

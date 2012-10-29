@@ -57,7 +57,9 @@ Ext.onReady(function() {
             });
         });
 
-
+        //================================================
+        // Teselagen.models.DownstreamAutomationParameters
+        //================================================
         describe("Teselagen.models.DownstreamAutomationParameters.js", function() {
 
             it("Creates DownstreamAutomationParameters", function(){
@@ -125,6 +127,9 @@ Ext.onReady(function() {
             });
         });
         
+        //================================================
+        // Teselagen.constants.Constants
+        //================================================
         describe("Teselagen.constants.Constants.js", function() {
 
             it("Calls Constants", function(){
@@ -134,6 +139,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.J5Parameters
+        //================================================
         describe("Teselagen.models.J5Parameters.js", function() {
 
             it("Creates J5Parameters with default values: setDefaultValues()", function(){
@@ -180,6 +188,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.SequenceFile
+        //================================================
         describe("Teselagen.models.SequenceFile.js", function() {
 
             it("Test encodeUriComponent()", function(){
@@ -218,7 +229,7 @@ Ext.onReady(function() {
                 expect(hash4).not.toBe(trueHash);
             });
             it("Test Associations", function(){
-                var seq = Ext.create("Teselagen.models.SequenceFile");
+                var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
                 seq.setProxy(modelProxy);
                 expect(seq).not.toBe(null);
 
@@ -227,11 +238,11 @@ Ext.onReady(function() {
             });
 
             it("Creates empty SequenceFile", function(){
-                var seq = Ext.create("Teselagen.models.SequenceFile");
+                var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
                 seq.setProxy(modelProxy);
                 expect(seq).not.toBe(null);
 
-                expect(seq.get("sequenceFileFormat")).toBe("");
+                expect(seq.get("sequenceFileFormat")).toBe("FASTA");
                 expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256(""));
                 expect(seq.get("hash")).toBe("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
             });
@@ -240,8 +251,7 @@ Ext.onReady(function() {
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var trueHash    =  "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3";
 
-                var seq = Ext.create("Teselagen.models.SequenceFile");
-                seq.setProxy(modelProxy);
+                var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
 
                 seq.set("sequenceFileFormat", "FASTA");
 
@@ -277,6 +287,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.SBOLvIconInfo
+        //================================================
         describe("Teselagen.models.SBOLvIconInfo.js", function() {
 
             it("Creates SBOLvIconInfo", function(){
@@ -310,6 +323,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.PartVO
+        //================================================
         describe("Teselagen.models.PartVO.js -- This Class will be Eliminated", function() {
 
             it("Creates Empty PartVO", function(){
@@ -347,6 +363,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.Part
+        //================================================
         describe("Teselagen.models.Part.js", function() {
 
             it("Creates Part, Test Associations", function(){
@@ -372,6 +391,7 @@ Ext.onReady(function() {
 
                 var newSeq = Ext.create("Teselagen.models.SequenceFile", {
                     id: 10,
+                    sequenceFileFormat: "FASTA",
                     sequenceFileName: "newSeq",
                     sequenceFileContent: "gattaca"
                 });
@@ -435,7 +455,10 @@ Ext.onReady(function() {
                 expect(part1.isEqual(part3)).toBe(false);
             });
         });
-
+        
+        //================================================
+        // Teselagen.models.EugeneRule
+        //================================================
         describe("Teselagen.models.EugeneRule.js", function() {
 
             beforeEach(function() {
@@ -571,8 +594,9 @@ Ext.onReady(function() {
             });
         });
         
-        
-
+        //================================================
+        // Teselagen.models.J5Bin
+        //================================================
         describe("Teselagen.models.J5Bin.js", function() {
 
             beforeEach(function() {
@@ -662,7 +686,6 @@ Ext.onReady(function() {
                 expect(bin.parts().getAt(2)).toBe(part1);
                 //console.log(bin.parts());
             });
-
 
             it("addToParts(): Is Part1 and the bin.part1 linked or cloned?", function(){
                 var part1   = Ext.create("Teselagen.models.Part", {
@@ -791,6 +814,9 @@ Ext.onReady(function() {
             });
         });
         
+        //================================================
+        // Teselagen.models.J5Collection
+        //================================================
         describe("Teselagen.models.J5Collection.js", function() {
 
             beforeEach(function() {
@@ -1042,6 +1068,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.DeviceDesign
+        //================================================
         describe("Teselagen.models.DeviceDesign.js", function() {
 
             it("Create DeviceDesign, Check Associations", function(){
@@ -1156,8 +1185,7 @@ Ext.onReady(function() {
                 // Search for rules that have part1
                 var eugRules = device.getRulesInvolvingPart(part1);
 
-                expect(eugRules[0]).toBe(rule1);
-//LAST HERE  DW: 10.16.2012
+                expect(eugRules[0].get("name")).toBe("rule1");
 
             });
 
@@ -1186,6 +1214,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.J5Run
+        //================================================
         describe("Teselagen.models.J5Run.js", function() {
 
             it("Create J5Run, Check Associations", function(){
@@ -1214,6 +1245,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.J5Results
+        //================================================
         describe("Teselagen.models.J5Results.js", function() {
 
             it("Create J5Results", function(){
