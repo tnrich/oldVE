@@ -155,17 +155,17 @@ Ext.define("Teselagen.models.SequenceFile", {
 
         if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.GENBANK) {
             cnt = content.match(/LOCUS *(\S*)/);
-            if (cnt.length >= 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.FASTA) {
             cnt = content.match(/>\s*(\S*)/);
-            if (cnt.length >= 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.JBEI_SEQ) {
             cnt = content.match(/<seq:name>(.*)<\/seq:name>/);
-            if (cnt.length >= 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         }
@@ -193,7 +193,10 @@ Ext.define("Teselagen.models.SequenceFile", {
         var displayID   = this.get("partSource");
         var name        = this.get("sequenceFileName");
 
-        if (this.get("sequenceFileName") === "" || this.get("sequenceFileName") === undefined ) {
+        // If the file name was set with a "" for displaID, the file name may be ".fas", ".gb", or "xml"
+        // Overwrite these filenames if that is true calling this method.
+
+        if (name.replace(/\.gb|\.fas|\.xml/gi,"") === "" || name === undefined ) {
             if (format === Teselagen.constants.Constants.GENBANK) {
                 name = displayID + ".gb";
             } else if (format === Teselagen.constants.Constants.FASTA) {
@@ -202,7 +205,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. SequenceFileName not set.");
+                console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
             }
         }
         this.set("sequenceFileName", name);

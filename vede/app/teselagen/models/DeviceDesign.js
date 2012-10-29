@@ -175,7 +175,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     getRulesInvolvingPart: function(pPart) {
         var rules = [];
         for (var i = 0; i < this.rules().count(); i++) {
-            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).get("operand2") === pPart) {
+            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).getOperand2() === pPart) {
                 rules.push(this.rules().getAt(i));
             }
         }
@@ -184,7 +184,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     /**
-     * @param {String} name
+     * @param {String} pName
      * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pName) {

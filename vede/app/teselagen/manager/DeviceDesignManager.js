@@ -28,8 +28,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     // DeviceDesign management
     //================================================================
 
-    /** UNTESTED
-     * @param {Number}} pNumBins Number of J5Bins to put into Collection
+    /**
+     * Creates a DeviceDesign with a J5Collection that has pNumBins empty J5Bins.
+     * Validates DeviceDesign.
+     *
+     * @param {Number} pNumBins Number of J5Bins to put into Collection
      * @returns {Teselagen.models.DeviceDesign}
      */
     createDeviceDesign: function(pNumBins) {
@@ -46,6 +49,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     /**
      * Creates a DeviceDesign using a given set of J5Bins.
      * The order in the array determines the order in the Collection.
+     * Validates DeviceDesign.
      * @param {Teselagen.models.J5Bin[]} pBins One or an array of J5Bins
      * @returns {Teselagen.models.DeviceDesign}
      */
@@ -53,7 +57,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var device = Ext.create("Teselagen.models.DeviceDesign");
         device.createCollectionFromBins(pBins);
 
-        var combo = this.checkCombinatorial(device);
+        var combo = this.setCombinatorial(device);
         //console.log(combo);
         device.getJ5Collection().set("combinatorial", combo);
         //this.setCombinatorial(device);
@@ -69,7 +73,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     // EugeneRules Management
     //================================================================
     /**
-     * Create a new EugeneRule in DeviceDesign.
+     * Creates a new EugeneRule in DeviceDesign.
+     * Executes validation.
      *
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pRuleName
@@ -96,40 +101,74 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         pDevice.addToRules(rule); //put this here?
         return rule;
     },
-    /** UNTESTED
+    /**
+     * Adds a EugeneRule into the Rules Store.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.EugeneRule} pRule. Can be a single part or an array of parts.
+     * @returns {Boolean} True if added, false if not.
      */
     addToRules: function(pDevice, pRule) {
         return pDevice.addToRules(pRule);
     },
-    /** UNTESTED
+    /**
+     * Removes a EugeneRule from the Rules Store.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.EugeneRule} pRule. Can be a single part or an array of parts.
+     * @returns {Boolean} True if removed, false if not.
      */
     removeFromRules: function(pDevice, pRule) {
         return pDevice.removeFromRules(pRule);
     },
-    /** UNTESTED
+    /**
+     * Removes all EugeneRules from the Rules Store.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @returns {Boolean} True if all EugeneRules have been removed.
      */
     removeAllRules: function(pDevice) {
         return pDevice.removeAllRules();
     },
-    /** UNTESTED
+    /**
+     * Returns the EugeneRules Store of EugeneRules that containt the Part in either operand.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pDevice, pPart) {
         return pDevice.getRulesInvolvingPart(pPart);
     },
-    /** UNTESTED
+    /**
+     * Returns the first EugeneRule in the store that has the given name.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {String} pName
+     * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pDevice, pName) {
         return pDevice.getRuleByName(pName);
     },
-    /** UNTESTED
+    /**
+     * Checks to see if a given name is unique within the Rules names.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {String} pName Name to check against Rules.
+     * @returns {Boolean} True if unique, false if not.
      */
     isUniqueRuleName: function(pDevice, pName) {
         return pDevice.isUniqueRuleName(pName);
     },
-    /** UNTESTED
+    /**
+     * Converts EugeneRule into text
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.EugeneRule} pRuleName
+     * @returns {String}
      */
-    generateRuleText: function(pDevice, pRule) {
-        return pRule.generateText();
+    generateRuleText: function(pDevice, pRuleName) {
+        var rule = pDevice.getRuleByName(pRuleName);
+        if (Ext.getClassName(rule) === "Teselagen.models.EugeneRule") {
+            return rule.generateText();
+        } else {
+            console.warn("Teselagen.manager.DeviceDesignManager.generateRuleText(): No rule '" + pRuleName +"'.");
+            return null;
+        }
+        
     },
 
     //================================================================
@@ -146,6 +185,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     /**
      * Delete existing J5Collection and replaces it with a new collection with pNumBins bins.
+     * Executes validation.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pNumBins
      * @param {Boolean} pIsCircular
@@ -155,7 +195,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var collection = Ext.create("Teselagen.models.J5Collection", {
             isCircular: pIsCircular
         });
-
         
         // GO BACK AND FIX THIS VALIDATOR
         var err = collection.validate();
@@ -194,16 +233,16 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
-     * Checks if J5Collection is combinatorial, i.e. if there is more than one Part in a J5Bin.
-     * NOTE: After checking for combinatorial, this method also sets the status of "combinatorial"
-     * J5Collection.
+     * Checks if Design/J5Collection is combinatorial (i.e. if there is more than one Part in a J5Bin)
+     * and sets the flag.
+     * NOTE: After checking for combinatorial, this method also sets the status of "combinatorial" a J5Collection.
      * If more than one part is added to a bin through the models, the combinatorial flag may not be triggered.
      * Using this function would be necessary to set the flags correctly and to check the status.
      *
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @returns {Boolean}
      */
-    checkCombinatorial: function(pDevice) {
+    setCombinatorial: function(pDevice) {
         var collection = pDevice.getJ5Collection();
         var combo   = false;
 
@@ -224,14 +263,16 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return combo;
     },
 
-    /** UNTESTED
-     * Set the Combinatorial flag in a collection based on checkCombinatorial()
+    /**
+     * Gets the Combinatorial flag in a collection based on setCombinatorial().
+     * NOTE: This method DOES NOT CHECK FOR COMBINATORIAL STATUS.
+     * Use setCombinatorial() first to verify if the Design/Collection is combinatorial.
+     *
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Boolean} pCircular
      */
-    setCombinatorial: function(pDevice) {
-        var combo = this.checkCombinatorial(pDevice);
-        pDevice.getJ5Collection().set("combinatorial", combo);
+    getCombinatorial: function(pDevice) {
+        return pDevice.getJ5Collection().get("combinatorial");
     },
 
     /**
@@ -305,6 +346,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     /**
      * Creates an empty J5Bin with the name pBinName at the index of pIndex.
+     * Executes validation.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pBinName Name of bin
      */
@@ -474,8 +516,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     // Parts management
     //================================================================
-    /** UNTESTED
+    /**
      * Create a Part. Optional parameters require a "null" in its place.
+     * Executes validation.
+     *
      * @param {String} pName Name of Part
      * @param {int} pStart Genbank start index
      * @param {int} pEnd Genbank end index
@@ -647,6 +691,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     /**
      * Create a SequenceFile. Optional parameters require an empty string "" in its place.
+     * Executes validation.
      *
      * @param {Teselagen.manager.DeviceDesign} pDevice
      * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "jbei-seq". Case insensitive.
@@ -759,7 +804,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     setSequenceFileName: function(pDevice, pSequenceFile, pSequenceFileName) {
         return pSequenceFile.setSequenceFileName(pSequenceFileName);
     },
-//LAST HERE  DW: 10.25.2012
 
     //================================================================
     // CSV Readers --> Refactor to Parsers?
@@ -788,7 +832,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {String} reverse complement sequence
      */
     reverseComplement: function(pSeq) {
-        var revComp = [];
+        return Teselagen.utils.FormatUtils(pSeq);
+        /*var revComp = [];
         pSeq = pSeq.toLowerCase();
 
         for (var i = pSeq.length-1; i >= 0; i--) {
@@ -800,39 +845,40 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                     revComp.push("g");
                     break;
                 case "g":
-                    revComp.push("a");
+                    revComp.push("g");
                     break;
                 case "t":
                     revComp.push("a");
                     break;
             }
         }
-        return revComp.join("");
+        return revComp.join("");*/
     },
 
     /**
      * Determines if string is only alphanumeric with underscores "_" or hyphens "-".
+     * Calls Teselagen.utils.FormatUtils.isLegalName()
      * @param {String} pName
      * @returns {Boolean}
      */
     isLegalName: function(pName) {
-        if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
+        return Teselagen.utils.FormatUtils.isLegalName(pName);
+        /*if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
             return false;
         } else {
             return true;
-        }
+        }*/
     },
 
     /**
      * Reformat name to be only alphanumeric with underscores "_" or hyphens "-".
+     * Calls Teselagen.utils.FormatUtils.reformatName().
      * @param {String} pName
      * @returns {String} New name.
      */
     reformatName: function(pName) {
-        return pName.replace(/[^a-zA-Z0-9_\-]/g, "");
+        return Teselagen.utils.FormatUtils.reformatName(pName);
+        //return pName.replace(/[^a-zA-Z0-9_\-]/g, "");
     }
-
-
-
 
 });

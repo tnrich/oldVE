@@ -47,32 +47,28 @@ Ext.define("Teselagen.utils.FormatUtils", {
         ParsersManager  = Teselagen.bio.parsers.ParsersManager;
     },
 
-    /** REFACTORED FROM DEVICEDESIGNMANAGER -- NEEDS TESTING.
-     * Finds reverse complement of a sequence.
-     * @param {String} pSeq
-     * @returns {String} reverse complement sequence
+    /**
+     * Determines if string is only alphanumeric with underscores "_" or hyphens "-".
+     * (REFACTORED FROM DEVICEDESIGNMANAGER)
+     * @param {String} pName
+     * @returns {Boolean}
      */
-    reverseComplement: function(pSeq) {
-        var revComp = [];
-        pSeq = pSeq.toLowerCase();
-
-        for (var i = pSeq.length-1; i >= 0; i--) {
-            switch (pSeq.charAt(i)) {
-                case "a":
-                    revComp.push("t");
-                    break;
-                case "c":
-                    revComp.push("g");
-                    break;
-                case "g":
-                    revComp.push("a");
-                    break;
-                case "t":
-                    revComp.push("a");
-                    break;
-            }
+    isLegalName: function(pName) {
+        if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
+            return false;
+        } else {
+            return true;
         }
-        return revComp.join("");
+    },
+
+    /**
+     * Reformat name to be only alphanumeric with underscores "_" or hyphens "-".
+     *(REFACTORED FROM DEVICEDESIGNMANAGER)
+     * @param {String} pName
+     * @returns {String} New name.
+     */
+    reformatName: function(pName) {
+        return pName.replace(/[^a-zA-Z0-9_\-]/g, "");
     },
 
 

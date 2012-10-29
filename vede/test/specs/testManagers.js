@@ -159,6 +159,7 @@ Ext.onReady(function() {
                 it("createDeviceDesign()", function(){
                     var design = DeviceDesignManager.createDeviceDesign(3);
 
+                    expect(design.getJ5Collection().binCount()).toBe(3);
                     expect(design.getJ5Collection().isCircular()).toBe(true);
                     expect(design.getJ5Collection().get("combinatorial")).toBe(false);
 
@@ -181,14 +182,12 @@ Ext.onReady(function() {
 
                     expect(design.getJ5Collection().isCircular()).toBe(true);
                     expect(design.getJ5Collection().get("combinatorial")).toBe(true);
-                    expect(DeviceDesignManager.checkCombinatorial(design)).toBe(true);
+                    expect(DeviceDesignManager.setCombinatorial(design)).toBe(true);
 
                     var err = design.validate();
                     expect(err.length).toBe(0);
                 });
 
-                it("()", function(){
-                });
             });
 
             //================================================================
@@ -226,8 +225,8 @@ Ext.onReady(function() {
                     expect(DeviceDesignManager.binCount(design)).toBe(2);
                 });
 
-                it("checkCombinatorial()", function(){
-                    expect(DeviceDesignManager.checkCombinatorial(design)).toBe(false);
+                it("setCombinatorial() -- Checks and sets combinatorial flag", function(){
+                    expect(DeviceDesignManager.setCombinatorial(design)).toBe(false);
 
                     // Make it combinatorial by manually going into the models to add a part to bin #0
                     var part1 = Ext.create("Teselagen.models.Part", {
@@ -241,15 +240,37 @@ Ext.onReady(function() {
                     expect(success).toBe(true);
 
                     // Note that adding parts does not trigger a setting of Combinatorial
-                    // Need to run DeviceDesignManager.checkCombinatorial() to set and check
+                    // Need to run DeviceDesignManager.setCombinatorial() to set and check
                     expect(design.getJ5Collection().get("combinatorial")).toBe(false);
 
-                    expect(DeviceDesignManager.checkCombinatorial(design)).toBe(true);
+                    expect(DeviceDesignManager.setCombinatorial(design)).toBe(true);
 
                     expect(design.getJ5Collection().get("combinatorial")).toBe(true);
                 });
 
-                it("setCombinatorial() *** Test Not written", function(){
+                it("getCombinatorial()", function(){
+                    expect(DeviceDesignManager.setCombinatorial(design)).toBe(false);
+
+                    // Make it combinatorial by manually going into the models to add a part to bin #0
+                    var part1 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart1"
+                    });
+                    var part2 = Ext.create("Teselagen.models.Part", {
+                        name: "addedPart2"
+                    });
+
+                    var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2], -1);
+                    expect(success).toBe(true);
+
+                    // Note that adding parts does not trigger a setting of Combinatorial
+                    // Need to run DeviceDesignManager.setCombinatorial() to set and check
+
+                    expect(DeviceDesignManager.getCombinatorial(design)).toBe(false);
+
+                    expect(DeviceDesignManager.setCombinatorial(design)).toBe(true);
+
+                    expect(DeviceDesignManager.getCombinatorial(design)).toBe(true);
+
                 });
 
                 it("findMaxNumParts()", function(){
@@ -626,7 +647,7 @@ Ext.onReady(function() {
                     expect(name).toBe("blah");
                 });
             });
-//LAST HERE  DW: 10.25.2012
+
             //================================================================
             // EugeneRule Management
             //================================================================
@@ -657,7 +678,6 @@ Ext.onReady(function() {
                 it("createEugeneRule(): Two parts", function(){
                     
                     expect(rule1.generateText()).toBe("Rule rule1(NOT operand1 AFTER operand2);");
-                    console.log(rule1);
 
                     expect(design.rules().count()).toBe(1);
                     expect(design.rules().getAt(0).getOperand1().get("name")).toBe("operand1");
@@ -669,48 +689,79 @@ Ext.onReady(function() {
                 });
 
                 it("addToRules()", function(){
+                    var success = DeviceDesignManager.addToRules(design, rule2);
+
+                    expect(success).toBe(true);
+                    expect(design.rules().count()).toBe(2);
                 });
 
                 it("removeFromRules()", function(){
+                    var success = DeviceDesignManager.removeFromRules(design, rule2);
+                    expect(success).toBe(false);
+                    expect(design.rules().count()).toBe(1);
+
+                    success = DeviceDesignManager.removeFromRules(design, rule1);
+                    expect(success).toBe(true);
+                    expect(design.rules().count()).toBe(0);
                 });
 
                 it("removeAllRules()", function(){
+                    DeviceDesignManager.addToRules(design, rule2);
+                    var success = DeviceDesignManager.removeAllRules(design, rule1);
+                    
+                    expect(success).toBe(true);
+                    expect(design.rules().count()).toBe(0);
                 });
 
                 it("getRulesInvolvingPart()", function(){
+
+                    DeviceDesignManager.addToRules(design, rule2);
+
+                    var rules = DeviceDesignManager.getRulesInvolvingPart(design, operand1);
+                    expect(rules.length).toBe(2);
+                    expect(rules[0].get("name")).toBe("rule1");
+
+                    rules = DeviceDesignManager.getRulesInvolvingPart(design, operand2);
+                    expect(rules.length).toBe(1);
+                    expect(rules[0].get("name")).toBe("rule1");
                 });
 
                 it("getRuleByName()", function(){
+                    DeviceDesignManager.addToRules(design, rule2);
+
+                    var rule = DeviceDesignManager.getRuleByName(design, "rule2");
+                    expect(rule.get("name")).toBe("rule2");
+                    expect(rule.getOperand2()).toBe(123);
                 });
 
                 it("isUniqueRuleName()", function(){
+                    DeviceDesignManager.addToRules(design, rule2);
+
+                    var unique = DeviceDesignManager.isUniqueRuleName(design, "rule1");
+                    expect(unique).toBe(false);
+
+                    unique = DeviceDesignManager.isUniqueRuleName(design, "blah");
+                    expect(unique).toBe(true);
                 });
 
                 it("generateRuleText()", function(){
+
+                    var text = DeviceDesignManager.generateRuleText(design, "rule1");
+                    expect(text).toBe("Rule rule1(NOT operand1 AFTER operand2);");
+
+                    text = DeviceDesignManager.generateRuleText(design, "ruleBLAH");
+                    expect(text).toBe(null);
                 });
             });
 
-            
 
-            xdescribe("CSV", function() {
-
-                it(")", function(){
-                });
-
-                it("()", function(){
-                });
-            });
-
-            xdescribe("Helper Functions", function() {
+            xdescribe("Helper Functions--See FormatUtils and SequenceUtils.", function() {
 
                 it("reverseComplement()", function(){
                 });
 
                 it("isLegalName()", function(){
                 });
-            });
-
-            it("()", function(){
             });
 
         });
