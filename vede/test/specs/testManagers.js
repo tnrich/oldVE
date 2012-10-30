@@ -685,6 +685,7 @@ Ext.onReady(function() {
 
                     // FIX THIS WHEN THE EugeneRule VALIDATORS ARE DONE
                     var err = rule1.validate();
+                    //console.log(err);
                     expect(err.length).toBe(0);
                 });
 
