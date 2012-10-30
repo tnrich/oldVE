@@ -21,8 +21,9 @@ Ext.require("Teselagen.models.J5Parameters");
 Ext.require("Teselagen.models.EugeneRule");
 
 Ext.require("Teselagen.manager.SequenceFileManager");
-Ext.require("Teselagen.manager.PartManager");
-Ext.require("Teselagen.manager.EugeneRuleManager");
+//Ext.require("Teselagen.manager.PartManager");
+//Ext.require("Teselagen.manager.EugeneRuleManager");
+
 Ext.require("Teselagen.manager.DeviceDesignManager");
 
 Ext.onReady(function() {
