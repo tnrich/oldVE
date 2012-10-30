@@ -144,3 +144,19 @@
 	background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
 }
 
+.binHeader {
+}
+
+.binHeader:hover {
+    border-color: blue;
+}
+
+.gridPartCell {
+}
+
+.gridPartCell:hover {
+    border-color: blue;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}

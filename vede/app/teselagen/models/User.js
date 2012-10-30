@@ -25,6 +25,11 @@ Ext.define("Teselagen.models.User", {
         model: 'Teselagen.models.ApplicationPreferences',
         associationKey: 'preferences',
         getterName: 'getPreferences'
+    }, {
+        type: 'hasMany',
+        model: 'Teselagen.models.UserRestrictionEnzymeGroup',
+        name: 'restrictionEnzymeGroups',
+        foreignKey: 'users'
     }],
     proxy: {
         type: 'rest',

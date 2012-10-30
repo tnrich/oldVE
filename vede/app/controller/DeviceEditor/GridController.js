@@ -4,10 +4,31 @@
 Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
+    requires: ["Teselagen.event.DeviceEvent"],
+
+    DeviceEvent: null,
+
     grid: null,
 
     onPartPanelButtonClick: function(button) {
         console.log(button.cls);
+    },
+
+    onAddColumn: function(j5Bin) {
+        if(j5Bin) {
+            this.addJ5Bin(j5Bin);
+        } else {
+            this.grid.add(Ext.create("Vede.view.de.grid.Bin"));
+        }
+    },
+
+    onAddRow: function() {
+    },
+
+    addJ5Bin: function(j5Bin) {
+        this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
+            bin: j5Bin
+        }));
     },
 
     onLaunch: function() {
@@ -42,7 +63,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.control({
             "DeviceEditorPartPanel button": {
                 click: this.onPartPanelButtonClick
-            }
+            },
         });
+
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
+
+        this.application.on(this.DeviceEvent.ADD_COLUMN,
+                            this.onAddColumn,
+                            this);
+
+        this.application.on(this.DeviceEvent.ADD_ROW,
+                            this.onAddRow,
+                            this);
     },
 });

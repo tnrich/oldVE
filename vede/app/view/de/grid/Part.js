@@ -16,16 +16,25 @@ Ext.define('Vede.view.de.grid.Part', {
     constructor: function(config) {
         this.initConfig(config);
 
+        var html;
+
+        if(this.getPart()) {
+            html = this.getPart().get("name");
+        } else {
+            html = "";
+        }
+
         this.callParent([{
             items: [{
-                html: '<b>' + this.getPart().get('name') + '</b>',
+                html: html,
+                styleHtmlContent: true,
+                styleHtmlCls: 'gridPartCell',
+                cls: 'gridPartCell',
                 bodyStyle: {
                     'padding-top': '10px',
                     'text-align': 'center'
                 },
                 height: 40,
-                styleHtmlContent: true,
-                styleHtmlCls: 'part'
             }]
         }]);
     }

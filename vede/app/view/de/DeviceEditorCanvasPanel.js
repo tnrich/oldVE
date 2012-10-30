@@ -18,6 +18,7 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
         layout: {
             type: 'column'
         },
+        padding: 10,
 	}],
 	items: [{
 		title: 'Canvas',

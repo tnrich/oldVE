@@ -54,7 +54,7 @@ Ext.define("Vede.controller.ProjectController", {
         Vede.application.projectManager.openDesign(record); 
     },
 
-    init: function () {
+    init: function() {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, 
                             this.openProject, this);

@@ -5,6 +5,11 @@
 Ext.define('Vede.view.de.grid.Bin', {
     extend: 'Ext.container.Container',
     alias: 'widget.Bin',
+    
+    statics: {
+        forwardButtonIconPath: 'resources/images/ux/right2.gif',
+        reverseButtonIconPath: 'resources/images/ux/left2.gif'
+    },
 
     config: {
         bin: null
@@ -16,12 +21,25 @@ Ext.define('Vede.view.de.grid.Bin', {
     constructor: function(config) {
         this.initConfig(config);
 
+        var flipButtonIconPath;
+        var html;
+
+        if(!this.getBin()) {
+            flipButtonIconPath = this.self.forwardButtonIconPath;
+            html = "New Bin";
+        } else if(this.getBin().get("directionForward")) {
+            flipButtonIconPath = this.self.forwardButtonIconPath;
+            html = this.getBin().get("binName");
+        } else {
+            flipButtonIconPath = this.self.reverseButtonIconPath;
+            html = this.getBin().get("binName");
+        }
+
         var binHeader = Ext.create('Ext.container.Container', {
-            layout: {
-                type: ''
-            },
             items: [{
-                html: '<p>' + this.getBin().get("binName") + '</p>',
+                html: html,
+                styleHtmlContent: true,
+                styleHtmlCls: 'binHeader',
                 height: 100,
                 bodyStyle: {
                     'padding-top': '80px',
@@ -30,11 +48,16 @@ Ext.define('Vede.view.de.grid.Bin', {
                 style: {
                     marginBottom: '10px'
                 },
-                styleHtmlContent: true,
-                styleHtmlCls: 'binHeader'
-            }, {
-                xtype: 'button',
-                text: 'flip me'
+                layout: {
+                    type: 'absolute'
+                },
+                items: [{
+                    xtype: 'button',
+                    cls: 'flipBinButton',
+                    x: 95,
+                    y: 5,
+                    icon: flipButtonIconPath
+                }]
             }]
         });
         
@@ -48,15 +71,18 @@ Ext.define('Vede.view.de.grid.Bin', {
                     }
                 }
             },
+            cls: 'gridBinColumn',
             width: 125,
             items: [binHeader]
         }]);
 
-        // Add each part in the bin to the bin view object.
-        this.getBin().parts().each(function(part) {
-            this.add(Ext.create("Vede.view.de.grid.Part", {
-                part: part
-            }));
-        }, this);
+        if(this.getBin()) {
+            // Add each part in the bin to the bin view object.
+            this.getBin().parts().each(function(part) {
+                this.add(Ext.create("Vede.view.de.grid.Part", {
+                    part: part
+                }));
+            }, this);
+        }
     },
 });
