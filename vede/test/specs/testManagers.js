@@ -766,6 +766,33 @@ Ext.onReady(function() {
 
         });
 
+        describe("Teselagen.manager.J5RunManager.js", function() {
+
+            it("createDefaultJ5Parameters()", function(){
+            });
+
+            it("changeJ5ParameterValue()", function(){
+            });
+
+            it("createDefaultDownstreamAutomationParameters()", function(){
+            });
+
+            it("changeDownstreamAutomationParameterValue()", function(){
+            });
+
+            it("createJ5Results()", function(){
+            });
+
+            it("()", function(){
+            });
+
+            it("()", function(){
+            });
+
+            it("()", function(){
+            });
+        });
+
         xdescribe("Teselagen.manager..js", function() {
 
             it("()", function(){
