@@ -5,7 +5,9 @@
  */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
-    requires: ['Teselagen.models.Project','Teselagen.models.ApplicationPreferences'],
+    requires: ["Teselagen.manager.SessionManager",
+               "Teselagen.models.ApplicationPreferences",
+               "Teselagen.models.Project"],
     fields: [{
         name: "id",
         type: "long"
@@ -14,12 +16,12 @@ Ext.define("Teselagen.models.User", {
         type: "String"
     }],
     associations: [{
-        type: 'hasMany',
-        model: 'Teselagen.models.Project',
-        name: 'projects',
-        associationKey: 'projects',
+        type: "hasMany",
+        model: "Teselagen.models.Project",
+        name: "projects",
+        associationKey: "projects",
         autoLoad: true,
-        foreignKey: 'user_id'
+        foreignKey: "user_id"
     }, {
         type: 'hasOne',
         model: 'Teselagen.models.ApplicationPreferences',
@@ -32,15 +34,17 @@ Ext.define("Teselagen.models.User", {
         foreignKey: 'users'
     }],
     proxy: {
-        type: 'rest',
-        url: 'getUser.json',
+        type: "rest",
+        url: "/vede/test/data/json/getUser.json",
         reader: {
-            type: 'json',
-            root: 'user'
+            type: "json",
+            root: "user"
+        },
+        writer: {
+            type: 'json'
         },
         buildUrl: function() {
-            //console.log(sessionData.baseURL);
-            //Ext.data.proxy.Ajax.prototype.buildUrl.apply(this, arguments);
+            //return Teselagen.manager.SessionManager.buildUrl("getUser", this.url);
             return sessionData.baseURL + 'getUser';
         }
     }

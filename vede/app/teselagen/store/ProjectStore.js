@@ -1,15 +1,8 @@
 Ext.define("Teselagen.store.ProjectStore", {
     requires: ["Teselagen.models.Project"],
-    extend: 'Ext.data.Store',
-    model: 'Teselagen.models.Project',
-    listeners: {
-        beforeload: function (store, operation, options) {
-            //store.getProxy().url = 'data/' + operation.node.get('Path') + '/level1.json';
-        },
-        load: function (records, successful, eOpts) {
-//            console.log(records);
-//            Ext.getCmp('projectsWidget').reconfigure(records);
-        }
+    extend: "Ext.data.Store",
+    model: "Teselagen.models.Project",
+    write: function(store, operations, eOpts){
+    	console.log("Project saved by store");
     }
-
 });

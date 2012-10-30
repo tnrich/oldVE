@@ -1,6 +1,6 @@
 /**
  * Unit Tests
- * @author Diana Womg
+ * @author Diana Wong
  */
 
 Ext.require("Ext.Ajax");
@@ -26,6 +26,11 @@ Ext.require("Teselagen.utils.FileUtils");
 
 Ext.onReady(function() {
 
+    FileUtils       = Teselagen.utils.FileUtils;
+    SequenceUtils   = Teselagen.utils.SequenceUtils;
+    FormatUtils     = Teselagen.utils.FormatUtils;
+    DeXmlUtils      = Teselagen.utils.DeXmlUtils;
+
     describe("Testing Teselagen.utils", function() {
 
         describe("Testing Teselagen.utils.FileUtils.js", function() {
@@ -37,10 +42,26 @@ Ext.onReady(function() {
 
                 expect(str.match(/seq:seq/).length).toBe(1);
             });
-
-
         });
+
         describe("Testing Teselagen.utils.SequenceUtils.js", function() {
+
+            describe("reverseComplement(): ", function() {
+
+                it("Complement of simple sequence GATTACA--tgtaatc>",function(){
+                    var seq = "GATTACA";
+                    var rev = Teselagen.utils.SequenceUtils.reverseComplement(seq);
+                    expect(rev).toBe("tgtaatc");
+                });
+
+                it("Ignores other carachters",function(){
+                    var seq = "GATTACA!@#$%^&*()QWERYUIOPSDFHJKL:ZXVBNM<>?";
+                    var rev = Teselagen.utils.SequenceUtils.reverseComplement(seq);
+                    expect(rev).toBe("tgtaatc");
+                });
+
+            });
+
 
             describe("isCompatibleDNASequence(): ", function() {
 
@@ -51,6 +72,7 @@ Ext.onReady(function() {
                 });
 
             });
+
             describe("isCompatibleRNASequence(): ", function() {
 
                 it("Detects letters: 'AUGCYRSWKMBVDHN' ",function(){
@@ -69,8 +91,8 @@ Ext.onReady(function() {
                     var compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
                     expect(compatible).toBe(true);
 
-                    var seq = "AGCTYRSWKMBVDHN";
-                    var compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
+                    seq = "AGCTYRSWKMBVDHN";
+                    compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
                     expect(compatible).toBe(true);
                 });
 
@@ -90,11 +112,13 @@ Ext.onReady(function() {
                     var seq = "F";
                     var compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
                     expect(compatible).toBe(false);
-                    var seq = "I";
-                    var compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
+
+                    seq = "I";
+                    compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
                     expect(compatible).toBe(false);
-                    var seq = "J";
-                    var compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
+
+                    seq = "J";
+                    compatible = Teselagen.utils.SequenceUtils.isCompatibleSequence(seq);
                     expect(compatible).toBe(false);
                 });
 
@@ -176,6 +200,27 @@ Ext.onReady(function() {
         });
 
         describe("Testing Teselagen.utils.FormatUtils.js", function() {
+
+            describe("Helper functions", function() {
+
+                it("isLegalName()", function() {
+                    var name = "ABCD1234567890_-";
+                    var legal = Teselagen.utils.FormatUtils.isLegalName(name);
+                    expect(legal).toBe(true);
+
+                    name = "!@#$%^&*   ()";
+                    legal = Teselagen.utils.FormatUtils.isLegalName(name);
+                    expect(legal).toBe(false);
+                });
+
+                it("reformatName()", function() {
+                    var name = "ABCD_123-!@#$%^&*() abc";
+                    var newName = Teselagen.utils.FormatUtils.reformatName(name);
+
+                    expect(newName).toBe("ABCD_123-abc");
+                });
+
+            });
 
             describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {
                 var sm;

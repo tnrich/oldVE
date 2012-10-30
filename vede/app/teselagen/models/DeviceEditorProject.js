@@ -33,13 +33,14 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         {field: "project_id", type: "presence"},
         {field: "name", type: "presence"}
     ],
-
-
     associations: [{
-        type: "hasOne",
-        model: "Teselagen.models.DeviceDesign",
-        associationKey: "design",
-        getterName: "getDesign"
+        type: 'hasOne',
+        model: 'Teselagen.models.DeviceDesign',
+        associationKey: 'design',
+        name: 'design',
+        getterName: 'getDesign',
+        setterName: 'setDesign',
+        foreignKey: 'id'
     }, {
         type: "hasMany",
         model: "Teselagen.models.J5Run",
@@ -47,14 +48,17 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         associationKey: "j5runs"
     }],
     proxy: {
-        type: "ajax",
-        url: "/vede/test/data/json/getDEProjects.json",
+        type: 'rest',
+        url: 'getDEProjects.json', // For testing just create a file with this name and fill with data.
         reader: {
-            type: "json",
-            root: "data"
+            type: 'json',
+            root: 'projects'
+        },
+        writer: {
+            type: 'json'
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("getProjects", this.url);
+            return sessionData.baseURL + 'user/projects/deprojects'; // This method reBuild the URL for ajax requests from parents models
         }
     }
 });

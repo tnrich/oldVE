@@ -1,6 +1,6 @@
 /**
  * Unit Tests
- * @author Diana Womg
+ * @author Diana Wong
  */
 
 Ext.require("Ext.Ajax");
@@ -52,13 +52,14 @@ Ext.onReady(function() {
             it("GetProxy and SetProxy", function() {
                 var part  = Ext.create("Teselagen.models.Part");
 
-                expect(part.getProxy().type).toBe("rest");
                 part.setProxy(modelProxy);
                 expect(part.getProxy().type).toBe("memory");
             });
         });
 
-
+        //================================================
+        // Teselagen.models.DownstreamAutomationParameters
+        //================================================
         describe("Teselagen.models.DownstreamAutomationParameters.js", function() {
 
             it("Creates DownstreamAutomationParameters", function(){
@@ -126,15 +127,21 @@ Ext.onReady(function() {
             });
         });
         
+        //================================================
+        // Teselagen.constants.Constants
+        //================================================
         describe("Teselagen.constants.Constants.js", function() {
 
             it("Calls Constants", function(){
 
-                expect(Teselagen.constants.Constants.self.GENBANK).toBe("Genbank");
+                expect(Teselagen.constants.Constants.GENBANK).toBe("GENBANK");
 
             });
         });
 
+        //================================================
+        // Teselagen.models.J5Parameters
+        //================================================
         describe("Teselagen.models.J5Parameters.js", function() {
 
             it("Creates J5Parameters with default values: setDefaultValues()", function(){
@@ -181,6 +188,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.SequenceFile
+        //================================================
         describe("Teselagen.models.SequenceFile.js", function() {
 
             it("Test encodeUriComponent()", function(){
@@ -219,7 +229,7 @@ Ext.onReady(function() {
                 expect(hash4).not.toBe(trueHash);
             });
             it("Test Associations", function(){
-                var seq = Ext.create("Teselagen.models.SequenceFile");
+                var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
                 seq.setProxy(modelProxy);
                 expect(seq).not.toBe(null);
 
@@ -228,11 +238,11 @@ Ext.onReady(function() {
             });
 
             it("Creates empty SequenceFile", function(){
-                var seq = Ext.create("Teselagen.models.SequenceFile");
+                var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
                 seq.setProxy(modelProxy);
                 expect(seq).not.toBe(null);
 
-                expect(seq.get("sequenceFileFormat")).toBe("");
+                expect(seq.get("sequenceFileFormat")).toBe("FASTA");
                 expect(seq.get("hash")).toBe(Teselagen.bio.util.Sha256.hex_sha256(""));
                 expect(seq.get("hash")).toBe("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
             });
@@ -241,8 +251,7 @@ Ext.onReady(function() {
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var trueHash    =  "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3";
 
-                var seq = Ext.create("Teselagen.models.SequenceFile");
-                seq.setProxy(modelProxy);
+                var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
 
                 seq.set("sequenceFileFormat", "FASTA");
 
@@ -278,6 +287,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.SBOLvIconInfo
+        //================================================
         describe("Teselagen.models.SBOLvIconInfo.js", function() {
 
             it("Creates SBOLvIconInfo", function(){
@@ -311,6 +323,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.PartVO
+        //================================================
         describe("Teselagen.models.PartVO.js -- This Class will be Eliminated", function() {
 
             it("Creates Empty PartVO", function(){
@@ -348,13 +363,15 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.Part
+        //================================================
         describe("Teselagen.models.Part.js", function() {
 
             it("Creates Part, Test Associations", function(){
                 var part = Ext.create("Teselagen.models.Part", {
                     fas: "fas1"
                 });
-                part.setProxy(modelProxy);
                 expect(part.isEmpty()).toBe(false);
 
                 expect(part.get("fas")).toBe("fas1");
@@ -374,10 +391,10 @@ Ext.onReady(function() {
 
                 var newSeq = Ext.create("Teselagen.models.SequenceFile", {
                     id: 10,
+                    sequenceFileFormat: "FASTA",
                     sequenceFileName: "newSeq",
                     sequenceFileContent: "gattaca"
                 });
-                newSeq.setProxy(modelProxy);
 
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("");
@@ -393,7 +410,6 @@ Ext.onReady(function() {
 
             it("Creates Empty Part, isEmpty", function(){
                 var part = Ext.create("Teselagen.models.Part");
-                part.setProxy(modelProxy);
 
                 expect(part.isEmpty()).toBe(true);
                 //expect(part.isPartVOEmpty()).toBe(true);
@@ -421,12 +437,10 @@ Ext.onReady(function() {
                 //expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
             });
 
-            it("isEmpty() ***", function(){
+            it("isEmpty() *** Check to see if this is a good definition", function(){
                 var part = Ext.create("Teselagen.models.Part");
-                part.setProxy(modelProxy);
 
                 expect(part.isEmpty()).toBe(true);
-                //expect(part.isPartVOEmpty()).toBe(true);
             });
 
             it("isEqual()", function(){
@@ -435,67 +449,55 @@ Ext.onReady(function() {
                 var part3 = Ext.create("Teselagen.models.Part", {
                     name: "blah"
                 });
-                //part1.setProxy(modelProxy);
-                //part2.setProxy(modelProxy);
-                //part3.setProxy(modelProxy);
 
                 expect(part1.isEqual(part1)).toBe(true);
                 expect(part1.isEqual(part2)).toBe(false); // Should this be equal??? They have different SeqFiles.
                 expect(part1.isEqual(part3)).toBe(false);
             });
         });
-
+        
+        //================================================
+        // Teselagen.models.EugeneRule
+        //================================================
         describe("Teselagen.models.EugeneRule.js", function() {
+
+            beforeEach(function() {
+                operand1 = Ext.create("Teselagen.models.Part", {name: "op1"});
+                operand2 = Ext.create("Teselagen.models.Part", {name: "op2"});
+            });
 
             it("Creates EugeneRule", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123,
                     compositionalOperator: "AFTER"
                 });
-                eugene.setProxy(modelProxy);
                 expect(eugene).not.toBe(null);
 
                 expect(eugene.get("name")).toBe("rule0"); //
                 expect(eugene.get("negationOperator")).toBe(false);
             });
-//LAST HERE  DW: 10.16.2012
-            it("Test Associations -- DEVICE DESIGN MUST HAVE PROXY", function(){
+            
+            it("Test Associations", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123,
                     compositionalOperator: "AFTER"
                 });
-                eugene.setProxy(modelProxy);
-
-                expect(eugene.getDeviceDesign().getProxy().type).toBe("memory");
-                eugene.getDeviceDesign().setProxy(modelProxy);
-                
+                eugene.setOperand1(operand1);
+                eugene.setOperand2(operand2);
 
                 expect(Ext.getClassName(eugene.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
-                expect(eugene.getDeviceDesign().getProxy().type).toBe("memory");
                 expect(Ext.getClassName(eugene.getOperand1())).toBe("Teselagen.models.Part");
+                expect(Ext.getClassName(eugene.getOperand2())).toBe("Teselagen.models.Part");
             });
 
-            it("Creates EugeneRule", function(){
-                var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    operand2: 123,
-                    compositionalOperator: "AFTER"
-                });
-                expect(eugene).not.toBe(null);
-
-                expect(eugene.get("name").match(/rule/).length).toBe(1); //
-                expect(eugene.get("negationOperator")).toBe(false);
-            });
-
-            it("Rejects unacceptable operand2", function(){
+            it("Rejects unacceptable compositionalOperator", function(){
                 var eugene, e;
                 var flag = false;
                 try {
                     eugene = Ext.create("Teselagen.models.EugeneRule", {
-                        compositionalOperator: "AFTER"
-                    } );
+                        compositionalOperator: ""
+                    });
                 } catch (bio) {
                     flag = true;
-                    expect(bio.message).toBe("Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part.");
+                    //expect(bio.message).toBe("Teselagen.models.EugeneRule: Illegal CompositionalOperator: ");
                 }
                 expect(flag).toBe(true);
             });
@@ -503,21 +505,17 @@ Ext.onReady(function() {
             it("Repairs a bad name", function(){
                 var eugene = Ext.create("Teselagen.models.EugeneRule", {
                     name: "blah blah",
-                    operand2: 123,
                     compositionalOperator: "AFTER"
                 });
                 expect(eugene.get("name")).toBe("blahblah");
             });
 
-            it("setOperand1() -- Using hasOne", function(){
+            it("setOperand1()", function(){
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
-                    //operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
-                    compositionalOperator: "BEFORE",
-                    operand2: 123
+                    compositionalOperator: "BEFORE"
                 });
-                eug.setProxy(modelProxy);
 
                 expect(eug.getOperand1().get("name")).toBe("");
 
@@ -526,49 +524,79 @@ Ext.onReady(function() {
                 expect(eug.getOperand1().get("name")).toBe("part");
             });
 
-            it("setOperand2() (test to make sure its ok)", function(){
-                var eugene = Ext.create("Teselagen.models.EugeneRule", {
-                    name: "name1",
-                    operand2: 123,
-                    compositionalOperator: "AFTER"
-                });
-                expect(eugene).not.toBe(null);
-
+            it("setOperand2(): Rejects unacceptable operand2", function(){
+                var eugene, e;
                 var flag = false;
                 try {
-                    eugene.setOperand2("bad string");
-                } catch (e) {
+                    eugene = Ext.create("Teselagen.models.EugeneRule", {
+                        compositionalOperator: "AFTER"
+                    });
+                    eugene.setOperand1(operand1);
+                    eugene.setOperand2("badString");
+                } catch (bio) {
                     flag = true;
-                    //console.log("Correctly caught: " + e.message);
+                    expect(bio.message).toBe("Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part.");
                 }
-                eugene.setOperand2(567);
-                expect(eugene.get("name")).toBe("name1");
-                expect(eugene.get("operand2")).toBe(567);
-                expect(eugene).not.toBe(null);
                 expect(flag).toBe(true);
             });
 
-            it("generateText()", function(){
+            it("setOperand2()/getOperand2(): accepts Number", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "name1",
+                    compositionalOperator: "AFTER"
+                });
+                eugene.setOperand1(operand1);
+                eugene.setOperand2(567);
+
+                expect(eugene.get("operand2isNumber")).toBe(true); //do not use outside of model
+                expect(eugene.getOperand2()).toBe(567);
+            });
+
+            it("setOperand2()/getOperand2(): accepts Part", function(){
+                var eugene = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "name1",
+                    compositionalOperator: "AFTER"
+                });
+                eugene.setOperand1(operand1);
+                eugene.setOperand2(operand2);
+
+                expect(eugene.get("operand2isNumber")).toBe(false); //do not use outside of model
+                expect(eugene.getOperand1().get("name")).toBe("op1");
+                expect(eugene.getOperand2().get("name")).toBe("op2");
+            });
+
+            it("generateText(): Operand2 is number", function(){
 
                 var eug = Ext.create("Teselagen.models.EugeneRule", {
                     name: "eug",
-                    //operand1: Ext.create("Teselagen.models.Part", { name: "part"}),
-                    compositionalOperator: "BEFORE",
-                    operand2: 123
+                    compositionalOperator: "BEFORE"
                 });
-                eug.setProxy(modelProxy);
 
-                var op1 = Ext.create("Teselagen.models.Part", { name: "part", genbankStartBP: 200});
-                eug.setOperand1(op1);
+                eug.setOperand1(operand1);
+                eug.setOperand2(123);
 
-                //console.log(eug.validate());
                 var str = eug.generateText();
-                expect(str).toBe("Rule eug(part BEFORE 123);");
+                expect(str).toBe("Rule eug(op1 BEFORE 123);");
+            });
+
+            it("generateText(): Operand2 is Part", function(){
+
+                var eug = Ext.create("Teselagen.models.EugeneRule", {
+                    name: "eug",
+                    compositionalOperator: "BEFORE"
+                });
+
+                eug.setOperand1(operand1);
+                eug.setOperand2(operand2);
+
+                var str = eug.generateText();
+                expect(str).toBe("Rule eug(op1 BEFORE op2);");
             });
         });
         
-        
-
+        //================================================
+        // Teselagen.models.J5Bin
+        //================================================
         describe("Teselagen.models.J5Bin.js", function() {
 
             beforeEach(function() {
@@ -658,7 +686,6 @@ Ext.onReady(function() {
                 expect(bin.parts().getAt(2)).toBe(part1);
                 //console.log(bin.parts());
             });
-
 
             it("addToParts(): Is Part1 and the bin.part1 linked or cloned?", function(){
                 var part1   = Ext.create("Teselagen.models.Part", {
@@ -768,7 +795,6 @@ Ext.onReady(function() {
                 expect(bin.parts().count()).toBe(1);
                 expect(bin.parts().getAt(0)).toBe(part2);
                 expect(device.rules().count()).toBe(0);
-//LAST HERE  DW: 10.11.2012
             });
 
             it("createPart() ***", function(){
@@ -778,7 +804,7 @@ Ext.onReady(function() {
                 var part1   = Ext.create("Teselagen.models.Part", {
                     name: "blah"
                 });
-                var bin     = Ext.create("Teselagen.models.J5Bin", {parts: [part1]});
+                var bin     = Ext.create("Teselagen.models.J5Bin");
                 bin.addToParts([part1]);
 
                 var unique  = bin.isUniquePartName("blah");
@@ -788,6 +814,9 @@ Ext.onReady(function() {
             });
         });
         
+        //================================================
+        // Teselagen.models.J5Collection
+        //================================================
         describe("Teselagen.models.J5Collection.js", function() {
 
             beforeEach(function() {
@@ -807,6 +836,10 @@ Ext.onReady(function() {
                 coll.getDeviceDesign().setProxy(modelProxy);
                 expect(Ext.getClassName(coll.getDeviceDesign())).toBe("Teselagen.models.DeviceDesign");
                 //console.log(coll.getDeviceDesign());
+
+                // Do validation
+                var err = coll.validate();
+                expect(err.length).toBe(0);
             });
 
 
@@ -935,6 +968,7 @@ Ext.onReady(function() {
                 expect(coll.bins().getAt(0)).toBe(bin1);
                 expect(coll.bins().getAt(1).get("binName")).toBe("newBin");
                 expect(coll.bins().getAt(2)).toBe(bin2);
+                expect(success).toBe(true);
             });
             
             it("deleteBinByIndex()", function(){
@@ -1016,10 +1050,27 @@ Ext.onReady(function() {
                 coll.addToBin(bin1);
 
                 var tmp = coll.getBinAssignment(part1);
-                expect(tmp).toBe(part1);
+                expect(tmp).toBe(0);
+            });
+
+            it("isUniqueBinName()", function(){
+                var bin     = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "newBinName"
+                });
+
+                var coll    = Ext.create("Teselagen.models.J5Collection");
+                coll.addToBin(bin);
+
+                var unique  = coll.isUniqueBinName("newBinName");
+                expect(unique).toBe(false);
+                unique      = bin.isUniquePartName("blah");
+                expect(unique).toBe(true);
             });
         });
 
+        //================================================
+        // Teselagen.models.DeviceDesign
+        //================================================
         describe("Teselagen.models.DeviceDesign.js", function() {
 
             it("Create DeviceDesign, Check Associations", function(){
@@ -1035,7 +1086,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(device.getDeviceEditorProject())).toBe("Teselagen.models.DeviceEditorProject");
             });
 
-            it("Create DeviceDesign", function(){
+            it("Create DeviceDesign: createNewCollection()", function(){
 
                 var device = Ext.create("Teselagen.models.DeviceDesign");
 
@@ -1044,6 +1095,19 @@ Ext.onReady(function() {
 
                 expect(device.getJ5Collection().binCount()).toBe(3);
                 expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
+            });
+
+            it("Create DeviceDesign: createCollectionFromBins()", function(){
+
+                var device  = Ext.create("Teselagen.models.DeviceDesign");
+
+                var bin1    = Ext.create("Teselagen.models.J5Bin", {binName: "bin1"});
+                var bin2    = Ext.create("Teselagen.models.J5Bin");
+
+                device.createCollectionFromBins([bin1, bin2]);
+
+                expect(device.getJ5Collection().binCount()).toBe(2);
+                expect(device.getJ5Collection().bins().getAt(0).get("binName")).toBe("bin1");
             });
 
 
@@ -1121,8 +1185,7 @@ Ext.onReady(function() {
                 // Search for rules that have part1
                 var eugRules = device.getRulesInvolvingPart(part1);
 
-                expect(eugRules[0]).toBe(rule1);
-//LAST HERE  DW: 10.16.2012
+                expect(eugRules[0].get("name")).toBe("rule1");
 
             });
 
@@ -1151,6 +1214,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.J5Run
+        //================================================
         describe("Teselagen.models.J5Run.js", function() {
 
             it("Create J5Run, Check Associations", function(){
@@ -1179,6 +1245,9 @@ Ext.onReady(function() {
             });
         });
 
+        //================================================
+        // Teselagen.models.J5Results
+        //================================================
         describe("Teselagen.models.J5Results.js", function() {
 
             it("Create J5Results", function(){

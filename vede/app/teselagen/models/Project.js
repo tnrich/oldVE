@@ -1,7 +1,6 @@
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
-    requires: ["Teselagen.constants.Constants",
-               "Teselagen.manager.SessionManager",
+    requires: ["Teselagen.manager.SessionManager",
                "Teselagen.models.DeviceEditorProject",
                "Teselagen.models.VectorEditorProject"],
 
@@ -36,20 +35,39 @@ Ext.define("Teselagen.models.Project", {
         name: "veprojects",
         foreignKey: "project_id",
         associationKey: "veprojects",
-        autoLoad: true
+        //autoLoad: true
     }],
-    
+/*    
     proxy: {
-        type: "ajax",
-//        url: "/vede/test/data/json/getProjects.json",
-        url: "/vede/test/data/json/projects.json",
+        type: 'memory',
         reader: {
-            type: "json",
-            root: "projects"
+            type: 'json',
+            root: 'projects'
+        }
+    }
+*/
+
+    /* Comment this proxy for testing - Use memory instead */
+    proxy: {
+        type: 'rest',
+        url: 'getProjects.json', // For testing just create a file with this name and fill with data.
+        reader: {
+            type: 'json',
+            root: 'projects'
+        },
+        writer: {
+            type: 'json',
+            //This method should resolve associations and prepare data before saving design
+            getRecordData: function(record, getEverything) {
+                var data = record.getData()
+                var associatedData = record.getAssociatedData();
+                data.deprojects = associatedData["deprojects"];
+                return data;
+            }
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("getProjects", this.url);
+            return sessionData.baseURL + 'user/projects'; // This method reBuild the URL for ajax requests from parents models
         }
-            
-    }
+    },
+
 });

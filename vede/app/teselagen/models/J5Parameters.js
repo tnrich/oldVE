@@ -166,6 +166,7 @@ Ext.define("Teselagen.models.J5Parameters", {
     /**
      * Input parameters:
      * J5 Parameter Values. Default values DO NOT SET when creating this obect
+     * FIX ME!!! COPY THE CONVERT STATMENTS AS SEEN IN DOWNSTREAMAUTOMATIONPARAMETERS
      */
     fields: [
         {name: "masterOligoNumberOfDigitsValue",                   type: "int",        defaultValue: this.self.MONOD_Default},

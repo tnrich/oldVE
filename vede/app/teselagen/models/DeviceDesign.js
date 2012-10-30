@@ -6,19 +6,41 @@
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
-        //"Teselagen.models.Project",
-        "Teselagen.models.J5Collection"//,
-        //"Teselagen.models.EugeneRule",
+        "Teselagen.models.J5Collection",
+        "Teselagen.models.EugeneRule"
     ],
-    // The models will break if there is not proxy defined here. Please define appropriately. DW
+    /*
     proxy: {
-        type: "memory",
-        reader: {
-            type: 'json'
-        }
+        type: "memory"
     },
-        
     statics: {
+    },
+    */
+
+    /* Comment this proxy for testing - Use memory instead */
+    proxy: {
+        type: 'rest',
+        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
+        reader: {
+            type: 'json',
+            root: 'design'
+        },
+        writer: {
+            type: 'json',
+            //This method should resolve associations and prepare data before saving design
+            getRecordData: function(record, getEverything) {
+                var data = record.getData();
+                var associatedData = record.getAssociatedData();
+                var j5Collection = associatedData["j5collection"];
+                var rules = associatedData["rules"];
+                data.j5collection = j5Collection;
+                data.rules = rules;
+                return data;
+            }
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'user/projects/deprojects/devicedesign'; // This method reBuild the URL for ajax requests from parents models
+        }
     },
 
     /**
@@ -26,11 +48,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {name: "id", type: "int"}
+        {
+            name: "deproject_id",
+            type: "long"
+        }
     ],
 
     validations: [
-        {field: "id", type: "presence"}
+        //{field: "id", type: "presence"}
     ],
 
     associations: [
@@ -39,11 +64,13 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5collection"
+            associationKey: "j5collection",
+            name: "j5collection"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
+            associationKey: "rules",
             name: "rules"
         },
         {
@@ -51,13 +78,20 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
+            associationKey: "deviceEditorProject",
+            name: "deviceEditorProject",
+            foreignKey: 'deproject_id'
         }
     ],
 
     init: function() {
     },
 
+    /**
+     * Creates a J5Collection with pNumBins empty J5Bins.
+     * @param {Number} pNumBins Number of empty J5Bins to make in Collection
+     * @returns {Teselagen.models.J5Collection}
+     */
     createNewCollection: function(pNumBins) {
         if (this.getJ5Collection().binCount() > 0) {
             console.warn("Warning. Overwriting existing J5Collection");
@@ -67,7 +101,23 @@ Ext.define("Teselagen.models.DeviceDesign", {
             var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
             j5Coll.addToBin(bin, i);
         }
-        //this.set("j5Collection", j5Coll);
+        this.setJ5Collection(j5Coll);
+        return j5Coll;
+    },
+
+    /**
+     * Creates a J5Collection from given J5Bins.
+     * @param {Teselagen.models.J5Bins[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
+     * @returns {Teselagen.models.J5Collection}
+     */
+    createCollectionFromBins: function(pBins) {
+        if (this.getJ5Collection().binCount() > 0) {
+            console.warn("Warning. Overwriting existing J5Collection");
+        }
+        var j5Coll = Ext.create("Teselagen.models.J5Collection");
+        for (var i = 0; i < pBins.length; i++) {
+            j5Coll.addToBin(pBins[i], i);
+        }
         this.setJ5Collection(j5Coll);
         return j5Coll;
     },
@@ -125,7 +175,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     getRulesInvolvingPart: function(pPart) {
         var rules = [];
         for (var i = 0; i < this.rules().count(); i++) {
-            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).get("operand2") === pPart) {
+            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).getOperand2() === pPart) {
                 rules.push(this.rules().getAt(i));
             }
         }
@@ -134,7 +184,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     /**
-     * @param {String} name
+     * @param {String} pName
      * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pName) {

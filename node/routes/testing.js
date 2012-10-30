@@ -54,7 +54,7 @@ module.exports = function (app) {
 
 
   app.all('/addProject', restrict, function (req, res) {
-    var Project = app.db.model("Project");
+    var Project = app.db.model("project");
     var proj = new Project({"name":"New Project","user_id":req.user._id});
     proj.save();
     req.user.projects.push(proj);
@@ -62,26 +62,25 @@ module.exports = function (app) {
   });
 
   app.all('/addDEProject', restrict, function (req, res) {
-    var Project = app.db.model("DEProject");
-    var proj = new Project({"name":"New DE proj","project_id":"5085df4f5264196eb4000002"});
+    var DEProject = app.db.model("deproject");
+    var proj = new DEProject({"name":"New DE proj"});
     proj.save();
 
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
       var project = user.projects[0];
-      project.DEProjects.push(proj);
+      project.deprojects.push(proj);
       project.save(function(){
         res.json(user);
       });
     });
-
   });
 
   // Dummy method
   app.all('/testing', restrict, function (req, res) {
 
-    var de = app.db.model("DEProject");
+    var de = app.db.model("deproject");
     var proj = new de({"name":"New DE proj"});
     proj.save();
 
@@ -90,7 +89,7 @@ module.exports = function (app) {
     .exec(function (err, user) {
       console.log(user.projects[0]);
       var project = user.projects[0];
-      project.DEProjects.push(proj);
+      project.deprojects.push(proj);
       project.save(function(){
         res.json(user);
       });
@@ -116,7 +115,7 @@ module.exports = function (app) {
   });
 
 	// For testing -> Insert new Model
-	app.all('/addModel', restrict, function (req, res) {
+	app.all('/addDesign', restrict, function (req, res) {
 		var payload = {
 			"de:design": {
 				"de:j5Collection": {
@@ -333,14 +332,15 @@ module.exports = function (app) {
 				}
 			}
 		};
-		var Model = app.db.model("Models");
-		req.user.models.push(new Model({
-			'name': 'Untitled model',
-			'payload': payload
-		}));
-		req.user.save(function () {
-			res.send('done');
-		});
+		
+		var DEProject = app.db.model("deproject");
+	    DEProject.findById(req.query.id, function (err, project) {
+	      project.design = payload;
+	      project.save(function(){
+	      	res.json(project);
+	      });
+	    });
+
 	});
 
 

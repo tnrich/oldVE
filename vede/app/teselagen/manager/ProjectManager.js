@@ -8,7 +8,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	mixins: {
 		observable: "Ext.util.Observable"
 	},
-
+	//singleton: true,
 	projects: null,
 	currentUser: null,
 	workingProject: null,
@@ -24,28 +24,17 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(records.length != 1) return console.log('Error loading user');
+				if(records.length != 1) console.log('Error loading user');
 				self.currentUser = users.first();
-				if(cb) self.loadProjects(cb); // For Testing
-				self.loadProjects();
-				//console.log(self.currentUser.getPreferences());
+				self.currentUser.projects().load({
+					callback: function(record,operation,success){
+						self.projects = self.currentUser.projects();
+						if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
+					}
+				});
+				if(cb) return cb(true);
 			}
 		});
-	},
-
-	/**
-	 * Load User Projects
-	 */
-	loadProjects: function (cb) {
-		console.log('PM: Showing projects');
-		var self = this;
-		this.projects = this.currentUser.projects().load({
-			callback: function () {
-				if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
-				if(cb) return cb(); // For Testing
-			}
-		});
-		
 	},
 
 	/**
@@ -56,13 +45,16 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
-		var deprojects = this.workingProject.deprojects().load({
-			callback: function () {
+
+		var deprojects = this.workingProject.deprojects();
+		deprojects.load({
+			callback: function (records,operation,success) {
 				projectController.renderDesignsSection(deprojects);
-				//projectController.renderPartsSection(self.workingProject);
 				projectController.renderJ5ResultsSection(deprojects);
 			}
 		});
+
+
 
 		var veprojects = this.workingProject.veprojects();
 		projectController.renderPartsSection(veprojects);
@@ -84,9 +76,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 	openDesign: function (item) {
 		var id = item.data.id;
-		var projects = this.workingProject.deprojects();
-		var selectedDesign = projects.getById(id);
-		var tabPanel = Ext.getCmp('tabpanel');
-		tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDesign.data.name+' Design',model:selectedDesign})).show();		
-    }
+		var deprojects = this.workingProject.deprojects();
+		var selectedDEProject = deprojects.getById(id);
+		
+		var selectedDesign = selectedDEProject.getDesign({
+			callback: function (record,operation) {
+				console.log(operation);
+				selectedDesign = selectedDEProject.getDesign();
+				var tabPanel = Ext.getCmp('tabpanel');
+				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
+			
+				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
+				deController.renderDesignInContext();
+
+			}
+		});		
+	}
 });

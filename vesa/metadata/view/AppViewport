@@ -22,10 +22,11 @@
             "codeClass": null,
             "userConfig": {
                 "layout|region": "north",
+                "container|align": "stretch",
                 "designer|userClassName": "MyPanel15",
                 "height": 50,
                 "id": "headerPanel",
-                "layout": "fit",
+                "layout": "hbox",
                 "title": null
             },
             "designerId": "0eb7ebe3-841a-4590-b130-8b8e3c2b08c2",
@@ -38,8 +39,11 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "layout|flex": 1,
                         "designer|userClassName": "MyPanel16",
                         "id": "headerMain",
+                        "maxWidth": 220,
+                        "layout": null,
                         "title": null
                     },
                     "designerId": "cd388f77-e2aa-442f-8373-517fb2c563bb",
@@ -72,6 +76,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "layout|flex": 3,
                         "dock": "right",
                         "designer|userClassName": "MyPanel17",
                         "id": "headerSub",
@@ -129,6 +134,65 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": 2,
+                        "designer|userClassName": "MyPanel26",
+                        "id": "headerButs",
+                        "title": null
+                    },
+                    "designerId": "b8b8b5d5-d255-4f3a-a271-28eee9db1f22",
+                    "cn": [
+                        {
+                            "type": "button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyButton61",
+                                "height": null,
+                                "id": "newProject_Btn",
+                                "margin": 3,
+                                "width": null,
+                                "icon": "resources/images/add_project.png",
+                                "scale": "large",
+                                "text": null,
+                                "tooltip": [
+                                    "New Project",
+                                    ""
+                                ]
+                            },
+                            "designerId": "17d78990-a0a1-4f8a-ba44-453807001d1a"
+                        },
+                        {
+                            "type": "button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyButton62",
+                                "id": "newDE_Btn",
+                                "icon": "resources/images/add_DE.png",
+                                "scale": "large",
+                                "text": null,
+                                "tooltip": [
+                                    "New Device Editor Design"
+                                ]
+                            },
+                            "designerId": "344e7d87-1da5-4e04-bdaf-0c90e0d77a23"
+                        }
+                    ]
                 }
             ]
         },
@@ -143,7 +207,7 @@
                 "layout|region": "west",
                 "layout|split": true,
                 "designer|userClassName": "MyTabPanel2",
-                "id": "projectPanel",
+                "id": "ProjectPanel",
                 "maxWidth": 230,
                 "minWidth": 228,
                 "width": 228,
@@ -175,7 +239,7 @@
                         "id": "projectDesignTab",
                         "layout": "fit",
                         "minButtonWidth": 32,
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
                     "cn": [
@@ -188,6 +252,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "designer|userClassName": "TabConfig5",
+                                "cls": "projectBarButton",
                                 "componentCls": null,
                                 "height": null,
                                 "id": "projectTab1",
@@ -243,7 +308,7 @@
                         "designer|userClassName": "MyPanel20",
                         "id": "projectAnalysisTab",
                         "layout": "fit",
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
                     "cn": [
@@ -256,6 +321,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "designer|userClassName": "TabConfig6",
+                                "cls": "projectBarButton",
                                 "id": "projectTab2",
                                 "icon": "resources/images/ux/graphTab.png",
                                 "iconCls": "projectBarButton",
@@ -273,7 +339,17 @@
                             "userConfig": {
                                 "designer|userClassName": "MyTreePanel1",
                                 "id": "projectAnalysisPanel",
-                                "title": "j5 Results"
+                                "title": "j5 Results",
+                                "root": [
+                                    "{",
+                                    "text: \"Design 1\",",
+                                    "expanded: true,",
+                                    "children: [",
+                                    "            { text: \"j5 Run 1\", leaf: true },",
+                                    "            { text: \"j5 Run 2\", leaf: true }",
+                                    "        ]",
+                                    "}"
+                                ]
                             },
                             "designerId": "6e8be2f7-7b74-4d20-b87d-3c3291910a14",
                             "cn": [
@@ -304,7 +380,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectPartsTab",
                         "layout": "fit",
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
                     "cn": [
@@ -317,6 +393,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "designer|userClassName": "TabConfig7",
+                                "cls": "projectBarButton",
                                 "id": "projectTab3",
                                 "icon": "resources/images/ux/partsTab.png",
                                 "iconCls": "projectBarButton",
@@ -365,7 +442,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectRegistryTab",
                         "layout": "fit",
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
                     "cn": [
@@ -378,6 +455,7 @@
                             "codeClass": null,
                             "userConfig": {
                                 "designer|userClassName": "TabConfig7",
+                                "cls": "projectBarButton",
                                 "id": "projectTab4",
                                 "minHeight": null,
                                 "minWidth": null,
@@ -499,6 +577,719 @@
                                     "designerId": "240cb9b7-26e9-4fbb-b14a-0d2829f5504b",
                                     "cn": [
                                         {
+                                            "type": "tabpanel",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyTabPanel3",
+                                                "border": 0,
+                                                "id": "AnalysisTabPanel",
+                                                "activeTab": 0
+                                            },
+                                            "designerId": "374b4c28-6678-43a9-ad73-2d05c0e55bf5",
+                                            "cn": [
+                                                {
+                                                    "type": "panel",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "container|align": "stretch",
+                                                        "designer|userClassName": "MyPanel27",
+                                                        "layout": "vbox",
+                                                        "title": "Info"
+                                                    },
+                                                    "designerId": "8e233994-7519-4e03-8581-965f811fff03",
+                                                    "cn": [
+                                                        {
+                                                            "type": "tab",
+                                                            "reference": {
+                                                                "name": "tabConfig",
+                                                                "type": "object"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "TabConfig9"
+                                                            },
+                                                            "designerId": "f116e51e-8900-450f-8a92-bc474f55af99"
+                                                        },
+                                                        {
+                                                            "type": "panel",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": 1,
+                                                                "container|align": "stretch",
+                                                                "designer|userClassName": "MyPanel33",
+                                                                "border": 0,
+                                                                "id": "j5_info",
+                                                                "layout": "hbox",
+                                                                "title": null
+                                                            },
+                                                            "designerId": "6e03450b-940e-4617-a711-e729a1674095",
+                                                            "cn": [
+                                                                {
+                                                                    "type": "panel",
+                                                                    "reference": {
+                                                                        "name": "items",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "layout|flex": 1,
+                                                                        "container|align": "stretch",
+                                                                        "designer|userClassName": "MyPanel31",
+                                                                        "border": 0,
+                                                                        "id": "j5-status-Panel",
+                                                                        "maxWidth": null,
+                                                                        "minWidth": null,
+                                                                        "layout": "vbox",
+                                                                        "title": null
+                                                                    },
+                                                                    "designerId": "ca0c9cad-7f56-416f-9975-8c6a55400d75",
+                                                                    "cn": [
+                                                                        {
+                                                                            "type": "fieldcontainer",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "layout|flex": 1,
+                                                                                "layout|margins": "10",
+                                                                                "container|align": "stretch",
+                                                                                "container|padding": 10,
+                                                                                "designer|userClassName": "MyFieldContainer",
+                                                                                "height": 150,
+                                                                                "id": "j5-status-Fields",
+                                                                                "minHeight": 150,
+                                                                                "width": 389,
+                                                                                "layout": "vbox",
+                                                                                "fieldLabel": "",
+                                                                                "hideLabel": true,
+                                                                                "labelAlign": null
+                                                                            },
+                                                                            "designerId": "7a04644e-a634-444d-827c-8f5363917a87",
+                                                                            "cn": [
+                                                                                {
+                                                                                    "type": "displayfield",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "designer|userClassName": "MyDisplayField6",
+                                                                                        "maxHeight": null,
+                                                                                        "minHeight": null,
+                                                                                        "value": [
+                                                                                            "Display Field"
+                                                                                        ],
+                                                                                        "fieldLabel": "Status"
+                                                                                    },
+                                                                                    "designerId": "465f7bcf-9c33-4134-bda6-47e0e294c522"
+                                                                                },
+                                                                                {
+                                                                                    "type": "displayfield",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "designer|userClassName": "MyDisplayField8",
+                                                                                        "maxHeight": null,
+                                                                                        "minHeight": null,
+                                                                                        "value": [
+                                                                                            "Display Field"
+                                                                                        ],
+                                                                                        "fieldLabel": "Run Date"
+                                                                                    },
+                                                                                    "designerId": "565a13ba-23e6-4960-8a1e-4f48a575c761"
+                                                                                },
+                                                                                {
+                                                                                    "type": "displayfield",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "designer|userClassName": "MyDisplayField9",
+                                                                                        "maxHeight": null,
+                                                                                        "minHeight": null,
+                                                                                        "value": [
+                                                                                            "Display Field"
+                                                                                        ],
+                                                                                        "fieldLabel": "Run Time"
+                                                                                    },
+                                                                                    "designerId": "ee24cd73-9739-42f5-8689-e37d7a0161d7"
+                                                                                },
+                                                                                {
+                                                                                    "type": "displayfield",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "designer|userClassName": "MyDisplayField7",
+                                                                                        "maxHeight": null,
+                                                                                        "minHeight": null,
+                                                                                        "value": [
+                                                                                            "Display Field"
+                                                                                        ],
+                                                                                        "fieldLabel": "Assembly Type"
+                                                                                    },
+                                                                                    "designerId": "497a3a2b-6ca3-4935-aca5-7755e43a2754"
+                                                                                },
+                                                                                {
+                                                                                    "type": "displayfield",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "designer|userClassName": "MyDisplayField7",
+                                                                                        "maxHeight": null,
+                                                                                        "minHeight": null,
+                                                                                        "value": [
+                                                                                            "Display Field"
+                                                                                        ],
+                                                                                        "fieldLabel": "j5 Ready"
+                                                                                    },
+                                                                                    "designerId": "fec8e7dd-aed1-4c1a-b6a1-7c4e8ce2f4b5"
+                                                                                },
+                                                                                {
+                                                                                    "type": "displayfield",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "designer|userClassName": "MyDisplayField7",
+                                                                                        "maxHeight": null,
+                                                                                        "minHeight": null,
+                                                                                        "value": [
+                                                                                            "Display Field"
+                                                                                        ],
+                                                                                        "fieldLabel": "Combinatorial"
+                                                                                    },
+                                                                                    "designerId": "92cea8ea-9256-4ee4-86fc-6d8bde5cfd46"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "panel",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "layout|flex": 2,
+                                                                                "container|align": "stretch",
+                                                                                "container|padding": 5,
+                                                                                "designer|userClassName": "MyPanel34",
+                                                                                "border": 0,
+                                                                                "margin": 10,
+                                                                                "maxHeight": null,
+                                                                                "layout": "vbox",
+                                                                                "title": null
+                                                                            },
+                                                                            "designerId": "4c0f8e17-5c46-4a8b-b248-7e7b112cae40",
+                                                                            "cn": [
+                                                                                {
+                                                                                    "type": "button",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|margins": "5",
+                                                                                        "designer|userClassName": "MyButton65",
+                                                                                        "icon": "resources/images/ux/edit_button.png",
+                                                                                        "iconAlign": null,
+                                                                                        "scale": "medium",
+                                                                                        "text": "Edit in Device Editor"
+                                                                                    },
+                                                                                    "designerId": "f1ba6306-95bf-497f-92f0-1512cee99a9e"
+                                                                                },
+                                                                                {
+                                                                                    "type": "button",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": null,
+                                                                                        "layout|margins": "5",
+                                                                                        "designer|userClassName": "MyButton63",
+                                                                                        "margin": null,
+                                                                                        "maxHeight": 30,
+                                                                                        "minHeight": 30,
+                                                                                        "minWidth": null,
+                                                                                        "width": null,
+                                                                                        "maintainFlex": false,
+                                                                                        "autoWidth": true,
+                                                                                        "icon": "resources/images/ux/view_button.png",
+                                                                                        "scale": "medium",
+                                                                                        "text": "View j5 Parameters"
+                                                                                    },
+                                                                                    "designerId": "4da12d71-4e0e-4169-a0b7-71ec950ce68f"
+                                                                                },
+                                                                                {
+                                                                                    "type": "splitbutton",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 3,
+                                                                                        "layout|margins": "5",
+                                                                                        "designer|userClassName": "MySplitButton",
+                                                                                        "margin": null,
+                                                                                        "maxHeight": 30,
+                                                                                        "autoWidth": true,
+                                                                                        "icon": "resources/images/ux/submit_button.png",
+                                                                                        "scale": "large",
+                                                                                        "text": "Submit j5 Run"
+                                                                                    },
+                                                                                    "designerId": "2056ae2e-28c4-4d8a-a84e-73d9e6a2b72e",
+                                                                                    "cn": [
+                                                                                        {
+                                                                                            "type": "menu",
+                                                                                            "reference": {
+                                                                                                "name": "menu",
+                                                                                                "type": "object"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "designer|userClassName": "MyMenu10"
+                                                                                            },
+                                                                                            "designerId": "9239eb36-8144-465e-836a-1b9c18c3741b",
+                                                                                            "cn": [
+                                                                                                {
+                                                                                                    "type": "menuitem",
+                                                                                                    "reference": {
+                                                                                                        "name": "items",
+                                                                                                        "type": "array"
+                                                                                                    },
+                                                                                                    "codeClass": null,
+                                                                                                    "userConfig": {
+                                                                                                        "designer|userClassName": "MyMenuItem38",
+                                                                                                        "text": "j5 Inputs"
+                                                                                                    },
+                                                                                                    "designerId": "2868db8d-4180-4a9b-ae16-8a35c6e1af67"
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    ]
+                                                                                },
+                                                                                {
+                                                                                    "type": "button",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 4,
+                                                                                        "layout|margins": "5",
+                                                                                        "designer|userClassName": "MyButton64",
+                                                                                        "margin": null,
+                                                                                        "maxHeight": 30,
+                                                                                        "minHeight": 30,
+                                                                                        "minWidth": null,
+                                                                                        "maintainFlex": false,
+                                                                                        "autoWidth": false,
+                                                                                        "icon": "resources/images/ux/downstream_button.png",
+                                                                                        "scale": "medium",
+                                                                                        "text": "Downstream Automation"
+                                                                                    },
+                                                                                    "designerId": "a87188dc-1ea8-46c7-86b9-a91ebaa0b0a1"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "type": "panel",
+                                                                    "reference": {
+                                                                        "name": "items",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "layout|flex": 1,
+                                                                        "container|align": "stretch",
+                                                                        "designer|userClassName": "MyPanel30",
+                                                                        "margin": 30,
+                                                                        "minWidth": null,
+                                                                        "width": null,
+                                                                        "layout": "vbox",
+                                                                        "title": "Download Results"
+                                                                    },
+                                                                    "designerId": "66b2f5f1-c09e-4833-88cb-682e8cca589b",
+                                                                    "cn": [
+                                                                        {
+                                                                            "type": "panel",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "layout|flex": 1,
+                                                                                "container|align": "stretch",
+                                                                                "designer|userClassName": "MyPanel14",
+                                                                                "border": 0,
+                                                                                "margin": 15,
+                                                                                "maxHeight": 50,
+                                                                                "layout": "vbox",
+                                                                                "title": null
+                                                                            },
+                                                                            "designerId": "a03a9ec0-6f47-4949-bf3a-cdf47d53b64c",
+                                                                            "cn": [
+                                                                                {
+                                                                                    "type": "button",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 1,
+                                                                                        "layout|margins": "5",
+                                                                                        "designer|userClassName": "MyButton66",
+                                                                                        "margin": "",
+                                                                                        "icon": "resources/images/ux/download_button.png",
+                                                                                        "scale": "large",
+                                                                                        "text": "Download All"
+                                                                                    },
+                                                                                    "designerId": "0b76e2bf-40d9-45f4-b53b-b9f78367bb3b"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "panel",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "layout|flex": 1,
+                                                                                "container|align": "stretch",
+                                                                                "container|pack": null,
+                                                                                "designer|userClassName": "MyPanel35",
+                                                                                "border": 0,
+                                                                                "margin": 15,
+                                                                                "maintainFlex": false,
+                                                                                "layout": "hbox",
+                                                                                "title": null
+                                                                            },
+                                                                            "designerId": "832b66f8-0c04-47c2-8820-06a20b022b37",
+                                                                            "cn": [
+                                                                                {
+                                                                                    "type": "panel",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 1,
+                                                                                        "container|align": "stretch",
+                                                                                        "designer|userClassName": "MyPanel36",
+                                                                                        "border": 0,
+                                                                                        "maxWidth": null,
+                                                                                        "minWidth": null,
+                                                                                        "width": null,
+                                                                                        "layout": "vbox",
+                                                                                        "minButtonWidth": null,
+                                                                                        "title": null
+                                                                                    },
+                                                                                    "designerId": "cfca216b-8355-4734-848f-9b8cc7551310",
+                                                                                    "cn": [
+                                                                                        {
+                                                                                            "type": "button",
+                                                                                            "reference": {
+                                                                                                "name": "items",
+                                                                                                "type": "array"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "layout|margins": "5",
+                                                                                                "designer|userClassName": "MyButton5",
+                                                                                                "icon": "resources/images/ux/download_button2.png",
+                                                                                                "scale": "medium",
+                                                                                                "text": "Sequence File"
+                                                                                            },
+                                                                                            "designerId": "1be982b1-490f-4f59-b50b-be1f90a6f699"
+                                                                                        },
+                                                                                        {
+                                                                                            "type": "button",
+                                                                                            "reference": {
+                                                                                                "name": "items",
+                                                                                                "type": "array"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "layout|margins": "5",
+                                                                                                "designer|userClassName": "MyButton68",
+                                                                                                "icon": "resources/images/ux/download_button2.png",
+                                                                                                "scale": "medium",
+                                                                                                "text": "Parts File"
+                                                                                            },
+                                                                                            "designerId": "c822d213-2f16-4890-ad2b-6f562bd58489"
+                                                                                        }
+                                                                                    ]
+                                                                                },
+                                                                                {
+                                                                                    "type": "panel",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 1,
+                                                                                        "container|align": "stretch",
+                                                                                        "designer|userClassName": "MyPanel37",
+                                                                                        "border": 0,
+                                                                                        "minWidth": 100,
+                                                                                        "layout": "vbox",
+                                                                                        "title": null
+                                                                                    },
+                                                                                    "designerId": "67e760b7-2b42-45f0-9b0d-324ff8c75147",
+                                                                                    "cn": [
+                                                                                        {
+                                                                                            "type": "button",
+                                                                                            "reference": {
+                                                                                                "name": "items",
+                                                                                                "type": "array"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "layout|margins": "5",
+                                                                                                "designer|userClassName": "MyButton69",
+                                                                                                "icon": "resources/images/ux/download_button2.png",
+                                                                                                "scale": "medium",
+                                                                                                "text": "Target Parts File"
+                                                                                            },
+                                                                                            "designerId": "c96a14de-aa8c-4db6-9956-913b9e928906"
+                                                                                        },
+                                                                                        {
+                                                                                            "type": "button",
+                                                                                            "reference": {
+                                                                                                "name": "items",
+                                                                                                "type": "array"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "layout|margins": "5",
+                                                                                                "designer|userClassName": "MyButton70",
+                                                                                                "icon": "resources/images/ux/download_button2.png",
+                                                                                                "scale": "medium",
+                                                                                                "text": "Eugene Rules File"
+                                                                                            },
+                                                                                            "designerId": "c8ed710a-ffb9-4284-99b3-0ac5c37edc41"
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "panel",
+                                                                            "reference": {
+                                                                                "name": "items",
+                                                                                "type": "array"
+                                                                            },
+                                                                            "codeClass": null,
+                                                                            "userConfig": {
+                                                                                "layout|flex": 1,
+                                                                                "container|align": "stretch",
+                                                                                "container|pack": null,
+                                                                                "designer|userClassName": "MyPanel35",
+                                                                                "border": 0,
+                                                                                "margin": 15,
+                                                                                "maintainFlex": false,
+                                                                                "layout": "hbox",
+                                                                                "title": null
+                                                                            },
+                                                                            "designerId": "8f2fe752-9c4a-4efe-aebd-28a7270c69ad",
+                                                                            "cn": [
+                                                                                {
+                                                                                    "type": "panel",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 1,
+                                                                                        "container|align": "stretch",
+                                                                                        "designer|userClassName": "MyPanel36",
+                                                                                        "border": 0,
+                                                                                        "maxWidth": null,
+                                                                                        "minWidth": null,
+                                                                                        "width": null,
+                                                                                        "layout": "vbox",
+                                                                                        "minButtonWidth": null,
+                                                                                        "title": null
+                                                                                    },
+                                                                                    "designerId": "f6599352-986f-4244-9427-b45704794db4",
+                                                                                    "cn": [
+                                                                                        {
+                                                                                            "type": "button",
+                                                                                            "reference": {
+                                                                                                "name": "items",
+                                                                                                "type": "array"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "layout|margins": "5",
+                                                                                                "designer|userClassName": "MyButton5",
+                                                                                                "icon": "resources/images/ux/download_button2.png",
+                                                                                                "scale": "medium",
+                                                                                                "text": "j5 Parameters"
+                                                                                            },
+                                                                                            "designerId": "7ca17154-6119-4304-aec5-336e37d8d71f"
+                                                                                        }
+                                                                                    ]
+                                                                                },
+                                                                                {
+                                                                                    "type": "panel",
+                                                                                    "reference": {
+                                                                                        "name": "items",
+                                                                                        "type": "array"
+                                                                                    },
+                                                                                    "codeClass": null,
+                                                                                    "userConfig": {
+                                                                                        "layout|flex": 1,
+                                                                                        "container|align": "stretch",
+                                                                                        "designer|userClassName": "MyPanel37",
+                                                                                        "border": 0,
+                                                                                        "minWidth": 100,
+                                                                                        "layout": "vbox",
+                                                                                        "title": null
+                                                                                    },
+                                                                                    "designerId": "a2f49cb7-c2f5-4f08-ae45-19b502b8b0aa",
+                                                                                    "cn": [
+                                                                                        {
+                                                                                            "type": "button",
+                                                                                            "reference": {
+                                                                                                "name": "items",
+                                                                                                "type": "array"
+                                                                                            },
+                                                                                            "codeClass": null,
+                                                                                            "userConfig": {
+                                                                                                "layout|margins": "5",
+                                                                                                "designer|userClassName": "MyButton69",
+                                                                                                "icon": "resources/images/ux/download_button2.png",
+                                                                                                "scale": "medium",
+                                                                                                "text": "Downstream Parameters"
+                                                                                            },
+                                                                                            "designerId": "75dc44b2-34c2-4ec1-94cd-ad82f2d30db7"
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "form",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": 1,
+                                                                "designer|userClassName": "MyForm7",
+                                                                "maxHeight": 250,
+                                                                "bodyPadding": 10,
+                                                                "title": "Warnings"
+                                                            },
+                                                            "designerId": "4d82b04c-c49c-452c-b61a-2dcd92eb840f"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "panel",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyPanel28",
+                                                        "title": "Design Overview"
+                                                    },
+                                                    "designerId": "2a872d77-e120-4664-bbe3-2c1eea3ea1d9",
+                                                    "cn": [
+                                                        {
+                                                            "type": "tab",
+                                                            "reference": {
+                                                                "name": "tabConfig",
+                                                                "type": "object"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "TabConfig10"
+                                                            },
+                                                            "designerId": "622d072f-bff7-4de4-80b9-510b0e02ee7b"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "panel",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyPanel29",
+                                                        "title": "Sequences"
+                                                    },
+                                                    "designerId": "8e25c994-d1ee-464e-995a-3f1993112883",
+                                                    "cn": [
+                                                        {
+                                                            "type": "tab",
+                                                            "reference": {
+                                                                "name": "tabConfig",
+                                                                "type": "object"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "TabConfig11"
+                                                            },
+                                                            "designerId": "93f462d5-07d6-420b-8f52-947e247963f1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
                                             "type": "gridpanel",
                                             "reference": {
                                                 "name": "items",
@@ -507,6 +1298,7 @@
                                             "codeClass": null,
                                             "userConfig": {
                                                 "designer|userClassName": "MyGridPanel1",
+                                                "hidden": true,
                                                 "title": "My Grid Panel"
                                             },
                                             "designerId": "b30bff8e-3033-4426-8124-4fcd409611cf",
@@ -580,6 +1372,21 @@
                                                     "designerId": "9ead2a11-c4ba-4b9c-bf95-11012745ceff"
                                                 }
                                             ]
+                                        },
+                                        {
+                                            "type": "form",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyForm5",
+                                                "layout": "fit",
+                                                "bodyPadding": 10,
+                                                "title": "j5 Run Info"
+                                            },
+                                            "designerId": "01526671-85fd-47a6-aa6d-84440fb01db4"
                                         }
                                     ]
                                 },
@@ -593,6 +1400,7 @@
                                     "userConfig": {
                                         "layout|flex": 2,
                                         "designer|userClassName": "MyPanel25",
+                                        "hidden": true,
                                         "maxHeight": 300,
                                         "layout": "fit",
                                         "title": "Analysis"
@@ -616,7 +1424,12 @@
                                 "maxWidth": 200,
                                 "minWidth": null,
                                 "layout": "vbox",
-                                "title": "Help"
+                                "animCollapse": false,
+                                "collapseDirection": "right",
+                                "collapsed": true,
+                                "collapsible": true,
+                                "title": "Help",
+                                "titleCollapse": true
                             },
                             "designerId": "817e75a8-dec1-4297-88a9-5c8d958c7c8c",
                             "cn": [

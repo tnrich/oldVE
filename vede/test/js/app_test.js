@@ -8,14 +8,15 @@ Ext.onReady(function() {
         
         requires: ["Teselagen.manager.SessionManager"],
         
-        sessionManager: Teselagen.manager.SessionManager,
+        sessionManager: null,
         
         controllers: [
             "AppController"
         ],
 
         launch: function() {
-            this.sessionManager.setEnv(Teselagen.constants.Constants.ENV_TEST)
+            this.sessionManager = Teselagen.manager.SessionManager;
+            this.sessionManager.setEnv(Teselagen.constants.Constants.ENV_TEST);
         }
     });
 });

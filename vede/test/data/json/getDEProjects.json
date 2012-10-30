@@ -5,6 +5,9 @@
             "id": 1,
             "project_id": 1,
             "name": "DE Proj 1",
+            "design": {
+                "id": 1
+            },
             "j5runs": [
                 {
                     "id" : 1,
