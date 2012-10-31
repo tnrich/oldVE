@@ -21,8 +21,9 @@ Ext.require("Teselagen.models.J5Parameters");
 Ext.require("Teselagen.models.EugeneRule");
 
 Ext.require("Teselagen.manager.SequenceFileManager");
-Ext.require("Teselagen.manager.PartManager");
-Ext.require("Teselagen.manager.EugeneRuleManager");
+//Ext.require("Teselagen.manager.PartManager");
+//Ext.require("Teselagen.manager.EugeneRuleManager");
+
 Ext.require("Teselagen.manager.DeviceDesignManager");
 
 Ext.onReady(function() {
@@ -685,6 +686,7 @@ Ext.onReady(function() {
 
                     // FIX THIS WHEN THE EugeneRule VALIDATORS ARE DONE
                     var err = rule1.validate();
+                    //console.log(err);
                     expect(err.length).toBe(0);
                 });
 

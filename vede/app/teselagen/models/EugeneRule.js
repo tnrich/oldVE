@@ -60,8 +60,22 @@ Ext.define("Teselagen.models.EugeneRule", {
         {
             name: "compositionalOperator",
             convert: function(v, record) {
-                v = v.toUpperCase();
-                return v;
+                var compOp = v.toUpperCase();
+
+                var constants = Teselagen.constants.Constants;
+
+                if (compOp === constants.AFTER || compOp === constants.BEFORE || compOp === constants.WITH || compOp === constants.THEN || compOp === constants.NEXTTO || compOp === constants.MORETHAN ) {
+                    // These check out
+                } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) {
+                    // These are ok, just deprecated
+                } else {
+                    // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
+                    console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
+                    throw Ext.create("Teselagen.bio.BioException", {
+                        message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
+                    });
+                }
+                return compOp;
             }
         },
         {
@@ -83,14 +97,14 @@ Ext.define("Teselagen.models.EugeneRule", {
         {field: "compositionalOperator",    type: "presence"},
         {field: "compositionalOperator",    type: "inclusion",
                 list: [             //Cannot access the statics, hard coding for now.
-                    "AFTER",
-                    "BEFORE",
-                    "WITH",
-                    "THEN",
-                    "NEXTTO",
-                    "MORETHAN",
-                    this.self.NOTMORETHAN,
-                    this.self.NOTWITH
+                    Teselagen.constants.Constants.AFTER,
+                    Teselagen.constants.Constants.BEFORE,
+                    Teselagen.constants.Constants.WITH,
+                    Teselagen.constants.Constants.THEN,
+                    Teselagen.constants.Constants.NEXTTO,
+                    Teselagen.constants.Constants.MORETHAN,
+                    Teselagen.constants.Constants.NOTMORETHAN,
+                    Teselagen.constants.Constants.NOTWITH
                 ]
         },
         {field: "operand2Number",         type: "presence"}
@@ -138,11 +152,8 @@ Ext.define("Teselagen.models.EugeneRule", {
                 this.self.highestDefaultNameIndex += 1;
         }
 
-        // Check Operand2
-        //this.setOperand2(this.getOperand2());
-
         // Check CompositionalOperator
-        var compOp = this.get("compositionalOperator");
+        /*var compOp = this.get("compositionalOperator");
         if (compOp === this.self.AFTER || compOp === this.self.BEFORE || compOp === this.self.WITH || compOp === this.self.THEN || compOp === this.self.NEXTTO || compOp === this.self.MORETHAN ) {
             // These check out
         } else if (compOp === this.self.NOTMORETHAN || compOp === this.self.NOTWITH) {
@@ -153,7 +164,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
             });
-        }
+        }*/
 
     },
 
