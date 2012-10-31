@@ -61,15 +61,16 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
-     * Given a @link Teselagen.models.UserRestrictionEnzymes object, creates
+     * SHOULD BE IRRELEVANT IN JS VERSION
+     * Given a @link Teselagen.models.User object, creates
      * @link Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
-     * @param {Teselagen.models.UserRestrictionEnzymes} userEnzymes The UserRestrictionEnzymes object to load from.
+     * @param {Teselagen.models.UserRestrictionEnzyme} userEnzymes The UserRestrictionEnzyme object to load from.
      */
-    loadUserRestrictionEnzymes: function(userEnzymes) {
+    loadUserRestrictionEnzymes: function(user) {
         this.setUserGroups([]);
         var newUserGroups = [];
         
-        Ext.each(userEnzymes.get("groups"), function(group) {
+        Ext.each(user.restrictionEnzymeGroups(), function(group) {
             if(!group || !group.get("groupName") || group.get("enzymeNames").length == 0) {
                 return true; // This simply tells Ext.each to continue to the next iteration.
             }
