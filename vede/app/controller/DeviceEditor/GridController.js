@@ -9,6 +9,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     DeviceEvent: null,
 
     grid: null,
+    tabPanel: null,
+
+    totalRows: 1,
 
     onPartPanelButtonClick: function(button) {
         console.log(button.cls);
@@ -18,23 +21,36 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(j5Bin) {
             this.addJ5Bin(j5Bin);
         } else {
-            this.grid.add(Ext.create("Vede.view.de.grid.Bin"));
+            this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
+                totalRows: this.totalRows
+            }));
         }
     },
 
     onAddRow: function() {
+        this.totalRows += 1;
+        this.updateBinsWithTotalRows();
     },
 
     addJ5Bin: function(j5Bin) {
         this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
-            bin: j5Bin
+            bin: j5Bin,
+            totalRows: this.totalRows
         }));
+    },
+
+    updateBinsWithTotalRows: function() {
+        this.grid.items.each(function(bin) {
+            bin.setTotalRows(this.totalRows);
+        }, this);
     },
 
     onLaunch: function() {
         this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
+        this.tabPanel = Ext.getCmp("tabPanel");
 
         // Create a sample bin and associated parts to render.
+        this.totalRows = 2;
         var binModel = Ext.create("Teselagen.models.J5Bin", {
             binName: "promoter",
         });
@@ -50,11 +66,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         binModel.parts().add(partModel1);
         binModel.parts().add(partModel2);
 
-        var bin = Ext.create("Vede.view.de.grid.Bin", {
-            bin: binModel
-        });
-
-        this.grid.add(bin);    
+        this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
+            bin: binModel,
+            totalRows: this.totalRows
+        }));
     },
 
     init: function() {

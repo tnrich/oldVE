@@ -12,7 +12,8 @@ Ext.define('Vede.view.de.grid.Bin', {
     },
 
     config: {
-        bin: null
+        bin: null,
+        totalRows: 1
     },
 
     /**
@@ -35,6 +36,7 @@ Ext.define('Vede.view.de.grid.Bin', {
             html = this.getBin().get("binName");
         }
 
+        // Create the header for the column.
         var binHeader = Ext.create('Ext.container.Container', {
             items: [{
                 html: html,
@@ -76,6 +78,7 @@ Ext.define('Vede.view.de.grid.Bin', {
             items: [binHeader]
         }]);
 
+        var currentRows = 0;
         if(this.getBin()) {
             // Add each part in the bin to the bin view object.
             this.getBin().parts().each(function(part) {
@@ -83,6 +86,24 @@ Ext.define('Vede.view.de.grid.Bin', {
                     part: part
                 }));
             }, this);
+            
+            currentRows = this.getBin().parts().length;
+        }
+
+        // Add blank rows until currentRows equals totalRows.
+        while(currentRows < this.getTotalRows()) {
+            this.add(Ext.create("Vede.view.de.grid.Part"));
+            currentRows += 1;
         }
     },
+
+    applyTotalRows: function(pTotalRows) {
+        var currentRows = this.getTotalRows();
+        while(currentRows < pTotalRows) {
+            this.add(Ext.create("Vede.view.de.grid.Part"));
+            currentRows += 1;
+        }
+
+        return pTotalRows;
+    }
 });
