@@ -220,6 +220,13 @@ Ext.onReady(function() {
                     expect(newName).toBe("ABCD_123-abc");
                 });
 
+                it("reformatName(): Number as input", function() {
+                    var name = 123;
+                    var newName = Teselagen.utils.FormatUtils.reformatName(name);
+
+                    expect(newName).toBe("123");
+                });
+
             });
 
             describe("Format2Format methods: Genbank, JbeiSeqXml, Fasta", function() {

@@ -54,7 +54,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * @returns {Boolean}
      */
     isLegalName: function(pName) {
-        if (pName.match(/[^a-zA-Z0-9_\-]/) !== null) {
+        var str = pName.toString();
+        if (str.match(/[^a-zA-Z0-9_\-]/) !== null) {
             return false;
         } else {
             return true;
@@ -68,7 +69,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * @returns {String} New name.
      */
     reformatName: function(pName) {
-        return pName.replace(/[^a-zA-Z0-9_\-]/g, "");
+        var str = pName.toString();
+        return str.replace(/[^a-zA-Z0-9_\-]/g, "");
     },
 
 
