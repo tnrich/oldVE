@@ -4,7 +4,30 @@
  * @author Diana Wong, Rodrigo Pavez
  */
 
-Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.util.XmlToJson", "Teselagen.bio.util.Sha256", "Teselagen.bio.parsers.GenbankManager", "Teselagen.bio.parsers.ParsersManager", "Teselagen.utils.SequenceUtils", "Teselagen.utils.FormatUtils", "Teselagen.utils.DeXmlUtils", "Teselagen.constants.Constants", "Teselagen.models.SequenceFile", "Teselagen.models.Part", "Teselagen.models.J5Bin", "Teselagen.models.J5Collection", "Teselagen.models.EugeneRule", "Teselagen.models.SBOLvIconInfo", "Teselagen.models.J5Run", "Teselagen.models.J5Parameters", "Teselagen.models.DownstreamAutomationParameters", "Teselagen.models.J5Results", "Teselagen.models.DeviceDesign", "Teselagen.models.Project", "Teselagen.manager.SequenceFileManager", "Teselagen.manager.EugeneRuleManager", "Teselagen.manager.DeviceDesignManager"], function () {
+Ext.syncRequire(["Ext.Ajax",
+ "Teselagen.bio.util.StringUtil",
+ "Teselagen.bio.util.XmlToJson",
+ "Teselagen.bio.util.Sha256",
+ "Teselagen.bio.parsers.GenbankManager",
+ "Teselagen.bio.parsers.ParsersManager",
+ "Teselagen.utils.SequenceUtils",
+ "Teselagen.utils.FormatUtils",
+ "Teselagen.utils.DeXmlUtils",
+ "Teselagen.constants.Constants",
+ "Teselagen.models.SequenceFile",
+ "Teselagen.models.Part",
+ "Teselagen.models.J5Bin",
+ "Teselagen.models.J5Collection",
+ "Teselagen.models.EugeneRule",
+ "Teselagen.models.SBOLvIconInfo",
+ "Teselagen.models.J5Run",
+ "Teselagen.models.J5Parameters",
+ "Teselagen.models.DownstreamAutomationParameters",
+ "Teselagen.models.J5Results",
+ "Teselagen.models.DeviceDesign",
+ "Teselagen.models.Project",
+ "Teselagen.manager.SequenceFileManager",
+ "Teselagen.manager.DeviceDesignManager"], function () {
     console.log('Requires are ready');
 
 
@@ -178,7 +201,7 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             part1a = Ext.create("Teselagen.models.Part", {
                 name: "part1a",
                 genbankStartBP: 1,
-                endBP: 10
+                endBP: 7
             });
             part1a.setSequenceFile(seq1a);
 
@@ -189,8 +212,8 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             });
             part1b = Ext.create("Teselagen.models.Part", {
                 name: "part1b",
-                genbankStartBP: 20,
-                endBP: 30
+                genbankStartBP: 1,
+                endBP: 7
             });
             part1b.setSequenceFile(seq1b);
 
@@ -202,12 +225,12 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
             // Create Bin2 with 1 Part with 1 SequenceFile
             seq2a = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1b\nAAAAAAAAA"
+                sequenceFileContent: ">seq1c\nAAAAAAAAA"
             });
             part2a = Ext.create("Teselagen.models.Part", {
                 name: "part2a",
                 genbankStartBP: 1,
-                endBP: 10
+                endBP: 7
             });
             part2a.setSequenceFile(seq2a);
 

@@ -77,7 +77,9 @@ function encoded_target_part_order_list_file(model)
         out += '>' + bin["binName"] + ',' + bin["directionForward"] + ',' + ',' + ',' + ',' + ',' + ',' + '\n';
     
         bin.parts.forEach(function(part){
-            out += part["name"] + ',' + part["directionForward"] + ',' + part["fas"] + ',' + bin['fro'] + ',' + bin["dsf"] + ',' + ',' + '\n';
+            var fro = bin['fro'];
+            if (fro == null) fro = '';
+            out += part["name"] + ',' + part["directionForward"] + ',' + part["fas"] + ',' + fro + ',' + bin["dsf"] + ',' + ',' + '\n';
         });
     });
 /* 
@@ -98,12 +100,13 @@ ssrA_tag_enhanced_5prime,forward,Embed_in_primer_reverse,,,,
 >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
 ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
 */
-    return out;
+
     return new Buffer(out).toString('base64'); 
 }
 
 function encoded_eugene_rules_list_file(model)
 {
+    return "";
     var eugenes = model["rules"];
     var out = "";
 
@@ -139,7 +142,46 @@ function encoded_eugene_rules_list_file(model)
 
 var j5rpcEncode = function(model,j5Params,execParams) {
 
-var j5Params = JSON.parse('{"MASTEROLIGONUMBEROFDIGITS": "5", "MASTERPLASMIDNUMBEROFDIGITS": "5", "GIBSONOVERLAPBPS": "26", "GIBSONOVERLAPMINTM": "60", "GIBSONOVERLAPMAXTM": "70", "MAXIMUMOLIGOLENGTHBPS": "110", "MINIMUMFRAGMENTSIZEGIBSONBPS": "250", "GOLDENGATEOVERHANGBPS": "4digestion", "GOLDENGATERECOGNITIONSEQ": "GGTCTC", "GOLDENGATETERMINIEXTRASEQ": "CACACCAGGTCTCA", "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE": "2", "OLIGOSYNTHESISCOSTPERBPUSD": "0.1", "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD": "40", "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS": "60", "MINIMUMPCRPRODUCTBPS": "100", "DIRECTSYNTHESISCOSTPERBPUSD": "0.39", "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD": "159", "PRIMER_GC_CLAMP": "2", "PRIMER_MIN_SIZE": "18", "PRIMER_MAX_SIZE": "36", "PRIMER_MIN_TM": "60", "PRIMER_MAX_TM": "70", "PRIMER_MAX_DIFF_TM": "5", "PRIMER_MAX_SELF_ANY_TH": "47", "PRIMER_MAX_SELF_END_TH": "47", "PRIMER_PAIR_MAX_COMPL_ANY_TH": "47", "PRIMER_PAIR_MAX_COMPL_END_TH": "4747)", "PRIMER_TM_SANTALUCIA": "1", "PRIMER_SALT_CORRECTIONS": "1", "PRIMER_DNA_CONC": "250", "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT": "4", "MISPRIMING_MIN_TM": "45", "MISPRIMING_SALT_CONC": "0.05", "MISPRIMING_OLIGO_CONC": "2.5e-7", "OUTPUT_SEQUENCE_FORMAT": "Genbank", "ASSEMBLY_PRODUCT_TYPE": "circular", "SUPPRESS_PURE_PRIMERS": "TRUE"}');
+var j5Params = JSON.parse(' \
+    { \
+    "MASTEROLIGONUMBEROFDIGITS": "5", \
+    "MASTERPLASMIDNUMBEROFDIGITS": "5", \
+    "GIBSONOVERLAPBPS": "26", \
+    "GIBSONOVERLAPMINTM": "60", \
+    "GIBSONOVERLAPMAXTM": "70", \
+    "MAXIMUMOLIGOLENGTHBPS": "110", \
+    "MINIMUMFRAGMENTSIZEGIBSONBPS": "250", \
+    "GOLDENGATEOVERHANGBPS": "4digestion", \
+    "GOLDENGATERECOGNITIONSEQ": "GGTCTC", \
+    "GOLDENGATETERMINIEXTRASEQ": "CACACCAGGTCTCA", \
+    "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE": "2", \
+    "OLIGOSYNTHESISCOSTPERBPUSD": "0.1", \
+    "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD": "40", \
+    "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS": "60", \
+    "MINIMUMPCRPRODUCTBPS": "100", \
+    "DIRECTSYNTHESISCOSTPERBPUSD": "0.39", \
+    "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD": "159", \
+    "PRIMER_GC_CLAMP": "2", \
+    "PRIMER_MIN_SIZE": "18", \
+    "PRIMER_MAX_SIZE": "36", \
+    "PRIMER_MIN_TM": "60", \
+    "PRIMER_MAX_TM": "70", \
+    "PRIMER_MAX_DIFF_TM": "5", \
+    "PRIMER_MAX_SELF_ANY_TH": "47", \
+    "PRIMER_MAX_SELF_END_TH": "47", \
+    "PRIMER_PAIR_MAX_COMPL_ANY_TH": "47", \
+    "PRIMER_PAIR_MAX_COMPL_END_TH": "4747)", \
+    "PRIMER_TM_SANTALUCIA": "1", \
+    "PRIMER_SALT_CORRECTIONS": "1", \
+    "PRIMER_DNA_CONC": "250", \
+    "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT": "4", \
+    "MISPRIMING_MIN_TM": "45", \
+    "MISPRIMING_SALT_CONC": "0.05", \
+    "MISPRIMING_OLIGO_CONC": "2.5e-7", \
+    "OUTPUT_SEQUENCE_FORMAT": "Genbank", \
+    "ASSEMBLY_PRODUCT_TYPE": "circular", \
+    "SUPPRESS_PURE_PRIMERS": "TRUE"\
+    }');
 
 
 var execParams = JSON.parse(' \
@@ -156,7 +198,6 @@ var execParams = JSON.parse(' \
         "master_direct_syntheses_list_filename": "j5_directsyntheses.csv",  \
         "reuse_eugene_rules_list_file": "FALSE",  \
         "assembly_method": "CombinatorialMock",  \
-        "j5_session_id": "34b649fcffc392f1d18027c945359bd0",  \
         "reuse_j5_parameters_file": "FALSE",  \
         "reuse_master_plasmids_file": "false",  \
         "reuse_sequences_list_file": "FALSE",  \
@@ -174,6 +215,10 @@ data["encoded_eugene_rules_list_file"] = encoded_eugene_rules_list_file(model);
 data["encoded_j5_parameters_file"] = encoded_j5_parameters_file(j5Params);
 */
 
+
+Object.keys(j5Params).forEach(function(prop) {
+    data[prop] = j5Params[prop];
+});
 
 Object.keys(execParams).forEach(function(prop) {
     data[prop] = execParams[prop];
