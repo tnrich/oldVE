@@ -130,7 +130,7 @@ Ext.define('Vesa.view.AppViewport', {
                                 type: 'fit'
                             },
                             minButtonWidth: 32,
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -158,7 +158,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -197,7 +197,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -222,7 +222,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
