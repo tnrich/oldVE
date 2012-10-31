@@ -184,6 +184,18 @@ Ext.define('Vede.view.de.j5Controls', {
                         enableToggle: true,
                         pressed: false,
                         text: '<b>Run j5</b>'
+                    },{
+                        xtype: 'button',
+                        flex: 1,
+                        height: 23,
+                        cls: 'downloadj5Btn',
+                        maxHeight: 23,
+                        maxWidth: 140,
+                        minHeight: 23,
+                        enableToggle: true,
+                        pressed: false,
+                        text: '<b>Download Results</b>',
+                        hidden: true
                     }, {
                         xtype: 'displayfield',
                         flex: 1,
@@ -232,10 +244,11 @@ Ext.define('Vede.view.de.j5Controls', {
                         rowLines: false,
                         columns: [{
                             xtype: 'gridcolumn',
-                            dataIndex: 'string',
+                            dataIndex: 'name',
                             text: '<b>Name</b>'
                         }, {
                             xtype: 'gridcolumn',
+                            dataIndex: 'size',
                             draggable: false,
                             resizable: false,
                             sortable: false,
