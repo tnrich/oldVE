@@ -17,8 +17,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
     onOpenj5Click: function(button, e, options) {
-        $(document).trigger('openj5');
-        this.application.fireEvent("openj5");
+        Ext.create('Vede.view.de.j5Controls').show();
     },
     onSaveDesignClick: function(button, e, options) {
         console.log('Trying to save design!');
