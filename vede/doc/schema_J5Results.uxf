@@ -279,10 +279,12 @@ SLIC/Gibson/CPEC/SLiCE
 *Parameters:
 -MasterOligoNumberOfDigits
 -MasterPlasmidNumberOfDigits
--GibsOnOverlaps
+-GibsonOverlaps
 -MaximumNumberOligoLengthBps
 --
 *Warnings
+-"Warning:"
+-"Note:"
 --
 *</panel_attributes>
     <additional_attributes/>
@@ -348,7 +350,7 @@ SLIC/Gibson/CPEC/SLiCE
       <x>52</x>
       <y>845</y>
       <w>195</w>
-      <h>39</h>
+      <h>52</h>
     </coordinates>
     <panel_attributes>MasterDirectSynthesis
 --
@@ -434,7 +436,7 @@ GoldenGateComb
 *Parameters
 -MasterOligoNumberOfDigits
 -MasterPlasmidNumberOfDigits
--GibsOnOverlaps
+-GibsonOverlaps
 -MaximumNumberOligoLengthBps
 
 *Warnings
