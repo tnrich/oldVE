@@ -1,49 +1,47 @@
-
 /**
- * /j5.js  
- * -------------
+ * j5 API - VEDE EXT Platform
+ * -----------------------
  */
 
-module.exports = function(app){
+module.exports = function (app) {
 
-// Load Custom lib to encode DE JSON Model for j5 Assembly
 var j5rpcEncode = require('./j5rpc');
 
-
-function authenticate(name, pass, fn) {
-  var User = app.db.model("Users");
-  User.findOne({'name':name}, function(err,user){
+function authenticate(username, pass, fn) {
+  var User = app.db.model("User");
+  User.findOne({
+    'username': username
+  }, function (err, user) {
     if(err) return fn(new Error('cannot find user'));
     return fn(null, user);
   });
 };
 
 function restrict(req, res, next) {
-  if (req.session.user) {
-    var User = app.db.model("Users");
-    User.findOne({'name':req.session.user.name}, function(err,user){
+  if(req.session.user) {
+    var User = app.db.model("User");
+    User.findOne({
+      'username': req.session.user.username
+    }, function (err, user) {
       req.user = user;
       next();
     });
   } else {
-    if(!app.testing.enabled)
-    {
-      req.session.error = 'Access denied!';
-      res.redirect('/login');
-    }
-    else
-    {
+    if(!app.testing.enabled) {
+      res.send('Wrong credentials');
+    } else {
+      /*
       console.log("Logged as Guest user");
-      authenticate("Guest","",function(err, user){
-      req.session.regenerate(function(){
-        req.session.user = user;
-        req.user = user;
-        next();
-        //res.send('Authenticated!');
-        
+      authenticate("Guest", "", function (err, user) {
+        req.session.regenerate(function () {
+          req.session.user = user;
+          req.user = user;
+          next();
+        });
+
       });
-    
-    })
+      */
+      res.send("Wrong credentials",401);
     }
   }
 };
@@ -198,35 +196,33 @@ function readFile(objectId,cb)
 
 function saveFile(fileData,user,model)
 {
+  var assert = require('assert');
 
-var assert = require('assert');
+  var mongodb = app.mongo;
+  var db = app.mongodb;
+  var GridStore = app.mongo.GridStore;
 
-var mongodb = app.mongo;
-var db = app.mongodb;
-var GridStore = app.mongo.GridStore;
+  var objectId = new app.mongo.ObjectID();
 
-var objectId = new app.mongo.ObjectID();
+  var gridStore = new GridStore(db, objectId, 'w');
+    // Open the file
+    gridStore.open(function(err, gridStore) {
+      // Write some data to the file
+      gridStore.write(fileData, function(err, gridStore) {
+        // Close (Flushes the data to MongoDB)
+        gridStore.close(function(err, result) {
+          // Verify that the file exists
+          GridStore.exist(db, objectId, function(err, result) {
+            console.log(user.name);
 
-var gridStore = new GridStore(db, objectId, 'w');
-  // Open the file
-  gridStore.open(function(err, gridStore) {
-    // Write some data to the file
-    gridStore.write(fileData, function(err, gridStore) {
-      // Close (Flushes the data to MongoDB)
-      gridStore.close(function(err, result) {
-        // Verify that the file exists
-        GridStore.exist(db, objectId, function(err, result) {
-          console.log(user.name);
-
-          var Protocol = app.db.model("Protocol");
-          user.protocols.push(new Protocol({model:model.name,fileId:objectId.toString(),created:new Date()}));
-          user.save();
-          db.close();
+            var Protocol = app.db.model("Protocol");
+            user.protocols.push(new Protocol({model:model.name,fileId:objectId.toString(),created:new Date()}));
+            user.save();
+            db.close();
+          });
         });
       });
     });
-  });
-
 };
 
 app.post('/openResult',restrict,function(req,res){
@@ -282,26 +278,21 @@ app.post('/getProtocol',restrict,function(req,res){
 });
 
 // Design Assembly RPC
-/*
-  Input: Id of the model
-  Output: JSON
-  {
-    files : Decoded output Plasmids files
-    data : Base64 encoded of output zip
-  }
-*/
-app.post('/fullRPC',restrict,function(req,res){
+app.post('/executej5',restrict,function(req,res){
 
-  var id = req.body._id;
-  var j5Params = JSON.parse(req.body.j5Params);
-  var execParams = JSON.parse(req.body.execParams);
+  var j5Params = {};
+  var execParams = {};
+  var DEProject = app.db.model("deproject");
 
-  var o_id = new app.mongo.ObjectID(id);
-  var model = req.user.models.id(o_id);
+  DEProject.findById(req.body.deProjectId, function(err,deproject){
+      if(err) console.log("There was a problem!/");
+      var data = j5rpcEncode(deproject.design,j5Params,execParams);
+      return res.json(data);
+  });
   
-  function processFullRPC(model){
-    var data = j5rpcEncode(model["payload"],j5Params,execParams);
-    if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  /*  
+    data["j5_session_id"] = app.testing.sessionId;
+    
     console.log("Using sessionId: "+data["j5_session_id"]);
 
     app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
@@ -346,27 +337,7 @@ app.post('/fullRPC',restrict,function(req,res){
         res.send(objResponse);
       }
     })
-  };
-
-  if(model==null)
-  {
-    //Maybe this model is an example so :
-    var ExamplesModel = app.db.model("Examples");
-    console.log("Finding "+id);
-    var ObjectId = require('mongoose').Types.ObjectId;
-    
-    ExamplesModel.findOne({_id:id},function(err,example){
-    if(!err)
-    {
-      processFullRPC(example);
-    }
-    else
-    {
-      console.log("Not model found");
-    }
-    });
-  }
-  else processFullRPC(model);
+  */
 
 });
 

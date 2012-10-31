@@ -66,7 +66,7 @@ var config = require('./config.js')(app, express);
 require('./routes/api.js')(app);
 require('./routes/testing.js')(app);
 //require('./routes/backend.js')(app);
-//require('./routes/j5.js')(app);
+require('./routes/j5.js')(app);
 
 // Listen Local Port on environment port or default 3000
 app.listen(process.env.NODE_PORT || 3000, function () {

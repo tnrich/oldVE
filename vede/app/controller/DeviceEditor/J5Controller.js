@@ -3,7 +3,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     requires: ["Teselagen.constants.Constants",
                "Teselagen.manager.DeviceDesignManager",
-               "Teselagen.utils.J5ControlsUtils"],
+               "Teselagen.utils.J5ControlsUtils",
+               "Teselagen.manager.J5CommunicationManager"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -269,6 +270,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         console.log(masterOligosListFileName);
         console.log(masterDirectSynthesesList);
         console.log(masterDirectSynthesesListFileName);
+        var j5comm = Teselagen.manager.J5CommunicationManager;
+
+        j5comm.generateAjaxRequest();
+
     },
 
     /**
