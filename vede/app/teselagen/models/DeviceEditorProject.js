@@ -55,10 +55,10 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             root: 'projects'
         },
         writer: {
-            type: 'json',
+            type: 'json'
         },
         buildUrl: function() {
             return sessionData.baseURL + 'user/projects/deprojects'; // This method reBuild the URL for ajax requests from parents models
         }
-    },
+    }
 });

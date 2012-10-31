@@ -257,23 +257,6 @@ module.exports = function (app) {
     var model = req.body;
     var DEProject = app.db.model("deproject");
 
-    /*
-    DEProject.findById(id,function(err,proj){
-      proj.design = req.body;
-      proj.save(function(){;
-        console.log("New Design Saved!");
-        console.log(proj);
-        res.json({"design":proj.design});
-      })
-    });
-    */
-    /*
-    DEProject.update({ _id: id }, { $set: { design: req.body }}).exec(function(){;
-        console.log("New Design Saved!");
-        res.json({"design":req.body});
-      });
-    */
-
     console.log(model);
 
     DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
@@ -289,7 +272,7 @@ module.exports = function (app) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id, function (err, project) {
-      delete project.design.rules;
+      //delete project.design.rules;
       res.json({"design":project.design});
     });
     

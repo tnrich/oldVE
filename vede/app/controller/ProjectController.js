@@ -47,14 +47,19 @@ Ext.define("Vede.controller.ProjectController", {
         });
         
     },
-    init: function () {
+
+    onProjectDesignPanelItemClick: function (store, record) { 
+        Vede.application.projectManager.openDesign(record); 
+    },
+
+    init: function() {
         this.callParent();
-        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,this.openProject, this);
+        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, 
+                            this.openProject, this);
 
         this.control({
             '#projectDesignPanel': {
-                itemclick: function(store,record) { Vede.application.projectManager.openDesign(record); }
-
+                itemclick: this.onProjectDesignPanelItemClick
             }
         });
     }

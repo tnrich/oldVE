@@ -2,7 +2,7 @@
  * @class Teselagen.models.UserRestrictionEnzymeGroup
  * User-defined group of restriction enzymes.
  * @author Nick Elsbree
- * @author Zinovii Dmytriv
+ * @author Zinovii Dmytriv (original author)
  */
  Ext.define("Teselagen.models.UserRestrictionEnzymeGroup", {
      extend: "Ext.data.Model",
@@ -16,4 +16,11 @@
          {name: "groupName", type: "string", defaultValue: ""},
          {name: "enzymeNames", type: "auto", defaultValue: []}
      ],
+
+     associations: [{
+         type: 'hasMany',
+         model: 'Teselagen.models.UserRestrictionEnzymes',
+         name: 'restrictionEnzymes',
+         foreignKey: 'userGroups'
+     }]
  });

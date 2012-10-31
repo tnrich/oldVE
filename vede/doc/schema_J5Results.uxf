@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>13</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>91</x>
+      <y>975</y>
+      <w>260</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>DownstreamAutomation
+Parameters
+--
+-ParameterName
+-Value
+-DefaultValue
+-Description</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>39</x>
+      <y>208</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>J5Parameters
+--
+-ParameterName
+-Value
+-DefaultValue
+-Description</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>715</x>
+      <y>156</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Run</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>91</x>
+      <y>169</y>
+      <w>454</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>429;91;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>741</x>
+      <y>26</y>
+      <w>64</w>
+      <h>155</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=n</panel_attributes>
+    <additional_attributes>39;39;39;130</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>923</x>
+      <y>221</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>J5Results</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>754</x>
+      <y>156</y>
+      <w>246</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;221;65</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>260</x>
+      <y>52</y>
+      <w>130</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Embed</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>260</x>
+      <y>91</y>
+      <w>130</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Linked</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>0</x>
+      <y>65</y>
+      <w>272</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;247;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>39</x>
+      <y>26</y>
+      <w>273</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Legend :</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>26</x>
+      <y>26</y>
+      <w>351</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>1274</x>
+      <y>988</y>
+      <w>260</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>
+J5Run:
+Original J5Output
+October 29, 2012 -DW</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>0</x>
+      <y>26</y>
+      <w>272</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;247;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>689</x>
+      <y>26</y>
+      <w>182</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>DeviceEditorProject</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>871</x>
+      <y>156</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5RunManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>52</x>
+      <y>702</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>MasterPlasmidList
+--
+-PlasmidName
+-[Alias]
+-Contents
+-Length
+-Sequence</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>52</x>
+      <y>611</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>EugeneRulesList
+--
+-RuleName
+-NegationOperator
+-Operand1
+-CompositionalOperator
+-Operand2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>26</x>
+      <y>416</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>PartsList
+--
+-PartName
+-PartSource/DisplayID
+-ReverseCompliment
+-Start
+-End</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>39</x>
+      <y>507</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>TargetPartsOrder
+--
+-Bin/PartName
+-Direction
+-[ForcedAssemblyStrategy]
+-[ForcedRelativeOverhangPosition]
+-[DirectSynthesisFirewall]
+-[Extra5'CPEC OverlapBps]
+-[Extra3'CPEC overlabBps]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>858</x>
+      <y>351</y>
+      <w>195</w>
+      <h>442</h>
+    </coordinates>
+    <panel_attributes>AssemblyParameters
+"pj5_0XXXX.csv"
+SLIC/Gibson/CPEC/SLiCE
+--
+-AssemblyAlg/Date
+--
+*Parameters:
+-MasterOligoNumberOfDigits
+-MasterPlasmidNumberOfDigits
+-GibsOnOverlaps
+-MaximumNumberOligoLengthBps
+--
+*Warnings
+--
+*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>494</x>
+      <y>221</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Input</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>520</x>
+      <y>156</y>
+      <w>259</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>234;39;39;65</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>26</x>
+      <y>351</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>SequencesListFile
+(aka MasterSequences)
+--
+-SequenceFileName
+-Format
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>52</x>
+      <y>780</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>MasterOligosList
+--
+-OligoName
+-Length
+-Tm
+-Tm3'Only
+-Sequence</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>52</x>
+      <y>845</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>MasterDirectSynthesis
+--
+DirectSynthesisName
+-[Alias]
+-Contents
+-Length
+-Sequence</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>520</x>
+      <y>910</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>SourcePlate
+--
+-PlateFileName</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>390</x>
+      <y>1001</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>Multi-wellPlate
+--
+-PlateID
+-PlateWell
+-LiquidType
+-Volume</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>546</x>
+      <y>338</y>
+      <w>195</w>
+      <h>169</h>
+    </coordinates>
+    <panel_attributes>AssemblyFile
+"pj50XXXX.gb"
+--
+-FileContent:
+	(in .gb, .fas, .jbeiseq)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>91</x>
+      <y>923</y>
+      <w>195</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>AssemblyFiles (?)
+--
+-AssemblyFileName
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1222</x>
+      <y>364</y>
+      <w>195</w>
+      <h>442</h>
+    </coordinates>
+    <panel_attributes>AssemblyParameters
+"pj5_0XXXX.csv
+GoldenGateComb
+--
+-AssemblyAlg/Date
+
+*Parameters
+-MasterOligoNumberOfDigits
+-MasterPlasmidNumberOfDigits
+-GibsOnOverlaps
+-MaximumNumberOligoLengthBps
+
+*Warnings
+
+*</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

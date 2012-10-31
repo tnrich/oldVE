@@ -488,7 +488,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(eugene.getOperand2())).toBe("Teselagen.models.Part");
             });
 
-            it("Rejects unacceptable compositionalOperator", function(){
+            it("Rejects unacceptable compositionalOperator: this test will fail if EugeneRule does not throw and error for a bad compOp", function(){
                 var eugene, e;
                 var flag = false;
                 try {
