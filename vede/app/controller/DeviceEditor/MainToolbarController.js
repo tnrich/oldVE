@@ -18,6 +18,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
 
     requires: ["Teselagen.event.DeviceEvent"],
 
+    DeviceDesignManager: null,
     DeviceEvent: null,
 
     onAddRowClick: function() {
@@ -50,6 +51,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             }
         });
 
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
     }
 });

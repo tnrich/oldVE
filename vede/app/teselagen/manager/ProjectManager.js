@@ -88,8 +88,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			
 				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
 				deController.renderDesignInContext();
-
 			}
-		});		
+		});
 	}
 });
