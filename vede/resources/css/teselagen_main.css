@@ -145,21 +145,23 @@
 }
 
 .binHeader {
+    background-color: #fefefe;
 }
 
 .binHeader:hover {
-    border-color: blue;
+    border-color: #000000;
 }
 
 .binHeader-selected {
-    background-color: gray;
+    background-color: #eeeeee;
+    border-color: #000000;
 }
 
 .gridPartCell {
 }
 
 .gridPartCell:hover {
-    border-color: blue;
+    /*border-color: #000000;*/
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
