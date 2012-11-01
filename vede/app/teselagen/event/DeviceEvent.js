@@ -9,4 +9,7 @@ Ext.define("Teselagen.event.DeviceEvent", {
 
     ADD_COLUMN: "AddColumn",
     ADD_ROW: "AddRow",
+
+    SELECT_BIN: "SelectBin",
+    SELECT_PART: "SelectPart"
 });
