@@ -106,13 +106,6 @@ Ext.define("Teselagen.models.Part", {
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
             associationKey: "vectorEditorProject"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.DeviceEditorProject",
-            getterName: "getDeviceEditorProject",
-            setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
         }
     ],
 
