@@ -2,3 +2,4 @@ test file for git
 DIANA WAS HERE!
 Yuri mod.
 Yuri mod2.
+Yuri mod3.
