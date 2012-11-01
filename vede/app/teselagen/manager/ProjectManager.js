@@ -40,7 +40,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	/**
 	 *	Load Project Child Resources
 	 */	
-	designAndChildResources: function () {
+	loadDesignAndChildResources: function () {
 
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
@@ -71,25 +71,45 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		Ext.getCmp('projectDesignPanel').setLoading(true);
 
 		// Load Designs And Design Child Resources and Render into ProjectPanel
-		this.designAndChildResources();
+		this.loadDesignAndChildResources();
 	},
 
 	openDesign: function (item) {
 		var id = item.data.id;
 		var deprojects = this.workingProject.deprojects();
 		var selectedDEProject = deprojects.getById(id);
-		
+		var self = this;
 		var selectedDesign = selectedDEProject.getDesign({
 			callback: function (record,operation) {
-				console.log(operation);
 				selectedDesign = selectedDEProject.getDesign();
 				var tabPanel = Ext.getCmp('tabpanel');
 				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
 			
 				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
 				deController.renderDesignInContext();
-
+				self.experiment(selectedDEProject);
 			}
 		});		
+	},
+	experiment:function(deproject){
+		console.log("Experiment Start here\n------------");
+		var binsStore = deproject.getDesign().getJ5Collection().bins();
+		//console.log(binsStore);
+		binsStore.on("update",function( record, operation, modifiedFieldNames, eOpts ){
+			console.log("Update event triggered!");
+			console.log(record);
+			console.log(operation);
+			console.log(modifiedFieldNames);
+		});
+
+		binsStore.getAt(0).set('name','asdadasd');
+		/*
+        var bin1 = Ext.create("Teselagen.models.J5Bin", {
+            binName: "bin21313"
+        });
+		*/
+
+		//binsStore.add(bin1);
+		//console.log(binsStore);
 	}
 });

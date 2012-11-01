@@ -121,7 +121,6 @@ Ext.syncRequire(["Ext.Ajax", "Teselagen.bio.util.StringUtil", "Teselagen.bio.uti
                 runs(function () {
                     var design = deprojects.last().getDesign({
                         callback: function(res,op){
-                            console.log(design);
                             console.log(res);
                             console.log(op);
                         }

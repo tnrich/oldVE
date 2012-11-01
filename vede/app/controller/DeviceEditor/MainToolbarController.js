@@ -29,8 +29,8 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     onOpenj5Click: function(button, e, options) {
-        $(document).trigger('openj5');
-        this.application.fireEvent("openj5");
+        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        currentTab.j5Window = Ext.create('Vede.view.de.j5Controls').show();
     },
 
     onSaveDesignClick: function(button, e, options) {
