@@ -68,7 +68,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * @returns {String} New name.
      */
     reformatName: function(pName) {
-        return pName.replace(/[^a-zA-Z0-9_\-]/g, "");
+        return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "");
     },
 
 
@@ -184,7 +184,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
             name: seqMan.getName(),
             sequence: seqMan.getSequence().seqString(),
             isCircular: seqMan.getCircular(),
-            features: seqMan.getFeatures(),
+            features: seqMan.getFeatures()
         });
 
         return result;
