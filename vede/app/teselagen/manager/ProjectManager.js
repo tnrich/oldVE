@@ -54,8 +54,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			}
 		});
 
-
-
 		var veprojects = this.workingProject.veprojects();
 		projectController.renderPartsSection(veprojects);
 		
@@ -92,6 +90,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		});		
 	},
 	experiment:function(deproject){
+
+		/*
+
 		console.log("Experiment Start here\n------------");
 		var binsStore = deproject.getDesign().getJ5Collection().bins();
 		//console.log(binsStore);
@@ -103,13 +104,45 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		});
 
 		binsStore.getAt(0).set('name','asdadasd');
-		/*
+		
         var bin1 = Ext.create("Teselagen.models.J5Bin", {
             binName: "bin21313"
         });
-		*/
+		
 
 		//binsStore.add(bin1);
 		//console.log(binsStore);
+
+		*/
+	},
+	createNewProject: function(){
+	    var project = Ext.create("Teselagen.models.Project", {
+	        name: "Untitled project",
+	        DateCreated: new Date(),
+	        DateModified: new Date()
+	    });
+
+	    this.currentUser.projects().add(project);
+
+	    project.save();
+
+	},
+	createNewDeviceEditorProject: function(){
+	    var self = this;
+
+	    if(this.workingProject) {
+		    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+		        name: "Untitled DE Project"
+		    });
+		    
+		    this.workingProject.deprojects().add(deproject);
+
+		    deproject.save({
+		        callback: function(){
+		        	self.loadDesignAndChildResources();
+		            console.log("DE project saved");
+		        }
+		    });
+		}
 	}
 });

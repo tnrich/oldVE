@@ -52,6 +52,14 @@ Ext.define("Vede.controller.ProjectController", {
         Vede.application.projectManager.openDesign(record); 
     },
 
+    onNewProjectClick: function(){
+        Vede.application.projectManager.createNewProject();
+    },
+
+    onNewDEClick: function(){
+        Vede.application.projectManager.createNewDeviceEditorProject();
+    },
+
     init: function() {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, 
@@ -60,6 +68,12 @@ Ext.define("Vede.controller.ProjectController", {
         this.control({
             '#projectDesignPanel': {
                 itemclick: this.onProjectDesignPanelItemClick
+            },
+            "#newProject_Btn": {
+                click: this.onNewProjectClick
+            },
+            "#newDE_Btn": {
+                click: this.onNewDEClick
             }
         });
     }

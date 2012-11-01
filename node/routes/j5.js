@@ -286,9 +286,9 @@ app.post('/executej5',restrict,function(req,res){
 
   DEProject.findById(req.body.deProjectId, function(err,deproject){
     if(err) console.log("There was a problem fetching the project!");
-    var data = j5rpcEncode(deproject.design,j5Params,execParams);
+    var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
   
-    data["j5_session_id"] = 'e17fa678a890cd71e1f33e974c63f8e6';
+    data["j5_session_id"] = '95646cc800c04ae1d97ee9d8e89cdc74';
     
     console.log("Using sessionId: " + data["j5_session_id"]);
 

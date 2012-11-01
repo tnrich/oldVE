@@ -274,8 +274,23 @@ Ext.syncRequire(["Ext.Ajax",
 
         });
 
-
     });
 
-    
+    describe("Test j5 Parameters", function () {
+        var j5Parameters;
+
+        it("Create j5Parameters Model", function () {
+
+            j5Parameters = Ext.create("Teselagen.models.J5Parameters");
+            j5Parameters.setDefaultValues();
+
+        });
+
+        it("Test getParametersAsArray method", function () {
+            var j5ParamsArray = j5Parameters.getParametersAsArray(true);
+            for(var prop in j5ParamsArray) {
+                expect(j5ParamsArray[prop]).toBeDefined();
+            }
+        });    
+    });
 });
