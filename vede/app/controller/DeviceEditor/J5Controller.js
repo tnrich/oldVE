@@ -196,7 +196,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.automationParameters.setDefaultValues();
         this.populateAutomationParametersDialog();
     },
-
     populateAutomationParametersDialog: function() {
         this.automationParameters.fields.eachKey(function(key) {
             if(key !== "id") {
@@ -270,9 +269,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         console.log(masterOligosListFileName);
         console.log(masterDirectSynthesesList);
         console.log(masterDirectSynthesesListFileName);
-        var j5comm = Teselagen.manager.J5CommunicationManager;
 
-        j5comm.generateAjaxRequest();
+        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
+        currentTab.j5Window.j5comm.setj5Parameters(this.j5Parameters.data);
+        currentTab.j5Window.j5comm.generateAjaxRequest();
 
     },
 
@@ -328,7 +329,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         }, this);
     },
-    
+    onDownloadj5Btn: function(button, e, options) {
+        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        currentTab.j5Window.j5comm.downloadResults(button);
+    },
+
     init: function() {
         this.control({
             "button[cls='editj5ParamsBtn']": {
@@ -390,6 +395,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             },
             "button[cls='automationParamsResetBtn']": {
                 click: this.onResetAutomationParamsBtnClick
+            },
+            "button[cls='downloadj5Btn']": {
+                click: this.onDownloadj5Btn
             },
         });
         
