@@ -19,8 +19,10 @@ Ext.define("Teselagen.models.SequenceFile", {
     statics: {
     },
 
-    Constants: null,
-
+    //This makes a copy of the constants part of this model. Is that bad? -DW
+    config: {
+        Constants: null,
+    },
     /**
      * Input parameters.
      * @param {String} sequenceFileFormat (required)
@@ -31,7 +33,14 @@ Ext.define("Teselagen.models.SequenceFile", {
      */
     fields: [
         {name: "id",                    type: "int"},
-        {name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
+        //{name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
+        {
+            name: "sequenceFileFormat",
+            convert: function(v, record) {
+                v = v.toUpperCase();
+                return v;
+            }
+        },
         {name: "sequenceFileContent",   type: "string",     defaultValue: ""},
         {name: "sequenceFileName",      type: "string",     defaultValue: ""},
         {name: "partSource",            type: "string",     defaultValue: ""},
@@ -123,31 +132,40 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     /**
      * Sets PartSource based on FileFormat and FileContent.
-     * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} Name of the PartSource
+     * DOES NOT CHECK FOR UNIQUENESS OF NAME.
+     *
+     * @param {[String]} pPartSource Optional. Name of the PartSource. If undefined, will set based on SequenceFileContent and SequenceFileFormat properties.
+     * @returns {String} Name of the set partSource
      */
-    setPartSource: function() {
+    setPartSource: function(pPartSource) {
+
+        // In The case where there is an input
+        if (pPartSource !== undefined) {
+            this.set("partSource", pPartSource);
+            return pPartSource;
+        }
+
         var displayID = "";
         var cnt;
         var content = this.get("sequenceFileContent");
 
-        if (this.get("partSource") !== "") {
+        if (!(this.get("partSource") === "" || this.get("partSource") === undefined || this.get("partSource" === null))) {
             return this.get("partSource");
         }
 
         if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.GENBANK) {
             cnt = content.match(/LOCUS *(\S*)/);
-            if (cnt.length > 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.FASTA) {
             cnt = content.match(/>\s*(\S*)/);
-            if (cnt.length > 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.JBEI_SEQ) {
             cnt = content.match(/<seq:name>(.*)<\/seq:name>/);
-            if (cnt.length > 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 displayID = cnt[1].toString();
             }
         }
@@ -157,16 +175,28 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     /**
      * Sets FileName based on PartSource
-     * DOES NOT CHECK FOR UNIQUENESS OF NAME
-     * @returns {String} SequenceFileName
+     * DOES NOT CHECK FOR UNIQUENESS OF NAME.
+     *
+     * @params {[String]} pSequenceFileName Optional. Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
+     * @returns {[String]} Set sequenceFileName.
      */
-    setSequenceFileName: function() {
+    setSequenceFileName: function(pName) {
+
+        // In The case where there is an input
+        if (pName !== undefined) {
+            this.set("sequenceFileName", pName);
+            return pName;
+        }
+
+        // Setting name based on SequenceFileContent and Format
         var format      = this.get("sequenceFileFormat");
-        //var constants   = Teselagen.constants.Constants;
         var displayID   = this.get("partSource");
         var name        = this.get("sequenceFileName");
 
-        if (this.get("sequenceFileName") === "" || this.get("sequenceFileName") === undefined ) {
+        // If the file name was set with a "" for displaID, the file name may be ".fas", ".gb", or "xml"
+        // Overwrite these filenames if that is true calling this method.
+
+        if (name.replace(/\.gb|\.fas|\.xml/gi,"") === "" || name === undefined ) {
             if (format === Teselagen.constants.Constants.GENBANK) {
                 name = displayID + ".gb";
             } else if (format === Teselagen.constants.Constants.FASTA) {
@@ -175,7 +205,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = displayID;
-                //console.warn("File format, '" + format + "' for this sequence is not recognized.  Beware of nonsensical file names or missing sequence files.");
+                console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
             }
         }
         this.set("sequenceFileName", name);

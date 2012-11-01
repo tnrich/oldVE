@@ -23,20 +23,29 @@ Ext.define("Teselagen.models.User", {
         autoLoad: true,
         foreignKey: "user_id"
     }, {
-        type: "hasOne",
-        model: "Teselagen.models.ApplicationPreferences",
-        associationKey: "preferences",
-        getterName: "getPreferences"
+        type: 'hasOne',
+        model: 'Teselagen.models.ApplicationPreferences',
+        associationKey: 'preferences',
+        getterName: 'getPreferences'
+    }, {
+        type: 'hasMany',
+        model: 'Teselagen.models.UserRestrictionEnzymeGroup',
+        name: 'restrictionEnzymeGroups',
+        foreignKey: 'users'
     }],
     proxy: {
-        type: "ajax",
+        type: "rest",
         url: "/vede/test/data/json/getUser.json",
         reader: {
             type: "json",
             root: "user"
         },
+        writer: {
+            type: 'json'
+        },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("getUser", this.url);
+            //return Teselagen.manager.SessionManager.buildUrl("getUser", this.url);
+            return sessionData.baseURL + 'getUser';
         }
     }
 });

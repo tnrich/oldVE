@@ -27,7 +27,6 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "id",                type: "int"},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
         {name: "isCircular",        type: "boolean",    defaultValue: true},
@@ -180,7 +179,7 @@ Ext.define("Teselagen.models.J5Collection", {
         }
 
         var newCnt  = this.binCount();
-        if (newCnt < cnt) {
+        if (newCnt > cnt) {
             added = true;
         }
 
@@ -200,7 +199,7 @@ Ext.define("Teselagen.models.J5Collection", {
 
         var cnt     = this.binCount();
         if (pIndex >= 0 && pIndex < cnt) {
-            //this.bins().splice(pIndex, 1); //Don't use slice
+            //console.log(this.bins());
             this.bins().removeAt(pIndex);
         } else {
             this.bins().removeAt(cnt-1);
@@ -280,21 +279,16 @@ Ext.define("Teselagen.models.J5Collection", {
      * Determines the J5Bin a Part is in.
      *
      * @param {Teselagen.models.Part} pPart The part whose J5Bin it belongs to.
-     * @param {Teselagen.models.J5Bin} The first J5Bin Part belongs to, null if not in J5Collection.
+     * @returns {Number} The first index of the bin that pPart is in. -1 if not present.
      */
     getBinAssignment: function(pPart) {
-        var bin = null;
-
+        var binIndex = -1;
         for (var i = 0; i < this.binCount(); i++) {
-            var j5Bin = this.bins().getAt(i);
-            for (var j = 0; j < j5Bin.partCount(); j++) {
-                //if (j5Bin.parts().getAt(i) === pPart) {
-                    if (j5Bin.parts().getAt(i).isEqual(pPart)) {
-                    bin = j5Bin.parts().getAt(i);
-                }
+            if (this.bins().getAt(i).indexOfPart(pPart) !== -1) {
+                binIndex = i;
             }
         }
-        return bin;
+        return binIndex;
     },
 
     /**

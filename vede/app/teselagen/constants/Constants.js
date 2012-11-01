@@ -13,14 +13,33 @@ Ext.define("Teselagen.constants.Constants", {
     
     VERSION:                "2.0.4",
     
-    //AUTHORS:    "Joanna Chen, Douglas Densmore, Zinovii Dmytriv, Timothy Ham",
-    
     ENTRY_REGISTRY_URL:     "",
+
+    //================================================================
+    // SequenceFile.js: sequenceFileFormat
     
-    GENBANK:                "Genbank",
+    GENBANK:                "GENBANK",
     FASTA:                  "FASTA",
-    JBEI_SEQ:               "jbei-seq",
+    JBEI_SEQ:               "JBEI-SEQ",
     SBOL_XML:               "SBOLXML",
+
+    //================================================================
+    // EugeneRule.js: compositionalOperator
+
+    // Deprecated
+    NOTMORETHAN: "NOTMORETHAN",
+    // Deprecated
+    NOTWITH: "NOTWITH",
+    
+    AFTER: "AFTER",
+    BEFORE: "BEFORE",
+    WITH: "WITH",
+    THEN: "THEN",
+    NEXTTO: "NEXTTO",
+    MORETHAN: "MORETHAN",
+
+    //================================================================
+
     
     REPORT_BUG_URL:         "",
     SUGGEST_FEATURE_URL:    "",
@@ -37,6 +56,7 @@ Ext.define("Teselagen.constants.Constants", {
     
     CIRCULAR:   "circular",
     LINEAR:     "linear",
+    //================================================================
 
     constructor: function() {
         this.RECT_SHAPE_MIN_SIZE = this.RECT_SHAPE_DEFAULT_SIZE / 2;

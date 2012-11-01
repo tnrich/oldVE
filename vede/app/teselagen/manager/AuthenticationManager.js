@@ -32,7 +32,6 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   manualAuth: function(username,password,server,cb) {
     
     sessionData.baseURL = server;
-
     if(Ext.get('splash-text')) Ext.get('splash-text').update('Authenticating to server');
     Ext.Ajax.request({
       url: sessionData.baseURL + 'login',

@@ -39,6 +39,7 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         associationKey: 'design',
         name: 'design',
         getterName: 'getDesign',
+        setterName: 'setDesign',
         foreignKey: 'id'
     }, {
         type: "hasMany",
@@ -47,10 +48,17 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         associationKey: "j5runs"
     }],
     proxy: {
-        type: 'memory',
+        type: 'rest',
+        url: 'getDEProjects.json', // For testing just create a file with this name and fill with data.
         reader: {
             type: 'json',
-            root: 'deprojects'
+            root: 'projects'
+        },
+        writer: {
+            type: 'json'
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'user/projects/deprojects'; // This method reBuild the URL for ajax requests from parents models
         }
     }
 });

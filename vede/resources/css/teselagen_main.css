@@ -43,7 +43,7 @@
     color: #333;	
 }
 
-.x-form-field, .x-form-text, .x-form-item-label, .x-boundlist-item {
+.x-form-field, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
 	font-family: 'Quicksand', sans-serif;
     font-size: 12px;
     color: #111;
@@ -62,7 +62,7 @@
 }
 
 /*Header*/
-#headerPanel-body, #headerMain-body, #headerSub-body {
+#headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
 	border: none;
 }
 
@@ -144,3 +144,19 @@
 	background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
 }
 
+.binHeader {
+}
+
+.binHeader:hover {
+    border-color: blue;
+}
+
+.gridPartCell {
+}
+
+.gridPartCell:hover {
+    border-color: blue;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}

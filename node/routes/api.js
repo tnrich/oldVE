@@ -50,7 +50,7 @@ module.exports = function (app) {
 
         });
         */
-        res.send("Wrong credentials", 405);
+        res.send("Wrong credentials",401);
       }
     }
   };
@@ -158,46 +158,124 @@ module.exports = function (app) {
 
   });
 
+  app.put('/getUser', restrict, function (req, res) {
+    res.json({});
+  });
+
   // Dummy method
-  app.all('/getUser', restrict, function (req, res) {
-    
+  app.get('/getUser', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
+      user.projects.forEach(function(proj){
+        proj.deprojects = undefined;
+      });
       res.json({"user":user});
     });
-
-    /*
-    res.json({
-      "user": req.session.user
-    });
-    */
   });
 
 
-  // Dummy method
-  app.all('/getProjects', restrict, function (req, res) {
+  // Add new Project to Current User
+  app.post('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var newProject = new Project({
+      name: req.body.name,
+      user_id : req.user,
+      DateCreated: req.body.DateCreated,
+      DateModified: req.body.DateModified
+    });
+    newProject.save(function(){
+      req.user.projects.push(newProject);
+      req.user.save(function(){
+        console.log("New project Saved");
+        res.json({"projects":newProject});
+      });
+    });
+  });
 
+  // Update Project to Current User
+  app.put('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.findById(req.body.id,function(err,proj){
+      proj.name = req.body.name;
+      proj.DateCreated = req.body.DateCreated;
+      proj.DateModified = req.body.DateModified;
+      var projects = de.body.deprojects;
+      //projec
+    });
+  });
+  
+
+  app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
+      user.projects.forEach(function(proj){
+        proj.deprojects = undefined;
+      });
+      console.log("Returning "+user.projects.length+" projects");
       res.json({"projects":user.projects});
     });
+  });
+
+
+  // CREATE
+  app.post('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var DEProject = app.db.model("deproject");
+    Project.findById(req.body.project_id,function(err,proj){
+      var newProj = new DEProject({
+        name : req.body.name,
+        project_id: proj
+      });
+      newProj.save(function(){
+        proj.deprojects.push(newProj);
+        proj.save(function(){
+          console.log("New DE Project Saved!");
+          res.json({"projects":newProj});
+        });
+      });
+    });
+  });
+
+  // GET
+  app.get('/user/projects/deprojects', restrict, function (req, res) {
+    var id = JSON.parse(req.query.filter)[0].value;
+    var Project = app.db.model("project");
+    Project.findById(id).populate('deprojects').exec(function(err,proj){
+      proj.deprojects.forEach(function(deproj){
+        deproj.design = undefined;
+      });
+      console.log("Returning "+proj.deprojects.length+" deprojects");
+      res.json({"projects":proj.deprojects});
+    });
+  });
+
+  //CREATE
+  app.post('/user/projects/deprojects/devicedesign', function (req, res) {
+    var id = req.body["deproject_id"];
+    var model = req.body;
+    var DEProject = app.db.model("deproject");
+
+    console.log(model);
+
+    DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("New Design Saved!");
+        res.json({"design":req.body});
+      });
 
   });
 
-  app.post('/getDeviceDesign', function (req, res) {
-    console.log(req.body);
-    res.send('ok');
-  });
 
-  
-  app.get('/getDeviceDesign', restrict, function (req, res) {
+  app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id, function (err, project) {
+      //delete project.design.rules;
       res.json({"design":project.design});
     });
-  
+    
   });
   
 
@@ -208,6 +286,5 @@ module.exports = function (app) {
       res.json(example);
     });
   });
-
 
 };

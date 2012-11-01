@@ -114,8 +114,8 @@ Ext.onReady(function() {
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal";
                 var flag = false;
                 try {
-                    //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
-                    var jbeiXml = jasmine.getFixtures().read(url);
+                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                    //var jbeiXml = jasmine.getFixtures().read(url);
                 } catch (bio) {
                     flag = true;
                     console.warn('Correctly Caught: ' + bio.message);
@@ -126,8 +126,8 @@ Ext.onReady(function() {
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
                 var flag = false;
                 try {
-                    //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
-                    var jbeiXml = jasmine.getFixtures().read(url);
+                    var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
+                    //var jbeiXml = jasmine.getFixtures().read(url);
                 } catch (bio) {
                     flag = true;
                     console.warn('Unexpectedly Caught: ' + bio.message);
@@ -137,13 +137,12 @@ Ext.onReady(function() {
             });
 
             it("Can also load files using jasmine.getFixtures().read()", function() {
-                
+                var flag = false;
                 try {
                     var jbeiXml = jasmine.getFixtures().read(jbeiXmlUrl);
-                    var flag = false;
                 } catch (bio) {
                     console.warn("Correctly Caught: " + bio.message);
-                    var flag = true;
+                    flag = true;
                 }
                 expect(flag).toBe(false);
             });

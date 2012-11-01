@@ -1,11 +1,11 @@
 /**
- * @class Teselagen.models.UserRestrictionEnzymes
- * Keeps track of RestrictionEnzymeGroups in use by a user,
+ * @class Teselagen.models.UserRestrictionEnzyme
+ * Keeps track of RestrictionEnzymes in use by a user,
  * and the names of active restriction enzymes.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
-Ext.define("Teselagen.models.UserRestrictionEnzymes", {
+Ext.define("Teselagen.models.UserRestrictionEnzyme", {
     extend: "Ext.data.Model",
 
     /**
@@ -15,6 +15,7 @@ Ext.define("Teselagen.models.UserRestrictionEnzymes", {
      */
     fields: [
         {name: "groups", type: "auto", defaultValue: []},
-        {name: "activeEnzymeNames", type: "auto", defaultValue: []}
+        {name: "activeEnzymeNames", type: "auto", defaultValue: []},
+        {name: "active", type: "boolean", defaultValue: false}
     ]
 });

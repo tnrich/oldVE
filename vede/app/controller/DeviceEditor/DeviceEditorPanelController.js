@@ -1,7 +1,17 @@
-
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
     requires: ["Ext.draw.*"],
+
+    openProject: function(project) {
+        Ext.getCmp('tabpanel').getActiveTab().model = project;
+    },
+
+    init: function () {
+        this.callParent();
+        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,
+                            this.openProject, this);
+    },
+
 
     renderDesignInContext: function () {
 
@@ -29,7 +39,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     type: "text",
                     text: this.bin.data.binName,
                     fill: "black",
-                    font: "10px monospace",
+                    font: "14px arial",
                     x: this.x + 30,
                     y: this.y + 15
                 }));
@@ -48,38 +58,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var currentModel = currentTab.model;
 
         var surface = currentTab.query('draw[cls=designCanvas]')[0].surface;
-
         var bins = currentModel.getDesign().getJ5Collection().bins();
         
-        var xPos = 0;
+        var xPos = 10;
         bins.each(function(bin){
-            console.log(bin);
             var binDraw = new Bin(surface,bin,xPos,10);
             xPos += 110;
         });
-        
-        },
-
-            init: function () {
-                this.callParent();
-                //this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,this.openProject, this);
-                //console.log(Ext.getCmp('tabpanel').getActiveTab().query('textfield[cls=partNameField]'));
-                this.control({
-                    'textfield[cls="partNameField"]': {
-                        keydown: function (field, e) {
-                            console.log(e);
-                            if(e.getKey() == e.ENTER) {
-                                e.stopEvent();
-                                console.log('Enter pressed');
-                            }
-                        },
-                        focus: function () {
-                            var currentModel = Ext.getCmp('tabpanel').getActiveTab().model;
-                            console.log(currentModel);
-                        }
-                    }
-                });
-
-            }
-
-    });
+    }
+});

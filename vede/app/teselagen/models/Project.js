@@ -35,9 +35,9 @@ Ext.define("Teselagen.models.Project", {
         name: "veprojects",
         foreignKey: "project_id",
         associationKey: "veprojects",
-        autoLoad: true
+        //autoLoad: true
     }],
-    
+/*    
     proxy: {
         type: 'memory',
         reader: {
@@ -45,4 +45,29 @@ Ext.define("Teselagen.models.Project", {
             root: 'projects'
         }
     }
+*/
+
+    /* Comment this proxy for testing - Use memory instead */
+    proxy: {
+        type: 'rest',
+        url: 'getProjects.json', // For testing just create a file with this name and fill with data.
+        reader: {
+            type: 'json',
+            root: 'projects'
+        },
+        writer: {
+            type: 'json',
+            //This method should resolve associations and prepare data before saving design
+            getRecordData: function(record, getEverything) {
+                var data = record.getData()
+                var associatedData = record.getAssociatedData();
+                data.deprojects = associatedData["deprojects"];
+                return data;
+            }
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'user/projects'; // This method reBuild the URL for ajax requests from parents models
+        }
+    },
+
 });
