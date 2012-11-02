@@ -64,7 +64,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 var constants = Teselagen.constants.Constants;
 
                 if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
-                    return v;
+                    return format;
                 } else {
                     console.warn("Teselagen.models.SequenceFile: File format, '" + v + "' for this sequence is not recognized. Format not set.");
                     return "";
@@ -141,7 +141,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             name: "hash",
             convert: function(v, record) {
                 var content = record.get("sequenceFileContent");
-                return Teselagen.bio.util.Sha256.hex_sha256(v);
+                return Teselagen.bio.util.Sha256.hex_sha256(content);
             }
         },
         {

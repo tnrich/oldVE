@@ -254,6 +254,7 @@ Ext.onReady(function() {
                 var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
 
                 seq.set("sequenceFileFormat", "FASTA");
+                expect(seq.get("sequenceFileFormat")).toBe("FASTA");
 
                 var hash = seq.setSequenceFileContent(content);
                 expect(hash).toBe(trueHash);

@@ -20,6 +20,7 @@ Ext.define("Teselagen.constants.Constants", {
 
     FORMATS_LIST: [
         "GENBANK",
+        "FASTA",
         "JBEISEQ"
         //"SBOLXML"
     ],
