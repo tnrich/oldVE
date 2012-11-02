@@ -13,9 +13,26 @@ Ext.define("Teselagen.models.SequenceFile", {
     ],
 
     proxy: {
-        type: "memory"
+        type: 'rest',
+        url: '/vede/test/data/json/getSequenceFile.json', // For testing just create a file with this name and fill with data.
+        reader: {
+            type: 'json',
+            root: 'sequence'
+        },
+        writer: {
+            type: 'json'
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'user/projects/veprojects/sequencefile'; // This method reBuild the URL for ajax requests from parents models
+        }
     },
 
+    /*
+    proxy: {
+        type: "memory"
+    },
+    */
+    
     statics: {
     },
 
@@ -32,7 +49,7 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {String} hash Hash code from sha256 encryption (Generated upon creating this object)
      */
     fields: [
-        {name: "id",                    type: "int"},
+        //{name: "id",                    type: "int"},
         //{name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
         {
             name: "sequenceFileFormat",
@@ -44,7 +61,11 @@ Ext.define("Teselagen.models.SequenceFile", {
         {name: "sequenceFileContent",   type: "string",     defaultValue: ""},
         {name: "sequenceFileName",      type: "string",     defaultValue: ""},
         {name: "partSource",            type: "string",     defaultValue: ""},
-        {name: "hash",                  type: "string",     defaultValue: ""}
+        {name: "hash",                  type: "string",     defaultValue: ""},
+        {
+            name: "veproject_id",
+            type: "long"
+        }
     ],
 
     validations: [
@@ -75,11 +96,12 @@ Ext.define("Teselagen.models.SequenceFile", {
         },
         {
             type: "belongsTo",
-            model: "Teselagen.models.Project",
-            name: "project",
-            getterName: "getProject",
-            setterName: "setProject",
-            associationKey: "project"
+            model: "Teselagen.models.VectorEditorProject",
+            name: "VectorEditorProject",
+            getterName: "getVectorEditorProject",
+            setterName: "setVectorEditorProject",
+            associationKey: "VectorEditorProject",
+            foreignKey: "veproject_id"
         }
     ],
 
@@ -94,16 +116,16 @@ Ext.define("Teselagen.models.SequenceFile", {
     // Read on forums to use init as a way to execute methods after the fields block. --DW
     init: function() {
         //console.log("init");
-        this.Constants = Teselagen.constants.Constants;
+        //this.Constants = Teselagen.constants.Constants;
 
         // Set the Hash Field
-        this.setSequenceFileContent(this.get("sequenceFileContent"));
+        //this.setSequenceFileContent(this.get("sequenceFileContent"));
 
         // Set PartSource with Display ID
-        this.setPartSource();
+        //this.setPartSource();
 
         // Set FileName if given ""
-        this.setSequenceFileName();
+        //this.setSequenceFileName();
     },
 
     /**

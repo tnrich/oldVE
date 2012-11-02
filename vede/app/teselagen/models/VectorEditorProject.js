@@ -3,26 +3,53 @@ Ext.define("Teselagen.models.VectorEditorProject", {
     requires: ['Teselagen.models.Part'],
     fields: [{
         name: "id",
-        type: "int"
+        type: "long"
     },
     {
         name: "project_id",
-        type: "int"
+        type: "long"
     },
     {
         name: "name",
         type: "String",
         defaultValue: ""
     }],
-    associations: [{
+    associations: [
+    {
+        type: "hasOne",
+        model: "Teselagen.models.SequenceFile",
+        getterName: "getSequenceFile",
+        setterName: "setSequenceFile",
+        associationKey: "sequenceFile",
+        name: "sequenceFile",
+        foreignKey: 'id'
+    },
+    {
         type: 'hasOne',
         model: 'Teselagen.models.Part',
         name: 'part',
         associationKey: 'part',
         getterName: 'getPart',
-        autoLoad: true,
-        foreignKey: 'veproject_id'
+        setterName: 'setPart',
+        foreignKey: 'id'
     }],
+    proxy: {
+        type: 'rest',
+        url: '/vede/test/data/json/getVEProjects.json', // For testing just create a file with this name and fill with data.
+        reader: {
+            type: 'json',
+            root: 'projects'
+        },
+        writer: {
+            type: 'json'
+        },
+        buildUrl: function() {
+            return sessionData.baseURL + 'user/projects/veprojects'; // This method reBuild the URL for ajax requests from parents models
+        }
+    }
+
+    /*
+    ,
     proxy: {
         type: 'ajax',
         url: '/vede/test/data/json/getVEProjects.json',
@@ -31,4 +58,5 @@ Ext.define("Teselagen.models.VectorEditorProject", {
             root: 'data'
         }
     }
+    */
 });

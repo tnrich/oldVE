@@ -100,8 +100,8 @@ Ext.application({
                 remove: true,
                 listeners: {
                     afteranimate: function() {
-                        self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
-                        self.projectManager.loadUser();
+                        //self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
+                        Teselagen.manager.ProjectManager.loadUser();
                         //Ext.getBody().unmask();
                     }
                 }

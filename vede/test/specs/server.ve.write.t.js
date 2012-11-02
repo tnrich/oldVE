@@ -16,16 +16,8 @@ Ext.syncRequire(["Ext.Ajax",
  "Teselagen.constants.Constants",
  "Teselagen.models.SequenceFile",
  "Teselagen.models.Part",
- "Teselagen.models.J5Bin",
- "Teselagen.models.J5Collection",
- "Teselagen.models.EugeneRule",
- "Teselagen.models.SBOLvIconInfo",
- "Teselagen.models.J5Run",
- "Teselagen.models.J5Parameters",
- "Teselagen.models.DownstreamAutomationParameters",
- "Teselagen.models.J5Results",
- "Teselagen.models.DeviceDesign",
  "Teselagen.models.Project",
+ "Teselagen.models.VectorEditorProject",
  "Teselagen.manager.SequenceFileManager",
  "Teselagen.manager.DeviceDesignManager"], function () {
     console.log('Requires are ready');
@@ -66,8 +58,9 @@ Ext.syncRequire(["Ext.Ajax",
     };
 
 
-    var design, deproject, projectManager, deprojectsaved;
+    var newSequence, veproject, projectManager, veprojectsaved;
     var server = 'http://teselagen.local/api/';
+    veprojectsaved = false;
 
     describe("Connection to server", function () {
         it("Setup params", function () {
@@ -164,100 +157,74 @@ Ext.syncRequire(["Ext.Ajax",
         });
 
         
-        it("Create DE Project", function () {
+        it("Create VE Project", function () {
 
             waits(500);
 
             runs(function () {
                 
-                deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+                veproject = Ext.create("Teselagen.models.VectorEditorProject", {
                     name: "My DE Project #"+Math.floor(Math.random()*11)
                 });
                 
                 var currentProject = projectManager.currentUser.projects().last();
-                currentProject.deprojects().add(deproject);
+                currentProject.deprojects().add(veproject);
 
-                deproject.save({
+                veproject.save({
                     callback: function(){
-                        console.log("DE project saved");
-                        deprojectsaved = true;
+                        console.log("VE project saved");
+                        veprojectsaved = true;
                     }
                 });
 
             });
         });
-        
-        
-        it("Generate in-memory DE Design", function () {
+            
+        it("Create new SequenceFile", function () {
 
-            // In creating this design, use bare minimum required fields
-            // Will build this from the models.
-            // The correct way would be to use DeviceDesignManager.js
-            // Create Bin1 with 2 Part with 1 SequenceFile each
-            seq1a = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: "part1a.fas",
-                sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1a\nGATTACA"
+            
+            var selectedFile = '/test/data/sequences/gen_bank_ex.gb';
+
+            Ext.Ajax.request({
+                url: selectedFile,
+                method: 'GET',
+                success: function(response){
+
+                    var text = response.responseText;
+
+                    newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileName: "gen_bank_ex.gb",
+                        sequenceFileFormat: "Genbank",
+                        sequenceFileContent: text
+                    });
+                }
             });
-            part1a = Ext.create("Teselagen.models.Part", {
-                name: "part1a",
-                genbankStartBP: 1,
-                endBP: 7
-            });
-            part1a.setSequenceFile(seq1a);
 
 
-            seq1b = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: "part1b.fas",
-                sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1b\nTTTTTTTTTT"
-            });
-            part1b = Ext.create("Teselagen.models.Part", {
-                name: "part1b",
-                genbankStartBP: 1,
-                endBP: 7
-            });
-            part1b.setSequenceFile(seq1b);
+            var veproject_id = 0;
+            waitsFor(function () {
+                veproject_id = veproject.get('id');
 
-            bin1 = Ext.create("Teselagen.models.J5Bin", {
-                binName: "bin1"
-            });
-            bin1.addToParts([part1a, part1b]);
+                if(veproject_id!=0 && veproject_id!=undefined && newSequence!=null && newSequence!= undefined) return true; else return false;
+            }, "VE Project creation took too much time", 100);
 
-            // Create Bin2 with 1 Part with 1 SequenceFile
-            seq2a = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: "part2a.fas",
-                sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1c\nAAAAAAAAA"
-            });
-            part2a = Ext.create("Teselagen.models.Part", {
-                name: "part2a",
-                genbankStartBP: 1,
-                endBP: 7
-            });
-            part2a.setSequenceFile(seq2a);
 
-            bin2 = Ext.create("Teselagen.models.J5Bin", {
-                binName: "bin2"
-            });
-            bin2.addToParts(part2a);
+            runs(function () {
 
-            // CREATE THE COLLECTION WITH BINS
-            design = DeviceDesignManager.createDeviceDesignFromBins([bin1, bin2]);
+                veproject.setSequenceFile(newSequence);
+                newSequence.set( 'veproject_id', veproject_id )
+                newSequence.save({
+                    callback: function(succ,op)
+                    {
 
-            // EUGENE RULE
-            rule1 = Ext.create("Teselagen.models.EugeneRule", {
-                name: "rule1",
-                negationOperator: false,
-                compositionalOperator: "BEFORE",
-                operand2: part2a
+                    }
+                });
+                                
             });
-            rule1.setOperand1(part1a);
-            design.addToRules(rule1);
 
         });
 
-
+        /*
         it("Save DE Design to Server", function () {
 
             waitsFor(function () {
@@ -276,24 +243,6 @@ Ext.syncRequire(["Ext.Ajax",
             });
 
         });
-
-    });
-
-    describe("Test j5 Parameters", function () {
-        var j5Parameters;
-
-        it("Create j5Parameters Model", function () {
-
-            j5Parameters = Ext.create("Teselagen.models.J5Parameters");
-            j5Parameters.setDefaultValues();
-
-        });
-
-        it("Test getParametersAsArray method", function () {
-            var j5ParamsArray = j5Parameters.getParametersAsArray(true);
-            for(var prop in j5ParamsArray) {
-                expect(j5ParamsArray[prop]).toBeDefined();
-            }
-        });    
+        */
     });
 });

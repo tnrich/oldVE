@@ -82,7 +82,6 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     setParameters: function(j5Parameters,masterFiles){
         this.j5Parameters = j5Parameters.getParametersAsArray(true);
         this.masterFiles = masterFiles;
-        console.log(this.j5Parameters);
     }
 
 });

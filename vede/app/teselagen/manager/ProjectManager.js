@@ -8,7 +8,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	mixins: {
 		observable: "Ext.util.Observable"
 	},
-	//singleton: true,
+	singleton: true,
 	projects: null,
 	currentUser: null,
 	workingProject: null,
@@ -55,8 +55,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		});
 
 		var veprojects = this.workingProject.veprojects();
-		projectController.renderPartsSection(veprojects);
-		
+		veprojects.load({
+			callback: function (records,operation,success) {
+				projectController.renderPartsSection(veprojects);
+			}
+		});
+
 	},
 
 	/**
@@ -89,6 +93,31 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			}
 		});		
 	},
+
+	openVEProject: function (item) {
+	console.log("Trying to open VE Project");
+	
+		var id = item.data.id;
+		var veprojects = this.workingProject.veprojects();
+		var selectedVEProject = veprojects.getById(id);
+		var self = this;
+				
+		var selectedSequence = selectedVEProject.getSequenceFile({
+			callback: function (record,operation) {
+				selectedSequence = selectedVEProject.getSequenceFile();
+				console.log(record);
+				console.log(operation);
+				var tabPanel = Ext.getCmp('tabpanel');
+				tabPanel.setActiveTab( 1 );
+				console.log(selectedSequence);
+	            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
+	            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+	            Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+			}
+		});		
+		
+	},
+
 	experiment:function(deproject){
 
 		/*
@@ -144,5 +173,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		        }
 		    });
 		}
+	},
+	saveImportedSequence: function(){
+	    console.log("Saving imported sequence");
+	},
+
+	init: function() {
+	this.callParent();
+	this.application.on("SaveImportedSequence",this.saveImportedSequence, this);
 	}
+
 });

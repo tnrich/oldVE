@@ -79,6 +79,7 @@ Ext.define('Vede.controller.MainMenuController', {
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
             seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
             that.application.fireEvent("SequenceManagerChanged", seqMgr);
+            that.application.fireEvent("SaveImportedSequence", seqMgr);
             //console.log(gb.toString());
             //console.log(seqMgr.getName());
         }

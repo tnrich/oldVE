@@ -288,7 +288,7 @@ app.post('/executej5',restrict,function(req,res){
     if(err) console.log("There was a problem fetching the project!");
     var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
   
-    data["j5_session_id"] = '95646cc800c04ae1d97ee9d8e89cdc74';
+    data["j5_session_id"] = '52437be99f714e44cb3a920aa38d7401';
     
     console.log("Using sessionId: " + data["j5_session_id"]);
 
