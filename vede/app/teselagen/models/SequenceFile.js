@@ -1,3 +1,9 @@
+/*Ext.onReady(function() {
+    Vede.setSequenceFileName2 = function(v, record) {
+        return v;
+    };
+});*/
+
 /**
  * @class Teselagen.models.SequenceFile
  * Class describing a SequenceFile.
@@ -114,6 +120,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         //{name: "sequenceFileName",      type: "string",     defaultValue: ""},
         {
             name: "sequenceFileName",
+            //convert: Vede.setSequenceFileName2
             convert: function(v, record) {
                 var name        = v;
                 var format      = record.get("sequenceFileFormat");
