@@ -55,6 +55,7 @@ Ext.application({
         'SequenceController',
         'VectorPanelController',
         'SimulateDigestionController',
+        'VectorEditor.ImportSequenceWindowController',
         'Vede.controller.AuthWindowController',
         'DeviceEditor.GridController',
         'DeviceEditor.InspectorController',

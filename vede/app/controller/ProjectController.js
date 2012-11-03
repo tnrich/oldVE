@@ -64,6 +64,10 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
+    onNewVEClick: function(){
+        Teselagen.manager.ProjectManager.createNewVectorEditorProject();
+    },
+
     init: function() {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, 
@@ -81,6 +85,9 @@ Ext.define("Vede.controller.ProjectController", {
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick
+            },
+            "#newVE_Btn": {
+                click: this.onNewVEClick
             }
         });
     }

@@ -313,6 +313,22 @@ module.exports = function (app) {
     });
   });
 
+  // UPDATE
+  app.put('/user/projects/veprojects', restrict, function (req, res) {
+    var updatedObj = req.body;
+    var VEProject = app.db.model("veproject");
+    VEProject.findById(req.body.id,function(err,proj){
+      if(err) res.json({"fault":"project not found"},500);
+      for(var prop in req.body)
+      {
+        proj[prop] = req.body[prop];
+      }
+      proj.save(function(){
+        res.json({"projects":proj});
+      });
+    });
+  });
+
   //CREATE
   app.post('/user/projects/veprojects/sequencefile', function (req, res) {
     var id = req.body["veproject_id"];
