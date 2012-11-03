@@ -42,6 +42,13 @@ Ext.define('Vede.view.common.HeaderPanelView', {
                                     icon: 'resources/images/ux/add_DE.png',
                                     scale: 'large',
                                     tooltip: 'New Device Editor Design'
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: 'newVE_Btn',
+                                    icon: 'resources/images/ux/add_DE.png',
+                                    scale: 'large',
+                                    tooltip: 'Import new sequence'
                                 }
                             ]
 	}],
