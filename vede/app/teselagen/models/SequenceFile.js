@@ -9,30 +9,25 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     requires: [
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Teselagen.manager.SessionManager"
     ],
 
     proxy: {
-        type: 'rest',
-        url: '/vede/test/data/json/getSequenceFile.json', // For testing just create a file with this name and fill with data.
+        type: "rest",
+        url: "/vede/test/data/json/getSequenceFile.json",
         reader: {
-            type: 'json',
-            root: 'sequence'
+            type: "json",
+            root: "sequence"
         },
         writer: {
-            type: 'json'
+            type: "json"
         },
         buildUrl: function() {
-            return sessionData.baseURL + 'user/projects/veprojects/sequencefile'; // This method reBuild the URL for ajax requests from parents models
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequencefile", this.url);
         }
     },
 
-    /*
-    proxy: {
-        type: "memory"
-    },
-    */
-    
     statics: {
     },
 
@@ -59,14 +54,14 @@ Ext.define("Teselagen.models.SequenceFile", {
         //{name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
         {
             name: "sequenceFileFormat",
-            convert: function(v, record) {
+            convert: function(v) {
                 var format = v.toUpperCase().replace(/[^A-Z]/gi,"");
                 var constants = Teselagen.constants.Constants;
 
                 if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
                     return v;
                 } else {
-                    console.warn("Teselagen.models.SequenceFile: File format, '" + v + "' for this sequence is not recognized. Format not set.");
+                    console.warn("Teselagen.models.SequenceFile: File format, " + v + " for this sequence is not recognized. Format not set.");
                     return "";
                 }
                 
@@ -129,7 +124,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                         name = source + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
                     } else {
                         name = source;
-                        console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
+                        console.warn("Teselagen.models.SequenceFile: File format, " + format + " for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
                     }
                 }
                 return name;
@@ -139,8 +134,8 @@ Ext.define("Teselagen.models.SequenceFile", {
         //{name: "hash",                  type: "string",     defaultValue: ""},
         {
             name: "hash",
-            convert: function(v, record) {
-                var content = record.get("sequenceFileContent");
+            convert: function(v) {
+//                var content = record.get("sequenceFileContent");
                 return Teselagen.bio.util.Sha256.hex_sha256(v);
             }
         },
@@ -192,7 +187,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     // Some of these taken from SequenceFileManager/SequenceProxy
 
-    // Tried using Constructor and it doesn't work.
+    // Tried using Constructor and it doesn"t work.
     // Read on forums to use init as a way to execute methods after the fields block. --DW
     init: function() {
         //console.log("init");
@@ -309,7 +304,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 name = source + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
             } else {
                 name = source;
-                console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
+                console.warn("Teselagen.models.SequenceFile: File format, " + format + " for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
             }
         }
         this.set("sequenceFileName", name);
