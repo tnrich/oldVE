@@ -1,6 +1,7 @@
 Ext.define("Teselagen.models.VectorEditorProject", {
     extend: "Ext.data.Model",
-    requires: ['Teselagen.models.Part'],
+    requires: ["Teselagen.manager.SessionManager",
+               "Teselagen.models.Part"],
     fields: [{
         name: "id",
         type: "long"
@@ -22,41 +23,29 @@ Ext.define("Teselagen.models.VectorEditorProject", {
         setterName: "setSequenceFile",
         associationKey: "sequenceFile",
         name: "sequenceFile",
-        foreignKey: 'id'
+        foreignKey: "id"
     },
     {
-        type: 'hasOne',
-        model: 'Teselagen.models.Part',
-        name: 'part',
-        associationKey: 'part',
-        getterName: 'getPart',
-        setterName: 'setPart',
-        foreignKey: 'id'
+        type: "hasOne",
+        model: "Teselagen.models.Part",
+        name: "part",
+        associationKey: "part",
+        getterName: "getPart",
+        setterName: "setPart",
+        foreignKey: "id"
     }],
     proxy: {
-        type: 'rest',
-        url: '/vede/test/data/json/getVEProjects.json', // For testing just create a file with this name and fill with data.
+        type: "rest",
+        url: "/vede/test/data/json/getVEProjects.json",
         reader: {
-            type: 'json',
-            root: 'projects'
+            type: "json",
+            root: "projects"
         },
         writer: {
-            type: 'json'
+            type: "json"
         },
         buildUrl: function() {
-            return sessionData.baseURL + 'user/projects/veprojects'; // This method reBuild the URL for ajax requests from parents models
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects", this.url);
         }
     }
-
-    /*
-    ,
-    proxy: {
-        type: 'ajax',
-        url: '/vede/test/data/json/getVEProjects.json',
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    }
-    */
 });

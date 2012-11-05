@@ -19,7 +19,8 @@ Ext.syncRequire(["Ext.Ajax",
  "Teselagen.models.Project",
  "Teselagen.models.VectorEditorProject",
  "Teselagen.manager.SequenceFileManager",
- "Teselagen.manager.DeviceDesignManager"], function () {
+ "Teselagen.manager.DeviceDesignManager",
+ "Teselagen.manager.ProjectManager"], function () {
     console.log('Requires are ready');
 
 
@@ -102,7 +103,7 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Get User Profile and Projects", function () {
         it("Create Project Manager", function () {
-            projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
+            projectManager = Teselagen.manager.ProjectManager; // Created Project Manager
         });
 
         it("Get User Profile and Get User Projects", function () {
