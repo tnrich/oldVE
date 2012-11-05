@@ -26,7 +26,8 @@ Ext.define('Vede.view.AppViewport', {
         'Vede.view.common.DashboardPanelView',
         'Vede.view.de.DeviceEditor',
         'Vede.view.de_legacy.DeviceEditor',
-        'Vede.view.ve.VectorEditorPanel'
+        'Vede.view.ve.VectorEditorPanel',
+        'Vede.view.j5.AnalysisPanel'
     ],
 
     initComponent: function() {
@@ -55,6 +56,9 @@ Ext.define('Vede.view.AppViewport', {
                         },
                         {
                             xtype: 'DeviceEditorPanel'
+                        },
+                        {
+                            xtype: 'AnalysisPanel'
                         },
                         {
                             xtype: 'DeviceEditorLegacyPanel',
