@@ -34,13 +34,13 @@ Ext.define("Teselagen.models.Project", {
         model: "Teselagen.models.VectorEditorProject",
         name: "veprojects",
         foreignKey: "project_id",
-        associationKey: "veprojects"
-        //autoLoad: true
+        associationKey: "veprojects",
+        autoLoad: true
     }],
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getProjects.json",
+        url: "/vede/test/data/json/projects.json",
         reader: {
             type: "json",
             root: "projects"
