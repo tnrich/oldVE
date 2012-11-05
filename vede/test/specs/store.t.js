@@ -38,7 +38,9 @@ Ext.onReady(function () {
                         expect(veprojects.count()).toBe(2);
                         veproject = veprojects.first();
                         expect(veproject).toBeDefined();
-                        expect(veproject.get("name")).toBe("VE Proj 1");
+                        if (veproject) {
+                            expect(veproject.get("name")).toBe("VE Proj 1");
+                        }
                     });
                 });
             });
