@@ -15,7 +15,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getSequenceFile.json",
+        url: "/vede/test/data/json/sequenceFiles.json",
         reader: {
             type: "json",
             root: "sequence"
