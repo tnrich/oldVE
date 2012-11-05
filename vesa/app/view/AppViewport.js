@@ -45,7 +45,7 @@ Ext.define('Vesa.view.AppViewport', {
                                     xtype: 'image',
                                     height: 32,
                                     id: 'headerIcon',
-                                    margin: 10,
+                                    margin: '12 10 10 10',
                                     width: 201,
                                     src: 'resources/images/teselagen_toplogo.png'
                                 }
@@ -56,24 +56,7 @@ Ext.define('Vesa.view.AppViewport', {
                             flex: 2,
                             floating: false,
                             id: 'headerButs',
-                            margin: '0 0 0 15',
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    id: 'newProject_Btn',
-                                    margin: 3,
-                                    icon: 'resources/images/add_project.png',
-                                    scale: 'large',
-                                    tooltip: 'New Project'
-                                },
-                                {
-                                    xtype: 'button',
-                                    id: 'newDE_Btn',
-                                    icon: 'resources/images/add_DE.png',
-                                    scale: 'large',
-                                    tooltip: 'New Device Editor Design'
-                                }
-                            ]
+                            margin: '0 0 0 15'
                         },
                         {
                             xtype: 'panel',
@@ -133,7 +116,7 @@ Ext.define('Vesa.view.AppViewport', {
                                 type: 'fit'
                             },
                             minButtonWidth: 32,
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -162,7 +145,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -201,7 +184,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -226,7 +209,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: 'My Tab',
+                            title: '',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -273,41 +256,207 @@ Ext.define('Vesa.view.AppViewport', {
                                     flex: 1,
                                     id: 'dashboard_Panel',
                                     layout: {
-                                        type: 'fit'
-                                    }
-                                },
-                                {
-                                    xtype: 'menu',
-                                    flex: 2,
-                                    border: 0,
-                                    floating: false,
-                                    maxWidth: 200,
-                                    width: 120,
-                                    title: 'Help',
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
                                     items: [
                                         {
-                                            xtype: 'menuitem',
-                                            text: 'j5 Manual'
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            border: 0,
+                                            id: 'dashboard_TopPanel',
+                                            layout: {
+                                                align: 'stretch',
+                                                type: 'hbox'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: 'gridpanel',
+                                                    flex: 1,
+                                                    id: 'projectGrid_Panel',
+                                                    margin: 10,
+                                                    title: 'Your Projects',
+                                                    forceFit: true,
+                                                    columnLines: false,
+                                                    columns: [
+                                                        {
+                                                            xtype: 'gridcolumn',
+                                                            id: 'projectGrid_Name',
+                                                            dataIndex: 'string',
+                                                            hideable: false,
+                                                            text: 'Name'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            id: 'projectGrid_DateCreated',
+                                                            dataIndex: 'date',
+                                                            text: 'Date Created'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            id: 'projectGrid_DateModified',
+                                                            dataIndex: 'date',
+                                                            text: 'Last Modified'
+                                                        }
+                                                    ],
+                                                    viewConfig: {
+                                                        id: 'projectGridView'
+                                                    },
+                                                    dockedItems: [
+                                                        {
+                                                            xtype: 'toolbar',
+                                                            dock: 'top',
+                                                            height: 40,
+                                                            items: [
+                                                                {
+                                                                    xtype: 'button',
+                                                                    id: 'newProject_Btn',
+                                                                    margin: 3,
+                                                                    icon: 'resources/images/add_project.png',
+                                                                    scale: 'medium',
+                                                                    tooltip: 'New Project'
+                                                                },
+                                                                {
+                                                                    xtype: 'button',
+                                                                    id: 'removeProject_Btn',
+                                                                    icon: 'resources/images/ux/remove.png',
+                                                                    scale: 'medium'
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    xtype: 'gridpanel',
+                                                    flex: 1,
+                                                    id: 'designGrid_Panel',
+                                                    margin: 10,
+                                                    width: 100,
+                                                    title: 'Recent Designs',
+                                                    forceFit: true,
+                                                    columns: [
+                                                        {
+                                                            xtype: 'gridcolumn',
+                                                            id: 'designGrid_Name',
+                                                            dataIndex: 'string',
+                                                            text: 'Name'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            id: 'designGrid_DateCreated',
+                                                            dataIndex: 'date',
+                                                            text: 'Date Created'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            id: 'designGrid_DateModified',
+                                                            dataIndex: 'date',
+                                                            text: 'Last Modified'
+                                                        }
+                                                    ],
+                                                    viewConfig: {
+                                                        id: 'designGridView'
+                                                    },
+                                                    dockedItems: [
+                                                        {
+                                                            xtype: 'toolbar',
+                                                            dock: 'top',
+                                                            height: 40,
+                                                            items: [
+                                                                {
+                                                                    xtype: 'button',
+                                                                    id: 'newDE_Btn',
+                                                                    icon: 'resources/images/add_DE.png',
+                                                                    scale: 'medium',
+                                                                    tooltip: 'New Device Editor Design'
+                                                                },
+                                                                {
+                                                                    xtype: 'button',
+                                                                    id: 'removeDesign_Btn',
+                                                                    icon: 'resources/images/ux/remove.png',
+                                                                    scale: 'medium',
+                                                                    text: ''
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
                                         },
                                         {
-                                            xtype: 'menuitem',
-                                            text: 'Vector Editor Manual'
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            border: 0,
+                                            id: 'dashboard_BottomPanel'
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'panel',
+                                    flex: 1,
+                                    border: 0,
+                                    id: 'dashboard_TaskPanel',
+                                    maxWidth: 250,
+                                    width: 250,
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'menu',
+                                            border: 0,
+                                            floating: false,
+                                            width: 120,
+                                            title: 'Common Tasks',
+                                            items: [
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'New Project'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'Open Sequence File'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'New Design'
+                                                }
+                                            ]
                                         },
                                         {
-                                            xtype: 'menuitem',
-                                            text: 'Device Editor Manual'
-                                        },
-                                        {
-                                            xtype: 'menuitem',
-                                            text: 'Tutorials'
-                                        },
-                                        {
-                                            xtype: 'menuitem',
-                                            text: 'Get Support'
-                                        },
-                                        {
-                                            xtype: 'menuitem',
-                                            text: 'Submit Feedback'
+                                            xtype: 'menu',
+                                            flex: 2,
+                                            border: 0,
+                                            floating: false,
+                                            width: 120,
+                                            title: 'Help',
+                                            items: [
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'j5 Manual'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'Vector Editor Manual'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'Device Editor Manual'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'Tutorials'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'Get Support'
+                                                },
+                                                {
+                                                    xtype: 'menuitem',
+                                                    text: 'Submit Feedback'
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
@@ -315,7 +464,6 @@ Ext.define('Vesa.view.AppViewport', {
                         },
                         {
                             xtype: 'panel',
-                            border: 0,
                             id: 'VectorEditor',
                             layout: {
                                 type: 'fit'
