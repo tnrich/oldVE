@@ -42,8 +42,9 @@ Ext.define('Vede.view.AppViewport', {
                 },
                 {
                     xtype: 'tabpanel',
-                    id: 'tabpanel',
+                    id: 'mainAppPanel',
                     region: 'center',
+                    border: 0,
                     activeTab: 0,
                     items: [
                         {

@@ -3,6 +3,7 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
     id: "VectorEditorStatusPanel",
     alias: "widget.VectorEditorStatusPanel",
     dock: "bottom",
+    border: '0 1 1 1',
     height: 23,
     layout: {
         type: "fit"

@@ -4,26 +4,21 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 
 	flex: 1,
 	cls: 'DeviceEditorCanvas',
-	width: 159,
 	layout: {
 		type: 'fit'
 	},
 	animCollapse: false,
 	dockedItems: [{
-		xtype: 'DeviceEditorPartPanel',
-	},{
+		xtype: 'InspectorPanel',
+	}],
+	items: [{
 		xtype: 'container',
 		title: 'Canvas container',
         cls: 'designGrid',
+        border: 0,
         layout: {
             type: 'column'
         },
         padding: 10,
-	}],
-	items: [{
-		title: 'Canvas',
-		xtype: 'draw',
-		layout: 'fit',
-		cls: 'designCanvas'
 	}]
 });
