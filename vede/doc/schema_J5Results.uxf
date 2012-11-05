@@ -5,7 +5,7 @@
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>715</x>
-      <y>117</y>
+      <y>78</y>
       <w>130</w>
       <h>39</h>
     </coordinates>
@@ -16,19 +16,19 @@
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>741</x>
-      <y>26</y>
-      <w>64</w>
-      <h>116</h>
+      <y>0</y>
+      <w>52</w>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 r2=n</panel_attributes>
-    <additional_attributes>39;39;39;91</additional_attributes>
+    <additional_attributes>39;39;312;273</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>910</x>
-      <y>182</y>
+      <x>715</x>
+      <y>130</y>
       <w>130</w>
       <h>39</h>
     </coordinates>
@@ -38,13 +38,13 @@ r2=n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>754</x>
-      <y>117</y>
-      <w>220</w>
-      <h>90</h>
+      <x>741</x>
+      <y>78</y>
+      <w>64</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;195;65</additional_attributes>
+    <additional_attributes>39;39;39;52</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.custom.Text</type>
@@ -120,8 +120,8 @@ October 29, 2012 -DW</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>26</y>
-      <w>272</w>
-      <h>64</h>
+      <w>260</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;247;39</additional_attributes>
@@ -130,7 +130,7 @@ October 29, 2012 -DW</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>689</x>
-      <y>26</y>
+      <y>0</y>
       <w>182</w>
       <h>39</h>
     </coordinates>
@@ -151,14 +151,14 @@ October 29, 2012 -DW</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>78</x>
-      <y>468</y>
-      <w>351</w>
-      <h>429</h>
+      <x>13</x>
+      <y>169</y>
+      <w>416</w>
+      <h>1105</h>
     </coordinates>
     <panel_attributes>AssemblyParameters
 "pj5_0XXXX.csv"
-SLIC/Gibson/CPEC/SLiCE
+
 --
 -AssemblyAlg/Date
 --
@@ -172,14 +172,83 @@ SLIC/Gibson/CPEC/SLiCE
 -"Warning:"
 -"Note:"
 --
-*</panel_attributes>
+*Non-degenerate Part IDs and Sources
+Part
+-IDNumber
+-Name
+Location
+-SourcePlasmid
+-ReverseComplement
+-StartBP
+-EndBP
+-Length
+-Sequence
+Warning
+--
+*TargetPart Ordering/Selection/Strategy
+Part
+-Order
+-IDNumber
+-Name
+-Direction
+-Strategy (FAS)
+--
+*Incompatibilities btw Assembly Pieces
+-Assembly Piece
+-Left End
+-Right End
+--
+*Suggested Assembly Piece Contigs for Hierarchical Assembly
+-Contig
+-Assembly Pieces Contained
+--
+*Oligo Synthesis
+-IDNumber
+-Name
+-First Target Part
+-Last Target Part
+-Tm
+-Tm (3' only)
+-Cost
+-Sequence
+--
+*PCR Reactions
+-ID Number
+-Primary Template
+-Alternate Template
+*ForwardOligo
+-IDNumber
+-Name
+-First Target Part
+-Last Target Part
+-Note
+-Mean Oligo Tm
+-Delta Oligo Tm
+-Mean Oligo Tm (3' only)
+-Delta Oligo Tm (3' only)
+-Length
+-Sequence
+--
+...
+--
+*Final Assembled Vector
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>390</x>
-      <y>78</y>
+      <x>520</x>
+      <y>39</y>
       <w>130</w>
       <h>39</h>
     </coordinates>
@@ -189,19 +258,19 @@ SLIC/Gibson/CPEC/SLiCE
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>442</x>
-      <y>78</y>
-      <w>298</w>
-      <h>90</h>
+      <x>611</x>
+      <y>26</y>
+      <w>129</w>
+      <h>103</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>273;65;39;39</additional_attributes>
+    <additional_attributes>104;78;39;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>39</x>
-      <y>312</y>
+      <x>247</x>
+      <y>52</y>
       <w>221</w>
       <h>117</h>
     </coordinates>
@@ -215,8 +284,8 @@ SLIC/Gibson/CPEC/SLiCE
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>650</x>
-      <y>468</y>
+      <x>1079</x>
+      <y>949</y>
       <w>195</w>
       <h>442</h>
     </coordinates>
@@ -240,13 +309,86 @@ GoldenGateComb
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>195</x>
-      <y>169</y>
-      <w>740</w>
+      <x>403</x>
+      <y>13</y>
+      <w>337</w>
       <h>168</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 r2=n</panel_attributes>
-    <additional_attributes>715;39;39;143</additional_attributes>
+    <additional_attributes>312;143;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>897</x>
+      <y>273</y>
+      <w>377</w>
+      <h>494</h>
+    </coordinates>
+    <panel_attributes>GoldenGate
+--
+*Assembly Pieces (Golden Gate)
+-ID Number
+-Type
+-PCR ID Number
+-First Target Part
+-Core Target Part
+-Last Target Part
+-Relative Overlap Position
+-Extra 5' CPEC bps
+-Extra 3' CPEC bps
+-CPEC Tm Next
+-Overlap with Next (bps)
+-Overlap with Next
+-Overlap with Next Reverse Complement
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>507</x>
+      <y>273</y>
+      <w>377</w>
+      <h>494</h>
+    </coordinates>
+    <panel_attributes>
+SLIC/Gibson/CPEC/SLiCE
+--
+*Assembly Pieces (SLIC/Gibson/CPEC)
+-ID Number
+-Type
+-PCR ID Number
+-First Target Part
+-Core Target Part
+-Last Target Part
+-Relative Overlap Position
+-Extra 5' CPEC bps
+-Extra 3' CPEC bps
+-CPEC Tm Next
+-Overlap with Next (bps)
+-Overlap with Next
+-Overlap with Next Reverse Complement
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
