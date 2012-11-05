@@ -44,9 +44,6 @@ Ext.define("Teselagen.models.J5Results", {
             setterName: "setJ5Run",
             assocationKey: "j5run"
         }
-    ],
-
-    init: function() {
-    }
+    ]
 
 });

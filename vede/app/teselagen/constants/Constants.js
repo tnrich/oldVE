@@ -33,6 +33,17 @@ Ext.define("Teselagen.constants.Constants", {
     //================================================================
     // EugeneRule.js: compositionalOperator
 
+    COMPOP_LIST: [
+        "NOTMORETHAN",
+        "NOTWITH",
+        "AFTER",
+        "BEFORE",
+        "WITH",
+        "THEN",
+        "NEXTTO",
+        "MORETHAN"
+    ],
+
     // Deprecated
     NOTMORETHAN:        "NOTMORETHAN",
     // Deprecated

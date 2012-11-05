@@ -438,6 +438,9 @@ Ext.onReady(function() {
                 //expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
             });
 
+            it("setDefaultStartStop() ***", function(){
+            });
+
             it("isEmpty() *** Check to see if this is a good definition", function(){
                 var part = Ext.create("Teselagen.models.Part");
 
@@ -454,6 +457,9 @@ Ext.onReady(function() {
                 expect(part1.isEqual(part1)).toBe(true);
                 expect(part1.isEqual(part2)).toBe(false); // Should this be equal??? They have different SeqFiles.
                 expect(part1.isEqual(part3)).toBe(false);
+            });
+
+            it("removeSequenceFile() ***", function(){
             });
         });
         
