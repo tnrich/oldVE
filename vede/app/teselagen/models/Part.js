@@ -106,13 +106,6 @@ Ext.define("Teselagen.models.Part", {
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
             associationKey: "vectorEditorProject"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.DeviceEditorProject",
-            getterName: "getDeviceEditorProject",
-            setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
         }
     ],
 
@@ -137,6 +130,7 @@ Ext.define("Teselagen.models.Part", {
 
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
+     * @returns {Boolean} True if set.
      */
     setId: function() {
         var newId = this.generateId();
@@ -145,27 +139,11 @@ Ext.define("Teselagen.models.Part", {
      },
 
     /**
-     * Determines if PartVO is empty.
-     * @returns {Boolean} equal True if empty, false if not.
-     *
-    isPartVOEmpty: function() {
-        var partEmpty = false;
-
-        if (this.get("partVO") === undefined || this.get("partVO") === null) {
-            partEmpty = true;
-        } else if (this.get("partVO").isEmpty()) {
-            partEmpty = true;
-        }
-        
-        if (partEmpty &&
-            this.get("directionForward") === true &&
-            this.get("fas") === "" ) {
-            partEmpty = true;
-        } else {
-            partEmpty = false;
-        }
-        return partEmpty;
-    },*/
+     * Sets deafult genbankStartBP and endBP based on a set SequenceFile.
+     * @returns {Boolean} True if empty, false if not.
+     */
+    setDefaultStartStop: function() {
+    },
 
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.

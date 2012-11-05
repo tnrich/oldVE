@@ -82,24 +82,24 @@ function encoded_target_part_order_list_file(model)
             out += part["name"] + ',' + part["directionForward"] + ',' + part["fas"] + ',' + fro + ',' + bin["dsf"] + ',' + ',' + '\n';
         });
     });
-/* 
-(>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps
->vector_backbone,,,2,,,
-pS8c-vector_backbone,forward,,,,,
->nterm_sig_pep,,,,TRUE,,
-BMC_nterm_sig_pep,forward,,,,,
-ccmN_nterm_sig_pep,forward,,,,,
->gly_ser_linker,,,,,,
-long_gly_ser_linker,forward,,,,,
-short_gly_ser_linker,forward,,,,,
->GFPuv,,,,,,
-GFPuv,forward,,,,,
->ssrA_tag_5prime,,Embed_in_primer_reverse,,TRUE,,
-ssrA_tag_5prime,forward,,,,,
-ssrA_tag_enhanced_5prime,forward,Embed_in_primer_reverse,,,,
->ssrA_tag_3prime,,Embed_in_primer_forward,,,,
-ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
-*/
+    /* 
+    (>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps
+    >vector_backbone,,,2,,,
+    pS8c-vector_backbone,forward,,,,,
+    >nterm_sig_pep,,,,TRUE,,
+    BMC_nterm_sig_pep,forward,,,,,
+    ccmN_nterm_sig_pep,forward,,,,,
+    >gly_ser_linker,,,,,,
+    long_gly_ser_linker,forward,,,,,
+    short_gly_ser_linker,forward,,,,,
+    >GFPuv,,,,,,
+    GFPuv,forward,,,,,
+    >ssrA_tag_5prime,,Embed_in_primer_reverse,,TRUE,,
+    ssrA_tag_5prime,forward,,,,,
+    ssrA_tag_enhanced_5prime,forward,Embed_in_primer_reverse,,,,
+    >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
+    ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
+    */
 
     return new Buffer(out).toString('base64'); 
 }
@@ -140,91 +140,107 @@ function encoded_eugene_rules_list_file(model)
     return new Buffer(out).toString('base64'); 
 }
 
-var j5rpcEncode = function(model,j5Params,execParams) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
 
-var j5Params = JSON.parse(' \
-    { \
-    "MASTEROLIGONUMBEROFDIGITS": "5", \
-    "MASTERPLASMIDNUMBEROFDIGITS": "5", \
-    "GIBSONOVERLAPBPS": "26", \
-    "GIBSONOVERLAPMINTM": "60", \
-    "GIBSONOVERLAPMAXTM": "70", \
-    "MAXIMUMOLIGOLENGTHBPS": "110", \
-    "MINIMUMFRAGMENTSIZEGIBSONBPS": "250", \
-    "GOLDENGATEOVERHANGBPS": "4digestion", \
-    "GOLDENGATERECOGNITIONSEQ": "GGTCTC", \
-    "GOLDENGATETERMINIEXTRASEQ": "CACACCAGGTCTCA", \
-    "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE": "2", \
-    "OLIGOSYNTHESISCOSTPERBPUSD": "0.1", \
-    "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD": "40", \
-    "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS": "60", \
-    "MINIMUMPCRPRODUCTBPS": "100", \
-    "DIRECTSYNTHESISCOSTPERBPUSD": "0.39", \
-    "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD": "159", \
-    "PRIMER_GC_CLAMP": "2", \
-    "PRIMER_MIN_SIZE": "18", \
-    "PRIMER_MAX_SIZE": "36", \
-    "PRIMER_MIN_TM": "60", \
-    "PRIMER_MAX_TM": "70", \
-    "PRIMER_MAX_DIFF_TM": "5", \
-    "PRIMER_MAX_SELF_ANY_TH": "47", \
-    "PRIMER_MAX_SELF_END_TH": "47", \
-    "PRIMER_PAIR_MAX_COMPL_ANY_TH": "47", \
-    "PRIMER_PAIR_MAX_COMPL_END_TH": "4747)", \
-    "PRIMER_TM_SANTALUCIA": "1", \
-    "PRIMER_SALT_CORRECTIONS": "1", \
-    "PRIMER_DNA_CONC": "250", \
-    "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT": "4", \
-    "MISPRIMING_MIN_TM": "45", \
-    "MISPRIMING_SALT_CONC": "0.05", \
-    "MISPRIMING_OLIGO_CONC": "2.5e-7", \
-    "OUTPUT_SEQUENCE_FORMAT": "Genbank", \
-    "ASSEMBLY_PRODUCT_TYPE": "circular", \
-    "SUPPRESS_PURE_PRIMERS": "TRUE"\
-    }');
+    var parameters = JSON.parse(encodedParameters);
+    var masterFiles = JSON.parse(encodedMasterFiles);
+
+    var j5Params = JSON.parse(' \
+        { \
+        "MASTEROLIGONUMBEROFDIGITS": "5", \
+        "MASTERPLASMIDNUMBEROFDIGITS": "5", \
+        "GIBSONOVERLAPBPS": "26", \
+        "GIBSONOVERLAPMINTM": "60", \
+        "GIBSONOVERLAPMAXTM": "70", \
+        "MAXIMUMOLIGOLENGTHBPS": "110", \
+        "MINIMUMFRAGMENTSIZEGIBSONBPS": "250", \
+        "GOLDENGATEOVERHANGBPS": "4digestion", \
+        "GOLDENGATERECOGNITIONSEQ": "GGTCTC", \
+        "GOLDENGATETERMINIEXTRASEQ": "CACACCAGGTCTCA", \
+        "MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE": "2", \
+        "OLIGOSYNTHESISCOSTPERBPUSD": "0.1", \
+        "OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD": "40", \
+        "OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS": "60", \
+        "MINIMUMPCRPRODUCTBPS": "100", \
+        "DIRECTSYNTHESISCOSTPERBPUSD": "0.39", \
+        "DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD": "159", \
+        "PRIMER_GC_CLAMP": "2", \
+        "PRIMER_MIN_SIZE": "18", \
+        "PRIMER_MAX_SIZE": "36", \
+        "PRIMER_MIN_TM": "60", \
+        "PRIMER_MAX_TM": "70", \
+        "PRIMER_MAX_DIFF_TM": "5", \
+        "PRIMER_MAX_SELF_ANY_TH": "47", \
+        "PRIMER_MAX_SELF_END_TH": "47", \
+        "PRIMER_PAIR_MAX_COMPL_ANY_TH": "47", \
+        "PRIMER_PAIR_MAX_COMPL_END_TH": "4747)", \
+        "PRIMER_TM_SANTALUCIA": "1", \
+        "PRIMER_SALT_CORRECTIONS": "1", \
+        "PRIMER_DNA_CONC": "250", \
+        "MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT": "4", \
+        "MISPRIMING_MIN_TM": "45", \
+        "MISPRIMING_SALT_CONC": "0.05", \
+        "MISPRIMING_OLIGO_CONC": "2.5e-7", \
+        "OUTPUT_SEQUENCE_FORMAT": "Genbank", \
+        "ASSEMBLY_PRODUCT_TYPE": "circular", \
+        "SUPPRESS_PURE_PRIMERS": "TRUE"\
+        }');
+
+    var execParams = JSON.parse('\
+        { \
+            "reuse_master_oligos_file": "false", \
+            "master_oligos_list_filename": "j5_oligos.csv",  \
+            "encoded_master_oligos_file": "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg==", \
+            "reuse_master_plasmids_file": "false",  \
+            "master_plasmids_list_filename": "j5_plasmids.csv",  \
+            "encoded_master_plasmids_file": "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo=", \
+            "reuse_master_direct_syntheses_file": "false",  \
+            "master_direct_syntheses_list_filename": "j5_directsyntheses.csv",  \
+            "encoded_master_direct_syntheses_file": "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo=",  \
+            "reuse_eugene_rules_list_file": "FALSE",  \
+            "assembly_method": "CombinatorialMock",  \
+            "reuse_j5_parameters_file": "FALSE",  \
+            "reuse_sequences_list_file": "FALSE",  \
+            "reuse_target_part_order_list_file": "FALSE",  \
+            "reuse_parts_list_file": "FALSE",  \
+            "reuse_zipped_sequences_file": "FALSE" \
+        }');
+
+    execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
+    execParams["encoded_master_plasmids_file"] = new Buffer(masterFiles["masterPlasmidsList"]).toString('base64');
+    
+    execParams["master_oligos_list_filename"] = masterFiles["masterOligosListFileName"];
+    execParams["encoded_master_oligos_file"] = new Buffer(masterFiles["masterOligosList"]).toString('base64');
+    
+    execParams["master_direct_syntheses_list_filename"] = masterFiles["masterDirectSynthesesListFileName"];
+    execParams["encoded_master_direct_syntheses_file"] = new Buffer(masterFiles["masterDirectSynthesesList"]).toString('base64');
 
 
-var execParams = JSON.parse(' \
-    { \
-        "master_plasmids_list_filename": "j5_plasmids.csv",  \
-        "reuse_zipped_sequences_file": "FALSE", \
-        "reuse_master_oligos_file": "false", \
-        "encoded_master_oligos_file": "T2xpZ28gTmFtZSxMZW5ndGgsVG0sVG0gKDMnIG9ubHkpLFNlcXVlbmNlCg==", \
-        "reuse_parts_list_file": "FALSE",  \
-        "master_oligos_list_filename": "j5_oligos.csv",  \
-        "reuse_master_direct_syntheses_file": "false",  \
-        "reuse_target_part_order_list_file": "FALSE",  \
-        "encoded_master_direct_syntheses_file": "RGlyZWN0IFN5bnRoZXNpcyBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo=",  \
-        "master_direct_syntheses_list_filename": "j5_directsyntheses.csv",  \
-        "reuse_eugene_rules_list_file": "FALSE",  \
-        "assembly_method": "CombinatorialMock",  \
-        "reuse_j5_parameters_file": "FALSE",  \
-        "reuse_master_plasmids_file": "false",  \
-        "reuse_sequences_list_file": "FALSE",  \
-        "encoded_master_plasmids_file": "UGxhc21pZCBOYW1lLEFsaWFzLENvbnRlbnRzLExlbmd0aCxTZXF1ZW5jZQo=" \
-    }');
+    var data = {};
 
-var data = {};
+    data["encoded_sequences_list_file"] = encoded_sequences_list_file(model);
+    data["encoded_zipped_sequences_file"] = encoded_zipped_sequences_file(model);
+    data["encoded_parts_list_file"] = encoded_parts_list_file(model);
+    data["encoded_target_part_order_list_file"] = encoded_target_part_order_list_file(model);
+    data["encoded_eugene_rules_list_file"] = encoded_eugene_rules_list_file(model);
+    data["encoded_j5_parameters_file"] = encoded_j5_parameters_file(parameters);
+    
 
-data["encoded_sequences_list_file"] = encoded_sequences_list_file(model);
-data["encoded_zipped_sequences_file"] = encoded_zipped_sequences_file(model);
-data["encoded_parts_list_file"] = encoded_parts_list_file(model);
-data["encoded_target_part_order_list_file"] = encoded_target_part_order_list_file(model);
-data["encoded_eugene_rules_list_file"] = encoded_eugene_rules_list_file(model);
-/*
-data["encoded_j5_parameters_file"] = encoded_j5_parameters_file(j5Params);
-*/
+    Object.keys(parameters).forEach(function(prop) {
+        data[prop] = parameters[prop];
+    });
 
+    /*
+    Object.keys(j5Params).forEach(function(prop) {
+        data[prop] = j5Params[prop];
+    });
+    */
 
-Object.keys(j5Params).forEach(function(prop) {
-    data[prop] = j5Params[prop];
-});
+    Object.keys(execParams).forEach(function(prop) {
+        data[prop] = execParams[prop];
+    });
 
-Object.keys(execParams).forEach(function(prop) {
-    data[prop] = execParams[prop];
-});
-
-return data;
+    return data;
 
 }
 

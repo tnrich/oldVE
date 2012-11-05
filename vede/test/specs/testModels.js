@@ -234,7 +234,7 @@ Ext.onReady(function() {
                 expect(seq).not.toBe(null);
 
                 expect(Ext.getClassName(seq.getPart())).toBe("Teselagen.models.Part");
-                expect(Ext.getClassName(seq.getProject())).toBe("Teselagen.models.Project");
+                expect(Ext.getClassName(seq.getVectorEditorProject())).toBe("Teselagen.models.VectorEditorProject");
             });
 
             it("Creates empty SequenceFile", function(){
@@ -254,6 +254,7 @@ Ext.onReady(function() {
                 var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
 
                 seq.set("sequenceFileFormat", "FASTA");
+                expect(seq.get("sequenceFileFormat")).toBe("FASTA");
 
                 var hash = seq.setSequenceFileContent(content);
                 expect(hash).toBe(trueHash);

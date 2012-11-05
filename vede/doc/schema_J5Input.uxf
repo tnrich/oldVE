@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>13</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1378</x>
+      <y>611</y>
+      <w>260</w>
+      <h>169</h>
+    </coordinates>
+    <panel_attributes>DownstreamAutomation
+Parameters
+--
+-ParameterName
+-Value
+-DefaultValue
+-Description</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>91</x>
+      <y>299</y>
+      <w>195</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>J5Parameters
+--
+-ParameterName
+-Value
+-DefaultValue
+-Description</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>780</x>
+      <y>130</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Run</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>247</x>
+      <y>338</y>
+      <w>558</w>
+      <h>129</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=n</panel_attributes>
+    <additional_attributes>533;104;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>806</x>
+      <y>39</y>
+      <w>64</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=n</panel_attributes>
+    <additional_attributes>39;39;39;91</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>260</x>
+      <y>52</y>
+      <w>130</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Embed</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>260</x>
+      <y>91</y>
+      <w>130</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Linked</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>0</x>
+      <y>65</y>
+      <w>272</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;247;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>39</x>
+      <y>26</y>
+      <w>273</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>Legend :</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>26</x>
+      <y>26</y>
+      <w>351</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>1443</x>
+      <y>1183</y>
+      <w>260</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>
+J5Run:
+Original J5Input
+Nov 1, 2012</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>0</x>
+      <y>26</y>
+      <w>272</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;247;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>754</x>
+      <y>39</y>
+      <w>182</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>DeviceEditorProject</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>754</x>
+      <y>1001</y>
+      <w>195</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>MasterPlasmidList
+--
+-PlasmidName
+-[Alias]
+-Contents
+-Length
+-Sequence</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>507</x>
+      <y>988</y>
+      <w>234</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>EugeneRulesList
+--
+-RuleName
+-NegationOperator
+-Operand1
+-CompositionalOperator
+-Operand2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>156</x>
+      <y>663</y>
+      <w>234</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>PartsList
+--
+-PartName
+-PartSource/DisplayID
+-ReverseCompliment
+-Start
+-End</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>143</x>
+      <y>897</y>
+      <w>338</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>TargetPartsOrder
+--
+-Bin/PartName
+-Direction
+-[ForcedAssemblyStrategy]
+-[ForcedRelativeOverhangPosition]
+-[DirectSynthesisFirewall]
+-[Extra5'CPEC OverlapBps]
+-[Extra3'CPEC overlabBps]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>780</x>
+      <y>442</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Input</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>806</x>
+      <y>130</y>
+      <w>64</w>
+      <h>337</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;39;312</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>104</x>
+      <y>507</y>
+      <w>247</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>SequencesListFile
+(aka MasterSequences)
+--
+-SequenceFileName
+-Format
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1001</x>
+      <y>1001</y>
+      <w>195</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>MasterOligosList
+--
+-OligoName
+-Length
+-Tm
+-Tm3'Only
+-Sequence</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1300</x>
+      <y>949</y>
+      <w>247</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>MasterDirectSynthesis
+--
+DirectSynthesisName
+-[Alias]
+-Contents
+-Length
+-Sequence</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1391</x>
+      <y>260</y>
+      <w>208</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>SourcePlate
+--
+-PlateFileName</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1391</x>
+      <y>429</y>
+      <w>195</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Multi-wellPlate
+--
+-PlateID
+-PlateWell
+-LiquidType
+-Volume</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1365</x>
+      <y>845</y>
+      <w>221</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>AssemblyFiles (?)
+--
+-AssemblyFileName
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>312</x>
+      <y>429</y>
+      <w>493</w>
+      <h>142</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>468;39;39;117</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>351</x>
+      <y>442</y>
+      <w>454</w>
+      <h>298</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>429;39;39;273</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>377</x>
+      <y>442</y>
+      <w>454</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>429;39;39;455</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>871</x>
+      <y>273</y>
+      <w>545</w>
+      <h>194</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;169;520;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>871</x>
+      <y>416</y>
+      <w>545</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;520;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>871</x>
+      <y>429</y>
+      <w>532</w>
+      <h>259</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;507;234</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>871</x>
+      <y>442</y>
+      <w>519</w>
+      <h>454</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;494;429</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>845</x>
+      <y>442</y>
+      <w>480</w>
+      <h>571</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;455;546</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>819</x>
+      <y>442</y>
+      <w>272</w>
+      <h>584</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;247;559</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>585</x>
+      <y>442</y>
+      <w>272</w>
+      <h>571</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>247;39;39;546</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>806</x>
+      <y>442</y>
+      <w>64</w>
+      <h>584</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;39;559</additional_attributes>
+  </element>
+</diagram>

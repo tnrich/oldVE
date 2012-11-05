@@ -27,7 +27,8 @@ Ext.syncRequire(["Ext.Ajax",
  "Teselagen.models.DeviceDesign",
  "Teselagen.models.Project",
  "Teselagen.manager.SequenceFileManager",
- "Teselagen.manager.DeviceDesignManager"], function () {
+ "Teselagen.manager.DeviceDesignManager",
+ "Teselagen.manager.ProjectManager"], function () {
     console.log('Requires are ready');
 
 
@@ -109,7 +110,7 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Get User Profile and Projects", function () {
         it("Create Project Manager", function () {
-            projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
+            projectManager = Teselagen.manager.ProjectManager; // Created Project Manager
         });
 
         it("Get User Profile and Get User Projects", function () {
@@ -195,6 +196,7 @@ Ext.syncRequire(["Ext.Ajax",
             // The correct way would be to use DeviceDesignManager.js
             // Create Bin1 with 2 Part with 1 SequenceFile each
             seq1a = Ext.create("Teselagen.models.SequenceFile", {
+                sequenceFileName: "part1a.fas",
                 sequenceFileFormat: "Fasta",
                 sequenceFileContent: ">seq1a\nGATTACA"
             });
@@ -207,6 +209,7 @@ Ext.syncRequire(["Ext.Ajax",
 
 
             seq1b = Ext.create("Teselagen.models.SequenceFile", {
+                sequenceFileName: "part1b.fas",
                 sequenceFileFormat: "Fasta",
                 sequenceFileContent: ">seq1b\nTTTTTTTTTT"
             });
@@ -224,6 +227,7 @@ Ext.syncRequire(["Ext.Ajax",
 
             // Create Bin2 with 1 Part with 1 SequenceFile
             seq2a = Ext.create("Teselagen.models.SequenceFile", {
+                sequenceFileName: "part2a.fas",
                 sequenceFileFormat: "Fasta",
                 sequenceFileContent: ">seq1c\nAAAAAAAAA"
             });
@@ -274,8 +278,23 @@ Ext.syncRequire(["Ext.Ajax",
 
         });
 
-
     });
 
-    
+    describe("Test j5 Parameters", function () {
+        var j5Parameters;
+
+        it("Create j5Parameters Model", function () {
+
+            j5Parameters = Ext.create("Teselagen.models.J5Parameters");
+            j5Parameters.setDefaultValues();
+
+        });
+
+        it("Test getParametersAsArray method", function () {
+            var j5ParamsArray = j5Parameters.getParametersAsArray(true);
+            for(var prop in j5ParamsArray) {
+                expect(j5ParamsArray[prop]).toBeDefined();
+            }
+        });    
+    });
 });

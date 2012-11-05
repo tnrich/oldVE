@@ -8,10 +8,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	mixins: {
 		observable: "Ext.util.Observable"
 	},
-	//singleton: true,
+	singleton: true,
 	projects: null,
 	currentUser: null,
 	workingProject: null,
+	workingSequence: null,
 
 	constructor: function (inData) {},
 
@@ -41,7 +42,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 *	Load Project Child Resources
 	 */	
 	loadDesignAndChildResources: function () {
-
+		console.log("Project panel update fired?");
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
@@ -54,11 +55,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			}
 		});
 
-
-
 		var veprojects = this.workingProject.veprojects();
-		projectController.renderPartsSection(veprojects);
-		
+		veprojects.load({
+			callback: function (records,operation,success) {
+				projectController.renderPartsSection(veprojects);
+			}
+		});
+
 	},
 
 	/**
@@ -91,7 +94,33 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			}
 		});		
 	},
+
+	openVEProject: function (item) {
+	console.log("Trying to open VE Project");
+	
+		var id = item.data.id;
+		var veprojects = this.workingProject.veprojects();
+		var selectedVEProject = veprojects.getById(id);
+		var self = this;
+				
+		var selectedSequence = selectedVEProject.getSequenceFile({
+			callback: function (record,operation) {
+				selectedSequence = selectedVEProject.getSequenceFile();
+				self.workingSequence = selectedSequence;
+				var tabPanel = Ext.getCmp('tabpanel');
+				tabPanel.setActiveTab( 1 );
+	            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
+	            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+	            Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+			}
+		});		
+		
+	},
+
 	experiment:function(deproject){
+
+		/*
+
 		console.log("Experiment Start here\n------------");
 		var binsStore = deproject.getDesign().getJ5Collection().bins();
 		//console.log(binsStore);
@@ -103,13 +132,98 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		});
 
 		binsStore.getAt(0).set('name','asdadasd');
-		/*
+		
         var bin1 = Ext.create("Teselagen.models.J5Bin", {
             binName: "bin21313"
         });
-		*/
+		
 
 		//binsStore.add(bin1);
 		//console.log(binsStore);
+
+		*/
+	},
+	createNewProject: function(){
+		var self = this;
+	    var project = Ext.create("Teselagen.models.Project", {
+	        name: "Untitled project",
+	        DateCreated: new Date(),
+	        DateModified: new Date()
+	    });
+
+	    this.currentUser.projects().add(project);
+	    project.save({
+	    	callback: function(){
+	    		self.workingProject = project;
+	    		self.loadDesignAndChildResources();
+	    	}
+	    });
+
+	},
+	createNewDeviceEditorProject: function(){
+	    var self = this;
+
+	    if(this.workingProject) {
+		    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+		        name: "Untitled DE Project"
+		    });
+		    
+		    this.workingProject.deprojects().add(deproject);
+
+		    deproject.save({
+		        callback: function(){
+		        	self.loadDesignAndChildResources();
+		            console.log("DE project saved");
+		        }
+		    });
+		}
+	},
+
+	createNewVectorEditorProject: function(){
+		var self = this;
+		Ext.getCmp('ProjectPanel').setActiveTab(2);
+		if(this.workingProject) {
+	    var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
+	        name: "Untitled Project"
+	    });
+	    
+	    this.workingProject.deprojects().add(veproject);
+
+	    veproject.save({
+	        callback: function(){
+	        	console.log("VE project saved");
+	        	var tabPanel = Ext.getCmp('tabpanel');
+				tabPanel.setActiveTab( 1 );
+				Vede.application.fireEvent("ImportSequenceToProject",veproject);
+				self.loadDesignAndChildResources();
+
+	            
+	        }
+	    });
+		}
+
+		/*
+	    var self = this;
+
+	    if(this.workingProject) {
+		    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+		        name: "Untitled DE Project"
+		    });
+		    
+		    this.workingProject.deprojects().add(deproject);
+
+		    deproject.save({
+		        callback: function(){
+		        	self.loadDesignAndChildResources();
+		            console.log("DE project saved");
+		        }
+		    });
+		}
+		*/
+	},
+
+	init: function() {
+		this.callParent();
 	}
+
 });

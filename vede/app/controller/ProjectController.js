@@ -3,7 +3,7 @@ Ext.define("Vede.controller.ProjectController", {
     requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager","Teselagen.models.DeviceEditorProject"],
 
     openProject: function (project) {
-        Vede.application.projectManager.openProject(project);
+        Teselagen.manager.ProjectManager.openProject(project);
     },
     renderDesignsSection: function (Collection) {
         Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
@@ -49,7 +49,23 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onProjectDesignPanelItemClick: function (store, record) { 
-        Vede.application.projectManager.openDesign(record); 
+        Teselagen.manager.ProjectManager.openDesign(record); 
+    },
+
+    onProjectPartsPanelItemClick: function (store, record) { 
+        Teselagen.manager.ProjectManager.openVEProject(record); 
+    },
+
+    onNewProjectClick: function(){
+        Teselagen.manager.ProjectManager.createNewProject();
+    },
+
+    onNewDEClick: function(){
+        Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
+    },
+
+    onNewVEClick: function(){
+        Teselagen.manager.ProjectManager.createNewVectorEditorProject();
     },
 
     init: function() {
@@ -58,8 +74,20 @@ Ext.define("Vede.controller.ProjectController", {
                             this.openProject, this);
 
         this.control({
+            '#projectPartsPanel': {
+                itemclick: this.onProjectPartsPanelItemClick
+            },
             '#projectDesignPanel': {
                 itemclick: this.onProjectDesignPanelItemClick
+            },
+            "#newProject_Btn": {
+                click: this.onNewProjectClick
+            },
+            "#newDE_Btn": {
+                click: this.onNewDEClick
+            },
+            "#newVE_Btn": {
+                click: this.onNewVEClick
             }
         });
     }

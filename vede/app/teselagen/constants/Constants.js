@@ -2,7 +2,7 @@
  * @class Teselagen.constants.Constants
  * Class with constants
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author)
+ * @author ? (original author)
  */
 Ext.define("Teselagen.constants.Constants", {
     singleton: true,
@@ -17,30 +17,53 @@ Ext.define("Teselagen.constants.Constants", {
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+
+    FORMATS_LIST: [
+        "GENBANK",
+        "FASTA",
+        "JBEISEQ"
+        //"SBOLXML"
+    ],
     
-    GENBANK:                "GENBANK",
-    FASTA:                  "FASTA",
-    JBEI_SEQ:               "JBEI-SEQ",
-    SBOL_XML:               "SBOLXML",
+    GENBANK:               "GENBANK",
+    FASTA:                 "FASTA",
+    JBEISEQ:               "JBEISEQ",
+    //SBOLXML:               "SBOLXML",
 
     //================================================================
     // EugeneRule.js: compositionalOperator
 
     // Deprecated
-    NOTMORETHAN: "NOTMORETHAN",
+    NOTMORETHAN:        "NOTMORETHAN",
     // Deprecated
-    NOTWITH: "NOTWITH",
+    NOTWITH:            "NOTWITH",
     
-    AFTER: "AFTER",
-    BEFORE: "BEFORE",
-    WITH: "WITH",
-    THEN: "THEN",
-    NEXTTO: "NEXTTO",
-    MORETHAN: "MORETHAN",
+    AFTER:              "AFTER",
+    BEFORE:             "BEFORE",
+    WITH:               "WITH",
+    THEN:               "THEN",
+    NEXTTO:             "NEXTTO",
+    MORETHAN:           "MORETHAN",
 
     //================================================================
+    // J5Bin.js
 
-    
+    // ForceAssemblyStrategies -- can be used only in certain conditions
+    FAS_LIST: [
+        // For the first part or first bin and part(s) in the first bin (assumed to be the destination vector backbone(s)):
+        "DIGEST",
+        // For a contiguous set of bin(s) or part(s) whose total length is large enough to be PCR amplified:
+        "Direct Synthesis",
+        // For bins or parts that are large enough to be PCR amplified:
+        "PCR",
+        // For bins or parts that are small enough to be embedded within a PCR oligo:
+        "Embed_in_primer_reverse",
+        "Embed_in_primer_forward",
+        //For bins or parts that are small enough to be embedded within a DNA oligo:
+        "Annealed Oligos"
+    ],
+
+    //================================================================
     REPORT_BUG_URL:         "",
     SUGGEST_FEATURE_URL:    "",
     
