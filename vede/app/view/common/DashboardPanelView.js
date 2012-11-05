@@ -146,7 +146,21 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                             xtype: 'panel',
                                             flex: 1,
                                             border: 0,
-                                            id: 'dashboard_BottomPanel'
+                                            id: 'dashboard_BottomPanel',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: 'panel',
+                                                    id: 'dashboard_StatsPanel',
+                                                    margin: 10,
+                                                    layout: {
+                                                        type: 'fit'
+                                                    },
+                                                    title: 'Analytics'
+                                                }
+                                            ]
                                         }
                                     ]
                                 },

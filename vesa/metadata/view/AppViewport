@@ -830,9 +830,28 @@
                                         "designer|userClassName": "MyPanel41",
                                         "border": 0,
                                         "id": "dashboard_BottomPanel",
+                                        "layout": "fit",
                                         "title": null
                                     },
-                                    "designerId": "bfcc6bd3-5c59-445a-8e0f-8f6af3fd23aa"
+                                    "designerId": "bfcc6bd3-5c59-445a-8e0f-8f6af3fd23aa",
+                                    "cn": [
+                                        {
+                                            "type": "panel",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyPanel43",
+                                                "id": "dashboard_StatsPanel",
+                                                "margin": 10,
+                                                "layout": "fit",
+                                                "title": "Analytics"
+                                            },
+                                            "designerId": "91186c08-b13a-48c5-be85-92a6f8fc31fe"
+                                        }
+                                    ]
                                 }
                             ]
                         },

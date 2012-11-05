@@ -186,7 +186,12 @@
                                             ]
                                         },
                                         {
-                                            "id": "bfcc6bd3-5c59-445a-8e0f-8f6af3fd23aa"
+                                            "id": "bfcc6bd3-5c59-445a-8e0f-8f6af3fd23aa",
+                                            "cn": [
+                                                {
+                                                    "id": "91186c08-b13a-48c5-be85-92a6f8fc31fe"
+                                                }
+                                            ]
                                         }
                                     ]
                                 },
