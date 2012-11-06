@@ -48,8 +48,9 @@ Ext.define("Teselagen.models.SequenceFile", {
                 if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
                     return format;
                 } else {
-                    console.warn("Teselagen.models.SequenceFile: File format, '" + v + "' for this sequence is not recognized. Format not set.");
-                    return "";
+                    // COMMENTING THIS OUT FOR NOW
+                    //console.warn("Teselagen.models.SequenceFile: File format, '" + v + "' for this sequence is not recognized. Format not set.");
+                    return "INIT";
                 }
                 
             }
@@ -230,7 +231,8 @@ Ext.define("Teselagen.models.SequenceFile", {
             name = pSource + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
         } else {
             name = pSource;
-            console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
+            // FIGURE OUT WHAT TO DO WITH THIS WARNING LATER
+            //console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
         }
 
         return name;
@@ -264,19 +266,23 @@ Ext.define("Teselagen.models.SequenceFile", {
     },
 
 
-    /**
+    /** COME BACK AND FILL THIS IN FOR GENBANK AND JBEISEQ
      * Determine the length of the sequence.
      * @returns {Number} Length of the sequence
      */
     getLength: function() {
-        var format  = this.get("sequenceFileFormat");
+        var constants   = Teselagen.constants.Constants;
+        var format      = this.get("sequenceFileFormat");
+        var content     = this.get("sequenceFileContent");
         var end     = 0;
-
-        // If the file name was set with a "" for partSource, the file name may be ".fas", ".gb", or "xml"
-        // Overwrite these filenames if that is true calling this method.
+        var seq;
 
         if (format === constants.GENBANK) {
         } else if (format === constants.FASTA) {
+            seq = content.replace(/>\s*(\S*)\s*/,"");
+            //console.log(seq);
+            end = seq.length;
+
         } else if (format === constants.JBEISEQ) {
         } else {
         }
