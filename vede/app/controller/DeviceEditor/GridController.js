@@ -115,7 +115,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         
         this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
-        this.tabPanel = Ext.getCmp("tabpanel");
+        this.tabPanel = Ext.getCmp("mainAppPanel");
 
         // Create a sample bin and associated parts to render.
         this.totalRows = 2;

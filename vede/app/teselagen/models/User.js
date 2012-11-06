@@ -44,7 +44,7 @@ Ext.define("Teselagen.models.User", {
             type: "json"
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("getUser", this.url);
+            return Teselagen.manager.SessionManager.buildUrl("user", this.url);
         }
     }
 });

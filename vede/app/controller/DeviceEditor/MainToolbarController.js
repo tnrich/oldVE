@@ -30,7 +30,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     onOpenj5Click: function(button, e, options) {
-        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window = Ext.create('Vede.view.de.j5Controls').show();
     },
 

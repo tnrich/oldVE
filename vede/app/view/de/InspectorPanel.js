@@ -6,7 +6,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
     dock: 'right',
     floating: false,
     frame: true,
-    id: 'InspectorPanel',
+    cls: 'InspectorPanel',
     margin: '10 0 10 0',
     minWidth: 350,
     width: 100,
@@ -40,7 +40,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 {
                     xtype: 'form',
                     flex: 1,
-                    id: 'PartPropertiesForm',
+                    cls: 'PartPropertiesForm',
                     width: 287,
                     layout: {
                         align: 'stretch',
@@ -51,32 +51,32 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     items: [
                         {
                             xtype: 'textfield',
-                            id: 'partNameField',
+                            cls: 'partNameField',
                             fieldLabel: 'Part Name'
                         },
                         {
                             xtype: 'displayfield',
                             height: 20,
-                            id: 'partSourceField',
+                            cls: 'partSourceField',
                             fieldLabel: 'Part Source'
                         },
                         {
                             xtype: 'displayfield',
                             height: 20,
-                            id: 'reverseComplementField',
+                            cls: 'reverseComplementField',
                             fieldLabel: 'Reverse Complement',
                             labelWidth: 160
                         },
                         {
                             xtype: 'displayfield',
                             height: 20,
-                            id: 'startBPField',
+                            cls: 'startBPField',
                             fieldLabel: 'Start BP'
                         },
                         {
                             xtype: 'displayfield',
                             height: 20,
-                            id: 'stopBPField',
+                            cls: 'stopBPField',
                             fieldLabel: 'End BP'
                         }
                     ]
@@ -123,40 +123,40 @@ Ext.define('Vede.view.de.InspectorPanel', {
             items: [
                 {
                     xtype: 'form',
-                    id: 'collectionInfoForm',
+                    cls: 'collectionInfoForm',
                     bodyBorder: false,
                     bodyPadding: 10,
                     items: [
                         {
                             xtype: 'displayfield',
                             anchor: '100%',
-                            id: 'j5_ready_field',
+                            cls: 'j5_ready_field',
                             value: 'Display Field',
                             fieldLabel: 'j5 Ready'
                         },
                         {
                             xtype: 'displayfield',
                             anchor: '100%',
-                            id: 'combinatorial_field',
+                            cls: 'combinatorial_field',
                             value: 'Display Field',
                             fieldLabel: 'Combinatorial'
                         },
                         {
                             xtype: 'radiogroup',
-                            id: 'plasmid_geometry',
+                            cls: 'plasmid_geometry',
                             fieldLabel: 'Plasmid Type',
                             allowBlank: false,
                             items: [
                                 {
                                     xtype: 'radiofield',
-                                    id: 'circular_plasmid_radio',
+                                    cls: 'circular_plasmid_radio',
                                     name: 'plasmidtype',
                                     boxLabel: 'Circular',
                                     checked: true
                                 },
                                 {
                                     xtype: 'radiofield',
-                                    id: 'linear_plasmid_radio',
+                                    cls: 'linear_plasmid_radio',
                                     name: 'plasmidtype',
                                     boxLabel: 'Linear'
                                 }
@@ -208,7 +208,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'container',
-                            id: 'inspector_containerActions',
+                            cls: 'inspector_containerActions',
                             margin: 10,
                             items: [
                                 {

@@ -85,8 +85,7 @@ Ext.application({
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        this.authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager"); // Created Auth manager
-        this.authenticationManager.login(this); // Start Auth process
+        Teselagen.manager.AuthenticationManager.login(this); // Start Auth process
 
         var self = this;
 

@@ -28,9 +28,11 @@ Ext.syncRequire(["Ext.Ajax",
  "Teselagen.models.Project",
  "Teselagen.manager.SequenceFileManager",
  "Teselagen.manager.DeviceDesignManager",
- "Teselagen.manager.ProjectManager"], function () {
-    console.log('Requires are ready');
-
+ "Teselagen.manager.ProjectManager",
+ "Teselagen.manager.AuthenticationManager",
+ "Teselagen.manager.ProjectManager",
+ "Teselagen.manager.SessionManager"], 
+ function () {
 
     Ext.define('sessionData', {
         singleton: true,
@@ -38,43 +40,19 @@ Ext.syncRequire(["Ext.Ajax",
         baseURL: 'http://teselagen.local/api/'
     });
 
-    function ajaxCheck(ajaxMethod, args, cb) {
-        /**
-         * @author Rodrigo Pavez
-         * Custom function for checking ajax request
-         * Need to add in the method: if (cb) return cb(true); // for testing
-         *
-         * Input: (method,args,cb)
-         * method: Method to test
-         * args: array of arguments
-         * cb (optional): function to be called after success
-         */
 
-        var ajaxTimeOut = 10000;
-
-        args.push(function (r) {
-            flag = r;
-        });
-        var flag = false;
-        runs(function () {
-            ajaxMethod.apply(this, args);
-        });
-
-        waitsFor(function () {
-            if(flag) cb(flag);
-            return flag;
-        }, "Ajax has not responded in setup timeout", ajaxTimeOut);
-    };
-
-
-    var design, deproject, projectManager, deprojectsaved;
+    var design, deproject, projectManager, authenticationManager, deprojectsaved;
     var server = 'http://teselagen.local/api/';
+
+    projectManager = Teselagen.manager.ProjectManager; // Now is singleton
+    authenticationManager = Teselagen.manager.AuthenticationManager; // Now is singleton
 
     describe("Connection to server", function () {
         it("Setup params", function () {
             Ext.Ajax.cors = true; // Allow CORS
             Ext.Ajax.method = 'POST'; // Set POST as default Method
             sessionData.baseURL = server;
+            Teselagen.manager.SessionManager.env = 'prod';
         });
 
         it("Checking server " + server + " is running", function () {
@@ -98,20 +76,15 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Authentication", function () {
 
-        it("Create Authentication Manager and Login as Root on teselagen.local server", function () {
-            var authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager"); // Created Auth manager
+        it("Login with Manual-Auth in Authentication Manager", function () {
             var args = ['rpavez', '', 'http://teselagen.local/api/'];
             ajaxCheck(authenticationManager.manualAuth, args, function () {
                 expect(sessionData.AuthResponse).toBeDefined();
             });
         });
-
     });
 
     describe("Get User Profile and Projects", function () {
-        it("Create Project Manager", function () {
-            projectManager = Teselagen.manager.ProjectManager; // Created Project Manager
-        });
 
         it("Get User Profile and Get User Projects", function () {
             runs(function () {
@@ -125,24 +98,15 @@ Ext.syncRequire(["Ext.Ajax",
                 else return false;
             }, "Auth took too much time", 750);
 
-        });
-
-        it("Check if projects loaded", function () {
             waits(500);
-
             runs(function () {
                 expect(projectManager.projects).toBeDefined();
             });
+
         });
     });
 
-    //Sha256              = Teselagen.bio.util.Sha256;
-    //SequenceFileManager = Teselagen.manager.SequenceFileManager;
-    DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-
-    
-    describe("Create new Project, De Project and DE Design", function () {
-
+    describe("Create new Project, DE Project and DE Design", function () {
 
         it("Create new Project", function () {
 
@@ -161,9 +125,7 @@ Ext.syncRequire(["Ext.Ajax",
                 project.save();
                 
             });
-
         });
-
         
         it("Create DE Project", function () {
 
@@ -188,8 +150,9 @@ Ext.syncRequire(["Ext.Ajax",
             });
         });
         
-        
         it("Generate in-memory DE Design", function () {
+
+            var DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
             // In creating this design, use bare minimum required fields
             // Will build this from the models.
@@ -255,9 +218,7 @@ Ext.syncRequire(["Ext.Ajax",
             });
             rule1.setOperand1(part1a);
             design.addToRules(rule1);
-
         });
-
 
         it("Save DE Design to Server", function () {
 
@@ -275,26 +236,35 @@ Ext.syncRequire(["Ext.Ajax",
                     console.log("Design saved!");
                 });
             });
-
         });
 
     });
 
-    describe("Test j5 Parameters", function () {
-        var j5Parameters;
+    var ajaxCheck = function(ajaxMethod, args, cb) {
+        /**
+         * @author Rodrigo Pavez
+         * Custom function for checking ajax request
+         * Need to add in the method: if (cb) return cb(true); // for testing
+         *
+         * Input: (method,args,cb)
+         * method: Method to test
+         * args: array of arguments
+         * cb (optional): function to be called after success
+         */
 
-        it("Create j5Parameters Model", function () {
+        var ajaxTimeOut = 10000;
 
-            j5Parameters = Ext.create("Teselagen.models.J5Parameters");
-            j5Parameters.setDefaultValues();
-
+        args.push(function (r) {
+            flag = r;
+        });
+        var flag = false;
+        runs(function () {
+            ajaxMethod.apply(this, args);
         });
 
-        it("Test getParametersAsArray method", function () {
-            var j5ParamsArray = j5Parameters.getParametersAsArray(true);
-            for(var prop in j5ParamsArray) {
-                expect(j5ParamsArray[prop]).toBeDefined();
-            }
-        });    
-    });
+        waitsFor(function () {
+            if(flag) cb(flag);
+            return flag;
+        }, "Ajax has not responded in setup timeout", ajaxTimeOut);
+    };
 });

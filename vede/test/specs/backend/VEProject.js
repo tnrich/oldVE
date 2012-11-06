@@ -20,9 +20,12 @@ Ext.syncRequire(["Ext.Ajax",
  "Teselagen.models.VectorEditorProject",
  "Teselagen.manager.SequenceFileManager",
  "Teselagen.manager.DeviceDesignManager",
+ "Teselagen.manager.AuthenticationManager",
  "Teselagen.manager.ProjectManager"], function () {
-    console.log('Requires are ready');
 
+    var newSequence, veproject, projectManager, veprojectsaved, AuthResponse;
+    var server = 'http://teselagen.local/api/';
+    veprojectsaved = false;
 
     Ext.define('sessionData', {
         singleton: true,
@@ -30,44 +33,10 @@ Ext.syncRequire(["Ext.Ajax",
         baseURL: 'http://teselagen.local/api/'
     });
 
-    function ajaxCheck(ajaxMethod, args, cb) {
-        /**
-         * @author Rodrigo Pavez
-         * Custom function for checking ajax request
-         * Need to add in the method: if (cb) return cb(true); // for testing
-         *
-         * Input: (method,args,cb)
-         * method: Method to test
-         * args: array of arguments
-         * cb (optional): function to be called after success
-         */
-
-        var ajaxTimeOut = 10000;
-
-        args.push(function (r) {
-            flag = r;
-        });
-        var flag = false;
-        runs(function () {
-            ajaxMethod.apply(this, args);
-        });
-
-        waitsFor(function () {
-            if(flag) cb(flag);
-            return flag;
-        }, "Ajax has not responded in setup timeout", ajaxTimeOut);
-    };
-
-
-    var newSequence, veproject, projectManager, veprojectsaved;
-    var server = 'http://teselagen.local/api/';
-    veprojectsaved = false;
-
     describe("Connection to server", function () {
         it("Setup params", function () {
             Ext.Ajax.cors = true; // Allow CORS
             Ext.Ajax.method = 'POST'; // Set POST as default Method
-            sessionData.baseURL = server;
         });
 
         it("Checking server " + server + " is running", function () {
@@ -92,7 +61,7 @@ Ext.syncRequire(["Ext.Ajax",
     describe("Authentication", function () {
 
         it("Create Authentication Manager and Login as Root on teselagen.local server", function () {
-            var authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager"); // Created Auth manager
+            var authenticationManager = Teselagen.manager.AuthenticationManager; // Created Auth manager
             var args = ['rpavez', '', 'http://teselagen.local/api/'];
             ajaxCheck(authenticationManager.manualAuth, args, function () {
                 expect(sessionData.AuthResponse).toBeDefined();
@@ -246,4 +215,20 @@ Ext.syncRequire(["Ext.Ajax",
         });
         */
     });
+
+    var ajaxCheck = function(ajaxMethod, args, cb) {
+
+        var ajaxTimeOut = 10000;
+        args.push(function (r) {
+            flag = r;
+        });
+        var flag = false;
+        runs(function () {
+            ajaxMethod.apply(this, args);
+        });
+        waitsFor(function () {
+            if(flag) cb(flag);
+            return flag;
+        }, "Ajax has not responded in setup timeout", ajaxTimeOut);
+    };
 });
