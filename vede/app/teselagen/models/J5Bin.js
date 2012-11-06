@@ -33,7 +33,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Boolean} dsf Direct Synthesis Firewall. False to allow j5 the flexibility to choose. True to prevent a direct synthesis piece from extending from a marked target part row to the target part in the next row.
      * @param {Teselagen.utils.NullableInt} fro Forced Relative Overlap/Overhang Position. Empty to allow j5 the flexibility to choose, or an integral number of bps (to forcibly set the relative overlap/overhang position).
      * @param {String} fas Forced Assembly Strategy. Empty to allow j5 the flexibility to choose.
-     * @param {Teselagen.utils.NullableInt} extra5PrimeBps 
+     * @param {Teselagen.utils.NullableInt} extra5PrimeBps
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
@@ -51,7 +51,18 @@ Ext.define("Teselagen.models.J5Bin", {
                 }
             }
         }, //required when making this object
-        {name: "iconID",            type: "string",     defaultValue: ""},
+        //{name: "iconID",            type: "string",     defaultValue: ""},
+        {
+            name: "iconID",
+            convert: function(v, record) {
+                if ( v === null || v === undefined || v === "") {
+                    return record.self.GENERIC;
+                } else {
+                    return v;
+                }
+            }
+        },
+
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
@@ -104,14 +115,6 @@ Ext.define("Teselagen.models.J5Bin", {
             associationKey: "j5Collection"
         }
     ],
-
-    // Tried using Constructor and it doesn't work.
-    // Read on forums to use init as a way to execute methods after the fields block. --DW
-    init: function(inData) {
-        if (this.get("iconID") === "") {
-            this.set("iconID", this.self.GENERIC);
-        }
-    },
 
     /**
      * @returns {Number} count Number of Parts in parts

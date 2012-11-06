@@ -41,20 +41,20 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         {
                                                             xtype: 'gridcolumn',
                                                             id: 'projectGrid_Name',
-                                                            dataIndex: 'string',
+                                                            dataIndex: 'name',
                                                             hideable: false,
                                                             text: 'Name'
                                                         },
                                                         {
                                                             xtype: 'datecolumn',
                                                             id: 'projectGrid_DateCreated',
-                                                            dataIndex: 'date',
+                                                            dataIndex: 'DateCreated',
                                                             text: 'Date Created'
                                                         },
                                                         {
                                                             xtype: 'datecolumn',
                                                             id: 'projectGrid_DateModified',
-                                                            dataIndex: 'date',
+                                                            dataIndex: 'DateModified',
                                                             text: 'Last Modified'
                                                         }
                                                     ],
@@ -83,7 +83,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                                 }
                                                             ]
                                                         }
-                                                    ]
+                                                    ],
+                                                    require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
+                                                    listeners: {
+                                                        itemclick: function (view, record, item, index, e, eOpts) {
+                                                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_PROJECT,record);;
+                                                        }
+                                                    }
                                                 },
                                                 {
                                                     xtype: 'gridpanel',

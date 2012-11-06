@@ -41,8 +41,7 @@ Ext.define("Teselagen.models.Part", {
     fields: [
         {name: "id",                type: "int"},
         {name: "veproject_id",        type: "int"},
-        
-        //{name: "partVO",            type: "auto",       defaultValue: null},
+
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "fas",               type: "string",     defaultValue: ""},
         /*{
@@ -63,9 +62,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        //{name: "sequenceFile_id",   type: "int"},
         {name: "iconID",            type: "string",     defaultValue: ""}//,
-        //{name: "j5bin_id",          type: "int"}
     ],
 
     validations: [
@@ -83,7 +80,7 @@ Ext.define("Teselagen.models.Part", {
             associationKey:"sequenceFile",
             foreignKey:"sequenceFile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFile",
+            setterName: "setSequenceFileModel",
             name: "SequenceFile"
         },
         {
@@ -109,10 +106,6 @@ Ext.define("Teselagen.models.Part", {
         }
     ],
 
-    init: function() {
-        
-    },
-
     /**
      * Generates ID based on date + 3 random digits
      * @returns {String} id
@@ -137,13 +130,6 @@ Ext.define("Teselagen.models.Part", {
         this.set("id", newId);
         return true;
      },
-
-    /**
-     * Sets deafult genbankStartBP and endBP based on a set SequenceFile.
-     * @returns {Boolean} True if empty, false if not.
-     */
-    setDefaultStartStop: function() {
-    },
 
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.
@@ -199,21 +185,24 @@ Ext.define("Teselagen.models.Part", {
 
 
 
-    // SOME METHODS FROM SEQUENCEFILEMANAGER/SEQUENCEFILEPROXY
-
-    /** NEEDS TESTING
-     * Adds a SequenceFile to Part.
-     * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Boolean} True if added, false if not.
-     *
-    addSequenceFile: function(pSequenceFile) {
-        this.setSequenceFile(pSequenceFile);
-        if (this.getSequenceFile() === pSequenceFile) {
-            return false;
+    /** COME BACK AND DO THIS
+     * Sets SequenceFile with default genbankStartBP and endBP based on a set SequenceFileContent.
+     * @returns {Boolean}
+     */
+    setSequenceFile: function(pSequenceFile) {
+        if (pSequenceFile === null) {
+            this.setSequenceFileModel(pSequenceFile);
         } else {
-            return true;
+            var start   = 1;
+            var stop    = pSequenceFile.getLength();
+
+            this.setSequenceFileModel(pSequenceFile);
+            this.set("genbankStartBP", start);
+            this.set("endBP", stop);
         }
-    },*/
+        
+    },
+
 
     /** NEEDS TESTING
      * Removes the SequenceFile of Part.

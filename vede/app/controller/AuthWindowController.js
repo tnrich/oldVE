@@ -3,7 +3,7 @@ Ext.define('Vede.controller.AuthWindowController', {
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
 
     onAuthLoginClick: function(button, e, options) {
-        var authenticationManager = Ext.get("Teselagen.manager.AuthenticationManager");
+        var authenticationManager = Teselagen.manager.AuthenticationManager;
 
 		var form = Ext.getCmp('auth-form').getForm();
 		var username = form.findField('username').getRawValue();
@@ -13,7 +13,7 @@ Ext.define('Vede.controller.AuthWindowController', {
         Vede.application.authenticationManager.manualAuth(username,password,server);
     },
     onAuthGuestClick: function(button, e, options) {
-        var authenticationManager = Ext.get("Teselagen.manager.AuthenticationManager");
+        var authenticationManager = Teselagen.manager.AuthenticationManager;
 		var form = Ext.getCmp('auth-form').getForm();
 		var server = form.findField('server').getRawValue();
         Vede.application.authenticationManager.guestAuth(server);

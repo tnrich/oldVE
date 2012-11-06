@@ -30,7 +30,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     generateAjaxRequest: function () {
         console.log("Starting Ajax Request");
 
-        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentModel = currentTab.model;
         var self = this;
         Ext.Ajax.request({
@@ -45,7 +45,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 
                 self.currentResults = response;
 
-                var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+                var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
                 var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
