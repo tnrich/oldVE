@@ -3,7 +3,7 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor'],
+	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor','Teselagen.manager.SessionManager'],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -30,7 +30,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
 						self.projects = self.currentUser.projects();
-						if(Ext.getCmp('projectsWidget')) Ext.getCmp('projectsWidget').reconfigure(self.projects);
+						if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
 					}
 				});
 				if(cb) return cb(true);
@@ -42,7 +42,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 *	Load Project Child Resources
 	 */	
 	loadDesignAndChildResources: function () {
-		console.log("Project panel update fired?");
 		var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
 		var self = this;
@@ -85,7 +84,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var selectedDesign = selectedDEProject.getDesign({
 			callback: function (record,operation) {
 				selectedDesign = selectedDEProject.getDesign();
-				var tabPanel = Ext.getCmp('tabpanel');
+				var tabPanel = Ext.getCmp('mainAppPanel');
 				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
 			
 				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
@@ -107,7 +106,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			callback: function (record,operation) {
 				selectedSequence = selectedVEProject.getSequenceFile();
 				self.workingSequence = selectedSequence;
-				var tabPanel = Ext.getCmp('tabpanel');
+				var tabPanel = Ext.getCmp('mainAppPanel');
 				tabPanel.setActiveTab( 1 );
 	            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
 	            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
@@ -192,7 +191,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	    veproject.save({
 	        callback: function(){
 	        	console.log("VE project saved");
-	        	var tabPanel = Ext.getCmp('tabpanel');
+	        	var tabPanel = Ext.getCmp('mainAppPanel');
 				tabPanel.setActiveTab( 1 );
 				Vede.application.fireEvent("ImportSequenceToProject",veproject);
 				self.loadDesignAndChildResources();

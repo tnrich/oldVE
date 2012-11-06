@@ -56,9 +56,6 @@ Ext.define("Teselagen.models.J5Collection", {
         }
     ],
 
-    init: function() {
-    },
-
     /**
      * @returns {Number} count Number of J5Bins in bins
      */

@@ -84,9 +84,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
     ],
 
-    init: function() {
-    },
-
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection

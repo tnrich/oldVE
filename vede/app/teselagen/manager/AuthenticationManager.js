@@ -7,6 +7,7 @@
 Ext.define("Teselagen.manager.AuthenticationManager", {
   requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow"],
   alias: "AuthenticationManager",
+  singleton: true,
   mixins: {
     observable: "Ext.util.Observable"
   },

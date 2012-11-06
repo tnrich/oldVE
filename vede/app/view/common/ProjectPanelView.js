@@ -82,7 +82,6 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.ProjectPanelView',
     region: 'west',
-    split: true,
     id: 'ProjectPanel',
     cls: 'tabbar',
     maxWidth: 230,
@@ -96,6 +95,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     title: 'Project',
     activeTab: 0,
     plain: false,
+    margin: '0 10 0 0',
     removePanelHeader: false,
     items: [{
         xtype: 'panel',
@@ -117,6 +117,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         },
         items: [{
             xtype: 'treepanel',
+            border: 0,
             id: 'projectDesignPanel',
             title: 'Your Designs',
             rootVisible: false
@@ -138,6 +139,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         },
         items: [{
             xtype: 'treepanel',
+            border: 0,
             id: 'projectAnalysisPanel',
             title: 'j5 Results',
             rootVisible: false,
@@ -164,6 +166,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         },
         items: [{
             xtype: 'treepanel',
+            border: 0,
             id: 'projectPartsPanel',
             title: 'Your Parts',
             rootVisible: false,
@@ -191,6 +194,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         },
         items: [{
             xtype: 'treepanel',
+            border: 0,
             id: 'projectsRegistryPanel',
             title: 'Registry',
             viewConfig: {

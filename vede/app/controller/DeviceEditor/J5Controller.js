@@ -271,7 +271,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;           
         masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;                   
 
-        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
         currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles);
         currentTab.j5Window.j5comm.generateAjaxRequest();
@@ -331,7 +331,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }, this);
     },
     onDownloadj5Btn: function(button, e, options) {
-        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm.downloadResults(button);
     },
 
