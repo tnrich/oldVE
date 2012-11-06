@@ -152,8 +152,8 @@ Ext.onReady(function() {
                 }
                 expect(tmp.findKeyword("LOCUS").getSequenceLength()).toBe(4639675);
 
-                expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(3);
-                expect(tmp.findKeyword("FEATURES").getFeaturesElements()[2].getFeatureQualifier().length).toBe(9);
+                expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(8907);
+                expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(5);
                 //console.log(tmp);
             });
 
