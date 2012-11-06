@@ -16,7 +16,7 @@
 /*Global Theme Vars*/
 
 body {
-  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
 }
 
 .x-body {
@@ -74,6 +74,10 @@ body {
   border-top: 0px none;
 }
 
+.x-column-header-text {
+	font-family: 'Quicksand', sans-serif;
+	color: #333;
+}
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;
@@ -187,6 +191,7 @@ body {
 
 #ProjectPanel-body {
   border-width: 0 1px;
+  width:230px;
 }
 
 #ProjectPanel .x-tab-bar { 
