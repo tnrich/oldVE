@@ -41,8 +41,7 @@ Ext.define("Teselagen.models.Part", {
     fields: [
         {name: "id",                type: "int"},
         {name: "veproject_id",        type: "int"},
-        
-        //{name: "partVO",            type: "auto",       defaultValue: null},
+
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "fas",               type: "string",     defaultValue: ""},
         /*{
@@ -63,9 +62,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        //{name: "sequenceFile_id",   type: "int"},
         {name: "iconID",            type: "string",     defaultValue: ""}//,
-        //{name: "j5bin_id",          type: "int"}
     ],
 
     validations: [
@@ -109,10 +106,6 @@ Ext.define("Teselagen.models.Part", {
         }
     ],
 
-    init: function() {
-        
-    },
-
     /**
      * Generates ID based on date + 3 random digits
      * @returns {String} id
@@ -138,7 +131,7 @@ Ext.define("Teselagen.models.Part", {
         return true;
      },
 
-    /**
+    /** COME BACK AND DO THIS
      * Sets deafult genbankStartBP and endBP based on a set SequenceFile.
      * @returns {Boolean} True if empty, false if not.
      */
@@ -197,23 +190,6 @@ Ext.define("Teselagen.models.Part", {
         return false;
     },
 
-
-
-    // SOME METHODS FROM SEQUENCEFILEMANAGER/SEQUENCEFILEPROXY
-
-    /** NEEDS TESTING
-     * Adds a SequenceFile to Part.
-     * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Boolean} True if added, false if not.
-     *
-    addSequenceFile: function(pSequenceFile) {
-        this.setSequenceFile(pSequenceFile);
-        if (this.getSequenceFile() === pSequenceFile) {
-            return false;
-        } else {
-            return true;
-        }
-    },*/
 
     /** NEEDS TESTING
      * Removes the SequenceFile of Part.
