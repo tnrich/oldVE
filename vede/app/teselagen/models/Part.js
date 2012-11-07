@@ -82,8 +82,7 @@ Ext.define("Teselagen.models.Part", {
             associationKey:"sequenceFile",
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFile",
-            name: "sequenceFile"
+            setterName: "setSequenceFileModel"
         },
         {
             type: "belongsTo",
@@ -136,13 +135,6 @@ Ext.define("Teselagen.models.Part", {
         return true;
      },
 
-    /** COME BACK AND DO THIS
-     * Sets deafult genbankStartBP and endBP based on a set SequenceFile.
-     * @returns {Boolean} True if empty, false if not.
-     */
-    setDefaultStartStop: function() {
-    },
-
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.
      * @returns {Boolean} True if empty, false if not.
@@ -193,6 +185,26 @@ Ext.define("Teselagen.models.Part", {
             return true;
         }
         return false;
+    },
+
+
+
+    /** COME BACK AND DO THIS
+     * Sets SequenceFile with default genbankStartBP and endBP based on a set SequenceFileContent.
+     * @returns {Boolean}
+     */
+    setSequenceFile: function(pSequenceFile) {
+        if (pSequenceFile === null) {
+            this.setSequenceFileModel(pSequenceFile);
+        } else {
+            var start   = 1;
+            var stop    = pSequenceFile.getLength();
+
+            this.setSequenceFileModel(pSequenceFile);
+            this.set("genbankStartBP", start);
+            this.set("endBP", stop);
+        }
+        
     },
 
 

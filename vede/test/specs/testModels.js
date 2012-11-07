@@ -383,7 +383,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
-            it("Creates Part, Can Set SequenceFile", function(){
+            it("Creates Part, setSequenceFile()", function(){
                 var part = Ext.create("Teselagen.models.Part", {
                     id: 5,
                     fas: "fas1"
@@ -397,6 +397,8 @@ Ext.onReady(function() {
                     sequenceFileContent: "gattaca"
                 });
 
+                expect(part.get("genbankStartBP")).toBe(0);
+                expect(part.get("endBP")).toBe(0);
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("");
 
@@ -405,8 +407,8 @@ Ext.onReady(function() {
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("newSeq");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("gattaca");
 
-                expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
-                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+                expect(part.get("genbankStartBP")).toBe(1);
+                expect(part.get("endBP")).toBe(7);
             });
 
             it("Creates Empty Part, isEmpty", function(){
@@ -436,9 +438,6 @@ Ext.onReady(function() {
                 //expect(part.get("id").length).toBe(16); //toBe(13); // Date.now()
                 part.setId();
                 //expect(part.get("id").length).toBe(16); // Date.now() + 3 random digits
-            });
-
-            it("setDefaultStartStop() ***", function(){
             });
 
             it("isEmpty() *** Check to see if this is a good definition", function(){
