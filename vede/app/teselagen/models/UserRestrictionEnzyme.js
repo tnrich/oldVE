@@ -18,5 +18,16 @@ Ext.define("Teselagen.models.UserRestrictionEnzyme", {
         { name: "uregroup_id", type: "long"},
         {name: "name", type: "string", defaultValue: ""},
         {name: "active", type: "boolean", defaultValue: false}
-    ]
+    ],
+    associations: [
+         {
+             type: "belongsTo",
+             model: "Teselagen.models.UserRestrictionEnzymeGroup",
+             getterName: "getUserRestrictionEnzymeGroup",
+             setterName: "setUserRestrictionEnzymeGroup",
+             associationKey: "userRestrictionEnzymeGroup",
+             foreignKey: "uregroup_id"
+         }
+     ]
+
 });
