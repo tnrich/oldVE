@@ -43,7 +43,6 @@ Ext.define("Teselagen.models.Project", {
         getterName: "getUser",
         setterName: "setUser",
         associationKey: "user",
-        name: "user",
         foreignKey: "user_id"
     }],
 
