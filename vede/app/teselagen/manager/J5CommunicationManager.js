@@ -15,6 +15,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     statics: {},
 
+    j5Parameters: null,
+
+    masterFiles: null,
+
     constructor: function () {},
 
     //================================================================
@@ -26,20 +30,22 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     generateAjaxRequest: function () {
         console.log("Starting Ajax Request");
 
-        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentModel = currentTab.model;
         var self = this;
         Ext.Ajax.request({
             url: sessionData.baseURL + 'executej5',
             params: {
-                deProjectId: currentModel.data.id
+                deProjectId: currentModel.data.id,
+                parameters: JSON.stringify(this.j5Parameters),
+                masterFiles: JSON.stringify(this.masterFiles)
             },
             success: function (response) {
                 var response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
 
-                var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+                var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
                 var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
@@ -61,10 +67,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                     fields: ['name']
                 });
                 store.load();
-
                 resultsGrid.reconfigure(store);
-
-                console.log(currentTab.j5Window.query('button[cls=downloadj5Btn]')[0]);
                 downloadBtn.show();
                 runj5Btn.toggle();
 
@@ -76,9 +79,9 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;
         btn.toggle();
     },
-    setj5Parameters: function(j5Parameters){
-        this.j5Parameters = j5Parameters;
-        console.log(this.j5Parameters);
+    setParameters: function(j5Parameters,masterFiles){
+        this.j5Parameters = j5Parameters.getParametersAsArray(true);
+        this.masterFiles = masterFiles;
     }
 
 });

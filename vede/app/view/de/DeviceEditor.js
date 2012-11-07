@@ -16,19 +16,20 @@ Ext.define('Vede.view.de.DeviceEditor', {
         xtype: 'DeviceEditorToolPanel'
     }, {
         xtype: 'DeviceEditorStatusPanel'
+    }, {
+        xtype: 'DeviceEditorPartPanel'
     }],
     items: [{
-        xtype: 'container',
+        xtype: 'panel',
         //id: 'DeviceEditorContainer',
         layout: {
             align: 'stretch',
-            type: 'hbox'
+            type: 'fit'
         },
+        border: 0,
         items: [{
             xtype: 'DeviceEditorCanvasPanel'
-        },
-        //Ext.create('Vede.view.de.InspectorPanel') 
-        { xtype: 'InspectorPanel', flex: 2 }
+        }
         ]
     }],
     listeners: {

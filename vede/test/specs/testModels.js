@@ -234,7 +234,7 @@ Ext.onReady(function() {
                 expect(seq).not.toBe(null);
 
                 expect(Ext.getClassName(seq.getPart())).toBe("Teselagen.models.Part");
-                expect(Ext.getClassName(seq.getProject())).toBe("Teselagen.models.Project");
+                expect(Ext.getClassName(seq.getVectorEditorProject())).toBe("Teselagen.models.VectorEditorProject");
             });
 
             it("Creates empty SequenceFile", function(){
@@ -254,6 +254,7 @@ Ext.onReady(function() {
                 var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
 
                 seq.set("sequenceFileFormat", "FASTA");
+                expect(seq.get("sequenceFileFormat")).toBe("FASTA");
 
                 var hash = seq.setSequenceFileContent(content);
                 expect(hash).toBe(trueHash);
@@ -382,7 +383,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
-            it("Creates Part, Can Set SequenceFile", function(){
+            it("Creates Part, setSequenceFile()", function(){
                 var part = Ext.create("Teselagen.models.Part", {
                     id: 5,
                     fas: "fas1"
@@ -396,6 +397,8 @@ Ext.onReady(function() {
                     sequenceFileContent: "gattaca"
                 });
 
+                expect(part.get("genbankStartBP")).toBe(0);
+                expect(part.get("endBP")).toBe(0);
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("");
 
@@ -404,8 +407,8 @@ Ext.onReady(function() {
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("newSeq");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("gattaca");
 
-                expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
-                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+                expect(part.get("genbankStartBP")).toBe(1);
+                expect(part.get("endBP")).toBe(7);
             });
 
             it("Creates Empty Part, isEmpty", function(){
@@ -453,6 +456,9 @@ Ext.onReady(function() {
                 expect(part1.isEqual(part1)).toBe(true);
                 expect(part1.isEqual(part2)).toBe(false); // Should this be equal??? They have different SeqFiles.
                 expect(part1.isEqual(part3)).toBe(false);
+            });
+
+            it("removeSequenceFile() ***", function(){
             });
         });
         

@@ -3,7 +3,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     requires: ["Ext.draw.*"],
 
     openProject: function(project) {
-        Ext.getCmp('tabpanel').getActiveTab().model = project;
+        Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
 
     init: function () {
@@ -54,7 +54,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             }
         });
 
-        var currentTab = Ext.getCmp('tabpanel').getActiveTab();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentModel = currentTab.model;
 
         var surface = currentTab.query('draw[cls=designCanvas]')[0].surface;

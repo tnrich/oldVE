@@ -28,21 +28,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
                             flex: 2,
                             id: 'headerButs',
                             items: [
-                                {
-                                    xtype: 'button',
-                                    id: 'newProject_Btn',
-                                    margin: 4,
-                                    icon: 'resources/images/ux/add_project.png',
-                                    scale: 'large',
-                                    tooltip: 'New Project'
-                                },
-                                {
-                                    xtype: 'button',
-                                    id: 'newDE_Btn',
-                                    icon: 'resources/images/ux/add_DE.png',
-                                    scale: 'large',
-                                    tooltip: 'New Device Editor Design'
-                                }
+                             
                             ]
 	}],
 	dockedItems: [{

@@ -17,14 +17,32 @@ Ext.define("Teselagen.constants.Constants", {
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+
+    FORMATS_LIST: [
+        "GENBANK",
+        "FASTA",
+        "JBEISEQ"
+        //"SBOLXML"
+    ],
     
-    GENBANK:                "GENBANK",
-    FASTA:                  "FASTA",
-    JBEI_SEQ:               "JBEI-SEQ",
-    SBOL_XML:               "SBOLXML",
+    GENBANK:               "GENBANK",
+    FASTA:                 "FASTA",
+    JBEISEQ:               "JBEISEQ",
+    //SBOLXML:               "SBOLXML",
 
     //================================================================
     // EugeneRule.js: compositionalOperator
+
+    COMPOP_LIST: [
+        "NOTMORETHAN",
+        "NOTWITH",
+        "AFTER",
+        "BEFORE",
+        "WITH",
+        "THEN",
+        "NEXTTO",
+        "MORETHAN"
+    ],
 
     // Deprecated
     NOTMORETHAN:        "NOTMORETHAN",

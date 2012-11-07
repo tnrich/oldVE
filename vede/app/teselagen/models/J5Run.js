@@ -75,9 +75,6 @@ Ext.define("Teselagen.models.J5Run", {
             setterName: "setDeviceDesign",
             associationKey: "deviceDesign"
         }*/
-    ],
-
-    init: function() {
-    }
+    ]
 
 });

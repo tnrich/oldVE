@@ -104,6 +104,9 @@ Ext.define('Vede.controller.MainToolbarController', {
             linearButton.toggle(false, true);
         }
     },
+    onSaveBtnClick: function(button, e, options){
+        this.application.fireEvent("saveCurrentVEProject");
+    },
 
     init: function() {
         this.control({
@@ -133,7 +136,10 @@ Ext.define('Vede.controller.MainToolbarController', {
             },
             "#linearViewBtn": {
                 click: this.onLinearViewBtnClick
-            }
+            },
+            "#saveBtn": {
+                click: this.onSaveBtnClick
+            },
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
