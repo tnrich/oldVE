@@ -19,11 +19,21 @@
          {name: "name", type: "string", defaultValue: ""}
      ],
 
-     associations: [{
-         type: "hasMany",
-         model: "Teselagen.models.UserRestrictionEnzyme",
-         name: "userRestrictionEnzymes",
-         associationKey: "userRestrictionEnzymes",
-         foreignKey: "uregroup_id"
-     }]
+     associations: [
+         {
+             type: "hasMany",
+             model: "Teselagen.models.UserRestrictionEnzyme",
+             name: "userRestrictionEnzymes",
+             associationKey: "userRestrictionEnzymes",
+             foreignKey: "uregroup_id"
+         },
+         {
+             type: "belongsTo",
+             model: "Teselagen.models.User",
+             getterName: "getUser",
+             setterName: "setUser",
+             associationKey: "user",
+             foreignKey: "user_id"
+         }
+     ]
  });
