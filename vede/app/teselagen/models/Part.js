@@ -39,9 +39,11 @@ Ext.define("Teselagen.models.Part", {
      * @param {String}  iconID iconID
      */
     fields: [
-        {name: "id",                type: "int"},
-        {name: "veproject_id",        type: "int"},
-
+        {name: "id",                type: "long"},
+        {name: "veproject_id",        type: "long"},
+        {name: "j5bin_id",        type: "long"},
+        {name: "eugenerule_id",        type: "long"},
+        {name: "sequencefile_id",        type: "long"},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "fas",               type: "string",     defaultValue: ""},
         /*{
@@ -78,31 +80,33 @@ Ext.define("Teselagen.models.Part", {
             type: "hasOne",
             model: "Teselagen.models.SequenceFile",
             associationKey:"sequenceFile",
-            foreignKey:"sequenceFile_id",
+            foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFileModel",
-            name: "SequenceFile"
+            setterName: "setSequenceFileModel"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Bin",
             getterName: "getJ5Bin",
             setterName: "setJ5Bin",
-            associationKey: "j5Bin"
+            associationKey: "j5Bin",
+            foreignKey: "j5bin_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.EugeneRule",
             getterName: "getEugeneRule",
             setterName: "setEugeneRule",
-            associationKey: "eugeneRule"
+            associationKey: "eugeneRule",
+            foreignKey: "eugenerule_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.VectorEditorProject",
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
-            associationKey: "vectorEditorProject"
+            associationKey: "vectorEditorProject",
+            foreignKey: "veproject_id"
         }
     ],
 

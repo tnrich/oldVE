@@ -6,21 +6,34 @@
  */
  Ext.define("Teselagen.models.UserRestrictionEnzymeGroup", {
      extend: "Ext.data.Model",
+     
+     requires: ["Teselagen.models.UserRestrictionEnzyme"],
 
      /**
       * Input parameters.
-      * @param {String} groupName The name assigned to the group of enzymes.
-      * @param {Array<String>} enzymeNames The names of enzymes in the group.
+      * @param {String} name The name assigned to the group of enzymes.
       */
      fields: [
-         {name: "groupName", type: "string", defaultValue: ""},
-         {name: "enzymeNames", type: "auto", defaultValue: []}
+         { name: "id", type: "long"},
+         { name: "user_id", type: "long"},
+         {name: "name", type: "string", defaultValue: ""}
      ],
 
-     associations: [{
-         type: 'hasMany',
-         model: 'Teselagen.models.UserRestrictionEnzymes',
-         name: 'restrictionEnzymes',
-         foreignKey: 'userGroups'
-     }]
+     associations: [
+         {
+             type: "hasMany",
+             model: "Teselagen.models.UserRestrictionEnzyme",
+             name: "userRestrictionEnzymes",
+             associationKey: "userRestrictionEnzymes",
+             foreignKey: "uregroup_id"
+         },
+         {
+             type: "belongsTo",
+             model: "Teselagen.models.User",
+             getterName: "getUser",
+             setterName: "setUser",
+             associationKey: "user",
+             foreignKey: "user_id"
+         }
+     ]
  });

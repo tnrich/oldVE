@@ -11,7 +11,9 @@ Ext.define("Teselagen.models.User", {
     fields: [{
         name: "id",
         type: "long"
-    }, {
+    },
+    { name: "applicationpreferences_id", type: "long" },
+    {
         name: "username",
         type: "String"
     }],
@@ -25,13 +27,16 @@ Ext.define("Teselagen.models.User", {
     }, {
         type: "hasOne",
         model: "Teselagen.models.ApplicationPreferences",
-        associationKey: "preferences",
-        getterName: "getPreferences"
+        associationKey: "applicationPreferences",
+        getterName: "getApplicationPreferences",
+        setterName: "setApplicationPreferences",
+        foreignKey: "applicationpreferences_id"
     }, {
         type: "hasMany",
         model: "Teselagen.models.UserRestrictionEnzymeGroup",
-        name: "restrictionEnzymeGroups",
-        foreignKey: "users"
+        name: "userRestrictionEnzymeGroups",
+        associationKey: "userRestrictionEnzymeGroups",
+        foreignKey: "user_id"
     }],
     proxy: {
         type: "rest",

@@ -43,6 +43,10 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
+        {name: "id",                type: "long"},
+        {name: "devicedesign_id",   type: "long"},
+        {name: "operand1_id",   type: "long"},
+        {name: "operand2_id",   type: "long"},
         {
             name: "name",
             convert: function(v, record) {
@@ -66,7 +70,7 @@ Ext.define("Teselagen.models.EugeneRule", {
 
         {
             name: "compositionalOperator",
-            convert: function(v, record) {
+            convert: function(v) {
                 var compOp = v.toUpperCase();
 
                 var constants = Teselagen.constants.Constants;
@@ -87,9 +91,10 @@ Ext.define("Teselagen.models.EugeneRule", {
         },
         {
             name: "operand2isNumber",
-            convert: function(v, record) {
-                if (this.get("operand2Number") === undefined)
-                return v;
+            convert: function(v) {
+                if (this.get("operand2Number") === undefined) {
+                    return v;
+                }
             }
         },
         
@@ -118,9 +123,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getOperand1",
             setterName: "setOperand1",
             associationKey: "operand1",
-
-            name: "operand1", //RP
-            instanceName: "operand1" //DW
+            instanceName: "operand1",
+            foreignKey: "operand1_id"
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -129,16 +133,16 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
             associationKey: "operand2Part",
-
-            name: "operand2Part", //RP
-            instanceName: "operand2" //DW
+            instanceName: "operand2",
+            foreignKey: "operand2_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
-            associationKey: "deviceDesign"
+            associationKey: "deviceDesign",
+            foreignKey: "devicedesign_id"
         }
     ],
 

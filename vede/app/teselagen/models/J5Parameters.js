@@ -24,16 +24,6 @@ Ext.define("Teselagen.models.J5Parameters", {
         reader: {type: "json"}
     },
 
-    associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Run",
-            getterName: "getJ5Run",
-            setterName: "setJ5Run",
-            associationKey: "j5run"
-        }
-    ],
-
     statics: {
         //parameter names
         MONOD:      "MASTEROLIGONUMBEROFDIGITS",
@@ -169,6 +159,8 @@ Ext.define("Teselagen.models.J5Parameters", {
      * FIX ME!!! COPY THE CONVERT STATMENTS AS SEEN IN DOWNSTREAMAUTOMATIONPARAMETERS
      */
     fields: [
+        {name: "id", type: "long"},
+        {name: "j5run_id", type: "long"},
         {name: "masterOligoNumberOfDigitsValue",                   type: "int",        defaultValue: this.self.MONOD_Default},
         {name: "masterPlasmidNumberOfDigitsValue",                 type: "int",        defaultValue: this.self.MPNOD_Default},
         {name: "gibsonOverlapBPsValue",                            type: "int",        defaultValue: this.self.GOB_Default},
@@ -215,6 +207,17 @@ Ext.define("Teselagen.models.J5Parameters", {
     ],
 
     validation: [
+    ],
+
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run",
+            foreignKey: "j5run_id"
+        }
     ],
 
     // Need this because fields:[] does not actually set the defaults!
