@@ -10,12 +10,13 @@ Ext.define("Teselagen.models.UserRestrictionEnzyme", {
 
     /**
      * Input parameters.
-     * @param {Array<Teselagen.models.UserRestrictionEnzymeGroup>} groups The groups of restriction enzymes defined by the user.
-     * @param {Array<String>} activeEnzymeNames Names of enzymes currently active.
+     * @param {String} name The name of the enzyme.
+     * @param {Boolean} active Denotes that enzyme is active.
      */
     fields: [
-        {name: "groups", type: "auto", defaultValue: []},
-        {name: "activeEnzymeNames", type: "auto", defaultValue: []},
+        { name: "id", type: "long"},
+        { name: "uregroup_id", type: "long"},
+        {name: "name", type: "string", defaultValue: ""},
         {name: "active", type: "boolean", defaultValue: false}
     ]
 });
