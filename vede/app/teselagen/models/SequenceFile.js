@@ -37,8 +37,9 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {[String]} hash Hash code from sha256 encryption (Generated upon creating this object)
      */
     fields: [
-        //{name: "id",                    type: "int"},
-
+        {name: "id", type: "long"},
+        { name: "veproject_id", type: "long" },
+        { name: "part_id", type: "long" },
         {
             name: "sequenceFileFormat",
             convert: function(v) {
@@ -93,10 +94,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
                 return name;
             }
-        },
-        {
-            name: "veproject_id",
-            type: "long"
         }
     ],
 
@@ -120,7 +117,8 @@ Ext.define("Teselagen.models.SequenceFile", {
             name: "part",
             getterName: "getPart",
             setterName: "setPart",
-            associationKey: "part"
+            associationKey: "part",
+            foreignKey: "part_id"
         },
         {
             type: "belongsTo",
