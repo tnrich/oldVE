@@ -9,7 +9,7 @@ Ext.onReady(function () {
 
         describe("Project.", function () {
             var projStore;
-            var project, veproject, deproject, part;
+            var project, veproject, deproject, part, design;
 
             it("Load ProjectStore", function () {
                 projStore = Ext.create("Teselagen.store.ProjectStore");
@@ -110,6 +110,7 @@ Ext.onReady(function () {
                 }, "DE Project to be defined", 500);
                 runs(function() {
                     deproject.getDesign(function(pModel) {
+                        design = pModel;
                         expect(pModel).toBeDefined();
                         if (pModel) {
                             expect(pModel.getId()).toBe(1);
@@ -117,7 +118,11 @@ Ext.onReady(function () {
                     });
                 });
             });
-
+            it("Device design is loaded", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(design);
+                }, "DeviceDesign to be defined.", 500);
+            });
         });
         
         describe("Part.", function () {
