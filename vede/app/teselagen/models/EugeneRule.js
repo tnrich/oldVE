@@ -133,7 +133,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
             associationKey: "operand2Part",
-            instanceName: "operand2Part",
+            instanceName: "operand2",
             foreignKey: "operand2_id"
         },
         {
