@@ -115,7 +115,6 @@ Ext.define("Teselagen.models.SequenceFile", {
         {
             type: "belongsTo",
             model: "Teselagen.models.Part",
-            name: "part",
             getterName: "getPart",
             setterName: "setPart",
             associationKey: "part",
@@ -124,10 +123,9 @@ Ext.define("Teselagen.models.SequenceFile", {
         {
             type: "belongsTo",
             model: "Teselagen.models.VectorEditorProject",
-            name: "VectorEditorProject",
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
-            associationKey: "VectorEditorProject",
+            associationKey: "vectorEditorProject",
             foreignKey: "veproject_id"
         }
     ],
