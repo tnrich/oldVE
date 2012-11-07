@@ -15,10 +15,10 @@ Ext.define("Teselagen.models.Project", {
         type: "String",
         defaultValue: ""
     }, {
-        name: "DateCreated",
+        name: "dateCreated",
         type: "date"
     }, {
-        name: "DateModified",
+        name: "dateModified",
         type: "date"
     }],
     
@@ -27,15 +27,24 @@ Ext.define("Teselagen.models.Project", {
         model: "Teselagen.models.DeviceEditorProject",
         name: "deprojects",
         associationKey: "deprojects",
-        autoLoad: true,
-        foreignKey: "project_id"
+        foreignKey: "project_id",
+        autoLoad: true
     }, {
         type: "hasMany",
         model: "Teselagen.models.VectorEditorProject",
         name: "veprojects",
-        foreignKey: "project_id",
         associationKey: "veprojects",
+        foreignKey: "project_id",
         autoLoad: true
+    },
+    {
+        type: "belongsTo",
+        model: "Teselagen.models.User",
+        getterName: "getUser",
+        setterName: "setUser",
+        associationKey: "user",
+        name: "user",
+        foreignKey: "user_id"
     }],
 
     proxy: {
