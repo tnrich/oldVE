@@ -4,8 +4,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1378</x>
-      <y>611</y>
+      <x>1352</x>
+      <y>39</y>
       <w>260</w>
       <h>169</h>
     </coordinates>
@@ -22,7 +22,7 @@ Parameters
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>91</x>
-      <y>299</y>
+      <y>221</y>
       <w>195</w>
       <h>143</h>
     </coordinates>
@@ -49,13 +49,13 @@ Parameters
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>247</x>
-      <y>338</y>
+      <y>260</y>
       <w>558</w>
-      <h>129</h>
+      <h>207</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 r2=n</panel_attributes>
-    <additional_attributes>533;104;39;39</additional_attributes>
+    <additional_attributes>533;182;39;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -72,82 +72,13 @@ r2=n</panel_attributes>
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>260</x>
-      <y>52</y>
-      <w>130</w>
-      <h>26</h>
-    </coordinates>
-    <panel_attributes>Embed</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>260</x>
-      <y>91</y>
-      <w>130</w>
-      <h>26</h>
-    </coordinates>
-    <panel_attributes>Linked</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>0</x>
-      <y>65</y>
-      <w>272</w>
-      <h>64</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;247;39</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>39</x>
-      <y>26</y>
-      <w>273</w>
-      <h>26</h>
-    </coordinates>
-    <panel_attributes>Legend :</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Note</type>
-    <coordinates>
-      <x>26</x>
-      <y>26</y>
-      <w>351</w>
+      <x>572</x>
+      <y>520</y>
+      <w>182</w>
       <h>117</h>
     </coordinates>
-    <panel_attributes/>
+    <panel_attributes>From Design</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>1443</x>
-      <y>1183</y>
-      <w>260</w>
-      <h>91</h>
-    </coordinates>
-    <panel_attributes>
-J5Run:
-Original J5Input
-Nov 1, 2012</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>0</x>
-      <y>26</y>
-      <w>272</w>
-      <h>64</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;247;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -163,12 +94,14 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>754</x>
+      <x>676</x>
       <y>1001</y>
-      <w>195</w>
-      <h>156</h>
+      <w>273</w>
+      <h>221</h>
     </coordinates>
     <panel_attributes>MasterPlasmidList
+(Name of output 
+plasmids being created)
 --
 -PlasmidName
 -[Alias]
@@ -180,8 +113,8 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>507</x>
-      <y>988</y>
+      <x>156</x>
+      <y>1001</y>
       <w>234</w>
       <h>156</h>
     </coordinates>
@@ -197,8 +130,8 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>156</x>
-      <y>663</y>
+      <x>91</x>
+      <y>546</y>
       <w>234</w>
       <h>156</h>
     </coordinates>
@@ -214,8 +147,8 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>143</x>
-      <y>897</y>
+      <x>39</x>
+      <y>741</y>
       <w>338</w>
       <h>208</h>
     </coordinates>
@@ -255,8 +188,8 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>104</x>
-      <y>507</y>
+      <x>52</x>
+      <y>403</y>
       <w>247</w>
       <h>104</h>
     </coordinates>
@@ -271,12 +204,13 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1001</x>
-      <y>1001</y>
-      <w>195</w>
-      <h>156</h>
+      <x>1014</x>
+      <y>1027</y>
+      <w>208</w>
+      <h>208</h>
     </coordinates>
     <panel_attributes>MasterOligosList
+(aka Primer Library?)
 --
 -OligoName
 -Length
@@ -288,8 +222,8 @@ Nov 1, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1300</x>
-      <y>949</y>
+      <x>1287</x>
+      <y>1027</y>
       <w>247</w>
       <h>156</h>
     </coordinates>
@@ -305,8 +239,8 @@ DirectSynthesisName
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1391</x>
-      <y>260</y>
+      <x>1404</x>
+      <y>377</y>
       <w>208</w>
       <h>91</h>
     </coordinates>
@@ -318,24 +252,24 @@ DirectSynthesisName
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1391</x>
-      <y>429</y>
-      <w>195</w>
+      <x>1430</x>
+      <y>221</y>
+      <w>234</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>Multi-wellPlate
 --
 -PlateID
 -PlateWell
--LiquidType
+-LiquidType - primers?
 -Volume</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1365</x>
-      <y>845</y>
+      <x>1430</x>
+      <y>702</y>
       <w>221</w>
       <h>78</h>
     </coordinates>
@@ -348,112 +282,112 @@ DirectSynthesisName
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>312</x>
-      <y>429</y>
-      <w>493</w>
-      <h>142</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>468;39;39;117</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>351</x>
-      <y>442</y>
-      <w>454</w>
-      <h>298</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>429;39;39;273</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>377</x>
-      <y>442</y>
-      <w>454</w>
-      <h>480</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>429;39;39;455</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>871</x>
-      <y>273</y>
+      <x>260</x>
+      <y>403</y>
       <w>545</w>
-      <h>194</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;169;520;39</additional_attributes>
+    <additional_attributes>520;65;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>286</x>
+      <y>442</y>
+      <w>519</w>
+      <h>181</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>494;39;39;156</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>273</x>
+      <y>442</y>
+      <w>558</w>
+      <h>324</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>533;39;39;299</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>871</x>
-      <y>416</y>
-      <w>545</w>
-      <h>64</h>
+      <y>390</y>
+      <w>558</w>
+      <h>103</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;520;39</additional_attributes>
+    <additional_attributes>39;78;533;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>871</x>
-      <y>429</y>
-      <w>532</w>
+      <y>208</y>
+      <w>584</w>
       <h>259</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;507;234</additional_attributes>
+    <additional_attributes>39;234;559;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>845</x>
+      <y>52</y>
+      <w>532</w>
+      <h>415</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;390;507;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>871</x>
       <y>442</y>
-      <w>519</w>
-      <h>454</h>
+      <w>584</w>
+      <h>311</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;494;429</additional_attributes>
+    <additional_attributes>39;39;559;286</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>845</x>
       <y>442</y>
-      <w>480</w>
-      <h>571</h>
+      <w>493</w>
+      <h>610</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;455;546</additional_attributes>
+    <additional_attributes>39;39;468;585</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>819</x>
       <y>442</y>
-      <w>272</w>
-      <h>584</h>
+      <w>285</w>
+      <h>610</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;247;559</additional_attributes>
+    <additional_attributes>39;39;260;585</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>585</x>
+      <x>312</x>
       <y>442</y>
-      <w>272</w>
-      <h>571</h>
+      <w>545</w>
+      <h>584</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>247;39;39;546</additional_attributes>
+    <additional_attributes>520;39;39;559</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -465,5 +399,77 @@ DirectSynthesisName
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;39;559</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>637</x>
+      <y>117</y>
+      <w>168</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>143;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>546</x>
+      <y>143</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Results</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>26</x>
+      <y>39</y>
+      <w>325</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>
+J5Run:
+J5Input, as defined by the Manual
+DRAFT
+Nov 6, 2012</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>1027</x>
+      <y>377</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>For Par Par</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>832</x>
+      <y>663</y>
+      <w>260</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>Server can generate this 
+list or user can supply it--
+This is really output?</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>1131</x>
+      <y>585</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Necessary?</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

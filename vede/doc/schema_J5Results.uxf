@@ -4,7 +4,7 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>715</x>
+      <x>767</x>
       <y>78</y>
       <w>130</w>
       <h>39</h>
@@ -15,20 +15,20 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>741</x>
+      <x>793</x>
       <y>0</y>
-      <w>52</w>
-      <h>91</h>
+      <w>64</w>
+      <h>103</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 r2=n</panel_attributes>
-    <additional_attributes>39;39;312;273</additional_attributes>
+    <additional_attributes>39;39;39;78</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>715</x>
-      <y>130</y>
+      <x>767</x>
+      <y>169</y>
       <w>130</w>
       <h>39</h>
     </coordinates>
@@ -38,98 +38,32 @@ r2=n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>741</x>
+      <x>793</x>
       <y>78</y>
       <w>64</w>
-      <h>77</h>
+      <h>116</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;39;52</additional_attributes>
+    <additional_attributes>39;39;39;91</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>260</x>
-      <y>52</y>
-      <w>130</w>
-      <h>26</h>
-    </coordinates>
-    <panel_attributes>Embed</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>260</x>
-      <y>91</y>
-      <w>130</w>
-      <h>26</h>
-    </coordinates>
-    <panel_attributes>Linked</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>0</x>
-      <y>65</y>
-      <w>272</w>
-      <h>64</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;247;39</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>39</x>
-      <y>26</y>
-      <w>273</w>
-      <h>26</h>
-    </coordinates>
-    <panel_attributes>Legend :</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Note</type>
-    <coordinates>
-      <x>26</x>
-      <y>26</y>
-      <w>351</w>
-      <h>117</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>1430</x>
-      <y>1196</y>
+      <x>52</x>
+      <y>0</y>
       <w>260</w>
       <h>91</h>
     </coordinates>
-    <panel_attributes>
-J5Run:
-Original J5Output
-October 29, 2012 -DW</panel_attributes>
+    <panel_attributes>J5Run:
+J5Output
+DRAFT
+Nov 6, 2012 -DW</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>0</x>
-      <y>26</y>
-      <w>260</w>
-      <h>52</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;247;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>689</x>
+      <x>741</x>
       <y>0</y>
       <w>182</w>
       <h>39</h>
@@ -140,8 +74,8 @@ October 29, 2012 -DW</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1053</x>
-      <y>78</y>
+      <x>936</x>
+      <y>91</y>
       <w>130</w>
       <h>39</h>
     </coordinates>
@@ -151,10 +85,10 @@ October 29, 2012 -DW</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>13</x>
-      <y>169</y>
-      <w>416</w>
-      <h>1105</h>
+      <x>52</x>
+      <y>286</y>
+      <w>364</w>
+      <h>1040</h>
     </coordinates>
     <panel_attributes>AssemblyParameters
 "pj5_0XXXX.csv"
@@ -162,7 +96,7 @@ October 29, 2012 -DW</panel_attributes>
 --
 -AssemblyAlg/Date
 --
-*Parameters:
+*Assembly Parameters:
 -MasterOligoNumberOfDigits
 -MasterPlasmidNumberOfDigits
 -GibsonOverlaps
@@ -193,42 +127,18 @@ Part
 -Direction
 -Strategy (FAS)
 --
-*Incompatibilities btw Assembly Pieces
--Assembly Piece
--Left End
--Right End
+...
 --
-*Suggested Assembly Piece Contigs for Hierarchical Assembly
--Contig
--Assembly Pieces Contained
---
-*Oligo Synthesis
--IDNumber
--Name
--First Target Part
--Last Target Part
--Tm
--Tm (3' only)
--Cost
--Sequence
---
-*PCR Reactions
+*(Annealed Oligos Synthesis)
 -ID Number
--Primary Template
--Alternate Template
-*ForwardOligo
--IDNumber
+-TopOligo-IDNum
+-BottomOligo-IDNum
 -Name
--First Target Part
--Last Target Part
--Note
--Mean Oligo Tm
--Delta Oligo Tm
--Mean Oligo Tm (3' only)
--Delta Oligo Tm (3' only)
+-FirstTargetPart
+-LastTargetPart
+-Tm
 -Length
 -Sequence
---
 ...
 --
 *Final Assembled Vector
@@ -247,7 +157,7 @@ Part
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>520</x>
+      <x>572</x>
       <y>39</y>
       <w>130</w>
       <h>39</h>
@@ -258,7 +168,7 @@ Part
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>611</x>
+      <x>663</x>
       <y>26</y>
       <w>129</w>
       <h>103</h>
@@ -269,8 +179,8 @@ Part
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>247</x>
-      <y>52</y>
+      <x>286</x>
+      <y>78</y>
       <w>221</w>
       <h>117</h>
     </coordinates>
@@ -282,68 +192,27 @@ Part
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>1079</x>
-      <y>949</y>
-      <w>195</w>
-      <h>442</h>
-    </coordinates>
-    <panel_attributes>AssemblyParameters
-"pj5_0XXXX.csv
-GoldenGateComb
---
--AssemblyAlg/Date
-
-*Parameters
--MasterOligoNumberOfDigits
--MasterPlasmidNumberOfDigits
--GibsonOverlaps
--MaximumNumberOligoLengthBps
-
-*Warnings
-
-*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>403</x>
-      <y>13</y>
-      <w>337</w>
-      <h>168</h>
+      <x>468</x>
+      <y>130</y>
+      <w>324</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 r2=n</panel_attributes>
-    <additional_attributes>312;143;39;39</additional_attributes>
+    <additional_attributes>299;39;39;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>897</x>
-      <y>273</y>
-      <w>377</w>
-      <h>494</h>
+      <x>1378</x>
+      <y>52</y>
+      <w>221</w>
+      <h>65</h>
     </coordinates>
-    <panel_attributes>GoldenGate
+    <panel_attributes>Combinatorial
 --
-*Assembly Pieces (Golden Gate)
--ID Number
--Type
--PCR ID Number
--First Target Part
--Core Target Part
--Last Target Part
--Relative Overlap Position
--Extra 5' CPEC bps
--Extra 3' CPEC bps
--CPEC Tm Next
--Overlap with Next (bps)
--Overlap with Next
--Overlap with Next Reverse Complement
--Length
--Sequence
 
 
 
@@ -357,10 +226,131 @@ r2=n</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>507</x>
-      <y>273</y>
+      <x>858</x>
+      <y>1261</y>
+      <w>325</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>Mock
+--
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>182</x>
+      <y>169</y>
+      <w>610</w>
+      <h>142</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=  n</panel_attributes>
+    <additional_attributes>585;39;39;39;39;117</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>442</x>
+      <y>234</y>
+      <w>364</w>
+      <h>1053</h>
+    </coordinates>
+    <panel_attributes>SLIC etc/GoldenGate
+--
+...
+--
+*Incompatibilities btw Assembly Pieces
+-Assembly Piece
+-Left End
+-Right End
+--
+*Suggested Assembly Piece Contigs for 
+                         Hierarchical Assembly
+-Contig
+-Assembly Pieces Contained
+--
+*(DirectSynthesis)
+-ID Number
+-Name
+-FirstTargetPart
+-LastTargetPart
+-Length
+-Cost
+-Sequence
+--
+*Oligo Synthesis
+-IDNumber
+-Name
+-First Target Part
+-Last Target Part
+-Tm
+-Tm (3' only)
+-Cost
+-Sequence
+--
+*PCR Reactions
+-ID Number
+-Primary Template
+-Alternate Template
+*ForwardOligo
+-IDNumber
+-Name
+*ReverseOligo
+-IDNumber
+-First Target Part
+-Last Target Part
+-Note
+-Mean Oligo Tm
+-Delta Oligo Tm
+-Mean Oligo Tm (3' only)
+-Delta Oligo Tm (3' only)
+-Length
+-Sequence
+--
+...
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>377</x>
+      <y>1261</y>
+      <w>506</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>481;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>377</x>
+      <y>260</y>
+      <w>77</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>52;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>845</x>
+      <y>234</y>
       <w>377</w>
-      <h>494</h>
+      <h>390</h>
     </coordinates>
     <panel_attributes>
 SLIC/Gibson/CPEC/SLiCE
@@ -390,5 +380,203 @@ SLIC/Gibson/CPEC/SLiCE
 
 </panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1248</x>
+      <y>169</y>
+      <w>377</w>
+      <h>455</h>
+    </coordinates>
+    <panel_attributes>Combinatorial SLIC/Gibson/CPEC/SLiCE
+--
+*Assembly Parameters ...
+--
+*Target Bin Selected Relative Overlap 
+            Positions and 5'/3' CPEC bps
+-ID Number
+-Name
+-Relative Overlap Position (bp)
+-Extra 5' CPEC bps
+-Extra 3' CPEC bps
+--
+*Oligo Synthesis ...
+--
+*PCR Reactions ...
+--
+*Assembly Pieces (SLIC etc)...
+--
+*Combinations of Assembly Pieces
+Variant 
+-Number
+-Name
+-Assembly Method
+Bin N
+-Assembly Piece ID Number
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1248</x>
+      <y>1131</y>
+      <w>247</w>
+      <h>312</h>
+    </coordinates>
+    <panel_attributes>Combinatorial Mock
+--
+...
+--
+*Target Bins
+-ID Number
+-Name
+--
+*Combinations of Parts
+Variant 
+-Number
+-Name
+Bin 0
+-Part
+Bin 1
+-Part
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1248</x>
+      <y>663</y>
+      <w>377</w>
+      <h>442</h>
+    </coordinates>
+    <panel_attributes>Combinatorial GoldenGate
+--
+AssemblyParameters ...
+--
+Non-degenerate Part IDs and Sources ...
+--
+*Target Bin Selected Relative Overhang 
+             Positions
+-ID Number
+-Name
+-Relative Overhang Position (bp
+--
+*Oligo Synthesis ..
+--
+*PCR Reactions ...
+--
+*Assembly Pieces (GoldenGate)...
+--
+*Combinations of Assembly Pieces
+Variant 
+-Number
+-Name
+-Assembly Method
+Bin N
+-Assembly Piece ID Number
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>858</x>
+      <y>52</y>
+      <w>545</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;143;520;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>858</x>
+      <y>663</y>
+      <w>312</w>
+      <h>325</h>
+    </coordinates>
+    <panel_attributes>GoldenGate
+--
+*Assembly Pieces (Golden Gate)
+-ID Number
+-Type
+-Type ID Number
+-First Target Part
+-Core Target Part
+-Last Target Part
+-Overhang with Previous
+-Overhand with Next
+-Relative Overhang Position
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1560</x>
+      <y>65</y>
+      <w>103</w>
+      <h>753</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;78;39;78;728;65;728</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>767</x>
+      <y>325</y>
+      <w>103</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>78;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>767</x>
+      <y>702</y>
+      <w>116</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>91;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1404</x>
+      <y>78</y>
+      <w>64</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;39;91</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1456</x>
+      <y>39</y>
+      <w>233</w>
+      <h>1247</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>143;39;208;39;208;1222;39;1222</additional_attributes>
   </element>
 </diagram>
