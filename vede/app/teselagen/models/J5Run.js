@@ -6,7 +6,6 @@
 Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
     requires: [
-        //"Teselagen.models.DeviceDesign",
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
         "Teselagen.models.J5Results"
@@ -26,7 +25,11 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "id", type: "int"},
+        {name: "id", type: "long"},
+        {name: "j5parameters_id", type: "long"},
+        {name: "automationparameters_id", type: "long"},
+        {name: "j5results_id", type: "long"},
+        {name: "deproject_id", type: "long"},
         {name: "name", type: "String", defaultValue: ""}
 
     ],
@@ -44,37 +47,33 @@ Ext.define("Teselagen.models.J5Run", {
             model: "Teselagen.models.J5Parameters",
             getterName: "getJ5Parameters",
             setterName: "setJ5Parameters",
-            assocationKey: "j5Parameters"
+            assocationKey: "j5Parameters",
+            foreignKey: "j5parameters_id"
         },
         {
             type: "hasOne",
             model: "Teselagen.models.DownstreamAutomationParameters",
             getterName: "getDownstreamAutomationParameters",
             setterName: "setDownstreamAutomationParameters",
-            assocationKey: "downstreamAutomationParameters"
+            assocationKey: "downstreamAutomationParameters",
+            foreignKey: "automationparameters_id"
         },
         {
             type: "hasOne",
             model: "Teselagen.models.J5Results",
             getterName: "getJ5Results",
             setterName: "setJ5Results",
-            associationKey: "j5Results"
+            associationKey: "j5Results",
+            foreignKey: "j5results_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
+            associationKey: "deviceEditorProject",
+            foreignKey: "deproject_id"
         }
-        /*,
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.DeviceDesign",
-            getterName: "getDeviceDesign",
-            setterName: "setDeviceDesign",
-            associationKey: "deviceDesign"
-        }*/
     ]
 
 });
