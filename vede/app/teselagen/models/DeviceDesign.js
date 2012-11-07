@@ -57,7 +57,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5collection",
-            name: "j5collection",
             foreignKey: "j5collection_id"
         },
         {
@@ -81,7 +80,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
             associationKey: "deviceEditorProject",
-            name: "deviceEditorProject",
             foreignKey: "deproject_id"
         }
     ],
