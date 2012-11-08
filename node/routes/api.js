@@ -201,8 +201,9 @@ module.exports = function (app) {
       proj.name = req.body.name;
       proj.DateCreated = req.body.DateCreated;
       proj.DateModified = req.body.DateModified;
-      var projects = de.body.deprojects;
-      //projec
+      proj.save(function(){
+        res.json(proj);
+      });
     });
   });
   
@@ -240,6 +241,17 @@ module.exports = function (app) {
     });
   });
 
+  // PUT
+  app.put('/user/projects/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.findById(req.body.id,function(err,proj){
+      proj.name = req.body.name;
+      proj.save(function(){
+        res.json(proj);
+      });
+    });
+  });
+
   // GET
   app.get('/user/projects/deprojects', restrict, function (req, res) {
     var id = JSON.parse(req.query.filter)[0].value;
@@ -265,7 +277,20 @@ module.exports = function (app) {
         console.log("New Design Saved!");
         res.json({"design":req.body});
       });
+  });
 
+  //CREATE
+  app.put('/user/projects/deprojects/devicedesign', function (req, res) {
+    var id = req.body["deproject_id"];
+    var model = req.body;
+    var DEProject = app.db.model("deproject");
+
+    DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("Design updated!!");
+        res.json({"design":req.body});
+      });
   });
 
   //READ
@@ -347,7 +372,21 @@ module.exports = function (app) {
         console.log("New Sequence Saved!");
         res.json({"sequence":req.body});
       });
+  });
 
+
+  //PUT
+  app.put('/user/projects/veprojects/sequencefile', function (req, res) {
+    var id = req.body["veproject_id"];
+    var sequence = req.body;
+    var VEProject = app.db.model("veproject");
+
+    VEProject.findByIdAndUpdate(id, { sequencefile: sequence }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("Sequence Updated!");
+        res.json({"sequence":req.body});
+      });
   });
 
   //READ
