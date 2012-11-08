@@ -21,7 +21,7 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         name: "id",
         type: "long"
     },
-    { name: "devicedesign_id", type: "long"},
+    //{ name: "devicedesign_id", type: "long"},
     {
         name: "project_id",
         type: "long"
@@ -30,12 +30,13 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         type: "String",
         defaultValue: ""
     }],
-
+    /*
     validations: [
         {field: "id", type: "presence"},
         {field: "project_id", type: "presence"},
         {field: "name", type: "presence"}
     ],
+    */
     associations: [
         {
             type: "hasOne",
@@ -43,7 +44,7 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             associationKey: "design",
             getterName: "getDesign",
             setterName: "setDesign",
-            foreignKey: "devicedesign_id"
+            foreignKey: "deproject_id"
         },
         {
             type: "hasMany",

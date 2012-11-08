@@ -40,7 +40,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {name: "id", type: "long"},
+        //{name: "id", type: "long"},
         {name: "deproject_id", type: "long"},
         {name: "j5collection_id", type: "long"},
         {name: "sbolviconinfo_id", type: "long"}
