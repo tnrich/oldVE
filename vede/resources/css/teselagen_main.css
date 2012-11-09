@@ -52,7 +52,7 @@ body {
     color: #333;  
 }
 
-.x-form-field, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
+.x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
   font-family: 'Quicksand', sans-serif;
     font-size: 12px;
     color: #111;
