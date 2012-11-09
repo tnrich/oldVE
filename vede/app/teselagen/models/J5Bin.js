@@ -8,10 +8,8 @@ Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.J5Collection",
         "Teselagen.models.Part",
         "Teselagen.constants.SBOLvIcons",
-        "Teselagen.utils.NullableInt",
         "Teselagen.utils.NullableInt"
     ],
 
@@ -37,9 +35,11 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
+        {name: "id",                type: "long"},
+        {name: "j5collection_id",     type: "long"},
         {
             name: "binName",
-            convert: function(v, record) {
+            convert: function(v) {
                 if (typeof(v) === "number" || typeof(v) === "string") {
                     if (Teselagen.utils.FormatUtils.isLegalName(v)) {
                         return v;
@@ -68,8 +68,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "fro",               type: "string",     defaultValue: ""},
         {name: "fas",               type: "string",     defaultValue: ""},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "collection_id",     type: "int"}
+        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
         /* worry about this later. Original does not include this field.
         ,{
@@ -98,21 +97,23 @@ Ext.define("Teselagen.models.J5Bin", {
         },
         {field: "extra5PrimeBps",   type: "presence"},
         {field: "extra3PrimeBps",   type: "presence"},
-        {field: "collection_id",    type: "presence"}
+        {field: "j5collection_id",    type: "presence"}
     ],
 
     associations: [
         {
             type: "hasMany",
             model: "Teselagen.models.Part",
-            name: "parts"
+            name: "parts",
+            foreignKey: "j5bin_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5Collection"
+            associationKey: "j5Collection",
+            foreignKey: "j5collection_id"
         }
     ],
 

@@ -20,16 +20,6 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
         reader: {type: "json"}
     },
 
-    associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Run",
-            getterName: "getJ5Run",
-            setterName: "setJ5Run",
-            associationKey: "j5run"
-        }
-    ],
-
     statics: {
         MDTAZ:            "MAXDELTATEMPERATUREADJACENTZONES",
         MDTROZA:          "MAXDELTATEMPERATUREREACTIONOPTIMUMZONEACCEPTABLE",
@@ -75,6 +65,8 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
 
     // The Defaults will not kick in. Init will set them if fields are not supplied.
     fields: [
+        {name: "id", type: "long"},
+        {name: "j5run_id", type: "long"},
         {
             name: "maxDeltaTemperatureAdjacentZonesValue",
             convert: function(v, record) {
@@ -162,6 +154,17 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
     ],
 
     validations: [
+    ],
+
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run",
+            foreignKey: "j5run_id"
+        }
     ],
 
     // Need this because fields:[] does not actually set the defaults!

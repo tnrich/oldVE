@@ -15,7 +15,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getSequenceFile.json",
+        url: "/vede/test/data/json/sequenceFiles.json",
         reader: {
             type: "json",
             root: "sequence"
@@ -37,8 +37,9 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {[String]} hash Hash code from sha256 encryption (Generated upon creating this object)
      */
     fields: [
-        //{name: "id",                    type: "int"},
-
+        {name: "id", type: "long"},
+        { name: "veproject_id", type: "long" },
+        { name: "part_id", type: "long" },
         {
             name: "sequenceFileFormat",
             convert: function(v) {
@@ -94,10 +95,6 @@ Ext.define("Teselagen.models.SequenceFile", {
 
                 return name;
             }
-        },
-        {
-            name: "veproject_id",
-            type: "long"
         }
     ],
 
@@ -118,18 +115,17 @@ Ext.define("Teselagen.models.SequenceFile", {
         {
             type: "belongsTo",
             model: "Teselagen.models.Part",
-            name: "part",
             getterName: "getPart",
             setterName: "setPart",
-            associationKey: "part"
+            associationKey: "part",
+            foreignKey: "part_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.VectorEditorProject",
-            name: "VectorEditorProject",
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
-            associationKey: "VectorEditorProject",
+            associationKey: "vectorEditorProject",
             foreignKey: "veproject_id"
         }
     ],

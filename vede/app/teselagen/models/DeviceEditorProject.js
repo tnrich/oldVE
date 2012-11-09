@@ -20,7 +20,9 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
     fields: [{
         name: "id",
         type: "long"
-    }, {
+    },
+    //{ name: "devicedesign_id", type: "long"},
+    {
         name: "project_id",
         type: "long"
     }, {
@@ -28,26 +30,38 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         type: "String",
         defaultValue: ""
     }],
-
+    /*
     validations: [
         {field: "id", type: "presence"},
         {field: "project_id", type: "presence"},
         {field: "name", type: "presence"}
     ],
-    associations: [{
-        type: "hasOne",
-        model: "Teselagen.models.DeviceDesign",
-        associationKey: "design",
-        name: "design",
-        getterName: "getDesign",
-        setterName: "setDesign",
-        foreignKey: "id"
-    }, {
-        type: "hasMany",
-        model: "Teselagen.models.J5Run",
-        name: "j5runs",
-        associationKey: "j5runs"
-    }],
+    */
+    associations: [
+        {
+            type: "hasOne",
+            model: "Teselagen.models.DeviceDesign",
+            associationKey: "design",
+            getterName: "getDesign",
+            setterName: "setDesign",
+            foreignKey: "deproject_id"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.J5Run",
+            name: "j5runs",
+            associationKey: "j5runs",
+            foreignKey: "deproject_id"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Project",
+            getterName: "getProject",
+            setterName: "setProject",
+            associationKey: "project",
+            foreignKey: "project_id"
+        }
+    ],
     proxy: {
         type: "rest",
         url: "/vede/test/data/json/getDEProjects.json",
