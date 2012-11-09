@@ -39,10 +39,9 @@ else if (app.program.prod) process.env.NODE_ENV = "Production";
 else process.env.NODE_ENV = "Development";
 
 app.use(function (req, res, next) {
-  //console.log('using cors');
   if(req.method === 'OPTIONS') {
     var headers = {};
-    headers["Access-Control-Allow-Origin"] = "*";
+    headers["Access-Control-Allow-Origin"] = req.headers.origin;
     headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
     headers["Access-Control-Allow-Credentials"] = true;
     headers["Access-Control-Max-Age"] = '86400'; // 24 hours
@@ -50,8 +49,9 @@ app.use(function (req, res, next) {
     res.writeHead(200, headers);
     res.end();
   } else {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Credentials", 'true');
     next();
   }
 });

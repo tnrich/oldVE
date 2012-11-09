@@ -73,6 +73,7 @@ Ext.application({
     launch: function() {
 
         Ext.Ajax.cors = true; // Allow CORS
+        Ext.Ajax.withCredentials = true;
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
