@@ -48,8 +48,8 @@ Ext.define('Vede.view.AuthWindow', {
 						fieldLabel: 'Server',
 						name: 'server',
 						store: [
-							['Local', 'http://localhost:3000/'],
-							['Pushscience', 'http://rp.teselagen.com/api/']
+							['Local', 'http://teselagen.local/api'],
+							['Dev', 'http://dev.teselagen.com/api/']
 						]
 					}]
 				},
