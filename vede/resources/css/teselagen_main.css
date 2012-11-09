@@ -265,10 +265,15 @@ body {
 background: #F8F8F8;
 }
 
-#DeviceEditorPartsBar-innerCt {
+.DeviceEditorPartsBar {
   background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
 }
 
+.DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
+  background: rgba(0,0,0,0.3);
+  box-shadow: inset 1px 1px 10px 1px rgba(0,0,0,0.5);
+  border: black;
+}
 .DeviceEditorCanvas .x-layout-fit {
   border: none;
 }
