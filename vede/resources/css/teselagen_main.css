@@ -70,6 +70,10 @@ body {
   background-image: url(../images/ux/tab-default-close.png);
 }
 
+.x-tab-close-btn:hover {
+  background-image: url(../images/ux/tab-default-close-active.png);
+}
+
 .x-toolbar {
   border-top: 0px none;
 }
@@ -78,6 +82,7 @@ body {
 	font-family: 'Quicksand', sans-serif;
 	color: #333;
 }
+
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;
