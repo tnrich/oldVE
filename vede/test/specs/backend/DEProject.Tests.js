@@ -34,12 +34,6 @@ Ext.syncRequire(["Ext.Ajax",
 
  function () {
 
-    Ext.define('sessionData', {
-        singleton: true,
-        data: null,
-        baseURL: 'http://teselagen.local/api/'
-    });
-
     var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
     designsaved = false;
     deprojectsaved = false;
@@ -51,8 +45,7 @@ Ext.syncRequire(["Ext.Ajax",
     describe("Connection to server", function () {
         it("Setup params", function () {
             Ext.Ajax.cors = true; // Allow CORS
-            Ext.Ajax.method = 'POST'; // Set POST as default Method
-            sessionData.baseURL = server;
+            Teselagen.manager.SessionManager.baseURL = server;
             Teselagen.manager.SessionManager.env = 'prod';
         });
 
@@ -77,16 +70,20 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Authentication", function () {
 
-        it("Login with Manual-Auth in Authentication Manager", function () {
-            var args = ['rpavez', '', 'http://teselagen.local/api/'];
-            ajaxCheck(authenticationManager.manualAuth, args, function () {
-                expect(sessionData.AuthResponse).toBeDefined();
+        it("Login using rpavez/nopassword", function () {
+            var params = {
+                    username: 'rpavez',
+                    password: '',
+                    server: 'http://teselagen.local/api/'
+            };
+
+            authenticationManager.sendAuthRequest(params, function(success) {
+                expect(Teselagen.manager.AuthenticationManager.authResponse).toBeDefined();
             });
         });
     });
 
     describe("Get User Profile and Projects", function () {
-
         it("Get User Profile and Get User Projects", function () {
             runs(function () {
                 projectManager.loadUser(function () {
@@ -95,7 +92,7 @@ Ext.syncRequire(["Ext.Ajax",
             });
 
             waitsFor(function () {
-                if(sessionData.AuthResponse) return true;
+                if(Teselagen.manager.AuthenticationManager.authResponse) return true;
                 else return false;
             }, "Auth took too much time", 750);
 
@@ -103,7 +100,6 @@ Ext.syncRequire(["Ext.Ajax",
             runs(function () {
                 expect(projectManager.projects).toBeDefined();
             });
-
         });
     });
 
@@ -267,9 +263,7 @@ Ext.syncRequire(["Ext.Ajax",
 
 
             runs(function () {
-                project.load({callback: function(){
-                    console.log(project);
-                }});
+                console.log(project);
             });
         });
 

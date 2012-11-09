@@ -61,16 +61,8 @@ Ext.define('Vede.view.AuthWindow', {
 					name: 'login'
 				}, {
 					xtype: 'button',
-					id: 'auth-guest-btn',
-					margin: '0 10',
-					text: 'Guest (Dev)',
-					style: {
-						background: 'yellow;'
-					}
-				}, {
-					xtype: 'button',
 					id: 'auth-nosession-btn',
-					margin: '0 0',
+					margin: '0 10',
 					text: 'No session (Dev)',
 					style: {
 						background: 'yellow;'

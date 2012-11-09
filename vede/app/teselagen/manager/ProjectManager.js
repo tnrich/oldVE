@@ -21,6 +21,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 */
 	loadUser: function (cb) {
 		console.log('PM: Loading User');
+		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
 		var users = Ext.create("Teselagen.store.UserStore");
 		var self = this;
 		users.load({
