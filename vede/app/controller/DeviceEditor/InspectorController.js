@@ -8,11 +8,26 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     DeviceEvent: null,
 
+    selectedPart: null,
+
     onPartSelected: function(j5Part) {
         var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='InspectorPanel']");
         inspector.setActiveTab(0);
 
         this.populatePartInformation(j5Part);
+        this.selectedPart = j5Part;
+    },
+
+    onPartNameFieldChange: function(nameField) {
+        var newName = nameField.getValue();
+
+        this.selectedPart.set("name", newName);
+    },
+
+    onPartAssemblyStrategyChange: function(box) {
+        var newStrategy = box.getValue();
+
+        this.selectedPart.set("fas", newStrategy);
     },
 
     populatePartInformation: function(j5Part) {
@@ -75,5 +90,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on(this.DeviceEvent.SELECT_PART,
                             this.onPartSelected,
                             this);
+
+        this.control({
+            "textfield[cls='partNameField']": {
+                keyup: this.onPartNameFieldChange
+            },
+            "combobox[cls='forcedAssemblyComboBox']": {
+                select: this.onPartAssemblyStrategyChange
+            }
+        })
     },
 });

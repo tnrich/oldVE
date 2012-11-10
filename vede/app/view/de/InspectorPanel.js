@@ -53,7 +53,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'textfield',
                             cls: 'partNameField',
-                            fieldLabel: 'Part Name'
+                            fieldLabel: 'Part Name',
+                            enableKeyEvents: true
                         },
                         {
                             xtype: 'displayfield',
