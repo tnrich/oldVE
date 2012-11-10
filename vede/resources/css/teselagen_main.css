@@ -261,6 +261,18 @@ body {
     border-color: #000000;
 }
 
+.gridPartCell:hover {
+    /*border-color: #000000;*/
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+.gridPartCell-selected {
+    background-color: #eeeeee;
+    border-color: #000000;
+}
+
 .DeviceEditorMenuPanel .x-toolbar-default {
    background: #FDFDFD;
 }
@@ -275,13 +287,6 @@ background: #F8F8F8;
 
 #DeviceEditorPartsBar-innerCt {
   background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
-}
-
-.gridPartCell:hover {
-    /*border-color: #000000;*/
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
 }
 
 .DeviceEditorCanvas .x-layout-fit {

@@ -17,6 +17,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     tabPanel: null,
 
     selectedBin: null,
+    selectedPart: null,
 
     totalRows: 1,
 
@@ -80,7 +81,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartCellClick: function(partCell) {
-        console.log("part clicked");
+        var gridPart = partCell.up().up();
+        var j5Part = gridPart.getPart();
+
+        if(this.selectedPart) {
+            this.selectedPart.deselect();
+        }
+
+        this.selectedPart = gridPart;
+        gridPart.select();
+
+        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part);
     },
 
     onAddColumn: function(j5Bin) {

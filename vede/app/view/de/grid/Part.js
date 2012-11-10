@@ -10,6 +10,8 @@ Ext.define('Vede.view.de.grid.Part', {
         part: null,
     },
 
+    partCell: null,
+
     /**
      * @param Teselagen.models.Part
      */
@@ -24,7 +26,7 @@ Ext.define('Vede.view.de.grid.Part', {
             html = "";
         }
 
-        this.callParent([{
+        this.partCell = Ext.create("Ext.container.Container", {
             items: [{
                 html: html,
                 styleHtmlContent: true,
@@ -36,6 +38,20 @@ Ext.define('Vede.view.de.grid.Part', {
                 },
                 height: 40,
             }]
+        });
+
+        this.callParent([{
+            items: [
+                this.partCell
+            ]
         }]);
+    },
+
+    select: function() {
+        this.partCell.down().addBodyCls("gridPartCell-selected");
+    },
+
+    deselect: function() {
+        this.partCell.down().removeBodyCls("gridPartCell-selected");
     }
 });

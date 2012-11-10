@@ -46,6 +46,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         align: 'stretch',
                         type: 'vbox'
                     },
+                    overflowY: 'auto',
                     bodyPadding: 10,
                     title: 'Properties',
                     items: [
@@ -90,7 +91,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     items: [
                         {
                             xtype: 'combobox',
-                            anchor: '100%'
+                            cls: 'forcedAssemblyComboBox',
+                            anchor: '100%',
+                            store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
+                                    'Embed_in_primer_reverse',
+                                    'Embed_in_primer_forward', 'Annealed Oligos']
                         }
                     ]
                 },
