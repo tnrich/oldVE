@@ -6,9 +6,14 @@
 Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
     requires: [
+        // will be moved to J5Input
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
-        "Teselagen.models.J5Results"
+
+        "Teselagen.models.J5Input",
+        "Teselagen.models.J5Results",
+        "Teselagen.constants.Constants",
+        "Teselagen.manager.SessionManager"
     ],
     proxy: {
         type: "memory"
@@ -25,20 +30,42 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "id", type: "long"},
+        {name: "id",            type: "long"},
+        {name: "name",          type: "String", defaultValue: ""},
+
+
+        // meta info
+        {name: "status",        type: "String",     defaultValue: ""},
+        {name: "date",          type: "String",     defaultValue: ""},
+        {name: "assemblyType",  type: "String",     defaultValue: ""},
+        {name: "status",        type: "String",     defaultValue: ""},
+
+
+        // IDs
+        {name: "deproject_id",  type: "long"},
+        {name: "j5results_id",  type: "long"},
+        {name: "j5input_id",    type: "long"},
+
+        // TO BE MOVED TO J5INPUT
         {name: "j5parameters_id", type: "long"},
-        {name: "automationparameters_id", type: "long"},
-        {name: "j5results_id", type: "long"},
-        {name: "deproject_id", type: "long"},
-        {name: "name", type: "String", defaultValue: ""}
+        {name: "automationparameters_id", type: "long"}
 
     ],
 
     validations: [
-        /*{field: "j5Parameters",                     type: "presence"},
-        {field: "downstreamAutomationParameters",   type: "presence"},
-        {field: "j5Results",                        type: "presence"}
-        */
+        //{field: "assemblyType", type: "presence"},
+        {
+            field: "assemblyType",
+            type: "inclusion",
+            list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
+        },
+
+        //{field: "status", type: "presence"},
+        {
+            field: "status",
+            type: "inclusion",
+            list: Teselagen.constants.Constants.RUN_STATUS_LIST
+        }
     ],
 
     associations: [
@@ -57,6 +84,14 @@ Ext.define("Teselagen.models.J5Run", {
             setterName: "setDownstreamAutomationParameters",
             assocationKey: "downstreamAutomationParameters",
             foreignKey: "automationparameters_id"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.J5Input",
+            getterName: "getJ5Input",
+            setterName: "setJ5Input",
+            associationKey: "j5Input",
+            foreignKey: "j5Input_id"
         },
         {
             type: "hasOne",
