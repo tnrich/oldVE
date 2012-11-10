@@ -109,9 +109,9 @@ Ext.onReady(function() {
                 
             });
 
-            it("loadFile(): wrong url and right url", function() {
+            it("loadFile(): (comment out --wrong url) and right url", function() {
                 //wrong
-                var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal";
+                /*var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal";
                 var flag = false;
                 try {
                     var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
@@ -121,6 +121,7 @@ Ext.onReady(function() {
                     console.warn('Correctly Caught: ' + bio.message);
                 }
                 expect(flag).toBe(true);
+                */
                 
                 //right
                 var jbeiXmlUrl = "/biojs/test/data/jbeiseq/signal_peptide.xml";
@@ -163,7 +164,7 @@ Ext.onReady(function() {
                     var jbeiXml = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson("");
                     var flag = false;
                 } catch (e) {
-                    console.warn("Correctly Caught: " + e.message);
+                    //console.warn("Correctly Caught: " + e.message);
                     var flag = true;
                 }
                 expect(flag).toBe(true);
@@ -194,7 +195,7 @@ Ext.onReady(function() {
                     var jbeiXml = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank("");
                     var flag = false;
                 } catch (e) {
-                    console.warn("Correctly Caught: " + e.message);
+                    //console.warn("Correctly Caught: " + e.message);
                     var flag = true;
                 }
                 expect(flag).toBe(true);
@@ -357,125 +358,6 @@ Ext.onReady(function() {
             });*/
 
             
-        });
-
-
-
-//===============================================================================
-
-        xdescribe("Toy Testing: Xml2Json", function() {
-
-            it("XmlToJson: json2xml", function(){
-
-                var xmlDoc = Teselagen.bio.util.XmlToJson.json2xml_str(
-                    {
-                        MyRoot : {
-                            MyChild : 'my_child_value',
-                            MyAnotherChild: 10,
-                            MyArray : [ 'test', 'test2' ],
-                            MyArrayRecords : [
-                                {
-                                    ttt : 'vvvv'
-                                },
-                                {
-                                    ttt : 'vvvv2'
-                                }
-                            ]
-                        }
-                    }
-                );
-
-                console.log(xmlDoc);
-
-                var jsonObj = Teselagen.bio.util.XmlToJson.xml_str2json(xmlDoc);
-                console.log(JSON.stringify(jsonObj, null, "  "));
-
-            });
-        });
-
-        describe("Toy Testing: Ext.data.Store", function() {
-
-            it("xml testing", function() {
-                var xml =Teselagen.bio.parsers.ParsersManager.loadFile("/biojs/src/teselagen/bio/enzymes/assets/common.xml");
-
-                //console.log(xml);
-                var enzymeList = [];
-                
-                // Define an Ext model "Enzyme" to make reading from XML data possible.
-                Ext.define("Enzyme", {
-                    extend: "Ext.data.Model",
-                    fields: [{name: "name", mapping: "n"},
-                             {name: "site", mapping: "s"},
-                             {name: "forwardRegex", mapping: "fr"},
-                             {name: "reverseRegex", mapping: "rr"},
-                             {name: "cutType", type: "int", mapping: "c"},
-                             {name: "dsForward", type: "int", mapping: "ds > df"},
-                             {name: "dsReverse", type: "int", mapping: "ds > dr"},
-                             {name: "usForward", type: "int", mapping: "us > uf"},
-                             {name: "usReverse", type: "int", mapping: "us > ur"}]
-                });
-                
-                var doc = new DOMParser().parseFromString(xml, "text/xml");
-                //console.log(doc);
-                // Define a store which will hold the data read from XML.
-                var memstore = new Ext.data.Store({
-                    autoLoad: true,
-                    model: "Enzyme",
-                    data : doc,
-                    proxy: {
-                        type: "memory",
-                        reader: {
-                            type: "xml",
-                            record: "e",
-                            root: "enzymes"
-                        }
-                    }
-                });
-                //console.log(memstore);
-                //console.log(memstore.getCount());
-            });
-        });
-
-        describe("Toy Testing: Ext.data.Store", function() {
-
-            it("xml testing", function() {
-                var url = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                //var xml = Teselagen.bio.parsers.ParsersManager.loadFile(url);
-                var xml = jasmine.getFixtures().read(url);
-                
-                // Define an Ext model "Enzyme" to make reading from XML data possible.
-                Ext.define("Jbei", {
-                    extend: "Ext.data.Model",
-                    //fields: [{name: "name",     mapping: "name"},
-                    //         {name: "circular", mapping: "seq:circular"},
-                    //         {name: "features", mapping: "seq:features"},
-                    //         {name: "sequence", mapping: "seq:sequence"}
-                    //         ]
-                    fields: ["name", "circular", "features", "sequence"]
-                });
-                
-                var doc = new DOMParser().parseFromString(xml, "text/xml");
-                //console.log(doc);
-                // Define a store which will hold the data read from XML.
-                var memstore = new Ext.data.Store({
-                    autoLoad: true,
-                    model: "Jbei",
-                    data : doc,
-                    proxy: {
-                        type: "memory",
-                        //type: "ajax",
-                        //url: url,
-                        reader: {
-                            type: "xml",
-                            record: "seq:seq"//,
-                            //root: "enzymes"
-                        }
-                    }
-                });
-                console.log(memstore.getCount());
-                var tmp = memstore.getAt(0);
-                console.log(tmp);
-            });
         });
 
     });

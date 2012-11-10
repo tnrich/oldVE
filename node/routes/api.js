@@ -206,7 +206,16 @@ module.exports = function (app) {
       });
     });
   });
-  
+
+  // Delete Project
+  app.delete('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.findById(req.body.id,function(err,proj){
+      proj.remove(function(){
+        res.json({});
+      });
+    });
+  });  
 
   app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");

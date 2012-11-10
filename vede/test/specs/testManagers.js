@@ -545,6 +545,8 @@ Ext.onReady(function() {
                     expect(design.getJ5Collection().bins().getAt(1).parts().count()).toBe(0);
                     expect(success).toBe(false);
                 });
+
+
             });
 
 
@@ -640,12 +642,45 @@ Ext.onReady(function() {
                     expect(seq1.get("partSource")).toBe("newPartSource");
                 });
 
+                it("setPartStart()/getPartStart() (From Part section)", function(){
+
+                    expect(part1.getStart()).toBe(1);
+
+                    DeviceDesignManager.setPartStart(design, part1, 5);
+
+                    expect(part1.getStart()).toBe(5);
+                    expect(part1.getStart()).toBe(DeviceDesignManager.getPartStart(design, part1));
+                });
+
+                it("setPartEnd()/getPartEnd() (From Part section)", function(){
+
+                    expect(part1.getEnd()).toBe(7);
+
+                    DeviceDesignManager.setPartEnd(design, part1, 5);
+
+                    expect(part1.getEnd()).toBe(5);
+                    expect(part1.getEnd()).toBe(DeviceDesignManager.getPartEnd(design, part1));
+                });
+
                 it("setSequenceFileName()", function(){
                     expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
                     
                     var name = DeviceDesignManager.setSequenceFileName(design, seq1, "blah");
                     expect(seq1.get("sequenceFileName")).toBe("blah");
                     expect(name).toBe("blah");
+                });
+
+                it("setSequenceFileName()", function(){
+                    expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
+                    
+                    var name = DeviceDesignManager.setSequenceFileName(design, seq1, "blah");
+                    expect(seq1.get("sequenceFileName")).toBe("blah");
+                    expect(name).toBe("blah");
+                });
+
+                it("getSequenceLength()", function(){
+                    var len = DeviceDesignManager.getSequenceLength(design, seq1);
+                    expect(len).toBe(7);
                 });
             });
 
@@ -783,15 +818,6 @@ Ext.onReady(function() {
             });
 
             it("createJ5Results()", function(){
-            });
-
-            it("()", function(){
-            });
-
-            it("()", function(){
-            });
-
-            it("()", function(){
             });
         });
 
