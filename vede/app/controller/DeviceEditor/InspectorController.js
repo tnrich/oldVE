@@ -21,6 +21,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.selectedPart = j5Part;
     },
 
+    onBinSelected: function(j5Bin) {
+        var selectionModel = this.columnsGrid.getSelectionModel();
+
+        selectionModel.select(j5Bin);
+    },
+
     onPartNameFieldChange: function(nameField) {
         var newName = nameField.getValue();
 
@@ -185,6 +191,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.SELECT_PART,
                             this.onPartSelected,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_BIN,
+                            this.onBinSelected,
                             this);
 
         this.control({

@@ -244,7 +244,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'button',
                                     cls: 'inspectorRemoveColumnBtn',
-                                    width: 100,
+                                    width: 130,
                                     text: 'Remove Column'
                                 }
                             ]
