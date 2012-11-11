@@ -8,11 +8,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     DeviceEvent: null,
 
+    activeProject: null,
     selectedPart: null,
+    tabPanel: null,
 
     onPartSelected: function(j5Part) {
-        var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='InspectorPanel']");
-        inspector.setActiveTab(0);
+        this.inspector.setActiveTab(0);
 
         this.populatePartInformation(j5Part);
         this.selectedPart = j5Part;
@@ -30,15 +31,68 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.selectedPart.set("fas", newStrategy);
     },
 
-    populatePartInformation: function(j5Part) {
-        var inspector = Ext.getCmp("mainAppPanel").getActiveTab().down("component[cls='InspectorPanel']");
+    onPlasmidGeometryChange: function(radioGroup, newValue) {
+        this.activeProject.set("isCircular", newValue);
+    },
 
-        var sourceField = inspector.down("component[cls='partSourceField']");
-        var revCompField = inspector.down("component[cls='reverseComplementField']");
-        var nameField = inspector.down("textfield[cls='partNameField']");
-        var startField = inspector.down("displayfield[cls='startBPField']");
-        var stopField = inspector.down("displayfield[cls='stopBPField']");
-        var strategyField = inspector.down("combobox[cls='forcedAssemblyComboBox']");
+    onTabChange: function(tabPanel, newTab, oldTab) {
+        if(newTab.model) {
+            if(this.activeBins) {
+                this.activeBins.un("add", this.onAddToBins, this);
+                this.activeBins.un("update", this.onBinsUpdate, this);
+                this.activeBins.un("remove", this.onRemoveFromBins, this);
+            }
+
+            this.activeProject = newTab.model;
+            this.activeBins = this.activeProject.getJ5Collection().bins();
+
+            this.activeBins.on("add", this.onAddToBins, this);
+            this.activeBins.on("update", this.onBinsUpdate, this);
+            this.activeBins.on("remove", this.onRemoveFromBins, this);
+
+            this.inspector = newTab.down("component[cls='InspectorPanel']");
+
+            this.renderCollectionInfo();
+        }
+    },
+
+    onAddToBins: function(activeBins, bins, index) {
+    },
+
+    onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
+    },
+
+    onRemoveFromBins: function(activeBins, removedBin, index) {
+    },
+
+    renderCollectionInfo: function() {
+        var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
+        var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
+        var circularPlasmidField = this.inspector.down("radiofield[cls='circular_plasmid_radio']");
+        var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
+        var columnsGrid = this.inspector.down("gridpanel");
+
+        if(this.activeProject) {
+            j5ReadyField.setValue(this.activeProject.getJ5Collection().get("j5Ready"));
+            combinatorialField.setValue(this.activeProject.getJ5Collection().get("combinatorial"));
+
+            if(this.activeProject.get("isCircular")) {
+                circularPlasmidField.setValue(true);
+            } else {
+                linearPlasmidField.setValue(true);
+            }
+
+            columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+        }
+    },
+
+    populatePartInformation: function(j5Part) {
+        var sourceField = this.inspector.down("component[cls='partSourceField']");
+        var revCompField = this.inspector.down("component[cls='reverseComplementField']");
+        var nameField = this.inspector.down("textfield[cls='partNameField']");
+        var startField = this.inspector.down("displayfield[cls='startBPField']");
+        var stopField = this.inspector.down("displayfield[cls='stopBPField']");
+        var strategyField = this.inspector.down("combobox[cls='forcedAssemblyComboBox']");
 
         if(j5Part) {
             nameField.setValue(j5Part.get("name"));
@@ -82,6 +136,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    onLaunch: function() {
+        this.tabPanel = Ext.getCmp("mainAppPanel");
+        this.tabPanel.on("tabchange",
+                         this.onTabChange,
+                         this);
+    },
+
     init: function() {
         this.callParent();
 
@@ -97,6 +158,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "combobox[cls='forcedAssemblyComboBox']": {
                 select: this.onPartAssemblyStrategyChange
+            },
+            "radiofield[cls='circular_plasmid_radio']": {
+                change: this.onPlasmidGeometryChange
             }
         })
     },

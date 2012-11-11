@@ -170,42 +170,60 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'gridpanel',
+                            cls: 'inspector_grid',
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
                             columns: [
                                 {
-                                    xtype: 'rownumberer',
-                                    width: 50,
-                                    text: 'Column'
+                                    xtype: 'gridcolumn',
+                                    width: 100,
+                                    text: 'Column',
+                                    dataIndex: 'binName'
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: 'Direction'
+                                    text: 'Direction',
+                                    dataIndex: 'directionForward',
+                                    renderer: function(forward) {
+                                        if(forward) {
+                                            return "Forward";
+                                        } else {
+                                            return "Reverse";
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'numbercolumn',
-                                    text: 'Items'
+                                    text: 'Items',
+                                    renderer: function(value, metadata, record) {
+                                        return record.parts().getRange().length;
+                                    }
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: 'FAS'
+                                    text: 'FAS',
+                                    dataIndex: 'fas'
                                 },
                                 {
                                     xtype: 'booleancolumn',
-                                    text: 'DSF'
+                                    text: 'DSF',
+                                    dataIndex: 'dsf'
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: 'FRO'
+                                    text: 'FRO',
+                                    dataIndex: 'fro'
                                 },
                                 {
                                     xtype: 'numbercolumn',
-                                    text: '5\' Ex'
+                                    text: '5\' Ex',
+                                    dataIndex: 'extra5PrimeBps'
                                 },
                                 {
                                     xtype: 'numbercolumn',
-                                    text: '3\' Ex'
+                                    text: '3\' Ex',
+                                    dataIndex: 'extra3PrimeBps'
                                 }
                             ],
                             viewConfig: {

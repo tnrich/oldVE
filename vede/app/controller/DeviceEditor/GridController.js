@@ -12,6 +12,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     DeviceDesignManager: null,
 
+    activeBins: null,
     activeProject: null,
     grid: null,
     tabPanel: null,
@@ -94,14 +95,36 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part);
     },
 
-    onAddColumn: function(j5Bin) {
-        if(j5Bin) {
-            this.addJ5Bin(j5Bin);
-        } else {
-            this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
-                totalRows: this.totalRows
-            }));
+    onTabChange: function(tabPanel, newTab, oldTab) {
+        if(newTab.model) {
+            if(this.activeBins) {
+                this.activeBins.un("add", this.onAddToBins, this);
+                this.activeBins.un("update", this.onBinsUpdate, this);
+                this.activeBins.un("remove", this.onRemoveFromBins, this);
+            }
+
+            this.activeProject = newTab.model;
+            this.activeBins = this.activeProject.getJ5Collection().bins();
+
+            this.activeBins.on("add", this.onAddToBins, this);
+            this.activeBins.on("update", this.onBinsUpdate, this);
+            this.activeBins.on("remove", this.onRemoveFromBins, this);
+
+            this.renderDevice();
         }
+    },
+
+    onAddToBins: function(activeBins, addedBins, index) {
+        Ext.each(addedBins, function(j5Bin) {
+            this.addJ5Bin(j5Bin);
+        }, this);
+    },
+
+    onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
+    },
+
+    onRemoveFromBins: function(activeBins, removedBin, index) {
+        this.grid.remove(this.grid.query("Bin")[index]);
     },
 
     onAddRow: function() {
@@ -146,9 +169,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         binModel.parts().add(partModel1);
         binModel.parts().add(partModel2);
 
-        this.activeProject = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+        this.tabPanel.down("DeviceEditorPanel").model = 
+            this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
 
-        this.renderDevice();
+        this.tabPanel.on("tabchange",
+                         this.onTabChange,
+                         this);
     },
 
     init: function() {
@@ -172,10 +198,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on(this.DeviceEvent.ADD_COLUMN,
-                            this.onAddColumn,
-                            this);
-
         this.application.on(this.DeviceEvent.ADD_ROW,
                             this.onAddRow,
                             this);
@@ -187,5 +209,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("PartCellClick",
                             this.onPartCellClick,
                             this);
-    },
+        },
 });

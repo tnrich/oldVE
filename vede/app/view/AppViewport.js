@@ -58,7 +58,7 @@ Ext.define('Vede.view.AppViewport', {
                             xtype: 'DeviceEditorPanel'
                         },
                         {
-                            xtype: 'AnalysisPanel'
+                           xtype: 'AnalysisPanel'
                         },
                         {
                             xtype: 'DeviceEditorLegacyPanel',
