@@ -6,9 +6,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     requires: ["Teselagen.event.DeviceEvent"],
 
+    DeviceDesignManager: null,
     DeviceEvent: null,
 
     activeProject: null,
+    columnsGrid: null,
     selectedPart: null,
     tabPanel: null,
 
@@ -35,6 +37,32 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.activeProject.set("isCircular", newValue);
     },
 
+    onAddColumnButtonClick: function() {
+        var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
+        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                                    selectedBin);
+
+        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
+                                                    selectedBinIndex);
+    },
+
+    onRemoveColumnButtonClick: function() {
+        var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
+        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                                    selectedBin);
+        
+        this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+    },
+
+    onGridBinSelect: function(grid, j5Bin, selectedIndex) {
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+    },
+
+    /**
+     * When we switch to a new tab, switch the current active project to the one
+     * associated with the new tab, and reset event handlers so they refer to the
+     * new grid and j5 bins.
+     */
     onTabChange: function(tabPanel, newTab, oldTab) {
         if(newTab.model) {
             if(this.activeBins) {
@@ -51,6 +79,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
             this.inspector = newTab.down("component[cls='InspectorPanel']");
+
+            if(this.columnsGrid) {
+                this.columnsGrid.un("select", this.onGridBinSelect, this);
+            }
+
+            this.columnsGrid = this.inspector.down("gridpanel");
+            this.columnsGrid.on("select", this.onGridBinSelect, this);
 
             this.renderCollectionInfo();
         }
@@ -70,7 +105,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
         var circularPlasmidField = this.inspector.down("radiofield[cls='circular_plasmid_radio']");
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
-        var columnsGrid = this.inspector.down("gridpanel");
 
         if(this.activeProject) {
             j5ReadyField.setValue(this.activeProject.getJ5Collection().get("j5Ready"));
@@ -82,7 +116,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 linearPlasmidField.setValue(true);
             }
 
-            columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+            this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
         }
     },
 
@@ -146,6 +180,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     init: function() {
         this.callParent();
 
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
 
         this.application.on(this.DeviceEvent.SELECT_PART,
@@ -161,6 +196,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "radiofield[cls='circular_plasmid_radio']": {
                 change: this.onPlasmidGeometryChange
+            },
+            "button[cls='inspectorAddColumnBtn']": {
+                click: this.onAddColumnButtonClick
+            },
+            "button[cls='inspectorRemoveColumnBtn']": {
+                click: this.onRemoveColumnButtonClick
+            },
+            "gridpanel[cls='inspectorGrid']": {
+                select: this.onGridBinSelect
             }
         })
     },

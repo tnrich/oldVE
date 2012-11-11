@@ -75,6 +75,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin.deselect();
         }
 
+        if(this.selectedPart) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
+        }
+
         this.selectedBin = gridBin;
         gridBin.select();
 
@@ -124,12 +129,27 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onRemoveFromBins: function(activeBins, removedBin, index) {
+        if(this.selectedBin.getBin() == removedBin) {
+            this.selectedBin = null;
+        }
+
         this.grid.remove(this.grid.query("Bin")[index]);
     },
 
     onAddRow: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
+    },
+
+    onSelectBin: function(j5Bin) {
+        var gridBin = this.getGridBinFromJ5Bin(j5Bin);
+
+        if(this.selectedBin) {
+            this.selectedBin.deselect();
+        }
+
+        this.selectedBin = gridBin;
+        gridBin.select();
     },
 
     addJ5Bin: function(j5Bin) {
@@ -143,6 +163,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.grid.items.each(function(bin) {
             bin.setTotalRows(this.totalRows);
         }, this);
+    },
+
+    getGridBinFromJ5Bin: function(j5Bin) {
+        var targetGridBin = null;
+
+        Ext.each(this.grid.query("Bin"), function(gridBin) {
+            if(gridBin.getBin() === j5Bin) {
+                targetGridBin = gridBin;
+                return false;
+            }
+        }, this);
+
+        return targetGridBin;
     },
 
     onLaunch: function() {
@@ -200,6 +233,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.ADD_ROW,
                             this.onAddRow,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_BIN,
+                            this.onSelectBin,
                             this);
 
         this.application.on("BinHeaderClick",

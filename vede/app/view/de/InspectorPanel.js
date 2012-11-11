@@ -130,6 +130,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 {
                     xtype: 'form',
                     cls: 'collectionInfoForm',
+                    overflowY: 'auto',
                     bodyBorder: false,
                     bodyPadding: 10,
                     items: [
@@ -170,7 +171,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'gridpanel',
-                            cls: 'inspector_grid',
+                            cls: 'inspectorGrid',
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
@@ -237,10 +238,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             items: [
                                 {
                                     xtype: 'button',
+                                    cls: 'inspectorAddColumnBtn',
                                     text: 'Add Column'
                                 },
                                 {
                                     xtype: 'button',
+                                    cls: 'inspectorRemoveColumnBtn',
                                     width: 100,
                                     text: 'Remove Column'
                                 }
