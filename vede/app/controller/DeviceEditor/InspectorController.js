@@ -17,8 +17,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartSelected: function(j5Part) {
         this.inspector.setActiveTab(0);
 
-        this.populatePartInformation(j5Part);
+        //this.populatePartInformation(j5Part);
+        if(j5Part) {
+            this.tabPanel.getActiveTab().down("form[cls='PartPropertiesForm']").loadRecord(j5Part);
+            this.tabPanel.getActiveTab().down("form[cls='forcedAssemblyStrategyForm']").loadRecord(j5Part);
+        }
         this.selectedPart = j5Part;
+    },
+
+    onBinSelected: function(j5Bin) {
+        var selectionModel = this.columnsGrid.getSelectionModel();
+
+        selectionModel.select(j5Bin);
     },
 
     onPartNameFieldChange: function(nameField) {
@@ -185,6 +195,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.SELECT_PART,
                             this.onPartSelected,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_BIN,
+                            this.onBinSelected,
                             this);
 
         this.control({
