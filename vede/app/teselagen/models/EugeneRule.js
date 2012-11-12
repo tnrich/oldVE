@@ -43,23 +43,34 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
+        {name: "id",                type: "long"},
+        {name: "devicedesign_id",   type: "long"},
+        {name: "operand1_id",   type: "long"},
+        {name: "operand2_id",   type: "long"},
         {
             name: "name",
             convert: function(v, record) {
-                if ( v.match(/[^a-zA-Z0-9_\-]/)) {
+                var name;
+
+                if (v === "" || v === undefined || v === null) {
+                    name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
+                    record.self.highestDefaultNameIndex += 1;
+                    //console.log(name);
+                } else if ( v.match(/[^a-zA-Z0-9_\-]/)) {
                     console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                    v = v.replace(/[^a-zA-Z0-9_\-]*/g, "");
+                    name = v.replace(/[^a-zA-Z0-9_\-]*/g, "");
+                } else {
+                    name = v;
                 }
-                return v;
+                return name;
             }
         },
         
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
-        //{name: "operand1",              type: "auto",       defaultValue: null},
-        //{name: "compositionalOperator", type: "String",     defaultValue: ""},
+
         {
             name: "compositionalOperator",
-            convert: function(v, record) {
+            convert: function(v) {
                 var compOp = v.toUpperCase();
 
                 var constants = Teselagen.constants.Constants;
@@ -80,14 +91,15 @@ Ext.define("Teselagen.models.EugeneRule", {
         },
         {
             name: "operand2isNumber",
-            convert: function(v, record) {
-                if (this.get("operand2Number") === undefine)
-                return v;
+            convert: function(v) {
+                if (this.get("operand2Number") === undefined) {
+                    return v;
+                }
             }
         },
         
         {name: "operand2isNumber",      type: "boolean",    defaultValue: false},
-        {name: "operand2Number",       type: "number",     defaultValue: 0}
+        {name: "operand2Number",        type: "number",     defaultValue: 0}
     ],
 
     validations: [
@@ -95,17 +107,10 @@ Ext.define("Teselagen.models.EugeneRule", {
         //{field: "negationOperator", type: "presence"},
         //{field: "operand1",         type: "presence"},
         {field: "compositionalOperator",    type: "presence"},
-        {field: "compositionalOperator",    type: "inclusion",
-                list: [             //Cannot access the statics, hard coding for now.
-                    Teselagen.constants.Constants.AFTER,
-                    Teselagen.constants.Constants.BEFORE,
-                    Teselagen.constants.Constants.WITH,
-                    Teselagen.constants.Constants.THEN,
-                    Teselagen.constants.Constants.NEXTTO,
-                    Teselagen.constants.Constants.MORETHAN,
-                    Teselagen.constants.Constants.NOTMORETHAN,
-                    Teselagen.constants.Constants.NOTWITH
-                ]
+        {
+            field: "compositionalOperator",
+            type: "inclusion",
+            list: Teselagen.constants.Constants.COMPOP_LIST
         },
         {field: "operand2Number",         type: "presence"}
     ],
@@ -118,9 +123,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getOperand1",
             setterName: "setOperand1",
             associationKey: "operand1",
-
-            name: "operand1", //RP
-            instanceName: "operand1" //DW
+            instanceName: "operand1",
+            foreignKey: "operand1_id"
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -129,44 +133,18 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
             associationKey: "operand2Part",
-
-            name: "operand2Part", //RP
-            instanceName: "operand2" //DW
+            instanceName: "operand2",
+            foreignKey: "operand2_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
-            associationKey: "deviceDesign"
+            associationKey: "deviceDesign",
+            foreignKey: "devicedesign_id"
         }
     ],
-
-    // Tried using Constructor and it doesn't work.
-    // Read on forums to use init as a way to execute methods after the fields block. --DW
-    init: function() {
-
-        // If Name is "", use default + number as name
-        if (this.get("name") === "") {
-            this.set("name", this.self.defaultNamePrefix + this.self.highestDefaultNameIndex);
-                this.self.highestDefaultNameIndex += 1;
-        }
-
-        // Check CompositionalOperator
-        /*var compOp = this.get("compositionalOperator");
-        if (compOp === this.self.AFTER || compOp === this.self.BEFORE || compOp === this.self.WITH || compOp === this.self.THEN || compOp === this.self.NEXTTO || compOp === this.self.MORETHAN ) {
-            // These check out
-        } else if (compOp === this.self.NOTMORETHAN || compOp === this.self.NOTWITH) {
-            // These are ok, just deprecated
-        } else {
-            // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
-            console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
-            throw Ext.create("Teselagen.bio.BioException", {
-                message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
-            });
-        }*/
-
-    },
 
     /**
      * Gets Operand2. Must use this method to obtain Operand2 correctly.

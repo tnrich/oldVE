@@ -3,20 +3,13 @@ Ext.define('Vede.controller.AuthWindowController', {
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
 
     onAuthLoginClick: function(button, e, options) {
-        var authenticationManager = Ext.get("Teselagen.manager.AuthenticationManager");
-
 		var form = Ext.getCmp('auth-form').getForm();
-		var username = form.findField('username').getRawValue();
-		var password = form.findField('password').getRawValue();
-		var server = form.findField('server').getRawValue();
+        var params = {};
+		params.username = form.findField('username').getRawValue();
+		params.password = form.findField('password').getRawValue();
+		params.server = form.findField('server').getRawValue();
 
-        Vede.application.authenticationManager.manualAuth(username,password,server);
-    },
-    onAuthGuestClick: function(button, e, options) {
-        var authenticationManager = Ext.get("Teselagen.manager.AuthenticationManager");
-		var form = Ext.getCmp('auth-form').getForm();
-		var server = form.findField('server').getRawValue();
-        Vede.application.authenticationManager.guestAuth(server);
+        Teselagen.manager.AuthenticationManager.sendAuthRequest(params);
     },
     onNoSessionClick: function(button, e, options) {
     	console.log('no auth');
@@ -53,9 +46,6 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-logout-btn": {
                 click: this.onLogoutClick
-            },
-            "#auth-guest-btn": {
-                click: this.onAuthGuestClick
             },
             "#auth-nosession-btn": {
                 click: this.onNoSessionClick

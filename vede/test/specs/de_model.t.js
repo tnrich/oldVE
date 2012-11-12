@@ -143,19 +143,7 @@ Ext.onReady(function() {
             expect(seqfile).toBeDefined();
             expect(seqfile.get("sequenceFileName")).toBe("myFasta");
         });
-        it("Create Part and access hasOne relation", function(){
-            var part = Ext.create("Teselagen.models.Part", {
-                "fas": "fas1",
-                "sequenceFile": {
-                    "sequenceFileName" : "myFasta"
-                }
-            });
-            expect(part.get("fas")).toBe("fas1");
-            seqfile = part.getSequenceFile();
-            expect(seqfile).toBeDefined();
-            expect(Ext.getClassName(seqfile)).toBe("Teselagen.models.SequenceFile");
-        });
-        describe("Ajax tests.", function() {
+        describe("File store tests.", function() {
             var proj, veprojs;
             it("Project", function() {
                 proj = Ext.create("Teselagen.models.Project", {id:1, name: "Project Z"});

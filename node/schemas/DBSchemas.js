@@ -17,7 +17,7 @@ module.exports = function (app) {
 	var VEProjectSchema = new Schema({
 		name: String,
 		project_id : { type: oIDRef, ref: 'project' },
-		design: {}
+		sequencefile: app.mongoose.Schema.Types.Mixed
 	});
 	app.db.model('veproject', VEProjectSchema);
 
@@ -54,5 +54,8 @@ module.exports = function (app) {
 
 	DEProjectSchema.virtual('id').get(function () {return this._id;});
 	DEProjectSchema.set('toJSON', { virtuals: true });		
+
+	VEProjectSchema.virtual('id').get(function () {return this._id;});
+	VEProjectSchema.set('toJSON', { virtuals: true });		
 
 };

@@ -8,7 +8,6 @@ Ext.define("Teselagen.models.J5Collection", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.DeviceDesign",
         "Teselagen.models.J5Bin"
     ],
 
@@ -27,10 +26,11 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Boolean} isCircular
      */
     fields: [
+        {name: "id",                type: "long"},
+        {name: "devicedesign_id",   type: "long"},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
-        {name: "isCircular",        type: "boolean",    defaultValue: true},
-        {name: "deviceDesign_id",   type: "int"}
+        {name: "isCircular",        type: "boolean",    defaultValue: true}
     ],
 
     // GO BACK AND FIX THESE VALIDATIONS. CURRENTLY FAILS. IF NOT SET TO NON-DEFAULT, IT BECOMES AN ERROR
@@ -38,26 +38,25 @@ Ext.define("Teselagen.models.J5Collection", {
         //{field: "j5Ready",          type: "presence"},
         //{field: "combinatorial",    type: "presence"},
         //{field: "isCircular",       type: "presence"},
-        {field: "deviceDesign_id",  type: "presence"}
+//        {field: "devicedesign_id",  type: "presence"}
     ],
 
     associations: [
         {
             type: "hasMany",
             model: "Teselagen.models.J5Bin",
-            name: "bins"
+            name: "bins",
+            foreignKey: "j5collection_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
-            associationKey: "deviceDesign"
+            associationKey: "deviceDesign",
+            foreignKey: "devicedesign_id"
         }
     ],
-
-    init: function() {
-    },
 
     /**
      * @returns {Number} count Number of J5Bins in bins

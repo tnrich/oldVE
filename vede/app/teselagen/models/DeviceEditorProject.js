@@ -5,6 +5,7 @@
 Ext.define("Teselagen.models.DeviceEditorProject", {
     extend: "Ext.data.Model",
     requires: [
+        "Teselagen.manager.SessionManager",
         "Teselagen.models.DeviceDesign",
         "Teselagen.models.J5Run"
     ],
@@ -19,7 +20,9 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
     fields: [{
         name: "id",
         type: "long"
-    }, {
+    },
+    //{ name: "devicedesign_id", type: "long"},
+    {
         name: "project_id",
         type: "long"
     }, {
@@ -27,38 +30,50 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         type: "String",
         defaultValue: ""
     }],
-
+    /*
     validations: [
         {field: "id", type: "presence"},
         {field: "project_id", type: "presence"},
         {field: "name", type: "presence"}
     ],
-    associations: [{
-        type: 'hasOne',
-        model: 'Teselagen.models.DeviceDesign',
-        associationKey: 'design',
-        name: 'design',
-        getterName: 'getDesign',
-        setterName: 'setDesign',
-        foreignKey: 'id'
-    }, {
-        type: "hasMany",
-        model: "Teselagen.models.J5Run",
-        name: "j5runs",
-        associationKey: "j5runs"
-    }],
+    */
+    associations: [
+        {
+            type: "hasOne",
+            model: "Teselagen.models.DeviceDesign",
+            associationKey: "design",
+            getterName: "getDesign",
+            setterName: "setDesign",
+            foreignKey: "deproject_id"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.J5Run",
+            name: "j5runs",
+            associationKey: "j5runs",
+            foreignKey: "deproject_id"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.Project",
+            getterName: "getProject",
+            setterName: "setProject",
+            associationKey: "project",
+            foreignKey: "project_id"
+        }
+    ],
     proxy: {
-        type: 'rest',
-        url: 'getDEProjects.json', // For testing just create a file with this name and fill with data.
+        type: "rest",
+        url: "/vede/test/data/json/getDEProjects.json",
         reader: {
-            type: 'json',
-            root: 'projects'
+            type: "json",
+            root: "projects"
         },
         writer: {
-            type: 'json'
+            type: "json"
         },
         buildUrl: function() {
-            return sessionData.baseURL + 'user/projects/deprojects'; // This method reBuild the URL for ajax requests from parents models
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects", this.url);
         }
     }
 });

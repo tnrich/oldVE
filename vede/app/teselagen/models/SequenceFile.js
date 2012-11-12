@@ -9,42 +9,93 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     requires: [
         "Teselagen.bio.util.Sha256",
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Teselagen.manager.SessionManager"
     ],
 
     proxy: {
-        type: "memory"
+        type: "rest",
+        url: "/vede/test/data/json/sequenceFiles.json",
+        reader: {
+            type: "json",
+            root: "sequence"
+        },
+        writer: {
+            type: "json"
+        },
+        buildUrl: function() {
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequencefile", this.url);
+        }
     },
 
-    statics: {
-    },
-
-    //This makes a copy of the constants part of this model. Is that bad? -DW
-    config: {
-        Constants: null,
-    },
     /**
      * Input parameters.
      * @param {String} sequenceFileFormat (required)
      * @param {String} sequenceFileContent (required)
-     * @param {String} sequenceFileName
-     * @param {String} partSource
-     * @param {String} hash Hash code from sha256 encryption (Generated upon creating this object)
+     * @param {[String]} sequenceFileName If n
+     * @param {[String]} partSource
+     * @param {[String]} hash Hash code from sha256 encryption (Generated upon creating this object)
      */
     fields: [
-        {name: "id",                    type: "int"},
-        //{name: "sequenceFileFormat",    type: "string",     defaultValue: ""},
+        {name: "id", type: "long"},
+        { name: "veproject_id", type: "long" },
+        { name: "part_id", type: "long" },
         {
             name: "sequenceFileFormat",
-            convert: function(v, record) {
-                v = v.toUpperCase();
-                return v;
+            convert: function(v) {
+                var format = v.toUpperCase().replace(/[^A-Z]/gi,"");
+                var constants = Teselagen.constants.Constants;
+
+                if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
+                    return format;
+                } else {
+                    // COMMENTING THIS OUT FOR NOW
+                    //console.warn("Teselagen.models.SequenceFile: File format, '" + v + "' for this sequence is not recognized. Format not set.");
+                    return "INIT";
+                }
+                
             }
         },
+        
         {name: "sequenceFileContent",   type: "string",     defaultValue: ""},
-        {name: "sequenceFileName",      type: "string",     defaultValue: ""},
-        {name: "partSource",            type: "string",     defaultValue: ""},
-        {name: "hash",                  type: "string",     defaultValue: ""}
+
+        {
+            name: "hash",
+            convert: function(v, record) {
+                var content = record.get("sequenceFileContent");
+                return Teselagen.bio.util.Sha256.hex_sha256(content);
+            }
+        },
+
+        {
+            name: "partSource",
+            convert: function(v, record) {
+
+                if (! (v === "" || v === undefined || v === null) ) {
+                    return v;
+                }
+                var format      = record.get("sequenceFileFormat");
+                var content     = record.get("sequenceFileContent");
+
+                return record.makePartSource(format, content);
+            }
+        },
+
+        {
+            name: "sequenceFileName",
+            convert: function(v, record) {
+                if (! (v === "" || v === undefined || v === null) ) {
+                    return v;
+                }
+
+                var format      = record.get("sequenceFileFormat");
+                var source      = record.get("partSource");
+
+                var name = record.makeSequenceFileName(format, source);
+
+                return name;
+            }
+        }
     ],
 
     validations: [
@@ -52,59 +103,32 @@ Ext.define("Teselagen.models.SequenceFile", {
         {
             field: "sequenceFileFormat",
             type: "inclusion",
-            list: [
-                Teselagen.constants.Constants.GENBANK,     // "Genbank"
-                Teselagen.constants.Constants.FASTA,       // "FASTA"
-                Teselagen.constants.Constants.JBEI_SEQ     // "jbei-seq"
-            ]
+            list: Teselagen.constants.Constants.FORMATS_LIST
         },
-        {field: "sequenceFileContent",  type: "presence"},
-        {field: "sequenceFileName",     type: "presence"},
-        {field: "partSource",           type: "presence"},
-        {field: "hash",                 type: "presence"}
+        {field: "sequenceFileContent",  type: "presence"}
+        //{field: "sequenceFileName",     type: "presence"},
+        //{field: "partSource",           type: "presence"},
+        //{field: "hash",                 type: "presence"}
     ],
 
     associations: [
         {
             type: "belongsTo",
             model: "Teselagen.models.Part",
-            name: "part",
             getterName: "getPart",
             setterName: "setPart",
-            associationKey: "part"
+            associationKey: "part",
+            foreignKey: "part_id"
         },
         {
             type: "belongsTo",
-            model: "Teselagen.models.Project",
-            name: "project",
-            getterName: "getProject",
-            setterName: "setProject",
-            associationKey: "project"
+            model: "Teselagen.models.VectorEditorProject",
+            getterName: "getVectorEditorProject",
+            setterName: "setVectorEditorProject",
+            associationKey: "vectorEditorProject",
+            foreignKey: "veproject_id"
         }
     ],
-
-    /*constructor: function() {
-        console.log("constructor");
-    },*/
-
-
-    // Some of these taken from SequenceFileManager/SequenceProxy
-
-    // Tried using Constructor and it doesn't work.
-    // Read on forums to use init as a way to execute methods after the fields block. --DW
-    init: function() {
-        //console.log("init");
-        this.Constants = Teselagen.constants.Constants;
-
-        // Set the Hash Field
-        this.setSequenceFileContent(this.get("sequenceFileContent"));
-
-        // Set PartSource with Display ID
-        this.setPartSource();
-
-        // Set FileName if given ""
-        this.setSequenceFileName();
-    },
 
     /**
      * Sets the sequenceFileContent for thi
@@ -130,6 +154,37 @@ Ext.define("Teselagen.models.SequenceFile", {
         return hash;
     },
 
+
+    /**
+     * If no Part Source is given, this function determines it based on SequenceFileContent.
+     * @private
+     */
+    makePartSource: function(pFormat, pContent) {
+
+        var constants   = Teselagen.constants.Constants;
+        var source      = "";//"UNKNOWN";
+        var cnt;
+
+        if (pFormat === constants.GENBANK) {
+            cnt = pContent.match(/LOCUS *(\S*)/);
+            if (cnt !== null && cnt.length >= 1) {
+                source = cnt[1].toString();
+            }
+        } else if (pFormat === constants.FASTA) {
+            cnt = pContent.match(/>\s*(\S*)/);
+            if (cnt !== null && cnt.length >= 1) {
+                source = cnt[1].toString();
+            }
+        } else if (pFormat === constants.JBEISEQ) {
+            cnt = pContent.match(/<seq:name>(.*)<\/seq:name>/);
+            if (cnt !== null && cnt.length >= 1) {
+                source = cnt[1].toString();
+            }
+        } else {
+        }
+        return source;
+    },
+
     /**
      * Sets PartSource based on FileFormat and FileContent.
      * DOES NOT CHECK FOR UNIQUENESS OF NAME.
@@ -140,37 +195,43 @@ Ext.define("Teselagen.models.SequenceFile", {
     setPartSource: function(pPartSource) {
 
         // In The case where there is an input
-        if (pPartSource !== undefined) {
+        if (! (pPartSource === "" || pPartSource === undefined || pPartSource === null) ) {
             this.set("partSource", pPartSource);
             return pPartSource;
         }
 
-        var displayID = "";
-        var cnt;
-        var content = this.get("sequenceFileContent");
+        var source = this.makePartSource(this.get("sequenceFileFormat"), this.get("sequenceFileContent"));
 
-        if (!(this.get("partSource") === "" || this.get("partSource") === undefined || this.get("partSource" === null))) {
-            return this.get("partSource");
+        this.set("partSource", source);
+        return source;
+    },
+
+    /**
+     * If no File Name is given, this function determines it based on SequenceFileContent and SequenceFileFormat.
+     * @private
+     */
+    makeSequenceFileName: function(pFormat, pSource) {
+
+        var constants   = Teselagen.constants.Constants;
+        var format      = this.get("sequenceFileFormat");
+        var name        = "";
+
+        // If the file name was set with a "" for partSource, the file name may be ".fas", ".gb", or "xml"
+        // Overwrite these filenames if that is true calling this method.
+
+        if (format === constants.GENBANK) {
+            name = pSource + ".gb";
+        } else if (format === constants.FASTA) {
+            name = pSource + ".fas";
+        } else if (format === constants.JBEISEQ) {
+            name = pSource + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
+        } else {
+            name = pSource;
+            // FIGURE OUT WHAT TO DO WITH THIS WARNING LATER
+            //console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
         }
 
-        if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.GENBANK) {
-            cnt = content.match(/LOCUS *(\S*)/);
-            if (cnt !== null && cnt.length >= 1) {
-                displayID = cnt[1].toString();
-            }
-        } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.FASTA) {
-            cnt = content.match(/>\s*(\S*)/);
-            if (cnt !== null && cnt.length >= 1) {
-                displayID = cnt[1].toString();
-            }
-        } else if (this.get("sequenceFileFormat") === Teselagen.constants.Constants.JBEI_SEQ) {
-            cnt = content.match(/<seq:name>(.*)<\/seq:name>/);
-            if (cnt !== null && cnt.length >= 1) {
-                displayID = cnt[1].toString();
-            }
-        }
-        this.set("partSource", displayID);
-        return displayID;
+        return name;
     },
 
     /**
@@ -181,34 +242,47 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @returns {[String]} Set sequenceFileName.
      */
     setSequenceFileName: function(pName) {
-
         // In The case where there is an input
-        if (pName !== undefined) {
+        if (! (pName === undefined || pName === null || pName === "") ) {
             this.set("sequenceFileName", pName);
             return pName;
         }
 
-        // Setting name based on SequenceFileContent and Format
-        var format      = this.get("sequenceFileFormat");
-        var displayID   = this.get("partSource");
-        var name        = this.get("sequenceFileName");
+        // The case of double checking what the sequenceFileName has already been set to.
+        var name = this.get("sequenceFileName");
 
-        // If the file name was set with a "" for displaID, the file name may be ".fas", ".gb", or "xml"
-        // Overwrite these filenames if that is true calling this method.
-
+        // reparse from Content if there is no name
         if (name.replace(/\.gb|\.fas|\.xml/gi,"") === "" || name === undefined ) {
-            if (format === Teselagen.constants.Constants.GENBANK) {
-                name = displayID + ".gb";
-            } else if (format === Teselagen.constants.Constants.FASTA) {
-                name = displayID + ".fas";
-            } else if (format === Teselagen.constants.Constants.JBEI_SEQ) {
-                name = displayID + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
-            } else {
-                name = displayID;
-                console.warn("Teselagen.models.SequenceFile: File format, '" + format + "' for this sequence is not recognized. Proper suffix for SequenceFileName not set.");
-            }
+            var source = this.makePartSource(this.get("sequenceFileFormat"), this.get("sequenceFileContent"));
+            name = this.makeSequenceFileName(this.get("sequenceFileFormat"), source);
         }
+
         this.set("sequenceFileName", name);
         return name;
+    },
+
+
+    /** COME BACK AND FILL THIS IN FOR GENBANK AND JBEISEQ
+     * Determine the length of the sequence.
+     * @returns {Number} Length of the sequence
+     */
+    getLength: function() {
+        var constants   = Teselagen.constants.Constants;
+        var format      = this.get("sequenceFileFormat");
+        var content     = this.get("sequenceFileContent");
+        var end     = 0;
+        var seq;
+
+        if (format === constants.GENBANK) {
+        } else if (format === constants.FASTA) {
+            seq = content.replace(/>\s*(\S*)\s*/,"");
+            seq = seq.replace(/\s/,"");
+            //console.log(seq);
+            end = seq.length;
+
+        } else if (format === constants.JBEISEQ) {
+        } else {
+        }
+        return end;
     }
 });

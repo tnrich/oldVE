@@ -9,26 +9,18 @@ Ext.define("Teselagen.models.DeviceDesign", {
         "Teselagen.models.J5Collection",
         "Teselagen.models.EugeneRule"
     ],
-    /*
-    proxy: {
-        type: "memory"
-    },
-    statics: {
-    },
-    */
 
-    /* Comment this proxy for testing - Use memory instead */
     proxy: {
-        type: 'rest',
-        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
+        type: "rest",
+        url: "/vede/test/data/json/getDeviceDesign.json",
         reader: {
-            type: 'json',
-            root: 'design'
+            type: "json",
+            root: "design"
         },
         writer: {
-            type: 'json',
+            type: "json",
             //This method should resolve associations and prepare data before saving design
-            getRecordData: function(record, getEverything) {
+            getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
                 var j5Collection = associatedData["j5collection"];
@@ -39,7 +31,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         },
         buildUrl: function() {
-            return sessionData.baseURL + 'user/projects/deprojects/devicedesign'; // This method reBuild the URL for ajax requests from parents models
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign", this.url);
         }
     },
 
@@ -48,10 +40,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {
-            name: "deproject_id",
-            type: "long"
-        }
+        //{name: "id", type: "long"},
+        {name: "deproject_id", type: "long"},
+        {name: "j5collection_id", type: "long"},
+        {name: "sbolviconinfo_id", type: "long"}
     ],
 
     validations: [
@@ -65,13 +57,22 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5collection",
-            name: "j5collection"
+            foreignKey: "j5collection_id"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.SBOLvIconInfo",
+            getterName: "getSBOLvIconInfo",
+            setterName: "setSBOLvIconInfo",
+            associationKey: "sbolvIconInfo",
+            foreignKey: "sbolviconinfo_id"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             associationKey: "rules",
-            name: "rules"
+            name: "rules",
+            foreignKey: "devicedesign_id"
         },
         {
             type: "belongsTo",
@@ -79,13 +80,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
             associationKey: "deviceEditorProject",
-            name: "deviceEditorProject",
-            foreignKey: 'deproject_id'
+            foreignKey: "deproject_id"
         }
     ],
-
-    init: function() {
-    },
 
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.

@@ -684,6 +684,38 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //return pDevice.removePartFromBin(pPart, pBinIndex);
     },
 
+    /** NEED THIS?
+     * Set the Start index for a Part
+     * @param {Number} pStart The start index, from 1 to length of the sequence, to set the start BP.
+     */
+    setPartStart: function(pDevice, pPart, pStart) {
+        pPart.setStart(pStart);
+    },
+
+    /** NEED THIS?
+     * Get Start Index
+     * @returns {Number}
+     */
+    getPartStart: function(pDevice, pPart) {
+        return pPart.getStart();
+    },
+
+    /** NEED THIS?
+     * Set the End index for a Part
+     * @param {Number} pEnd The start index, from 1 to length of the sequence, to set the start BP.
+     */
+    setPartEnd: function(pDevice, pPart, pEnd) {
+        pPart.setEnd(pEnd);
+    },
+
+    /** NEED THIS?
+     * Get End Index
+     * @returns {Number}
+     */
+    getPartEnd: function(pDevice, pPart) {
+        return pPart.getEnd();
+    },
+
     //================================================================
     // SequenceFile Management
     // Use methods to obtain the part you want to manipulate.
@@ -805,19 +837,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return pSequenceFile.setSequenceFileName(pSequenceFileName);
     },
 
-    //================================================================
-    // CSV Readers --> Refactor to Parsers?
-    //================================================================
-    parseSeqCsv: function(pCsv) {
 
-    },
-
-    parsePartCsv: function(pCsv) {
-
-    },
-
-    parseTargetCsv: function(pCsv) {
-
+    /** THIS IS INCOMPLETE. ONLY TESTED FOR FASTA. GO BACK FOR GENBANK AND JBEISEQ AND SBOL.
+     * Get Length of Sequence.
+     * @param {Teselagen.models.SequenceFile}
+     */
+    getSequenceLength: function(pDevice, pSequenceFile) {
+        return pSequenceFile.getLength();
     },
 
 

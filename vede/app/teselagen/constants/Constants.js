@@ -17,14 +17,33 @@ Ext.define("Teselagen.constants.Constants", {
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+
+    FORMATS_LIST: [
+        "GENBANK",
+        "FASTA",
+        "JBEISEQ"
+        //"SBOLXML"
+    ],
     
-    GENBANK:                "GENBANK",
-    FASTA:                  "FASTA",
-    JBEI_SEQ:               "JBEI-SEQ",
-    SBOL_XML:               "SBOLXML",
+    GENBANK:               "GENBANK",
+    FASTA:                 "FASTA",
+    JBEISEQ:               "JBEISEQ",
+    //SBOLXML:               "SBOLXML",
+    INIT:                   "INIT",
 
     //================================================================
     // EugeneRule.js: compositionalOperator
+
+    COMPOP_LIST: [
+        "NOTMORETHAN",
+        "NOTWITH",
+        "AFTER",
+        "BEFORE",
+        "WITH",
+        "THEN",
+        "NEXTTO",
+        "MORETHAN"
+    ],
 
     // Deprecated
     NOTMORETHAN:        "NOTMORETHAN",
@@ -54,6 +73,30 @@ Ext.define("Teselagen.constants.Constants", {
         "Embed_in_primer_forward",
         //For bins or parts that are small enough to be embedded within a DNA oligo:
         "Annealed Oligos"
+    ],
+
+    //================================================================
+    // J5Run
+
+
+    ASSEMBLYTYPE_LIST: [
+        // Mock
+        "MOCK",
+        // SLIC/Gibson/CPEC/SLiCE
+        "SLIC",
+        // Golden Gate
+        "GOLDENGATE"
+    ],
+
+
+    MOCK:       "MOCK",
+    SLIC:       "SLIC",
+    GOLDENGATE: "GOLDENGATE",
+
+    RUN_STATUS_LIST: [
+        "SUCCESS",
+        "FAILED",
+        "IN PROGRESS"
     ],
 
     //================================================================

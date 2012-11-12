@@ -16,8 +16,10 @@
 Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.DeviceEvent"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.manager.DeviceDesignManager"],
 
+    DeviceDesignManager: null,
     DeviceEvent: null,
 
     onAddRowClick: function() {
@@ -25,11 +27,14 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     onAddColumnClick: function() {
-        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN, null);
+        var device = Ext.getCmp("mainAppPanel").getActiveTab().model;
+        this.DeviceDesignManager.addEmptyBinByIndex(device,
+                            device.getJ5Collection().bins().getRange().length);
     },
 
     onOpenj5Click: function(button, e, options) {
-        Ext.create('Vede.view.de.j5Controls').show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window = Ext.create('Vede.view.de.j5Controls').show();
     },
 
     onSaveDesignClick: function(button, e, options) {
@@ -50,6 +55,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             }
         });
 
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.DeviceEvent = Teselagen.event.DeviceEvent;
     }
 });

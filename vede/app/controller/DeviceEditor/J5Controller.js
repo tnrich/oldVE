@@ -196,7 +196,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.automationParameters.setDefaultValues();
         this.populateAutomationParametersDialog();
     },
-
     populateAutomationParametersDialog: function() {
         this.automationParameters.fields.eachKey(function(key) {
             if(key !== "id") {
@@ -216,8 +215,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onRunJ5BtnClick: function() {
-        console.log(this.automationParameters);
-        console.log(this.j5Parameters.data);
+        //console.log(this.automationParameters);
+        //console.log(this.j5Parameters.data);
 
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -264,15 +263,18 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 Ext.ComponentQuery.query("component[cls='directSynthesesListFileSelector']")[0]);
         }
 
-        console.log(masterPlasmidsList);
-        console.log(masterPlasmidsListFileName);
-        console.log(masterOligosList);
-        console.log(masterOligosListFileName);
-        console.log(masterDirectSynthesesList);
-        console.log(masterDirectSynthesesListFileName);
-        var j5comm = Teselagen.manager.J5CommunicationManager;
+        var masterFiles = {};
+        masterFiles["masterPlasmidsList"]                 = masterPlasmidsList;    
+        masterFiles["masterPlasmidsListFileName"]         = masterPlasmidsListFileName;            
+        masterFiles["masterOligosList"]                   = masterOligosList;  
+        masterFiles["masterOligosListFileName"]           = masterOligosListFileName;          
+        masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;           
+        masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;                   
 
-        j5comm.generateAjaxRequest();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
+        currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles);
+        currentTab.j5Window.j5comm.generateAjaxRequest();
 
     },
 
@@ -328,7 +330,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             }
         }, this);
     },
-    
+    onDownloadj5Btn: function(button, e, options) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window.j5comm.downloadResults(button);
+    },
+
     init: function() {
         this.control({
             "button[cls='editj5ParamsBtn']": {
@@ -390,6 +396,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             },
             "button[cls='automationParamsResetBtn']": {
                 click: this.onResetAutomationParamsBtnClick
+            },
+            "button[cls='downloadj5Btn']": {
+                click: this.onDownloadj5Btn
             },
         });
         

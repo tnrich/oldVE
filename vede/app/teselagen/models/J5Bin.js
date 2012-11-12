@@ -8,10 +8,8 @@ Ext.define("Teselagen.models.J5Bin", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.J5Collection",
         "Teselagen.models.Part",
         "Teselagen.constants.SBOLvIcons",
-        "Teselagen.utils.NullableInt",
         "Teselagen.utils.NullableInt"
     ],
 
@@ -30,16 +28,18 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {String} binName (REQUIRED) String must be alphanumeric with only "_" or "-". Will eliminate other characters when saving the name.
      * @param {String} iconID
      * @param {Boolean} directionForward True for "forward" or False for "reverse". All parts within a bin should be the same direction.
-     * @param {Boolean} dsf Direct Synthesis Firewall.
+     * @param {Boolean} dsf Direct Synthesis Firewall. False to allow j5 the flexibility to choose. True to prevent a direct synthesis piece from extending from a marked target part row to the target part in the next row.
      * @param {Teselagen.utils.NullableInt} fro Forced Relative Overlap/Overhang Position. Empty to allow j5 the flexibility to choose, or an integral number of bps (to forcibly set the relative overlap/overhang position).
      * @param {String} fas Forced Assembly Strategy. Empty to allow j5 the flexibility to choose.
      * @param {Teselagen.utils.NullableInt} extra5PrimeBps
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
+        {name: "id",                type: "long"},
+        {name: "j5collection_id",     type: "long"},
         {
             name: "binName",
-            convert: function(v, record) {
+            convert: function(v) {
                 if (typeof(v) === "number" || typeof(v) === "string") {
                     if (Teselagen.utils.FormatUtils.isLegalName(v)) {
                         return v;
@@ -51,14 +51,24 @@ Ext.define("Teselagen.models.J5Bin", {
                 }
             }
         }, //required when making this object
-        {name: "iconID",            type: "string",     defaultValue: ""},
+        //{name: "iconID",            type: "string",     defaultValue: ""},
+        {
+            name: "iconID",
+            convert: function(v, record) {
+                if ( v === null || v === undefined || v === "") {
+                    return record.self.GENERIC;
+                } else {
+                    return v;
+                }
+            }
+        },
+
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
         {name: "fas",               type: "string",     defaultValue: ""},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null},
-        {name: "collection_id",     type: "int"}
+        {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
         /* worry about this later. Original does not include this field.
         ,{
@@ -78,7 +88,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {field: "binName",          type: "presence"},
         {field: "iconID",           type: "presence"},
         //field: "directionForward", type: "presence"},
-        {field: "dsf",              type: "presence"},
+        //{field: "dsf",              type: "presence"},
         {field: "fro",              type: "presence"},
         {
             field: "fas",
@@ -87,31 +97,25 @@ Ext.define("Teselagen.models.J5Bin", {
         },
         {field: "extra5PrimeBps",   type: "presence"},
         {field: "extra3PrimeBps",   type: "presence"},
-        {field: "collection_id",    type: "presence"}
+        {field: "j5collection_id",    type: "presence"}
     ],
 
     associations: [
         {
             type: "hasMany",
             model: "Teselagen.models.Part",
-            name: "parts"
+            name: "parts",
+            foreignKey: "j5bin_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5Collection"
+            associationKey: "j5Collection",
+            foreignKey: "j5collection_id"
         }
     ],
-
-    // Tried using Constructor and it doesn't work.
-    // Read on forums to use init as a way to execute methods after the fields block. --DW
-    init: function(inData) {
-        if (this.get("iconID") === "") {
-            this.set("iconID", this.self.GENERIC);
-        }
-    },
 
     /**
      * @returns {Number} count Number of Parts in parts

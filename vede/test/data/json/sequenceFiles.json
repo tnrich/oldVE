@@ -1,0 +1,23 @@
+{
+    "success": true,
+    "sequence": [
+        {
+        	"id": 1,
+        	"veproject_id": 1,
+            "sequenceFileName": "SequenceFile1.fas",
+            "sequenceFileFormat": "FASTA"
+        },
+        {
+        	"id": 2,
+        	"veproject_id": 1,
+            "sequenceFileName": "SequenceFile2.fas",
+            "sequenceFileFormat": "FASTA"
+        },
+        {
+        	"id": 3,
+        	"veproject_id": 2,
+            "sequenceFileName": "SequenceFile3.fas",
+            "sequenceFileFormat": "FASTA"
+        }
+    ]
+}

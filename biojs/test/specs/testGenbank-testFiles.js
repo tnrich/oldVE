@@ -7,7 +7,7 @@ Ext.require("Ext.Ajax");
 Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.parsers.GenbankManager");
 Ext.onReady(function() {
-    var LOG = true;
+    var LOG = false;
 
     loadGenbankFile = function(url) {
         var gb, text;
@@ -35,9 +35,9 @@ Ext.onReady(function() {
             JSON.stringify(gb, null, "  "));
     };
 
-    xdescribe("Opening Problematic Genbank Files: ", function() {
+    describe("Opening Problematic Genbank Files: ", function() {
 
-        describe("MarkDaris file: ", function() {
+        xdescribe("MarkDaris file: ", function() {
             var text, tmp;
             it("Opens and JSON.stringifies: pTT15d_anti-huCB1_10D10.1_TTR3.gb",function(){
                 var text, tmp;
@@ -64,7 +64,7 @@ Ext.onReady(function() {
 
         });
 
-        describe("Simon Bredl file: ", function() {
+        xdescribe("Simon Bredl file: ", function() {
             var text, tmp;
             it("Opens and JSON.stringifies: GentR-Casette.gbk",function(){
 
@@ -113,7 +113,7 @@ Ext.onReady(function() {
         });
         
 
-        describe("Lacz file: ", function() {
+        xdescribe("Lacz file: ", function() {
             var text, tmp;
             it("Opens and JSON.stringifies: lacz.gb",function(){
                 var text, tmp;
@@ -134,6 +134,39 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(3);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements()[2].getFeatureQualifier().length).toBe(9);
                     
+            });
+
+        });
+
+        describe("200k Lines of GenbankFile: ", function() {
+            var text, tmp;
+            it("Opens and JSON.stringifies: largeFile/NC_000913.gb",function(){
+                var text, tmp;
+                var name = "LargeFile";
+                var url  = "../test/data/largeFile/NC_000913.gb";
+
+                tmp = loadGenbankFile(url);
+
+                if (LOG) {
+                    logGenbank(name, url, tmp);
+                }
+                expect(tmp.findKeyword("LOCUS").getSequenceLength()).toBe(4639675);
+
+                expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(8993);
+                expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(5);
+                //console.log(tmp.findKeyword("REFERENCE").toString());
+                //console.log(tmp.getKeywords().length);
+                //console.log(tmp.getKeywords());
+                //console.log(tmp.findKeyword("FEATURES").getFeaturesElements());
+
+                var str = tmp.toString();
+                var fn  = url.replace(/.gb$/,"_parsed.gb");
+                console.log(fn);
+
+                var bb = new BlobBuilder;
+                bb.append(str);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), fn);
+
             });
 
         });

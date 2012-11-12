@@ -9,7 +9,7 @@ Ext.onReady(function () {
 
         describe("Project.", function () {
             var projStore;
-            var project, veproject, deproject;
+            var project, veproject, deproject, part;
 
             it("Load ProjectStore", function () {
                 projStore = Ext.create("Teselagen.store.ProjectStore");
@@ -38,7 +38,9 @@ Ext.onReady(function () {
                         expect(veprojects.count()).toBe(2);
                         veproject = veprojects.first();
                         expect(veproject).toBeDefined();
-                        expect(veproject.get("name")).toBe("VE Proj 1");
+                        if (veproject) {
+                            expect(veproject.get("name")).toBe("VE Proj 1");
+                        }
                     });
                 });
             });
@@ -47,10 +49,27 @@ Ext.onReady(function () {
                     return Ext.isDefined(veproject);
                 }, "VE project to be defined", 500);
                 runs(function() {
-                    veproject.getPart(function(pModel) {
+                    var parts = veproject.parts();
+                    parts.on("load", function() {
+                        expect(parts).toBeDefined();
+                        expect(parts.count()).toBe(2);
+                        part = parts.first();
+                        expect(part).toBeDefined();
+                        if (part) {
+                            expect(part.get("name")).toBe("Part 1");
+                        }
+                    });
+                });
+            });
+            it("Get SequenceFile from VE project", function() {
+                waitsFor(function() {
+                    return Ext.isDefined(veproject);
+                }, "VE project to be defined", 500);
+                runs(function() {
+                    veproject.getSequenceFile(function(pModel) {
                         expect(pModel).toBeDefined();
                         if (pModel) {
-                            expect(pModel.get("name")).toBe("Part 1");
+                            expect(pModel.get("sequenceFileName")).toBe("SequenceFile1.fas");
                         }
                     });
                 });

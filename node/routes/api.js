@@ -158,17 +158,18 @@ module.exports = function (app) {
 
   });
 
-  app.put('/getUser', restrict, function (req, res) {
+  app.put('/user', restrict, function (req, res) {
     res.json({});
   });
 
   // Dummy method
-  app.get('/getUser', restrict, function (req, res) {
+  app.get('/user', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
       user.projects.forEach(function(proj){
         proj.deprojects = undefined;
+        proj.veprojects = undefined;
       });
       res.json({"user":user});
     });
@@ -200,11 +201,21 @@ module.exports = function (app) {
       proj.name = req.body.name;
       proj.DateCreated = req.body.DateCreated;
       proj.DateModified = req.body.DateModified;
-      var projects = de.body.deprojects;
-      //projec
+      proj.save(function(){
+        res.json(proj);
+      });
     });
   });
-  
+
+  // Delete Project
+  app.delete('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.findById(req.body.id,function(err,proj){
+      proj.remove(function(){
+        res.json({});
+      });
+    });
+  });  
 
   app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");
@@ -212,6 +223,7 @@ module.exports = function (app) {
     .exec(function (err, user) {
       user.projects.forEach(function(proj){
         proj.deprojects = undefined;
+        proj.veprojects = undefined;
       });
       console.log("Returning "+user.projects.length+" projects");
       res.json({"projects":user.projects});
@@ -238,6 +250,17 @@ module.exports = function (app) {
     });
   });
 
+  // PUT
+  app.put('/user/projects/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.findById(req.body.id,function(err,proj){
+      proj.name = req.body.name;
+      proj.save(function(){
+        res.json(proj);
+      });
+    });
+  });
+
   // GET
   app.get('/user/projects/deprojects', restrict, function (req, res) {
     var id = JSON.parse(req.query.filter)[0].value;
@@ -257,28 +280,134 @@ module.exports = function (app) {
     var model = req.body;
     var DEProject = app.db.model("deproject");
 
-    console.log(model);
-
     DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
         if(err) console.log("There was a problem!/");
         console.log(err);
         console.log("New Design Saved!");
         res.json({"design":req.body});
       });
-
   });
 
+  //CREATE
+  app.put('/user/projects/deprojects/devicedesign', function (req, res) {
+    var id = req.body["deproject_id"];
+    var model = req.body;
+    var DEProject = app.db.model("deproject");
 
+    DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("Design updated!!");
+        res.json({"design":req.body});
+      });
+  });
+
+  //READ
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id, function (err, project) {
       //delete project.design.rules;
+      /*
+      project.design.j5collection.bins.forEach(function(bin){
+        bin.parts.forEach(function(part){
+          delete part.id;
+        });
+      });
+      */
       res.json({"design":project.design});
     });
     
   });
   
+  // CREATE
+  app.post('/user/projects/veprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var VEProject = app.db.model("veproject");
+    Project.findById(req.body.project_id,function(err,proj){
+      if(err) res.json({"fault":"project not found"},500);
+      var newProj = new VEProject({
+        name : req.body.name,
+        project_id: proj
+      });
+      newProj.save(function(){
+        proj.veprojects.push(newProj);
+        proj.save(function(){
+          console.log("New VE Project Saved!");
+          res.json({"projects":newProj});
+        });
+      });
+    });
+  });
 
+  // GET
+  app.get('/user/projects/veprojects', restrict, function (req, res) {
+    var id = JSON.parse(req.query.filter)[0].value;
+    var Project = app.db.model("project");
+    Project.findById(id).populate('veprojects').exec(function(err,proj){
+      proj.veprojects.forEach(function(veproj){
+        veproj.sequencefile = undefined;
+      });
+      console.log("Returning "+proj.veprojects.length+" veprojects");
+      res.json({"projects":proj.veprojects});
+    });
+  });
+
+  // UPDATE
+  app.put('/user/projects/veprojects', restrict, function (req, res) {
+    var updatedObj = req.body;
+    var VEProject = app.db.model("veproject");
+    VEProject.findById(req.body.id,function(err,proj){
+      if(err) res.json({"fault":"project not found"},500);
+      for(var prop in req.body)
+      {
+        proj[prop] = req.body[prop];
+      }
+      proj.save(function(){
+        res.json({"projects":proj});
+      });
+    });
+  });
+
+  //CREATE
+  app.post('/user/projects/veprojects/sequencefile', function (req, res) {
+    var id = req.body["veproject_id"];
+    var sequence = req.body;
+    delete sequence.id;
+    var VEProject = app.db.model("veproject");
+
+    VEProject.findByIdAndUpdate(id, { sequencefile: sequence }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("New Sequence Saved!");
+        res.json({"sequence":req.body});
+      });
+  });
+
+
+  //PUT
+  app.put('/user/projects/veprojects/sequencefile', function (req, res) {
+    var id = req.body["veproject_id"];
+    var sequence = req.body;
+    var VEProject = app.db.model("veproject");
+
+    VEProject.findByIdAndUpdate(id, { sequencefile: sequence }, {}, function(err){
+        if(err) console.log("There was a problem!/");
+        console.log(err);
+        console.log("Sequence Updated!");
+        res.json({"sequence":req.body});
+      });
+  });
+
+  //READ
+  app.get('/user/projects/veprojects/sequencefile', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.findById(req.query.id, function (err, project) {
+      if(err) console.log("There was a problem!/");
+      //console.log(project);
+      res.json({"sequence":project.sequencefile});
+    });
+    
+  });
 
   app.all('/getExampleModel', restrict, function (req, res) {
     var ExamplesModel = app.db.model("Examples");

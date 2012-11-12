@@ -15,6 +15,10 @@
 
 /*Global Theme Vars*/
 
+body {
+  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+}
+
 .x-body {
   font-family: 'Quicksand', sans-serif;
   font-size: 12px;
@@ -31,6 +35,10 @@
   font-family: 'Quicksand', sans-serif;
     font-size: 12px;
     color: #333;
+}
+
+.x-panel-body-default {
+  border-color: #EBEBEB;
 }
 
 .x-btn,
@@ -62,23 +70,51 @@
   background-image: url(../images/ux/tab-default-close.png);
 }
 
+.x-toolbar {
+  border-top: 0px none;
+}
+
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;
 }
 
 #headerPanel-body, #headerMain-body, #headerSub-body {
-  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
 }
 
-#headerUserIcon {
+#headerUserIcon, #help_Btn {
   border: none;
   background: none;
   padding-left: 10px;
-  padding-right: 10px;
+  padding-right: 10px;  
+}
+
+#mainAppPanel .x-tab-bar-top .x-tab-bar-body   {
+  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+  border: 0 none;
+}
+
+#mainAppPanel div:first-child div:first-child{
+  background-color:none;
+}
+
+
+#mainAppPanel .x-tab-default-top {
+  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+  border-color: #ddd;
+}
+
+#mainAppPanel .x-tab-top-active {
+  background: -webkit-linear-gradient(#f8f8f8 0%, #e8e8e8 100%);
+  border-color: #ccc;
+  box-shadow: none;
 }
 
 /*Project Panel*/
+#projectDesignPanel-body {
+  background: #fdfdfd;
+}
+
 #projectDesignPanel-body div table td div .x-tree-icon-leaf {
   background-image: url(../images/ux/design-tree-icon-leaf.png);
 }
@@ -124,24 +160,99 @@
   height: 32px;
 }
 
+#ProjectPanel_header { 
+  border-top-right-radius: 4px;
+  border-color: #4c4c4c;
+  background: #4c4c4c; /* Old browsers */
+  background: -moz-linear-gradient(top,  #4c4c4c 0%, #333333 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(100%,#333333)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #4c4c4c 0%,#333333 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #4c4c4c 0%,#333333 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #4c4c4c 0%,#333333 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #4c4c4c 0%,#333333 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
+  box-shadow: none;
+}
+
+#ProjectPanel_header_hd span {
+  color: #efefef;
+}
+
+#ProjectPanel-body {
+  border-width: 0 1px;
+}
+
 #ProjectPanel .x-tab-bar { 
   background: -webkit-linear-gradient(#055e75 0.33%, #003e53 100%);
 }
 
+#ProjectPanel .x-tab-bar-top .x-tab-bar-body {
+  border-width: 1px;
+  border-color: #003e53;
+}
+
 #ProjectPanel .x-tab-bar-body {
-  height:40px;
+  height:38px;
 }
 
 #ProjectPanel .x-tab-bar-strip {
   top:37px;
 }
 
+/*Dashboard*/
+#dashboard_Panel-body {
+  border-top: none;
+}
+
+#projectGrid_Panel_header, #designGrid_Panel_header, #dashboard_StatsPanel_header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+#projectGrid_Panel-body, #designGrid_Panel-body, #dashboard_StatsPanel-body{
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/*Vector Editor*/
+#MainMenuPanel-body {
+  border: 0px;
+}
+
+#VectorPanel_header, #AnnotatePanel_header {
+  border-top: 0px;
+}
+
+#VectorEditor-body {
+  border:0px;
+}
+
+#VectorEditorMenuBar{
+  background: #FDFDFD;
+}
+
+#VectorEditorMainToolBar {
+  background: #F8F8F8;
+}
 /*Device Editor*/
 
+#DeviceEditorMenuBar {
+   background: #FDFDFD;
+}
+
+#DeviceEditorMainToolPanel {
+  background: #F8F8F8;
+}
+
 #DeviceEditorToolPanel .x-toolbar-default {
+background: #F8F8F8;
 }
 
 #DeviceEditorPartsBar-innerCt {
   background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
+}
+
+#DeviceEditorCanvas-body {
+  border: none;
 }
 

@@ -8,7 +8,8 @@ Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.SequenceFile"
+        "Teselagen.models.SequenceFile",
+        "Teselagen.constants.Constants"
     ],
 
     proxy: {
@@ -39,10 +40,11 @@ Ext.define("Teselagen.models.Part", {
      * @param {String}  iconID iconID
      */
     fields: [
-        {name: "id",                type: "int"},
-        {name: "veproject_id",        type: "int"},
-        
-        //{name: "partVO",            type: "auto",       defaultValue: null},
+        {name: "id",                type: "long"},
+        {name: "veproject_id",        type: "long"},
+        {name: "j5bin_id",        type: "long"},
+        {name: "eugenerule_id",        type: "long"},
+        {name: "sequencefile_id",        type: "long"},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "fas",               type: "string",     defaultValue: ""},
         /*{
@@ -63,9 +65,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        //{name: "sequenceFile_id",   type: "int"},
         {name: "iconID",            type: "string",     defaultValue: ""}//,
-        //{name: "j5bin_id",          type: "int"}
     ],
 
     validations: [
@@ -81,44 +81,35 @@ Ext.define("Teselagen.models.Part", {
             type: "hasOne",
             model: "Teselagen.models.SequenceFile",
             associationKey:"sequenceFile",
-            foreignKey:"sequenceFile_id",
+            foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFile",
-            name: "SequenceFile"
+            setterName: "setSequenceFileModel"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Bin",
             getterName: "getJ5Bin",
             setterName: "setJ5Bin",
-            associationKey: "j5Bin"
+            associationKey: "j5Bin",
+            foreignKey: "j5bin_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.EugeneRule",
             getterName: "getEugeneRule",
             setterName: "setEugeneRule",
-            associationKey: "eugeneRule"
+            associationKey: "eugeneRule",
+            foreignKey: "eugenerule_id"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.VectorEditorProject",
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
-            associationKey: "vectorEditorProject"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.DeviceEditorProject",
-            getterName: "getDeviceEditorProject",
-            setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
+            associationKey: "vectorEditorProject",
+            foreignKey: "veproject_id"
         }
     ],
-
-    init: function() {
-        
-    },
 
     /**
      * Generates ID based on date + 3 random digits
@@ -144,13 +135,6 @@ Ext.define("Teselagen.models.Part", {
         this.set("id", newId);
         return true;
      },
-
-    /**
-     * Sets deafult genbankStartBP and endBP based on a set SequenceFile.
-     * @returns {Boolean} True if empty, false if not.
-     */
-    setDefaultStartStop: function() {
-    },
 
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.
@@ -204,34 +188,76 @@ Ext.define("Teselagen.models.Part", {
         return false;
     },
 
+    /**
+     * Set Start index
+     * @param {Number} pStart The start index, from 1 to length of the sequence, to set the start BP.
+     */
+    setStart: function(pStart) {
+        this.set("genbankStartBP", pStart);
+    },
+
+    /**
+     * Get Start index.
+     * @returns {Number}
+     */
+    getStart: function() {
+        return this.get("genbankStartBP");
+    },
 
 
-    // SOME METHODS FROM SEQUENCEFILEMANAGER/SEQUENCEFILEPROXY
+    /**
+     * Set End index
+     * @param {Number} pEnd The end index, from 1 to length of the sequence, to set the start BP.
+     */
+    setEnd: function(pEnd) {
+        this.set("endBP", pEnd);
+    },
 
-    /** NEEDS TESTING
-     * Adds a SequenceFile to Part.
+    /**
+     * Get End index.
+     * @returns {Number}
+     */
+    getEnd: function() {
+        return this.get("endBP");
+    },
+
+    /**
+     * Sets SequenceFile with default genbankStartBP and endBP based on a set SequenceFileContent.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Boolean} True if added, false if not.
-     *
-    addSequenceFile: function(pSequenceFile) {
-        this.setSequenceFile(pSequenceFile);
-        if (this.getSequenceFile() === pSequenceFile) {
-            return false;
+     * @returns {Boolean}
+     */
+    setSequenceFile: function(pSequenceFile) {
+        var success = false;
+        if (pSequenceFile === null) {
+            this.setSequenceFileModel(pSequenceFile);
         } else {
-            return true;
-        }
-    },*/
+            var start   = 1;
+            var stop    = pSequenceFile.getLength();
 
-    /** NEEDS TESTING
-     * Removes the SequenceFile of Part.
+            this.setSequenceFileModel(pSequenceFile);
+            this.set("genbankStartBP", start);
+            this.set("endBP", stop);
+            success = true;
+        }
+        return success;
+    },
+
+
+    /** (WEIRD PROBLEM--print part, does not show same seqFile from getSeqFile.)
+     * Removes the SequenceFile of Part. Resets the Sequence File format to INIT (?),
+     * and the content, filename, partsource, etc to empty strings.
+     * Resets the Start and Stop in Part to 0.
+     *
      * @returns {Boolean} True if removed, false if not.
      */
     removeSequenceFile: function() {
         this.setSequenceFile(null);
-        if (this.getSequenceFile() === null || this.getSequenceFile() === undefined) {
-            return false;
-        } else {
+        this.setStart(0);
+        this.setEnd(0);
+        if (this.getSequenceFile().get("sequenceFileFormat") === "INIT") {
             return true;
+        } else {
+            return false;
         }
     }
 

@@ -13,8 +13,11 @@ Ext.define('Vede.view.de.grid.Bin', {
 
     config: {
         bin: null,
+        iconID: null,
         totalRows: 1
     },
+
+    binHeader: null,
 
     /**
      * @param Teselagen.models.J5Bin
@@ -25,6 +28,8 @@ Ext.define('Vede.view.de.grid.Bin', {
         var flipButtonIconPath;
         var html;
 
+        // Set the html and orientation of the flip button based on whether
+        // the bin was created with a blank model or if it contains data.
         if(!this.getBin()) {
             flipButtonIconPath = this.self.forwardButtonIconPath;
             html = "New Bin";
@@ -36,10 +41,13 @@ Ext.define('Vede.view.de.grid.Bin', {
             html = this.getBin().get("binName");
         }
 
+        var iconSource = "resources/images/icons/device/small/promoter.png";
+
         // Create the header for the column.
-        var binHeader = Ext.create('Ext.container.Container', {
+        this.binHeader = Ext.create('Ext.container.Container', {
             items: [{
                 html: html,
+                cls: 'binHeader',
                 styleHtmlContent: true,
                 styleHtmlCls: 'binHeader',
                 height: 100,
@@ -59,6 +67,12 @@ Ext.define('Vede.view.de.grid.Bin', {
                     x: 95,
                     y: 5,
                     icon: flipButtonIconPath
+                }, {
+                    xtype: 'image',
+                    cls: 'binIcon',
+                    x: 40,
+                    y: 30,
+                    src: iconSource
                 }]
             }]
         });
@@ -75,7 +89,7 @@ Ext.define('Vede.view.de.grid.Bin', {
             },
             cls: 'gridBinColumn',
             width: 125,
-            items: [binHeader]
+            items: [this.binHeader]
         }]);
 
         var currentRows = 0;
@@ -87,7 +101,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                 }));
             }, this);
             
-            currentRows = this.getBin().parts().length;
+            currentRows = this.getBin().parts().getRange().length;
         }
 
         // Add blank rows until currentRows equals totalRows.
@@ -105,5 +119,13 @@ Ext.define('Vede.view.de.grid.Bin', {
         }
 
         return pTotalRows;
+    },
+
+    select: function() {
+        this.binHeader.down().addBodyCls("binHeader-selected");
+    },
+
+    deselect: function() {
+        this.binHeader.down().removeBodyCls("binHeader-selected");
     }
 });

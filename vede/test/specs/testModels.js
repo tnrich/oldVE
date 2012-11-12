@@ -234,7 +234,7 @@ Ext.onReady(function() {
                 expect(seq).not.toBe(null);
 
                 expect(Ext.getClassName(seq.getPart())).toBe("Teselagen.models.Part");
-                expect(Ext.getClassName(seq.getProject())).toBe("Teselagen.models.Project");
+                expect(Ext.getClassName(seq.getVectorEditorProject())).toBe("Teselagen.models.VectorEditorProject");
             });
 
             it("Creates empty SequenceFile", function(){
@@ -254,6 +254,7 @@ Ext.onReady(function() {
                 var seq = Ext.create("Teselagen.models.SequenceFile", {sequenceFileFormat: "FASTA"});
 
                 seq.set("sequenceFileFormat", "FASTA");
+                expect(seq.get("sequenceFileFormat")).toBe("FASTA");
 
                 var hash = seq.setSequenceFileContent(content);
                 expect(hash).toBe(trueHash);
@@ -285,6 +286,90 @@ Ext.onReady(function() {
 
                 //console.log(seq);
             });
+
+            it("setSequenceFileContent()", function(){
+                var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
+                var trueHash    =  "7ded0adb8463aa8b7bfe30d093bc4f6d8718bd1182906f283b04d303860dd0f3";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+
+                var hash = seq.setSequenceFileContent("");
+                expect(hash).not.toBe(trueHash);
+                expect(seq.get("sequenceFileContent")).toBe("");
+            });
+
+            it("makePartSource()", function(){
+                var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+                var name = seq.makePartSource("FASTA", content);
+                expect(name).toBe("ssrA_tag_enhance");
+            });
+
+            it("setPartSource()", function(){
+                var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+
+                var source = seq.setPartSource("");
+                expect(source).toBe("ssrA_tag_enhance");
+                source = seq.setPartSource(undefined);
+                expect(source).toBe("ssrA_tag_enhance");
+                source = seq.setPartSource(null);
+                expect(source).toBe("ssrA_tag_enhance");
+
+                source = seq.setPartSource("newName");
+                expect(source).toBe("newName");
+            });
+
+            it("makeSequenceFileName()", function(){
+                var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+                var name = seq.makeSequenceFileName("FASTA", "ssrA_tag_enhance");
+                expect(name).toBe("ssrA_tag_enhance.fas");
+            });
+
+            it("setSequenceFileName()", function(){
+                var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+
+                var name = seq.setSequenceFileName("");
+                expect(name).toBe("ssrA_tag_enhance.fas");
+
+                name = seq.setSequenceFileName(null);
+                expect(name).toBe("ssrA_tag_enhance.fas");
+
+                name = seq.setSequenceFileName(undefined);
+                expect(name).toBe("ssrA_tag_enhance.fas");
+
+                name = seq.setSequenceFileName("newName.fas");
+                expect(name).toBe("newName.fas");
+            });
+
+            it("getLength()", function(){
+                var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(39);
+            });
+
+
         });
 
         //================================================
@@ -326,7 +411,7 @@ Ext.onReady(function() {
         //================================================
         // Teselagen.models.PartVO
         //================================================
-        describe("Teselagen.models.PartVO.js -- This Class will be Eliminated", function() {
+        xdescribe("Teselagen.models.PartVO.js -- This Class will be Eliminated", function() {
 
             it("Creates Empty PartVO", function(){
                 var part = Ext.create("Teselagen.models.PartVO");
@@ -382,7 +467,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
-            it("Creates Part, Can Set SequenceFile", function(){
+            it("Creates Part, setSequenceFile()", function(){
                 var part = Ext.create("Teselagen.models.Part", {
                     id: 5,
                     fas: "fas1"
@@ -396,6 +481,8 @@ Ext.onReady(function() {
                     sequenceFileContent: "gattaca"
                 });
 
+                expect(part.get("genbankStartBP")).toBe(0);
+                expect(part.get("endBP")).toBe(0);
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("");
 
@@ -404,8 +491,8 @@ Ext.onReady(function() {
                 expect(part.getSequenceFile().get("sequenceFileName")).toBe("newSeq");
                 expect(part.getSequenceFile().get("sequenceFileContent")).toBe("gattaca");
 
-                expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
-                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+                expect(part.get("genbankStartBP")).toBe(1);
+                expect(part.get("endBP")).toBe(7);
             });
 
             it("Creates Empty Part, isEmpty", function(){
@@ -453,6 +540,49 @@ Ext.onReady(function() {
                 expect(part1.isEqual(part1)).toBe(true);
                 expect(part1.isEqual(part2)).toBe(false); // Should this be equal??? They have different SeqFiles.
                 expect(part1.isEqual(part3)).toBe(false);
+            });
+
+            it("setSequenceFile()", function(){
+                var part = Ext.create("Teselagen.models.Part", {
+                    fas: "fas1"
+                });
+
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: ">seq\ngattaca"
+                });
+
+                expect(part.getSequenceFile().get("sequenceFileName")).toBe("");
+                expect(part.getStart()).toBe(0);
+                expect(part.getEnd()).toBe(0);
+
+                part.setSequenceFile(seq);
+
+                expect(part.getSequenceFile().get("sequenceFileName")).toBe("seq.fas");
+                expect(part.getStart()).toBe(1);
+                expect(part.getEnd()).toBe(7);
+            });
+
+            it("removeSequenceFile()", function(){
+                var part = Ext.create("Teselagen.models.Part", {
+                    fas: "fas1"
+                });
+
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "FASTA",
+                    sequenceFileContent: ">seq\ngattaca"
+                });
+
+                part.setSequenceFile(seq);
+                expect(part.getStart()).toBe(1);
+                expect(part.getEnd()).toBe(7);
+
+                var success = part.removeSequenceFile();
+                var s = part.getSequenceFile();
+                expect(success).toBe(true);
+                expect(s.get("sequenceFileFormat")).toBe("INIT");
+                expect(part.getStart()).toBe(0);
+                expect(part.getEnd()).toBe(0);
             });
         });
         
