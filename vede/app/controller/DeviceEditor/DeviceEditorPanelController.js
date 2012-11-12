@@ -14,7 +14,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
 
     renderDesignInContext: function () {
-
+        /*
         Ext.define('Bin', {
             constructor: function (group,bin,x,y) {
                 this.group = group;
@@ -65,5 +65,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             var binDraw = new Bin(surface,bin,xPos,10);
             xPos += 110;
         });
+        */
     }
 });

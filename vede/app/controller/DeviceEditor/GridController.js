@@ -5,7 +5,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.manager.DeviceDesignManager"],
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.models.DeviceEditorProject"],
 
     DeviceEvent: null,
     ProjectEvent: null,
@@ -101,6 +102,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
+        console.log("Tab changed!");
+
+        console.log(newTab);
+        this.grid = newTab.query("component[cls='designGrid']")[0];
+        console.log(this.grid);
+
         if(newTab.model) {
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
@@ -108,7 +115,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
             }
 
-            this.activeProject = newTab.model;
+            this.activeProject = newTab.model.getDesign();
+            console.log(this.activeProject);
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
@@ -202,8 +210,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         binModel.parts().add(partModel1);
         binModel.parts().add(partModel2);
 
-        this.tabPanel.down("DeviceEditorPanel").model = 
-            this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+        var deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+            name: "Untitled Project"
+        });
+
+        var design = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+
+        deproject.setDesign(design);
+
+        this.tabPanel.down("DeviceEditorPanel").model = deproject;
 
         this.tabPanel.on("tabchange",
                          this.onTabChange,

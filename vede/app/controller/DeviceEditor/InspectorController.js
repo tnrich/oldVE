@@ -19,6 +19,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.populatePartInformation(j5Part);
         this.selectedPart = j5Part;
+        console.log("Part selected");
     },
 
     onPartNameFieldChange: function(nameField) {
@@ -71,7 +72,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
             }
 
-            this.activeProject = newTab.model;
+            var self = this;
+            this.activeProject = newTab.model.getDesign();
+            
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);

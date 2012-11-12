@@ -3,7 +3,13 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor','Teselagen.manager.SessionManager'],
+	requires: ["Teselagen.event.ProjectEvent",
+	,"Teselagen.store.UserStore"
+	,'Vede.view.de.DeviceEditor'
+	,'Teselagen.manager.SessionManager'
+	,"Teselagen.manager.DeviceDesignManager"
+	,"Teselagen.models.J5Bin",
+	,"Teselagen.models.Part"],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -90,7 +96,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			
 				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
 				deController.renderDesignInContext();
-				self.experiment(selectedDEProject);
 			}
 		});		
 	},
@@ -117,38 +122,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		
 	},
 
-	experiment:function(deproject){
-
-		/*
-
-		console.log("Experiment Start here\n------------");
-		var binsStore = deproject.getDesign().getJ5Collection().bins();
-		//console.log(binsStore);
-		binsStore.on("update",function( record, operation, modifiedFieldNames, eOpts ){
-			console.log("Update event triggered!");
-			console.log(record);
-			console.log(operation);
-			console.log(modifiedFieldNames);
-		});
-
-		binsStore.getAt(0).set('name','asdadasd');
-		
-        var bin1 = Ext.create("Teselagen.models.J5Bin", {
-            binName: "bin21313"
-        });
-		
-
-		//binsStore.add(bin1);
-		//console.log(binsStore);
-
-		*/
-	},
 	createNewProject: function(){
 		var self = this;
 	    var project = Ext.create("Teselagen.models.Project", {
 	        name: "Untitled project",
-	        DateCreated: new Date(),
-	        DateModified: new Date()
+	        dateCreated: new Date(),
+	        dateModified: new Date()
 	    });
 
 	    this.currentUser.projects().add(project);
@@ -168,18 +147,46 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		        name: "Untitled DE Project"
 		    });
 		    
+            var bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Empty bin"
+            });
+
+            var part1a = Ext.create("Teselagen.models.Part", {
+                name: "part1a",
+                genbankStartBP: 1,
+                endBP: 7
+            });
+
+            var part1b = Ext.create("Teselagen.models.Part", {
+                name: "part1b",
+                genbankStartBP: 1,
+                endBP: 7
+            });
+
+            bin.addToParts([part1a, part1b]);
+
+
+            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
+            console.log(design);
+            
+            deproject.setDesign(design);
+
 		    this.workingProject.deprojects().add(deproject);
 
 		    deproject.save({
 		        callback: function(){
-		        	self.loadDesignAndChildResources();
-		            console.log("DE project saved");
-		        }
-		    });
+		        	console.log("DE Project saved");
+		        	design.set( 'deproject_id', deproject.get('id') );
+		        	design.save({
+		        		callback: function(){
+		        			console.log("DESIGN SAVED");
+		        			self.loadDesignAndChildResources();
+		            	}});
+		    }});
 		}
 	},
 
-	createNewVectorEditorProject: function(){
+	openSequenceFile: function(){
 		var self = this;
 		Ext.getCmp('ProjectPanel').setActiveTab(2);
 		if(this.workingProject) {
