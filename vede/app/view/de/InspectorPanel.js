@@ -53,6 +53,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'textfield',
                             cls: 'partNameField',
+                            name: "name",
                             fieldLabel: 'Part Name',
                             enableKeyEvents: true
                         },
@@ -66,6 +67,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             height: 20,
                             cls: 'reverseComplementField',
+                            name: 'revComp',
                             fieldLabel: 'Reverse Complement',
                             labelWidth: 160
                         },
@@ -73,18 +75,21 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             height: 20,
                             cls: 'startBPField',
+                            name: 'genbankStartBP',
                             fieldLabel: 'Start BP'
                         },
                         {
                             xtype: 'displayfield',
                             height: 20,
                             cls: 'stopBPField',
+                            name: 'endBP',
                             fieldLabel: 'End BP'
                         }
                     ]
                 },
                 {
                     xtype: 'form',
+                    cls: 'forcedAssemblyStrategyForm',
                     flex: 1,
                     maxHeight: 80,
                     bodyPadding: 10,
@@ -93,6 +98,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
+                            name: 'fas',
                             anchor: '100%',
                             store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
                                     'Embed_in_primer_reverse',

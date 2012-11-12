@@ -17,7 +17,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartSelected: function(j5Part) {
         this.inspector.setActiveTab(0);
 
-        this.populatePartInformation(j5Part);
+        //this.populatePartInformation(j5Part);
+        if(j5Part) {
+            this.tabPanel.getActiveTab().down("form[cls='PartPropertiesForm']").loadRecord(j5Part);
+            this.tabPanel.getActiveTab().down("form[cls='forcedAssemblyStrategyForm']").loadRecord(j5Part);
+        }
         this.selectedPart = j5Part;
     },
 
