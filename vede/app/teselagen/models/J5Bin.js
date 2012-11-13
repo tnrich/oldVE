@@ -35,8 +35,6 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        {name: "id",                type: "long"},
-        {name: "j5collection_id",     type: "long"},
         {
             name: "binName",
             convert: function(v) {
@@ -104,16 +102,14 @@ Ext.define("Teselagen.models.J5Bin", {
         {
             type: "hasMany",
             model: "Teselagen.models.Part",
-            name: "parts",
-            foreignKey: "j5bin_id"
+            name: "parts"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5Collection",
-            foreignKey: "j5collection_id"
+            associationKey: "j5Collection"
         }
     ],
 
