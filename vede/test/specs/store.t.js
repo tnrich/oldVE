@@ -137,12 +137,33 @@ Ext.onReady(function () {
         });
 
         describe("User.", function () {
-            var userStore;
+            var userStore, user, projects, project;
 
             it("Load UserStore", function () {
                 userStore = Ext.create("Teselagen.store.UserStore");
                 userStore.load(function() {
                     expect(userStore.getCount()).toBe(2);
+                    user = userStore.first();
+                });
+            });
+            it("Load user projects", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(user);
+                }, "User to be defined", 500);
+                runs(function() {
+                    projects = user.projects();
+                    projects.on("load", function() {
+                        expect(projects).toBeDefined();
+                        project = projects.first();
+                    });
+                });
+            });
+            it("Load project", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(project);
+                }, "User to be defined", 500);
+                runs(function() {
+                    expect(project.get("name")).toBe("Project A");
                 });
             });
         });
