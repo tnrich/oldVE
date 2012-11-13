@@ -203,7 +203,7 @@
                         "id": "projectDesignTab",
                         "layout": "fit",
                         "minButtonWidth": 32,
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
                     "cn": [
@@ -273,7 +273,7 @@
                         "designer|userClassName": "MyPanel20",
                         "id": "projectAnalysisTab",
                         "layout": "fit",
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
                     "cn": [
@@ -345,7 +345,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectPartsTab",
                         "layout": "fit",
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
                     "cn": [
@@ -407,7 +407,7 @@
                         "designer|userClassName": "MyPanel21",
                         "id": "projectRegistryTab",
                         "layout": "fit",
-                        "title": ""
+                        "title": "My Tab"
                     },
                     "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
                     "cn": [
@@ -691,8 +691,8 @@
                                             },
                                             "codeClass": null,
                                             "userConfig": {
-                                                "dock": null,
                                                 "layout|flex": 1,
+                                                "dock": null,
                                                 "designer|userClassName": "MyGridPanel3",
                                                 "id": "designGrid_Panel",
                                                 "margin": 10,
@@ -3084,6 +3084,8 @@
                             "userConfig": {
                                 "dock": "top",
                                 "designer|userClassName": "MyPanel8",
+                                "floating": false,
+                                "frame": false,
                                 "id": "DeviceEditorPartPanel",
                                 "layout": "fit",
                                 "animCollapse": false,
