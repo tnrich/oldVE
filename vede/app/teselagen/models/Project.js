@@ -26,14 +26,14 @@ Ext.define("Teselagen.models.Project", {
         type: "hasMany",
         model: "Teselagen.models.DeviceEditorProject",
         name: "deprojects",
-        associationKey: "deprojects",
+//        associationKey: "deprojects",
         foreignKey: "project_id",
         autoLoad: true
     }, {
         type: "hasMany",
         model: "Teselagen.models.VectorEditorProject",
         name: "veprojects",
-        associationKey: "veprojects",
+//        associationKey: "veprojects",
         foreignKey: "project_id",
         autoLoad: true
     },
@@ -42,7 +42,6 @@ Ext.define("Teselagen.models.Project", {
         model: "Teselagen.models.User",
         getterName: "getUser",
         setterName: "setUser",
-        associationKey: "user",
         foreignKey: "user_id"
     }],
 
