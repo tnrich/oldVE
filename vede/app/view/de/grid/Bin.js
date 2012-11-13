@@ -101,7 +101,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                 }));
             }, this);
             
-            currentRows = this.getBin().parts().length;
+            currentRows = this.getBin().parts().getRange().length;
         }
 
         // Add blank rows until currentRows equals totalRows.
