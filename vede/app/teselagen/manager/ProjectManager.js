@@ -9,7 +9,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	,'Teselagen.manager.SessionManager'
 	,"Teselagen.manager.DeviceDesignManager"
 	,"Teselagen.models.J5Bin",
-	,"Teselagen.models.Part"],
+	,"Teselagen.models.Part"
+	,'Ext.window.MessageBox'],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -26,7 +27,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 * Load User Info
 	 */
 	loadUser: function (cb) {
-		console.log('PM: Loading User');
+		//console.log('PM: Loading User');
 		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
 		var users = Ext.create("Teselagen.store.UserStore");
 		var self = this;
@@ -123,67 +124,77 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	},
 
 	createNewProject: function(){
-		var self = this;
-	    var project = Ext.create("Teselagen.models.Project", {
-	        name: "Untitled project",
-	        dateCreated: new Date(),
-	        dateModified: new Date()
-	    });
+		
+		var onPromptClosed = function(answer,text) {
+				var self = this;
+				var project = Ext.create("Teselagen.models.Project", {
+			        name: text,
+			        dateCreated: new Date(),
+			        dateModified: new Date()
+			    });
 
-	    this.currentUser.projects().add(project);
-	    project.save({
-	    	callback: function(){
-	    		self.workingProject = project;
-	    		self.loadDesignAndChildResources();
-	    	}
-	    });
+			    this.currentUser.projects().add(project);
+			    project.save({
+			    	callback: function(){
+			    		self.workingProject = project;
+			    		self.loadDesignAndChildResources();
+			    	}
+			    });
+		};
 
+		Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
 	},
 	createNewDeviceEditorProject: function(){
-	    var self = this;
 
-	    if(this.workingProject) {
-		    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-		        name: "Untitled DE Project"
-		    });
-		    
-            var bin = Ext.create("Teselagen.models.J5Bin", {
-                binName: "Empty bin"
-            });
+		var onPromptClosed = function(answer,text) {
+		    var self = this;
 
-            var part1a = Ext.create("Teselagen.models.Part", {
-                name: "part1a",
-                genbankStartBP: 1,
-                endBP: 7
-            });
+		    if(this.workingProject) {
+			    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+			        name: text
+			    });
+			    
+	            var bin = Ext.create("Teselagen.models.J5Bin", {
+	                binName: "Empty bin"
+	            });
 
-            var part1b = Ext.create("Teselagen.models.Part", {
-                name: "part1b",
-                genbankStartBP: 1,
-                endBP: 7
-            });
+	            var part1a = Ext.create("Teselagen.models.Part", {
+	                name: "part1a",
+	                genbankStartBP: 1,
+	                endBP: 7
+	            });
 
-            bin.addToParts([part1a, part1b]);
+	            var part1b = Ext.create("Teselagen.models.Part", {
+	                name: "part1b",
+	                genbankStartBP: 1,
+	                endBP: 7
+	            });
+
+	            bin.addToParts([part1a, part1b]);
 
 
-            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
-            console.log(design);
-            
-            deproject.setDesign(design);
+	            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
+	            //console.log(design);
+	            
+	            deproject.setDesign(design);
 
-		    this.workingProject.deprojects().add(deproject);
+			    this.workingProject.deprojects().add(deproject);
 
-		    deproject.save({
-		        callback: function(){
-		        	console.log("DE Project saved");
-		        	design.set( 'deproject_id', deproject.get('id') );
-		        	design.save({
-		        		callback: function(){
-		        			console.log("DESIGN SAVED");
-		        			self.loadDesignAndChildResources();
-		            	}});
-		    }});
-		}
+			    deproject.save({
+			        callback: function(){
+			        	//console.log("DE Project saved");
+			        	design.set( 'deproject_id', deproject.get('id') );
+			        	design.save({
+			        		callback: function(){
+			        			//console.log("DESIGN SAVED");
+			        			self.loadDesignAndChildResources();
+			            	}});
+			    }});
+			}
+		};
+
+		Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
+
 	},
 
 	openSequenceFile: function(){

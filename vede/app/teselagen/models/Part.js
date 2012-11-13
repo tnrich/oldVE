@@ -87,14 +87,6 @@ Ext.define("Teselagen.models.Part", {
         },
         {
             type: "belongsTo",
-            model: "Teselagen.models.J5Bin",
-            getterName: "getJ5Bin",
-            setterName: "setJ5Bin",
-            associationKey: "j5Bin",
-            foreignKey: "j5bin_id"
-        },
-        {
-            type: "belongsTo",
             model: "Teselagen.models.EugeneRule",
             getterName: "getEugeneRule",
             setterName: "setEugeneRule",

@@ -35,8 +35,8 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        {name: "id",                type: "long"},
-        {name: "j5collection_id",     type: "long"},
+        //{name: "id",                type: "long"},
+        //{name: "j5collection_id",     type: "long"},
         {
             name: "binName",
             convert: function(v) {
@@ -106,7 +106,9 @@ Ext.define("Teselagen.models.J5Bin", {
             model: "Teselagen.models.Part",
             name: "parts",
             foreignKey: "j5bin_id"
-        },
+        }
+        // PLEASE DONT INCLUDE THIS BELONG, DONT NEEDED
+        /*,
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
@@ -115,6 +117,7 @@ Ext.define("Teselagen.models.J5Bin", {
             associationKey: "j5Collection",
             foreignKey: "j5collection_id"
         }
+        */
     ],
 
     /**

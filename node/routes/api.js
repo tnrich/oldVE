@@ -306,14 +306,6 @@ module.exports = function (app) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id, function (err, project) {
-      //delete project.design.rules;
-      /*
-      project.design.j5collection.bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-          delete part.id;
-        });
-      });
-      */
       res.json({"design":project.design});
     });
     

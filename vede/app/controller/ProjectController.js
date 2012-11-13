@@ -85,6 +85,9 @@ Ext.define("Vede.controller.ProjectController", {
             '#projectDesignPanel': {
                 itemclick: this.onProjectDesignPanelItemClick
             },
+            '#designGrid_Panel': {
+                itemclick: this.onProjectDesignPanelItemClick
+            },
             "#newProject_Btn": {
                 click: this.onNewProjectClick
             },
