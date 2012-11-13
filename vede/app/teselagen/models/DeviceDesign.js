@@ -10,6 +10,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
         "Teselagen.models.EugeneRule"
     ],
 
+    // Even though DeviceDesign is embedded inside DeviceEditorProject, this proxy allows the saving
+    // of DeviceDesign independently.
     proxy: {
         type: "rest",
         url: "/vede/test/data/json/getDeviceDesign.json",
@@ -40,14 +42,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {name: "id", type: "long"},
-        {name: "deproject_id", type: "long"},
-        {name: "j5collection_id", type: "long"},
-        {name: "sbolviconinfo_id", type: "long"}
     ],
 
     validations: [
-        //{field: "id", type: "presence"}
     ],
 
     associations: [
@@ -56,31 +53,27 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5collection",
-            foreignKey: "j5collection_id"
+            associationKey: "j5collection"
         },
         {
             type: "hasOne",
             model: "Teselagen.models.SBOLvIconInfo",
             getterName: "getSBOLvIconInfo",
             setterName: "setSBOLvIconInfo",
-            associationKey: "sbolvIconInfo",
-            foreignKey: "sbolviconinfo_id"
+            associationKey: "sbolvIconInfo"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             associationKey: "rules",
-            name: "rules",
-            foreignKey: "devicedesign_id"
+            name: "rules"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject",
-            foreignKey: "deproject_id"
+            associationKey: "deviceEditorProject"
         }
     ],
 
