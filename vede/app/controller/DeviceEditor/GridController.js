@@ -102,11 +102,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
-        console.log("Tab changed!");
-
-        console.log(newTab);
         this.grid = newTab.query("component[cls='designGrid']")[0];
         console.log(this.grid);
+        var bins = this.grid.query("Bin");
+        bins.forEach(function(index){
+            if(this.grid && this.grid.query("Bin")[index]) this.grid.remove(this.grid.query("Bin")[index]);
+        });
 
         if(newTab.model) {
             if(this.activeBins) {
@@ -116,7 +117,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.activeProject = newTab.model.getDesign();
-            console.log(this.activeProject);
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
@@ -188,8 +188,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onLaunch: function() {
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-        
+
         this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
+        
         this.tabPanel = Ext.getCmp("mainAppPanel");
 
         // Create a sample bin and associated parts to render.

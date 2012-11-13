@@ -134,13 +134,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             nameField.setValue(j5Part.get("name"));
 
-            var sourceFile = j5Part.getSequenceFile();
-            if(j5Part.getSequenceFile()) {
-                sourceField.setValue(sourceFile.get("partSource"));
-                revCompField.setValue(j5Part.get("revComp"));
+            var existSequence = (j5Part.get('sequencefile_id')=="")? false : true;
+            if(existSequence)
+            {
+                var sourceFile = j5Part.getSequenceFile({
+                    callback: function(record,operation){
+                        sourceField.setValue(sourceFile.get("partSource"));
+                        revCompField.setValue(j5Part.get("revComp"));                        
+                    }
+                });
             } else {
-                sourceField.setValue("");
-                revCompField.setValue("");
+                sourceField.setValue("No source assigned");
+                revCompField.setValue("No source assigned");
             }
 
             var startBP = j5Part.get("genbankStartBP");

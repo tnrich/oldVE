@@ -95,7 +95,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
 			
 				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
-				deController.renderDesignInContext();
+				//deController.renderDesignInContext();
 			}
 		});		
 	},
