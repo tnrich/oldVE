@@ -3,5 +3,7 @@ Ext.define('Vede.view.Viewport', {
     renderTo: Ext.getBody(),
     requires: [
         'Vede.view.AppViewport',
-        'Vede.view.FileImportWindow'    ]
+        'Vede.view.FileImportWindow'
+     ]
 });
+

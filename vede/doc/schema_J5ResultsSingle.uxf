@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>13</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>741</x>
+      <y>78</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Run</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>767</x>
+      <y>0</y>
+      <w>64</w>
+      <h>103</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=n</panel_attributes>
+    <additional_attributes>39;39;39;78</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>741</x>
+      <y>169</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>J5Results</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>767</x>
+      <y>78</y>
+      <w>64</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;39;91</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>26</x>
+      <y>0</y>
+      <w>260</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>J5Run:
+J5Output
+DRAFT
+Nov 8, 2012 -DW</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>715</x>
+      <y>0</y>
+      <w>182</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>DeviceEditorProject</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>884</x>
+      <y>78</y>
+      <w>143</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5RunManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>572</x>
+      <y>78</y>
+      <w>130</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>j5Input</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>663</x>
+      <y>65</y>
+      <w>103</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>78;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>195</x>
+      <y>78</y>
+      <w>338</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>AssembledSequenceFile
+"pj50XXXX.gb"
+--
+-type [GENBANK|FASTA|JBEISEQ|SBOL
+-fileContent</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>494</x>
+      <y>130</y>
+      <w>272</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=1..n</panel_attributes>
+    <additional_attributes>247;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1157</x>
+      <y>52</y>
+      <w>338</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>Combinatorial Assembly Parameters
+"pj5_XXXXX_combinatorial.csv"
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>806</x>
+      <y>1313</y>
+      <w>325</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>Mock
+--
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>130</x>
+      <y>169</y>
+      <w>636</w>
+      <h>142</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=    1..n</panel_attributes>
+    <additional_attributes>611;39;39;39;39;117</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>416</x>
+      <y>234</y>
+      <w>377</w>
+      <h>1326</h>
+    </coordinates>
+    <panel_attributes>subset
+SLIC &amp;&amp; GoldenGate
+--
+...
+--
+*Incompatibilities btw Assembly Pieces
+-Assembly Piece
+-Left End
+-Right End
+--
+*Suggested Assembly Piece Contigs for 
+                         Hierarchical Assembly
+-Contig
+-Assembly Pieces Contained
+--
+--
+*[DirectSynthesis]
+-IDNumber
+-name
+-firstTargetPart
+-lastTargetPart
+-length
+-cost
+-sequence
+--
+*Oligo Synthesis (order for rxn)
+-IDNumber
+-name
+-First Target Part
+-last Target Part
+-Tm
+-Tm (3' only)
+-Cost
+-Sequence
+--
+*[Annealed Oligos Synthesis]
+-ID Number
+-topOligo-IDNum
+-bottomOligo-IDNum
+-name
+-firstTargetPart
+-lastTargetPart
+-Tm
+-length
+-sequence
+--
+--
+*PCR Reactions
+-ID Number
+-primary Template
+-alternate Template
+*ForwardOligo
+-IDNumber
+-name
+*ReverseOligo
+-IDNumber
+-name
+-first Target Part
+-last Target Part
+-note
+-mean Oligo Tm
+-delta Oligo Tm
+-mean Oligo Tm (3' only)
+-delta Oligo Tm (3' only)
+-length
+-sequence
+--
+...
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>325</x>
+      <y>1079</y>
+      <w>506</w>
+      <h>519</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>481;273;481;494;39;494;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>325</x>
+      <y>949</y>
+      <w>116</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>91;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>832</x>
+      <y>234</y>
+      <w>377</w>
+      <h>455</h>
+    </coordinates>
+    <panel_attributes>subset 
+SLIC/Gibson/CPEC/SLiCE
+--
+...
+--
+*Assembly Pieces (SLIC/Gibson/CPEC)
+-ID Number
+-Type
+-PCR ID Number
+-First Target Part
+-Core Target Part
+-Last Target Part
+-Relative Overlap Position
+-Extra 5' CPEC bps
+-Extra 3' CPEC bps
+-CPEC Tm Next
+-Overlap with Next (bps)
+-Overlap with Next
+-Overlap with Next Reverse Complement
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1222</x>
+      <y>247</y>
+      <w>273</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>Combinatorial 
+SLIC/Gibson/CPEC/SLiCE
+--
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1235</x>
+      <y>1313</y>
+      <w>247</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>Combinatorial Mock
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1222</x>
+      <y>793</y>
+      <w>299</w>
+      <h>39</h>
+    </coordinates>
+    <panel_attributes>Combinatorial GoldenGate
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>832</x>
+      <y>78</y>
+      <w>376</w>
+      <h>142</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2= 0..1</panel_attributes>
+    <additional_attributes>39;117;351;117;351;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>871</x>
+      <y>754</y>
+      <w>312</w>
+      <h>364</h>
+    </coordinates>
+    <panel_attributes>subset
+GoldenGate
+--
+...
+--
+*Assembly Pieces (Golden Gate)
+-ID Number
+-Type
+-Type ID Number
+-First Target Part
+-Core Target Part
+-Last Target Part
+-Overhang with Previous
+-Overhand with Next
+-Relative Overhang Position
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1456</x>
+      <y>65</y>
+      <w>104</w>
+      <h>767</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;78;39;78;741;65;741</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>754</x>
+      <y>637</y>
+      <w>103</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>78;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>754</x>
+      <y>793</y>
+      <w>142</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;-</panel_attributes>
+    <additional_attributes>117;39;39;39</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1378</x>
+      <y>78</y>
+      <w>64</w>
+      <h>194</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;39;169</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1443</x>
+      <y>39</y>
+      <w>130</w>
+      <h>1326</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>52;39;104;39;104;1300;39;1300</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>286</y>
+      <w>364</w>
+      <h>832</h>
+    </coordinates>
+    <panel_attributes>AssemblyFile
+"pj5_0XXXX.csv"
+
+--
+-assemblyAlg
+-date
+--
+*Assembly Parameters..
+  (J5Parameters)
+  (see J5Parameters)
+--
+*Warnings
+-"Warning:"
+-"Note:"
+-partIDs &amp; source part warnings
+-targetPart Ordering warnings
+--
+*Non-degenerate Part IDs and Sources
+Part (list of all parts)
+-IDNumber
+-Name
+Location
+-SourcePlasmid
+-ReverseComplement
+-StartBP
+-EndBP
+-Length
+-Sequence
+--
+*TargetPart Ordering/Selection/Strategy
+Part (list for this construct)
+-Order
+-IDNumber
+-Name
+-Direction
+-Strategy (FAS)
+--
+...
+--
+*Final Assembled Vector
+-Length
+-Sequence
+
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

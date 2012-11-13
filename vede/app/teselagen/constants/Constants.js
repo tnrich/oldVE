@@ -29,6 +29,7 @@ Ext.define("Teselagen.constants.Constants", {
     FASTA:                 "FASTA",
     JBEISEQ:               "JBEISEQ",
     //SBOLXML:               "SBOLXML",
+    INIT:                   "INIT",
 
     //================================================================
     // EugeneRule.js: compositionalOperator
@@ -72,6 +73,30 @@ Ext.define("Teselagen.constants.Constants", {
         "Embed_in_primer_forward",
         //For bins or parts that are small enough to be embedded within a DNA oligo:
         "Annealed Oligos"
+    ],
+
+    //================================================================
+    // J5Run
+
+
+    ASSEMBLYTYPE_LIST: [
+        // Mock
+        "MOCK",
+        // SLIC/Gibson/CPEC/SLiCE
+        "SLIC",
+        // Golden Gate
+        "GOLDENGATE"
+    ],
+
+
+    MOCK:       "MOCK",
+    SLIC:       "SLIC",
+    GOLDENGATE: "GOLDENGATE",
+
+    RUN_STATUS_LIST: [
+        "SUCCESS",
+        "FAILED",
+        "IN PROGRESS"
     ],
 
     //================================================================

@@ -4,9 +4,8 @@ Ext.define('Vede.view.de.j5Controls', {
     height: 412,
     width: 852,
     title: 'j5 Controls',
-    resizable: false,
-    draggable: false,
     modal: true,
+    autoScroll: true,
 
     initComponent: function () {
         var me = this;
@@ -52,7 +51,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptyPlasmidsRadioBtn',
-                            flex: 0.5,
+                            flex: 0.7,
                             margin: 'left: 10px',
                             name: 'plasmidsListSource',
                             fieldLabel: 'or',
@@ -70,7 +69,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
-                            labelPad: 15,
+                            labelPad: 10,
                             labelSeparator: ' ',
                             labelWidth: 10,
                             preventMark: false,
@@ -95,7 +94,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptyOligosRadioBtn',
-                            flex: 0.5,
+                            flex: 0.7,
                             margin: 'left: 10px',
                             name: 'oligosListSource',
                             fieldLabel: 'or',
@@ -112,7 +111,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
-                            labelPad: 15,
+                            labelPad: 10,
                             labelSeparator: ' ',
                             labelWidth: 10,
                             preventMark: false,
@@ -137,7 +136,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptySynthesesRadioBtn',
-                            flex: 0.5,
+                            flex: 0.7,
                             margin: 'left: 10px',
                             name: 'directSynthesesListSource',
                             fieldLabel: 'or',
@@ -154,7 +153,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
-                            labelPad: 15,
+                            labelPad: 10,
                             labelSeparator: ' ',
                             labelWidth: 10,
                             preventMark: false,

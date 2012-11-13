@@ -1,48 +1,43 @@
 /**
- * Testing J5 submission.
- * Creates models and converts to JSON for J5 server submission.
- * @author Diana Wong, Rodrigo Pavez
+ * Testing DEProject and Associate models
+ * @author Rodrigo Pavez
  */
 
 Ext.syncRequire(["Ext.Ajax",
- "Teselagen.bio.util.StringUtil",
- "Teselagen.bio.util.XmlToJson",
- "Teselagen.bio.util.Sha256",
- "Teselagen.bio.parsers.GenbankManager",
- "Teselagen.bio.parsers.ParsersManager",
- "Teselagen.utils.SequenceUtils",
- "Teselagen.utils.FormatUtils",
- "Teselagen.utils.DeXmlUtils",
- "Teselagen.constants.Constants",
- "Teselagen.models.SequenceFile",
- "Teselagen.models.Part",
- "Teselagen.models.J5Bin",
- "Teselagen.models.J5Collection",
- "Teselagen.models.EugeneRule",
- "Teselagen.models.SBOLvIconInfo",
- "Teselagen.models.J5Run",
- "Teselagen.models.J5Parameters",
- "Teselagen.models.DownstreamAutomationParameters",
- "Teselagen.models.J5Results",
- "Teselagen.models.DeviceDesign",
- "Teselagen.models.Project",
- "Teselagen.manager.SequenceFileManager",
- "Teselagen.manager.DeviceDesignManager",
- "Teselagen.manager.ProjectManager",
- "Teselagen.manager.AuthenticationManager",
- "Teselagen.manager.ProjectManager",
- "Teselagen.manager.SessionManager"], 
+     "Teselagen.bio.util.StringUtil",
+     "Teselagen.bio.util.XmlToJson",
+     "Teselagen.bio.util.Sha256",
+     "Teselagen.bio.parsers.GenbankManager",
+     "Teselagen.bio.parsers.ParsersManager",
+     "Teselagen.utils.SequenceUtils",
+     "Teselagen.utils.FormatUtils",
+     "Teselagen.utils.DeXmlUtils",
+     "Teselagen.constants.Constants",
+     "Teselagen.models.SequenceFile",
+     "Teselagen.models.Part",
+     "Teselagen.models.J5Bin",
+     "Teselagen.models.J5Collection",
+     "Teselagen.models.EugeneRule",
+     "Teselagen.models.SBOLvIconInfo",
+     "Teselagen.models.J5Run",
+     "Teselagen.models.J5Parameters",
+     "Teselagen.models.DownstreamAutomationParameters",
+     "Teselagen.models.J5Results",
+     "Teselagen.models.DeviceDesign",
+     "Teselagen.models.Project",
+     "Teselagen.manager.SequenceFileManager",
+     "Teselagen.manager.DeviceDesignManager",
+     "Teselagen.manager.ProjectManager",
+     "Teselagen.manager.AuthenticationManager",
+     "Teselagen.manager.ProjectManager",
+     "Teselagen.manager.SessionManager"],
+
  function () {
 
-    Ext.define('sessionData', {
-        singleton: true,
-        data: null,
-        baseURL: 'http://teselagen.local/api/'
-    });
-
-
-    var design, deproject, projectManager, authenticationManager, deprojectsaved;
-    var server = 'http://teselagen.local/api/';
+    var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
+    designsaved = false;
+    deprojectsaved = false;
+    var server = 'http://dev.teselagen.com/api/';
 
     projectManager = Teselagen.manager.ProjectManager; // Now is singleton
     authenticationManager = Teselagen.manager.AuthenticationManager; // Now is singleton
@@ -50,8 +45,7 @@ Ext.syncRequire(["Ext.Ajax",
     describe("Connection to server", function () {
         it("Setup params", function () {
             Ext.Ajax.cors = true; // Allow CORS
-            Ext.Ajax.method = 'POST'; // Set POST as default Method
-            sessionData.baseURL = server;
+            Teselagen.manager.SessionManager.baseURL = server;
             Teselagen.manager.SessionManager.env = 'prod';
         });
 
@@ -76,16 +70,19 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Authentication", function () {
 
-        it("Login with Manual-Auth in Authentication Manager", function () {
-            var args = ['rpavez', '', 'http://teselagen.local/api/'];
-            ajaxCheck(authenticationManager.manualAuth, args, function () {
-                expect(sessionData.AuthResponse).toBeDefined();
+        it("Login using rpavez/nopassword", function () {
+            var params = {
+                    username: 'rpavez',
+                    password: ''
+            };
+
+            authenticationManager.sendAuthRequest(params, function(success) {
+                expect(Teselagen.manager.AuthenticationManager.authResponse).toBeDefined();
             });
         });
     });
 
     describe("Get User Profile and Projects", function () {
-
         it("Get User Profile and Get User Projects", function () {
             runs(function () {
                 projectManager.loadUser(function () {
@@ -94,7 +91,7 @@ Ext.syncRequire(["Ext.Ajax",
             });
 
             waitsFor(function () {
-                if(sessionData.AuthResponse) return true;
+                if(Teselagen.manager.AuthenticationManager.authResponse) return true;
                 else return false;
             }, "Auth took too much time", 750);
 
@@ -102,19 +99,18 @@ Ext.syncRequire(["Ext.Ajax",
             runs(function () {
                 expect(projectManager.projects).toBeDefined();
             });
-
         });
     });
 
-    describe("Create new Project, DE Project and DE Design", function () {
 
+    describe("Create new Project, DE Project and DE Design", function () {
         it("Create new Project", function () {
 
             waits(1000);
 
             runs(function () {
                 
-                var project = Ext.create("Teselagen.models.Project", {
+                project = Ext.create("Teselagen.models.Project", {
                     name: "My Project #"+Math.floor(Math.random()*11),
                     DateCreated: new Date((new Date).getTime()*Math.random()),
                     DateModified: new Date((new Date).getTime()*Math.random())
@@ -125,6 +121,13 @@ Ext.syncRequire(["Ext.Ajax",
                 project.save();
                 
             });
+
+            waitsFor(function () {
+                if(projectManager.currentUser) return true;
+                else return false;
+            }, "Auth took too much time", 1750);
+
+
         });
         
         it("Create DE Project", function () {
@@ -229,17 +232,121 @@ Ext.syncRequire(["Ext.Ajax",
 
 
             runs(function () {
-                design.set( 'deproject_id', deproject.get('id') )
+                design.set( 'deproject_id', deproject.get('id') );
                 deproject.setDesign(design);
                 
-                design.save(function(){
+                design.save({callback:function(){
+                    designsaved = true;
                     console.log("Design saved!");
+                }});
+            });
+        });
+    });
+
+    var projectedited = false;
+    describe("Editing Project", function () {
+        it("Alter design model", function () {
+            
+            waitsFor(function () {
+                if(designsaved) return true; else return false;
+            }, "Saving DE Design Timeout", 9000);
+
+            runs(function () {
+                console.log("Editing Project");
+                project.set('name','changed name');
+                project.save({
+                    callback: function(){
+                        projectedited = true;
+                    }
                 });
+            });
+            
+        });
+
+        it("Get Altered Project", function () {
+            waitsFor(function () {
+                if(projectedited) return true; else return false;
+            }, "Editing Project Timeout", 9000);
+
+
+            runs(function () {
+                console.log(project);
+            });
+        });
+
+    });
+    
+    var deprojectedited = false;
+    describe("Editing DE Project", function () {
+        it("Alter design model", function () {
+            
+            waitsFor(function () {
+                if(projectedited&&deprojectsaved) return true; else return false;
+            }, "Project editing Timeout", 9000);
+
+
+            runs(function () {
+                console.log("Editing DE Project");
+                //console.log(deproject);
+                deproject.set('name','DE Project changed');
+                deproject.save({
+                    callback: function(){
+                        deprojectedited = true;
+                    }
+                });
+            });
+            
+        });
+
+        it("Get Altered DE Project", function () {
+            waitsFor(function () {
+                if(deprojectedited) return true; else return false;
+            }, "Editing DE Project Timeout", 9000);
+
+
+            runs(function () {
+                //console.log(deproject);
             });
         });
 
     });
 
+    var designedited = false;
+    describe("Editing DE Design", function () {
+        it("Alter design model", function () {
+            
+            waitsFor(function () {
+                if(deprojectedited) return true; else return false;
+            }, "Editing DE Project Timeout", 9000);
+
+
+            runs(function () {
+                console.log("Editing design");
+                design.createNewCollection(1);
+                design.save({
+                    callback: function(){
+                        console.log("Design edited!");
+                        designedited = true;
+                    }
+                });
+            });
+            
+        });
+
+        it("Get Altered design model", function () {
+            waitsFor(function () {
+                if(designedited) return true; else return false;
+            }, "Editing Design Timeout", 9000);
+
+
+            runs(function () {
+                var editedDesign = deproject.getDesign();
+                //console.log(editedDesign);
+            });
+        });
+
+    });
+    
     var ajaxCheck = function(ajaxMethod, args, cb) {
         /**
          * @author Rodrigo Pavez

@@ -25,10 +25,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
+                //console.log(associatedData);
                 var j5Collection = associatedData["j5collection"];
                 var rules = associatedData["rules"];
                 data.j5collection = j5Collection;
                 data.rules = rules;
+                console.log(data);
                 return data;
             }
         },
@@ -53,7 +55,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5collection"
+            associationKey: "j5collection",
+//            name: "j5collection" // PLEASE DONT DELETE IT, I NEED IT TO GET CORRECTLY ASSOCIATED DATA
         },
         {
             type: "hasOne",

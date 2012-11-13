@@ -6,9 +6,13 @@
 Ext.define("Teselagen.models.J5Run", {
     extend: "Ext.data.Model",
     requires: [
+        // will be moved to J5Input
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
-        "Teselagen.models.J5Results"
+        //"Teselagen.models.J5Input",
+        "Teselagen.models.J5Results",
+        "Teselagen.constants.Constants",
+        "Teselagen.manager.SessionManager"
     ],
     proxy: {
         type: "memory"
@@ -25,15 +29,27 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "name", type: "String", defaultValue: ""}
-
+        {name: "name",          type: "String", defaultValue: ""},
+        {name: "status",        type: "String",     defaultValue: ""},
+        {name: "date",          type: "String",     defaultValue: ""},
+        {name: "assemblyType",  type: "String",     defaultValue: ""},
+        {name: "status",        type: "String",     defaultValue: ""}
     ],
 
     validations: [
-        /*{field: "j5Parameters",                     type: "presence"},
-        {field: "downstreamAutomationParameters",   type: "presence"},
-        {field: "j5Results",                        type: "presence"}
-        */
+        //{field: "assemblyType", type: "presence"},
+        {
+            field: "assemblyType",
+            type: "inclusion",
+            list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
+        },
+
+        //{field: "status", type: "presence"},
+        {
+            field: "status",
+            type: "inclusion",
+            list: Teselagen.constants.Constants.RUN_STATUS_LIST
+        }
     ],
 
     associations: [
@@ -50,6 +66,14 @@ Ext.define("Teselagen.models.J5Run", {
             getterName: "getDownstreamAutomationParameters",
             setterName: "setDownstreamAutomationParameters",
             assocationKey: "downstreamAutomationParameters"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.J5Input",
+            getterName: "getJ5Input",
+            setterName: "setJ5Input",
+            associationKey: "j5Input",
+            foreignKey: "j5Input_id"
         },
         {
             type: "hasOne",

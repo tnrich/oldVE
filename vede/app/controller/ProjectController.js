@@ -15,6 +15,8 @@ Ext.define("Vede.controller.ProjectController", {
             });
         });
 
+        Ext.getCmp('designGrid_Panel').reconfigure(Collection);
+
         Ext.getCmp('projectDesignPanel').setLoading(false);
     },
     renderPartsSection: function(veprojects){
@@ -64,8 +66,11 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
-    onNewVEClick: function(){
-        Teselagen.manager.ProjectManager.createNewVectorEditorProject();
+    onOpenSequenceFileClick: function(){
+        Teselagen.manager.ProjectManager.openSequenceFile();
+    },
+    onRemoveProjectClick:function(){
+        
     },
 
     init: function() {
@@ -80,14 +85,20 @@ Ext.define("Vede.controller.ProjectController", {
             '#projectDesignPanel': {
                 itemclick: this.onProjectDesignPanelItemClick
             },
+            '#designGrid_Panel': {
+                itemclick: this.onProjectDesignPanelItemClick
+            },
             "#newProject_Btn": {
                 click: this.onNewProjectClick
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick
             },
-            "#newVE_Btn": {
-                click: this.onNewVEClick
+            "#openSequenceFile_Btn": {
+                click: this.onOpenSequenceFileClick
+            },
+            "#removeProject_Btn": {
+                click: this.onRemoveProjectClick
             }
         });
     }

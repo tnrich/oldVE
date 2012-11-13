@@ -12,12 +12,12 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 		xtype: 'InspectorPanel',
 	}],
 	items: [
-	{
+	/*{
 		title: 'Canvas',
 		xtype: 'draw',
 		layout: 'fit',
 		cls: 'designCanvas'
-	},
+	},*/
 	{
 		xtype: 'container',
 		title: 'Canvas container',

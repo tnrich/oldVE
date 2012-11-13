@@ -14,8 +14,8 @@ Parameters
 --
 -ParameterName
 -Value
--DefaultValue
--Description</panel_attributes>
+-[DefaultValue]
+-[Description]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -30,8 +30,8 @@ Parameters
 --
 -ParameterName
 -Value
--DefaultValue
--Description</panel_attributes>
+-[DefaultValue]
+-[Description]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -94,20 +94,18 @@ r2=n</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>676</x>
+      <x>689</x>
       <y>1001</y>
       <w>273</w>
       <h>221</h>
     </coordinates>
     <panel_attributes>MasterPlasmidList
-(Name of output 
-plasmids being created)
 --
 -PlasmidName
 -[Alias]
--Contents
--Length
--Sequence</panel_attributes>
+-[Contents]
+-[Length]
+-[Sequence]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -140,8 +138,8 @@ plasmids being created)
 -PartName
 -PartSource/DisplayID
 -ReverseCompliment
--Start
--End</panel_attributes>
+-[Start]
+-[End]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -194,7 +192,6 @@ plasmids being created)
       <h>104</h>
     </coordinates>
     <panel_attributes>SequencesListFile
-(aka MasterSequences)
 --
 -SequenceFileName
 -Format
@@ -204,42 +201,41 @@ plasmids being created)
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1014</x>
-      <y>1027</y>
-      <w>208</w>
-      <h>208</h>
+      <x>1027</x>
+      <y>1001</y>
+      <w>260</w>
+      <h>221</h>
     </coordinates>
     <panel_attributes>MasterOligosList
-(aka Primer Library?)
 --
 -OligoName
--Length
--Tm
--Tm3'Only
+-[Length]
+-[Tm]
+-[Tm3'Only]
 -Sequence</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1287</x>
-      <y>1027</y>
+      <x>1352</x>
+      <y>1001</y>
       <w>247</w>
-      <h>156</h>
+      <h>195</h>
     </coordinates>
     <panel_attributes>MasterDirectSynthesis
 --
 DirectSynthesisName
 -[Alias]
--Contents
--Length
+-[Contents]
+-[Length]
 -Sequence</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1404</x>
+      <x>1443</x>
       <y>377</y>
       <w>208</w>
       <h>91</h>
@@ -261,19 +257,19 @@ DirectSynthesisName
 --
 -PlateID
 -PlateWell
--LiquidType - primers?
+-LiquidType
 -Volume</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1430</x>
-      <y>702</y>
+      <x>1443</x>
+      <y>494</y>
       <w>221</w>
       <h>78</h>
     </coordinates>
-    <panel_attributes>AssemblyFiles (?)
+    <panel_attributes>AssemblyFiles
 --
 -AssemblyFileName
 </panel_attributes>
@@ -317,11 +313,11 @@ DirectSynthesisName
     <coordinates>
       <x>871</x>
       <y>390</y>
-      <w>558</w>
+      <w>597</w>
       <h>103</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;78;533;39</additional_attributes>
+    <additional_attributes>39;78;572;39</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -350,33 +346,33 @@ DirectSynthesisName
     <coordinates>
       <x>871</x>
       <y>442</y>
-      <w>584</w>
-      <h>311</h>
+      <w>597</w>
+      <h>103</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;559;286</additional_attributes>
+    <additional_attributes>39;39;572;78</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>858</x>
+      <y>442</y>
+      <w>545</w>
+      <h>584</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;520;559</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>845</x>
       <y>442</y>
-      <w>493</w>
-      <h>610</h>
+      <w>298</w>
+      <h>584</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;468;585</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>819</x>
-      <y>442</y>
-      <w>285</w>
-      <h>610</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;260;585</additional_attributes>
+    <additional_attributes>39;39;234;494;273;559</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -392,13 +388,13 @@ DirectSynthesisName
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>806</x>
+      <x>819</x>
       <y>442</y>
-      <w>64</w>
+      <w>77</w>
       <h>584</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>39;39;39;559</additional_attributes>
+    <additional_attributes>52;39;39;559</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -440,36 +436,84 @@ Nov 6, 2012</panel_attributes>
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>1027</x>
-      <y>377</y>
-      <w>182</w>
+      <x>962</x>
+      <y>390</y>
+      <w>299</w>
       <h>117</h>
     </coordinates>
-    <panel_attributes>For Par Par</panel_attributes>
+    <panel_attributes>For Downstream Automation
+(Par Par)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>832</x>
-      <y>663</y>
-      <w>260</w>
+      <x>858</x>
+      <y>650</y>
+      <w>403</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>MasterLists:
+Optionally independently empty
+if use wants to user wishes to 
+start with clean slate</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>988</x>
+      <y>871</y>
+      <w>247</w>
       <h>91</h>
     </coordinates>
-    <panel_attributes>Server can generate this 
-list or user can supply it--
-This is really output?</panel_attributes>
+    <panel_attributes>aka Primer Library,
+Primers needed to 
+get sequence out of part
+bg=white
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.custom.Text</type>
+    <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>1131</x>
-      <y>585</y>
-      <w>182</w>
-      <h>117</h>
+      <x>1196</x>
+      <y>507</y>
+      <w>234</w>
+      <h>39</h>
     </coordinates>
-    <panel_attributes>Necessary?</panel_attributes>
+    <panel_attributes>Req for ConsdenseAssembly
+bg=white
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>312</x>
+      <y>429</y>
+      <w>117</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>aka Master
+Sequences
+bg=white
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>728</x>
+      <y>897</y>
+      <w>247</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>Name of output 
+plasmids being created)
+(opt fields for user)
+bg=white
+</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

@@ -1,7 +1,6 @@
 /**
- * Testing J5 submission.
- * Creates models and converts to JSON for J5 server submission.
- * @author Diana Wong, Rodrigo Pavez
+ * Testing VEProject and Associate models
+ * @author Rodrigo Pavez
  */
 
 Ext.syncRequire(["Ext.Ajax",
@@ -19,13 +18,8 @@ Ext.syncRequire(["Ext.Ajax",
  "Teselagen.models.Project",
  "Teselagen.models.VectorEditorProject",
  "Teselagen.manager.SequenceFileManager",
- "Teselagen.manager.DeviceDesignManager",
  "Teselagen.manager.AuthenticationManager",
  "Teselagen.manager.ProjectManager"], function () {
-
-    var newSequence, veproject, projectManager, veprojectsaved, AuthResponse;
-    var server = 'http://teselagen.local/api/';
-    veprojectsaved = false;
 
     Ext.define('sessionData', {
         singleton: true,
@@ -33,10 +27,19 @@ Ext.syncRequire(["Ext.Ajax",
         baseURL: 'http://teselagen.local/api/'
     });
 
+    var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
+    designsaved = false;
+    deprojectsaved = false;
+    var server = 'http://teselagen.local/api/';
+
+    projectManager = Teselagen.manager.ProjectManager; // Now is singleton
+    authenticationManager = Teselagen.manager.AuthenticationManager; // Now is singleton
+
     describe("Connection to server", function () {
         it("Setup params", function () {
             Ext.Ajax.cors = true; // Allow CORS
-            Ext.Ajax.method = 'POST'; // Set POST as default Method
+            Teselagen.manager.SessionManager.baseURL = server;
+            Teselagen.manager.SessionManager.env = 'prod';
         });
 
         it("Checking server " + server + " is running", function () {
@@ -60,21 +63,20 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Authentication", function () {
 
-        it("Create Authentication Manager and Login as Root on teselagen.local server", function () {
-            var authenticationManager = Teselagen.manager.AuthenticationManager; // Created Auth manager
-            var args = ['rpavez', '', 'http://teselagen.local/api/'];
-            ajaxCheck(authenticationManager.manualAuth, args, function () {
-                expect(sessionData.AuthResponse).toBeDefined();
+        it("Login using rpavez/nopassword", function () {
+            var params = {
+                    username: 'rpavez',
+                    password: '',
+                    server: 'http://teselagen.local/api/'
+            };
+
+            authenticationManager.sendAuthRequest(params, function(success) {
+                expect(Teselagen.manager.AuthenticationManager.authResponse).toBeDefined();
             });
         });
-
     });
 
     describe("Get User Profile and Projects", function () {
-        it("Create Project Manager", function () {
-            projectManager = Teselagen.manager.ProjectManager; // Created Project Manager
-        });
-
         it("Get User Profile and Get User Projects", function () {
             runs(function () {
                 projectManager.loadUser(function () {
@@ -83,36 +85,25 @@ Ext.syncRequire(["Ext.Ajax",
             });
 
             waitsFor(function () {
-                if(sessionData.AuthResponse) return true;
+                if(Teselagen.manager.AuthenticationManager.authResponse) return true;
                 else return false;
             }, "Auth took too much time", 750);
 
-        });
-
-        it("Check if projects loaded", function () {
             waits(500);
-
             runs(function () {
                 expect(projectManager.projects).toBeDefined();
             });
         });
     });
 
-    //Sha256              = Teselagen.bio.util.Sha256;
-    //SequenceFileManager = Teselagen.manager.SequenceFileManager;
-    DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-
-    
-    describe("Create new Project, De Project and DE Design", function () {
-
-
+    describe("Create new Project, VE Project and Sequence", function () {
         it("Create new Project", function () {
 
             waits(1000);
 
             runs(function () {
                 
-                var project = Ext.create("Teselagen.models.Project", {
+                project = Ext.create("Teselagen.models.Project", {
                     name: "My Project #"+Math.floor(Math.random()*11),
                     DateCreated: new Date((new Date).getTime()*Math.random()),
                     DateModified: new Date((new Date).getTime()*Math.random())
@@ -121,12 +112,10 @@ Ext.syncRequire(["Ext.Ajax",
                 projectManager.currentUser.projects().add(project);
 
                 project.save();
-                
+ 
             });
-
         });
 
-        
         it("Create VE Project", function () {
 
             waits(500);
@@ -150,9 +139,9 @@ Ext.syncRequire(["Ext.Ajax",
             });
         });
             
-        it("Create new SequenceFile", function () {
 
-            
+        var sequenceSaved = false;
+        it("Create new SequenceFile", function () {
             var selectedFile = '/test/data/sequences/gen_bank_ex.gb';
 
             Ext.Ajax.request({
@@ -171,49 +160,61 @@ Ext.syncRequire(["Ext.Ajax",
             });
 
 
-            var veproject_id = 0;
+            var veproject_id;
             waitsFor(function () {
                 veproject_id = veproject.get('id');
-
                 if(veproject_id!=0 && veproject_id!=undefined && newSequence!=null && newSequence!= undefined) return true; else return false;
             }, "VE Project creation took too much time", 100);
 
-
             runs(function () {
-
                 veproject.setSequenceFile(newSequence);
                 newSequence.set( 'veproject_id', veproject_id )
                 newSequence.save({
                     callback: function(succ,op)
                     {
-
+                        sequenceSaved = true;
                     }
                 });
                                 
             });
-
         });
 
-        /*
-        it("Save DE Design to Server", function () {
+        it("Edit VEProject", function () {
 
             waitsFor(function () {
-                if(design&&deprojectsaved&&deproject) return true;
+                if(sequenceSaved) return true;
                 else return false;
             }, "DE Project creation took too much time", 100);
 
 
             runs(function () {
-                design.set( 'deproject_id', deproject.get('id') )
-                deproject.setDesign(design);
+                veproject.set('name','Modified VEProject Name');
                 
-                design.save(function(){
-                    console.log("Design saved!");
+                veproject.save(function(){
+                    console.log("Veproject updated!");
                 });
             });
 
         });
-        */
+        
+        it("Edit Sequence", function () {
+
+            waitsFor(function () {
+                if(sequenceSaved) return true;
+                else return false;
+            }, "DE Project creation took too much time", 100);
+
+
+            runs(function () {
+                newSequence.set('sequenceFileName','Modified Sequence FileName');
+                
+                newSequence.save(function(){
+                    console.log("Sequence updated!");
+                });
+            });
+
+        });
+        
     });
 
     var ajaxCheck = function(ajaxMethod, args, cb) {

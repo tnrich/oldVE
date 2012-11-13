@@ -39,7 +39,21 @@ Ext.define("Teselagen.utils.FileUtils", {
             }
         });
         return str;
-     }
+     },
+
+
+     /**
+      * Write a string to file.
+      * Requires BlobBuilder.js and FileSaver.js.
+      *
+      * @param {String} text
+      * @returns {}
+      */
+    writeFile: function(pText, pFilename) {
+        var bb = new BlobBuilder();
+        bb.append(pText);
+        saveAs(bb.getBlob("text/plain;charset=utf-8"), pFileName);
+    }
 
  });
 

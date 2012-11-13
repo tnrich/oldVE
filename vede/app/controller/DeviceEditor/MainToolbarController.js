@@ -16,7 +16,8 @@
 Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.DeviceEvent"],
+    requires: ["Teselagen.event.DeviceEvent",
+               "Teselagen.manager.DeviceDesignManager"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -26,7 +27,9 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     onAddColumnClick: function() {
-        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN, null);
+        var device = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign();
+        this.DeviceDesignManager.addEmptyBinByIndex(device,
+                            device.getJ5Collection().bins().getRange().length);
     },
 
     onOpenj5Click: function(button, e, options) {
