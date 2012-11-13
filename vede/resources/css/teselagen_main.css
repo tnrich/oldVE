@@ -128,6 +128,11 @@ body {
   background-image: url(../images/ux/design-tree-icon-leaf.png);
 }
 
+
+#projectAnalysisPanel-body div table td div .x-tree-icon-parent {
+  background-image: url(../images/ux/j5-tree-icon-parent.png);
+}
+
 #projectAnalysisPanel-body div table td div .x-tree-icon-leaf {
   background-image: url(../images/ux/j5-tree-icon-leaf.png);
 }

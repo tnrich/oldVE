@@ -134,6 +134,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
+
     },
 
     onRemoveFromBins: function(activeBins, removedBin, index) {
