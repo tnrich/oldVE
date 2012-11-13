@@ -47,15 +47,13 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             type: "hasMany",
             model: "Teselagen.models.J5Run",
             name: "j5runs",
-            associationKey: "j5runs",
-            foreignKey: "deproject_id"
+            associationKey: "j5runs"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.Project",
             getterName: "getProject",
             setterName: "setProject",
-            associationKey: "project",
             foreignKey: "project_id"
         }
     ],
