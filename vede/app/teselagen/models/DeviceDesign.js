@@ -28,7 +28,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 var rules = associatedData["rules"];
                 data.j5collection = j5Collection;
                 data.rules = rules;
-                console.log(data);
                 return data;
             }
         },

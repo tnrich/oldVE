@@ -13,11 +13,17 @@ Ext.define("Teselagen.models.Part", {
     ],
 
     proxy: {
-        type: "ajax",
-        url: "/vede/test/data/json/getParts.json",
+        type: "rest",
+        url: "",
         reader: {
             type: "json",
-            root: "data"
+            root: "design"
+        },
+        writer: {
+            type: "json",
+        },
+        buildUrl: function() {
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
         }
     },
 
@@ -83,7 +89,8 @@ Ext.define("Teselagen.models.Part", {
             associationKey:"sequenceFile",
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFileModel"
+            setterName: "setSequenceFileModel",
+            name: "sequenceFile" // PLEASE DONT DELETE THIS
         },
         {
             type: "belongsTo",

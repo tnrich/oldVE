@@ -37,7 +37,7 @@ Ext.syncRequire(["Ext.Ajax",
     var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
     designsaved = false;
     deprojectsaved = false;
-    var server = 'http://dev.teselagen.com/api/';
+    var server = 'http://teselagen.local/api/';
 
     projectManager = Teselagen.manager.ProjectManager; // Now is singleton
     authenticationManager = Teselagen.manager.AuthenticationManager; // Now is singleton
@@ -232,7 +232,9 @@ Ext.syncRequire(["Ext.Ajax",
 
 
             runs(function () {
-                design.set( 'deproject_id', deproject.get('id') );
+                var deproject_id = deproject.get('id');
+                design.set( 'deproject_id', deproject_id );
+                deproject.set('id',deproject_id);
                 deproject.setDesign(design);
                 
                 design.save({callback:function(){
