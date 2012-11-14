@@ -14,18 +14,54 @@ module.exports = function (app) {
 		payload: oMixed
 	}));
 
+	var SequenceSchema = new Schema({
+		veproject_id: String,
+		sequenceFileContent: String,
+		sequenceFileFormat: String,
+		hash: String,
+		partSource: String,
+		sequenceFileName: String
+	});
+	app.db.model('sequence', SequenceSchema);
+
+	var PartSchema = new Schema({
+		veproject_id      :  String,
+		j5bin_id          :  String,
+		eugenerule_id     :  String,
+		sequencefile_id   :  String,
+		directionForward  :  String,
+		fas               :  String,
+		name              :  String,
+		revComp           :  String,
+		genbankStartBP    :  String,
+		endBP             :  String,
+		iconID            :  String,
+		veproject_id      :  String,
+		j5bin_id          :  String,
+		eugenerule_id     :  String,
+		sequencefile_id   :  String,
+		directionForward  :  String,
+		fas               :  String,
+		name              :  String,
+		revComp           :  String,
+		genbankStartBP    :  String,
+		endBP             :  String,
+		iconID            :  String
+	});
+	app.db.model('part', PartSchema);
+
 	var VEProjectSchema = new Schema({
 		name: String,
 		project_id : { type: oIDRef, ref: 'project' },
-		sequencefile: app.mongoose.Schema.Types.Mixed
+		sequences: [{ type: oIDRef, ref: 'sequence' }]
 	});
 	app.db.model('veproject', VEProjectSchema);
 
 	var DEProjectSchema = new Schema({
 		project_id : { type: oIDRef, ref: 'project' },
-		design: app.mongoose.Schema.Types.Mixed,
+		design: oMixed,
 		name: String
-	}, { strict: false });
+	});
 	app.db.model('deproject', DEProjectSchema);
 
 	var ProjectSchema = new Schema({
@@ -45,6 +81,12 @@ module.exports = function (app) {
 		preferences: Schema.Types.Mixed
 	});
 	app.db.model('User', UserSchema);
+
+	PartSchema.virtual('id').get(function () {return this._id;});
+	PartSchema.set('toJSON', { virtuals: true });
+
+	SequenceSchema.virtual('id').get(function () {return this._id;});
+	SequenceSchema.set('toJSON', { virtuals: true });
 
 	UserSchema.virtual('id').get(function () {return this._id;});
 	UserSchema.set('toJSON', { virtuals: true });

@@ -31,7 +31,7 @@ Ext.define("Teselagen.models.VectorEditorProject", {
         type: "hasMany",
         model: "Teselagen.models.Part",
         name: "parts",
-        foreignKey: "id" // dont change please
+        foreignKey: "veproject_id" // dont change please
     },
     {
         type: "belongsTo",
