@@ -17,19 +17,25 @@ Ext.define("Teselagen.constants.Constants", {
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+    // AssembledSequenceFile.js:
 
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ"
-        //"SBOLXML"
+        "JBEISEQ",
+        "SBOLXML"
     ],
     
-    GENBANK:               "GENBANK",
-    FASTA:                 "FASTA",
-    JBEISEQ:               "JBEISEQ",
+    GENBANK:                "GENBANK",
+    FASTA:                  "FASTA",
+    JBEISEQ:                "JBEISEQ",
     //SBOLXML:               "SBOLXML",
     INIT:                   "INIT",
+
+    GENBANK_SUFFIX:         ".gb",
+    FASTA_SUFFIX:           ".fas",
+    JEBISEQ_SUFFIX:         ".xml",
+    SBOL_SUFFIX:            ".sbol", //?
 
     //================================================================
     // EugeneRule.js: compositionalOperator
