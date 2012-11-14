@@ -14,13 +14,13 @@ Ext.define("Teselagen.models.Part", {
 
     proxy: {
         type: "rest",
-        url: "",
+        url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
             root: "design"
         },
         writer: {
-            type: "json",
+            type: "json"
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
@@ -89,8 +89,16 @@ Ext.define("Teselagen.models.Part", {
             associationKey:"sequenceFile",
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFileModel",
-            name: "sequenceFile" // PLEASE DONT DELETE THIS
+            setterName: "setSequenceFileModel"
+            , name: "sequenceFile" // PLEASE DON'T DELETE THIS <-- don't delete other people's code either
+        },
+        { //Needed to find the parent of a child
+            type: "belongsTo",
+            model: "Teselagen.models.J5Bin",
+            getterName: "getJ5Bin",
+            setterName: "setJ5Bin",
+            associationKey: "j5Bin",
+            foreignKey: "j5bin_id"
         },
         {
             type: "belongsTo",
