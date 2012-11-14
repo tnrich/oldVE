@@ -73,8 +73,7 @@ Ext.syncRequire(["Ext.Ajax",
         it("Login using rpavez/nopassword", function () {
             var params = {
                     username: 'rpavez',
-                    password: '',
-                    server: 'http://teselagen.local/api/'
+                    password: ''
             };
 
             authenticationManager.sendAuthRequest(params, function(success) {
@@ -103,6 +102,7 @@ Ext.syncRequire(["Ext.Ajax",
         });
     });
 
+
     describe("Create new Project, DE Project and DE Design", function () {
         it("Create new Project", function () {
 
@@ -121,6 +121,13 @@ Ext.syncRequire(["Ext.Ajax",
                 project.save();
                 
             });
+
+            waitsFor(function () {
+                if(projectManager.currentUser) return true;
+                else return false;
+            }, "Auth took too much time", 1750);
+
+
         });
         
         it("Create DE Project", function () {
@@ -225,7 +232,9 @@ Ext.syncRequire(["Ext.Ajax",
 
 
             runs(function () {
-                design.set( 'deproject_id', deproject.get('id') )
+                var deproject_id = deproject.get('id');
+                design.set( 'deproject_id', deproject_id );
+                deproject.set('id',deproject_id);
                 deproject.setDesign(design);
                 
                 design.save({callback:function(){

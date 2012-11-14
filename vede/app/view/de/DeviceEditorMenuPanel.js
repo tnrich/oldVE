@@ -55,6 +55,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
             }
         }, {
             xtype: 'button',
+            cls: 'DeviceEditorSaveBtn',
             text: 'Save'
         }, {
             xtype: 'button',

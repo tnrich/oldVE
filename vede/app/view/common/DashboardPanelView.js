@@ -48,13 +48,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         {
                                                             xtype: 'datecolumn',
                                                             id: 'projectGrid_DateCreated',
-                                                            dataIndex: 'DateCreated',
+                                                            dataIndex: 'dateCreated',
                                                             text: 'Date Created'
                                                         },
                                                         {
                                                             xtype: 'datecolumn',
                                                             id: 'projectGrid_DateModified',
-                                                            dataIndex: 'DateModified',
+                                                            dataIndex: 'dateModified',
                                                             text: 'Last Modified'
                                                         }
                                                     ],
@@ -103,19 +103,19 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                         {
                                                             xtype: 'gridcolumn',
                                                             id: 'designGrid_Name',
-                                                            dataIndex: 'string',
+                                                            dataIndex: 'name',
                                                             text: 'Name'
                                                         },
                                                         {
                                                             xtype: 'datecolumn',
                                                             id: 'designGrid_DateCreated',
-                                                            dataIndex: 'date',
+                                                            dataIndex: 'dateCreated',
                                                             text: 'Date Created'
                                                         },
                                                         {
                                                             xtype: 'datecolumn',
                                                             id: 'designGrid_DateModified',
-                                                            dataIndex: 'date',
+                                                            dataIndex: 'dateModified',
                                                             text: 'Last Modified'
                                                         }
                                                     ],
@@ -195,6 +195,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                 },
                                                 {
                                                     xtype: 'menuitem',
+                                                    id: 'openSequenceFile_Btn',
                                                     text: 'Open Sequence File'
                                                 },
                                                 {

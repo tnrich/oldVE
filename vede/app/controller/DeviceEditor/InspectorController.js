@@ -23,6 +23,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.tabPanel.getActiveTab().down("form[cls='forcedAssemblyStrategyForm']").loadRecord(j5Part);
         }
         this.selectedPart = j5Part;
+        console.log("Part selected");
     },
 
     onBinSelected: function(j5Bin) {
@@ -81,7 +82,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
             }
 
-            this.activeProject = newTab.model;
+            var self = this;
+            this.activeProject = newTab.model.getDesign();
+            
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
@@ -141,13 +144,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             nameField.setValue(j5Part.get("name"));
 
-            var sourceFile = j5Part.getSequenceFile();
-            if(j5Part.getSequenceFile()) {
-                sourceField.setValue(sourceFile.get("partSource"));
-                revCompField.setValue(j5Part.get("revComp"));
+            var existSequence = (j5Part.get('sequencefile_id')=="")? false : true;
+            if(existSequence)
+            {
+                var sourceFile = j5Part.getSequenceFile({
+                    callback: function(record,operation){
+                        sourceField.setValue(sourceFile.get("partSource"));
+                        revCompField.setValue(j5Part.get("revComp"));                        
+                    }
+                });
             } else {
-                sourceField.setValue("");
-                revCompField.setValue("");
+                sourceField.setValue("No source assigned");
+                revCompField.setValue("No source assigned");
             }
 
             var startBP = j5Part.get("genbankStartBP");

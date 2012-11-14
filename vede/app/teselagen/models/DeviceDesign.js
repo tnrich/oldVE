@@ -23,6 +23,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
+                //console.log(associatedData);
                 var j5Collection = associatedData["j5collection"];
                 var rules = associatedData["rules"];
                 data.j5collection = j5Collection;
@@ -42,8 +43,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
     fields: [
         //{name: "id", type: "long"},
         {name: "deproject_id", type: "long"},
-        {name: "j5collection_id", type: "long"},
-        {name: "sbolviconinfo_id", type: "long"}
+        //{name: "j5collection_id", type: "long"},
+        //{name: "sbolviconinfo_id", type: "long"}
     ],
 
     validations: [
@@ -57,7 +58,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5collection",
-            foreignKey: "j5collection_id"
+            name: "j5collection" // PLEASE DONT DELETE IT, I NEED IT TO GET CORRECTLY ASSOCIATED DATA
+            //foreignKey: "j5collection_id"
         },
         {
             type: "hasOne",
@@ -65,14 +67,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getSBOLvIconInfo",
             setterName: "setSBOLvIconInfo",
             associationKey: "sbolvIconInfo",
-            foreignKey: "sbolviconinfo_id"
+            //foreignKey: "sbolviconinfo_id"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             associationKey: "rules",
             name: "rules",
-            foreignKey: "devicedesign_id"
+            //foreignKey: "devicedesign_id"
         },
         {
             type: "belongsTo",
@@ -80,7 +82,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
             associationKey: "deviceEditorProject",
-            foreignKey: "deproject_id"
+            //foreignKey: "deproject_id"
         }
     ],
 

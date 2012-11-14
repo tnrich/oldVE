@@ -24,7 +24,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             type: "json"
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequencefile", this.url);
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequences", this.url);
         }
     },
 

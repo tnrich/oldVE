@@ -43,7 +43,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
-        {name: "id",                type: "long"},
+        //{name: "id",                type: "long"},
         {name: "devicedesign_id",   type: "long"},
         {name: "operand1_id",   type: "long"},
         {name: "operand2_id",   type: "long"},
@@ -125,6 +125,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             associationKey: "operand1",
             instanceName: "operand1",
             foreignKey: "operand1_id"
+            , name: "Part" //this field is not in ext documentation
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -135,8 +136,9 @@ Ext.define("Teselagen.models.EugeneRule", {
             associationKey: "operand2Part",
             instanceName: "operand2",
             foreignKey: "operand2_id"
+            , name: "Part" //this field is not in ext documentation. It's not even a unique name
         },
-        {
+        {//Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",

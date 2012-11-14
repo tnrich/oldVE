@@ -5,7 +5,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.manager.DeviceDesignManager"],
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.models.DeviceEditorProject"],
 
     DeviceEvent: null,
     ProjectEvent: null,
@@ -101,14 +102,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
-        if(newTab.model) {
+        if(newTab.model) { // It is a DE tab
+            this.grid = newTab.query("component[cls='designGrid']")[0];
+            this.grid.removeAll(); // Clean grid
+
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("update", this.onBinsUpdate, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
             }
 
-            this.activeProject = newTab.model;
+            this.activeProject = newTab.model.getDesign();
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
@@ -181,8 +185,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onLaunch: function() {
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-        
+
         this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
+        
         this.tabPanel = Ext.getCmp("mainAppPanel");
 
         // Create a sample bin and associated parts to render.
@@ -203,8 +208,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         binModel.parts().add(partModel1);
         binModel.parts().add(partModel2);
 
-        this.tabPanel.down("DeviceEditorPanel").model = 
-            this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+        var deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+            name: "Untitled Project"
+        });
+
+        var design = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+
+        deproject.setDesign(design);
+
+        this.tabPanel.down("DeviceEditorPanel").model = deproject;
 
         this.tabPanel.on("tabchange",
                          this.onTabChange,
