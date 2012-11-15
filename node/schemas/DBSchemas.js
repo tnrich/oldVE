@@ -30,8 +30,8 @@ module.exports = function (app) {
 
 	var ProjectSchema = new Schema({
 		user_id : { type: oIDRef, ref: 'User' },
-		DateCreated: Date,
-		DateModified: Date,
+		dateCreated: Date,
+		dateModified: Date,
 		name: String,
 		deprojects : [{ type: oIDRef, ref: 'deproject' }],
 		veprojects : [{ type: oIDRef, ref: 'veproject' }]
