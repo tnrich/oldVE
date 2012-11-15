@@ -14,13 +14,13 @@ Ext.define("Teselagen.models.Part", {
 
     proxy: {
         type: "rest",
-        url: "",
+        url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
             root: "parts"
         },
         writer: {
-            type: "json",
+            type: "json"
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
@@ -91,6 +91,36 @@ Ext.define("Teselagen.models.Part", {
             getterName: "getSequenceFile",
             setterName: "setSequenceFileModel",
             name: "sequenceFile" // PLEASE DONT DELETE THIS
+        },
+
+        // These belongsTo are not correct since Parts exist by their own so connection is only in onde side
+        // Ex. One part can belong to multiple VEProjects
+        // These class of belongsTo only represent to belong to ONE VEProject
+        // Thats why we don't need these belongs
+
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Bin",
+            getterName: "getJ5Bin",
+            setterName: "setJ5Bin",
+            associationKey: "j5Bin",
+            foreignKey: "j5bin_id"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.EugeneRule",
+            getterName: "getEugeneRule",
+            setterName: "setEugeneRule",
+            associationKey: "eugeneRule",
+            foreignKey: "eugenerule_id"
+        },
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.VectorEditorProject",
+            getterName: "getVectorEditorProject",
+            setterName: "setVectorEditorProject",
+            associationKey: "vectorEditorProject",
+            foreignKey: "veproject_id"
         }
     ],
 
