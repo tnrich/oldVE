@@ -47,7 +47,7 @@ Ext.define("Teselagen.models.Project", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/projects.json",
+//      url: "/vede/test/data/json/projects.json",
         reader: {
             type: "json",
             root: "projects"
@@ -62,8 +62,10 @@ Ext.define("Teselagen.models.Project", {
                 return data;
             }
         },
-        buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects", this.url);
+        action: "user/projects",
+        buildUrl: function(req) {
+//            this.callParent(arguments);
+            return Teselagen.manager.SessionManager.buildUrl(this.action);
         }
     }
 
