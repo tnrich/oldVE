@@ -5,34 +5,18 @@
 
 Ext.require("Ext.Ajax");
 
-Ext.require("Teselagen.bio.util.StringUtil");
-Ext.require("Teselagen.bio.util.XmlToJson");
-Ext.require("Teselagen.bio.util.Sha256");
+//Ext.require("Teselagen.bio.util.StringUtil");
+//Ext.require("Teselagen.bio.util.XmlToJson");
+//Ext.require("Teselagen.bio.util.Sha256");
 
-Ext.require("Teselagen.bio.parsers.GenbankManager");
-Ext.require("Teselagen.bio.parsers.ParsersManager");
-
-Ext.require("Teselagen.utils.SequenceUtils");
-Ext.require("Teselagen.utils.FormatUtils");
-Ext.require("Teselagen.utils.DeXmlUtils");
+//Ext.require("Teselagen.utils.SequenceUtils");
+//Ext.require("Teselagen.utils.FormatUtils");
+//Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
 
+Ext.require("Teselagen.models.j5Output.AssembledSequenceFile");
 
-Ext.require("Teselagen.models.SequenceFile");
-Ext.require("Teselagen.models.Part");
-Ext.require("Teselagen.models.J5Bin");
-Ext.require("Teselagen.models.J5Collection");
-Ext.require("Teselagen.models.EugeneRule");
-Ext.require("Teselagen.models.SBOLvIconInfo");
-
-Ext.require("Teselagen.models.J5Run");
-Ext.require("Teselagen.models.J5Parameters");
-Ext.require("Teselagen.models.DownstreamAutomationParameters");
-Ext.require("Teselagen.models.J5Results");
-
-Ext.require("Teselagen.models.DeviceDesign");
-Ext.require("Teselagen.models.Project");
 
 
 Ext.onReady(function() {
@@ -41,12 +25,42 @@ Ext.onReady(function() {
     describe("Testing Teselagen.models.j5Output", function() {
 
         //================================================
-        // Teselagen.models.
+        // Teselagen.models.j5Output.AssembledSequenceFile
         //================================================
-        describe("Teselagen.models..js", function() {
+        describe("Teselagen.models.j5Output.AssembledSequenceFile.js", function() {
 
             beforeEach(function() {
+                assemblySeq = Ext.create("Teselagen.models.j5Output.AssembledSequenceFile");
+
+                assemblySeq2 = Ext.create("Teselagen.models.j5Output.AssembledSequenceFile", {
+                    fileType: "fasta",
+                    fileContent: ">assSeq2\nGATTACA"
+                });
             });
+
+            it("Creates AssembledSequenceFile()", function(){
+                //console.log(assemblySeq);
+                console.log(assemblySeq2);
+                console.log(assemblySeq2.getAssembly());
+                expect(assemblySeq2.get("fileType")).toBe("FASTA");
+                expect(assemblySeq2.get("fileContent")).toBe(">assSeq2\nGATTACA");
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(assemblySeq.getJ5Results())).toBe("Teselagen.models.J5Results");
+            });
+
+            it("()", function(){
+            });
+
+            it("()", function(){
+            });
+        });
+
+        //================================================
+        // Teselagen.models.
+        //================================================
+        xdescribe("Teselagen.models.j5Output..js", function() {
 
             it("()", function(){
             });
@@ -64,7 +78,7 @@ Ext.onReady(function() {
         //================================================
         // Teselagen.models.
         //================================================
-        xdescribe("Teselagen.models..js", function() {
+        xdescribe("Teselagen.models.j5Output..js", function() {
 
             it("()", function(){
             });
@@ -82,7 +96,7 @@ Ext.onReady(function() {
         //================================================
         // Teselagen.models.
         //================================================
-        xdescribe("Teselagen.models..js", function() {
+        xdescribe("Teselagen.models.j5Output..js", function() {
 
             it("()", function(){
             });
@@ -100,25 +114,7 @@ Ext.onReady(function() {
         //================================================
         // Teselagen.models.
         //================================================
-        xdescribe("Teselagen.models..js", function() {
-
-            it("()", function(){
-            });
-
-            it("()", function(){
-            });
-
-            it("()", function(){
-            });
-
-            it("()", function(){
-            });
-        });
-
-        //================================================
-        // Teselagen.models.
-        //================================================
-        xdescribe("Teselagen.models..js", function() {
+        xdescribe("Teselagen.models.j5Output..js", function() {
 
             it("()", function(){
             });

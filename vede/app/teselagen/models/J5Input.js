@@ -8,9 +8,9 @@ Ext.define("Teselagen.models.J5Input", {
 
     requires: [
         "Teselagen.models.J5Parameters",
-        "Teselagen.models.DownstreamAutomationParameters",
-        "Teselagen.constants.Constants",
-        "Teselagen.manager.SessionManager"
+        "Teselagen.models.DownstreamAutomationParameters"//,
+        //"Teselagen.constants.Constants",
+        //"Teselagen.manager.SessionManager"
     ],
 
     proxy: {

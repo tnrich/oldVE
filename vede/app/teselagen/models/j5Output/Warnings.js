@@ -21,7 +21,9 @@ Ext.define("Teselagen.models.j5Output.Warnings", {
      */
     fields: [
         // IDs
-        {name: "warnings_id",   type: "long"}
+        {name: "warnings_id",   type: "long"},
+        {name: "type",          type: "string"},
+        {name: "message",       type: "string"}
     ],
 
     validations: [
@@ -31,7 +33,7 @@ Ext.define("Teselagen.models.j5Output.Warnings", {
     associations: [
         {
             type: "belongsTo",
-            model: "Teselagen.models.Assembly",
+            model: "Teselagen.models.j5Output.Assembly",
             getterName: "getAssembly",
             setterName: "setAssembly",
             assocationKey: "assembly",

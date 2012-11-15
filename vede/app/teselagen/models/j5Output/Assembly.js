@@ -7,8 +7,8 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.Warnings",
-        "Teselagen.models.TargetPart"
+        "Teselagen.models.j5Output.Warnings"//,
+        //"Teselagen.models.j5Output.TargetPart"
     ],
 
     proxy: {
@@ -28,8 +28,8 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
         {name: "date",          type: "String",     defaultValue: ""},
 
         // Tables to be stored as strings, not as models
-        {name: "nonDegenerativeParts",  type: "String",     defaultValue: ""},
-        {name: "finalAssembledVector",  type: "String",     defaultValue: ""},
+        //{name: "nonDegenerativeParts",  type: "String",     defaultValue: ""},
+        //{name: "finalAssembledVector",  type: "String",     defaultValue: ""},
 
 
         // IDs
@@ -38,7 +38,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
 
     validations: [
         { // or leave this in J5Run
-            field: type,
+            field: "type",
             type: "inclusion",
             list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
         }
@@ -47,24 +47,25 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
 
     associations: [
         {
-            type: "hasOne",
-            model: "Teselagen.models.Warnings",
-            getterName: "getWarnings",
-            setterName: "setWarnings",
-            assocationKey: "warnings",
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Warnings",
+            name: "warnings",
+            //getterName: "getWarnings",
+            //setterName: "setWarnings",
+            //assocationKey: "warnings",
             foreignKey: "warnings_id"
-        },
+        },/*
         {
             type: "hasOne",
-            model: "Teselagen.models.TargetPart",
+            model: "Teselagen.models.j5Output.TargetPart",
             getterName: "getTargetPart",
             setterName: "setTargetPart",
             assocationKey: "targetPart",
             foreignKey: "targetPart_id"
-        },
+        },*/
         {
             type: "belongsTo",
-            model: "Teselagen.models.AssembledSequenceFile",
+            model: "Teselagen.models.j5Output.AssembledSequenceFile",
             getterName: "getAssembledSequenceFile",
             setterName: "setAssembledSequenceFile",
             assocationKey: "assembledSequenceFile",
