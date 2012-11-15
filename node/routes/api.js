@@ -182,8 +182,8 @@ module.exports = function (app) {
     var newProject = new Project({
       name: req.body.name,
       user_id : req.user,
-      DateCreated: req.body.DateCreated,
-      DateModified: req.body.DateModified
+      dateCreated: req.body.dateCreated,
+      dateModified: req.body.dateModified
     });
     newProject.save(function(){
       req.user.projects.push(newProject);
@@ -198,9 +198,10 @@ module.exports = function (app) {
   app.put('/user/projects', restrict, function (req, res) {
     var Project = app.db.model("project");
     Project.findById(req.body.id,function(err,proj){
+      if(err||!proj) return res.json({'fault':err},500); 
       proj.name = req.body.name;
-      proj.DateCreated = req.body.DateCreated;
-      proj.DateModified = req.body.DateModified;
+      proj.dateCreated = req.body.dateCreated;
+      proj.dateModified = req.body.dateModified;
       proj.save(function(){
         res.json(proj);
       });
@@ -239,7 +240,9 @@ module.exports = function (app) {
       if(!proj) return res.json({'fault':'project not found'},500);
       var newProj = new DEProject({
         name : req.body.name,
-        project_id: proj
+        project_id: proj,
+        dateCreated: req.body.dateCreated,
+        dateModified: req.body.dateModified
       });
       newProj.save(function(err){
         if(err) return res.json({'fault':' new deproj not saved'},500);
@@ -256,12 +259,14 @@ module.exports = function (app) {
 
   // PUT
   app.put('/user/projects/deprojects', restrict, function (req, res) {
-    var DEProject = app.db.model("deproject");
-    DEProject.findById(req.body.id,function(err,proj){
+    var Project = app.db.model("project");
+    var DEProjects = app.db.model("deproject");
+    DEProjects.findById(req.body.id,function(err,proj){
       if(!proj) return res.json({'fault':'project not found'},500);
-      proj.name = req.body.name;
-      proj.save(function(){
-        res.json(proj);
+      proj.name = req.body.name,
+      proj.save(function(err){
+        if(err) return res.json({'fault':' new deproj not saved'},500);
+        res.json({"projects":proj});
       });
     });
   });
@@ -281,36 +286,65 @@ module.exports = function (app) {
 
   //CREATE
   app.post('/user/projects/deprojects/devicedesign', function (req, res) {
+
+    var DEProject = app.db.model("deproject");
+    var Part = app.db.model("part");
+
     var id = req.body["deproject_id"];
     var model = req.body;
-    var DEProject = app.db.model("deproject");
+    
+    DEProject.findById(id,function(err,deproject){
+      deproject.design = model;
 
-    DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
-      if(err) console.log("There was a problem!");
-      if(err) console.log(err);
-      console.log("Design updated!!");
-      res.json({"design":req.body});
+      deproject.design.j5collection.bins.forEach(function(bin,binKey){
+        bin.parts.forEach(function(part,partKey){
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey].toString();
+          deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+        });
+      });
+    
+      deproject.save(function(err){
+        if(err) console.log(err);
+        res.json({"design":req.body});
+      });
+
     });
   });
 
   //UPDATE/CREATE
   app.put('/user/projects/deprojects/devicedesign', function (req, res) {
+    var DEProject = app.db.model("deproject");
+    var Part = app.db.model("part");
+
     var id = req.body["deproject_id"];
     var model = req.body;
-    var DEProject = app.db.model("deproject");
-
-    DEProject.findByIdAndUpdate(id, { design: model }, {}, function(err){
-      if(err) console.log("There was a problem!/");
-      if(err) console.log(err);
-      console.log("Design updated!!");
-      res.json({"design":req.body});
+    
+    DEProject.findById(id,function(err,deproject){
+      deproject.design = model;
+      deproject.design.j5collection.bins.forEach(function(bin,binKey){
+        bin.parts.forEach(function(part,partKey){
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey].toString();
+          delete deproject.design.j5collection.bins[binKey].parts[partKey];
+          console.log(partId);
+          deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+        });
+      });
+      deproject.save(function(err){
+        if(err) console.log(err);
+        res.json({"design":req.body});
+      }); 
     });
   });
 
   //READ
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
-    DEProject.findById(req.query.id, function (err, project) {
+    DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
+      project.design.j5collection.bins.forEach(function(bin){
+        bin.parts.forEach(function(part){
+          part.id = part._id;
+        });
+      });
       res.json({"design":project.design});
     });
     

@@ -33,7 +33,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(records.length != 1) console.log('Error loading user');
+				if(!records) {console.log('Error loading user'); return cb(false);}
 				self.currentUser = users.first();
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
@@ -79,7 +79,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		this.workingProject = project;
 
 		Ext.getCmp('projectDesignPanel').setLoading(true);
-
 		// Load Designs And Design Child Resources and Render into ProjectPanel
 		this.loadDesignAndChildResources();
 	},
@@ -88,12 +87,19 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var id = item.data.id;
 		var deprojects = this.workingProject.deprojects();
 		var selectedDEProject = deprojects.getById(id);
-
+		var tabPanel = Ext.getCmp('mainAppPanel');
 		// First check tab is not already opened
 		var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
 		var duplicated = false;
-		tabs.forEach(function(tab){
-			if(tab.model.internalId == selectedDEProject.internalId) duplicated = true;
+		tabPanel.items.items.forEach(function(tab,key){
+			if(tab.model)
+			{
+				if(tab.model.internalId == selectedDEProject.internalId) 
+				{
+					duplicated = true;
+					tabPanel.setActiveTab(key);
+				}
+			}
 		});
 		if(!duplicated)
 		{
@@ -101,7 +107,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			var selectedDesign = selectedDEProject.getDesign({
 				callback: function (record,operation) {
 					selectedDesign = selectedDEProject.getDesign();
-					var tabPanel = Ext.getCmp('mainAppPanel');
 					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
 				
 					var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
@@ -161,7 +166,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 		    if(this.workingProject) {
 			    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-			        name: text
+			        name: text,
+			        dateCreated: new Date(),
+			        dateModified: new Date()
 			    });
 			    
 	            var bin = Ext.create("Teselagen.models.J5Bin", {

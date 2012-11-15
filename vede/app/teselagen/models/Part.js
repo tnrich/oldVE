@@ -17,7 +17,7 @@ Ext.define("Teselagen.models.Part", {
         url: "",
         reader: {
             type: "json",
-            root: "design"
+            root: "parts"
         },
         writer: {
             type: "json",
@@ -91,30 +91,17 @@ Ext.define("Teselagen.models.Part", {
             getterName: "getSequenceFile",
             setterName: "setSequenceFileModel",
             name: "sequenceFile" // PLEASE DONT DELETE THIS
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.EugeneRule",
-            getterName: "getEugeneRule",
-            setterName: "setEugeneRule",
-            associationKey: "eugeneRule",
-            foreignKey: "eugenerule_id"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.VectorEditorProject",
-            getterName: "getVectorEditorProject",
-            setterName: "setVectorEditorProject",
-            associationKey: "vectorEditorProject",
-            foreignKey: "veproject_id"
         }
     ],
 
+
+    // IDS ARE GENERATED ON SERVER SIDE
     /**
      * Generates ID based on date + 3 random digits
      * @returns {String} id
      * @private
      */
+     /*
     generateId: function() {
         var extraDigits = Math.floor(Math.random() * 1000).toString();
 
@@ -124,17 +111,19 @@ Ext.define("Teselagen.models.Part", {
         var id = (Date.now()) + extraDigits;
         return id;
     },
+    */
 
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
      * @returns {Boolean} True if set.
      */
+     /*
     setId: function() {
         var newId = this.generateId();
         this.set("id", newId);
         return true;
      },
-
+    */
     /** Copy of isEmpty, except checks PartVO fields that are now in Part
      * Determines if PartVO is empty.
      * @returns {Boolean} True if empty, false if not.

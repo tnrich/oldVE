@@ -10,14 +10,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         activeTab.el.mask('Loading');
         activeTab.model.getDesign().save({ 
-            success: function(record, operation)
+            callback: function(record, operation)
             {
                     console.log("Design Saved!");
                     activeTab.el.unmask();
-            },
-            failure: function(record, operation)
-            {
-                //handle failure(s) here
             }
         });
     },

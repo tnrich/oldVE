@@ -34,7 +34,10 @@ Ext.syncRequire(["Ext.Ajax",
 
  function () {
 
-    var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
+    var project, design, deproject, projectManager, authenticationManager, projectcreated, deprojectsaved, designsaved;
+    var project_id;
+    var deproject_id;
+    var parts = [];
     designsaved = false;
     deprojectsaved = false;
     var server = 'http://teselagen.local/api/';
@@ -68,9 +71,9 @@ Ext.syncRequire(["Ext.Ajax",
         });
     });
 
-    describe("Authentication", function () {
+    describe("Get User Profile and Projects", function () {
 
-        it("Login using rpavez/nopassword", function () {
+    beforeEach(function () {    
             var params = {
                     username: 'rpavez',
                     password: ''
@@ -79,11 +82,12 @@ Ext.syncRequire(["Ext.Ajax",
             authenticationManager.sendAuthRequest(params, function(success) {
                 expect(Teselagen.manager.AuthenticationManager.authResponse).toBeDefined();
             });
-        });
     });
 
-    describe("Get User Profile and Projects", function () {
         it("Get User Profile and Get User Projects", function () {
+            
+            waits(1000);
+
             runs(function () {
                 projectManager.loadUser(function () {
                     expect(projectManager.currentUser).toBeDefined();
@@ -118,7 +122,12 @@ Ext.syncRequire(["Ext.Ajax",
 
                 projectManager.currentUser.projects().add(project);
 
-                project.save();
+                project.save({
+                    callback: function(){
+                        projectcreated = true;
+                        project_id = project.data.id;
+                    }
+                });
                 
             });
 
@@ -144,9 +153,11 @@ Ext.syncRequire(["Ext.Ajax",
                 currentProject.deprojects().add(deproject);
 
                 deproject.save({
-                    callback: function(){
+                    callback: function(rec){
+                        deproject_id = deproject.data.id;
                         console.log("DE project saved");
                         deprojectsaved = true;
+                        console.log(deproject);
                     }
                 });
 
@@ -172,6 +183,7 @@ Ext.syncRequire(["Ext.Ajax",
                 endBP: 7
             });
             part1a.setSequenceFile(seq1a);
+            parts.push(part1a);
 
 
             seq1b = Ext.create("Teselagen.models.SequenceFile", {
@@ -185,6 +197,7 @@ Ext.syncRequire(["Ext.Ajax",
                 endBP: 7
             });
             part1b.setSequenceFile(seq1b);
+            parts.push(part1b);
 
             bin1 = Ext.create("Teselagen.models.J5Bin", {
                 binName: "bin1"
@@ -203,6 +216,7 @@ Ext.syncRequire(["Ext.Ajax",
                 endBP: 7
             });
             part2a.setSequenceFile(seq2a);
+            parts.push(part2a);
 
             bin2 = Ext.create("Teselagen.models.J5Bin", {
                 binName: "bin2"
@@ -221,9 +235,23 @@ Ext.syncRequire(["Ext.Ajax",
             });
             rule1.setOperand1(part1a);
             design.addToRules(rule1);
+
+            expect(design).toBeDefined();
+        });
+
+    });
+
+    describe("Saving DE Project", function () {
+
+        beforeEach(function() {
+            parts.forEach(function(part){
+                part.save();
+            });
         });
 
         it("Save DE Design to Server", function () {
+
+            waits(1000);
 
             waitsFor(function () {
                 if(design&&deprojectsaved&&deproject) return true;
@@ -243,19 +271,17 @@ Ext.syncRequire(["Ext.Ajax",
                 }});
             });
         });
+
     });
 
     var projectedited = false;
     describe("Editing Project", function () {
         it("Alter design model", function () {
             
-            waitsFor(function () {
-                if(designsaved) return true; else return false;
-            }, "Saving DE Design Timeout", 9000);
-
             runs(function () {
                 console.log("Editing Project");
                 project.set('name','changed name');
+                project.set('id',project_id);
                 project.save({
                     callback: function(){
                         projectedited = true;
@@ -263,22 +289,28 @@ Ext.syncRequire(["Ext.Ajax",
                 });
             });
             
+            waitsFor(function () {
+                if(projectcreated) return true; else return false;
+            }, "Saving DE Design Timeout", 9000);
+
         });
 
         it("Get Altered Project", function () {
+
+            runs(function () {
+                //console.log(project);
+            });
+
             waitsFor(function () {
                 if(projectedited) return true; else return false;
             }, "Editing Project Timeout", 9000);
 
-
-            runs(function () {
-                console.log(project);
-            });
         });
 
     });
     
     var deprojectedited = false;
+    
     describe("Editing DE Project", function () {
         it("Alter design model", function () {
             
@@ -289,8 +321,9 @@ Ext.syncRequire(["Ext.Ajax",
 
             runs(function () {
                 console.log("Editing DE Project");
-                //console.log(deproject);
                 deproject.set('name','DE Project changed');
+                deproject.set('id',deproject_id);
+                console.log(deproject);
                 deproject.save({
                     callback: function(){
                         deprojectedited = true;
@@ -312,8 +345,9 @@ Ext.syncRequire(["Ext.Ajax",
         });
 
     });
-
-    var designedited = false;
+    
+    var designedited = true;
+    /*
     describe("Editing DE Design", function () {
         it("Alter design model", function () {
             
@@ -348,6 +382,7 @@ Ext.syncRequire(["Ext.Ajax",
         });
 
     });
+*/
     
     var ajaxCheck = function(ajaxMethod, args, cb) {
         /**
