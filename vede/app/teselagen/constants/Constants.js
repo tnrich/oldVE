@@ -14,6 +14,7 @@ Ext.define("Teselagen.constants.Constants", {
     VERSION:                "2.0.4",
     
     ENTRY_REGISTRY_URL:     "",
+    API_URL:     "http://teselagen.local/api/",
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
