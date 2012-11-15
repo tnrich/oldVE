@@ -406,24 +406,40 @@ module.exports = function (app) {
     var VEProject = app.db.model("veproject");
     var Sequence = app.db.model("sequence");
 
-    VEProject.findById(id,function(err,veproject){
+    if(id)
+    {
+      VEProject.findById(id,function(err,veproject){
+        if(err||!veproject) return res.json({"fault":"VEProject not found"},500);
+        var newSequence = new Sequence();
+
+        for(var prop in sequence) {
+          newSequence[prop] = sequence[prop];
+        }
+
+        newSequence.save(function(){
+          veproject.sequences.push(newSequence);
+          veproject.save(function(err){
+            if(err) console.log(err);
+            console.log("New Sequence Saved!");
+
+            res.json({"sequence":newSequence});
+          });
+        });
+      });
+    }
+    else
+    {
       var newSequence = new Sequence();
 
       for(var prop in sequence) {
-        console.log(prop);
         newSequence[prop] = sequence[prop];
       }
 
-      newSequence.save(function(){
-        veproject.sequences.push(newSequence);
-        veproject.save(function(err){
-          if(err) console.log(err);
-          console.log("New Sequence Saved!");
-
-          res.json({"sequence":newSequence});
-        });
+      newSequence.save(function(err){
+        if(err) return res.json({"fault":"Sequence not saved"},500);
+        res.json({"sequence":newSequence});
       });
-    });
+    }
   });
 
 
@@ -463,7 +479,6 @@ module.exports = function (app) {
       //console.log(project);
       res.json({"sequence":project.sequences});
     });
-    
   });
 
   //CREATE
@@ -485,6 +500,15 @@ module.exports = function (app) {
     var ExamplesModel = app.db.model("Examples");
     ExamplesModel.findById(req.body._id, function (err, example) {
       res.json(example);
+    });
+  });
+
+  //READ
+  app.get('/user/projects/deprojects/j5results', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    //var J5Result = app.db.model("j5result");
+    DEProject.findById(req.query.id).populate('j5results').exec(function (err, deproject) {
+      res.json({'j5results':deproject.j5results});
     });
   });
 
