@@ -25,7 +25,6 @@ Ext.define("Teselagen.manager.SessionManager", {
         this.constants = Teselagen.constants.Constants;
         this.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + "api/";
         this.env = this.constants.ENV_DEV;
-//        console.log(this.baseURL);
     },
     
     /**
