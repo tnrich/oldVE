@@ -115,7 +115,7 @@ Nov 8, 2012 -DW</panel_attributes>
     <panel_attributes>AssembledSequenceFile
 "pj50XXXX.gb"
 --
--type [GENBANK|FASTA|JBEISEQ|SBOL
+-format [GENBANK|FASTA|JBEISEQ|SBOL
 -fileContent</panel_attributes>
     <additional_attributes/>
   </element>
