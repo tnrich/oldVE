@@ -4,10 +4,7 @@
  * @author Diana Wong
  */
 Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
-    extend: [
-        "Ext.data.Model",
-        "Teselagen.models.j5Output.Assembly"
-    ],
+    extend: "Teselagen.models.j5Output.Assembly",
 
     requires: [
     ],
@@ -25,8 +22,8 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
     fields: [
 
         // fields that may go under J5Run
-        {name: "type",          type: "String",     defaultValue: ""},
-        {name: "date",          type: "String",     defaultValue: ""},
+        //{name: "type",          type: "String",     defaultValue: ""},
+        //{name: "date",          type: "String",     defaultValue: ""},
 
         // Tables to be stored as strings, not as models
         {name: "directSynthesis",           type: "String",     defaultValue: ""},
@@ -35,19 +32,20 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
 
         // IDs
         {name: "assembly_id",   type: "long"}
+        
     ],
 
     validations: [
-        { // or leave this in J5Run
-            field: type,
+        /*{ // or leave this in J5Run
+            field: "type",
             type: "inclusion",
-            list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
-        }
+            list: Teselagen.constants.Constants.NONMOCKTYPE_LIST
+        }*/
 
     ],
 
     associations: [
-        {
+        /*{
             type: "hasOne",
             model: "Teselagen.models.Incompatibilities",
             getterName: "getIncompatibilities",
@@ -78,7 +76,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             setterName: "setPCRReactions",
             assocationKey: "pcrReactions",
             foreignKey: "pcrReactions_id"
-        },
+        },*/
         {
             type: "belongsTo",
             model: "Teselagen.models.AssembledSequenceFile",

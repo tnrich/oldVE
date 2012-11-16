@@ -1,0 +1,29 @@
+LOCUS       ADH4                    1149 bp ds-DNA     linear       28-JUN-2012
+ACCESSION   ADH4
+VERSION     ADH4
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     CDS             1..1149
+                     /label="ADH4"
+ORIGIN      
+        1 atgtcttccg ttactgggtt ttacattcca ccaatctctt tctttggtga aggtgcttta
+       61 gaagaaaccg ctgattacat caaaaacaag gattacaaaa aggctttgat cgttactgat
+      121 cctggtattg cagctattgg tctctccggt agagtccaaa agatgttgga agaacgtgac
+      181 ttaaacgttg ctatctatga caaaactcaa ccaaacccaa atattgccaa tgtcacagct
+      241 ggtttgaagg ttttgaagga acaaaactct gaaattgttg tttccattgg tggtggttct
+      301 gctcacgaca atgctaaggc cattgcttta ttggctacta acggtgggga aatcggagac
+      361 tatgaaggtg tcaatcaatc taagaaggct gctttaccac tatttgccat caacactact
+      421 gctggtactg cttccgaaat gaccagattc actattatct ctaatgaaga aaagaaaatc
+      481 aagatggcta tcattgacaa caacgtcact ccagctgttg ctgtcaacga tccatctacc
+      541 atgtttggtt tgccacctgc tttgactgct gctactggtc tagatgcttt gactcactgt
+      601 atcgaagctt atgtttccac cgcctctaac ccaatcaccg atgcctgtgc tttgaagggt
+      661 attgatttga tcaatgaaag cttagtcgct gcatacaaag acggtaaaga caagaaggcc
+      721 agaactgaca tgtgttacgc tgaatacttg gcaggtatgg ctttcaacaa tgcttctcta
+      781 ggttatgttc atgcccttgc tcatcaactt ggtggtttct accacttgcc tcatggtgtt
+      841 tgtaacgctg tcttgttgcc tcatgttcaa gaggccaaca tgcaatgtcc aaaggccaag
+      901 aagagattag gtgaaattgc tttgcatttc ggtgcttctc aagaagatcc agaagaaacc
+      961 atcaaggctt tgcacgtttt aaacagaacc atgaacattc caagaaactt gaaagaatta
+     1021 ggtgttaaaa ccgaagattt tgaaattttg gctgaacacg ccatgcatga tgcctgccat
+     1081 ttgactaacc cagttcaatt caccaaagaa caagtggttg ccattatcaa gaaagcctat
+     1141 gaatattaa     
+//

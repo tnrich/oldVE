@@ -464,7 +464,7 @@ Ext.onReady(function() {
                 // Checking Associations
                 // FILL IN TESTS FOR SEQUENCE FILE HERE!!!!
                 expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
-                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+                //expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
             it("Creates Part, setSequenceFile()", function(){
