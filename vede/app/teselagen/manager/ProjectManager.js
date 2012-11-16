@@ -33,7 +33,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(records.length != 1) console.log('Error loading user');
+				if(!records) {console.log('Error loading user'); return cb(false);}
 				self.currentUser = users.first();
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
@@ -75,11 +75,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 * Open a Project
 	 */
 	openProject: function (project) {
-		console.log('PM: Opening a project ' + project.data.name);
+		//console.log('PM: Opening a project ' + project.data.name);
 		this.workingProject = project;
 
 		Ext.getCmp('projectDesignPanel').setLoading(true);
-
 		// Load Designs And Design Child Resources and Render into ProjectPanel
 		this.loadDesignAndChildResources();
 	},
@@ -88,17 +87,33 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var id = item.data.id;
 		var deprojects = this.workingProject.deprojects();
 		var selectedDEProject = deprojects.getById(id);
-		var self = this;
-		var selectedDesign = selectedDEProject.getDesign({
-			callback: function (record,operation) {
-				selectedDesign = selectedDEProject.getDesign();
-				var tabPanel = Ext.getCmp('mainAppPanel');
-				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
-			
-				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
-				//deController.renderDesignInContext();
+		var tabPanel = Ext.getCmp('mainAppPanel');
+		// First check tab is not already opened
+		var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
+		var duplicated = false;
+		tabPanel.items.items.forEach(function(tab,key){
+			if(tab.model)
+			{
+				if(tab.model.internalId == selectedDEProject.internalId) 
+				{
+					duplicated = true;
+					tabPanel.setActiveTab(key);
+				}
 			}
-		});		
+		});
+		if(!duplicated)
+		{
+			var self = this;
+			var selectedDesign = selectedDEProject.getDesign({
+				callback: function (record,operation) {
+					selectedDesign = selectedDEProject.getDesign();
+					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
+				
+					var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
+					//deController.renderDesignInContext();
+				}
+			});
+		}	
 	},
 
 	openVEProject: function (item) {
@@ -151,7 +166,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 		    if(this.workingProject) {
 			    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-			        name: text
+			        name: text,
+			        dateCreated: new Date(),
+			        dateModified: new Date()
 			    });
 			    
 	            var bin = Ext.create("Teselagen.models.J5Bin", {
@@ -170,26 +187,30 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	                endBP: 7
 	            });
 
-	            bin.addToParts([part1a, part1b]);
+	            part1a.save({callback: function(){
+		            part1b.save({callback: function(){
 
+			            bin.addToParts([part1a, part1b]);
 
-	            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
-	            //console.log(design);
-	            
-	            deproject.setDesign(design);
+			            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
+			            
+			            deproject.setDesign(design);
 
-			    this.workingProject.deprojects().add(deproject);
+					    self.workingProject.deprojects().add(deproject);
 
-			    deproject.save({
-			        callback: function(){
-			        	//console.log("DE Project saved");
-			        	design.set( 'deproject_id', deproject.get('id') );
-			        	design.save({
-			        		callback: function(){
-			        			//console.log("DESIGN SAVED");
-			        			self.loadDesignAndChildResources();
-			            	}});
-			    }});
+					    deproject.save({
+					        callback: function(){
+					        	//console.log("DE Project saved");
+					        	design.set( 'deproject_id', deproject.get('id') );
+					        	design.save({
+					        		callback: function(){
+					        			//console.log("DESIGN SAVED");
+					        			self.loadDesignAndChildResources();
+					            	}});
+					    }});
+
+		            }});	            	
+	            }});
 			}
 		};
 

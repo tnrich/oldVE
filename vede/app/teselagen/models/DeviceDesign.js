@@ -23,12 +23,29 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                //console.log(associatedData);
                 var j5Collection = associatedData["j5collection"];
+
                 var rules = associatedData["rules"];
                 data.j5collection = j5Collection;
+
+                var binsTempArray = [];
+
+                record.getJ5Collection().bins().each(function(bin,binKey){
+                    var partsTempArray = [];
+                    bin.parts().each(function(part){
+                        partsTempArray.push(part.getData().id)
+                    });
+                    binsTempArray.push(partsTempArray);
+                });
+
+                data.j5collection.bins.forEach(function(bin,binKey){
+                    bin.parts.forEach(function(part,partKey){
+                        delete data.j5collection.bins[binKey].parts;
+                        data.j5collection.bins[binKey].parts = binsTempArray[binKey];
+                    });
+                });
+
                 data.rules = rules;
-                console.log(data);
                 return data;
             }
         },

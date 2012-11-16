@@ -7,7 +7,7 @@ Ext.define('Vede.controller.AuthWindowController', {
         var params = {};
 		params.username = form.findField('username').getRawValue();
 		params.password = form.findField('password').getRawValue();
-		params.server = form.findField('server').getRawValue();
+		if(form.findField('server')) params.server = form.findField('server').getRawValue();
 
         Teselagen.manager.AuthenticationManager.sendAuthRequest(params);
     },

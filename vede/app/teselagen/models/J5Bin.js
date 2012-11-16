@@ -106,10 +106,8 @@ Ext.define("Teselagen.models.J5Bin", {
             model: "Teselagen.models.Part",
             name: "parts",
             foreignKey: "j5bin_id"
-        }
-        // PLEASE DONT INCLUDE THIS BELONG, DONT NEEDED
-        /*,
-        {
+        },
+        {//Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
@@ -117,7 +115,6 @@ Ext.define("Teselagen.models.J5Bin", {
             associationKey: "j5Collection",
             foreignKey: "j5collection_id"
         }
-        */
     ],
 
     /**

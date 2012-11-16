@@ -2,7 +2,7 @@ Ext.define('Vede.view.de.DeviceEditor', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorPanel',
     requires: ["Vede.view.de.InspectorPanel", "Vede.view.de.DeviceEditorPartPanel", "Vede.view.de.DeviceEditorMenuPanel", "Vede.view.de.DeviceEditorToolPanel", "Vede.view.de.DeviceEditorStatusPanel", "Vede.view.de.DeviceEditorCanvasPanel"],
-
+    cls: 'DeviceEditorTab',
     //id: 'DeviceEditorPanel',
     layout: {
         type: 'fit'
