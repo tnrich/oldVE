@@ -5,6 +5,8 @@
 
 module.exports = function (app) {
 
+    var express = require("express");
+    var errorHandler = express.errorHandler();
 
   // Login Auth Method : Find User in DB
 
@@ -164,7 +166,7 @@ module.exports = function (app) {
     var Project = app.db.model("project");
     Project.findById(req.query.id, function (err, proj) {
         if (err) {
-            handleError(err);
+            errorHandler(err, req, res);
         }
         else {
             res.json({"projects": proj});
