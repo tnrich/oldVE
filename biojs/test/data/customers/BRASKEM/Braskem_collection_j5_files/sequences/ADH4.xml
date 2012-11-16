@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH4</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>atgtcttccgttactgggttttacattccaccaatctctttctttggtgaaggtgctttagaagaaaccgctgattacatcaaaaacaaggattacaaaaaggctttgatcgttactgatcctggtattgcagctattggtctctccggtagagtccaaaagatgttggaagaacgtgacttaaacgttgctatctatgacaaaactcaaccaaacccaaatattgccaatgtcacagctggtttgaaggttttgaaggaacaaaactctgaaattgttgtttccattggtggtggttctgctcacgacaatgctaaggccattgctttattggctactaacggtggggaaatcggagactatgaaggtgtcaatcaatctaagaaggctgctttaccactatttgccatcaacactactgctggtactgcttccgaaatgaccagattcactattatctctaatgaagaaaagaaaatcaagatggctatcattgacaacaacgtcactccagctgttgctgtcaacgatccatctaccatgtttggtttgccacctgctttgactgctgctactggtctagatgctttgactcactgtatcgaagcttatgtttccaccgcctctaacccaatcaccgatgcctgtgctttgaagggtattgatttgatcaatgaaagcttagtcgctgcatacaaagacggtaaagacaagaaggccagaactgacatgtgttacgctgaatacttggcaggtatggctttcaacaatgcttctctaggttatgttcatgcccttgctcatcaacttggtggtttctaccacttgcctcatggtgtttgtaacgctgtcttgttgcctcatgttcaagaggccaacatgcaatgtccaaaggccaagaagagattaggtgaaattgctttgcatttcggtgcttctcaagaagatccagaagaaaccatcaaggctttgcacgttttaaacagaaccatgaacattccaagaaacttgaaagaattaggtgttaaaaccgaagattttgaaattttggctgaacacgccatgcatgatgcctgccatttgactaacccagttcaattcaccaaagaacaagtggttgccattatcaagaaagcctatgaatattaa</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>ADH4</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>1149</seq:end>
+        </seq:location>
+        <seq:seqHash>c960c819e997c1c9d080235a5e24e65059b63cf66b95ff3da9a44773ebf81c1b</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>

@@ -91,7 +91,7 @@ Ext.define("Teselagen.models.Part", {
             getterName: "getSequenceFile",
             setterName: "setSequenceFileModel"
             , name: "sequenceFile" // PLEASE DON'T DELETE THIS <-- don't delete other people's code either
-        },
+        }/*,
         { //Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.J5Bin",
@@ -115,7 +115,7 @@ Ext.define("Teselagen.models.Part", {
             setterName: "setVectorEditorProject",
             associationKey: "vectorEditorProject",
             foreignKey: "veproject_id"
-        }
+        }*/
     ],
 
     /**

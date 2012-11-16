@@ -21,11 +21,9 @@ Ext.define("Teselagen.models.j5Output.Warning", {
      */
     fields: [
         // IDs
-        {name: "warning_id",    type: "long"},
-
-        // Fields
-        {name: "type",          type: "string",     defaultValue: ""},
-        {name: "message",       type: "string",     defaultValue: ""}
+        {name: "warnings_id",   type: "long"},
+        {name: "type",          type: "string"},
+        {name: "message",       type: "string"}
     ],
 
     validations: [

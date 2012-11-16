@@ -4,10 +4,7 @@
  * @author Diana Wong
  */
 Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
-    extend: [
-        "Ext.data.Model",
-        "Teselagen.models.j5Output.CombinatorialAssembly"
-    ],
+    extend: "Teselagen.models.j5Output.CombinatorialAssembly",
 
     requires: [
     ],
@@ -41,7 +38,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
 
     validations: [
         { // or leave this in J5Run
-            field: type,
+            field: "type",
             type: "inclusion",
             list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
         }
@@ -49,7 +46,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
     ],
 
     associations: [
-        {
+        /*{
             type: "hasOne",
             model: "Teselagen.models.OligoSynthesis",
             getterName: "getOligoSynthesis",
@@ -64,7 +61,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
             setterName: "setPCRReactions",
             assocationKey: "pcrReactions",
             foreignKey: "pcrReactions_id"
-        },
+        },*/
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Results",
