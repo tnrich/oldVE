@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>TEF1_terminator</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>ggagattgataagacttttctagttgcatatcttttatatttaaatcttatctattagttaattttttgtaatttatccttatatatagtctggttattctaaaatatcatttcagtatctaaaaattcccctcttttttcagttatatcttaacaggcgacagtccaaatgttgatttatcccagtccgattcatcag</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>TEF1_terminator</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>terminator</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>199</seq:end>
+        </seq:location>
+        <seq:seqHash>ab3df617aaa3140f04dc53f65b5446f34a6b2bdbb1f7b78db8db4d067ba14db9</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>

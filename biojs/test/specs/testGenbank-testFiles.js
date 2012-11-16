@@ -7,7 +7,7 @@ Ext.require("Ext.Ajax");
 Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.parsers.GenbankManager");
 Ext.onReady(function() {
-    var LOG = true;
+    var LOG = false;
 
     loadGenbankFile = function(url) {
         var gb, text;
@@ -28,10 +28,10 @@ Ext.onReady(function() {
 
     logGenbank = function(name, url, gb) {
         console.log("RECONSTRUCTED " + name + " File: " + url + "\n" +
-            "==================================================\n" + 
+            "==================================================\n" +
             gb.toString());
         console.log("JSON " + name + " FILE: " + url + "\n" +
-            "\n==================================================\n" + 
+            "\n==================================================\n" +
             JSON.stringify(gb, null, "  "));
     };
 
@@ -42,7 +42,7 @@ Ext.onReady(function() {
             it("Opens and JSON.stringifies: pTT15d_anti-huCB1_10D10.1_TTR3.gb",function(){
                 var text, tmp;
                 var name = "MarkDaris";
-                var url  = "../test/data/MarkDaris/pTT15d_anti-huCB1_10D10.1_TTR3.gb";
+                var url  = "../test/data/customers/MarkDaris/pTT15d_anti-huCB1_10D10.1_TTR3.gb";
                 //var url = "../test/data/MarkDaris/pTT15d_anti-huCB1_10D10.1_TTR3_ApE.gb";
                 //var url = "../test/data/MarkDaris/ape.gb";
 
@@ -70,7 +70,7 @@ Ext.onReady(function() {
 
                 var text, tmp;
                 var name = "SimonBredl";
-                var url  = "../test/data/sbredl/GentR-Casette.gbk";
+                var url  = "../test/data/customers/sbredl/GentR-Casette.gbk";
 
                 tmp = loadGenbankFile(url);
 
@@ -92,7 +92,7 @@ Ext.onReady(function() {
 
                 var text, tmp;
                 var name = "SimonBredl";
-                var url  = "../test/data/sbredl/TN7R.gbk";
+                var url  = "../test/data/customers/sbredl/TN7R.gbk";
 
                 tmp = loadGenbankFile(url);
 
@@ -118,7 +118,7 @@ Ext.onReady(function() {
             it("Opens and JSON.stringifies: lacz.gb",function(){
                 var text, tmp;
                 var name = "Lac Z";
-                var url  = "../test/data/lacz.gb";
+                var url  = "../test/data/genbanklacz.gb";
 
                 tmp = loadGenbankFile(url);
 
@@ -142,22 +142,31 @@ Ext.onReady(function() {
             var text, tmp;
             it("Opens and JSON.stringifies: largeFile/NC_000913.gb",function(){
                 var text, tmp;
-                var name = "LargeVile";
-                var url  = "../test/data/largeFile/NC_000913.gb";
+                var name = "LargeFile";
+                var url  = "../test/data/customers/largeFile/NC_000913.gb";
 
                 tmp = loadGenbankFile(url);
 
                 if (LOG) {
-                    //logGenbank(name, url, tmp);
+                    logGenbank(name, url, tmp);
                 }
                 expect(tmp.findKeyword("LOCUS").getSequenceLength()).toBe(4639675);
 
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(8993);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(5);
-                console.log(tmp.findKeyword("REFERENCE").toString());
-                console.log(tmp.getKeywords().length);
-                console.log(tmp.getKeywords());
-                console.log(tmp.findKeyword("FEATURES").getFeaturesElements());
+                //console.log(tmp.findKeyword("REFERENCE").toString());
+                //console.log(tmp.getKeywords().length);
+                //console.log(tmp.getKeywords());
+                //console.log(tmp.findKeyword("FEATURES").getFeaturesElements());
+
+                var str = tmp.toString();
+                var fn  = name.replace(/.gb$/,"_parsed.gb");
+                console.log(fn);
+
+                var bb = new BlobBuilder();
+                bb.append(str);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), fn);
+
             });
 
         });
@@ -194,15 +203,15 @@ Ext.onReady(function() {
 
 
                 runs(function() {
-                    console.log("ORIGINAL SBREDL FILE: TN7R.gbk\n" + 
-                        "==================================================\n" + 
+                    console.log("ORIGINAL SBREDL FILE: TN7R.gbk\n" +
+                        "==================================================\n" +
                         text);
                     // As an example of output, uncomment these two lines
-                    console.log("RECONSTRUCTED SBREDL FILE\n" + 
-                        "==================================================\n" + 
-                        tmp.toString());       
-                    console.log("RECONSTRUCTED SBREDL FILE: TN7R.gbk\n" + 
-                        "==================================================\n" + 
+                    console.log("RECONSTRUCTED SBREDL FILE\n" +
+                        "==================================================\n" +
+                        tmp.toString());
+                    console.log("RECONSTRUCTED SBREDL FILE: TN7R.gbk\n" +
+                        "==================================================\n" +
                         JSON.stringify(tmp, null, "  "));
                     
                     expect(tmp.getKeywords().length).toBe(3);
@@ -212,7 +221,7 @@ Ext.onReady(function() {
 
                     expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(1);
                     expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(1);
-                })
+                });
 
             });
 

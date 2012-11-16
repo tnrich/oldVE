@@ -24,7 +24,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             type: "json"
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequencefile", this.url);
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequences", this.url);
         }
     },
 
@@ -276,6 +276,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         if (format === constants.GENBANK) {
         } else if (format === constants.FASTA) {
             seq = content.replace(/>\s*(\S*)\s*/,"");
+            seq = seq.replace(/\s/,"");
             //console.log(seq);
             end = seq.length;
 

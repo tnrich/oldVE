@@ -21,7 +21,7 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         name: "id",
         type: "long"
     },
-    { name: "devicedesign_id", type: "long"},
+    //{ name: "devicedesign_id", type: "long"},
     {
         name: "project_id",
         type: "long"
@@ -29,13 +29,23 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         name: "name",
         type: "String",
         defaultValue: ""
-    }],
-
+    },
+    {
+        name: "dateCreated",
+        type: "date"
+    },
+    {
+        name: "dateModified",
+        type: "date"
+    }
+    ],
+    /*
     validations: [
         {field: "id", type: "presence"},
         {field: "project_id", type: "presence"},
         {field: "name", type: "presence"}
     ],
+    */
     associations: [
         {
             type: "hasOne",
@@ -43,14 +53,14 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             associationKey: "design",
             getterName: "getDesign",
             setterName: "setDesign",
-            foreignKey: "devicedesign_id"
+            foreignKey: "id"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.J5Run",
             name: "j5runs",
             associationKey: "j5runs",
-            foreignKey: "deproject_id"
+            foreignKey: "id"
         },
         {
             type: "belongsTo",

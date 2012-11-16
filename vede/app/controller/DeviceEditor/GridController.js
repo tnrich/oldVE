@@ -5,18 +5,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.manager.DeviceDesignManager"],
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.models.DeviceEditorProject"],
 
     DeviceEvent: null,
     ProjectEvent: null,
 
     DeviceDesignManager: null,
 
+    activeBins: null,
     activeProject: null,
     grid: null,
     tabPanel: null,
 
     selectedBin: null,
+    selectedPart: null,
 
     totalRows: 1,
 
@@ -73,6 +76,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin.deselect();
         }
 
+        if(this.selectedPart) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
+        }
+
         this.selectedBin = gridBin;
         gridBin.select();
 
@@ -80,22 +88,73 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartCellClick: function(partCell) {
-        console.log("part clicked");
+        var gridPart = partCell.up().up();
+        var j5Part = gridPart.getPart();
+
+        if(this.selectedPart) {
+            this.selectedPart.deselect();
+        }
+
+        this.selectedPart = gridPart;
+        gridPart.select();
+
+        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part);
     },
 
-    onAddColumn: function(j5Bin) {
-        if(j5Bin) {
-            this.addJ5Bin(j5Bin);
-        } else {
-            this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
-                totalRows: this.totalRows
-            }));
+    onTabChange: function(tabPanel, newTab, oldTab) {
+        if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
+            this.grid = newTab.query("component[cls='designGrid']")[0];
+            this.grid.removeAll(); // Clean grid
+
+            if(this.activeBins) {
+                this.activeBins.un("add", this.onAddToBins, this);
+                this.activeBins.un("update", this.onBinsUpdate, this);
+                this.activeBins.un("remove", this.onRemoveFromBins, this);
+            }
+
+            this.activeProject = newTab.model.getDesign();
+            this.activeBins = this.activeProject.getJ5Collection().bins();
+
+            this.activeBins.on("add", this.onAddToBins, this);
+            this.activeBins.on("update", this.onBinsUpdate, this);
+            this.activeBins.on("remove", this.onRemoveFromBins, this);
+
+            this.renderDevice();
         }
+    },
+
+    onAddToBins: function(activeBins, addedBins, index) {
+        Ext.each(addedBins, function(j5Bin) {
+            this.addJ5Bin(j5Bin);
+        }, this);
+    },
+
+    onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
+
+    },
+
+    onRemoveFromBins: function(activeBins, removedBin, index) {
+        if(this.selectedBin.getBin() == removedBin) {
+            this.selectedBin = null;
+        }
+
+        this.grid.remove(this.grid.query("Bin")[index]);
     },
 
     onAddRow: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
+    },
+
+    onSelectBin: function(j5Bin) {
+        var gridBin = this.getGridBinFromJ5Bin(j5Bin);
+
+        if(this.selectedBin) {
+            this.selectedBin.deselect();
+        }
+
+        this.selectedBin = gridBin;
+        gridBin.select();
     },
 
     addJ5Bin: function(j5Bin) {
@@ -111,10 +170,24 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }, this);
     },
 
+    getGridBinFromJ5Bin: function(j5Bin) {
+        var targetGridBin = null;
+
+        Ext.each(this.grid.query("Bin"), function(gridBin) {
+            if(gridBin.getBin() === j5Bin) {
+                targetGridBin = gridBin;
+                return false;
+            }
+        }, this);
+
+        return targetGridBin;
+    },
+
     onLaunch: function() {
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-        
+
         this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
+        
         this.tabPanel = Ext.getCmp("mainAppPanel");
 
         // Create a sample bin and associated parts to render.
@@ -135,9 +208,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         binModel.parts().add(partModel1);
         binModel.parts().add(partModel2);
 
-        this.activeProject = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+        var deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+            name: "Untitled Project"
+        });
 
-        this.renderDevice();
+        var design = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
+
+        deproject.setDesign(design);
+
+        this.tabPanel.down("DeviceEditorPanel").model = deproject;
+
+        this.tabPanel.on("tabchange",
+                         this.onTabChange,
+                         this);
     },
 
     init: function() {
@@ -161,12 +244,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
-        this.application.on(this.DeviceEvent.ADD_COLUMN,
-                            this.onAddColumn,
-                            this);
-
         this.application.on(this.DeviceEvent.ADD_ROW,
                             this.onAddRow,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_BIN,
+                            this.onSelectBin,
                             this);
 
         this.application.on("BinHeaderClick",
@@ -176,5 +259,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("PartCellClick",
                             this.onPartCellClick,
                             this);
-    },
+        },
 });

@@ -8,15 +8,22 @@ Ext.define("Teselagen.models.Part", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.SequenceFile"
+        "Teselagen.models.SequenceFile",
+        "Teselagen.constants.Constants"
     ],
 
     proxy: {
-        type: "ajax",
+        type: "rest",
         url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
-            root: "data"
+            root: "parts"
+        },
+        writer: {
+            type: "json"
+        },
+        buildUrl: function() {
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
         }
     },
 
@@ -83,7 +90,8 @@ Ext.define("Teselagen.models.Part", {
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
             setterName: "setSequenceFileModel"
-        },
+            , name: "sequenceFile"
+        }/*,
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Bin",
@@ -107,14 +115,16 @@ Ext.define("Teselagen.models.Part", {
             setterName: "setVectorEditorProject",
             associationKey: "vectorEditorProject",
             foreignKey: "veproject_id"
-        }
+        }*/
     ],
 
+
+    // IDS ARE GENERATED ON SERVER SIDE
     /**
      * Generates ID based on date + 3 random digits
      * @returns {String} id
      * @private
-     */
+     *
     generateId: function() {
         var extraDigits = Math.floor(Math.random() * 1000).toString();
 
@@ -124,19 +134,20 @@ Ext.define("Teselagen.models.Part", {
         var id = (Date.now()) + extraDigits;
         return id;
     },
+    */
 
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
      * @returns {Boolean} True if set.
-     */
+     *
     setId: function() {
         var newId = this.generateId();
         this.set("id", newId);
         return true;
      },
-
-    /** Copy of isEmpty, except checks PartVO fields that are now in Part
-     * Determines if PartVO is empty.
+    */
+    /**
+     * Determines if Part is empty.
      * @returns {Boolean} True if empty, false if not.
      */
     isEmpty: function() {
@@ -187,13 +198,46 @@ Ext.define("Teselagen.models.Part", {
         return false;
     },
 
+    /**
+     * Set Start index
+     * @param {Number} pStart The start index, from 1 to length of the sequence, to set the start BP.
+     */
+    setStart: function(pStart) {
+        this.set("genbankStartBP", pStart);
+    },
+
+    /**
+     * Get Start index.
+     * @returns {Number}
+     */
+    getStart: function() {
+        return this.get("genbankStartBP");
+    },
 
 
-    /** COME BACK AND DO THIS
+    /**
+     * Set End index
+     * @param {Number} pEnd The end index, from 1 to length of the sequence, to set the start BP.
+     */
+    setEnd: function(pEnd) {
+        this.set("endBP", pEnd);
+    },
+
+    /**
+     * Get End index.
+     * @returns {Number}
+     */
+    getEnd: function() {
+        return this.get("endBP");
+    },
+
+    /**
      * Sets SequenceFile with default genbankStartBP and endBP based on a set SequenceFileContent.
+     * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @returns {Boolean}
      */
     setSequenceFile: function(pSequenceFile) {
+        var success = false;
         if (pSequenceFile === null) {
             this.setSequenceFileModel(pSequenceFile);
         } else {
@@ -203,21 +247,27 @@ Ext.define("Teselagen.models.Part", {
             this.setSequenceFileModel(pSequenceFile);
             this.set("genbankStartBP", start);
             this.set("endBP", stop);
+            success = true;
         }
-        
+        return success;
     },
 
 
-    /** NEEDS TESTING
-     * Removes the SequenceFile of Part.
+    /** (WEIRD PROBLEM--print part, does not show same seqFile from getSeqFile.)
+     * Removes the SequenceFile of Part. Resets the Sequence File format to INIT (?),
+     * and the content, filename, partsource, etc to empty strings.
+     * Resets the Start and Stop in Part to 0.
+     *
      * @returns {Boolean} True if removed, false if not.
      */
     removeSequenceFile: function() {
         this.setSequenceFile(null);
-        if (this.getSequenceFile() === null || this.getSequenceFile() === undefined) {
-            return false;
-        } else {
+        this.setStart(0);
+        this.setEnd(0);
+        if (this.getSequenceFile().get("sequenceFileFormat") === "INIT") {
             return true;
+        } else {
+            return false;
         }
     }
 

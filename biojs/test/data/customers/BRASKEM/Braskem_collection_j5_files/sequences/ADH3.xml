@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH3</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>tccttacgaaaaaaaagatcaaggaaacatgtcggaaacaaatgggaaacaacaaaaaggacttatcattcctacttttttgtcgagggcatttgtcgagggtaatactgcatactgcctattgtcggtcccgcagaattaatagtggctgctcatacacaacgaaaaaaattgttaacaaaatagaaggattcgtctatgcccttttttcagtgcggaaattatataccacacaagccgtcgaagcccatagggtcctttaacaataaagactctcctaaaaaaatttttcttgtgacacgtcagtgcaggatataaatgtagcaagcgtatataacaaatgacaaagggttcttgcgcaaggttactttagcgttgctggataatgatcggattgtttttagatcacgatagcacatttgaggaatcgtatcgaaacggacagggcaagagtacgagggcgaaatgaacttataacaccattgatattttctcctcaatcttatcattccacgcacattattttcctactatgttatgcgggaacagttcctaaggaatttttctaatggcatttcggcagcgtcatcaaatgtacgcacccacttcaagtgatcattcgctcgttactacctatcacgtgtcgcatcactcgcgacgtccatgcgcatgctgtgccgcaggagaattcgagatgcgaatgagcagcagccattttgatgttgtgagcatcggaacgtttctgcgtccgtacactgtccttttgttacttagataatggctaaggcaagcagtccgggccacaggagtcaaaggcttttcgccagctcctaaacgctggaagtgtaattttttttcgtcttataaaattaaacaaacccttttagaaaggaacactcgctttatctcttcgaccgaatttactatacatggatatatatatattatcttctgttcacagttaaaactaggaatagtatagtcataagttaacaccatcatgttgagaacgtcaacattgttcaccaggcgtgtccaaccaagcctattttctagaaacattcttagattgcaatccacagctgcaatccctaagactcaaaaaggtgtcatcttttatgagaataaggggaagctgcattacaaagatatccctgtccccgagcctaagccaaatgaaattttaatcaacgttaaatattctggtgtatgtcacaccgatttacatgcttggcacggcgattggccattacctgttaaactaccattagtaggtggtcatgaaggtgctggtgtagttgtcaaactaggttccaatgtcaagggctggaaagtcggtgatttagcaggtatcaaatggctgaacggttcttgtatgacatgcgaattctgtgaatcaggtcatgaatcaaattgtccagatgctgatttatctggttacactcatgatggttctttccaacaatttgcgaccgctgatgctattcaagccgccaaaattcaacagggtaccgacttggccgaagtagccccaatattatgtgctggtgttactgtatataaagcactaaaagaggcagacttgaaagctggtgactgggttgccatctctggtgctgcaggtggcttgggttccttggccgttcaatatgcaactgcgatgggttacagagttctaggtattgatgcaggtgaggaaaaggaaaaacttttcaagaaattggggggtgaagtattcatcgactttactaaaacaaagaatatggtttctgacattcaagaagctaccaaaggtggccctcatggtgtcattaacgtttccgtttctgaagccgctatttctctatctacggaatatgttagaccatgtggtaccgtcgttttggttggtttgcccgctaacgcctacgttaaatcagaggtattctctcatgtggtgaagtccatcaatatcaagggttcttatgttggtaacagagctgatacgagagaagccttagacttctttagcagaggtttgatcaaatcaccaatcaaaattgttggattatctgaattaccaaaggtttatgacttgatggaaaagggcaagattttgggtagatacgtcgtcgatactagtaaataatagcgtgttacgcacccaaactttttatgaaagtctttgtttataatgatgaggtttataaatatatagtggagcaaagattaatcactaaatcaagaagcagtaccagtattttttctatatcaagtagtgataatggaaatagcccaaatttggcttccgtcgacacatagaacgtttgagagacattatcaccatcaagcatcgagccgcccaaacctaaccgtataagttttttcacgtttttgatttttccttgcacacttcgatattactctcacgataaaagggccgaagagaatatttttcttgaacatccagaattttaattcggagaaatttcacaagccgccgatttaagggtcctgtgttcttaataatcagcctctctcaaagcaggtaagaggcagtctttcttttaacaataggagacattcgaactaaaacatcagccccaaaaatgcgcttgaaggtcattaggatttggatttcttcctcatttttaaaggcgccccttttcgttttagtcatgctgggctagactagcacgtagtgtatggaatcaaactgatgccgtcccctgaattatatttacaattcagaaacgtctttgaacatttataattaaattataaaacaaaaggaatttgtaaaaaagactttcaaaagatgatccaataaactagattaaaaacccaatataagaagaagaatgtgtggcatttttggctattgcaattttttaattgagaagacaagaggagaaatcatcgacactttaatcgaagggttacaggcattggagtacaaggaatatgactccagtggaatttcgatccaaggtgatgagctggagtctctcaatatttataagcaaaccggtaaaataagcagtttgaaggaagaaatcgacctttacaatcttaataagaacctgccctttatttcgcattgtggcattgcccatactaggcgggcaacacatggagggctaagacgt</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>1st forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>788</seq:genbankStart>
+            <seq:end>807</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >59.97</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CAAGCAGTCCGGGCCACAGG</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1561.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >5.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.07</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group0_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>1st reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2329</seq:genbankStart>
+            <seq:end>2348</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GGTTTGGGCGGCTCGATGCT</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1561.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >5.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.07</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group0_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>2nd forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>668</seq:genbankStart>
+            <seq:end>687</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GCATGCTGTGCCGCAGGAGA</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1681.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.00</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group1_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>2nd reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2329</seq:genbankStart>
+            <seq:end>2348</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GGTTTGGGCGGCTCGATGCT</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1681.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.00</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group1_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>3rd forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>649</seq:genbankStart>
+            <seq:end>668</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >59.85</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >TCACTCGCGACGTCCATGCG</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1700.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.20</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group2_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>3rd reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2329</seq:genbankStart>
+            <seq:end>2348</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GGTTTGGGCGGCTCGATGCT</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1700.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.20</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group2_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>4th forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>788</seq:genbankStart>
+            <seq:end>807</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >59.97</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CAAGCAGTCCGGGCCACAGG</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2332.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >7.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.35</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group3_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>4th reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>3100</seq:genbankStart>
+            <seq:end>3119</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.32</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CCCTCCATGTGTTGCCCGCC</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2332.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >7.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.35</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group3_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>5th forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>668</seq:genbankStart>
+            <seq:end>687</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GCATGCTGTGCCGCAGGAGA</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2452.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.28</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group4_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>5th reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>3100</seq:genbankStart>
+            <seq:end>3119</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.32</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CCCTCCATGTGTTGCCCGCC</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2452.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.28</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group4_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>ADH3</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1001</seq:genbankStart>
+            <seq:end>2128</seq:end>
+        </seq:location>
+        <seq:seqHash>fac1cbe3a320ec0d0050c29d90932b3b445d83d7633ce8b5b62ee54c142fa32f</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>

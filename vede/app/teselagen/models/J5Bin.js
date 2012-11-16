@@ -35,8 +35,8 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        {name: "id",                type: "long"},
-        {name: "j5collection_id",     type: "long"},
+        //{name: "id",                type: "long"},
+        //{name: "j5collection_id",     type: "long"},
         {
             name: "binName",
             convert: function(v) {
@@ -107,7 +107,7 @@ Ext.define("Teselagen.models.J5Bin", {
             name: "parts",
             foreignKey: "j5bin_id"
         },
-        {
+        {//Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",

@@ -11,24 +11,31 @@ Ext.define("Teselagen.constants.Constants", {
     ENV_PROD: "prod",
     ENV_TEST: "test",
     
-    VERSION:                "2.0.4",
+    VERSION:                "1.0",
     
-    ENTRY_REGISTRY_URL:     "",
+    //ENTRY_REGISTRY_URL:     "",
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+    // AssembledSequenceFile.js:
 
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ"
-        //"SBOLXML"
+        "JBEISEQ",
+        "SBOLXML"
     ],
     
-    GENBANK:               "GENBANK",
-    FASTA:                 "FASTA",
-    JBEISEQ:               "JBEISEQ",
+    GENBANK:                "GENBANK",
+    FASTA:                  "FASTA",
+    JBEISEQ:                "JBEISEQ",
     //SBOLXML:               "SBOLXML",
+    INIT:                   "INIT",
+
+    GENBANK_SUFFIX:         ".gb",
+    FASTA_SUFFIX:           ".fas",
+    JEBISEQ_SUFFIX:         ".xml",
+    SBOL_SUFFIX:            ".sbol", //?
 
     //================================================================
     // EugeneRule.js: compositionalOperator
@@ -72,6 +79,35 @@ Ext.define("Teselagen.constants.Constants", {
         "Embed_in_primer_forward",
         //For bins or parts that are small enough to be embedded within a DNA oligo:
         "Annealed Oligos"
+    ],
+
+    //================================================================
+    // J5Run
+
+
+    ASSEMBLYTYPE_LIST: [
+        // Mock
+        "MOCK",
+        // SLIC/Gibson/CPEC/SLiCE
+        "SLIC",
+        // Golden Gate
+        "GOLDENGATE"
+    ],
+
+    NONMOCKTYPE_LIST: [
+        "SLIC/Gibonson/CPEC/SLiCE",
+        "GOLDENGATE"
+    ],
+
+
+    MOCK:       "MOCK",
+    SLIC:       "SLIC",
+    GOLDENGATE: "GOLDENGATE",
+
+    RUN_STATUS_LIST: [
+        "SUCCESS",
+        "FAILED",
+        "IN PROGRESS"
     ],
 
     //================================================================

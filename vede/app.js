@@ -1,11 +1,5 @@
 var splashscreen;
 
-Ext.define('sessionData', { 
-          singleton: true, 
-          data: null,
-          baseURL: null
-}); 
-
 Ext.onReady(function() {
     // Start the mask on the body and get a reference to the mask
     splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span>', 'splashscreen');
@@ -79,13 +73,11 @@ Ext.application({
     launch: function() {
 
         Ext.Ajax.cors = true; // Allow CORS
-        Ext.Ajax.method = 'POST'; // Set POST as default Method
-        sessionData.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + 'api/';
-
+        Ext.Ajax.withCredentials = true;
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        Teselagen.manager.AuthenticationManager.login(this); // Start Auth process
+        Teselagen.manager.AuthenticationManager.Login(); // Start Auth process
 
         var self = this;
 
@@ -100,9 +92,7 @@ Ext.application({
                 remove: true,
                 listeners: {
                     afteranimate: function() {
-                        //self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
                         Teselagen.manager.ProjectManager.loadUser();
-                        //Ext.getBody().unmask();
                     }
                 }
             });

@@ -137,9 +137,7 @@ app.post('/condenseAssemblyFiles',function(req,res){
 
 function readFile(objectId,cb)
 {
-  var GridStore = app.mongo.GridStore;
-  var db = app.mongodb;
-  var gridStore = new GridStore(db, objectId, 'r');
+  var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'r');
   
   gridStore.open(function(err, file) {
     // Peform a find to get a cursor
@@ -176,7 +174,7 @@ function readFile(objectId,cb)
       //assert.equal(fileBuffer, fileBody);
       console.log(fileBuffer);
       cb(fileBuffer);
-      db.close();
+      app.GridStoreDB.close();
     });
 
     // Resume the stream
@@ -194,17 +192,15 @@ function readFile(objectId,cb)
   */
 }
 
-function saveFile(fileData,user,model)
+function saveFile(fileData,user,deproject)
 {
   var assert = require('assert');
 
-  var mongodb = app.mongo;
-  var db = app.mongodb;
-  var GridStore = app.mongo.GridStore;
+  //console.log(app.GridStoreDB);
 
-  var objectId = new app.mongo.ObjectID();
+  var objectId = new app.mongoose.mongo.ObjectID();
 
-  var gridStore = new GridStore(db, objectId, 'w');
+  var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'w');
     // Open the file
     gridStore.open(function(err, gridStore) {
       // Write some data to the file
@@ -212,25 +208,28 @@ function saveFile(fileData,user,model)
         // Close (Flushes the data to MongoDB)
         gridStore.close(function(err, result) {
           // Verify that the file exists
-          GridStore.exist(db, objectId, function(err, result) {
-            console.log(user.name);
+          app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
 
-            var Protocol = app.db.model("Protocol");
-            user.protocols.push(new Protocol({model:model.name,fileId:objectId.toString(),created:new Date()}));
-            user.save();
-            db.close();
+            var j5Result = app.db.model("j5result");
+            var newj5Result = new j5Result({deprojectName:deproject.name,fileId:objectId.toString(),dateCreated:new Date()});
+            newj5Result.save(function(){
+              deproject.j5results.push(newj5Result);
+              deproject.save();
+              app.GridStoreDB.close();
+            });
           });
         });
       });
     });
 };
 
-app.post('/openResult',restrict,function(req,res){
-  var o_id = new app.mongo.ObjectID(req.body.fileId);
+app.get('/openResult',restrict,function(req,res){
+  var o_id = new app.mongoose.mongo.ObjectID(req.query.fileId);
   
   readFile(o_id,function(inputStream){
 
       var decodedFile = new Buffer(inputStream, 'base64').toString('binary');
+      
       var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
 
       var objResponse = {};
@@ -268,6 +267,7 @@ app.post('/openResult',restrict,function(req,res){
       };
 
       res.json(tree);
+      
     });
 });
 
@@ -284,58 +284,76 @@ app.post('/executej5',restrict,function(req,res){
   var execParams = {};
   var DEProject = app.db.model("deproject");
 
-  DEProject.findById(req.body.deProjectId, function(err,deproject){
-    if(err) console.log("There was a problem fetching the project!");
-    var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
-  
-    data["j5_session_id"] = '52437be99f714e44cb3a920aa38d7401';
-    
-    console.log("Using sessionId: " + data["j5_session_id"]);
+  var resolveSequences = function(deproject,cb){
+    deproject = deproject.toObject();
+    var Sequence = app.db.model("sequence");
+    var partsCounter = 0;
+    deproject.design.j5collection.bins.forEach(function(bin){
+        partsCounter += bin.parts.length;
+    });
 
-    app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-      if(error) 
-      {
-        console.log(error);
-        res.send(error["faultString"], 500);
-      }
-      else
-      {
-        var encodedFileData = value['encoded_output_file'];
-        var fileName = value['output_filename'];
-
-        var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
-
-        //saveFile(encodedFileData,req.user,model);
-
-        var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
-        
-        var objResponse = {};
-        objResponse.files = [];
-        objResponse.data = encodedFileData;
-
-        for(var file in zip.files)
-        {
-          var fileName = zip.files[file]['name'];
-          if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
-          {
-            var newFile = {};
-            newFile.data = zip.files[file]['data'];
-            newFile.name = fileName;
-            newFile.size = zip.files[file]['data'].length;
-            objResponse.files.push(newFile);
-          }
-        }
-
-        objResponse.files.sort(function (a, b) {
-            if (a.name < b.name) return -1;
-            if (b.name < a.name) return 1;
-            return 0;
+    deproject.design.j5collection.bins.forEach(function(bin,binKey){
+      bin.parts.forEach(function(part,partKey){
+        Sequence.findById(part.sequencefile_id,function(err,seq){
+          deproject.design.j5collection.bins[binKey].parts[partKey].SequenceFile = seq;
+          partsCounter--;
+          if(partsCounter==0) return cb(deproject);
         });
-        
-        res.send(objResponse);
-      }
-    })
-  
+      });
+    });
+  };
+
+  DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
+    resolveSequences(deprojectModel,function(deproject){
+      var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
+      data["j5_session_id"] = 'ce03444cd7da329896e8d6115f98cea5';
+      app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
+        if(error) 
+        {
+          console.log(error);
+          res.send(error["faultString"], 500);
+        }
+        else
+        {
+          var encodedFileData = value['encoded_output_file'];
+          var fileName = value['output_filename'];
+
+          var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
+
+          saveFile(encodedFileData,req.user,deprojectModel);
+
+          var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
+          
+          var objResponse = {};
+          objResponse.files = [];
+          objResponse.data = encodedFileData;
+
+          for(var file in zip.files)
+          {
+            var fileName = zip.files[file]['name'];
+            if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
+            {
+              var newFile = {};
+              //newFile.data = zip.files[file]['data'];
+              newFile.data = 'test';
+              newFile.name = fileName;
+              newFile.size = zip.files[file]['data'].length;
+              objResponse.files.push(newFile);
+            }
+          }
+
+          objResponse.files.sort(function (a, b) {
+              if (a.name < b.name) return -1;
+              if (b.name < a.name) return 1;
+              return 0;
+          });
+          
+          res.send(objResponse);
+        }
+      })
+
+    });
+
   });
 
 });

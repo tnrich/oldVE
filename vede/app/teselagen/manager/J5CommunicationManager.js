@@ -34,7 +34,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         var currentModel = currentTab.model;
         var self = this;
         Ext.Ajax.request({
-            url: sessionData.baseURL + 'executej5',
+            url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
             params: {
                 deProjectId: currentModel.data.id,
                 parameters: JSON.stringify(this.j5Parameters),

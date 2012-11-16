@@ -140,7 +140,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         items: [{
             xtype: 'treepanel',
             border: 0,
-            id: 'projectAnalysisPanel',
+            id: 'j5ResultsPanel',
             title: 'j5 Results',
             rootVisible: false,
             listeners: {

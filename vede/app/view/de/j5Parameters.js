@@ -6,9 +6,8 @@ Ext.define('Vede.view.de.j5Parameters', {
     width: 845,
     maxWidth: 845,
     title: 'j5 Parameters',
+    cls: 'j5Parameters_Window',
     autoScroll: true,
-    draggable: false,
-    resizable: false,
     modal: true,
     maximizable: true,
 

@@ -24,8 +24,27 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
                 var j5Collection = associatedData["j5collection"];
+
                 var rules = associatedData["rules"];
                 data.j5collection = j5Collection;
+
+                var binsTempArray = [];
+
+                record.getJ5Collection().bins().each(function(bin,binKey){
+                    var partsTempArray = [];
+                    bin.parts().each(function(part){
+                        partsTempArray.push(part.getData().id)
+                    });
+                    binsTempArray.push(partsTempArray);
+                });
+
+                data.j5collection.bins.forEach(function(bin,binKey){
+                    bin.parts.forEach(function(part,partKey){
+                        delete data.j5collection.bins[binKey].parts;
+                        data.j5collection.bins[binKey].parts = binsTempArray[binKey];
+                    });
+                });
+
                 data.rules = rules;
                 return data;
             }
@@ -40,10 +59,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {name: "id", type: "long"},
+        //{name: "id", type: "long"},
         {name: "deproject_id", type: "long"},
-        {name: "j5collection_id", type: "long"},
-        {name: "sbolviconinfo_id", type: "long"}
+        //{name: "j5collection_id", type: "long"},
+        //{name: "sbolviconinfo_id", type: "long"}
     ],
 
     validations: [
@@ -57,7 +76,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5collection",
-            foreignKey: "j5collection_id"
+            name: "j5collection" // PLEASE DONT DELETE IT, I NEED IT TO GET CORRECTLY ASSOCIATED DATA
+            //foreignKey: "j5collection_id"
         },
         {
             type: "hasOne",
@@ -65,14 +85,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getSBOLvIconInfo",
             setterName: "setSBOLvIconInfo",
             associationKey: "sbolvIconInfo",
-            foreignKey: "sbolviconinfo_id"
+            //foreignKey: "sbolviconinfo_id"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             associationKey: "rules",
             name: "rules",
-            foreignKey: "devicedesign_id"
+            //foreignKey: "devicedesign_id"
         },
         {
             type: "belongsTo",
@@ -80,7 +100,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
             associationKey: "deviceEditorProject",
-            foreignKey: "deproject_id"
+            //foreignKey: "deproject_id"
         }
     ],
 
