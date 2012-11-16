@@ -49,18 +49,18 @@ module.exports = function (app, express) {
   });
 
   // Init MONGODB (Native Driver)
-  /*
+  
   var server = new app.mongo.Server('localhost', 27017, {
     auto_reconnect: true
   });
-  var db = new app.mongo.Db('deviceEditor', server);
+  var db = new app.mongo.Db('TestingTeselagen', server);
   db.open(function (err, db) {
     if(!err) {
-      console.log("MONGODB online (required)");
+      console.log("GRIDFS: Online");
     }
   });
-  app.mongodb = db;
-  */
+  app.GridStoreDB = db;
+  
 
   // Init MONGOOSE (ODM)
   //host, database, port, options

@@ -5,7 +5,8 @@ Ext.define("Vede.view.ve.VectorPanel", {
     /*layout: {
         type: "fit"
     },*/
-    autoScroll: true,
+    //autoScroll: true,
+    scrollable: false,
     collapsible: true,
     collapseDirection: "left",
     title: "Vector",

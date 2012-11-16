@@ -34,9 +34,16 @@ Ext.syncRequire(["Ext.Ajax",
 
  function () {
 
-    var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
-    designsaved = false;
-    deprojectsaved = false;
+    var project, design, deproject, projectManager, authenticationManager, projectcreated, deprojectsaved, designsaved;
+    var project_id;
+    var deproject_id;
+    var parts = [];
+    var sequences = [];
+    var designsaved = false;
+    var deprojectsaved = false;
+    var designGenerated = false;
+    var sequencesSaved = false;
+    var partsSaved = false;
     var server = 'http://teselagen.local/api/';
 
     projectManager = Teselagen.manager.ProjectManager; // Now is singleton
@@ -68,9 +75,9 @@ Ext.syncRequire(["Ext.Ajax",
         });
     });
 
-    describe("Authentication", function () {
+    describe("Get User Profile and Projects", function () {
 
-        it("Login using rpavez/nopassword", function () {
+    beforeEach(function () {    
             var params = {
                     username: 'rpavez',
                     password: ''
@@ -79,11 +86,12 @@ Ext.syncRequire(["Ext.Ajax",
             authenticationManager.sendAuthRequest(params, function(success) {
                 expect(Teselagen.manager.AuthenticationManager.authResponse).toBeDefined();
             });
-        });
     });
 
-    describe("Get User Profile and Projects", function () {
         it("Get User Profile and Get User Projects", function () {
+            
+            waits(1000);
+
             runs(function () {
                 projectManager.loadUser(function () {
                     expect(projectManager.currentUser).toBeDefined();
@@ -112,13 +120,18 @@ Ext.syncRequire(["Ext.Ajax",
                 
                 project = Ext.create("Teselagen.models.Project", {
                     name: "My Project #"+Math.floor(Math.random()*11),
-                    DateCreated: new Date((new Date).getTime()*Math.random()),
-                    DateModified: new Date((new Date).getTime()*Math.random())
+                    dateCreated: new Date((new Date).getTime()*Math.random()),
+                    dateModified: new Date((new Date).getTime()*Math.random())
                 });
 
                 projectManager.currentUser.projects().add(project);
 
-                project.save();
+                project.save({
+                    callback: function(){
+                        projectcreated = true;
+                        project_id = project.data.id;
+                    }
+                });
                 
             });
 
@@ -137,16 +150,20 @@ Ext.syncRequire(["Ext.Ajax",
             runs(function () {
                 
                 deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-                    name: "My DE Project #"+Math.floor(Math.random()*11)
+                    name: "My DE Project #"+Math.floor(Math.random()*11),
+                    dateCreated: new Date((new Date).getTime()*Math.random()),
+                    dateModified: new Date((new Date).getTime()*Math.random())
                 });
                 
                 var currentProject = projectManager.currentUser.projects().last();
                 currentProject.deprojects().add(deproject);
 
                 deproject.save({
-                    callback: function(){
+                    callback: function(rec){
+                        deproject_id = deproject.data.id;
                         console.log("DE project saved");
                         deprojectsaved = true;
+                        console.log(deproject);
                     }
                 });
 
@@ -172,6 +189,8 @@ Ext.syncRequire(["Ext.Ajax",
                 endBP: 7
             });
             part1a.setSequenceFile(seq1a);
+            parts.push(part1a);
+            sequences.push(seq1a);
 
 
             seq1b = Ext.create("Teselagen.models.SequenceFile", {
@@ -185,6 +204,8 @@ Ext.syncRequire(["Ext.Ajax",
                 endBP: 7
             });
             part1b.setSequenceFile(seq1b);
+            parts.push(part1b);
+            sequences.push(seq1b);
 
             bin1 = Ext.create("Teselagen.models.J5Bin", {
                 binName: "bin1"
@@ -203,6 +224,8 @@ Ext.syncRequire(["Ext.Ajax",
                 endBP: 7
             });
             part2a.setSequenceFile(seq2a);
+            parts.push(part2a);
+            sequences.push(seq2a);
 
             bin2 = Ext.create("Teselagen.models.J5Bin", {
                 binName: "bin2"
@@ -221,14 +244,48 @@ Ext.syncRequire(["Ext.Ajax",
             });
             rule1.setOperand1(part1a);
             design.addToRules(rule1);
+
+            expect(design).toBeDefined();
+            designGenerated = true;
         });
 
-        it("Save DE Design to Server", function () {
+    });
+
+    describe("Saving Design", function () {
+
+        it("Saving Sequences", function () {
+
+            waitsFor(function () { if(designGenerated && deprojectsaved) return true; else return false; }, "", 1750);
+
+            runs(function(){
+                sequences.forEach(function(sequence,key){
+                    sequence.save({callback:function(){ 
+                        parts[key].setSequenceFile(sequences[key]); // Updated Ids
+                        if(key==sequences.length-1) sequencesSaved = true; 
+                    }});
+                });
+            });
+
+        });
+
+        it("Saving Parts", function () {
+
+            waitsFor(function () { if(sequencesSaved) return true; else return false; }, "", 1750);
+
+            runs(function(){
+                parts.forEach(function(part,key){
+                    part.save({callback:function(){ if(key==parts.length-1) partsSaved = true; }});
+                });
+            });
+
+        });
+
+        it("Saving Design", function () {
 
             waitsFor(function () {
-                if(design&&deprojectsaved&&deproject) return true;
+                if(partsSaved) return true;
                 else return false;
-            }, "DE Project creation took too much time", 100);
+            }, "", 100);
 
 
             runs(function () {
@@ -243,19 +300,20 @@ Ext.syncRequire(["Ext.Ajax",
                 }});
             });
         });
+
     });
+
+
+    /*
 
     var projectedited = false;
     describe("Editing Project", function () {
         it("Alter design model", function () {
             
-            waitsFor(function () {
-                if(designsaved) return true; else return false;
-            }, "Saving DE Design Timeout", 9000);
-
             runs(function () {
                 console.log("Editing Project");
                 project.set('name','changed name');
+                project.set('id',project_id);
                 project.save({
                     callback: function(){
                         projectedited = true;
@@ -263,22 +321,28 @@ Ext.syncRequire(["Ext.Ajax",
                 });
             });
             
+            waitsFor(function () {
+                if(projectcreated) return true; else return false;
+            }, "Saving DE Design Timeout", 9000);
+
         });
 
         it("Get Altered Project", function () {
+
+            runs(function () {
+                //console.log(project);
+            });
+
             waitsFor(function () {
                 if(projectedited) return true; else return false;
             }, "Editing Project Timeout", 9000);
 
-
-            runs(function () {
-                console.log(project);
-            });
         });
 
     });
     
     var deprojectedited = false;
+    
     describe("Editing DE Project", function () {
         it("Alter design model", function () {
             
@@ -289,8 +353,9 @@ Ext.syncRequire(["Ext.Ajax",
 
             runs(function () {
                 console.log("Editing DE Project");
-                //console.log(deproject);
                 deproject.set('name','DE Project changed');
+                deproject.set('id',deproject_id);
+                console.log(deproject);
                 deproject.save({
                     callback: function(){
                         deprojectedited = true;
@@ -312,8 +377,10 @@ Ext.syncRequire(["Ext.Ajax",
         });
 
     });
-
-    var designedited = false;
+    
+    var designedited = true;
+    */
+    /*
     describe("Editing DE Design", function () {
         it("Alter design model", function () {
             
@@ -348,6 +415,7 @@ Ext.syncRequire(["Ext.Ajax",
         });
 
     });
+*/
     
     var ajaxCheck = function(ajaxMethod, args, cb) {
         /**
