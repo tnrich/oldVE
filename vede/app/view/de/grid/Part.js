@@ -53,5 +53,9 @@ Ext.define('Vede.view.de.grid.Part', {
 
     deselect: function() {
         this.partCell.down().removeBodyCls("gridPartCell-selected");
+    },
+
+    applyPart: function(pPart) {
+        return pPart;
     }
 });

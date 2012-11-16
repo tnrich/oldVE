@@ -11,25 +11,51 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     activeProject: null,
     columnsGrid: null,
+    inspector: null,
     selectedPart: null,
     tabPanel: null,
 
-    onPartSelected: function(j5Part) {
+    onPartSelected: function(j5Part, binIndex) {
         this.inspector.setActiveTab(0);
 
-        //this.populatePartInformation(j5Part);
+        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+        var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         if(j5Part) {
-            this.tabPanel.getActiveTab().down("form[cls='PartPropertiesForm']").loadRecord(j5Part);
-            this.tabPanel.getActiveTab().down("form[cls='forcedAssemblyStrategyForm']").loadRecord(j5Part);
+            partPropertiesForm.loadRecord(j5Part);
+            fasForm.loadRecord(j5Part);
+
+            this.selectedPart = j5Part;
+        } else {
+            var newPart = this.DeviceDesignManager.createPart(this.activeProject,
+                                                              binIndex);
+
+            partPropertiesForm.loadRecord(newPart);
+            fasForm.loadRecord(newPart);
+
+            this.selectedPart = newPart;
         }
-        this.selectedPart = j5Part;
-        console.log("Part selected");
+
     },
 
     onBinSelected: function(j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
+        var contentField = 
+            this.inspector.down("displayfield[cls='columnContentDisplayField']");
+        var contentArray = [];
 
-        selectionModel.select(j5Bin);
+        this.inspector.setActiveTab(1);
+
+        selectionModel.setCurrentPosition({
+            column: 0,
+            row: this.activeProject.getJ5Collection().bins().indexOf(j5Bin)
+        });
+
+        j5Bin.parts().each(function(part) {
+            contentArray.push(part.get("name"));
+            contentArray.push("<br>");
+        });
+
+        contentField.setValue(contentArray.join(""));
     },
 
     onPartNameFieldChange: function(nameField) {
@@ -75,7 +101,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * new grid and j5 bins.
      */
     onTabChange: function(tabPanel, newTab, oldTab) {
-        if(newTab.model) {
+        if(newTab.model &&
+           newTab.model.$className.indexOf("DeviceEditorProject") > -1) {
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("update", this.onBinsUpdate, this);
