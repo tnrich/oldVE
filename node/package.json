@@ -17,5 +17,6 @@
     , "bson":"latest"
     , "xml2js":"latest"
     , "commander":"1.0.5"
+    , "xmlbuilder":"0.4.2"
   }
 }
