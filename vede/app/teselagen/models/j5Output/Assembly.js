@@ -7,7 +7,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.models.j5Output.Warnings"//,
+        "Teselagen.models.j5Output.Warning"//,
         //"Teselagen.models.j5Output.TargetPart"
     ],
 
@@ -48,7 +48,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
     associations: [
         {
             type: "hasMany",
-            model: "Teselagen.models.j5Output.Warnings",
+            model: "Teselagen.models.j5Output.Warning",
             name: "warnings",
             //getterName: "getWarnings",
             //setterName: "setWarnings",

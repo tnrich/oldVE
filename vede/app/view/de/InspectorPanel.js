@@ -181,12 +181,25 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
+                            /*selModel: Ext.create('Ext.selection.CellModel', {
+                                mode: "SINGLE",
+                                allowDeselect: true
+                            }),*/
+                            plugins: [
+                                Ext.create('Ext.grid.plugin.RowEditing', {
+                                    clicksToEdit: 2
+                                })
+                            ],
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
                                     width: 100,
                                     text: 'Column',
-                                    dataIndex: 'binName'
+                                    dataIndex: 'binName',
+                                    editor: {
+                                        xtype: 'textfield',
+                                        allowBlank: false
+                                    }
                                 },
                                 {
                                     xtype: 'gridcolumn',
@@ -256,11 +269,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             ]
                         },
                         {
-                            xtype: 'textfield',
-                            anchor: '100%',
-                            height: 200,
+                            xtype: 'displayfield',
+                            cls: 'columnContentDisplayField',
                             margin: 10,
-                            width: 269,
                             fieldLabel: 'Column Content',
                             labelAlign: 'top'
                         }

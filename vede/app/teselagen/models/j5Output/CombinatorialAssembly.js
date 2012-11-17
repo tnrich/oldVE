@@ -37,7 +37,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {
         { // or leave this in J5Run
             field: type,
             type: "inclusion",
-            list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
+            list: Teselagen.constants.Constants.NONMOCKTYPE_LIST
         }
 
     ],

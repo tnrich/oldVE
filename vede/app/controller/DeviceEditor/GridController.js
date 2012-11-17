@@ -90,6 +90,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
+        var j5Bin = gridPart.up("Bin").getBin();
+
+        var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                            j5Bin);
 
         if(this.selectedPart) {
             this.selectedPart.deselect();
@@ -98,10 +102,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.selectedPart = gridPart;
         gridPart.select();
 
-        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part);
+        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
+        if(this.selectedPart) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
+        }
+        
+        if(this.selectedBin) {
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
+
+
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid
@@ -110,6 +125,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("update", this.onBinsUpdate, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
+
+                // Unset listeners for the parts store of each bin.
+                this.activeBins.each(function(bin) {
+                    var parts = bin.parts();
+
+                    parts.un("add", this.onAddToParts, this);
+                    parts.un("update", this.onPartsUpdate, this);
+                    parts.un("remove", this.onRemoveFromParts, this);
+                }, this);
             }
 
             this.activeProject = newTab.model.getDesign();
@@ -119,6 +143,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.activeBins.on("update", this.onBinsUpdate, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
+            this.activeBins.each(function(bin) {
+                var parts = bin.parts();
+
+                parts.on("add", this.onAddToParts, this);
+                parts.on("update", this.onPartsUpdate, this);
+                parts.on("remove", this.onRemoveFromParts, this);
+            }, this);
+
+            this.totalRows = this.DeviceDesignManager.findMaxNumParts(
+                                                            this.activeProject);
+
             this.renderDevice();
         }
     },
@@ -126,11 +161,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onAddToBins: function(activeBins, addedBins, index) {
         Ext.each(addedBins, function(j5Bin) {
             this.addJ5Bin(j5Bin);
+
+            // Add event listeners to the parts store of this bin.
+            parts = j5Bin.parts();
+            parts.on("add", this.onAddToParts, this);
+            parts.on("update", this.onPartsUpdate, this);
+            parts.on("remove", this.onRemoveFromParts, this);
         }, this);
     },
 
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
+        console.log("bin '" + updatedBin.get("binName") + "' field " + modified + 
+                    " modified, operation " + operation);
 
+        this.rerenderBin(updatedBin);
     },
 
     onRemoveFromBins: function(activeBins, removedBin, index) {
@@ -141,11 +185,43 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.grid.remove(this.grid.query("Bin")[index]);
     },
 
+    onAddToParts: function(parts, addedParts, index) {
+        console.log("part '" + addedParts[0].get("name") + "' added");
+
+        // For each part added, re-render that part's bin.
+        Ext.each(addedParts, function(addedPart) {
+            var ownerIndex = this.DeviceDesignManager.getBinAssignment(
+                                                this.activeProject, addedPart);
+
+            this.rerenderBin(this.DeviceDesignManager.getBinByIndex(this.activeProject,
+                                                                    ownerIndex));
+        }, this);
+    },
+
+    onPartsUpdate: function(parts, updatedPart, operation, modified) {
+        console.log("part '" + updatedPart.get("name") + "' field " + modified + 
+                    " modified, operation " + operation);
+
+        var binIndex = this.DeviceDesignManager.getBinAssignment(this.activeProject,
+                                                            updatedPart);
+        
+        var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
+                                                              binIndex);
+
+        this.rerenderBin(ownerBin);
+    },
+
+    onRemoveFromParts: function(parts, removedPart, index) {
+    },
+
     onAddRow: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
     },
 
+    /**
+     * Handler for the SELECT_BIN event.
+     */
     onSelectBin: function(j5Bin) {
         var gridBin = this.getGridBinFromJ5Bin(j5Bin);
 
@@ -155,6 +231,53 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.selectedBin = gridBin;
         gridBin.select();
+    },
+
+    /**
+     * Re-renders a grid bin given a j5Bin. Used when a bin or one of its child
+     * parts is changed.
+     */
+    rerenderBin: function(j5Bin) {
+        var gridBin = this.getGridBinFromJ5Bin(j5Bin);
+        var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                            j5Bin);
+
+        var previousSelectedPartId;
+        if(this.selectedPart) {
+            if(this.selectedPart.getPart()) {
+                previousSelectedPartId = this.selectedPart.getPart().get("id");
+            } else if(this.selectedPart) {
+                previousSelectedPartId = null;
+            }
+        }
+
+        // Remove grid bin and re-render it.
+        this.grid.remove(gridBin);
+        var newBin = Ext.create("Vede.view.de.grid.Bin", {
+            bin: j5Bin,
+            totalRows: this.totalRows
+        });
+
+        this.grid.insert(binIndex, newBin);
+
+        // If the bin was previously selected, reselect it.
+        if(this.selectedBin === gridBin) {
+            this.selectedBin = newBin;
+            newBin.select();
+        }
+
+        // If the previously selected part was destroyed on re-rendering (that
+        // is, it was a child of the bin that was destroyed), reselect it.
+        if(this.selectedPart && !this.selectedPart.partCell.down()) {
+            Ext.each(newBin.query("Part"), function(part, index, allParts) {
+                if(part.getPart().get("id") == previousSelectedPartId) {
+                    this.selectedPart = part;
+                    part.select();
+
+                    return false;
+                }
+            }, this);
+        }
     },
 
     addJ5Bin: function(j5Bin) {
@@ -178,9 +301,22 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 targetGridBin = gridBin;
                 return false;
             }
-        }, this);
+        });
 
         return targetGridBin;
+    },
+
+    getGridPartFromJ5Part: function(j5Part) {
+        var targetGridPart = null;
+
+        Ext.each(this.grid.query("Part"), function(gridPart) {
+            if(gridPart.getPart() === j5Part) {
+                targetGridPart = gridPart;
+                return false;
+            }
+        });
+
+        return targetGridPart;
     },
 
     onLaunch: function() {

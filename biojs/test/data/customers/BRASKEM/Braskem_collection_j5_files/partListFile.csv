@@ -1,0 +1,9 @@
+Part Name,Part Source (Sequence Display ID),Reverse Compliment?,Start (bp),End (bp)
+pYES-DEST52_SalI_SacII,pYES-DEST52,FALSE,2113,644
+ADH1_promoter,ADH1_promoter,FALSE,1,672
+TEF1_promoter,TEF1_promoter,FALSE,1,427
+ADH1_terminator,ADH1_terminator,FALSE,1,188
+TEF1_terminator,TEF1_terminator,FALSE,1,199
+ADH3_region,ADH3,FALSE,1,3128
+ADH4_CDS,ADH4,FALSE,1,1149
+ADH3_CDS,ADH3,FALSE,1001,2128

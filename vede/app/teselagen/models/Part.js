@@ -89,15 +89,9 @@ Ext.define("Teselagen.models.Part", {
             associationKey:"sequenceFile",
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFileModel",
-            name: "sequenceFile" // PLEASE DONT DELETE THIS
-        },
-
-        // These belongsTo are not correct since Parts exist by their own so connection is only in onde side
-        // Ex. One part can belong to multiple VEProjects
-        // These class of belongsTo only represent to belong to ONE VEProject
-        // Thats why we don't need these belongs
-
+            setterName: "setSequenceFileModel"
+            , name: "sequenceFile"
+        }/*,
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Bin",
@@ -121,7 +115,7 @@ Ext.define("Teselagen.models.Part", {
             setterName: "setVectorEditorProject",
             associationKey: "vectorEditorProject",
             foreignKey: "veproject_id"
-        }
+        }*/
     ],
 
 
@@ -130,8 +124,7 @@ Ext.define("Teselagen.models.Part", {
      * Generates ID based on date + 3 random digits
      * @returns {String} id
      * @private
-     */
-     /*
+     *
     generateId: function() {
         var extraDigits = Math.floor(Math.random() * 1000).toString();
 
@@ -146,16 +139,15 @@ Ext.define("Teselagen.models.Part", {
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
      * @returns {Boolean} True if set.
-     */
-     /*
+     *
     setId: function() {
         var newId = this.generateId();
         this.set("id", newId);
         return true;
      },
     */
-    /** Copy of isEmpty, except checks PartVO fields that are now in Part
-     * Determines if PartVO is empty.
+    /**
+     * Determines if Part is empty.
      * @returns {Boolean} True if empty, false if not.
      */
     isEmpty: function() {

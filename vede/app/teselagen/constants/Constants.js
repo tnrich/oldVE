@@ -11,9 +11,9 @@ Ext.define("Teselagen.constants.Constants", {
     ENV_PROD: "prod",
     ENV_TEST: "test",
     
-    VERSION:                "2.0.4",
+    VERSION:                "1.0",
     
-    ENTRY_REGISTRY_URL:     "",
+    //ENTRY_REGISTRY_URL:     "",
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
@@ -91,6 +91,11 @@ Ext.define("Teselagen.constants.Constants", {
         // SLIC/Gibson/CPEC/SLiCE
         "SLIC",
         // Golden Gate
+        "GOLDENGATE"
+    ],
+
+    NONMOCKTYPE_LIST: [
+        "SLIC/Gibonson/CPEC/SLiCE",
         "GOLDENGATE"
     ],
 
