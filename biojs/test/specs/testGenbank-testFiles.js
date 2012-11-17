@@ -1,5 +1,5 @@
 /**
- * Genbank: Testing real files
+ * Genbank: Testing real files from customers
  * @author Diana Womg
  */
 
@@ -7,6 +7,7 @@ Ext.require("Ext.Ajax");
 Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.parsers.GenbankManager");
 Ext.onReady(function() {
+    //===================================================================================================
     var LOG = false;
 
     loadGenbankFile = function(url) {
@@ -35,13 +36,37 @@ Ext.onReady(function() {
             JSON.stringify(gb, null, "  "));
     };
 
+    saveFile = function(name, gb) {
+        var flag;
+        var text        = gb.toString();
+        var filename    = name; // + "_parsed.gb"; //name.replace(/.gb$/,"_parsed.gb");
+        var bb          = new BlobBuilder();
+        bb.append(text);
+
+        /*runs(function() {
+            flag = false;
+            gb = null;
+
+            setTimeout(function() {
+                flag = true;
+            }, 10);
+        });*/
+
+        //waitsFor(function() {
+            saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            //return flag;
+        //}, "Completed Reading file", 100);
+    };
+
+    //===================================================================================================
+
     describe("Opening Problematic Genbank Files: ", function() {
 
-        xdescribe("MarkDaris file: ", function() {
+        describe("MarkDaris file: ", function() {
             var text, tmp;
             it("Opens and JSON.stringifies: pTT15d_anti-huCB1_10D10.1_TTR3.gb",function(){
                 var text, tmp;
-                var name = "MarkDaris";
+                var name = "MarkDaris_pTT15d";
                 var url  = "../test/data/customers/MarkDaris/pTT15d_anti-huCB1_10D10.1_TTR3.gb";
                 //var url = "../test/data/MarkDaris/pTT15d_anti-huCB1_10D10.1_TTR3_ApE.gb";
                 //var url = "../test/data/MarkDaris/ape.gb";
@@ -59,17 +84,18 @@ Ext.onReady(function() {
 
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(15);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements()[14].getFeatureQualifier().length).toBe(2);
-                    
+
+                saveFile(name, tmp);
             });
 
         });
 
-        xdescribe("Simon Bredl file: ", function() {
+        describe("Simon Bredl file: ", function() {
             var text, tmp;
             it("Opens and JSON.stringifies: GentR-Casette.gbk",function(){
 
                 var text, tmp;
-                var name = "SimonBredl";
+                var name = "SimonBredl_GentR";
                 var url  = "../test/data/customers/sbredl/GentR-Casette.gbk";
 
                 tmp = loadGenbankFile(url);
@@ -86,12 +112,13 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(1);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(1);
 
+                saveFile(name, tmp);
             });
 
             it("Opens and JSON.stringifies: TN7R.gbk",function(){
 
                 var text, tmp;
-                var name = "SimonBredl";
+                var name = "SimonBredl_TN7R";
                 var url  = "../test/data/customers/sbredl/TN7R.gbk";
 
                 tmp = loadGenbankFile(url);
@@ -108,6 +135,7 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(1);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(1);
 
+                saveFile(name, tmp);
             });
 
         });
@@ -118,7 +146,7 @@ Ext.onReady(function() {
             it("Opens and JSON.stringifies: lacz.gb",function(){
                 var text, tmp;
                 var name = "Lac Z";
-                var url  = "../test/data/genbanklacz.gb";
+                var url  = "../test/data/genbank/lacz.gb";
 
                 tmp = loadGenbankFile(url);
 
@@ -133,7 +161,8 @@ Ext.onReady(function() {
 
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(3);
                 expect(tmp.findKeyword("FEATURES").getFeaturesElements()[2].getFeatureQualifier().length).toBe(9);
-                    
+
+                saveFile(name, tmp);
             });
 
         });
@@ -142,7 +171,7 @@ Ext.onReady(function() {
             var text, tmp;
             it("Opens and JSON.stringifies: largeFile/NC_000913.gb",function(){
                 var text, tmp;
-                var name = "LargeFile";
+                var name = "LargeFile_NC_000913";
                 var url  = "../test/data/customers/largeFile/NC_000913.gb";
 
                 tmp = loadGenbankFile(url);
@@ -159,13 +188,28 @@ Ext.onReady(function() {
                 //console.log(tmp.getKeywords());
                 //console.log(tmp.findKeyword("FEATURES").getFeaturesElements());
 
-                var str = tmp.toString();
-                var fn  = name.replace(/.gb$/,"_parsed.gb");
-                console.log(fn);
+                saveFile(name, tmp);
 
-                var bb = new BlobBuilder();
-                bb.append(str);
-                saveAs(bb.getBlob("text/plain;charset=utf-8"), fn);
+            });
+
+        });
+
+        describe("BRASKEM: ", function() {
+            var text, tmp;
+            it("Opens and JSON.stringifies: BRASKEM/ADH4.g",function(){
+                var text, tmp;
+                var name = "BRASKEM_ADH4";
+                var url  = "../test/data/customers/BRASKEM/ADH4.gb";
+
+                tmp = loadGenbankFile(url);
+
+                if (LOG) {
+                    logGenbank(name, url, tmp);
+                }
+                //expect(tmp.findKeyword("LOCUS").getSequenceLength()).toBe(4639675);
+                //expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(8993);
+                //expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(5);
+                saveFile(name, tmp);
 
             });
 
@@ -191,7 +235,7 @@ Ext.onReady(function() {
 
                 waitsFor(function() {
                     Ext.Ajax.request({
-                        url:'../test/data/sbredl/TN7R.gbk',
+                        url:'../test/data/customers/sbredl/TN7R.gbk',
                         success: function(response) {
                             text = response.responseText;
                             tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(String(text));
@@ -203,16 +247,6 @@ Ext.onReady(function() {
 
 
                 runs(function() {
-                    console.log("ORIGINAL SBREDL FILE: TN7R.gbk\n" +
-                        "==================================================\n" +
-                        text);
-                    // As an example of output, uncomment these two lines
-                    console.log("RECONSTRUCTED SBREDL FILE\n" +
-                        "==================================================\n" +
-                        tmp.toString());
-                    console.log("RECONSTRUCTED SBREDL FILE: TN7R.gbk\n" +
-                        "==================================================\n" +
-                        JSON.stringify(tmp, null, "  "));
                     
                     expect(tmp.getKeywords().length).toBe(3);
                     // Can't verify this because of all the backslashes!!!!
@@ -222,9 +256,9 @@ Ext.onReady(function() {
                     expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(1);
                     expect(tmp.findKeyword("FEATURES").getFeaturesElements()[0].getFeatureQualifier().length).toBe(1);
                 });
-
             });
-
         });
+
+//===================================================================================================
     });
 });
