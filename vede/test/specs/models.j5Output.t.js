@@ -96,9 +96,9 @@ Ext.onReady(function() {
         });
 
         //================================================
-        // Teselagen.models.j5Output.Warnings
+        // Teselagen.models.j5Output.Warning
         //================================================
-        describe("Teselagen.models.j5Output.Warnings.js", function() {
+        describe("Teselagen.models.j5Output.Warning.js", function() {
 
             beforeEach(function() {
                 warn = Ext.create("Teselagen.models.j5Output.Warning");
@@ -116,6 +116,37 @@ Ext.onReady(function() {
 
             it("Associations()", function(){
                 expect(Ext.getClassName(warn.getAssembly())).toBe("Teselagen.models.j5Output.Assembly");
+            });
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+
+
+        //================================================
+        // Teselagen.models.j5Output.Warnings
+        //================================================
+        describe("Teselagen.models.j5Output.TargetPart.js", function() {
+
+            beforeEach(function() {
+                tar = Ext.create("Teselagen.models.j5Output.TargetPart");
+
+                tar2 = Ext.create("Teselagen.models.j5Output.TargetPart", {
+                    //type: "MOCK",
+                    message: "TargetPart: the MasterPlasmidListFile is empty. ..."
+                });
+            });
+
+            it("Creates TargetPart()", function(){
+                console.log(tar);
+                expect(tar.get("direction")).toBe("forward");
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(tar.getAssembly())).toBe("Teselagen.models.j5Output.Assembly");
             });
 
             xit("()", function(){
