@@ -9,7 +9,7 @@ Ext.define("Teselagen.models.J5Run", {
         // will be moved to J5Input
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
-        //"Teselagen.models.J5Input",
+        "Teselagen.models.J5Input",
         "Teselagen.models.J5Results",
         "Teselagen.constants.Constants",
         "Teselagen.manager.SessionManager"

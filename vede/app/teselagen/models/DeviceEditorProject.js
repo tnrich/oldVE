@@ -28,7 +28,16 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         name: "name",
         type: "String",
         defaultValue: ""
-    }],
+    },
+    {
+        name: "dateCreated",
+        type: "date"
+    },
+    {
+        name: "dateModified",
+        type: "date"
+    }
+    ],
     /*
     validations: [
         {field: "id", type: "presence"},

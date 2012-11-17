@@ -33,7 +33,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
     renderJ5ResultsSection: function(deprojects){
         deprojects.each(function(deproject){
-            var designNode = Ext.getCmp('projectAnalysisPanel').getRootNode().appendChild({
+            var designNode = Ext.getCmp('j5ResultsPanel').getRootNode().appendChild({
                 text: deproject.data.name,
                 leaf: false,
                 expanded: true

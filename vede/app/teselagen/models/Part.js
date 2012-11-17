@@ -13,11 +13,17 @@ Ext.define("Teselagen.models.Part", {
     ],
 
     proxy: {
-        type: "ajax",
+        type: "rest",
         url: "/vede/test/data/json/getParts.json",
         reader: {
             type: "json",
-            root: "data"
+            root: "parts"
+        },
+        writer: {
+            type: "json"
+        },
+        buildUrl: function() {
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
         }
     },
 
@@ -82,6 +88,15 @@ Ext.define("Teselagen.models.Part", {
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
             setterName: "setSequenceFileModel"
+            , name: "sequenceFile"
+        }/*,
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Bin",
+            getterName: "getJ5Bin",
+            setterName: "setJ5Bin",
+            associationKey: "j5Bin",
+            foreignKey: "j5bin_id"
         },
         {
             type: "belongsTo",
@@ -101,14 +116,16 @@ Ext.define("Teselagen.models.Part", {
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
             foreignKey: "veproject_id"
-        }
+        }*/
     ],
 
+
+    // IDS ARE GENERATED ON SERVER SIDE
     /**
      * Generates ID based on date + 3 random digits
      * @returns {String} id
      * @private
-     */
+     *
     generateId: function() {
         var extraDigits = Math.floor(Math.random() * 1000).toString();
 
@@ -118,19 +135,20 @@ Ext.define("Teselagen.models.Part", {
         var id = (Date.now()) + extraDigits;
         return id;
     },
+    */
 
     /**
      * Sets a new id for this part, different than what was generated at object initiation.
      * @returns {Boolean} True if set.
-     */
+     *
     setId: function() {
         var newId = this.generateId();
         this.set("id", newId);
         return true;
      },
-
-    /** Copy of isEmpty, except checks PartVO fields that are now in Part
-     * Determines if PartVO is empty.
+    */
+    /**
+     * Determines if Part is empty.
      * @returns {Boolean} True if empty, false if not.
      */
     isEmpty: function() {

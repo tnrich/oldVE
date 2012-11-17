@@ -1,0 +1,13 @@
+LOCUS       TEF1_terminator          199 bp ds-DNA     linear       28-JUN-2012
+ACCESSION   TEF1_terminator
+VERSION     TEF1_terminator
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     terminator      1..199
+                     /label="TEF1_terminator"
+ORIGIN      
+        1 ggagattgat aagacttttc tagttgcata tcttttatat ttaaatctta tctattagtt
+       61 aattttttgt aatttatcct tatatatagt ctggttattc taaaatatca tttcagtatc
+      121 taaaaattcc cctctttttt cagttatatc ttaacaggcg acagtccaaa tgttgattta
+      181 tcccagtccg attcatcag    
+//

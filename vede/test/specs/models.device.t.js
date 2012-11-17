@@ -464,7 +464,7 @@ Ext.onReady(function() {
                 // Checking Associations
                 // FILL IN TESTS FOR SEQUENCE FILE HERE!!!!
                 expect(Ext.getClassName(part.getSequenceFile())).toBe("Teselagen.models.SequenceFile");
-                expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
+                //expect(Ext.getClassName(part.getJ5Bin())).toBe("Teselagen.models.J5Bin");
             });
 
             it("Creates Part, setSequenceFile()", function(){
@@ -1357,6 +1357,7 @@ Ext.onReady(function() {
                 expect(Ext.getClassName(run.getJ5Parameters())).toBe("Teselagen.models.J5Parameters");
                 expect(Ext.getClassName(run.getDownstreamAutomationParameters())).toBe("Teselagen.models.DownstreamAutomationParameters");
                 expect(Ext.getClassName(run.getJ5Results())).toBe("Teselagen.models.J5Results");
+                expect(Ext.getClassName(run.getJ5Input())).toBe("Teselagen.models.J5Input");
 
                 expect(Ext.getClassName(run.getDeviceEditorProject())).toBe("Teselagen.models.DeviceEditorProject");
             });

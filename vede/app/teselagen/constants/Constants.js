@@ -11,26 +11,32 @@ Ext.define("Teselagen.constants.Constants", {
     ENV_PROD: "prod",
     ENV_TEST: "test",
     
-    VERSION:                "2.0.4",
+    VERSION:                "1.0",
     
-    ENTRY_REGISTRY_URL:     "",
+//    ENTRY_REGISTRY_URL:     "",
     API_URL:     "http://teselagen.local/api/",
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+    // AssembledSequenceFile.js:
 
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ"
-        //"SBOLXML"
+        "JBEISEQ",
+        "SBOLXML"
     ],
     
-    GENBANK:               "GENBANK",
-    FASTA:                 "FASTA",
-    JBEISEQ:               "JBEISEQ",
+    GENBANK:                "GENBANK",
+    FASTA:                  "FASTA",
+    JBEISEQ:                "JBEISEQ",
     //SBOLXML:               "SBOLXML",
     INIT:                   "INIT",
+
+    GENBANK_SUFFIX:         ".gb",
+    FASTA_SUFFIX:           ".fas",
+    JEBISEQ_SUFFIX:         ".xml",
+    SBOL_SUFFIX:            ".sbol", //?
 
     //================================================================
     // EugeneRule.js: compositionalOperator
@@ -86,6 +92,11 @@ Ext.define("Teselagen.constants.Constants", {
         // SLIC/Gibson/CPEC/SLiCE
         "SLIC",
         // Golden Gate
+        "GOLDENGATE"
+    ],
+
+    NONMOCKTYPE_LIST: [
+        "SLIC/Gibonson/CPEC/SLiCE",
         "GOLDENGATE"
     ],
 
