@@ -1,4 +1,4 @@
-/**
+ /**
  * API - VEDE EXT Platform
  * -----------------------
  */
@@ -323,10 +323,14 @@ module.exports = function (app) {
       deproject.design = model;
       deproject.design.j5collection.bins.forEach(function(bin,binKey){
         bin.parts.forEach(function(part,partKey){
-          var partId = deproject.design.j5collection.bins[binKey].parts[partKey].toString();
-          delete deproject.design.j5collection.bins[binKey].parts[partKey];
-          console.log(partId);
-          deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          if(partId)
+          {
+            partId = partId.toString();
+            delete deproject.design.j5collection.bins[binKey].parts[partKey];
+            console.log(partId);
+            deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          }
         });
       });
       deproject.save(function(err){
@@ -496,6 +500,22 @@ module.exports = function (app) {
     });
   });
 
+  //PUT
+  app.put('/user/projects/deprojects/parts', function (req, res) {
+
+    var Part = app.db.model("part");
+    Part.findById(req.body.id,function(err,Part){
+      for(var prop in req.body) {
+        Part[prop] = req.body[prop];
+      }
+
+      Part.save(function(){
+        res.json({'parts':Part})
+      });
+    });
+  });
+
+  //GET
   app.all('/getExampleModel', restrict, function (req, res) {
     var ExamplesModel = app.db.model("Examples");
     ExamplesModel.findById(req.body._id, function (err, example) {

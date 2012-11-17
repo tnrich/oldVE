@@ -33,6 +33,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 record.getJ5Collection().bins().each(function(bin,binKey){
                     var partsTempArray = [];
                     bin.parts().each(function(part){
+                        part.save();
                         partsTempArray.push(part.getData().id)
                     });
                     binsTempArray.push(partsTempArray);
