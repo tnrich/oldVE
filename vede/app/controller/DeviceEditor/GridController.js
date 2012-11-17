@@ -106,6 +106,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
+        if(this.selectedPart) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
+        }
+        
+        if(this.selectedBin) {
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
+
+
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid

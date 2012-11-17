@@ -181,9 +181,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
-                            selType: 'cellmodel',
+                            /*selModel: Ext.create('Ext.selection.CellModel', {
+                                mode: "SINGLE",
+                                allowDeselect: true
+                            }),*/
                             plugins: [
-                                Ext.create('Ext.grid.plugin.CellEditing', {
+                                Ext.create('Ext.grid.plugin.RowEditing', {
                                     clicksToEdit: 2
                                 })
                             ],
