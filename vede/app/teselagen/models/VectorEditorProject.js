@@ -24,7 +24,8 @@ Ext.define("Teselagen.models.VectorEditorProject", {
         model: "Teselagen.models.SequenceFile",
         getterName: "getSequenceFile",
         setterName: "setSequenceFile",
-//        associationKey: "sequenceFile",
+        associationKey: "sequenceFile",
+//        foreignKey: "id"
         foreignKey: "sequencefile_id"
     },
     {
