@@ -195,61 +195,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
-    populatePartInformation: function(j5Part) {
-        var sourceField = this.inspector.down("component[cls='partSourceField']");
-        var revCompField = this.inspector.down("component[cls='reverseComplementField']");
-        var nameField = this.inspector.down("textfield[cls='partNameField']");
-        var startField = this.inspector.down("displayfield[cls='startBPField']");
-        var stopField = this.inspector.down("displayfield[cls='stopBPField']");
-        var strategyField = this.inspector.down("combobox[cls='forcedAssemblyComboBox']");
-
-        if(j5Part) {
-            nameField.setValue(j5Part.get("name"));
-
-            var existSequence = (j5Part.get('sequencefile_id')=="")? false : true;
-            if(existSequence)
-            {
-                var sourceFile = j5Part.getSequenceFile({
-                    callback: function(record,operation){
-                        sourceField.setValue(sourceFile.get("partSource"));
-                        revCompField.setValue(j5Part.get("revComp"));                        
-                    }
-                });
-            } else {
-                sourceField.setValue("No source assigned");
-                revCompField.setValue("No source assigned");
-            }
-
-            var startBP = j5Part.get("genbankStartBP");
-            if(startBP < 1) {
-                startField.setValue("");
-            } else {
-                startField.setValue(startBP);
-            }
-
-            var endBP = j5Part.get("endBP");
-            if(endBP < 1) {
-                stopField.setValue("");
-            } else {
-                stopField.setValue(endBP);
-            }
-
-            var strategy = j5Part.get("fas");
-            if(strategy) {
-                strategyField.setValue(strategy);
-            } else {
-                strategyField.setValue("None");
-            }
-        } else {
-            nameField.setValue("");
-            sourceField.setValue("");
-            revCompField.setValue("");
-            startField.setValue("");
-            stopField.setValue("");
-            strategyField.setValue("None");
-        }
-    },
-
     onLaunch: function() {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.tabPanel.on("tabchange",
