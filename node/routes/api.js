@@ -496,6 +496,24 @@ module.exports = function (app) {
     });
   });
 
+  //PUT
+  app.put('/user/projects/deprojects/parts', function (req, res) {
+
+    var Part = app.db.model("part");
+
+    Part.findById(req.body.id,function(err,part){
+    for(var prop in req.body) {
+      part[prop] = req.body[prop];
+    }
+
+    part.save(function(){
+      res.json({'parts':part})
+    });
+
+    });
+
+  });
+
   app.all('/getExampleModel', restrict, function (req, res) {
     var ExamplesModel = app.db.model("Examples");
     ExamplesModel.findById(req.body._id, function (err, example) {

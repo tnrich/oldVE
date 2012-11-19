@@ -23,6 +23,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     totalRows: 1,
 
+    tempCounter: 0,
+
     /**
      * Renders a given DeviceDesign.
      * @param {Teselagen.models.DeviceDesign} The design to render.
@@ -285,10 +287,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     addJ5Bin: function(j5Bin) {
+
+        var iconSource;
+        if(this.tempCounter==0) iconSource = "resources/images/icons/device/small/origin_of_replication.png";
+        if(this.tempCounter==1) iconSource = "resources/images/icons/device/small/cds.png";
+        if(this.tempCounter==2) iconSource = "resources/images/icons/device/small/cds.png";
+        if(this.tempCounter==3) iconSource = "resources/images/icons/device/small/cds.png";
+        if(this.tempCounter==4) iconSource = "resources/images/icons/device/small/protein_stability_element.png";
+        if(this.tempCounter==5) iconSource = "resources/images/icons/device/small/protein_stability_element.png";
+
         this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
-            totalRows: this.totalRows
+            totalRows: this.totalRows,
+            iconSource: iconSource
         }));
+        this.tempCounter++;
     },
 
     updateBinsWithTotalRows: function() {
@@ -333,7 +346,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Create a sample bin and associated parts to render.
         this.totalRows = 2;
         var binModel = Ext.create("Teselagen.models.J5Bin", {
-            binName: "promoter",
+            binName: "cds",
             iconID: ""
         });
 
