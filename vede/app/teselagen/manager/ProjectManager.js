@@ -174,16 +174,16 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	            var binsArray = [];
 	            var parts = [];
 
-	            for(var binIndex = 0;binIndex<6;binIndex++)
+	            for(var binIndex = 0;binIndex<1;binIndex++)
 	            {
 	                var newBin = Ext.create("Teselagen.models.J5Bin", {
-	                    binName: "bin"+binIndex
+	                    binName: "bin"+binIndex+1
 	                });
 	                var tempParts = [];
-	                for(var i=0;i<6;i++)
+	                for(var i=0;i<2;i++)
 	                {
 	                    var newPart = Ext.create("Teselagen.models.Part", {
-	                        name: "part"+i,
+	                        name: "",
 	                        genbankStartBP: 1,
 	                        endBP: 7
 	                    });
@@ -208,6 +208,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				        		callback: function(){
 				        			//console.log("DESIGN SAVED");
 				        			self.loadDesignAndChildResources();
+									self.openDesign(deproject);
 				            	}});
 				    }});
 	        	};

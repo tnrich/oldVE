@@ -298,8 +298,8 @@ module.exports = function (app) {
 
       deproject.design.j5collection.bins.forEach(function(bin,binKey){
         bin.parts.forEach(function(part,partKey){
-          var partId = deproject.design.j5collection.bins[binKey].parts[partKey].toString();
-          deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          if(partId) deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
         });
       });
     
