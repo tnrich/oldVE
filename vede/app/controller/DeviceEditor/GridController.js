@@ -23,6 +23,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     totalRows: 1,
 
+    tempCounter: 0,
+
     /**
      * Renders a given DeviceDesign.
      * @param {Teselagen.models.DeviceDesign} The design to render.
@@ -76,7 +78,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin.deselect();
         }
 
-        if(this.selectedPart) {
+        if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
             this.selectedPart = null;
         }
@@ -95,7 +97,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
                                                             j5Bin);
 
-        if(this.selectedPart) {
+        if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
         }
 
@@ -106,7 +108,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onTabChange: function(tabPanel, newTab, oldTab) {
-        if(this.selectedPart) {
+        if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
             this.selectedPart = null;
         }
@@ -202,13 +204,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         console.log("part '" + updatedPart.get("name") + "' field " + modified + 
                     " modified, operation " + operation);
 
-        var binIndex = this.DeviceDesignManager.getBinAssignment(this.activeProject,
-                                                            updatedPart);
-        
-        var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
-                                                              binIndex);
-
-        this.rerenderBin(ownerBin);
+        this.rerenderPart(updatedPart);
     },
 
     onRemoveFromParts: function(parts, removedPart, index) {
@@ -242,15 +238,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
                                                             j5Bin);
 
-        var previousSelectedPartId;
-        if(this.selectedPart) {
-            if(this.selectedPart.getPart()) {
-                previousSelectedPartId = this.selectedPart.getPart().get("id");
-            } else if(this.selectedPart) {
-                previousSelectedPartId = null;
-            }
-        }
-
         // Remove grid bin and re-render it.
         this.grid.remove(gridBin);
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
@@ -265,26 +252,56 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin = newBin;
             newBin.select();
         }
+    },
 
-        // If the previously selected part was destroyed on re-rendering (that
-        // is, it was a child of the bin that was destroyed), reselect it.
-        if(this.selectedPart && !this.selectedPart.partCell.down()) {
-            Ext.each(newBin.query("Part"), function(part, index, allParts) {
-                if(part.getPart().get("id") == previousSelectedPartId) {
-                    this.selectedPart = part;
-                    part.select();
+    /**
+     * Re-renders a part in the grid by deleting it and re-adding it. Used when
+     * a part is updated.
+     */
+    rerenderPart: function(j5Part) {
+        var binIndex = this.DeviceDesignManager.getBinAssignment(
+                            this.activeProject, j5Part);
+        var parentBin = this.DeviceDesignManager.getBinByIndex(
+                            this.activeProject, binIndex);
+        var parentGridBin = this.getGridBinFromJ5Bin(parentBin);
 
-                    return false;
-                }
-            }, this);
+        var gridPart = this.getGridPartFromJ5Part(j5Part);
+        var partIndex = parentBin.parts().indexOf(j5Part);
+
+        if(this.selectedPart && this.selectedPart.down()) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
         }
+
+        // Remove part from grid and re-add it.
+        parentGridBin.remove(gridPart);
+        var newPart = Ext.create("Vede.view.de.grid.Part", {
+            part: j5Part
+        });
+
+        // Insert the part at partIndex + 1, because the bin header is at index 0.
+        parentGridBin.insert(partIndex + 1, newPart);
+        
+        this.selectedPart = newPart;
+        newPart.select();
     },
 
     addJ5Bin: function(j5Bin) {
+
+        var iconSource;
+        if(this.tempCounter==0) iconSource = "resources/images/icons/device/small/origin_of_replication.png";
+        if(this.tempCounter==1) iconSource = "resources/images/icons/device/small/cds.png";
+        if(this.tempCounter==2) iconSource = "resources/images/icons/device/small/cds.png";
+        if(this.tempCounter==3) iconSource = "resources/images/icons/device/small/cds.png";
+        if(this.tempCounter==4) iconSource = "resources/images/icons/device/small/protein_stability_element.png";
+        if(this.tempCounter==5) iconSource = "resources/images/icons/device/small/protein_stability_element.png";
+
         this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
-            totalRows: this.totalRows
+            totalRows: this.totalRows,
+            iconSource: iconSource
         }));
+        this.tempCounter++;
     },
 
     updateBinsWithTotalRows: function() {
@@ -329,7 +346,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Create a sample bin and associated parts to render.
         this.totalRows = 2;
         var binModel = Ext.create("Teselagen.models.J5Bin", {
-            binName: "promoter",
+            binName: "cds",
             iconID: ""
         });
 

@@ -504,13 +504,13 @@ module.exports = function (app) {
   app.put('/user/projects/deprojects/parts', function (req, res) {
 
     var Part = app.db.model("part");
-    Part.findById(req.body.id,function(err,Part){
+    Part.findById(req.body.id,function(err,part){
       for(var prop in req.body) {
-        Part[prop] = req.body[prop];
+        part[prop] = req.body[prop];
       }
 
-      Part.save(function(){
-        res.json({'parts':Part})
+      part.save(function(){
+        res.json({'parts':part})
       });
     });
   });
