@@ -9,6 +9,24 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     onDeviceEditorSaveBtnClick: function(){
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         activeTab.el.mask('Loading');
+        
+        var design = activeTab.model.getDesign();
+
+        var countParts = 36;
+
+        design.getJ5Collection().bins().each(function(bin,binKey){
+            bin.parts().each(function(part,partIndex){
+                part.save({
+                    callback:function(part){
+                        if(partCounter==1) activeTab.el.unmask();
+                        partCounter--;
+                    }
+                });
+            });
+        });
+
+        
+        /*
         activeTab.model.getDesign().save({ 
             callback: function(record, operation)
             {
@@ -16,6 +34,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     activeTab.el.unmask();
             }
         });
+        */
     },
 
     init: function () {
