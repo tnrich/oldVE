@@ -126,6 +126,32 @@ Ext.onReady(function() {
         });
 
         //================================================
+        // Teselagen.models.j5Output.TargetPart
+        //================================================
+        describe("Teselagen.models.j5Output.TargetPart.js", function() {
+
+            beforeEach(function() {
+                tar = Ext.create("Teselagen.models.j5Output.TargetPart");
+            });
+
+            it("Creates TargetPart()", function(){
+                console.log(warn2);
+                expect(warn2.get("message")).toBe("Warning: the MasterPlasmidListFile is empty. ...");
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(warn.getAssembly())).toBe("Teselagen.models.j5Output.Assembly");
+            });
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+
+
+        //================================================
         // Teselagen.models.j5Output.NonMockAssembly
         //================================================
         describe("Teselagen.models.j5Output.NonMockAssembly.js", function() {
