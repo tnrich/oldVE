@@ -56,11 +56,21 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
             foreignKey: "warnings_id"
         },/*
         {
-            type: "hasOne",
+            type: "hasMany",
             model: "Teselagen.models.j5Output.TargetPart",
-            getterName: "getTargetPart",
-            setterName: "setTargetPart",
-            assocationKey: "targetPart",
+            name: "targetParts"
+            //getterName: "getTargetPart",
+            //setterName: "setTargetPart",
+            //assocationKey: "targetPart",
+            foreignKey: "targetPart_id"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.FinalAssembledVector",
+            name: "final"
+            //getterName: "getTargetPart",
+            //setterName: "setTargetPart",
+            //assocationKey: "targetPart",
             foreignKey: "targetPart_id"
         },*/
         {

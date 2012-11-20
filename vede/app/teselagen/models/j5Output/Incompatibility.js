@@ -30,14 +30,6 @@ Ext.define("Teselagen.models.j5Output.Incompatibility", {
     ],
 
     validations: [
-        {
-            field: "forward",
-            type: "inclusion",
-            list: [
-                "forward",
-                "reverse"
-            ]
-        }
     ],
 
     associations: [

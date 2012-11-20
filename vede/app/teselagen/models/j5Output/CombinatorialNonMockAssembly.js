@@ -46,22 +46,44 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
     ],
 
     associations: [
-        /*{
-            type: "hasOne",
-            model: "Teselagen.models.OligoSynthesis",
-            getterName: "getOligoSynthesis",
-            setterName: "setOligoSynthesis",
-            assocationKey: "oligoSynthesis",
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Synthesis",
+            name: "directSynthesis",
+            //getterName: "getDirectSynthesis",
+            //setterName: "setDirectynthesis",
+            //assocationKey: "directSynthesis",
+            foreignKey: "directSynthesis_id"
+        },
+
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Synthesis",
+            name: "oligoSynthesis",
+            //getterName: "getOligoSynthesis",
+            //setterName: "setOligoSynthesis",
+            //assocationKey: "oligoSynthesis",
             foreignKey: "oligoSynthesis_id"
         },
+
         {
-            type: "hasOne",
-            model: "Teselagen.models.PCRReactions",
-            getterName: "getPCRReactions",
-            setterName: "setPCRReactions",
-            assocationKey: "pcrReactions",
-            foreignKey: "pcrReactions_id"
-        },*/
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Synthesis",
+            name: "annealedOligoSynthesis",
+            //getterName: "getAnnealedOligoSynthesis",
+            //setterName: "setAnnealedOligoSynthesis",
+            //assocationKey: "annealedOligoSynthesis",
+            foreignKey: "annealedOligoSynthesis_id"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.PCRReaction",
+            name: "pcrReaction",
+            //getterName: "getPCRReaction",
+            //setterName: "setPCRReaction",
+            //assocationKey: "pcrReaction",
+            foreignKey: "pcrReaction_id"
+        },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Results",

@@ -1354,14 +1354,15 @@ Ext.onReady(function() {
 
                 //console.log(run);
 
-                expect(Ext.getClassName(run.getJ5Parameters())).toBe("Teselagen.models.J5Parameters");
-                expect(Ext.getClassName(run.getDownstreamAutomationParameters())).toBe("Teselagen.models.DownstreamAutomationParameters");
+                //expect(Ext.getClassName(run.getJ5Parameters())).toBe("Teselagen.models.J5Parameters");
+                //expect(Ext.getClassName(run.getDownstreamAutomationParameters())).toBe("Teselagen.models.DownstreamAutomationParameters");
                 expect(Ext.getClassName(run.getJ5Results())).toBe("Teselagen.models.J5Results");
                 expect(Ext.getClassName(run.getJ5Input())).toBe("Teselagen.models.J5Input");
 
                 expect(Ext.getClassName(run.getDeviceEditorProject())).toBe("Teselagen.models.DeviceEditorProject");
             });
-            it("Create J5Run, Check Parameter files.", function(){
+            
+            xit("Create J5Run, Check Parameter files.", function(){
                 var run = Ext.create("Teselagen.models.J5Run");
 
                 var j5p = Ext.create("Teselagen.models.J5Parameters");
@@ -1377,6 +1378,39 @@ Ext.onReady(function() {
         });
 
         //================================================
+        // Teselagen.models.J5Input
+        //================================================
+        describe("Teselagen.models.J5Input.js", function() {
+
+            it("Create J5Results", function(){
+                var input = Ext.create("Teselagen.models.J5Input");
+
+                expect(input).not.toBe(null);
+
+                //console.log(results);
+                expect(Ext.getClassName(input.getJ5Run())).toBe("Teselagen.models.J5Run");
+
+                expect(Ext.getClassName(input.getJ5Parameters())).toBe("Teselagen.models.J5Parameters");
+                expect(Ext.getClassName(input.getDownstreamAutomationParameters())).toBe("Teselagen.models.DownstreamAutomationParameters");
+            });
+
+
+            it("Create J5Run, Check Parameter files.", function(){
+                var input = Ext.create("Teselagen.models.J5Input");
+
+                var j5p = Ext.create("Teselagen.models.J5Parameters");
+                var dsa = Ext.create("Teselagen.models.DownstreamAutomationParameters");
+
+                input.setJ5Parameters(j5p);
+                input.setDownstreamAutomationParameters(dsa);
+
+                // input should have default j5 and downstream parameters
+                expect(input.getJ5Parameters().get("masterOligoNumberOfDigitsValue")).toBe(j5p.self.MONOD_Default);
+                expect(input.getDownstreamAutomationParameters().get("maxDeltaTemperatureAdjacentZonesValue")).toBe(dsa.self.MDTAZ_DEFAULT);
+            });
+        });
+
+        //================================================
         // Teselagen.models.J5Results
         //================================================
         describe("Teselagen.models.J5Results.js", function() {
@@ -1388,6 +1422,8 @@ Ext.onReady(function() {
 
                 //console.log(results);
                 expect(Ext.getClassName(results.getJ5Run())).toBe("Teselagen.models.J5Run");
+                expect(Ext.getClassName(results.assemblies())).toBe("Ext.data.Store");//"Teselagen.models.j5Output.AssembledSequenceFile");
+                expect(Ext.getClassName(results.getCombinatorialAssembly())).toBe("Teselagen.models.j5Output.CombinatorialAssembly");
             });
         });
 

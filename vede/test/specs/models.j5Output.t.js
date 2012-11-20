@@ -127,21 +127,16 @@ Ext.onReady(function() {
 
 
         //================================================
-        // Teselagen.models.j5Output.Warnings
+        // Teselagen.models.j5Output.TargetPart
         //================================================
         describe("Teselagen.models.j5Output.TargetPart.js", function() {
 
             beforeEach(function() {
                 tar = Ext.create("Teselagen.models.j5Output.TargetPart");
-
-                tar2 = Ext.create("Teselagen.models.j5Output.TargetPart", {
-                    //type: "MOCK",
-                    message: "TargetPart: the MasterPlasmidListFile is empty. ..."
-                });
             });
 
             it("Creates TargetPart()", function(){
-                console.log(tar);
+                //console.log(tar);
                 expect(tar.get("direction")).toBe("forward");
             });
 
@@ -156,22 +151,62 @@ Ext.onReady(function() {
             });
         });
 
+
         //================================================
-        // Teselagen.models.j5Output.TargetPart
+        // Teselagen.models.j5Output.NonMockAssembly
         //================================================
-        describe("Teselagen.models.j5Output.TargetPart.js", function() {
+        describe("Teselagen.models.j5Output.NonMockAssembly.js: inherits from Assembly", function() {
 
             beforeEach(function() {
-                tar = Ext.create("Teselagen.models.j5Output.TargetPart");
+                nonMock = Ext.create("Teselagen.models.j5Output.NonMockAssembly", {
+                    type: "GOLDENGATE"
+                });
+
+                //tmp = Ext.create("Teselagen.models.j5Output.Incompatibility");
+
+                //nonMock.comp().add(tmp);
+
+                //nonMock2 = Ext.create("Teselagen.models.j5Output.NonMockAssembly", {
+                //});
             });
 
-            it("Creates TargetPart()", function(){
-                console.log(warn2);
-                expect(warn2.get("message")).toBe("Warning: the MasterPlasmidListFile is empty. ...");
+            it("Create NonMockAssembly()", function(){
+                console.log(nonMock);
+                expect(Ext.getClassName(nonMock)).toBe("Teselagen.models.j5Output.NonMockAssembly");
+                expect(nonMock.validate().length).toBe(0);
+                expect(nonMock.get("type")).toBe("GOLDENGATE");
+                //expect(nonMock.get("").toBe("");
             });
 
             it("Associations()", function(){
-                expect(Ext.getClassName(warn.getAssembly())).toBe("Teselagen.models.j5Output.Assembly");
+                expect(Ext.getClassName(nonMock.getAssembledSequenceFile())).toBe("Teselagen.models.j5Output.AssembledSequenceFile");
+                expect(Ext.getClassName(nonMock.comp())).toBe("Ext.data.Store");//"Teselagen.models.j5Output.Incompatibility");
+            });
+
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+        
+        //================================================
+        // Teselagen.models.j5Output.Incompatibility
+        //================================================
+        describe("Teselagen.models.j5Output.Incompatibility.js", function() {
+
+            beforeEach(function() {
+                tmp = Ext.create("Teselagen.models.j5Output.Incompatibility");
+            });
+
+            it("Creates Incompatibility()", function(){
+
+                expect(tmp.get("assemblyPiece")).toBe(0);
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(tmp.getNonMockAssembly())).toBe("Teselagen.models.j5Output.NonMockAssembly");
             });
 
             xit("()", function(){
@@ -181,25 +216,122 @@ Ext.onReady(function() {
             });
         });
 
-
         //================================================
-        // Teselagen.models.j5Output.NonMockAssembly
+        // Teselagen.models.j5Output.SuggestedAssembly
         //================================================
-        describe("Teselagen.models.j5Output.NonMockAssembly.js", function() {
+        describe("Teselagen.models.j5Output.SuggestedAssembly.js", function() {
 
             beforeEach(function() {
-                nonMock = Ext.create("Teselagen.models.j5Output.NonMockAssembly");
-
-                //nonMock2 = Ext.create("Teselagen.models.j5Output.NonMockAssembly", {
-                //});
+                tmp = Ext.create("Teselagen.models.j5Output.SuggestedAssembly");
             });
 
-            it("Create NonMockAssembly()", function(){
-                console.log(nonMock);
-                //expect(nonMock.validate().length).toBe(0);
+            it("Creates SuggestedAssembly()", function(){
             });
 
-            xit("Associations()", function(){
+            it("Associations()", function(){
+                expect(Ext.getClassName(tmp.getNonMockAssembly())).toBe("Teselagen.models.j5Output.NonMockAssembly");
+            });
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+
+        //================================================
+        // Teselagen.models.j5Output.Synthesis
+        //================================================
+        describe("Teselagen.models.j5Output.Synthesis.js", function() {
+
+            beforeEach(function() {
+                tmp = Ext.create("Teselagen.models.j5Output.Synthesis");
+            });
+
+            it("Creates Synthesis()", function(){
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(tmp.getNonMockAssembly())).toBe("Teselagen.models.j5Output.NonMockAssembly");
+            });
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+
+        //================================================
+        // Teselagen.models.j5Output.PCRReactions
+        //================================================
+        describe("Teselagen.models.j5Output.PCRReactions.js", function() {
+
+            beforeEach(function() {
+                tmp = Ext.create("Teselagen.models.j5Output.PCRReaction");
+            });
+
+            it("Creates PCRReactions()", function(){
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(tmp.getNonMockAssembly())).toBe("Teselagen.models.j5Output.NonMockAssembly");
+            });
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+
+        //================================================
+        // Teselagen.models.j5Output.CombinatorialAssembly
+        //================================================
+        describe("Teselagen.models.j5Output.CombinatorialAssembly.js", function() {
+
+            beforeEach(function() {
+                tmp = Ext.create("Teselagen.models.j5Output.CombinatorialAssembly", {
+                    type: "MOCK"
+                });
+            });
+
+            it("Creates Assembly()", function(){
+                console.log(tmp);
+                expect(tmp.get("type")).toBe("MOCK");
+                //expect(tmp.validate().length).toBe(0);
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(tmp.getJ5Results())).toBe("Teselagen.models.J5Results");
+            });
+
+            xit("()", function(){
+            });
+
+            xit("()", function(){
+            });
+        });
+
+        //================================================
+        // Teselagen.models.j5Output.CombinatorialNonMockAssembly
+        //================================================
+        describe("Teselagen.models.j5Output.CombinatorialNonMockAssembly.js", function() {
+
+            beforeEach(function() {
+                tmp = Ext.create("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
+                    type: "GOLDENGATE"
+                });
+            });
+
+            it("Creates Assembly()", function(){
+                console.log(tmp);
+                expect(tmp.get("type")).toBe("GOLDENGATE");
+                //expect(tmp.validate().length).toBe(0);
+            });
+
+            it("Associations()", function(){
+                expect(Ext.getClassName(tmp.getJ5Results())).toBe("Teselagen.models.J5Results");
             });
 
             xit("()", function(){
