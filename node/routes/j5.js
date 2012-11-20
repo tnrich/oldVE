@@ -283,7 +283,7 @@ app.post('/getProtocol',restrict,function(req,res){
   res.json(protocol);
 });
 
-var direct = true;
+var direct = false;
 var j5Method1,j5Method2;
 var j5Method1 = direct ? '/executej5t' : '/executej5';
 var j5Method2 = !direct ? '/executej5t' : '/executej5';

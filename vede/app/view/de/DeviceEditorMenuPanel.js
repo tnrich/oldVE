@@ -4,7 +4,6 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
 
     dock: 'top',
     hidden: false,
-    //id: 'DeviceEditorMenuPanel',
     cls: 'DeviceEditorMenuPanel',
     width: 150,
     layout: {
@@ -13,9 +12,9 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
-        //id: 'DeviceEditorMenuBar',
         items: [{
             xtype: 'button',
+            id: 'newDesign',
             text: 'New'
         }, {
             xtype: 'button',

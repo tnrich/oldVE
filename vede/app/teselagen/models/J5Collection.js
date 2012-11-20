@@ -51,6 +51,7 @@ Ext.define("Teselagen.models.J5Collection", {
         { //Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
+            name: "devicedesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
             associationKey: "deviceDesign",

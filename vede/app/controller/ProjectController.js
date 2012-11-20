@@ -63,6 +63,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onNewDEClick: function(){
+        if(!Teselagen.manager.ProjectManager.workingProject) return Ext.MessageBox.alert('Alert', 'First select or create a Project.');
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 

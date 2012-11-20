@@ -289,6 +289,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     addJ5Bin: function(j5Bin) {
 
         var iconSource;
+        // This was added temporary for a DEMO request
         if(this.tempCounter==0) iconSource = "resources/images/icons/device/small/origin_of_replication.png";
         if(this.tempCounter==1) iconSource = "resources/images/icons/device/small/cds.png";
         if(this.tempCounter==2) iconSource = "resources/images/icons/device/small/cds.png";
