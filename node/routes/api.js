@@ -3,9 +3,8 @@
  * -----------------------
  */
 
-module.exports = function (app) {
+module.exports = function (app, express) {
 
-    var express = require("express");
     var errorHandler = express.errorHandler();
 
   // Login Auth Method : Find User in DB
