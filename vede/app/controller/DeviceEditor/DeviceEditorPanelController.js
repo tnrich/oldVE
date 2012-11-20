@@ -12,29 +12,38 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         
         var design = activeTab.model.getDesign();
 
+        var saveDesign = function(){
+            activeTab.model.getDesign().save({ 
+                callback: function(record, operation)
+                {
+                        console.log("Design Saved!");
+                        activeTab.el.unmask();
+                }
+            });
+        };
+
         var countParts = 36;
 
         design.getJ5Collection().bins().each(function(bin,binKey){
             bin.parts().each(function(part,partIndex){
-                part.save({
-                    callback:function(part){
-                        if(partCounter==1) activeTab.el.unmask();
-                        partCounter--;
-                    }
-                });
+                if(part.isModified('name'))
+                {
+                    console.log("Saving part");
+                    part.save({
+                        callback:function(part){
+                            if(countParts==1) saveDesign();
+                            countParts--;
+                        }
+                    });
+                }
+                else
+                {
+                    if(countParts==1) saveDesign();
+                    countParts--;
+                }
             });
         });
 
-        
-        /*
-        activeTab.model.getDesign().save({ 
-            callback: function(record, operation)
-            {
-                    console.log("Design Saved!");
-                    activeTab.el.unmask();
-            }
-        });
-        */
     },
 
     init: function () {
