@@ -18,6 +18,7 @@
     , "soap":"0.2.6"
     , "socket.io":"0.9.9"
     , "xml2js":"latest"
+    , "xmlbuilder":"0.4.2"
     , "xmlrpc": ">=1.0.1"
   }
 }

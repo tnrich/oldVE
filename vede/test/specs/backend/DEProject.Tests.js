@@ -178,72 +178,31 @@ Ext.syncRequire(["Ext.Ajax",
             // Will build this from the models.
             // The correct way would be to use DeviceDesignManager.js
             // Create Bin1 with 2 Part with 1 SequenceFile each
-            seq1a = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: "part1a.fas",
-                sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1a\nGATTACA"
-            });
-            part1a = Ext.create("Teselagen.models.Part", {
-                name: "part1a",
-                genbankStartBP: 1,
-                endBP: 7
-            });
-            part1a.setSequenceFile(seq1a);
-            parts.push(part1a);
-            sequences.push(seq1a);
+            var binsArray = [];
 
-
-            seq1b = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: "part1b.fas",
-                sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1b\nTTTTTTTTTT"
-            });
-            part1b = Ext.create("Teselagen.models.Part", {
-                name: "part1b",
-                genbankStartBP: 1,
-                endBP: 7
-            });
-            part1b.setSequenceFile(seq1b);
-            parts.push(part1b);
-            sequences.push(seq1b);
-
-            bin1 = Ext.create("Teselagen.models.J5Bin", {
-                binName: "bin1"
-            });
-            bin1.addToParts([part1a, part1b]);
-
-            // Create Bin2 with 1 Part with 1 SequenceFile
-            seq2a = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: "part2a.fas",
-                sequenceFileFormat: "Fasta",
-                sequenceFileContent: ">seq1c\nAAAAAAAAA"
-            });
-            part2a = Ext.create("Teselagen.models.Part", {
-                name: "part2a",
-                genbankStartBP: 1,
-                endBP: 7
-            });
-            part2a.setSequenceFile(seq2a);
-            parts.push(part2a);
-            sequences.push(seq2a);
-
-            bin2 = Ext.create("Teselagen.models.J5Bin", {
-                binName: "bin2"
-            });
-            bin2.addToParts(part2a);
+            for(var binIndex = 0;binIndex<6;binIndex++)
+            {
+                var newBin = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "bin"+binIndex
+                });
+                var tempParts = [];
+                for(var i=0;i<6;i++)
+                {
+                    var newPart = Ext.create("Teselagen.models.Part", {
+                        name: "part1a",
+                        genbankStartBP: 1,
+                        endBP: 7
+                    });
+                    parts.push(newPart);
+                    tempParts.push(newPart);
+                }
+                newBin.addToParts(tempParts);
+                binsArray.push(newBin);
+            }
 
             // CREATE THE COLLECTION WITH BINS
-            design = DeviceDesignManager.createDeviceDesignFromBins([bin1, bin2]);
+            design = DeviceDesignManager.createDeviceDesignFromBins(binsArray);
 
-            // EUGENE RULE
-            rule1 = Ext.create("Teselagen.models.EugeneRule", {
-                name: "rule1",
-                negationOperator: false,
-                compositionalOperator: "BEFORE",
-                operand2: part2a
-            });
-            rule1.setOperand1(part1a);
-            design.addToRules(rule1);
 
             expect(design).toBeDefined();
             designGenerated = true;
@@ -253,6 +212,7 @@ Ext.syncRequire(["Ext.Ajax",
 
     describe("Saving Design", function () {
 
+        
         it("Saving Sequences", function () {
 
             waitsFor(function () { if(designGenerated && deprojectsaved) return true; else return false; }, "", 1750);
@@ -267,7 +227,7 @@ Ext.syncRequire(["Ext.Ajax",
             });
 
         });
-
+        
         it("Saving Parts", function () {
 
             waitsFor(function () { if(sequencesSaved) return true; else return false; }, "", 1750);

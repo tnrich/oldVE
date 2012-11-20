@@ -179,47 +179,57 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			        dateCreated: new Date(),
 			        dateModified: new Date()
 			    });
-			    
-	            var bin = Ext.create("Teselagen.models.J5Bin", {
-	                binName: "Empty bin"
+
+	            var binsArray = [];
+	            var parts = [];
+
+	            for(var binIndex = 0;binIndex<1;binIndex++)
+	            {
+	                var newBin = Ext.create("Teselagen.models.J5Bin", {
+	                    binName: "bin"+binIndex+1
+	                });
+	                var tempParts = [];
+	                for(var i=0;i<2;i++)
+	                {
+	                    var newPart = Ext.create("Teselagen.models.Part", {
+	                        name: "",
+	                        genbankStartBP: 1,
+	                        endBP: 7
+	                    });
+	                    parts.push(newPart);
+	                    tempParts.push(newPart);
+	                }
+	                newBin.addToParts(tempParts);
+	                binsArray.push(newBin);
+	            }
+
+	            var afterPartsSaved = function(){
+
+		            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+		            deproject.setDesign(design);
+				    self.workingProject.deprojects().add(deproject);
+
+				    deproject.save({
+				        callback: function(){
+				        	//console.log("DE Project saved");
+				        	design.set( 'deproject_id', deproject.get('id') );
+				        	design.save({
+				        		callback: function(){
+				        			//console.log("DESIGN SAVED");
+				        			self.loadDesignAndChildResources();
+									self.openDesign(deproject);
+				            	}});
+				    }});
+	        	};
+
+	            parts.forEach(function(part,partIndex){
+	            	part.save({
+	            		callback:function(){
+	            			if(partIndex == parts.length-1) afterPartsSaved();
+	            		}
+	            	});
 	            });
 
-	            var part1a = Ext.create("Teselagen.models.Part", {
-	                name: "part1a",
-	                genbankStartBP: 1,
-	                endBP: 7
-	            });
-
-	            var part1b = Ext.create("Teselagen.models.Part", {
-	                name: "part1b",
-	                genbankStartBP: 1,
-	                endBP: 7
-	            });
-
-	            part1a.save({callback: function(){
-		            part1b.save({callback: function(){
-
-			            bin.addToParts([part1a, part1b]);
-
-			            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
-			            
-			            deproject.setDesign(design);
-
-					    self.workingProject.deprojects().add(deproject);
-
-					    deproject.save({
-					        callback: function(){
-					        	//console.log("DE Project saved");
-					        	design.set( 'deproject_id', deproject.get('id') );
-					        	design.save({
-					        		callback: function(){
-					        			//console.log("DESIGN SAVED");
-					        			self.loadDesignAndChildResources();
-					            	}});
-					    }});
-
-		            }});	            	
-	            }});
 			}
 		};
 

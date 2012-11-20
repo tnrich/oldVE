@@ -1,12 +1,16 @@
 /**
  * @class Teselagen.models.j5Output.NonMockAssembly
- * Class describing a NonMockAssembly.
+ * Class describing a NonMockAssembly that is of the "type": SLIC or GOLDENGATE only.
  * @author Diana Wong
  */
 Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
     extend: "Teselagen.models.j5Output.Assembly",
 
     requires: [
+        "Teselagen.models.j5Output.Incompatibility",
+        "Teselagen.models.j5Output.SuggestedAssembly",
+        "Teselagen.models.j5Output.Synthesis",
+        "Teselagen.models.j5Output.PCRReaction"
     ],
 
     proxy: {
@@ -45,45 +49,61 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
     ],
 
     associations: [
-        /*{
-            type: "hasOne",
-            model: "Teselagen.models.Incompatibilities",
-            getterName: "getIncompatibilities",
-            setterName: "setIncompatibilities",
-            assocationKey: "incompatibilities",
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Incompatibility",
+            name: "comp",
+            //getterName: "getIncompatibilities",
+            //setterName: "setIncompatibilities",
+            //assocationKey: "incompatibilities",
             foreignKey: "incompatibilities_id"
         },
         {
-            type: "hasOne",
-            model: "Teselagen.models.SuggestedAssembly",
-            getterName: "getSuggestedAssembly",
-            setterName: "setSuggestedAssembly",
-            assocationKey: "suggestedAssembly",
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.SuggestedAssembly",
+            name: "suggestedAssembly",
+            //getterName: "getSuggestedAssembly",
+            //setterName: "setSuggestedAssembly",
+            //assocationKey: "suggestedAssembly",
             foreignKey: "suggestedAssembly_id"
         },
         {
-            type: "hasOne",
-            model: "Teselagen.models.OligoSynthesis",
-            getterName: "getOligoSynthesis",
-            setterName: "setOligoSynthesis",
-            assocationKey: "oligoSynthesis",
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Synthesis",
+            name: "directSynthesis",
+            //getterName: "getDirectSynthesis",
+            //setterName: "setDirectynthesis",
+            //assocationKey: "directSynthesis",
+            foreignKey: "directSynthesis_id"
+        },
+
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Synthesis",
+            name: "oligoSynthesis",
+            //getterName: "getOligoSynthesis",
+            //setterName: "setOligoSynthesis",
+            //assocationKey: "oligoSynthesis",
             foreignKey: "oligoSynthesis_id"
         },
+
         {
-            type: "hasOne",
-            model: "Teselagen.models.PCRReactions",
-            getterName: "getPCRReactions",
-            setterName: "setPCRReactions",
-            assocationKey: "pcrReactions",
-            foreignKey: "pcrReactions_id"
-        },*/
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Synthesis",
+            name: "annealedOligoSynthesis",
+            //getterName: "getAnnealedOligoSynthesis",
+            //setterName: "setAnnealedOligoSynthesis",
+            //assocationKey: "annealedOligoSynthesis",
+            foreignKey: "annealedOligoSynthesis_id"
+        },
         {
-            type: "belongsTo",
-            model: "Teselagen.models.AssembledSequenceFile",
-            getterName: "getAssembledSequenceFile",
-            setterName: "setAssembledSequenceFile",
-            assocationKey: "assembledSequenceFile",
-            foreignKey: "assembledSequenceFile_id"
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.PCRReaction",
+            name: "pcrReaction",
+            //getterName: "getPCRReaction",
+            //setterName: "setPCRReaction",
+            //assocationKey: "pcrReaction",
+            foreignKey: "pcrReaction_id"
         }
     ]
 

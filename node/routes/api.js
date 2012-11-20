@@ -1,4 +1,4 @@
-/**
+ /**
  * API - VEDE EXT Platform
  * -----------------------
  */
@@ -314,8 +314,8 @@ module.exports = function (app, express) {
 
       deproject.design.j5collection.bins.forEach(function(bin,binKey){
         bin.parts.forEach(function(part,partKey){
-          var partId = deproject.design.j5collection.bins[binKey].parts[partKey].toString();
-          deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          if(partId) deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
         });
       });
     
@@ -339,10 +339,14 @@ module.exports = function (app, express) {
       deproject.design = model;
       deproject.design.j5collection.bins.forEach(function(bin,binKey){
         bin.parts.forEach(function(part,partKey){
-          var partId = deproject.design.j5collection.bins[binKey].parts[partKey].toString();
-          delete deproject.design.j5collection.bins[binKey].parts[partKey];
-          console.log(partId);
-          deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          if(partId)
+          {
+            partId = partId.toString();
+            delete deproject.design.j5collection.bins[binKey].parts[partKey];
+            console.log(partId);
+            deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          }
         });
       });
       deproject.save(function(err){
@@ -512,6 +516,22 @@ module.exports = function (app, express) {
     });
   });
 
+  //PUT
+  app.put('/user/projects/deprojects/parts', function (req, res) {
+
+    var Part = app.db.model("part");
+    Part.findById(req.body.id,function(err,part){
+      for(var prop in req.body) {
+        part[prop] = req.body[prop];
+      }
+
+      part.save(function(){
+        res.json({'parts':part})
+      });
+    });
+  });
+
+  //GET
   app.all('/getExampleModel', restrict, function (req, res) {
     var ExamplesModel = app.db.model("Examples");
     ExamplesModel.findById(req.body._id, function (err, example) {

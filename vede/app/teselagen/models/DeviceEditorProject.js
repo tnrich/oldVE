@@ -51,7 +51,9 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             model: "Teselagen.models.DeviceDesign",
             associationKey: "design",
             getterName: "getDesign",
-            setterName: "setDesign"
+            setterName: "setDesign",
+            foreignKey: "id",
+            name: "design"
         },
         {
             type: "hasMany",

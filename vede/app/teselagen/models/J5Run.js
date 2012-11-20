@@ -53,20 +53,21 @@ Ext.define("Teselagen.models.J5Run", {
     ],
 
     associations: [
-        {
+        /*{ // Move this to J5Input
             type: "hasOne",
             model: "Teselagen.models.J5Parameters",
             getterName: "getJ5Parameters",
             setterName: "setJ5Parameters",
             assocationKey: "j5Parameters"
         },
-        {
+        { // Move this to J5Input
             type: "hasOne",
             model: "Teselagen.models.DownstreamAutomationParameters",
             getterName: "getDownstreamAutomationParameters",
             setterName: "setDownstreamAutomationParameters",
-            assocationKey: "downstreamAutomationParameters"
-        },
+            assocationKey: "downstreamAutomationParameters",
+            foreignKey: "automationparameters_id"
+        },*/
         {
             type: "hasOne",
             model: "Teselagen.models.J5Input",

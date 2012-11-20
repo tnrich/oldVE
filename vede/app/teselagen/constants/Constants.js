@@ -95,6 +95,7 @@ Ext.define("Teselagen.constants.Constants", {
         "GOLDENGATE"
     ],
 
+    // Assembly type list
     NONMOCKTYPE_LIST: [
         "SLIC/Gibonson/CPEC/SLiCE",
         "GOLDENGATE"
@@ -104,6 +105,15 @@ Ext.define("Teselagen.constants.Constants", {
     MOCK:       "MOCK",
     SLIC:       "SLIC",
     GOLDENGATE: "GOLDENGATE",
+
+
+    // Synthesis type list
+    SYNTHESISTYPE_LIST: [
+        "DIRECT",
+        "OLIGO",
+        "ANNEALED OLIGOS"
+    ],
+
 
     RUN_STATUS_LIST: [
         "SUCCESS",

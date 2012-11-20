@@ -1,0 +1,20 @@
+{
+    "type": "application",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "views": [
+            "MyWindow"
+        ],
+        "autoCreateViewport": true,
+        "name": "TeselagenUtils",
+        "controllers": [
+            "GenbankCleanerUtil"
+        ]
+    },
+    "id": "ExtBox1-ext-gen1585",
+    "designerId": "application"
+}

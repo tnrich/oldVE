@@ -8,7 +8,10 @@ Ext.define("Teselagen.models.J5Results", {
 
     requires: [
         "Teselagen.constants.Constants",
-        "Teselagen.manager.SessionManager"
+        "Teselagen.manager.SessionManager",
+
+        "Teselagen.models.j5Output.CombinatorialAssembly",
+        "Teselagen.models.j5Output.AssembledSequenceFile"
     ],
 
     proxy: {
@@ -41,9 +44,17 @@ Ext.define("Teselagen.models.J5Results", {
     associations: [
         {
             type: "hasMany",
-            model: "Teselagen.models.AssembledSequenceFile",
+            model: "Teselagen.models.j5Output.AssembledSequenceFile",
             name: "assemblies",
             foreignKey: "assemblies_id"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.j5Output.CombinatorialAssembly",
+            getterName: "getCombinatorialAssembly",
+            setterName: "setCombinatorialAssembly",
+            assocationKey: "combinatorialAssembly",
+            foreignKey: "combinatorialAssembly_id"
         },
         {
             type: "belongsTo",
