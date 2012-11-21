@@ -17,6 +17,7 @@ Ext.require("Teselagen.utils.FormatUtils");
 Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
+Ext.require("Teselagen.constants.SBOLIcons");
 
 
 Ext.require("Teselagen.models.SequenceFile");
@@ -741,11 +742,33 @@ Ext.onReady(function() {
                 
                 // check -- Non-empty defaults do not work!
                 expect(bin.get("binName")).toBe("binName1");
-                expect(bin.get("iconID")).toBe("generic");
+                expect(bin.get("iconID")).toBe("GENERIC");
                 expect(bin.get("directionForward")).toBe(true);
-                expect(bin.get("fas")).toBe("");
+                expect(bin.get("fas")).toBe("NONE");
 
                 expect(bin.partCount()).toBe(0);
+            });
+
+            it("Validate()", function(){
+                var bin = Ext.create("Teselagen.models.J5Bin");
+                expect(bin.validate().length).toBe(1);
+
+                bin = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "binName1"
+                });
+                expect(bin.validate().length).toBe(0);
+
+                bin = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "binName1",
+                    iconID: "NOT A REAL ICON"
+                });
+                expect(bin.validate().length).toBe(1);
+
+                bin = Ext.create("Teselagen.models.J5Bin", {
+                    binName: "binName1",
+                    iconID: "NOT A REAL ICON"
+                });
+                expect(bin.validate().length).toBe(1);
             });
 
             it("Test Associations()", function(){
@@ -870,7 +893,7 @@ Ext.onReady(function() {
                 expect(bin.partCount()).toBe(0);
             });
 
-            it("getPartById() -- THIS WILL NOT WORK UNTIL RODRIGO/MONGO'S ID GENERATOR WORKS", function(){
+            xit("getPartById() -- THIS WILL NOT WORK UNTIL RODRIGO/MONGO'S ID GENERATOR WORKS", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
 

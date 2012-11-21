@@ -40,17 +40,6 @@ Ext.define("Teselagen.constants.Constants", {
     //================================================================
     // EugeneRule.js: compositionalOperator
 
-    COMPOP_LIST: [
-        "NOTMORETHAN",
-        "NOTWITH",
-        "AFTER",
-        "BEFORE",
-        "WITH",
-        "THEN",
-        "NEXTTO",
-        "MORETHAN"
-    ],
-
     // Deprecated
     NOTMORETHAN:        "NOTMORETHAN",
     // Deprecated
@@ -63,11 +52,25 @@ Ext.define("Teselagen.constants.Constants", {
     NEXTTO:             "NEXTTO",
     MORETHAN:           "MORETHAN",
 
+    COMPOP_LIST: [
+        "NOTMORETHAN",
+        "NOTWITH",
+        "AFTER",
+        "BEFORE",
+        "WITH",
+        "THEN",
+        "NEXTTO",
+        "MORETHAN"
+    ],
+
+    
+
     //================================================================
     // J5Bin.js
 
     // ForceAssemblyStrategies -- can be used only in certain conditions
     FAS_LIST: [
+        "NONE",
         // For the first part or first bin and part(s) in the first bin (assumed to be the destination vector backbone(s)):
         "DIGEST",
         // For a contiguous set of bin(s) or part(s) whose total length is large enough to be PCR amplified:

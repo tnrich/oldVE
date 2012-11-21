@@ -19,19 +19,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         // For Default Names
         // This Differs from EugeneRules.as
         defaultNamePrefix: "rule",
-        highestDefaultNameIndex: 0,
-
-        // Deprecated
-        NOTMORETHAN: "NOTMORETHAN",
-        // Deprecated
-        NOTWITH: "NOTWITH",
-        
-        AFTER: "AFTER",
-        BEFORE: "BEFORE",
-        WITH: "WITH",
-        THEN: "THEN",
-        NEXTTO: "NEXTTO",
-        MORETHAN: "MORETHAN"
+        highestDefaultNameIndex: 0
     },
 
     /**
