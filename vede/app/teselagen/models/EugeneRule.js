@@ -98,7 +98,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         {
             field: "compositionalOperator",
             type: "inclusion",
-            list: Teselagen.constants.Constants.COMPOP_LIST
+            //list: Teselagen.constants.Constants.COMPOP_LIST
         },
         {field: "operand2Number",         type: "presence"}
     ],
@@ -112,8 +112,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand1",
             associationKey: "operand1",
             instanceName: "operand1",
-            foreignKey: "operand1_id"
-            , name: "Part" //this field is not in ext documentation
+            foreignKey: "operand1_id", // this foreign key is not really needed, maybe we will delete in the future
+            name: "Part" //this field is not in ext documentation
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -123,8 +123,10 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand2Part",
             associationKey: "operand2Part",
             instanceName: "operand2",
-            foreignKey: "operand2_id"
-            , name: "Part" //this field is not in ext documentation. It's not even a unique name
+            foreignKey: "operand2_id", // this foreign key is not really needed, maybe we will delete in the future
+            name: "Part" 
+            //this field is not in ext documentation. It's not even a unique name
+            //I know its is not, but I relly need that field. Don't worry
         },
         {//Needed to find the parent of a child
             type: "belongsTo",
@@ -132,7 +134,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
             associationKey: "deviceDesign",
-            foreignKey: "devicedesign_id"
+            foreignKey: "devicedesign_id" // this foreign key is not really needed, maybe we will delete in the future
         }
     ],
 
