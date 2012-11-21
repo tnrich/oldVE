@@ -6,10 +6,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
     dock: 'top',
     cls: 'DeviceEditorPartPanel',
     collapseDirection: 'top',
-    collapsed: true,
-    collapsible: true,
-    hideCollapseTool: false,
-    title: 'Parts',
+    collapsed: false,
+    hideCollapseTool: true,
     titleCollapse: true,
     dockedItems: [{
         xtype: 'toolbar',
@@ -18,7 +16,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
         cls: 'DeviceEditorPartsBar',
         enableOverflow: true,
         layout: {
-            align: 'middle',
+            align: 'left',
             pack: 'center',
             type: 'hbox'
         },
@@ -29,7 +27,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Origin of Replication'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'cds_Btn',
@@ -37,7 +36,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'CDS'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'five_prime_ov_Btn',
@@ -45,7 +45,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: '5\' Overhang'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'three_prime_ov_Btn',
@@ -53,7 +54,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: '3\' Overhang'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'translational_start_site_Btn',
@@ -61,7 +63,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Translational Start Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'promoter_Btn',
@@ -69,7 +72,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Promoter'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'primer_binding_site_Btn',
@@ -77,7 +81,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Primer Binding Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'restriction_enz_recog_site_Btn',
@@ -85,7 +90,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Restriction Enzyme Recognition Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'restriction_site_w_no_overhang_Btn',
@@ -93,7 +99,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Restriction Site With No Overhangs'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'protease_site_Btn',
@@ -101,7 +108,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Protease Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'protein_stability_element_Btn',
@@ -109,7 +117,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Protein Stability Element'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'assembly_junction_Btn',
@@ -117,7 +126,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Assembly Junction'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'insulator_Btn',
@@ -125,7 +135,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Insulator'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'operator_Btn',
@@ -133,7 +144,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Operator'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'ribonuclease_site_Btn',
@@ -141,7 +153,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Ribonuclease Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'rna_stability_element_Btn',
@@ -149,7 +162,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'RNA Stability Element'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'terminator_Btn',
@@ -157,7 +171,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Terminator'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'signature_Btn',

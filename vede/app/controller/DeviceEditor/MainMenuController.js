@@ -28,7 +28,7 @@ Ext.define('Vede.controller.DeviceEditor.MainMenuController', {
 
     init: function() {
         this.control({
-            "#newDesign": {
+            'button[cls="newDesign"]': {
                 click: this.onNewDesignClick
             },
             "#openDesign": {
