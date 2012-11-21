@@ -13,6 +13,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var design = activeTab.model.getDesign();
 
         var saveDesign = function(){
+            console.log("Saving design");
             activeTab.model.getDesign().save({ 
                 callback: function(record, operation)
                 {
@@ -22,7 +23,15 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             });
         };
 
-        var countParts = 36;
+        var countParts = 0;
+
+        design.getJ5Collection().bins().each(function(bin,binKey){
+            bin.parts().each(function(part,partIndex){
+                countParts++;
+            });
+        });
+
+        console.log("Count parts is: "+countParts);
 
         design.getJ5Collection().bins().each(function(bin,binKey){
             bin.parts().each(function(part,partIndex){

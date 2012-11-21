@@ -104,13 +104,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		if(!duplicated)
 		{
 			var self = this;
+			Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
 			var selectedDesign = selectedDEProject.getDesign({
 				callback: function (record,operation) {
 					selectedDesign = selectedDEProject.getDesign();
+					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
 					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
-				
-					var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
-					//deController.renderDesignInContext();
+					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();		
 				}
 			});
 		}	
@@ -141,6 +141,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	createNewProject: function(){
 		
 		var onPromptClosed = function(answer,text) {
+
+				if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
+
 				var self = this;
 				var project = Ext.create("Teselagen.models.Project", {
 			        name: text,
@@ -162,6 +165,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	createNewDeviceEditorProject: function(){
 
 		var onPromptClosed = function(answer,text) {
+
+			if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
+
 		    var self = this;
 
 		    if(this.workingProject) {
