@@ -374,6 +374,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Returns the iconID for J5Bin at pBinIndex. (Indices begin at 0.)
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex
+     * @returns {String}
+     */
+    getIconIDByBinIndex: function(pDevice, pBinIndex) {
+        return pDevice.getJ5Collection().bins().getAt(pBinIndex).get("iconID");
+    },
+
+    /**
+     * Returns the iconID for J5Bin at pBinIndex. (Indices begin at 0.)
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex
+     * @param {String} pIconIDName
+     */
+    setIconIDByBinIndex: function(pDevice, pBinIndex, pIconIDName) {
+        pDevice.getJ5Collection().bins().getAt(pBinIndex).set("iconID", pIconIDName);
+    },
+
+    /**
      * Returns the bin at pBinIndex. (Indices begin at 0.)
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pBinIndex

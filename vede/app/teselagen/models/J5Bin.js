@@ -88,6 +88,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     validations: [
         {field: "binName",          type: "presence"},
+        
         {
             field: "iconID",
             type: "inclusion",

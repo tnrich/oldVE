@@ -339,6 +339,24 @@ Ext.onReady(function() {
                     //console.log(bin.validate());
                 });
 
+                it("getBinIconIDByIndex/setBinIconIDByIndex()", function(){
+                    var success = design.getJ5Collection().addToBin(bin1, 1);
+                    expect(success).toBe(true);
+
+                    var iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
+                    expect(iconID).toBe("GENERIC");
+
+                    DeviceDesignManager.setIconIDByBinIndex(design, 0, "BLAH");
+                    iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
+                    expect(iconID).toBe("BLAH");
+                    expect(bin1.validate().length).toBe(1);
+
+                    DeviceDesignManager.setIconIDByBinIndex(design, 0, "ASSEMBLY_JUNCTION");
+                    iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
+                    expect(iconID).toBe("ASSEMBLY_JUNCTION");
+                    expect(bin1.validate().length).toBe(0);
+                });
+
                 it("getBinByIndex()/getBinNameByIndex()", function(){
                     design.getJ5Collection().addToBin(bin1, 0);
 
