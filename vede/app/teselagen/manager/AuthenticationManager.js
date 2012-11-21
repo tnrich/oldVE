@@ -75,8 +75,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         if(response.responseText != '')
         {
           console.log(response.responseText);
-          var parsedResponse = JSON.parse(response.responseText);
-          Ext.get('splash-text').update(parsedResponse.msg);
+          try {
+            var parsedResponse = JSON.parse(response.responseText);
+            Ext.get('splash-text').update(parsedResponse.msg);
+          }catch(e)
+          {
+            console.warn("Server response not parsed as a valid json");
+          }
         }
         if( response.status == 0 ) Ext.get('splash-text').update('Server offline.');
         if (cb) return cb(false); // for Testing

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>pYES-DEST52</seq:name>
+<seq:circular>true</seq:circular>
+<seq:sequence>acggattagaagccgccgagcgggtgacagccctccgaaggaagactctcctccgtgcgtcctcgtcttcaccggtcgcgttcctgaaacgcagatgtgcctcgcgccgcactgctccgaacaataaagattctacaatactagcttttatggttatgaagaggaaaaattggcagtaacctggccccacaaaccttcaaatgaacgaatcaaattaacaaccataggatgataatgcgattagttttttagccttatttctggggtaattaatcagcgaagcgatgatttttgatctattaacagatatataaatgcaaaaactgcataaccactttaactaatactttcaacattttcggtttgtattacttcttattcaaatgtaataaaagtatcaacaaaaaattgttaatatacctctatactttaacgtcaaggagaaaaaaccccggatcggactactagcagctgtaatacgactcactatagggaatattaagctatcaaacaagtttgtacaaaaaagctgaacgagaaacgtaaaatgatataaatatcaatatattaaattagattttgcataaaaaacagactacataatactgtaaaacacaacatatccagtcactatggcggccgcgggtgatgctgccaacttagcggccgcattaggcaccccaggctttacactttatgcttccggctcgtataatgtgtggattttgagttaggatccgtcgagattttcaggagctaaggaagctaaaatggagaaaaaaatcactggatataccaccgttgatatatcccaatggcatcgtaaagaacattttgaggcatttcagtcagttgctcaatgtacctataaccagaccgttcagctggatattacggcctttttaaagaccgtaaagaaaaataagcacaagttttatccggcctttattcacattcttgcccgcctgatgaatgctcatccggaattccgtatggcaatgaaagacggtgagctggtgatatgggatagtgttcacccttgttacaccgttttccatgagcaaactgaaacgttttcatcgctctggagtgaataccacgacgatttccggcagtttctacacatatattcgcaagatgtggcgtgttacggtgaaaacctggcctatttccctaaagggtttattgagaatatgtttttcgtctcagccaatccctgggtgagtttcaccagttttgatttaaacgtggccaatatggacaacttcttcgcccccgttttcaccatgggcaaatattatacgcaaggcgacaaggtgctgatgccgctggcgattcaggttcatcatgccgtctgtgatggcttccatgtcggcagaatgcttaatgaattacaacagtactgcgatgagtggcagggcggggcgtaatctagaggatccggcttactaaaagccagataacagtatgcgtatttgcgcgctgatttttgcggtataagaatatatactgatatgtatacccgaagtatgtcaaaaagaggtgtgctatgaagcagcgtattacagtgacagttgacagcgacagctatcagttgctcaaggcatatatgatgtcaatatctccggtctggtaagcacaaccatgcagaatgaagcccgtcgtctgcgtgccgaacgctggaaagcggaaaatcaggaagggatggctgaggtcgcccggtttattgaaatgaacggctcttttgctgacgagaacagggactggtgaaatgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataaatgtcaggctccgttatacacagccagtctgcaggtcgaccatagtgactggatatgttgtgttttacagtattatgtagtctgttttttatgcaaaatctaatttaatatattgatatttatatcattttacgtttctcgttcagctttcttgtacaaagtggttcgatctagagggcccttcgaaggtaagcctatccctaaccctctcctcggtctcgattctacgcgtaccggtcatcatcaccatcaccattgagtttaaacccgctgatcctagagggccgcatcatgtaattagttatgtcacgcttacattcacgccctccccccacatccgctctaaccgaaaaggaaggagttagacaacctgaagtctaggtccctatttatttttttatagttatgttagtattaagaacgttatttatatttcaaatttttcttttttttctgtacagacgcgtgtacgcatgtaacattatactgaaaaccttgcttgagaaggttttgggacgctcgaaggctttaatttgcaagctgcggccctgcattaatgaatcggccaacgcgcggggagaggcggtttgcgtattgggcgctcttccgcttcctcgctcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaagcccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccggtaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaaggacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacgttaagggattttggtcatgagattatcaaaaaggatcttcacctagatccttttaaattaaaaatgaagttttaaatcaatctaaagtatatatgagtaaacttggtctgacagttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctatttcgttcatccatagttgcctgactccccgtcgtgtagataactacgatacgggagcgcttaccatctggccccagtgctgcaatgataccgcgagacccacgctcaccggctccagatttatcagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaattgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgcaacgttgttggcattgctacaggcatcgtggtgtcactctcgtcgtttggtatggcttcattcagctccggttcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcagtgttatcactcatggttatggcagcactgcataattctcttactgtcatgccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatacgggataatagtgtatcacatagcagaactttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatccagttcgatgtaacccactcgtgcacccaactgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatgttgaatactcatactcttcctttttcaatgggtaataactgatataattaaattgaagctctaatttgtgagtttagtatacatgcatttacttataatacagttttttagttttgctggccgcatcttctcaaatatgcttcccagcctgcttttctgtaacgttcaccctctaccttagcatcccttccctttgcaaatagtcctcttccaacaataataatgtcagatcctgtagagaccacatcatccacggttctatactgttgacccaatgcgtctcccttgtcatctaaacccacaccgggtgtcataatcaaccaatcgtaaccttcatctcttccacccatgtctctttgagcaataaagccgataacaaaatctttgtcgctcttcgcaatgtcaacagtacccttagtatattctccagtagatagggagcccttgcatgacaattctgctaacatcaaaaggcctctaggttcctttgttacttcttctgccgcctgcttcaaaccgctaacaatacctgggcccaccacaccgtgtgcattcgtaatgtctgcccattctgctattctgtatacacccgcagagtactgcaatttgactgtattaccaatgtcagcaaattttctgtcttcgaagagtaaaaaattgtacttggcggataatgcctttagcggcttaactgtgccctccatggaaaaatcagtcaagatatccacatgtgtttttagtaaacaaattttgggacctaatgcttcaactaactccagtaattccttggtggtacgaacatccaatgaagcacacaagtttgtttgcttttcgtgcatgatattaaatagcttggcagcaacaggactaggatgagtagcagcacgttccttatatgtagctttcgacatgatttatcttcgtttcctgcaggtttttgttctgtgcagttgggttaagaatactgggcaatttcatgtttcttcaacactacatatgcgtatatataccaatctaagtctgtgctccttccttcgttcttccttctgttcggagattaccgaatcaaaaaaatttcaaagaaaccgaaatcaaaaaaaagaataaaaaaaaaatgatgaattgaattgaaaagctagcttatcgatgataagctgtcaaagatgagaattaattccacggactatagactatactagatactccgtctactgtacgatacacttccgctcaggtccttgtcctttaacgaggccttaccactcttttgttactctattgatccagctcagcaaaggcagtgtgatctaagattctatcttcgcgatgtagtaaaactagctagaccgagaaagagactagaaatgcaaaaggcacttctacaatggctgccatcattattatccgatgtgacgctgcagcttctcaatgatattcgaatacgctttgaggagatacagcctaatatccgacaaactgttttacagatttacgatcgtacttgttacccatcattgaattttgaacatccgaacctgggagttttccctgaaacagatagtatatttgaacctgtataataatatatagtctagcgctttacggaagacaatgtatgtatttcggttcctggagaaactattgcatctattgcataggtaatcttgcacgtcgcatccccggttcattttctgcgtttccatcttgcacttcaatagcatatctttgttaacgaagcatctgtgcttcattttgtagaacaaaaatgcaacgcgagagcgctaatttttcaaacaaagaatctgagctgcatttttacagaacagaaatgcaacgcgaaagcgctattttaccaacgaagaatctgtgcttcatttttgtaaaacaaaaatgcaacgcgacgagagcgctaatttttcaaacaaagaatctgagctgcatttttacagaacagaaatgcaacgcgagagcgctattttaccaacaaagaatctatacttcttttttgttctacaaaaatgcatcccgagagcgctatttttctaacaaagcatcttagattactttttttctcctttgtgcgctctataatgcagtctcttgataactttttgcactgtaggtccgttaaggttagaagaaggctactttggtgtctattttctcttccataaaaaaagcctgactccacttcccgcgtttactgattactagcgaagctgcgggtgcattttttcaagataaaggcatccccgattatattctataccgatgtggattgcgcatactttgtgaacagaaagtgatagcgttgatgattcttcattggtcagaaaattatgaacggtttcttctattttgtctctatatactacgtataggaaatgtttacattttcgtattgttttcgattcactctatgaatagttcttactacaatttttttgtctaaagagtaatactagagataaacataaaaaatgtagaggtcgagtttagatgcaagttcaaggagcgaaaggtggatgggtaggttatatagggatatagcacagagatatatagcaaagagatacttttgagcaatgtttgtggaagcggtattcgcaatgggaagctccaccccggttgataatcagaaaagccccaaaaacaggaagattgtataagcaaatatttaaattgtaaacgttaatattttgttaaaattcgcgttaaatttttgttaaatcagctcattttttaacgaatagcccgaaatcggcaaaatcccttataaatcaaaagaatagaccgagatagggttgagtgttgttccagtttccaacaagagtccactattaaagaacgtggactccaacgtcaaagggcgaaaaagggtctatcagggcgatggcccactacgtgaaccatcaccctaatcaagttttttggggtcgaggtgccgtaaagcagtaaatcggaagggtaaacggatgcccccatttagagcttgacggggaaagccggcgaacgtggcgagaaaggaagggaagaaagcgaaaggagcgggggctagggcggtgggaagtgtaggggtcacgctgggcgtaaccaccacacccgccgcgcttaatggggcgctacagggcgcgtggggatgatccactagt</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>attR1 recombination site</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>attR1</seq:type>
+        <seq:location>
+            <seq:genbankStart>511</seq:genbankStart>
+            <seq:end>635</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:attribute name="modified_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>15dae5979058bfbf4f9166029b6e340ea3ca374fef578a11dc9e6e923860d7ae</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>attR2 recombination site</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>attR2</seq:type>
+        <seq:location>
+            <seq:genbankStart>2118</seq:genbankStart>
+            <seq:end>2242</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>15dae5979058bfbf4f9166029b6e340ea3ca374fef578a11dc9e6e923860d7ae</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>CYC1</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>polyA_site</seq:type>
+        <seq:location>
+            <seq:genbankStart>2366</seq:genbankStart>
+            <seq:end>2619</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>V5 epitope </seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2265</seq:genbankStart>
+            <seq:end>2306</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>85759b3811ff7dc47b03792ac85317be51431a3f9e01dcafce317ed736a391b0</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>HisTag</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2316</seq:genbankStart>
+            <seq:end>2333</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>de47c9b27eb8d300dbb5f2c353e632c393262cf06340c4fa7f1b40c4cbd36f90</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>GAL1</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>451</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>8d43407158818d7f3e03cc0a6ae6d789e9e393467ba847a998214eb4e292b989</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>T7</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>475</seq:genbankStart>
+            <seq:end>494</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>2 micron</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbankStart>5610</seq:genbankStart>
+            <seq:end>7081</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>d177bd8b0675a64580acfd4199c8beb6eba109dd6c9a0d06c5424143b7dcb02b</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>pUC</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbankStart>2803</seq:genbankStart>
+            <seq:end>3476</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>1bfedb90a487ecce837b77d13c349bf60548cc0326eba5435fd27c359231b6ca</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>f1</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbankStart>7149</seq:genbankStart>
+            <seq:end>7604</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>3b9e9d4ed135268270adc99df1f1ceb9f5df2752e3e5c20ae5b42690d5113e16</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>AmpR</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>3321</seq:genbankStart>
+            <seq:end>4481</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:attribute name="modified_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>5aab670850a1fb271f9f1405d24cab56fc384c96b3180462360ae7c0a61206fe</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>URA3</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>4499</seq:genbankStart>
+            <seq:end>5606</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>5dd4207b65a770f9bb3a22599143525057f59a7f0c61a5be8a213d9b44e2e8e1</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>CmR</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>771</seq:genbankStart>
+            <seq:end>1430</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>de16db2a0fbaf4c535d6823a26824750a4c617dddf17aeb157436e59682c490b</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>ccdB</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>1772</seq:genbankStart>
+            <seq:end>2077</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>9575b2125169377b2ade7b401ea36c81228331d971f49664d9648d4f255d4868</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>

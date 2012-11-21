@@ -48,7 +48,9 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onCancelButtonClick: function(button, e, options) {
-        button.up('window').close();
+        if(button.up('window')) {
+            button.up('window').close();
+        }
     },
 
     onImportButtonClick: function(button, e, options) {

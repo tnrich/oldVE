@@ -15,7 +15,7 @@ Ext.onReady(function() {
         describe("Integrative Testing for GenbankManager.js: KEYWORDS & SUBKEYWORDS & RUNONS", function() {
 
             it("Parses DEFINITION with 2 lines?",function(){
-                var line = 
+                var line =
                     'DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p\n ' +
                     '            (AXL2) and Rev7p (REV7) genes, complete cds.';
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
@@ -23,7 +23,7 @@ Ext.onReady(function() {
             });
 
             it("Parses SOURCE? Correctly parses SubKeywords and runons?",function(){
-                var line = 
+                var line =
                     'SOURCE      Saccharomyces cerevisiae (baker\'s yeast)\n' +
                     '  ORGANISM  Saccharomyces cerevisiae\n' +
                     '            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
@@ -35,22 +35,22 @@ Ext.onReady(function() {
             });
 
             it("Parses SOURCE with SubKeywords and runon toJSON and toString format?",function(){
-                var line = 
+                var line =
                     'SOURCE      Saccharomyces cerevisiae (baker\'s yeast)\n' +
                     '  ORGANISM  Saccharomyces cerevisiae\n' +
                     '            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
                     '            Saccharomycetales; Saccharomycetaceae; Saccharomyces.';
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 var json = {
-                        "keyword": "SOURCE", 
-                        "value": "Saccharomyces cerevisiae (baker's yeast)", 
-                        "subKeywords": [ 
-                                        { 
-                                            "keyword": "ORGANISM", 
-                                            "value": "Saccharomyces cerevisiae\n            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n            Saccharomycetales; Saccharomycetaceae; Saccharomyces." 
-                                        } 
+                        "keyword": "SOURCE",
+                        "value": "Saccharomyces cerevisiae (baker's yeast)",
+                        "subKeywords": [
+                                        {
+                                            "keyword": "ORGANISM",
+                                            "value": "Saccharomyces cerevisiae\n            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n            Saccharomycetales; Saccharomycetaceae; Saccharomyces."
+                                        }
                                         ]
-                }
+                };
                 expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("SOURCE"), null, "  "));
                 expect(tmp.findKeyword("SOURCE").toString()).toBe(line);
             });
@@ -58,13 +58,13 @@ Ext.onReady(function() {
 
         describe("Integrative Testing for GenbankManager.js: parseFeatures(), parseFeatureLocation(), parseFeatureQualifier()", function() {
             beforeEach(function() {
-                line = 
-                    'FEATURES             Location/Qualifiers\n' + 
-                    '     CDS             complement(7..885)\n' + 
+                line =
+                    'FEATURES             Location/Qualifiers\n' +
+                    '     CDS             complement(7..885)\n' +
                     '                     /label="araC"';
                 tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 //console.log(JSON.stringify(tmp, null, "  "));
-            })
+            });
             it("Parses a Feature & Feature Element?",function(){
                 //console.log(tmp.getLastKeyword());
                 expect(Ext.getClassName(tmp.getLastKeyword())).toBe("Teselagen.bio.parsers.GenbankFeaturesKeyword");
@@ -77,18 +77,18 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getTo()).toBe("..");
             });
 
-            it("Parses QUALIFIER?",function(){    
+            it("Parses QUALIFIER?",function(){
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getName()).toBe("label");
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getValue()).toBe("araC");
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getQuoted()).toBe(true);
             });
 
-            it("Parses toJSON?",function(){    
+            it("Parses toJSON?",function(){
                 var json = { "keyword": "FEATURES", "elements": [ { "keyword": "CDS", "strand": -1, "location": [ { "start": 7, "to": "..", "end": 885 } ], "qualifier": [ { "name": "label", "value": "araC" } ] } ] };
                 expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("FEATURES"), null, "  "));
             });
 
-            it("Parses toString? (Icing on the cake. This does not have to hold due to wrap issues.",function(){    
+            it("Parses toString? (Icing on the cake. This does not have to hold due to wrap issues.",function(){
                 expect(tmp.findKeyword("FEATURES").toString()).toBe(line);
             });
 
@@ -96,10 +96,10 @@ Ext.onReady(function() {
 
         describe("Integrative: parseFeatures() etc, (COMPLEX CASE: Runon LOCATION, and QUALIFIER)", function() {
             beforeEach(function() {
-                line = 
-                    'FEATURES             Location/Qualifiers\n' + 
-                    '     CDS             complement(7..885)\n' + 
-                    '                     /label="araC"\n' + 
+                line =
+                    'FEATURES             Location/Qualifiers\n' +
+                    '     CDS             complement(7..885)\n' +
+                    '                     /label="araC"\n' +
                     '     fakemRNA        join(<265..402,673..781,911..1007,1088..1215,\n' +
                     '                     1377..1573,1866..2146,2306..2634,2683..>2855)\n' +
                     '                     /translation="MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQ\n' +
@@ -118,14 +118,14 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getLastElement().getComplement()).toBeFalsy();
             });
 
-            it("Parses Last Element Feature Location #1 correctly?",function(){ 
+            it("Parses Last Element Feature Location #1 correctly?",function(){
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getStart()).toBe(265); //<265
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getPreStart()).toBe("<");
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getEnd()).toBe(402);
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[0].getPreEnd()).toBe("");
             });
 
-            it("Parses Last Element Feature Location #8 correctly?",function(){    
+            it("Parses Last Element Feature Location #8 correctly?",function(){
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[7].getStart()).toBe(2683);
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[7].getEnd()).toBe(2855); //>2855
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureLocation()[7].getPreEnd()).toBe(">");
@@ -138,7 +138,7 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getQuoted()).toBeTruthy();
             });
 
-            it("Parses toJSON?",function(){    
+            it("Parses toJSON?",function(){
                 var json = { "keyword": "FEATURES", "elements": [ { "keyword": "CDS", "strand": -1, "location": [ { "start": 7, "to": "..", "end": 885 } ], "qualifier": [ { "name": "label", "value": "araC" } ] }, { "keyword": "fakemRNA", "strand": 1, "location": [ { "start": 265, "to": "..", "end": 402 }, { "start": 673, "to": "..", "end": 781 }, { "start": 911, "to": "..", "end": 1007 }, { "start": 1088, "to": "..", "end": 1215 }, { "start": 1377, "to": "..", "end": 1573 }, { "start": 1866, "to": "..", "end": 2146 }, { "start": 2306, "to": "..", "end": 2634 }, { "start": 2683, "to": "..", "end": 2855 } ], "qualifier": [ { "name": "translation", "value": "MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQFVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVDLISGDDKILNGVYSQYEEGESIFGSLF" } ] } ] };
                 expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("FEATURES"), null, "  "));
             });
@@ -159,7 +159,7 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("ORIGIN").getSequence()).toBe("gacgtcttatgacaacttgacggctacatcattcactttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgcgagaaatagagttgatcgtc");
             });
 
-            it("Parses toJSON?",function(){    
+            it("Parses toJSON?",function(){
                 var json = { "keyword": "ORIGIN", "sequence": "gacgtcttatgacaacttgacggctacatcattcactttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgcgagaaatagagttgatcgtc" };
                 expect(JSON.stringify(json)).toBe(JSON.stringify(tmp.findKeyword("ORIGIN")));
             });
@@ -167,7 +167,7 @@ Ext.onReady(function() {
 
         describe("Integrative: Partial file (top part of pj5_00028.gb) parsing from GenbankManager.js:?", function() {
             beforeEach(function() {
-                line = '' + 
+                line = '' +
 'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n' +
 'ACCESSION   pj5_00028 Accession\n' +
 'VERSION     pj5_00028 version.1\n' +
@@ -202,7 +202,7 @@ Ext.onReady(function() {
 '       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n' +
 '\n'+
 '\n'+
-'//'
+'//';
                 tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
             });
 
@@ -232,12 +232,12 @@ Ext.onReady(function() {
             it("Parses Last Element Feature Qualifier correctly?",function(){
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getName()).toBe("translation");
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getValue()).toBe("MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQFVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVDLISGDDKILNGVYSQYEEGESIFGSLF");
-            });;
+            });
         });
 
         describe("Opening data files from biojs/data/DATAFILE.gb correctly? Uses AJAX and is asynchronos.", function() {
             var text, tmp;
-            it("../data/pj5_00028.gb: correct Locus, # of Keywords, # of Features",function(){
+            it("../data/genbank/pj5_00028.gb: correct Locus, # of Keywords, # of Features",function(){
 
                 runs(function() {
                     flag = false;
@@ -250,7 +250,7 @@ Ext.onReady(function() {
 
                 waitsFor(function() {
                     Ext.Ajax.request({
-                        url:'../test/data/pj5_00028.gb',
+                        url:'../test/data/genbank/pj5_00028.gb',
                         success: function(response) {
                             text = response.responseText;
                             //console.log(text);
@@ -267,7 +267,7 @@ Ext.onReady(function() {
                 runs(function() {expect(tmp.findKeyword("LOCUS").toString()).toBe("LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012");
                     expect(tmp.getKeywords().length).toBe(7);
                     expect(tmp.findKeyword("FEATURES").getFeaturesElements().length).toBe(19);
-                })
+                });
 
             });
 

@@ -31,7 +31,7 @@ Ext.define("Teselagen.manager.J5RunManager", {
      * Change the field values after this is created.
      */
     createDefaultJ5Parameters: function() {
-        var param = Ext.create("Teselagen.modesl.J5Parameters");
+        var param = Ext.create("Teselagen.models.J5Parameters");
         param.validate();
         return param;
     },
@@ -52,7 +52,7 @@ Ext.define("Teselagen.manager.J5RunManager", {
      * Change the field values after this is created.
      */
     createDefaultDownstreamAutomationParameters: function() {
-        var param = Ext.create("Teselagen.modesl.DownstreamAutomationParameters");
+        var param = Ext.create("Teselagen.models.DownstreamAutomationParameters");
         param.validate();
         return param;
     },
@@ -70,7 +70,7 @@ Ext.define("Teselagen.manager.J5RunManager", {
     /**
      */
     createJ5Results: function() {
-        var results = Ext.create("Teselagen.modesl.J5Results");
+        var results = Ext.create("Teselagen.models.J5Results");
         param.validate();
         return results;
     }

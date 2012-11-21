@@ -6,64 +6,63 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
 
+    onDeviceEditorSaveBtnClick: function(){
+        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        activeTab.el.mask('Loading');
+        
+        var design = activeTab.model.getDesign();
+
+        var saveDesign = function(){
+            console.log("Saving design");
+            activeTab.model.getDesign().save({ 
+                callback: function(record, operation)
+                {
+                        console.log("Design Saved!");
+                        activeTab.el.unmask();
+                }
+            });
+        };
+
+        var countParts = 0;
+
+        design.getJ5Collection().bins().each(function(bin,binKey){
+            bin.parts().each(function(part,partIndex){
+                countParts++;
+            });
+        });
+
+        console.log("Count parts is: "+countParts);
+
+        design.getJ5Collection().bins().each(function(bin,binKey){
+            bin.parts().each(function(part,partIndex){
+                if(part.isModified('name'))
+                {
+                    console.log("Saving part");
+                    part.save({
+                        callback:function(part){
+                            if(countParts==1) saveDesign();
+                            countParts--;
+                        }
+                    });
+                }
+                else
+                {
+                    if(countParts==1) saveDesign();
+                    countParts--;
+                }
+            });
+        });
+
+    },
+
     init: function () {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,
                             this.openProject, this);
-    },
-
-
-    renderDesignInContext: function () {
-
-        Ext.define('Bin', {
-            constructor: function (group,bin,x,y) {
-                this.group = group;
-                this.x = x;
-                this.y = y;
-                this.bin = bin;
-
-                var bin = this.group.add(Ext.create('Ext.draw.Sprite',{
-                    type: 'rect',
-                    width: 100,
-                    height: 50,
-                    radius: 10,
-                    fill: 'white',
-                    opacity: 0.5,
-                    stroke: 'black',
-                    'stroke-width': 2,
-                    x: this.x,
-                    y: this.y
-                }));
-
-                var text = this.group.add(Ext.create('Ext.draw.Sprite',{
-                    type: "text",
-                    text: this.bin.data.binName,
-                    fill: "black",
-                    font: "14px arial",
-                    x: this.x + 30,
-                    y: this.y + 15
-                }));
-
-                bin.show(true);
-                text.show(true);
-
-                bin.addListener('click', function () {
-                    console.log('bin clicked');
-                });
-
+        this.control({
+            "button[cls='DeviceEditorSaveBtn']": {
+                click: this.onDeviceEditorSaveBtnClick
             }
-        });
-
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var currentModel = currentTab.model;
-
-        var surface = currentTab.query('draw[cls=designCanvas]')[0].surface;
-        var bins = currentModel.getDesign().getJ5Collection().bins();
-        
-        var xPos = 10;
-        bins.each(function(bin){
-            var binDraw = new Bin(surface,bin,xPos,10);
-            xPos += 110;
         });
     }
 });

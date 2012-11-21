@@ -3,7 +3,14 @@
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.manager.ProjectManager", {
-	requires: ["Teselagen.event.ProjectEvent","Teselagen.store.UserStore",'Vede.view.de.DeviceEditor','Teselagen.manager.SessionManager'],
+	requires: ["Teselagen.event.ProjectEvent",
+	,"Teselagen.store.UserStore"
+	,'Vede.view.de.DeviceEditor'
+	,'Teselagen.manager.SessionManager'
+	,"Teselagen.manager.DeviceDesignManager"
+	,"Teselagen.models.J5Bin",
+	,"Teselagen.models.Part"
+	,'Ext.window.MessageBox'],
 	alias: "ProjectManager",
 	mixins: {
 		observable: "Ext.util.Observable"
@@ -20,13 +27,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 * Load User Info
 	 */
 	loadUser: function (cb) {
-		console.log('PM: Loading User');
+		//console.log('PM: Loading User');
 		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
 		var users = Ext.create("Teselagen.store.UserStore");
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(records.length != 1) console.log('Error loading user');
+				if(!records) {console.log('Error loading user'); return cb(false);}
 				self.currentUser = users.first();
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
@@ -68,11 +75,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 * Open a Project
 	 */
 	openProject: function (project) {
-		console.log('PM: Opening a project ' + project.data.name);
+		//console.log('PM: Opening a project ' + project.data.name);
 		this.workingProject = project;
 
 		Ext.getCmp('projectDesignPanel').setLoading(true);
-
 		// Load Designs And Design Child Resources and Render into ProjectPanel
 		this.loadDesignAndChildResources();
 	},
@@ -81,18 +87,33 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var id = item.data.id;
 		var deprojects = this.workingProject.deprojects();
 		var selectedDEProject = deprojects.getById(id);
-		var self = this;
-		var selectedDesign = selectedDEProject.getDesign({
-			callback: function (record,operation) {
-				selectedDesign = selectedDEProject.getDesign();
-				var tabPanel = Ext.getCmp('mainAppPanel');
-				tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
-			
-				var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
-				deController.renderDesignInContext();
-				self.experiment(selectedDEProject);
+		var tabPanel = Ext.getCmp('mainAppPanel');
+		// First check tab is not already opened
+		var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
+		var duplicated = false;
+		tabPanel.items.items.forEach(function(tab,key){
+			if(tab.model)
+			{
+				if(tab.model.internalId == selectedDEProject.internalId) 
+				{
+					duplicated = true;
+					tabPanel.setActiveTab(key);
+				}
 			}
-		});		
+		});
+		if(!duplicated)
+		{
+			var self = this;
+			Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
+			var selectedDesign = selectedDEProject.getDesign({
+				callback: function (record,operation) {
+					selectedDesign = selectedDEProject.getDesign();
+					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
+					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();		
+				}
+			});
+		}	
 	},
 
 	openVEProject: function (item) {
@@ -117,69 +138,103 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		
 	},
 
-	experiment:function(deproject){
-
-		/*
-
-		console.log("Experiment Start here\n------------");
-		var binsStore = deproject.getDesign().getJ5Collection().bins();
-		//console.log(binsStore);
-		binsStore.on("update",function( record, operation, modifiedFieldNames, eOpts ){
-			console.log("Update event triggered!");
-			console.log(record);
-			console.log(operation);
-			console.log(modifiedFieldNames);
-		});
-
-		binsStore.getAt(0).set('name','asdadasd');
-		
-        var bin1 = Ext.create("Teselagen.models.J5Bin", {
-            binName: "bin21313"
-        });
-		
-
-		//binsStore.add(bin1);
-		//console.log(binsStore);
-
-		*/
-	},
 	createNewProject: function(){
-		var self = this;
-	    var project = Ext.create("Teselagen.models.Project", {
-	        name: "Untitled project",
-	        DateCreated: new Date(),
-	        DateModified: new Date()
-	    });
+		
+		var onPromptClosed = function(answer,text) {
 
-	    this.currentUser.projects().add(project);
-	    project.save({
-	    	callback: function(){
-	    		self.workingProject = project;
-	    		self.loadDesignAndChildResources();
-	    	}
-	    });
+				if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
 
+				var self = this;
+				var project = Ext.create("Teselagen.models.Project", {
+			        name: text,
+			        dateCreated: new Date(),
+			        dateModified: new Date()
+			    });
+
+			    this.currentUser.projects().add(project);
+			    project.save({
+			    	callback: function(){
+			    		self.workingProject = project;
+			    		self.loadDesignAndChildResources();
+			    	}
+			    });
+		};
+
+		Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
 	},
 	createNewDeviceEditorProject: function(){
-	    var self = this;
 
-	    if(this.workingProject) {
-		    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-		        name: "Untitled DE Project"
-		    });
-		    
-		    this.workingProject.deprojects().add(deproject);
+		var onPromptClosed = function(answer,text) {
 
-		    deproject.save({
-		        callback: function(){
-		        	self.loadDesignAndChildResources();
-		            console.log("DE project saved");
-		        }
-		    });
-		}
+			if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
+
+		    var self = this;
+
+		    if(this.workingProject) {
+			    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
+			        name: text,
+			        dateCreated: new Date(),
+			        dateModified: new Date()
+			    });
+
+	            var binsArray = [];
+	            var parts = [];
+
+	            for(var binIndex = 0;binIndex<1;binIndex++)
+	            {
+	                var newBin = Ext.create("Teselagen.models.J5Bin", {
+	                    binName: "bin"+binIndex+1
+	                });
+	                var tempParts = [];
+	                for(var i=0;i<2;i++)
+	                {
+	                    var newPart = Ext.create("Teselagen.models.Part", {
+	                        name: "",
+	                        genbankStartBP: 1,
+	                        endBP: 7
+	                    });
+	                    parts.push(newPart);
+	                    tempParts.push(newPart);
+	                }
+	                newBin.addToParts(tempParts);
+	                binsArray.push(newBin);
+	            }
+
+	            var afterPartsSaved = function(){
+
+		            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+		            deproject.setDesign(design);
+				    self.workingProject.deprojects().add(deproject);
+
+				    deproject.save({
+				        callback: function(){
+				        	//console.log("DE Project saved");
+				        	design.set( 'deproject_id', deproject.get('id') );
+				        	design.save({
+				        		callback: function(){
+				        			//console.log("DESIGN SAVED");
+				        			self.loadDesignAndChildResources();
+									self.openDesign(deproject);
+				            	}});
+				    }});
+	        	};
+
+	            parts.forEach(function(part,partIndex){
+	            	part.save({
+	            		callback:function(){
+	            			if(partIndex == parts.length-1) afterPartsSaved();
+	            		}
+	            	});
+	            });
+
+			}
+		};
+
+		Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
+
 	},
 
-	createNewVectorEditorProject: function(){
+	openSequenceFile: function(){
 		var self = this;
 		Ext.getCmp('ProjectPanel').setActiveTab(2);
 		if(this.workingProject) {

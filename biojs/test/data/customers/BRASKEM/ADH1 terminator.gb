@@ -1,0 +1,13 @@
+LOCUS       ADH1_terminator          188 bp ds-DNA     linear       28-JUN-2012
+ACCESSION   ADH1_terminator
+VERSION     ADH1_terminator
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     terminator      1..188
+                     /label="ADH1_terminator"
+ORIGIN      
+        1 gcgaatttct tatgatttat gatttttatt attaaataag ttataaaaaa aataagtgta
+       61 tacaaatttt aaagtgactc ttaggtttta aaacgaaaat tcttattctt gagtaactct
+      121 ttcctgtagg tcaggttgct ttctcaggta tagcatgagg tcgctcttat tgaccacacc
+      181 tctaccgg     
+//

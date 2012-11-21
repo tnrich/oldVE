@@ -15,6 +15,15 @@ Ext.define("Vede.controller.ProjectController", {
             });
         });
 
+        Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
+            text: 'Add design',
+            leaf: true,
+            icon: 'resources/images/add.png',
+            id: 0
+        });
+
+        Ext.getCmp('designGrid_Panel').reconfigure(Collection);
+
         Ext.getCmp('projectDesignPanel').setLoading(false);
     },
     renderPartsSection: function(veprojects){
@@ -31,7 +40,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
     renderJ5ResultsSection: function(deprojects){
         deprojects.each(function(deproject){
-            var designNode = Ext.getCmp('projectAnalysisPanel').getRootNode().appendChild({
+            var designNode = Ext.getCmp('j5ResultsPanel').getRootNode().appendChild({
                 text: deproject.data.name,
                 leaf: false,
                 expanded: true
@@ -49,7 +58,8 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onProjectDesignPanelItemClick: function (store, record) { 
-        Teselagen.manager.ProjectManager.openDesign(record); 
+        if(record.data.id!=0) Teselagen.manager.ProjectManager.openDesign(record); 
+        else Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
     onProjectPartsPanelItemClick: function (store, record) { 
@@ -61,11 +71,15 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onNewDEClick: function(){
+        if(!Teselagen.manager.ProjectManager.workingProject) return Ext.MessageBox.alert('Alert', 'First select or create a Project.');
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
-    onNewVEClick: function(){
-        Teselagen.manager.ProjectManager.createNewVectorEditorProject();
+    onOpenSequenceFileClick: function(){
+        Teselagen.manager.ProjectManager.openSequenceFile();
+    },
+    onRemoveProjectClick:function(){
+        
     },
 
     init: function() {
@@ -80,14 +94,20 @@ Ext.define("Vede.controller.ProjectController", {
             '#projectDesignPanel': {
                 itemclick: this.onProjectDesignPanelItemClick
             },
+            '#designGrid_Panel': {
+                itemclick: this.onProjectDesignPanelItemClick
+            },
             "#newProject_Btn": {
                 click: this.onNewProjectClick
             },
             "#newDE_Btn": {
                 click: this.onNewDEClick
             },
-            "#newVE_Btn": {
-                click: this.onNewVEClick
+            "#openSequenceFile_Btn": {
+                click: this.onOpenSequenceFileClick
+            },
+            "#removeProject_Btn": {
+                click: this.onRemoveProjectClick
             }
         });
     }

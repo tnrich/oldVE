@@ -128,6 +128,11 @@ body {
   background-image: url(../images/ux/design-tree-icon-leaf.png);
 }
 
+
+#projectAnalysisPanel-body div table td div .x-tree-icon-parent {
+  background-image: url(../images/ux/j5-tree-icon-parent.png);
+}
+
 #projectAnalysisPanel-body div table td div .x-tree-icon-leaf {
   background-image: url(../images/ux/j5-tree-icon-leaf.png);
 }
@@ -291,7 +296,7 @@ background: #F8F8F8;
 }
 
 .DeviceEditorPartsBar {
-  background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
+  background: #D0D0D0;
 }
 
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {

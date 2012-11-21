@@ -10,7 +10,7 @@ Ext.define("Teselagen.models.J5Run", {
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
 
-        //"Teselagen.models.J5Input",
+        "Teselagen.models.J5Input",
         "Teselagen.models.J5Results",
         "Teselagen.constants.Constants",
         "Teselagen.manager.SessionManager"
@@ -69,7 +69,7 @@ Ext.define("Teselagen.models.J5Run", {
     ],
 
     associations: [
-        {
+        /*{ // Move this to J5Input
             type: "hasOne",
             model: "Teselagen.models.J5Parameters",
             getterName: "getJ5Parameters",
@@ -77,14 +77,14 @@ Ext.define("Teselagen.models.J5Run", {
             assocationKey: "j5Parameters",
             foreignKey: "j5parameters_id"
         },
-        {
+        { // Move this to J5Input
             type: "hasOne",
             model: "Teselagen.models.DownstreamAutomationParameters",
             getterName: "getDownstreamAutomationParameters",
             setterName: "setDownstreamAutomationParameters",
             assocationKey: "downstreamAutomationParameters",
             foreignKey: "automationparameters_id"
-        },
+        },*/
         {
             type: "hasOne",
             model: "Teselagen.models.J5Input",

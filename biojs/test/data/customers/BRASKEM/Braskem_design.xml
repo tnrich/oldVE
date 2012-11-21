@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<de:design xsi:schemaLocation="http://jbei.org/device_editor design.xsd" xmlns:de="http://jbei.org/device_editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <de:version>4.0</de:version>
+  <de:sequenceFiles>
+    <de:sequenceFile hash="eb06c5690e67f595907571174a482f7982129ef3102de5c53ea5f1bdc4d80721">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>pYES-DEST52</seq:name>
+<seq:circular>true</seq:circular>
+<seq:sequence>acggattagaagccgccgagcgggtgacagccctccgaaggaagactctcctccgtgcgtcctcgtcttcaccggtcgcgttcctgaaacgcagatgtgcctcgcgccgcactgctccgaacaataaagattctacaatactagcttttatggttatgaagaggaaaaattggcagtaacctggccccacaaaccttcaaatgaacgaatcaaattaacaaccataggatgataatgcgattagttttttagccttatttctggggtaattaatcagcgaagcgatgatttttgatctattaacagatatataaatgcaaaaactgcataaccactttaactaatactttcaacattttcggtttgtattacttcttattcaaatgtaataaaagtatcaacaaaaaattgttaatatacctctatactttaacgtcaaggagaaaaaaccccggatcggactactagcagctgtaatacgactcactatagggaatattaagctatcaaacaagtttgtacaaaaaagctgaacgagaaacgtaaaatgatataaatatcaatatattaaattagattttgcataaaaaacagactacataatactgtaaaacacaacatatccagtcactatggcggccgcgggtgatgctgccaacttagcggccgcattaggcaccccaggctttacactttatgcttccggctcgtataatgtgtggattttgagttaggatccgtcgagattttcaggagctaaggaagctaaaatggagaaaaaaatcactggatataccaccgttgatatatcccaatggcatcgtaaagaacattttgaggcatttcagtcagttgctcaatgtacctataaccagaccgttcagctggatattacggcctttttaaagaccgtaaagaaaaataagcacaagttttatccggcctttattcacattcttgcccgcctgatgaatgctcatccggaattccgtatggcaatgaaagacggtgagctggtgatatgggatagtgttcacccttgttacaccgttttccatgagcaaactgaaacgttttcatcgctctggagtgaataccacgacgatttccggcagtttctacacatatattcgcaagatgtggcgtgttacggtgaaaacctggcctatttccctaaagggtttattgagaatatgtttttcgtctcagccaatccctgggtgagtttcaccagttttgatttaaacgtggccaatatggacaacttcttcgcccccgttttcaccatgggcaaatattatacgcaaggcgacaaggtgctgatgccgctggcgattcaggttcatcatgccgtctgtgatggcttccatgtcggcagaatgcttaatgaattacaacagtactgcgatgagtggcagggcggggcgtaatctagaggatccggcttactaaaagccagataacagtatgcgtatttgcgcgctgatttttgcggtataagaatatatactgatatgtatacccgaagtatgtcaaaaagaggtgtgctatgaagcagcgtattacagtgacagttgacagcgacagctatcagttgctcaaggcatatatgatgtcaatatctccggtctggtaagcacaaccatgcagaatgaagcccgtcgtctgcgtgccgaacgctggaaagcggaaaatcaggaagggatggctgaggtcgcccggtttattgaaatgaacggctcttttgctgacgagaacagggactggtgaaatgcagtttaaggtttacacctataaaagagagagccgttatcgtctgtttgtggatgtacagagtgatattattgacacgcccgggcgacggatggtgatccccctggccagtgcacgtctgctgtcagataaagtctcccgtgaactttacccggtggtgcatatcggggatgaaagctggcgcatgatgaccaccgatatggccagtgtgccggtctccgttatcggggaagaagtggctgatctcagccaccgcgaaaatgacatcaaaaacgccattaacctgatgttctggggaatataaatgtcaggctccgttatacacagccagtctgcaggtcgaccatagtgactggatatgttgtgttttacagtattatgtagtctgttttttatgcaaaatctaatttaatatattgatatttatatcattttacgtttctcgttcagctttcttgtacaaagtggttcgatctagagggcccttcgaaggtaagcctatccctaaccctctcctcggtctcgattctacgcgtaccggtcatcatcaccatcaccattgagtttaaacccgctgatcctagagggccgcatcatgtaattagttatgtcacgcttacattcacgccctccccccacatccgctctaaccgaaaaggaaggagttagacaacctgaagtctaggtccctatttatttttttatagttatgttagtattaagaacgttatttatatttcaaatttttcttttttttctgtacagacgcgtgtacgcatgtaacattatactgaaaaccttgcttgagaaggttttgggacgctcgaaggctttaatttgcaagctgcggccctgcattaatgaatcggccaacgcgcggggagaggcggtttgcgtattgggcgctcttccgcttcctcgctcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaagcccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccggtaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaaggacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacgttaagggattttggtcatgagattatcaaaaaggatcttcacctagatccttttaaattaaaaatgaagttttaaatcaatctaaagtatatatgagtaaacttggtctgacagttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctatttcgttcatccatagttgcctgactccccgtcgtgtagataactacgatacgggagcgcttaccatctggccccagtgctgcaatgataccgcgagacccacgctcaccggctccagatttatcagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaattgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgcaacgttgttggcattgctacaggcatcgtggtgtcactctcgtcgtttggtatggcttcattcagctccggttcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcagtgttatcactcatggttatggcagcactgcataattctcttactgtcatgccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatacgggataatagtgtatcacatagcagaactttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatccagttcgatgtaacccactcgtgcacccaactgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatgttgaatactcatactcttcctttttcaatgggtaataactgatataattaaattgaagctctaatttgtgagtttagtatacatgcatttacttataatacagttttttagttttgctggccgcatcttctcaaatatgcttcccagcctgcttttctgtaacgttcaccctctaccttagcatcccttccctttgcaaatagtcctcttccaacaataataatgtcagatcctgtagagaccacatcatccacggttctatactgttgacccaatgcgtctcccttgtcatctaaacccacaccgggtgtcataatcaaccaatcgtaaccttcatctcttccacccatgtctctttgagcaataaagccgataacaaaatctttgtcgctcttcgcaatgtcaacagtacccttagtatattctccagtagatagggagcccttgcatgacaattctgctaacatcaaaaggcctctaggttcctttgttacttcttctgccgcctgcttcaaaccgctaacaatacctgggcccaccacaccgtgtgcattcgtaatgtctgcccattctgctattctgtatacacccgcagagtactgcaatttgactgtattaccaatgtcagcaaattttctgtcttcgaagagtaaaaaattgtacttggcggataatgcctttagcggcttaactgtgccctccatggaaaaatcagtcaagatatccacatgtgtttttagtaaacaaattttgggacctaatgcttcaactaactccagtaattccttggtggtacgaacatccaatgaagcacacaagtttgtttgcttttcgtgcatgatattaaatagcttggcagcaacaggactaggatgagtagcagcacgttccttatatgtagctttcgacatgatttatcttcgtttcctgcaggtttttgttctgtgcagttgggttaagaatactgggcaatttcatgtttcttcaacactacatatgcgtatatataccaatctaagtctgtgctccttccttcgttcttccttctgttcggagattaccgaatcaaaaaaatttcaaagaaaccgaaatcaaaaaaaagaataaaaaaaaaatgatgaattgaattgaaaagctagcttatcgatgataagctgtcaaagatgagaattaattccacggactatagactatactagatactccgtctactgtacgatacacttccgctcaggtccttgtcctttaacgaggccttaccactcttttgttactctattgatccagctcagcaaaggcagtgtgatctaagattctatcttcgcgatgtagtaaaactagctagaccgagaaagagactagaaatgcaaaaggcacttctacaatggctgccatcattattatccgatgtgacgctgcagcttctcaatgatattcgaatacgctttgaggagatacagcctaatatccgacaaactgttttacagatttacgatcgtacttgttacccatcattgaattttgaacatccgaacctgggagttttccctgaaacagatagtatatttgaacctgtataataatatatagtctagcgctttacggaagacaatgtatgtatttcggttcctggagaaactattgcatctattgcataggtaatcttgcacgtcgcatccccggttcattttctgcgtttccatcttgcacttcaatagcatatctttgttaacgaagcatctgtgcttcattttgtagaacaaaaatgcaacgcgagagcgctaatttttcaaacaaagaatctgagctgcatttttacagaacagaaatgcaacgcgaaagcgctattttaccaacgaagaatctgtgcttcatttttgtaaaacaaaaatgcaacgcgacgagagcgctaatttttcaaacaaagaatctgagctgcatttttacagaacagaaatgcaacgcgagagcgctattttaccaacaaagaatctatacttcttttttgttctacaaaaatgcatcccgagagcgctatttttctaacaaagcatcttagattactttttttctcctttgtgcgctctataatgcagtctcttgataactttttgcactgtaggtccgttaaggttagaagaaggctactttggtgtctattttctcttccataaaaaaagcctgactccacttcccgcgtttactgattactagcgaagctgcgggtgcattttttcaagataaaggcatccccgattatattctataccgatgtggattgcgcatactttgtgaacagaaagtgatagcgttgatgattcttcattggtcagaaaattatgaacggtttcttctattttgtctctatatactacgtataggaaatgtttacattttcgtattgttttcgattcactctatgaatagttcttactacaatttttttgtctaaagagtaatactagagataaacataaaaaatgtagaggtcgagtttagatgcaagttcaaggagcgaaaggtggatgggtaggttatatagggatatagcacagagatatatagcaaagagatacttttgagcaatgtttgtggaagcggtattcgcaatgggaagctccaccccggttgataatcagaaaagccccaaaaacaggaagattgtataagcaaatatttaaattgtaaacgttaatattttgttaaaattcgcgttaaatttttgttaaatcagctcattttttaacgaatagcccgaaatcggcaaaatcccttataaatcaaaagaatagaccgagatagggttgagtgttgttccagtttccaacaagagtccactattaaagaacgtggactccaacgtcaaagggcgaaaaagggtctatcagggcgatggcccactacgtgaaccatcaccctaatcaagttttttggggtcgaggtgccgtaaagcagtaaatcggaagggtaaacggatgcccccatttagagcttgacggggaaagccggcgaacgtggcgagaaaggaagggaagaaagcgaaaggagcgggggctagggcggtgggaagtgtaggggtcacgctgggcgtaaccaccacacccgccgcgcttaatggggcgctacagggcgcgtggggatgatccactagt</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>attR1 recombination site</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>attR1</seq:type>
+        <seq:location>
+            <seq:genbankStart>511</seq:genbankStart>
+            <seq:end>635</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:attribute name="modified_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>15dae5979058bfbf4f9166029b6e340ea3ca374fef578a11dc9e6e923860d7ae</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>attR2 recombination site</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>attR2</seq:type>
+        <seq:location>
+            <seq:genbankStart>2118</seq:genbankStart>
+            <seq:end>2242</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>15dae5979058bfbf4f9166029b6e340ea3ca374fef578a11dc9e6e923860d7ae</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>CYC1</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>polyA_site</seq:type>
+        <seq:location>
+            <seq:genbankStart>2366</seq:genbankStart>
+            <seq:end>2619</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>V5 epitope </seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2265</seq:genbankStart>
+            <seq:end>2306</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>85759b3811ff7dc47b03792ac85317be51431a3f9e01dcafce317ed736a391b0</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>HisTag</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2316</seq:genbankStart>
+            <seq:end>2333</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>de47c9b27eb8d300dbb5f2c353e632c393262cf06340c4fa7f1b40c4cbd36f90</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>GAL1</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>451</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>8d43407158818d7f3e03cc0a6ae6d789e9e393467ba847a998214eb4e292b989</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>T7</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>475</seq:genbankStart>
+            <seq:end>494</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>2 micron</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbankStart>5610</seq:genbankStart>
+            <seq:end>7081</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>d177bd8b0675a64580acfd4199c8beb6eba109dd6c9a0d06c5424143b7dcb02b</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>pUC</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbankStart>2803</seq:genbankStart>
+            <seq:end>3476</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>1bfedb90a487ecce837b77d13c349bf60548cc0326eba5435fd27c359231b6ca</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>f1</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>rep_origin</seq:type>
+        <seq:location>
+            <seq:genbankStart>7149</seq:genbankStart>
+            <seq:end>7604</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>3b9e9d4ed135268270adc99df1f1ceb9f5df2752e3e5c20ae5b42690d5113e16</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>AmpR</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>3321</seq:genbankStart>
+            <seq:end>4481</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:attribute name="modified_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>5aab670850a1fb271f9f1405d24cab56fc384c96b3180462360ae7c0a61206fe</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>URA3</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>4499</seq:genbankStart>
+            <seq:end>5606</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>5dd4207b65a770f9bb3a22599143525057f59a7f0c61a5be8a213d9b44e2e8e1</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>CmR</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>771</seq:genbankStart>
+            <seq:end>1430</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>de16db2a0fbaf4c535d6823a26824750a4c617dddf17aeb157436e59682c490b</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>ccdB</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>ORF</seq:type>
+        <seq:location>
+            <seq:genbankStart>1772</seq:genbankStart>
+            <seq:end>2077</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >User</seq:attribute>
+        <seq:seqHash>9575b2125169377b2ade7b401ea36c81228331d971f49664d9648d4f255d4868</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>pYES-DEST52.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="21147ca13c1ac0a281b7dc7fcdd77ae9dc67569b302c34744197a2621f6e73fd">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH4</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>atgtcttccgttactgggttttacattccaccaatctctttctttggtgaaggtgctttagaagaaaccgctgattacatcaaaaacaaggattacaaaaaggctttgatcgttactgatcctggtattgcagctattggtctctccggtagagtccaaaagatgttggaagaacgtgacttaaacgttgctatctatgacaaaactcaaccaaacccaaatattgccaatgtcacagctggtttgaaggttttgaaggaacaaaactctgaaattgttgtttccattggtggtggttctgctcacgacaatgctaaggccattgctttattggctactaacggtggggaaatcggagactatgaaggtgtcaatcaatctaagaaggctgctttaccactatttgccatcaacactactgctggtactgcttccgaaatgaccagattcactattatctctaatgaagaaaagaaaatcaagatggctatcattgacaacaacgtcactccagctgttgctgtcaacgatccatctaccatgtttggtttgccacctgctttgactgctgctactggtctagatgctttgactcactgtatcgaagcttatgtttccaccgcctctaacccaatcaccgatgcctgtgctttgaagggtattgatttgatcaatgaaagcttagtcgctgcatacaaagacggtaaagacaagaaggccagaactgacatgtgttacgctgaatacttggcaggtatggctttcaacaatgcttctctaggttatgttcatgcccttgctcatcaacttggtggtttctaccacttgcctcatggtgtttgtaacgctgtcttgttgcctcatgttcaagaggccaacatgcaatgtccaaaggccaagaagagattaggtgaaattgctttgcatttcggtgcttctcaagaagatccagaagaaaccatcaaggctttgcacgttttaaacagaaccatgaacattccaagaaacttgaaagaattaggtgttaaaaccgaagattttgaaattttggctgaacacgccatgcatgatgcctgccatttgactaacccagttcaattcaccaaagaacaagtggttgccattatcaagaaagcctatgaatattaa</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>ADH4</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>1149</seq:end>
+        </seq:location>
+        <seq:seqHash>c960c819e997c1c9d080235a5e24e65059b63cf66b95ff3da9a44773ebf81c1b</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>ADH4.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="824bf64e8f3e90adaf6e9a358b6000935d253cf763da00968c6c9a552be55c71">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH3</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>tccttacgaaaaaaaagatcaaggaaacatgtcggaaacaaatgggaaacaacaaaaaggacttatcattcctacttttttgtcgagggcatttgtcgagggtaatactgcatactgcctattgtcggtcccgcagaattaatagtggctgctcatacacaacgaaaaaaattgttaacaaaatagaaggattcgtctatgcccttttttcagtgcggaaattatataccacacaagccgtcgaagcccatagggtcctttaacaataaagactctcctaaaaaaatttttcttgtgacacgtcagtgcaggatataaatgtagcaagcgtatataacaaatgacaaagggttcttgcgcaaggttactttagcgttgctggataatgatcggattgtttttagatcacgatagcacatttgaggaatcgtatcgaaacggacagggcaagagtacgagggcgaaatgaacttataacaccattgatattttctcctcaatcttatcattccacgcacattattttcctactatgttatgcgggaacagttcctaaggaatttttctaatggcatttcggcagcgtcatcaaatgtacgcacccacttcaagtgatcattcgctcgttactacctatcacgtgtcgcatcactcgcgacgtccatgcgcatgctgtgccgcaggagaattcgagatgcgaatgagcagcagccattttgatgttgtgagcatcggaacgtttctgcgtccgtacactgtccttttgttacttagataatggctaaggcaagcagtccgggccacaggagtcaaaggcttttcgccagctcctaaacgctggaagtgtaattttttttcgtcttataaaattaaacaaacccttttagaaaggaacactcgctttatctcttcgaccgaatttactatacatggatatatatatattatcttctgttcacagttaaaactaggaatagtatagtcataagttaacaccatcatgttgagaacgtcaacattgttcaccaggcgtgtccaaccaagcctattttctagaaacattcttagattgcaatccacagctgcaatccctaagactcaaaaaggtgtcatcttttatgagaataaggggaagctgcattacaaagatatccctgtccccgagcctaagccaaatgaaattttaatcaacgttaaatattctggtgtatgtcacaccgatttacatgcttggcacggcgattggccattacctgttaaactaccattagtaggtggtcatgaaggtgctggtgtagttgtcaaactaggttccaatgtcaagggctggaaagtcggtgatttagcaggtatcaaatggctgaacggttcttgtatgacatgcgaattctgtgaatcaggtcatgaatcaaattgtccagatgctgatttatctggttacactcatgatggttctttccaacaatttgcgaccgctgatgctattcaagccgccaaaattcaacagggtaccgacttggccgaagtagccccaatattatgtgctggtgttactgtatataaagcactaaaagaggcagacttgaaagctggtgactgggttgccatctctggtgctgcaggtggcttgggttccttggccgttcaatatgcaactgcgatgggttacagagttctaggtattgatgcaggtgaggaaaaggaaaaacttttcaagaaattggggggtgaagtattcatcgactttactaaaacaaagaatatggtttctgacattcaagaagctaccaaaggtggccctcatggtgtcattaacgtttccgtttctgaagccgctatttctctatctacggaatatgttagaccatgtggtaccgtcgttttggttggtttgcccgctaacgcctacgttaaatcagaggtattctctcatgtggtgaagtccatcaatatcaagggttcttatgttggtaacagagctgatacgagagaagccttagacttctttagcagaggtttgatcaaatcaccaatcaaaattgttggattatctgaattaccaaaggtttatgacttgatggaaaagggcaagattttgggtagatacgtcgtcgatactagtaaataatagcgtgttacgcacccaaactttttatgaaagtctttgtttataatgatgaggtttataaatatatagtggagcaaagattaatcactaaatcaagaagcagtaccagtattttttctatatcaagtagtgataatggaaatagcccaaatttggcttccgtcgacacatagaacgtttgagagacattatcaccatcaagcatcgagccgcccaaacctaaccgtataagttttttcacgtttttgatttttccttgcacacttcgatattactctcacgataaaagggccgaagagaatatttttcttgaacatccagaattttaattcggagaaatttcacaagccgccgatttaagggtcctgtgttcttaataatcagcctctctcaaagcaggtaagaggcagtctttcttttaacaataggagacattcgaactaaaacatcagccccaaaaatgcgcttgaaggtcattaggatttggatttcttcctcatttttaaaggcgccccttttcgttttagtcatgctgggctagactagcacgtagtgtatggaatcaaactgatgccgtcccctgaattatatttacaattcagaaacgtctttgaacatttataattaaattataaaacaaaaggaatttgtaaaaaagactttcaaaagatgatccaataaactagattaaaaacccaatataagaagaagaatgtgtggcatttttggctattgcaattttttaattgagaagacaagaggagaaatcatcgacactttaatcgaagggttacaggcattggagtacaaggaatatgactccagtggaatttcgatccaaggtgatgagctggagtctctcaatatttataagcaaaccggtaaaataagcagtttgaaggaagaaatcgacctttacaatcttaataagaacctgccctttatttcgcattgtggcattgcccatactaggcgggcaacacatggagggctaagacgt</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>1st forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>788</seq:genbankStart>
+            <seq:end>807</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >59.97</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CAAGCAGTCCGGGCCACAGG</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1561.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >5.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.07</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group0_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>1st reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2329</seq:genbankStart>
+            <seq:end>2348</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GGTTTGGGCGGCTCGATGCT</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1561.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >5.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.07</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group0_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>2nd forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>668</seq:genbankStart>
+            <seq:end>687</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GCATGCTGTGCCGCAGGAGA</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1681.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.00</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group1_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>2nd reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2329</seq:genbankStart>
+            <seq:end>2348</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GGTTTGGGCGGCTCGATGCT</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1681.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.00</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group1_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>3rd forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>649</seq:genbankStart>
+            <seq:end>668</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >59.85</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >TCACTCGCGACGTCCATGCG</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1700.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.20</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group2_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>3rd reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>2329</seq:genbankStart>
+            <seq:end>2348</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GGTTTGGGCGGCTCGATGCT</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >1700.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.20</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group2_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>4th forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>788</seq:genbankStart>
+            <seq:end>807</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >59.97</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CAAGCAGTCCGGGCCACAGG</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2332.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >7.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.35</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group3_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>4th reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>3100</seq:genbankStart>
+            <seq:end>3119</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.32</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CCCTCCATGTGTTGCCCGCC</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2332.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >7.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >3.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.35</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group3_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>5th forward primer</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>primer_bind</seq:type>
+        <seq:location>
+            <seq:genbankStart>668</seq:genbankStart>
+            <seq:end>687</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >65.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.04</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >6.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >2.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >GCATGCTGTGCCGCAGGAGA</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2452.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.28</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group4_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>5th reverse primer</seq:label>
+        <seq:complement>true</seq:complement>
+        <seq:type>misc_feature</seq:type>
+        <seq:location>
+            <seq:genbankStart>3100</seq:genbankStart>
+            <seq:end>3119</seq:end>
+        </seq:location>
+        <seq:attribute name="created_by" quoted="true" >primer3</seq:attribute>
+        <seq:attribute name="%GC" quoted="true" >70.0</seq:attribute>
+        <seq:attribute name="Tm" quoted="true" >60.32</seq:attribute>
+        <seq:attribute name="Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Monovalent_Salt_Concentration" quoted="true" >50.0</seq:attribute>
+        <seq:attribute name="Divalent_Salt_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="DNTP_Concentration" quoted="true" >0.0</seq:attribute>
+        <seq:attribute name="Sequence" quoted="true" >CCCTCCATGTGTTGCCCGCC</seq:attribute>
+        <seq:attribute name="Product_Size" quoted="true" >2452.0</seq:attribute>
+        <seq:attribute name="Pair_Hairpin" quoted="true" >4.0</seq:attribute>
+        <seq:attribute name="Pair_Primer-Dimer" quoted="true" >1.0</seq:attribute>
+        <seq:attribute name="Pair_Tm_Diff" quoted="true" >0.28</seq:attribute>
+        <seq:attribute name="annotation_group" quoted="true" >PrimerPlugin Group4_urn:local:ANEZEI01:1334946705923.62</seq:attribute>
+        <seq:attribute name="note" quoted="true" >Geneious type: primer_bind_reverse</seq:attribute>
+        <seq:seqHash>6a4875ddaceaa91fb3369f0f6d962f77442daf1b1d97733457d12bcabdf79441</seq:seqHash>
+    </seq:feature>
+    <seq:feature>
+        <seq:label>ADH3</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>CDS</seq:type>
+        <seq:location>
+            <seq:genbankStart>1001</seq:genbankStart>
+            <seq:end>2128</seq:end>
+        </seq:location>
+        <seq:seqHash>fac1cbe3a320ec0d0050c29d90932b3b445d83d7633ce8b5b62ee54c142fa32f</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>ADH3.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="c746524623262fae61328fc85aeac8099e143f893a7d6a11216dfdb30c5e6d68">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH1_terminator</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>gcgaatttcttatgatttatgatttttattattaaataagttataaaaaaaataagtgtatacaaattttaaagtgactcttaggttttaaaacgaaaattcttattcttgagtaactctttcctgtaggtcaggttgctttctcaggtatagcatgaggtcgctcttattgaccacacctctaccgg</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>ADH1_terminator</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>terminator</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>188</seq:end>
+        </seq:location>
+        <seq:seqHash>07ec9bf950252d0254d4d778698c2e4173f36dbc3f57f51f34d1b85a07c2eab0</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>ADH1_terminator.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="ad1a24afaf70c94b868536ed60a87c95da8c776cc3c205def6382f285bc847ed">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>TEF1_terminator</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>ggagattgataagacttttctagttgcatatcttttatatttaaatcttatctattagttaattttttgtaatttatccttatatatagtctggttattctaaaatatcatttcagtatctaaaaattcccctcttttttcagttatatcttaacaggcgacagtccaaatgttgatttatcccagtccgattcatcag</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>TEF1_terminator</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>terminator</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>199</seq:end>
+        </seq:location>
+        <seq:seqHash>ab3df617aaa3140f04dc53f65b5446f34a6b2bdbb1f7b78db8db4d067ba14db9</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>TEF1_terminator.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="3d690d9318dabbab3b68ca75fc491c0affdb4e0efb5aa1557ca4ed9febcc6405">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH1_promoter</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>tggcaaccaaacccatacatcgggattcctataataccttcgttggtctccctaacatgtaggtggcggaggggagatatacaatagaacagataccagacaagacataatgggctaaacaagactacaccaattacactgcctcattgatggtggtacataacgaactaatactgtagccctagacttgatagccatcatcatatcgaagtttcactaccctttttccatttgccatctattgaagtaataataggcgcatgcaacttcttttctttttttttcttttctctctcccccgttgttgtctcaccatatccgcaatgacaaaaaaatgatggaagacactaaaggaaaaaattaacgacaaagacagcaccaacagatgtcgttgttccagagctgatgaggggtatctcgaagcacacgaaactttttccttccttcattcacgcacactactctctaatgagcaacggtatacggccttccttccagttacttgaatttgaaataaaaaaaagtttgctgtcttgctatcaagtataaatagacctgcaattattaatcttttgtttcctcgtcattgttctcgttccctttcttccttgtttctttttctgcacaatatttcaagctataccaagcatacaatcaactatctcatataca</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>ADH1_promoter</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>672</seq:end>
+        </seq:location>
+        <seq:seqHash>c2facc35b4e9b09f90473d9c6d7d30aee5d7eef7b9310835a57a9caeafd97d8c</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>ADH1_promoter.xml</de:fileName>
+    </de:sequenceFile>
+    <de:sequenceFile hash="bcf3ae6f0b4080b14b9e8b59cff21384ff0fbd2a5293c46f83a761fccf287302">
+      <de:format>jbei-seq</de:format>
+      <de:content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>TEF1_promoter</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>gatcccccacacaccatagcttcaaaatgtttctactccttttttactcttccagattttctcggactccgcgcatcgccgtaccacttcaaaacacccaagcacagcatactaaatttcccctctttcttcctctagggtgtcgttaattacccgtactaaaggtttggaaaagaaaaaagagaccgcctcgtttctttttcttcgtcgaaaaaggcaataaaaatttttatcacgtttctttttcttgaaaatttttttttttgatttttttctctttcgatgacctcccattgatatttaagttaataaacggtcttcaatttctcaagtttcagtttcatttttcttgttctattacaactttttttacttcttgctcattagaaagaaagcatagcaatctaatctaagttttaattacaaa</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>TEF1_promoter</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>427</seq:end>
+        </seq:location>
+        <seq:seqHash>a6df5cb2b51fa56609c7daf08d28f0e41801b96f9514a9d179992a63afd516b5</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>
+]]></de:content>
+      <de:fileName>TEF1_promoter.xml</de:fileName>
+    </de:sequenceFile>
+  </de:sequenceFiles>
+  <de:partVOs>
+    <de:partVO id="1340844577341388">
+      <de:name>pYES-DEST52_SalI_SacII</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>2113</de:startBP>
+      <de:stopBP>644</de:stopBP>
+      <de:sequenceFileHash>eb06c5690e67f595907571174a482f7982129ef3102de5c53ea5f1bdc4d80721</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844577348624">
+          <de:fas>DIGEST</de:fas>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1340844602370619">
+      <de:name>ADH4_CDS</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>1149</de:stopBP>
+      <de:sequenceFileHash>21147ca13c1ac0a281b7dc7fcdd77ae9dc67569b302c34744197a2621f6e73fd</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844602371722">
+          <de:fas/>
+        </de:part>
+        <de:part id="1340844760265152">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1340844663478515">
+      <de:name>ADH3_CDS</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1001</de:startBP>
+      <de:stopBP>2128</de:stopBP>
+      <de:sequenceFileHash>824bf64e8f3e90adaf6e9a358b6000935d253cf763da00968c6c9a552be55c71</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844663487618">
+          <de:fas/>
+        </de:part>
+        <de:part id="1340844768184313">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1340844701708844">
+      <de:name>ADH1_terminator</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>188</de:stopBP>
+      <de:sequenceFileHash>c746524623262fae61328fc85aeac8099e143f893a7d6a11216dfdb30c5e6d68</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844701709515">
+          <de:fas/>
+        </de:part>
+        <de:part id="1340844794094065">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1340844711403124">
+      <de:name>TEF1_terminator</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>199</de:stopBP>
+      <de:sequenceFileHash>ad1a24afaf70c94b868536ed60a87c95da8c776cc3c205def6382f285bc847ed</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844711404758">
+          <de:fas/>
+        </de:part>
+        <de:part id="1340844800046372">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1340844727618838">
+      <de:name>ADH1_promoter</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>672</de:stopBP>
+      <de:sequenceFileHash>3d690d9318dabbab3b68ca75fc491c0affdb4e0efb5aa1557ca4ed9febcc6405</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844727619457">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+    <de:partVO id="1340844736553143">
+      <de:name>TEF1_promoter</de:name>
+      <de:revComp>false</de:revComp>
+      <de:startBP>1</de:startBP>
+      <de:stopBP>427</de:stopBP>
+      <de:sequenceFileHash>bcf3ae6f0b4080b14b9e8b59cff21384ff0fbd2a5293c46f83a761fccf287302</de:sequenceFileHash>
+      <de:parts>
+        <de:part id="1340844736554914">
+          <de:fas/>
+        </de:part>
+      </de:parts>
+    </de:partVO>
+  </de:partVOs>
+  <de:eugeneRules>
+    <de:eugeneRule>
+      <de:name>rule1</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844602370619</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule2</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844701708844</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule3</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844727618838</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule4</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844663478515</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule5</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844711403124</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule6</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844736553143</de:operand1ID>
+      <de:compositionalOperator>MORETHAN</de:compositionalOperator>
+      <de:operand2Number>1</de:operand2Number>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule7</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844701708844</de:operand1ID>
+      <de:compositionalOperator>NEXTTO</de:compositionalOperator>
+      <de:operand2ID>1340844727618838</de:operand2ID>
+    </de:eugeneRule>
+    <de:eugeneRule>
+      <de:name>rule8</de:name>
+      <de:negationOperator>true</de:negationOperator>
+      <de:operand1ID>1340844711403124</de:operand1ID>
+      <de:compositionalOperator>NEXTTO</de:compositionalOperator>
+      <de:operand2ID>1340844736553143</de:operand2ID>
+    </de:eugeneRule>
+  </de:eugeneRules>
+  <de:j5Collection>
+    <de:isCircular>true</de:isCircular>
+    <de:j5Bins>
+      <de:j5Bin>
+        <de:binName>vector_backbone</de:binName>
+        <de:iconID>origin_of_replication</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1340844577348624</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>CDS1</de:binName>
+        <de:iconID>cds</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1340844602371722</de:partID>
+          <de:partID>1340844663487618</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>terminator1</de:binName>
+        <de:iconID>terminator</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1340844701709515</de:partID>
+          <de:partID>1340844711404758</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>promoter2</de:binName>
+        <de:iconID>promoter</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1340844727619457</de:partID>
+          <de:partID>1340844736554914</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>CDS2</de:binName>
+        <de:iconID>cds</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1340844760265152</de:partID>
+          <de:partID>1340844768184313</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+      <de:j5Bin>
+        <de:binName>terminator2</de:binName>
+        <de:iconID>terminator</de:iconID>
+        <de:direction>forward</de:direction>
+        <de:dsf>false</de:dsf>
+        <de:binItems>
+          <de:partID>1340844794094065</de:partID>
+          <de:partID>1340844800046372</de:partID>
+        </de:binItems>
+      </de:j5Bin>
+    </de:j5Bins>
+  </de:j5Collection>
+</de:design>

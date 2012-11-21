@@ -53,6 +53,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'textfield',
                             cls: 'partNameField',
+                            name: "name",
                             fieldLabel: 'Part Name',
                             enableKeyEvents: true
                         },
@@ -66,6 +67,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             height: 20,
                             cls: 'reverseComplementField',
+                            name: 'revComp',
                             fieldLabel: 'Reverse Complement',
                             labelWidth: 160
                         },
@@ -73,18 +75,21 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             height: 20,
                             cls: 'startBPField',
+                            name: 'genbankStartBP',
                             fieldLabel: 'Start BP'
                         },
                         {
                             xtype: 'displayfield',
                             height: 20,
                             cls: 'stopBPField',
+                            name: 'endBP',
                             fieldLabel: 'End BP'
                         }
                     ]
                 },
                 {
                     xtype: 'form',
+                    cls: 'forcedAssemblyStrategyForm',
                     flex: 1,
                     maxHeight: 80,
                     bodyPadding: 10,
@@ -93,6 +98,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
+                            name: 'fas',
                             anchor: '100%',
                             store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
                                     'Embed_in_primer_reverse',
@@ -175,12 +181,25 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
+                            /*selModel: Ext.create('Ext.selection.CellModel', {
+                                mode: "SINGLE",
+                                allowDeselect: true
+                            }),*/
+                            plugins: [
+                                Ext.create('Ext.grid.plugin.RowEditing', {
+                                    clicksToEdit: 2
+                                })
+                            ],
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
                                     width: 100,
                                     text: 'Column',
-                                    dataIndex: 'binName'
+                                    dataIndex: 'binName',
+                                    editor: {
+                                        xtype: 'textfield',
+                                        allowBlank: false
+                                    }
                                 },
                                 {
                                     xtype: 'gridcolumn',
@@ -244,17 +263,15 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'button',
                                     cls: 'inspectorRemoveColumnBtn',
-                                    width: 100,
+                                    width: 130,
                                     text: 'Remove Column'
                                 }
                             ]
                         },
                         {
-                            xtype: 'textfield',
-                            anchor: '100%',
-                            height: 200,
+                            xtype: 'displayfield',
+                            cls: 'columnContentDisplayField',
                             margin: 10,
-                            width: 269,
                             fieldLabel: 'Column Content',
                             labelAlign: 'top'
                         }
