@@ -42,7 +42,7 @@ Ext.define('Vede.view.de.grid.Bin', {
         }
 
         var iconSource = "resources/images/icons/device/small/promoter.png";
-
+        iconSource = config.iconSource;
         // Create the header for the column.
         this.binHeader = Ext.create('Ext.container.Container', {
             items: [{
@@ -127,5 +127,5 @@ Ext.define('Vede.view.de.grid.Bin', {
 
     deselect: function() {
         this.binHeader.down().removeBodyCls("binHeader-selected");
-    }
+    },
 });

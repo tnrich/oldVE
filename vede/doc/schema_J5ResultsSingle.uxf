@@ -115,7 +115,7 @@ Nov 8, 2012 -DW</panel_attributes>
     <panel_attributes>AssembledSequenceFile
 "pj50XXXX.gb"
 --
--type [GENBANK|FASTA|JBEISEQ|SBOL
+-format [GENBANK|FASTA|JBEISEQ|SBOL
 -fileContent</panel_attributes>
     <additional_attributes/>
   </element>
@@ -123,7 +123,7 @@ Nov 8, 2012 -DW</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>494</x>
-      <y>130</y>
+      <y>143</y>
       <w>272</w>
       <h>64</h>
     </coordinates>
@@ -163,14 +163,13 @@ r2=1..n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>130</x>
-      <y>169</y>
-      <w>636</w>
-      <h>142</h>
+      <x>260</x>
+      <y>156</y>
+      <w>64</w>
+      <h>155</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-r2=    1..n</panel_attributes>
-    <additional_attributes>611;39;39;39;39;117</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>39;39;39;130</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -410,8 +409,8 @@ GoldenGate
     <coordinates>
       <x>1456</x>
       <y>65</y>
-      <w>104</w>
-      <h>767</h>
+      <w>103</w>
+      <h>766</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;78;39;78;741;65;741</additional_attributes>
@@ -454,8 +453,8 @@ GoldenGate
     <coordinates>
       <x>1443</x>
       <y>39</y>
-      <w>130</w>
-      <h>1326</h>
+      <w>129</w>
+      <h>1325</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>52;39;104;39;104;1300;39;1300</additional_attributes>

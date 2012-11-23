@@ -1,0 +1,21 @@
+LOCUS       ADH1_promoter            672 bp ds-DNA     linear       28-JUN-2012
+ACCESSION   ADH1_promoter
+VERSION     ADH1_promoter
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     promoter        1..672
+                     /label="ADH1_promoter"
+ORIGIN      
+        1 tggcaaccaa acccatacat cgggattcct ataatacctt cgttggtctc cctaacatgt
+       61 aggtggcgga ggggagatat acaatagaac agataccaga caagacataa tgggctaaac
+      121 aagactacac caattacact gcctcattga tggtggtaca taacgaacta atactgtagc
+      181 cctagacttg atagccatca tcatatcgaa gtttcactac cctttttcca tttgccatct
+      241 attgaagtaa taataggcgc atgcaacttc ttttcttttt ttttcttttc tctctccccc
+      301 gttgttgtct caccatatcc gcaatgacaa aaaaatgatg gaagacacta aaggaaaaaa
+      361 ttaacgacaa agacagcacc aacagatgtc gttgttccag agctgatgag gggtatctcg
+      421 aagcacacga aactttttcc ttccttcatt cacgcacact actctctaat gagcaacggt
+      481 atacggcctt ccttccagtt acttgaattt gaaataaaaa aaagtttgct gtcttgctat
+      541 caagtataaa tagacctgca attattaatc ttttgtttcc tcgtcattgt tctcgttccc
+      601 tttcttcctt gtttcttttt ctgcacaata tttcaagcta taccaagcat acaatcaact
+      661 atctcatata ca    
+//

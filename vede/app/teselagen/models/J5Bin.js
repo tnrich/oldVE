@@ -9,7 +9,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
     requires: [
         "Teselagen.models.Part",
-        "Teselagen.constants.SBOLvIcons",
+        "Teselagen.constants.Constants",
+        "Teselagen.constants.SBOLIcons",
         "Teselagen.utils.NullableInt"
     ],
 
@@ -24,7 +25,6 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Input parameters.
-     * @param {Ext.data.Store} parts A store of many(@link Teselagen.models.Part}
      * @param {String} binName (REQUIRED) String must be alphanumeric with only "_" or "-". Will eliminate other characters when saving the name.
      * @param {String} iconID
      * @param {Boolean} directionForward True for "forward" or False for "reverse". All parts within a bin should be the same direction.
@@ -56,7 +56,9 @@ Ext.define("Teselagen.models.J5Bin", {
             name: "iconID",
             convert: function(v, record) {
                 if ( v === null || v === undefined || v === "") {
-                    return record.self.GENERIC;
+                    // DW NOTE: I am saving the key here, but maybe it should be name
+                    // Depends on how you use iconID to find the original URL.
+                    return Teselagen.constants.SBOLIcons.ICONS.GENERIC.key;
                 } else {
                     return v;
                 }
@@ -65,8 +67,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
-        {name: "fro",               type: "string",     defaultValue: ""},
-        {name: "fas",               type: "string",     defaultValue: ""},
+        {name: "fro",               type: "string",     defaultValue: "NONE"},
+        {name: "fas",               type: "string",     defaultValue: "NONE"},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
@@ -86,18 +88,22 @@ Ext.define("Teselagen.models.J5Bin", {
 
     validations: [
         {field: "binName",          type: "presence"},
-        {field: "iconID",           type: "presence"},
+        {
+            field: "iconID",
+            type: "inclusion",
+            //list: Teselagen.constants.SBOLIcons.ICON_LIST
+        },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
-        {field: "fro",              type: "presence"},
+        //{field: "fro",              type: "presence"},
         {
             field: "fas",
             type: "inclusion",
             list: Teselagen.constants.Constants.FAS_LIST
-        },
-        {field: "extra5PrimeBps",   type: "presence"},
-        {field: "extra3PrimeBps",   type: "presence"},
-        {field: "j5collection_id",    type: "presence"}
+        }//,
+        //{field: "extra5PrimeBps",   type: "presence"},
+        //{field: "extra3PrimeBps",   type: "presence"},
+        //{field: "j5collection_id",    type: "presence"}
     ],
 
     associations: [
@@ -106,18 +112,16 @@ Ext.define("Teselagen.models.J5Bin", {
             model: "Teselagen.models.Part",
             name: "parts",
             foreignKey: "j5bin_id"
-        }
-        // PLEASE DONT INCLUDE THIS BELONG, DONT NEEDED
-        /*,
-        {
+        },
+        {//Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.J5Collection",
+            name: "j5collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5Collection",
             foreignKey: "j5collection_id"
         }
-        */
     ],
 
     /**

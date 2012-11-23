@@ -1,0 +1,17 @@
+LOCUS       TEF1_promoter            427 bp ds-DNA     linear       28-JUN-2012
+ACCESSION   TEF1_promoter
+VERSION     TEF1_promoter
+KEYWORDS    .
+FEATURES             Location/Qualifiers
+     promoter        1..427
+                     /label="TEF1_promoter"
+ORIGIN      
+        1 gatcccccac acaccatagc ttcaaaatgt ttctactcct tttttactct tccagatttt
+       61 ctcggactcc gcgcatcgcc gtaccacttc aaaacaccca agcacagcat actaaatttc
+      121 ccctctttct tcctctaggg tgtcgttaat tacccgtact aaaggtttgg aaaagaaaaa
+      181 agagaccgcc tcgtttcttt ttcttcgtcg aaaaaggcaa taaaaatttt tatcacgttt
+      241 ctttttcttg aaaatttttt tttttgattt ttttctcttt cgatgacctc ccattgatat
+      301 ttaagttaat aaacggtctt caatttctca agtttcagtt tcatttttct tgttctatta
+      361 caactttttt tacttcttgc tcattagaaa gaaagcatag caatctaatc taagttttaa
+      421 ttacaaa     
+//

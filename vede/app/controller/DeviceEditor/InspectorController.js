@@ -11,25 +11,55 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     activeProject: null,
     columnsGrid: null,
+    inspector: null,
     selectedPart: null,
     tabPanel: null,
 
-    onPartSelected: function(j5Part) {
+    onPartSelected: function(j5Part, binIndex) {
         this.inspector.setActiveTab(0);
 
-        //this.populatePartInformation(j5Part);
+        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+        var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         if(j5Part) {
-            this.tabPanel.getActiveTab().down("form[cls='PartPropertiesForm']").loadRecord(j5Part);
-            this.tabPanel.getActiveTab().down("form[cls='forcedAssemblyStrategyForm']").loadRecord(j5Part);
+            partPropertiesForm.loadRecord(j5Part);
+            fasForm.loadRecord(j5Part);
+
+            this.selectedPart = j5Part;
+        } else {
+            var newPart = this.DeviceDesignManager.createPart(this.activeProject,
+                                                              binIndex);
+
+            partPropertiesForm.loadRecord(newPart);
+            fasForm.loadRecord(newPart);
+
+            this.selectedPart = newPart;
         }
-        this.selectedPart = j5Part;
-        console.log("Part selected");
+
     },
 
     onBinSelected: function(j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
+        var contentField = 
+            this.inspector.down("displayfield[cls='columnContentDisplayField']");
+        var contentArray = [];
+
+        this.inspector.setActiveTab(1);
+
+        var binIndex = this.activeProject.getJ5Collection().bins().indexOf(j5Bin);
+        /*selectionModel.setCurrentPosition({
+            column: 0,
+            row: this.activeProject.getJ5Collection().bins().indexOf(j5Bin),
+        });
+        selectionModel.select(this.activeProject.getJ5Collection().bins().indexOf(j5Bin));*/
 
         selectionModel.select(j5Bin);
+
+        j5Bin.parts().each(function(part) {
+            contentArray.push(part.get("name"));
+            contentArray.push("<br>");
+        });
+
+        contentField.setValue(contentArray.join(""));
     },
 
     onPartNameFieldChange: function(nameField) {
@@ -75,11 +105,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * new grid and j5 bins.
      */
     onTabChange: function(tabPanel, newTab, oldTab) {
-        if(newTab.model) {
+        if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("update", this.onBinsUpdate, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
+
+                // Unset listeners for the parts store of each bin.
+                this.activeBins.each(function(bin) {
+                    var parts = bin.parts();
+
+                    parts.un("add", this.onAddToParts, this);
+                    parts.un("remove", this.onRemoveFromParts, this);
+                }, this);
             }
 
             var self = this;
@@ -90,6 +128,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.activeBins.on("add", this.onAddToBins, this);
             this.activeBins.on("update", this.onBinsUpdate, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
+
+            // Add listeners to each bin's parts store.
+            this.activeBins.each(function(bin) {
+                var parts = bin.parts();
+
+                parts.on("add", this.onAddToParts, this);
+                parts.on("remove", this.onRemoveFromParts, this);
+            }, this);
 
             this.inspector = newTab.down("component[cls='InspectorPanel']");
 
@@ -104,13 +150,27 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
-    onAddToBins: function(activeBins, bins, index) {
+    onAddToBins: function(activeBins, addedBins, index) {
+        // Add event listeners to the parts store of this bin.
+        Ext.each(addedBins, function(j5Bin) {
+            parts = j5Bin.parts();
+            parts.on("add", this.onAddToParts, this);
+            parts.on("remove", this.onRemoveFromParts, this);
+        }, this);
     },
 
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
     },
 
     onRemoveFromBins: function(activeBins, removedBin, index) {
+    },
+
+    onAddToParts: function(parts, addedParts, index) {
+        this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+    },
+
+    onRemoveFromParts: function(parts, removedPart, index) {
+        this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
     },
 
     renderCollectionInfo: function() {
@@ -130,61 +190,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
-        }
-    },
 
-    populatePartInformation: function(j5Part) {
-        var sourceField = this.inspector.down("component[cls='partSourceField']");
-        var revCompField = this.inspector.down("component[cls='reverseComplementField']");
-        var nameField = this.inspector.down("textfield[cls='partNameField']");
-        var startField = this.inspector.down("displayfield[cls='startBPField']");
-        var stopField = this.inspector.down("displayfield[cls='stopBPField']");
-        var strategyField = this.inspector.down("combobox[cls='forcedAssemblyComboBox']");
-
-        if(j5Part) {
-            nameField.setValue(j5Part.get("name"));
-
-            var existSequence = (j5Part.get('sequencefile_id')=="")? false : true;
-            if(existSequence)
-            {
-                var sourceFile = j5Part.getSequenceFile({
-                    callback: function(record,operation){
-                        sourceField.setValue(sourceFile.get("partSource"));
-                        revCompField.setValue(j5Part.get("revComp"));                        
-                    }
-                });
-            } else {
-                sourceField.setValue("No source assigned");
-                revCompField.setValue("No source assigned");
-            }
-
-            var startBP = j5Part.get("genbankStartBP");
-            if(startBP < 1) {
-                startField.setValue("");
-            } else {
-                startField.setValue(startBP);
-            }
-
-            var endBP = j5Part.get("endBP");
-            if(endBP < 1) {
-                stopField.setValue("");
-            } else {
-                stopField.setValue(endBP);
-            }
-
-            var strategy = j5Part.get("fas");
-            if(strategy) {
-                strategyField.setValue(strategy);
-            } else {
-                strategyField.setValue("None");
-            }
-        } else {
-            nameField.setValue("");
-            sourceField.setValue("");
-            revCompField.setValue("");
-            startField.setValue("");
-            stopField.setValue("");
-            strategyField.setValue("None");
+            console.log('columns grid change');
         }
     },
 

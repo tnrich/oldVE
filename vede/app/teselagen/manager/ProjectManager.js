@@ -33,7 +33,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(records.length != 1) console.log('Error loading user');
+				if(!records) {console.log('Error loading user'); return cb(false);}
 				self.currentUser = users.first();
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
@@ -79,7 +79,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		this.workingProject = project;
 
 		Ext.getCmp('projectDesignPanel').setLoading(true);
-
 		// Load Designs And Design Child Resources and Render into ProjectPanel
 		this.loadDesignAndChildResources();
 	},
@@ -88,24 +87,30 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var id = item.data.id;
 		var deprojects = this.workingProject.deprojects();
 		var selectedDEProject = deprojects.getById(id);
-
+		var tabPanel = Ext.getCmp('mainAppPanel');
 		// First check tab is not already opened
 		var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
 		var duplicated = false;
-		tabs.forEach(function(tab){
-			if(tab.model.internalId == selectedDEProject.internalId) duplicated = true;
+		tabPanel.items.items.forEach(function(tab,key){
+			if(tab.model)
+			{
+				if(tab.model.internalId == selectedDEProject.internalId) 
+				{
+					duplicated = true;
+					tabPanel.setActiveTab(key);
+				}
+			}
 		});
 		if(!duplicated)
 		{
 			var self = this;
+			Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
 			var selectedDesign = selectedDEProject.getDesign({
 				callback: function (record,operation) {
 					selectedDesign = selectedDEProject.getDesign();
-					var tabPanel = Ext.getCmp('mainAppPanel');
+					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
 					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
-				
-					var deController = Vede.application.getController('Vede.controller.DeviceEditor.DeviceEditorPanelController');
-					//deController.renderDesignInContext();
+					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();		
 				}
 			});
 		}	
@@ -136,6 +141,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	createNewProject: function(){
 		
 		var onPromptClosed = function(answer,text) {
+
+				if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
+
 				var self = this;
 				var project = Ext.create("Teselagen.models.Project", {
 			        name: text,
@@ -157,53 +165,68 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	createNewDeviceEditorProject: function(){
 
 		var onPromptClosed = function(answer,text) {
+
+			if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
+
 		    var self = this;
 
 		    if(this.workingProject) {
 			    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-			        name: text
+			        name: text,
+			        dateCreated: new Date(),
+			        dateModified: new Date()
 			    });
-			    
-	            var bin = Ext.create("Teselagen.models.J5Bin", {
-	                binName: "Empty bin"
+
+	            var binsArray = [];
+	            var parts = [];
+
+	            for(var binIndex = 0;binIndex<1;binIndex++)
+	            {
+	                var newBin = Ext.create("Teselagen.models.J5Bin", {
+	                    binName: "bin"+binIndex+1
+	                });
+	                var tempParts = [];
+	                for(var i=0;i<2;i++)
+	                {
+	                    var newPart = Ext.create("Teselagen.models.Part", {
+	                        name: "",
+	                        genbankStartBP: 1,
+	                        endBP: 7
+	                    });
+	                    parts.push(newPart);
+	                    tempParts.push(newPart);
+	                }
+	                newBin.addToParts(tempParts);
+	                binsArray.push(newBin);
+	            }
+
+	            var afterPartsSaved = function(){
+
+		            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+		            deproject.setDesign(design);
+				    self.workingProject.deprojects().add(deproject);
+
+				    deproject.save({
+				        callback: function(){
+				        	//console.log("DE Project saved");
+				        	design.set( 'deproject_id', deproject.get('id') );
+				        	design.save({
+				        		callback: function(){
+				        			//console.log("DESIGN SAVED");
+				        			self.loadDesignAndChildResources();
+									self.openDesign(deproject);
+				            	}});
+				    }});
+	        	};
+
+	            parts.forEach(function(part,partIndex){
+	            	part.save({
+	            		callback:function(){
+	            			if(partIndex == parts.length-1) afterPartsSaved();
+	            		}
+	            	});
 	            });
 
-	            var part1a = Ext.create("Teselagen.models.Part", {
-	                name: "part1a",
-	                genbankStartBP: 1,
-	                endBP: 7
-	            });
-
-	            var part1b = Ext.create("Teselagen.models.Part", {
-	                name: "part1b",
-	                genbankStartBP: 1,
-	                endBP: 7
-	            });
-
-	            part1a.save({callback: function(){
-		            part1b.save({callback: function(){
-
-			            bin.addToParts([part1a, part1b]);
-
-			            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins([bin]);
-			            
-			            deproject.setDesign(design);
-
-					    self.workingProject.deprojects().add(deproject);
-
-					    deproject.save({
-					        callback: function(){
-					        	//console.log("DE Project saved");
-					        	design.set( 'deproject_id', deproject.get('id') );
-					        	design.save({
-					        		callback: function(){
-					        			//console.log("DESIGN SAVED");
-					        			self.loadDesignAndChildResources();
-					            	}});
-					    }});
-
-		            }});	            	
-	            }});
 			}
 		};
 

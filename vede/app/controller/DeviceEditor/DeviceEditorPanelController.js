@@ -9,17 +9,50 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     onDeviceEditorSaveBtnClick: function(){
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         activeTab.el.mask('Loading');
-        activeTab.model.getDesign().save({ 
-            success: function(record, operation)
-            {
-                    console.log("Design Saved!");
-                    activeTab.el.unmask();
-            },
-            failure: function(record, operation)
-            {
-                //handle failure(s) here
-            }
+        
+        var design = activeTab.model.getDesign();
+
+        var saveDesign = function(){
+            console.log("Saving design");
+            activeTab.model.getDesign().save({ 
+                callback: function(record, operation)
+                {
+                        console.log("Design Saved!");
+                        activeTab.el.unmask();
+                }
+            });
+        };
+
+        var countParts = 0;
+
+        design.getJ5Collection().bins().each(function(bin,binKey){
+            bin.parts().each(function(part,partIndex){
+                countParts++;
+            });
         });
+
+        console.log("Count parts is: "+countParts);
+
+        design.getJ5Collection().bins().each(function(bin,binKey){
+            bin.parts().each(function(part,partIndex){
+                if(part.isModified('name'))
+                {
+                    console.log("Saving part");
+                    part.save({
+                        callback:function(part){
+                            if(countParts==1) saveDesign();
+                            countParts--;
+                        }
+                    });
+                }
+                else
+                {
+                    if(countParts==1) saveDesign();
+                    countParts--;
+                }
+            });
+        });
+
     },
 
     init: function () {

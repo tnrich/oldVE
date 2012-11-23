@@ -1,0 +1,239 @@
+LOCUS       ADH3                    3128 bp    DNA     linear   UNA 27-JUN-2012
+DEFINITION  ORF.
+ACCESSION   urn.local...1353100132437.1261
+VERSION     urn.local...1353100132437.1261
+KEYWORDS    .
+SOURCE      Saccharomyces cerevisiae
+  ORGANISM  Saccharomyces cerevisiae
+            .
+FEATURES             Location/Qualifiers
+     primer_bind     649..668
+                     /created_by="primer3"
+                     /%GC="65.0"
+                     /Tm="59.85"
+                     /Hairpin="6.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="TCACTCGCGACGTCCATGCG"
+                     /Product_Size="1700.0"
+                     /Pair_Hairpin="6.0"
+                     /Pair_Primer-Dimer="3.0"
+                     /Pair_Tm_Diff="0.20"
+                     /annotation_group="PrimerPlugin
+                     Group2_urn:local:ANEZEI01:1334946705923.62"
+                     /label="3rd forward primer"
+     primer_bind     668..687
+                     /created_by="primer3"
+                     /%GC="65.0"
+                     /Tm="60.04"
+                     /Hairpin="6.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="GCATGCTGTGCCGCAGGAGA"
+                     /Product_Size="1681.0"
+                     /Pair_Hairpin="6.0"
+                     /Pair_Primer-Dimer="3.0"
+                     /Pair_Tm_Diff="0.00"
+                     /annotation_group="PrimerPlugin
+                     Group1_urn:local:ANEZEI01:1334946705923.62"
+                     /label="2nd forward primer"
+     primer_bind     668..687
+                     /created_by="primer3"
+                     /%GC="65.0"
+                     /Tm="60.04"
+                     /Hairpin="6.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="GCATGCTGTGCCGCAGGAGA"
+                     /Product_Size="2452.0"
+                     /Pair_Hairpin="4.0"
+                     /Pair_Primer-Dimer="1.0"
+                     /Pair_Tm_Diff="0.28"
+                     /annotation_group="PrimerPlugin
+                     Group4_urn:local:ANEZEI01:1334946705923.62"
+                     /label="5th forward primer"
+     primer_bind     788..807
+                     /created_by="primer3"
+                     /%GC="70.0"
+                     /Tm="59.97"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="CAAGCAGTCCGGGCCACAGG"
+                     /Product_Size="1561.0"
+                     /Pair_Hairpin="5.0"
+                     /Pair_Primer-Dimer="2.0"
+                     /Pair_Tm_Diff="0.07"
+                     /annotation_group="PrimerPlugin
+                     Group0_urn:local:ANEZEI01:1334946705923.62"
+                     /label="1st forward primer"
+     primer_bind     788..807
+                     /created_by="primer3"
+                     /%GC="70.0"
+                     /Tm="59.97"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="CAAGCAGTCCGGGCCACAGG"
+                     /Product_Size="2332.0"
+                     /Pair_Hairpin="7.0"
+                     /Pair_Primer-Dimer="3.0"
+                     /Pair_Tm_Diff="0.35"
+                     /annotation_group="PrimerPlugin
+                     Group3_urn:local:ANEZEI01:1334946705923.62"
+                     /label="4th forward primer"
+     misc_feature    complement(2329..2348)
+                     /created_by="primer3"
+                     /%GC="65.0"
+                     /Tm="60.04"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="GGTTTGGGCGGCTCGATGCT"
+                     /Product_Size="1561.0"
+                     /Pair_Hairpin="5.0"
+                     /Pair_Primer-Dimer="2.0"
+                     /Pair_Tm_Diff="0.07"
+                     /annotation_group="PrimerPlugin
+                     Group0_urn:local:ANEZEI01:1334946705923.62"
+                     /label="1st reverse primer"
+                     /note="Geneious type: primer_bind_reverse"
+     misc_feature    complement(2329..2348)
+                     /created_by="primer3"
+                     /%GC="65.0"
+                     /Tm="60.04"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="GGTTTGGGCGGCTCGATGCT"
+                     /Product_Size="1681.0"
+                     /Pair_Hairpin="6.0"
+                     /Pair_Primer-Dimer="3.0"
+                     /Pair_Tm_Diff="0.00"
+                     /annotation_group="PrimerPlugin
+                     Group1_urn:local:ANEZEI01:1334946705923.62"
+                     /label="2nd reverse primer"
+                     /note="Geneious type: primer_bind_reverse"
+     misc_feature    complement(2329..2348)
+                     /created_by="primer3"
+                     /%GC="65.0"
+                     /Tm="60.04"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="2.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="GGTTTGGGCGGCTCGATGCT"
+                     /Product_Size="1700.0"
+                     /Pair_Hairpin="6.0"
+                     /Pair_Primer-Dimer="3.0"
+                     /Pair_Tm_Diff="0.20"
+                     /annotation_group="PrimerPlugin
+                     Group2_urn:local:ANEZEI01:1334946705923.62"
+                     /label="3rd reverse primer"
+                     /note="Geneious type: primer_bind_reverse"
+     misc_feature    complement(3100..3119)
+                     /created_by="primer3"
+                     /%GC="70.0"
+                     /Tm="60.32"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="1.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="CCCTCCATGTGTTGCCCGCC"
+                     /Product_Size="2332.0"
+                     /Pair_Hairpin="7.0"
+                     /Pair_Primer-Dimer="3.0"
+                     /Pair_Tm_Diff="0.35"
+                     /annotation_group="PrimerPlugin
+                     Group3_urn:local:ANEZEI01:1334946705923.62"
+                     /label="4th reverse primer"
+                     /note="Geneious type: primer_bind_reverse"
+     misc_feature    complement(3100..3119)
+                     /created_by="primer3"
+                     /%GC="70.0"
+                     /Tm="60.32"
+                     /Hairpin="4.0"
+                     /Primer-Dimer="1.0"
+                     /Monovalent_Salt_Concentration="50.0"
+                     /Divalent_Salt_Concentration="0.0"
+                     /DNTP_Concentration="0.0"
+                     /Sequence="CCCTCCATGTGTTGCCCGCC"
+                     /Product_Size="2452.0"
+                     /Pair_Hairpin="4.0"
+                     /Pair_Primer-Dimer="1.0"
+                     /Pair_Tm_Diff="0.28"
+                     /annotation_group="PrimerPlugin
+                     Group4_urn:local:ANEZEI01:1334946705923.62"
+                     /label="5th reverse primer"
+                     /note="Geneious type: primer_bind_reverse"
+ORIGIN      
+        1 tccttacgaa aaaaaagatc aaggaaacat gtcggaaaca aatgggaaac aacaaaaagg
+       61 acttatcatt cctacttttt tgtcgagggc atttgtcgag ggtaatactg catactgcct
+      121 attgtcggtc ccgcagaatt aatagtggct gctcatacac aacgaaaaaa attgttaaca
+      181 aaatagaagg attcgtctat gccctttttt cagtgcggaa attatatacc acacaagccg
+      241 tcgaagccca tagggtcctt taacaataaa gactctccta aaaaaatttt tcttgtgaca
+      301 cgtcagtgca ggatataaat gtagcaagcg tatataacaa atgacaaagg gttcttgcgc
+      361 aaggttactt tagcgttgct ggataatgat cggattgttt ttagatcacg atagcacatt
+      421 tgaggaatcg tatcgaaacg gacagggcaa gagtacgagg gcgaaatgaa cttataacac
+      481 cattgatatt ttctcctcaa tcttatcatt ccacgcacat tattttccta ctatgttatg
+      541 cgggaacagt tcctaaggaa tttttctaat ggcatttcgg cagcgtcatc aaatgtacgc
+      601 acccacttca agtgatcatt cgctcgttac tacctatcac gtgtcgcatc actcgcgacg
+      661 tccatgcgca tgctgtgccg caggagaatt cgagatgcga atgagcagca gccattttga
+      721 tgttgtgagc atcggaacgt ttctgcgtcc gtacactgtc cttttgttac ttagataatg
+      781 gctaaggcaa gcagtccggg ccacaggagt caaaggcttt tcgccagctc ctaaacgctg
+      841 gaagtgtaat tttttttcgt cttataaaat taaacaaacc cttttagaaa ggaacactcg
+      901 ctttatctct tcgaccgaat ttactataca tggatatata tatattatct tctgttcaca
+      961 gttaaaacta ggaatagtat agtcataagt taacaccatc atgttgagaa cgtcaacatt
+     1021 gttcaccagg cgtgtccaac caagcctatt ttctagaaac attcttagat tgcaatccac
+     1081 agctgcaatc cctaagactc aaaaaggtgt catcttttat gagaataagg ggaagctgca
+     1141 ttacaaagat atccctgtcc ccgagcctaa gccaaatgaa attttaatca acgttaaata
+     1201 ttctggtgta tgtcacaccg atttacatgc ttggcacggc gattggccat tacctgttaa
+     1261 actaccatta gtaggtggtc atgaaggtgc tggtgtagtt gtcaaactag gttccaatgt
+     1321 caagggctgg aaagtcggtg atttagcagg tatcaaatgg ctgaacggtt cttgtatgac
+     1381 atgcgaattc tgtgaatcag gtcatgaatc aaattgtcca gatgctgatt tatctggtta
+     1441 cactcatgat ggttctttcc aacaatttgc gaccgctgat gctattcaag ccgccaaaat
+     1501 tcaacagggt accgacttgg ccgaagtagc cccaatatta tgtgctggtg ttactgtata
+     1561 taaagcacta aaagaggcag acttgaaagc tggtgactgg gttgccatct ctggtgctgc
+     1621 aggtggcttg ggttccttgg ccgttcaata tgcaactgcg atgggttaca gagttctagg
+     1681 tattgatgca ggtgaggaaa aggaaaaact tttcaagaaa ttggggggtg aagtattcat
+     1741 cgactttact aaaacaaaga atatggtttc tgacattcaa gaagctacca aaggtggccc
+     1801 tcatggtgtc attaacgttt ccgtttctga agccgctatt tctctatcta cggaatatgt
+     1861 tagaccatgt ggtaccgtcg ttttggttgg tttgcccgct aacgcctacg ttaaatcaga
+     1921 ggtattctct catgtggtga agtccatcaa tatcaagggt tcttatgttg gtaacagagc
+     1981 tgatacgaga gaagccttag acttctttag cagaggtttg atcaaatcac caatcaaaat
+     2041 tgttggatta tctgaattac caaaggttta tgacttgatg gaaaagggca agattttggg
+     2101 tagatacgtc gtcgatacta gtaaataata gcgtgttacg cacccaaact ttttatgaaa
+     2161 gtctttgttt ataatgatga ggtttataaa tatatagtgg agcaaagatt aatcactaaa
+     2221 tcaagaagca gtaccagtat tttttctata tcaagtagtg ataatggaaa tagcccaaat
+     2281 ttggcttccg tcgacacata gaacgtttga gagacattat caccatcaag catcgagccg
+     2341 cccaaaccta accgtataag ttttttcacg tttttgattt ttccttgcac acttcgatat
+     2401 tactctcacg ataaaagggc cgaagagaat atttttcttg aacatccaga attttaattc
+     2461 ggagaaattt cacaagccgc cgatttaagg gtcctgtgtt cttaataatc agcctctctc
+     2521 aaagcaggta agaggcagtc tttcttttaa caataggaga cattcgaact aaaacatcag
+     2581 ccccaaaaat gcgcttgaag gtcattagga tttggatttc ttcctcattt ttaaaggcgc
+     2641 cccttttcgt tttagtcatg ctgggctaga ctagcacgta gtgtatggaa tcaaactgat
+     2701 gccgtcccct gaattatatt tacaattcag aaacgtcttt gaacatttat aattaaatta
+     2761 taaaacaaaa ggaatttgta aaaaagactt tcaaaagatg atccaataaa ctagattaaa
+     2821 aacccaatat aagaagaaga atgtgtggca tttttggcta ttgcaatttt ttaattgaga
+     2881 agacaagagg agaaatcatc gacactttaa tcgaagggtt acaggcattg gagtacaagg
+     2941 aatatgactc cagtggaatt tcgatccaag gtgatgagct ggagtctctc aatatttata
+     3001 agcaaaccgg taaaataagc agtttgaagg aagaaatcga cctttacaat cttaataaga
+     3061 acctgccctt tatttcgcat tgtggcattg cccatactag gcgggcaaca catggagggc
+     3121 taagacgt
+//

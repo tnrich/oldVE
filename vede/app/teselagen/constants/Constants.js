@@ -11,39 +11,34 @@ Ext.define("Teselagen.constants.Constants", {
     ENV_PROD: "prod",
     ENV_TEST: "test",
     
-    VERSION:                "2.0.4",
+    VERSION:                "1.0",
     
-    ENTRY_REGISTRY_URL:     "",
+    //ENTRY_REGISTRY_URL:     "",
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
+    // AssembledSequenceFile.js:
 
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ"
-        //"SBOLXML"
+        "JBEISEQ",
+        "SBOLXML"
     ],
     
-    GENBANK:               "GENBANK",
-    FASTA:                 "FASTA",
-    JBEISEQ:               "JBEISEQ",
+    GENBANK:                "GENBANK",
+    FASTA:                  "FASTA",
+    JBEISEQ:                "JBEISEQ",
     //SBOLXML:               "SBOLXML",
     INIT:                   "INIT",
 
+    GENBANK_SUFFIX:         ".gb",
+    FASTA_SUFFIX:           ".fas",
+    JEBISEQ_SUFFIX:         ".xml",
+    SBOL_SUFFIX:            ".sbol", //?
+
     //================================================================
     // EugeneRule.js: compositionalOperator
-
-    COMPOP_LIST: [
-        "NOTMORETHAN",
-        "NOTWITH",
-        "AFTER",
-        "BEFORE",
-        "WITH",
-        "THEN",
-        "NEXTTO",
-        "MORETHAN"
-    ],
 
     // Deprecated
     NOTMORETHAN:        "NOTMORETHAN",
@@ -57,11 +52,25 @@ Ext.define("Teselagen.constants.Constants", {
     NEXTTO:             "NEXTTO",
     MORETHAN:           "MORETHAN",
 
+    COMPOP_LIST: [
+        "NOTMORETHAN",
+        "NOTWITH",
+        "AFTER",
+        "BEFORE",
+        "WITH",
+        "THEN",
+        "NEXTTO",
+        "MORETHAN"
+    ],
+
+    
+
     //================================================================
     // J5Bin.js
 
     // ForceAssemblyStrategies -- can be used only in certain conditions
     FAS_LIST: [
+        "NONE",
         // For the first part or first bin and part(s) in the first bin (assumed to be the destination vector backbone(s)):
         "DIGEST",
         // For a contiguous set of bin(s) or part(s) whose total length is large enough to be PCR amplified:
@@ -88,10 +97,25 @@ Ext.define("Teselagen.constants.Constants", {
         "GOLDENGATE"
     ],
 
+    // Assembly type list
+    NONMOCKTYPE_LIST: [
+        "SLIC/Gibonson/CPEC/SLiCE",
+        "GOLDENGATE"
+    ],
+
 
     MOCK:       "MOCK",
     SLIC:       "SLIC",
     GOLDENGATE: "GOLDENGATE",
+
+
+    // Synthesis type list
+    SYNTHESISTYPE_LIST: [
+        "DIRECT",
+        "OLIGO",
+        "ANNEALED OLIGOS"
+    ],
+
 
     RUN_STATUS_LIST: [
         "SUCCESS",

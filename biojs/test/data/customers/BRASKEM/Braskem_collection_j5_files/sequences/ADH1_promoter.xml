@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seq:seq
+  xmlns:seq="http://jbei.org/sequence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbei.org/sequence seq.xsd"
+>
+<seq:name>ADH1_promoter</seq:name>
+<seq:circular>false</seq:circular>
+<seq:sequence>tggcaaccaaacccatacatcgggattcctataataccttcgttggtctccctaacatgtaggtggcggaggggagatatacaatagaacagataccagacaagacataatgggctaaacaagactacaccaattacactgcctcattgatggtggtacataacgaactaatactgtagccctagacttgatagccatcatcatatcgaagtttcactaccctttttccatttgccatctattgaagtaataataggcgcatgcaacttcttttctttttttttcttttctctctcccccgttgttgtctcaccatatccgcaatgacaaaaaaatgatggaagacactaaaggaaaaaattaacgacaaagacagcaccaacagatgtcgttgttccagagctgatgaggggtatctcgaagcacacgaaactttttccttccttcattcacgcacactactctctaatgagcaacggtatacggccttccttccagttacttgaatttgaaataaaaaaaagtttgctgtcttgctatcaagtataaatagacctgcaattattaatcttttgtttcctcgtcattgttctcgttccctttcttccttgtttctttttctgcacaatatttcaagctataccaagcatacaatcaactatctcatataca</seq:sequence>
+<seq:features>
+    <seq:feature>
+        <seq:label>ADH1_promoter</seq:label>
+        <seq:complement>false</seq:complement>
+        <seq:type>promoter</seq:type>
+        <seq:location>
+            <seq:genbankStart>1</seq:genbankStart>
+            <seq:end>672</seq:end>
+        </seq:location>
+        <seq:seqHash>c2facc35b4e9b09f90473d9c6d7d30aee5d7eef7b9310835a57a9caeafd97d8c</seq:seqHash>
+    </seq:feature>
+</seq:features>
+</seq:seq>

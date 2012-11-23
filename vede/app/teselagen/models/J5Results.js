@@ -8,7 +8,10 @@ Ext.define("Teselagen.models.J5Results", {
 
     requires: [
         "Teselagen.constants.Constants",
-        "Teselagen.manager.SessionManager"
+        "Teselagen.manager.SessionManager",
+
+        "Teselagen.models.j5Output.CombinatorialAssembly",
+        "Teselagen.models.j5Output.AssembledSequenceFile"
     ],
 
     proxy: {
@@ -24,13 +27,11 @@ Ext.define("Teselagen.models.J5Results", {
     fields: [
         {name: "id", type: "long"},
         {name: "j5run_id", type: "long"},
-        {name: "name",              type: "String",     defaultValue: ""},
+        {name: "name", type: "String", defaultValue: ""}
 
         //
 
-
-
-        {name: "eugeneruleslist",   type: "string",     defaultValue: ""}, //.eug
+        /*{name: "eugeneruleslist",   type: "string",     defaultValue: ""}, //.eug
         {name: "j5parameters",      type: "string",     defaultValue: ""}, //.csv
         {name: "masterplasmidlist", type: "string",     defaultValue: ""}, //.csv
         {name: "mastersequences",   type: "string",     defaultValue: ""}, //.csv
@@ -38,12 +39,27 @@ Ext.define("Teselagen.models.J5Results", {
         {name: "partslist",         type: "string",     defaultValue: ""}, //.csv
         {name: "combinatorial",     type: "string",     defaultValue: ""}, //.csv
         {name: "plamids",           type: "auto"}  //. <--- these are the RESULTS: .gb/.csv files
+        */
     ],
 
     validations: [
     ],
 
     associations: [
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.AssembledSequenceFile",
+            name: "assemblies",
+            foreignKey: "assemblies_id"
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.j5Output.CombinatorialAssembly",
+            getterName: "getCombinatorialAssembly",
+            setterName: "setCombinatorialAssembly",
+            assocationKey: "combinatorialAssembly",
+            foreignKey: "combinatorialAssembly_id"
+        },
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Run",
@@ -54,4 +70,4 @@ Ext.define("Teselagen.models.J5Results", {
         }
     ]
 
-})
+});
