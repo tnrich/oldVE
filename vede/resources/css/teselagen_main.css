@@ -296,7 +296,12 @@ background: #F8F8F8;
 }
 
 .DeviceEditorPartsBar {
-  background: #D0D0D0;
+  background: #0C4857;
+}
+
+.x-toolbar .x-toolbar-separator-horizontal {
+  border-left: 1px solid #035363;
+  border-right: 1px solid #044150;
 }
 
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
