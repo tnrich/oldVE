@@ -47,10 +47,10 @@ Ext.define("Teselagen.models.J5Bin", {
                         return Teselagen.utils.FormatUtils.reformatName(v);
                     }
                 } else {
-                    return "";
+                    return ""; //No_Name";
                 }
             }
-        }, //required when making this object
+        },
         //{name: "iconID",            type: "string",     defaultValue: ""},
         {
             name: "iconID",
@@ -88,11 +88,10 @@ Ext.define("Teselagen.models.J5Bin", {
 
     validations: [
         {field: "binName",          type: "presence"},
-        
         {
             field: "iconID",
             type: "inclusion",
-            //list: Teselagen.constants.SBOLIcons.ICON_LIST
+            list: Teselagen.constants.SBOLIcons.ICON_LIST
         },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},

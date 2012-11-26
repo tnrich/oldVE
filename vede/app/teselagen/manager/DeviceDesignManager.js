@@ -472,9 +472,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Add an empty bin to the collection, by index.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pIndex
+     * @para, {String} [pName] Optional
      */
-    addEmptyBinByIndex: function(pDevice, pIndex) {
-        var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex);
+    addEmptyBinByIndex: function(pDevice, pIndex, pName) {
+        if (pName === null || pName === undefined || pName === "") {
+            pName = "No_Name";
+        }
+        var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
         return success;
     },
     /**

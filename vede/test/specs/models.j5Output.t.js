@@ -18,8 +18,10 @@ Ext.require("Teselagen.constants.Constants");
 Ext.require("Teselagen.models.j5Output.AssembledSequenceFile");
 Ext.require("Teselagen.models.j5Output.Assembly");
 Ext.require("Teselagen.models.j5Output.Warning");
-//Ext.require("Teselagen.models.j5Output.NonMockAssembly");
-
+Ext.require("Teselagen.models.j5Output.NonMockAssembly");
+Ext.require("Teselagen.models.j5Output.TargetPart");
+Ext.require("Teselagen.models.j5Output.CombinatorialNonMockAssembly");
+Ext.require("Teselagen.models.j5Output.CombinatorialAssembly");
 
 
 Ext.onReady(function() {
@@ -75,8 +77,8 @@ Ext.onReady(function() {
             });
 
             it("Creates Assembly()", function(){
-                console.log(assembly2);
-                console.log(assembly2.warnings());
+                //console.log(assembly2);
+                //console.log(assembly2.warnings());
                 expect(assembly2.get("type")).toBe("MOCK");
                 expect(assembly2.validate().length).toBe(0);
             });
@@ -110,7 +112,7 @@ Ext.onReady(function() {
             });
 
             it("Creates Warning()", function(){
-                console.log(warn2);
+                //console.log(warn2);
                 expect(warn2.get("message")).toBe("Warning: the MasterPlasmidListFile is empty. ...");
             });
 
@@ -171,7 +173,7 @@ Ext.onReady(function() {
             });
 
             it("Create NonMockAssembly()", function(){
-                console.log(nonMock);
+                //Ωconsole.log(nonMock);
                 expect(Ext.getClassName(nonMock)).toBe("Teselagen.models.j5Output.NonMockAssembly");
                 expect(nonMock.validate().length).toBe(0);
                 expect(nonMock.get("type")).toBe("GOLDENGATE");
@@ -297,7 +299,7 @@ Ext.onReady(function() {
             });
 
             it("Creates Assembly()", function(){
-                console.log(tmp);
+                //console.log(tmp);
                 expect(tmp.get("type")).toBe("MOCK");
                 //expect(tmp.validate().length).toBe(0);
             });
@@ -325,7 +327,7 @@ Ext.onReady(function() {
             });
 
             it("Creates Assembly()", function(){
-                console.log(tmp);
+                //console.log(tmp);
                 expect(tmp.get("type")).toBe("GOLDENGATE");
                 //expect(tmp.validate().length).toBe(0);
             });

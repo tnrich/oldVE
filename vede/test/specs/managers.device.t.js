@@ -340,21 +340,26 @@ Ext.onReady(function() {
                 });
 
                 it("getBinIconIDByIndex/setBinIconIDByIndex()", function(){
-                    var success = design.getJ5Collection().addToBin(bin1, 1);
+                    var success = design.getJ5Collection().addToBin(bin1, 0);
                     expect(success).toBe(true);
 
                     var iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
                     expect(iconID).toBe("GENERIC");
 
+
                     DeviceDesignManager.setIconIDByBinIndex(design, 0, "BLAH");
                     iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
                     expect(iconID).toBe("BLAH");
-                    expect(bin1.validate().length).toBe(1);
+                    expect(DeviceDesignManager.getBinByIndex(design, 0).validate().length).toBe(1);
 
                     DeviceDesignManager.setIconIDByBinIndex(design, 0, "ASSEMBLY_JUNCTION");
                     iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
                     expect(iconID).toBe("ASSEMBLY_JUNCTION");
-                    expect(bin1.validate().length).toBe(0);
+                    expect(DeviceDesignManager.getBinByIndex(design, 0).validate().length).toBe(0);
+                    
+
+                    //console.log(DeviceDesignManager.getBinByIndex(design, 0));
+                    //console.log(DeviceDesignManager.getBinByIndex(design, 0).validate());
                 });
 
                 it("getBinByIndex()/getBinNameByIndex()", function(){
@@ -419,6 +424,7 @@ Ext.onReady(function() {
                 it("addEmptyBinByIndex()", function(){
                     var success = DeviceDesignManager.addEmptyBinByIndex(design, 0);
                     expect(design.getJ5Collection().binCount()).toBe(3);
+                    expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name");
                     expect(success).toBe(true);
                 });
 
