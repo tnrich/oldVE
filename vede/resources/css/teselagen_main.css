@@ -283,6 +283,10 @@ body {
     border-color: #000000;
 }
 
+.DeviceEditorTitlePanel .x-toolbar-default {
+   background: #FDFDFD;
+}
+
 .DeviceEditorMenuPanel .x-toolbar-default {
    background: #FDFDFD;
 }
