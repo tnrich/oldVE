@@ -6,6 +6,25 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
 
+    onOpenExampleItemBtnClick: function( item, e, eOpts ){
+        var selectedItem = item.text;
+        var examplesMap = {
+            "SLIC/Gibson/CPEC" : "resources/examples/SLIC_Gibson_CPEC.json",
+            "Combinatorial SLIC/Gibson/CPEC" : "resources/examples/Combinatorial_SLIC_Gibson_CPEC.json",
+            "Golden Gate" : "resources/examples/Golden_Gate.json",
+            "Combinatorial Golden Gate" : "resources/examples/Combinatorial_Golden_Gate.json"
+        };
+
+        Ext.Ajax.request({
+            url: examplesMap[selectedItem],
+            method: 'GET',
+            success: function(response){
+                Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText,selectedItem.replace(" ","_"));
+            }
+        });
+
+    },
+
     importDesignFromFormat: function(format,cb){
         var importModal = Ext.create("Ext.Window",{
             title : 'Import '+ format +' from File',
@@ -137,6 +156,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='importMenu'] > menu > menuitem[text='JSON file']": {
                 click: this.onimportJSONItemBtnClick
+            },
+            "button[cls='examplesMenu'] > menu > menuitem": {
+                click: this.onOpenExampleItemBtnClick
             }
         });
     }

@@ -22,6 +22,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       });
     };
 
+    function finishedResolving(){
+      var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+      deproject.setDesign(design);
+      Teselagen.manager.ProjectManager.workingProject.deprojects().add(deproject);
+      Teselagen.manager.ProjectManager.loadDesignAndChildResources();
+      Teselagen.manager.ProjectManager.openDesign(deproject);
+    };
+
     deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
         name: fileName.replace(/.json/g,''),
         dateCreated: new Date(),
@@ -31,35 +39,52 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
     var binsArray = [];
 
+    var binsCounter = bins.length;
+
     for(var indexBin in bins){
       var bin = bins[indexBin];
-      //console.log(bin);
-      var binName = bin["de:binName"];
-      console.log(binName);
+
       var newBin = Ext.create("Teselagen.models.J5Bin", {
-          binName: binName
+          binName: bin["de:binName"],
+          iconID: bin["de:iconID"]
       });
-      var parts = bin["de:binItems"];
+      var parts = bin["de:binItems"]["de:partID"];
+      //console.log(parts);
+      var partsCounter = parts.length;
+      //console.log("PartsCounter: "+partsCounter);
+
       var tempPartsArray = [];
       for(var indexPart in parts){
+        //console.log(parts[indexPart]);
         getPartByID(parts[indexPart],function(part){
           var newPart = Ext.create("Teselagen.models.Part", {
               name: part["de:name"],
               genbankStartBP: 1,
               endBP: 7
           });
-          tempPartsArray.push(newPart);       
+          tempPartsArray.push(newPart);
+          //console.log("Parts: "+partsCounter);
+          //console.log("Bins: "+binsCounter);
+          partsCounter--;
+          if(partsCounter == 0)
+          {
+            newBin.addToParts(tempPartsArray);
+            binsArray.push(newBin);
+            
+            binsCounter--;
+
+            if(binsCounter == 0)
+            {
+              finishedResolving();
+            }            
+          } 
         });
       }
-      newBin.addToParts(tempPartsArray);
-      binsArray.push(newBin);
+
+
     }
 
-    var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-    deproject.setDesign(design);
-    Teselagen.manager.ProjectManager.workingProject.deprojects().add(deproject);
-    Teselagen.manager.ProjectManager.loadDesignAndChildResources();
-    Teselagen.manager.ProjectManager.openDesign(deproject);
+
 
   },
 

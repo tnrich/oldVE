@@ -30,6 +30,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
         {
             xtype: 'button',
             text: 'Examples',
+            cls: 'examplesMenu',
             menu: {
                 xtype: 'menu',
                 minWidth: 300,

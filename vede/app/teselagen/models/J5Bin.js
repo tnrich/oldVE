@@ -91,7 +91,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {
             field: "iconID",
             type: "inclusion",
-            list: Teselagen.constants.SBOLIcons.ICON_LIST
+            //list: Teselagen.constants.SBOLIcons.ICON_LIST
         },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
@@ -99,7 +99,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {
             field: "fas",
             type: "inclusion",
-            list: Teselagen.constants.Constants.FAS_LIST
+            //list: Teselagen.constants.Constants.FAS_LIST
         }//,
         //{field: "extra5PrimeBps",   type: "presence"},
         //{field: "extra3PrimeBps",   type: "presence"},

@@ -23,6 +23,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
         items: [{
             xtype: 'button',
             cls: 'ori_Btn',
+            data: { iconKey : 'ORIGIN_OF_REPLICATION' },
             icon: 'resources/images/Symbols/origin-of-replication.png',
             scale: 'large',
             tooltip: 'Origin of Replication'
@@ -33,6 +34,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
         }, {
             xtype: 'button',
             cls: 'cds_Btn',
+            data: { iconKey : 'CDS' },
             icon: 'resources/images/Symbols/cds.png',
             scale: 'large',
             tooltip: 'CDS'
