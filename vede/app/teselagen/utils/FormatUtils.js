@@ -20,7 +20,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
         "Teselagen.bio.sequence.dna.DNASequence",
         "Teselagen.bio.sequence.DNATools",
 
-        "Teselagen.utils.SequenceUtils"
+        "Teselagen.utils.SequenceUtils"//,
+        //"Teselagen.manager.SequenceFileManager"
     ],
 
     singleton: true,
@@ -29,9 +30,12 @@ Ext.define("Teselagen.utils.FormatUtils", {
     StringUtil: null,
     XmlToJson: null,
     Sha256: null,
+
+    Constants: null,
     SequenceUtils: null,
     GenbankManager: null,
     ParsersManager: null,
+    //SequenceFileManager: null,
     
     constructor: function() {
         DNAAlphabet     = Teselagen.bio.sequence.alphabets.DNAAlphabet;
@@ -41,10 +45,13 @@ Ext.define("Teselagen.utils.FormatUtils", {
         XmlToJson       = Teselagen.bio.util.XmlToJson;
         Sha256          = Teselagen.bio.util.Sha256;
 
+        Constants       = Teselagen.constants.Constants;
         SequenceUtils   = Teselagen.utils.SequenceUtils;
 
         GenbankManager  = Teselagen.bio.parsers.GenbankManager;
         ParsersManager  = Teselagen.bio.parsers.ParsersManager;
+
+        //SequenceFileManager = Teselagen.manager.SequenceFileManager;
     },
 
     /**
@@ -72,7 +79,23 @@ Ext.define("Teselagen.utils.FormatUtils", {
         return pName.toString().replace(/[^a-zA-Z0-9_\-]/g, "");
     },
 
+    /**
+     * isALabel
+     * @param
+     * @return {Boolean} isALabel
+     */
+    isALabel: function(name) {
+        /*if (name === "label" || name === "name"|| name === "ApEinfo_label" ||
+            name === "note" || name === "gene" || name === "organism"  ) {
 
+            return true;
+        } else {
+            return false;
+        }*/
+
+        //return this.ParsersManager.isALabel(name);
+        return Teselagen.bio.parsers.ParsersManager.isALabel(name);
+    },
 
     // ===========================================================================
     //   SequenceManager  Conversions
@@ -129,7 +152,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /**
      * Converts a FASTA file into a SequenceManager form of the data.
-     * @param {String} pFasta FASTA formated string
+     * @param {String} pFasta FASTA file as a string
      * @returns Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     fastaToSequenceManager: function(pFasta) {
@@ -474,21 +497,58 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * isALabel
-     * @param
-     * @return {Boolean} isALabel
+     * Convert a SequenceFile model to a SequenceManager model.
+     * @param {Teselagen.models.SequenceFile} pSequenceFile
+     * @returns {Teselagen.models.SequenceManager}
+     *
+    sequenceFileToSequenceManager: function(pSequenceFile) {
+        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
+    },*/
+
+    /**
+     * Convert a SequenceFile model to a SequenceManager model.
+     * @param {Teselagen.models.SequenceFile} pSequenceFile
+     * @returns {Teselagen.models.SequenceManager}
      */
-    isALabel: function(name) {
-        /*if (name === "label" || name === "name"|| name === "ApEinfo_label" ||
-            name === "note" || name === "gene" || name === "organism"  ) {
+    sequenceFileToSequenceManager: function(pSequenceFile) {
 
-            return true;
-        } else {
-            return false;
-        }*/
+        if (Ext.getClassName(pSequenceFile) !== "Teselagen.models.SequenceFile") {
+            console.warn("FormatUtils.sequenceFileToSequenceManager(): '" + pSequenceFile + "' is not a SequenceFile. Returning null.");
+            return null;
+        }
+        var name    = pSequenceFile.get("partSource");
+        var format  = pSequenceFile.get("sequenceFileFormat");
+        var content = pSequenceFile.get("sequenceFileContent");
+        var seqMan;
+        
+        switch (format) {
+        case Constants.GENBANK:
+            var genbank = GenbankManager.parseGenbankFile(content);
+            seqMan = FormatUtils.genbankToSequenceManager(genbank);
+            break;
+        case Constants.FASTA:
+            seqMan = FormatUtils.fastaToSequenceManager(content);
+            break;
+        case Constants.JBEISEQ:
+            seqMan = FormatUtils.jbeiseqXmlToSequenceManager(content);
+            //console.log(content);
+            break;
+        case Constants.SBOLXML:
+            sbolJson = SbolParser.sbolXmlToJson(content);
 
-        //return this.ParsersManager.isALabel(name);
-        return Teselagen.bio.parsers.ParsersManager.isALabel(name);
+            if (SbolParser.checkRawSbolJson(sbolJson)) {
+                // SBOL 2 SequenceManager has not been written yet
+            }
+
+            console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: SbolJson2SequenceManager not written yet.");
+
+            seqMan = null;
+            break;
+        default:
+            console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
+        }
+        seqMan.setName(name);
+        return seqMan;
     }
 
 

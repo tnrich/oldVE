@@ -22,14 +22,14 @@ Ext.define("Teselagen.constants.Constants", {
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ",
+        "JBEISEQXML",
         "SBOLXML"
     ],
     
     GENBANK:                "GENBANK",
     FASTA:                  "FASTA",
-    JBEISEQ:                "JBEISEQ",
-    //SBOLXML:               "SBOLXML",
+    JBEISEQ:                "JBEISEQXML",
+    SBOLXML:                "SBOLXML",
     INIT:                   "INIT",
 
     GENBANK_SUFFIX:         ".gb",
