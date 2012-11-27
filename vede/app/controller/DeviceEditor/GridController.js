@@ -252,7 +252,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.grid.remove(gridBin);
 
         var icon = Teselagen.constants.SBOLIcons.ICON_v1_0_0_LIST[j5Bin.get('iconID').toUpperCase()];
-        console.log(icon.url_small);
+
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,

@@ -148,7 +148,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,
                             this.openProject, this);
         this.control({
-            "button[cls='DeviceEditorSaveBtn']": {
+            "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
                 click: this.onDeviceEditorSaveBtnClick
             },
             "button[cls='importMenu'] > menu > menuitem[text='XML file']": {

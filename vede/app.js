@@ -66,11 +66,17 @@ Ext.application({
         return true;
     },
     require: [
-        "Teselagen.event.AuthenticationEvent", 
-        "Teselagen.manager.AuthenticationManager", 
+        "Teselagen.event.AuthenticationEvent",
+        "Teselagen.manager.AuthenticationManager",
+
+        // Stuff that may not be wise to put here
+        "Teselagen.constants.Constants",
+        "Teselagen.constants.SBOLIcons",
         "Teselagen.models.SequenceFile"
     ],
     launch: function() {
+
+        console.log(Teselagen.constants.SBOLIcons.ICON_LIST);
 
         Ext.Ajax.cors = true; // Allow CORS
         Ext.Ajax.withCredentials = true;

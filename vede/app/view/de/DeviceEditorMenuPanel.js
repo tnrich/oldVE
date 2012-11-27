@@ -16,6 +16,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
         {
             xtype: 'button',
             text: 'File',
+            cls: 'fileMenu',
             menu: {
                 xtype: 'menu',
                 items: [{
