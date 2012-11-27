@@ -25,6 +25,7 @@ Ext.require("Teselagen.utils.DeXmlUtils");
 Ext.require("Teselagen.utils.FileUtils");
 
 Ext.require("Teselagen.constants.Constants");
+Ext.require("Teselagen.constants.SBOLIcons");
 
 Ext.require("Teselagen.models.SequenceFile");
 
