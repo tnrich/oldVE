@@ -30,6 +30,7 @@ Ext.define('Vede.view.FileImportWindow', {
                                 {
                                     xtype: 'button',
                                     text: 'Import',
+                                    cls: 'ImportSequence',
                                     formBind: true
                                 },
                                 {

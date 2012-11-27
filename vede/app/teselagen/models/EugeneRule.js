@@ -98,7 +98,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         {
             field: "compositionalOperator",
             type: "inclusion",
-            //list: Teselagen.constants.Constants.COMPOP_LIST
+            list: Teselagen.constants.Constants.COMPOP_LIST
         },
         {field: "operand2Number",         type: "presence"}
     ],

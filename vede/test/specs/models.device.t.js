@@ -1115,7 +1115,7 @@ Ext.onReady(function() {
                 coll.addToBin([bin1, bin2]);
 
                 // add new bin between bin1 and bin2
-                var success = coll.addNewBinByIndex("newBin", 1);
+                var success = coll.addNewBinByIndex(1, "newBin");
 
                 expect(coll.bins().count()).toBe(3);
                 expect(coll.bins().getAt(0)).toBe(bin1);

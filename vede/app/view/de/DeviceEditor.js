@@ -1,7 +1,7 @@
 Ext.define('Vede.view.de.DeviceEditor', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorPanel',
-    requires: ["Vede.view.de.InspectorPanel", "Vede.view.de.DeviceEditorPartPanel", "Vede.view.de.DeviceEditorMenuPanel", "Vede.view.de.DeviceEditorToolPanel", "Vede.view.de.DeviceEditorStatusPanel", "Vede.view.de.DeviceEditorCanvasPanel"],
+    requires: ["Vede.view.de.InspectorPanel", "Vede.view.de.DeviceEditorPartPanel", "Vede.view.de.DeviceEditorMenuPanel", "Vede.view.de.DeviceEditorToolPanel", "Vede.view.de.DeviceEditorStatusPanel", "Vede.view.de.DeviceEditorCanvasPanel", "Vede.view.de.DeviceEditorTitlePanel"],
     cls: 'DeviceEditorTab',
     //id: 'DeviceEditorPanel',
     layout: {
@@ -11,6 +11,8 @@ Ext.define('Vede.view.de.DeviceEditor', {
     closable: true,
     title: 'Device Editor',
     dockedItems: [{
+        xtype: 'DeviceEditorTitlePanel'
+    }, {
         xtype: 'DeviceEditorMenuPanel'
     }, {
         xtype: 'DeviceEditorToolPanel'

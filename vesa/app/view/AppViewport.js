@@ -116,7 +116,7 @@ Ext.define('Vesa.view.AppViewport', {
                                 type: 'fit'
                             },
                             minButtonWidth: 32,
-                            title: '',
+                            title: 'My Tab',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -145,7 +145,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: '',
+                            title: 'My Tab',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -184,7 +184,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: '',
+                            title: 'My Tab',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -209,7 +209,7 @@ Ext.define('Vesa.view.AppViewport', {
                             layout: {
                                 type: 'fit'
                             },
-                            title: '',
+                            title: 'My Tab',
                             tabConfig: {
                                 xtype: 'tab',
                                 cls: 'projectBarButton',
@@ -1008,7 +1008,6 @@ Ext.define('Vesa.view.AppViewport', {
                                             ]
                                         },
                                         {
-                                            xtype: 'splitter',
                                             collapseTarget: 'prev'
                                         },
                                         {
@@ -1201,6 +1200,8 @@ Ext.define('Vesa.view.AppViewport', {
                                 {
                                     xtype: 'panel',
                                     dock: 'top',
+                                    floating: false,
+                                    frame: false,
                                     id: 'DeviceEditorPartPanel',
                                     layout: {
                                         type: 'fit'
