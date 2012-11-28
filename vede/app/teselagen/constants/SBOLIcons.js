@@ -10,10 +10,6 @@ Ext.define("Teselagen.constants.SBOLIcons", {
     requires: [
     ],
 
-    proxy: {
-        type: "memory"
-    },
-
     /*ASSEMBLY_JUNCTION:                      "assembly_junction",
     CDS:                                    "cds",
     FIVE_PRIME_OVERHANG:                    "five_prime_overhang",
