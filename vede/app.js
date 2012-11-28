@@ -76,8 +76,6 @@ Ext.application({
     ],
     launch: function() {
 
-        console.log(Teselagen.constants.SBOLIcons.ICON_LIST);
-
         Ext.Ajax.cors = true; // Allow CORS
         Ext.Ajax.withCredentials = true;
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
