@@ -251,7 +251,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Remove grid bin and re-render it.
         this.grid.remove(gridBin);
 
-        var icon = Teselagen.constants.SBOLIcons.ICON_v1_0_0_LIST[j5Bin.get('iconID').toUpperCase()];
+        var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.get('iconID').toUpperCase()];
 
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
@@ -305,7 +305,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var iconSource;
         iconSource = "resources/images/icons/device/small/origin_of_replication.png";
         
-        var icon = Teselagen.constants.SBOLIcons.ICON_v1_0_0_LIST[j5Bin.data.iconID.toUpperCase()];
+        var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
         this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,

@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="701.25"
+   height="990"
+   id="svg2"
+   xml:space="preserve"><metadata
+     id="metadata8"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+     id="defs6" /><g
+     transform="matrix(1.25,0,0,-1.25,0,990)"
+     id="g10"><path
+       d="m 512.88,49.344 6.36,0 0,12 -6.36,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path12"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,512.88,51.384)"
+       id="text14"><tspan
+         x="0"
+         y="0"
+         id="tspan16"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">1</tspan></text>
+<path
+       d="m 37.56,749.88 449.28,0 0,12 -449.28,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path18"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,751.92)"
+       id="text20"><tspan
+         x="0 6.8325601 13.66512 19.431959 22.93788 29.860081 35.626919 42.578999 46.084919"
+         y="0"
+         id="tspan22"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">BBF RFC #</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,91.824,751.92)"
+       id="text24"><tspan
+         x="0 6.3599601"
+         y="0"
+         id="tspan26"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">87</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,459.58,751.92)"
+       id="text28"><tspan
+         x="0 6.8126402 13.7946 21.593281"
+         y="0"
+         id="tspan30"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">SBOL</tspan></text>
+<path
+       d="m 37.56,750.48 54.264,0 0,0.6 -54.264,0 0,-0.6 z"
+       inkscape:connector-curvature="0"
+       id="path32"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" /><path
+       d="m 91.824,750.48 12.72,0 0,0.6 -12.72,0 0,-0.6 z"
+       inkscape:connector-curvature="0"
+       id="path34"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" /><path
+       d="m 104.54,750.48 382.3,0 0,0.6 -382.3,0 0,-0.6 z"
+       inkscape:connector-curvature="0"
+       id="path36"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" /><path
+       d="m 37.56,737.76 3.48,0 0,12 -3.48,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path38"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><path
+       d="m 71.184,715.8 418.9,0 0,21.72 -418.9,0 0,-21.72 z"
+       inkscape:connector-curvature="0"
+       id="path40"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,71.184,719.52)"
+       id="text42"><tspan
+         x="0 12.816 24.534 37.403999 45.612 58.428001 70.379997 78.587997 84.690002 95.274002 101.376 115.092 121.248 133.614 139.77 152.136 164.718 176.472 182.62801 197.92799 210.50999 222.534 235.35001 241.38 252.882 264.90601 277.72198 290.30399 303.12 315.14401 327.72601 339.75 345.90601 355.59 368.40601 382.12201 397.422 408.888 418.66199"
+         y="0"
+         id="tspan44"
+         style="font-size:18px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">Synthetic Biology Open Language (SBOL) </tspan></text>
+<path
+       d="m 213.41,693.94 134.3,0 0,21.744 -134.3,0 0,-21.744 z"
+       inkscape:connector-curvature="0"
+       id="path46"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,213.41,697.66)"
+       id="text48"><tspan
+         x="0 13.752 25.775999 34.722 45.431999 51.588001 63.953999 76.769997 82.872002 95.669998"
+         y="0"
+         id="tspan50"
+         style="font-size:18px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">Version 1.</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,315.67,697.66)"
+       id="text52"><tspan
+         x="0"
+         y="0"
+         id="tspan54"
+         style="font-size:18px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">1</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,328.51,697.66)"
+       id="text56"><tspan
+         x="0"
+         y="0"
+         id="tspan58"
+         style="font-size:18px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">.</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,334.87,697.66)"
+       id="text60"><tspan
+         x="0"
+         y="0"
+         id="tspan62"
+         style="font-size:18px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">0</tspan></text>
+<path
+       d="m 278.95,681.82 3.36,0 0,12 -3.36,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path64"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><path
+       d="m 45.84,669.7 469.56,0 0,12 -469.56,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path66"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,45.84,671.74)"
+       id="text68"><tspan
+         x="0 8.3962803 11.27472 16.463881 22.76856 28.674841 31.54332 35.04924 42.698521 48.684479 51.57288 57.807838 62.967121 65.835602 71.024757 76.751762 79.620239 83.245682 86.701797 95.098083 101.08404 107.44848 113.68344 119.57976 123.04584 128.59357 132.1692 135.75481 145.60524 148.33427 151.22269 156.41183 162.37788 168.73236 172.3578 175.81392 182.88551 188.76192 193.95108 200.03664 204.23976 207.74568 214.55832 218.27341 221.77933 228.70152 234.71736 241.07184 245.27496 248.14343 254.3784 260.73288 266.60928 271.87811 275.50357"
+         y="0"
+         id="tspan70"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Michal Galdzicki, Mandy L. Wilson, Cesar A. Rodriguez, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,325.03,671.74)"
+       id="text72"><tspan
+         x="0 8.3962803 14.38224 18.346319 22.30044 28.654921 34.531319 42.6786 46.184521 53.10672 56.841721 60.347641 66.323639 72.429123 77.618279 83.703842 88.892998 94.739517 98.36496"
+         y="0"
+         id="tspan74"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Matthew R. Pocock, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,427.06,671.74)"
+       id="text76"><tspan
+         x="0 6.3544798 10.5576 16.912081 22.10124 26.02548"
+         y="0"
+         id="tspan78"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Ernst </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,456.7,671.74)"
+       id="text80"><tspan
+         x="0 7.7986798 14.03364 20.0196 24.222719 30.328199 34.531319 38.485439 44.83992 50.825878"
+         y="0"
+         id="tspan82"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Oberortner</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,511.8,671.74)"
+       id="text84"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan86"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<path
+       d="m 48.12,657.46 465,0 0,12 -465,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path88"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,48.12,659.5)"
+       id="text90"><tspan
+         x="0 5.54772 11.53368 17.86824 22.07136 28.05732 31.56324 38.375881 44.6208 50.606758 60.327721 64.032837 67.538757 74.351402 80.337357 84.660004 90.655922 97.010399 100.51632 107.32896 113.56392 116.4324 122.3088 126.51192 130.13736 133.59348 138.12527 141.86028 145.3662 152.31828 158.65285 162.85596 165.72444 170.9136 174.83784 180.84372 187.07867 193.43317 199.41911 203.62224 207.12816 213.9408 220.29527 226.53024 232.5162 236.71931 241.98816 247.98409 254.33856 257.96399 261.4201 265.95193 271.96777 277.2366 283.23251 289.46747 292.97339 299.8956 305.772 311.75797 314.64636 318.27179"
+         y="0"
+         id="tspan92"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Laura Adam, Aaron Adler, J. Christopher Anderson, Jacob Beal, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,370.18,659.5)"
+       id="text94"><tspan
+         x="0 6.1254001 8.9938803 14.26272 20.507641 23.37612 26.88204 33.834122 39.700562"
+         y="0"
+         id="tspan96"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Yizhi Cai</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,412.66,659.5)"
+       id="text98"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan100"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,419.74,659.5)"
+       id="text102"><tspan
+         x="0 7.6791601 13.66512 19.541519 25.77648 31.76244 37.768318 41.274239 48.226318 54.560879 60.546841 66.911278 73.14624 77.349358 83.33532 89.69976 93.325203"
+         y="0"
+         id="tspan104"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Deepak Chandran, </tspan></text>
+<path
+       d="m 48.72,645.34 463.68,0 0,12 -463.68,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path106"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,48.72,647.38)"
+       id="text108"><tspan
+         x="0 7.6791601 13.67508 20.02956 26.264521 29.132999 35.118961 40.308121 43.7742 51.453362 57.329762 63.684238 68.873398 78.674042 84.66996 88.982643 94.859039 98.564163 102.07008 109.84884 119.67936 123.88248 126.75096 130.25688 137.06952 140.69496 144.15108 151.83025 156.14291 162.13884 166.45152 172.34784 175.93344 179.43936 187.20816 191.52084 197.39725 205.54453 209.15004 215.39496 221.74944 227.98441 233.88072 237.46632 241.05193 245.58372 251.62944 257.96399 264.31848 267.8244 275.23465 278.86008 282.42575 290.21448 296.09088 302.44537 308.79984 314.7858 318.99887 321.86737 325.4928 328.94891 335.901 341.88696 344.77536 350.67169 354.13776 361.81693 366.02005 372.37451 378.729 384.96396 390.84036 395.04349 401.27844 404.98355 408.48947 414.58499 417.45349 427.14456 433.19028 437.11453 443.47897 449.37527 452.84137 459.65399 463.27945"
+         y="0"
+         id="tspan110"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Douglas Densmore, Omri A. Drory, Drew Endy, John H. Gennari, Raik Grünberg, Timothy S. </tspan></text>
+<path
+       d="m 44.64,633.22 471.84,0 0,12 -471.84,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path112"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,44.64,635.26)"
+       id="text114"><tspan
+         x="0 7.4401202 13.42608 23.147039 26.77248"
+         y="0"
+         id="tspan116"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Ham, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,75.024,635.26)"
+       id="text118"><tspan
+         x="0 7.4500799 13.43604 17.39016 23.74464 29.7306 36.095039 39.60096 44.132759 47.758202 51.323879 58.764 61.512959 64.261917 67.130402 72.319557 78.285599"
+         y="0"
+         id="tspan120"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Nathan J. Hillson</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,159.77,635.26)"
+       id="text122"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan124"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,166.97,635.26)"
+       id="text126"><tspan
+         x="0 4.5317998 10.46796 13.92408 17.50968 21.712799 27.698759 33.595081 37.061161 44.740318 48.455399 51.961319 56.493118 62.499001 68.853477 75.207962 80.476799 86.472717"
+         y="0"
+         id="tspan128"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Jeffrey D. Johnson</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,259.87,635.26)"
+       id="text130"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan132"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,266.95,635.26)"
+       id="text134"><tspan
+         x="0 6.8126402 9.7110004 12.57948 18.455879 24.81036 28.31628 35.23848 41.59296 46.78212 53.0868 55.865639 62.220119 67.409279 73.255798 79.152122"
+         y="0"
+         id="tspan136"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Allan Kuchinsky,</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,353.23,635.26)"
+       id="text138"><tspan
+         x="0 8.3962803 14.38224 18.346319 22.30044 28.654921"
+         y="0"
+         id="tspan140"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Matthe</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,387.94,635.26)"
+       id="text142"><tspan
+         x="0 8.1472797 11.7528 21.603239 25.188841 28.694759 34.19268 40.547161 46.533119 50.158562 53.614681 60.566761 67.040756 71.243881 75.197998 78.066483 83.255638 86.701797 95.098083 101.08404 107.32896 112.51812 118.36464 124.71912 128.42424"
+         y="0"
+         id="tspan144"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">w W. Lux, Curtis Madsen, </tspan></text>
+<path
+       d="m 61.104,620.98 439.06,0 0,12 -439.06,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path146"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,61.104,623.02)"
+       id="text148"><tspan
+         x="0 7.6791601 13.78464 19.68096 24.92988 30.80628 33.674759 37.180679 45.576962 48.425522 53.465279 56.333759 60.53688 63.285839 66.15432 69.779762 73.235878 80.187958 86.542442 90.626038 93.494522 98.683678 102.12984 106.66164 110.28708 113.793 122.27892 128.17525 134.15125 138.35435"
+         y="0"
+         id="tspan150"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Goksel Misirli, Chris J. Myers</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,204.77,623.02)"
+       id="text152"><tspan
+         x="0 3.7200401"
+         y="0"
+         id="tspan154"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,211.97,623.02)"
+       id="text156"><tspan
+         x="0 6.9520798 12.93804 17.161079 20.02956 26.02548 31.294319 34.80024 42.578999 45.447479 51.682442 58.036919 60.785881"
+         y="0"
+         id="tspan158"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Carlos Olguin</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,279.19,623.02)"
+       id="text160"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan162"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,286.27,623.02)"
+       id="text164"><tspan
+         x="0 4.5317998 10.46796 16.45392 22.788481 26.294399 32.270401 38.146801 43.415642 48.604801 54.570839 60.92532 67.160278 70.865402 74.371323 81.891121 87.767517 92.95668 97.000443 102.99636 107.30904 110.81496 116.79096 119.65944 125.6454 132.00984"
+         y="0"
+         id="tspan166"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Jean Peccoud, Hector Plaha</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,424.42,623.02)"
+       id="text168"><tspan
+         x="0 4.2000198"
+         y="0"
+         id="tspan170"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">r,</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,435.7,623.02)"
+       id="text172"><tspan
+         x="0 7.6791601 13.7946 18.107281 22.3104 28.1868 34.541279 38.126881 44.132759 47.00124 52.987202 56.951279"
+         y="0"
+         id="tspan174"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Darren Platt</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,496.68,623.02)"
+       id="text176"><tspan
+         x="0"
+         y="0"
+         id="tspan178"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">,</tspan></text>
+<path
+       d="m 41.16,608.86 478.8,0 0,12 -478.8,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path180"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,41.16,610.9)"
+       id="text182"><tspan
+         x="0 7.4500799 10.3086 15.49776 21.802441 27.84816 30.69672 36.682678 41.871841 45.337921 52.290001 58.285919 64.162323 70.5168 76.871277 82.747681 87.060364 90.685799"
+         y="0"
+         id="tspan184"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Nicholas Roehner, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,135.5,610.9)"
+       id="text186"><tspan
+         x="0 6.2449198 12.23088 16.434 22.41996 28.774441 32.280361 39.092999 41.961479 46.045078 48.913559"
+         y="0"
+         id="tspan188"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Evren Sirin</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,190.85,610.9)"
+       id="text190"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan192"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,197.93,610.9)"
+       id="text194"><tspan
+         x="0 6.1353598 10.31856 16.30452 22.20084 28.29636 32.499481 36.005402 41.732399 45.447479 48.9534 55.766041 65.477043 68.34552 72.299637 78.654121 82.130157 85.636078 93.285362 99.639839"
+         y="0"
+         id="tspan196"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Trevor F. Smith, Guy</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,303.55,610.9)"
+       id="text198"><tspan
+         x="0"
+         y="0"
+         id="tspan200"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">-</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,308.11,610.9)"
+       id="text202"><tspan
+         x="0 6.8325601 12.948 17.151119 21.10524 24.61116 31.4238 35.377918 41.36388 47.728321 51.35376"
+         y="0"
+         id="tspan204"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Bart Stan, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,362.98,610.9)"
+       id="text206"><tspan
+         x="0 6.8126402 9.7110004 15.69696 22.061399 25.56732 32.379959 35.128922 37.87788 40.746361 46.622761 49.491241 55.48716 61.722118 67.71804 72.907204 76.482841"
+         y="0"
+         id="tspan208"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Alan Villalobos, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,443.02,610.9)"
+       id="text210"><tspan
+         x="0 6.8126402 13.18704 15.936 18.80448 22.3104 32.120998 34.989479 41.224442 47.2104 51.17448 54.799919 58.256039 64.241997 70.606438 76.8414"
+         y="0"
+         id="tspan212"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Anil Wipat, and </tspan></text>
+<path
+       d="m 237.17,596.74 86.784,0 0,12 -86.784,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path214"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,237.17,598.78)"
+       id="text216"><tspan
+         x="0 7.4401202 13.42608 17.6292 23.864161 29.850121 34.053242 38.007359 41.513279 49.999199"
+         y="0"
+         id="tspan218"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Herbert M.</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,294.31,598.78)"
+       id="text220"><tspan
+         x="0 6.8126402 12.82848 19.182961 23.49564"
+         y="0"
+         id="tspan222"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Sauro</tspan></text>
+<path
+       d="m 242.81,572.38 75.504,0 0,12 -75.504,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path224"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,242.81,574.42)"
+       id="text226"><tspan
+         x="0"
+         y="0"
+         id="tspan228"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">1</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,249.17,574.42)"
+       id="text230"><tspan
+         x="0"
+         y="0"
+         id="tspan232"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">2</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,259.03,574.42)"
+       id="text234"><tspan
+         x="0"
+         y="0"
+         id="tspan236"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">M</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,267.43,574.42)"
+       id="text238"><tspan
+         x="0 5.98596 10.3086 15.49776"
+         y="0"
+         id="tspan240"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">arch</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,292.75,574.42)"
+       id="text242"><tspan
+         x="0 6.3599601 12.71992"
+         y="0"
+         id="tspan244"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">201</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,311.83,574.42)"
+       id="text246"><tspan
+         x="0"
+         y="0"
+         id="tspan248"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">2</tspan></text>
+<path
+       d="m 37.56,519.19 144.05,0 0,28.944 -144.05,0 0,-28.944 z"
+       inkscape:connector-curvature="0"
+       id="path250"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,524.11)"
+       id="text252"><tspan
+         x="0 17.063999 25.728001 33.84 51.431999 68.519997 80.447998 97.295998 113.832 128.064"
+         y="0"
+         id="tspan254"
+         style="font-size:24px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">1. Purpose</tspan></text>
+<path
+       d="m 37.56,501.07 485.52,0 0,12 -485.52,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path256"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,503.11)"
+       id="text258"><tspan
+         x="0 4.0836 10.43808 13.944 17.86824 24.232679 27.10116 32.290321 35.736481 42.569038 45.447479 51.443401 58.275959 62.47908 65.347557 70.53672 76.38324 81.572403 85.018562 90.76548 96.761398 103.11588 109.47036 115.70532 121.8108 125.76492 128.63341 134.62932 140.9838 144.48972 151.41193 157.30824 163.5432 169.89767 175.77408 180.96324 184.88748 188.3934 191.96904 197.96497 202.27763 205.78355 212.73564 218.7216 228.41267 238.27309 244.25903 250.61353 254.56764 259.75681 263.20297 267.75467 274.58725 281.4198 287.18665 290.69257 297.61475 303.38159 310.33368 314.89536 318.52081 321.97693 330.24371 336.12012 339.70572 344.89487 351.09995 357.09589 362.28503 365.12363 368.62955 374.48605 377.99197 381.9162 388.28064 394.15704 397.66296 404.58517 410.48148 416.81604 420.77017 427.12463 433.00104 436.95517 439.82364 445.01279 448.45895 455.29153 458.16995 464.16589 467.03436 473.03027 479.26523 485.02213"
+         y="0"
+         id="tspan260"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">In this BioBricks Foundation Request for Comments (BBF RFC), we specify the Synthetic Biology </tspan></text>
+<path
+       d="m 37.56,488.95 437.04,0 0,12 -437.04,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path262"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,490.99)"
+       id="text264"><tspan
+         x="0 7.7986798 14.03364 19.91004 26.264521 29.850121 35.397839 41.383801 47.718361 53.95332 60.3078 66.293762 72.538681 78.415077 81.920998 86.442841 93.285362 100.23744 108.03612 113.58384 118.10568 121.70124 128.51389 134.45004 138.73283 143.922 146.7606 152.75652 159.11099 162.61691 168.95148"
+         y="0"
+         id="tspan266"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Open Language (SBOL) Version 1.</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,210.29,490.99)"
+       id="text268"><tspan
+         x="0"
+         y="0"
+         id="tspan270"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">1</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,216.65,490.99)"
+       id="text272"><tspan
+         x="0 3.6254399 9.96 13.46592 17.39016 23.5056 27.01152 32.868 39.222481 45.208439 51.453362 54.321838 60.198238 63.78384 67.737961 74.092438 79.968842 83.474762 89.331238 92.199722 98.076118 103.26528 107.30904 111.51216 117.50808 123.86256 126.73104 131.9202 135.36636 141.24277 147.22871 152.41788 158.72256 164.7384 171.09288 177.32784 183.3138 186.81972 192.79572 196.30164 199.75777 202.62624 208.98071 212.48663 218.5722 222.77531 232.4664 238.48224 242.43636 245.30484 251.30077 257.65524"
+         y="0"
+         id="tspan274"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">.0 to enable the electronic exchange of information </tspan></text>
+<path
+       d="m 37.56,476.71 331.66,0 0,12 -331.66,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path276"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,478.75)"
+       id="text278"><tspan
+         x="0 6.2349601 12.11136 17.30052 22.53948 26.742599 29.61108 35.846039 38.595001 44.949478 51.184441 54.690361 62.369518 69.779762 76.5924 80.09832 85.287483 91.263481 100.95456 107.32896 113.32488 119.79888 125.67528 132.02975 135.98389 141.17303 144.6192 150.97368 156.24252 162.11893 168.35388 171.8598 174.70836 181.06284 184.56876 189.69817 195.59448 201.92905 205.88316 212.23764 218.11404"
+         y="0"
+         id="tspan280"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">describing DNA components used in synthet</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,259.87,478.75)"
+       id="text282"><tspan
+         x="0 2.86848 8.0576401 11.5038 17.73876 20.607241 26.483641 29.352119 35.348042 41.583 47.479321 51.064919 54.570839 64.490997 70.367401 73.873322 80.197922 86.074318 89.580238 92.428802 98.783279 104.65968 109.2114"
+         y="0"
+         id="tspan284"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">ic biology. We define: </tspan></text>
+<path
+       d="m 73.584,464.59 231.17,0 0,12 -231.17,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path286"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,55.584,466.63)"
+       id="text288"><tspan
+         x="0 6.3599601"
+         y="0"
+         id="tspan290"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">1.</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,73.584,466.63)"
+       id="text292"><tspan
+         x="0 3.9541199 10.3086 16.184999"
+         y="0"
+         id="tspan294"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">the </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,93.264,466.63)"
+       id="text296"><tspan
+         x="0 6.474 13.31652 19.312441 25.91592 32.87796 40.06908 43.425598 50.138641 55.05888"
+         y="0"
+         id="tspan298"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">vocabulary</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,154.85,466.63)"
+       id="text300"><tspan
+         x="0 3.7051201 7.21104 13.197 16.66308 21.931919 27.808319 31.76244 35.348042 41.453522 44.959438 48.415562 54.65052 58.9632 64.8396 68.425201 74.301598 78.614281 82.817398 88.693802 95.048279 98.554199 102.47844 108.47436 112.67748 122.36856 127.66728 131.1732 137.15916 143.49371"
+         y="0"
+         id="tspan302"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, a set of preferred terms and</tspan></text>
+<path
+       d="m 73.584,452.47 325.51,0 0,12 -325.51,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path304"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,55.584,454.51)"
+       id="text306"><tspan
+         x="0 6.3599601"
+         y="0"
+         id="tspan308"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">2.</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,73.584,454.51)"
+       id="text310"><tspan
+         x="0 3.9541199 10.3086 16.184999"
+         y="0"
+         id="tspan312"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">the </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,93.264,454.51)"
+       id="text314"><tspan
+         x="0 5.8564801 12.699 17.74872 24.36216 27.708719 34.780319 41.383801 46.055038 52.65852 56.015041 66.552719 73.524719 80.486763 87.189842"
+         y="0"
+         id="tspan316"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">core data model</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,183.89,454.51)"
+       id="text318"><tspan
+         x="0 3.6254399 7.1911201 13.17708 16.683001 21.832319 27.828239 37.519321 47.379719 53.375641 59.730122 63.31572 68.504883 74.470917 84.162003 90.416878 96.771362 100.72548 106.71144 110.67552 113.544 119.53992 125.8944 131.88036 134.76875 138.27467 142.44792 148.32433 154.55928 158.87196 164.74837 170.0172 175.8936 182.24808 186.20219 192.18816 196.15224 199.02072 205.01665 211.37112"
+         y="0"
+         id="tspan320"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, a common computational representation.</tspan></text>
+<path
+       d="m 37.56,399.31 396.46,0 0,28.92 -396.46,0 0,-28.92 z"
+       inkscape:connector-curvature="0"
+       id="path322"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,404.23)"
+       id="text324"><tspan
+         x="0 17.063999 25.728001 33.84 52.608002 68.543999 76.68 92.711998 103.776 111.984 128.472 145.56 153.696 164.71201 181.2 189.312 205.8 216.744 233.92799 249.864 261.79199 270 288.168 306.45599 322.104 330.31201 349.07999 364.67999 382.056"
+         y="0"
+         id="tspan326"
+         style="font-size:24px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">2. Relation to other BBF RFCs</tspan></text>
+<path
+       d="m 37.56,381.19 462.24,0 0,12 -462.24,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path328"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,383.23)"
+       id="text330"><tspan
+         x="0 6.8325601 13.66512 19.431959 22.93788 29.860081 35.626919 42.578999"
+         y="0"
+         id="tspan332"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">BBF RFC </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,83.664,383.23)"
+       id="text334"><tspan
+         x="0 6.3599601 12.71992"
+         y="0"
+         id="tspan336"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">87 </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,99.864,383.23)"
+       id="text338"><tspan
+         x="0 7.0716 13.31652 19.322399 24.84024 31.79232 38.7444 44.989319 51.80196"
+         y="0"
+         id="tspan340"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">REPLACES </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,155.33,383.23)"
+       id="text342"><tspan
+         x="0 6.8325601 13.66512 19.431959 22.93788 29.860081 35.626919 42.578999 46.084919 52.419479 58.77396 62.399399"
+         y="0"
+         id="tspan344"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">BBF RFC 84, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,221.33,383.23)"
+       id="text346"><tspan
+         x="0 6.8325601 13.66512 19.431959 22.93788 29.860081 35.626919 42.578999 46.084919 52.539001 58.873562"
+         y="0"
+         id="tspan348"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">BBF RFC 31 </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,283.75,383.23)"
+       id="text350"><tspan
+         x="0 5.98596 12.3504 18.58536 22.09128 29.382 35.387878 43.067039 49.879681 56.13456 62.379478 69.192123 72.698036 79.530602 86.363159 92.249519 95.75544 102.67764 108.44448 115.39656 118.90248 125.23704"
+         y="0"
+         id="tspan352"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">and UPDATES BBF RFC 30</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,415.42,383.23)"
+       id="text354"><tspan
+         x="0 3.60004"
+         y="0"
+         id="tspan356"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">, </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,422.5,383.23)"
+       id="text358"><tspan
+         x="0 6.1054802 11.29464 14.7408 17.60928 21.5634"
+         y="0"
+         id="tspan360"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">as it </tspan></text>
+<text
+       transform="matrix(1,0,0,-1,447.58,383.23)"
+       id="text362"><tspan
+         x="0 5.1891599 11.39424 17.2806 22.469761 25.308359 28.81428 31.66284 37.539242"
+         y="0"
+         id="tspan364"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">specifies</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,493.8,383.23)"
+       id="text366"><tspan
+         x="0 5.9999599"
+         y="0"
+         id="tspan368"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">a </tspan></text>
+<path
+       d="m 37.56,368.93 183.89,0 0,12.024 -183.89,0 0,-12.024 z"
+       inkscape:connector-curvature="0"
+       id="path370"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,370.97)"
+       id="text372"><tspan
+         x="0 5.1891599 9.1134005 15.09936 21.473761 27.708719 33.694679 37.907761 44.142719 47.64864 52.89756 58.893478"
+         y="0"
+         id="tspan374"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">standard con</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,102.86,370.97)"
+       id="text376"><tspan
+         x="0 3.5059199 9.5914803 13.7946 23.48568 26.384041 32.738522 38.97348 42.479401 46.403641 52.409519 55.995121 62.827679 69.66024 75.427078 78.932999 85.855202 91.62204 98.57412 102.08004 108.4146 114.76908"
+         y="0"
+         id="tspan378"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">forming to BBF RFC 30.</tspan></text>
+<path
+       d="m 37.56,315.77 259.51,0 0,28.92 -259.51,0 0,-28.92 z"
+       inkscape:connector-curvature="0"
+       id="path380"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,320.69)"
+       id="text382"><tspan
+         x="0 17.063999 25.728001 33.84 51.216 67.704002 84.480003 100.104 112.032 120.336 137.112 154.2 165.144 173.256 193.584 210.07201 221.01601 229.272 243.384"
+         y="0"
+         id="tspan384"
+         style="font-size:24px;font-variant:normal;font-weight:bold;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana Bold">3. Copyright Notice</tspan></text>
+<path
+       d="m 37.56,297.65 345.22,0 0,12 -345.22,0 0,-12 z"
+       inkscape:connector-curvature="0"
+       id="path386"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" /><text
+       transform="matrix(1,0,0,-1,37.56,299.69)"
+       id="text388"><tspan
+         x="0 6.9520798 12.95796 19.192921 25.178881 29.382 32.250481 38.485439 44.83992 48.794041 52.299961 56.8218 63.77388 68.34552 71.85144 77.94696 84.301437 90.177841 93.683762 100.51632 103.36488 109.3608 116.19336 120.50604 123.37452 128.56367 134.4102 139.59937 143.04552 148.79243 154.78836 161.14284 167.49731 173.73228 179.71825 183.68233 186.5508 192.54672 198.9012 202.40712 206.92896 213.2934 219.62796 226.00237 232.33691 236.90855 240.534 243.99013 250.80276 253.5816 256.45007 259.95599 266.76865 269.63712 275.87207 282.22656 286.18069 291.36984 294.81601 301.76807 307.64447 312.83365 318.78973 322.99283 328.97879 334.85519 341.09015"
+         y="0"
+         id="tspan390"
+         style="font-size:9.96000004px;font-variant:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana">Copyright (C) The BioBricks Foundation (2011). All Rights Reserved.</tspan></text>
+</g></svg>
