@@ -256,7 +256,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: icon.url_small
+            iconSource: icon.url_svg
         });
 
         this.grid.insert(binIndex, newBin);
@@ -310,7 +310,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: icon.url_small
+            iconSource: icon.url_svg
         }));
     },
 

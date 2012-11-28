@@ -41,7 +41,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         GENERIC: {
             key: "GENERIC",
             name: "generic",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/DUMMYFILE.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/DUMMYFILE.svg",
             url_png: "resources/images/symbols/DUMMYFILE.png",
             url_small: "resources/images/icons/device/small/generic.png",
             url_smallRev: "resources/images/icons/device/small/generic_reverse.png"
@@ -49,7 +49,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         ASSEMBLY_JUNCTION: {
             key: "ASSEMBLY_JUNCTION",
             name: "assembly_junction",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/assembly-junction.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/assembly-junction.svg",
             url_png: "resources/images/symbols/assembly-junction.png",
             url_small: "resources/images/icons/device/small/assembly_junction.png",
             url_smallRev: "resources/images/icons/device/small/assembly_junction_reverse.png"
@@ -57,7 +57,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         CDS: {
             key: "CDS",
             name: "cds",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/cds.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/cds.svg",
             url_png: "resources/images/symbols/cds.png",
             url_small: "resources/images/icons/device/small/cds.png",
             url_smallRev: "resources/images/icons/device/small/cds_reverse.png"
@@ -65,7 +65,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         FIVE_PRIME_OVERHANG: {
             key: "FIVE_PRIME_OVERHANG",
             name: "five_prime_overhang",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/five-prime-overhang.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/five-prime-overhang.svg",
             url_png: "resources/images/symbols/five-prime-overhang.png",
             url_small: "resources/images/icons/device/small/five_prime_overhang.png",
             url_smallRev: "resources/images/icons/device/small/five_prime_overhang_reverse.png"
@@ -73,7 +73,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         FIVE_PRIME_UTR: {
             key: "FIVE_PRIME_UTR",
             name: "five_prime_utr",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/DUMMYFILE.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/DUMMYFILE.svg",
             url_png: "resources/images/symbols/DUMMYFILE.png",
             url_small: "resources/images/icons/device/small/five_prime_utr.png",
             url_smallRev: "resources/images/icons/device/small/five_prime_utr_reverse.png"
@@ -81,7 +81,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         INSULATOR: {
             key: "INSULATOR",
             name: "insulator",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/insulator.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/insulator.svg",
             url_png: "resources/images/symbols/insulator.png",
             url_small: "resources/images/icons/device/small/insulator.png",
             url_smallRev: "resources/images/icons/device/small/insulator_reverse.png"
@@ -89,7 +89,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         OPERATOR_SITE: {
             key: "OPERATOR_SITE",
             name: "operator_site",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/operator.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/operator.svg",
             url_png: "resources/images/symbols/operator.png",
             url_small: "resources/images/icons/device/small/operator_site.png",
             url_smallRev: "resources/images/icons/device/small/operator_site_reverse.png"
@@ -97,7 +97,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         ORIGIN_OF_REPLICATION: {
             key: "ORIGIN_OF_REPLICATION",
             name: "origin_of_replication",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/origin-of-replication.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/origin-of-replication.svg",
             url_png: "resources/images/symbols/origin-of-replication.png",
             url_small: "resources/images/icons/device/small/origin_of_replication.png",
             url_smallRev: "resources/images/icons/device/small/origin_of_replication_reverse.png"
@@ -105,7 +105,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         PRIMER_BINDING_SITE: {
             key: "PRIMER_BINDING_SITE",
             name: "primer_binding_site",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/primer-binding-site.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/primer-binding-site.svg",
             url_png: "resources/images/symbols/primer-binding-site.png",
             url_small: "resources/images/icons/device/small/primer_binding_site.png",
             url_smallRev: "resources/images/icons/device/small/primer_binding_site_reverse.png"
@@ -113,7 +113,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         PROMOTER: {
             key: "PROMOTER",
             name: "promoter",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/promoter.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/promoter.svg",
             url_png: "resources/images/symbols/promoter.png",
             url_small: "resources/images/icons/device/small/promoter.png",
             url_smallRev: "resources/images/icons/device/small/promoter_reverse.png"
@@ -121,7 +121,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         PROTEASE_SITE: {
             key: "PROTEASE_SITE",
             name: "protease_site",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/protease-site.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/protease-site.svg",
             url_png: "resources/images/symbols/protease-site.png",
             url_small: "resources/images/icons/device/small/protease_site.png",
             url_smallRev: "resources/images/icons/device/small/protease_site_reverse.png"
@@ -129,7 +129,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         PROTEIN_STABILITY_ELEMENT: {
             key: "PROTEIN_STABILITY_ELEMENT",
             name: "protein_stability_element",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/protein-stability-element.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/protein-stability-element.svg",
             url_png: "resources/images/symbols/protein-stability-element.png",
             url_small: "resources/images/icons/device/small/protein_stability_element.png",
             url_smallRev: "resources/images/icons/device/small/protein_stability_element_reverse.png"
@@ -137,7 +137,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         RESTRICTION_ENZYME_RECOGNITION_SITE: {
             key: "RESTRICTION_ENZYME_RECOGNITION_SITE",
             name: "restriction_enzyme_recognition_site",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/restriction-enzyme-recognition-site.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/restriction-enzyme-recognition-site.svg",
             url_png: "resources/images/symbols/restriction-enzyme-recognition-site.png",
             url_small: "resources/images/icons/device/small/restriction_enzyme_recognition_site.png",
             url_smallRev: "resources/images/icons/device/small/restriction_enzyme_recognition_site_reverse.png"
@@ -145,7 +145,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         RESTRICTION_SITE_NO_OVERHANG: {
             key: "RESTRICTION_SITE_NO_OVERHANG",
             name: "restriction_site_no_overhang",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/restriction-site-with-no-overhang.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/restriction-site-with-no-overhang.svg",
             url_png: "resources/images/symbols/restriction-site-with-no-overhang.png",
             url_small: "resources/images/icons/device/small/restriction_site_no_overhang.png",
             url_smallRev: "resources/images/icons/device/small/restriction_site_no_overhang_reverse.png"
@@ -153,7 +153,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         RIBONUCLEASE_SITE: {
             key: "RIBONUCLEASE_SITE",
             name: "ribonuclease_site",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/ribonuclease-site.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/ribonuclease-site.svg",
             url_png: "resources/images/symbols/ribonuclease-site.png",
             url_small: "resources/images/icons/device/small/ribonuclease_site.png",
             url_smallRev: "resources/images/icons/device/small/ribonuclease_site_reverse.png"
@@ -161,7 +161,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         RNA_STABILITY_ELEMENT: {
             key: "RNA_STABILITY_ELEMENT",
             name: "rna_stability_element",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/rna-stability-element.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/rna-stability-element.svg",
             url_png: "resources/images/symbols/rna-stability-element.png",
             url_small: "resources/images/icons/device/small/rna_stability_element.png",
             url_smallRev: "resources/images/icons/device/small/rna_stability_element_reverse.png"
@@ -169,7 +169,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         SIGNATURE: {
             key: "SIGNATURE",
             name: "signature",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/signature.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/signature.svg",
             url_png: "resources/images/symbols/signature.png",
             url_small: "resources/images/icons/device/small/signature.png",
             url_smallRev: "resources/images/icons/device/small/signature_reverse.png"
@@ -177,7 +177,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         TERMINATOR: {
             key: "TERMINATOR",
             name: "terminator",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/terminator.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/terminator.svg",
             url_png: "resources/images/symbols/terminator.png",
             url_small: "resources/images/icons/device/small/terminator.png",
             url_smallRev: "resources/images/icons/device/smallterminator/_reverse.png"
@@ -185,7 +185,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         THREE_PRIME_OVERHANG: {
             key: "THREE_PRIME_OVERHANG",
             name: "three_prime_overhang",
-            url_pdf: "resources/images/SBOLv1.1.0_SymbolsPDF/three-prime-overhang.pdf",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/three-prime-overhang.svg",
             url_png: "resources/images/symbols/three-prime-overhang.png",
             url_small: "resources/images/icons/device/small/three_prime_overhang.png",
             url_smallRev: "resources/images/icons/device/small/three_prime_overhang_reverse.png"
