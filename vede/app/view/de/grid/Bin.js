@@ -71,7 +71,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                     xtype: 'image',
                     cls: 'binIcon',
                     x: 34,
-                    y: -8,
+                    y: 12,
                     src: iconSource
                 }]
             }]

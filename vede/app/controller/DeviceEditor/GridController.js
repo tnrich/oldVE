@@ -259,6 +259,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             iconSource: icon.url_svg
         });
 
+        // If false flip, otherwise do nothing;
+        var flip = !j5Bin.get("directionForward");
+        if(flip)
+        {
+            var imageBinIcon = newBin.query('image[cls="binIcon"]')[0];
+            imageBinIcon.addCls('flipImage');
+        }
+
         this.grid.insert(binIndex, newBin);
 
         // If the bin was previously selected, reselect it.

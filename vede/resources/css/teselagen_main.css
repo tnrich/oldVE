@@ -317,3 +317,12 @@ background: #F8F8F8;
   border: none;
 }
 
+.flipImage {
+        -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        filter: FlipH;
+        -ms-filter: "FlipH";
+}
+
