@@ -2,7 +2,6 @@
  * @class Teselagen.constants.SBOLIcons
  * Class with constants.
  * @author Diana Wong
- * @author ? original
  */
 Ext.define("Teselagen.constants.SBOLIcons", {
     singleton: true,

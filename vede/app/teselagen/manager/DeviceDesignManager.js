@@ -708,35 +708,39 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //return pDevice.removePartFromBin(pPart, pBinIndex);
     },
 
-    /** NEED THIS?
+    /**
      * Set the Start index for a Part
+     * @param {Teselagen.models.Part} pPart
      * @param {Number} pStart The start index, from 1 to length of the sequence, to set the start BP.
      */
-    setPartStart: function(pDevice, pPart, pStart) {
+    setPartStart: function(pPart, pStart) {
         pPart.setStart(pStart);
     },
 
-    /** NEED THIS?
-     * Get Start Index
+    /**
+     * Get Start Index for a Part
+     * @param {Teselagen.models.Part} pPart
      * @returns {Number}
      */
-    getPartStart: function(pDevice, pPart) {
+    getPartStart: function(pPart) {
         return pPart.getStart();
     },
 
-    /** NEED THIS?
+    /**
      * Set the End index for a Part
+     * @param {Teselagen.models.Part} pPart
      * @param {Number} pEnd The start index, from 1 to length of the sequence, to set the start BP.
      */
-    setPartEnd: function(pDevice, pPart, pEnd) {
+    setPartEnd: function(pPart, pEnd) {
         pPart.setEnd(pEnd);
     },
 
-    /** NEED THIS?
+    /**
      * Get End Index
+     * @param {Teselagen.models.Part} pPart
      * @returns {Number}
      */
-    getPartEnd: function(pDevice, pPart) {
+    getPartEnd: function(pPart) {
         return pPart.getEnd();
     },
 
@@ -792,23 +796,21 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return part.getSequenceFile();
     },
     /**
-     * Given a Part, get the SequenceFile. (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * Given a Part, get the SequenceFile.
      * @param {Teselagen.models.Part} pPart
      * @returns {Teselagen.models.SequenceFile}
      */
-    getSequenceFileByPart: function(pDevice, pPart) {
+    getSequenceFileByPart: function(pPart) {
         return pPart.getSequenceFile();
     },
 
     /**
-     * Given a Part, get the SequenceFile. (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * Given a Part, get the SequenceFile.
      * @param {Teselagen.models.Part} pPart
      * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @returns {Teselagen.models.Part}
      */
-    setSequenceFile: function(pDevice, pPart, pSequenceFile) {
+    setSequenceFileByPart: function(pPart, pSequenceFile) {
         //console.log(pPart.getSequenceFile().get("sequenceFileName"));
         //console.log(pSequenceFile.get("sequenceFileName"));
         pPart.setSequenceFile(pSequenceFile);
@@ -816,12 +818,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     /**
      * Removes the SequenceFile in a Part and replaces it with an empty Part.
-     * (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
      * @returns {Teselagen.models.Part}
      */
-    removeSequenceFile: function(pDevice, pPart) {
+    removeSequenceFileByPart: function(pPart) {
         return pPart.removeSequenceFile();
     },
 
@@ -852,12 +852,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Sets the sequenceFileName for a SequenceFile.
      * NOTE: Does not reset any other properties.
      *
-     * @param {Teselagen.manager.DeviceDesign} pDevice
      * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @param {String} pSequenceFileName
      * @return {Boolean} True if name is set, false if not. (Throw an error if not set?)
      */
-    setSequenceFileName: function(pDevice, pSequenceFile, pSequenceFileName) {
+    setSequenceFileName: function(pSequenceFile, pSequenceFileName) {
         return pSequenceFile.setSequenceFileName(pSequenceFileName);
     },
 
@@ -866,7 +865,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Get Length of Sequence.
      * @param {Teselagen.models.SequenceFile}
      */
-    getSequenceLength: function(pDevice, pSequenceFile) {
+    getSequenceLength: function(pSequenceFile) {
         return pSequenceFile.getLength();
     },
 

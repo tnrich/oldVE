@@ -105,6 +105,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
     ],
 
+    /** (Untested)
+     * Get number of bins in J5Bin.
+     * @returns {Number}
+     */
+    getBinCount: function() {
+        return this.getJ5Collection().binCount();
+    },
+
     /**
      * Creates a J5Collection with pNumBins empty J5Bins.
      * @param {Number} pNumBins Number of empty J5Bins to make in Collection

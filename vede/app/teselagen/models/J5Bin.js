@@ -19,9 +19,9 @@ Ext.define("Teselagen.models.J5Bin", {
         reader: {type: "json"}
     },
 
-    statics: {
+    /*statics: {
         GENERIC: "generic"
-    },
+    },*/
 
     /**
      * Input parameters.
