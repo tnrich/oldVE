@@ -26,14 +26,14 @@ Ext.define("Teselagen.models.Project", {
         type: "hasMany",
         model: "Teselagen.models.DeviceEditorProject",
         name: "deprojects",
-//        associationKey: "deprojects",
+        associationKey: "deprojects",
         foreignKey: "project_id",
         autoLoad: true
     }, {
         type: "hasMany",
         model: "Teselagen.models.VectorEditorProject",
         name: "veprojects",
-//        associationKey: "veprojects",
+        associationKey: "veprojects",
         foreignKey: "project_id",
         autoLoad: true
     },
@@ -42,12 +42,13 @@ Ext.define("Teselagen.models.Project", {
         model: "Teselagen.models.User",
         getterName: "getUser",
         setterName: "setUser",
+        associationKey: "user",
         foreignKey: "user_id"
     }],
 
     proxy: {
         type: "rest",
-//      url: "/vede/test/data/json/projects.json",
+        url: "/vede/test/data/json/projects.json",
         reader: {
             type: "json",
             root: "projects"
@@ -62,10 +63,8 @@ Ext.define("Teselagen.models.Project", {
                 return data;
             }
         },
-        action: "user/projects",
-        buildUrl: function(req) {
-//            this.callParent(arguments);
-            return Teselagen.manager.SessionManager.buildUrl(this.action);
+        buildUrl: function() {
+            return Teselagen.manager.SessionManager.buildUrl("user/projects", this.url);
         }
     }
 

@@ -38,9 +38,6 @@ else if (app.program.stage) process.env.NODE_ENV = "Stage";
 else if (app.program.prod) process.env.NODE_ENV = "Production";
 else process.env.NODE_ENV = "Development";
 
-// Log requests
-app.use(express.logger());
-
 app.use(function (req, res, next) {
   if(req.method === 'OPTIONS') {
     var headers = {};
@@ -66,7 +63,7 @@ require('./development.js')(app);
 var config = require('./config.js')(app, express);
 
 // Routes
-require('./routes/api.js')(app, express);
+require('./routes/api.js')(app);
 require('./routes/testing.js')(app);
 //require('./routes/backend.js')(app);
 require('./routes/j5.js')(app);
