@@ -117,7 +117,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             model: "Teselagen.models.Part",
             getterName: "getPart",
             setterName: "setPart",
-            associationKey: "part",
             foreignKey: "part_id"
         },
         {
@@ -125,7 +124,6 @@ Ext.define("Teselagen.models.SequenceFile", {
             model: "Teselagen.models.VectorEditorProject",
             getterName: "getVectorEditorProject",
             setterName: "setVectorEditorProject",
-            associationKey: "vectorEditorProject",
             foreignKey: "veproject_id"
         }
     ],
@@ -271,18 +269,24 @@ Ext.define("Teselagen.models.SequenceFile", {
         var format      = this.get("sequenceFileFormat");
         var content     = this.get("sequenceFileContent");
         var end     = 0;
-        var seq;
-
         if (format === constants.GENBANK) {
+            var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(content);
+            end = gb.findKeyword("ORIGIN").getSequence().length;
         } else if (format === constants.FASTA) {
-            seq = content.replace(/>\s*(\S*)\s*/,"");
+            var seq = content.replace(/>\s*(\S*)\s*/,"");
             seq = seq.replace(/\s/,"");
-            //console.log(seq);
+            console.log(seq);
             end = seq.length;
 
         } else if (format === constants.JBEISEQ) {
+
+            var jbei = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(content);
+            //console.log(jbei);
+            end = jbei["seq:seq"]["seq:sequence"].length;
+
         } else {
         }
+        console.log(end);
         return end;
     }
 });

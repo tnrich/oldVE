@@ -1,8 +1,7 @@
 /*global beforeEach, describe, expect, it*/
-var userStore, partStore;
+var userStore;
 Ext.onReady(function() {
     describe("Device Editor models tests.", function () {
-        var part, partData, seqfile;
         var user, orders, order, userData, address, bossStore;
         beforeEach(function() {
             Ext.define("User", {
@@ -112,36 +111,6 @@ Ext.onReady(function() {
             user.setBoss(boss2);
             expect(user.getBoss().getId()).toBe(20);
             expect(user.getBoss().get("name")).toBe("myboss2");
-        });
-        it("Part test using store", function() {
-            partData = {
-                    "parts": [{
-                        "id": 123,
-                        "name": "mypart",
-                        "sequenceFile": {
-                            "id": 10,
-                            "sequenceFileName": "myFasta",
-                            "sequenceFileFormat": "FASTA",
-                            "sequenceFileContent": ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n"
-
-                        }
-                    }]
-            };
-            partStore = Ext.create("Ext.data.Store", {
-                model: "Teselagen.models.Part",
-                data: partData,
-                proxy: {
-                    type: "memory",
-                    reader: {type:"json", root: "parts"}
-                }
-            });
-            part = partStore.first();
-            expect(part).toBeDefined();
-            expect(part.get("id")).toBe(123);
-            expect(part.get("name")).toBe("mypart");
-            seqfile = part.getSequenceFile();
-            expect(seqfile).toBeDefined();
-            expect(seqfile.get("sequenceFileName")).toBe("myFasta");
         });
         describe("File store tests.", function() {
             var proj, veprojs;

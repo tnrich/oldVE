@@ -27,21 +27,30 @@ Ext.define("Teselagen.manager.ProjectManager", {
 	 * Load User Info
 	 */
 	loadUser: function (cb) {
-		//console.log('PM: Loading User');
+//		console.log('PM: Loading User');
 		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
 		var users = Ext.create("Teselagen.store.UserStore");
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(!records) {console.log('Error loading user'); return cb(false);}
-				self.currentUser = users.first();
-				self.currentUser.projects().load({
-					callback: function(record,operation,success){
-						self.projects = self.currentUser.projects();
-						if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
-					}
-				});
-				if(cb) return cb(true);
+				if(!success || records && records.length != 1) {
+				    console.log('Error loading user');
+				    return cb(false);
+				}
+				else {
+				    self.currentUser = users.first();
+				    self.currentUser.projects().load({
+				        callback: function(record,operation,success){
+				            self.projects = self.currentUser.projects();
+				            if(Ext.getCmp('projectGrid_Panel')) {
+				                Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
+				            }
+				        }
+				    });
+				    if(cb) { 
+				        return cb(true);
+				    }
+				}
 			}
 		});
 	},

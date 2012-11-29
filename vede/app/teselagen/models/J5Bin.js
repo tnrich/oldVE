@@ -35,8 +35,6 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        //{name: "id",                type: "long"},
-        //{name: "j5collection_id",     type: "long"},
         {
             name: "binName",
             convert: function(v) {
@@ -92,14 +90,14 @@ Ext.define("Teselagen.models.J5Bin", {
         {
             field: "iconID",
             type: "inclusion",
-            //list: Teselagen.constants.SBOLIcons.ICON_LIST
+            list: Teselagen.constants.SBOLIcons.ICON_LIST
 
             // DW 11.24.12: DO NOT DO THIS!
             // GET THE APPLICATION TO LOAD Teselagen.constants.SBOLIcons !!!!!
             // YOU NEED THE PREVIOUS LINE TO WORK
             //
             // THIS IS A TEMPORARY SOLUTION !!!!!!!!!
-            list : [
+            /*list : [
                 "GENERIC",
                 "ASSEMBLY_JUNCTION",
                 "CDS",
@@ -119,7 +117,7 @@ Ext.define("Teselagen.models.J5Bin", {
                 "SIGNATURE",
                 "TERMINATOR",
                 "THREE_PRIME_OVERHANG"
-            ]
+            ]*/
         },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
@@ -147,8 +145,7 @@ Ext.define("Teselagen.models.J5Bin", {
             name: "j5collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5Collection",
-            foreignKey: "j5collection_id"
+            associationKey: "j5Collection"
         }
     ],
 
