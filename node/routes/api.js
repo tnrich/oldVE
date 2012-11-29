@@ -3,8 +3,9 @@
  * -----------------------
  */
 
-module.exports = function (app) {
+module.exports = function (app, express) {
 
+    var errorHandler = express.errorHandler();
 
   // Login Auth Method : Find User in DB
 
@@ -66,6 +67,7 @@ module.exports = function (app) {
     var sessionId = req.body.sessionId;
     var username = req.body.username;
     var password = req.body.password;
+//    console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
 
     // getOrCreateUser : Create new entry in DB if User doesn't exist
 
@@ -158,6 +160,19 @@ module.exports = function (app) {
 
   });
 
+  // Get Project by id
+  app.get('/project', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.findById(req.query.id, function (err, proj) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": proj});
+        }
+    });
+  });
+
   app.put('/user', restrict, function (req, res) {
     res.json({});
   });
@@ -218,6 +233,7 @@ module.exports = function (app) {
     });
   });  
 
+  // Get Project
   app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')

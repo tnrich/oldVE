@@ -57,7 +57,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     if(Ext.get('splash-text')) Ext.get('splash-text').update('Authenticating to server');
     
     Ext.Ajax.request({
-      url: Teselagen.manager.SessionManager.buildUrl('login','login'),
+      url: Teselagen.manager.SessionManager.buildUrl('login'),
       params: {
         username: params.username || "",
         password: params.password || "",
