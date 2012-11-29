@@ -300,6 +300,19 @@ module.exports = function (app, express) {
     });
   });
 
+  // DELETE
+  app.delete('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var DEProjects = app.db.model("deproject");
+    DEProjects.findById(req.body.id,function(err,proj){
+      if(!proj) return res.json({'fault':'project not found'},500);
+      proj.remove(function(err){
+        if(err) return res.json({'fault':' new deproj not saved'},500);
+        res.json({"projects":{}});
+      });
+    });
+  });
+
   //CREATE
   app.post('/user/projects/deprojects/devicedesign', function (req, res) {
 
@@ -310,6 +323,7 @@ module.exports = function (app, express) {
     var model = req.body;
     
     DEProject.findById(id,function(err,deproject){
+      if(!deproject) return res.json({'fault':'deproject not found'},500);
       deproject.design = model;
 
       deproject.design.j5collection.bins.forEach(function(bin,binKey){

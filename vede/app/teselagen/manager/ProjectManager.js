@@ -100,10 +100,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		// First check tab is not already opened
 		var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
 		var duplicated = false;
+		var DEProjectId = selectedDEProject.data.id;
 		tabPanel.items.items.forEach(function(tab,key){
 			if(tab.model)
 			{
-				if(tab.model.internalId == selectedDEProject.internalId) 
+				if(tab.model.data.id == DEProjectId) 
 				{
 					duplicated = true;
 					tabPanel.setActiveTab(key);
@@ -118,11 +119,23 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				callback: function (record,operation) {
 					selectedDesign = selectedDEProject.getDesign();
 					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject})).show();		
+					tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject,modelId:DEProjectId})).show();		
 					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();		
 				}
 			});
 		}	
+	},
+
+	deleteDEProject: function(deproject,tab){
+		console.log("Deleting deproject");
+		var self = this;
+		this.workingProject.deprojects().remove(deproject);
+		this.workingProject.deprojects().sync({
+			callback: function(){
+				self.loadDesignAndChildResources();
+				Ext.getCmp('mainAppPanel').remove(tab);			
+			}
+		});
 	},
 
 	openVEProject: function (item) {
@@ -217,11 +230,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 				    deproject.save({
 				        callback: function(){
-				        	//console.log("DE Project saved");
 				        	design.set( 'deproject_id', deproject.get('id') );
 				        	design.save({
 				        		callback: function(){
-				        			//console.log("DESIGN SAVED");
 				        			self.loadDesignAndChildResources();
 									self.openDesign(deproject);
 				            	}});
