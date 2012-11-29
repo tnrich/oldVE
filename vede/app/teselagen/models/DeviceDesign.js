@@ -74,7 +74,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5collection",
-//            name: "j5collection" // PLEASE DONT DELETE IT, I NEED IT TO GET CORRECTLY ASSOCIATED DATA
+            name: "j5collection" // PLEASE DONT DELETE IT, I NEED IT TO GET CORRECTLY ASSOCIATED DATA
         },
         {
             type: "hasOne",
