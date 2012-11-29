@@ -9,7 +9,6 @@ Ext.define("Teselagen.models.J5Run", {
         // will be moved to J5Input
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
-
         "Teselagen.models.J5Input",
         "Teselagen.models.J5Results",
         "Teselagen.constants.Constants",
@@ -30,26 +29,11 @@ Ext.define("Teselagen.models.J5Run", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "id",            type: "long"},
         {name: "name",          type: "String", defaultValue: ""},
-
-
-        // meta info
         {name: "status",        type: "String",     defaultValue: ""},
         {name: "date",          type: "String",     defaultValue: ""},
         {name: "assemblyType",  type: "String",     defaultValue: ""},
-        {name: "status",        type: "String",     defaultValue: ""},
-
-
-        // IDs
-        {name: "deproject_id",  type: "long"},
-        {name: "j5results_id",  type: "long"},
-        {name: "j5input_id",    type: "long"},
-
-        // TO BE MOVED TO J5INPUT
-        {name: "j5parameters_id", type: "long"},
-        {name: "automationparameters_id", type: "long"}
-
+        {name: "status",        type: "String",     defaultValue: ""}
     ],
 
     validations: [
@@ -74,8 +58,7 @@ Ext.define("Teselagen.models.J5Run", {
             model: "Teselagen.models.J5Parameters",
             getterName: "getJ5Parameters",
             setterName: "setJ5Parameters",
-            assocationKey: "j5Parameters",
-            foreignKey: "j5parameters_id"
+            assocationKey: "j5Parameters"
         },
         { // Move this to J5Input
             type: "hasOne",
@@ -98,16 +81,14 @@ Ext.define("Teselagen.models.J5Run", {
             model: "Teselagen.models.J5Results",
             getterName: "getJ5Results",
             setterName: "setJ5Results",
-            associationKey: "j5Results",
-            foreignKey: "j5results_id"
+            associationKey: "j5Results"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject",
-            foreignKey: "deproject_id"
+            associationKey: "deviceEditorProject"
         }
     ]
 
