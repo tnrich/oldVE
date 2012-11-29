@@ -23,6 +23,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedPart: null,
 
     totalRows: 1,
+
+    onReRenderDECanvasEvent: function(){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        this.onTabChange(tab,tab,tab);
+    },
+
     /**
      * Renders a given DeviceDesign.
      * @param {Teselagen.models.DeviceDesign} The design to render.
@@ -429,6 +435,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
  
         this.application.on("PartCellClick",
                             this.onPartCellClick,
+                            this);
+
+        this.application.on("ReRenderDECanvas",
+                            this.onReRenderDECanvasEvent,
                             this);
         },
 });

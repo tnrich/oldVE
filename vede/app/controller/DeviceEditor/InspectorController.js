@@ -15,6 +15,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedPart: null,
     tabPanel: null,
 
+    onReRenderDECanvasEvent: function(){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        this.onTabChange(tab,tab,tab);        
+    },
+
     onPartSelected: function(j5Part, binIndex) {
         this.inspector.setActiveTab(0);
 
@@ -214,6 +219,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.SELECT_BIN,
                             this.onBinSelected,
+                            this);
+
+        this.application.on("ReRenderDECanvas",
+                            this.onReRenderDECanvasEvent,
                             this);
 
         this.control({
