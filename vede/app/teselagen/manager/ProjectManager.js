@@ -33,15 +33,24 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var self = this;
 		users.load({
 			callback: function (records,operation,success) {
-				if(!records) {console.log('Error loading user'); return cb(false);}
-				self.currentUser = users.first();
-				self.currentUser.projects().load({
-					callback: function(record,operation,success){
-						self.projects = self.currentUser.projects();
-						if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
-					}
-				});
-				if(cb) return cb(true);
+				if (!success || !records) {
+				    console.log('Error loading user');
+				    if (cb) {
+				        return cb(false);
+				    }
+				}
+				else {
+				    self.currentUser = users.first();
+				    self.currentUser.projects().load({
+				        callback: function(record,operation,success){
+				            self.projects = self.currentUser.projects();
+				            if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
+				        }
+				    });
+				    if(cb) { 
+				        return cb(true);
+				    }
+				}
 			}
 		});
 	},
