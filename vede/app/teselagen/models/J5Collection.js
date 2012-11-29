@@ -160,7 +160,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * ///@returns {Teselagen.models.J5Bin}
      * @returns {Boolean} True if added, false if not.
      */
-    addNewBinByIndex: function(pName, pIndex) {
+    addNewBinByIndex: function(pIndex, pName) {
         var added   = false;
 
         var j5Bin = Ext.create("Teselagen.models.J5Bin", {

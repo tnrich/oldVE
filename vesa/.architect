@@ -586,6 +586,7 @@
                                     "cn": [
                                         {
                                             "id": "88cc23a6-64d1-4b1c-9926-7131f3e4de7a",
+                                            "expanded": false,
                                             "cn": [
                                                 {
                                                     "id": "7cdc67f6-321d-41d6-b03a-a3ce7deedb57"
@@ -640,6 +641,7 @@
                                 },
                                 {
                                     "id": "73eee35b-35c4-4407-a6bb-a4777021372b",
+                                    "expanded": false,
                                     "cn": [
                                         {
                                             "id": "25d7eae5-28f3-4fd0-ac40-82364c771ee2",
@@ -687,6 +689,7 @@
                                 },
                                 {
                                     "id": "88cd779c-e60d-4643-bf26-7674386d47cd",
+                                    "expanded": false,
                                     "cn": [
                                         {
                                             "id": "40f1d048-130a-42ef-898c-be789dfc1ee5",

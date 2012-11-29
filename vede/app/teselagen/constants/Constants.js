@@ -23,14 +23,14 @@ Ext.define("Teselagen.constants.Constants", {
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ",
+        "JBEISEQXML",
         "SBOLXML"
     ],
     
     GENBANK:                "GENBANK",
     FASTA:                  "FASTA",
-    JBEISEQ:                "JBEISEQ",
-    //SBOLXML:               "SBOLXML",
+    JBEISEQ:                "JBEISEQXML",
+    SBOLXML:                "SBOLXML",
     INIT:                   "INIT",
 
     GENBANK_SUFFIX:         ".gb",
@@ -40,17 +40,6 @@ Ext.define("Teselagen.constants.Constants", {
 
     //================================================================
     // EugeneRule.js: compositionalOperator
-
-    COMPOP_LIST: [
-        "NOTMORETHAN",
-        "NOTWITH",
-        "AFTER",
-        "BEFORE",
-        "WITH",
-        "THEN",
-        "NEXTTO",
-        "MORETHAN"
-    ],
 
     // Deprecated
     NOTMORETHAN:        "NOTMORETHAN",
@@ -64,11 +53,25 @@ Ext.define("Teselagen.constants.Constants", {
     NEXTTO:             "NEXTTO",
     MORETHAN:           "MORETHAN",
 
+    COMPOP_LIST: [
+        "NOTMORETHAN",
+        "NOTWITH",
+        "AFTER",
+        "BEFORE",
+        "WITH",
+        "THEN",
+        "NEXTTO",
+        "MORETHAN"
+    ],
+
+    
+
     //================================================================
     // J5Bin.js
 
     // ForceAssemblyStrategies -- can be used only in certain conditions
     FAS_LIST: [
+        "NONE",
         // For the first part or first bin and part(s) in the first bin (assumed to be the destination vector backbone(s)):
         "DIGEST",
         // For a contiguous set of bin(s) or part(s) whose total length is large enough to be PCR amplified:
@@ -122,16 +125,16 @@ Ext.define("Teselagen.constants.Constants", {
     ],
 
     //================================================================
-    REPORT_BUG_URL:         "",
-    SUGGEST_FEATURE_URL:    "",
+    //REPORT_BUG_URL:         "",
+    //SUGGEST_FEATURE_URL:    "",
     
-    VERIFY_URL_RELATIVE_PATH:   "/bin/verify.pl",
-    SERVER_PATH:            "",   //set to "" for relative paths
+    //VERIFY_URL_RELATIVE_PATH:   "/bin/verify.pl",
+    //SERVER_PATH:            "",   //set to "" for relative paths
     
-    PART_CLIPBOARD_KEY:     "PartClipboardKey",
+    //PART_CLIPBOARD_KEY:     "PartClipboardKey",
     
-    BIN_MARGIN:                     5,
-    COLLECTION_OUTSIDE_MARGIN:      20,
+    //BIN_MARGIN:                     5,
+    //COLLECTION_OUTSIDE_MARGIN:      20,
     RECT_SHAPE_DEFAULT_SIZE:        56,
     RECT_SHAPE_MIN_SIZE:            this.RECT_SHAPE_DEFAULT_SIZE / 2,
     

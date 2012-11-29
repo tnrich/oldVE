@@ -41,7 +41,7 @@ Ext.define("Teselagen.models.J5Run", {
         {
             field: "assemblyType",
             type: "inclusion",
-            list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
+            //list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
         },
 
         //{field: "status", type: "presence"},

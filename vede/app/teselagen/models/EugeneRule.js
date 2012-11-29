@@ -19,19 +19,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         // For Default Names
         // This Differs from EugeneRules.as
         defaultNamePrefix: "rule",
-        highestDefaultNameIndex: 0,
-
-        // Deprecated
-        NOTMORETHAN: "NOTMORETHAN",
-        // Deprecated
-        NOTWITH: "NOTWITH",
-        
-        AFTER: "AFTER",
-        BEFORE: "BEFORE",
-        WITH: "WITH",
-        THEN: "THEN",
-        NEXTTO: "NEXTTO",
-        MORETHAN: "MORETHAN"
+        highestDefaultNameIndex: 0
     },
 
     /**
@@ -122,8 +110,8 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand1",
 //            associationKey: "operand1",
             instanceName: "operand1",
-            foreignKey: "operand1_id"
-            , name: "Part" //this field is not in ext documentation
+            foreignKey: "operand1_id", // this foreign key is not really needed, maybe we will delete in the future
+            name: "Part" //this field is not in ext documentation
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -133,8 +121,10 @@ Ext.define("Teselagen.models.EugeneRule", {
             setterName: "setOperand2Part",
 //            associationKey: "operand2Part",
             instanceName: "operand2",
-            foreignKey: "operand2_id"
-            , name: "Part" //this field is not in ext documentation. It's not even a unique name
+            foreignKey: "operand2_id", // this foreign key is not really needed, maybe we will delete in the future
+            name: "Part" 
+            //this field is not in ext documentation. It's not even a unique name
+            //I know its is not, but I relly need that field. Don't worry
         },
         {//Needed to find the parent of a child
             type: "belongsTo",

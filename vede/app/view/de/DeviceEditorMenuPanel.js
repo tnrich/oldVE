@@ -12,53 +12,62 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
-        items: [{
+        items: [
+        {
             xtype: 'button',
-            id: 'newDesign',
-            text: 'New'
+            text: 'File',
+            cls: 'fileMenu',
+            menu: {
+                xtype: 'menu',
+                items: [{
+                    xtype: 'menuitem',
+                    text: 'Open Design'
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Save Design'
+                }]
+            }
+        },
+        {
+            xtype: 'button',
+            text: 'Examples',
+            cls: 'examplesMenu',
+            menu: {
+                xtype: 'menu',
+                minWidth: 300,
+                width: 300,
+                items: [{
+                    xtype: 'menuitem',
+                    text: 'SLIC/Gibson/CPEC'
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Combinatorial SLIC/Gibson/CPEC'
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Golden Gate'
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Combinatorial Golden Gate'
+                }]
+            }
         }, {
             xtype: 'button',
-            text: 'Load',
+            text: 'Import',
+            cls: 'importMenu',
             menu: {
                 xtype: 'menu',
                 minWidth: 140,
                 width: 140,
                 items: [{
                     xtype: 'menuitem',
-                    text: 'Design XML'
+                    cls: 'importXML',
+                    text: 'XML file'
                 }, {
                     xtype: 'menuitem',
-                    text: 'j5 File'
-                }, {
-                    xtype: 'menuitem',
-                    text: 'Example Design',
-                    menu: {
-                        xtype: 'menu',
-                        minWidth: 220,
-                        width: 220,
-                        items: [{
-                            xtype: 'menuitem',
-                            text: 'SLIC/Gibson/CPEC'
-                        }, {
-                            xtype: 'menuitem',
-                            text: 'Combinatorial SLIC/Gibson/CPEC'
-                        }, {
-                            xtype: 'menuitem',
-                            text: 'Golden Gate'
-                        }, {
-                            xtype: 'menuitem',
-                            text: 'Combinatorial Golden Gate'
-                        }]
-                    }
+                    cls: 'importJSON',
+                    text: 'JSON file'
                 }]
             }
-        }, {
-            xtype: 'button',
-            cls: 'DeviceEditorSaveBtn',
-            text: 'Save'
-        }, {
-            xtype: 'button',
-            text: 'Export'
         }]
     }]
 }

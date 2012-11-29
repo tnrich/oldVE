@@ -3,7 +3,7 @@
  * Class describing a J5CommunicationManager.
  * J5CommunicationManager manages communication with the server.
  *
- * @author Diana Wong
+ * @author Rodrigo Pavez, Diana Wong
  */
 Ext.define("Teselagen.manager.J5CommunicationManager", {
 

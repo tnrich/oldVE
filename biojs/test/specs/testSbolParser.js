@@ -50,6 +50,7 @@ Ext.onReady(function() {
                 expect(json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"][0]["subComponent"]["displayId"]).toBe("signal_peptide");
 
                 //console.log(Ext.typeOf(123));
+                console.log(json);
             });
 
 

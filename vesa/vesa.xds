@@ -4,6 +4,7 @@
         "urlPrefix": "http://localhost/vesa/",
         "spacesToIndent": 4,
         "exportPath": "/Users/tim98210/Sites/Teselagen/ve/vesa",
+        "sdkPath": "",
         "lineEnding": "LF",
         "genTimestamps": false,
         "cacheBust": false,
@@ -15,7 +16,7 @@
         "appName": "MyApp"
     },
     "xdsVersion": "2.1.0",
-    "xdsBuild": 640,
+    "xdsBuild": 676,
     "schemaVersion": 1,
     "upgradeVersion": 210000000498,
     "framework": "ext40",

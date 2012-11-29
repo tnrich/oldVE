@@ -9,7 +9,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
     requires: [
         "Teselagen.models.Part",
-        "Teselagen.constants.SBOLvIcons",
+        "Teselagen.constants.Constants",
+        "Teselagen.constants.SBOLIcons",
         "Teselagen.utils.NullableInt"
     ],
 
@@ -24,7 +25,6 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Input parameters.
-     * @param {Ext.data.Store} parts A store of many(@link Teselagen.models.Part}
      * @param {String} binName (REQUIRED) String must be alphanumeric with only "_" or "-". Will eliminate other characters when saving the name.
      * @param {String} iconID
      * @param {Boolean} directionForward True for "forward" or False for "reverse". All parts within a bin should be the same direction.
@@ -45,16 +45,19 @@ Ext.define("Teselagen.models.J5Bin", {
                         return Teselagen.utils.FormatUtils.reformatName(v);
                     }
                 } else {
-                    return "";
+                    return ""; //No_Name";
                 }
             }
-        }, //required when making this object
+        },
         //{name: "iconID",            type: "string",     defaultValue: ""},
         {
             name: "iconID",
             convert: function(v, record) {
+                //console.log(Teselagen.constants.SBOLIcons.ICON_LIST);
                 if ( v === null || v === undefined || v === "") {
-                    return record.self.GENERIC;
+                    // DW NOTE: I am saving the key here, but maybe it should be name
+                    // Depends on how you use iconID to find the original URL.
+                    return Teselagen.constants.SBOLIcons.ICONS.GENERIC.key;
                 } else {
                     return v;
                 }
@@ -63,8 +66,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
-        {name: "fro",               type: "string",     defaultValue: ""},
-        {name: "fas",               type: "string",     defaultValue: ""},
+        {name: "fro",               type: "string",     defaultValue: "NONE"},
+        {name: "fas",               type: "string",     defaultValue: "NONE"},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
@@ -84,18 +87,49 @@ Ext.define("Teselagen.models.J5Bin", {
 
     validations: [
         {field: "binName",          type: "presence"},
-        {field: "iconID",           type: "presence"},
+        {
+            field: "iconID",
+            type: "inclusion",
+            //list: Teselagen.constants.SBOLIcons.ICON_LIST
+
+            // DW 11.24.12: DO NOT DO THIS!
+            // GET THE APPLICATION TO LOAD Teselagen.constants.SBOLIcons !!!!!
+            // YOU NEED THE PREVIOUS LINE TO WORK
+            //
+            // THIS IS A TEMPORARY SOLUTION !!!!!!!!!
+            list : [
+                "GENERIC",
+                "ASSEMBLY_JUNCTION",
+                "CDS",
+                "FIVE_PRIME_OVERHANG",
+                "FIVE_PRIME_UTR",
+                "INSULATOR",
+                "OPERATOR_SITE",
+                "ORIGIN_OF_REPLICATION",
+                "PRIMER_BINDING_SITE",
+                "PROMOTER",
+                "PROTEASE_SITE",
+                "PROTEIN_STABILITY_ELEMENT",
+                "RESTRICTION_ENZYME_RECOGNITION_SITE",
+                "RESTRICTION_SITE_NO_OVERHANG",
+                "RIBONUCLEASE_SITE",
+                "RNA_STABILITY_ELEMENT",
+                "SIGNATURE",
+                "TERMINATOR",
+                "THREE_PRIME_OVERHANG"
+            ]
+        },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
-        {field: "fro",              type: "presence"},
+        //{field: "fro",              type: "presence"},
         {
             field: "fas",
             type: "inclusion",
             list: Teselagen.constants.Constants.FAS_LIST
-        },
-        {field: "extra5PrimeBps",   type: "presence"},
-        {field: "extra3PrimeBps",   type: "presence"},
-        {field: "j5collection_id",    type: "presence"}
+        }//,
+        //{field: "extra5PrimeBps",   type: "presence"},
+        //{field: "extra3PrimeBps",   type: "presence"},
+        //{field: "j5collection_id",    type: "presence"}
     ],
 
     associations: [

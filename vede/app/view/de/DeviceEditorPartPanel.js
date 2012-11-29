@@ -6,10 +6,8 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
     dock: 'top',
     cls: 'DeviceEditorPartPanel',
     collapseDirection: 'top',
-    collapsed: true,
-    collapsible: true,
-    hideCollapseTool: false,
-    title: 'Parts',
+    collapsed: false,
+    hideCollapseTool: true,
     titleCollapse: true,
     dockedItems: [{
         xtype: 'toolbar',
@@ -18,150 +16,176 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
         cls: 'DeviceEditorPartsBar',
         enableOverflow: true,
         layout: {
-            align: 'middle',
+            align: 'left',
             pack: 'center',
             type: 'hbox'
         },
         items: [{
             xtype: 'button',
             cls: 'ori_Btn',
-            icon: 'resources/images/symbols/origin-of-replication.png',
+            data: { iconKey : 'ORIGIN_OF_REPLICATION' },
+            icon: 'resources/images/Symbols/origin-of-replication.png',
             scale: 'large',
             tooltip: 'Origin of Replication'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            cls: 'parttoolbarseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'cds_Btn',
-            icon: 'resources/images/symbols/cds.png',
+            data: { iconKey : 'CDS' },
+            icon: 'resources/images/Symbols/cds.png',
             scale: 'large',
             tooltip: 'CDS'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'five_prime_ov_Btn',
-            icon: 'resources/images/symbols/five-prime-overhang.png',
+            data: { iconKey : 'FIVE_PRIME_OVERHANG' },
+            icon: 'resources/images/Symbols/five-prime-overhang.png',
             scale: 'large',
             tooltip: '5\' Overhang'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'three_prime_ov_Btn',
-            icon: 'resources/images/symbols/three-prime-overhang.png',
+            data: { iconKey : 'THREE_PRIME_OVERHANG' },
+            icon: 'resources/images/Symbols/three-prime-overhang.png',
             scale: 'large',
             tooltip: '3\' Overhang'
         }, {
-            xtype: 'tbseparator'
-        }, {
-            xtype: 'button',
-            cls: 'translational_start_site_Btn',
-            icon: 'resources/images/symbols/translational-start-site.png',
-            scale: 'large',
-            tooltip: 'Translational Start Site'
-        }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'promoter_Btn',
-            icon: 'resources/images/symbols/promoter.png',
+            data: { iconKey : 'PROMOTER' },
+            icon: 'resources/images/Symbols/promoter.png',
             scale: 'large',
             tooltip: 'Promoter'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'primer_binding_site_Btn',
-            icon: 'resources/images/symbols/primer-binding-site.png',
+            data: { iconKey : 'PRIMER_BINDING_SITE' },
+            icon: 'resources/images/Symbols/primer-binding-site.png',
             scale: 'large',
             tooltip: 'Primer Binding Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'restriction_enz_recog_site_Btn',
-            icon: 'resources/images/symbols/restriction-enzyme-recognition-site.png',
+            data: { iconKey : 'RESTRICTION_ENZYME_RECOGNITION_SITE' },
+            icon: 'resources/images/Symbols/restriction-enzyme-recognition-site.png',
             scale: 'large',
             tooltip: 'Restriction Enzyme Recognition Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'restriction_site_w_no_overhang_Btn',
-            icon: 'resources/images/symbols/restriction-site-with-no-overhang.png',
+            data: { iconKey : 'RESTRICTION_SITE_NO_OVERHANG' },
+            icon: 'resources/images/Symbols/restriction-site-with-no-overhang.png',
             scale: 'large',
             tooltip: 'Restriction Site With No Overhangs'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'protease_site_Btn',
-            icon: 'resources/images/symbols/protease-site.png',
+            data: { iconKey : 'PROTEASE_SITE' },
+            icon: 'resources/images/Symbols/protease-site.png',
             scale: 'large',
             tooltip: 'Protease Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'protein_stability_element_Btn',
-            icon: 'resources/images/symbols/protein-stability-element.png',
+            data: { iconKey : 'PROTEIN_STABILITY_ELEMENT' },
+            icon: 'resources/images/Symbols/protein-stability-element.png',
             scale: 'large',
             tooltip: 'Protein Stability Element'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'assembly_junction_Btn',
-            icon: 'resources/images/symbols/assembly-junction.png',
+            data: { iconKey : 'ASSEMBLY_JUNCTION' },
+            icon: 'resources/images/Symbols/assembly-junction.png',
             scale: 'large',
             tooltip: 'Assembly Junction'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'insulator_Btn',
-            icon: 'resources/images/symbols/insulator.png',
+            data: { iconKey : 'INSULATOR' },
+            icon: 'resources/images/Symbols/insulator.png',
             scale: 'large',
             tooltip: 'Insulator'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'operator_Btn',
-            icon: 'resources/images/symbols/operator.png',
+            data: { iconKey : 'OPERATOR_SITE' },
+            icon: 'resources/images/Symbols/operator.png',
             scale: 'large',
             tooltip: 'Operator'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'ribonuclease_site_Btn',
-            icon: 'resources/images/symbols/ribonuclease-site.png',
+            data: { iconKey : 'RIBONUCLEASE_SITE' },
+            icon: 'resources/images/Symbols/ribonuclease-site.png',
             scale: 'large',
             tooltip: 'Ribonuclease Site'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'rna_stability_element_Btn',
-            icon: 'resources/images/symbols/rna-stability-element.png',
+            data: { iconKey : 'RNA_STABILITY_ELEMENT' },
+            icon: 'resources/images/Symbols/rna-stability-element.png',
             scale: 'large',
             tooltip: 'RNA Stability Element'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'terminator_Btn',
-            icon: 'resources/images/symbols/terminator.png',
+            data: { iconKey : 'TERMINATOR' },
+            icon: 'resources/images/Symbols/terminator.png',
             scale: 'large',
             tooltip: 'Terminator'
         }, {
-            xtype: 'tbseparator'
+            xtype: 'tbseparator',
+            height: 40
         }, {
             xtype: 'button',
             cls: 'signature_Btn',
-            icon: 'resources/images/symbols/signature.png',
+            data: { iconKey : 'SIGNATURE' },
+            icon: 'resources/images/Symbols/signature.png',
             params: 'Signature',
             scale: 'large',
             tooltip: 'Signature'

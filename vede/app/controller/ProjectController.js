@@ -15,6 +15,13 @@ Ext.define("Vede.controller.ProjectController", {
             });
         });
 
+        Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
+            text: 'Add design',
+            leaf: true,
+            icon: 'resources/images/add.png',
+            id: 0
+        });
+
         Ext.getCmp('designGrid_Panel').reconfigure(Collection);
 
         Ext.getCmp('projectDesignPanel').setLoading(false);
@@ -51,7 +58,8 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onProjectDesignPanelItemClick: function (store, record) { 
-        Teselagen.manager.ProjectManager.openDesign(record); 
+        if(record.data.id!=0) Teselagen.manager.ProjectManager.openDesign(record); 
+        else Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
     onProjectPartsPanelItemClick: function (store, record) { 

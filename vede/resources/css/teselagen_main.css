@@ -283,6 +283,10 @@ body {
     border-color: #000000;
 }
 
+.DeviceEditorTitlePanel .x-toolbar-default {
+   background: #FDFDFD;
+}
+
 .DeviceEditorMenuPanel .x-toolbar-default {
    background: #FDFDFD;
 }
@@ -296,7 +300,12 @@ background: #F8F8F8;
 }
 
 .DeviceEditorPartsBar {
-  background: -webkit-linear-gradient(#4b4b4b 0%, #656565 100%);
+  background: #0C4857;
+}
+
+.x-toolbar .x-toolbar-separator-horizontal {
+  border-left: 1px solid #035363;
+  border-right: 1px solid #044150;
 }
 
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
@@ -306,5 +315,14 @@ background: #F8F8F8;
 }
 .DeviceEditorCanvas .x-layout-fit {
   border: none;
+}
+
+.flipImage {
+        -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        filter: FlipH;
+        -ms-filter: "FlipH";
 }
 
