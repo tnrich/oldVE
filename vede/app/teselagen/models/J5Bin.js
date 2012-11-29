@@ -92,14 +92,14 @@ Ext.define("Teselagen.models.J5Bin", {
         {
             field: "iconID",
             type: "inclusion",
-            //list: Teselagen.constants.SBOLIcons.ICON_LIST
+            list: Teselagen.constants.SBOLIcons.ICON_LIST
 
             // DW 11.24.12: DO NOT DO THIS!
             // GET THE APPLICATION TO LOAD Teselagen.constants.SBOLIcons !!!!!
             // YOU NEED THE PREVIOUS LINE TO WORK
             //
             // THIS IS A TEMPORARY SOLUTION !!!!!!!!!
-            list : [
+            /*list : [
                 "GENERIC",
                 "ASSEMBLY_JUNCTION",
                 "CDS",
@@ -119,7 +119,7 @@ Ext.define("Teselagen.models.J5Bin", {
                 "SIGNATURE",
                 "TERMINATOR",
                 "THREE_PRIME_OVERHANG"
-            ]
+            ]*/
         },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
