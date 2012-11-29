@@ -6,7 +6,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     requires: ["Teselagen.event.DeviceEvent",
                "Teselagen.manager.DeviceDesignManager",
-               "Teselagen.models.DeviceEditorProject"],
+               "Teselagen.models.DeviceEditorProject",
+               "Teselagen.constants.SBOLIcons"],
 
     DeviceEvent: null,
     ProjectEvent: null,
@@ -22,6 +23,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedPart: null,
 
     totalRows: 1,
+
+    onReRenderDECanvasEvent: function(){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        this.onTabChange(tab,tab,tab);
+    },
+
     /**
      * Renders a given DeviceDesign.
      * @param {Teselagen.models.DeviceDesign} The design to render.
@@ -35,7 +42,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartPanelButtonClick: function(button) {
-        console.log(button.cls);
+        if(this.selectedBin) this.selectedBin.bin.set('iconID',button.data.iconKey);
     },
 
     onFlipBinButtonClick: function(button) {
@@ -224,6 +231,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
 
         this.selectedBin = gridBin;
+
+        /*
+        var toolbarPartItems = Ext.getCmp('mainAppPanel').getActiveTab().query('button[cls="toolbarPartItem"]');
+
+        toolbarPartItems.forEach(function(item){
+            item.on("click", function( btn, e, eOpts ){
+                console.log(btn);
+            });
+        });
+        */
+
         gridBin.select();
     },
 
@@ -238,10 +256,22 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // Remove grid bin and re-render it.
         this.grid.remove(gridBin);
+
+        var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.get('iconID').toUpperCase()];
+
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
-            totalRows: this.totalRows
+            totalRows: this.totalRows,
+            iconSource: icon.url_svg
         });
+
+        // If false flip, otherwise do nothing;
+        var flip = !j5Bin.get("directionForward");
+        if(flip)
+        {
+            var imageBinIcon = newBin.query('image[cls="binIcon"]')[0];
+            imageBinIcon.addCls('flipImage');
+        }
 
         this.grid.insert(binIndex, newBin);
 
@@ -288,18 +318,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var iconSource;
         iconSource = "resources/images/icons/device/small/origin_of_replication.png";
-        // This was added temporary for a DEMO request
-        //if(this.tempCounter==0) iconSource = "resources/images/icons/device/small/origin_of_replication.png";
-        //if(this.tempCounter==1) iconSource = "resources/images/icons/device/small/cds.png";
-        //if(this.tempCounter==2) iconSource = "resources/images/icons/device/small/cds.png";
-        //if(this.tempCounter==3) iconSource = "resources/images/icons/device/small/cds.png";
-        //if(this.tempCounter==4) iconSource = "resources/images/icons/device/small/protein_stability_element.png";
-        //if(this.tempCounter==5) iconSource = "resources/images/icons/device/small/protein_stability_element.png";
+        
+        var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
         this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: iconSource
+            iconSource: icon.url_svg
         }));
     },
 
@@ -410,6 +435,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
  
         this.application.on("PartCellClick",
                             this.onPartCellClick,
+                            this);
+
+        this.application.on("ReRenderDECanvas",
+                            this.onReRenderDECanvasEvent,
                             this);
         },
 });

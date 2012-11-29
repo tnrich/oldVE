@@ -1,9 +1,10 @@
 /*globals Ext, Teselagen, XmlToJson, DNATools*/
 /**
+ * DW NOTE: SHOULD REFACTOR THE JBEISEQ CODE INTO Teslagen.bio.parses.JbeiSeq
+ *
  * @class Teselagen.bio.parsers.ParsersManager
  *
- * Converts input files into Genbank data models.
- * Converts back to other formats as needed.
+ * Conversions between FASTA, GenBank, JbeiSeqXML/JbeiSeqJSON.
  *
  * @author Diana Wong
  */

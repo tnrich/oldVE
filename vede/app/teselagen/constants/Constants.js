@@ -13,7 +13,8 @@ Ext.define("Teselagen.constants.Constants", {
     
     VERSION:                "1.0",
     
-    //ENTRY_REGISTRY_URL:     "",
+//    ENTRY_REGISTRY_URL:     "",
+    API_URL:     "http://teselagen.local/api/",
 
     //================================================================
     // SequenceFile.js: sequenceFileFormat
@@ -22,14 +23,16 @@ Ext.define("Teselagen.constants.Constants", {
     FORMATS_LIST: [
         "GENBANK",
         "FASTA",
-        "JBEISEQ",
+        "JBEISEQXML",
+        "JBEISEQJSON",
         "SBOLXML"
     ],
     
     GENBANK:                "GENBANK",
     FASTA:                  "FASTA",
-    JBEISEQ:                "JBEISEQ",
-    //SBOLXML:               "SBOLXML",
+    JBEISEQ:                "JBEISEQXML", //Implicitly XML
+    JBEISEQJSON:            "JBEISEQJSON",  //JSON format. Not included as a case for some device models
+    SBOLXML:                "SBOLXML",
     INIT:                   "INIT",
 
     GENBANK_SUFFIX:         ".gb",
@@ -124,16 +127,16 @@ Ext.define("Teselagen.constants.Constants", {
     ],
 
     //================================================================
-    REPORT_BUG_URL:         "",
-    SUGGEST_FEATURE_URL:    "",
+    //REPORT_BUG_URL:         "",
+    //SUGGEST_FEATURE_URL:    "",
     
-    VERIFY_URL_RELATIVE_PATH:   "/bin/verify.pl",
-    SERVER_PATH:            "",   //set to "" for relative paths
+    //VERIFY_URL_RELATIVE_PATH:   "/bin/verify.pl",
+    //SERVER_PATH:            "",   //set to "" for relative paths
     
-    PART_CLIPBOARD_KEY:     "PartClipboardKey",
+    //PART_CLIPBOARD_KEY:     "PartClipboardKey",
     
-    BIN_MARGIN:                     5,
-    COLLECTION_OUTSIDE_MARGIN:      20,
+    //BIN_MARGIN:                     5,
+    //COLLECTION_OUTSIDE_MARGIN:      20,
     RECT_SHAPE_DEFAULT_SIZE:        56,
     RECT_SHAPE_MIN_SIZE:            this.RECT_SHAPE_DEFAULT_SIZE / 2,
     

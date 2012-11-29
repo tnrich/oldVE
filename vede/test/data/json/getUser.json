@@ -4,7 +4,7 @@
         {
             "id": 1,
             "name": "Rodrigo Pavez",
-            "preferences" :
+            "applicationPreferences" :
             {
             	"testPreference" : "Preference Test"
             }
@@ -12,7 +12,7 @@
         {
             "id": 2,
             "name": "Diana Wong",
-            "preferences" :
+            "applicationPreferences" :
             {
             	"testPreference" : "obama"
             }

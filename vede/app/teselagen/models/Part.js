@@ -245,8 +245,13 @@ Ext.define("Teselagen.models.Part", {
             var stop    = pSequenceFile.getLength();
 
             this.setSequenceFileModel(pSequenceFile);
-            this.set("genbankStartBP", start);
-            this.set("endBP", stop);
+
+            if (this.get("genbankStartBP") === 0) {
+                this.set("genbankStartBP", start);
+            }
+            if (this.get("endBP") === 0) {
+                this.set("endBP", stop);
+            }
             success = true;
         }
         return success;

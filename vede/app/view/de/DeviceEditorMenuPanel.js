@@ -16,20 +16,22 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
         {
             xtype: 'button',
             text: 'File',
+            cls: 'fileMenu',
             menu: {
                 xtype: 'menu',
                 items: [{
                     xtype: 'menuitem',
-                    text: 'Open Design'
+                    text: 'Save Design'
                 }, {
                     xtype: 'menuitem',
-                    text: 'Save Design'
+                    text: 'Delete Design'
                 }]
             }
         },
         {
             xtype: 'button',
             text: 'Examples',
+            cls: 'examplesMenu',
             menu: {
                 xtype: 'menu',
                 minWidth: 300,

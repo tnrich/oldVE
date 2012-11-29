@@ -3,7 +3,7 @@
  * Class describing a J5CommunicationManager.
  * J5CommunicationManager manages communication with the server.
  *
- * @author Diana Wong
+ * @author Rodrigo Pavez, Diana Wong
  */
 Ext.define("Teselagen.manager.J5CommunicationManager", {
 
@@ -30,13 +30,14 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     generateAjaxRequest: function () {
         console.log("Starting Ajax Request");
 
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var currentModel = currentTab.model;
+        var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+        console.log(deproject);
+
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
             params: {
-                deProjectId: currentModel.data.id,
+                deProjectId: deproject.data.id,
                 parameters: JSON.stringify(this.j5Parameters),
                 masterFiles: JSON.stringify(this.masterFiles)
             },
@@ -73,7 +74,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
             }
         });
-
+        
     },
     downloadResults: function (btn) {
         if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;

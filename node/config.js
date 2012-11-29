@@ -38,10 +38,7 @@ module.exports = function (app, express) {
 
   // Environments
   app.configure('development', function () {
-    app.use(express.errorHandler({
-      dumpExceptions: true,
-      showStack: true
-    }));
+    app.use(express.errorHandler());
   });
 
   app.configure('stage', function () {

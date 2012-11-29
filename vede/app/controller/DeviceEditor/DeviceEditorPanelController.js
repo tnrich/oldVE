@@ -1,9 +1,33 @@
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*","Teselagen.manager.DeviceDesignParsersManager"],
+    requires: ["Ext.draw.*","Teselagen.manager.DeviceDesignParsersManager","Teselagen.manager.ProjectManager"],
 
     openProject: function(project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
+    },
+
+    onDeviceEditorDeleteBtnClick: function() {
+        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model,activeTab);
+    },
+
+    onOpenExampleItemBtnClick: function( item, e, eOpts ){
+        var selectedItem = item.text;
+        var examplesMap = {
+            "SLIC/Gibson/CPEC" : "resources/examples/SLIC_Gibson_CPEC.json",
+            "Combinatorial SLIC/Gibson/CPEC" : "resources/examples/Combinatorial_SLIC_Gibson_CPEC.json",
+            "Golden Gate" : "resources/examples/Golden_Gate.json",
+            "Combinatorial Golden Gate" : "resources/examples/Combinatorial_Golden_Gate.json"
+        };
+
+        Ext.Ajax.request({
+            url: examplesMap[selectedItem],
+            method: 'GET',
+            success: function(response){
+                Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText,selectedItem.replace(" ","_"));
+            }
+        });
+
     },
 
     importDesignFromFormat: function(format,cb){
@@ -75,11 +99,30 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.importDesignFromFormat('JSON',Teselagen.manager.DeviceDesignParsersManager.parseJSON);
     },
 
-    onDeviceEditorSaveBtnClick: function(){
+    saveDEProject : function(cb){
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        activeTab.el.mask('Loading');
-        
-        var design = activeTab.model.getDesign();
+        var deproject = activeTab.model;
+        deproject.save({
+        callback: function() {
+        var design = deproject.getDesign();
+
+        var saveAssociatedSequence = function(part,cb){
+            console.log(part);
+            console.log(part.getSequenceFile());
+            part.getSequenceFile().save({
+                callback: function(sequencefile){
+                    console.log(sequencefile.get('id'));
+                    part.set("sequencefile_id",sequencefile.get('id'));
+                    part.save({
+                        callback: function(){
+                            cb();
+                        }
+                    });
+                    
+                }
+            });
+
+        };
 
         var saveDesign = function(){
             console.log("Saving design");
@@ -87,7 +130,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 callback: function(record, operation)
                 {
                         console.log("Design Saved!");
-                        activeTab.el.unmask();
+                        if(typeof(cb) == "function") cb();
                 }
             });
         };
@@ -104,39 +147,68 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         design.getJ5Collection().bins().each(function(bin,binKey){
             bin.parts().each(function(part,partIndex){
-                if(part.isModified('name'))
+                //console.log(part);
+                if(part.isModified('name')||!part.data.id)
                 {
                     console.log("Saving part");
                     part.save({
                         callback:function(part){
-                            if(countParts==1) saveDesign();
-                            countParts--;
+                            saveAssociatedSequence(part,function(){
+                                if(countParts==1) saveDesign();
+                                countParts--;
+                            });
                         }
                     });
                 }
                 else
                 {
-                    if(countParts==1) saveDesign();
-                    countParts--;
+                    saveAssociatedSequence(part,function(){
+                        if(countParts==1) saveDesign();
+                        countParts--;
+                    });
                 }
             });
         });
+        }});
+    },
 
+    onDeviceEditorSaveBtnClick: function(){
+        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        activeTab.el.mask('Loading');
+        this.saveDEProject(function(){
+            activeTab.el.unmask();
+        });
+
+
+    },
+
+    onDeviceEditorSaveEvent: function(arg){
+        this.saveDEProject(arg);
     },
 
     init: function () {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT,
                             this.openProject, this);
+
+        this.application.on("saveDesignEvent",
+                            this.onDeviceEditorSaveEvent, this);
+
         this.control({
-            "button[cls='DeviceEditorSaveBtn']": {
-                click: this.onDeviceEditorSaveBtnClick
+            "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
+                click: this.onDeviceEditorSaveEvent
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {
+                click: this.onDeviceEditorDeleteBtnClick
             },
             "button[cls='importMenu'] > menu > menuitem[text='XML file']": {
                 click: this.onimportXMLItemBtnClick
             },
             "button[cls='importMenu'] > menu > menuitem[text='JSON file']": {
                 click: this.onimportJSONItemBtnClick
+            },
+            "button[cls='examplesMenu'] > menu > menuitem": {
+                click: this.onOpenExampleItemBtnClick
             }
         });
     }
