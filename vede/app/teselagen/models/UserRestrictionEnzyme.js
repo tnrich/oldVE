@@ -14,6 +14,8 @@ Ext.define("Teselagen.models.UserRestrictionEnzyme", {
      * @param {Boolean} active Denotes that enzyme is active.
      */
     fields: [
+        { name: "id", type: "long"},
+        { name: "uregroup_id", type: "long"},
         {name: "name", type: "string", defaultValue: ""},
         {name: "active", type: "boolean", defaultValue: false}
     ],
@@ -23,7 +25,8 @@ Ext.define("Teselagen.models.UserRestrictionEnzyme", {
              model: "Teselagen.models.UserRestrictionEnzymeGroup",
              getterName: "getUserRestrictionEnzymeGroup",
              setterName: "setUserRestrictionEnzymeGroup",
-             associationKey: "userRestrictionEnzymeGroup"
+             associationKey: "userRestrictionEnzymeGroup",
+             foreignKey: "uregroup_id"
          }
      ]
 

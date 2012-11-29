@@ -25,19 +25,22 @@ Ext.define("Teselagen.models.SBOLvIconInfo", {
      * @param {String} reversePath
      */
     fields: [
+        {name: "id",                    type: "long"},
+        {name: "devicedesign_id",       type: "long"},
         {name: "name",                  type: "string",     defaultValue: ""},
         {name: "forwardPath",           type: "string",     defaultValue: ""},
         {name: "reversePath",           type: "string",     defaultValue: ""}
     ],
 
     validations: [
-//        {field: "id", type: "presence"}
+        {field: "id", type: "presence"}
     ],
 
     associations: [
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
+            foreignKey: "devicedesign_id",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign"
         }

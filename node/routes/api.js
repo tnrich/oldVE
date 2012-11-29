@@ -3,9 +3,8 @@
  * -----------------------
  */
 
-module.exports = function (app, express) {
+module.exports = function (app) {
 
-    var errorHandler = express.errorHandler();
 
   // Login Auth Method : Find User in DB
 
@@ -67,7 +66,6 @@ module.exports = function (app, express) {
     var sessionId = req.body.sessionId;
     var username = req.body.username;
     var password = req.body.password;
-//    console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
 
     // getOrCreateUser : Create new entry in DB if User doesn't exist
 
@@ -160,19 +158,6 @@ module.exports = function (app, express) {
 
   });
 
-  // Get Project by id
-  app.get('/project', restrict, function (req, res) {
-    var Project = app.db.model("project");
-    Project.findById(req.query.id, function (err, proj) {
-        if (err) {
-            errorHandler(err, req, res);
-        }
-        else {
-            res.json({"projects": proj});
-        }
-    });
-  });
-
   app.put('/user', restrict, function (req, res) {
     res.json({});
   });
@@ -233,7 +218,6 @@ module.exports = function (app, express) {
     });
   });  
 
-  // Get Project
   app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
@@ -300,6 +284,19 @@ module.exports = function (app, express) {
     });
   });
 
+  // DELETE
+  app.delete('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var DEProjects = app.db.model("deproject");
+    DEProjects.findById(req.body.id,function(err,proj){
+      if(!proj) return res.json({'fault':'project not found'},500);
+      proj.remove(function(err){
+        if(err) return res.json({'fault':' new deproj not saved'},500);
+        res.json({"projects":{}});
+      });
+    });
+  });
+
   //CREATE
   app.post('/user/projects/deprojects/devicedesign', function (req, res) {
 
@@ -310,6 +307,7 @@ module.exports = function (app, express) {
     var model = req.body;
     
     DEProject.findById(id,function(err,deproject){
+      if(!deproject) return res.json({'fault':'deproject not found'},500);
       deproject.design = model;
 
       deproject.design.j5collection.bins.forEach(function(bin,binKey){

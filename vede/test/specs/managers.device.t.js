@@ -680,8 +680,17 @@ Ext.onReady(function() {
 
                 it("setPartEnd()/getPartEnd() (From Part section)", function(){
 
+                    console.log(part1.getEnd());
+
+                    // Sets it to an incorrect length
+                    expect(part1.getEnd()).toBe(10); // WHY IS THIS WRONG? DW 11.28.2012
+
+                    // Sets it to the length of a sequence
+                    DeviceDesignManager.setPartEnd(part1);
+
                     expect(part1.getEnd()).toBe(7);
 
+                    // Sets it to a length you choose
                     DeviceDesignManager.setPartEnd(part1, 5);
 
                     expect(part1.getEnd()).toBe(5);
