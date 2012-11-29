@@ -24,12 +24,14 @@ Ext.define("Teselagen.constants.Constants", {
         "GENBANK",
         "FASTA",
         "JBEISEQXML",
+        "JBEISEQJSON",
         "SBOLXML"
     ],
     
     GENBANK:                "GENBANK",
     FASTA:                  "FASTA",
-    JBEISEQ:                "JBEISEQXML",
+    JBEISEQ:                "JBEISEQXML", //Implicitly XML
+    JBEISEQJSON:            "JBEISEQJSON",  //JSON format. Not included as a case for some device models
     SBOLXML:                "SBOLXML",
     INIT:                   "INIT",
 

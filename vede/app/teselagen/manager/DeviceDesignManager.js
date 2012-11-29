@@ -729,10 +729,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     /**
      * Set the End index for a Part
      * @param {Teselagen.models.Part} pPart
-     * @param {Number} pEnd The start index, from 1 to length of the sequence, to set the start BP.
+     * @param {Number} [pEnd] If undefined, will set to length of sequence.
      */
     setPartEnd: function(pPart, pEnd) {
-        pPart.setEnd(pEnd);
+        if (pEnd === undefined || pEnd === null) {
+            var len = pPart.getSequenceFile().getLength();
+            pPart.setEnd(len);
+        } else {
+            pPart.setEnd(pEnd);
+        }
     },
 
     /**

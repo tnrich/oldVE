@@ -359,10 +359,46 @@ Ext.onReady(function() {
                 expect(name).toBe("newName.fas");
             });
 
-            it("getLength()", function(){
+            it("getLength(): For FASTA FILE", function(){
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var seq = Ext.create("Teselagen.models.SequenceFile", {
                     sequenceFileFormat: "FASTA",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(39);
+            });
+
+            it("getLength(): For Genbank FILE", function(){
+                var content   = "ORIGIN      \n" +
+                                "        1 gacgtcttat gacaacttga";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "GENBANK",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(20);
+            });
+
+            it("getLength(): For JbeiSeqXml FILE", function(){
+
+                var url = "/biojs/test/data/jbeiseq/test.xml";
+                var content = jasmine.getFixtures().read(url);
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "JBEISEQXML",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(64);
+            });
+
+            it("getLength(): For SBOL FILE ***** NOT DONE", function(){
+                var content     = "";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "SBOLXML",
                     sequenceFileContent: content
                 });
 
