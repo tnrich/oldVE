@@ -74,9 +74,19 @@ function encoded_parts_list_file(model)
         bin.parts.forEach(function(part){
             var sequenceFile = part["SequenceFile"];
 
-            if     (sequenceFile["sequenceFileFormat"]=="GENBANK")  out += part['name']+','+sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/)[1]            +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-            else if(sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") out += part['name']+','+sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1]+','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-            else if(sequenceFile["sequenceFileFormat"]=="FASTA")    out += part['name']+','+sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1]                   +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+            var sequenceName = "";
+            if (sequenceFile["sequenceFileFormat"]=="GENBANK")
+                {
+                    sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
+                    if(sequenceName) sequenceName = sequenceName[1];
+                    else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                }
+
+            if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+            if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
+
+            out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+
         });
     }); 
     quicklog(out);

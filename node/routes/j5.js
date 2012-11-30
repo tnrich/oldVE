@@ -317,7 +317,7 @@ app.post(j5Method1,restrict,function(req,res){
   DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
     resolveSequences(deprojectModel,function(deproject){
       var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
-      data["j5_session_id"] = '0a5e283fbf74e23fa0a881e4dbfb1a3c';
+      data["j5_session_id"] = '270c31fe87dad9477c99bf843acf77a6';
 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error) 
@@ -346,8 +346,7 @@ app.post(j5Method1,restrict,function(req,res){
             if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
             {
               var newFile = {};
-              //newFile.data = zip.files[file]['data'];
-              newFile.data = 'test';
+              newFile.data = zip.files[file]['data'];
               newFile.name = fileName;
               newFile.size = zip.files[file]['data'].length;
               objResponse.files.push(newFile);

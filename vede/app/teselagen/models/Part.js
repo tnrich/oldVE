@@ -51,7 +51,7 @@ Ext.define("Teselagen.models.Part", {
     fields: [
         {name: "id",                type: "long"},
         {name: "veproject_id",        type: "long"},
-        {name: "j5bin_id",        type: "long"},
+        // {name: "j5bin_id",        type: "long"}, 
         {name: "eugenerule_id",        type: "long"},
         {name: "sequencefile_id",        type: "long"},
         {name: "directionForward",  type: "boolean",    defaultValue: true},

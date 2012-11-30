@@ -68,8 +68,8 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         FIVE_PRIME_UTR: {
             key: "FIVE_PRIME_UTR",
             name: "five_prime_utr",
-            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/DUMMYFILE.svg",
-            url_png: "resources/images/symbols/DUMMYFILE.png",
+            url_svg: "resources/images/SBOLv1.1.0_SymbolsSVG/five_prime_utr.svg",
+            url_png: "resources/images/symbols/five_prime_utr.png",
             url_small: "resources/images/icons/device/small/five_prime_utr.png",
             url_smallRev: "resources/images/icons/device/small/five_prime_utr_reverse.png"
         },

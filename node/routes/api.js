@@ -474,26 +474,18 @@ module.exports = function (app, express) {
 
   //PUT
   app.put('/user/projects/veprojects/sequences', function (req, res) {
-    var id = req.body["veproject_id"];
+
     var sequence = req.body;
-    delete sequence.id;
-    var VEProject = app.db.model("veproject");
     var Sequence = app.db.model("sequence");
 
-    VEProject.findById(id,function(err,veproject){
-      var newSequence = new Sequence();
-
+    Sequence.findById(req.body.id,function(err,seq){
       for(var prop in sequence) {
-        newSequence[prop] = sequence[prop];
+        seq[prop] = sequence[prop];
       }
-
-      newSequence.save(function(){
-        veproject.sequences.push(newSequence);
-        veproject.save(function(err){
+      seq.save(function(){
+        seq.save(function(err){
           if(err) console.log(err);
-          console.log("New Sequence Saved!");
-
-          res.json({"sequence":newSequence});
+          res.json({"sequence":seq});
         });
       });
     });
@@ -502,11 +494,10 @@ module.exports = function (app, express) {
   //READ
   app.get('/user/projects/veprojects/sequences', restrict, function (req, res) {
 
-    var VEProject = app.db.model("veproject");
-    VEProject.findById(req.query.id).populate('sequences').exec(function (err, project) {
+    var Sequence = app.db.model("sequence");
+    Sequence.findById(req.query.id, function (err, sequence) {
       if(err) console.log("There was a problem!/");
-      //console.log(project);
-      res.json({"sequence":project.sequences});
+      res.json({"sequence":sequence});
     });
   });
 

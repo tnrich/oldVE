@@ -181,6 +181,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
+                            height:400,
+                            minHeigh:400,
                             /*selModel: Ext.create('Ext.selection.CellModel', {
                                 mode: "SINGLE",
                                 allowDeselect: true
