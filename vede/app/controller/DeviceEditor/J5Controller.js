@@ -4,7 +4,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     requires: ["Teselagen.constants.Constants",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.utils.J5ControlsUtils",
-               "Teselagen.manager.J5CommunicationManager"],
+               "Teselagen.manager.J5CommunicationManager",
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.bio.parsers.GenbankManager"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -24,7 +26,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     directSynthesesListText: null,
 
     onOpenJ5: function() {
-        this.j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        currentTab.j5Window = j5Window;
+        this.j5Window = j5Window;
     },
 
     onEditJ5ParamsBtnClick: function() {
@@ -342,6 +347,30 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         currentTab.j5Window.j5comm.downloadResults(button);
     },
 
+    onPlasmidsItemClick: function( grid, record ){
+
+        console.log(record);
+
+        var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
+            name: "Untitled Project"
+        });
+
+        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileName: record.data.name,
+            sequenceFileFormat: "Genbank",
+            sequenceFileContent: record.data.data
+        });
+
+        veproject.setSequenceFile(newSequence);
+        
+        console.log(veproject);
+
+        Teselagen.manager.ProjectManager.workingProject.veprojects().add(veproject);
+        Teselagen.manager.ProjectManager.openVEProject(veproject);
+
+        this.j5Window.close()
+    },
+
     init: function() {
         this.control({
             "button[cls='editj5ParamsBtn']": {
@@ -407,6 +436,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='downloadj5Btn']": {
                 click: this.onDownloadj5Btn
             },
+            "gridpanel[title=Plasmids]": {
+                itemclick: this.onPlasmidsItemClick
+            }
         });
         
         this.application.on("openj5", this.onOpenJ5, this);

@@ -136,13 +136,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var veprojects = this.workingProject.veprojects();
 		var selectedVEProject = veprojects.getById(id);
 		var self = this;
-				
+		
 		var selectedSequence = selectedVEProject.getSequenceFile({
 			callback: function (record,operation) {
 				selectedSequence = selectedVEProject.getSequenceFile();
 				self.workingSequence = selectedSequence;
 				var tabPanel = Ext.getCmp('mainAppPanel');
 				tabPanel.setActiveTab( 1 );
+				console.log(selectedSequence);
 	            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
 	            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
 	            Vede.application.fireEvent("SequenceManagerChanged", seqMgr);

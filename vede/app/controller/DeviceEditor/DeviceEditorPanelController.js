@@ -6,6 +6,22 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
 
+    onDeviceEditorRenameBtnClick: function(){
+        var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+
+        var onPromptClosed = function(answer,text){
+            deproject.set('name',text);
+            deproject.save({
+                callback: function(){
+                    Teselagen.manager.ProjectManager.loadDesignAndChildResources();
+                    Ext.getCmp('mainAppPanel').getActiveTab().setTitle(text);
+                }
+            });
+        };
+
+        Ext.MessageBox.prompt("Rename Design", 'New name:' ,onPromptClosed ,this);
+    },
+
     onDeviceEditorDeleteBtnClick: function() {
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model,activeTab);
@@ -107,8 +123,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var design = deproject.getDesign();
 
         var saveAssociatedSequence = function(part,cb){
-            console.log(part);
-            console.log(part.getSequenceFile());
+            //console.log(part);
+            //console.log(part.getSequenceFile());
             part.getSequenceFile().save({
                 callback: function(sequencefile){
                     console.log(sequencefile.get('id'));
@@ -143,12 +159,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             });
         });
 
-        console.log("Count parts is: "+countParts);
+        //console.log("Count parts is: "+countParts);
 
         design.getJ5Collection().bins().each(function(bin,binKey){
             bin.parts().each(function(part,partIndex){
-                //console.log(part);
-                if(part.isModified('name')||!part.data.id)
+                if( Object.keys(part.getChanges()).length > 0 ||!part.data.id )
                 {
                     console.log("Saving part");
                     part.save({
@@ -162,10 +177,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 }
                 else
                 {
-                    saveAssociatedSequence(part,function(){
+                    //saveAssociatedSequence(part,function(){
                         if(countParts==1) saveDesign();
                         countParts--;
-                    });
+                    //});
                 }
             });
         });
@@ -200,6 +215,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Delete Design']": {
                 click: this.onDeviceEditorDeleteBtnClick
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {
+                click: this.onDeviceEditorRenameBtnClick
             },
             "button[cls='importMenu'] > menu > menuitem[text='XML file']": {
                 click: this.onimportXMLItemBtnClick
