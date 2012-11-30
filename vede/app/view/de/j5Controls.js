@@ -1,7 +1,7 @@
 Ext.define('Vede.view.de.j5Controls', {
     extend: 'Ext.window.Window',
 
-    height: 412,
+    height: 500,
     width: 852,
     title: 'j5 Controls',
     modal: true,
@@ -13,7 +13,7 @@ Ext.define('Vede.view.de.j5Controls', {
         Ext.applyIf(me, {
             items: [{
                 xtype: 'tabpanel',
-                height: 379,
+                height: 467,
                 padding: 5,
                 activeTab: 0,
                 items: [{
@@ -229,10 +229,10 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'gridpanel',
                         flex: 1,
-                        height: 90,
+                        height: 178,
                         cls: 'plasmidsGrid',
                         margin: '10 0 5 0',
-                        minHeight: 100,
+                        minHeight: 178,
                         width: 786,
                         title: 'Plasmids',
                         columnLines: true,
@@ -248,18 +248,18 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'gridcolumn',
                             dataIndex: 'size',
+                            text: 'size',
                             draggable: false,
                             resizable: false,
                             sortable: false,
-                            hideable: false,
-                            text: ''
+                            hideable: false
                         }, {
                             xtype: 'gridcolumn',
+                            dataIndex: 'data',
                             draggable: false,
                             resizable: false,
                             sortable: false,
-                            hideable: false,
-                            text: ''
+                            hideable: false
                         }],
                         viewConfig: {
                             deferEmptyText: false,

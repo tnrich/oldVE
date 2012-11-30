@@ -189,6 +189,23 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             params: 'Signature',
             scale: 'large',
             tooltip: 'Signature'
+        }, {
+            xtype: 'button',
+            cls: 'five_prime_utr_Btn',
+            data: { iconKey : 'FIVE_PRIME_UTR' },
+            icon: 'resources/images/Symbols/five_prime_utr.png',
+            params: 'five_prime_utr',
+            scale: 'large',
+            tooltip: 'Five Prime UTR'
+        },
+        {
+            xtype: 'button',
+            cls: 'generic',
+            data: { iconKey : 'GENERIC' },
+            icon: 'resources/images/Symbols/generic.png',
+            params: 'generic',
+            scale: 'large',
+            tooltip: 'Generic DNA'
         }]
     }]
 }
