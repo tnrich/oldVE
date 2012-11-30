@@ -317,7 +317,7 @@ app.post(j5Method1,restrict,function(req,res){
   DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
     resolveSequences(deprojectModel,function(deproject){
       var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
-      data["j5_session_id"] = '270c31fe87dad9477c99bf843acf77a6';
+      data["j5_session_id"] = '16ee1d22d984c60d544aec01032a70b6';
 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error) 
