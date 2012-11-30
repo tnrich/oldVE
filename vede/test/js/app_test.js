@@ -2,7 +2,9 @@ Ext.application({
     name: "Vede",
     appFolder: "../app",
 
-    requires: ["Teselagen.manager.SessionManager"],
+    requires: ["Teselagen.constants.Constants",
+               "Teselagen.constants.SBOLIcons",
+               "Teselagen.manager.SessionManager"],
 
     sessionManager: null,
 
