@@ -294,14 +294,16 @@ Ext.onReady(function() {
 
                 });
 
-                it("checkJ5Ready()", function(){
+                it("checkJ5Ready():", function(){
                     expect(DeviceDesignManager.checkJ5Ready(design)).toBe(false);
 
                     var part1 = Ext.create("Teselagen.models.Part", {
-                        name: "addedPart1"
+                        //name: "addedPart1",
+                        fas: "PCR"
                     });
                     var part2 = Ext.create("Teselagen.models.Part", {
-                        name: "addedPart2"
+                        //name: "addedPart2",
+                        fas: "PCR"
                     });
 
                     design.getJ5Collection().bins().getAt(0).addToParts([part1], -1);
@@ -309,6 +311,7 @@ Ext.onReady(function() {
 
                     design.getJ5Collection().bins().getAt(1).addToParts([part2], -1);
                     expect(DeviceDesignManager.checkJ5Ready(design)).toBe(true);
+                    //console.log(design);
                     // Adding a part in each of the two bins will make this Design ready
                 });
             });
@@ -426,7 +429,7 @@ Ext.onReady(function() {
                 it("addEmptyBinByIndex()", function(){
                     var success = DeviceDesignManager.addEmptyBinByIndex(design, 0);
                     expect(design.getJ5Collection().binCount()).toBe(3);
-                    expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name");
+                    expect(design.getJ5Collection().bins().getAt(0).get("binName").match("Bin")).not.toBe(null);
                     expect(success).toBe(true);
                 });
 
@@ -448,7 +451,8 @@ Ext.onReady(function() {
 
                 it("nonEmptyPartCount()", function(){
                     var part = Ext.create("Teselagen.models.Part", {
-                        name: "blah"
+                        name: "blah",
+                        fas: "PCR"
                     });
                     design.getJ5Collection().bins().getAt(0).addToParts(part);
 
@@ -680,10 +684,10 @@ Ext.onReady(function() {
 
                 it("setPartEnd()/getPartEnd() (From Part section)", function(){
 
-                    console.log(part1.getEnd());
+                    //console.log(part1.getEnd());
 
-                    // Sets it to an incorrect length
-                    expect(part1.getEnd()).toBe(10); // WHY IS THIS WRONG? DW 11.28.2012
+                    // Sets it to an incorrect length because that was given to the model
+                    expect(part1.getEnd()).toBe(10);
 
                     // Sets it to the length of a sequence
                     DeviceDesignManager.setPartEnd(part1);

@@ -28,6 +28,9 @@ Ext.define("Teselagen.models.Part", {
     },
 
     statics: {
+        // For Default Names
+        defaultNamePrefix: "Part",
+        highestDefaultNameIndex: 0
     },
 
     /**
@@ -52,7 +55,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "eugenerule_id",        type: "long"},
         {name: "sequencefile_id",        type: "long"},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
-        {name: "fas",               type: "string",     defaultValue: ""},
+        {name: "fas",               type: "string",     defaultValue: "None"},
         /*{
             name: "id",
             convert: function() {
@@ -67,7 +70,39 @@ Ext.define("Teselagen.models.Part", {
         },
         */
         // Fields from PartVO
-        {name: "name",              type: "string",     defaultValue: ""},      //name
+        //{name: "name",              type: "string",     defaultValue: ""},      //name
+        {
+            name: "name",
+            convert: function(v, record) {
+                var name;
+
+                if (v === "" || v === undefined || v === null) {
+                    name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
+                    record.self.highestDefaultNameIndex += 1;
+                } else {
+                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                        name = v.toString();
+                    } else {
+                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                        name = Teselagen.utils.FormatUtils.reformatName(v);
+                    }
+                }
+                return name;
+                /*
+                if (typeof(v) === "number" || typeof(v) === "string") {
+                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                        return v.toString();
+                    } else {
+                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                        return Teselagen.utils.FormatUtils.reformatName(v);
+                    }
+                } else {
+                    var name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
+                    record.self.highestDefaultNameIndex += 1;
+                    return name;
+                }*/
+            }
+        },
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
@@ -89,8 +124,8 @@ Ext.define("Teselagen.models.Part", {
             associationKey:"sequenceFile",
             foreignKey:"sequencefile_id",
             getterName: "getSequenceFile",
-            setterName: "setSequenceFileModel"
-            , name: "sequenceFile"
+            setterName: "setSequenceFileModel",
+            name: "sequenceFile"
         }/*,
         {
             type: "belongsTo",
@@ -147,13 +182,15 @@ Ext.define("Teselagen.models.Part", {
      },
     */
     /**
-     * Determines if Part is empty.
+     * Determines if Part is empty, i.e.
+     * a Part is empty if it only has default values and no set SequenceFile
+     * A Part with a non-default "name" field is still defined as Empty.
      * @returns {Boolean} True if empty, false if not.
      */
     isEmpty: function() {
         var partEmpty = false;
 
-        if (this.get("name") === "" &&
+        if (//this.get("name").match(this.self.defaultNamePrefix) !== null &&
             this.get("revComp") === false &&
             this.get("genbankStartBP") === 0 &&
             this.get("endBP") === 0 &&
@@ -164,7 +201,7 @@ Ext.define("Teselagen.models.Part", {
         
         if (partEmpty &&
             this.get("directionForward") === true &&
-            this.get("fas") === "" ) {
+            this.get("fas") === "None" ) {
             partEmpty = true;
         } else {
             partEmpty = false;

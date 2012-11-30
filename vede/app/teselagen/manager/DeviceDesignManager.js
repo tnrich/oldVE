@@ -329,6 +329,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             var parts = bins.getAt(i).parts();
             for (var j = 0; j < parts.count(); j++) {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
+
+                // Supplying a only a name field makes an "empty" Part
                 if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
                     ready = false;
                 }
@@ -475,9 +477,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @para, {String} [pName] Optional
      */
     addEmptyBinByIndex: function(pDevice, pIndex, pName) {
-        if (pName === null || pName === undefined || pName === "") {
+        /*if (pName === null || pName === undefined || pName === "") {
             pName = "No_Name";
-        }
+        }*/
         var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
         return success;
     },

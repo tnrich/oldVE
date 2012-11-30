@@ -97,6 +97,31 @@ Ext.define("Teselagen.utils.FormatUtils", {
         return Teselagen.bio.parsers.ParsersManager.isALabel(name);
     },
 
+    /** NOT TESTED
+     * Determines an appropriate name for a Model (J5Bin, Part, EugeneRule)
+     * @param {String} pInput Input passed into model for name
+     * @param {String} pNamePrefix
+     * @param {Number} pNameNum
+     * @returns {Object} Name of model and Number count
+     */
+    createName: function(pInput, pNamePrefix, pNameNum) {
+        var name;
+
+        if (pInput === "" || pInput === undefined || pInput === null) {
+            name = pNamePrefix + pNameNum;
+            pNameNum += 1;
+        } else {
+            if (Teselagen.utils.FormatUtils.isLegalName(pInput)) {
+                name = pInput.toString();
+            } else {
+                console.warn("Illegal name " + pInput + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                name = Teselagen.utils.FormatUtils.reformatName(pInput);
+            }
+        }
+        return { name: name, number: pNameNum};
+    },
+
+
     // ===========================================================================
     //   SequenceManager  Conversions
     // ===========================================================================

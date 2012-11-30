@@ -18,10 +18,12 @@ Ext.define("Teselagen.models.J5Bin", {
         type: "memory",
         reader: {type: "json"}
     },
-
-    /*statics: {
-        GENERIC: "generic"
-    },*/
+    
+    statics: {
+        // For Default Names
+        defaultNamePrefix: "Bin",
+        highestDefaultNameIndex: 0
+    },
 
     /**
      * Input parameters.
@@ -39,16 +41,21 @@ Ext.define("Teselagen.models.J5Bin", {
         //{name: "j5collection_id",     type: "long"},
         {
             name: "binName",
-            convert: function(v) {
-                if (typeof(v) === "number" || typeof(v) === "string") {
-                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
-                        return v;
-                    } else {
-                        return Teselagen.utils.FormatUtils.reformatName(v);
-                    }
+            convert: function(v, record) {
+                var name;
+
+                if (v === "" || v === undefined || v === null) {
+                    name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
+                    record.self.highestDefaultNameIndex += 1;
                 } else {
-                    return ""; //No_Name";
+                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                        name = v.toString();
+                    } else {
+                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                        name = Teselagen.utils.FormatUtils.reformatName(v);
+                    }
                 }
+                return name;
             }
         },
         //{name: "iconID",            type: "string",     defaultValue: ""},
@@ -68,8 +75,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
-        {name: "fro",               type: "string",     defaultValue: "NONE"},
-        {name: "fas",               type: "string",     defaultValue: "NONE"},
+        {name: "fro",               type: "string",     defaultValue: "None"},
+        {name: "fas",               type: "string",     defaultValue: "None"},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
