@@ -337,7 +337,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     saveJ5Parameters: function() {
         this.j5Parameters.fields.eachKey(function(key) {
             if(key !== "id") {
-                this.j5Parameters.set(key, 
+                this.j5Parameters.set(key,
                     Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
@@ -355,11 +355,19 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             name: "Untitled Project"
         });
 
-        var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+        //DW
+
+        /*var newSequence = Ext.create("Teselagen.models.SequenceFile", {
             sequenceFileName: record.data.name,
             sequenceFileFormat: "Genbank",
             sequenceFileContent: record.data.data
-        });
+        });*/
+        
+        var format  = Teselagen.constants.GENBANK;
+        var content = record.data.data;
+        var name    = record.data.name;
+        
+        var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(format, content, name, "");
 
         veproject.setSequenceFile(newSequence);
         
@@ -368,7 +376,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         Teselagen.manager.ProjectManager.workingProject.veprojects().add(veproject);
         Teselagen.manager.ProjectManager.openVEProject(veproject);
 
-        this.j5Window.close()
+        this.j5Window.close();
     },
 
     init: function() {
