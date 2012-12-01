@@ -574,6 +574,30 @@ Ext.define("Teselagen.utils.FormatUtils", {
         }
         seqMan.setName(name);
         return seqMan;
+    },
+
+    /** NOT TESTED
+     * Convert a File (FASTA, GenBank, JbeiSeq, SBOL, etc) to a SequenceFile model.
+     * @param {String} pFile
+     * @param {String} pFormat Must be: "GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML"
+     * @returns {Teselagen.models.SequenceFile}
+     */
+    fileToSequenceFile: function(pFile, pFormat) {
+
+        if (typeOf(pFile) !== "string") {
+            console.warn("FormatUtils.fileToSequenceFile(): '" + pFile + "' is not a string. Returning null.");
+            return null;
+        }
+
+        var format  = pFormat;
+        var content = pFile;
+
+        var seqFile = Ext.create("Teselagen.model.SequenceFile", {
+            sequenceFileFormat: format,
+            sequenceFileContent: content
+        });
+
+        return seqFile;
     }
 
 
