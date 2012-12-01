@@ -155,10 +155,10 @@ module.exports = function (app, express) {
 
   });
 
-  // Get Project by id
-  app.get('/project', restrict, function (req, res) {
+  // Get Project
+  app.get('/projects/:project', restrict, function (req, res) {
       var Project = app.db.model("project");
-      Project.findById(req.query.id, function (err, proj) {
+      Project.findById(req.params.project, function (err, proj) {
           if (err) {
               errorHandler(err, req, res);
           }
@@ -221,11 +221,23 @@ module.exports = function (app, express) {
   // Delete Project
   app.delete('/user/projects', restrict, function (req, res) {
     var Project = app.db.model("project");
-    Project.findById(req.body.id,function(err,proj){
-      proj.remove(function(){
-        res.json({});
-      });
-    });
+    if (req.body.id) {
+        Project.findById(req.body.id,function(err,proj){
+            proj.remove(function(){
+                res.json({});
+            });
+        });
+    }
+    else {
+        Project.remove(function(err) {
+            if (err) {
+                errorHandler(err, req, res);
+            }
+            else {
+                res.json({});
+            }
+        });
+    }
   });  
 
   // Get User Projects
