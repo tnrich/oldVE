@@ -160,306 +160,35 @@
             ]
         },
         {
-            "type": "tabpanel",
+            "type": "treepanel",
             "reference": {
                 "name": "items",
                 "type": "array"
             },
             "codeClass": null,
             "userConfig": {
+                "layout|margins": "0 10 0 0",
                 "layout|region": "west",
-                "layout|split": false,
-                "designer|userClassName": "MyTabPanel2",
-                "id": "ProjectPanel",
-                "margin": "0 10 0 0",
-                "maxWidth": 230,
-                "minWidth": 228,
-                "width": 228,
-                "collapseDirection": "left",
+                "designer|userClassName": "MyTreePanel",
+                "border": null,
+                "id": "projectDesignPanel",
+                "width": 230,
                 "collapsible": true,
-                "frameHeader": false,
-                "hideCollapseTool": false,
-                "minButtonWidth": null,
-                "preventHeader": false,
-                "title": "Project",
-                "activeTab": 0,
-                "minTabWidth": null,
-                "plain": false,
-                "removePanelHeader": false
+                "title": "Your Designs"
             },
-            "designerId": "ed4a0801-2a39-48a0-98f1-0903cdc24240",
+            "designerId": "0c0f3dbf-3479-4891-be40-b3e9df1785f3",
             "cn": [
                 {
-                    "type": "panel",
+                    "type": "treeview",
                     "reference": {
-                        "name": "items",
-                        "type": "array"
+                        "name": "viewConfig",
+                        "type": "object"
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "designer|userClassName": "MyPanel19",
-                        "baseCls": "sfsdf",
-                        "cls": "sfs",
-                        "id": "projectDesignTab",
-                        "layout": "fit",
-                        "minButtonWidth": 32,
-                        "title": "My Tab"
+                        "designer|userClassName": "MyTreeView"
                     },
-                    "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
-                    "cn": [
-                        {
-                            "type": "tab",
-                            "reference": {
-                                "name": "tabConfig",
-                                "type": "object"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "TabConfig5",
-                                "cls": "projectBarButton",
-                                "componentCls": null,
-                                "height": null,
-                                "id": "projectTab1",
-                                "minHeight": null,
-                                "minWidth": null,
-                                "overCls": "project-tab-focus",
-                                "autoWidth": true,
-                                "focusCls": "project-tab-focus",
-                                "icon": "resources/images/ux/designTab.png",
-                                "iconCls": "projectBarButton",
-                                "scale": null
-                            },
-                            "designerId": "4b2e104b-076e-4a79-aa94-88a5b139403b"
-                        },
-                        {
-                            "type": "treepanel",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "MyTreePanel",
-                                "border": 0,
-                                "id": "projectDesignPanel",
-                                "title": "Your Designs"
-                            },
-                            "designerId": "0c0f3dbf-3479-4891-be40-b3e9df1785f3",
-                            "cn": [
-                                {
-                                    "type": "treeview",
-                                    "reference": {
-                                        "name": "viewConfig",
-                                        "type": "object"
-                                    },
-                                    "codeClass": null,
-                                    "userConfig": {
-                                        "designer|userClassName": "MyTreeView"
-                                    },
-                                    "designerId": "bc865def-c23f-4923-a307-8cbf886f269d"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "panel",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "designer|userClassName": "MyPanel20",
-                        "id": "projectAnalysisTab",
-                        "layout": "fit",
-                        "title": "My Tab"
-                    },
-                    "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
-                    "cn": [
-                        {
-                            "type": "tab",
-                            "reference": {
-                                "name": "tabConfig",
-                                "type": "object"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "TabConfig6",
-                                "cls": "projectBarButton",
-                                "id": "projectTab2",
-                                "icon": "resources/images/ux/graphTab.png",
-                                "iconCls": "projectBarButton",
-                                "scale": null
-                            },
-                            "designerId": "76090913-638c-467b-b36d-3c04cd70f8b6"
-                        },
-                        {
-                            "type": "treepanel",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "MyTreePanel1",
-                                "id": "projectAnalysisPanel",
-                                "title": "j5 Results",
-                                "root": [
-                                    "{",
-                                    "text: \"Design 1\",",
-                                    "expanded: true,",
-                                    "children: [",
-                                    "            { text: \"j5 Run 1\", leaf: true },",
-                                    "            { text: \"j5 Run 2\", leaf: true }",
-                                    "        ]",
-                                    "}"
-                                ]
-                            },
-                            "designerId": "6e8be2f7-7b74-4d20-b87d-3c3291910a14",
-                            "cn": [
-                                {
-                                    "type": "treeview",
-                                    "reference": {
-                                        "name": "viewConfig",
-                                        "type": "object"
-                                    },
-                                    "codeClass": null,
-                                    "userConfig": {
-                                        "designer|userClassName": "MyTreeView1"
-                                    },
-                                    "designerId": "7bf04b07-7254-4635-ac22-c5c92c010790"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "panel",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "designer|userClassName": "MyPanel21",
-                        "id": "projectPartsTab",
-                        "layout": "fit",
-                        "title": "My Tab"
-                    },
-                    "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
-                    "cn": [
-                        {
-                            "type": "tab",
-                            "reference": {
-                                "name": "tabConfig",
-                                "type": "object"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "TabConfig7",
-                                "cls": "projectBarButton",
-                                "id": "projectTab3",
-                                "icon": "resources/images/ux/partsTab.png",
-                                "iconCls": "projectBarButton",
-                                "scale": null
-                            },
-                            "designerId": "3edbaa2f-c94c-4d18-ac62-b53b27144663"
-                        },
-                        {
-                            "type": "treepanel",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "MyTreePanel2",
-                                "id": "projectPartsPanel",
-                                "title": "Your Parts"
-                            },
-                            "designerId": "5a07d9e8-2dcd-4529-b070-bec228044b89",
-                            "cn": [
-                                {
-                                    "type": "treeview",
-                                    "reference": {
-                                        "name": "viewConfig",
-                                        "type": "object"
-                                    },
-                                    "codeClass": null,
-                                    "userConfig": {
-                                        "designer|userClassName": "MyTreeView2"
-                                    },
-                                    "designerId": "bc3c83e9-dec7-4690-b24a-775daf90f906"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "panel",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "designer|userClassName": "MyPanel21",
-                        "id": "projectRegistryTab",
-                        "layout": "fit",
-                        "title": "My Tab"
-                    },
-                    "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
-                    "cn": [
-                        {
-                            "type": "tab",
-                            "reference": {
-                                "name": "tabConfig",
-                                "type": "object"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "TabConfig7",
-                                "cls": "projectBarButton",
-                                "id": "projectTab4",
-                                "minHeight": null,
-                                "minWidth": null,
-                                "autoWidth": false,
-                                "icon": "resources/images/ux/registryTab.png",
-                                "iconCls": "projectBarButton",
-                                "scale": null
-                            },
-                            "designerId": "ee600f18-fffa-4c08-98f6-ee0161fee1a8"
-                        },
-                        {
-                            "type": "treepanel",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "designer|userClassName": "MyTreePanel3",
-                                "id": "projectsRegistryPanel",
-                                "title": "Registry"
-                            },
-                            "designerId": "1d4df9ec-49db-491d-8eb7-a921565a3864",
-                            "cn": [
-                                {
-                                    "type": "treeview",
-                                    "reference": {
-                                        "name": "viewConfig",
-                                        "type": "object"
-                                    },
-                                    "codeClass": null,
-                                    "userConfig": {
-                                        "designer|userClassName": "MyTreeView3"
-                                    },
-                                    "designerId": "15e8c485-daf8-4ad6-a641-a32918fbf25c"
-                                }
-                            ]
-                        }
-                    ]
+                    "designerId": "bc865def-c23f-4923-a307-8cbf886f269d"
                 }
             ]
         },
@@ -514,6 +243,44 @@
                         {
                             "type": "panel",
                             "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": 1,
+                                "dock": "top",
+                                "designer|userClassName": "MyPanel10",
+                                "border": "0 1 0 1",
+                                "id": "dashboardWelcomePanel",
+                                "title": null
+                            },
+                            "designerId": "8a947a33-8bea-4158-9487-686c1e12c6f5",
+                            "cn": [
+                                {
+                                    "type": "displayfield",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyDisplayField12",
+                                        "padding": "0 0 0 10",
+                                        "value": [
+                                            "Tim"
+                                        ],
+                                        "fieldLabel": "Welcome back",
+                                        "labelPad": 0,
+                                        "labelSeparator": " "
+                                    },
+                                    "designerId": "e56d55f0-dc8f-4a64-8084-013ee6544e81"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
                                 "name": "items",
                                 "type": "array"
                             },
@@ -547,142 +314,6 @@
                                     },
                                     "designerId": "75980a1e-1ebe-4ce1-a448-aadbcc29fbef",
                                     "cn": [
-                                        {
-                                            "type": "gridpanel",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "layout|flex": 1,
-                                                "designer|userClassName": "MyGridPanel2",
-                                                "id": "projectGrid_Panel",
-                                                "margin": 10,
-                                                "title": "Your Projects",
-                                                "forceFit": true,
-                                                "columnLines": false
-                                            },
-                                            "designerId": "4f215bd8-76e2-4953-afe3-0b28653c0caf",
-                                            "cn": [
-                                                {
-                                                    "type": "gridcolumn",
-                                                    "reference": {
-                                                        "name": "columns",
-                                                        "type": "array"
-                                                    },
-                                                    "codeClass": null,
-                                                    "userConfig": {
-                                                        "designer|userClassName": "MyColumn4",
-                                                        "id": "projectGrid_Name",
-                                                        "dataIndex": "string",
-                                                        "hideable": false,
-                                                        "text": "Name"
-                                                    },
-                                                    "designerId": "64749c3a-07ae-4a28-b876-756117b96c60"
-                                                },
-                                                {
-                                                    "type": "datecolumn",
-                                                    "reference": {
-                                                        "name": "columns",
-                                                        "type": "array"
-                                                    },
-                                                    "codeClass": null,
-                                                    "userConfig": {
-                                                        "designer|userClassName": "MyDateColumn1",
-                                                        "id": "projectGrid_DateCreated",
-                                                        "dataIndex": "date",
-                                                        "text": "Date Created"
-                                                    },
-                                                    "designerId": "385f1563-3c5e-40af-8e11-f58378de70bf"
-                                                },
-                                                {
-                                                    "type": "datecolumn",
-                                                    "reference": {
-                                                        "name": "columns",
-                                                        "type": "array"
-                                                    },
-                                                    "codeClass": null,
-                                                    "userConfig": {
-                                                        "designer|userClassName": "MyDateColumn1",
-                                                        "id": "projectGrid_DateModified",
-                                                        "dataIndex": "date",
-                                                        "text": "Last Modified"
-                                                    },
-                                                    "designerId": "3c6612e3-1ff1-4941-93e6-aec88b3311f9"
-                                                },
-                                                {
-                                                    "type": "gridview",
-                                                    "reference": {
-                                                        "name": "viewConfig",
-                                                        "type": "object"
-                                                    },
-                                                    "codeClass": null,
-                                                    "userConfig": {
-                                                        "designer|userClassName": "MyGridView2",
-                                                        "id": "projectGridView"
-                                                    },
-                                                    "designerId": "1c87f106-4e2b-4f28-a953-1c92572c2462"
-                                                },
-                                                {
-                                                    "type": "toolbar",
-                                                    "reference": {
-                                                        "name": "dockedItems",
-                                                        "type": "array"
-                                                    },
-                                                    "codeClass": null,
-                                                    "userConfig": {
-                                                        "dock": "top",
-                                                        "designer|userClassName": "MyToolbar8",
-                                                        "height": 40
-                                                    },
-                                                    "designerId": "ff73affe-71fc-48d3-ad28-d5ce822f95cc",
-                                                    "cn": [
-                                                        {
-                                                            "type": "button",
-                                                            "reference": {
-                                                                "name": "items",
-                                                                "type": "array"
-                                                            },
-                                                            "codeClass": null,
-                                                            "userConfig": {
-                                                                "layout|flex": null,
-                                                                "designer|userClassName": "MyButton61",
-                                                                "height": null,
-                                                                "id": "newProject_Btn",
-                                                                "margin": 3,
-                                                                "width": null,
-                                                                "icon": "resources/images/add_project.png",
-                                                                "scale": "medium",
-                                                                "text": null,
-                                                                "tooltip": [
-                                                                    "New Project",
-                                                                    ""
-                                                                ]
-                                                            },
-                                                            "designerId": "17d78990-a0a1-4f8a-ba44-453807001d1a"
-                                                        },
-                                                        {
-                                                            "type": "button",
-                                                            "reference": {
-                                                                "name": "items",
-                                                                "type": "array"
-                                                            },
-                                                            "codeClass": null,
-                                                            "userConfig": {
-                                                                "layout|flex": null,
-                                                                "designer|userClassName": "MyButton67",
-                                                                "id": "removeProject_Btn",
-                                                                "icon": "resources/images/ux/remove.png",
-                                                                "scale": "medium",
-                                                                "text": null
-                                                            },
-                                                            "designerId": "b5502398-1c6a-4c3a-87ab-2910a037c6a3"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         {
                                             "type": "gridpanel",
                                             "reference": {
@@ -850,183 +481,6 @@
                                                 "title": "Analytics"
                                             },
                                             "designerId": "91186c08-b13a-48c5-be85-92a6f8fc31fe"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "panel",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "layout|flex": 1,
-                                "container|align": "stretch",
-                                "designer|userClassName": "MyPanel42",
-                                "border": 0,
-                                "id": "dashboard_TaskPanel",
-                                "maxWidth": 250,
-                                "width": 250,
-                                "layout": "vbox",
-                                "title": null
-                            },
-                            "designerId": "2fe37195-f952-46e6-9d44-08b8cb390a9e",
-                            "cn": [
-                                {
-                                    "type": "menu",
-                                    "reference": {
-                                        "name": "items",
-                                        "type": "array"
-                                    },
-                                    "codeClass": null,
-                                    "userConfig": {
-                                        "designer|userClassName": "MyMenu12",
-                                        "border": 0,
-                                        "floating": false,
-                                        "width": 120,
-                                        "title": "Common Tasks"
-                                    },
-                                    "designerId": "8485afbd-029a-494a-adbc-80b98ea9fb75",
-                                    "cn": [
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem45",
-                                                "text": "New Project"
-                                            },
-                                            "designerId": "8d8c600f-f17a-4056-ac27-fee73afc2143"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem46",
-                                                "text": "Open Sequence File"
-                                            },
-                                            "designerId": "123706ec-87c5-482e-8c9f-0e2cf11f56c1"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem47",
-                                                "text": "New Design"
-                                            },
-                                            "designerId": "8eacec8d-2b5a-4582-a766-8a614b4821fe"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "menu",
-                                    "reference": {
-                                        "name": "items",
-                                        "type": "array"
-                                    },
-                                    "codeClass": null,
-                                    "userConfig": {
-                                        "layout|flex": 2,
-                                        "designer|userClassName": "MyMenu11",
-                                        "border": 0,
-                                        "floating": false,
-                                        "maxWidth": null,
-                                        "width": 120,
-                                        "title": "Help"
-                                    },
-                                    "designerId": "94a808a6-bce1-4c05-9121-9d8884e58b81",
-                                    "cn": [
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem39",
-                                                "text": "j5 Manual"
-                                            },
-                                            "designerId": "e1e839ac-41a6-4b9f-907c-a4100261042c"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem40",
-                                                "text": "Vector Editor Manual"
-                                            },
-                                            "designerId": "22bd2e25-5f25-465a-9fc9-3a59697d2a1f"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem41",
-                                                "text": "Device Editor Manual"
-                                            },
-                                            "designerId": "4b319456-c6e2-4ee3-a0a6-220ce678e65d"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem42",
-                                                "text": "Tutorials"
-                                            },
-                                            "designerId": "5a30ab1c-19a7-4d2e-a653-ebec1fdf74c3"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem43",
-                                                "text": "Get Support"
-                                            },
-                                            "designerId": "8263cd2b-61cc-4f45-9dc5-9b290fa4153c"
-                                        },
-                                        {
-                                            "type": "menuitem",
-                                            "reference": {
-                                                "name": "items",
-                                                "type": "array"
-                                            },
-                                            "codeClass": null,
-                                            "userConfig": {
-                                                "designer|userClassName": "MyMenuItem44",
-                                                "text": "Submit Feedback"
-                                            },
-                                            "designerId": "e3d97994-b4f0-46ba-8396-0cd42e6d7897"
                                         }
                                     ]
                                 }

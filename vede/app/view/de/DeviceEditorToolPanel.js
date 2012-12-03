@@ -30,30 +30,6 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 			xtype: 'tbseparator'
 		}, {
 			xtype: 'button',
-			cls: 've_init_Btn',
-			icon: 'resources/images/icons/device/ve_icon.png',
-			scale: 'large',
-			tooltip: 'Vector Editor',
-			menu: {
-				xtype: 'menu',
-				cls: 'de_ve_menu',
-				minWidth: 160,
-				width: 120,
-				items: [{
-					xtype: 'menuitem',
-					text: 'Map From Clipboard'
-				}, {
-					xtype: 'menuitem',
-					text: 'Map From Genbank'
-				}, {
-					xtype: 'menuitem',
-					text: 'Go To Vector Editor'
-				}]
-			}
-		}, {
-			xtype: 'tbseparator'
-		}, {
-			xtype: 'button',
 			cls: 'j5_init_Btn',
 			icon: 'resources/images/icons/device/j5_icon.png',
 			scale: 'large',
