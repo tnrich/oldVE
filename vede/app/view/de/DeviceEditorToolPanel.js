@@ -28,28 +28,7 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 			tooltip: 'Add Row'
 		}, {
 			xtype: 'tbseparator'
-		}, {
-			xtype: 'button',
-			cls: 've_init_Btn',
-			icon: 'resources/images/icons/device/ve_icon.png',
-			scale: 'large',
-			tooltip: 'Vector Editor',
-			menu: {
-				xtype: 'menu',
-				cls: 'de_ve_menu',
-				minWidth: 160,
-				width: 120,
-				items: [{
-					xtype: 'menuitem',
-					text: 'Map From Clipboard'
-				}, {
-					xtype: 'menuitem',
-					text: 'Map From Genbank'
-				}, {
-					xtype: 'menuitem',
-					text: 'Go To Vector Editor'
-				}]
-			}
+
 		}, {
 			xtype: 'tbseparator'
 		}, {
