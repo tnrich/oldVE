@@ -69,8 +69,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     addPartCellClickEvent: function(partCell) {
+        //console.log(partCell);
+        //console.log(Ext.getClassName(partCell.body));
         partCell.body.on("click", function() {
             this.application.fireEvent("PartCellClick", partCell);
+        },this);
+        partCell.body.on("dblclick", function() {
+            this.application.fireEvent("PartCellVEEditClick", partCell);
         },this);
     },
 
@@ -360,6 +365,26 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         return targetGridPart;
     },
 
+    onPartCellVEEditClick: function(partCell){
+        var gridPart = partCell.up().up();
+        var j5Part = gridPart.getPart();
+        console.log(j5Part);
+        if(j5Part.data.sequencefile_id)
+        {
+            // Open VE Project
+            j5Part.getSequenceFile({
+                callback: function(seq){
+                    console.log(seq);
+                }
+            });
+        }
+        else
+        {
+            console.log("This part doesn't have an associated sequence");
+        }
+
+    },
+
     onLaunch: function() {
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
@@ -440,5 +465,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("ReRenderDECanvas",
                             this.onReRenderDECanvasEvent,
                             this);
+
+        this.application.on("PartCellVEEditClick",
+                            this.onPartCellVEEditClick,
+                            this);
+        
         },
 });
