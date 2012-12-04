@@ -363,7 +363,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             sequenceFileContent: record.data.data
         });*/
         
-        var format  = Teselagen.constants.GENBANK;
+        var format  = Teselagen.constants.Constants.GENBANK;
         var content = record.data.data;
         var name    = record.data.name;
         
@@ -372,6 +372,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         veproject.setSequenceFile(newSequence);
         
         console.log(veproject);
+        console.log(newSequence);
 
         Teselagen.manager.ProjectManager.workingProject.veprojects().add(veproject);
         Teselagen.manager.ProjectManager.openVEProject(veproject);

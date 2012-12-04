@@ -60,12 +60,18 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                         }
                     },
 
-                    fields: ['name','data','size']
+                    fields: ['name','fileContent','size']
                 });
                 store.load();
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
                 runj5Btn.toggle();
+
+                deproject.j5runs().load({
+                    callback : function(runs){
+                        console.log(runs);
+                    }
+                });
 
             }
         });

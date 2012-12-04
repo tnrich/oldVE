@@ -198,7 +198,7 @@ function readFile(objectId,cb)
   */
 }
 
-function saveFile(fileData,user,deproject)
+function saveFile(fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
@@ -216,12 +216,18 @@ function saveFile(fileData,user,deproject)
           // Verify that the file exists
           app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
 
-            var j5Result = app.db.model("j5result");
-            var newj5Result = new j5Result({deprojectName:deproject.name,fileId:objectId.toString(),dateCreated:new Date()});
-            newj5Result.save(function(){
-              deproject.j5results.push(newj5Result);
-              deproject.save();
-              app.GridStoreDB.close();
+            var j5Run = app.db.model("j5run");
+            var newj5Run = new j5Run({
+              name: "newResult",
+              file_id:objectId.toString(),
+              date:new Date()
+            });
+            newj5Run.save(function(){
+              deproject.j5runs.push(newj5Run);
+              deproject.save(function(){
+                app.GridStoreDB.close();
+                return cb(newj5Run);
+              });
             });
           });
         });
@@ -230,7 +236,7 @@ function saveFile(fileData,user,deproject)
 };
 
 app.get('/openResult',restrict,function(req,res){
-  var o_id = new app.mongoose.mongo.ObjectID(req.query.fileId);
+  var o_id = new app.mongoose.mongo.ObjectID(req.query.file_id);
   
   readFile(o_id,function(inputStream){
 
@@ -333,34 +339,40 @@ app.post(j5Method1,restrict,function(req,res){
 
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(encodedFileData,req.user,deprojectModel);
+          saveFile(encodedFileData,req.user,deprojectModel,function(j5run){
 
-          var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
-          
-          var objResponse = {};
-          objResponse.files = [];
-          objResponse.data = encodedFileData;
+            var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
+            
+            var objResponse = {};
+            objResponse.files = [];
+            objResponse.data = encodedFileData;
 
-          for(var file in zip.files)
-          {
-            var fileName = zip.files[file]['name'];
-            if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
+            for(var file in zip.files)
             {
-              var newFile = {};
-              newFile.data = zip.files[file]['data'];
-              newFile.name = fileName;
-              newFile.size = zip.files[file]['data'].length;
-              objResponse.files.push(newFile);
+              var fileName = zip.files[file]['name'];
+              if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
+              {
+                var newFile = {};
+                newFile.fileContent = zip.files[file]['data'];
+                newFile.name = fileName;
+                newFile.size = zip.files[file]['data'].length;
+                objResponse.files.push(newFile);
+              }
             }
-          }
 
-          objResponse.files.sort(function (a, b) {
-              if (a.name < b.name) return -1;
-              if (b.name < a.name) return 1;
-              return 0;
+            objResponse.files.sort(function (a, b) {
+                if (a.name < b.name) return -1;
+                if (b.name < a.name) return 1;
+                return 0;
+            });
+            
+            j5run.j5Results = {};
+            j5run.j5Results.assemblies = objResponse.files;
+            j5run.save();
+
+            res.send(objResponse);
+
           });
-          
-          res.send(objResponse);
         }
       })
 

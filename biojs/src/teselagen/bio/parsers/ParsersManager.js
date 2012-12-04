@@ -143,10 +143,11 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var result = false;
 
         if (json["seq:seq"] === undefined) {
+            console.warn("Invalid JbeiSeqXML file. No root or record tag 'seq'");
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No root or record tag 'seq'"
             });
-            return result;
+            //return result;
         }
 
         //===============
@@ -183,6 +184,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         var jFeats;
 
         if (json["seq:seq"]["seq:features"] === undefined) {
+            console.warn("Invalid JbeiSeqXML file. No Features detected");
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Invalid JbeiSeqXML file. No Features detected"
             });
@@ -213,6 +215,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             for (var j=0; j < ft["seq:location"].length; j++) {
 
                 if (ft["seq:location"][j]["seq:genbankStart"] === undefined) {
+                    console.warn("feature['seq:location'][" + j +"]['seq:genbankStart'] undefined");
                     return result;
                 }
             }
@@ -220,6 +223,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
             // ATTRIBUTES
 
             if (ft["seq:label"] === undefined ) {
+                console.warn("json['seq:seq']['seq:features']["+i+"]'seq:feature][seq:label'] undefined");
                 return result;
             }
 
@@ -737,6 +741,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
                         }
                     });
                 }
+                console.log(label);
             }
 
             newFt = {
