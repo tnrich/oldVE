@@ -42,6 +42,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 self.currentUser.projects().load({
                     callback: function(record,operation,success){
                         self.projects = self.currentUser.projects();
+                        Vede.application.fireEvent("openProjectManagerWindow");
                         if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
                     }
                 });
@@ -88,6 +89,16 @@ Ext.define("Teselagen.manager.ProjectManager", {
         this.loadDesignAndChildResources();
     },
 
+    openj5Report: function(item){
+        var id = item.data.id;
+        var deprojects = this.workingProject.deprojects();
+        var selectedDEProject = deprojects.getById(id);
+        var tabPanel = Ext.getCmp('mainAppPanel');
+        var newj5ReportPanel = Ext.create('Vede.view.j5Report.j5ReportPanel',{title:'Report',model:selectedDEProject});
+        tabPanel.add(newj5ReportPanel).show();
+        tabPanel.setActiveTab(newj5ReportPanel);
+    },
+
     openDesign: function (item) {
         var id = item.data.id;
         var deprojects = this.workingProject.deprojects();
@@ -98,8 +109,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var duplicated = false;
             var DEProjectId = selectedDEProject.data.id;
         tabPanel.items.items.forEach(function(tab,key){
-            if(tab.model)
+            if(tab.model &&  tab.initialCls == "DeviceEditorTab")
             {
+                console.log(tab);
                 if(tab.model.data.id == DEProjectId)
                 {
                     duplicated = true;

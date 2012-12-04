@@ -123,6 +123,11 @@ body {
   background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
 }
 
+#headerUserIcon {
+  background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
+}
+
+
 .header_btn .x-btn-default-small .x-btn-inner {
   color: white;
 }

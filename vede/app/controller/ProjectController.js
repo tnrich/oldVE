@@ -10,27 +10,57 @@ Ext.define("Vede.controller.ProjectController", {
         Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
 
         deprojects.each(function (deproject) {
-            var designNode = Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
+
+            var rootNode = Ext.getCmp('projectDesignPanel').getRootNode();
+
+            var designNode = rootNode.appendChild({
                 text: deproject.data.name,
-                leaf: true,
-                id: deproject.data.id
+                leaf: false,
+                id: deproject.data.id,
+                hrefTarget: 'opende',
+                icon: "resources/images/ux/design-tree-icon-leaf.png",
+                expanded: true
             });
 
-            console.log(deproject.j5runs());
+            designNode.appendChild({
+                text: "Design",
+                leaf: true,
+                id: deproject.data.id,
+                hrefTarget: 'opende',
+                icon: "resources/images/ux/design-tree-icon-leaf.png",
+            });
 
+            designNode.appendChild({
+                text: "J5 Reports",
+                leaf: true,
+                id: deproject.data.id,
+                hrefTarget: 'j5report',
+                icon: "resources/images/ux/j5-tree-icon-parent"
+
+            });
+
+            designNode.appendChild({
+                text: "List Parts",
+                leaf: true,
+                id: deproject.data.id,
+                icon: "resources/images/ux/parts-tree-icon-parent"
+            });
+
+            /*
             deproject.j5runs().each(function (run) {
                 designNode.appendChild({
                     text: run.data.name,
                     leaf: true,
                     id: run.data.id
                 });
-            });
+            });*/
 
         });
 
         Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
             text: 'Add design',
             leaf: true,
+            hrefTarget: 'newde',
             icon: 'resources/images/add.png',
             id: 0
         });
@@ -40,9 +70,19 @@ Ext.define("Vede.controller.ProjectController", {
         Ext.getCmp('projectDesignPanel').setLoading(false);
     },
 
-    onProjectDesignPanelItemClick: function (store, record) { 
-        if(record.data.id!=0) Teselagen.manager.ProjectManager.openDesign(record); 
-        else Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
+    onProjectPanelItemClick: function (store, record) { 
+        switch(record.data.hrefTarget)
+        {
+            case 'newde':
+                Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
+                break;
+            case 'opende':
+                Teselagen.manager.ProjectManager.openDesign(record);
+                break;
+            case 'j5report':
+                Teselagen.manager.ProjectManager.openj5Report(record);
+                break;
+        }
     },
 
     onProjectPartsPanelItemClick: function (store, record) { 
@@ -71,14 +111,8 @@ Ext.define("Vede.controller.ProjectController", {
                             this.openProject, this);
 
         this.control({
-            '#projectPartsPanel': {
-                itemclick: this.onProjectPartsPanelItemClick
-            },
             '#projectDesignPanel': {
-                itemclick: this.onProjectDesignPanelItemClick
-            },
-            '#designGrid_Panel': {
-                itemclick: this.onProjectDesignPanelItemClick
+                itemclick: this.onProjectPanelItemClick
             },
             "#newProject_Btn": {
                 click: this.onNewProjectClick

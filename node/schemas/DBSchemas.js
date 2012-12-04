@@ -122,6 +122,9 @@ module.exports = function (app) {
 	  next();
 	});
 
+	j5RunSchema.virtual('id').get(function () {return this._id;});
+	j5RunSchema.set('toJSON', { virtuals: true });
+
 	SequenceSchema.virtual('id').get(function () {return this._id;});
 	SequenceSchema.set('toJSON', { virtuals: true });
 

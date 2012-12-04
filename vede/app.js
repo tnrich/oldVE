@@ -61,7 +61,8 @@ Ext.application({
         'Vede.controller.AuthEventDispatcherController',
         'ProjectController',
         'DashboardPanelController',
-        'Vede.controller.VectorEditor.SequenceEditingController'
+        'Vede.controller.VectorEditor.SequenceEditingController',
+        'Vede.controller.j5ReportController'
     ],
     errorHandler: function(err) {
         console.warn(err);
