@@ -66,10 +66,16 @@ Ext.define('Vesa.view.AppViewport', {
                                 align: 'stretch',
                                 type: 'hbox'
                             },
-                            dockedItems: [
+                            items: [
                                 {
                                     xtype: 'button',
-                                    dock: 'right',
+                                    flex: 1,
+                                    cls: 'header_btn',
+                                    overCls: 'projectButton_ober',
+                                    text: 'MyButton'
+                                },
+                                {
+                                    xtype: 'button',
                                     id: 'headerUserIcon',
                                     styleHtmlContent: false,
                                     iconAlign: 'right',
@@ -154,13 +160,11 @@ Ext.define('Vesa.view.AppViewport', {
                                             border: 0,
                                             id: 'dashboard_TopPanel',
                                             layout: {
-                                                align: 'stretch',
-                                                type: 'hbox'
+                                                type: 'fit'
                                             },
                                             items: [
                                                 {
                                                     xtype: 'gridpanel',
-                                                    flex: 1,
                                                     id: 'designGrid_Panel',
                                                     margin: 10,
                                                     width: 100,
@@ -194,6 +198,11 @@ Ext.define('Vesa.view.AppViewport', {
                                                             xtype: 'toolbar',
                                                             dock: 'top',
                                                             height: 40,
+                                                            width: 332,
+                                                            layout: {
+                                                                pack: 'end',
+                                                                type: 'hbox'
+                                                            },
                                                             items: [
                                                                 {
                                                                     xtype: 'button',

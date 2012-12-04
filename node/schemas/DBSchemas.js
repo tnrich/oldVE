@@ -18,7 +18,7 @@ module.exports = function (app) {
 		name: String,
 		file_id: oIDRef,
 		date: Date,
-		j5results: oMixed
+		j5Results: oMixed
 	});
 	app.db.model('j5run', j5RunSchema);
 

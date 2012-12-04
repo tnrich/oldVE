@@ -353,7 +353,7 @@ app.post(j5Method1,restrict,function(req,res){
               if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
               {
                 var newFile = {};
-                newFile.data = zip.files[file]['data'];
+                newFile.fileContent = zip.files[file]['data'];
                 newFile.name = fileName;
                 newFile.size = zip.files[file]['data'].length;
                 objResponse.files.push(newFile);
@@ -366,7 +366,8 @@ app.post(j5Method1,restrict,function(req,res){
                 return 0;
             });
             
-            j5run.j5results = objResponse.files;
+            j5run.j5Results = {};
+            j5run.j5Results.assemblies = objResponse.files;
             j5run.save();
 
             res.send(objResponse);

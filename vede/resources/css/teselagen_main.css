@@ -17,6 +17,8 @@
 
 body {
   background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+  background-image: url(../images/bg/furley_bg.png);
+  background-repeat: repeat;
 }
 
 .x-body {
@@ -85,13 +87,14 @@ body {
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;
+  background:none;
 }
 
 #headerPanel-body, #headerMain-body, #headerSub-body {
 }
 
-#mainAppPanel .x-tab-bar-top .x-tab-bar-body   {
-  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+#mainAppPanel .x-tab-bar-top .x-tab-bar-body, .x-tab-bar, .x-tab-bar-strip-default   {
+  background: none;
   border: 0 none;
 }
 
@@ -114,18 +117,24 @@ body {
 .header_btn {
   border: 0;
   background: white;
-  -webkit-transition: background 0.5s linear;
-  transition: background 0.5s linear;
+}
+
+#projectmanager_btn {
+  background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
 }
 
 .header_btn .x-btn-default-small .x-btn-inner {
-  color: #333;
+  color: white;
 }
 
 .header_btn_over {
   background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
   color: #fafafa;
   border: #0084b4;
+}
+
+.header_btn #projectmanager_btn-btnInnerEl, .header_btn #headerUserIcon-btnInnerEl {
+  color: #fafafa;
 }
 
 .header_btn_over #projectmanager_btn-btnInnerEl, .header_btn_over #headerUserIcon-btnInnerEl {
@@ -213,6 +222,7 @@ body {
 
 #ProjectPanel-body {
   border-width: 0 1px;
+  border-color: #D6D6D6;
   width:230px;
 }
 
@@ -246,6 +256,21 @@ body {
 #projectGrid_Panel-body, #designGrid_Panel-body, #dashboard_StatsPanel-body {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+}
+
+#designGrid_Panel .x-panel-header-default, .x-toolbar-default , #dashboard_BottomPanel .x-panel-header-default {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+#designGrid_Panel_header {
+  top: 30px !important;
+  z-index: 100;
+}
+
+#designGrid_Panel .x-toolbar-default {
+  z-index: 110;
 }
 
 /*Vector Editor*/
@@ -312,12 +337,12 @@ background: #F8F8F8;
 }
 
 .DeviceEditorPartsBar {
-  background: #0C4857;
+  background: #125B85;
 }
 
 .x-toolbar .x-toolbar-separator-horizontal {
   border-left: 1px solid #035363;
-  border-right: 1px solid #044150;
+  border-right: 1px solid #05628D;
 }
 
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
