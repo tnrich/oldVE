@@ -37,7 +37,9 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                         text: 'Linear View'
                     }]
                 }
-            }]
+            }
+
+            ]
         }
     }, {
         xtype: 'button',
@@ -211,5 +213,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'About'
             }]
         }
+    }, {
+        xtype: 'tbfill'
+    }, {
+        xtype: 'button',
+        text: 'Done Editing',
+        cls: 'doneEditingBtn',
+        hidden: true
     }]
 });

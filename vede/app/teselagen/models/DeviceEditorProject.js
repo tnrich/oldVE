@@ -80,7 +80,15 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             root: "projects"
         },
         writer: {
-            type: "json"
+            type: "json",
+            /*
+            getRecordData: function(record) {
+                var data = record.getData();
+                var associatedData = record.getAssociatedData();
+                console.log(associatedData);
+                return data;
+            }
+            */
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects", this.url);

@@ -190,6 +190,9 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             scale: 'large',
             tooltip: 'Signature'
         }, {
+            xtype: 'tbseparator',
+            height: 40
+        }, {
             xtype: 'button',
             cls: 'five_prime_utr_Btn',
             data: { iconKey : 'FIVE_PRIME_UTR' },
@@ -197,8 +200,10 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             params: 'five_prime_utr',
             scale: 'large',
             tooltip: 'Five Prime UTR'
-        },
-        {
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        }, {
             xtype: 'button',
             cls: 'generic',
             data: { iconKey : 'GENERIC' },

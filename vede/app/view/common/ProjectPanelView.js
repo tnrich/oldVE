@@ -79,11 +79,10 @@ function loadResults(record) {
 
 
 Ext.define('Vede.view.common.ProjectPanelView', {
-    extend: 'Ext.tab.Panel',
+    extend: 'Ext.panel.Panel',
     alias: 'widget.ProjectPanelView',
     region: 'west',
     id: 'ProjectPanel',
-    cls: 'tabbar',
     maxWidth: 230,
     minWidth: 228,
     width: 228,
@@ -93,113 +92,23 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     hideCollapseTool: false,
     preventHeader: false,
     title: 'Project',
-    activeTab: 0,
     plain: false,
     margin: '0 10 0 0',
     removePanelHeader: false,
     items: [{
         xtype: 'panel',
         overCls: 'project-tab-focus',
+        border: 0,
         id: 'projectDesignTab',
         layout: {
             type: 'fit'
         },
         minButtonWidth: 32,
-        tabConfig: {
-            xtype: 'tab',
-            id: 'projectTab1',
-            cls: 'projectBarButton',
-            overCls: 'project-tab-focus',
-            autoWidth: true,
-            icon: 'resources/images/ux/designTab.png',
-            iconCls: 'projectBarButton',
-            activeCls: 'project-tab-active'
-        },
         items: [{
             xtype: 'treepanel',
             border: 0,
             id: 'projectDesignPanel',
-            title: 'Your Designs',
             rootVisible: false
-        }]
-    }, {
-        xtype: 'panel',
-        id: 'projectAnalysisTab',
-        layout: {
-            type: 'fit'
-        },
-        tabConfig: {
-            xtype: 'tab',
-            id: 'projectTab2',
-            cls: 'projectBarButton',
-            overCls: 'project-tab-focus',
-            icon: 'resources/images/ux/graphTab.png',
-            iconCls: 'projectBarButton',
-            activeCls: 'project-tab-active'
-        },
-        items: [{
-            xtype: 'treepanel',
-            border: 0,
-            id: 'j5ResultsPanel',
-            title: 'j5 Results',
-            rootVisible: false,
-            listeners: {
-                itemclick: function (view, record, item, index, e, eOpts) {
-                    //console.log(JSON.stringify(record.raw));
-                }
-            }
-        }]
-    }, {
-        xtype: 'panel',
-        id: 'projectPartsTab',
-        layout: {
-            type: 'fit'
-        },
-        tabConfig: {
-            xtype: 'tab',
-            id: 'projectTab3',
-            cls: 'projectBarButton',
-            overCls: 'project-tab-focus',
-            icon: 'resources/images/ux/partsTab.png',
-            iconCls: 'projectBarButton',
-            activeCls: 'project-tab-active'
-        },
-        items: [{
-            xtype: 'treepanel',
-            border: 0,
-            id: 'projectPartsPanel',
-            title: 'Your Parts',
-            rootVisible: false,
-            listeners: {
-                itemclick: function (view, record, item, index, e, eOpts) {
-                    //console.log(JSON.stringify(record.raw));
-                }
-            }
-        }]
-    }, {
-        xtype: 'panel',
-        id: 'projectRegistryTab',
-        layout: {
-            type: 'fit'
-        },
-        tabConfig: {
-            xtype: 'tab',
-            id: 'projectTab4',
-            autoWidth: false,
-            cls: 'projectBarButton',
-            overCls: 'project-tab-focus',
-            icon: 'resources/images/ux/registryTab.png',
-            iconCls: 'projectBarButton',
-            activeCls: 'project-tab-active'
-        },
-        items: [{
-            xtype: 'treepanel',
-            border: 0,
-            id: 'projectsRegistryPanel',
-            title: 'Registry',
-            viewConfig: {
-
-            }
         }]
     }]
 });

@@ -14,12 +14,13 @@ module.exports = function (app) {
 		payload: oMixed
 	}));
 
-	var j5ResultSchema = new Schema({
-		fileId: oIDRef,
-		deprojectName: String,
-		dateCreated: Date
+	var j5RunSchema = new Schema({
+		name: String,
+		file_id: oIDRef,
+		date: Date,
+		j5results: oMixed
 	});
-	app.db.model('j5result', j5ResultSchema);
+	app.db.model('j5run', j5RunSchema);
 
 	var SequenceSchema = new Schema({
 		veproject_id: String,
@@ -91,7 +92,7 @@ module.exports = function (app) {
 			},
 			rules: oMixed
 		},
-		j5results : [{ type: oIDRef, ref: 'j5result' }]
+		j5runs : [{ type: oIDRef, ref: 'j5run' }]
 	});
 	app.db.model('deproject', DEProjectSchema);
 

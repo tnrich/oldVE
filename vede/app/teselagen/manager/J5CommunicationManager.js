@@ -67,6 +67,12 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 downloadBtn.show();
                 runj5Btn.toggle();
 
+                deproject.j5runs().load({
+                    callback : function(runs){
+                        console.log(runs);
+                    }
+                });
+
             }
         });
         

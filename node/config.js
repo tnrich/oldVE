@@ -159,9 +159,9 @@ module.exports = function (app, express) {
 
   // Init XML-RPC
   app.j5client = app.xmlrpc.createClient({
-    host: 'eaa.teselagen.com',
+    host: 'dev.teselagen.com',
     port: 80,
-    path: '/bin/j5_xml_rpc.pl'
+    path: '/j5/j5_xml_rpc.pl'
   });
 
 

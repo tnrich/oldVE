@@ -540,11 +540,11 @@ module.exports = function (app, express) {
   });
 
   //READ
-  app.get('/user/projects/deprojects/j5results', restrict, function (req, res) {
+  app.get('/user/projects/deprojects/j5runs', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
-    //var J5Result = app.db.model("j5result");
-    DEProject.findById(req.query.id).populate('j5results').exec(function (err, deproject) {
-      res.json({'j5results':deproject.j5results});
+    var id = JSON.parse(req.query.filter)[0].value;
+    DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
+      res.json({'j5runs':deproject.j5tuns});
     });
   });
 
