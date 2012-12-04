@@ -25,103 +25,102 @@ Ext.define("Teselagen.manager.ProjectManager", {
     workingProject: null,
     workingSequence: null,
 
-	constructor: function (inData) {},
+    constructor: function (inData) {},
 
-	/**
-	 * Load User Info
-	 */
-	loadUser: function (cb) {
-		//console.log('PM: Loading User');
-		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
-		var users = Ext.create("Teselagen.store.UserStore");
-		var self = this;
-		users.load({
-			callback: function (records,operation,success) {
-				if(!records) {console.log('Error loading user'); return cb(false);}
-				self.currentUser = users.first();
-				self.currentUser.projects().load({
-					callback: function(record,operation,success){
-						self.projects = self.currentUser.projects();
-						if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
-					}
-				});
-				if(cb) return cb(true);
-			}
-		});
-	},
+    /**
+     * Load User Info
+     */
+    loadUser: function (cb) {
+        //console.log('PM: Loading User');
+        if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
+        var users = Ext.create("Teselagen.store.UserStore");
+        var self = this;
+        users.load({
+            callback: function (records,operation,success) {
+                if(!records) {console.log('Error loading user'); return cb(false);}
+                self.currentUser = users.first();
+                self.currentUser.projects().load({
+                    callback: function(record,operation,success){
+                        self.projects = self.currentUser.projects();
+                        if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
+                    }
+                });
+                if(cb) return cb(true);
+            }
+        });
+    },
 
-	/**
-	 *	Load Project Child Resources
-	 */	
-	loadDesignAndChildResources: function () {
-		var projectController = Vede.application.getController('Vede.controller.ProjectController');
+    /**
+     *  Load Project Child Resources
+     */ 
+    loadDesignAndChildResources: function () {
+        var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
-		var self = this;
+        var self = this;
 
-		var deprojects = this.workingProject.deprojects();
-		deprojects.load({
-			callback: function (records,operation,success) {
-				projectController.renderTree(deprojects);
-			}
-		});
+        var deprojects = this.workingProject.deprojects();
+        deprojects.load({
+            callback: function (records,operation,success) {
+                projectController.renderTree(deprojects);
+            }
+        });
 
-		/*
-		var veprojects = this.workingProject.veprojects();
-		veprojects.load({
-			callback: function (records,operation,success) {
-				projectController.renderPartsSection(veprojects);
-			}
-		});
-		*/
+        /*
+        var veprojects = this.workingProject.veprojects();
+        veprojects.load({
+            callback: function (records,operation,success) {
+                projectController.renderPartsSection(veprojects);
+            }
+        });
+        */
 
-	},
+    },
 
-	/**
-	 * Open a Project
-	 */
-	openProject: function (project) {
-		//console.log('PM: Opening a project ' + project.data.name);
-		this.workingProject = project;
+    /**
+     * Open a Project
+     */
+    openProject: function (project) {
+        //console.log('PM: Opening a project ' + project.data.name);
+        this.workingProject = project;
 
-		Ext.getCmp('projectDesignPanel').setLoading(true);
-		// Load Designs And Design Child Resources and Render into ProjectPanel
-		this.loadDesignAndChildResources();
-	},
+        Ext.getCmp('projectDesignPanel').setLoading(true);
+        // Load Designs And Design Child Resources and Render into ProjectPanel
+        this.loadDesignAndChildResources();
+    },
 
-	openDesign: function (item) {
-		var id = item.data.id;
-		var deprojects = this.workingProject.deprojects();
-		var selectedDEProject = deprojects.getById(id);
-		var tabPanel = Ext.getCmp('mainAppPanel');
-		// First check tab is not already opened
-		var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
-		var duplicated = false;
-	        var DEProjectId = selectedDEProject.data.id;
-		tabPanel.items.items.forEach(function(tab,key){
-			if(tab.model)
-			{
-			    if(tab.model.data.id == DEProjectId)
-				{
-					duplicated = true;
-					tabPanel.setActiveTab(key);
-				}
-			}
-		});
-		if(!duplicated)
-		{
-			var self = this;
-			Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
-			var selectedDesign = selectedDEProject.getDesign({
-				callback: function (record,operation) {
-					selectedDesign = selectedDEProject.getDesign();
-					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-				        tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject,modelId:DEProjectId})).show();
-					Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();		
-				}
-			});
-		}	
-	},
->>>>>>> 5f4cdedc0a78c3a8f10be9ad8f7b2e8713ded47b
+    openDesign: function (item) {
+        var id = item.data.id;
+        var deprojects = this.workingProject.deprojects();
+        var selectedDEProject = deprojects.getById(id);
+        var tabPanel = Ext.getCmp('mainAppPanel');
+        // First check tab is not already opened
+        var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
+        var duplicated = false;
+            var DEProjectId = selectedDEProject.data.id;
+        tabPanel.items.items.forEach(function(tab,key){
+            if(tab.model)
+            {
+                if(tab.model.data.id == DEProjectId)
+                {
+                    duplicated = true;
+                    tabPanel.setActiveTab(key);
+                }
+            }
+        });
+        if(!duplicated)
+        {
+            var self = this;
+            Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
+            var selectedDesign = selectedDEProject.getDesign({
+                callback: function (record,operation) {
+                    selectedDesign = selectedDEProject.getDesign();
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                        tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject,modelId:DEProjectId})).show();
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();      
+                }
+            });
+        }   
+    },
 
         deleteDEProject: function(deproject,tab){
             console.log("Deleting deproject");
