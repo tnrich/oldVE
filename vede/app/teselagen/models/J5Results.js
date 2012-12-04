@@ -49,8 +49,7 @@ Ext.define("Teselagen.models.J5Results", {
         {
             type: "hasMany",
             model: "Teselagen.models.j5Output.AssembledSequenceFile",
-            name: "assemblies",
-            foreignKey: "assemblies_id"
+            name: "assemblies"
         },
         {
             type: "hasOne",

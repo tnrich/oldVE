@@ -38,6 +38,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
 						self.projects = self.currentUser.projects();
+						Vede.application.fireEvent("openProjectManagerWindow");
 						if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
 					}
 				});
@@ -171,6 +172,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			    	callback: function(){
 			    		self.workingProject = project;
 			    		self.loadDesignAndChildResources();
+			    		Vede.application.fireEvent("closeProjectManagerWindow");
 			    	}
 			    });
 		};

@@ -111,8 +111,6 @@ Ext.define("Teselagen.models.J5Run", {
             getterName: "getJ5Results",
             setterName: "setJ5Results",
             associationKey: "j5Results",
-            foreignKey: "j5results_id",
-            name: "j5results"
         },
         {
             type: "belongsTo",

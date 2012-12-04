@@ -60,7 +60,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                         }
                     },
 
-                    fields: ['name','data','size']
+                    fields: ['name','fileContent','size']
                 });
                 store.load();
                 resultsGrid.reconfigure(store);
