@@ -47,6 +47,7 @@ Ext.application({
         'RestrictionEnzymeController',
         'SelectWindowController',
         'SequenceController',
+        'HeaderPanelController',
         'VectorPanelController',
         'SimulateDigestionController',
         'VectorEditor.ImportSequenceWindowController',
