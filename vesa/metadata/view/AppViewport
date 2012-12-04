@@ -107,13 +107,29 @@
                         {
                             "type": "button",
                             "reference": {
-                                "name": "dockedItems",
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout|flex": 1,
+                                "designer|userClassName": "MyButton69",
+                                "cls": "header_btn",
+                                "overCls": "projectButton_ober",
+                                "text": "MyButton"
+                            },
+                            "designerId": "0fab2fb7-c233-4bf6-ba5c-4bd7385c37fd"
+                        },
+                        {
+                            "type": "button",
+                            "reference": {
+                                "name": "items",
                                 "type": "array"
                             },
                             "codeClass": null,
                             "userConfig": {
                                 "layout|flex": null,
-                                "dock": "right",
+                                "dock": null,
                                 "designer|userClassName": "MyButton28",
                                 "id": "headerUserIcon",
                                 "style": null,
@@ -305,11 +321,10 @@
                                     "codeClass": null,
                                     "userConfig": {
                                         "layout|flex": 1,
-                                        "container|align": "stretch",
                                         "designer|userClassName": "MyPanel40",
                                         "border": 0,
                                         "id": "dashboard_TopPanel",
-                                        "layout": "hbox",
+                                        "layout": "fit",
                                         "title": null
                                     },
                                     "designerId": "75980a1e-1ebe-4ce1-a448-aadbcc29fbef",
@@ -322,7 +337,6 @@
                                             },
                                             "codeClass": null,
                                             "userConfig": {
-                                                "layout|flex": 1,
                                                 "dock": null,
                                                 "designer|userClassName": "MyGridPanel3",
                                                 "id": "designGrid_Panel",
@@ -400,8 +414,10 @@
                                                     "codeClass": null,
                                                     "userConfig": {
                                                         "dock": "top",
+                                                        "container|pack": "end",
                                                         "designer|userClassName": "MyToolbar9",
-                                                        "height": 40
+                                                        "height": 40,
+                                                        "width": 332
                                                     },
                                                     "designerId": "fed35dd6-c0cd-4bfc-8a65-8c406bb13d3f",
                                                     "cn": [

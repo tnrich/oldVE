@@ -65,6 +65,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                                                             xtype: 'toolbar',
                                                             dock: 'top',
                                                             height: 40,
+                                                            layout: {
+                                                                pack: 'end',
+                                                                type: 'hbox'
+                                                            },  
                                                             items: [
                                                                 {
                                                                     xtype: 'button',
