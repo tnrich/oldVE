@@ -52,7 +52,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     /**
      *  Load Project Child Resources
-     */ 
+     */
     loadDesignAndChildResources: function () {
         var projectController = Vede.application.getController('Vede.controller.ProjectController');
 
@@ -116,22 +116,22 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     selectedDesign = selectedDEProject.getDesign();
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                         tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject,modelId:DEProjectId})).show();
-                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();      
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                 }
             });
-        }   
+        }
     },
 
-        deleteDEProject: function(deproject,tab){
-            console.log("Deleting deproject");
-            var self = this;
-            this.workingProject.deprojects().remove(deproject);
-            this.workingProject.deprojects().sync({
-        callback: function(){
-                    self.loadDesignAndChildResources();
-                    Ext.getCmp('mainAppPanel').remove(tab);
-        }
-            });
+    deleteDEProject: function(deproject,tab){
+        console.log("Deleting deproject");
+        var self = this;
+        this.workingProject.deprojects().remove(deproject);
+        this.workingProject.deprojects().sync({
+            callback: function(){
+                self.loadDesignAndChildResources();
+                Ext.getCmp('mainAppPanel').remove(tab);
+            }
+        });
     },
 
     openVEProject: function (item) {
@@ -150,13 +150,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 self.workingSequence = selectedSequence;
                 var tabPanel = Ext.getCmp('mainAppPanel');
                 tabPanel.setActiveTab( 1 );
-                console.log(selectedSequence);
-                //var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
-                //seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-
                 seqMgr = Teselagen.utils.FormatUtils.sequenceFileToSequenceManager(selectedSequence);
-                console.log(seqMgr);
-                
                 Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
             }
         });
@@ -181,6 +175,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     callback: function(){
                         self.workingProject = project;
                         self.loadDesignAndChildResources();
+                        Vede.application.fireEvent("closeProjectManagerWindow");
                     }
                 });
         };
