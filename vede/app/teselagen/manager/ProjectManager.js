@@ -42,7 +42,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				self.currentUser.projects().load({
 					callback: function(record,operation,success){
 						self.projects = self.currentUser.projects();
-						Vede.application.fireEvent("openProjectManagerWindow");
+                        Vede.application.fireEvent("openProjectManagerWindow");
 						if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
 					}
 				});
@@ -122,137 +122,17 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			});
 		}	
 	},
->>>>>>> 5f4cdedc0a78c3a8f10be9ad8f7b2e8713ded47b
 
-        deleteDEProject: function(deproject,tab){
-            console.log("Deleting deproject");
-            var self = this;
-            this.workingProject.deprojects().remove(deproject);
-            this.workingProject.deprojects().sync({
-        callback: function(){
-                    self.loadDesignAndChildResources();
-                    Ext.getCmp('mainAppPanel').remove(tab);
-        }
-            });
-<<<<<<< HEAD
-	},
-
-	openVEProject: function (item) {
-	console.log("Trying to open VE Project");
-	
-		var id = item.data.id;
-		var veprojects = this.workingProject.veprojects();
-		var selectedVEProject = veprojects.getById(id);
-		var self = this;
-		
-		var selectedSequence = selectedVEProject.getSequenceFile({
-			callback: function (record,operation) {
-				selectedSequence = selectedVEProject.getSequenceFile();
-				self.workingSequence = selectedSequence;
-				var tabPanel = Ext.getCmp('mainAppPanel');
-				tabPanel.setActiveTab( 1 );
-				console.log(selectedSequence);
-	            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
-	            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-	            Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
-			}
-		});		
-		
-	},
-
-	createNewProject: function(){
-		
-		var onPromptClosed = function(answer,text) {
-
-				if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
-
-				var self = this;
-				var project = Ext.create("Teselagen.models.Project", {
-			        name: text,
-			        dateCreated: new Date(),
-			        dateModified: new Date()
-			    });
-
-			    this.currentUser.projects().add(project);
-			    project.save({
-			    	callback: function(){
-			    		self.workingProject = project;
-			    		self.loadDesignAndChildResources();
-			    		Vede.application.fireEvent("closeProjectManagerWindow");
-			    	}
-			    });
-		};
-
-		Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
-	},
-	createNewDeviceEditorProject: function(){
-
-		var onPromptClosed = function(answer,text) {
-
-			if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
-
-		    var self = this;
-
-		    if(this.workingProject) {
-			    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-			        name: text,
-			        dateCreated: new Date(),
-			        dateModified: new Date()
-			    });
-
-	            var binsArray = [];
-	            var parts = [];
-
-	            for(var binIndex = 0;binIndex<1;binIndex++)
-	            {
-	                var newBin = Ext.create("Teselagen.models.J5Bin", {
-	                    binName: "bin"+binIndex+1
-	                });
-	                var tempParts = [];
-	                for(var i=0;i<2;i++)
-	                {
-	                    var newPart = Ext.create("Teselagen.models.Part", {
-	                        name: "",
-	                        genbankStartBP: 1,
-	                        endBP: 7
-	                    });
-	                    parts.push(newPart);
-	                    tempParts.push(newPart);
-	                }
-	                newBin.addToParts(tempParts);
-	                binsArray.push(newBin);
-	            }
-
-	            var afterPartsSaved = function(){
-
-		            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-		            deproject.setDesign(design);
-				    self.workingProject.deprojects().add(deproject);
-
-				    deproject.save({
-				        callback: function(){
-				        	design.set( 'deproject_id', deproject.get('id') );
-				        	design.save({
-				        		callback: function(){
-				        			self.loadDesignAndChildResources();
-									self.openDesign(deproject);
-				            	}});
-				    }});
-	        	};
-
-	            parts.forEach(function(part,partIndex){
-	            	part.save({
-	            		callback:function(){
-	            			if(partIndex == parts.length-1) afterPartsSaved();
-	            		}
-	            	});
-	            });
-
-			}
-		};
-
-		Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
-=======
+    deleteDEProject: function(deproject,tab){
+        console.log("Deleting deproject");
+        var self = this;
+        this.workingProject.deprojects().remove(deproject);
+        this.workingProject.deprojects().sync({
+            callback: function(){
+                self.loadDesignAndChildResources();
+                Ext.getCmp('mainAppPanel').remove(tab);
+            }
+        });
     },
 
     openVEProject: function (item) {
@@ -271,13 +151,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 self.workingSequence = selectedSequence;
                 var tabPanel = Ext.getCmp('mainAppPanel');
                 tabPanel.setActiveTab( 1 );
-                console.log(selectedSequence);
-                //var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(selectedSequence.data.sequenceFileContent);
-                //seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-
                 seqMgr = Teselagen.utils.FormatUtils.sequenceFileToSequenceManager(selectedSequence);
-                console.log(seqMgr);
-                
                 Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
             }
         });
@@ -302,6 +176,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     callback: function(){
                         self.workingProject = project;
                         self.loadDesignAndChildResources();
+                        Vede.application.fireEvent("closeProjectManagerWindow");
                     }
                 });
         };
@@ -313,7 +188,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var onPromptClosed = function(answer,text) {
 
             if(text==='') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
->>>>>>> ae5fbfffd6eae42385dc85384f45eaa5739c54e2
 
             var self = this;
 
