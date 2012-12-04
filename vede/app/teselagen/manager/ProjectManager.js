@@ -57,17 +57,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
 		var deprojects = this.workingProject.deprojects();
 		deprojects.load({
 			callback: function (records,operation,success) {
-				projectController.renderDesignsSection(deprojects);
-				projectController.renderJ5ResultsSection(deprojects);
+				projectController.renderTree(deprojects);
 			}
 		});
 
+		/*
 		var veprojects = this.workingProject.veprojects();
 		veprojects.load({
 			callback: function (records,operation,success) {
 				projectController.renderPartsSection(veprojects);
 			}
 		});
+		*/
 
 	},
 

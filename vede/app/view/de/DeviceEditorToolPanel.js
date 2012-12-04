@@ -28,9 +28,6 @@ Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 			tooltip: 'Add Row'
 		}, {
 			xtype: 'tbseparator'
-
-		}, {
-			xtype: 'tbseparator'
 		}, {
 			xtype: 'button',
 			cls: 'j5_init_Btn',
