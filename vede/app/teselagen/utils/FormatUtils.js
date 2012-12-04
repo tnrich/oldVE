@@ -257,7 +257,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
         }
 
         if ( isJSON === false) {
-            return null;
+            console.warn("FormatUtils.jbeiseqJsonToSequenceManager(): Invalid jbeiSeq JSON input.");
+            //return null;
         }
 
         var name    = json["seq:seq"]["seq:name"];
@@ -494,6 +495,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         //var jbeiseqJson = this.ParsersManager.genbankToJbeiseqJson(genbank);
         var jbeiseqJson = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(genbank);
+        console.log(jbeiseqJson);
 
         var result = this.jbeiseqJsonToSequenceManager(jbeiseqJson);
         
@@ -536,6 +538,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * @returns {Teselagen.models.SequenceManager}
      */
     sequenceFileToSequenceManager: function(pSequenceFile) {
+        //console.log(pSequenceFile);
 
         if (Ext.getClassName(pSequenceFile) !== "Teselagen.models.SequenceFile") {
             console.warn("FormatUtils.sequenceFileToSequenceManager(): '" + pSequenceFile + "' is not a SequenceFile. Returning null.");
@@ -548,14 +551,17 @@ Ext.define("Teselagen.utils.FormatUtils", {
         
         switch (format) {
         case Constants.GENBANK:
+            console.log(content);
             var genbank = GenbankManager.parseGenbankFile(content);
-            seqMan = FormatUtils.genbankToSequenceManager(genbank);
+            //console.log(JSON.stringify(genbank, null, "  "));
+            seqMan = this.genbankToSequenceManager(genbank);
+            console.log(seqMan);
             break;
         case Constants.FASTA:
-            seqMan = FormatUtils.fastaToSequenceManager(content);
+            seqMan = this.fastaToSequenceManager(content);
             break;
         case Constants.JBEISEQ:
-            seqMan = FormatUtils.jbeiseqXmlToSequenceManager(content);
+            seqMan = this.jbeiseqXmlToSequenceManager(content);
             //console.log(content);
             break;
         case Constants.SBOLXML:
@@ -570,10 +576,31 @@ Ext.define("Teselagen.utils.FormatUtils", {
             seqMan = null;
             break;
         default:
-            console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
+            console.warn("Teselagen.utils.FormatUtils.sequenceFileToSequenceManger: File format not detected: " + format);
         }
+        //console.log(seqMan);
         seqMan.setName(name);
         return seqMan;
+    },
+
+    /** NOT TESTED
+     * Convert a SequenceManager model to a SequenceFile model.
+     * @param {Teselagen.models.SequenceManager} pSequenceManager
+     * @returns {Teselagen.models.SequenceFile}
+     */
+    sequenceManagerToSequenceFile: function(pSequenceManager) {
+
+        if (Ext.getClassName(pSequenceManager) !== "Teselagen.models.SequenceManager") {
+            console.warn("FormatUtils.sequenceManagerToSequenceFile(): '" + pSequenceManager + "' is not a SequenceManager. Returning null.");
+            return null;
+        }
+        var name    = pSequenceManager.getName();
+        var format  = Teselagen.constants.Constants.GENBANK;
+        var content = Teselagen.manager.FormatUtils.sequenceManagerToGenbank(pSequenceManager);
+
+        var seqFile = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(format, content, name, "");
+
+        return seqFile;
     },
 
     /** NOT TESTED
