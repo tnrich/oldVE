@@ -3,9 +3,9 @@ var expect = require("chai").expect;
 var request = require("request");
 var API_URL =  "http://teselagen.local/api/";
 
-describe("/api", function() {
-    var projects;
-    describe("Basic access", function() {
+describe("/api.", function() {
+    var date, projects;
+    describe("Basic access.", function() {
         it("Get /", function(done) {
             request(API_URL, function(err, res, body) {
                 expect(err).to.be.null;
@@ -36,7 +36,7 @@ describe("/api", function() {
             });
         });
     });
-    describe("Projects", function() {
+    describe("Projects.", function() {
         it("Delete /user/projects", function(done) {
             request.del({
                 uri: API_URL+"user/projects",
@@ -48,9 +48,10 @@ describe("/api", function() {
             });
         });
         it("Post /user/projects", function(done) {
+            date = Date.now();
             request.post({
                 uri: API_URL+"user/projects",
-                form: {name:"MyProject1"},
+                form: {name:"MyProject1", dateCreated:date, dateModified:date},
                 json: true
             },
             function(err, res, body) {
@@ -93,8 +94,11 @@ describe("/api", function() {
                 json: true
             },
             function(err, res, body) {
+                var proj = body.projects[0];
                 expect(res.statusCode).to.equal(200);
-                expect(body.projects[0].name).to.equal("MyProject1");
+                expect(proj.name).to.equal("MyProject1");
+                expect(proj.dateCreated).to.equal(date.toString());
+                expect(proj.dateModified).to.equal(date.toString());
                 done();
             });
         });
