@@ -33,7 +33,7 @@ Ext.onReady(function() {
                 expect( Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier")).toBeDefined();
                 expect( Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation")).toBeDefined();
                 expect( Ext.create("Teselagen.bio.parsers.GenbankOriginKeyword")).toBeDefined();
-            });	
+            });
         });
 
         describe("Unit Testing: creation of a null Genbank Object.", function() {
@@ -78,7 +78,8 @@ Ext.onReady(function() {
             });
             it("GenbankFeatureLocation?",function(){
                 var tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation", {} );
-                expect(tmp.getStart()).toBe("");
+                expect(tmp.getStart()).toBe(0);
+                expect(tmp.getEnd()).toBe(0);
             });
             it("GenbankFeatureQualifier?",function(){
                 var tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {} );
@@ -118,7 +119,7 @@ Ext.onReady(function() {
                 tmp.appendValue("ue");
                 expect(tmp.getValue()).toBe("value");
                 expect(tmp.toString()).toBe("key         value\n1\n2\n3\n4");
-                expect(JSON.stringify(tmp)).toBe(JSON.stringify({keyword:"key", value:"value", 
+                expect(JSON.stringify(tmp)).toBe(JSON.stringify({keyword:"key", value:"value",
                     subKeywords: [ 1, 2, 3, 4]}));
             });
             it("GenbankSubKeyword: get, toString, toJSON, appendValue",function(){
@@ -527,13 +528,13 @@ Ext.onReady(function() {
                 var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 var json = {
-                        "keyword": "LOCUS", 
-                        "locusName": "pj5_00028", 
-                        "sequenceLength": 5371, 
-                        "strandType": "ds", 
-                        "naType": "DNA", 
-                        "linear": false, 
-                        "divisionCode": "", 
+                        "keyword": "LOCUS",
+                        "locusName": "pj5_00028",
+                        "sequenceLength": 5371,
+                        "strandType": "ds",
+                        "naType": "DNA",
+                        "linear": false,
+                        "divisionCode": "",
                         "date": "1-APR-2012"
                 };
                 expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("LOCUS"), null, "  "));
@@ -566,7 +567,7 @@ Ext.onReady(function() {
                 tmp.findKeyword("ACCESSION").addSubKeyword(Ext.create('Teselagen.bio.parsers.GenbankSubKeyword', {keyword: "test", value : "test2"}));
                 expect(tmp.findKeyword("ACCESSION").getSubKeywords().length).toBe(1);
                 expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getKeyword()).toBe("test");
-                expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getValue()).toBe("test2"); 
+                expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getValue()).toBe("test2");
             });
 
             it("Parses VERSION?",function(){
@@ -592,8 +593,9 @@ Ext.onReady(function() {
             it("Parses KEYWORDS? ';;;;;' case",function(){
                 var line =  "KEYWORDS    ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; \n" +
                             "; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ";
+                console.log("blah");
                 var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                //console.log(tmp.toString());
+                console.log(tmp.toString());
                 expect(tmp.getKeywords().length).toBe(1); // does not turn second line into a keyword
             });
 
@@ -601,7 +603,7 @@ Ext.onReady(function() {
                 var line = "ACCESSION   pj5_00028 Accession";
                 var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
                 var json = {
-                        "keyword": "ACCESSION", 
+                        "keyword": "ACCESSION",
                         "value": "pj5_00028 Accession"
                 };
                 expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("ACCESSION"), null, "  "));

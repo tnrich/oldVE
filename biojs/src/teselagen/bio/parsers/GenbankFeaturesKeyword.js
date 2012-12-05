@@ -3,8 +3,8 @@
  * @class Teselagen.bio.parsers.GenbankFeaturesKeyword
  *
  * Stores an array of GenbankFeatureElements. Is created when parsing the line "FEATURES" from a Genbank file.
- * Same level as {@link Teselagen.bio.parsers.GenbankKeyword}, 
- * {@link Teselagen.bio.parsers.GenbankLocusKeyword}, 
+ * Same level as {@link Teselagen.bio.parsers.GenbankKeyword},
+ * {@link Teselagen.bio.parsers.GenbankLocusKeyword},
  * and {@link Teselagen.bio.parsers.GenbankOriginKeyword}.
  * Simply holds GenbankFeatureElements in an array.
  * @author Diana Wong
@@ -18,57 +18,46 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
     extend: "Teselagen.bio.parsers.Keyword",
 
     /**
+     * @cfg {Object} config
+     * @cfg {Teselagen.bio.parsers.GenbankFeatureElement[]} featuresElements
+     */
+    config: {
+        featuresElements: []
+    },
+
+    /**
      * Creates a new GenbankFeaturesKeyword from inData.
      * @returns {GenbankFeaturesKeyword}
      * @memberOf GenbankFeaturesKeyword
      */
     constructor: function () {
-        //var that = this;
         /**
          *  @property {String} keyword
          */
         this.keyword = "FEATURES";
-        /**
-         *  @property {GenbankFeatureElements} [featuresElements]
-         */
-        var featuresElements = [];
+        this.featuresElements = [];
 
-
-        /**
-         * Get featuresElements
-         * @returns {GenbankFeaturesKeyword} featuresElements
-         */
-        this.getFeaturesElements = function() {
-            return featuresElements;
-        }
-        /**
-         * Set featuresElements
-         * @param {GenbankFeaturesKeyword} [featuresElements]
-         */
-        this.setFeaturesElements = function(pFeaturesElements) {
-            featuresElements = pFeaturesElements;
-        }
-
-        /**
-         * Add GenbankFeatureElement
-         * @param {GenbankFeatureElement} element
-         */
-        this.addElement = function(pElement) {
-            featuresElements.push(pElement);
-        }
-
-        /**
-         * Get Last GenbankFeatureElement in featuresElements array
-         * @returns {GenbankFeatureElement} element
-         */
-        this.getLastElement = function() {
-            if (featuresElements.length > 0) {
-                return featuresElements[featuresElements.length-1];
-            } else {
-                return null;
-            }
-        }
         return this;
+    },
+
+    /**
+     * Add GenbankFeatureElement
+     * @param {GenbankFeatureElement} element
+     */
+    addElement: function(pElement) {
+        this.featuresElements.push(pElement);
+    },
+
+    /**
+     * Get Last GenbankFeatureElement in featuresElements array
+     * @returns {GenbankFeatureElement} element
+     */
+    getLastElement: function() {
+        if (this.featuresElements.length > 0) {
+            return this.featuresElements[this.featuresElements.length-1];
+        } else {
+            return null;
+        }
     },
     /**
      * Converts this GenbankFeaturesKeyword to Genbank file format string
@@ -76,11 +65,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
      */
     toString : function() {
         var line = "FEATURES             Location/Qualifiers\n";
-        var featuresElements = this.getFeaturesElements();
 
-        for (var i=0; i < featuresElements.length; i++) {
-            line += featuresElements[i].toString();
-            if (i < featuresElements.length-1) {
+        for (var i=0; i < this.featuresElements.length; i++) {
+            line += this.featuresElements[i].toString();
+            if (i < this.featuresElements.length-1) {
                 line += "\n";
             }
         }
@@ -91,21 +79,31 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
      * @returns {Object} json
      */
     toJSON : function() {
-        var featuresElements = this.getFeaturesElements();
 
         var json = {
-                keyword: this.keyword,
-        }
+                keyword: this.keyword
+        };
         if (this.value  !== null) {
             json["value"] = this.value;
         }
         json["elements"] = [];
-        for (var i=0; i <featuresElements.length; i++) {
-            json["elements"].push(featuresElements[i]);
+        for (var i=0; i < this.featuresElements.length; i++) {
+            json["elements"].push(this.featuresElements[i]);
         }
 
 
         return json;
+    },
+
+    /**
+     * Converts GenBank JSON back to GenBank model
+     * @params {JSON} json GenbankFeatureQualifier in JSON form
+     * @returns {Teselagen.bio.model.GenbankFeatureQualifier}
+     */
+    fromJSON: function(json) {
+        this.keyword    = json["keyword"];
+        this.featuresElements = json["elements"];
+        return this;
     }
 
 

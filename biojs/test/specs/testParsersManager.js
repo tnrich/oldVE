@@ -94,7 +94,9 @@ Ext.onReady(function() {
             it("fastaToGenbank()", function() {
                 var newGb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(fastaStr);
 
+                console.log(newGb.getLocus());
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
+
                 expect(newGb.getOrigin().getSequence()).toBe("gattaca");
                 //if (LOG) console.log(newGb.toString());
                 jasmine.log(newGb.toString());

@@ -1,28 +1,48 @@
 
 /**
- * @class Teselagen.bio.parsers.GenbankFeatureElement 
+ * @class Teselagen.bio.parsers.GenbankFeatureElement
  *
- * Stores an array of Feature Elements in {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}. 
+ * Stores an array of Feature Elements in {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}.
  * An Element (e.g. CDS, mRNA, promoter, etc) spans some part of the sequence.
- * Its indices are defined by GenbankFeatureLocation and it's annotations by 
- * {@link Teselagen.bio.parsers.GenbankFeatureQualifier}. 
- * 
- * Go to {@link http://www.insdc.org/documents/feature_table.html#3.4} for specifications of Genbank file. 
+ * Its indices are defined by GenbankFeatureLocation and it's annotations by
+ * {@link Teselagen.bio.parsers.GenbankFeatureQualifier}.
+ *
+ * Go to {@link http://www.insdc.org/documents/feature_table.html#3.4} for specifications of Genbank file.
  * This class does not assumes all locations of one feature are complement or not complement, join or not join.
- * This means: 
- * 		complement(join(2691..4571,4918..5163))
+ * This means:
+ *      complement(join(2691..4571,4918..5163))
  * is acceptable, and:
- * 		join(complement(4918..5163),complement(2691..4571))
+ *      join(complement(4918..5163),complement(2691..4571))
  * is also acceptable, but assumes every location (i.e. the feature) is a complement. However:
- * 		join(complement(4918..5163),2691..4571)
+ *      join(complement(4918..5163),2691..4571)
  * would not be acceptable and all location pairs would be stored as complement.  (Is this biologically possible?)
- * 
+ *
  * @author Diana Wong
  * @author Timothy Ham (original author)
  */
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
+
     requires: ["Teselagen.bio.util.StringUtil"],
+
+    /**
+     * @cfg {Object} config
+     * @cfg {String} keyword
+     * @cfg {String} strand
+     * @cfg {Boolean} complement
+     * @cfg {Boolean} join
+     * @cfg {Teselagen.bio.parsers.GenbankFeatureQualifier[]} featureQualifier
+     * @cfg {Teselagen.bio.parsers.GenbankFeatureLocation[]} featureLocation
+     */
+
+    config: {
+        keyword: null,
+        strand: null,
+        complement: false,
+        join: false,
+        featureQualifier: [],
+        featureLocation: []
+    },
 
     /**
      * Creates a new GenbankFeatureElement from inData.
@@ -37,146 +57,50 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * @memberOf GenbankFeatureElement
      */
     constructor: function (inData) {
-        var keyword;
-        var strand;
-        var complement = false;
-        var join = false;
-        var featureQualifier;
-        var featureLocation;
 
         if (inData !== undefined) {
-            keyword = inData.keyword || null;
-            strand = inData.strand || null;
-            complement = inData.complement || false;
-            join = inData.join || false;
-            featureQualifier = inData.featureQualifier || [];
-            featureLocation = inData.featureLocation || [];
-        }
-        /**
-         * Get keyword
-         * @returns {String} keyword
-         */
-        this.getKeyword = function() {
-            return keyword;
-        }
-        /**
-         * Set keyword
-         * @param {String} keyword
-         */
-        this.setKeyword = function(pKeyword) {
-            keyword = pKeyword;
-        }
-        /**
-         * Get strand
-         * @returns {String} strand
-         */
-        this.getStrand = function() {
-            return strand;
-        }
-        /**
-         * Set strand
-         * @param {String} strand
-         */
-        this.setStrand = function(pStrand) {
-            strand = pStrand;
-        }
-        /**
-         * Get featureQualifier
-         * This should be featureQualifiers since it is an array.
-         * @returns {Teselagen.bio.parsers.GenbankFeatureQualifier[]} featureQualifer An array of Feature Qualifiers
-         */
-        this.getFeatureQualifier = function() {
-            return featureQualifier;
-        }
-        /**
-         * Set featureQualifier
-         * This should be featureQualifiers since it is an array.
-         * @param {Teselagen.bio.parsers.GenbankFeatureQualifier[]} featureQualifer An array of Feature Qualifiers
-         */
-        this.setFeatureQualifier = function(pFeatureQualifier) {
-            featureQualifier = pFeatureQualifier;
-        }
-
-        /**
-         * Get Last GenbankFeatureElement in features array
-         * @returns {Teselagen.bio.parsers.GenbankFeatureElement} element
-         */
-        this.getLastFeatureQualifier = function() {
-            if (featureQualifier.length > 0) {
-                return featureQualifier[featureQualifier.length-1];
-            } else {
-                return null;
-            }
-        }
-
-        /**
-         * Add a single GenbankFeatureQualifier to the featureQualifier array
-         * @param {Teselagen.bio.parsers.GenbankFeatureQualifer} qualifier
-         */
-        this.addFeatureQualifier= function(pQual) {
-            if (featureQualifier === undefined ) {
-                featureQualifier = [];
-            }
-            featureQualifier.push(pQual);
-        }
-        /**
-         * Get featureLocation
-         * This should be featureLocations since it is an array.
-         * @returns {Teselagen.bio.parsers.GenbankFeatureLocation[]} featureLocation An array of Feature Locations
-         */
-        this.getFeatureLocation = function() {
-            return featureLocation;
-        }
-        /**
-         * Get featureLocation
-         * This should be featureLocations since it is an array.
-         * @param {Teselagen.bio.parsers.GenbankFeatureLocation[]} featureLocation An array of Feature Locations
-         */
-        this.setFeatureLocation = function(pFeatureLocation) {
-            featureLocation = pFeatureLocation;
-        }
-        /**
-         * Add a single GenbankFeatureLocation to the featureLocation array
-         * @param {Teselagen.bio.parsers.GenbankFeatureLocation} location
-         */
-        this.addFeatureLocation = function(pLoc) {
-            if (featureLocation === undefined ) {
-                featureLocation = [];
-            }
-            featureLocation.push(pLoc);
-        }
-
-        /**
-         * Get Complement
-         * @return {Boolean} complement
-         */
-        this.getComplement = function() {
-            return complement;
-        }
-
-        /**
-         * Set Complement to be true or false
-         * @param {Boolean} complement
-         */
-        this.setComplement = function(bool) {
-            complement = bool;
-        }
-
-        /**
-         * Get Join
-         * @return {Boolean} join
-         */
-        this.getJoin = function() {
-            return join;
-        }
-        /**
-         * Set Join to be true or false
-         * @param {Boolean} join
-         */
-        this.setJoin = function(bool) {
-            join = bool;
+            this.keyword = inData.keyword || null;
+            this.strand = inData.strand || null;
+            this.complement = inData.complement || false;
+            this.join = inData.join || false;
+            this.featureQualifier = inData.featureQualifier || [];
+            this.featureLocation = inData.featureLocation || [];
         }
         return this;
+    },
+
+    /**
+     * Get Last GenbankFeatureElement in features array
+     * @returns {Teselagen.bio.parsers.GenbankFeatureElement} element
+     */
+    getLastFeatureQualifier: function() {
+        if (this.featureQualifier.length > 0) {
+            return this.featureQualifier[this.featureQualifier.length-1];
+        } else {
+            return null;
+        }
+    },
+
+    /**
+     * Add a single GenbankFeatureQualifier to the featureQualifier array
+     * @param {Teselagen.bio.parsers.GenbankFeatureQualifer} qualifier
+     */
+    addFeatureQualifier: function(pQual) {
+        if (this.featureQualifier === undefined ) {
+            this.featureQualifier = [];
+        }
+        this.featureQualifier.push(pQual);
+    },
+
+    /**
+     * Add a single GenbankFeatureLocation to the featureLocation array
+     * @param {Teselagen.bio.parsers.GenbankFeatureLocation} location
+     */
+    addFeatureLocation: function(pLoc) {
+        if (this.featureLocation === undefined ) {
+            this.featureLocation = [];
+        }
+        this.featureLocation.push(pLoc);
     },
 
     /**
@@ -184,7 +108,6 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * SequenceManager and FeaturedDNA data models.
      * This searches for the first Qualifier with the name (in this order):
      *
-     * @param 
      * @returns {String} name Name of Qualifier as used in Sequence Manager, FeaturedDNA, and JbeiSeq
      */
     findLabel: function() {
@@ -206,34 +129,29 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * @returns {String} genbankString
      */
     toString: function() {
-        var keyword = this.getKeyword();
-        var featureLocation = this.getFeatureLocation();
-        var featureQualifier = this.getFeatureQualifier();
-        var join = this.getJoin()
-        var complement = this.getComplement();
         
-        var line = "     " + Teselagen.StringUtil.rpad(keyword, " ", 16);
+        var line = "     " + Teselagen.StringUtil.rpad(this.keyword, " ", 16);
         var loc = "";
         var qual = "";
         
-        for (var i=0; i < featureLocation.length; i++) {
-            loc += featureLocation[i].toString();
-            if (i<featureLocation.length - 1) { 
+        for (var i=0; i < this.featureLocation.length; i++) {
+            loc += this.featureLocation[i].toString();
+            if (i < this.featureLocation.length - 1) {
                 loc += ",";
             } else {
                 //loc += "\n";
             }
         }
-        if (join === true) {  //explicit true because if complement is passed in a string, this won't work
-            loc = "join(" + loc + ")"; 
+        if (this.join === true) {  //explicit true because if complement is passed in a string, this won't work
+            loc = "join(" + loc + ")";
         }
-        if (complement === true) {
-            loc = "complement(" + loc + ")"; 
+        if (this.complement === true) {
+            loc = "complement(" + loc + ")";
         }
 
-        for (var i=0; i < featureQualifier.length; i++) {
-            qual += featureQualifier[i].toString();
-            if (i<featureQualifier.length - 1) { 
+        for ( i=0; i < this.featureQualifier.length; i++) {
+            qual += this.featureQualifier[i].toString();
+            if (i < this.featureQualifier.length - 1) {
                 qual += "\n";
             }
         }
@@ -247,33 +165,59 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * @returns {Object} json
      */
     toJSON: function() {
-        var keyword = this.getKeyword();
-        var strand = this.getStrand();
-        var featureLocation = this.getFeatureLocation();
-        var featureQualifier = this.getFeatureQualifier();
-        var join = this.getJoin()
-        var complement = this.getComplement();
-        
+        var i;
         var json = {
-                keyword: keyword,
+                keyword: this.keyword,
                 //complement: complement,
-                strand: strand
-        }
+                strand: this.strand
+        };
 
-        if (featureLocation !== undefined && featureLocation.length > 0) {
+        if (this.featureLocation !== undefined && this.featureLocation.length > 0) {
             json["location"] = [];
-            for (var i = 0; i<featureLocation.length; i++) {
-                json["location"].push(featureLocation[i]);
+            for ( i = 0; i < this.featureLocation.length; i++) {
+                json["location"].push(this.featureLocation[i]);
             }
         }
 
-        if ( featureQualifier !== undefined && featureQualifier.length > 0) {
+        if ( this.featureQualifier !== undefined && this.featureQualifier.length > 0) {
             json["qualifier"] =[];
-            for (var i = 0; i<featureQualifier.length; i++) {
-                json["qualifier"].push(featureQualifier[i]);
+            for ( i = 0; i < this.featureQualifier.length; i++) {
+                json["qualifier"].push(this.featureQualifier[i]);
             }
         }
         return json;
+    },
+
+    /**
+     * Converts GenBank JSON back to GenBank model
+     * @params {JSON} json GenbankFeatureElement in JSON form
+     * @returns {Teselagen.bio.model.GenbankFeatureElement}
+     */
+    fromJSON: function(json) {
+        var i, tmp;
+
+        this.keyword    = json["keyword"];
+        this.strand     = json["strand"];
+        this.complement = json["complement"];
+        this.join       = json["join"];
+
+        this.featureLocation = [];
+        var loc = json["location"];
+        for ( i = 0; i < sub.length; i++) {
+            tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation");
+            tmp.fromJSON(loc);
+            this.featureLocation.push(tmp);
+        }
+
+        this.featureQualifier = [];
+        var qual = json["qualifier"];
+        for ( i = 0; i < sub.length; i++) {
+            tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier");
+            tmp.fromJSON(qual);
+            this.featureQualifier.push(tmp);
+        }
+
+        return this;
     }
 
 
