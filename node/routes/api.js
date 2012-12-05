@@ -229,7 +229,7 @@ module.exports = function (app, express) {
         });
     }
     else {
-        Project.remove(function(err) {
+        Project.remove({user_id:req.user._id}, function(err) {
             if (err) {
                 errorHandler(err, req, res);
             }
