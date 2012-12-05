@@ -343,7 +343,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             value: val
         });
         mainKey.addSubKeyword(result);
-        console.log(result);
+        //console.log(result);
         return result;
     },
 

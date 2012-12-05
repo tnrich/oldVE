@@ -8,7 +8,7 @@
 
 Ext.define("Teselagen.bio.parsers.Genbank", {
 
-    /** 
+    /**
      * Creates new Genbank
      * @returns {Genbank}
      * @memberOf Genbank
@@ -16,19 +16,19 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
     constructor: function () {
         var that = this;
         /**
-         * @property {String} [keywordTags] Array of all the GenbankKeyword names in a Genbank class. 
+         * @property {String} [keywordTags] Array of all the GenbankKeyword names in a Genbank class.
          * This is redundant since iterating through keywords[i].keyword will regenerate this list.
          * @deprecated
          */
-        var keywordsTag	= [];	// List of Keywords being used
+        var keywordsTag = [];   // List of Keywords being used
         /**
          * @property {GenbankKeywords} [keywords] Array of all the GenbankKeyword objects in a Genbank class
-         * (which also includes {@link Teselagen.bio.parsers.GenbankLocusKeyword}, 
-         * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword}, 
-         * {@link Teselagen.bio.parsers.GenbankOriginKeyword} which inherit from 
+         * (which also includes {@link Teselagen.bio.parsers.GenbankLocusKeyword},
+         * {@link Teselagen.bio.parsers.GenbankFeaturesKeyword},
+         * {@link Teselagen.bio.parsers.GenbankOriginKeyword} which inherit from
          * {@link Teselagen.bio.parsers.GenbankKeyword}).
          */
-        var keywords	= [];	
+        var keywords    = [];
 
 
         // ======== Getter and Setter function ========//

@@ -593,9 +593,9 @@ Ext.onReady(function() {
             it("Parses KEYWORDS? ';;;;;' case",function(){
                 var line =  "KEYWORDS    ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; \n" +
                             "; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ";
-                console.log("blah");
+                //console.log("blah");
                 var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                console.log(tmp.toString());
+                //console.log(tmp.toString());
                 expect(tmp.getKeywords().length).toBe(1); // does not turn second line into a keyword
             });
 
