@@ -130,7 +130,6 @@ body {
 .header_btn_over {
   background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
   color: #fafafa;
-  border: #0084b4;
 }
 
 .header_btn #projectmanager_btn-btnInnerEl, .header_btn #headerUserIcon-btnInnerEl {

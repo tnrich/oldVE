@@ -100,6 +100,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             cls: 'forcedAssemblyComboBox',
                             name: 'fas',
                             anchor: '100%',
+                            value: 'None',
                             store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
                                     'Embed_in_primer_reverse',
                                     'Embed_in_primer_forward', 'Annealed Oligos']
