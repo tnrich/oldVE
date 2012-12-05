@@ -4,8 +4,8 @@
   , "private": true
   , "dependencies": {
       "bson":"latest"
+    , "chai":"*"
     , "commander":"1.0.5"
-    , "expect.js":"*"
     , "express": "=3.0.0rc3"
     , "jade": ">= 0.0.1"
     , "mongodb":">=1.1.0-beta"
