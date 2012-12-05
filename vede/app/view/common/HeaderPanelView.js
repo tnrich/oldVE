@@ -47,11 +47,11 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 			cls: 'header_btn',
 			overCls: 'header_btn_over'
 		},
+		{ xtype: 'tbspacer', width: 5 },
 		{
 			xtype: 'button',
 			flex: 1,
 			styleHtmlContent: false,
-			text: 'user_Name',
 			cls: 'header_btn',
 			overCls: 'header_btn_over',
 			id: 'headerUserIcon',
