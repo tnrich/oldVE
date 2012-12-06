@@ -5,6 +5,56 @@ Ext.define("Vede.controller.ProjectController", {
     openProject: function (project) {
         Teselagen.manager.ProjectManager.openProject(project);
     },
+
+    renderProjectsTree: function(){
+        //Ext.getCmp('projectDesignTab').hide()
+        Ext.getCmp('projectTreeTab').hide();
+        var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
+        rootNode.removeAll();
+        var projects = Teselagen.manager.ProjectManager.projects;
+        projects.each(function(project) {
+            var projectNode = rootNode.appendChild({
+                text: project.data.name
+            });
+
+            var deprojects = project.deprojects();
+            deprojects.load({callback: function(){
+                deprojects.each(function(deproject){
+                    var deprojectnode = projectNode.appendChild({
+                        text: deproject.data.name,
+                        leaf: false,
+                        id: deproject.data.id,
+                        hrefTarget: 'opende',
+                        icon: "resources/images/ux/design-tree-icon-leaf.png"
+                    });
+
+                    var j5resultsNode = deprojectnode.appendChild({
+                        text: "J5 Reports",
+                        leaf: false,
+                        id: deproject.data.id,
+                        hrefTarget: 'j5reports',
+                        icon: "resources/images/ux/j5-tree-icon-parent"
+                    });
+
+                    var j5runs = deproject.j5runs();
+                    j5runs.load({callback: function(){
+                        deproject.j5runs().each(function(j5run){
+                            var j5resultNode = j5resultsNode.appendChild({
+                                text: j5run.data.date,
+                                leaf: true,
+                                id: deproject.data.id,
+                                hrefTarget: 'j5report'
+                            });
+                        });
+
+                    }});
+                });
+
+            }});
+
+        });
+    },
+
     renderTree: function (deprojects) {
 
         Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
@@ -20,14 +70,6 @@ Ext.define("Vede.controller.ProjectController", {
                 hrefTarget: 'opende',
                 icon: "resources/images/ux/design-tree-icon-leaf.png",
                 expanded: true
-            });
-
-            designNode.appendChild({
-                text: "Design",
-                leaf: true,
-                id: deproject.data.id,
-                hrefTarget: 'opende',
-                icon: "resources/images/ux/design-tree-icon-leaf.png",
             });
 
             designNode.appendChild({
@@ -71,6 +113,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onProjectPanelItemClick: function (store, record) { 
+        console.log(record);
         switch(record.data.hrefTarget)
         {
             case 'newde':
@@ -107,11 +150,14 @@ Ext.define("Vede.controller.ProjectController", {
 
     init: function() {
         this.callParent();
-        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, 
-                            this.openProject, this);
+        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
+        this.application.on("renderProjectsTree", this.renderProjectsTree, this);
 
         this.control({
             '#projectDesignPanel': {
+                itemclick: this.onProjectPanelItemClick
+            },
+            '#projectTreePanel': {
                 itemclick: this.onProjectPanelItemClick
             },
             "#newProject_Btn": {

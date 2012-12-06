@@ -99,6 +99,21 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         xtype: 'panel',
         overCls: 'project-tab-focus',
         border: 0,
+        id: 'projectTreeTab',
+        layout: {
+            type: 'fit'
+        },
+        minButtonWidth: 32,
+        items: [{
+            xtype: 'treepanel',
+            border: 0,
+            id: 'projectTreePanel',
+            rootVisible: false
+        }]
+    }, {
+        xtype: 'panel',
+        overCls: 'project-tab-focus',
+        border: 0,
         id: 'projectDesignTab',
         layout: {
             type: 'fit'

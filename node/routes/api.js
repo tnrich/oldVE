@@ -34,22 +34,7 @@ module.exports = function (app, express) {
         next();
       });
     } else {
-      if(!app.testing.enabled) {
-        res.send('Wrong credentials');
-      } else {
-        /*
-        console.log("Logged as Guest user");
-        authenticate("Guest", "", function (err, user) {
-          req.session.regenerate(function () {
-            req.session.user = user;
-            req.user = user;
-            next();
-          });
-
-        });
-        */
         res.send("Wrong credentials",401);
-      }
     }
   };
 
@@ -289,6 +274,7 @@ module.exports = function (app, express) {
     Project.findById(id).populate('deprojects').exec(function(err,proj){
       proj.deprojects.forEach(function(deproj){
         deproj.design = undefined;
+        deproj.j5runs = undefined;
       });
       //console.log("Returning "+proj.deprojects.length+" deprojects");
       res.json({"projects":proj.deprojects});
@@ -545,6 +531,28 @@ module.exports = function (app, express) {
     var id = JSON.parse(req.query.filter)[0].value;
     DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
       res.json({'j5runs':deproject.j5runs});
+    });
+  });
+
+  //READ
+  app.get('/user/projects/deprojects/j5runs', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    var id = JSON.parse(req.query.filter)[0].value;
+    DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
+      res.json({'j5runs':deproject.j5runs});
+    });
+  });
+
+  //GetTree
+  app.get('/user/tree', restrict, function (req, res) {
+    var User = app.db.model("User");
+    User.findById(req.user._id).populate('projects')
+    .exec(function (err, user) {
+      user.projects.forEach(function(proj){
+        proj.deprojects = undefined;
+        proj.veprojects = undefined;
+      });
+      res.json({"user":user});
     });
   });
 

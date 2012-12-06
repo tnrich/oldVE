@@ -88,17 +88,8 @@ module.exports = function (app, express) {
 
   app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
     console.log('MONGODB: MONGODB is online');
-    if(app.program.examples) app.development.reloadExamples();
-    if(app.program.guest) app.development.reloadUsers();
+    require('./schemas/DBSchemas.js')(app);
   });
-
-  // Load MONGOOSE SCHEMAS
-  //require('./schemas/schemas.js')(app);
-  require('./schemas/DBSchemas.js')(app);
-  
-
-
-
 
   // MYSQL CONNECTION
   if(app.program.stage || app.program.production) {
