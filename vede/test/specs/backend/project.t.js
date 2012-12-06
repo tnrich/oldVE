@@ -10,21 +10,25 @@ Ext.require([
      "Teselagen.manager.ProjectManager",
      "Teselagen.manager.AuthenticationManager",
      "Teselagen.manager.ProjectManager",
-     "Teselagen.manager.SessionManager"]);
+     "Teselagen.manager.SessionManager",
+     "Teselagen.store.ProjectStore"]);
 
 Ext.onReady(function () {
-    var project, projects, user, userProjects, projectById;
+    var project, projects, user, userProjects, projectById, projStore;
+    var isLoggedIn = false;
+    var isTestDataDeleted = false;
+    var isTestSetup = false;
+    var isUserLoaded = false;
     var projectCreated = false;
     var projectEdited = false;
-    var projectEditCheck = false;
+    var projectEditCheck1 = false;
+    var projectEditCheck2 = false;
     var projectRemoved = false;
     var projectLoaded = false;
     var constants = Teselagen.constants.Constants;
     var projectManager = Teselagen.manager.ProjectManager;
     var authenticationManager = Teselagen.manager.AuthenticationManager;
     var sessionManager = Teselagen.manager.SessionManager;
-    var Project = Teselagen.models.Project;
-    var projectAction = Project.getProxy().action;
 
     describe("Project server tests.", function() {
 
@@ -33,31 +37,85 @@ Ext.onReady(function () {
             sessionManager.setEnv(constants.ENV_PROD);
         });
 
-        it("Login and load user", function () {
+        it("Login", function() {
             runs(function() {
                 authenticationManager.sendAuthRequest({
                     username: "rpavez",
                     password: "",
                     server: constants.API_URL
+                }, function(pSuccess) {
+                    if (pSuccess) {
+                        isLoggedIn = true;
+                    }
                 });
             });
+        });
+
+        it("Clear test data", function() {
             waitsFor(function() {
-                return !Ext.isEmpty(authenticationManager.authResponse);
-            }, "authentication");
+                return isLoggedIn;
+            }, "login", 500);
+            runs(function() {
+                projStore = Ext.create("Teselagen.store.ProjectStore");
+                projStore.load(function() {
+                    var projs = projStore.getRange();
+                    if (!Ext.isEmpty(projs)) {
+                        projStore.remove(projs);
+                        projStore.sync({
+                            success: function() {
+                                expect(projStore.getCount()).toBe(0);
+                                isTestDataDeleted = true;
+                            }
+                        });
+                    }
+                    else {
+                        isTestDataDeleted = true;
+                    }
+                });
+            });
+        });
+
+        it("Setup test data", function() {
+            waitsFor(function() {
+                return isTestDataDeleted;
+            }, "login", 500);
+            runs(function() {
+                projStore.add({
+                    name: "My Project #1",
+                    dateCreated: new Date("11/14/12"),
+                    dateModified: new Date("11/14/12")
+                });
+                projStore.sync({
+                    success: function() {
+                        isTestSetup = true;
+                    }
+                });
+            });
+        });
+
+        it("Load user", function () {
+            waitsFor(function() {
+                return isTestSetup;
+            }, "test data setup");
             runs(function () {
-                projectManager.loadUser();
+                projectManager.loadUser(function(pSuccess) {
+                    if (pSuccess) {
+                        isUserLoaded = true;
+                    }
+                });
             });
         });
 
         it("Check user", function () {
             waitsFor(function() {
-                return !Ext.isEmpty(projectManager.currentUser);
+                return isUserLoaded;
             }, "currentUser", 500);
             runs(function() {
                 user = projectManager.currentUser;
                 expect(user.get("username")).toBe("rpavez");
             });
         });
+
 
         it("Check projects", function () {
             waitsFor(function () {
@@ -66,7 +124,7 @@ Ext.onReady(function () {
             runs(function () {
                 projects = projectManager.projects;
                 project = projects.first();
-                expect(project.get("name")).toBe("My Project #2");
+                expect(project.get("name")).toBe("My Project #1");
             });
         });
         
@@ -76,17 +134,21 @@ Ext.onReady(function () {
             }, "user", 500);
             runs(function () {
                 project = Ext.create("Teselagen.models.Project", {
-                    name: "My Project #3",
-                    dateCreated: new Date("11/14/12"),
-                    dateModified: new Date("11/14/12")
+                    name: "My Project #2",
+                    dateCreated: new Date("11/15/12"),
+                    dateModified: new Date("11/15/12")
                 });
                 userProjects = user.projects();
                 userProjects.add(project);
                 userProjects.sync({
                     success: function(){
                         projectCreated = true;
-                    }});
+                    }
+                });
             });
+        });
+        
+        it("Check new project", function() {
             waitsFor(function() {
                 return projectCreated;
             }, "projectCreated", 500);
@@ -95,13 +157,8 @@ Ext.onReady(function () {
                 // Why = 1?
                 expect(userProjects.getTotalCount()).toBe(1);
                 expect(project.getId()).toBeDefined();
-                Project.getProxy().action="project";
-                Teselagen.models.Project.load(project.getId(), {
+                projStore.load( {
                     callback: function() {
-                        Project.getProxy().action=projectAction;
-                    },
-                    success: function(record) {
-                        projectById = record;
                         projectLoaded = true;
                     }
                 });
@@ -110,7 +167,9 @@ Ext.onReady(function () {
                 return projectLoaded;
             }, "projectLoaded", 500);
             runs(function() {
-                expect(projectById.get("name")).toBe("My Project #3");
+                expect(projStore.getCount()).toBe(2);
+                projectById = projStore.findRecord("id", project.getId());
+                expect(projectById.get("name")).toBe("My Project #2");
             });
         });
 
@@ -120,7 +179,7 @@ Ext.onReady(function () {
             }, "projectLoaded", 500);
             runs(function () {
                 expect(project.dirty).toBe(false);
-                project.set("name","changed name");
+                project.set("name","My Project #3");
                 expect(project.dirty).toBe(true);
                 project.save({
                     success: function(){
@@ -128,34 +187,34 @@ Ext.onReady(function () {
                     }
                 });
             });
+        });
+        
+        it("Check edited project", function() {
             waitsFor(function() {
                 return projectEdited;
             }, "projectEdited", 500);
             runs(function() {
                 expect(project.dirty).toBe(false);
-                Project.getProxy().action="project";
-                Teselagen.models.Project.load(project.getId(), {
+                projStore.load( {
                     callback: function() {
-                        Project.getProxy().action=projectAction;
-                    },
-                    success: function(record) {
-                        projectById = record;
-                        projectEditCheck = true;
+                        projectEditCheck1 = true;
                     }
                 });
             });
             waitsFor(function() {
-                return projectEditCheck;
-            }, "projectEditCheck", 500);
+                return projectEditCheck1;
+            }, "projectEditCheck1", 500);
             runs(function() {
-                expect(projectById.get("name")).toBe("changed name");
+                projectById = projStore.findRecord("id", project.getId());
+                expect(projectById.get("name")).toBe("My Project #3");
+                projectEditCheck2=true;
             });
         });
 
         it("Remove Project", function () {
             waitsFor(function() {
-                return projectEdited;
-            }, "projectEdited", 500);
+                return projectEditCheck2;
+            }, "projectEditCheck2", 500);
             runs(function () {
                 userProjects.remove(project);
                 userProjects.sync({
@@ -170,6 +229,11 @@ Ext.onReady(function () {
             runs(function() {
                 expect(userProjects.getCount()).toBe(1);
                 expect(userProjects.getTotalCount()).toBe(1);
+                projStore.load(function() {
+                    var proj = projStore.first();
+                    expect(projStore.getCount()).toBe(1);
+                    expect(proj.get("name")).toBe("My Project #1");
+                });
             });
         });
 
