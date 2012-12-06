@@ -48,7 +48,7 @@ describe("/api.", function() {
             });
         });
         it("Post /user/projects", function(done) {
-            date = Date.now();
+            date = new Date().toISOString();
             request.post({
                 uri: API_URL+"user/projects",
                 form: {name:"MyProject1", dateCreated:date, dateModified:date},
@@ -97,8 +97,8 @@ describe("/api.", function() {
                 var proj = body.projects[0];
                 expect(res.statusCode).to.equal(200);
                 expect(proj.name).to.equal("MyProject1");
-                expect(proj.dateCreated).to.equal(date.toString());
-                expect(proj.dateModified).to.equal(date.toString());
+                expect(proj.dateCreated).to.equal(date);
+                expect(proj.dateModified).to.equal(date);
                 done();
             });
         });
