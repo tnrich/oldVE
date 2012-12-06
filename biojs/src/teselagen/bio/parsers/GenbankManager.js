@@ -231,6 +231,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             } else if (lineArr[i].match(/^ds/gi)) {
                 strand = "ds";
             }
+            //console.log(strand);
         }
 
 
