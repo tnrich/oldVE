@@ -11,6 +11,7 @@ Ext.define("Teselagen.models.J5Bin", {
         "Teselagen.models.Part",
         "Teselagen.constants.Constants",
         "Teselagen.constants.SBOLIcons",
+        "Teselagen.utils.FormatUtils",
         "Teselagen.utils.NullableInt"
     ],
 
