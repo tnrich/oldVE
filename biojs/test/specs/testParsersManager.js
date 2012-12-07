@@ -24,7 +24,7 @@ Ext.onReady(function() {
 
     describe("ParsersManager Unit Testing:", function() {
         describe("Teselagen.bio.parsers.ParsersManager.", function() {
-            var seqStr, seq;
+            /*var seqStr, seq;
             var feat1, note1;
             var sm;
             var fastaStr, fasta;
@@ -32,7 +32,7 @@ Ext.onReady(function() {
             var gb = null;
             //var gbA;
             var gbB;
-            var jbeiXmlUrl;
+            var jbeiXmlUrl;*/
 
             beforeEach(function() {
                 seqStr = "GATTACA";
@@ -96,7 +96,7 @@ Ext.onReady(function() {
             it("fastaToGenbank()", function() {
                 var newGb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(fastaStr);
 
-                console.log(newGb.getLocus());
+                //console.log(newGb.getLocus());
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
 
                 expect(newGb.getOrigin().getSequence()).toBe("gattaca");
@@ -295,7 +295,7 @@ Ext.onReady(function() {
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(100);
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(6300);
 
-                console.log(json);
+                //console.log(json);
 
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:attribute"].length).toBe(1);
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:attribute"][0]["_name"]).toBe("translation");

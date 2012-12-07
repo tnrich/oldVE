@@ -28,7 +28,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
         preStart: "",
         end: 0,
         preEnd: "",
-        to: ""
+        to: ".."
     },
 
     /**
@@ -48,12 +48,12 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
      */
     constructor: function (inData) {
 
-        var start       = "";
+        /*var start       = "";
         var preStart    = "";   // stores partials
         var end         = "";
         var preEnd      = "";   // stores partials
         var to          = "";   // stores how start and end are joined. ie start TO end
-        var tmp;
+        var tmp;*/
 
         if (inData) {
             if (inData.start !== undefined) {
@@ -126,12 +126,19 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
     toJSON : function() {
         
         var json = {
-                //preStart: this.preStart,
-                start: this.start,
-                to: this.to,
-                //preEnd: this.preEnd,
-                end: this.end
+            //preStart: this.preStart,
+            start: this.start,
+            to: this.to,
+            //preEnd: this.preEnd,
+            end: this.end
         };
+
+        if (this.preStart !== "") {
+            json.preStart = this.preStart;
+        }
+        if (this.preEnd !== "") {
+            json.preEnd = this.preEnd;
+        }
         return json;
     },
 
@@ -141,12 +148,20 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
      * @returns {Teselagen.bio.model.GenbankFeatureLocation}
      */
     fromJSON: function(json) {
-        this.keyword    = json["keyword"];
+
         //this.preStart   = json["preStart"];
         this.start      = json["start"];
         this.to         = json["to"];
         //this.preEnd     = json["preEnd"];
         this.end        = json["end"];
+
+        if (json.preStart !== "") {
+            this.preStart = json.preStart;
+        }
+        if (json.preEnd !== "") {
+            this.preEnd = json.preEnd;
+        }
+
         return this;
     }
 

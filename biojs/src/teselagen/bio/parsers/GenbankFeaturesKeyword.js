@@ -86,9 +86,9 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
         if (this.value  !== null) {
             json["value"] = this.value;
         }
-        json["elements"] = [];
+        json["featuresElements"] = [];
         for (var i=0; i < this.featuresElements.length; i++) {
-            json["elements"].push(this.featuresElements[i]);
+            json["featuresElements"].push(this.featuresElements[i].toJSON());
         }
 
 
@@ -101,8 +101,25 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
      * @returns {Teselagen.bio.model.GenbankFeatureQualifier}
      */
     fromJSON: function(json) {
-        this.keyword    = json["keyword"];
-        this.featuresElements = json["elements"];
+        this.keyword = json["keyword"];
+
+        this.featuresElements = [];
+
+        var elms = json["featuresElements"];
+
+        if (elms === undefined) {
+            return this;
+        }
+
+        //console.log(json);
+        //console.log(json["keyword"]);
+        //console.log(json["featuresElements"]);
+
+        for (var i = 0; i < elms.length; i++) {
+            var elm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement");
+            elm.fromJSON(elms[i]);
+            this.featuresElements.push(elm);
+        }
         return this;
     }
 

@@ -77,9 +77,10 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
      * @returns {Object} json
      */
     toJSON: function() {
+
         var json = {
-                keyword: this.keyword,
-                value: this.value
+            keyword: this.keyword,
+            value: this.value
         };
         return json;
     },
@@ -90,8 +91,11 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
      * @returns {Teselagen.bio.parsers.GenbankSubKeywords}
      */
     fromJSON: function(json) {
+        //console.log("RIGHT HERE");
+
         this.keyword    = json["keyword"];
         this.value      = json["value"];
+
         return this;
     }
 

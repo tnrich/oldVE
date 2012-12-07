@@ -167,6 +167,8 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
         this.setLinear(json["linear"]);
         this.setDivisionCode(json["divisionCode"]);
         this.setDate(json["date"]);
+
+        return this;
     }
 
 });

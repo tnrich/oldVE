@@ -301,6 +301,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             date: date
         });
 
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankLocusKeyword");
+        }
+
         result.setKeyword(this.self.LOCUS_TAG);
         gb.addKeyword(result);
         gb.addKeywordTag(this.self.LOCUS_TAG);
@@ -321,6 +325,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             keyword: key,
             value: val
         });
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankKeyword");
+        }
+
         gb.addKeyword(result);
         gb.addKeywordTag(key);
 
@@ -343,6 +352,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             keyword: key,
             value: val
         });
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankSubKeyword");
+        }
+
         mainKey.addSubKeyword(result);
         //console.log(result);
         return result;
@@ -368,6 +382,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             line = line.replace(/[\s]*[0-9]*/g,"");
             result.appendSequence(line);
         }
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankOriginKeyword");
+        }
+
         return result;
     },
 
@@ -440,6 +459,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 result.getLastElement().getLastFeatureQualifier().appendValue(Ext.String.trim(line).replace(/\"/g, ""));
             }
         }
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankFeaturesKeyword");
+        }
+
         return result;
     },
 
@@ -488,6 +512,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             // This may not be neccesary with the inclusion of join and complement booleans.
         }
 
+        if (location === null || location === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankFeatureLocation");
+        }
+
         return location;
     },
 
@@ -506,15 +534,22 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         lineArr = newLine.split(/=\"|=/);
 
         var quoted = false;
+        var val = lineArr[1];
         if (line.match(/=\"/g)) {
             quoted = true;
+        } else {
+            val = parseInt(val);
         }
 
         featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
             name: lineArr[0],
-            value: lineArr[1],
+            value: val,
             quoted: quoted
         });
+
+        if (featQual === null || featQual === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankFeatureQualifier");
+        }
         return featQual;
     },
 

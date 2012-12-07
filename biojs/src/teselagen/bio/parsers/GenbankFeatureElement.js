@@ -37,7 +37,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
     config: {
         keyword: null,
-        strand: null,
+        strand: 1,
         complement: false,
         join: false,
         featureQualifier: [],
@@ -60,7 +60,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         if (inData !== undefined) {
             this.keyword = inData.keyword || null;
-            this.strand = inData.strand || null;
+            this.strand = inData.strand || 1;
             this.complement = inData.complement || false;
             this.join = inData.join || false;
             this.featureQualifier = inData.featureQualifier || [];
@@ -101,6 +101,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
             this.featureLocation = [];
         }
         this.featureLocation.push(pLoc);
+        
+        if (this.featureLocation.length > 1) {
+            this.join = true;
+        }
     },
 
     /**
@@ -168,23 +172,24 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
         var i;
         var json = {
                 keyword: this.keyword,
-                //complement: complement,
-                strand: this.strand
+                strand: this.strand,
+                complement: this.complement,
+                join: this.join
         };
 
-        if (this.featureLocation !== undefined && this.featureLocation.length > 0) {
+        //if (this.featureLocation !== undefined && this.featureLocation.length > 0) {
             json["location"] = [];
             for ( i = 0; i < this.featureLocation.length; i++) {
-                json["location"].push(this.featureLocation[i]);
+                json["location"].push(this.featureLocation[i].toJSON());
             }
-        }
+        //}
 
-        if ( this.featureQualifier !== undefined && this.featureQualifier.length > 0) {
+        //if ( this.featureQualifier !== undefined && this.featureQualifier.length > 0) {
             json["qualifier"] =[];
             for ( i = 0; i < this.featureQualifier.length; i++) {
-                json["qualifier"].push(this.featureQualifier[i]);
+                json["qualifier"].push(this.featureQualifier[i].toJSON());
             }
-        }
+        //}
         return json;
     },
 
@@ -203,18 +208,24 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
         this.featureLocation = [];
         var loc = json["location"];
-        for ( i = 0; i < sub.length; i++) {
-            tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation");
-            tmp.fromJSON(loc);
-            this.featureLocation.push(tmp);
+        //console.log(loc);
+        if (loc !== undefined) {
+            for ( i = 0; i < loc.length; i++) {
+                tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureLocation");
+                tmp.fromJSON(loc[i]);
+                //console.log(tmp);
+                this.featureLocation.push(tmp);
+            }
         }
 
         this.featureQualifier = [];
         var qual = json["qualifier"];
-        for ( i = 0; i < sub.length; i++) {
-            tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier");
-            tmp.fromJSON(qual);
-            this.featureQualifier.push(tmp);
+        if (qual !== undefined) {
+            for ( i = 0; i < qual.length; i++) {
+                tmp = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier");
+                tmp.fromJSON(qual[i]);
+                this.featureQualifier.push(tmp);
+            }
         }
 
         return this;

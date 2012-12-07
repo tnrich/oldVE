@@ -20,7 +20,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
     config: {
         name: "",
         value: "",
-        quoted: false
+        quoted: true
     },
 
     /**
@@ -34,9 +34,15 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
     constructor: function (inData) {
 
         if (inData !== undefined) {
-            this.name = inData.name || null;
-            this.value = inData.value || null;
-            this.quoted = inData.quoted || false; // boolean
+            this.name = inData.name || "";
+            this.value = inData.value || "";
+            this.quoted = inData.quoted || true; // boolean
+        }
+
+        if (typeof(this.value) === "string") {
+            this.quoted = true;
+        } else {
+            this.quoted = false;
         }
         return this;
     },
@@ -77,13 +83,10 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
      * @returns {Object} json
      */
     toJSON : function() {
-        var name    = this.getName();
-        var value   = this.getValue();
-        var quoted  = this.getQuoted();
-        
+
         var json = {
-                name: this.name,
-                value: this.value
+            name: this.name,
+            value: this.value
         };
         return json;
     },
@@ -94,6 +97,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
      * @returns {Teselagen.bio.model.GenbankFeatureQualifier}
      */
     fromJSON: function(json) {
+        //console.log(json);
         this.name   = json["name"];
         this.value  = json["value"];
 

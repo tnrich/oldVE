@@ -84,8 +84,8 @@ Ext.onReady(function() {
             });
 
             it("Parses toJSON?",function(){
-                var json = { "keyword": "FEATURES", "elements": [ { "keyword": "CDS", "strand": -1, "location": [ { "start": 7, "to": "..", "end": 885 } ], "qualifier": [ { "name": "label", "value": "araC" } ] } ] };
-                expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("FEATURES"), null, "  "));
+                var json = { "keyword": "FEATURES", "featuresElements": [ { "keyword": "CDS", "strand": -1, "complement": true, "join": false, "location": [ { "start": 7, "to": "..", "end": 885 } ], "qualifier": [ { "name": "label", "value": "araC" } ] } ] };
+                expect(JSON.stringify(tmp.findKeyword("FEATURES"), null, "  ")).toBe(JSON.stringify(json, null, "  "));
             });
 
             it("Parses toString? (Icing on the cake. This does not have to hold due to wrap issues.",function(){
@@ -138,11 +138,6 @@ Ext.onReady(function() {
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getQuoted()).toBeTruthy();
             });
 
-            it("Parses toJSON?",function(){
-                var json = { "keyword": "FEATURES", "elements": [ { "keyword": "CDS", "strand": -1, "location": [ { "start": 7, "to": "..", "end": 885 } ], "qualifier": [ { "name": "label", "value": "araC" } ] }, { "keyword": "fakemRNA", "strand": 1, "location": [ { "start": 265, "to": "..", "end": 402 }, { "start": 673, "to": "..", "end": 781 }, { "start": 911, "to": "..", "end": 1007 }, { "start": 1088, "to": "..", "end": 1215 }, { "start": 1377, "to": "..", "end": 1573 }, { "start": 1866, "to": "..", "end": 2146 }, { "start": 2306, "to": "..", "end": 2634 }, { "start": 2683, "to": "..", "end": 2855 } ], "qualifier": [ { "name": "translation", "value": "MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQFVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVDLISGDDKILNGVYSQYEEGESIFGSLF" } ] } ] };
-                expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("FEATURES"), null, "  "));
-            });
-
         });
 
         describe("Integrative: parseOrigin()?", function() {
@@ -168,42 +163,42 @@ Ext.onReady(function() {
         describe("Integrative: Partial file (top part of pj5_00028.gb) parsing from GenbankManager.js:?", function() {
             beforeEach(function() {
                 line = '' +
-'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n' +
-'ACCESSION   pj5_00028 Accession\n' +
-'VERSION     pj5_00028 version.1\n' +
-'DEFINITION  pj5_00028 Definition\n'+
-'KEYWORDS    .\n' +
-'SOURCE      Saccharomyces cerevisiae (baker\'s yeast)\n' +
-'  ORGANISM  Saccharomyces cerevisiae\n' +
-'            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
-'            Saccharomycetales; Saccharomycetaceae; Saccharomyces.\n' +
-'REFERENCE   1  (bases 1 to 5028)\n' +
-'  AUTHORS   Torpey,L.E., Gibbs,P.E., Nelson,J. and Lawrence,C.W.\n' +
-'  TITLE     Cloning and sequence of REV7, a gene whose function is required for\n' +
-'            DNA damage-induced mutagenesis in Saccharomyces cerevisiae\n' +
-'  JOURNAL   Yeast 10 (11), 1503-1509 (1994)\n' +
-'  PUBMED    7871890\n' +
-'FEATURES             Location/Qualifiers\n' +
-'     CDS             complement(7..885)\n' +
-'                     /label="araC"\n' +
-'     promoter        complement(1036..1064)\n' +
-'                     /label="araC promoter"\n' +
-'     CDS             >1236..<2090\n' +
-'                     /vntifkey="4"\n' +
-'                     /vntifkey2=4\n' +
-'     fakemRNA        join(<265..402,673..781,911..1007,1088..1215,\n' +
-'                     1377..1573,1866..2146,2306..2634,2683..>2855)\n' +
-'     fakeCDS         complement(3300..4037)\n' +
-'                     /translation="MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQ\n' +
-'                     FVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVD\n' +
-'                     LISGDDKILNGVYSQYEEGESIFGSLF"\n' +
-'ORIGIN      \n' +
-'        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n' +
-'       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n' +
-'\n'+
-'\n'+
-'//';
-                tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                    'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n' +
+                    'ACCESSION   pj5_00028 Accession\n' +
+                    'VERSION     pj5_00028 version.1\n' +
+                    'DEFINITION  pj5_00028 Definition\n'+
+                    'KEYWORDS    .\n' +
+                    'SOURCE      Saccharomyces cerevisiae (baker\'s yeast)\n' +
+                    '  ORGANISM  Saccharomyces cerevisiae\n' +
+                    '            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;\n' +
+                    '            Saccharomycetales; Saccharomycetaceae; Saccharomyces.\n' +
+                    'REFERENCE   1  (bases 1 to 5028)\n' +
+                    '  AUTHORS   Torpey,L.E., Gibbs,P.E., Nelson,J. and Lawrence,C.W.\n' +
+                    '  TITLE     Cloning and sequence of REV7, a gene whose function is required for\n' +
+                    '            DNA damage-induced mutagenesis in Saccharomyces cerevisiae\n' +
+                    '  JOURNAL   Yeast 10 (11), 1503-1509 (1994)\n' +
+                    '  PUBMED    7871890\n' +
+                    'FEATURES             Location/Qualifiers\n' +
+                    '     CDS             complement(7..885)\n' +
+                    '                     /label="araC"\n' +
+                    '     promoter        complement(1036..1064)\n' +
+                    '                     /label="araC promoter"\n' +
+                    '     CDS             >1236..<2090\n' +
+                    '                     /vntifkey="4"\n' +
+                    '                     /vntifkey2=4\n' +
+                    '     fakemRNA        join(<265..402,673..781,911..1007,1088..1215,\n' +
+                    '                     1377..1573,1866..2146,2306..2634,2683..>2855)\n' +
+                    '     fakeCDS         complement(3300..4037)\n' +
+                    '                     /translation="MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQ\n' +
+                    '                     FVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVD\n' +
+                    '                     LISGDDKILNGVYSQYEEGESIFGSLF"\n' +
+                    'ORIGIN      \n' +
+                    '        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n' +
+                    '       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc\n' +
+                    '\n'+
+                    '\n'+
+                    '//';
+                    tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
             });
 
             it("Parses the # of Keywords (in the array) Correctly?",function(){
@@ -232,6 +227,32 @@ Ext.onReady(function() {
             it("Parses Last Element Feature Qualifier correctly?",function(){
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getName()).toBe("translation");
                 expect(tmp.findKeyword("FEATURES").getLastElement().getFeatureQualifier()[0].getValue()).toBe("MNRWVEKWLRVYLKCYINLILFYRNVYPPQSFDYTTYQSFNLPQFVPINRHPALIDYIEELILDVLSKLTHVYRFSICIINKKNDLCIEKYVLDFSELQHVDLISGDDKILNGVYSQYEEGESIFGSLF");
+            });
+
+            it("JSON CONVERSION: Converts Genbank String -> Genbank Model -> JSON -> Genbank Model",function(){
+
+                var tmpJson = tmp.toJSON(); //JSON.stringify(tmp, null, "  ");
+                console.log(tmp);
+                console.log(tmpJson);
+
+                var convert = Ext.create("Teselagen.bio.parsers.Genbank");
+                convert.fromJSON(tmp.toJSON());
+
+                var conJsonStr = convert.toJSON(); //JSON.stringify(convert, null, "  ");
+                //console.log(conJsonStr);
+
+                for (var i=0; i < tmp.keywordsTag.length; i++) {
+                    var origKW = tmp.keywords[i].toString();
+                    var jsonKW = tmp.keywords[i].toJSON();
+                    var convKW = convert.keywords[i].toString();
+
+                    //console.log(origKW);
+                    //console.log(jsonKW);
+                    //console.log(convKW);
+                    expect(convKW).toBe(origKW);
+                }
+                //console.log(tmp.getKeywordsTag());
+                expect(convert.getKeywordsTag().length).toBe(tmp.getKeywordsTag().length);
             });
         });
 

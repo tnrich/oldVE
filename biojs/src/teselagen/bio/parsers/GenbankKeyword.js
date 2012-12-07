@@ -115,14 +115,29 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
      * @returns {Object} json
      */
     toJSON : function() {
-        var subKeywords = this.getSubKeywords();
+        
         var json = {
                 keyword: this.keyword,
                 value: this.value
         };
-        if ( this.subKeywords.length > 0) {
-            json["subKeywords"] = this.subKeywords;
+
+        if (this.subKeywords === undefined ) {
+            return json;
         }
+
+        //if (this.subKeywords !== undefined || this.subKeywords.length > 0) {
+            var subKey = [];
+            for (var i = 0; i < this.subKeywords.length; i++) {
+                //console.log(this.subKeywords[i]);
+                //subKey.push(this.subKeywords[i]);
+                subKey.push(this.subKeywords[i].toJSON());
+            }
+
+            if (subKey.length > 0) {
+                json["subKeywords"] = subKey;
+            }
+        //}
+
         return json;
     },
 
@@ -132,17 +147,23 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
      * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
      */
     fromJSON: function(json) {
+        //console.log(json);
         this.keyword    = json["keyword"];
         this.value      = json["value"];
 
         this.subKeywords = [];
 
         var sub = json["subKeywords"];
+
+        if (sub === undefined ) {
+            return this;
+        }
+
         for (var i = 0; i < sub.length; i++) {
-            var tmp = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword", {
-                keyword:    sub["keyword"],
-                value:      sub["value"]
-            });
+            var tmp = Ext.create("Teselagen.bio.parsers.GenbankSubKeyword");
+            tmp.fromJSON(sub[i]);
+            //console.log(sub[i]);
+            //console.log(tmp.toString());
             this.subKeywords.push(tmp);
         }
         return this;
