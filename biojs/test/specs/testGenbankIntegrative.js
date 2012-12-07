@@ -232,8 +232,8 @@ Ext.onReady(function() {
             it("JSON CONVERSION: Converts Genbank String -> Genbank Model -> JSON -> Genbank Model",function(){
 
                 var tmpJson = tmp.toJSON(); //JSON.stringify(tmp, null, "  ");
-                console.log(tmp);
-                console.log(tmpJson);
+                //console.log(tmp);
+                //console.log(tmpJson);
 
                 var convert = Ext.create("Teselagen.bio.parsers.Genbank");
                 convert.fromJSON(tmp.toJSON());
