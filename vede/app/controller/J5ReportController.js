@@ -1,4 +1,4 @@
-Ext.define("Vede.controller.j5ReportController", {
+Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
     requires: [],
