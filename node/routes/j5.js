@@ -218,6 +218,7 @@ function saveFile(fileData,user,deproject,cb)
 
             var j5Run = app.db.model("j5run");
             var newj5Run = new j5Run({
+              deproject_id: deproject._id,
               name: "newResult",
               file_id:objectId.toString(),
               date:new Date()

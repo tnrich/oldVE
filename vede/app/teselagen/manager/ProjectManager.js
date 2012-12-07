@@ -42,8 +42,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 self.currentUser.projects().load({
                     callback: function(record,operation,success){
                         self.projects = self.currentUser.projects();
-                        Vede.application.fireEvent("openProjectManagerWindow");
-                        if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
+                        Vede.application.fireEvent("renderProjectsTree");
+                        //Vede.application.fireEvent("openProjectManagerWindow");
+                        //if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
                     }
                 });
                 if(cb) return cb(true);
@@ -101,6 +102,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openDesign: function (item) {
         var id = item.data.id;
+        if(!this.workingProject) this.workingProject
         var deprojects = this.workingProject.deprojects();
         var selectedDEProject = deprojects.getById(id);
         var tabPanel = Ext.getCmp('mainAppPanel');
