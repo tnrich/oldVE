@@ -155,6 +155,58 @@ module.exports = function (app, express) {
 
   });
 
+  // Get DEProjects
+  app.get('/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete DEProjects
+  app.delete('/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get Projects
+  app.get('/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete Projects
+  app.delete('/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
   // Get Project
   app.get('/projects/:project', restrict, function (req, res) {
       var Project = app.db.model("project");
@@ -166,10 +218,6 @@ module.exports = function (app, express) {
               res.json({"projects": proj});
           }
       });
-  });
-
-  app.put('/user', restrict, function (req, res) {
-    res.json({});
   });
 
   // Dummy method
@@ -185,6 +233,10 @@ module.exports = function (app, express) {
     });
   });
 
+  // Update user
+  app.put('/user', restrict, function (req, res) {
+    res.json({});
+  });
 
   // Add new Project to Current User
   app.post('/user/projects', restrict, function (req, res) {
