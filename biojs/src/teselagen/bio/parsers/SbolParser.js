@@ -124,7 +124,7 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
     },
 
 
-    /**
+    /** NOTE DONE NOT TESTED
       * Checks if a structure of the XML2JSON data structure has the minimal structure requirements.
       * Inserts blank entries for entries that are needed.
       *
@@ -146,6 +146,45 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return json;
     },
 
+    /**
+     */
+    sbolJsonToJbeiJson: function(json, prefix) {
+        var name = json["rdf:RDF"]["DnaComponent"][0]["displayId"];
+        var seq  = json["rdf:RDF"]["DnaComponent"][0]["dnaSequence"]["DnaSequence"]["nucleotides"];
+        var seqHash = Teselagen.bio.util.Sha256.hex_sha256(seq);
+
+        var circ = true; // DONT KNOW HOW TO SET YET
+
+        var features= [];
+        var jbei = {
+            "seq:seq" : {
+                "seq:name" : name,
+                "seq:circular" : circ,
+                "seq:sequence" : seq,
+                "seq:features" : features,
+                "seq:seqHash"  : seqHash,
+                "_xmlns:seq": "http://jbei.org/sequence",
+                "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"
+            }
+        };
+
+        return jbei;
+
+    },
+
+    /**
+     */
+    jbeiJsonToSbolJson: function(json, prefix) {
+
+    },
+
+    /** NOT TESTED
+     * Parses a Raw Collection JSON to something more readable.
+     * @param {JSON} coll
+     * @param {String} prefix
+     * @returns {JSON}
+     */
     parseRawCollection: function(coll, prefix) {
         var result = {};
 
@@ -171,6 +210,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
 
     },
 
+    /** NOT TESTED
+     * Parses a Raw DnaComponent JSON to something more readable.
+     * @param {JSON} comp
+     * @param {String} prefix
+     * @returns {JSON}
+     */
     parseRawDnaComponent: function(comp, prefix) {
         var result      = {};
 
@@ -221,6 +266,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return result;
     },
 
+    /** NOT TESTED
+     * Parses a Raw RawDnaSequence JSON to something more readable.
+     * @param {JSON} seq
+     * @param {String} prefix
+     * @returns {JSON}
+     */
     parseRawDnaSequence: function(seq, prefix) {
         var result;
 
@@ -238,6 +289,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return result;
     },
 
+    /** NOT TESTED
+     * Parses a Raw SequenceAnnotation JSON to something more readable.
+     * @param {JSON} annotation
+     * @param {String} prefix
+     * @returns {JSON}
+     */
     parseRawSequenceAnnotation: function(annotation, prefix) {
         var result = {};
 
