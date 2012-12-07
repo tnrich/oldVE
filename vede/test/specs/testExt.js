@@ -1,3 +1,8 @@
+/**
+ * Generic Ext tests.
+ * @author Yuri Bendana
+ */
+
 Ext.require("Teselagen.bio.parsers.Genbank");
 
 Ext.onReady(function() {
