@@ -1,3 +1,8 @@
+/**
+ * Device Editor Store tests.
+ * @author Yuri Bendana
+ */
+
 /*global describe, expect, it, runs, waitsFor*/
 Ext.require("Teselagen.constants.Constants");
 Ext.require("Teselagen.store.PartStore");
