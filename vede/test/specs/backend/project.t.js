@@ -1,7 +1,9 @@
-/*global beforeEach, describe, it, expect, runs, waitsFor*/
 /**
- * @author Diana Wong, Rodrigo Pavez
+ * Project tests that access the server.
+ * @author Rodrigo Pavez, Yuri Bendana
  */
+
+/*global beforeEach, describe, it, expect, runs, waitsFor*/
 
 Ext.require([
      "Ext.Ajax",
@@ -14,7 +16,7 @@ Ext.require([
      "Teselagen.store.ProjectStore"]);
 
 Ext.onReady(function () {
-    var project, projects, user, userProjects, projectById, projStore;
+    var project, projects, user, userProjects, projectById;
     var isLoggedIn = false;
     var isTestDataDeleted = false;
     var isTestSetup = false;
@@ -29,6 +31,7 @@ Ext.onReady(function () {
     var projectManager = Teselagen.manager.ProjectManager;
     var authenticationManager = Teselagen.manager.AuthenticationManager;
     var sessionManager = Teselagen.manager.SessionManager;
+    var projStore = Ext.create("Teselagen.store.ProjectStore");
 
     describe("Project server tests.", function() {
 
@@ -56,19 +59,10 @@ Ext.onReady(function () {
                 return isLoggedIn;
             }, "login", 500);
             runs(function() {
-                projStore = Ext.create("Teselagen.store.ProjectStore");
-                projStore.load(function() {
-                    var projs = projStore.getRange();
-                    if (!Ext.isEmpty(projs)) {
-                        projStore.remove(projs);
-                        projStore.sync({
-                            success: function() {
-                                expect(projStore.getCount()).toBe(0);
-                                isTestDataDeleted = true;
-                            }
-                        });
-                    }
-                    else {
+                Ext.Ajax.request({
+                    url: "/api/projects",
+                    method: "DELETE",
+                    success: function() {
                         isTestDataDeleted = true;
                     }
                 });
