@@ -1,19 +1,17 @@
 Ext.define("Vede.controller.DashboardPanelController", {
 	extend: "Ext.app.Controller",
 
-	requires: [],
+	requires: ["Teselagen.manager.ProjectManager"],
 
-	onSomeButtonClick: function () {
-	},
 
-	loadProject: function () {
-		console.log("Trying to load new project");
+	onLastDEProjectsItemClick: function (item,record) {
+		Teselagen.manager.ProjectManager.openDEProject(record);
 	},
 
 	init: function () {
 		this.control({
-			"#someButton": {
-				click: this.onSomeButtonClick
+			"#designGrid_Panel": {
+				itemclick: this.onLastDEProjectsItemClick
 			}
 		});
 

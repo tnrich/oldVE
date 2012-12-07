@@ -14,6 +14,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             deproject.save({
                 callback: function(){
                     Ext.getCmp('mainAppPanel').getActiveTab().setTitle(text);
+                    Ext.getCmp('mainAppPanel').getActiveTab().down('label[cls="designName"]').setText(text);
+                    Vede.application.fireEvent("renderProjectsTree",function(){
+                        Ext.getCmp('projectTreePanel').expandPath('/root/'+deproject.data.project_id+'/'+deproject.data.id); 
+                    });
                 }
             });
         };

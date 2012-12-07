@@ -55,7 +55,6 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         xtype: 'panel',
         title: 'Detail',
         cls: 'j5detailpanel',
-        disabled: true,
         items: [{
                     xtype: 'fieldset',
                     margin: '10 10 10 10',

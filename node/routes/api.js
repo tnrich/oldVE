@@ -39,8 +39,42 @@ module.exports = function (app, express) {
   };
 
   // Root Path
-  app.get('/', function (req, res) {
-    res.send('', 200)
+  app.post('/sendFeedback', function (req, res) {
+    if(req.body.feedback)
+    {
+      app.mailer.sendMail(
+        {
+            from: "Teselagen <root@localhost>",
+            to: "rpavez@gmail.com",
+            subject: "Feedback",
+            text: req.body.feedback
+        }
+        , function(error, response){
+          if(error){
+              console.log(error);
+          } else {
+              res.send();
+          }
+      });
+    }
+    else if(req.body.error)
+    {
+      app.mailer.sendMail(
+        {
+            from: "Teselagen <root@localhost>",
+            to: "rpavez@gmail.com",
+            subject: "Error",
+            text: req.body.error+'\n'+req.body.error_feedback
+        }
+        , function(error, response){
+          if(error){
+              console.log(error);
+          } else {
+              res.send();
+          }
+      });
+    }
+    res.send();
   })
 
   app.all('/login', function (req, res) {

@@ -41,9 +41,9 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 		{
 			xtype: 'button',
 			flex: 1,
-			id: 'projectmanager_btn',
+			id: 'help_btn',
 			margin: "0 5 0 0",
-			text: 'Project',
+			text: 'Help',
 			cls: 'header_btn',
 			overCls: 'header_btn_over'
 		},

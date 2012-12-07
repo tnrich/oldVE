@@ -20,16 +20,19 @@ Ext.define("Vede.controller.ProjectController", {
             id: 0
         });
 
+        var lastDEProjects = Ext.create('Ext.data.Store',{model: 'Teselagen.models.DeviceEditorProject'});
         var projects = Teselagen.manager.ProjectManager.projects;
         projects.each(function(project) {
             var projectNode = rootNode.appendChild({
                 text: project.data.name,
-                id: project.data.id
+                id: project.data.id,
+                hrefTarget: 'openproj'
             });
 
             var deprojects = project.deprojects();
             deprojects.load({callback: function(){
                 deprojects.each(function(deproject){
+                    lastDEProjects.add(deproject);
                     var deprojectnode = projectNode.appendChild({
                         text: deproject.data.name,
                         leaf: false,
@@ -72,6 +75,10 @@ Ext.define("Vede.controller.ProjectController", {
             });
 
         });
+
+        
+        Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
+
         if(typeof(cb) == "function") cb();
     },
 
@@ -122,9 +129,17 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewProject();
     },
 
+    expandProject: function(record){
+        if(record.isExpanded()) record.collapse();
+        else record.expand();
+    },
+
     onProjectPanelItemClick: function (store, record) { 
         switch(record.data.hrefTarget)
         {
+            case 'openproj':
+                this.expandProject(record);
+                break;
             case 'newproj':
                 this.createProject(record);
                 break;

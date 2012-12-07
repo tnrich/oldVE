@@ -17,7 +17,6 @@ Ext.define("Vede.controller.J5ReportController", {
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
         var assemblies = this.activeJ5Run.getJ5Results().assemblies();
         this.tabPanel.down('gridpanel').reconfigure(assemblies);
-        this.tabPanel.down('panel[cls="j5detailpanel"]').setDisabled(false);
     },
 
     renderMenu: function(){

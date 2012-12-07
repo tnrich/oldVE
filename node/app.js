@@ -23,6 +23,7 @@ app.markdown = require("markdown-js");
 app.soap = require("soap");
 app.xml2js = require('xml2js');
 app.program = require('commander');
+app.nodemailer = require("nodemailer");
 
 app.program
   .version('0.0.1')
