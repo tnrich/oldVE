@@ -1,7 +1,9 @@
-/*global beforeEach, describe, it, expect, runs, waitsFor*/
 /**
+ * Tests authentication.
  * @author Yuri Bendana
  */
+
+/*global beforeEach, describe, it, expect, runs, waitsFor*/
 
 Ext.require([
      "Ext.Ajax",
@@ -10,11 +12,11 @@ Ext.require([
      "Teselagen.manager.SessionManager"]);
 
 Ext.onReady(function () {
-
     var authResponse;
     var authenticationManager = Teselagen.manager.AuthenticationManager;
     var constants = Teselagen.constants.Constants;
     var sessionManager = Teselagen.manager.SessionManager;
+    var isLoggedIn = false;
 
     describe("Authentication tests.", function() {
         beforeEach(function() {
@@ -35,7 +37,7 @@ Ext.onReady(function () {
             });
             waitsFor(function() {
                return success;
-            }, "connection", 1000);
+            }, "connection", 500);
             runs(function() {
                 expect(success).toBe(true);
             });
@@ -48,11 +50,15 @@ Ext.onReady(function () {
                     server: constants.API_URL
             };
             runs(function() {
-                authenticationManager.sendAuthRequest(params);
+                authenticationManager.sendAuthRequest(params,  function(pSuccess) {
+                    if (pSuccess) {
+                        isLoggedIn = true;
+                    }
+                });
             });
             waitsFor(function() {
-                return !Ext.isEmpty(authenticationManager.authResponse);
-            }, "authentication", 1000);
+                return isLoggedIn;
+            }, "authentication", 500);
             runs(function() {
                 authResponse = authenticationManager.authResponse;
                 expect(authResponse.firstTime).toBe(false);
