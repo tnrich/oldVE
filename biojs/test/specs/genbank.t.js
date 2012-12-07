@@ -37,7 +37,7 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Unit Testing: creation of a null Genbank Models.", function() {
+        describe("Creation of a null Genbank Models.", function() {
             var tmp2 = [];
 
             it("Keyword?",function(){
@@ -787,387 +787,284 @@ Ext.onReady(function() {
                 var line, tmp;
             });
 
-            it("getLineKey()",function(){
-                line = "KEY VALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.getLineKey(line);
-                expect(tmp).toBe("KEY");
-                line = "  KEY        VALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.getLineKey(line);
-                expect(tmp).toBe("KEY");
-                line = "\tKEY\tVALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.getLineKey(line);
-                expect(tmp).toBe("KEY");
+            describe("", function() {});
+
+            describe("Helper Functions", function() {
+                it("getLineKey()",function(){
+                    line = "KEY VALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.getLineKey(line);
+                    expect(tmp).toBe("KEY");
+                    line = "  KEY        VALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.getLineKey(line);
+                    expect(tmp).toBe("KEY");
+                    line = "\tKEY\tVALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.getLineKey(line);
+                    expect(tmp).toBe("KEY");
+                });
+
+                it("getLineVal()",function(){
+                    line = "KEY VALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.getLineVal(line);
+                    expect(tmp).toBe("VALUE");
+                    line = "  KEY          VALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.getLineVal(line);
+                    expect(tmp).toBe("VALUE");
+                    line = "\tKEY\tVALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.getLineVal(line);
+                    expect(tmp).toBe("VALUE");
+                });
+
+                it("isKeyword()",function(){
+                    line = "KEYWORD BLAHBLAH"; //no white space makes this a Keyword
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isKeyword(line);
+                    expect(tmp).toBeTruthy();
+                    line = " KEYWORD BLAHBLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isKeyword(line);
+                    expect(tmp).toBeFalsy();
+                });
+
+                it("isSubKeyword()",function(){
+                    line = "KEYWORD BLAHBLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isSubKeyword(line);
+                    expect(tmp).toBeFalsy();
+                    line = " KEYWORD BLAHBLAH"; // any white space makes this a subKeyword
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isSubKeyword(line);
+                    expect(tmp).toBeTruthy();
+                });
+
+                it("isKeywordRunon()",function(){
+                    line = "          KEYWORD BLAHBLAH"; // Must be 10 white space before line begins.
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isKeywordRunon(line);
+                    expect(tmp).toBeTruthy();
+                });
+
+                it("isQualifier",function(){
+                    line = "          /KEYWORDBLAHBLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isQualifier(line);
+                    expect(tmp).toBeTruthy();
+                    line = "     /KEYWORD=BLAHBLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isQualifier(line);
+                    expect(tmp).toBeTruthy();
+                });
+
+                it("isQualifierRunon()",function(){
+                    line = "    /KEYWORDBLAHBLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
+                    expect(tmp).toBeFalsy();
+                    line = "          BLAHBLAH"; // has at least 10 empty spaces before entry, should be 20
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
+                    expect(tmp).toBeTruthy();
+                    line = "     CDS     1-2X";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
+                    expect(tmp).toBeFalsy();
+                    line = "             1-2X";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
+                    expect(tmp).toBeFalsy();
+                });
+
+                it("isLocationRunon()",function(){
+                    line = "    CDS BLAH BLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
+                    expect(tmp).toBeFalsy();
+                    line = "          123455";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
+                    expect(tmp).toBeTruthy();
+                    line = "   CDS  1-2";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
+                    expect(tmp).toBeFalsy();
+                    line = "     CDS   complement(join(300..400,500.600))";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
+                    expect(tmp).toBeFalsy();
+                });
+
+                it("setType()",function(){
+                    //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
+                    //expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe(false);
+
+                    Teselagen.bio.parsers.GenbankManager.setType("FEATURES", true);
+                    expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("FEATURES");
+                    //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
+
+                    Teselagen.bio.parsers.GenbankManager.setType("ORIGIN", true);
+                    expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("ORIGIN");
+                    //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
+
+                    Teselagen.bio.parsers.GenbankManager.setType("REFERENCE", true);
+                    expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("REFERENCE");
+                    //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
+
+                    Teselagen.bio.parsers.GenbankManager.setType("//", true);
+                    expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("//");
+                    //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
+
+                    Teselagen.bio.parsers.GenbankManager.setType("VERSION", true);
+                    expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("VERSION");
+                    //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
+
+                    Teselagen.bio.parsers.GenbankManager.setType("BLAHBLAH", false); //eg AUTHOR, or CDS
+                    expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("VERSION"); //whatever was previously set
+
+                });
             });
-
-            it("getLineVal()",function(){
-                line = "KEY VALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.getLineVal(line);
-                expect(tmp).toBe("VALUE");
-                line = "  KEY          VALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.getLineVal(line);
-                expect(tmp).toBe("VALUE");
-                line = "\tKEY\tVALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.getLineVal(line);
-                expect(tmp).toBe("VALUE");
-            });
-
-            it("isKeyword()",function(){
-                line = "KEYWORD BLAHBLAH"; //no white space makes this a Keyword
-                tmp  = Teselagen.bio.parsers.GenbankManager.isKeyword(line);
-                expect(tmp).toBeTruthy();
-                line = " KEYWORD BLAHBLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isKeyword(line);
-                expect(tmp).toBeFalsy();
-            });
-
-            it("isSubKeyword()",function(){
-                line = "KEYWORD BLAHBLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isSubKeyword(line);
-                expect(tmp).toBeFalsy();
-                line = " KEYWORD BLAHBLAH"; // any white space makes this a subKeyword
-                tmp  = Teselagen.bio.parsers.GenbankManager.isSubKeyword(line);
-                expect(tmp).toBeTruthy();
-            });
-
-            it("isKeywordRunon()",function(){
-                line = "          KEYWORD BLAHBLAH"; // Must be 10 white space before line begins.
-                tmp  = Teselagen.bio.parsers.GenbankManager.isKeywordRunon(line);
-                expect(tmp).toBeTruthy();
-            });
-
-            it("isQualifier",function(){
-                line = "          /KEYWORDBLAHBLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isQualifier(line);
-                expect(tmp).toBeTruthy();
-                line = "     /KEYWORD=BLAHBLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isQualifier(line);
-                expect(tmp).toBeTruthy();
-            });
-
-            it("isQualifierRunon()",function(){
-                line = "    /KEYWORDBLAHBLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
-                expect(tmp).toBeFalsy();
-                line = "          BLAHBLAH"; // has at least 10 empty spaces before entry, should be 20
-                tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
-                expect(tmp).toBeTruthy();
-                line = "     CDS     1-2X";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
-                expect(tmp).toBeFalsy();
-                line = "             1-2X";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isQualifierRunon(line);
-                expect(tmp).toBeFalsy();
-            });
-
-            it("isLocationRunon()",function(){
-                line = "    CDS BLAH BLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
-                expect(tmp).toBeFalsy();
-                line = "          123455";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
-                expect(tmp).toBeTruthy();
-                line = "   CDS  1-2";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
-                expect(tmp).toBeFalsy();
-                line = "     CDS   complement(join(300..400,500.600))";
-                tmp  = Teselagen.bio.parsers.GenbankManager.isLocationRunon(line);
-                expect(tmp).toBeFalsy();
-            });
-
-            it("setType()",function(){
-                //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
-                //expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe(false);
-
-                Teselagen.bio.parsers.GenbankManager.setType("FEATURES", true);
-                expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("FEATURES");
-                //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
-
-                Teselagen.bio.parsers.GenbankManager.setType("ORIGIN", true);
-                expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("ORIGIN");
-                //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
-
-                Teselagen.bio.parsers.GenbankManager.setType("REFERENCE", true);
-                expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("REFERENCE");
-                //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
-
-                Teselagen.bio.parsers.GenbankManager.setType("//", true);
-                expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("//");
-                //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
-
-                Teselagen.bio.parsers.GenbankManager.setType("VERSION", true);
-                expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("VERSION");
-                //console.log(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE);
-
-                Teselagen.bio.parsers.GenbankManager.setType("BLAHBLAH", false); //eg AUTHOR, or CDS
-                expect(Teselagen.bio.parsers.GenbankManager.self.LASTTYPE).toBe("VERSION"); //whatever was previously set
-
-            });
-
-
-            it("parseLocus()",function(){
-                line = "LOCUS blah 10 bp ds-DNA circular 1-APR-2012";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseLocus(line, gb);
-                expect(tmp.getLocusName()).toBe("blah");
-                expect(tmp.getStrandType()).toBe("ds");
-                expect(tmp.getSequenceLength()).toBe(10);
-                expect(tmp.getNaType()).toBe("DNA");
-                expect(tmp.getLinear()).toBeFalsy();
-                expect(tmp.getDivisionCode()).toBe("");
-            });
-
-            it("parseKeyword()",function(){
-                line = "KEY VALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseKeyword(line, gb);
-                expect(tmp.getKeyword()).toBe("KEY");
-                expect(tmp.getValue()).toBe("VALUE");
-            });
-            it("parseKeyword() with runon. This would not be used since it is line by line parsing.",function(){
-                line = "KEY VALUE\n      BLAH";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseKeyword(line, gb);
-                expect(tmp.getKeyword()).toBe("KEY");
-                expect(tmp.getValue()).toBe("VALUE\n      BLAH");
-            });
-            it("parseSubKeyword()",function(){
-                var key = Ext.create("Teselagen.bio.parsers.GenbankKeyword", {});
-                line = "   KEY VALUE";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseSubKeyword(key, line, gb);
-                expect(tmp.getKeyword()).toBe("KEY");
-                expect(tmp.getValue()).toBe("VALUE");
-            });
-            it("parseOrigin()",function(){
-                gb   = Teselagen.bio.parsers.GenbankManager.parseGenbankFile("ORIGIN\n");
-                line = "GATTACA";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseOrigin(line, gb);
-                expect(tmp.getKeyword()).toBe("ORIGIN");
-                expect(tmp.getSequence()).toBe("GATTACA");
-            });
-
-            it("parseFeatureLocation()",function(){
-                var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
-                var locStr = "100..200";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
-                expect(tmp.getStart()).toBe(100);
-                expect(tmp.getEnd()).toBe(200);
-                expect(tmp.getTo()).toBe("..");
-                expect(featElm.getJoin()).toBe(false);
-                expect(featElm.getComplement()).toBe(false);
-
-            });
-            it("parseFeatureLocation() 2: with partials",function(){
-                var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
-                var locStr = "<100.>200";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
-                expect(tmp.getStart()).toBe(100);
-                expect(tmp.getEnd()).toBe(200);
-                expect(tmp.getPreStart()).toBe("<");
-                expect(tmp.getPreEnd()).toBe(">");
-                expect(tmp.getTo()).toBe(".");
-            });
-            it("parseFeatureLocation() 3: no End",function(){
-                var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
-                var locStr = "100";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
-                expect(tmp.getStart()).toBe(100);
-                expect(tmp.getEnd()).toBe(100);
-                expect(tmp.getTo()).toBe("..");
-            });
-
-
-            it("parseFeatures()",function(){
-                var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
-                gb.setFeatures(fkw);
-                line = "     CDS  1..2";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
-                expect(tmp.getKeyword()).toBe("FEATURES");
-                expect(tmp.getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
-            });
-
-            it("parseFeatureLocation()/parseFeatures(): complex versions",function(){
-                // Cannot access GenbankFeatureElement directly because this function creates it and puts it in a gbFeaturesKeyword
-                var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
-                gb.setFeatures(fkw);
-                line = "     CDS   complement(join(300..400,500.600))";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
-                expect(tmp.getFeaturesElements()[0].getKeyword()).toBe("CDS");
-                expect(tmp.getFeaturesElements()[0].getComplement()).toBe(true);
-                expect(tmp.getFeaturesElements()[0].getComplement()).toBe(true);
-                expect(tmp.getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(300);
-                expect(tmp.getFeaturesElements()[0].getFeatureLocation()[1].getStart()).toBe(500);
-            });
-
-            it("parseFeatureLocation()/parseFeatures(): with runon Features Location",function(){
-                // Cannot access GenbankFeatureElement directly because this function creates it and puts it in a gbFeaturesKeyword
-                var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
-                gb.setFeatures(fkw);
-                line = "     CDS   complement(join(300..400,500.600,";
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
-                line = "          700..800))"; //there are at least 10 spaces in front; should be 20
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb);
-                expect(tmp.getFeaturesElements()[0].getFeatureLocation()[2].getStart()).toBe(700);
-                expect(tmp.getFeaturesElements()[0].getFeatureLocation()[2].getEnd()).toBe(800);
-            });
-
-            it("parseFeatureQualifier()",function(){
-                var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
-                gb.setFeatures(fkw);
-                line = '          /BLAH="HAHA"';
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureQualifier(line);
-                expect(tmp.getName()).toBe("BLAH");
-                expect(tmp.getValue()).toBe("HAHA");
-                expect(tmp.getQuoted()).toBe(true);
-                line = '          /BLAH=123';
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureQualifier(line);
-                expect(tmp.getName()).toBe("BLAH");
-                expect(tmp.getValue()).toBe(123);
-                expect(tmp.getQuoted()).toBe(false);
-            });
-
-            it("parseFeatureQualifier(): complex with runon Feature Qualifier",function(){
-                // Cannot access GenbankFeatureElement directly because this function creates it and puts it in a gbFeaturesKeyword
-                var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
-                var fkw     = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
-                fkw.setFeaturesElements([featElm]);
-                gb.setFeatures(fkw);
-                line = '          /BLAH="HAHA';
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
-                expect(tmp.getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("BLAH");
-                expect(tmp.getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("HAHA");
-                line = '          MUWAWA"';
-                tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb);
-                expect(tmp.getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("HAHAMUWAWA");
-            });
-
-
-        });
-
-        describe("Integrative Testing for GenbankManager.js: LOCUS", function() {
             
-            var line, tmp;
+            describe("LOCUS", function() {
 
-            it("Parses LOCUS 1: circular?",function(){
-                var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.getLocus().toString()).toBe(line);
-                expect(tmp.getLocus().getStrandType()).toBe("ds");
-                expect(tmp.getLocus().getSequenceLength()).toBe(5371); //currently a string
-                expect(tmp.getLocus().getNaType()).toBe("DNA");
-                expect(tmp.getLocus().getLinear()).toBe(false);
-                expect(tmp.getLocus().getDivisionCode()).toBe("");
-                // CURRENTLY DOES NOT SUPPORT DATE TYPE
-                expect(tmp.getLocus().getDate()).toBe("1-APR-2012");
+                it("parseLocus()",function(){
+                    line = "LOCUS blah 10 bp ds-DNA circular 1-APR-2012";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseLocus(line, gb);
+                    expect(tmp.getLocusName()).toBe("blah");
+                    expect(tmp.getStrandType()).toBe("ds");
+                    expect(tmp.getSequenceLength()).toBe(10);
+                    expect(tmp.getNaType()).toBe("DNA");
+                    expect(tmp.getLinear()).toBeFalsy();
+                    expect(tmp.getDivisionCode()).toBe("");
+                });
             });
-            it("Parses LOCUS 2: linear, divisionCode?",function(){
-                var line = "LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.getLocus().getLocusName()).toBe("SCU49845");
-                expect(tmp.getLocus().getStrandType()).toBe("");
-                expect(tmp.getLocus().getSequenceLength()).toBe(5028);
-                expect(tmp.getLocus().getNaType()).toBe("DNA");
-                expect(tmp.getLocus().getLinear()).toBe(true);
-                expect(tmp.getLocus().getDivisionCode()).toBe("PLN");
+
+            describe("KEYWORD/SUBKEYWORD", function() {
+
+                it("parseKeyword()",function(){
+                    line = "KEY VALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseKeyword(line, gb);
+                    expect(tmp.getKeyword()).toBe("KEY");
+                    expect(tmp.getValue()).toBe("VALUE");
+                });
+                it("parseKeyword() with runon. This would not be used since it is line by line parsing.",function(){
+                    line = "KEY VALUE\n      BLAH";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseKeyword(line, gb);
+                    expect(tmp.getKeyword()).toBe("KEY");
+                    expect(tmp.getValue()).toBe("VALUE\n      BLAH");
+                });
+                it("parseSubKeyword()",function(){
+                    var key = Ext.create("Teselagen.bio.parsers.GenbankKeyword", {});
+                    line = "   KEY VALUE";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseSubKeyword(key, line, gb);
+                    expect(tmp.getKeyword()).toBe("KEY");
+                    expect(tmp.getValue()).toBe("VALUE");
+                });
             });
-            it("Parses LOCUS 3: Model formated line. no ds/ss, linear, division code?",function(){
-                var line = "LOCUS       LISOD                    756 bp    DNA     linear   BCT 30-JUN-1993";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.getLocus().getLocusName()).toBe("LISOD");
-                expect(tmp.getLocus().getStrandType()).toBe("");
-                expect(tmp.getLocus().getSequenceLength()).toBe(756);
-                expect(tmp.getLocus().getNaType()).toBe("DNA");
-                expect(tmp.getLocus().getLinear()).toBeTruthy();
-                expect(tmp.getLocus().getDivisionCode()).toBe("BCT");
+
+            describe("ORIGIN", function() {
+
+                it("parseOrigin()",function(){
+                    gb   = Teselagen.bio.parsers.GenbankManager.parseGenbankFile("ORIGIN\n");
+                    line = "GATTACA";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseOrigin(line, gb);
+                    expect(tmp.getKeyword()).toBe("ORIGIN");
+                    expect(tmp.getSequence()).toBe("GATTACA");
+                });
+
             });
-            it("Parses LOCUS: toJSON format?",function(){
-                var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                var json = {
-                        "keyword": "LOCUS",
-                        "locusName": "pj5_00028",
-                        "sequenceLength": 5371,
-                        "strandType": "ds",
-                        "naType": "DNA",
-                        "linear": false,
-                        "divisionCode": "",
-                        "date": "1-APR-2012"
-                };
-                expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("LOCUS"), null, "  "));
+            
+            describe("FEATURES/LOCATION", function() {
+
+                it("parseFeatureLocation()",function(){
+                    var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
+                    var locStr = "100..200";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
+                    expect(tmp.getStart()).toBe(100);
+                    expect(tmp.getEnd()).toBe(200);
+                    expect(tmp.getTo()).toBe("..");
+                    expect(featElm.getJoin()).toBe(false);
+                    expect(featElm.getComplement()).toBe(false);
+
+                });
+                it("parseFeatureLocation() 2: with partials",function(){
+                    var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
+                    var locStr = "<100.>200";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
+                    expect(tmp.getStart()).toBe(100);
+                    expect(tmp.getEnd()).toBe(200);
+                    expect(tmp.getPreStart()).toBe("<");
+                    expect(tmp.getPreEnd()).toBe(">");
+                    expect(tmp.getTo()).toBe(".");
+                });
+
+                it("parseFeatureLocation() 3: no End",function(){
+                    var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
+                    var locStr = "100";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureLocation(featElm, locStr);
+                    expect(tmp.getStart()).toBe(100);
+                    expect(tmp.getEnd()).toBe(100);
+                    expect(tmp.getTo()).toBe("..");
+                });
+
+
+                it("parseFeatures()",function(){
+                    var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
+                    gb.setFeatures(fkw);
+                    line = "     CDS  1..2";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
+                    expect(tmp.getKeyword()).toBe("FEATURES");
+                    expect(tmp.getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                });
+
+                it("parseFeatureLocation()/parseFeatures(): complex versions",function(){
+                    // Cannot access GenbankFeatureElement directly because this function creates it and puts it in a gbFeaturesKeyword
+                    var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
+                    gb.setFeatures(fkw);
+                    line = "     CDS   complement(join(300..400,500.600))";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
+                    expect(tmp.getFeaturesElements()[0].getKeyword()).toBe("CDS");
+                    expect(tmp.getFeaturesElements()[0].getComplement()).toBe(true);
+                    expect(tmp.getFeaturesElements()[0].getComplement()).toBe(true);
+                    expect(tmp.getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(300);
+                    expect(tmp.getFeaturesElements()[0].getFeatureLocation()[1].getStart()).toBe(500);
+                });
+
+                it("parseFeatureLocation()/parseFeatures(): with runon Features Location",function(){
+                    // Cannot access GenbankFeatureElement directly because this function creates it and puts it in a gbFeaturesKeyword
+                    var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
+                    gb.setFeatures(fkw);
+                    line = "     CDS   complement(join(300..400,500.600,";
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
+                    line = "          700..800))"; //there are at least 10 spaces in front; should be 20
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb);
+                    expect(tmp.getFeaturesElements()[0].getFeatureLocation()[2].getStart()).toBe(700);
+                    expect(tmp.getFeaturesElements()[0].getFeatureLocation()[2].getEnd()).toBe(800);
+                });
+
             });
-            it("Parses LOCUS: toString format?",function(){
-                var line = "LOCUS       LISOD                    756 bp    DNA     linear   BCT 30-JUN-1993";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.getLocus().toString()).toBe(line);
+
+            describe("FEATURES/QUALIFIER", function() {
+
+                it("parseFeatureQualifier()",function(){
+                    var fkw = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
+                    gb.setFeatures(fkw);
+                    line = '          /BLAH="HAHA"';
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureQualifier(line);
+                    expect(tmp.getName()).toBe("BLAH");
+                    expect(tmp.getValue()).toBe("HAHA");
+                    expect(tmp.getQuoted()).toBe(true);
+                    line = '          /BLAH=123';
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatureQualifier(line);
+                    expect(tmp.getName()).toBe("BLAH");
+                    expect(tmp.getValue()).toBe(123);
+                    expect(tmp.getQuoted()).toBe(false);
+                });
+
+                it("parseFeatureQualifier(): complex with runon Feature Qualifier",function(){
+                    // Cannot access GenbankFeatureElement directly because this function creates it and puts it in a gbFeaturesKeyword
+                    var featElm = Ext.create("Teselagen.bio.parsers.GenbankFeatureElement", {} );
+                    var fkw     = Ext.create("Teselagen.bio.parsers.GenbankFeaturesKeyword", {} );
+                    fkw.setFeaturesElements([featElm]);
+                    gb.setFeatures(fkw);
+                    line = '          /BLAH="HAHA';
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb); //returns a GenbankFeaturesKeyword
+                    expect(tmp.getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("BLAH");
+                    expect(tmp.getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("HAHA");
+                    line = '          MUWAWA"';
+                    tmp  = Teselagen.bio.parsers.GenbankManager.parseFeatures(line, gb);
+                    expect(tmp.getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("HAHAMUWAWA");
+                });
             });
+
+            
+
 
         });
 
-        describe("Integrative Testing for GenbankManager.js: KEYWORDS", function() {
-
-            it("Parses ACCESSION?",function(){
-                var line = "ACCESSION   pj5_00028 Accession";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
-                expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBeTruthy(); // {} is truthy
-                expect(tmp.findKeyword("VERSION")).toBeFalsy();
-            });
-
-            it("Parses ACCESSION?, adds dummy SubKeywords correctly?",function(){
-                var line = "ACCESSION   pj5_00028 Accession";
-                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
-                expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBeTruthy(); // {} is truthy
-                expect(tmp.findKeyword("VERSION")).toBeFalsy();
-                
-                tmp.findKeyword("ACCESSION").addSubKeyword(Ext.create('Teselagen.bio.parsers.GenbankSubKeyword', {keyword: "test", value : "test2"}));
-                expect(tmp.findKeyword("ACCESSION").getSubKeywords().length).toBe(1);
-                expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getKeyword()).toBe("test");
-                expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getValue()).toBe("test2");
-            });
-
-            it("Parses VERSION?",function(){
-                var line = "VERSION     pj5_00028 version.12";
-                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.findKeyword("VERSION")).toBeTruthy();
-                expect(tmp.findKeyword("ACCESSION")).toBeFalsy();
-                expect(tmp.findKeyword("VERSION").toString()).toBe(line);
-            });
-
-            it("Parses DEFINITION?",function(){
-                var line = "DEFINITION  pj5_00028 Definition";
-                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.findKeyword("DEFINITION").toString()).toBe(line);
-            });
-
-            it("Parses KEYWORDS? '.' case",function(){
-                var line = "KEYWORDS    .";
-                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.findKeyword("KEYWORDS").toString()).toBe(line);
-            });
-
-            it("Parses KEYWORDS? ';;;;;' case",function(){
-                var line =  "KEYWORDS    ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; \n" +
-                            "; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ";
-                //console.log("blah");
-                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                //console.log(tmp.toString());
-                expect(tmp.getKeywords().length).toBe(1); // does not turn second line into a keyword
-            });
-
-            it("Parses KEYWORDS: toJSON format?",function(){
-                var line = "ACCESSION   pj5_00028 Accession";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                var json = {
-                        "keyword": "ACCESSION",
-                        "value": "pj5_00028 Accession"
-                };
-                expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("ACCESSION"), null, "  "));
-            });
-
-            it("Parses KEYWORDS: toString format",function(){
-                var line = "ACCESSION   pj5_00028 Accession";
-                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
-                expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
-            });
-
-        });
+        
         
     });
 });
