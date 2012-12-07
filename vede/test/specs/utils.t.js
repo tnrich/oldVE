@@ -423,7 +423,13 @@ Ext.onReady(function() {
                     expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(1);
 
                     var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
-                    expect(gb.toString()).toEqual(newGb.toString());
+                    //expect(gb.toString()).toEqual(newGb.toString());
+                    expect(gb.getLocus().getLocusName()).toBe("test");
+                    expect(gb.getLocus().getStrandType()).toBe(""); // ds NOT STORED in SequenceManager! -->not "ds"
+                    expect(gb.getLocus().getSequenceLength()).toBe(7);
+                    expect(gb.getLocus().getNaType()).toBe("DNA");
+                    expect(gb.getLocus().getLinear()).toBe(false);
+                    expect(gb.getLocus().getDivisionCode()).toBe("");
                 });
                 
                 it("sequenceManagerToJbeiseqXml() - checked with jbeiseqXmlToJson",function(){
@@ -450,7 +456,13 @@ Ext.onReady(function() {
                     expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(1);
 
                     var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
-                    expect(gb.toString()).toEqual(newGb.toString());
+                    //expect(gb.toString()).toEqual(newGb.toString());
+                    expect(gb.getLocus().getLocusName()).toBe("test");
+                    expect(gb.getLocus().getStrandType()).toBe(""); // ds NOT STORED in SequenceManager! -->not "ds"
+                    expect(gb.getLocus().getSequenceLength()).toBe(7);
+                    expect(gb.getLocus().getNaType()).toBe("DNA");
+                    expect(gb.getLocus().getLinear()).toBe(false);
+                    expect(gb.getLocus().getDivisionCode()).toBe("");
                 });
 
                 it("jbeiseqXmlToSequenceManager() - checked with back and forth format change",function(){

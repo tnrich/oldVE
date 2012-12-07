@@ -24,7 +24,7 @@ Ext.onReady(function() {
 
     describe("ParsersManager Unit Testing:", function() {
         describe("Teselagen.bio.parsers.ParsersManager.", function() {
-            var seqStr, seq;
+            /*var seqStr, seq;
             var feat1, note1;
             var sm;
             var fastaStr, fasta;
@@ -32,7 +32,7 @@ Ext.onReady(function() {
             var gb = null;
             //var gbA;
             var gbB;
-            var jbeiXmlUrl;
+            var jbeiXmlUrl;*/
 
             beforeEach(function() {
                 seqStr = "GATTACA";
@@ -87,6 +87,8 @@ Ext.onReady(function() {
 
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("signal_peptide");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getName()).toBe("translation");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getValue()).toBe("GSKVYGKEQFLRMRQSMFPDR");
 
                 expect(gb.getOrigin().getSequence().length).toBe(63);
             });
@@ -94,7 +96,9 @@ Ext.onReady(function() {
             it("fastaToGenbank()", function() {
                 var newGb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(fastaStr);
 
+                //console.log(newGb.getLocus());
                 expect(newGb.getLocus().getLocusName()).toBe("DummyName");
+
                 expect(newGb.getOrigin().getSequence()).toBe("gattaca");
                 //if (LOG) console.log(newGb.toString());
                 jasmine.log(newGb.toString());
@@ -160,12 +164,13 @@ Ext.onReady(function() {
             });
             */
             it("jbeiseqXmlToJson(): Null case", function() {
+                var flag;
                 try {
                     var jbeiXml = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson("");
-                    var flag = false;
+                    flag = false;
                 } catch (e) {
                     //console.warn("Correctly Caught: " + e.message);
-                    var flag = true;
+                    flag = true;
                 }
                 expect(flag).toBe(true);
             });
@@ -191,12 +196,13 @@ Ext.onReady(function() {
             });
             
             it("jbeiseqXmlToGenbank()/jbeiseqJsonToGenbank(): Null case", function() {
+                var flag;
                 try {
                     var jbeiXml = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank("");
-                    var flag = false;
+                    flag = false;
                 } catch (e) {
                     //console.warn("Correctly Caught: " + e.message);
-                    var flag = true;
+                    flag = true;
                 }
                 expect(flag).toBe(true);
             });
@@ -207,10 +213,11 @@ Ext.onReady(function() {
 
                 //var jbeiXml = Teselagen.bio.parsers.ParsersManager.loadFile(jbeiXmlUrl);
                 var jbeiXml = jasmine.getFixtures().read(url);
+                var gb;
                 //console.log(jbeiXml);
                 try {
                     //console.log(Teselagen.bio.parsers.ParsersManager.jbeiseqxmlToJson(jbeiXml));
-                    var gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(jbeiXml);
+                    gb      = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(jbeiXml);
                     //if (LOG) console.log(gb.toString());
                     //if (LOG) console.log(JSON.stringify(gb, null, "    "));
                 } catch (e) {
@@ -239,6 +246,8 @@ Ext.onReady(function() {
 
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
                 expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("signal_peptide");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getName()).toBe("translation");
+                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getValue()).toBe("GSKVYGKEQFLRMRQSMFPDR");
 
                 expect(gb.getOrigin().getSequence().length).toBe(64);
             });
@@ -286,6 +295,14 @@ Ext.onReady(function() {
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][1]["seq:genbankStart"]).toBe(100);
                 expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(6300);
 
+                //console.log(json);
+
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:attribute"].length).toBe(1);
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:attribute"][0]["_name"]).toBe("translation");
+                expect(json["seq:seq"]["seq:features"][0]["seq:feature"]["seq:attribute"][0]["__text"]).toBe("GSKVYGKEQFLRMRQSMFPDR");
+
+                // NOTE: "label"="signal_peptide" does not become an attribute because it is saved as "label"
+
                 //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:label"]).toBe("signal_peptide0");
                 //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:type"]).toBe("CDS2");
                 //expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"].length).toBe(1);
@@ -299,29 +316,31 @@ Ext.onReady(function() {
                 var json = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(gb);
 
                 var gb2      = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
-                expect(gb).toEqual(gb2);
+                //expect(gb.toString()).toEqual(gb2.toString());
 
-                var gb = gb2;
-                expect(gb.getLocus().getLocusName()).toBe("signal_pep");
-                expect(gb.getLocus().getStrandType()).toBe("");
-                expect(gb.getLocus().getSequenceLength()).toBe(63);
-                expect(gb.getLocus().getNaType()).toBe("DNA");
-                expect(gb.getLocus().getLinear()).toBe(true);
-                expect(gb.getLocus().getDivisionCode()).toBe("");
+                //var gb = gb2;
+                expect(gb2.getLocus().getLocusName()).toBe("signal_pep");
+                expect(gb2.getLocus().getStrandType()).toBe("");
+                expect(gb2.getLocus().getSequenceLength()).toBe(63);
+                expect(gb2.getLocus().getNaType()).toBe("DNA");
+                expect(gb2.getLocus().getLinear()).toBe(true);
+                expect(gb2.getLocus().getDivisionCode()).toBe("");
 
-                expect(gb.getFeatures().getFeaturesElements().length).toBe(1);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(2);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(63);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[1].getStart()).toBe(100);
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureLocation()[1].getEnd()).toBe(6300);
-                expect(gb.getFeatures().getFeaturesElements()[0].getComplement()).toBe(false);
-                expect(gb.getFeatures().getFeaturesElements()[0].getJoin()).toBe(true);
+                expect(gb2.getFeatures().getFeaturesElements().length).toBe(1);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureLocation().length).toBe(2);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getStart()).toBe(1);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureLocation()[0].getEnd()).toBe(63);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureLocation()[1].getStart()).toBe(100);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureLocation()[1].getEnd()).toBe(6300);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getComplement()).toBe(false);
+                expect(gb2.getFeatures().getFeaturesElements()[0].getJoin()).toBe(true);
 
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
-                expect(gb.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("signal_peptide");
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getName()).toBe("label");
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[0].getValue()).toBe("signal_peptide");
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getName()).toBe("translation");
+                expect(gb2.getFeatures().getFeaturesElements()[0].getFeatureQualifier()[1].getValue()).toBe("GSKVYGKEQFLRMRQSMFPDR");
 
-                expect(gb.getOrigin().getSequence().length).toBe(63);
+                expect(gb2.getOrigin().getSequence().length).toBe(63);
             });
             
             
@@ -332,7 +351,7 @@ Ext.onReady(function() {
                 var gb2  = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(xml);
                 var xml2 = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqXml(gb);
 
-                expect(gb).toEqual(gb2);
+                expect(gb.toString()).toEqual(gb2.toString());
                 expect(xml).toEqual(xml2);
 
             });

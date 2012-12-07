@@ -12,6 +12,18 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
     requires: ["Teselagen.bio.util.StringUtil"],
 
     /**
+     * @cfg {Object} config
+     * @cfg {String} name
+     * @cfg {String} value
+     * @cfg {Boolean} quoted
+     */
+    config: {
+        name: "",
+        value: "",
+        quoted: true
+    },
+
+    /**
      * Creates a new GenbankFeatureQualifier from inData.
      * @param {String} name
      * @param {String} value
@@ -21,101 +33,80 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
      */
     constructor: function (inData) {
 
-        var name;
-        var value;
-        var quoted;
         if (inData !== undefined) {
-            name = inData.name || null;
-            value = inData.value || null;
-            quoted = inData.quoted || false; // boolean
+            this.name = inData.name || "";
+            this.value = inData.value || "";
+            this.quoted = inData.quoted || true; // boolean
         }
-        /**
-         * Get name
-         * @returns {String} name
-         */
-        this.getName = function() {
-            return name;
-        }
-        /**
-         * Set name
-         * @param {String} name
-         */
-        this.setName = function(pName) {
-            name = pName;
-        }
-        /**
-         * Get value
-         * @returns {String} value
-         */
-        this.getValue = function() {
-            return value;
-        }
-        /**
-         * Set value
-         * @param {String} value
-         */
-        this.setValue = function(pValue) {
-            value = pValue;
-        }
-        /**
-         * Get Quoted
-         * @returns {Boolean} quoted
-         */
-        this.getQuoted = function() {
-            return quoted;
-        }
-        /**
-         * Set Quoted
-         * @param {Boolean} quoted
-         */
-        this.setQuoted = function(pQuoted) {
-            quoted = pQuoted;
-        }
-        /**
-         * Append a string to the value property
-         * @param {String} append
-         */
-        this.appendValue = function(append){
-            if (value) {
-                value += append;
-            } else {
-                value = append;
-            }
-            //value += append;
+
+        if (typeof(this.value) === "string") {
+            this.quoted = true;
+        } else {
+            this.quoted = false;
         }
         return this;
     },
+
+    /**
+     * Append a string to the value property
+     * @param {String} append
+     */
+    appendValue: function(append){
+        if (this.value) {
+            this.value += append;
+        } else {
+            this.value = append;
+        }
+        //value += append;
+    },
+
     /**
      * Converts this GenbankLocusKeyword to Genbank file format string
      * @returns {String} genbankString
      */
-    toString : function() {
+    toString: function() {
         var line;
         var name    = this.getName();
         var value   = this.getValue();
         var quoted  = this.getQuoted();
         
         if (quoted) {
-            line = Teselagen.StringUtil.lpad("/", " ", 22) + name + "=\"" + value + "\"";
+            line = Teselagen.StringUtil.lpad("/", " ", 22) + this.name + "=\"" + this.value + "\"";
         } else {
-            line = Teselagen.StringUtil.lpad("/"," ", 22) + name + "=" + value ;
+            line = Teselagen.StringUtil.lpad("/"," ", 22) + this.name + "=" + this.value ;
         }
         return line;
     },
+
     /**
      * Converts to JSON format.
      * @returns {Object} json
      */
     toJSON : function() {
-        var name    = this.getName();
-        var value   = this.getValue();
-        var quoted  = this.getQuoted();
-        
+
         var json = {
-                name: name,
-                value: value
-        }
+            name: this.name,
+            value: this.value
+        };
         return json;
+    },
+
+    /**
+     * Converts GenBank JSON back to GenBank model
+     * @params {JSON} json GenbankFeatureQualifier in JSON form
+     * @returns {Teselagen.bio.model.GenbankFeatureQualifier}
+     */
+    fromJSON: function(json) {
+        //console.log(json);
+        this.name   = json["name"];
+        this.value  = json["value"];
+
+        if (typeof(this.value) === "string") {
+            this.quoted = true;
+        } else {
+            this.quoted = false;
+        }
+        return this;
     }
 
 
