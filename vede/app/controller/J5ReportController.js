@@ -4,14 +4,20 @@ Ext.define("Vede.controller.j5ReportController", {
     requires: [],
 
     activeProject: null,
+    activeJ5Run: null,
     tabPanel: null,
     j5runs: null,
+    cls: 'j5ReportTab',
+
+    downloadResults: function(){
+        location.href = '/api/getfile/'+this.activeJ5Run.data.file_id
+    },
 
     onJ5RunSelect: function( item, e, eOpts ){
-        j5run = this.activeProject.j5runs().getById(item.id);
-        var assemblies = j5run.getJ5Results().assemblies();
-        console.log(assemblies);
+        this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
+        var assemblies = this.activeJ5Run.getJ5Results().assemblies();
         this.tabPanel.down('gridpanel').reconfigure(assemblies);
+        this.tabPanel.down('panel[cls="j5detailpanel"]').setDisabled(false);
     },
 
     renderMenu: function(){
@@ -50,8 +56,13 @@ Ext.define("Vede.controller.j5ReportController", {
         this.callParent();
 
         this.control({
-            "menu > menuitem": {
+            'panel[cls="j5ReportsPanel"] > menu > menuitem': {
                 click: this.onJ5RunSelect
-        }});
+            },
+            'button[cls="downloadResults"]': {
+                click: this.downloadResults
+            }
+
+    });
     },
 });

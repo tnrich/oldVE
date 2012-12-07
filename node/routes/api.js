@@ -355,11 +355,6 @@ module.exports = function (app, express) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
-      project.design.j5collection.bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-          part.id = part._id;
-        });
-      });
       res.json({"design":project.design});
     });
     
@@ -510,7 +505,6 @@ module.exports = function (app, express) {
       for(var prop in req.body) {
         part[prop] = req.body[prop];
       }
-
       part.save(function(){
         res.json({'parts':part})
       });

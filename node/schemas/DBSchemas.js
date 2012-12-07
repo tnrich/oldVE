@@ -14,7 +14,8 @@ module.exports = function (app) {
 
 	var registerSchema = function(name,schema){
 		app.db.model(name, schema);
-		schema.virtual('id').get(function () {return this._id;});
+		schema.virtual('id').get(function () {return this._id.toString();});
+		schema.set('toJSON', { virtuals: true });
 		schema.set('toJSON', { virtuals: true });
 	};
 
@@ -42,6 +43,7 @@ module.exports = function (app) {
 	registerSchema('sequence', SequenceSchema);
 
 	var PartSchema = new Schema({
+		id                :  String,
 		veproject_id      :  String,
 		j5bin_id          :  String,
 		eugenerule_id     :  String,
@@ -65,7 +67,13 @@ module.exports = function (app) {
 		endBP             :  String,
 		iconID            :  String
 	});
-	registerSchema('part', PartSchema);
+
+	PartSchema.pre('save', function (next) {
+	  this.id = this._id;
+	  next();
+	})
+
+	app.db.model('part', PartSchema);
 
 	var VEProjectSchema = new Schema({
 		name: String,

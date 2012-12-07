@@ -13,7 +13,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             deproject.set('name',text);
             deproject.save({
                 callback: function(){
-                    Teselagen.manager.ProjectManager.loadDesignAndChildResources();
                     Ext.getCmp('mainAppPanel').getActiveTab().setTitle(text);
                 }
             });
@@ -43,7 +42,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText,selectedItem.replace(" ","_"));
             }
         });
-
     },
 
     importDesignFromFormat: function(format,cb){
@@ -193,8 +191,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.saveDEProject(function(){
             activeTab.el.unmask();
         });
-
-
     },
 
     onDeviceEditorSaveEvent: function(arg){

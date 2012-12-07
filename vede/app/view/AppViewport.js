@@ -59,7 +59,7 @@ Ext.define('Vede.view.AppViewport', {
                         },
                         {
                            xtype: 'AnalysisPanel',
-                           hidden: true
+                           //hidden: true
                         },
                         {
                             xtype: 'j5ReportPanel'

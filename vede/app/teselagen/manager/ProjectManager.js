@@ -20,120 +20,68 @@ Ext.define("Teselagen.manager.ProjectManager", {
         observable: "Ext.util.Observable"
     },
     singleton: true,
-    projects: null,
     currentUser: null,
-    workingProject: null,
-    workingSequence: null,
+    projects: null,
 
-    constructor: function (inData) {},
-
-    /**
-     * Load User Info
-     */
-    loadUser: function (cb) {
-        //console.log('PM: Loading User');
+    loadUser: function () {
         if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
         var users = Ext.create("Teselagen.store.UserStore");
         var self = this;
         users.load({
-            callback: function (records,operation,success) {
-                if(!records) {console.log('Error loading user'); return cb(false);}
+            callback: function(records,operation,success) {
+                if(!records) console.log('Error loading user');
                 self.currentUser = users.first();
-                self.currentUser.projects().load({
-                    callback: function(record,operation,success){
-                        self.projects = self.currentUser.projects();
-                        Vede.application.fireEvent("renderProjectsTree");
-                        //Vede.application.fireEvent("openProjectManagerWindow");
-                        //if(Ext.getCmp('projectGrid_Panel')) Ext.getCmp('projectGrid_Panel').reconfigure(self.projects);
+                var projects = self.currentUser.projects();
+                projects.load({
+                    callback : function(records,operation,success){
+                        self.projects = projects;
+                        Vede.application.fireEvent("renderProjectsTree");                        
                     }
                 });
-                if(cb) return cb(true);
             }
         });
     },
 
-    /**
-     *  Load Project Child Resources
-     */
-    loadDesignAndChildResources: function () {
-        var projectController = Vede.application.getController('Vede.controller.ProjectController');
-
-        var self = this;
-
-        var deprojects = this.workingProject.deprojects();
-        deprojects.load({
-            callback: function (records,operation,success) {
-                projectController.renderTree(deprojects);
-            }
-        });
-
-        /*
-        var veprojects = this.workingProject.veprojects();
-        veprojects.load({
-            callback: function (records,operation,success) {
-                projectController.renderPartsSection(veprojects);
-            }
-        });
-        */
-
-    },
-
-    /**
-     * Open a Project
-     */
-    openProject: function (project) {
-        //console.log('PM: Opening a project ' + project.data.name);
-        this.workingProject = project;
-
-        Ext.getCmp('projectDesignPanel').setLoading(true);
-        // Load Designs And Design Child Resources and Render into ProjectPanel
-        this.loadDesignAndChildResources();
-    },
-
-    openj5Report: function(item){
-        var id = item.data.id;
-        var deprojects = this.workingProject.deprojects();
-        var selectedDEProject = deprojects.getById(id);
+    checkDuplicatedTabs: function(model,tabName,cb) {
         var tabPanel = Ext.getCmp('mainAppPanel');
-        var newj5ReportPanel = Ext.create('Vede.view.j5Report.j5ReportPanel',{title:'Report',model:selectedDEProject});
-        tabPanel.add(newj5ReportPanel).show();
-        tabPanel.setActiveTab(newj5ReportPanel);
-    },
-
-    openDesign: function (item) {
-        var id = item.data.id;
-        if(!this.workingProject) this.workingProject
-        var deprojects = this.workingProject.deprojects();
-        var selectedDEProject = deprojects.getById(id);
-        var tabPanel = Ext.getCmp('mainAppPanel');
-        // First check tab is not already opened
         var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
         var duplicated = false;
-            var DEProjectId = selectedDEProject.data.id;
+        var ModelId = model.data.id;
         tabPanel.items.items.forEach(function(tab,key){
-            if(tab.model &&  tab.initialCls == "DeviceEditorTab")
+            if(tab.model &&  tab.initialCls == tabName)
             {
-                console.log(tab);
-                if(tab.model.data.id == DEProjectId)
+                if(tab.model.data.id == ModelId)
                 {
                     duplicated = true;
                     tabPanel.setActiveTab(key);
                 }
             }
         });
-        if(!duplicated)
-        {
+        if(!duplicated) return cb(tabPanel);
+    },
+
+    openj5Report: function(selectedDEProject){
+        this.checkDuplicatedTabs(selectedDEProject,"j5ReportTab",function(){
+            var tabPanel = Ext.getCmp('mainAppPanel');
+            var newj5ReportPanel = Ext.create('Vede.view.j5Report.j5ReportPanel',{title:'Report',model:selectedDEProject});
+            tabPanel.add(newj5ReportPanel).show();
+            tabPanel.setActiveTab(newj5ReportPanel);
+        });
+    },
+
+    openDEProject: function (selectedDEProject) {
+        this.checkDuplicatedTabs(selectedDEProject,"DeviceEditorTab",function(tabPanel){
             var self = this;
             Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
             var selectedDesign = selectedDEProject.getDesign({
                 callback: function (record,operation) {
                     selectedDesign = selectedDEProject.getDesign();
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                        tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject,modelId:DEProjectId})).show();
+                        tabPanel.add(Ext.create('Vede.view.de.DeviceEditor',{title: selectedDEProject.data.name+' Design',model:selectedDEProject,modelId:selectedDEProject.data.id})).show();
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                 }
             });
-        }
+        });
     },
 
     deleteDEProject: function(deproject,tab){
@@ -188,23 +136,23 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 project.save({
                     callback: function(){
                         self.workingProject = project;
-                        self.loadDesignAndChildResources();
-                        Vede.application.fireEvent("closeProjectManagerWindow");
+                        Vede.application.fireEvent("renderProjectsTree",function(){
+                            Ext.getCmp('projectTreePanel').expandPath('/root/'+project.data.id); 
+                        });
                     }
                 });
         };
 
         Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
     },
-    createNewDeviceEditorProject: function(){
 
+    createNewDEProjectAtProject: function(project){
         var onPromptClosed = function(answer,text) {
 
             if(text==='') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed ,this);
 
             var self = this;
-
-            if(this.workingProject) {
+            if(project) {
                 deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
                     name: text,
                     dateCreated: new Date(),
@@ -238,15 +186,19 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                     var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
                     deproject.setDesign(design);
-                    self.workingProject.deprojects().add(deproject);
+                    project.deprojects().add(deproject);
 
                     deproject.save({
                         callback: function(){
                             design.set( 'deproject_id', deproject.get('id') );
                             design.save({
                                 callback: function(){
-                                    self.loadDesignAndChildResources();
-                                    self.openDesign(deproject);
+                                    Vede.application.fireEvent("renderProjectsTree",function(){
+                                        console.log("Expanding "+'/root/'+project.data.id+'/'+deproject.data.id);
+                                        Ext.getCmp('projectTreePanel').expandPath('/root/'+project.data.id); 
+                                        Ext.getCmp('projectTreePanel').selectPath('/root/'+project.data.id+'/'+deproject.data.id); 
+                                    });
+                                    self.openDEProject(deproject);
                                 }});
                     }});
                 };
@@ -288,29 +240,5 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         });
         }
-
-        /*
-        var self = this;
-
-        if(this.workingProject) {
-            deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-                name: "Untitled DE Project"
-            });
-            
-            this.workingProject.deprojects().add(deproject);
-
-            deproject.save({
-                callback: function(){
-                    self.loadDesignAndChildResources();
-                    console.log("DE project saved");
-                }
-            });
-        }
-        */
-    },
-
-    init: function() {
-        this.callParent();
     }
-
 });

@@ -188,7 +188,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     deproject.setDesign(design);
     Teselagen.manager.ProjectManager.workingProject.deprojects().add(deproject);
     Teselagen.manager.ProjectManager.loadDesignAndChildResources();
-    Teselagen.manager.ProjectManager.openDesign(deproject);
+    Teselagen.manager.ProjectManager.openDEProject(deproject);
 
   }
 

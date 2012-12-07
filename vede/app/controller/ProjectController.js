@@ -6,15 +6,25 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.openProject(project);
     },
 
-    renderProjectsTree: function(){
-        //Ext.getCmp('projectDesignTab').hide()
-        Ext.getCmp('projectTreeTab').hide();
+    renderProjectsTree: function(cb){
+        Ext.getCmp('projectDesignTab').hide()
+        Ext.getCmp('projectTreeTab').show();
         var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
         rootNode.removeAll();
+
+        rootNode.appendChild({
+            text: 'Add project',
+            leaf: true,
+            hrefTarget: 'newproj',
+            icon: 'resources/images/add.png',
+            id: 0
+        });
+
         var projects = Teselagen.manager.ProjectManager.projects;
         projects.each(function(project) {
             var projectNode = rootNode.appendChild({
-                text: project.data.name
+                text: project.data.name,
+                id: project.data.id
             });
 
             var deprojects = project.deprojects();
@@ -30,12 +40,12 @@ Ext.define("Vede.controller.ProjectController", {
 
                     var j5resultsNode = deprojectnode.appendChild({
                         text: "J5 Reports",
-                        leaf: false,
+                        leaf: true,
                         id: deproject.data.id,
                         hrefTarget: 'j5reports',
                         icon: "resources/images/ux/j5-tree-icon-parent"
                     });
-
+                    /*
                     var j5runs = deproject.j5runs();
                     j5runs.load({callback: function(){
                         deproject.j5runs().each(function(j5run){
@@ -48,82 +58,87 @@ Ext.define("Vede.controller.ProjectController", {
                         });
 
                     }});
+                    */
                 });
 
             }});
 
+            projectNode.appendChild({
+                text: 'Add design',
+                leaf: true,
+                hrefTarget: 'newde',
+                icon: 'resources/images/add.png',
+                id: 0
+            });
+
+        });
+        if(typeof(cb) == "function") cb();
+    },
+
+    resolveAndOpenDEProject: function(record){
+        var deproject_id = record.data.id;
+        var project_id = record.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var deprojects = project.deprojects().load({
+            callback : function(){
+                var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.openDEProject(deproject);
+            }
+        });
+
+    },
+
+    resolveAndOpenj5Report: function(record){
+        var deproject_id = record.parentNode.parentNode.data.id;
+        var project_id = record.parentNode.parentNode.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var deprojects = project.deprojects().load({
+            callback : function(){
+                var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.openj5Report(deproject);
+            }
         });
     },
 
-    renderTree: function (deprojects) {
-
-        Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
-
-        deprojects.each(function (deproject) {
-
-            var rootNode = Ext.getCmp('projectDesignPanel').getRootNode();
-
-            var designNode = rootNode.appendChild({
-                text: deproject.data.name,
-                leaf: false,
-                id: deproject.data.id,
-                hrefTarget: 'opende',
-                icon: "resources/images/ux/design-tree-icon-leaf.png",
-                expanded: true
-            });
-
-            designNode.appendChild({
-                text: "J5 Reports",
-                leaf: true,
-                id: deproject.data.id,
-                hrefTarget: 'j5report',
-                icon: "resources/images/ux/j5-tree-icon-parent"
-
-            });
-
-            designNode.appendChild({
-                text: "List Parts",
-                leaf: true,
-                id: deproject.data.id,
-                icon: "resources/images/ux/parts-tree-icon-parent"
-            });
-
-            /*
-            deproject.j5runs().each(function (run) {
-                designNode.appendChild({
-                    text: run.data.name,
-                    leaf: true,
-                    id: run.data.id
-                });
-            });*/
-
+    resolveAndOpenj5Reports: function(record){
+        var deproject_id = record.parentNode.data.id;
+        var project_id = record.parentNode.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var deprojects = project.deprojects().load({
+            callback : function(){
+                var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.openj5Report(deproject,record);
+            }
         });
+    },
 
-        Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
-            text: 'Add design',
-            leaf: true,
-            hrefTarget: 'newde',
-            icon: 'resources/images/add.png',
-            id: 0
-        });
+    resolveAndCreateDEProject: function(record){
+        var project_id = record.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        Teselagen.manager.ProjectManager.createNewDEProjectAtProject(project);
+    },
 
-        Ext.getCmp('designGrid_Panel').reconfigure(deprojects);
-
-        Ext.getCmp('projectDesignPanel').setLoading(false);
+    createProject: function(record){
+        Teselagen.manager.ProjectManager.createNewProject();
     },
 
     onProjectPanelItemClick: function (store, record) { 
-        console.log(record);
         switch(record.data.hrefTarget)
         {
+            case 'newproj':
+                this.createProject(record);
+                break;
             case 'newde':
-                Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
+                this.resolveAndCreateDEProject(record);
                 break;
             case 'opende':
-                Teselagen.manager.ProjectManager.openDesign(record);
+                this.resolveAndOpenDEProject(record);
                 break;
             case 'j5report':
-                Teselagen.manager.ProjectManager.openj5Report(record);
+                this.resolveAndOpenj5Report(record);
+                break;
+            case 'j5reports':
+                this.resolveAndOpenj5Reports(record);
                 break;
         }
     },
