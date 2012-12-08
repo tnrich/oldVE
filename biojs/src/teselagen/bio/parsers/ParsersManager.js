@@ -5,17 +5,20 @@
  *
  * DW: NOTE NOT ALL HAVE BEEN TESTED THOROUGHLY
  *
- * Conversions between FASTA, GenBank, JbeiSeqXML/JbeiSeqJSON.
+ * This class has file conversions between FASTA, GenBank, JbeiSeqXML/JbeiSeqJSON, and SBOL XML/JSON.
+ *
+ * Contains some helper functions such as todayDate() and isALabel().
+ *
  * The JbeiSeqJSON structure is the central structure to conver between GenBank, JbeiSeqXml, and SBOLXML.
  *
  * FASTA/GenBank:
  *      FASTA <--> Genbank
  *
- * JbeiSeq/Genbank:
+ * JbeiSeq/Genbank: (Calls methods from {@link Teselagen.bio.parsers.JbeiseqParser})
  *      jbeiseqXMLs (more than one) --> ArrayList<jbeiseqXml>
  *      jbeiseqXML <--> jbeiseqJSON <--> Genbank
  *
- * SBOL/JbeiSeq
+ * SBOL/JbeiSeq: (Calls methods from {@link Teselagen.bio.parsers.SbolParser})
  *      sbolXML <--> sbolJSON <--> jbeiJSON
  *
  * @author Diana Wong
@@ -152,7 +155,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * If a required entry is not recognized, an error is thrown.
      * If a non-required entry is not recognized, a default value is used.
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
-     * XXXXCurrently eliminates the "seq:" namespace by replaceing it with "seq".
+     *
      * @param {String} xml XML file in String format
      * @returns {JSON} json Cleaned JSON object of the JbeiSeqXml
      */
@@ -248,16 +251,16 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
 
     },
 
-    /**
+    /** NOT WRITTEN ON SbolParser Side
      */
     sbolJsonToJbeiJson: function(sbol) {
-
+        return Teselagen.bio.parsers.SbolParser.sbolJsonToJbeiJson(sbol);
     },
 
-    /**
+    /** NOT WRITTEN ON SbolParser Side
      */
     jbeiJsonToSbolJson: function(jbei) {
-
+        return Teselagen.bio.parsers.SbolParser.jbeiJsonToSbolJson(jbei);
     },
 
 
