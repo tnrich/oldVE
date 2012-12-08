@@ -116,9 +116,14 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * isALabel
-     * @param
-     * @return {Boolean} isALabel
+     * Determines if a name (of a Genbank Feature Qualifier) is a "Label".
+     * A "label" can be label, name, note, gene, organism, and is considered the
+     * "label" of a JbeiSeq's feature (ie. "seq:label").
+     * In GenBank, the name of the Feature Element is the "type" in JbeiSeq, and
+     * the Feature Qualfier with a labe;/name/note/gene/organism is the "label".
+     *
+     * @param {String} name
+     * @return {Boolean} If it is a label or not.
      */
     isALabel: function(name) {
         /*if (name === "label" || name === "name"|| name === "ApEinfo_label" ||

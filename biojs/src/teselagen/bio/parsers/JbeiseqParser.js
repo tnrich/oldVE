@@ -319,7 +319,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                     //"seq:attribute" : {
                         "_name" : ft["attribute_asArray"][j]["_name"],
                         "_quoted" : true,
-                        "__text" : ft["attribute_asArray"][j]["__text"], //USE __text
+                        "__text" : ft["attribute_asArray"][j]["__text"] //USE __text
                     //}
                 };
 

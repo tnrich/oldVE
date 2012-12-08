@@ -186,12 +186,10 @@ Ext.onReady(function() {
                 it("jbeiseqXmlToJson() & jbeiseqJsonToXml(): Does xml->json->xml2->json2 yield json===json2?", function() {
                     var url      = "/biojs/test/data/jbeiseq/test.xml";
                     //var url      = "/biojs/test/data/jbeiseq/signal_peptide.xml";
-                    //var jbeiXml  = Teselagen.bio.parsers.ParsersManager.loadFile(url);
+                    
                     var jbeiXml = jasmine.getFixtures().read(url);
                     var jbeiJson = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(jbeiXml);
 
-                    //console.log(jbeiXml);
-                    //console.log(JSON.stringify(XmlToJson.xml_str2json(jbeiXml), null, "  "));
                     //console.log(JSON.stringify(jbeiJson, null, "  "));
 
                     var jbeiXml2 = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToXml(jbeiJson);
@@ -368,26 +366,6 @@ Ext.onReady(function() {
             });
 
             describe("Using Teselagen.bio.parsers.SbolParser", function() {
-
-                it("sbolXmlToJson()--- THIS DOES NOT WORK", function() {
-                    var url = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
-                    var xml = jasmine.getFixtures().read(url);
-                    //console.log(xml);
-
-                    //var json = ParsersManager.sbolXmlToJson(xml);
-
-                    //console.log(JSON.stringify(json, null, "  "));
-
-                    
-                });
-
-                /*it("genbankToSbol()", function() {
-                    
-                });
-
-                it("sbolToGenbank()", function() {
-                    
-                });*/
             });
 
             describe("Teselagen.bio.parsers.JbeiSeq", function() {
