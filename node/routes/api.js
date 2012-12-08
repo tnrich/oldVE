@@ -181,6 +181,32 @@ module.exports = function (app, express) {
     });
   });  
 
+  // Get Parts
+  app.get('/parts', restrict, function (pReq, pRes) {
+    var Part = app.db.model("part");
+    Part.find(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({"parts": pDocs});
+        }
+    });
+  });  
+
+  // Delete Parts
+  app.delete('/parts', restrict, function (pReq, pRes) {
+    var Part = app.db.model("part");
+    Part.remove(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({});
+        }
+    });
+  });  
+
   // Get Projects
   app.get('/projects', restrict, function (req, res) {
     var Project = app.db.model("project");
@@ -219,6 +245,32 @@ module.exports = function (app, express) {
           }
       });
   });
+
+  // Get Sequences
+  app.get('/sequences', restrict, function (pReq, pRes) {
+    var Sequence = app.db.model("sequence");
+    Sequence.find(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({"sequence": pDocs});
+        }
+    });
+  });  
+
+  // Delete Sequences
+  app.delete('/sequences', restrict, function (pReq, pRes) {
+    var Sequence = app.db.model("sequence");
+    Sequence.remove(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({});
+        }
+    });
+  });  
 
   // Dummy method
   app.get('/user', restrict, function (req, res) {
