@@ -9,8 +9,8 @@ Ext.define("Teselagen.models.J5Run", {
         // will be moved to J5Input
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
-
         "Teselagen.models.J5Input",
+        "Teselagen.models.j5Output.*",
         "Teselagen.models.J5Results",
         "Teselagen.constants.Constants",
         "Teselagen.manager.SessionManager"
@@ -22,9 +22,6 @@ Ext.define("Teselagen.models.J5Run", {
         reader: {
             type: "json",
             root: "j5runs"
-        },
-        writer: {
-            type: "json"
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/j5runs", this.url);

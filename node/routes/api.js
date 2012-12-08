@@ -77,6 +77,11 @@ module.exports = function (app, express) {
     res.send();
   })
 
+  app.all('/logout', function (req, res) {
+    req.session.destroy();
+    res.send();
+  });
+
   app.all('/login', function (req, res) {
 
     // Get parameters

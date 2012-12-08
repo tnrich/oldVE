@@ -28,7 +28,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
             fasForm.loadRecord(j5Part);
-
             this.selectedPart = j5Part;
         } else {
             var newPart = this.DeviceDesignManager.createPart(this.activeProject,

@@ -16,7 +16,10 @@ Ext.define("Vede.controller.J5ReportController", {
     onJ5RunSelect: function( item, e, eOpts ){
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
         var assemblies = this.activeJ5Run.getJ5Results().assemblies();
+        var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly().data.fileContent;
+        console.log(this.activeJ5Run);
         this.tabPanel.down('gridpanel').reconfigure(assemblies);
+        //this.tabPanel.down('textareafield').setValue(combinatorial);
     },
 
     renderMenu: function(){

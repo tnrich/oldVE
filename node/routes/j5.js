@@ -332,6 +332,10 @@ app.post(j5Method1,restrict,function(req,res){
                 newFile.size = zip.files[file]['data'].length;
                 objResponse.files.push(newFile);
               }
+              if( fileName.match(/.+combinatorial.csv/) )
+              {
+                objResponse.combinatorial = zip.files[file]['data'];
+              }
             }
 
             objResponse.files.sort(function (a, b) {
@@ -342,6 +346,8 @@ app.post(j5Method1,restrict,function(req,res){
             
             j5run.j5Results = {};
             j5run.j5Results.assemblies = objResponse.files;
+            j5run.j5Results.combinatorialAssembly = {};
+            j5run.j5Results.combinatorialAssembly.nonDegenerativeParts = objResponse.combinatorial;
             j5run.save();
 
             res.send(objResponse);

@@ -51,6 +51,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                 styleHtmlContent: true,
                 styleHtmlCls: 'binHeader',
                 height: 100,
+                width: 125,
                 bodyStyle: {
                     'padding-top': '80px',
                     'text-align': 'center'

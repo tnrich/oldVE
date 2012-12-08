@@ -125,7 +125,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             if(btn=='ok')
             {
                 if(text=='') return Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed ,this);
-
+                Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Creating new project');
                 var self = this;
                 var project = Ext.create("Teselagen.models.Project", {
                     name: text,
@@ -139,6 +139,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         self.workingProject = project;
                         Vede.application.fireEvent("renderProjectsTree",function(){
                             Ext.getCmp('projectTreePanel').expandPath('/root/'+project.data.id); 
+                            Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                         });
                     }
                 });
