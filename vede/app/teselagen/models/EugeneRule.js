@@ -110,10 +110,9 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand1",
             setterName: "setOperand1",
-            associationKey: "operand1",
+//            associationKey: "operand1",
             instanceName: "operand1",
-            foreignKey: "operand1_id", // this foreign key is not really needed, maybe we will delete in the future
-            name: "Part" //this field is not in ext documentation
+            foreignKey: "operand1_id", 
         },
         // Operand2 can be a Part or a Number; If Part, then store here.
         {
@@ -121,12 +120,10 @@ Ext.define("Teselagen.models.EugeneRule", {
             model: "Teselagen.models.Part",
             getterName: "getOperand2Part",
             setterName: "setOperand2Part",
-            associationKey: "operand2Part",
+//            associationKey: "operand2Part",
             instanceName: "operand2",
-            foreignKey: "operand2_id", // this foreign key is not really needed, maybe we will delete in the future
-            name: "Part" 
-            //this field is not in ext documentation. It's not even a unique name
-            //I know its is not, but I relly need that field. Don't worry
+            foreignKey: "operand2_id", 
+
         },
         {//Needed to find the parent of a child
             type: "belongsTo",
@@ -134,7 +131,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
             associationKey: "deviceDesign",
-            foreignKey: "devicedesign_id" // this foreign key is not really needed, maybe we will delete in the future
+            foreignKey: "devicedesign_id" 
         }
     ],
 
