@@ -3,16 +3,147 @@
  * @author Diana Womg
  */
 
+ // =====================================================
+ //   INTEGRATIVE TESTING
+ // =====================================================
+
 Ext.require("Ext.Ajax");
 Ext.require("Teselagen.bio.util.StringUtil");
 Ext.require("Teselagen.bio.parsers.GenbankManager"); //will be a singleton
 Ext.onReady(function() {
 
-    describe("Teselagen.bio.parsers.Genbank/Manager: GENBANK PACKAGE INTEGRATIVE TESTING:", function() {
-        // =====================================================
-        //   INTEGRATIVE TESTING
-        // =====================================================
-        describe("Integrative Testing for GenbankManager.js: KEYWORDS & SUBKEYWORDS & RUNONS", function() {
+    describe("Teselagen.bio.parsers.GenbankManager.parseGenbankFile(): INTEGRATIVE TESTING:", function() {
+        
+        describe("LOCUS", function() {
+            
+            var line, tmp;
+
+            it("Parses LOCUS 1: circular?",function(){
+                var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.getLocus().toString()).toBe(line);
+                expect(tmp.getLocus().getStrandType()).toBe("ds");
+                expect(tmp.getLocus().getSequenceLength()).toBe(5371); //currently a string
+                expect(tmp.getLocus().getNaType()).toBe("DNA");
+                expect(tmp.getLocus().getLinear()).toBe(false);
+                expect(tmp.getLocus().getDivisionCode()).toBe("");
+                // CURRENTLY DOES NOT SUPPORT DATE TYPE
+                expect(tmp.getLocus().getDate()).toBe("1-APR-2012");
+            });
+            it("Parses LOCUS 2: linear, divisionCode?",function(){
+                var line = "LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.getLocus().getLocusName()).toBe("SCU49845");
+                expect(tmp.getLocus().getStrandType()).toBe("");
+                expect(tmp.getLocus().getSequenceLength()).toBe(5028);
+                expect(tmp.getLocus().getNaType()).toBe("DNA");
+                expect(tmp.getLocus().getLinear()).toBe(true);
+                expect(tmp.getLocus().getDivisionCode()).toBe("PLN");
+            });
+            it("Parses LOCUS 3: Model formated line. no ds/ss, linear, division code?",function(){
+                var line = "LOCUS       LISOD                    756 bp    DNA     linear   BCT 30-JUN-1993";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.getLocus().getLocusName()).toBe("LISOD");
+                expect(tmp.getLocus().getStrandType()).toBe("");
+                expect(tmp.getLocus().getSequenceLength()).toBe(756);
+                expect(tmp.getLocus().getNaType()).toBe("DNA");
+                expect(tmp.getLocus().getLinear()).toBeTruthy();
+                expect(tmp.getLocus().getDivisionCode()).toBe("BCT");
+            });
+            it("Parses LOCUS: toJSON format?",function(){
+                var line = "LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                var json = {
+                        "keyword": "LOCUS",
+                        "locusName": "pj5_00028",
+                        "sequenceLength": 5371,
+                        "strandType": "ds",
+                        "naType": "DNA",
+                        "linear": false,
+                        "divisionCode": "",
+                        "date": "1-APR-2012"
+                };
+                expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("LOCUS"), null, "  "));
+            });
+            it("Parses LOCUS: toString format?",function(){
+                var line = "LOCUS       LISOD                    756 bp    DNA     linear   BCT 30-JUN-1993";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.getLocus().toString()).toBe(line);
+            });
+
+        });
+
+        describe("KEYWORDS", function() {
+
+            it("Parses ACCESSION?",function(){
+                var line = "ACCESSION   pj5_00028 Accession";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
+                expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBeTruthy(); // {} is truthy
+                expect(tmp.findKeyword("VERSION")).toBeFalsy();
+            });
+
+            it("Parses ACCESSION?, adds dummy SubKeywords correctly?",function(){
+                var line = "ACCESSION   pj5_00028 Accession";
+                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
+                expect(tmp.findKeyword("ACCESSION").getSubKeywords()).toBeTruthy(); // {} is truthy
+                expect(tmp.findKeyword("VERSION")).toBeFalsy();
+                
+                tmp.findKeyword("ACCESSION").addSubKeyword(Ext.create('Teselagen.bio.parsers.GenbankSubKeyword', {keyword: "test", value : "test2"}));
+                expect(tmp.findKeyword("ACCESSION").getSubKeywords().length).toBe(1);
+                expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getKeyword()).toBe("test");
+                expect(tmp.findKeyword("ACCESSION").getSubKeywords()[0].getValue()).toBe("test2");
+            });
+
+            it("Parses VERSION?",function(){
+                var line = "VERSION     pj5_00028 version.12";
+                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.findKeyword("VERSION")).toBeTruthy();
+                expect(tmp.findKeyword("ACCESSION")).toBeFalsy();
+                expect(tmp.findKeyword("VERSION").toString()).toBe(line);
+            });
+
+            it("Parses DEFINITION?",function(){
+                var line = "DEFINITION  pj5_00028 Definition";
+                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.findKeyword("DEFINITION").toString()).toBe(line);
+            });
+
+            it("Parses KEYWORDS? '.' case",function(){
+                var line = "KEYWORDS    .";
+                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.findKeyword("KEYWORDS").toString()).toBe(line);
+            });
+
+            it("Parses KEYWORDS? ';;;;;' case",function(){
+                var line =  "KEYWORDS    ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; \n" +
+                            "; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ";
+                //console.log("blah");
+                var tmp  = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                //console.log(tmp.toString());
+                expect(tmp.getKeywords().length).toBe(1); // does not turn second line into a keyword
+            });
+
+            it("Parses KEYWORDS: toJSON format?",function(){
+                var line = "ACCESSION   pj5_00028 Accession";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                var json = {
+                        "keyword": "ACCESSION",
+                        "value": "pj5_00028 Accession"
+                };
+                expect(JSON.stringify(json, null, "  ")).toBe(JSON.stringify(tmp.findKeyword("ACCESSION"), null, "  "));
+            });
+
+            it("Parses KEYWORDS: toString format",function(){
+                var line = "ACCESSION   pj5_00028 Accession";
+                var tmp = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(line);
+                expect(tmp.findKeyword("ACCESSION").toString()).toBe(line);
+            });
+
+        });
+
+        describe("KEYWORDS & SUBKEYWORDS & RUNONS", function() {
 
             it("Parses DEFINITION with 2 lines?",function(){
                 var line =
@@ -56,7 +187,7 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Integrative Testing for GenbankManager.js: parseFeatures(), parseFeatureLocation(), parseFeatureQualifier()", function() {
+        describe("FEATURES", function() {
             beforeEach(function() {
                 line =
                     'FEATURES             Location/Qualifiers\n' +
@@ -94,7 +225,7 @@ Ext.onReady(function() {
 
         });
 
-        describe("Integrative: parseFeatures() etc, (COMPLEX CASE: Runon LOCATION, and QUALIFIER)", function() {
+        describe("FEATURES: (COMPLEX CASE: Runon LOCATION, and QUALIFIER)", function() {
             beforeEach(function() {
                 line =
                     'FEATURES             Location/Qualifiers\n' +
@@ -140,7 +271,7 @@ Ext.onReady(function() {
 
         });
 
-        describe("Integrative: parseOrigin()?", function() {
+        describe("ORIGIN", function() {
             beforeEach(function() {
                 line = "ORIGIN      \n" +
                 "        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa\n" +
@@ -160,7 +291,7 @@ Ext.onReady(function() {
             });
         });
 
-        describe("Integrative: Partial file (top part of pj5_00028.gb) parsing from GenbankManager.js:?", function() {
+        describe("FULL FILE STRING", function() {
             beforeEach(function() {
                 line = '' +
                     'LOCUS       pj5_00028               5371 bp ds-DNA     circular     1-APR-2012\n' +

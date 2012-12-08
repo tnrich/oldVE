@@ -4,6 +4,42 @@
  * Converts SequenceManager to various file formats using
  * {@link Teselagen.bio.parsers.ParsersManager}
  *
+ * This class directly converts:
+ *          FASTA ---> {@link Teselagen.models.FeaturedDNASequence}
+ *
+ *          FASTA <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          FileString (FASTA, GenBank, JbeiSeq, SBOL?) ---> {@link Teselagen.models.SequenceFile}
+ *
+ *          jbeiseq JSON <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          jbeiseq XML <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          {@link Teselagen.models.SequenceFile}  <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          {@link Teselagen.manager.SequenceManager}  ---> {@link Teselagen.models.FeaturedDNASequence}
+ *
+ *          {@link Teselagen.manager.SequenceManager}  ---> {@link Teselagen.bio.parsers.Genbank}
+ *
+ *
+ * Calls methods from {@link Teselagen.bio.parsers.ParsersManager}, can also convert:
+ *      FASTA/GenBank:
+ *          FASTA <--> Genbank
+ *
+ *      JbeiSeq/Genbank:
+ *          jbeiseqXMLs (more than one) --> ArrayList<jbeiseqXml>
+ *          jbeiseqXML <--> jbeiseqJSON <--> Genbank
+ *
+ *      SBOL/JbeiSeq
+ *          sbolXML <--> sbolJSON <--> jbeiJSON
+ *
+ *
+ * Use {@link Teselagen.bio.parsers.JbeiseqParser} to convert:
+ *          jbeiseqXMLs (more than one) --> ArrayList<jbeiseqXml>
+ *
+ *          jbeiseqXML <--> jbeiseqJSON <--> Genbank
+ *
+ *
  * @author Diana Wong
  */
 
@@ -80,9 +116,14 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * isALabel
-     * @param
-     * @return {Boolean} isALabel
+     * Determines if a name (of a Genbank Feature Qualifier) is a "Label".
+     * A "label" can be label, name, note, gene, organism, and is considered the
+     * "label" of a JbeiSeq's feature (ie. "seq:label").
+     * In GenBank, the name of the Feature Element is the "type" in JbeiSeq, and
+     * the Feature Qualfier with a labe;/name/note/gene/organism is the "label".
+     *
+     * @param {String} name
+     * @return {Boolean} If it is a label or not.
      */
     isALabel: function(name) {
         /*if (name === "label" || name === "name"|| name === "ApEinfo_label" ||
@@ -585,7 +626,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /** NOT TESTED
      * Convert a SequenceManager model to a SequenceFile model.
-     * @param {Teselagen.models.SequenceManager} pSequenceManager
+     * @param {Teselagen.manager.SequenceManager} pSequenceManager
      * @returns {Teselagen.models.SequenceFile}
      */
     sequenceManagerToSequenceFile: function(pSequenceManager) {
