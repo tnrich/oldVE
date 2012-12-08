@@ -15,7 +15,7 @@ Ext.require(["Ext.Ajax",
 //     "Teselagen.utils.FormatUtils",
 //     "Teselagen.utils.DeXmlUtils",
      "Teselagen.constants.Constants",
-//     "Teselagen.models.SequenceFile",
+     "Teselagen.models.SequenceFile",
 //     "Teselagen.models.Part",
 //     "Teselagen.models.J5Bin",
 //     "Teselagen.models.J5Collection",
@@ -28,7 +28,7 @@ Ext.require(["Ext.Ajax",
 //     "Teselagen.models.DeviceDesign",
      "Teselagen.models.DeviceEditorProject",
 //     "Teselagen.manager.SequenceFileManager",
-//     "Teselagen.manager.DeviceDesignManager",
+     "Teselagen.manager.DeviceDesignManager",
      "Teselagen.manager.ProjectManager",
      "Teselagen.manager.AuthenticationManager",
      "Teselagen.manager.SessionManager",
@@ -39,6 +39,9 @@ Ext.require(["Ext.Ajax",
     var project, design, deproject, projectcreated, deprojectsaved, designsaved, project_id, 
         deproject_id, deprojStore;
     var isTestDataDeleted = false;
+    var isDEprojectsDeleted = false;
+    var isPartsDeleted = false;
+    var isSequencesDeleted = false;
     var parts = [];
     var sequences = [];
     var designsaved = false;
@@ -50,6 +53,7 @@ Ext.require(["Ext.Ajax",
     var projectManager = Teselagen.manager.ProjectManager;
     var authenticationManager = Teselagen.manager.AuthenticationManager;
     var sessionManager = Teselagen.manager.SessionManager;
+    var DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
     describe("Device Editor Project server tests.", function() {
         it("Clear test data", function() {
@@ -58,9 +62,27 @@ Ext.require(["Ext.Ajax",
                     url: "/api/deprojects",
                     method: "DELETE",
                     success: function() {
-                        isTestDataDeleted = true;
+                        isDEprojectsDeleted = true;
                     }
                 });
+                Ext.Ajax.request({
+                    url: "/api/parts",
+                    method: "DELETE",
+                    success: function() {
+                        isPartsDeleted = true;
+                    }
+                });
+                Ext.Ajax.request({
+                    url: "/api/sequences",
+                    method: "DELETE",
+                    success: function() {
+                        isSequencesDeleted = true;
+                    }
+                });
+                waitsFor(function() {
+                    isTestDataDeleted = isDEprojectsDeleted && isPartsDeleted && isSequencesDeleted;
+                    return isTestDataDeleted;
+                }, "test data deleted", 500)
             });
         });
 
@@ -90,24 +112,28 @@ Ext.require(["Ext.Ajax",
             // Will build this from the models.
             // The correct way would be to use DeviceDesignManager.js
             // Create Bin1 with 2 Part with 1 SequenceFile each
-            var DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
-            var binsArray = [];
+            var binsArray = [], sequenceFile;
 
-            for(var binIndex = 0;binIndex<6;binIndex++)
+            for(var binIndex = 0;binIndex<2;binIndex++)
             {
                 var newBin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "bin"+binIndex
                 });
                 var tempParts = [];
-                for(var i=0;i<6;i++)
+                for(var i=0;i<2;i++)
                 {
                     var newPart = Ext.create("Teselagen.models.Part", {
-                        name: "part1a",
+                        name: "part"+binIndex+i,
                         genbankStartBP: 1,
                         endBP: 7
                     });
                     parts.push(newPart);
                     tempParts.push(newPart);
+                    sequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                       sequenceFileFormat: constants.FASTA,
+                       sequenceFileContent: "GATTACA"
+                    });
+                    sequences.push(sequenceFile);
                 }
                 newBin.addToParts(tempParts);
                 binsArray.push(newBin);
@@ -115,12 +141,11 @@ Ext.require(["Ext.Ajax",
 
             // CREATE THE COLLECTION WITH BINS
             design = DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-
             expect(design).toBeDefined();
             designGenerated = true;
         });
 
-        xit("Saving Sequences", function () {
+        it("Saving Sequences", function () {
             waitsFor(function () { 
                 return designGenerated && deprojectsaved;
             }, "design generated and deproject saved", 500);
@@ -129,14 +154,16 @@ Ext.require(["Ext.Ajax",
                     sequence.save({
                             callback:function(){ 
                                 parts[key].setSequenceFile(sequences[key]); // Updated Ids
-                                if(key==sequences.length-1) sequencesSaved = true; 
+                                if(key==sequences.length-1) {
+                                    sequencesSaved = true; 
+                                }
                             }
                     });
                 });
             });
         });
         
-        xit("Saving Parts", function () {
+        it("Saving Parts", function () {
             waitsFor(function () { 
                 return sequencesSaved;
             }, "sequences saved", 500);
@@ -144,7 +171,9 @@ Ext.require(["Ext.Ajax",
                 parts.forEach(function(part,key){
                     part.save({
                         callback:function(){
-                            if(key==parts.length-1) partsSaved = true; 
+                            if(key==parts.length-1) {
+                                partsSaved = true; 
+                            }
                         }
                     });
                 });
@@ -152,7 +181,7 @@ Ext.require(["Ext.Ajax",
 
         });
 
-        xit("Saving Design", function () {
+        it("Saving Design", function () {
             waitsFor(function () {
                 return partsSaved;
             }, "parts saved", 500);
