@@ -26,8 +26,6 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Boolean} isCircular
      */
     fields: [
-        //{name: "id",                type: "long"},
-        //{name: "devicedesign_id",   type: "long"},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
         {name: "isCircular",        type: "boolean",    defaultValue: true}
@@ -45,8 +43,8 @@ Ext.define("Teselagen.models.J5Collection", {
         {
             type: "hasMany",
             model: "Teselagen.models.J5Bin",
-            name: "bins",
-            foreignKey: "j5collection_id"
+            name: "bins"
+//            foreignKey: "j5collection_id"
         },
         { //Needed to find the parent of a child
             type: "belongsTo",
