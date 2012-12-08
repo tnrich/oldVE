@@ -34,7 +34,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     var partsTempArray = [];
                     bin.parts().each(function(part){
                         //part.save();
-                        partsTempArray.push(part.getData().id)
+                        partsTempArray.push(part.getData().id);
                     });
                     binsTempArray.push(partsTempArray);
                 });
@@ -60,14 +60,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        //{name: "id", type: "long"},
         {name: "deproject_id", type: "long"},
-        //{name: "j5collection_id", type: "long"},
-        //{name: "sbolviconinfo_id", type: "long"}
     ],
 
     validations: [
-        //{field: "id", type: "presence"}
     ],
 
     associations: [
@@ -77,8 +73,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
             associationKey: "j5collection",
-            name: "j5collection" // PLEASE DONT DELETE IT, I NEED IT TO GET CORRECTLY ASSOCIATED DATA
-            //foreignKey: "j5collection_id"
+            name: "j5collection" // Note: not a documented config, but specified for getRecordData
         },
         {
             type: "hasOne",
@@ -86,14 +81,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getSBOLvIconInfo",
             setterName: "setSBOLvIconInfo",
             associationKey: "sbolvIconInfo",
-            //foreignKey: "sbolviconinfo_id"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
             associationKey: "rules",
             name: "rules",
-            //foreignKey: "devicedesign_id"
         },
         {
             type: "belongsTo",
@@ -101,7 +94,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
             associationKey: "deviceEditorProject",
-            //foreignKey: "deproject_id"
         }
     ],
 
