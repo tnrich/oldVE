@@ -215,44 +215,27 @@ Ext.require(["Ext.Ajax",
             });
         });
 
-    });
-    
-    
-    /*
-    describe("Editing DE Design", function () {
         it("Alter design model", function () {
-            
             waitsFor(function () {
-                if(deprojectedited) return true; else return false;
-            }, "Editing DE Project Timeout", 9000);
-
-
+                return  deprojectedited;
+            }, "editing DE Project", 500);
             runs(function () {
-                console.log("Editing design");
                 design.createNewCollection(1);
                 design.save({
-                    callback: function(){
-                        console.log("Design edited!");
+                    success: function(){
                         designedited = true;
                     }
                 });
             });
+            waitsFor(function () {
+                return  designedited;
+            }, "editing DeviceDesign", 500);
+            runs(function() {
+               expect(designedited).toBe(true); 
+            });
             
         });
 
-        it("Get Altered design model", function () {
-            waitsFor(function () {
-                if(designedited) return true; else return false;
-            }, "Editing Design Timeout", 9000);
-
-
-            runs(function () {
-                var editedDesign = deproject.getDesign();
-                //console.log(editedDesign);
-            });
-        });
-
     });
-*/
     
 });
