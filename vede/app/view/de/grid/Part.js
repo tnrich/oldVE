@@ -1,5 +1,5 @@
 /**
- * Class which creates components for given parts to display in the Device 
+ * Class which creates components for given parts to display in the Device
  * Editor canvas.
  */
 Ext.define('Vede.view.de.grid.Part', {
@@ -11,51 +11,74 @@ Ext.define('Vede.view.de.grid.Part', {
     },
 
     partCell: null,
-
+    eugeneFlag: null,
     /**
      * @param Teselagen.models.Part
      */
-    constructor: function(config) {
+    constructor: function (config) {
         this.initConfig(config);
 
-        var html;
+        var html = "";
 
         if(this.getPart()) {
             html = this.getPart().get("name");
-        } else {
-            html = "";
+            if(html.length > 14) html = html.substring(0,14) + '..';
         }
+
+        this.eugeneFlag = {
+            xtype: 'button',
+            cls: 'eugeneFlag',
+            x: 5,
+            y: 0,
+            margin: '0 auto auto auto',
+            hidden: true
+        }
+        /*
+        if(this.getBin())
+        {
+            var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+            var rules = deproject.getDesign().rules();
+            rules.each(function(rule){
+                if(rule.data.operand1_id==this.getBin)
+            });
+        }
+        */
 
         this.partCell = Ext.create("Ext.container.Container", {
             items: [{
-                html: html,
+                //html: html,
                 styleHtmlContent: true,
                 styleHtmlCls: 'gridPartCell',
+                height: 60,
                 cls: 'gridPartCell',
-                bodyStyle: {
-                    'padding-top': '10px',
+                width: 125,
+                items: [
+                {
+                    xtype: 'container',
+                    style: {
+                    'padding-top': '20px',
                     'text-align': 'center'
-                },
-                height: 40,
+                    },
+                    html : html
+                }]
             }]
         });
 
         this.callParent([{
             items: [
-                this.partCell
-            ]
+            this.partCell]
         }]);
     },
 
-    select: function() {
+    select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
     },
 
-    deselect: function() {
+    deselect: function () {
         this.partCell.down().removeBodyCls("gridPartCell-selected");
     },
 
-    applyPart: function(pPart) {
+    applyPart: function (pPart) {
         return pPart;
     }
 });

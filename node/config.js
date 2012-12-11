@@ -177,6 +177,10 @@ module.exports = function (app, express) {
 
   app.xmlparser = new app.xml2js.Parser();
 
+  app.mailer = app.nodemailer.createTransport("SMTP",{
+      host: 'localhost'
+  });
+
   return config;
 
 };

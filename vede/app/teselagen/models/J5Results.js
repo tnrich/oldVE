@@ -9,7 +9,6 @@ Ext.define("Teselagen.models.J5Results", {
     requires: [
         "Teselagen.constants.Constants",
         "Teselagen.manager.SessionManager",
-
         "Teselagen.models.j5Output.CombinatorialAssembly",
         "Teselagen.models.j5Output.AssembledSequenceFile"
     ],

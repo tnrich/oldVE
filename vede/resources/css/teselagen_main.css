@@ -129,7 +129,7 @@ body {
   background: white;
 }
 
-#projectmanager_btn {
+#help_btn {
   background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
 }
 
@@ -147,11 +147,11 @@ body {
   color: #fafafa;
 }
 
-.header_btn #projectmanager_btn-btnInnerEl, .header_btn #headerUserIcon-btnInnerEl {
+.header_btn #help_btn-btnInnerEl, .header_btn #headerUserIcon-btnInnerEl {
   color: #fafafa;
 }
 
-.header_btn_over #projectmanager_btn-btnInnerEl, .header_btn_over #headerUserIcon-btnInnerEl {
+.header_btn_over #help_btn-btnInnerEl, .header_btn_over #headerUserIcon-btnInnerEl {
   color: #fafafa;
 }
 /*Project Panel*/

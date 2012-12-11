@@ -39,9 +39,48 @@ module.exports = function (app, express) {
   };
 
   // Root Path
-  app.get('/', function (req, res) {
-    res.send('', 200)
+  app.post('/sendFeedback', function (req, res) {
+    if(req.body.feedback)
+    {
+      app.mailer.sendMail(
+        {
+            from: "Teselagen <root@localhost>",
+            to: "rpavez@gmail.com",
+            subject: "Feedback",
+            text: req.body.feedback
+        }
+        , function(error, response){
+          if(error){
+              console.log(error);
+          } else {
+              res.send();
+          }
+      });
+    }
+    else if(req.body.error)
+    {
+      app.mailer.sendMail(
+        {
+            from: "Teselagen <root@localhost>",
+            to: "rpavez@gmail.com",
+            subject: "Error",
+            text: req.body.error+'\n'+req.body.error_feedback
+        }
+        , function(error, response){
+          if(error){
+              console.log(error);
+          } else {
+              res.send();
+          }
+      });
+    }
+    res.send();
   })
+
+  app.all('/logout', function (req, res) {
+    req.session.destroy();
+    res.send();
+  });
 
   app.all('/login', function (req, res) {
 
@@ -355,11 +394,6 @@ module.exports = function (app, express) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
-      project.design.j5collection.bins.forEach(function(bin){
-        bin.parts.forEach(function(part){
-          part.id = part._id;
-        });
-      });
       res.json({"design":project.design});
     });
     
@@ -510,7 +544,6 @@ module.exports = function (app, express) {
       for(var prop in req.body) {
         part[prop] = req.body[prop];
       }
-
       part.save(function(){
         res.json({'parts':part})
       });

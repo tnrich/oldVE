@@ -31,9 +31,9 @@ Ext.onReady(function() {
         describe("sbolXmlToJson()", function() {
             
             it("opens and reads /biojs/test/data/sbol/signal_peptide_SBOL.xml",function(){
-                var url  = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
-                var xml  = jasmine.getFixtures().read(url);
-                var json = SbolParser.sbolXmlToJson(xml);
+                url  = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
+                xml  = jasmine.getFixtures().read(url);
+                json = SbolParser.sbolXmlToJson(xml);
                 //console.log(JSON.stringify(json, null, "  "));
 
                 expect(json["rdf:RDF"]["_xmlns"]).toBe("http://sbols.org/v1#");
@@ -50,11 +50,42 @@ Ext.onReady(function() {
                 expect(json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"][0]["subComponent"]["displayId"]).toBe("signal_peptide");
 
                 //console.log(Ext.typeOf(123));
-                console.log(json);
+                //console.log(JSON.stringify(json, null, "  "));
             });
 
 
         });
+        
+        describe("checkRawSbolJson()", function() {
+            it("NEED TEST", function(){});
+        });
+
+        describe("sbolJsonToJbeiJson()", function() {
+            it("NEED TEST", function(){});
+        });
+
+        describe("jbeiJsonToSbolJson()", function() {
+            it("NEED TEST", function(){});
+        });
+
+        describe("Parse Components of SBOL XML", function() {
+
+            describe("parseRawCollection()", function() {
+                it("NEED TEST", function(){});
+            });
+            describe("parseRawDnaComponent()", function() {
+                it("NEED TEST", function(){});
+            });
+            describe("parseRawDnaSequence()", function() {
+                it("NEED TEST", function(){});
+            });
+            describe("parseRawSequenceAnnotation()", function() {
+                it("NEED TEST", function(){});
+            });
+        });
+
+        
+
 
     });
 

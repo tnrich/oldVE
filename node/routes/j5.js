@@ -236,52 +236,25 @@ function saveFile(fileData,user,deproject,cb)
     });
 };
 
-app.get('/openResult',restrict,function(req,res){
-  var o_id = new app.mongoose.mongo.ObjectID(req.query.file_id);
+app.get('/getfile/:id',restrict,function(req,res){
+  var o_id = new app.mongoose.mongo.ObjectID(req.params.id);
   
+  var j5Runs = app.db.model("j5run");
+  j5Runs.findOne({'file_id':req.params.id},function(err,j5run){
+  console.log(j5run);
   readFile(o_id,function(inputStream){
-
-      var decodedFile = new Buffer(inputStream, 'base64').toString('binary');
-      
-      var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
-
-      var objResponse = {};
-      objResponse.files = [];
-      objResponse.data = inputStream;
-
-      var plasmids = [];
-
-      for(var file in zip.files)
-      {
-        var fileName = zip.files[file]['name'];
-        if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
-        {
-          var newFile = {};
-          newFile.data = zip.files[file]['data'];
-          newFile.name = fileName;
-          newFile.size = zip.files[file]['data'].length;
-          objResponse.files.push(newFile);
-
-          plasmids.push({'text':fileName, 'leaf': true, 'type':'plasmid','data':newFile.data});
-        }
-      }
-
-      objResponse.files.sort(function (a, b) {
-          if (a.name < b.name) return -1;
-          if (b.name < a.name) return 1;
-          return 0;
+      var file = new Buffer(inputStream, 'base64').toString('binary');
+      var filename = "j5Results-"+j5run.date;
+      res.set({
+        'Content-Type': 'application/zip',
+        'Content-Length': file.length,
+        'Content-disposition': 'attachment; filename='+filename
       });
-      
-      console.log(zip);
-      console.log(plasmids);
-
-      var tree = {
-        children : plasmids
-      };
-
-      res.json(tree);
-      
+      res.set('Content-Length', file.length);
+      res.end(file,'binary');
     });
+
+  })
 });
 
 app.post('/getProtocol',restrict,function(req,res){
@@ -359,6 +332,10 @@ app.post(j5Method1,restrict,function(req,res){
                 newFile.size = zip.files[file]['data'].length;
                 objResponse.files.push(newFile);
               }
+              if( fileName.match(/.+combinatorial.csv/) )
+              {
+                objResponse.combinatorial = zip.files[file]['data'];
+              }
             }
 
             objResponse.files.sort(function (a, b) {
@@ -369,6 +346,8 @@ app.post(j5Method1,restrict,function(req,res){
             
             j5run.j5Results = {};
             j5run.j5Results.assemblies = objResponse.files;
+            j5run.j5Results.combinatorialAssembly = {};
+            j5run.j5Results.combinatorialAssembly.nonDegenerativeParts = objResponse.combinatorial;
             j5run.save();
 
             res.send(objResponse);

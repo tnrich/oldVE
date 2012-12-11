@@ -14,7 +14,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         dock: 'left',
         floating: false,
         frame: true,
-        cls: 'InspectorPanel',
+        cls: 'j5ReportsPanel',
         margin: '0 0 0 0',
         width: 300,
         bodyBorder: false,
@@ -53,35 +53,68 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
     }],
     items: [{
         xtype: 'panel',
-        layout: {
-            type: 'column'
-        },
         title: 'Detail',
+        cls: 'j5detailpanel',
         items: [{
-            xtype: 'gridpanel',
-            width: 538,
-            title: 'My Grid Panel',
-            columns: [{
-                xtype: 'gridcolumn',
-                dataIndex: 'name',
-                text: 'Name'
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'size',
-                text: 'Size'
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'fileType',
-                text: 'Type'
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'fileContent',
-                text: 'Content'
-            }],
-            viewConfig: {
-
-            }
-        }]
+                    xtype: 'fieldset',
+                    margin: '10 10 10 10',
+                    width: 700,
+                    title: 'Plasmids',
+                    items: [
+                        {
+                            xtype: 'gridpanel',
+                            margin: '10 10 20 10',
+                            width: 650,
+                            title: '',
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'name',
+                                    flex: 1,
+                                    text: 'Name'
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'size',
+                                    flex: 1,
+                                    text: 'Size'
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'fileType',
+                                    flex: 1,
+                                    text: 'Type'
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'fileContent',
+                                    flex: 2,
+                                    text: 'Content'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'fieldset',
+                    margin: '10 10 10 10',
+                    width: 700,
+                    title: 'Combinatorial Mock Assembly Output',
+                    items: [
+                        {
+                            xtype: 'textareafield',
+                            margin: '10 10 20 10',
+                            width: 650,
+                            fieldLabel: ''
+                        }
+                    ]
+                },
+                {
+                    xtype: 'button',
+                    margin: 10,
+                    text: 'Download Results',
+                    cls: 'downloadResults'
+                }]
     }],
 
     listeners: {}
