@@ -46,7 +46,9 @@ Ext.require(["Ext.Ajax",
     var sequences = [];
     var designsaved = false;
     var deprojectsaved = false;
+    var deprojectedited = false;
     var designGenerated = false;
+    var designedited = true;
     var sequencesSaved = false;
     var partsSaved = false;
     var constants = Teselagen.constants.Constants;
@@ -152,7 +154,7 @@ Ext.require(["Ext.Ajax",
             runs(function(){
                 sequences.forEach(function(sequence,key){
                     sequence.save({
-                            callback:function(){ 
+                            success:function(){ 
                                 parts[key].setSequenceFile(sequences[key]); // Updated Ids
                                 if(key==sequences.length-1) {
                                     sequencesSaved = true; 
@@ -170,7 +172,7 @@ Ext.require(["Ext.Ajax",
             runs(function(){
                 parts.forEach(function(part,key){
                     part.save({
-                        callback:function(){
+                        success:function(){
                             if(key==parts.length-1) {
                                 partsSaved = true; 
                             }
@@ -191,92 +193,31 @@ Ext.require(["Ext.Ajax",
                 deproject.set('id',deproject_id);
                 deproject.setDesign(design);
                 design.save({
-                    callback:function(){
+                    success:function(){
                         designsaved = true;
                     }
                 });
             });
         });
 
-    });
-
-
-    /*
-
-    var projectedited = false;
-    describe("Editing Project", function () {
-        it("Alter design model", function () {
-            
-            runs(function () {
-                console.log("Editing Project");
-                project.set('name','changed name');
-                project.set('id',project_id);
-                project.save({
-                    callback: function(){
-                        projectedited = true;
-                    }
-                });
-            });
-            
+        it("Edit DE project", function () {
             waitsFor(function () {
-                if(projectcreated) return true; else return false;
-            }, "Saving DE Design Timeout", 9000);
-
-        });
-
-        it("Get Altered Project", function () {
-
+                return deprojectsaved;
+            }, "DE Project saved", 500);
             runs(function () {
-                //console.log(project);
-            });
-
-            waitsFor(function () {
-                if(projectedited) return true; else return false;
-            }, "Editing Project Timeout", 9000);
-
-        });
-
-    });
-    
-    var deprojectedited = false;
-    
-    describe("Editing DE Project", function () {
-        it("Alter design model", function () {
-            
-            waitsFor(function () {
-                if(projectedited&&deprojectsaved) return true; else return false;
-            }, "Project editing Timeout", 9000);
-
-
-            runs(function () {
-                console.log("Editing DE Project");
                 deproject.set('name','DE Project changed');
                 deproject.set('id',deproject_id);
-                console.log(deproject);
                 deproject.save({
-                    callback: function(){
+                    success: function(){
                         deprojectedited = true;
                     }
                 });
             });
-            
-        });
-
-        it("Get Altered DE Project", function () {
-            waitsFor(function () {
-                if(deprojectedited) return true; else return false;
-            }, "Editing DE Project Timeout", 9000);
-
-
-            runs(function () {
-                //console.log(deproject);
-            });
         });
 
     });
     
-    var designedited = true;
-    */
+    
     /*
     describe("Editing DE Design", function () {
         it("Alter design model", function () {
