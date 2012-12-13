@@ -3,31 +3,12 @@
  * @author Rodrigo Pavez, Yuri Bendana
  */
 
-/*global beforeEach, describe, it, expect, runs, waitsFor*/
+/*global describe, it, expect, runs, waitsFor*/
 
 Ext.require(["Ext.Ajax",
-//     "Teselagen.bio.util.StringUtil",
-//     "Teselagen.bio.util.XmlToJson",
-//     "Teselagen.bio.util.Sha256",
-//     "Teselagen.bio.parsers.GenbankManager",
-//     "Teselagen.bio.parsers.ParsersManager",
-//     "Teselagen.utils.SequenceUtils",
-//     "Teselagen.utils.FormatUtils",
-//     "Teselagen.utils.DeXmlUtils",
      "Teselagen.constants.Constants",
      "Teselagen.models.SequenceFile",
-//     "Teselagen.models.Part",
-//     "Teselagen.models.J5Bin",
-//     "Teselagen.models.J5Collection",
-//     "Teselagen.models.EugeneRule",
-//     "Teselagen.models.SBOLvIconInfo",
-//     "Teselagen.models.J5Run",
-//     "Teselagen.models.J5Parameters",
-//     "Teselagen.models.DownstreamAutomationParameters",
-//     "Teselagen.models.J5Results",
-//     "Teselagen.models.DeviceDesign",
      "Teselagen.models.DeviceEditorProject",
-//     "Teselagen.manager.SequenceFileManager",
      "Teselagen.manager.DeviceDesignManager",
      "Teselagen.manager.ProjectManager",
      "Teselagen.manager.AuthenticationManager",
@@ -36,8 +17,7 @@ Ext.require(["Ext.Ajax",
 ]);
 
  Ext.onReady(function () {
-    var project, design, deproject, projectcreated, deprojectsaved, designsaved, project_id, 
-        deproject_id, deprojStore;
+    var design, deproject, deproject_id;
     var isTestDataDeleted = false;
     var isDEprojectsDeleted = false;
     var isPartsDeleted = false;
@@ -53,8 +33,6 @@ Ext.require(["Ext.Ajax",
     var partsSaved = false;
     var constants = Teselagen.constants.Constants;
     var projectManager = Teselagen.manager.ProjectManager;
-    var authenticationManager = Teselagen.manager.AuthenticationManager;
-    var sessionManager = Teselagen.manager.SessionManager;
     var DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
     describe("Device Editor Project server tests.", function() {
@@ -84,7 +62,7 @@ Ext.require(["Ext.Ajax",
                 waitsFor(function() {
                     isTestDataDeleted = isDEprojectsDeleted && isPartsDeleted && isSequencesDeleted;
                     return isTestDataDeleted;
-                }, "test data deleted", 500)
+                }, "test data deleted", 500);
             });
         });
 
@@ -148,16 +126,16 @@ Ext.require(["Ext.Ajax",
         });
 
         it("Saving Sequences", function () {
-            waitsFor(function () { 
+            waitsFor(function () {
                 return designGenerated && deprojectsaved;
             }, "design generated and deproject saved", 500);
             runs(function(){
                 sequences.forEach(function(sequence,key){
                     sequence.save({
-                            success:function(){ 
+                            success:function(){
                                 parts[key].setSequenceFile(sequences[key]); // Updated Ids
-                                if(key==sequences.length-1) {
-                                    sequencesSaved = true; 
+                                if(key===sequences.length-1) {
+                                    sequencesSaved = true;
                                 }
                             }
                     });
@@ -166,15 +144,15 @@ Ext.require(["Ext.Ajax",
         });
         
         it("Saving Parts", function () {
-            waitsFor(function () { 
+            waitsFor(function () {
                 return sequencesSaved;
             }, "sequences saved", 500);
             runs(function(){
                 parts.forEach(function(part,key){
                     part.save({
                         success:function(){
-                            if(key==parts.length-1) {
-                                partsSaved = true; 
+                            if(key===parts.length-1) {
+                                partsSaved = true;
                             }
                         }
                     });
@@ -188,9 +166,9 @@ Ext.require(["Ext.Ajax",
                 return partsSaved;
             }, "parts saved", 500);
             runs(function () {
-                var deproject_id = deproject.get('id');
-                design.set( 'deproject_id', deproject_id );
-                deproject.set('id',deproject_id);
+                var deproject_id = deproject.get("id");
+                design.set( "deproject_id", deproject_id );
+                deproject.set("id",deproject_id);
                 deproject.setDesign(design);
                 design.save({
                     success:function(){
@@ -205,8 +183,8 @@ Ext.require(["Ext.Ajax",
                 return deprojectsaved;
             }, "DE Project saved", 500);
             runs(function () {
-                deproject.set('name','DE Project changed');
-                deproject.set('id',deproject_id);
+                deproject.set("name","DE Project changed");
+                deproject.set("id",deproject_id);
                 deproject.save({
                     success: function(){
                         deprojectedited = true;
@@ -231,7 +209,7 @@ Ext.require(["Ext.Ajax",
                 return  designedited;
             }, "editing DeviceDesign", 500);
             runs(function() {
-               expect(designedited).toBe(true); 
+               expect(designedited).toBe(true);
             });
             
         });
