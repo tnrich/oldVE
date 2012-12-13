@@ -181,7 +181,7 @@ Ext.onReady(function() {
 
         describe("UserRestrictionEnzymes", function() {
             beforeEach(function() {
-                uEnz = Ext.create("Teselagen.models.UserRestrictionEnzymes", {
+                uEnz = Ext.create("Teselagen.models.UserRestrictionEnzyme", {
                     groups: [uGroup, uGroup],
                     activeEnzymeNames: ["enz1, enz3"]
                 });
@@ -703,7 +703,7 @@ Ext.onReady(function() {
                     enzymeNames: ["AatII", "BglII"]
                 });
 
-                user = Ext.create("Teselagen.models.UserRestrictionEnzymes", {
+                user = Ext.create("Teselagen.models.UserRestrictionEnzyme", {
                     groups: [group],
                     activeEnzymeNames: ["AatII, BglII"]
                 });
