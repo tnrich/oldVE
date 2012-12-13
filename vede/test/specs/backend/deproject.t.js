@@ -193,7 +193,7 @@ Ext.require(["Ext.Ajax",
             });
         });
 
-        it("Alter design model", function () {
+        it("Alter Device Design", function () {
             waitsFor(function () {
                 return  deprojectedited;
             }, "editing DE Project", 500);
