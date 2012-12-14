@@ -22,7 +22,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
-            fasForm.loadRecord(j5Part);
+
+            if(j5Part.get("fas") === "") {
+                fasForm.down("combobox").setValue("None");
+            } else {
+                fasForm.loadRecord(j5Part);
+            }
 
             this.selectedPart = j5Part;
         } else {
@@ -30,7 +35,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                               binIndex);
 
             partPropertiesForm.loadRecord(newPart);
-            fasForm.loadRecord(newPart);
+
+            if(newPart.get("fas") === "") {
+                fasForm.down("combobox").setValue("None");
+            } else {
+                fasForm.loadRecord(newPart);
+            }
 
             this.selectedPart = newPart;
         }
@@ -44,13 +54,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var contentArray = [];
 
         this.inspector.setActiveTab(1);
-
-        var binIndex = this.activeProject.getJ5Collection().bins().indexOf(j5Bin);
-        /*selectionModel.setCurrentPosition({
-            column: 0,
-            row: this.activeProject.getJ5Collection().bins().indexOf(j5Bin),
-        });
-        selectionModel.select(this.activeProject.getJ5Collection().bins().indexOf(j5Bin));*/
 
         selectionModel.select(j5Bin);
 
@@ -71,7 +74,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartAssemblyStrategyChange: function(box) {
         var newStrategy = box.getValue();
 
-        this.selectedPart.set("fas", newStrategy);
+        if(newStrategy === "None") {
+            this.selectedPart.set("fas", "");
+        } else {
+            this.selectedPart.set("fas", newStrategy);
+        }
     },
 
     onPlasmidGeometryChange: function(radioGroup, newValue) {
@@ -166,11 +173,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onAddToParts: function(parts, addedParts, index) {
-        this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+        this.columnsGrid.getView().refresh();
     },
 
     onRemoveFromParts: function(parts, removedPart, index) {
-        this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+        this.columnsGrid.getView().refresh();
     },
 
     renderCollectionInfo: function() {
@@ -190,8 +197,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
-
-            console.log('columns grid change');
         }
     },
 
