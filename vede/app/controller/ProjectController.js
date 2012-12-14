@@ -7,8 +7,6 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     renderProjectsTree: function(cb){
-        Ext.getCmp('projectDesignTab').hide()
-        Ext.getCmp('projectTreeTab').show();
         var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
         rootNode.removeAll();
 
