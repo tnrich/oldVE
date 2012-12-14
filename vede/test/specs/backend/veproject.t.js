@@ -3,6 +3,8 @@
  * @author  Rodrigo Pavez, Yuri Bendana
  */
 
+/*global describe, it, expect, runs, waitsFor*/
+
 Ext.require(["Ext.Ajax",
  "Teselagen.bio.util.StringUtil",
  "Teselagen.bio.util.XmlToJson",
@@ -22,8 +24,7 @@ Ext.require(["Ext.Ajax",
  "Teselagen.manager.ProjectManager"]);
 
 Ext.onReady(function () {
-    var project, design, deproject, projectManager, authenticationManager, deprojectsaved, designsaved;
-    var veproject_id;
+    var veproject, veproject_id, newSequence;
     var veprojectEdited = false;
     var veprojectsaved = false;
     var sequenceSaved = false;
@@ -31,7 +32,6 @@ Ext.onReady(function () {
     var createdSequenceFile = false;
     var isTestDataDeleted = false;
     var projectManager = Teselagen.manager.ProjectManager; // Now is singleton
-    var authenticationManager = Teselagen.manager.AuthenticationManager; // Now is singleton
 
     describe("Vector Editor Project server tests.", function () {
         it("Clear test data", function() {
@@ -70,10 +70,10 @@ Ext.onReady(function () {
                 return veprojectsaved;
             }, "saving VE project", 500);
             runs(function() {
-                var selectedFile = '/test/data/sequences/gen_bank_ex.gb';
+                var selectedFile = "/test/data/sequences/gen_bank_ex.gb";
                 Ext.Ajax.request({
                     url: selectedFile,
-                    method: 'GET',
+                    method: "GET",
                     success: function(response){
                         var text = response.responseText;
                         newSequence = Ext.create("Teselagen.models.SequenceFile", {
@@ -89,10 +89,10 @@ Ext.onReady(function () {
                 return createdSequenceFile;
             }, "creating SequenceFile", 500);
             runs(function () {
-                veproject_id = veproject.get('id');
+                veproject_id = veproject.get("id");
                 expect (Ext.isEmpty(veproject_id)).toBe(false);
                 veproject.setSequenceFile(newSequence);
-                newSequence.set( 'veproject_id', veproject_id );
+                newSequence.set( "veproject_id", veproject_id );
                 newSequence.save({
                     success: function() {
                         sequenceSaved = true;
@@ -106,8 +106,7 @@ Ext.onReady(function () {
                 return veprojectsaved;
             }, "saving SequenceFile", 500);
             runs(function () {
-                console.log(veproject);
-                veproject.set('name','Modified VEProject Name');
+                veproject.set("name","Modified VEProject Name");
                 veproject.save({
                     success: function(){
                         veprojectEdited = true;
@@ -119,7 +118,7 @@ Ext.onReady(function () {
             }, "VE project edited", 500);
             runs(function() {
                 expect(veprojectEdited).toBe(true);
-            })
+            });
         });
         
         it("Edit Sequence", function () {
@@ -127,7 +126,7 @@ Ext.onReady(function () {
                 return sequenceSaved;
             }, "saving SequenceFile", 500);
             runs(function () {
-                newSequence.set('sequenceFileName','Modified Sequence FileName');
+                newSequence.set("sequenceFileName","Modified Sequence FileName");
                 newSequence.save({
                     success: function(){
                         sequenceEdited = true;
@@ -139,7 +138,7 @@ Ext.onReady(function () {
             }, "sequence edited", 500);
             runs(function() {
                 expect(sequenceEdited).toBe(true);
-            })
+            });
         });
         
     });
