@@ -468,7 +468,7 @@ Ext.onReady(function() {
                         expect(annotationTest.getLocations()[2].getEnd()).toEqual(55);
                     });
 
-                    it(".deleteAt() First and Gap", function(){
+                    it(".deleteAt() First and Gap <-- SOURCE OF BUG IN SequenceManager? -DW", function(){
                         annotationTest.deleteAt(10, 15, 100, false);
                         expect(annotationTest.getLocations().length).toEqual(2);
                         expect(annotationTest.getLocations()[0].getStart()).toEqual(10);

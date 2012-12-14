@@ -243,7 +243,7 @@ Ext.define('Vede.controller.MainMenuController', {
             "button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
-            "button[text='Import']": {
+            "button[cls='ImportSequence']": {
                 click: this.onImportButtonClick
             },
             "#importMenuItem": {

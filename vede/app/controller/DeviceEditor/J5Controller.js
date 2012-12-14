@@ -4,7 +4,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     requires: ["Teselagen.constants.Constants",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.utils.J5ControlsUtils",
-               "Teselagen.manager.J5CommunicationManager"],
+               "Teselagen.manager.J5CommunicationManager",
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.bio.parsers.GenbankManager"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -24,7 +26,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     directSynthesesListText: null,
 
     onOpenJ5: function() {
-        this.j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        currentTab.j5Window = j5Window;
+        this.j5Window = j5Window;
     },
 
     onEditJ5ParamsBtnClick: function() {
@@ -274,7 +279,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
         currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles);
-        currentTab.j5Window.j5comm.generateAjaxRequest();
+
+        //urrentTab.j5Window.j5comm.generateAjaxRequest();
+        
+        Vede.application.fireEvent("saveDesignEvent",function(){
+            currentTab.j5Window.j5comm.generateAjaxRequest();
+        });
+        
+        
 
     },
 
@@ -325,7 +337,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     saveJ5Parameters: function() {
         this.j5Parameters.fields.eachKey(function(key) {
             if(key !== "id") {
-                this.j5Parameters.set(key, 
+                this.j5Parameters.set(key,
                     Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
@@ -333,6 +345,39 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onDownloadj5Btn: function(button, e, options) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm.downloadResults(button);
+    },
+
+    onPlasmidsItemClick: function( grid, record ){
+
+        console.log(record);
+
+        var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
+            name: "Untitled Project"
+        });
+
+        //DW
+
+        /*var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileName: record.data.name,
+            sequenceFileFormat: "Genbank",
+            sequenceFileContent: record.data.data
+        });*/
+        
+        var format  = Teselagen.constants.Constants.GENBANK;
+        var content = record.data.data;
+        var name    = record.data.name;
+        
+        var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(format, content, name, "");
+
+        veproject.setSequenceFile(newSequence);
+        
+        console.log(veproject);
+        console.log(newSequence);
+
+        Teselagen.manager.ProjectManager.workingProject.veprojects().add(veproject);
+        Teselagen.manager.ProjectManager.openVEProject(veproject);
+
+        this.j5Window.close();
     },
 
     init: function() {
@@ -400,6 +445,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='downloadj5Btn']": {
                 click: this.onDownloadj5Btn
             },
+            "gridpanel[title=Plasmids]": {
+                itemclick: this.onPlasmidsItemClick
+            }
         });
         
         this.application.on("openj5", this.onOpenJ5, this);

@@ -12,34 +12,29 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
-        items: [{
-            xtype: 'label',
-            margins: '0 0 0 10',
-            style: '{font-weight:bold;}',
-            text: 'Device Editor'
-        }, {
-            xtype: 'tbseparator'
-        }, {
-            xtype: 'label',
-            margins: '0 0 0 10',
-            style: '{font-weight:light;}',
-            cls: 'designName',
-            text: ''
-        }
-
-        , {
-            xtype: 'tbfill'
-        }, {
-            xtype: 'tbseparator'
-        }, {
+        items: [
+        {
             xtype: 'button',
-            cls: 'DeviceEditorSaveBtn',
-            text: 'Save current design'
-        }, {
-            xtype: 'tbseparator'
-        }, {
+            text: 'File',
+            cls: 'fileMenu',
+            menu: {
+                xtype: 'menu',
+                items: [{
+                    xtype: 'menuitem',
+                    text: 'Save Design'
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Delete Design'
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Rename Design'
+                }]
+            }
+        },
+        {
             xtype: 'button',
-            text: 'Load example design',
+            text: 'Examples',
+            cls: 'examplesMenu',
             menu: {
                 xtype: 'menu',
                 minWidth: 300,
@@ -57,14 +52,11 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     xtype: 'menuitem',
                     text: 'Combinatorial Golden Gate'
                 }]
-
-
             }
         }, {
-            xtype: 'tbseparator'
-        }, {
             xtype: 'button',
-            text: 'Import File',
+            text: 'Import',
+            cls: 'importMenu',
             menu: {
                 xtype: 'menu',
                 minWidth: 140,
@@ -72,11 +64,11 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 items: [{
                     xtype: 'menuitem',
                     cls: 'importXML',
-                    text: 'Design XML'
+                    text: 'XML file'
                 }, {
                     xtype: 'menuitem',
                     cls: 'importJSON',
-                    text: 'j5 File'
+                    text: 'JSON file'
                 }]
             }
         }]

@@ -4,7 +4,7 @@ Ext.define('Vede.controller.AuthEventDispatcherController', {
 
     dispatchLoggedInEvent: function() {
     	//console.log('Dispaching logged in');
-    	Ext.getCmp("projectDesignPanel").store.load();   
+    	//Ext.getCmp("projectDesignPanel").store.load();   
     },
 
     init: function() {

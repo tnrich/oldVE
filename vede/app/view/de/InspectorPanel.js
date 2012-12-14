@@ -101,6 +101,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             name: 'fas',
                             queryMode: 'local',
                             anchor: '100%',
+                            value: 'None',
                             store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
                                     'Embed_in_primer_reverse',
                                     'Embed_in_primer_forward', 'Annealed Oligos']
@@ -185,6 +186,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
+                            height:400,
+                            minHeight:400,
                             plugins: [
                                 Ext.create('Ext.grid.plugin.RowEditing', {
                                     clicksToEdit: 2

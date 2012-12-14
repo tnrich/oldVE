@@ -329,6 +329,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             var parts = bins.getAt(i).parts();
             for (var j = 0; j < parts.count(); j++) {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
+
+                // Supplying a only a name field makes an "empty" Part
                 if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
                     ready = false;
                 }
@@ -371,6 +373,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         pDevice.getJ5Collection().addToBin(bin, pIndex); // put this here?
         return bin;
+    },
+
+    /**
+     * Returns the iconID for J5Bin at pBinIndex. (Indices begin at 0.)
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex
+     * @returns {String}
+     */
+    getIconIDByBinIndex: function(pDevice, pBinIndex) {
+        return pDevice.getJ5Collection().bins().getAt(pBinIndex).get("iconID");
+    },
+
+    /**
+     * Returns the iconID for J5Bin at pBinIndex. (Indices begin at 0.)
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Number} pBinIndex
+     * @param {String} pIconIDName
+     */
+    setIconIDByBinIndex: function(pDevice, pBinIndex, pIconIDName) {
+        pDevice.getJ5Collection().bins().getAt(pBinIndex).set("iconID", pIconIDName);
     },
 
     /**
@@ -452,9 +474,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Add an empty bin to the collection, by index.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pIndex
+     * @para, {String} [pName] Optional
      */
-    addEmptyBinByIndex: function(pDevice, pIndex) {
-        var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex);
+    addEmptyBinByIndex: function(pDevice, pIndex, pName) {
+        /*if (pName === null || pName === undefined || pName === "") {
+            pName = "No_Name";
+        }*/
+        var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
         return success;
     },
     /**
@@ -684,35 +710,44 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //return pDevice.removePartFromBin(pPart, pBinIndex);
     },
 
-    /** NEED THIS?
+    /**
      * Set the Start index for a Part
+     * @param {Teselagen.models.Part} pPart
      * @param {Number} pStart The start index, from 1 to length of the sequence, to set the start BP.
      */
-    setPartStart: function(pDevice, pPart, pStart) {
+    setPartStart: function(pPart, pStart) {
         pPart.setStart(pStart);
     },
 
-    /** NEED THIS?
-     * Get Start Index
+    /**
+     * Get Start Index for a Part
+     * @param {Teselagen.models.Part} pPart
      * @returns {Number}
      */
-    getPartStart: function(pDevice, pPart) {
+    getPartStart: function(pPart) {
         return pPart.getStart();
     },
 
-    /** NEED THIS?
+    /**
      * Set the End index for a Part
-     * @param {Number} pEnd The start index, from 1 to length of the sequence, to set the start BP.
+     * @param {Teselagen.models.Part} pPart
+     * @param {Number} [pEnd] If undefined, will set to length of sequence.
      */
-    setPartEnd: function(pDevice, pPart, pEnd) {
-        pPart.setEnd(pEnd);
+    setPartEnd: function(pPart, pEnd) {
+        if (pEnd === undefined || pEnd === null) {
+            var len = pPart.getSequenceFile().getLength();
+            pPart.setEnd(len);
+        } else {
+            pPart.setEnd(pEnd);
+        }
     },
 
-    /** NEED THIS?
+    /**
      * Get End Index
+     * @param {Teselagen.models.Part} pPart
      * @returns {Number}
      */
-    getPartEnd: function(pDevice, pPart) {
+    getPartEnd: function(pPart) {
         return pPart.getEnd();
     },
 
@@ -754,9 +789,39 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             console.warn(err);
         }
 
-        pPart.setSequenceFile(seq); // put this here?
+        pPart.setSequenceFile(seq); // put this here
         return seq;
     },
+
+    /**
+     * Create a standalone SequenceFile not belonging to a DeviceDesign.
+     * Optional parameters require an empty string "" in its place.
+     * Executes validation.
+     *
+     * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "JBEISEQXML". Case insensitive.
+     * @param {String} pSequenceFileContent The content of the file in string form
+     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
+     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     */
+    createSequenceFileStandAlone: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
+
+        var seq = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileFormat: pSequenceFileFormat,
+            sequenceFileContent: pSequenceFileContent,
+            sequenceFileName: pSequenceFileName,
+            partSource: pPartSource
+        });
+
+        // GO BACK AND FIX THIS VALIDATOR
+        var err = seq.validate();
+        if (err.length > 0) {
+            console.warn("Creating Part: " + err.length + " errors found.");
+            console.warn(err);
+        }
+
+        return seq;
+    },
+
     /**
      * Given a Part, get the SequenceFile. (pDevice is not used.)
      * @param {Teselagen.manager.DeviceDesign} pDevice
@@ -768,23 +833,21 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return part.getSequenceFile();
     },
     /**
-     * Given a Part, get the SequenceFile. (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * Given a Part, get the SequenceFile.
      * @param {Teselagen.models.Part} pPart
      * @returns {Teselagen.models.SequenceFile}
      */
-    getSequenceFileByPart: function(pDevice, pPart) {
+    getSequenceFileByPart: function(pPart) {
         return pPart.getSequenceFile();
     },
 
     /**
-     * Given a Part, get the SequenceFile. (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * Given a Part, get the SequenceFile.
      * @param {Teselagen.models.Part} pPart
      * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @returns {Teselagen.models.Part}
      */
-    setSequenceFile: function(pDevice, pPart, pSequenceFile) {
+    setSequenceFileByPart: function(pPart, pSequenceFile) {
         //console.log(pPart.getSequenceFile().get("sequenceFileName"));
         //console.log(pSequenceFile.get("sequenceFileName"));
         pPart.setSequenceFile(pSequenceFile);
@@ -792,12 +855,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     /**
      * Removes the SequenceFile in a Part and replaces it with an empty Part.
-     * (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
      * @returns {Teselagen.models.Part}
      */
-    removeSequenceFile: function(pDevice, pPart) {
+    removeSequenceFileByPart: function(pPart) {
         return pPart.removeSequenceFile();
     },
 
@@ -828,12 +889,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Sets the sequenceFileName for a SequenceFile.
      * NOTE: Does not reset any other properties.
      *
-     * @param {Teselagen.manager.DeviceDesign} pDevice
      * @param {Teselagen.models.SequenceFile} pSequenceFile
      * @param {String} pSequenceFileName
      * @return {Boolean} True if name is set, false if not. (Throw an error if not set?)
      */
-    setSequenceFileName: function(pDevice, pSequenceFile, pSequenceFileName) {
+    setSequenceFileName: function(pSequenceFile, pSequenceFileName) {
         return pSequenceFile.setSequenceFileName(pSequenceFileName);
     },
 
@@ -842,7 +902,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Get Length of Sequence.
      * @param {Teselagen.models.SequenceFile}
      */
-    getSequenceLength: function(pDevice, pSequenceFile) {
+    getSequenceLength: function(pSequenceFile) {
         return pSequenceFile.getLength();
     },
 

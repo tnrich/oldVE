@@ -43,16 +43,18 @@ Ext.define("Teselagen.models.EugeneRule", {
                 if (v === "" || v === undefined || v === null) {
                     name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
                     record.self.highestDefaultNameIndex += 1;
-                    //console.log(name);
-                } else if ( v.match(/[^a-zA-Z0-9_\-]/)) {
-                    console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                    name = v.replace(/[^a-zA-Z0-9_\-]*/g, "");
                 } else {
-                    name = v;
+                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                        name =  v.toString();
+                    } else {
+                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                        name = Teselagen.utils.FormatUtils.reformatName(v);
+                    }
                 }
                 return name;
             }
         },
+
         
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
 
@@ -98,7 +100,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         {
             field: "compositionalOperator",
             type: "inclusion",
-            //list: Teselagen.constants.Constants.COMPOP_LIST
+            list: Teselagen.constants.Constants.COMPOP_LIST
         },
         {field: "operand2Number",         type: "presence"}
     ],

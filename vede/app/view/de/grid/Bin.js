@@ -51,6 +51,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                 styleHtmlContent: true,
                 styleHtmlCls: 'binHeader',
                 height: 100,
+                width: 125,
                 bodyStyle: {
                     'padding-top': '80px',
                     'text-align': 'center'
@@ -70,8 +71,8 @@ Ext.define('Vede.view.de.grid.Bin', {
                 }, {
                     xtype: 'image',
                     cls: 'binIcon',
-                    x: 40,
-                    y: 30,
+                    x: 34,
+                    y: 12,
                     src: iconSource
                 }]
             }]

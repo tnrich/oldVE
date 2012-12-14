@@ -24,6 +24,11 @@ Ext.require("Teselagen.utils.FormatUtils");
 Ext.require("Teselagen.utils.DeXmlUtils");
 Ext.require("Teselagen.utils.FileUtils");
 
+Ext.require("Teselagen.constants.Constants");
+Ext.require("Teselagen.constants.SBOLIcons");
+
+Ext.require("Teselagen.models.SequenceFile");
+
 Ext.onReady(function() {
 
     FileUtils       = Teselagen.utils.FileUtils;
@@ -418,7 +423,13 @@ Ext.onReady(function() {
                     expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(1);
 
                     var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
-                    expect(gb.toString()).toEqual(newGb.toString());
+                    //expect(gb.toString()).toEqual(newGb.toString());
+                    expect(gb.getLocus().getLocusName()).toBe("test");
+                    expect(gb.getLocus().getStrandType()).toBe(""); // ds NOT STORED in SequenceManager! -->not "ds"
+                    expect(gb.getLocus().getSequenceLength()).toBe(7);
+                    expect(gb.getLocus().getNaType()).toBe("DNA");
+                    expect(gb.getLocus().getLinear()).toBe(false);
+                    expect(gb.getLocus().getDivisionCode()).toBe("");
                 });
                 
                 it("sequenceManagerToJbeiseqXml() - checked with jbeiseqXmlToJson",function(){
@@ -445,7 +456,13 @@ Ext.onReady(function() {
                     expect(json["seq:seq"]["seq:features"][1]["seq:feature"]["seq:location"][1]["seq:end"]).toBe(1);
 
                     var gb    = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(json);
-                    expect(gb.toString()).toEqual(newGb.toString());
+                    //expect(gb.toString()).toEqual(newGb.toString());
+                    expect(gb.getLocus().getLocusName()).toBe("test");
+                    expect(gb.getLocus().getStrandType()).toBe(""); // ds NOT STORED in SequenceManager! -->not "ds"
+                    expect(gb.getLocus().getSequenceLength()).toBe(7);
+                    expect(gb.getLocus().getNaType()).toBe("DNA");
+                    expect(gb.getLocus().getLinear()).toBe(false);
+                    expect(gb.getLocus().getDivisionCode()).toBe("");
                 });
 
                 it("jbeiseqXmlToSequenceManager() - checked with back and forth format change",function(){
@@ -465,6 +482,25 @@ Ext.onReady(function() {
                     expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(2);
                     expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
                     expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(0);
+                    expect(sm2.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
+                });
+
+                it("genbankToSequenceManager()",function(){
+                    var sm2   = Teselagen.utils.FormatUtils.genbankToSequenceManager(newGb);
+
+                    expect(sm2.getName()).toBe("test");
+                    expect(sm2.getCircular()).toBeTruthy();
+                    expect(sm2.getSequence().seqString()).toBe("gattaca");
+                    expect(sm2.getFeatures().length).toBe(2);
+                    expect(sm2.getFeatures()[0].getName()).toBe("feat1");
+                    expect(sm2.getFeatures()[0].getType()).toBe("CDS");
+                    expect(sm2.getFeatures()[0].getLocations()[0].getStart()).toBe(0);//toBe(1);
+                    expect(sm2.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
+                    expect(sm2.getFeatures()[1].getName()).toBe("feat3");
+                    expect(sm2.getFeatures()[1].getType()).toBe("gene");
+                    expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(1);//toBe(2);
+                    expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
+                    expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(-1);//toBe(0);
                     expect(sm2.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
                 });
 
@@ -506,23 +542,52 @@ Ext.onReady(function() {
                     //console.log(gb.toString());
                 });
 
-                it("genbankToSequenceManager()",function(){
-                    var sm2   = Teselagen.utils.FormatUtils.genbankToSequenceManager(newGb);
+                // =========================
+                // SEQUENCEFILE CONVERSIONS
+                // =========================
+                it("sequenceFileToSequenceManager(): FASTA file",function(){
+                    var fastaSeq = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "FASTA",
+                        sequenceFileContent: ">DummyName\nGATTACA\n"
+                    });
 
-                    expect(sm2.getName()).toBe("test");
-                    expect(sm2.getCircular()).toBeTruthy();
-                    expect(sm2.getSequence().seqString()).toBe("gattaca");
-                    expect(sm2.getFeatures().length).toBe(2);
-                    expect(sm2.getFeatures()[0].getName()).toBe("feat1");
-                    expect(sm2.getFeatures()[0].getType()).toBe("CDS");
-                    expect(sm2.getFeatures()[0].getLocations()[0].getStart()).toBe(0);//toBe(1);
-                    expect(sm2.getFeatures()[0].getLocations()[0].getEnd()).toBe(3);
-                    expect(sm2.getFeatures()[1].getName()).toBe("feat3");
-                    expect(sm2.getFeatures()[1].getType()).toBe("gene");
-                    expect(sm2.getFeatures()[1].getLocations()[0].getStart()).toBe(1);//toBe(2);
-                    expect(sm2.getFeatures()[1].getLocations()[0].getEnd()).toBe(5);
-                    expect(sm2.getFeatures()[1].getLocations()[1].getStart()).toBe(-1);//toBe(0);
-                    expect(sm2.getFeatures()[1].getLocations()[1].getEnd()).toBe(1);
+                    var fastaSM = Teselagen.utils.FormatUtils.sequenceFileToSequenceManager(fastaSeq);
+
+                    expect(fastaSM.getName()).toBe("DummyName");
+                    expect(fastaSM.getCircular()).toBeFalsy();
+                    expect(fastaSM.getSequence().seqString()).toBe("gattaca");
+                    expect(fastaSM.getFeatures().length).toBe(0);
+                });
+
+                it("sequenceFileToSequenceManager(): Genbank file",function(){
+
+                    var genbankSeq = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "GENBANK",
+                        sequenceFileContent: newGb
+                    });
+
+                    var gbSM = Teselagen.utils.FormatUtils.sequenceFileToSequenceManager(genbankSeq);
+
+                    expect(gbSM.getName()).toBe("test");
+                    expect(gbSM.getCircular()).toBeTruthy();
+                    expect(gbSM.getSequence().seqString()).toBe("gattaca");
+                    expect(gbSM.getFeatures().length).toBe(2);
+                });
+
+                it("sequenceFileToSequenceManager(): JbeiSeqXml file",function(){
+                    var xml = Teselagen.utils.FormatUtils.sequenceManagerToJbeiseqXml(sm);
+
+                    var jbeiSeq = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "JBEISEQXML",
+                        sequenceFileContent: xml
+                    });
+
+                    var SM = Teselagen.utils.FormatUtils.sequenceFileToSequenceManager(jbeiSeq);
+
+                    expect(SM.getName()).toBe("test");
+                    expect(SM.getCircular()).toBeTruthy();
+                    expect(SM.getSequence().seqString()).toBe("gattaca");
+                    expect(SM.getFeatures().length).toBe(2);
                 });
 
                 

@@ -17,6 +17,8 @@ Ext.require("Teselagen.utils.FormatUtils");
 Ext.require("Teselagen.utils.DeXmlUtils");
 
 Ext.require("Teselagen.constants.Constants");
+Ext.require("Teselagen.constants.SBOLIcons");
+
 Ext.require("Teselagen.models.J5Parameters");
 Ext.require("Teselagen.models.EugeneRule");
 
@@ -292,14 +294,16 @@ Ext.onReady(function() {
 
                 });
 
-                it("checkJ5Ready()", function(){
+                it("checkJ5Ready():", function(){
                     expect(DeviceDesignManager.checkJ5Ready(design)).toBe(false);
 
                     var part1 = Ext.create("Teselagen.models.Part", {
-                        name: "addedPart1"
+                        //name: "addedPart1",
+                        fas: "PCR"
                     });
                     var part2 = Ext.create("Teselagen.models.Part", {
-                        name: "addedPart2"
+                        //name: "addedPart2",
+                        fas: "PCR"
                     });
 
                     design.getJ5Collection().bins().getAt(0).addToParts([part1], -1);
@@ -307,6 +311,7 @@ Ext.onReady(function() {
 
                     design.getJ5Collection().bins().getAt(1).addToParts([part2], -1);
                     expect(DeviceDesignManager.checkJ5Ready(design)).toBe(true);
+                    //console.log(design);
                     // Adding a part in each of the two bins will make this Design ready
                 });
             });
@@ -337,6 +342,29 @@ Ext.onReady(function() {
 
                     //expect(bin.validate().length).toBe(0);
                     //console.log(bin.validate());
+                });
+
+                it("getBinIconIDByIndex/setBinIconIDByIndex()", function(){
+                    var success = design.getJ5Collection().addToBin(bin1, 0);
+                    expect(success).toBe(true);
+
+                    var iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
+                    expect(iconID).toBe("GENERIC");
+
+
+                    DeviceDesignManager.setIconIDByBinIndex(design, 0, "BLAH");
+                    iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
+                    expect(iconID).toBe("BLAH");
+                    expect(DeviceDesignManager.getBinByIndex(design, 0).validate().length).toBe(1);
+
+                    DeviceDesignManager.setIconIDByBinIndex(design, 0, "ASSEMBLY_JUNCTION");
+                    iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
+                    expect(iconID).toBe("ASSEMBLY_JUNCTION");
+                    expect(DeviceDesignManager.getBinByIndex(design, 0).validate().length).toBe(0);
+                    
+
+                    //console.log(DeviceDesignManager.getBinByIndex(design, 0));
+                    //console.log(DeviceDesignManager.getBinByIndex(design, 0).validate());
                 });
 
                 it("getBinByIndex()/getBinNameByIndex()", function(){
@@ -401,6 +429,7 @@ Ext.onReady(function() {
                 it("addEmptyBinByIndex()", function(){
                     var success = DeviceDesignManager.addEmptyBinByIndex(design, 0);
                     expect(design.getJ5Collection().binCount()).toBe(3);
+                    expect(design.getJ5Collection().bins().getAt(0).get("binName").match("Bin")).not.toBe(null);
                     expect(success).toBe(true);
                 });
 
@@ -422,7 +451,8 @@ Ext.onReady(function() {
 
                 it("nonEmptyPartCount()", function(){
                     var part = Ext.create("Teselagen.models.Part", {
-                        name: "blah"
+                        name: "blah",
+                        fas: "PCR"
                     });
                     design.getJ5Collection().bins().getAt(0).addToParts(part);
 
@@ -599,31 +629,31 @@ Ext.onReady(function() {
 
                 it("getSequenceFileByPart()", function(){
                     part1.setSequenceFile(seq1);
-                    var tmpSeq = DeviceDesignManager.getSequenceFileByPart(design, part1);
+                    var tmpSeq = DeviceDesignManager.getSequenceFileByPart(part1);
 
                     expect(tmpSeq.get("sequenceFileName")).toBe("seq1.fas");
                 });
 
-                it("setSequenceFile()", function(){
+                it("setSequenceFileByPart()", function(){
                     var seq2 = Ext.create("Teselagen.models.SequenceFile", {
                         sequenceFileFormat: "Fasta",
                         sequenceFileContent: ">seq2NEW\naaaaaaa"
                     });
                     part1.setSequenceFile(seq1);
-                    var tmpSeq = DeviceDesignManager.getSequenceFileByPart(design, part1);
+                    var tmpSeq = DeviceDesignManager.getSequenceFileByPart(part1);
                     expect(tmpSeq.get("sequenceFileName")).toBe("seq1.fas");
 
                     // run this method
-                    DeviceDesignManager.setSequenceFile(design, part1, seq2);
-                    tmpSeq = DeviceDesignManager.getSequenceFileByPart(design, part1);
+                    DeviceDesignManager.setSequenceFileByPart(part1, seq2);
+                    tmpSeq = DeviceDesignManager.getSequenceFileByPart(part1);
                     expect(tmpSeq.get("sequenceFileName")).toBe("seq2NEW.fas");
                 });
 
-                it("removeSequenceFile()", function(){
+                it("removeSequenceFileByPart()", function(){
                     var tmpSeq = design.getJ5Collection().bins().getAt(0).parts().getAt(0).getSequenceFile();
                     expect(tmpSeq.get("sequenceFileContent")).toBe(">seq1\nGATTACA");
 
-                    var success = DeviceDesignManager.removeSequenceFile(design, part1);
+                    var success = DeviceDesignManager.removeSequenceFileByPart(part1);
                     tmpSeq = design.getJ5Collection().bins().getAt(0).parts().getAt(0).getSequenceFile();
                     expect(tmpSeq.get("sequenceFileContent")).toBe("");
                     expect(success).toBe(true);
@@ -646,26 +676,35 @@ Ext.onReady(function() {
 
                     expect(part1.getStart()).toBe(1);
 
-                    DeviceDesignManager.setPartStart(design, part1, 5);
+                    DeviceDesignManager.setPartStart(part1, 5);
 
                     expect(part1.getStart()).toBe(5);
-                    expect(part1.getStart()).toBe(DeviceDesignManager.getPartStart(design, part1));
+                    expect(part1.getStart()).toBe(DeviceDesignManager.getPartStart(part1));
                 });
 
                 it("setPartEnd()/getPartEnd() (From Part section)", function(){
 
+                    //console.log(part1.getEnd());
+
+                    // Sets it to an incorrect length because that was given to the model
+                    expect(part1.getEnd()).toBe(10);
+
+                    // Sets it to the length of a sequence
+                    DeviceDesignManager.setPartEnd(part1);
+
                     expect(part1.getEnd()).toBe(7);
 
-                    DeviceDesignManager.setPartEnd(design, part1, 5);
+                    // Sets it to a length you choose
+                    DeviceDesignManager.setPartEnd(part1, 5);
 
                     expect(part1.getEnd()).toBe(5);
-                    expect(part1.getEnd()).toBe(DeviceDesignManager.getPartEnd(design, part1));
+                    expect(part1.getEnd()).toBe(DeviceDesignManager.getPartEnd(part1));
                 });
 
                 it("setSequenceFileName()", function(){
                     expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
                     
-                    var name = DeviceDesignManager.setSequenceFileName(design, seq1, "blah");
+                    var name = DeviceDesignManager.setSequenceFileName(seq1, "blah");
                     expect(seq1.get("sequenceFileName")).toBe("blah");
                     expect(name).toBe("blah");
                 });
@@ -673,13 +712,13 @@ Ext.onReady(function() {
                 it("setSequenceFileName()", function(){
                     expect(seq1.get("sequenceFileName")).toBe("seq1.fas");
                     
-                    var name = DeviceDesignManager.setSequenceFileName(design, seq1, "blah");
+                    var name = DeviceDesignManager.setSequenceFileName(seq1, "blah");
                     expect(seq1.get("sequenceFileName")).toBe("blah");
                     expect(name).toBe("blah");
                 });
 
                 it("getSequenceLength()", function(){
-                    var len = DeviceDesignManager.getSequenceLength(design, seq1);
+                    var len = DeviceDesignManager.getSequenceLength(seq1);
                     expect(len).toBe(7);
                 });
             });

@@ -1,3 +1,24 @@
+var loopAndSplice = function(unordered) {
+  for(var i = 0; i < unordered.length; i++) {
+    for(var j = i + 1; j < unordered.length; j++) {
+      if (unordered[i]["hash"] == unordered[j]["hash"]) {
+        unordered.splice(j, 1);
+        j--;
+      }
+    }
+  }
+  return unordered;
+}
+
+function quicklog(s) {
+  var logpath = "/tmp/quick.log";
+  var fs = require('fs');
+  s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
+  var fd = fs.openSync(logpath, 'a+', 0666);
+  fs.writeSync(fd, s + '\n');
+  fs.closeSync(fd);
+}
+
 /*
  * Sequence File Name,Format
  */
@@ -7,13 +28,20 @@ function encoded_sequences_list_file(model)
 
     var out ="Sequence File Name,Format\n";
 
+    var sequences = [];
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
-            var sequenceFile = part["SequenceFile"];
-            out += sequenceFile['sequenceFileName']+','+sequenceFile["sequenceFileFormat"]+'\n';
+            sequences.push(part["SequenceFile"]);
         });
     });
 
+    sequences = loopAndSplice(sequences);
+
+    sequences.forEach(function(sequenceFile){
+        var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
+        out += sequenceFile['sequenceFileName']+','+ format +'\n';
+    });
+    quicklog(out);
     return new Buffer(out).toString('base64');
 }
 
@@ -32,6 +60,7 @@ function encoded_zipped_sequences_file(model)
     });   
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
+    quicklog(data);
     return data;
 }
 
@@ -45,12 +74,22 @@ function encoded_parts_list_file(model)
         bin.parts.forEach(function(part){
             var sequenceFile = part["SequenceFile"];
 
-            if     (sequenceFile["sequenceFileFormat"]=="Genbank")  out += part['name']+','+sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/)[1]            +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-            else if(sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") out += part['name']+','+sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1]+','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-            else if(sequenceFile["sequenceFileFormat"]=="FASTA")    out += part['name']+','+sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1]                   +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+            var sequenceName = "";
+            if (sequenceFile["sequenceFileFormat"]=="GENBANK")
+                {
+                    sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
+                    if(sequenceName) sequenceName = sequenceName[1];
+                    else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                }
+
+            if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+            if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
+
+            out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+
         });
     }); 
-
+    quicklog(out);
     return new Buffer(out).toString('base64');  
 }
 
@@ -61,7 +100,7 @@ function encoded_j5_parameters_file(params)
     for(var prop in params) {
         out += prop + ',' + params[prop] + '\n';
     }
-
+    quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
@@ -74,12 +113,16 @@ function encoded_target_part_order_list_file(model)
     var out = '(>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps\n';
     
     bins.forEach(function(bin){
-        out += '>' + bin["binName"] + ',' + bin["directionForward"] + ',' + ',' + ',' + ',' + ',' + ',' + '\n';
+        var direction = '';
+        out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
     
         bin.parts.forEach(function(part){
-            var fro = bin['fro'];
-            if (fro == null) fro = '';
-            out += part["name"] + ',' + part["directionForward"] + ',' + part["fas"] + ',' + fro + ',' + bin["dsf"] + ',' + ',' + '\n';
+            var fro = (bin['fro'] == 'NONE') ? '' : '';
+            var direction = (part["directionForward"] == 'true') ? 'forward' : '';
+            var dsf = '';//bin["dsf"]
+            var fas = part["fas"];
+
+            out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
         });
     });
     /* 
@@ -100,7 +143,7 @@ function encoded_target_part_order_list_file(model)
     >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
     ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
     */
-
+    quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
@@ -136,7 +179,7 @@ function encoded_eugene_rules_list_file(model)
 
 
     });
-
+    quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 

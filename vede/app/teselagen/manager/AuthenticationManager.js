@@ -31,6 +31,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
       method: 'GET',
       success: function(response) {
         var session = JSON.parse(response.responseText);
+        self.username = session.username;
         delete session.username;
         self.sendAuthRequest(session);
       },
@@ -57,14 +58,14 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     if(Ext.get('splash-text')) Ext.get('splash-text').update('Authenticating to server');
     
     Ext.Ajax.request({
-      url: Teselagen.manager.SessionManager.buildUrl('login','login'),
+      url: Teselagen.manager.SessionManager.buildUrl('login'),
       params: {
         username: params.username || "",
         password: params.password || "",
         sessionId: params.sessionId || ""
       },
       success: function(response) {
-        self.username = params.username;
+        if(params.username) self.username = params.username;
         self.authResponse = JSON.parse(response.responseText);
         if(Ext.get('splash-text')) Ext.get('splash-text').update(self.authResponse.msg);
         if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();

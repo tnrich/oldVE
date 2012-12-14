@@ -1,12 +1,12 @@
 /**
  * @class Teselagen.bio.parsers.GenbankManager
  *
- * Takes in Genbank file (as a string) and creates the Genbank class. 
+ * Takes in Genbank file (as a string) and creates the Genbank class.
  * Static class changed to singleton. (Replaces GenbankFormat.js) \n
- * 
- * Currently, this does not log errors in the Genbank file. 
+ *
+ * Currently, this does not log errors in the Genbank file.
  * Need to include enhancement in the future.
- * 
+ *
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
@@ -93,12 +93,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      },
 
     /**
-     * This is the main method in the GenbankFormat static class that performs the parsing. 
-     * Converts a Genbank File (in string format) into a GenbankFileFormat object. 
+     * This is the main method in the GenbankFormat static class that performs the parsing.
+     * Converts a Genbank File (in string format) into a GenbankFileFormat object.
      * All tabs will be converted to 4 spaces.
      *
      * @param {String} genbankFileString String form of Genbank File.
-     * @return {Genbank} 
+     * @returns {Genbank}
      */
     parseGenbankFile : function(genbankFileString) {
         var gb;             // Genbank object/handle
@@ -109,6 +109,9 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
 
         gb = Ext.create("Teselagen.bio.parsers.Genbank");
+        if (genbankFileString.match(/[\t]/) !== null) {
+            console.warn("Parsing GenBank File: '\t' detected in file. Replacing with 4 spaces.");
+        }
         genbankFileString.replace(/[\t]/g, "    ");
         genArr	= genbankFileString.split(/[\n]+|[\r]+/g);
         for (var i=0 ; i < genArr.length; i++) {
@@ -117,7 +120,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         return gb;
     },
 
-    /** 
+    /**
      * Line by line parser
      * @param {String} line A single line from a Genbank File
      * @private
@@ -134,6 +137,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         // IGNORE LINES: DO NOT EVEN PROCESS
         if (Ext.String.trim(line) === "" || key==="COMMENT" || key===";") {
+            console.warn("Parsing GenBank File: Empty line, 'COMMENT', or ';' detected. Ignoring line: " + line);
             return null;
         }
 
@@ -150,16 +154,18 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             lastObj = this.parseOrigin(line, gb);
             break;
         case this.self.END_SEQUENCE_TAG:
-            //console.log("END"); // DO NOTHING
+            //console.warn("Parsing GenBank File: End of GenBank file detected.");
             break;
         case "COMMENT":
             // do nothing
+            console.warn("GenbankManager.lineParser(: This line contains a 'COMMENT' and has been ignored: " + line);
             break;
         default: // FOLLOWING FOR KEYWORDS NOT PREVIOUSLY DEFINED IN CASES
-            if ( line === "" || key === ";" || key === "BASE") {
+            if ( key === "BASE") {
                 // do nothing;              // BLANK LINES || line with ;;;;;;;;;  || "BASE COUNT"
+                console.warn("Parsing GenBank File: This line with BaseCount has been ignored: " + line);
                 break;
-            } else if ( isKey ) {          
+            } else if ( isKey ) {
                 // REGULAR KEYWORDS (NOT LOCUS/FEATURES/ORIGIN) eg VERSION, ACCESSION, SOURCE, REFERENCE
                 lastObj = this.parseKeyword(line, gb);
             }  else if ( isSubKey ) {       // REGULAR SUBKEYWORD, NOT FEATURE eg AUTHOR, ORGANISM
@@ -170,6 +176,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 //console.log(line);
                 //lastObj.setValue(lastObj.getValue() + Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line));
                 lastObj.appendValue(Teselagen.StringUtil.rpad("\n"," ",13) + Ext.String.trim(line), gb);
+            } else {
+                console.warn("Parsing GenBank File: This line has been ignored: " + line);
             }
         }
 
@@ -193,7 +201,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
 
         if (lineArr.length <= 1) {
-            console.warn("WARNING! Parsing Genbank File: Locus line contains no values!");
+            console.warn("Parsing GenBank File: WARNING! Locus line contains no values!");
         }
 
         locusName = lineArr[1];
@@ -217,12 +225,13 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             strand = ""; //"unknown";
         }*/
         strand = "";
-        for (var i=1; i < lineArr.length; i++) {
+        for (i=1; i < lineArr.length; i++) {
             if (lineArr[i].match(/^ss/gi)) {
                 strand = "ss";
             } else if (lineArr[i].match(/^ds/gi)) {
                 strand = "ds";
             }
+            //console.log(strand);
         }
 
 
@@ -235,7 +244,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             naType = ""; //"unknown";
         }*/
         naType = "";
-        for (var i=1; i < lineArr.length; i++) {
+        for (i=1; i < lineArr.length; i++) {
             if (lineArr[i].match(/DNA$/gi)) {
                 naType = "DNA";
             } else if (lineArr[i].match(/RNA$/gi)) {
@@ -246,15 +255,18 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         // Linear vs Circular?; CANNOT HANDLE TANDEM
         linear = true;
-        for (var i=1; i < lineArr.length; i++) {
+        for (i=1; i < lineArr.length; i++) {
             if (lineArr[i].match(/circular/gi)) {
+                //console.warn("Parsing GenBank File: Circular sequence detected.");
                 linear = false;
+            } else {
+                //console.warn("Parsing GenBank File: Linear sequence detected.");
             }
         }
 
         // Date and Div
         // Date is in this format:1-APR-2012
-        for (var i=1; i < lineArr.length; i++) {
+        for (i=1; i < lineArr.length; i++) {
             if (lineArr[i].match(/-[A-Z]{3}-/g)) {
                 date = lineArr[i];
             }
@@ -289,7 +301,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             date: date
         });
 
-        result.setKeyword(this.self.LOCUS_TAG);	
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankLocusKeyword");
+        }
+
+        result.setKeyword(this.self.LOCUS_TAG);
         gb.addKeyword(result);
         gb.addKeywordTag(this.self.LOCUS_TAG);
         return result;
@@ -309,6 +325,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             keyword: key,
             value: val
         });
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankKeyword");
+        }
+
         gb.addKeyword(result);
         gb.addKeywordTag(key);
 
@@ -331,7 +352,13 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             keyword: key,
             value: val
         });
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankSubKeyword");
+        }
+
         mainKey.addSubKeyword(result);
+        //console.log(result);
         return result;
     },
 
@@ -342,7 +369,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @returns {GenbankOriginKeyword} result
      * @private
      */
-    parseOrigin: function(line, gb) {  
+    parseOrigin: function(line, gb) {
         var result;
         var key = this.getLineKey(line);
         if (key === this.self.ORIGIN_TAG) {
@@ -350,13 +377,18 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             result.setKeyword(this.self.ORIGIN_TAG);
             gb.setOrigin(result);
             gb.addKeywordTag(this.self.ORIGIN_TAG);
-        } else { 
+        } else {
             result = gb.getOrigin();
             line = line.replace(/[\s]*[0-9]*/g,"");
             result.appendSequence(line);
         }
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankOriginKeyword");
+        }
+
         return result;
-    },	
+    },
 
     /**
      * Parses Features Block of lines in Genbank file.
@@ -427,6 +459,11 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
                 result.getLastElement().getLastFeatureQualifier().appendValue(Ext.String.trim(line).replace(/\"/g, ""));
             }
         }
+
+        if (result === null || result === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankFeaturesKeyword");
+        }
+
         return result;
     },
 
@@ -443,7 +480,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var complement = false;
         var join       = false;
 
-        var locStr = Ext.String.trim(locStr);
+        locStr = Ext.String.trim(locStr);
 
         if (locStr.match(/complement/i) ) {
             complement = true;
@@ -475,6 +512,10 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
             // This may not be neccesary with the inclusion of join and complement booleans.
         }
 
+        if (location === null || location === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankFeatureLocation");
+        }
+
         return location;
     },
 
@@ -492,17 +533,23 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         newLine = newLine.replace(/^\/|"$/g, "");
         lineArr = newLine.split(/=\"|=/);
 
+        var quoted = false;
+        var val = lineArr[1];
         if (line.match(/=\"/g)) {
-            var quoted = true;
-        } else { 
-            var quoted = false;
+            quoted = true;
+        } else {
+            val = parseInt(val);
         }
 
         featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {
             name: lineArr[0],
-            value: lineArr[1],
+            value: val,
             quoted: quoted
         });
+
+        if (featQual === null || featQual === undefined) {
+            console.warn("Parsing GenBank File: Could not create a GenbankFeatureQualifier");
+        }
         return featQual;
     },
 
@@ -528,12 +575,12 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @private
      */
     getLineVal: function(line) {
-        line = line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");	
+        line = line.replace(/^[\s]*[\S]+[\s]+|[\s]+$/, "");
         line = Ext.String.trim(line);
         return line;
     },
     /**
-     * Checks if line is a Keyword line. If there is NO whitespace greater than before keyword, then it's a subkeyword. 
+     * Checks if line is a Keyword line. If there is NO whitespace greater than before keyword, then it's a subkeyword.
      * Works for FeatureElements too but not used there.
      * @param {String} line
      * @return {Boolean} isKey
@@ -548,7 +595,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         return isKey;
     },
     /**
-     * Checks if line is a SubKeyword line. If there is some whitespace before keyword, then it's a subkeyword. 
+     * Checks if line is a SubKeyword line. If there is some whitespace before keyword, then it's a subkeyword.
      * Works for FeatureElements too but not used there.
      * @param {String} line
      * @return {Boolean} isSubKey
@@ -559,8 +606,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         var isSubKey = false;
 
         if ( line.substr(0,10).match(/^[\s]+[\S]+/) ) {
-            var isSubKey = true;
-        } 
+            isSubKey = true;
+        }
         return isSubKey;
     },
 
@@ -591,7 +638,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      */
     isQualifier: function(line) {
         var qual = false;
-        /*if (line.charAt(21) === "/") {//T.H. Hard coded method 
+        /*if (line.charAt(21) === "/") {//T.H. Hard coded method
 				qual = true;
 			}*/
 
@@ -621,7 +668,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
         return runon;
     },
     /**
-     *  Checks if this line is a continuation of previous Feature Location line. 
+     *  Checks if this line is a continuation of previous Feature Location line.
      *  There must be at least 10 empty spaces before this entry for it to be a runon line,
      *  however a standard file should have 20 spaces before a Location or Qualifier entry.
      *  (Do not create new object, just append to previous object.)

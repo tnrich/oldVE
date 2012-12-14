@@ -359,7 +359,7 @@ Ext.onReady(function() {
                 expect(name).toBe("newName.fas");
             });
 
-            it("getLength()", function(){
+            it("getLength(): For FASTA FILE", function(){
                 var content     = ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n";
                 var seq = Ext.create("Teselagen.models.SequenceFile", {
                     sequenceFileFormat: "FASTA",
@@ -368,6 +368,44 @@ Ext.onReady(function() {
 
                 var len = seq.getLength();
                 expect(len).toBe(39);
+            });
+
+            it("getLength(): For Genbank FILE", function(){
+                var content   = "ORIGIN      \n" +
+                                "        1 gacgtcttat gacaacttga";
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "GENBANK",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(20);
+            });
+
+            it("getLength(): For JbeiSeqXml FILE", function(){
+
+                var url = "/biojs/test/data/jbeiseq/test.xml";
+                var content = jasmine.getFixtures().read(url);
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "JBEISEQXML",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(64);
+            });
+
+            it("getLength(): For SBOL FILE ***** NOT DONE", function(){
+                //var content     = "";
+                var url = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
+                var content = jasmine.getFixtures().read(url);
+                var seq = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "SBOLXML",
+                    sequenceFileContent: content
+                });
+
+                var len = seq.getLength();
+                expect(len).toBe(64);
             });
 
 
@@ -455,12 +493,11 @@ Ext.onReady(function() {
         describe("Teselagen.models.Part.js", function() {
 
             it("Creates Part, Test Associations", function(){
-                var part = Ext.create("Teselagen.models.Part", {
-                    fas: "fas1"
-                });
-                expect(part.isEmpty()).toBe(false);
+                var part = Ext.create("Teselagen.models.Part");
+                expect(part.isEmpty()).toBe(true);
 
-                expect(part.get("fas")).toBe("fas1");
+                expect(part.get("fas")).toBe("None");
+                expect(part.get("name").match("Part")).not.toBe(null);
 
                 // Checking Associations
                 // FILL IN TESTS FOR SEQUENCE FILE HERE!!!!
@@ -503,11 +540,11 @@ Ext.onReady(function() {
                 //expect(part.isPartVOEmpty()).toBe(true);
 
                 //expect(part.get("partVO")).toBe(null);
-                expect(part.get("fas")).toBe("");
+                expect(part.get("fas")).toBe("None");
                 expect(part.get("id")).not.toBe("");
 
                 // Added PartVO fields
-                expect(part.get("name")).toBe("");
+                expect(part.get("name").match("Part")).not.toBe(null);
                 expect(part.get("revComp")).toBe(false);
                 expect(part.get("genbankStartBP")).toBe(0);
                 expect(part.get("endBP")).toBe(0);
@@ -648,7 +685,7 @@ Ext.onReady(function() {
                     compositionalOperator: "BEFORE"
                 });
 
-                expect(eug.getOperand1().get("name")).toBe("");
+                expect(eug.getOperand1().get("name").match("Part")).not.toBe(null);
 
                 var op1 = Ext.create("Teselagen.models.Part", { name: "part", genbankStartBP: 200});
                 eug.setOperand1(op1);
@@ -734,35 +771,27 @@ Ext.onReady(function() {
             });
 
             it("Creates J5Bin", function(){
-                var bin = Ext.create("Teselagen.models.J5Bin", {
-                    binName: "binName1"
-                });
+                var bin = Ext.create("Teselagen.models.J5Bin");
                 bin.setProxy(modelProxy);
                 expect(bin).not.toBe(null);
                 
                 // check -- Non-empty defaults do not work!
-                expect(bin.get("binName")).toBe("binName1");
+                expect(bin.get("binName").match("Bin")).not.toBe(null);
                 expect(bin.get("iconID")).toBe("GENERIC");
                 expect(bin.get("directionForward")).toBe(true);
-                expect(bin.get("fas")).toBe("NONE");
+                expect(bin.get("fas")).toBe("None");
 
                 expect(bin.partCount()).toBe(0);
             });
 
             it("Validate()", function(){
                 var bin = Ext.create("Teselagen.models.J5Bin");
-                expect(bin.validate().length).toBe(1);
+                expect(bin.validate().length).toBe(0);
 
                 bin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "binName1"
                 });
                 expect(bin.validate().length).toBe(0);
-
-                bin = Ext.create("Teselagen.models.J5Bin", {
-                    binName: "binName1",
-                    iconID: "NOT A REAL ICON"
-                });
-                expect(bin.validate().length).toBe(1);
 
                 bin = Ext.create("Teselagen.models.J5Bin", {
                     binName: "binName1",
@@ -1115,7 +1144,7 @@ Ext.onReady(function() {
                 coll.addToBin([bin1, bin2]);
 
                 // add new bin between bin1 and bin2
-                var success = coll.addNewBinByIndex("newBin", 1);
+                var success = coll.addNewBinByIndex(1, "newBin");
 
                 expect(coll.bins().count()).toBe(3);
                 expect(coll.bins().getAt(0)).toBe(bin1);

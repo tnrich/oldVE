@@ -3,7 +3,7 @@
  * Class describing a J5CommunicationManager.
  * J5CommunicationManager manages communication with the server.
  *
- * @author Diana Wong
+ * @author Rodrigo Pavez, Diana Wong
  */
 Ext.define("Teselagen.manager.J5CommunicationManager", {
 
@@ -30,13 +30,13 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     generateAjaxRequest: function () {
         console.log("Starting Ajax Request");
 
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var currentModel = currentTab.model;
+        var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
             params: {
-                deProjectId: currentModel.data.id,
+                deProjectId: deproject.data.id,
                 parameters: JSON.stringify(this.j5Parameters),
                 masterFiles: JSON.stringify(this.masterFiles)
             },
@@ -49,10 +49,6 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
                 var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
-                var obj = [];
-                obj.push({
-                    'name': 'Rodrigo'
-                });
 
                 var store = new Ext.data.JsonStore({
                     proxy: {
@@ -64,16 +60,22 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                         }
                     },
 
-                    fields: ['name']
+                    fields: ['name','fileContent','size']
                 });
                 store.load();
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
                 runj5Btn.toggle();
 
+                deproject.j5runs().load({
+                    callback : function(runs){
+                        console.log(runs);
+                    }
+                });
+
             }
         });
-
+        
     },
     downloadResults: function (btn) {
         if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;

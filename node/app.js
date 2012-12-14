@@ -23,6 +23,7 @@ app.markdown = require("markdown-js");
 app.soap = require("soap");
 app.xml2js = require('xml2js');
 app.program = require('commander');
+app.nodemailer = require("nodemailer");
 
 app.program
   .version('0.0.1')
@@ -31,12 +32,16 @@ app.program
   .option('-d, --dev', 'Run Production environment')
   .option('-s, --stage', 'Run Production environment')
   .option('-p, --prod', 'Run Production environment')
+  .option('-q, --quiet', 'Disable logging')
   .parse(process.argv);
 
 if (app.program.dev) process.env.NODE_ENV = "Development";
 else if (app.program.stage) process.env.NODE_ENV = "Stage";
 else if (app.program.prod) process.env.NODE_ENV = "Production";
 else process.env.NODE_ENV = "Development";
+
+// Log requests
+if (!app.program.quiet) app.use(express.logger());
 
 app.use(function (req, res, next) {
   if(req.method === 'OPTIONS') {
@@ -63,7 +68,7 @@ require('./development.js')(app);
 var config = require('./config.js')(app, express);
 
 // Routes
-require('./routes/api.js')(app);
+require('./routes/api.js')(app, express);
 require('./routes/testing.js')(app);
 //require('./routes/backend.js')(app);
 require('./routes/j5.js')(app);

@@ -15,6 +15,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedPart: null,
     tabPanel: null,
 
+    onReRenderDECanvasEvent: function(){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        this.onTabChange(tab,tab,tab);        
+    },
+
     onPartSelected: function(j5Part, binIndex) {
         this.inspector.setActiveTab(0);
 
@@ -22,6 +27,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
+<<<<<<< HEAD
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
@@ -29,6 +35,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 fasForm.loadRecord(j5Part);
             }
 
+=======
+            fasForm.loadRecord(j5Part);
+>>>>>>> 06adb959897af75ad18d98bc2ba8e88178b55a36
             this.selectedPart = j5Part;
         } else {
             var newPart = this.DeviceDesignManager.createPart(this.activeProject,
@@ -219,6 +228,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on(this.DeviceEvent.SELECT_BIN,
                             this.onBinSelected,
+                            this);
+
+        this.application.on("ReRenderDECanvas",
+                            this.onReRenderDECanvasEvent,
                             this);
 
         this.control({

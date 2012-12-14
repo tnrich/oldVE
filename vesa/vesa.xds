@@ -207,6 +207,14 @@
                 "metadata/resource/css2"
             ],
             "className": "css2"
+        },
+        "52420128-9754-4bb8-92c8-187a378e4e5f": {
+            "paths": [
+                "metadata/view/ProjectManagerWindow",
+                "app/view/override/ProjectManagerWindow.js",
+                "app/view/ProjectManagerWindow.js"
+            ],
+            "className": "ProjectManagerWindow"
         }
     },
     "viewOrderMap": {
@@ -214,7 +222,8 @@
             "769f9c07-da27-4fec-8039-b923f3e3a5d5",
             "36796554-cdfd-4b2b-bfce-3a09263e3130",
             "80fca5e0-4950-4656-b37a-ee0401bd3048",
-            "b2e50587-a656-45cb-8b69-0312e55ad096"
+            "b2e50587-a656-45cb-8b69-0312e55ad096",
+            "52420128-9754-4bb8-92c8-187a378e4e5f"
         ],
         "store": [],
         "controller": [
