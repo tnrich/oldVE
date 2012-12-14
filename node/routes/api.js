@@ -181,6 +181,32 @@ module.exports = function (app, express) {
     });
   });  
 
+  // Get VEProjects
+  app.get('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete VEProjects
+  app.delete('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
   // Get Parts
   app.get('/parts', restrict, function (pReq, pRes) {
     var Part = app.db.model("part");
