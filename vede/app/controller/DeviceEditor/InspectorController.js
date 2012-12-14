@@ -27,17 +27,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
-<<<<<<< HEAD
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
             } else {
                 fasForm.loadRecord(j5Part);
             }
-
-=======
-            fasForm.loadRecord(j5Part);
->>>>>>> 06adb959897af75ad18d98bc2ba8e88178b55a36
             this.selectedPart = j5Part;
         } else {
             var newPart = this.DeviceDesignManager.createPart(this.activeProject,
