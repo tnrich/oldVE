@@ -616,28 +616,24 @@ module.exports = function (app, express) {
 
   //PUT
   app.put('/user/projects/veprojects/sequences', function (req, res) {
-    var id = req.body["veproject_id"];
-    var sequence = req.body;
-    delete sequence.id;
-    var VEProject = app.db.model("veproject");
     var Sequence = app.db.model("sequence");
-
-    VEProject.findById(id,function(err,veproject){
-      var newSequence = new Sequence();
-
-      for(var prop in sequence) {
-        newSequence[prop] = sequence[prop];
-      }
-
-      newSequence.save(function(){
-        veproject.sequences.push(newSequence);
-        veproject.save(function(err){
-          if(err) console.log(err);
-          console.log("New Sequence Saved!");
-
-          res.json({"sequence":newSequence});
-        });
-      });
+    Sequence.findById(req.body.id,function(err, sequence){
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            for(var prop in req.body) {
+                sequence[prop] = req.body[prop];
+            }
+            sequence.save(function(pErr){
+                if (pErr) {
+                    errorHandler(pErr, req, res);
+                }
+                else {
+                    res.json({"sequence":sequence});
+                }
+            });
+        }
     });
   });
 
