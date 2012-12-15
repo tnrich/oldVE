@@ -1,39 +1,3 @@
-var store = Ext.create('Ext.data.Store', {
-    fields: ['name'],
-    data: {
-        'items': [
-                {'name': 'psc001'},
-                {'name': 'psc002'},
-                {'name': 'psc003'},
-                {'name': 'psc004'},
-                {'name': 'psc005'},
-                {'name': 'psc006'},
-                {'name': 'psc007'},
-                {'name': 'psc008'},
-                {'name': 'psc009'},
-                {'name': 'psc010'},
-                {'name': 'psc011'},
-                {'name': 'psc012'},
-                {'name': 'psc013'},
-                {'name': 'psc014'},
-                {'name': 'psc015'},
-                {'name': 'psc016'},
-                {'name': 'psc017'},
-                {'name': 'psc018'},
-                {'name': 'psc019'},
-                {'name': 'psc020'},
-                {'name': 'psc021'},
-                {'name': 'psc022'}
-            ]},
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'json',
-            root: 'items'
-        }
-    }
-});
-
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.ProjectPanelView',
@@ -61,15 +25,15 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         id: 'projectTreePanel',
         rootVisible: false
     }, {
+        //xtype: 'panel',
         flex: 1,
-        xtype: 'gridpanel',
-        store: store,
+        //items: [{
+        xtype: 'treepanel',
+        title: 'Parts',
+        id: 'projectPartsPanel',
         width: 228,
-        columns: [{
-            text: 'Name',
-            dataIndex: 'name',
-            flex: 1
-        }]
+        rootVisible: false
+        //}]
     }]
 
 });

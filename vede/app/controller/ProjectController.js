@@ -61,7 +61,6 @@ Ext.define("Vede.controller.ProjectController", {
                     }});
                     */
                 });
-
             }});
 
             projectNode.appendChild({
@@ -71,11 +70,56 @@ Ext.define("Vede.controller.ProjectController", {
                 icon: 'resources/images/add.png',
                 id: 0
             });
-
         });
 
-        
         Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
+
+        this.renderPartsPanel(cb);
+        //if(typeof(cb) == "function") cb();
+    },
+
+    renderPartsPanel: function(cb){
+        var rootNode = Ext.getCmp('projectPartsPanel').getRootNode();
+        rootNode.removeAll();
+
+        rootNode.appendChild({
+            text: 'Add project',
+            leaf: true,
+            hrefTarget: 'newproj',
+            icon: 'resources/images/add.png',
+            id: 0
+        });
+        
+        var projects = Teselagen.manager.ProjectManager.projects;
+        projects.each(function(project) {
+            var projectNode = rootNode.appendChild({
+                text: project.data.name,
+                id: project.data.id,
+                hrefTarget: 'openproj'
+            });
+
+            var veprojects = project.veprojects();
+            veprojects.load({callback: function(){
+                veprojects.each(function(deproject){
+                    var veprojectnode = projectNode.appendChild({
+                        text: veproject.data.name,
+                        leaf: false,
+                        id: veproject.data.id,
+                        hrefTarget: 'openve',
+                        icon: "resources/images/ux/design-tree-icon-leaf.png"
+                    });
+
+                });
+            }});
+
+            projectNode.appendChild({
+                text: 'Add part',
+                leaf: true,
+                hrefTarget: 'newve',
+                icon: 'resources/images/add.png',
+                id: 0
+            });
+        });
 
         if(typeof(cb) == "function") cb();
     },
@@ -127,12 +171,27 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewProject();
     },
 
+    createVEProject: function(){
+        var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
+            name: "Untitled Project"
+        });
+        var projects = Teselagen.manager.ProjectManager.projects;
+        projects.deprojects().add(veproject);
+
+        veproject.save({
+            callback: function(){
+                Ext.getCmp('mainAppPanel').setActiveTab(1);
+                Vede.application.fireEvent("ImportSequenceToProject",veproject);
+            }
+        });
+    },
+
     expandProject: function(record){
         if(record.isExpanded()) record.collapse();
         else record.expand();
     },
 
-    onProjectPanelItemClick: function (store, record) { 
+    onProjectPanelItemClick: function (store, record) {
         switch(record.data.hrefTarget)
         {
             case 'openproj':
@@ -156,8 +215,13 @@ Ext.define("Vede.controller.ProjectController", {
         }
     },
 
-    onProjectPartsPanelItemClick: function (store, record) { 
-        Teselagen.manager.ProjectManager.openVEProject(record); 
+    onProjectPartsPanelItemClick: function (store, record) {
+        switch(record.data.hrefTarget)
+        {
+            case 'newve':
+                this.createVEProject(record);
+                break;
+        }
     },
 
     onNewProjectClick: function(){
@@ -185,8 +249,8 @@ Ext.define("Vede.controller.ProjectController", {
             '#projectDesignPanel': {
                 itemclick: this.onProjectPanelItemClick
             },
-            '#projectTreePanel': {
-                itemclick: this.onProjectPanelItemClick
+            '#projectPartsPanel': {
+                itemclick: this.onProjectPartsPanelItemClick
             },
             "#newProject_Btn": {
                 click: this.onNewProjectClick
