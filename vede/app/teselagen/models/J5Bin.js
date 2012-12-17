@@ -75,7 +75,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
-        {name: "fro",               type: "string",     defaultValue: "None"},
+        {name: "fro",               type: "string",     defaultValue: ""},
         {name: "fas",               type: "string",     defaultValue: "None"},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
