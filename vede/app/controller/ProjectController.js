@@ -49,20 +49,6 @@ Ext.define("Vede.controller.ProjectController", {
                         hrefTarget: 'j5reports',
                         icon: "resources/images/ux/j5-tree-icon-parent"
                     });
-                    /*
-                    var j5runs = deproject.j5runs();
-                    j5runs.load({callback: function(){
-                        deproject.j5runs().each(function(j5run){
-                            var j5resultNode = j5resultsNode.appendChild({
-                                text: j5run.data.date,
-                                leaf: true,
-                                id: deproject.data.id,
-                                hrefTarget: 'j5report'
-                            });
-                        });
-
-                    }});
-                    */
                 });
             }});
 
@@ -78,7 +64,6 @@ Ext.define("Vede.controller.ProjectController", {
         Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
 
         this.renderPartsPanel(cb);
-        //if(typeof(cb) == "function") cb();
     },
 
     renderPartsPanel: function(cb){
@@ -106,7 +91,7 @@ Ext.define("Vede.controller.ProjectController", {
                             parts.each(function(part){
                                 self.partsStore.add(part);
                                 rootNode.appendChild({
-                                    text: deproject.data.name,
+                                    text: part.data.name,
                                     leaf: true,
                                     id: part.data.id,
                                     hrefTarget: 'openpart',
@@ -171,7 +156,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     addPart: function(){
-
+        var self = this;
         var projects = Teselagen.manager.ProjectManager.projects;
         selectedproject = projects.last();
         if(selectedproject)
@@ -185,7 +170,7 @@ Ext.define("Vede.controller.ProjectController", {
             });
      
             var newPart = Ext.create("Teselagen.models.Part", {
-                name: "",
+                name: "Untitled Part",
                 genbankStartBP: 1,
                 endBP: 7
             });
@@ -204,6 +189,7 @@ Ext.define("Vede.controller.ProjectController", {
                         newPart.save({callback: function(){
                             newVEProject.parts().add(newPart);
                             newVEProject.save({callback:function(){
+                                self.renderPartsPanel();
                                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                                 Vede.application.fireEvent("VectorEditorEditingMode",newPart,activeTab);
                             }});
@@ -217,13 +203,9 @@ Ext.define("Vede.controller.ProjectController", {
 
     resolveAndOpenPart: function(record){
         var part_id = record.data.id;
-        console.log(part_id);
-        console.log(this.partsStore);
-
-        var veproject = veprojects.getById(veproject_id);
+        var selectedPart = this.partsStore.getById(part_id);
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        Vede.application.fireEvent("VectorEditorEditingMode",newPart,activeTab);
-
+        Vede.application.fireEvent("VectorEditorEditingMode",selectedPart,activeTab);
     },
 
     expandProject: function(record){

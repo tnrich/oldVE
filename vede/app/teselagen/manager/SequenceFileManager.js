@@ -46,6 +46,12 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
         var content = pSequenceFile.get("sequenceFileContent");
         var seqMan;
         
+        if(!this.FormatUtils)
+        {
+            console.log("Fixing FormatUtils loading");
+            this.FormatUtils = Teselagen.utils.FormatUtils;
+        }
+
         switch (format) {
         case this.Constants.GENBANK:
             var genbank = this.GenbankManager.parseGenbankFile(content);
