@@ -131,11 +131,21 @@ Ext.onReady(function () {
         });
         
         describe("Part.", function () {
-            var partStore;
+            var aPart, partStore;
 
             it("Load PartStore", function () {
-                partStore = Ext.create("Teselagen.store.PartStore");
-                partStore.load(function() {
+                runs(function() {
+                    partStore = Ext.create("Teselagen.store.PartStore");
+                    partStore.load(function(pRecs, pOp, pSuccess) {
+                        if (pSuccess) {
+                            aPart = partStore.first();
+                        }
+                    });
+                });
+                waitsFor(function() {
+                    return Ext.isDefined(aPart);
+                }, "aPart to be defined", 500);
+                runs(function() {
                     expect(partStore.getCount()).toBe(2);
                 });
             });
@@ -147,7 +157,6 @@ Ext.onReady(function () {
             it("Load UserStore", function () {
                 userStore = Ext.create("Teselagen.store.UserStore");
                 userStore.load(function() {
-                    expect(userStore.getCount()).toBe(2);
                     user = userStore.first();
                 });
             });
@@ -156,6 +165,7 @@ Ext.onReady(function () {
                     return Ext.isDefined(user);
                 }, "User to be defined", 500);
                 runs(function() {
+                    expect(userStore.getCount()).toBe(2);
                     projects = user.projects();
                     projects.on("load", function() {
                         expect(projects).toBeDefined();
