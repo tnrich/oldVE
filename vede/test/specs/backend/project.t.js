@@ -90,13 +90,15 @@ Ext.onReady(function () {
         it("Load user", function () {
             waitsFor(function() {
                 return isTestSetup;
-            }, "test data setup");
+            }, "test data setup", 500);
             runs(function () {
-                projectManager.loadUser(function(pSuccess) {
-                    if (pSuccess) {
-                        isUserLoaded = true;
-                    }
-                });
+                projectManager.loadUser();
+            });
+            waitsFor(function() {
+                return !Ext.isEmpty(projectManager.projects);
+            }, "user projects to be loaded", 500);
+            runs(function() {
+                isUserLoaded = true;
             });
         });
 
