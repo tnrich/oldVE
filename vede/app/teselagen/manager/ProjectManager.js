@@ -23,29 +23,10 @@ Ext.define("Teselagen.manager.ProjectManager", {
     currentUser: null,
     projects: null,
 
-    loadUser: function () {
-        if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
-        var users = Ext.create("Teselagen.store.UserStore");
-        var self = this;
-        users.load({
-            callback: function(records,operation,success) {
-                if(!records) console.log('Error loading user');
-                self.currentUser = users.first();
-                var projects = self.currentUser.projects();
-                projects.load({
-                    callback : function(records,operation,success){
-                        self.projects = projects;
-                        Vede.application.fireEvent("renderProjectsTree");                        
-                    }
-                });
-            }
-        });
-    },
-
 	/**
 	 * Load User Info
 	 */
-	loadUser: function (cb) {
+	loadUser: function () {
 		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
 		var users = Ext.create("Teselagen.store.UserStore");
 		var self = this;
@@ -54,9 +35,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 			callback: function (records,operation,success) {
 				if (!success || !records) {
 				    console.log('Error loading user');
-//				    if (cb) {
-//				        return cb(false);
-//				    }
 				}
 				else {
 				    self.currentUser = users.first();
@@ -72,9 +50,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
 				            }
 				        }
 				    });
-//				    if(cb) { 
-//				        return cb(true);
-//				    }
 				}
 			}
 		});
