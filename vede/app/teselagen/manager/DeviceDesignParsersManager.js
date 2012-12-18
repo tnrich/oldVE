@@ -86,7 +86,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
               genbankStartBP: part["de:startBP"],
               endBP: part["de:stopBP"],
               revComp: part["de:revComp"],
-              fas: part["de:parts"]["de:part"]["de:fas"]
+              fas: (part["de:parts"]["de:part"]["de:fas"]=='') ? 'None' : part["de:parts"]["de:part"]["de:fas"]
           });
 
           var newSequence = Ext.create("Teselagen.models.SequenceFile", {
@@ -188,7 +188,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     deproject.setDesign(design);
     Teselagen.manager.ProjectManager.workingProject.deprojects().add(deproject);
     Teselagen.manager.ProjectManager.loadDesignAndChildResources();
-    Teselagen.manager.ProjectManager.openDesign(deproject);
+    Teselagen.manager.ProjectManager.openDEProject(deproject);
 
   }
 

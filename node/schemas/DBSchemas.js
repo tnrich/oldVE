@@ -1,25 +1,36 @@
 /**
- * Schemas for the DB
- * -------------
+ * Schemas definitions
+ * -------------------
+ * User
+ * j5run
+ * sequence
+ * part
+ * veproject
+ * deproject
+ * project
  */
 
 module.exports = function (app) {
 
+	var registerSchema = function(name,schema){
+		app.db.model(name, schema);
+		schema.virtual('id').get(function () {return this._id.toString();});
+		schema.set('toJSON', { virtuals: true });
+		schema.set('toJSON', { virtuals: true });
+	};
+
 	var Schema = app.mongoose.Schema;
 	var oIDRef = app.mongoose.Schema.Types.ObjectId;
-	var oMixed = app.mongoose.Schema.Types.Mixed;
+	var Mixed = app.mongoose.Schema.Types.Mixed;
 
-	app.db.model('Examples', new Schema({
+	var j5RunSchema = new Schema({
+		deproject_id: String,
 		name: String,
-		payload: oMixed
-	}));
-
-	var j5ResultSchema = new Schema({
-		fileId: oIDRef,
-		deprojectName: String,
-		dateCreated: Date
+		file_id: oIDRef,
+		date: Date,
+		j5Results: Mixed
 	});
-	app.db.model('j5result', j5ResultSchema);
+	registerSchema('j5run', j5RunSchema);
 
 	var SequenceSchema = new Schema({
 		veproject_id: String,
@@ -29,10 +40,10 @@ module.exports = function (app) {
 		partSource: String,
 		sequenceFileName: String
 	});
-	app.db.model('sequence', SequenceSchema);
+	registerSchema('sequence', SequenceSchema);
 
 	var PartSchema = new Schema({
-		id : String,
+		id                :  String,
 		veproject_id      :  String,
 		j5bin_id          :  String,
 		eugenerule_id     :  String,
@@ -56,6 +67,12 @@ module.exports = function (app) {
 		endBP             :  String,
 		iconID            :  String
 	});
+
+	PartSchema.pre('save', function (next) {
+	  this.id = this._id;
+	  next();
+	})
+
 	app.db.model('part', PartSchema);
 
 	var VEProjectSchema = new Schema({
@@ -63,7 +80,7 @@ module.exports = function (app) {
 		project_id : { type: oIDRef, ref: 'project' },
 		sequences: [{ type: oIDRef, ref: 'sequence' }]
 	});
-	app.db.model('veproject', VEProjectSchema);
+	registerSchema('veproject', VEProjectSchema);
 
 	var DEProjectSchema = new Schema({
 		name: String,
@@ -89,11 +106,11 @@ module.exports = function (app) {
 					parts: [ { type: oIDRef, ref: 'part' } ]
 				}]
 			},
-			rules: oMixed
+			rules: Mixed
 		},
-		j5results : [{ type: oIDRef, ref: 'j5result' }]
+		j5runs : [{ type: oIDRef, ref: 'j5run' }]
 	});
-	app.db.model('deproject', DEProjectSchema);
+	registerSchema('deproject', DEProjectSchema);
 
 	var ProjectSchema = new Schema({
 		user_id : { type: oIDRef, ref: 'User' },
@@ -101,39 +118,30 @@ module.exports = function (app) {
 		dateModified: String,
 		name: String,
 		deprojects : [{ type: oIDRef, ref: 'deproject' }],
-		veprojects : [{ type: oIDRef, ref: 'veproject' }]
+		veprojects : [{ type: oIDRef, ref: 'veproject' }],
+		projecttree: {
+			deprojects: [Mixed],
+			veproject: [Mixed],
+			parts: [Mixed]
+		}
 	});
-	app.db.model('project', ProjectSchema);
+	registerSchema('project', ProjectSchema);
 
 	var UserSchema = new Schema({
 		username: String,
 		name: String,
 		projects : [{ type: oIDRef, ref: 'project' }],
-		preferences: Schema.Types.Mixed
+		preferences: Mixed
 	});
-	app.db.model('User', UserSchema);
+	registerSchema('User', UserSchema);
 
-	//PartSchema.virtual('id').get(function () {return this._id;});
-	//PartSchema.set('toJSON', { virtuals: true });
-
-	PartSchema.pre('save', function (next) {
-	  this.id = this._id;
-	  next();
+	DEProjectSchema.post('save', function() {
+		var Project = app.db.model("project");
+		var self = this;
+	    Project.findById(this.project_id,function(err,proj){	
+	     	proj.projecttree.deprojects.push({'name':self.name,'id':self.id});
+	     	proj.save();
+	    });	  
 	});
-
-	SequenceSchema.virtual('id').get(function () {return this._id;});
-	SequenceSchema.set('toJSON', { virtuals: true });
-
-	UserSchema.virtual('id').get(function () {return this._id;});
-	UserSchema.set('toJSON', { virtuals: true });
-
-	ProjectSchema.virtual('id').get(function () {return this._id;});
-	ProjectSchema.set('toJSON', { virtuals: true });	
-
-	DEProjectSchema.virtual('id').get(function () {return this._id;});
-	DEProjectSchema.set('toJSON', { virtuals: true });		
-
-	VEProjectSchema.virtual('id').get(function () {return this._id;});
-	VEProjectSchema.set('toJSON', { virtuals: true });		
-
+		
 };

@@ -9,14 +9,23 @@ Ext.define("Teselagen.models.J5Run", {
         // will be moved to J5Input
         "Teselagen.models.J5Parameters",
         "Teselagen.models.DownstreamAutomationParameters",
-
         "Teselagen.models.J5Input",
+        "Teselagen.models.j5Output.*",
         "Teselagen.models.J5Results",
         "Teselagen.constants.Constants",
         "Teselagen.manager.SessionManager"
     ],
+
     proxy: {
-        type: "memory"
+        type: "rest",
+        url: "/vede/test/data/json/getj5Runs.json",
+        reader: {
+            type: "json",
+            root: "j5runs"
+        },
+        buildUrl: function() {
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/j5runs", this.url);
+        }
     },
 
     statics: {
@@ -31,8 +40,8 @@ Ext.define("Teselagen.models.J5Run", {
      */
     fields: [
         {name: "id",            type: "long"},
+        {name: "file_id",            type: "long"},
         {name: "name",          type: "String", defaultValue: ""},
-
 
         // meta info
         {name: "status",        type: "String",     defaultValue: ""},
@@ -99,7 +108,6 @@ Ext.define("Teselagen.models.J5Run", {
             getterName: "getJ5Results",
             setterName: "setJ5Results",
             associationKey: "j5Results",
-            foreignKey: "j5results_id"
         },
         {
             type: "belongsTo",

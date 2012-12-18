@@ -27,15 +27,11 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     onAddColumnClick: function() {
-        var device = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign();
-        //this.DeviceDesignManager.addEmptyBinByIndex(device,
-        //                    device.getJ5Collection().bins().getRange().length);
-        this.DeviceDesignManager.addEmptyBinByIndex(device, device.getBinCount());
+        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
     },
 
     onOpenj5Click: function(button, e, options) {
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.j5Window = Ext.create('Vede.view.de.j5Controls').show();
+        Vede.application.fireEvent("openj5");
     },
 
     onSaveDesignClick: function(button, e, options) {

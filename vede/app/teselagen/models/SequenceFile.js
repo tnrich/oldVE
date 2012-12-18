@@ -273,20 +273,25 @@ Ext.define("Teselagen.models.SequenceFile", {
         var end     = 0;
 
         if (format === constants.GENBANK) {
-	    var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(content);
+            var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(content);
             end = gb.findKeyword("ORIGIN").getSequence().length;
         } else if (format === constants.FASTA) {
-	    var seq = content.replace(/>\s*(\S*)\s*/,"");
+            var seq = content.replace(/>\s*(\S*)\s*/,"");
             seq = seq.replace(/\s/,"");
-//            console.log(seq);
+            //console.log(seq);
             end = seq.length;
         } else if (format === constants.JBEISEQ) {
-	    var jbei = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(content);
+            var jbei = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(content);
             //console.log(jbei);
             end = jbei["seq:seq"]["seq:sequence"].length;
+        } else if (format === constants.SBOLXML) {
+            var sbol = Teselagen.bio.parsers.ParsersManager.sbolXmlToJson(content);
+            console.log(sbol);
+            console.warn("Finding length for SBOL file not determined yet");
+            end = -1;
         } else {
         }
-//	console.log(end);
+        //console.log(end);
         return end;
     }
 });

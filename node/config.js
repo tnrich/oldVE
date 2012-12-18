@@ -88,17 +88,8 @@ module.exports = function (app, express) {
 
   app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
     console.log('MONGODB: MONGODB is online');
-    if(app.program.examples) app.development.reloadExamples();
-    if(app.program.guest) app.development.reloadUsers();
+    require('./schemas/DBSchemas.js')(app);
   });
-
-  // Load MONGOOSE SCHEMAS
-  //require('./schemas/schemas.js')(app);
-  require('./schemas/DBSchemas.js')(app);
-  
-
-
-
 
   // MYSQL CONNECTION
   if(app.program.stage || app.program.production) {
@@ -159,9 +150,9 @@ module.exports = function (app, express) {
 
   // Init XML-RPC
   app.j5client = app.xmlrpc.createClient({
-    host: 'eaa.teselagen.com',
+    host: 'dev.teselagen.com',
     port: 80,
-    path: '/bin/j5_xml_rpc.pl'
+    path: '/j5/j5_xml_rpc.pl'
   });
 
 
@@ -185,6 +176,10 @@ module.exports = function (app, express) {
   }
 
   app.xmlparser = new app.xml2js.Parser();
+
+  app.mailer = app.nodemailer.createTransport("SMTP",{
+      host: 'localhost'
+  });
 
   return config;
 

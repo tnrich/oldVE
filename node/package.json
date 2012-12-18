@@ -20,5 +20,6 @@
     , "xml2js":"latest"
     , "xmlbuilder":"0.4.2"
     , "xmlrpc": ">=1.0.1"
+    , "nodemailer": "0.3.35"
   }
 }

@@ -66,10 +66,16 @@ Ext.define('Vesa.view.AppViewport', {
                                 align: 'stretch',
                                 type: 'hbox'
                             },
-                            dockedItems: [
+                            items: [
                                 {
                                     xtype: 'button',
-                                    dock: 'right',
+                                    flex: 1,
+                                    cls: 'header_btn',
+                                    overCls: 'projectButton_ober',
+                                    text: 'MyButton'
+                                },
+                                {
+                                    xtype: 'button',
                                     id: 'headerUserIcon',
                                     styleHtmlContent: false,
                                     iconAlign: 'right',
@@ -89,147 +95,16 @@ Ext.define('Vesa.view.AppViewport', {
                     ]
                 },
                 {
-                    xtype: 'tabpanel',
+                    xtype: 'treepanel',
+                    margins: '0 10 0 0',
                     region: 'west',
-                    split: false,
-                    id: 'ProjectPanel',
-                    margin: '0 10 0 0',
-                    maxWidth: 230,
-                    minWidth: 228,
-                    width: 228,
-                    collapseDirection: 'left',
+                    id: 'projectDesignPanel',
+                    width: 230,
                     collapsible: true,
-                    frameHeader: false,
-                    hideCollapseTool: false,
-                    preventHeader: false,
-                    title: 'Project',
-                    activeTab: 0,
-                    plain: false,
-                    removePanelHeader: false,
-                    items: [
-                        {
-                            xtype: 'panel',
-                            baseCls: 'sfsdf',
-                            cls: 'sfs',
-                            id: 'projectDesignTab',
-                            layout: {
-                                type: 'fit'
-                            },
-                            minButtonWidth: 32,
-                            title: 'My Tab',
-                            tabConfig: {
-                                xtype: 'tab',
-                                cls: 'projectBarButton',
-                                id: 'projectTab1',
-                                overCls: 'project-tab-focus',
-                                autoWidth: true,
-                                focusCls: 'project-tab-focus',
-                                icon: 'resources/images/ux/designTab.png',
-                                iconCls: 'projectBarButton'
-                            },
-                            items: [
-                                {
-                                    xtype: 'treepanel',
-                                    border: 0,
-                                    id: 'projectDesignPanel',
-                                    title: 'Your Designs',
-                                    viewConfig: {
+                    title: 'Your Designs',
+                    viewConfig: {
 
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'panel',
-                            id: 'projectAnalysisTab',
-                            layout: {
-                                type: 'fit'
-                            },
-                            title: 'My Tab',
-                            tabConfig: {
-                                xtype: 'tab',
-                                cls: 'projectBarButton',
-                                id: 'projectTab2',
-                                icon: 'resources/images/ux/graphTab.png',
-                                iconCls: 'projectBarButton'
-                            },
-                            items: [
-                                {
-                                    xtype: 'treepanel',
-                                    id: 'projectAnalysisPanel',
-                                    title: 'j5 Results',
-                                    root: {
-                                        text: 'Design 1',
-                                        expanded: true,
-                                        children: [
-                                            {
-                                                text: 'j5 Run 1',
-                                                leaf: true
-                                            },
-                                            {
-                                                text: 'j5 Run 2',
-                                                leaf: true
-                                            }
-                                        ]
-                                    },
-                                    viewConfig: {
-
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'panel',
-                            id: 'projectPartsTab',
-                            layout: {
-                                type: 'fit'
-                            },
-                            title: 'My Tab',
-                            tabConfig: {
-                                xtype: 'tab',
-                                cls: 'projectBarButton',
-                                id: 'projectTab3',
-                                icon: 'resources/images/ux/partsTab.png',
-                                iconCls: 'projectBarButton'
-                            },
-                            items: [
-                                {
-                                    xtype: 'treepanel',
-                                    id: 'projectPartsPanel',
-                                    title: 'Your Parts',
-                                    viewConfig: {
-
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'panel',
-                            id: 'projectRegistryTab',
-                            layout: {
-                                type: 'fit'
-                            },
-                            title: 'My Tab',
-                            tabConfig: {
-                                xtype: 'tab',
-                                cls: 'projectBarButton',
-                                id: 'projectTab4',
-                                autoWidth: false,
-                                icon: 'resources/images/ux/registryTab.png',
-                                iconCls: 'projectBarButton'
-                            },
-                            items: [
-                                {
-                                    xtype: 'treepanel',
-                                    id: 'projectsRegistryPanel',
-                                    title: 'Registry',
-                                    viewConfig: {
-
-                                    }
-                                }
-                            ]
-                        }
-                    ]
+                    }
                 },
                 {
                     xtype: 'tabpanel',
@@ -250,6 +125,25 @@ Ext.define('Vesa.view.AppViewport', {
                                 xtype: 'tab',
                                 id: 'DashboardTab'
                             },
+                            dockedItems: [
+                                {
+                                    xtype: 'panel',
+                                    flex: 1,
+                                    dock: 'top',
+                                    border: '0 1 0 1',
+                                    id: 'dashboardWelcomePanel',
+                                    items: [
+                                        {
+                                            xtype: 'displayfield',
+                                            padding: '0 0 0 10',
+                                            value: 'Tim',
+                                            fieldLabel: 'Welcome back',
+                                            labelPad: 0,
+                                            labelSeparator: ' '
+                                        }
+                                    ]
+                                }
+                            ],
                             items: [
                                 {
                                     xtype: 'panel',
@@ -266,69 +160,11 @@ Ext.define('Vesa.view.AppViewport', {
                                             border: 0,
                                             id: 'dashboard_TopPanel',
                                             layout: {
-                                                align: 'stretch',
-                                                type: 'hbox'
+                                                type: 'fit'
                                             },
                                             items: [
                                                 {
                                                     xtype: 'gridpanel',
-                                                    flex: 1,
-                                                    id: 'projectGrid_Panel',
-                                                    margin: 10,
-                                                    title: 'Your Projects',
-                                                    forceFit: true,
-                                                    columnLines: false,
-                                                    columns: [
-                                                        {
-                                                            xtype: 'gridcolumn',
-                                                            id: 'projectGrid_Name',
-                                                            dataIndex: 'string',
-                                                            hideable: false,
-                                                            text: 'Name'
-                                                        },
-                                                        {
-                                                            xtype: 'datecolumn',
-                                                            id: 'projectGrid_DateCreated',
-                                                            dataIndex: 'date',
-                                                            text: 'Date Created'
-                                                        },
-                                                        {
-                                                            xtype: 'datecolumn',
-                                                            id: 'projectGrid_DateModified',
-                                                            dataIndex: 'date',
-                                                            text: 'Last Modified'
-                                                        }
-                                                    ],
-                                                    viewConfig: {
-                                                        id: 'projectGridView'
-                                                    },
-                                                    dockedItems: [
-                                                        {
-                                                            xtype: 'toolbar',
-                                                            dock: 'top',
-                                                            height: 40,
-                                                            items: [
-                                                                {
-                                                                    xtype: 'button',
-                                                                    id: 'newProject_Btn',
-                                                                    margin: 3,
-                                                                    icon: 'resources/images/add_project.png',
-                                                                    scale: 'medium',
-                                                                    tooltip: 'New Project'
-                                                                },
-                                                                {
-                                                                    xtype: 'button',
-                                                                    id: 'removeProject_Btn',
-                                                                    icon: 'resources/images/ux/remove.png',
-                                                                    scale: 'medium'
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    xtype: 'gridpanel',
-                                                    flex: 1,
                                                     id: 'designGrid_Panel',
                                                     margin: 10,
                                                     width: 100,
@@ -362,6 +198,11 @@ Ext.define('Vesa.view.AppViewport', {
                                                             xtype: 'toolbar',
                                                             dock: 'top',
                                                             height: 40,
+                                                            width: 332,
+                                                            layout: {
+                                                                pack: 'end',
+                                                                type: 'hbox'
+                                                            },
                                                             items: [
                                                                 {
                                                                     xtype: 'button',
@@ -400,75 +241,6 @@ Ext.define('Vesa.view.AppViewport', {
                                                         type: 'fit'
                                                     },
                                                     title: 'Analytics'
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'panel',
-                                    flex: 1,
-                                    border: 0,
-                                    id: 'dashboard_TaskPanel',
-                                    maxWidth: 250,
-                                    width: 250,
-                                    layout: {
-                                        align: 'stretch',
-                                        type: 'vbox'
-                                    },
-                                    items: [
-                                        {
-                                            xtype: 'menu',
-                                            border: 0,
-                                            floating: false,
-                                            width: 120,
-                                            title: 'Common Tasks',
-                                            items: [
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'New Project'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'Open Sequence File'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'New Design'
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            xtype: 'menu',
-                                            flex: 2,
-                                            border: 0,
-                                            floating: false,
-                                            width: 120,
-                                            title: 'Help',
-                                            items: [
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'j5 Manual'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'Vector Editor Manual'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'Device Editor Manual'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'Tutorials'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'Get Support'
-                                                },
-                                                {
-                                                    xtype: 'menuitem',
-                                                    text: 'Submit Feedback'
                                                 }
                                             ]
                                         }

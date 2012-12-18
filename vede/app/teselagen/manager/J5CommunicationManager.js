@@ -31,7 +31,6 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         console.log("Starting Ajax Request");
 
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-        console.log(deproject);
 
         var self = this;
         Ext.Ajax.request({
@@ -50,10 +49,6 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
                 var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
-                var obj = [];
-                obj.push({
-                    'name': 'Rodrigo'
-                });
 
                 var store = new Ext.data.JsonStore({
                     proxy: {
@@ -65,12 +60,18 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                         }
                     },
 
-                    fields: ['name']
+                    fields: ['name','fileContent','size']
                 });
                 store.load();
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
                 runj5Btn.toggle();
+
+                deproject.j5runs().load({
+                    callback : function(runs){
+                        console.log(runs);
+                    }
+                });
 
             }
         });

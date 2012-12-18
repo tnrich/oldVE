@@ -11,7 +11,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 	},
 	items: [{
 		xtype: 'panel',
-		flex: 1,
+		flex: 0,
 		id: 'headerMain',
 		maxWidth: 220,
 		items: [{
@@ -24,27 +24,36 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 		}]
 	},
 	{
+			xtype: 'panel',
+            flex: 3,
+            id: 'headerButs',
+            floating: false,
+	}, {
 		xtype: 'panel',
-                            flex: 2,
-                            id: 'headerButs',
-                            items: [
-                             
-                            ]
-	}],
-	dockedItems: [{
-		xtype: 'panel',
-		dock: 'right',
-		flex: 3,
+		flex: 1,
 		id: 'headerSub',
+		margin: '15 10 10 10',
 		layout: {
-			type: 'fit'
+			align: 'stretch',
+			type: 'hbox'
 		},
-		items: [{
+		items: [
+		{
 			xtype: 'button',
-			id: 'username',
+			flex: 1,
+			id: 'help_btn',
+			margin: "0 5 0 0",
+			text: 'Help',
+			cls: 'header_btn',
+			overCls: 'header_btn_over'
+		},
+		{ xtype: 'tbspacer', width: 5 },
+		{
+			xtype: 'button',
+			flex: 1,
 			styleHtmlContent: false,
-			iconAlign: 'right',
-			text: 'user_Name',
+			cls: 'header_btn',
+			overCls: 'header_btn_over',
 			id: 'headerUserIcon',
 			menu: {
 				xtype: 'menu',

@@ -5,65 +5,223 @@ Ext.define("Vede.controller.ProjectController", {
     openProject: function (project) {
         Teselagen.manager.ProjectManager.openProject(project);
     },
-    renderDesignsSection: function (Collection) {
-        Ext.getCmp('projectDesignPanel').getRootNode().removeAll();
-        Collection.data.items.forEach(function (rec) {
-            Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
-                text: rec.data.name,
-                leaf: true,
-                id: rec.data.id
-            });
-        });
 
-        Ext.getCmp('projectDesignPanel').getRootNode().appendChild({
-            text: 'Add design',
+    renderProjectsTree: function(cb){
+        var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
+        rootNode.removeAll();
+
+        rootNode.appendChild({
+            text: 'Add project',
             leaf: true,
+            hrefTarget: 'newproj',
             icon: 'resources/images/add.png',
             id: 0
         });
 
-        Ext.getCmp('designGrid_Panel').reconfigure(Collection);
+        var lastDEProjects = Ext.create('Ext.data.Store',{model: 'Teselagen.models.DeviceEditorProject'});
+        var projects = Teselagen.manager.ProjectManager.projects;
+        projects.each(function(project) {
+            var projectNode = rootNode.appendChild({
+                text: project.data.name,
+                id: project.data.id,
+                hrefTarget: 'openproj'
+            });
 
-        Ext.getCmp('projectDesignPanel').setLoading(false);
-    },
-    renderPartsSection: function(veprojects){
-        Ext.getCmp('projectPartsPanel').getRootNode().removeAll();
+            var deprojects = project.deprojects();
+            deprojects.load({callback: function(){
+                deprojects.each(function(deproject){
+                    lastDEProjects.add(deproject);
+                    var deprojectnode = projectNode.appendChild({
+                        text: deproject.data.name,
+                        leaf: false,
+                        id: deproject.data.id,
+                        hrefTarget: 'opende',
+                        icon: "resources/images/ux/design-tree-icon-leaf.png"
+                    });
 
-        veprojects.each(function(veproject){
-            Ext.getCmp('projectPartsPanel').getRootNode().appendChild({
-                text: veproject.data.name,
+                    var j5resultsNode = deprojectnode.appendChild({
+                        text: "J5 Reports",
+                        leaf: true,
+                        id: deproject.data.id,
+                        hrefTarget: 'j5reports',
+                        icon: "resources/images/ux/j5-tree-icon-parent"
+                    });
+                    /*
+                    var j5runs = deproject.j5runs();
+                    j5runs.load({callback: function(){
+                        deproject.j5runs().each(function(j5run){
+                            var j5resultNode = j5resultsNode.appendChild({
+                                text: j5run.data.date,
+                                leaf: true,
+                                id: deproject.data.id,
+                                hrefTarget: 'j5report'
+                            });
+                        });
+
+                    }});
+                    */
+                });
+            }});
+
+            projectNode.appendChild({
+                text: 'Add design',
                 leaf: true,
-                id: veproject.data.id
+                hrefTarget: 'newde',
+                icon: 'resources/images/add.png',
+                id: 0
             });
         });
 
-    },
-    renderJ5ResultsSection: function(deprojects){
-        deprojects.each(function(deproject){
-            var designNode = Ext.getCmp('j5ResultsPanel').getRootNode().appendChild({
-                text: deproject.data.name,
-                leaf: false,
-                expanded: true
-            });
+        Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
 
-            deproject.j5runs().each(function (run) {
-                designNode.appendChild({
-                    text: run.data.name,
-                    leaf: true,
-                    id: run.data.id
-                });
-            });
+        this.renderPartsPanel(cb);
+        //if(typeof(cb) == "function") cb();
+    },
+
+    renderPartsPanel: function(cb){
+        var rootNode = Ext.getCmp('projectPartsPanel').getRootNode();
+        rootNode.removeAll();
+
+        rootNode.appendChild({
+            text: 'Add project',
+            leaf: true,
+            hrefTarget: 'newproj',
+            icon: 'resources/images/add.png',
+            id: 0
         });
         
+        var projects = Teselagen.manager.ProjectManager.projects;
+        projects.each(function(project) {
+            var projectNode = rootNode.appendChild({
+                text: project.data.name,
+                id: project.data.id,
+                hrefTarget: 'openproj'
+            });
+
+            var veprojects = project.veprojects();
+            veprojects.load({callback: function(){
+                veprojects.each(function(deproject){
+                    var veprojectnode = projectNode.appendChild({
+                        text: veproject.data.name,
+                        leaf: false,
+                        id: veproject.data.id,
+                        hrefTarget: 'openve',
+                        icon: "resources/images/ux/design-tree-icon-leaf.png"
+                    });
+
+                });
+            }});
+
+            projectNode.appendChild({
+                text: 'Add part',
+                leaf: true,
+                hrefTarget: 'newve',
+                icon: 'resources/images/add.png',
+                id: 0
+            });
+        });
+
+        if(typeof(cb) == "function") cb();
     },
 
-    onProjectDesignPanelItemClick: function (store, record) { 
-        if(record.data.id!=0) Teselagen.manager.ProjectManager.openDesign(record); 
-        else Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
+    resolveAndOpenDEProject: function(record){
+        var deproject_id = record.data.id;
+        var project_id = record.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var deprojects = project.deprojects().load({
+            callback : function(){
+                var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.openDEProject(deproject);
+            }
+        });
+
     },
 
-    onProjectPartsPanelItemClick: function (store, record) { 
-        Teselagen.manager.ProjectManager.openVEProject(record); 
+    resolveAndOpenj5Report: function(record){
+        var deproject_id = record.parentNode.parentNode.data.id;
+        var project_id = record.parentNode.parentNode.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var deprojects = project.deprojects().load({
+            callback : function(){
+                var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.openj5Report(deproject);
+            }
+        });
+    },
+
+    resolveAndOpenj5Reports: function(record){
+        var deproject_id = record.parentNode.data.id;
+        var project_id = record.parentNode.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var deprojects = project.deprojects().load({
+            callback : function(){
+                var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.openj5Report(deproject,record);
+            }
+        });
+    },
+
+    resolveAndCreateDEProject: function(record){
+        var project_id = record.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        Teselagen.manager.ProjectManager.createNewDEProjectAtProject(project);
+    },
+
+    createProject: function(record){
+        Teselagen.manager.ProjectManager.createNewProject();
+    },
+
+    createVEProject: function(){
+        var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
+            name: "Untitled Project"
+        });
+        var projects = Teselagen.manager.ProjectManager.projects;
+        projects.deprojects().add(veproject);
+
+        veproject.save({
+            callback: function(){
+                Ext.getCmp('mainAppPanel').setActiveTab(1);
+                Vede.application.fireEvent("ImportSequenceToProject",veproject);
+            }
+        });
+    },
+
+    expandProject: function(record){
+        if(record.isExpanded()) record.collapse();
+        else record.expand();
+    },
+
+    onProjectPanelItemClick: function (store, record) {
+        switch(record.data.hrefTarget)
+        {
+            case 'openproj':
+                this.expandProject(record);
+                break;
+            case 'newproj':
+                this.createProject(record);
+                break;
+            case 'newde':
+                this.resolveAndCreateDEProject(record);
+                break;
+            case 'opende':
+                this.resolveAndOpenDEProject(record);
+                break;
+            case 'j5report':
+                this.resolveAndOpenj5Report(record);
+                break;
+            case 'j5reports':
+                this.resolveAndOpenj5Reports(record);
+                break;
+        }
+    },
+
+    onProjectPartsPanelItemClick: function (store, record) {
+        switch(record.data.hrefTarget)
+        {
+            case 'newve':
+                this.createVEProject(record);
+                break;
+        }
     },
 
     onNewProjectClick: function(){
@@ -84,18 +242,15 @@ Ext.define("Vede.controller.ProjectController", {
 
     init: function() {
         this.callParent();
-        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, 
-                            this.openProject, this);
+        this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
+        this.application.on("renderProjectsTree", this.renderProjectsTree, this);
 
         this.control({
+            '#projectDesignPanel': {
+                itemclick: this.onProjectPanelItemClick
+            },
             '#projectPartsPanel': {
                 itemclick: this.onProjectPartsPanelItemClick
-            },
-            '#projectDesignPanel': {
-                itemclick: this.onProjectDesignPanelItemClick
-            },
-            '#designGrid_Panel': {
-                itemclick: this.onProjectDesignPanelItemClick
             },
             "#newProject_Btn": {
                 click: this.onNewProjectClick

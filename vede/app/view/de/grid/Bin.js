@@ -51,6 +51,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                 styleHtmlContent: true,
                 styleHtmlCls: 'binHeader',
                 height: 100,
+                width: 125,
                 bodyStyle: {
                     'padding-top': '80px',
                     'text-align': 'center'
@@ -108,6 +109,15 @@ Ext.define('Vede.view.de.grid.Bin', {
         while(currentRows < this.getTotalRows()) {
             this.add(Ext.create("Vede.view.de.grid.Part"));
             currentRows += 1;
+        }
+
+        // If the bin has a DSF associated with it, apply the DSF CSS class.
+        if(this.getBin() && this.getBin().get("dsf")) {
+            Ext.each(this.query("container[cls='gridPartCell']"), function(cell) {
+                cell.addCls("grid-DSF");
+            });
+
+            this.binHeader.down().addBodyCls("grid-DSF");
         }
     },
 

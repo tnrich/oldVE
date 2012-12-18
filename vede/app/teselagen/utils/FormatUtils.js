@@ -4,6 +4,42 @@
  * Converts SequenceManager to various file formats using
  * {@link Teselagen.bio.parsers.ParsersManager}
  *
+ * This class directly converts:
+ *          FASTA ---> {@link Teselagen.models.FeaturedDNASequence}
+ *
+ *          FASTA <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          FileString (FASTA, GenBank, JbeiSeq, SBOL?) ---> {@link Teselagen.models.SequenceFile}
+ *
+ *          jbeiseq JSON <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          jbeiseq XML <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          {@link Teselagen.models.SequenceFile}  <--> {@link Teselagen.manager.SequenceManager}
+ *
+ *          {@link Teselagen.manager.SequenceManager}  ---> {@link Teselagen.models.FeaturedDNASequence}
+ *
+ *          {@link Teselagen.manager.SequenceManager}  ---> {@link Teselagen.bio.parsers.Genbank}
+ *
+ *
+ * Calls methods from {@link Teselagen.bio.parsers.ParsersManager}, can also convert:
+ *      FASTA/GenBank:
+ *          FASTA <--> Genbank
+ *
+ *      JbeiSeq/Genbank:
+ *          jbeiseqXMLs (more than one) --> ArrayList<jbeiseqXml>
+ *          jbeiseqXML <--> jbeiseqJSON <--> Genbank
+ *
+ *      SBOL/JbeiSeq
+ *          sbolXML <--> sbolJSON <--> jbeiJSON
+ *
+ *
+ * Use {@link Teselagen.bio.parsers.JbeiseqParser} to convert:
+ *          jbeiseqXMLs (more than one) --> ArrayList<jbeiseqXml>
+ *
+ *          jbeiseqXML <--> jbeiseqJSON <--> Genbank
+ *
+ *
  * @author Diana Wong
  */
 
@@ -80,9 +116,14 @@ Ext.define("Teselagen.utils.FormatUtils", {
     },
 
     /**
-     * isALabel
-     * @param
-     * @return {Boolean} isALabel
+     * Determines if a name (of a Genbank Feature Qualifier) is a "Label".
+     * A "label" can be label, name, note, gene, organism, and is considered the
+     * "label" of a JbeiSeq's feature (ie. "seq:label").
+     * In GenBank, the name of the Feature Element is the "type" in JbeiSeq, and
+     * the Feature Qualfier with a labe;/name/note/gene/organism is the "label".
+     *
+     * @param {String} name
+     * @return {Boolean} If it is a label or not.
      */
     isALabel: function(name) {
         /*if (name === "label" || name === "name"|| name === "ApEinfo_label" ||
@@ -96,6 +137,31 @@ Ext.define("Teselagen.utils.FormatUtils", {
         //return this.ParsersManager.isALabel(name);
         return Teselagen.bio.parsers.ParsersManager.isALabel(name);
     },
+
+    /** NOT TESTED
+     * Determines an appropriate name for a Model (J5Bin, Part, EugeneRule)
+     * @param {String} pInput Input passed into model for name
+     * @param {String} pNamePrefix
+     * @param {Number} pNameNum
+     * @returns {Object} Name of model and Number count
+     */
+    createName: function(pInput, pNamePrefix, pNameNum) {
+        var name;
+
+        if (pInput === "" || pInput === undefined || pInput === null) {
+            name = pNamePrefix + pNameNum;
+            pNameNum += 1;
+        } else {
+            if (Teselagen.utils.FormatUtils.isLegalName(pInput)) {
+                name = pInput.toString();
+            } else {
+                console.warn("Illegal name " + pInput + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                name = Teselagen.utils.FormatUtils.reformatName(pInput);
+            }
+        }
+        return { name: name, number: pNameNum};
+    },
+
 
     // ===========================================================================
     //   SequenceManager  Conversions
@@ -232,7 +298,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
         }
 
         if ( isJSON === false) {
-            return null;
+            console.warn("FormatUtils.jbeiseqJsonToSequenceManager(): Invalid jbeiSeq JSON input.");
+            //return null;
         }
 
         var name    = json["seq:seq"]["seq:name"];
@@ -469,6 +536,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         //var jbeiseqJson = this.ParsersManager.genbankToJbeiseqJson(genbank);
         var jbeiseqJson = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(genbank);
+        console.log(jbeiseqJson);
 
         var result = this.jbeiseqJsonToSequenceManager(jbeiseqJson);
         
@@ -511,6 +579,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * @returns {Teselagen.models.SequenceManager}
      */
     sequenceFileToSequenceManager: function(pSequenceFile) {
+        //console.log(pSequenceFile);
 
         if (Ext.getClassName(pSequenceFile) !== "Teselagen.models.SequenceFile") {
             console.warn("FormatUtils.sequenceFileToSequenceManager(): '" + pSequenceFile + "' is not a SequenceFile. Returning null.");
@@ -523,14 +592,17 @@ Ext.define("Teselagen.utils.FormatUtils", {
         
         switch (format) {
         case Constants.GENBANK:
+            console.log(content);
             var genbank = GenbankManager.parseGenbankFile(content);
-            seqMan = FormatUtils.genbankToSequenceManager(genbank);
+            //console.log(JSON.stringify(genbank, null, "  "));
+            seqMan = this.genbankToSequenceManager(genbank);
+            console.log(seqMan);
             break;
         case Constants.FASTA:
-            seqMan = FormatUtils.fastaToSequenceManager(content);
+            seqMan = this.fastaToSequenceManager(content);
             break;
         case Constants.JBEISEQ:
-            seqMan = FormatUtils.jbeiseqXmlToSequenceManager(content);
+            seqMan = this.jbeiseqXmlToSequenceManager(content);
             //console.log(content);
             break;
         case Constants.SBOLXML:
@@ -545,10 +617,55 @@ Ext.define("Teselagen.utils.FormatUtils", {
             seqMan = null;
             break;
         default:
-            console.warn("Teselagen.manager.SequenceFileManger.sequenceFileToSequenceManger: File format not detected.");
+            console.warn("Teselagen.utils.FormatUtils.sequenceFileToSequenceManger: File format not detected: " + format);
         }
+        //console.log(seqMan);
         seqMan.setName(name);
         return seqMan;
+    },
+
+    /** NOT TESTED
+     * Convert a SequenceManager model to a SequenceFile model.
+     * @param {Teselagen.manager.SequenceManager} pSequenceManager
+     * @returns {Teselagen.models.SequenceFile}
+     */
+    sequenceManagerToSequenceFile: function(pSequenceManager) {
+
+        if (Ext.getClassName(pSequenceManager) !== "Teselagen.models.SequenceManager") {
+            console.warn("FormatUtils.sequenceManagerToSequenceFile(): '" + pSequenceManager + "' is not a SequenceManager. Returning null.");
+            return null;
+        }
+        var name    = pSequenceManager.getName();
+        var format  = Teselagen.constants.Constants.GENBANK;
+        var content = Teselagen.manager.FormatUtils.sequenceManagerToGenbank(pSequenceManager);
+
+        var seqFile = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(format, content, name, "");
+
+        return seqFile;
+    },
+
+    /** NOT TESTED
+     * Convert a File (FASTA, GenBank, JbeiSeq, SBOL, etc) to a SequenceFile model.
+     * @param {String} pFile
+     * @param {String} pFormat Must be: "GENBANK", "FASTA", "JBEISEQXML", "JBEISEQJSON", "SBOLXML"
+     * @returns {Teselagen.models.SequenceFile}
+     */
+    fileToSequenceFile: function(pFile, pFormat) {
+
+        if (typeOf(pFile) !== "string") {
+            console.warn("FormatUtils.fileToSequenceFile(): '" + pFile + "' is not a string. Returning null.");
+            return null;
+        }
+
+        var format  = pFormat;
+        var content = pFile;
+
+        var seqFile = Ext.create("Teselagen.model.SequenceFile", {
+            sequenceFileFormat: format,
+            sequenceFileContent: content
+        });
+
+        return seqFile;
     }
 
 

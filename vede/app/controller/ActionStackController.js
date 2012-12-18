@@ -26,6 +26,7 @@ Ext.define("Vede.controller.ActionStackController", {
                             this.onRedo, this);
         this.application.on("saveCurrentVEProject",
                     this.onsaveCurrentVEProject, this);
+
     },
 
     onLaunch: function() {

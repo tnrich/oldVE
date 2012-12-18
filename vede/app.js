@@ -47,6 +47,7 @@ Ext.application({
         'RestrictionEnzymeController',
         'SelectWindowController',
         'SequenceController',
+        'HeaderPanelController',
         'VectorPanelController',
         'SimulateDigestionController',
         'VectorEditor.ImportSequenceWindowController',
@@ -59,7 +60,9 @@ Ext.application({
         'DeviceEditor.DeviceEditorPanelController',
         'Vede.controller.AuthEventDispatcherController',
         'ProjectController',
-        'DashboardPanelController'
+        'DashboardPanelController',
+        'Vede.controller.VectorEditor.SequenceEditingController',
+        'Vede.controller.J5ReportController'
     ],
     errorHandler: function(err) {
         console.warn(err);

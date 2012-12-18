@@ -1,4 +1,4 @@
-/**
+/** THIS IS THE OLD DEPRECATED VERSION. DONT USE!!!!
  * GenbankManager. 
  * Takes in Genbank file (as a string) and creates the Genbank class. 
  * Static functions. (Replaces GenbankFormat.js) \n
@@ -10,7 +10,7 @@
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
 
-Ext.define("Teselagen.bio.parsers.GenbankManager", {
+Ext.define("Teselagen.bio.parsers.GenbankManager_noSing", {
     
     requires: ["Teselagen.bio.util.StringUtil"],
     

@@ -329,6 +329,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             var parts = bins.getAt(i).parts();
             for (var j = 0; j < parts.count(); j++) {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
+
+                // Supplying a only a name field makes an "empty" Part
                 if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
                     ready = false;
                 }
@@ -475,9 +477,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @para, {String} [pName] Optional
      */
     addEmptyBinByIndex: function(pDevice, pIndex, pName) {
-        if (pName === null || pName === undefined || pName === "") {
+        /*if (pName === null || pName === undefined || pName === "") {
             pName = "No_Name";
-        }
+        }*/
         var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
         return success;
     },
@@ -787,9 +789,39 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             console.warn(err);
         }
 
-        pPart.setSequenceFile(seq); // put this here?
+        pPart.setSequenceFile(seq); // put this here
         return seq;
     },
+
+    /**
+     * Create a standalone SequenceFile not belonging to a DeviceDesign.
+     * Optional parameters require an empty string "" in its place.
+     * Executes validation.
+     *
+     * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "JBEISEQXML". Case insensitive.
+     * @param {String} pSequenceFileContent The content of the file in string form
+     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
+     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     */
+    createSequenceFileStandAlone: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
+
+        var seq = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileFormat: pSequenceFileFormat,
+            sequenceFileContent: pSequenceFileContent,
+            sequenceFileName: pSequenceFileName,
+            partSource: pPartSource
+        });
+
+        // GO BACK AND FIX THIS VALIDATOR
+        var err = seq.validate();
+        if (err.length > 0) {
+            console.warn("Creating Part: " + err.length + " errors found.");
+            console.warn(err);
+        }
+
+        return seq;
+    },
+
     /**
      * Given a Part, get the SequenceFile. (pDevice is not used.)
      * @param {Teselagen.manager.DeviceDesign} pDevice

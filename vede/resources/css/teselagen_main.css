@@ -17,6 +17,8 @@
 
 body {
   background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
+  background-image: url(../images/bg/furley_bg.png);
+  background-repeat: repeat;
 }
 
 .x-body {
@@ -49,7 +51,6 @@ body {
 .x-grid-row .x-grid-cell {
   font-family: 'Quicksand', sans-serif;
     font-size: 12px;
-    color: #333;  
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
@@ -86,20 +87,14 @@ body {
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;
+  background:none;
 }
 
 #headerPanel-body, #headerMain-body, #headerSub-body {
 }
 
-#headerUserIcon, #help_Btn {
-  border: none;
+#mainAppPanel .x-tab-bar-top .x-tab-bar-body, .x-tab-bar, .x-tab-bar-strip-default   {
   background: none;
-  padding-left: 10px;
-  padding-right: 10px;  
-}
-
-#mainAppPanel .x-tab-bar-top .x-tab-bar-body   {
-  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
   border: 0 none;
 }
 
@@ -119,6 +114,36 @@ body {
   box-shadow: none;
 }
 
+.header_btn {
+  border: 0;
+  background: white;
+}
+
+#help_btn {
+  background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
+}
+
+#headerUserIcon {
+  background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
+}
+
+
+.header_btn .x-btn-default-small .x-btn-inner {
+  color: white;
+}
+
+.header_btn_over {
+  background: -webkit-linear-gradient(#0082DB.33%, #0084B4 100%);
+  color: #fafafa;
+}
+
+.header_btn #help_btn-btnInnerEl, .header_btn #headerUserIcon-btnInnerEl {
+  color: #fafafa;
+}
+
+.header_btn_over #help_btn-btnInnerEl, .header_btn_over #headerUserIcon-btnInnerEl {
+  color: #fafafa;
+}
 /*Project Panel*/
 #projectDesignPanel-body {
   background: #fdfdfd;
@@ -201,6 +226,7 @@ body {
 
 #ProjectPanel-body {
   border-width: 0 1px;
+  border-color: #D6D6D6;
   width:230px;
 }
 
@@ -236,6 +262,21 @@ body {
   border-bottom-right-radius: 4px;
 }
 
+#designGrid_Panel .x-panel-header-default, .x-toolbar-default , #dashboard_BottomPanel .x-panel-header-default {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+#designGrid_Panel_header {
+  top: 30px !important;
+  z-index: 100;
+}
+
+#designGrid_Panel .x-toolbar-default {
+  z-index: 110;
+}
+
 /*Vector Editor*/
 #VectorEditorMainMenuPanel-body {
   border: 0px;
@@ -257,6 +298,12 @@ body {
   background: #F8F8F8;
 }
 /*Device Editor*/
+
+.grid-DSF {
+    border-right-color: #ff0000 ! important;
+    border-right-style: solid ! important;
+    border-right-width: 1px ! important;
+}
 
 .binHeader {
     background-color: #fefefe;
@@ -300,12 +347,12 @@ background: #F8F8F8;
 }
 
 .DeviceEditorPartsBar {
-  background: #0C4857;
+  background: #125B85;
 }
 
 .x-toolbar .x-toolbar-separator-horizontal {
   border-left: 1px solid #035363;
-  border-right: 1px solid #044150;
+  border-right: 1px solid #05628D;
 }
 
 .DeviceEditorPartsBar .x-btn-default-toolbar-large-over {
@@ -318,11 +365,11 @@ background: #F8F8F8;
 }
 
 .flipImage {
-        -moz-transform: scaleX(-1);
-        -o-transform: scaleX(-1);
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
-        filter: FlipH;
-        -ms-filter: "FlipH";
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
 }
 
