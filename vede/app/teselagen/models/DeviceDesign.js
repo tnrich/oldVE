@@ -34,7 +34,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     var partsTempArray = [];
                     bin.parts().each(function(part){
                         //part.save();
-                        partsTempArray.push(part.getData().id)
+                        partsTempArray.push(part.getData().id);
                     });
                     binsTempArray.push(partsTempArray);
                 });

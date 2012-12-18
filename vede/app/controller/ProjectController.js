@@ -1,6 +1,9 @@
 Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
-    requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager","Teselagen.models.DeviceEditorProject"],
+    requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager","Teselagen.models.DeviceEditorProject",
+    "Teselagen.models.SequenceFile","Teselagen.models.Part","Teselagen.models.VectorEditorProject"],
+
+    partsStore: null,
 
     openProject: function (project) {
         Teselagen.manager.ProjectManager.openProject(project);
@@ -79,46 +82,42 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     renderPartsPanel: function(cb){
+        var self = this;
+        self.partsStore = Ext.create('Ext.data.Store',{model: 'Teselagen.models.Part'});
         var rootNode = Ext.getCmp('projectPartsPanel').getRootNode();
         rootNode.removeAll();
 
         rootNode.appendChild({
-            text: 'Add project',
+            text: 'Add Part',
             leaf: true,
-            hrefTarget: 'newproj',
+            hrefTarget: 'addpart',
             icon: 'resources/images/add.png',
             id: 0
         });
         
         var projects = Teselagen.manager.ProjectManager.projects;
         projects.each(function(project) {
-            var projectNode = rootNode.appendChild({
-                text: project.data.name,
-                id: project.data.id,
-                hrefTarget: 'openproj'
-            });
-
             var veprojects = project.veprojects();
             veprojects.load({callback: function(){
-                veprojects.each(function(deproject){
-                    var veprojectnode = projectNode.appendChild({
-                        text: veproject.data.name,
-                        leaf: false,
-                        id: veproject.data.id,
-                        hrefTarget: 'openve',
-                        icon: "resources/images/ux/design-tree-icon-leaf.png"
+                veprojects.each(function(veproject){
+                    var parts = veproject.parts();
+                    parts.load({
+                        callback: function(){
+                            parts.each(function(part){
+                                self.partsStore.add(part);
+                                rootNode.appendChild({
+                                    text: deproject.data.name,
+                                    leaf: true,
+                                    id: part.data.id,
+                                    hrefTarget: 'openpart',
+                                    icon: "resources/images/ux/design-tree-icon-leaf.png"
+                                });
+                            });
+                        }
                     });
-
                 });
             }});
-
-            projectNode.appendChild({
-                text: 'Add part',
-                leaf: true,
-                hrefTarget: 'newve',
-                icon: 'resources/images/add.png',
-                id: 0
-            });
+            
         });
 
         if(typeof(cb) == "function") cb();
@@ -171,19 +170,60 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewProject();
     },
 
-    createVEProject: function(){
-        var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
-            name: "Untitled Project"
-        });
-        var projects = Teselagen.manager.ProjectManager.projects;
-        projects.deprojects().add(veproject);
+    addPart: function(){
 
-        veproject.save({
-            callback: function(){
-                Ext.getCmp('mainAppPanel').setActiveTab(1);
-                Vede.application.fireEvent("ImportSequenceToProject",veproject);
-            }
-        });
+        var projects = Teselagen.manager.ProjectManager.projects;
+        selectedproject = projects.last();
+        if(selectedproject)
+        {
+
+            var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                sequenceFileFormat: "Genbank",
+                sequenceFileContent: "LOCUS       NO_NAME                  1 bp    DNA     circular     03-DEC-2012\nFEATURES             Location/Qualifiers\n\nORIGIN      \n        1 g     \n\n//",
+                sequenceFileName: "untitled.gb",
+                partSource: "New Part"
+            });
+     
+            var newPart = Ext.create("Teselagen.models.Part", {
+                name: "",
+                genbankStartBP: 1,
+                endBP: 7
+            });
+
+
+            var newVEProject = Ext.create("Teselagen.models.VectorEditorProject", {
+                name: "Untitled VEProject"
+            });
+
+            selectedproject.veprojects().add(newVEProject);
+            newVEProject.save({callback:function(){
+                newSequenceFile.save({
+                    callback: function(){
+                        newPart.setSequenceFileModel(newSequenceFile);
+                        newPart.set('veproject_id',newVEProject.data.id);
+                        newPart.save({callback: function(){
+                            newVEProject.parts().add(newPart);
+                            newVEProject.save({callback:function(){
+                                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                                Vede.application.fireEvent("VectorEditorEditingMode",newPart,activeTab);
+                            }});
+                        }});
+                    }
+                });
+            }});
+        }
+        else this.createProject();
+    },
+
+    resolveAndOpenPart: function(record){
+        var part_id = record.data.id;
+        console.log(part_id);
+        console.log(this.partsStore);
+
+        var veproject = veprojects.getById(veproject_id);
+        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        Vede.application.fireEvent("VectorEditorEditingMode",newPart,activeTab);
+
     },
 
     expandProject: function(record){
@@ -218,8 +258,11 @@ Ext.define("Vede.controller.ProjectController", {
     onProjectPartsPanelItemClick: function (store, record) {
         switch(record.data.hrefTarget)
         {
-            case 'newve':
-                this.createVEProject(record);
+            case 'addpart':
+                this.addPart(record);
+                break;
+            case 'openpart':
+                this.resolveAndOpenPart(record);
                 break;
         }
     },
@@ -246,7 +289,7 @@ Ext.define("Vede.controller.ProjectController", {
         this.application.on("renderProjectsTree", this.renderProjectsTree, this);
 
         this.control({
-            '#projectDesignPanel': {
+            '#projectTreePanel': {
                 itemclick: this.onProjectPanelItemClick
             },
             '#projectPartsPanel': {

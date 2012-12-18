@@ -392,7 +392,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(j5Part.data.sequencefile_id)
         {
-            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);                    
+            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
         }
         else
@@ -410,7 +410,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     newSequenceFile.save({
                         callback: function(){
                             var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);                            
+                            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
                         }
                     });
                 }
