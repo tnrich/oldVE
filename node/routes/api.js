@@ -549,7 +549,8 @@ module.exports = function (app, express) {
       if(err) res.json({"fault":"project not found"},500);
       var newProj = new VEProject({
         name : req.body.name,
-        project_id: proj
+        project_id: proj,
+        parts : req.body.parts
       });
       newProj.save(function(){
         proj.veprojects.push(newProj);
@@ -678,7 +679,7 @@ module.exports = function (app, express) {
     }
 
     newPart.save(function(){
-      res.json({'parts':newPart})
+      res.json({'parts':newPart});
     });
   });
 
@@ -691,8 +692,21 @@ module.exports = function (app, express) {
         part[prop] = req.body[prop];
       }
       part.save(function(){
-        res.json({'parts':part})
+        res.json({'parts':part});
       });
+    });
+  });
+
+  //GET
+  app.get('/user/projects/deprojects/parts', function (req, res) {
+
+    var veproject_id = JSON.parse(req.query.filter)[0].value;
+
+    var VEProject = app.db.model("veproject");
+
+    VEProject.findById(veproject_id).populate("parts").exec(function(err,veproject){
+      if (!veproject || err) return res.json({"fault":"Unexpected error"},500);
+      res.send({"parts":veproject.parts});
     });
   });
 
