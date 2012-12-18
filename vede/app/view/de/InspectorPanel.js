@@ -99,6 +99,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'combobox',
                             cls: 'forcedAssemblyComboBox',
                             name: 'fas',
+                            queryMode: 'local',
                             anchor: '100%',
                             value: 'None',
                             store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
@@ -179,15 +180,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'gridpanel',
                             cls: 'inspectorGrid',
+                            viewConfig: {
+                                markDirty: false
+                            },
                             margin: 10,
                             autoScroll: true,
                             columnLines: true,
                             height:400,
-                            minHeigh:400,
-                            /*selModel: Ext.create('Ext.selection.CellModel', {
-                                mode: "SINGLE",
-                                allowDeselect: true
-                            }),*/
+                            minHeight:400,
                             plugins: [
                                 Ext.create('Ext.grid.plugin.RowEditing', {
                                     clicksToEdit: 2
@@ -208,6 +208,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: 'Direction',
                                     dataIndex: 'directionForward',
+                                    editor: {
+                                        xtype: 'combobox',
+                                        store: [[true, "Forward"], [false, "Reverse"]]
+                                    },
                                     renderer: function(forward) {
                                         if(forward) {
                                             return "Forward";
@@ -231,27 +235,53 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'booleancolumn',
                                     text: 'DSF',
-                                    dataIndex: 'dsf'
+                                    dataIndex: 'dsf',
+                                    editor: {
+                                        xtype: 'checkbox'
+                                    }
                                 },
                                 {
                                     xtype: 'gridcolumn',
                                     text: 'FRO',
-                                    dataIndex: 'fro'
+                                    dataIndex: 'fro',
+                                    editor: {
+                                        xtype: 'textfield',
+                                    },
+                                    renderer: function(value) {
+                                        if(value === 'None') {
+                                            return '';
+                                        } else {
+                                            return value;
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'numbercolumn',
                                     text: '5\' Ex',
-                                    dataIndex: 'extra5PrimeBps'
+                                    dataIndex: 'extra5PrimeBps',
+                                    editor: {
+                                        xtype: 'numberfield',
+                                        allowDecimals: false,
+                                        decimalPrecision: 1,
+                                        emptyText: '',
+                                        hideTrigger: true
+                                    },
+                                    renderer: Ext.util.Format.numberRenderer('0')
                                 },
                                 {
                                     xtype: 'numbercolumn',
                                     text: '3\' Ex',
-                                    dataIndex: 'extra3PrimeBps'
+                                    dataIndex: 'extra3PrimeBps',
+                                    editor: {
+                                        xtype: 'numberfield',
+                                        allowDecimals: false,
+                                        decimalPrecision: 1,
+                                        emptyText: '',
+                                        hideTrigger: true
+                                    },
+                                    renderer: Ext.util.Format.numberRenderer('0')
                                 }
                             ],
-                            viewConfig: {
-
-                            }
                         },
                         {
                             xtype: 'container',

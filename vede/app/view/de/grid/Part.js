@@ -4,11 +4,16 @@
  */
 Ext.define('Vede.view.de.grid.Part', {
     extend: 'Ext.container.Container',
+
+    requires: ['Teselagen.manager.DeviceDesignManager'],
+
     alias: 'widget.Part',
 
     config: {
         part: null,
     },
+
+    DeviceDesignManager: null,
 
     partCell: null,
     eugeneFlag: null,
@@ -18,7 +23,15 @@ Ext.define('Vede.view.de.grid.Part', {
     constructor: function (config) {
         this.initConfig(config);
 
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
+
         var html = "";
+        var activeProject = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign();
+
+        var parentIndex = this.DeviceDesignManager.getBinAssignment(activeProject,
+                                                                  this.getPart());
+        var parentBin = this.DeviceDesignManager.getBinByIndex(activeProject,
+                                                               parentIndex);
 
         if(this.getPart()) {
             html = this.getPart().get("name");
@@ -66,8 +79,13 @@ Ext.define('Vede.view.de.grid.Part', {
 
         this.callParent([{
             items: [
-            this.partCell]
+                this.partCell
+            ]
         }]);
+
+        if(parentBin && parentBin.get("dsf")) {
+            this.down("container[cls='gridPartCell']").addCls("grid-DSF");
+        }
     },
 
     select: function () {

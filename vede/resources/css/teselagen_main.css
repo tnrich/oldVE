@@ -316,6 +316,12 @@ body {
 }
 /*Device Editor*/
 
+.grid-DSF {
+    border-right-color: #ff0000 ! important;
+    border-right-style: solid ! important;
+    border-right-width: 1px ! important;
+}
+
 .binHeader {
     background-color: #fefefe;
 }

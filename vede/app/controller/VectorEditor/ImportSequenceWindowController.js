@@ -57,7 +57,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
                     //Vede.application.fireEvent("SaveImportedSequence", seqMgr);
 
                     //Update information with parsed Data
-                    if(sequenceName==""){
+                    if(sequenceName===""){
                         sequenceName = seqMgr.getName();
                         self.importWindow.veproject.set('name',sequenceName);
                         self.importWindow.veproject.save({
@@ -83,5 +83,5 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
 
     init: function() {
         this.application.on("ImportSequenceToProject",this.onOpenImportSequencePanel, this);
-    },
+    }
 });

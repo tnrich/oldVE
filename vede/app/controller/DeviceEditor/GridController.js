@@ -172,7 +172,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onAddToBins: function(activeBins, addedBins, index) {
         Ext.each(addedBins, function(j5Bin) {
-            this.addJ5Bin(j5Bin);
+            this.addJ5Bin(j5Bin, index);
 
             // Add event listeners to the parts store of this bin.
             parts = j5Bin.parts();
@@ -223,6 +223,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onAddRow: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
+    },
+
+    onAddColumn: function() {
+        var selectedBinIndex;
+
+        if(this.selectedBin) {
+            selectedBinIndex = this.DeviceDesignManager.getBinIndex(
+                                                        this.activeProject,
+                                                        this.selectedBin.getBin());
+        } else {
+            selectedBinIndex = 0;
+        }
+
+        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 
+                                                    selectedBinIndex);
     },
 
     /**
@@ -319,18 +334,23 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         newPart.select();
     },
 
-    addJ5Bin: function(j5Bin) {
-
+    addJ5Bin: function(j5Bin, index) {
         var iconSource;
         iconSource = "resources/images/icons/device/small/origin_of_replication.png";
         
         var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
-        this.grid.add(Ext.create("Vede.view.de.grid.Bin", {
+        var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
             iconSource: icon.url_svg
-        }));
+        });
+
+        if(index === null) {
+            this.grid.add(newBin);
+        } else {
+            this.grid.insert(index, newBin);
+        }
     },
 
     updateBinsWithTotalRows: function() {
@@ -372,7 +392,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(j5Part.data.sequencefile_id)
         {
-            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);                    
+            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
         }
         else
@@ -390,7 +410,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     newSequenceFile.save({
                         callback: function(){
                             var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);                            
+                            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
                         }
                     });
                 }
@@ -462,6 +482,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.ADD_ROW,
                             this.onAddRow,
+                            this);
+
+        this.application.on(this.DeviceEvent.ADD_COLUMN,
+                            this.onAddColumn,
                             this);
 
         this.application.on(this.DeviceEvent.SELECT_BIN,

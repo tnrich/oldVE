@@ -110,6 +110,15 @@ Ext.define('Vede.view.de.grid.Bin', {
             this.add(Ext.create("Vede.view.de.grid.Part"));
             currentRows += 1;
         }
+
+        // If the bin has a DSF associated with it, apply the DSF CSS class.
+        if(this.getBin() && this.getBin().get("dsf")) {
+            Ext.each(this.query("container[cls='gridPartCell']"), function(cell) {
+                cell.addCls("grid-DSF");
+            });
+
+            this.binHeader.down().addBodyCls("grid-DSF");
+        }
     },
 
     applyTotalRows: function(pTotalRows) {
