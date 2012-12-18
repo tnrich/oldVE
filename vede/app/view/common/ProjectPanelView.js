@@ -93,7 +93,6 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     preventHeader: false,
     title: 'Project',
     plain: false,
-    margin: '0 10 0 0',
     removePanelHeader: false,
     items: [{
         xtype: 'panel',

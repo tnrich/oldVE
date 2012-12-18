@@ -100,8 +100,10 @@ body {
   background:none;
 }
 
-#headerPanel-body, #headerMain-body, #headerSub-body {
+#mainAppPanel {
+  margin-left: 10px;
 }
+
 
 #mainAppPanel .x-tab-bar-top .x-tab-bar-body, .x-tab-bar, .x-tab-bar-strip-default   {
   background: none;
@@ -157,6 +159,11 @@ body {
 /*Project Panel*/
 #projectDesignPanel-body {
   background: #fdfdfd;
+}
+
+#ProjectPanel-placeholder {
+  border-top-right-radius: 4px;
+  border-color: #EBEBEB;
 }
 
 #projectDesignPanel-body div table td div .x-tree-icon-leaf {
