@@ -25,21 +25,27 @@ Ext.onReady(function () {
         });
 
         it("Checking server " + constants.API_URL + " is running", function () {
-            var success = false;
+            var success, response;
             runs(function() {
                 Ext.Ajax.request({
-                    url: constants.API_URL,
+                    url: constants.API_URL+"user",
                     method: "GET",
-                    success: function () {
-                        success = true;
+                    callback: function(pReq, pSuccess, pResp) {
+                        success = pSuccess;
+                        response = pResp;
                     }
                 });
             });
             waitsFor(function() {
-               return success;
+               return Ext.isDefined(success);
             }, "connection", 500);
             runs(function() {
-                expect(success).toBe(true);
+                if (success) {
+                    expect(response.status).toBe(200);
+                }
+                else {
+                    expect(response.status).toBe(401);
+                }
             });
         });
 
