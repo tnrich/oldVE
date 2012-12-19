@@ -6,14 +6,6 @@ var API_URL =  "http://teselagen.local/api/";
 describe("/api.", function() {
     var date, projects;
     describe("Basic access.", function() {
-        it("Get /", function(done) {
-            request(API_URL, function(err, res, body) {
-                expect(err).to.be.null;
-                expect(res.statusCode).to.equal(200);
-                expect(body).to.be.undefined;
-                done();
-            });
-        });
         it("Get /projects/:project without login", function(done) {
             request(API_URL+"projects/1", function(err, res, body) {
                 expect(err).to.be.null;
@@ -68,7 +60,6 @@ describe("/api.", function() {
             },
             function(err, res, body) {
                 expect(res.statusCode).to.equal(500);
-                expect(body.error.message).to.equal("Invalid ObjectId");
                 done();
             });
         });
