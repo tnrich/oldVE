@@ -536,7 +536,12 @@ module.exports = function (app, express) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
-      res.json({"design":project.design});
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"design":project.design});
+        }
     });
     
   });
