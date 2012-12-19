@@ -1,0 +1,12 @@
+{
+    "success": true,
+    "j5runs": [
+        {
+        	"id": 1,
+        	"file_id": 1,
+            "name": "Run 1",
+            "status": "SUCCESS",
+            "assemblyType": "MOCK"
+        }
+    ]
+}
