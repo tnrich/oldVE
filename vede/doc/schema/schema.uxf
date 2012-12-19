@@ -472,7 +472,7 @@ m2=n</panel_attributes>
       <w>130</w>
       <h>26</h>
     </coordinates>
-    <panel_attributes>Embed</panel_attributes>
+    <panel_attributes>Embedded</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -491,8 +491,8 @@ m2=n</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>65</y>
-      <w>273</w>
-      <h>65</h>
+      <w>272</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;247;39</additional_attributes>
@@ -547,8 +547,8 @@ December 18, 2012</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>26</y>
-      <w>273</w>
-      <h>65</h>
+      <w>272</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;39;247;39</additional_attributes>
