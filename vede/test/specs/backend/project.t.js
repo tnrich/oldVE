@@ -52,6 +52,9 @@ Ext.onReady(function () {
                     }
                 });
             });
+            waitsFor(function() {
+                return isLoggedIn;
+            }, "for login", 500);
         });
 
         it("Clear test data", function() {
