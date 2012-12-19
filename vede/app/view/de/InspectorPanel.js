@@ -230,7 +230,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'gridcolumn',
                                     text: 'FAS',
-                                    dataIndex: 'fas'
+                                    dataIndex: 'fas',
+                                    renderer: function(value, metadata, record) {
+                                        if(record.parts().getRange().length > 0) {
+                                            return record.parts().getRange()[0].get("fas");
+                                        } else {
+                                            return value;
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'booleancolumn',

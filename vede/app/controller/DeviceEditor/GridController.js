@@ -190,7 +190,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onRemoveFromBins: function(activeBins, removedBin, index) {
-        if(this.selectedBin.getBin() == removedBin) {
+        if(this.selectedBin && this.selectedBin.getBin() == removedBin) {
             this.selectedBin = null;
         }
 
@@ -215,6 +215,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     " modified, operation " + operation);
 
         this.rerenderPart(updatedPart);
+
+        // If the assembly strategy is modified, check to make sure that all 
+        // parts in the bin still have the same FAS as the first part. If not,
+        // set the fasConflict flag.
+        if(modified === "fas") {
+            if(parts.indexOf(updatedPart) == 0) {
+                
+            }
+        }
     },
 
     onRemoveFromParts: function(parts, removedPart, index) {
