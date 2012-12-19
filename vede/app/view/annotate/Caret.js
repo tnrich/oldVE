@@ -31,17 +31,19 @@ Ext.define("Vede.view.annotate.Caret", {
                             .attr("id", "caretSVG");
 
         var location = this.sequenceAnnotator.bpMetricsByIndex(this.position);
-
-        this.caretSVG.append("svg:path")
-            .attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + 
-                       "L" + (location.x - 1) + " " + (location.y + this.height))
-            .attr("stroke", this.self.CARET_COLOR)
-            .attr("stroke-width", this.self.CARET_WIDTH)
-            .append("svg:animate")
-            .attr("attributeName", "visibility")
-            .attr("from", "hidden")
-            .attr("to", "visible")
-            .attr("dur", this.self.TIMER_REFRESH_SPEED)
-            .attr("repeatCount", "indefinite");
+        if(location)
+        {
+            this.caretSVG.append("svg:path")
+                .attr("d", "M" + (location.x - 1) + " " + (location.y + 4) + 
+                           "L" + (location.x - 1) + " " + (location.y + this.height))
+                .attr("stroke", this.self.CARET_COLOR)
+                .attr("stroke-width", this.self.CARET_WIDTH)
+                .append("svg:animate")
+                .attr("attributeName", "visibility")
+                .attr("from", "hidden")
+                .attr("to", "visible")
+                .attr("dur", this.self.TIMER_REFRESH_SPEED)
+                .attr("repeatCount", "indefinite");
+        }
     },
  });

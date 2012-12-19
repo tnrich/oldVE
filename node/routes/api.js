@@ -179,10 +179,114 @@ module.exports = function (app, express) {
 
   });
 
-  // Get Project by id
-  app.get('/project', restrict, function (req, res) {
+  // Get DEProjects
+  app.get('/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete DEProjects
+  app.delete('/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get VEProjects
+  app.get('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete VEProjects
+  app.delete('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get Parts
+  app.get('/parts', restrict, function (pReq, pRes) {
+    var Part = app.db.model("part");
+    Part.find(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({"parts": pDocs});
+        }
+    });
+  });  
+
+  // Delete Parts
+  app.delete('/parts', restrict, function (pReq, pRes) {
+    var Part = app.db.model("part");
+    Part.remove(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({});
+        }
+    });
+  });  
+
+  // Get Projects
+  app.get('/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete Projects
+  app.delete('/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get Project
+  app.get('/projects/:project', restrict, function (req, res) {
       var Project = app.db.model("project");
-      Project.findById(req.query.id, function (err, proj) {
+      Project.findById(req.params.project, function (err, proj) {
           if (err) {
               errorHandler(err, req, res);
           }
@@ -192,9 +296,31 @@ module.exports = function (app, express) {
       });
   });
 
-  app.put('/user', restrict, function (req, res) {
-    res.json({});
-  });
+  // Get Sequences
+  app.get('/sequences', restrict, function (pReq, pRes) {
+    var Sequence = app.db.model("sequence");
+    Sequence.find(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({"sequence": pDocs});
+        }
+    });
+  });  
+
+  // Delete Sequences
+  app.delete('/sequences', restrict, function (pReq, pRes) {
+    var Sequence = app.db.model("sequence");
+    Sequence.remove(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({});
+        }
+    });
+  });  
 
   // Dummy method
   app.get('/user', restrict, function (req, res) {
@@ -209,6 +335,10 @@ module.exports = function (app, express) {
     });
   });
 
+  // Update user
+  app.put('/user', restrict, function (req, res) {
+    res.json({});
+  });
 
   // Add new Project to Current User
   app.post('/user/projects', restrict, function (req, res) {
@@ -245,11 +375,23 @@ module.exports = function (app, express) {
   // Delete Project
   app.delete('/user/projects', restrict, function (req, res) {
     var Project = app.db.model("project");
-    Project.findById(req.body.id,function(err,proj){
-      proj.remove(function(){
-        res.json({});
-      });
-    });
+    if (req.body.id) {
+        Project.findById(req.body.id,function(err,proj){
+            proj.remove(function(){
+                res.json({});
+            });
+        });
+    }
+    else {
+        Project.remove({user_id:req.user._id}, function(err) {
+            if (err) {
+                errorHandler(err, req, res);
+            }
+            else {
+                res.json({});
+            }
+        });
+    }
   });  
 
   // Get User Projects
@@ -394,7 +536,12 @@ module.exports = function (app, express) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
-      res.json({"design":project.design});
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"design":project.design});
+        }
     });
     
   });
@@ -407,7 +554,8 @@ module.exports = function (app, express) {
       if(err) res.json({"fault":"project not found"},500);
       var newProj = new VEProject({
         name : req.body.name,
-        project_id: proj
+        project_id: proj,
+        parts : req.body.parts
       });
       newProj.save(function(){
         proj.veprojects.push(newProj);
@@ -494,20 +642,24 @@ module.exports = function (app, express) {
 
   //PUT
   app.put('/user/projects/veprojects/sequences', function (req, res) {
-
-    var sequence = req.body;
     var Sequence = app.db.model("sequence");
-
-    Sequence.findById(req.body.id,function(err,seq){
-      for(var prop in sequence) {
-        seq[prop] = sequence[prop];
-      }
-      seq.save(function(){
-        seq.save(function(err){
-          if(err) console.log(err);
-          res.json({"sequence":seq});
-        });
-      });
+    Sequence.findById(req.body.id,function(err, sequence){
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            for(var prop in req.body) {
+                sequence[prop] = req.body[prop];
+            }
+            sequence.save(function(pErr){
+                if (pErr) {
+                    errorHandler(pErr, req, res);
+                }
+                else {
+                    res.json({"sequence":sequence});
+                }
+            });
+        }
     });
   });
 
@@ -532,7 +684,7 @@ module.exports = function (app, express) {
     }
 
     newPart.save(function(){
-      res.json({'parts':newPart})
+      res.json({'parts':newPart});
     });
   });
 
@@ -545,8 +697,21 @@ module.exports = function (app, express) {
         part[prop] = req.body[prop];
       }
       part.save(function(){
-        res.json({'parts':part})
+        res.json({'parts':part});
       });
+    });
+  });
+
+  //GET
+  app.get('/user/projects/deprojects/parts', function (req, res) {
+
+    var veproject_id = JSON.parse(req.query.filter)[0].value;
+
+    var VEProject = app.db.model("veproject");
+
+    VEProject.findById(veproject_id).populate("parts").exec(function(err,veproject){
+      if (!veproject || err) return res.json({"fault":"Unexpected error"},500);
+      res.send({"parts":veproject.parts});
     });
   });
 

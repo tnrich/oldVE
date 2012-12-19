@@ -23,26 +23,39 @@ Ext.define("Teselagen.manager.ProjectManager", {
     currentUser: null,
     projects: null,
 
-    loadUser: function () {
-        if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
-        var users = Ext.create("Teselagen.store.UserStore");
-        var self = this;
-        users.load({
-            callback: function(records,operation,success) {
-                if(!records) console.log('Error loading user');
-                self.currentUser = users.first();
-                var projects = self.currentUser.projects();
-                projects.load({
-                    callback : function(records,operation,success){
-                        self.projects = projects;
-                        Vede.application.fireEvent("renderProjectsTree");                        
-                    }
-                });
-            }
-        });
-    },
+	/**
+	 * Load User Info
+	 */
+	loadUser: function () {
+		if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
+		var users = Ext.create("Teselagen.store.UserStore");
+		var self = this;
+		var projects;
+		users.load({
+			callback: function (records,operation,success) {
+				if (!success || !records) {
+				    console.log('Error loading user');
+				}
+				else {
+				    self.currentUser = users.first();
+				    projects = self.currentUser.projects();
+				    projects.load({
+				        callback: function(record,operation,success){
+				            if (success) {
+				                self.projects = projects;
+				                Vede.application.fireEvent("renderProjectsTree");
+				            }
+				            else {
+				                console.log("Error loading projects");
+				            }
+				        }
+				    });
+				}
+			}
+		});
+	},
 
-    checkDuplicatedTabs: function(model,tabName,cb) {
+	checkDuplicatedTabs: function(model,tabName,cb) {
         var tabPanel = Ext.getCmp('mainAppPanel');
         var tabs = Ext.getCmp('mainAppPanel').query('component[cls=DeviceEditorTab]');
         var duplicated = false;

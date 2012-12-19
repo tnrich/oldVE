@@ -1,3 +1,8 @@
+/**
+ * Simple Controller tests.
+ * @author Yuri Bendana
+ */
+
 /*global beforeEach, describe, expect, it, Vede*/
 Ext.onReady(function() {
     describe("Test Controller", function() {

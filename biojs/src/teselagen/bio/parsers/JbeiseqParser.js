@@ -606,8 +606,8 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         var json = {};
 
         var feat      = pGenbank.getFeatures().getFeaturesElements();
-        var sequence  = pGenbank.getOrigin().getSequence();
-
+        var sequence = "";
+        if(pGenbank.getOrigin()) sequence = pGenbank.getOrigin().getSequence();
         // FEATURES Label/Complement/type population
         var newFeatures = [];
 
@@ -696,7 +696,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
             "seq:seq" : {
                 "seq:name" : pGenbank.getLocus().getLocusName(),
                 "seq:circular" : !pGenbank.getLocus().getLinear(),
-                "seq:sequence" : pGenbank.getOrigin().getSequence(),
+                "seq:sequence" : pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "",
                 "seq:features" : newFeatures,
                 "_xmlns:seq": "http://jbei.org/sequence",
                 "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",

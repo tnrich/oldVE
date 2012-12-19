@@ -18,7 +18,7 @@ Ext.define("Teselagen.models.J5Run", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getj5Runs.json",
+        url: "/vede/test/data/json/j5Runs.json",
         reader: {
             type: "json",
             root: "j5runs"
@@ -65,7 +65,7 @@ Ext.define("Teselagen.models.J5Run", {
         //{field: "assemblyType", type: "presence"},
         {
             field: "assemblyType",
-            type: "inclusion",
+            type: "inclusion"
             //list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
         },
 
