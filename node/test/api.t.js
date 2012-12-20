@@ -58,7 +58,7 @@ describe("/api.", function() {
                 uri: API_URL+"projects/1",
                 json: true
             },
-            function(err, res, body) {
+            function(err, res) {
                 expect(res.statusCode).to.equal(500);
                 done();
             });
@@ -90,6 +90,16 @@ describe("/api.", function() {
                 expect(proj.name).to.equal("MyProject1");
                 expect(proj.dateCreated).to.equal(date);
                 expect(proj.dateModified).to.equal(date);
+                done();
+            });
+        });
+        it("/resetdb", function(done) {
+            request({
+                uri: API_URL+"resetdb",
+                json: true
+            },
+            function(err, res) {
+                expect(res.statusCode).to.equal(200);
                 done();
             });
         });
