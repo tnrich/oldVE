@@ -181,6 +181,10 @@ module.exports = function (app, express) {
       host: 'localhost'
   });
 
+  // Load Manager classes
+  app.ApiManager = require("./manager/ApiManager.js")(app);
+  app.ProjectManager = require("./manager/ProjectManager.js")(app);
+  
   return config;
 
 };
