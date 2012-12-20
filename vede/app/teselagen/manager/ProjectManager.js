@@ -102,7 +102,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
     },
 
-    openVEProject: function (item) {
+    openSequence: function (item) {
         console.log("Trying to open VE Project");
 
         var id = item.data.id;
@@ -122,7 +122,22 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
             }
         });
+    },
 
+    openPart: function (part) {
+        console.log("Opening Sequence Associated to Part");
+        var self = this;
+        var associatedSequence = part.getSequenceFile({
+            callback: function (record, operation) {
+                self.workingSequence = part.getSequenceFile();
+                var tabPanel = Ext.getCmp('mainAppPanel');
+                tabPanel.setActiveTab(1);
+                console.log(self.workingSequence);
+                var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(self.workingSequence.data.sequenceFileContent);
+                seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+                Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+            }
+        });
     },
 
     createNewProject: function () {

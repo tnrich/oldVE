@@ -11,7 +11,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
     importWindow: null,
 
 
-    importSequenceToProject: function(){
+    loadFile: function(cb){
+        console.log("Loading file");
         var file,sequenceName;
         if (typeof window.FileReader !== 'function') {
             Ext.Msg.alert('Browser does not support File API.');
@@ -33,6 +34,19 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
 
         function processText() {
             var result  = fr.result;
+            cb(file,result);
+        }
+    },
+
+    renderSequence: function(sequenceFileContent){
+        var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(sequenceFileContent);
+        seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+        Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+        //Vede.application.fireEvent("SaveImportedSequence", seqMgr);
+    },
+
+    importSequenceToProject: function(){
+
 
             // Generate the sequenceFile
             var newSequence = Ext.create("Teselagen.models.SequenceFile", {
@@ -62,7 +76,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
                         self.importWindow.veproject.set('name',sequenceName);
                         self.importWindow.veproject.save({
                             callback: function(){
-                                Teselagen.manager.ProjectManager.openVEProject(self.importWindow.veproject);
+                                Teselagen.manager.ProjectManager.openSequence(self.importWindow.veproject);
                                 Teselagen.manager.ProjectManager.loadDesignAndChildResources();
                             }
                         });
@@ -71,17 +85,32 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
                 }
             });
 
-        }
+        
 
     },
-    onOpenImportSequencePanel: function(veproject) {
+
+    loadAndSaveToSequence: function(btn,event,sequence){
+        var self = this;
+        this.loadFile(function(file,fileContent){
+            console.log("Replacing sequence");
+            //console.log(file);
+            sequence.set('sequenceFileContent',fileContent);
+            sequence.set('sequenceFileFormat',"GENBANK");
+            sequence.set('sequenceFileName',file.name);
+            sequence.save({callback:function(){
+                self.renderSequence(fileContent);
+                console.log("Sequence updated");
+            }});
+        });
+    },
+    onImportSequence: function(sequence) {
+        console.log("Imporing sequence");
         this.importWindow = Ext.create("Vede.view.ve.ImportSequenceWindow").show();
-        this.importWindow.veproject = veproject;
+        this.importWindow.sequence = sequence;
         var importBtn = this.importWindow.query('button[cls=import]')[0];
-        importBtn.on("click",this.importSequenceToProject,this);
+        importBtn.on("click",this.loadAndSaveToSequence,this,sequence);
     },
-
     init: function() {
-        this.application.on("ImportSequenceToProject",this.onOpenImportSequencePanel, this);
+        this.application.on("ImportSequence",this.onImportSequence, this);
     }
 });

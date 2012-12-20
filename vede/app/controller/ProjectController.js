@@ -211,7 +211,7 @@ Ext.define("Vede.controller.ProjectController", {
         this.promptPartName(function(partName){
 
             var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileFormat: "Genbank",
+                sequenceFileFormat: "GENBANK",
                 sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
                 partSource: "Untitled sequence"
@@ -226,7 +226,9 @@ Ext.define("Vede.controller.ProjectController", {
             newSequenceFile.save({
                 callback: function () {
                     newPart.setSequenceFileModel(newSequenceFile);
-                    newPart.set('veproject_id', selectedVEProject.data.id);
+                    var selectedVEProjectID = selectedVEProject.data.id;
+                    newPart.set('veproject_id', selectedVEProjectID);
+                    selectedVEProject.set('id',selectedVEProjectID);
                     newPart.save({
                         callback: function () {
                             selectedVEProject.parts().add(newPart);
@@ -236,6 +238,7 @@ Ext.define("Vede.controller.ProjectController", {
                                         Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + selectedVEProject.data.id);
                                     });
                                     var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                                    Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
                                     Vede.application.fireEvent("VectorEditorEditingMode", newPart, activeTab);
                                 }
                             });
@@ -250,8 +253,7 @@ Ext.define("Vede.controller.ProjectController", {
     resolveAndOpenPart: function (record) {
         var part_id = record.data.id;
         var selectedPart = this.partsStore.getById(part_id);
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        Vede.application.fireEvent("VectorEditorEditingMode", selectedPart, activeTab);
+        Teselagen.manager.ProjectManager.openPart(selectedPart);
     },
 
     expandProject: function (record) {

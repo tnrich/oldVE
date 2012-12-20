@@ -536,7 +536,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         //var jbeiseqJson = this.ParsersManager.genbankToJbeiseqJson(genbank);
         var jbeiseqJson = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(genbank);
-        console.log(jbeiseqJson);
+        //console.log(jbeiseqJson);
 
         var result = this.jbeiseqJsonToSequenceManager(jbeiseqJson);
         
@@ -592,11 +592,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
         
         switch (format) {
         case Constants.GENBANK:
-            console.log(content);
+            //console.log(content);
             var genbank = GenbankManager.parseGenbankFile(content);
             //console.log(JSON.stringify(genbank, null, "  "));
             seqMan = this.genbankToSequenceManager(genbank);
-            console.log(seqMan);
+            //console.log(seqMan);
             break;
         case Constants.FASTA:
             seqMan = this.fastaToSequenceManager(content);

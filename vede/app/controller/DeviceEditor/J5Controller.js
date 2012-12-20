@@ -375,7 +375,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         console.log(newSequence);
 
         Teselagen.manager.ProjectManager.workingProject.veprojects().add(veproject);
-        Teselagen.manager.ProjectManager.openVEProject(veproject);
+        Teselagen.manager.ProjectManager.openSequence(veproject);
 
         this.j5Window.close();
     },
