@@ -400,7 +400,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             console.log("This part doesn't have an associated sequence");
             var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Genbank",
-                sequenceFileContent: "LOCUS       NO_NAME                  1 bp    DNA     circular     03-DEC-2012\nFEATURES             Location/Qualifiers\n\nORIGIN      \n        1 g     \n\n//",
+                sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
                 partSource: "New Part"
             });
