@@ -330,6 +330,12 @@ body {
     border-color: #000000;
 }
 
+.fasConflictIndicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+
 .DeviceEditorTitlePanel .x-toolbar-default {
    background: #FDFDFD;
 }

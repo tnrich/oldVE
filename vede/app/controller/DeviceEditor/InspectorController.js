@@ -78,11 +78,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartAssemblyStrategyChange: function(box) {
         var newStrategy = box.getValue();
 
-        if(newStrategy === "None") {
-            this.selectedPart.set("fas", "");
-        } else {
-            this.selectedPart.set("fas", newStrategy);
-        }
+        this.selectedPart.set("fas", newStrategy);
 
         this.columnsGrid.getView().refresh();
     },
