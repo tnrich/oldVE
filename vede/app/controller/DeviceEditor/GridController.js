@@ -237,9 +237,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(parts.indexOf(updatedPart) == 0) {
             Ext.each(partsArray.slice(1, partsArray.length), function(part) {
                 if(part.get("fas") != "None" && 
+                   updatedPart.get("fas") != "None" &&
                    part.get("fas") != updatedPart.get("fas")) {
                     this.rerenderPart(part, true);
-                } else if(part.get("fas") == updatedPart.get("fas")) {
+                } else if(part.get("fas") == updatedPart.get("fas") ||
+                          updatedPart.get("fas") == "None") {
                     this.rerenderPart(part, false);
                 }
             }, this);
