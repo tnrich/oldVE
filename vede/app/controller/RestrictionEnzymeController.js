@@ -20,22 +20,31 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.control({
 			"#OkButton": {
 				click: this.onOkButtonClick
-			}
-            // "#enzymeGroupSelector": {
-            //     change: this.onEnzymeGroupSelected
-            // },
-            // "#enzymeSearchField": {
-                // keyup: this.onEnzymeSearchFieldKeyup
-            // },
-            // "#restrictionEnzymesManagerOKButton": {
-                // click: this.onOKButtonClick
-            // },
-            // "#saveGroupButton": {
-                // click: this.onSaveButtonClick
-            // },
-            // "#deleteGroupButton": {
-                // click: this.onDeleteGroupButtonClick
-            // },
+			},
+            "#GroupComboBox": {
+                 change: this.onGroupComboBoxChange
+             },
+            "#EnzymeSearchBox": {
+                 keyup: this.onEnzymeSearchBoxKeyup
+             },
+            "#SaveGroupButton": {
+                 click: this.onSaveButtonClick
+             },
+             "#DeleteGroupButton": {
+                 click: this.onDeleteGroupButtonClick
+             },
+			 "#selectAllButton": {
+			     click: this.onSelectAllButtonClick
+		     }, 
+			 "#selectButton": {
+			     click: this.onSelectButtonClick
+			 },
+			 "#deselectButton": {
+			     click: this.onDeselectButtonClick
+			 },
+			 "#deselectAllButton": {
+			     click: this.onDeselectAllButtonClick
+			 }
         });
 
         this.application.on({
@@ -94,7 +103,8 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Populates the itemselector field with enzyme names.
      * Called when the user selects a new group in the combobox.
      */
-    onEnzymeGroupSelected: function(combobox) {
+    onGroupComboBoxChange: function(combobox) {
+	    alert("enzyme group combo box changed, no function yet");
         // var newGroup = this.GroupManager.groupByName(combobox.getValue());
         // var newStoreData = [];
 
@@ -108,7 +118,8 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         // this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
     },
 
-    onEnzymeSearchFieldKeyup: function(field) {
+    onEnzymeSearchBoxKeyup: function(field) {
+	    alert("enzyme search box click detected, no function yet");
         // this.enzymeSelector.fromField.store.filterBy(function(rec) {
             // if(rec.data.name.search(new RegExp(field.getValue(), "i")) != -1) {
                 // return true;
@@ -123,7 +134,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Not implemented in the flex version.
      */
     onSaveButtonClick: function() {
-		// alert("save button clicked, no function yet")
+		 alert("save button clicked, no function yet")
     },
 
     /**
@@ -131,14 +142,14 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Also not implemented in the flex version.
      */
     onDeleteGroupButtonClick: function() {
-		// alert("delete button clicked, no function yet")
+		 alert("delete button clicked, no function yet")
     },
 
     /**
      * Saves active enzymes and closes the window.
      */
     onOkButtonClick: function() {
-		alert("OK BUTTON CLICKED");
+		alert("Ok button clicked, no function yet");
         // var names = [];
         // this.enzymeSelector.toField.store.each(function(obj) {
             // names.push(obj.data.name);
@@ -152,5 +163,40 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             // this.GroupManager.setActiveGroup(newActiveGroup);
             // this.application.fireEvent("ActiveEnzymesChanged");
         // }
-    }
+    },
+	
+	/**
+	* closes window without saving selected enzymes
+	*/
+	onCancelButtonClick: function() {
+	    alert("cancel button clicked, no function yet");
+	},
+	
+	/**
+	* for every enzyme in AvailableEnzymeGridPanel and not in SelectedEnzymeGridPanel, add enzyme to SelectedEnzymeGridPanel
+	*/
+	onSelectAllButtonClick: function() {
+	    alert("select all button clicked, no function yet");
+	},
+	
+	/**
+	* if there is at least one enzyme selected in AvailableEnzymeGrid, add each selected enzyme to SelectedEnzymeGrid
+	*/
+	onSelectButtonClick: function() {
+	    alert("select button clicked, no function yet");
+	},
+	
+	/**
+	* if there is at least one enzyme selected in SelectedEnzymeGrid, remove each selected enzyme from SelectedEnzymeGrid
+	*/
+	onDeselectButtonClick: function() {
+	    alert("deselect button clicked, no function yet");
+	},
+	
+	/**
+	* remove all enzymes from SelectedEnzymeGrid
+	*/
+	onDeselectAllButtonClick: function() {
+	    alert("deselect all button clicked, no function yet");
+	}
 });
