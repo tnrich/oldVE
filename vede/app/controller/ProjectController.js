@@ -27,7 +27,7 @@ Ext.define("Vede.controller.ProjectController", {
         partsRootNode.removeAll();
 
         rootNode.appendChild({
-            text: 'Add project',
+            text: 'Create project',
             leaf: true,
             hrefTarget: 'newproj',
             icon: 'resources/images/add.png',
@@ -44,7 +44,7 @@ Ext.define("Vede.controller.ProjectController", {
             });
 
             projectNode.appendChild({
-                text: 'Add design',
+                text: 'Create design',
                 leaf: true,
                 hrefTarget: 'newde',
                 icon: 'resources/images/add.png',
@@ -52,9 +52,9 @@ Ext.define("Vede.controller.ProjectController", {
             });
 
             projectNode.appendChild({
-                text: 'Add VectorEditor Project',
+                text: 'Create sequence',
                 leaf: true,
-                hrefTarget: 'newveproj',
+                hrefTarget: 'newsequence',
                 icon: 'resources/images/add.png',
                 id: 0
             });
@@ -90,43 +90,10 @@ Ext.define("Vede.controller.ProjectController", {
                     veprojects.each(function (veproject) {
                         var veprojectnode = projectNode.appendChild({
                             text: veproject.data.name,
-                            leaf: false,
-                            id: veproject.data.id,
-                            hrefTarget: 'openve',
-                            icon: "resources/images/ux/tree-node-parent.png"
-                        });
-
-                        veprojectnode.appendChild({
-                            text: 'Add Part',
                             leaf: true,
-                            hrefTarget: 'addpart',
-                            icon: 'resources/images/add.png',
-                            id: 0
-                        });
-
-                        var parts = veproject.parts();
-                        parts.load({
-                            callback: function () {
-                                parts.each(function (part,key) {
-                                    self.partsStore.add(part);
-                                    veprojectnode.appendChild({
-                                        text: part.data.name,
-                                        leaf: true,
-                                        id: part.data.id,
-                                        hrefTarget: 'openpart',
-                                        icon: "resources/images/ux/design-tree-icon-leaf.png"
-                                    });
-                                    //if(key==parts.totalCount-1) self.renderPartsPanel(cb);
-
-                                    partsRootNode.appendChild({
-                                        text: part.data.name,
-                                        leaf: true,
-                                        id: part.data.id,
-                                        hrefTarget: 'openpart',
-                                        icon: "resources/images/ux/design-tree-icon-leaf.png"
-                                    });
-                                });
-                            }
+                            id: veproject.data.id,
+                            hrefTarget: 'opensequence',
+                            icon: "resources/images/ux/design-tree-icon-leaf.png"
                         });
                     });
                 }
@@ -184,10 +151,11 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewProject();
     },
 
-    createVEProj: function (record) {
+    /* Creates a veproject and an associated sequence */
+    createSequence: function (record) {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        Teselagen.manager.ProjectManager.createNewVEProject(project);
+        Teselagen.manager.ProjectManager.createNewSequence(project);        
     },
 
     promptPartName: function(cb){
@@ -250,10 +218,16 @@ Ext.define("Vede.controller.ProjectController", {
         
     },
 
-    resolveAndOpenPart: function (record) {
-        var part_id = record.data.id;
-        var selectedPart = this.partsStore.getById(part_id);
-        Teselagen.manager.ProjectManager.openPart(selectedPart);
+    resolveAndOpenSequence: function (record) {
+        var veproject_id = record.data.id;
+        var project_id = record.parentNode.data.id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+        var veprojects = project.veprojects().load({
+            callback: function () {
+                var veproject = veprojects.getById(veproject_id);
+                Teselagen.manager.ProjectManager.openVEProject(veproject);
+            }
+        });
     },
 
     expandProject: function (record) {
@@ -269,14 +243,17 @@ Ext.define("Vede.controller.ProjectController", {
         case 'newproj':
             this.createProject(record);
             break;
-        case 'newveproj':
-            this.createVEProj(record);
+        case 'newsequence':
+            this.createSequence(record);
             break;
         case 'newde':
             this.resolveAndCreateDEProject(record);
             break;
         case 'opende':
             this.resolveAndOpenDEProject(record);
+            break;
+        case 'opensequence':
+            this.resolveAndOpenSequence(record);
             break;
         case 'j5report':
             this.resolveAndOpenj5Report(record);
@@ -286,9 +263,6 @@ Ext.define("Vede.controller.ProjectController", {
             break;
         case 'addpart':
             this.addPart(record);
-            break;
-        case 'openpart':
-            this.resolveAndOpenPart(record);
             break;
         }
     },

@@ -614,7 +614,7 @@ module.exports = function (app, express) {
         }
 
         newSequence.save(function(){
-          veproject.sequences.push(newSequence);
+          veproject.sequencefile_id = newSequence;
           veproject.save(function(err){
             if(err) console.log(err);
             console.log("New Sequence Saved!");
@@ -665,7 +665,6 @@ module.exports = function (app, express) {
 
   //READ
   app.get('/user/projects/veprojects/sequences', restrict, function (req, res) {
-
     var Sequence = app.db.model("sequence");
     Sequence.findById(req.query.id, function (err, sequence) {
       if(err) console.log("There was a problem!/");

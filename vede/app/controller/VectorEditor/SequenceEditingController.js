@@ -8,6 +8,18 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     editingSequence:  null,
     sequenceFileManager : null,
 
+    onVectorEditorProjectMode: function(seq){
+        var currentTabPanel = Ext.getCmp('mainAppPanel');
+        currentTabPanel.setActiveTab(1);
+        currentTabPanel.setLoading(true);
+        self.editingSequence = seq;
+        sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        self.sequenceFileManager = sequenceFileManager;
+        Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
+        Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="doneEditingBtn"]')[0].show();
+        currentTabPanel.setLoading(false);
+    },
+
     onVectorEditorEditingMode: function(j5Part,DETab) {
     this.editingDETab = DETab;
     var currentTabPanel = Ext.getCmp('mainAppPanel');
@@ -57,6 +69,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         }});
 
         this.application.on("VectorEditorEditingMode", this.onVectorEditorEditingMode, this);
+        this.application.on("VectorEditorProjectMode", this.onVectorEditorProjectMode, this);
         this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
 
     },

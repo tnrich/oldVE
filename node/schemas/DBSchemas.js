@@ -78,7 +78,7 @@ module.exports = function (app) {
 	var VEProjectSchema = new Schema({
 		name: String,
 		project_id : { type: oIDRef, ref: 'project' },
-		sequences: [{ type: oIDRef, ref: 'sequence' }],
+		sequencefile_id: { type: oIDRef, ref: 'sequence' },
 		parts: [ { type: oIDRef, ref: 'part' } ]
 	});
 	registerSchema('veproject', VEProjectSchema);
