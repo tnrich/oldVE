@@ -52,7 +52,7 @@ Ext.define('Vede.controller.MainMenuController', {
             button.up('window').close();
         }
     },
-
+    
     onImportButtonClick: function(button, e, options) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
         // Change this at a later date when that class is tested. --DW 10.17.2012
@@ -86,9 +86,9 @@ Ext.define('Vede.controller.MainMenuController', {
             //console.log(seqMgr.getName());
         }
     },
-
+    
     onImportMenuItemClick: function(item, e, options) {
-        Ext.create("Vede.view.FileImportWindow").show();
+        Vede.application.fireEvent("ImportSequence",Teselagen.manager.ProjectManager.workingSequence);
     },
 
     onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {

@@ -101,7 +101,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             return name;
         }
     }],
-
+    /*
     validations: [{
         field: "sequenceFileFormat",
         type: "presence"
@@ -117,7 +117,7 @@ Ext.define("Teselagen.models.SequenceFile", {
     //{field: "partSource",           type: "presence"},
     //{field: "hash",                 type: "presence"}
     ],
-
+    */
     associations: [{
         type: "belongsTo",
         model: "Teselagen.models.Part",

@@ -437,26 +437,30 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-
-        if(j5Part.data.sequencefile_id)
+        
+        j5Part.getSequenceFile({
+        callback: function(associatedSequence,operation){
+        if(associatedSequence)
         {
             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
         }
         else
         {
-            console.log("This part doesn't have an associated sequence");
+            console.log("This part doesn't have an associated sequence, creating new empty sequence");
             var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Genbank",
                 sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
                 partSource: "New Part"
             });
-            j5Part.setSequenceFileModel(newSequenceFile);
-            j5Part.save({
+            
+            newSequenceFile.save({
                 callback: function(){
-                    newSequenceFile.save({
+                    j5Part.setSequenceFileModel(newSequenceFile);
+                    j5Part.save({
                         callback: function(){
+                            console.log(j5Part);
                             var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
                         }
@@ -464,6 +468,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 }
             });
         }
+        
+        }});
 
     },
 

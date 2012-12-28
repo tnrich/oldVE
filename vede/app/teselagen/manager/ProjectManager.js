@@ -102,7 +102,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
     },
 
-    openVEProject: function (item) {
+    openSequence: function (item) {
         console.log("Trying to open VE Project");
 
         var id = item.data.id;
@@ -122,7 +122,35 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
             }
         });
+    },
 
+    openPart: function (part) {
+        console.log("Opening Sequence Associated to Part");
+        var self = this;
+        var associatedSequence = part.getSequenceFile({
+            callback: function (record, operation) {
+                self.workingSequence = part.getSequenceFile();
+                var tabPanel = Ext.getCmp('mainAppPanel');
+                tabPanel.setActiveTab(1);
+                var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(self.workingSequence.data.sequenceFileContent);
+                seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+                Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+            }
+        });
+    },
+
+    openVEProject: function(veproject){
+        console.log("Opening Sequence Associated to VEProject");
+        var self = this;
+        var associatedSequence = veproject.getSequenceFile({
+            callback: function (record, operation) {
+                self.workingSequence = veproject.getSequenceFile();
+                //var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(self.workingSequence.data.sequenceFileContent);
+                //seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+                //Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+                Vede.application.fireEvent("VectorEditorProjectMode", self.workingSequence);
+            }
+        });
     },
 
     createNewProject: function () {
@@ -157,7 +185,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed, this);
     },
 
-    createNewVEProject: function (project) {
+    createNewSequence: function (project) {
 
         var onPromptClosed = function (btn, text) {
                 if(btn == 'ok') {
@@ -170,15 +198,34 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         dateModified: new Date()
                     });
 
-                    project.veprojects().add(veproject);
-                    veproject.save({
-                        callback: function () {
-                            Vede.application.fireEvent("renderProjectsTree", function () {
-                                Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + veproject.data.id);
-                                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                            });
-                        }
+                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                        sequenceFileFormat: "GENBANK",
+                        sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                        sequenceFileName: "untitled.gb",
+                        partSource: "Untitled sequence"
                     });
+
+                    project.veprojects().add(veproject);
+                    veproject.setSequenceFile(newSequenceFile);
+                    veproject.save({callback: function(){
+
+                        newSequenceFile.setVectorEditorProject(veproject);
+                        newSequenceFile.set('veproject_id',veproject.data.id);
+
+                        newSequenceFile.save({
+                            callback: function () {
+
+                                veproject.set('sequencefile_id',newSequenceFile.data.id);
+                                veproject.save();
+
+                                Vede.application.fireEvent("renderProjectsTree", function () {
+                                    Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + veproject.data.id);
+                                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                                });
+                            }
+                        });
+                    }});
+
                 } else {
                     return false;
                 }
