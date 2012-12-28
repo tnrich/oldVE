@@ -2,10 +2,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 
     requires: ["Teselagen.event.SequenceManagerEvent",
-               "Teselagen.manager.SequenceFileManager"],
+               "Teselagen.manager.SequenceFileManager",
+               "Teselagen.manager.ProjectManager"],
 
     editingDETab : null,
-    editingSequence:  null,
     sequenceFileManager : null,
 
     onVectorEditorProjectMode: function(seq){
@@ -30,26 +30,27 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
     j5Part.getSequenceFile({
         callback: function(seq){
-            self.editingSequence = seq;
-            sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
-            self.sequenceFileManager = sequenceFileManager;
-            Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
+            Teselagen.manager.ProjectManager.workingSequence = seq;
+            self.sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+            Vede.application.fireEvent("SequenceManagerChanged", self.sequenceFileManager);
             Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="doneEditingBtn"]')[0].show();
             currentTabPanel.setLoading(false);
         }
     });
+
     },
 
     onDoneEditingBtnClick: function(){
         var currentTabPanel = Ext.getCmp('mainAppPanel');
+        var editingSequence = Teselagen.manager.ProjectManager.workingSequence;
         currentTabPanel.setLoading(true);
 
         rawGenbank = this.sequenceFileManager.toGenbank().toString();
-        this.editingSequence.setSequenceFileContent(rawGenbank);
+        editingSequence.setSequenceFileContent(rawGenbank);
 
         var self = this;
 
-        this.editingSequence.save({
+        editingSequence.save({
             callback: function(){
                 currentTabPanel.setLoading(false);
                 currentTabPanel.setActiveTab(self.editingDETab);

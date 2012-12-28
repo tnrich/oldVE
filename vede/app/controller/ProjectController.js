@@ -79,10 +79,10 @@ Ext.define("Vede.controller.ProjectController", {
                             hrefTarget: 'j5reports',
                             icon: "resources/images/ux/j5-tree-icon-parent"
                         });
+
                     });
                 }
             });
-
 
             var veprojects = project.veprojects();
             veprojects.load({
@@ -95,6 +95,16 @@ Ext.define("Vede.controller.ProjectController", {
                             hrefTarget: 'opensequence',
                             icon: "resources/images/ux/design-tree-icon-leaf.png"
                         });
+
+
+                        partsRootNode.appendChild({
+                            text: veproject.data.name,
+                            leaf: true,
+                            id: veproject.data.id,
+                            hrefTarget: 'opensequence',
+                            icon: "resources/images/ux/design-tree-icon-leaf.png"
+                        });
+
                     });
                 }
             });

@@ -71,7 +71,31 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'JSON file'
                 }]
             }
-        }]
+        }, {
+            xtype: 'button',
+            text: 'Insert',
+            cls: 'insertMenu',
+            menu: {
+                xtype: 'menu',
+                minWidth: 140,
+                width: 140,
+                items: [{
+                    xtype: 'menuitem',
+                    cls: 'row',
+                    text: 'Row'
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'column',
+                    text: 'Column'
+                }]
+            }
+        },
+        {
+            xtype: 'button',
+            text: 'j5',
+            cls: 'j5button'
+        }
+        ]
     }]
 }
 
