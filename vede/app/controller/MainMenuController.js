@@ -88,7 +88,7 @@ Ext.define('Vede.controller.MainMenuController', {
     },
     
     onImportMenuItemClick: function(item, e, options) {
-        Vede.application.fireEvent("ImportSequence",Teselagen.manager.ProjectManager.workingSequence);
+        Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
     },
 
     onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
@@ -214,6 +214,25 @@ Ext.define('Vede.controller.MainMenuController', {
         //console.log(gbMng.);
     },
 
+    onDownloadGenbankMenuItemClick: function (item, e, options) {
+        console.log("Download genbank called");
+
+
+        var saveFile = function (name, gb) {
+                var flag;
+                var text = gb.toString();
+                var filename = name;
+                var bb = new BlobBuilder();
+                bb.append(text);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            };
+
+        var sequenceFileManager = Teselagen.manager.ProjectManager.workingSequenceFileManager;
+        var fileName = sequenceFileManager.getName()+".gb";
+        saveFile(fileName, sequenceFileManager.toGenbank());
+
+    },
+
     init: function() {
         this.control({
             "#undoMenuItem": {
@@ -245,6 +264,9 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "button[cls='ImportSequence']": {
                 click: this.onImportButtonClick
+            },
+            "#downloadGenbankMenuItem": {
+                click: this.onDownloadGenbankMenuItemClick
             },
             "#importMenuItem": {
                 click: this.onImportMenuItemClick
@@ -290,12 +312,12 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
-            },
+            }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-    },
+    }
 });

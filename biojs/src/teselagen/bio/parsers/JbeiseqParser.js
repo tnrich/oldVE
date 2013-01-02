@@ -673,7 +673,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                         //}
                     });
                 }
-                console.log(label);
+                //console.log(label);
             }
 
             newFt = {

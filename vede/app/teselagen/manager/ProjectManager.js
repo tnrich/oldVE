@@ -12,6 +12,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null,
     projects: null,
+    workingSequence: null,
+    workingSequenceFileManager: null,
 
     /**
      * Load User Info
@@ -145,9 +147,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var associatedSequence = veproject.getSequenceFile({
             callback: function (record, operation) {
                 self.workingSequence = veproject.getSequenceFile();
-                //var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(self.workingSequence.data.sequenceFileContent);
-                //seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-                //Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
                 Vede.application.fireEvent("VectorEditorProjectMode", self.workingSequence);
             }
         });
@@ -186,7 +185,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     createNewSequence: function (project) {
-
+        var self = this;
         var onPromptClosed = function (btn, text) {
                 if(btn == 'ok') {
                     if(text === '') return Ext.MessageBox.prompt('Name', 'Please enter a vector editor project name:', onPromptClosed, this);
@@ -221,6 +220,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 Vede.application.fireEvent("renderProjectsTree", function () {
                                     Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + veproject.data.id);
                                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                                    self.openVEProject(veproject);
                                 });
                             }
                         });
@@ -307,7 +307,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed, this);
 
     },
-
+    /*
     openSequenceFile: function () {
         var self = this;
         Ext.getCmp('ProjectPanel').setActiveTab(2);
@@ -325,10 +325,9 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     tabPanel.setActiveTab(1);
                     Vede.application.fireEvent("ImportSequenceToProject", veproject);
                     self.loadDesignAndChildResources();
-
-
                 }
             });
         }
     }
+    */
 });

@@ -14,7 +14,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Import from File'
             }, {
                 xtype: 'menuitem',
-                text: 'Download Genbank'
+                text: 'Download Genbank',
+                id: 'downloadGenbankMenuItem'
             }, {
                 xtype: 'menuseparator'
             }, {
@@ -217,8 +218,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         xtype: 'tbfill'
     }, {
         xtype: 'button',
-        text: 'Done Editing',
-        cls: 'doneEditingBtn',
+        text: 'Save changes',
+        cls: 'saveSequenceBtn',
         hidden: true
     }]
 });
