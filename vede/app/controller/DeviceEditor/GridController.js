@@ -212,13 +212,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
-        console.log("part '" + updatedPart.get("name") + "' field " + modified + 
+        console.log("part '" + updatedPart.get("name") + "' field " + modified +
                     " modified, new value " + updatedPart.get(modified));
 
-        if(modified.indexOf("fas") >= 0) {
-            this.renderFasConflicts(parts, updatedPart);
-        } else {
-            this.rerenderPart(updatedPart, false);
+        if(modified)
+        {
+            if(modified.indexOf("fas") >= 0) {
+                this.renderFasConflicts(parts, updatedPart);
+            } else {
+                this.rerenderPart(updatedPart, false);
+            }
         }
     },
 
