@@ -1,7 +1,7 @@
 Ext.define('Vede.view.ve.ImportSequenceWindow', {
     extend: 'Ext.window.Window',
 
-    height: 188,
+    height: 98,
     width: 400,
     layout: {
         type: 'anchor'
@@ -26,6 +26,7 @@ Ext.define('Vede.view.ve.ImportSequenceWindow', {
                 }, {
                     xtype: 'fieldset',
                     title: 'Sequence details (optional)',
+                    hidden: true,
                     items: [{
                         xtype: 'textfield',
                         anchor: '100%',
@@ -37,7 +38,7 @@ Ext.define('Vede.view.ve.ImportSequenceWindow', {
                         anchor: '100%',
                         fieldLabel: 'Author',
                         name: 'sequenceAuthor',
-                        cls: 'sequenceName'
+                        cls: 'sequenceAuthor'
                     }]
                 }, {
                     xtype: 'button',

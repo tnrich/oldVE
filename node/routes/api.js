@@ -731,15 +731,6 @@ module.exports = function (app, express) {
     });
   });
 
-  //READ
-  app.get('/user/projects/deprojects/j5runs', restrict, function (req, res) {
-    var DEProject = app.db.model("deproject");
-    var id = JSON.parse(req.query.filter)[0].value;
-    DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
-      res.json({'j5runs':deproject.j5runs});
-    });
-  });
-
   //GetTree
   app.get('/user/tree', restrict, function (req, res) {
     var User = app.db.model("User");

@@ -233,6 +233,18 @@ Ext.define('Vede.controller.MainMenuController', {
 
     },
 
+    onRenameSequenceItemClick: function(item, e, options){
+
+        var onPromptClosed = function (answer, text) {
+            Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
+            Teselagen.manager.ProjectManager.workingVEProject.save({callback: function(){
+                Vede.application.fireEvent("renderProjectsTree");
+            }});
+        };
+
+        Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
+    },
+
     init: function() {
         this.control({
             "#undoMenuItem": {
@@ -270,6 +282,9 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#importMenuItem": {
                 click: this.onImportMenuItemClick
+            },
+            "#renameSequenceItem": {
+                click: this.onRenameSequenceItemClick
             },
             "#circularViewMenuItem": {
                 checkchange: this.onCircularViewMenuItemCheckChange

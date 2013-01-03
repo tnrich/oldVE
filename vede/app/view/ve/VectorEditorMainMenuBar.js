@@ -17,6 +17,10 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Download Genbank',
                 id: 'downloadGenbankMenuItem'
             }, {
+                xtype: 'menuitem',
+                text: 'Rename Sequence',
+                id: 'renameSequenceItem'
+            }, {
                 xtype: 'menuseparator'
             }, {
                 xtype: 'menuitem',

@@ -12,6 +12,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null,
     projects: null,
+    workingVEProject: null,
     workingSequence: null,
     workingSequenceFileManager: null,
 
@@ -147,6 +148,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
         var associatedSequence = veproject.getSequenceFile({
             callback: function (record, operation) {
                 self.workingSequence = veproject.getSequenceFile();
+                self.workingVEProject = veproject;
                 Vede.application.fireEvent("VectorEditorProjectMode", self.workingSequence);
             }
         });

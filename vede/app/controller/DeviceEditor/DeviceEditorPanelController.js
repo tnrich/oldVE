@@ -121,7 +121,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
                 var saveAssociatedSequence = function (part, cb) {
                         //console.log(part);
-                        //console.log(part.getSequenceFile());
+                        console.log(part.getSequenceFile());
                         part.getSequenceFile().save({
                             callback: function (sequencefile) {
                                 console.log(sequencefile.get('id'));
@@ -169,10 +169,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                                 }
                             });
                         } else {
-                            //saveAssociatedSequence(part,function(){
+                            saveAssociatedSequence(part,function(){
                             if(countParts == 1) saveDesign();
                             countParts--;
-                            //});
+                            });
                         }
                     });
                 });

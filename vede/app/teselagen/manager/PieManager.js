@@ -315,7 +315,7 @@ Ext.define("Teselagen.manager.PieManager", {
                     color: color
                 });
 
-                this.cutSiteRenderer.addToolTip(label, 
+                this.cutSiteRenderer.addToolTip(label,
                                             this.cutSiteRenderer.getToolTip(site));
                 this.cutSiteRenderer.addClickListener(label,
                                                 label.annotation.getStart(),
