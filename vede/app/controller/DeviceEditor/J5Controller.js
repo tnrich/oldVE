@@ -213,15 +213,36 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     saveAutomationParams: function() {
         this.automationParameters.fields.eachKey(function(key) {
             if(key !== "id") {
-                this.automationParameters.set(key, 
+                this.automationParameters.set(key,
                     Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
     },
 
-    onRunJ5BtnClick: function() {
-        //console.log(this.automationParameters);
-        //console.log(this.j5Parameters.data);
+    createLoadingMessage: function(){
+        var msgBox = Ext.MessageBox.show({
+           title: 'Please wait',
+           msg: 'Preparing input parameters',
+           progressText: 'Initializing...',
+           width:300,
+           progress:true,
+           closable:false
+       });
+
+        return {
+            close: function(){
+                msgBox.close();
+            },
+            update: function(progress,msg){
+                msgBox.updateProgress(progress/100, progress+'% completed',msg);
+            }
+        };
+    },
+
+
+
+    onRunJ5BtnClick: function(btn) {
+        var loadingMessage = this.createLoadingMessage();
 
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -269,21 +290,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
 
         var masterFiles = {};
-        masterFiles["masterPlasmidsList"]                 = masterPlasmidsList;    
-        masterFiles["masterPlasmidsListFileName"]         = masterPlasmidsListFileName;            
-        masterFiles["masterOligosList"]                   = masterOligosList;  
-        masterFiles["masterOligosListFileName"]           = masterOligosListFileName;          
-        masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;           
-        masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;                   
+        masterFiles["masterPlasmidsList"]                 = masterPlasmidsList;
+        masterFiles["masterPlasmidsListFileName"]         = masterPlasmidsListFileName;
+        masterFiles["masterOligosList"]                   = masterOligosList;
+        masterFiles["masterOligosListFileName"]           = masterOligosListFileName;
+        masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;
+        masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
         currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles);
-
-        //urrentTab.j5Window.j5comm.generateAjaxRequest();
         
+        loadingMessage.update(30,"Saving design");
+
         Vede.application.fireEvent("saveDesignEvent",function(){
-            currentTab.j5Window.j5comm.generateAjaxRequest();
+            loadingMessage.update(60,"Executing request");
+            currentTab.j5Window.j5comm.generateAjaxRequest(function(){
+                loadingMessage.update(100,"Completed");
+                loadingMessage.close();
+            });
         });
         
         
@@ -348,36 +373,20 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onPlasmidsItemClick: function( grid, record ){
+        
+        this.j5Window.close();
 
         console.log(record);
-
-        var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
-            name: "Untitled Project"
-        });
-
-        //DW
-
-        /*var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-            sequenceFileName: record.data.name,
-            sequenceFileFormat: "Genbank",
-            sequenceFileContent: record.data.data
-        });*/
         
-        var format  = Teselagen.constants.Constants.GENBANK;
-        var content = record.data.data;
-        var name    = record.data.name;
+        var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+            "GENBANK",
+            record.data.fileContent,
+            record.data.name,
+            ""
+        );
         
-        var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(format, content, name, "");
-
-        veproject.setSequenceFile(newSequence);
+        Teselagen.manager.ProjectManager.openSequence(newSequence);
         
-        console.log(veproject);
-        console.log(newSequence);
-
-        Teselagen.manager.ProjectManager.workingProject.veprojects().add(veproject);
-        Teselagen.manager.ProjectManager.openSequence(veproject);
-
-        this.j5Window.close();
     },
 
     init: function() {
