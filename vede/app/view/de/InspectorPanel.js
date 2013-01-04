@@ -188,11 +188,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             columnLines: true,
                             height:400,
                             minHeight:400,
-                            plugins: [
-                                Ext.create('Ext.grid.plugin.RowEditing', {
-                                    clicksToEdit: 2
-                                })
-                            ],
+                            plugins: {
+                                ptype: 'rowediting',
+                                clicksToEdit: 2
+                            },
                             columns: [
                                 {
                                     xtype: 'gridcolumn',

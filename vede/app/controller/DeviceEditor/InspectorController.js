@@ -114,6 +114,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
+    onInspectorGridRender: function(grid) {
+        console.log("render");
+    },
+
     /**
      * When we switch to a new tab, switch the current active project to the one
      * associated with the new tab, and reset event handlers so they refer to the
@@ -250,7 +254,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 click: this.onRemoveColumnButtonClick
             },
             "gridpanel[cls='inspectorGrid']": {
-                select: this.onGridBinSelect
+                select: this.onGridBinSelect,
             }
         })
     },

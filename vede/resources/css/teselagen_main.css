@@ -307,6 +307,7 @@ body {
 
 .binHeader {
     background-color: #fefefe;
+    text-overflow: ellipsis;
 }
 
 .binHeader:hover {
