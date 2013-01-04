@@ -1,9 +1,17 @@
 var loopAndSplice = function(unordered) {
   for(var i = 0; i < unordered.length; i++) {
     for(var j = i + 1; j < unordered.length; j++) {
-      if (unordered[i]["hash"] == unordered[j]["hash"]) {
-        unordered.splice(j, 1);
-        j--;
+      if(unordered[i])
+      {
+          if (unordered[i]["hash"] == unordered[j]["hash"]) {
+            unordered.splice(j, 1);
+            j--;
+          }
+      }
+      else
+      {
+          console.log("Error: sequence not found");
+          return [];
       }
     }
   }

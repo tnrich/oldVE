@@ -105,26 +105,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
     },
 
-    openSequence: function (item) {
-        console.log("Trying to open VE Project");
-
-        var id = item.data.id;
-        var veprojects = this.workingProject.veprojects();
-        var selectedVEProject = veprojects.getById(id);
-        var self = this;
-
-        var seqMgr;
-
-        var selectedSequence = selectedVEProject.getSequenceFile({
-            callback: function (record, operation) {
-                selectedSequence = selectedVEProject.getSequenceFile();
-                self.workingSequence = selectedSequence;
-                var tabPanel = Ext.getCmp('mainAppPanel');
-                tabPanel.setActiveTab(1);
-                seqMgr = Teselagen.utils.FormatUtils.sequenceFileToSequenceManager(selectedSequence);
-                Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
-            }
-        });
+    openSequence: function (sequence) {
+        console.log("Opening Sequence");
+        this.workingSequence = sequence;
+        //this.workingVEProject = veproject;
+        Vede.application.fireEvent("VectorEditorProjectMode", this.workingSequence);
     },
 
     openPart: function (part) {

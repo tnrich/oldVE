@@ -1,7 +1,7 @@
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: [],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -9,8 +9,23 @@ Ext.define("Vede.controller.J5ReportController", {
     j5runs: null,
     cls: 'j5ReportTab',
 
+    onPlasmidsItemClick: function(row,record){
+        console.log("PLASMID SELECTED");
+        console.log(record);
+
+        var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+            "GENBANK",
+            record.data.fileContent,
+            record.data.name,
+            ""
+        );
+
+        Teselagen.manager.ProjectManager.openSequence(sequence);
+
+    },
+
     downloadResults: function(){
-        location.href = '/api/getfile/'+this.activeJ5Run.data.file_id
+        location.href = '/api/getfile/'+this.activeJ5Run.data.file_id;
     },
 
     onJ5RunSelect: function( item, e, eOpts ){
@@ -19,7 +34,6 @@ Ext.define("Vede.controller.J5ReportController", {
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly().data.fileContent;
         console.log(this.activeJ5Run);
         this.tabPanel.down('gridpanel').reconfigure(assemblies);
-        //this.tabPanel.down('textareafield').setValue(combinatorial);
     },
 
     renderMenu: function(){
@@ -63,8 +77,11 @@ Ext.define("Vede.controller.J5ReportController", {
             },
             'button[cls="downloadResults"]': {
                 click: this.downloadResults
+            },
+            "gridpanel[title=Output Plasmids]": {
+                itemclick: this.onPlasmidsItemClick
             }
 
-    });
-    },
+        });
+    }
 });

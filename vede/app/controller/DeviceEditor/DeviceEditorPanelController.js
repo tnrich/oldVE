@@ -115,69 +115,76 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     saveDEProject: function (cb) {
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var deproject = activeTab.model;
-        deproject.save({
-            callback: function () {
-                var design = deproject.getDesign();
 
-                var saveAssociatedSequence = function (part, cb) {
-                        //console.log(part);
-                        console.log(part.getSequenceFile());
-                        part.getSequenceFile().save({
+        var design = deproject.getDesign();
+
+        deproject.save({callback:function(){
+
+        var saveAssociatedSequence = function (part, cb) {
+                part.getSequenceFile({callback: function(associatedSequence){
+                    var lastSequenceId = associatedSequence.get('id');
+                    if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                    {
+                        associatedSequence.save({
                             callback: function (sequencefile) {
-                                console.log(sequencefile.get('id'));
-                                part.set("sequencefile_id", sequencefile.get('id'));
-                                part.save({
-                                    callback: function () {
-                                        cb();
-                                    }
-                                });
-
-                            }
-                        });
-
-                    };
-
-                var saveDesign = function () {
-                        console.log("Saving design");
-                        activeTab.model.getDesign().save({
-                            callback: function (record, operation) {
-                                console.log("Design Saved!");
-                                if(typeof (cb) == "function") cb();
-                            }
-                        });
-                    };
-
-                var countParts = 0;
-
-                design.getJ5Collection().bins().each(function (bin, binKey) {
-                    bin.parts().each(function (part, partIndex) {
-                        countParts++;
-                    });
-                });
-
-                //console.log("Count parts is: "+countParts);
-                design.getJ5Collection().bins().each(function (bin, binKey) {
-                    bin.parts().each(function (part, partIndex) {
-                        if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                            console.log("Saving part");
-                            part.save({
-                                callback: function (part) {
-                                    saveAssociatedSequence(part, function () {
-                                        if(countParts == 1) saveDesign();
-                                        countParts--;
+                                if(!lastSequenceId)
+                                {
+                                    part.set("sequencefile_id", sequencefile.get('id'));
+                                    part.save({
+                                        callback: function () {
+                                            cb();
+                                        }
                                     });
                                 }
-                            });
-                        } else {
-                            saveAssociatedSequence(part,function(){
-                            if(countParts == 1) saveDesign();
-                            countParts--;
+                                else { cb(); }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        cb();
+                    }
+                }});
+            };
+
+        var saveDesign = function () {
+                design = activeTab.model.getDesign();
+                design.save({
+                    callback: function (record, operation) {
+                        if(typeof (cb) == "function") cb();
+                    }
+                });
+            };
+
+        var countParts = 0;
+
+        design.getJ5Collection().bins().each(function (bin, binKey) {
+            bin.parts().each(function (part, partIndex) {
+                countParts++;
+            });
+        });
+
+        design.getJ5Collection().bins().each(function (bin, binKey) {
+            bin.parts().each(function (part, partIndex) {
+                if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                    part.save({
+                        callback: function (part) {
+                            saveAssociatedSequence(part, function () {
+                                if(countParts == 1) saveDesign();
+                                countParts--;
                             });
                         }
                     });
-                });
-            }
+                } else {
+                    saveAssociatedSequence(part,function(){
+                    if(countParts == 1) saveDesign();
+                    countParts--;
+                    });
+                }
+            });
         });
+
+        }});
     },
 
     onDeviceEditorSaveBtnClick: function () {

@@ -23,7 +23,7 @@ Ext.define("TeselagenUtils.manager.gbCleanerManager", {
         var saveFile = function(name, gb) {
             var flag;
             var text        = gb.toString();
-            var filename    = name+'_clean';
+            var filename    = 'cleaned_'+name;
             var bb          = new BlobBuilder();
             bb.append(text);
             saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
