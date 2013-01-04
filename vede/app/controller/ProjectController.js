@@ -110,7 +110,7 @@ Ext.define("Vede.controller.ProjectController", {
             });
         });
 
-        Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
+        //Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
         if(typeof (cb) == "function") cb();
     },
 
