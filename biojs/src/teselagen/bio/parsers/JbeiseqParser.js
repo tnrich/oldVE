@@ -605,7 +605,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         }
         var json = {};
 
-        var feat      = pGenbank.getFeatures().getFeaturesElements();
+        var feat      = pGenbank.getFeatures() ? pGenbank.getFeatures().getFeaturesElements() : "";
         var sequence = "";
         if(pGenbank.getOrigin()) sequence = pGenbank.getOrigin().getSequence();
         // FEATURES Label/Complement/type population
@@ -673,7 +673,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                         //}
                     });
                 }
-                console.log(label);
+                //console.log(label);
             }
 
             newFt = {
@@ -694,8 +694,8 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         // MAKE JSON
         json = {
             "seq:seq" : {
-                "seq:name" : pGenbank.getLocus().getLocusName(),
-                "seq:circular" : !pGenbank.getLocus().getLinear(),
+                "seq:name" : pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : "",
+                "seq:circular" : pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : "",
                 "seq:sequence" : pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "",
                 "seq:features" : newFeatures,
                 "_xmlns:seq": "http://jbei.org/sequence",

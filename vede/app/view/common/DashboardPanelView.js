@@ -11,6 +11,20 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     title: 'Dashboard',
     items: [{
         xtype: 'panel',
+        //layout: 'fit',
+        items: [
+                {
+                    xtype: 'image',
+                    height: 175,
+                    margin: '50 50 50 50',
+                    width: 330,
+                    src: 'resources/images/logo-splash.png'
+                }
+            ]
+    }],
+    /*
+    items: [{
+        xtype: 'panel',
         flex: 1,
         id: 'dashboard_Panel',
         layout: {
@@ -137,7 +151,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 text: 'Submit Feedback'
             }]
         }]
-    }],
+    }],*/
     require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
     listeners: {
         itemclick: function (view, record, item, index, e, eOpts) {

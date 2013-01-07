@@ -27,8 +27,11 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     /**
      *
      */
-    generateAjaxRequest: function () {
+    generateAjaxRequest: function (cb) {
         console.log("Starting Ajax Request");
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
+        runj5Btn.toggle();
 
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
 
@@ -41,14 +44,12 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 masterFiles: JSON.stringify(this.masterFiles)
             },
             success: function (response) {
-                var response = JSON.parse(response.responseText);
+                response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
 
-                var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
-                var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
 
                 var store = new Ext.data.JsonStore({
                     proxy: {
@@ -56,7 +57,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                         data: response,
                         reader: {
                             type: 'json',
-                            root: 'files',
+                            root: 'files'
                         }
                     },
 
@@ -65,14 +66,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 store.load();
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
-                runj5Btn.toggle();
 
-                deproject.j5runs().load({
-                    callback : function(runs){
-                        console.log(runs);
-                    }
-                });
-
+                return cb();
             }
         });
         

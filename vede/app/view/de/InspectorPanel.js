@@ -101,10 +101,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             name: 'fas',
                             queryMode: 'local',
                             anchor: '100%',
-                            value: 'None',
                             store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
                                     'Embed_in_primer_reverse',
-                                    'Embed_in_primer_forward', 'Annealed Oligos']
+                                    'Embed_in_primer_forward', 'Annealed Oligos'],
+                            value: 'None'
                         }
                     ]
                 },
@@ -188,11 +188,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             columnLines: true,
                             height:400,
                             minHeight:400,
-                            plugins: [
-                                Ext.create('Ext.grid.plugin.RowEditing', {
-                                    clicksToEdit: 2
-                                })
-                            ],
+                            plugins: {
+                                ptype: 'rowediting',
+                                clicksToEdit: 2
+                            },
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -230,7 +229,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'gridcolumn',
                                     text: 'FAS',
-                                    dataIndex: 'fas'
+                                    dataIndex: 'fas',
+                                    renderer: function(value, metadata, record) {
+                                        if(record.parts().getRange().length > 0) {
+                                            return record.parts().getRange()[0].get("fas");
+                                        } else {
+                                            return value;
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'booleancolumn',

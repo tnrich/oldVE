@@ -78,11 +78,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartAssemblyStrategyChange: function(box) {
         var newStrategy = box.getValue();
 
-        if(newStrategy === "None") {
-            this.selectedPart.set("fas", "");
-        } else {
-            this.selectedPart.set("fas", newStrategy);
-        }
+        this.selectedPart.set("fas", newStrategy);
+
+        this.columnsGrid.getView().refresh();
     },
 
     onPlasmidGeometryChange: function(radioGroup, newValue) {
@@ -100,14 +98,24 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     onRemoveColumnButtonClick: function() {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
-                                                                    selectedBin);
-        
-        this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+
+        if(selectedBin) {
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                                        selectedBin);
+            
+            this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+        } else {
+            this.activeProject.getJ5Collection().deleteBinByIndex(
+                    this.activeProject.getJ5Collection().binCount() - 1);
+        }
     },
 
     onGridBinSelect: function(grid, j5Bin, selectedIndex) {
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+    },
+
+    onInspectorGridRender: function(grid) {
+        console.log("render");
     },
 
     /**
@@ -246,7 +254,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 click: this.onRemoveColumnButtonClick
             },
             "gridpanel[cls='inspectorGrid']": {
-                select: this.onGridBinSelect
+                select: this.onGridBinSelect,
             }
         })
     },

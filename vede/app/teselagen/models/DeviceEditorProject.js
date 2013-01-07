@@ -21,7 +21,6 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
         name: "id",
         type: "long"
     },
-    //{ name: "devicedesign_id", type: "long"},
     {
         name: "project_id",
         type: "long"
@@ -54,7 +53,7 @@ Ext.define("Teselagen.models.DeviceEditorProject", {
             getterName: "getDesign",
             setterName: "setDesign",
             foreignKey: "id",
-            name: "design" // PLEASE DONT DELETE
+//            name: "design" // PLEASE DONT DELETE
         },
         {
             type: "hasMany",

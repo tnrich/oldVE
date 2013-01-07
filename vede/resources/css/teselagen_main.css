@@ -324,6 +324,7 @@ body {
 
 .binHeader {
     background-color: #fefefe;
+    text-overflow: ellipsis;
 }
 
 .binHeader:hover {
@@ -345,6 +346,12 @@ body {
 .gridPartCell-selected {
     background-color: #eeeeee;
     border-color: #000000;
+}
+
+.fasConflictIndicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
 }
 
 .DeviceEditorTitlePanel .x-toolbar-default {

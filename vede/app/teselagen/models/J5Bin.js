@@ -11,6 +11,7 @@ Ext.define("Teselagen.models.J5Bin", {
         "Teselagen.models.Part",
         "Teselagen.constants.Constants",
         "Teselagen.constants.SBOLIcons",
+        "Teselagen.utils.FormatUtils",
         "Teselagen.utils.NullableInt"
     ],
 
@@ -37,8 +38,6 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
     fields: [
-        //{name: "id",                type: "long"},
-        //{name: "j5collection_id",     type: "long"},
         {
             name: "binName",
             convert: function(v, record) {
@@ -58,10 +57,9 @@ Ext.define("Teselagen.models.J5Bin", {
                 return name;
             }
         },
-        //{name: "iconID",            type: "string",     defaultValue: ""},
         {
             name: "iconID",
-            convert: function(v, record) {
+            convert: function(v) {
                 //console.log(Teselagen.constants.SBOLIcons.ICON_LIST);
                 if ( v === null || v === undefined || v === "") {
                     // DW NOTE: I am saving the key here, but maybe it should be name
@@ -79,6 +77,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "fas",               type: "string",     defaultValue: "None"},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
+
 
         /* worry about this later. Original does not include this field.
         ,{

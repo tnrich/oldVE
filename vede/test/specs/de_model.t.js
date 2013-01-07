@@ -1,3 +1,8 @@
+/**
+ * Simple Device Editor Model tests.
+ * @author Yuri Bendana
+ */
+
 /*global beforeEach, describe, expect, it*/
 var userStore;
 Ext.onReady(function() {

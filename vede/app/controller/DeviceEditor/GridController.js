@@ -190,7 +190,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onRemoveFromBins: function(activeBins, removedBin, index) {
-        if(this.selectedBin.getBin() == removedBin) {
+        if(this.selectedBin && this.selectedBin.getBin() == removedBin) {
             this.selectedBin = null;
         }
 
@@ -200,24 +200,61 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onAddToParts: function(parts, addedParts, index) {
         console.log("part '" + addedParts[0].get("name") + "' added");
 
-        // For each part added, re-render that part's bin.
+        // For each part added, insert it to the part's bin.
         Ext.each(addedParts, function(addedPart) {
-            var ownerIndex = this.DeviceDesignManager.getBinAssignment(
-                                                this.activeProject, addedPart);
+            var newPart = Ext.create("Vede.view.de.grid.Part", {
+                part: addedPart,
+                fasConflict: false
+            });
 
-            this.rerenderBin(this.DeviceDesignManager.getBinByIndex(this.activeProject,
-                                                                    ownerIndex));
+            this.renderFasConflicts(parts, addedPart);
         }, this);
     },
 
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
-        console.log("part '" + updatedPart.get("name") + "' field " + modified + 
-                    " modified, operation " + operation);
+        console.log("part '" + updatedPart.get("name") + "' field " + modified +
+                    " modified, new value " + updatedPart.get(modified));
 
-        this.rerenderPart(updatedPart);
+        if(modified)
+        {
+            if(modified.indexOf("fas") >= 0) {
+                this.renderFasConflicts(parts, updatedPart);
+            } else {
+                this.rerenderPart(updatedPart, false);
+            }
+        }
     },
 
     onRemoveFromParts: function(parts, removedPart, index) {
+    },
+
+    /**
+     * Helper function to calculate which parts need to be rerendered after the
+     * fas field of a part is modified.
+     */
+    renderFasConflicts: function(parts, updatedPart) {
+        var partsArray = parts.getRange();
+
+        // If the modified part is at index 0, update all the other parts
+        // with the appropriate fasConflict flag.
+        if(parts.indexOf(updatedPart) == 0) {
+            Ext.each(partsArray.slice(1, partsArray.length), function(part) {
+                if(part.get("fas") != "None" && 
+                   updatedPart.get("fas") != "None" &&
+                   part.get("fas") != updatedPart.get("fas")) {
+                    this.rerenderPart(part, true);
+                } else if(part.get("fas") == updatedPart.get("fas") ||
+                          updatedPart.get("fas") == "None") {
+                    this.rerenderPart(part, false);
+                }
+            }, this);
+
+            this.rerenderPart(updatedPart, false);
+        } else if(partsArray[0].get("fas") != updatedPart.get("fas")) {
+            this.rerenderPart(updatedPart, true);
+        } else {
+            this.rerenderPart(updatedPart, false);
+        }
     },
 
     onAddRow: function() {
@@ -266,8 +303,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     /**
-     * Re-renders a grid bin given a j5Bin. Used when a bin or one of its child
-     * parts is changed.
+     * Re-renders a grid bin given a j5Bin. Used when a bin is updated.
      */
     rerenderBin: function(j5Bin) {
         var gridBin = this.getGridBinFromJ5Bin(j5Bin);
@@ -306,7 +342,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * Re-renders a part in the grid by deleting it and re-adding it. Used when
      * a part is updated.
      */
-    rerenderPart: function(j5Part) {
+    rerenderPart: function(j5Part, fasConflict) {
         var binIndex = this.DeviceDesignManager.getBinAssignment(
                             this.activeProject, j5Part);
         var parentBin = this.DeviceDesignManager.getBinByIndex(
@@ -324,7 +360,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Remove part from grid and re-add it.
         parentGridBin.remove(gridPart);
         var newPart = Ext.create("Vede.view.de.grid.Part", {
-            part: j5Part
+            part: j5Part,
+            fasConflict: fasConflict
         });
 
         // Insert the part at partIndex + 1, because the bin header is at index 0.
@@ -382,6 +419,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         });
 
+        // If this method fails, we may be trying to retrieve a grid part which
+        // has no part associated with it yet. In this case, first retrieve the
+        // bin associated with the j5Part, then the index of the part itself.
+        if(!targetGridPart) {
+            var ownerBinIndex = this.DeviceDesignManager.getBinAssignment(
+                                        this.activeProject, j5Part);
+            var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
+                                                                  ownerBinIndex);
+            var gridBin = this.getGridBinFromJ5Bin(ownerBin);
+
+            var partIndex = ownerBin.parts().indexOf(j5Part);
+            targetGridPart = gridBin.query("container[cls='gridPartContainer']")[partIndex];
+        }
+
         return targetGridPart;
     },
 
@@ -389,26 +440,30 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-
-        if(j5Part.data.sequencefile_id)
+        
+        j5Part.getSequenceFile({
+        callback: function(associatedSequence,operation){
+        if(associatedSequence)
         {
             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
         }
         else
         {
-            console.log("This part doesn't have an associated sequence");
+            console.log("This part doesn't have an associated sequence, creating new empty sequence");
             var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Genbank",
-                sequenceFileContent: "LOCUS       NO_NAME                  1 bp    DNA     circular     03-DEC-2012\nFEATURES             Location/Qualifiers\n\nORIGIN      \n        1 g     \n\n//",
+                sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
                 partSource: "New Part"
             });
-            j5Part.setSequenceFileModel(newSequenceFile);
-            j5Part.save({
+            
+            newSequenceFile.save({
                 callback: function(){
-                    newSequenceFile.save({
+                    j5Part.setSequenceFileModel(newSequenceFile);
+                    j5Part.save({
                         callback: function(){
+                            console.log(j5Part);
                             var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
                         }
@@ -416,6 +471,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 }
             });
         }
+        
+        }});
 
     },
 

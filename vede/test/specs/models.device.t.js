@@ -395,7 +395,7 @@ Ext.onReady(function() {
                 expect(len).toBe(64);
             });
 
-            it("getLength(): For SBOL FILE ***** NOT DONE", function(){
+            xit("getLength(): For SBOL FILE ***** NOT DONE", function(){
                 //var content     = "";
                 var url = "/biojs/test/data/sbol/signal_peptide_SBOL.xml";
                 var content = jasmine.getFixtures().read(url);

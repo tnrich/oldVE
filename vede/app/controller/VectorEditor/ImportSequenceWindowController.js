@@ -4,84 +4,104 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
     requires: ['Teselagen.bio.parsers.GenbankManager',
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
-               'Teselagen.utils.FormatUtils'],
+               'Teselagen.utils.FormatUtils',
+               'Teselagen.bio.parsers.ParsersManager',
+               "Teselagen.manager.ProjectManager"],
 
     MenuItemEvent: null,
     VisibilityEvent: null,
     importWindow: null,
 
-
-    importSequenceToProject: function(){
-        var file,sequenceName;
+    loadFile: function(cb){
+        //console.log("Loading file");
+        var file,sequenceName,ext;
+        var details = {};
         if (typeof window.FileReader !== 'function') {
             Ext.Msg.alert('Browser does not support File API.');
         }
         else {
             var form = this.importWindow.down('form').getForm();
-            sequenceName = this.importWindow.query('textfield[cls=sequenceName]')[0].value;
+            details.sequenceName = this.importWindow.query('textfield[cls=sequenceName]')[0].value;
+            details.sequenceAuthor = this.importWindow.query('textfield[cls=sequenceAuthor]')[0].value;
             var fileField = form.findField('importedFile');
             var fileInput = fileField.extractFileInput();
             file = fileInput.files[0];
-            fr = new FileReader();
-            fr.onload = processText;
-            fr.readAsText(file);
+            ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+            if(ext)
+            {
+                fr = new FileReader();
+                fr.onload = processText;
+                fr.readAsText(file);
+            }
+            else
+            {
+                Ext.MessageBox.alert('Error', 'Invalid file format');
+            }
         }
-        this.importWindow.close();
 
-        var seqMgr;
         var self = this;
 
         function processText() {
-            var result  = fr.result;
-
-            // Generate the sequenceFile
-            var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileName: file.name,
-                sequenceFileFormat: "Genbank",
-                sequenceFileContent: result
-            });
-
-            var veproject_id = self.importWindow.veproject.data.id;
-            self.importWindow.veproject.setSequenceFile(newSequence);
-            newSequence.set('veproject_id',veproject_id);
-            self.importWindow.veproject.set('id',veproject_id);
-            
-            newSequence.save({
-                callback: function(succ,op)
-                {
-                    console.log("New Sequence Saved!");
-
-                    var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
-                    seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-                    //Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
-                    //Vede.application.fireEvent("SaveImportedSequence", seqMgr);
-
-                    //Update information with parsed Data
-                    if(sequenceName===""){
-                        sequenceName = seqMgr.getName();
-                        self.importWindow.veproject.set('name',sequenceName);
-                        self.importWindow.veproject.save({
-                            callback: function(){
-                                Teselagen.manager.ProjectManager.openVEProject(self.importWindow.veproject);
-                                Teselagen.manager.ProjectManager.loadDesignAndChildResources();
-                            }
-                        });
-                    }
-
-                }
-            });
-
+            self.formatParser(file,fr.result,ext[1],details,cb);
         }
-
     },
-    onOpenImportSequencePanel: function(veproject) {
+
+    formatParser: function(file,fileContent,ext,details,cb){
+        //console.log("FormatParser Reached");
+        //console.log(details);
+        switch(ext)
+        {
+            case "fasta":
+            case "fas":
+                fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(fileContent).toString();
+                break;
+            case "xml":
+                fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(fileContent).toString();
+                break;
+            case "json":
+                fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(fileContent).toString();
+                break;
+        }
+        cb(file,ext,fileContent);
+    },
+
+    renderSequence: function(sequenceFileContent,cb){
+        var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(sequenceFileContent);
+        seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+        Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
+        if(cb) cb(seqMgr);
+    },
+
+    loadAndSaveToSequence: function(btn,event,sequence){
+        var self = this;
+        this.loadFile(function(file,ext,fileContent){
+            self.importWindow.close();
+            sequence.set('sequenceFileContent',fileContent);
+            sequence.set('sequenceFileFormat',"GENBANK");
+            sequence.set('sequenceFileName',file.name);
+            self.renderSequence(fileContent,function(seqMgr){
+                veproject = Teselagen.manager.ProjectManager.workingVEProject;
+                veproject.set('name',seqMgr.getName());
+
+            });
+        });
+    },
+
+    cleanPath: function(field,value,eOpts){
+        var originalPath = field.value;
+        var cleanPath = originalPath.substring(originalPath.lastIndexOf('\\')+1);
+        field.inputEl.dom.value = cleanPath;
+    },
+
+    onImportFileToSequence: function(sequence) {
+        //console.log("Import sequence called");
         this.importWindow = Ext.create("Vede.view.ve.ImportSequenceWindow").show();
-        this.importWindow.veproject = veproject;
         var importBtn = this.importWindow.query('button[cls=import]')[0];
-        importBtn.on("click",this.importSequenceToProject,this);
+        var fileField = this.importWindow.down('form').getForm().findField('importedFile');
+        fileField.on("change",this.cleanPath);
+        importBtn.on("click",this.loadAndSaveToSequence,this,sequence);
     },
-
     init: function() {
-        this.application.on("ImportSequenceToProject",this.onOpenImportSequencePanel, this);
+        this.application.on("ImportFileToSequence",this.onImportFileToSequence, this);
     }
 });

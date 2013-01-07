@@ -59,13 +59,12 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     xtype: 'fieldset',
                     margin: '10 10 10 10',
                     width: 700,
-                    title: 'Plasmids',
                     items: [
                         {
                             xtype: 'gridpanel',
                             margin: '10 10 20 10',
                             width: 650,
-                            title: '',
+                            title: 'Output Plasmids',
                             columns: [
                                 {
                                     xtype: 'gridcolumn',

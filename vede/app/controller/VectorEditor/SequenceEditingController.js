@@ -1,64 +1,77 @@
 Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.SequenceManagerEvent",
-               "Teselagen.manager.SequenceFileManager"],
+    requires: ["Teselagen.event.SequenceManagerEvent", "Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager"],
 
-    editingDETab : null,
-    editingSequence:  null,
-    sequenceFileManager : null,
+    editingDETab: null,
+    sequenceFileManager: null,
 
-    onVectorEditorEditingMode: function(j5Part,DETab) {
-    this.editingDETab = DETab;
-    var currentTabPanel = Ext.getCmp('mainAppPanel');
-    currentTabPanel.setActiveTab(1);
-    currentTabPanel.setLoading(true);
-
-    var self = this;
-
-    j5Part.getSequenceFile({
-        callback: function(seq){
-            self.editingSequence = seq;
-            sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
-            self.sequenceFileManager = sequenceFileManager;
-            Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
-            Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="doneEditingBtn"]')[0].show();
-            currentTabPanel.setLoading(false);
-        }
-    });
+    onVectorEditorProjectMode: function (seq) {
+        var currentTabPanel = Ext.getCmp('mainAppPanel');
+        currentTabPanel.setActiveTab(1);
+        currentTabPanel.setLoading(true);
+        self.editingSequence = seq;
+        sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+        self.sequenceFileManager = sequenceFileManager;
+        Teselagen.manager.ProjectManager.workingSequenceFileManager = sequenceFileManager;
+        Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
+        Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
+        currentTabPanel.setLoading(false);
     },
 
-    onDoneEditingBtnClick: function(){
+    onVectorEditorEditingMode: function (j5Part, DETab) {
+        this.editingDETab = DETab;
         var currentTabPanel = Ext.getCmp('mainAppPanel');
+        currentTabPanel.setActiveTab(1);
         currentTabPanel.setLoading(true);
-
-        rawGenbank = this.sequenceFileManager.toGenbank().toString();
-        this.editingSequence.setSequenceFileContent(rawGenbank);
 
         var self = this;
 
-        this.editingSequence.save({
-            callback: function(){
+        j5Part.getSequenceFile({
+            callback: function (seq) {
+                Teselagen.manager.ProjectManager.workingSequence = seq;
+                self.sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
+                Vede.application.fireEvent("SequenceManagerChanged", self.sequenceFileManager);
+                Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
+                currentTabPanel.setLoading(false);
+            }
+        });
+
+    },
+
+    onsaveSequenceBtnClick: function () {
+        var currentTabPanel = Ext.getCmp('mainAppPanel');
+        var editingSequence = Teselagen.manager.ProjectManager.workingSequence;
+        currentTabPanel.setLoading(true);
+
+        rawGenbank = this.sequenceFileManager.toGenbank().toString();
+        editingSequence.setSequenceFileContent(rawGenbank);
+
+        var self = this;
+
+        editingSequence.save({
+            callback: function () {
                 currentTabPanel.setLoading(false);
                 currentTabPanel.setActiveTab(self.editingDETab);
             }
         });
     },
 
-    onSequenceManagerChanged: function(newSequenceFileManager){
+    onSequenceManagerChanged: function (newSequenceFileManager) {
         this.sequenceFileManager = newSequenceFileManager;
     },
 
     init: function () {
 
         this.control({
-            '#VectorEditorMainMenuBar > button[cls="doneEditingBtn"]': {
-            click: this.onDoneEditingBtnClick
-        }});
+            '#VectorEditorMainMenuBar > button[cls="saveSequenceBtn"]': {
+                click: this.onsaveSequenceBtnClick
+            }
+        });
 
         this.application.on("VectorEditorEditingMode", this.onVectorEditorEditingMode, this);
+        this.application.on("VectorEditorProjectMode", this.onVectorEditorProjectMode, this);
         this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
 
-    },
+    }
 });
-

@@ -11,10 +11,12 @@ Ext.define('Vede.view.de.grid.Part', {
 
     config: {
         part: null,
+        fasConflict: false
     },
 
     DeviceDesignManager: null,
 
+    parentBin: null,
     partCell: null,
     eugeneFlag: null,
     /**
@@ -30,8 +32,8 @@ Ext.define('Vede.view.de.grid.Part', {
 
         var parentIndex = this.DeviceDesignManager.getBinAssignment(activeProject,
                                                                   this.getPart());
-        var parentBin = this.DeviceDesignManager.getBinByIndex(activeProject,
-                                                               parentIndex);
+        this.parentBin = this.DeviceDesignManager.getBinByIndex(activeProject,
+                                                                parentIndex);
 
         if(this.getPart()) {
             html = this.getPart().get("name");
@@ -78,13 +80,20 @@ Ext.define('Vede.view.de.grid.Part', {
         });
 
         this.callParent([{
+            cls: 'gridPartContainer',
             items: [
                 this.partCell
             ]
         }]);
 
-        if(parentBin && parentBin.get("dsf")) {
+        if(this.parentBin && this.parentBin.get("dsf")) {
             this.down("container[cls='gridPartCell']").addCls("grid-DSF");
+        }
+
+        // If the fas is set, add either a red or blue rectangle, depending on 
+        // whether the fasConflict flag is true or false.
+        if(this.parentBin && this.getPart().get("fas") != "None") {
+            this.addFasIndicator(this.getFasConflict());
         }
     },
 
@@ -98,5 +107,30 @@ Ext.define('Vede.view.de.grid.Part', {
 
     applyPart: function (pPart) {
         return pPart;
-    }
+    },
+
+    /**
+     * If the fas is set, add either a red or blue rectangle, depending on 
+     * whether the fasConflict flag is true or false.
+     */
+    addFasIndicator: function(fasConflict) {
+        var image;
+
+        if(fasConflict) {
+            image = Ext.create("widget.image", {
+                xtype: "image",
+                cls: "fasConflictIndicator",
+                src: "resources/images/fas_conflict_true.png"
+            });
+        } else {
+            image = Ext.create("widget.image", {
+                xtype: "image",
+                cls: "fasConflictIndicator",
+                src: "resources/images/fas_conflict_false.png"
+            });
+        }
+
+        this.partCell.down().insert(0, image);
+        image.show();
+    },
 });

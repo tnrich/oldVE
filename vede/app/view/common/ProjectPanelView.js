@@ -30,7 +30,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         flex: 1,
         //items: [{
         xtype: 'treepanel',
-        title: 'Parts',
+        title: 'Part Library',
         id: 'projectPartsPanel',
         width: 228,
         rootVisible: false

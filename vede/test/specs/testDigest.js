@@ -1,5 +1,5 @@
 /* 
- * @author Diana Womg
+ * @author Micah Lerner
  */
 
 Ext.require("Teselagen.bio.sequence.alphabets.DNAAlphabet");
@@ -83,7 +83,7 @@ Ext.onReady(function() {
                 sequenceManager: sm
             });
 
-            dm = Ext.create("Teselagen.manager.DigestionMananger", {
+            dm = Ext.create("Teselagen.manager.DigestionManager", {
                 sequenceManager: sm,
                 start: 1,
                 end: 5,
