@@ -92,7 +92,7 @@ module.exports = function (app, express) {
   });
 
   // MYSQL CONNECTION
-  if(app.program.stage || app.program.production) {
+  if(app.program.stage || app.program.prod) {
     // Init MYSQL
     var connection = app.mysql.createConnection({
       host: 'localhost',

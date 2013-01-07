@@ -49,12 +49,15 @@ Ext.define('Vede.view.AppViewport', {
                     border: 0,
                     activeTab: 0,
                     items: [
+                        
                         {
-                            xtype: 'DashboardPanelView'
+                            xtype: 'DashboardPanelView',
+                            hidden: true
                         },
+
                         {
                             xtype: 'VectorEditorPanel',
-                            hidden: true
+                            hidden: false
                         },
                         {
                             xtype: 'DeviceEditorPanel',
