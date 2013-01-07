@@ -8,7 +8,6 @@ Ext.define("Teselagen.models.J5Collection", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.DeviceDesign",
         "Teselagen.models.J5Bin"
     ],
 
@@ -27,18 +26,17 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Boolean} isCircular
      */
     fields: [
-        {name: "id",                type: "int"},
         {name: "j5Ready",           type: "boolean",    defaultValue: false},
         {name: "combinatorial",     type: "boolean",    defaultValue: false},
-        {name: "isCircular",        type: "boolean",    defaultValue: true},
-        {name: "deviceDesign_id",   type: "int"}
+        {name: "isCircular",        type: "boolean",    defaultValue: true}
     ],
 
+    // GO BACK AND FIX THESE VALIDATIONS. CURRENTLY FAILS. IF NOT SET TO NON-DEFAULT, IT BECOMES AN ERROR
     validations: [
-        {field: "j5Ready",          type: "presence"},
-        {field: "combinatorial",    type: "presence"},
-        {field: "isCircular",       type: "presence"},
-        {field: "deviceDesign_id",  type: "presence"}
+        //{field: "j5Ready",          type: "presence"},
+        //{field: "combinatorial",    type: "presence"},
+        //{field: "isCircular",       type: "presence"},
+//        {field: "devicedesign_id",  type: "presence"}
     ],
 
     associations: [
@@ -46,18 +44,18 @@ Ext.define("Teselagen.models.J5Collection", {
             type: "hasMany",
             model: "Teselagen.models.J5Bin",
             name: "bins"
+//            foreignKey: "j5collection_id"
         },
-        {
+        { //Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
+            name: "devicedesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
-            associationKey: "deviceDesign"
+            associationKey: "deviceDesign",
+            foreignKey: "devicedesign_id"
         }
     ],
-
-    init: function() {
-    },
 
     /**
      * @returns {Number} count Number of J5Bins in bins
@@ -162,7 +160,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * ///@returns {Teselagen.models.J5Bin}
      * @returns {Boolean} True if added, false if not.
      */
-    addNewBinByIndex: function(pName, pIndex) {
+    addNewBinByIndex: function(pIndex, pName) {
         var added   = false;
 
         var j5Bin = Ext.create("Teselagen.models.J5Bin", {
@@ -179,7 +177,7 @@ Ext.define("Teselagen.models.J5Collection", {
         }
 
         var newCnt  = this.binCount();
-        if (newCnt < cnt) {
+        if (newCnt > cnt) {
             added = true;
         }
 
@@ -199,7 +197,7 @@ Ext.define("Teselagen.models.J5Collection", {
 
         var cnt     = this.binCount();
         if (pIndex >= 0 && pIndex < cnt) {
-            //this.bins().splice(pIndex, 1); //Don't use slice
+            //console.log(this.bins());
             this.bins().removeAt(pIndex);
         } else {
             this.bins().removeAt(cnt-1);
@@ -279,21 +277,16 @@ Ext.define("Teselagen.models.J5Collection", {
      * Determines the J5Bin a Part is in.
      *
      * @param {Teselagen.models.Part} pPart The part whose J5Bin it belongs to.
-     * @param {Teselagen.models.J5Bin} The first J5Bin Part belongs to, null if not in J5Collection.
+     * @returns {Number} The first index of the bin that pPart is in. -1 if not present.
      */
     getBinAssignment: function(pPart) {
-        var bin = null;
-
+        var binIndex = -1;
         for (var i = 0; i < this.binCount(); i++) {
-            var j5Bin = this.bins().getAt(i);
-            for (var j = 0; j < j5Bin.partCount(); j++) {
-                //if (j5Bin.parts().getAt(i) === pPart) {
-                    if (j5Bin.parts().getAt(i).isEqual(pPart)) {
-                    bin = j5Bin.parts().getAt(i);
-                }
+            if (this.bins().getAt(i).indexOfPart(pPart) !== -1) {
+                binIndex = i;
             }
         }
-        return bin;
+        return binIndex;
     },
 
     /**
@@ -302,7 +295,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * @returns {Boolean} True if unique, false if not.
      */
     isUniqueBinName: function(pName) {
-        var index = this.bins().find("name", pName);
+        var index = this.bins().find("binName", pName);
 
         if (index === -1) {
             return true;

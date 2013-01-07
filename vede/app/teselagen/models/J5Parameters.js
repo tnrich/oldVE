@@ -24,16 +24,6 @@ Ext.define("Teselagen.models.J5Parameters", {
         reader: {type: "json"}
     },
 
-    associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Run",
-            getterName: "getJ5Run",
-            setterName: "setJ5Run",
-            associationKey: "j5run"
-        }
-    ],
-
     statics: {
         //parameter names
         MONOD:      "MASTEROLIGONUMBEROFDIGITS",
@@ -169,6 +159,8 @@ Ext.define("Teselagen.models.J5Parameters", {
      * FIX ME!!! COPY THE CONVERT STATMENTS AS SEEN IN DOWNSTREAMAUTOMATIONPARAMETERS
      */
     fields: [
+        {name: "id", type: "long"},
+        {name: "j5run_id", type: "long"},
         {name: "masterOligoNumberOfDigitsValue",                   type: "int",        defaultValue: this.self.MONOD_Default},
         {name: "masterPlasmidNumberOfDigitsValue",                 type: "int",        defaultValue: this.self.MPNOD_Default},
         {name: "gibsonOverlapBPsValue",                            type: "int",        defaultValue: this.self.GOB_Default},
@@ -215,6 +207,17 @@ Ext.define("Teselagen.models.J5Parameters", {
     ],
 
     validation: [
+    ],
+
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run",
+            foreignKey: "j5run_id"
+        }
     ],
 
     // Need this because fields:[] does not actually set the defaults!
@@ -326,6 +329,51 @@ Ext.define("Teselagen.models.J5Parameters", {
             this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
 
             return returnString;
-    }
+    },
 
+    /**
+     * Creates the J5Parameters Array
+     * @returns {String} Array of Parameters
+     */
+    getParametersAsArray: function(isCollectionCircular) {
+        var obj = {};
+        obj[this.self.MONOD]    =   this.get("masterOligoNumberOfDigitsValue");
+        obj[this.self.MPNOD]    =   this.get("masterPlasmidNumberOfDigitsValue");
+        obj[this.self.GOB]      =   this.get("gibsonOverlapBPsValue"              );
+        obj[this.self.GOMT]     =   this.get("gibsonOverlapMinTmValue");
+        obj[this.self.GOMAXT]   =   this.get("gibsonOverlapMaxTmValue");
+        obj[this.self.MOLB]     =   this.get("maxOligoLengthBPsValue");
+        obj[this.self.MFSGB]    =   this.get("minFragmentSizeGibsonBPsValue");
+        obj[this.self.GGOHB]    =   this.get("goldenGateOverhangBPsValue");
+        obj[this.self.GGRS]     =   this.get("goldenGateRecognitionSeqValue");
+        obj[this.self.GGTES]    =   this.get("goldenGateTerminiExtraSeqValue");
+        obj[this.self.MIGGOC]   =   this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue");
+        obj[this.self.OSCPB]    =   this.get("oligoSynthesisCostPerBPUSDValue"  );
+        obj[this.self.OPPCPP]   =   this.get("oligoPagePurificationCostPerPieceUSDValue");
+        obj[this.self.OMLPPRB]  =   this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue");
+        obj[this.self.MPPB]     =   this.get("minPCRProductBPsValue");
+        obj[this.self.DSCPB]    =   this.get("directSynthesisCostPerBPUSDValue");
+        obj[this.self.DSMCPP]   =   this.get("directSynthesisMinCostPerPieceUSDValue");
+        obj[this.self.PGC]      =   this.get("primerGCClampValue");
+        obj[this.self.PMS]      =   this.get("primerMinSizeValue");
+        obj[this.self.PMAXS]    =   this.get("primerMaxSizeValue");
+        obj[this.self.PMT]      =   this.get("primerMinTmValue");
+        obj[this.self.PMAXT]    =   this.get("primerMaxTmValue");
+        obj[this.self.PMDT]     =   this.get("primerMaxDiffTmValue");
+        obj[this.self.PMSAT]    =   this.get("primerMaxSelfAnyThValue");
+        obj[this.self.PMSET]    =   this.get("primerMaxSelfEndThValue");
+        obj[this.self.PPMCAT]   =   this.get("primerPairMaxComplAnyThValue");
+        obj[this.self.PPMCET]   =   this.get("primerPairMaxComplEndThValue");
+        obj[this.self.PTS]      =   this.get("primerTmSantaluciaValue");
+        obj[this.self.PSC]      =   this.get("primerSaltCorrectionsValue");
+        obj[this.self.PDC]      =   this.get("primerDnaConcValue"                      );
+        obj[this.self.M3BBTWIH] =   this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue");
+        obj[this.self.MMT]      =   this.get("misprimingMinTmValue"     );
+        obj[this.self.MSC]      =   this.get("misprimingSaltConcValue");
+        obj[this.self.MOC]      =   this.get("misprimingOligoConcValue");
+        obj[this.self.OSF]      =   this.get("outputSequenceFormatValue");
+        obj[this.self.SPP]      =   this.get("suppressPurePrimersValue");
+        obj[this.self.APT]      =   isCollectionCircular;
+        return obj;
+    }
 });

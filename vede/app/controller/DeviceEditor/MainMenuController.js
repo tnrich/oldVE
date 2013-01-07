@@ -17,23 +17,22 @@ Ext.define('Vede.controller.DeviceEditor.MainMenuController', {
     extend: 'Ext.app.Controller',
 
     onNewDesignClick: function(button, e, options) {
-        $(document).trigger('newDesign');
+        Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
-    onOpenDesignClick: function(button, e, options) {
-        $(document).trigger('openDesign');
+    onOpenDEProjectClick: function(button, e, options) {
+
     },
     onSaveDesignClick: function(button, e, options) {
-        console.log('Trying save design!');
-        $(document).trigger('saveDesign');
+
     },
 
     init: function() {
         this.control({
-            "#newDesign": {
+            'button[cls="newDesign"]': {
                 click: this.onNewDesignClick
             },
-            "#openDesign": {
-                click: this.onOpenDesignClick
+            "#openDEProject": {
+                click: this.onOpenDEProjectClick
             },
             "#saveDesign": {
                 click: this.onSaveDesignClick

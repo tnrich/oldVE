@@ -20,8 +20,16 @@ module.exports = function (app, express) {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({
-      secret: 'supersecretkeygoeshere'
+      secret: 'j5',
+      cookie: { httpOnly: false }
     }));
+    /*
+    app.use(express.cookieSession({
+      key: 'teselagen',
+      secret: 'j5',
+      cookie: { httpOnly: false }
+    }));
+    */
     app.use(express.methodOverride());
 
     app.use(app.router);
@@ -30,10 +38,7 @@ module.exports = function (app, express) {
 
   // Environments
   app.configure('development', function () {
-    app.use(express.errorHandler({
-      dumpExceptions: true,
-      showStack: true
-    }));
+    app.use(express.errorHandler());
   });
 
   app.configure('stage', function () {
@@ -41,18 +46,18 @@ module.exports = function (app, express) {
   });
 
   // Init MONGODB (Native Driver)
-  /*
+  
   var server = new app.mongo.Server('localhost', 27017, {
     auto_reconnect: true
   });
-  var db = new app.mongo.Db('deviceEditor', server);
+  var db = new app.mongo.Db('TestingTeselagen', server);
   db.open(function (err, db) {
     if(!err) {
-      console.log("MONGODB online (required)");
+      console.log("GRIDFS: Online");
     }
   });
-  app.mongodb = db;
-  */
+  app.GridStoreDB = db;
+  
 
   // Init MONGOOSE (ODM)
   //host, database, port, options
@@ -83,17 +88,8 @@ module.exports = function (app, express) {
 
   app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
     console.log('MONGODB: MONGODB is online');
-    if(app.program.examples) app.development.reloadExamples();
-    if(app.program.guest) app.development.reloadUsers();
+    require('./schemas/DBSchemas.js')(app);
   });
-
-  // Load MONGOOSE SCHEMAS
-  //require('./schemas/schemas.js')(app);
-  require('./schemas/DBSchemas.js')(app);
-  
-
-
-
 
   // MYSQL CONNECTION
   if(app.program.stage || app.program.production) {
@@ -154,9 +150,9 @@ module.exports = function (app, express) {
 
   // Init XML-RPC
   app.j5client = app.xmlrpc.createClient({
-    host: 'eaa.teselagen.com',
+    host: 'dev.teselagen.com',
     port: 80,
-    path: '/bin/j5_xml_rpc.pl'
+    path: '/j5/j5_xml_rpc.pl'
   });
 
 
@@ -180,6 +176,10 @@ module.exports = function (app, express) {
   }
 
   app.xmlparser = new app.xml2js.Parser();
+
+  app.mailer = app.nodemailer.createTransport("SMTP",{
+      host: 'localhost'
+  });
 
   return config;
 

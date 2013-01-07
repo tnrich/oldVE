@@ -1,11 +1,5 @@
 var splashscreen;
 
-Ext.define('sessionData', { 
-          singleton: true, 
-          data: null,
-          baseURL: null
-}); 
-
 Ext.onReady(function() {
     // Start the mask on the body and get a reference to the mask
     splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span>', 'splashscreen');
@@ -53,59 +47,59 @@ Ext.application({
         'RestrictionEnzymeController',
         'SelectWindowController',
         'SequenceController',
+        'HeaderPanelController',
         'VectorPanelController',
         'SimulateDigestionController',
+        'VectorEditor.ImportSequenceWindowController',
         'Vede.controller.AuthWindowController',
+        'DeviceEditor.GridController',
+        'DeviceEditor.InspectorController',
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
         'DeviceEditor.DeviceEditorPanelController',
         'Vede.controller.AuthEventDispatcherController',
         'ProjectController',
-        'DashboardPanelController'
+        'DashboardPanelController',
+        'Vede.controller.VectorEditor.SequenceEditingController',
+        'Vede.controller.J5ReportController'
     ],
     errorHandler: function(err) {
         console.warn(err);
         return true;
     },
     require: [
-        "Teselagen.event.AuthenticationEvent", 
-        "Teselagen.manager.AuthenticationManager", 
+        "Teselagen.event.AuthenticationEvent",
+        "Teselagen.manager.AuthenticationManager",
+
+        // Stuff that may not be wise to put here
+        "Teselagen.constants.Constants",
+        "Teselagen.constants.SBOLIcons",
         "Teselagen.models.SequenceFile"
     ],
     launch: function() {
 
         Ext.Ajax.cors = true; // Allow CORS
-        Ext.Ajax.method = 'POST'; // Set POST as default Method
-        sessionData.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + 'api/';
-
+        Ext.Ajax.withCredentials = true;
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        this.authenticationManager = Ext.create("Teselagen.manager.AuthenticationManager"); // Created Auth manager
-        this.authenticationManager.login(this); // Start Auth process
+        Teselagen.manager.AuthenticationManager.Login(); // Start Auth process
 
         var self = this;
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
-            // Fade out the body mask
             splashscreen.fadeOut({
                 duration: 1000,
                 remove: true
             });
-            // Fade out the icon and message
             splashscreen.next().fadeOut({
                 duration: 1000,
                 remove: true,
                 listeners: {
                     afteranimate: function() {
-                        // Set the body as unmasked after the animation
-                        console.log('Execute app...');
-                        self.projectManager = Ext.create("Teselagen.manager.ProjectManager"); // Created Project Manager
-                        self.projectManager.loadUser();
-                        //self.projectManager.loadProjects(); // Load User Projects
-                        Ext.getBody().unmask();
+                        Teselagen.manager.ProjectManager.loadUser();
                     }
                 }
             });

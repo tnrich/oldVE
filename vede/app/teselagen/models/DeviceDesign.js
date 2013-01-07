@@ -6,26 +6,53 @@
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
-        //"Teselagen.models.Project",
-        "Teselagen.models.J5Collection"//,
-        //"Teselagen.models.EugeneRule",
+        "Teselagen.models.J5Collection",
+        "Teselagen.models.EugeneRule"
     ],
-    // The models will break if there is not proxy defined here. Please define appropriately. DW
-    // We need a rest proxy here to load designs from here. RP
-    
+
     proxy: {
-        type: 'rest',
-        url: 'getDeviceDesign.json', // For testing just create a file with this name and fill with data.
+        type: "rest",
+        url: "/vede/test/data/json/getDeviceDesign.json",
         reader: {
-            type: 'json',
-            root: 'design'
+            type: "json",
+            root: "design"
+        },
+        writer: {
+            type: "json",
+            //This method should resolve associations and prepare data before saving design
+            getRecordData: function(record) {
+                var data = record.getData();
+                var associatedData = record.getAssociatedData();
+                var j5Collection = associatedData["j5collection"];
+
+                var rules = associatedData["rules"];
+                data.j5collection = j5Collection;
+
+                var binsTempArray = [];
+
+                record.getJ5Collection().bins().each(function(bin,binKey){
+                    var partsTempArray = [];
+                    bin.parts().each(function(part){
+                        //part.save();
+                        partsTempArray.push(part.getData().id);
+                    });
+                    binsTempArray.push(partsTempArray);
+                });
+
+                data.j5collection.bins.forEach(function(bin,binKey){
+                    bin.parts.forEach(function(part,partKey){
+                        delete data.j5collection.bins[binKey].parts;
+                        data.j5collection.bins[binKey].parts = binsTempArray[binKey];
+                    });
+                });
+
+                data.rules = rules;
+                return data;
+            }
         },
         buildUrl: function() {
-            return sessionData.baseURL + 'getDeviceDesign'; // This method reBuild the URL for ajax requests from parents models
+            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign", this.url);
         }
-    },
-        
-    statics: {
     },
 
     /**
@@ -33,16 +60,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [
-        {
-            name: "id", type: "long"
-        },
-        {
-            name: "payload", type: "string" // This is temporary, not really needed
-        }
+        {name: "deproject_id", type: "long"},
     ],
 
     validations: [
-        {field: "id", type: "presence"}
     ],
 
     associations: [
@@ -51,23 +72,37 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.J5Collection",
             getterName: "getJ5Collection",
             setterName: "setJ5Collection",
-            associationKey: "j5collection"
+            associationKey: "j5collection",
+            name: "j5collection" // Note: not a documented config, but specified for getRecordData
+        },
+        {
+            type: "hasOne",
+            model: "Teselagen.models.SBOLvIconInfo",
+            getterName: "getSBOLvIconInfo",
+            setterName: "setSBOLvIconInfo",
+            associationKey: "sbolvIconInfo",
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
-            name: "rules"
+            associationKey: "rules",
+            name: "rules",
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
+            associationKey: "deviceEditorProject",
         }
     ],
 
-    init: function() {
+    /** (Untested)
+     * Get number of bins in J5Bin.
+     * @returns {Number}
+     */
+    getBinCount: function() {
+        return this.getJ5Collection().binCount();
     },
 
     /**
@@ -84,12 +119,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
             var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
             j5Coll.addToBin(bin, i);
         }
-        //this.set("j5Collection", j5Coll);
         this.setJ5Collection(j5Coll);
         return j5Coll;
     },
 
-    /** NOT TESTED
+    /**
      * Creates a J5Collection from given J5Bins.
      * @param {Teselagen.models.J5Bins[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
      * @returns {Teselagen.models.J5Collection}
@@ -159,7 +193,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     getRulesInvolvingPart: function(pPart) {
         var rules = [];
         for (var i = 0; i < this.rules().count(); i++) {
-            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).get("operand2") === pPart) {
+            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).getOperand2() === pPart) {
                 rules.push(this.rules().getAt(i));
             }
         }
@@ -168,7 +202,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     /**
-     * @param {String} name
+     * @param {String} pName
      * @returns {Teselagen.models.EugeneRule} Returns null if none found.
      */
     getRuleByName: function(pName) {

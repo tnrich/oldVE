@@ -24,6 +24,9 @@ Ext.define("Vede.controller.ActionStackController", {
                             this.onUndo, this);
         this.application.on(this.MenuItemEvent.REDO,
                             this.onRedo, this);
+        this.application.on("saveCurrentVEProject",
+                    this.onsaveCurrentVEProject, this);
+
     },
 
     onLaunch: function() {
@@ -37,7 +40,7 @@ Ext.define("Vede.controller.ActionStackController", {
     },
 
     onSequenceChanging: function(kind, memento) {
-        console.log("adding memento");
+        //console.log("adding memento");
         this.ActionStackManager.add(memento);
     },
 
@@ -51,5 +54,14 @@ Ext.define("Vede.controller.ActionStackController", {
         if(this.SequenceManager && this.ActionStackManager.redoStack.length != 0) {
             this.ActionStackManager.redo();
         }
-    }
+    },
+    onsaveCurrentVEProject: function() {
+        var workingSequence = Teselagen.manager.ProjectManager.workingSequence;
+        var updatedGenbankSequence = this.SequenceManager.toGenbank().toString();
+        workingSequence.set('sequenceFileFormat',updatedGenbankSequence);
+        workingSequence.save({
+            callback:function(){
+                console.log("Working sequence updated!");
+        }});
+    },
 });

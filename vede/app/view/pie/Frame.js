@@ -10,7 +10,7 @@ Ext.define('Vede.view.pie.Frame', {
         OUTER_RADIUS: 100,
         INNER_RADIUS: 97,
         OUTLINE_WIDTH: 0.5,
-        OUTLINE_COLOR: "black",
+        OUTLINE_COLOR: "#8F8F8F",
         RING_COLOR: "#ffffb3" // The color of the area between the two circles.
     },
 

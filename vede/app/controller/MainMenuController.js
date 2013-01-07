@@ -48,9 +48,11 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onCancelButtonClick: function(button, e, options) {
-        button.up('window').close();
+        if(button.up('window')) {
+            button.up('window').close();
+        }
     },
-
+    
     onImportButtonClick: function(button, e, options) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
         // Change this at a later date when that class is tested. --DW 10.17.2012
@@ -79,13 +81,14 @@ Ext.define('Vede.controller.MainMenuController', {
             var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
             seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
             that.application.fireEvent("SequenceManagerChanged", seqMgr);
+            that.application.fireEvent("SaveImportedSequence", seqMgr);
             //console.log(gb.toString());
             //console.log(seqMgr.getName());
         }
     },
-
+    
     onImportMenuItemClick: function(item, e, options) {
-        Ext.create("Vede.view.FileImportWindow").show();
+        Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
     },
 
     onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
@@ -211,6 +214,37 @@ Ext.define('Vede.controller.MainMenuController', {
         //console.log(gbMng.);
     },
 
+    onDownloadGenbankMenuItemClick: function (item, e, options) {
+        console.log("Download genbank called");
+
+
+        var saveFile = function (name, gb) {
+                var flag;
+                var text = gb.toString();
+                var filename = name;
+                var bb = new BlobBuilder();
+                bb.append(text);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            };
+
+        var sequenceFileManager = Teselagen.manager.ProjectManager.workingSequenceFileManager;
+        var fileName = sequenceFileManager.getName()+".gb";
+        saveFile(fileName, sequenceFileManager.toGenbank());
+
+    },
+
+    onRenameSequenceItemClick: function(item, e, options){
+
+        var onPromptClosed = function (answer, text) {
+            Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
+            Teselagen.manager.ProjectManager.workingVEProject.save({callback: function(){
+                Vede.application.fireEvent("renderProjectsTree");
+            }});
+        };
+
+        Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
+    },
+
     init: function() {
         this.control({
             "#undoMenuItem": {
@@ -240,11 +274,17 @@ Ext.define('Vede.controller.MainMenuController', {
             "button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
-            "button[text='Import']": {
+            "button[cls='ImportSequence']": {
                 click: this.onImportButtonClick
+            },
+            "#downloadGenbankMenuItem": {
+                click: this.onDownloadGenbankMenuItemClick
             },
             "#importMenuItem": {
                 click: this.onImportMenuItemClick
+            },
+            "#renameSequenceItem": {
+                click: this.onRenameSequenceItemClick
             },
             "#circularViewMenuItem": {
                 checkchange: this.onCircularViewMenuItemCheckChange
@@ -287,12 +327,12 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
-            },
+            }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-    },
+    }
 });

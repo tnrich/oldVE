@@ -6,11 +6,14 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 	height: 50,
 	id: 'headerPanel',
 	layout: {
-		type: 'fit'
+		align: 'stretch',
+		type: 'hbox'
 	},
 	items: [{
 		xtype: 'panel',
+		flex: 0,
 		id: 'headerMain',
+		maxWidth: 220,
 		items: [{
 			xtype: 'image',
 			height: 32,
@@ -19,20 +22,38 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 			width: 201,
 			src: 'resources/images/teselagen_toplogo.png'
 		}]
-	}],
-	dockedItems: [{
+	},
+	{
+			xtype: 'panel',
+            flex: 3,
+            id: 'headerButs',
+            floating: false,
+	}, {
 		xtype: 'panel',
-		dock: 'right',
+		flex: 1,
 		id: 'headerSub',
+		margin: '15 10 10 10',
 		layout: {
-			type: 'fit'
+			align: 'stretch',
+			type: 'hbox'
 		},
-		items: [{
+		items: [
+		{
 			xtype: 'button',
-			id: 'username',
+			flex: 1,
+			id: 'help_btn',
+			margin: "0 5 0 0",
+			text: 'Help',
+			cls: 'header_btn',
+			overCls: 'header_btn_over'
+		},
+		{ xtype: 'tbspacer', width: 5 },
+		{
+			xtype: 'button',
+			flex: 1,
 			styleHtmlContent: false,
-			iconAlign: 'right',
-			text: 'user_Name',
+			cls: 'header_btn',
+			overCls: 'header_btn_over',
 			id: 'headerUserIcon',
 			menu: {
 				xtype: 'menu',

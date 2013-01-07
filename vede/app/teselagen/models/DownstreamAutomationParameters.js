@@ -20,16 +20,6 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
         reader: {type: "json"}
     },
 
-    associations: [
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Run",
-            getterName: "getJ5Run",
-            setterName: "setJ5Run",
-            associationKey: "j5run"
-        }
-    ],
-
     statics: {
         MDTAZ:            "MAXDELTATEMPERATUREADJACENTZONES",
         MDTROZA:          "MAXDELTATEMPERATUREREACTIONOPTIMUMZONEACCEPTABLE",
@@ -75,87 +65,89 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
 
     // The Defaults will not kick in. Init will set them if fields are not supplied.
     fields: [
+        {name: "id", type: "long"},
+        {name: "j5run_id", type: "long"},
         {
             name: "maxDeltaTemperatureAdjacentZonesValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MDTAZ_DEFAULT;
+                return parseFloat(v) || record.self.MDTAZ_DEFAULT;
             }
         },
         //{name: "maxDeltaTemperatureAdjacentZonesValue",   type: "number",         defaultValue: this.self.MDTAZ_DEFAULT},
         {
             name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MDTROZA_DEFAULT;
+                return parseFloat(v) || record.self.MDTROZA_DEFAULT;
             }
         },
         //  {name: "maxDeltaTemperatureReactionOptimumZoneAcceptableValue",   type: "number",         defaultValue: this.self.MDTROZA_DEFAULT},
         {
             name: "maxMcStepsPerZoneValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MMCSPZ_DEFAULT;
+                return parseFloat(v) || record.self.MMCSPZ_DEFAULT;
             }
         },
         //{name: "maxMcStepsPerZoneValue",                                  type: "int",            defaultValue: this.self.MMCSPZ_DEFAULT},
         {
             name: "maxWellVolumeMultiwellPlateValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MWVMP_DEFAULT;
+                return parseFloat(v) || record.self.MWVMP_DEFAULT;
             }
         },
         //{name: "maxWellVolumeMultiwellPlateValue",                        type: "int",            defaultValue: this.self.MWVMP_DEFAULT},
         {
             name: "mcTemperatureFinalValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MCTF_DEFAULT;
+                return parseFloat(v) || record.self.MCTF_DEFAULT;
             }
         },
         //{name: "mcTemperatureFinalValue",                                 type: "number",         defaultValue: this.self.MCTF_DEFAULT},
         {
             name: "mcTemperatureInitialValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MCTI_DEFAULT;
+                return parseFloat(v) || record.self.MCTI_DEFAULT;
             }
         },
         //{name: "mcTemperatureInitialValue",                               type: "number",         defaultValue: this.self.MCTI_DEFAULT},
         {
             name: "minPipettingVolumeValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.MPV_DEFAULT;
+                return parseFloat(v) || record.self.MPV_DEFAULT;
             }
         },
         //{name: "minPipettingVolumeValue",                                 type: "number",         defaultValue: this.self.MPV_DEFAULT},
         {
             name: "nColumnsMultiwellPlateValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.NCMP_DEFAULT;
+                return parseFloat(v) || record.self.NCMP_DEFAULT;
             }
         },
         //{name: "nColumnsMultiwellPlateValue",                             type: "int",            defaultValue: this.self.NCMP_DEFAULT},
         {
             name: "nRowsMultiwellPlateValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.NRMP_DEFAULT;
+                return parseFloat(v) || record.self.NRMP_DEFAULT;
             }
         },
         //{name: "nRowsMultiwellPlateValue",                                type: "int",            defaultValue: this.self.NRMP_DEFAULT},
         {
             name: "trialDeltaTemperatureValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.TDT_DEFAULT;
+                return parseFloat(v) || record.self.TDT_DEFAULT;
             }
         },
         //{name: "trialDeltaTemperatureValue",                              type: "number",         defaultValue: this.self.TDT_DEFAULT},
         {
             name: "wellsPerThermocyclerZoneValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.WPTZ_DEFAULT;
+                return parseFloat(v) || record.self.WPTZ_DEFAULT;
             }
         },
         //{name: "wellsPerThermocyclerZoneValue",                           type: "int",            defaultValue: this.self.WPTZ_DEFAULT},
         {
             name: "zonesPerThermocyclerBlockValue",
             convert: function(v, record) {
-                return parseFloat(v) || this.self.ZPTB_DEFAULT;
+                return parseFloat(v) || record.self.ZPTB_DEFAULT;
             }
         }
         //{name: "zonesPerThermocyclerBlockValue",                          type: "int",            defaultValue: this.self.ZPTB_DEFAULT}
@@ -164,13 +156,24 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
     validations: [
     ],
 
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run",
+            foreignKey: "j5run_id"
+        }
+    ],
+
     // Need this because fields:[] does not actually set the defaults!
     // Keep the inputted values if they are not undefined
     init: function() {
         //console.log("init");
         //console.log(this.data);
 
-        if (this.get("maxDeltaTemperatureAdjacentZonesValue") === undefined) {
+        /*if (this.get("maxDeltaTemperatureAdjacentZonesValue") === undefined) {
             this.set("maxDeltaTemperatureAdjacentZonesValue", this.self.MDTAZ_DEFAULT);
         }
         if (this.get("maxDeltaTemperatureReactionOptimumZoneAcceptableValue") === undefined) {
@@ -205,7 +208,7 @@ Ext.define("Teselagen.models.DownstreamAutomationParameters", {
         }
         if (this.get("zonesPerThermocyclerBlockValue") === undefined) {
             this.set("zonesPerThermocyclerBlockValue", this.self.ZPTB_DEFAULT);
-        }
+        }*/
         //console.log("init");
         //console.log(this.data);
     },

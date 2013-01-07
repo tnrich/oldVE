@@ -1,8 +1,12 @@
+/**
+ * Simple Device Editor Model tests.
+ * @author Yuri Bendana
+ */
+
 /*global beforeEach, describe, expect, it*/
-var userStore, partStore;
+var userStore;
 Ext.onReady(function() {
     describe("Device Editor models tests.", function () {
-        var part, partData, seqfile;
         var user, orders, order, userData, address, bossStore;
         beforeEach(function() {
             Ext.define("User", {
@@ -113,49 +117,7 @@ Ext.onReady(function() {
             expect(user.getBoss().getId()).toBe(20);
             expect(user.getBoss().get("name")).toBe("myboss2");
         });
-        it("Part test using store", function() {
-            partData = {
-                    "parts": [{
-                        "id": 123,
-                        "name": "mypart",
-                        "sequenceFile": {
-                            "id": 10,
-                            "sequenceFileName": "myFasta",
-                            "sequenceFileFormat": "FASTA",
-                            "sequenceFileContent": ">ssrA_tag_enhance\nGCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG\n"
-
-                        }
-                    }]
-            };
-            partStore = Ext.create("Ext.data.Store", {
-                model: "Teselagen.models.Part",
-                data: partData,
-                proxy: {
-                    type: "memory",
-                    reader: {type:"json", root: "parts"}
-                }
-            });
-            part = partStore.first();
-            expect(part).toBeDefined();
-            expect(part.get("id")).toBe(123);
-            expect(part.get("name")).toBe("mypart");
-            seqfile = part.getSequenceFile();
-            expect(seqfile).toBeDefined();
-            expect(seqfile.get("sequenceFileName")).toBe("myFasta");
-        });
-        it("Create Part and access hasOne relation", function(){
-            var part = Ext.create("Teselagen.models.Part", {
-                "fas": "fas1",
-                "sequenceFile": {
-                    "sequenceFileName" : "myFasta"
-                }
-            });
-            expect(part.get("fas")).toBe("fas1");
-            seqfile = part.getSequenceFile();
-            expect(seqfile).toBeDefined();
-            expect(Ext.getClassName(seqfile)).toBe("Teselagen.models.SequenceFile");
-        });
-        describe("Ajax tests.", function() {
+        describe("File store tests.", function() {
             var proj, veprojs;
             it("Project", function() {
                 proj = Ext.create("Teselagen.models.Project", {id:1, name: "Project Z"});

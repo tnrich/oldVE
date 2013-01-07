@@ -315,7 +315,7 @@ Ext.define("Teselagen.manager.PieManager", {
                     color: color
                 });
 
-                this.cutSiteRenderer.addToolTip(label, 
+                this.cutSiteRenderer.addToolTip(label,
                                             this.cutSiteRenderer.getToolTip(site));
                 this.cutSiteRenderer.addClickListener(label,
                                                 label.annotation.getStart(),
@@ -609,18 +609,20 @@ Ext.define("Teselagen.manager.PieManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-        this.caret.show(true);
-        this.nameBox.destroy();
+        if(this.pie) {
+            this.caret.show(true);
+            this.nameBox.destroy();
 
-        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
-            center: this.center,
-            name: pSequenceManager.getName(),
-            length: pSequenceManager.getSequence().toString().length
-        });
+            this.nameBox = Ext.create("Vede.view.pie.NameBox", {
+                center: this.center,
+                name: pSequenceManager.getName(),
+                length: pSequenceManager.getSequence().toString().length
+            });
 
-        this.pie.surface.add(this.nameBox);
-        this.nameBox.show(true);
-        this.nameBox.setStyle("dominant-baseline", "central");
+            this.pie.surface.add(this.nameBox);
+            this.nameBox.show(true);
+            this.nameBox.setStyle("dominant-baseline", "central");
+        }
 
         return pSequenceManager;
     },

@@ -1,54 +1,148 @@
 /**
- * Schemas for the DB
- * -------------
+ * Schemas definitions
+ * -------------------
+ * User
+ * j5run
+ * sequence
+ * part
+ * veproject
+ * deproject
+ * project
  */
 
 module.exports = function (app) {
 
+	var registerSchema = function(name,schema){
+		app.db.model(name, schema);
+		schema.virtual('id').get(function () {return this._id.toString();});
+		schema.set('toJSON', { virtuals: true });
+		schema.set('toJSON', { virtuals: true });
+	};
+
 	var Schema = app.mongoose.Schema;
 	var oIDRef = app.mongoose.Schema.Types.ObjectId;
-	var Mixed  = app.mongoose.Schema.Types.Mixed;
+	var Mixed = app.mongoose.Schema.Types.Mixed;
 
-	app.db.model('Examples', new Schema({
+	var j5RunSchema = new Schema({
+		deproject_id: String,
 		name: String,
-		payload: Mixed
-	}));
+		file_id: oIDRef,
+		date: Date,
+		j5Results: Mixed
+	});
+	registerSchema('j5run', j5RunSchema);
+
+	var SequenceSchema = new Schema({
+		veproject_id: String,
+		sequenceFileContent: String,
+		sequenceFileFormat: String,
+		hash: String,
+		partSource: String,
+		sequenceFileName: String
+	});
+	registerSchema('sequence', SequenceSchema);
+
+	var PartSchema = new Schema({
+		id                :  String,
+		veproject_id      :  String,
+		j5bin_id          :  String,
+		eugenerule_id     :  String,
+		sequencefile_id   :  String,
+		directionForward  :  String,
+		fas               :  String,
+		name              :  String,
+		revComp           :  String,
+		genbankStartBP    :  String,
+		endBP             :  String,
+		iconID            :  String,
+		veproject_id      :  String,
+		j5bin_id          :  String,
+		eugenerule_id     :  String,
+		sequencefile_id   :  String,
+		directionForward  :  String,
+		fas               :  String,
+		name              :  String,
+		revComp           :  String,
+		genbankStartBP    :  String,
+		endBP             :  String,
+		iconID            :  String
+	});
+
+	PartSchema.pre('save', function (next) {
+	  this.id = this._id;
+	  next();
+	})
+
+	app.db.model('part', PartSchema);
 
 	var VEProjectSchema = new Schema({
-		name: String
+		name: String,
+		project_id : { type: oIDRef, ref: 'project' },
+		sequencefile_id: { type: oIDRef, ref: 'sequence' },
+		parts: [ { type: oIDRef, ref: 'part' } ]
 	});
-	app.db.model('veproject', VEProjectSchema);
+	registerSchema('veproject', VEProjectSchema);
 
 	var DEProjectSchema = new Schema({
+		name: String,
+		dateCreated: String,
+		dateModified: String,
 		project_id : { type: oIDRef, ref: 'project' },
-		design: Mixed,
-		name: String
+		design: {
+			name: String,
+			deproject_id: String,
+			j5collection: {
+				directionForward: String,
+				combinatorial: String,
+				isCircular: String,
+				bins: [{
+					directionForward: String,
+					dsf: String,
+					fro: String,
+					fas: String,
+					extra5PrimeBps: String,
+					extra3PrimeBps: String,
+					binName: String,
+					iconID: String,
+					parts: [ { type: oIDRef, ref: 'part' } ]
+				}]
+			},
+			rules: Mixed
+		},
+		j5runs : [{ type: oIDRef, ref: 'j5run' }]
 	});
-	app.db.model('deproject', DEProjectSchema);
+	registerSchema('deproject', DEProjectSchema);
 
 	var ProjectSchema = new Schema({
 		user_id : { type: oIDRef, ref: 'User' },
+		dateCreated: String,
+		dateModified: String,
 		name: String,
-		deprojects : [DEProjectSchema],
-		veprojects : [VEProjectSchema],
+		deprojects : [{ type: oIDRef, ref: 'deproject' }],
+		veprojects : [{ type: oIDRef, ref: 'veproject' }],
+		projecttree: {
+			deprojects: [Mixed],
+			veproject: [Mixed],
+			parts: [Mixed]
+		}
 	});
-	app.db.model('project', ProjectSchema);
+	registerSchema('project', ProjectSchema);
 
 	var UserSchema = new Schema({
 		username: String,
 		name: String,
 		projects : [{ type: oIDRef, ref: 'project' }],
-		preferences: Schema.Types.Mixed
+		preferences: Mixed
 	});
-	app.db.model('User', UserSchema);
+	registerSchema('User', UserSchema);
 
-	UserSchema.virtual('id').get(function () {return this._id;});
-	UserSchema.set('toJSON', { virtuals: true });
-
-	ProjectSchema.virtual('id').get(function () {return this._id;});
-	ProjectSchema.set('toJSON', { virtuals: true });	
-
-	DEProjectSchema.virtual('id').get(function () {return this._id;});
-	DEProjectSchema.set('toJSON', { virtuals: true });		
-
+	DEProjectSchema.post('save', function() {
+		var Project = app.db.model("project");
+		var self = this;
+	    Project.findById(this.project_id,function(err,proj){	
+	     	proj.projecttree.deprojects.push({'name':self.name,'id':self.id});
+	     	proj.save();
+	    });	  
+	});
+		
 };

@@ -1,0 +1,261 @@
+/**
+ * Controls the inspector panel, on the right side of the device editor.
+ */
+Ext.define("Vede.controller.DeviceEditor.InspectorController", {
+    extend: "Ext.app.Controller",
+
+    requires: ["Teselagen.event.DeviceEvent"],
+
+    DeviceDesignManager: null,
+    DeviceEvent: null,
+
+    activeProject: null,
+    columnsGrid: null,
+    inspector: null,
+    selectedPart: null,
+    tabPanel: null,
+
+    onReRenderDECanvasEvent: function(){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        this.onTabChange(tab,tab,tab);        
+    },
+
+    onPartSelected: function(j5Part, binIndex) {
+        this.inspector.setActiveTab(0);
+
+        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+        var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
+        if(j5Part) {
+            partPropertiesForm.loadRecord(j5Part);
+
+            if(j5Part.get("fas") === "") {
+                fasForm.down("combobox").setValue("None");
+            } else {
+                fasForm.loadRecord(j5Part);
+            }
+            this.selectedPart = j5Part;
+        } else {
+            var newPart = this.DeviceDesignManager.createPart(this.activeProject,
+                                                              binIndex);
+
+            partPropertiesForm.loadRecord(newPart);
+
+            if(newPart.get("fas") === "") {
+                fasForm.down("combobox").setValue("None");
+            } else {
+                fasForm.loadRecord(newPart);
+            }
+
+            this.selectedPart = newPart;
+        }
+
+    },
+
+    onBinSelected: function(j5Bin) {
+        var selectionModel = this.columnsGrid.getSelectionModel();
+        var contentField = 
+            this.inspector.down("displayfield[cls='columnContentDisplayField']");
+        var contentArray = [];
+
+        this.inspector.setActiveTab(1);
+
+        selectionModel.select(j5Bin);
+
+        j5Bin.parts().each(function(part) {
+            contentArray.push(part.get("name"));
+            contentArray.push("<br>");
+        });
+
+        contentField.setValue(contentArray.join(""));
+    },
+
+    onPartNameFieldChange: function(nameField) {
+        var newName = nameField.getValue();
+
+        this.selectedPart.set("name", newName);
+    },
+
+    onPartAssemblyStrategyChange: function(box) {
+        var newStrategy = box.getValue();
+
+        this.selectedPart.set("fas", newStrategy);
+
+        this.columnsGrid.getView().refresh();
+    },
+
+    onPlasmidGeometryChange: function(radioGroup, newValue) {
+        this.activeProject.set("isCircular", newValue);
+    },
+
+    onAddColumnButtonClick: function() {
+        var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
+        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                                    selectedBin);
+
+        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
+                                                    selectedBinIndex);
+    },
+
+    onRemoveColumnButtonClick: function() {
+        var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
+
+        if(selectedBin) {
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
+                                                                        selectedBin);
+            
+            this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+        } else {
+            this.activeProject.getJ5Collection().deleteBinByIndex(
+                    this.activeProject.getJ5Collection().binCount() - 1);
+        }
+    },
+
+    onGridBinSelect: function(grid, j5Bin, selectedIndex) {
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+    },
+
+    onInspectorGridRender: function(grid) {
+        console.log("render");
+    },
+
+    /**
+     * When we switch to a new tab, switch the current active project to the one
+     * associated with the new tab, and reset event handlers so they refer to the
+     * new grid and j5 bins.
+     */
+    onTabChange: function(tabPanel, newTab, oldTab) {
+        if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
+            if(this.activeBins) {
+                this.activeBins.un("add", this.onAddToBins, this);
+                this.activeBins.un("update", this.onBinsUpdate, this);
+                this.activeBins.un("remove", this.onRemoveFromBins, this);
+
+                // Unset listeners for the parts store of each bin.
+                this.activeBins.each(function(bin) {
+                    var parts = bin.parts();
+
+                    parts.un("add", this.onAddToParts, this);
+                    parts.un("remove", this.onRemoveFromParts, this);
+                }, this);
+            }
+
+            var self = this;
+            this.activeProject = newTab.model.getDesign();
+            
+            this.activeBins = this.activeProject.getJ5Collection().bins();
+
+            this.activeBins.on("add", this.onAddToBins, this);
+            this.activeBins.on("update", this.onBinsUpdate, this);
+            this.activeBins.on("remove", this.onRemoveFromBins, this);
+
+            // Add listeners to each bin's parts store.
+            this.activeBins.each(function(bin) {
+                var parts = bin.parts();
+
+                parts.on("add", this.onAddToParts, this);
+                parts.on("remove", this.onRemoveFromParts, this);
+            }, this);
+
+            this.inspector = newTab.down("component[cls='InspectorPanel']");
+
+            if(this.columnsGrid) {
+                this.columnsGrid.un("select", this.onGridBinSelect, this);
+            }
+
+            this.columnsGrid = this.inspector.down("gridpanel");
+            this.columnsGrid.on("select", this.onGridBinSelect, this);
+
+            this.renderCollectionInfo();
+        }
+    },
+
+    onAddToBins: function(activeBins, addedBins, index) {
+        // Add event listeners to the parts store of this bin.
+        Ext.each(addedBins, function(j5Bin) {
+            parts = j5Bin.parts();
+            parts.on("add", this.onAddToParts, this);
+            parts.on("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+
+    onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
+    },
+
+    onRemoveFromBins: function(activeBins, removedBin, index) {
+    },
+
+    onAddToParts: function(parts, addedParts, index) {
+        this.columnsGrid.getView().refresh();
+    },
+
+    onRemoveFromParts: function(parts, removedPart, index) {
+        this.columnsGrid.getView().refresh();
+    },
+
+    renderCollectionInfo: function() {
+        var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
+        var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
+        var circularPlasmidField = this.inspector.down("radiofield[cls='circular_plasmid_radio']");
+        var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
+
+        if(this.activeProject) {
+            j5ReadyField.setValue(this.activeProject.getJ5Collection().get("j5Ready"));
+            combinatorialField.setValue(this.activeProject.getJ5Collection().get("combinatorial"));
+
+            if(this.activeProject.get("isCircular")) {
+                circularPlasmidField.setValue(true);
+            } else {
+                linearPlasmidField.setValue(true);
+            }
+
+            this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+        }
+    },
+
+    onLaunch: function() {
+        this.tabPanel = Ext.getCmp("mainAppPanel");
+        this.tabPanel.on("tabchange",
+                         this.onTabChange,
+                         this);
+    },
+
+    init: function() {
+        this.callParent();
+
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
+        this.DeviceEvent = Teselagen.event.DeviceEvent;
+
+        this.application.on(this.DeviceEvent.SELECT_PART,
+                            this.onPartSelected,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_BIN,
+                            this.onBinSelected,
+                            this);
+
+        this.application.on("ReRenderDECanvas",
+                            this.onReRenderDECanvasEvent,
+                            this);
+
+        this.control({
+            "textfield[cls='partNameField']": {
+                keyup: this.onPartNameFieldChange
+            },
+            "combobox[cls='forcedAssemblyComboBox']": {
+                select: this.onPartAssemblyStrategyChange
+            },
+            "radiofield[cls='circular_plasmid_radio']": {
+                change: this.onPlasmidGeometryChange
+            },
+            "button[cls='inspectorAddColumnBtn']": {
+                click: this.onAddColumnButtonClick
+            },
+            "button[cls='inspectorRemoveColumnBtn']": {
+                click: this.onRemoveColumnButtonClick
+            },
+            "gridpanel[cls='inspectorGrid']": {
+                select: this.onGridBinSelect,
+            }
+        })
+    },
+});

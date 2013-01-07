@@ -8,8 +8,7 @@ Ext.define("Teselagen.models.EugeneRule", {
     extend: "Ext.data.Model",
 
     requires: [
-        //"Teselagen.models.Part",
-        "Teselagen.models.DeviceDesign"
+        "Teselagen.models.Part"
     ],
 
     proxy: {
@@ -20,19 +19,7 @@ Ext.define("Teselagen.models.EugeneRule", {
         // For Default Names
         // This Differs from EugeneRules.as
         defaultNamePrefix: "rule",
-        highestDefaultNameIndex: 0,
-
-        // Deprecated
-        NOTMORETHAN: "NOTMORETHAN",
-        // Deprecated
-        NOTWITH: "NOTWITH",
-        
-        AFTER: "AFTER",
-        BEFORE: "BEFORE",
-        WITH: "WITH",
-        THEN: "THEN",
-        NEXTTO: "NEXTTO",
-        MORETHAN: "MORETHAN"
+        highestDefaultNameIndex: 0
     },
 
     /**
@@ -44,23 +31,65 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part||Number} operand2
      */
     fields: [
-        {name: "id",                type: "int"},
+        //{name: "id",                type: "long"},
+        {name: "devicedesign_id",   type: "long"},
+        {name: "operand1_id",   type: "long"},
+        {name: "operand2_id",   type: "long"},
         {
             name: "name",
             convert: function(v, record) {
-                if ( v.match(/[^a-zA-Z0-9_\-]/)) {
-                    console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                    v = v.replace(/[^a-zA-Z0-9_\-]*/g, "");
+                var name;
+
+                if (v === "" || v === undefined || v === null) {
+                    name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
+                    record.self.highestDefaultNameIndex += 1;
+                } else {
+                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
+                        name =  v.toString();
+                    } else {
+                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
+                        name = Teselagen.utils.FormatUtils.reformatName(v);
+                    }
                 }
-                return v;
+                return name;
+            }
+        },
+
+        
+        {name: "negationOperator",      type: "boolean",    defaultValue: false},
+
+        {
+            name: "compositionalOperator",
+            convert: function(v) {
+                var compOp = v.toUpperCase();
+
+                var constants = Teselagen.constants.Constants;
+
+                if (compOp === constants.AFTER || compOp === constants.BEFORE || compOp === constants.WITH || compOp === constants.THEN || compOp === constants.NEXTTO || compOp === constants.MORETHAN ) {
+                    // These check out
+                } else if (compOp === constants.NOTMORETHAN || compOp === constants.NOTWITH) {
+                    // These are ok, just deprecated
+                } else {
+                    // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
+                    console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
+                    throw Ext.create("Teselagen.bio.BioException", {
+                        message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
+                    });
+                }
+                return compOp;
+            }
+        },
+        {
+            name: "operand2isNumber",
+            convert: function(v) {
+                if (this.get("operand2Number") === undefined) {
+                    return v;
+                }
             }
         },
         
-        {name: "negationOperator",      type: "boolean",    defaultValue: false},
-        //{name: "operand1",              type: "auto",       defaultValue: null},
-        {name: "compositionalOperator", type: "String",     defaultValue: ""},
-        
-        {name: "operand2",              type: "auto",       defaultValue: null}
+        {name: "operand2isNumber",      type: "boolean",    defaultValue: false},
+        {name: "operand2Number",        type: "number",     defaultValue: 0}
     ],
 
     validations: [
@@ -68,85 +97,69 @@ Ext.define("Teselagen.models.EugeneRule", {
         //{field: "negationOperator", type: "presence"},
         //{field: "operand1",         type: "presence"},
         {field: "compositionalOperator",    type: "presence"},
-        {field: "compositionalOperator",    type: "inclusion",
-                list: [             //Cannot access the statics, hard coding for now.
-                    "AFTER",
-                    "BEFORE",
-                    "WITH",
-                    "THEN",
-                    "NEXTTO",
-                    "MORETHAN",
-                    this.self.NOTMORETHAN,
-                    this.self.NOTWITH
-                ]
+        {
+            field: "compositionalOperator",
+            type: "inclusion",
+            list: Teselagen.constants.Constants.COMPOP_LIST
         },
-        {field: "operand2",         type: "presence"}
+        {field: "operand2Number",         type: "presence"}
     ],
 
     associations: [
+        // Operand1 is always a Part
         {
             type: "hasOne",
             model: "Teselagen.models.Part",
             getterName: "getOperand1",
             setterName: "setOperand1",
-            associationKey: "operand1"
+//            associationKey: "operand1",
+            instanceName: "operand1",
+            foreignKey: "operand1_id", 
         },
-        /*{
+        // Operand2 can be a Part or a Number; If Part, then store here.
+        {
             type: "hasOne",
             model: "Teselagen.models.Part",
-            getterName: "getOperand2",
-            setterName: "setOperand2",
-            associationKey: "operand2"
+            getterName: "getOperand2Part",
+            setterName: "setOperand2Part",
+//            associationKey: "operand2Part",
+            instanceName: "operand2",
+            foreignKey: "operand2_id", 
+
         },
-        */
-        {
+        {//Needed to find the parent of a child
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",
             setterName: "setDeviceDesign",
-            associationKey: "deviceDesign"
+            associationKey: "deviceDesign",
+            foreignKey: "devicedesign_id" 
         }
     ],
 
-
-    // EVENTUALLY USE THE BELONGS TO THING TO DO THIS
-    // Tried using Constructor and it doesn't work.
-    // Read on forums to use init as a way to execute methods after the fields block. --DW
-    init: function() {
-        //device = this.getDeviceDesign().isUniqueRuleName(this));
-        //console.log(device);
-
-        //console.log(pDeviceDesign.isUniqueRuleName(this));
-
-
-        // If Name is "", use default + number as name
-        if (this.get("name") === "") {
-            this.set("name", this.self.defaultNamePrefix + this.self.highestDefaultNameIndex);
-                this.self.highestDefaultNameIndex += 1;
-        }
-
-        // Check Operand2
-        this.setOperand2(this.get("operand2"));
-
-        // Check CompositionalOperator
-        var compOp = this.get("compositionalOperator");
-        if (compOp === this.self.AFTER || compOp === this.self.BEFORE || compOp === this.self.WITH || compOp === this.self.THEN || compOp === this.self.NEXTTO || compOp === this.self.MORETHAN ) {
-            // These check out
-        } else if (compOp === this.self.NOTMORETHAN || compOp === this.self.NOTWITH) {
-            // These are ok, just deprecated
+    /**
+     * Gets Operand2. Must use this method to obtain Operand2 correctly.
+     * @returns {Teselagen.models.Part|Number} Operand2 can be a Part or a Number
+     */
+    getOperand2: function() {
+        if (this.get("operand2isNumber")) {
+            return this.get("operand2Number");
         } else {
-            // Should be a throw, but it would throw A LOT of errors for ppl not knowing how to create a rule...
-            console.warn("Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp);
-            /*throw Ext.create("Teselagen.bio.BioException", {
-                message: "Teselagen.models.EugeneRule: Illegal CompositionalOperator: " + compOp
-            });*/
+            return this.getOperand2Part();
         }
-
     },
 
+    /**
+     * Set Operand2. Input can be Part or a Number. This method will set them appropriately.
+     * @param {Teselagen.models.Part|Number} pOperand2 can be a Part or a Number
+     */
     setOperand2: function(pOperand2) {
-        if (Ext.typeOf(pOperand2) === "number" || Ext.getClassName(pOperand2) === "Teselagen.models.Part") {
-            this.set("operand2", pOperand2);
+        if (Ext.typeOf(pOperand2) === "number") {
+            //console.log(pOperand2);
+            this.set("operand2Number", pOperand2);
+            this.set("operand2isNumber", true);
+        } else if (Ext.getClassName(pOperand2) === "Teselagen.models.Part") {
+            this.setOperand2Part(pOperand2);
         } else {
             throw Ext.create("Teselagen.bio.BioException", {
                 message: "Teselagen.models.EugeneRule.setOperand2(): Illegal operand2. Must be a Number or Part."
@@ -178,18 +191,18 @@ Ext.define("Teselagen.models.EugeneRule", {
         }
 
         if ( this.getOperand1() !== null) {
-            //console.log(this.getOperand1());
             ruleText.push( this.getOperand1().get("name") );
             ruleText.push( " " );
         }
         ruleText.push( this.get("compositionalOperator") );
         ruleText.push( " " );
 
-        if (typeof(this.get("operand2")) === "number") {
-            ruleText.push( this.get("operand2").toString());
-        } else if ( Ext.getClassName(this.get("operand2")) === "Teselagen.models.Part") {
-            ruleText.push( this.get("operand2").get("name"));
+        if (typeof(this.getOperand2()) === "number") {
+            ruleText.push( this.getOperand2().toString());
+        } else if ( Ext.getClassName(this.getOperand2()) === "Teselagen.models.Part") {
+            ruleText.push( this.getOperand2().get("name"));
         } else {
+            console.warn("Teselagen.models.EugeneRule.generateRuleText(): Cannot generate rule. Operand2 must be a Number or a Part.");
             /*throw Ext.create("Teselagen.bio.BioException", {
                 message: "generateRuleText(): Cannot generate rule. Operand2 must be a Number or a Part."
             });*/

@@ -1,14 +1,12 @@
-/**
+ /**
  * API - VEDE EXT Platform
  * -----------------------
  */
 
-module.exports = function (app) {
-
+module.exports = function (app, express) {
+    var errorHandler = express.errorHandler();
 
   // Login Auth Method : Find User in DB
-
-
   function authenticate(username, pass, fn) {
     var User = app.db.model("User");
     User.findOne({
@@ -36,29 +34,53 @@ module.exports = function (app) {
         next();
       });
     } else {
-      if(!app.testing.enabled) {
-        res.send('Wrong credentials');
-      } else {
-        /*
-        console.log("Logged as Guest user");
-        authenticate("Guest", "", function (err, user) {
-          req.session.regenerate(function () {
-            req.session.user = user;
-            req.user = user;
-            next();
-          });
-
-        });
-        */
-        res.send("Wrong credentials", 405);
-      }
+        res.send("Wrong credentials",401);
     }
   };
 
   // Root Path
-  app.get('/', function (req, res) {
-    res.send('', 200)
+  app.post('/sendFeedback', function (req, res) {
+    if(req.body.feedback)
+    {
+      app.mailer.sendMail(
+        {
+            from: "Teselagen <root@localhost>",
+            to: "rpavez@gmail.com",
+            subject: "Feedback",
+            text: req.body.feedback
+        }
+        , function(error, response){
+          if(error){
+              console.log(error);
+          } else {
+              res.send();
+          }
+      });
+    }
+    else if(req.body.error)
+    {
+      app.mailer.sendMail(
+        {
+            from: "Teselagen <root@localhost>",
+            to: "rpavez@gmail.com",
+            subject: "Error",
+            text: req.body.error+'\n'+req.body.error_feedback
+        }
+        , function(error, response){
+          if(error){
+              console.log(error);
+          } else {
+              res.send();
+          }
+      });
+    }
+    res.send();
   })
+
+  app.all('/logout', function (req, res) {
+    req.session.destroy();
+    res.send();
+  });
 
   app.all('/login', function (req, res) {
 
@@ -66,10 +88,9 @@ module.exports = function (app) {
     var sessionId = req.body.sessionId;
     var username = req.body.username;
     var password = req.body.password;
-
+//    console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
+    
     // getOrCreateUser : Create new entry in DB if User doesn't exist
-
-
     function getOrCreateUser(username) {
       // Check if user exist on mongoDB
       var User = app.db.model("User");
@@ -158,43 +179,542 @@ module.exports = function (app) {
 
   });
 
+  // Get DEProjects
+  app.get('/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete DEProjects
+  app.delete('/deprojects', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get VEProjects
+  app.get('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete VEProjects
+  app.delete('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get Parts
+  app.get('/parts', restrict, function (pReq, pRes) {
+    var Part = app.db.model("part");
+    Part.find(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({"parts": pDocs});
+        }
+    });
+  });  
+
+  // Delete Parts
+  app.delete('/parts', restrict, function (pReq, pRes) {
+    var Part = app.db.model("part");
+    Part.remove(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({});
+        }
+    });
+  });  
+
+  // Get Projects
+  app.get('/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete Projects
+  app.delete('/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
+  // Get Project
+  app.get('/projects/:project', restrict, function (req, res) {
+      var Project = app.db.model("project");
+      Project.findById(req.params.project, function (err, proj) {
+          if (err) {
+              errorHandler(err, req, res);
+          }
+          else {
+              res.json({"projects": proj});
+          }
+      });
+  });
+
+  // Get Sequences
+  app.get('/sequences', restrict, function (pReq, pRes) {
+    var Sequence = app.db.model("sequence");
+    Sequence.find(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({"sequence": pDocs});
+        }
+    });
+  });  
+
+  // Delete Sequences
+  app.delete('/sequences', restrict, function (pReq, pRes) {
+    var Sequence = app.db.model("sequence");
+    Sequence.remove(function(pErr, pDocs) {
+        if (pErr) {
+            errorHandler(pErr, pReq, pRes);
+        }
+        else {
+            pRes.json({});
+        }
+    });
+  });  
+
   // Dummy method
-  app.all('/getUser', restrict, function (req, res) {
-    
+  app.get('/user', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
+      user.projects.forEach(function(proj){
+        proj.deprojects = undefined;
+        proj.veprojects = undefined;
+      });
       res.json({"user":user});
     });
-
-    /*
-    res.json({
-      "user": req.session.user
-    });
-    */
   });
 
+  // Update user
+  app.put('/user', restrict, function (req, res) {
+    res.json({});
+  });
 
-  // Dummy method
-  app.all('/getProjects', restrict, function (req, res) {
+  // Add new Project to Current User
+  app.post('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var newProject = new Project({
+      name: req.body.name,
+      user_id : req.user,
+      dateCreated: req.body.dateCreated,
+      dateModified: req.body.dateModified
+    });
+    newProject.save(function(){
+      req.user.projects.push(newProject);
+      req.user.save(function(){
+        console.log("New project Saved");
+        res.json({"projects":newProject});
+      });
+    });
+  });
 
+  // Update Project to Current User
+  app.put('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    Project.findById(req.body.id,function(err,proj){
+      if(err||!proj) return res.json({'fault':err},500); 
+      proj.name = req.body.name;
+      proj.dateCreated = req.body.dateCreated;
+      proj.dateModified = req.body.dateModified;
+      proj.save(function(){
+        res.json(proj);
+      });
+    });
+  });
+
+  // Delete Project
+  app.delete('/user/projects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    if (req.body.id) {
+        Project.findById(req.body.id,function(err,proj){
+            proj.remove(function(){
+                res.json({});
+            });
+        });
+    }
+    else {
+        Project.remove({user_id:req.user._id}, function(err) {
+            if (err) {
+                errorHandler(err, req, res);
+            }
+            else {
+                res.json({});
+            }
+        });
+    }
+  });  
+
+  // Get User Projects
+  app.get('/user/projects', restrict, function (req, res) {
     var User = app.db.model("User");
     User.findById(req.user._id).populate('projects')
     .exec(function (err, user) {
+      user.projects.forEach(function(proj){
+        proj.deprojects = undefined;
+        proj.veprojects = undefined;
+      });
+      //console.log("Returning "+user.projects.length+" projects");
       res.json({"projects":user.projects});
     });
-
   });
 
-  app.all('/getDeviceDesign', restrict, function (req, res) {
+
+  // CREATE
+  app.post('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
     var DEProject = app.db.model("deproject");
-    DEProject.findById(req.query.id, function (err, project) {
-      res.json({"design":project.design});
+    Project.findById(req.body.project_id,function(err,proj){
+      if(!proj) return res.json({'fault':'project not found'},500);
+      var newProj = new DEProject({
+        name : req.body.name,
+        project_id: proj,
+        dateCreated: req.body.dateCreated,
+        dateModified: req.body.dateModified
+      });
+      newProj.save(function(err){
+        if(err) return res.json({'fault':' new deproj not saved'},500);
+        proj.deprojects.push(newProj);
+        proj.save(function(err){
+          if(err) return res.json({'fault':' proj not updated'},500);
+          if(!err) console.log("New DE Project Saved!");
+          else console.log("Problem saving DE Proj");
+          res.json({"projects":newProj});
+        });
+      });
     });
+  });
+
+  // PUT
+  app.put('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var DEProjects = app.db.model("deproject");
+    DEProjects.findById(req.body.id,function(err,proj){
+      if(!proj) return res.json({'fault':'project not found'},500);
+      proj.name = req.body.name,
+      proj.save(function(err){
+        if(err) return res.json({'fault':' new deproj not saved'},500);
+        res.json({"projects":proj});
+      });
+    });
+  });
+
+  // GET
+  app.get('/user/projects/deprojects', restrict, function (req, res) {
+    var id = JSON.parse(req.query.filter)[0].value;
+    var Project = app.db.model("project");
+    Project.findById(id).populate('deprojects').exec(function(err,proj){
+      proj.deprojects.forEach(function(deproj){
+        deproj.design = undefined;
+        deproj.j5runs = undefined;
+      });
+      //console.log("Returning "+proj.deprojects.length+" deprojects");
+      res.json({"projects":proj.deprojects});
+    });
+  });
+
+  // DELETE
+  app.delete('/user/projects/deprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var DEProjects = app.db.model("deproject");
+    DEProjects.findById(req.body.id,function(err,proj){
+      if(!proj) return res.json({'fault':'project not found'},500);
+      proj.remove(function(err){
+        if(err) return res.json({'fault':' new deproj not saved'},500);
+        res.json({"projects":{}});
+      });
+    });
+  });
+
+  //CREATE
+  app.post('/user/projects/deprojects/devicedesign', function (req, res) {
+
+    var DEProject = app.db.model("deproject");
+    var Part = app.db.model("part");
+
+    var id = req.body["deproject_id"];
+    var model = req.body;
+    
+    DEProject.findById(id,function(err,deproject){
+      if(!deproject) return res.json({'fault':'deproject not found'},500);
+      deproject.design = model;
+
+      deproject.design.j5collection.bins.forEach(function(bin,binKey){
+        bin.parts.forEach(function(part,partKey){
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          if(partId) deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
+        });
+      });
+    
+      deproject.save(function(err){
+        if(err) console.log(err);
+        res.json({"design":req.body});
+      });
+
+    });
+  });
+
+  //UPDATE/CREATE
+  app.put('/user/projects/deprojects/devicedesign', function (req, res) {
+    var DEProject = app.db.model("deproject");
+    var Part = app.db.model("part");
+
+    var id = req.body["deproject_id"];
+    var model = req.body;
+    
+    DEProject.findById(id,function(err,deproject){
+      deproject.design = model;
+      deproject.design.j5collection.bins.forEach(function(bin,binKey){
+        bin.parts.forEach(function(part,partKey){
+          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          if(partId)
+          {
+            partId = partId.toString();
+            delete deproject.design.j5collection.bins[binKey].parts[partKey];
+            console.log(partId);
+            deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+          }
+        });
+      });
+      deproject.save(function(err){
+        if(err) console.log(err);
+        res.json({"design":req.body});
+      }); 
+    });
+  });
+
+  //READ
+  app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"design":project.design});
+        }
+    });
+    
+  });
   
+  // CREATE
+  app.post('/user/projects/veprojects', restrict, function (req, res) {
+    var Project = app.db.model("project");
+    var VEProject = app.db.model("veproject");
+    Project.findById(req.body.project_id,function(err,proj){
+      if(err) res.json({"fault":"project not found"},500);
+      var newProj = new VEProject({
+        name : req.body.name,
+        project_id: proj,
+        parts : req.body.parts
+      });
+      newProj.save(function(){
+        proj.veprojects.push(newProj);
+        proj.save(function(){
+          console.log("New VE Project Saved!");
+          res.json({"projects":newProj});
+        });
+      });
+    });
+  });
+
+  // GET
+  app.get('/user/projects/veprojects', restrict, function (req, res) {
+    var id = JSON.parse(req.query.filter)[0].value;
+    var Project = app.db.model("project");
+    Project.findById(id).populate('veprojects').exec(function(err,proj){
+      proj.veprojects.forEach(function(veproj){
+        veproj.sequencefile = undefined;
+      });
+      //console.log("Returning "+proj.veprojects.length+" veprojects");
+      res.json({"projects":proj.veprojects});
+    });
+  });
+
+  // UPDATE
+  app.put('/user/projects/veprojects', restrict, function (req, res) {
+    var updatedObj = req.body;
+    var VEProject = app.db.model("veproject");
+    VEProject.findById(req.body.id,function(err,proj){
+      if(err) res.json({"fault":"project not found"},500);
+      for(var prop in req.body)
+      {
+        proj[prop] = req.body[prop];
+      }
+      proj.save(function(){
+        res.json({"projects":proj});
+      });
+    });
+  });
+
+  //CREATE
+  app.post('/user/projects/veprojects/sequences', function (req, res) {
+    var id = req.body["veproject_id"];
+    var sequence = req.body;
+    var VEProject = app.db.model("veproject");
+    var Sequence = app.db.model("sequence");
+
+    if(id)
+    {
+      VEProject.findById(id,function(err,veproject){
+        if(err||!veproject) return res.json({"fault":"VEProject not found"},500);
+        var newSequence = new Sequence();
+
+        for(var prop in sequence) {
+          newSequence[prop] = sequence[prop];
+        }
+
+        newSequence.save(function(){
+          veproject.sequencefile_id = newSequence;
+          veproject.save(function(err){
+            if(err) console.log(err);
+            console.log("New Sequence Saved!");
+
+            res.json({"sequence":newSequence});
+          });
+        });
+      });
+    }
+    else
+    {
+      var newSequence = new Sequence();
+
+      for(var prop in sequence) {
+        newSequence[prop] = sequence[prop];
+      }
+
+      newSequence.save(function(err){
+        if(err) return res.json({"fault":"Sequence not saved"},500);
+        res.json({"sequence":newSequence});
+      });
+    }
   });
 
 
+  //PUT
+  app.put('/user/projects/veprojects/sequences', function (req, res) {
+    var Sequence = app.db.model("sequence");
+    Sequence.findById(req.body.id,function(err, sequence){
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            for(var prop in req.body) {
+                sequence[prop] = req.body[prop];
+            }
+            sequence.save(function(pErr){
+                if (pErr) {
+                    errorHandler(pErr, req, res);
+                }
+                else {
+                    res.json({"sequence":sequence});
+                }
+            });
+        }
+    });
+  });
+
+  //READ
+  app.get('/user/projects/veprojects/sequences', restrict, function (req, res) {
+    var Sequence = app.db.model("sequence");
+    Sequence.findById(req.query.id, function (err, sequence) {
+      if(err) console.log("There was a problem!/");
+      res.json({"sequence":sequence});
+    });
+  });
+
+  //CREATE
+  app.post('/user/projects/deprojects/parts', function (req, res) {
+
+    var Part = app.db.model("part");
+    var newPart = new Part();
+
+    for(var prop in req.body) {
+      newPart[prop] = req.body[prop];
+    }
+
+    newPart.save(function(){
+      res.json({'parts':newPart});
+    });
+  });
+
+  //PUT
+  app.put('/user/projects/deprojects/parts', function (req, res) {
+
+    var Part = app.db.model("part");
+    Part.findById(req.body.id,function(err,part){
+      for(var prop in req.body) {
+        part[prop] = req.body[prop];
+      }
+      part.save(function(){
+        res.json({'parts':part});
+      });
+    });
+  });
+
+  //GET
+  app.get('/user/projects/deprojects/parts', function (req, res) {
+
+    var veproject_id = JSON.parse(req.query.filter)[0].value;
+
+    var VEProject = app.db.model("veproject");
+
+    VEProject.findById(veproject_id).populate("parts").exec(function(err,veproject){
+      if (!veproject || err) return res.json({"fault":"Unexpected error"},500);
+      res.send({"parts":veproject.parts});
+    });
+  });
+
+  //GET
   app.all('/getExampleModel', restrict, function (req, res) {
     var ExamplesModel = app.db.model("Examples");
     ExamplesModel.findById(req.body._id, function (err, example) {
@@ -202,5 +722,26 @@ module.exports = function (app) {
     });
   });
 
+  //READ
+  app.get('/user/projects/deprojects/j5runs', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    var id = JSON.parse(req.query.filter)[0].value;
+    DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
+      res.json({'j5runs':deproject.j5runs});
+    });
+  });
+
+  //GetTree
+  app.get('/user/tree', restrict, function (req, res) {
+    var User = app.db.model("User");
+    User.findById(req.user._id).populate('projects')
+    .exec(function (err, user) {
+      user.projects.forEach(function(proj){
+        proj.deprojects = undefined;
+        proj.veprojects = undefined;
+      });
+      res.json({"user":user});
+    });
+  });
 
 };

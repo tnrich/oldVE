@@ -1,16 +1,20 @@
+/**
+ * Device Editor Store tests.
+ * @author Yuri Bendana
+ */
+
 /*global describe, expect, it, runs, waitsFor*/
-Ext.require("Ext.Ajax");
 Ext.require("Teselagen.constants.Constants");
+Ext.require("Teselagen.store.PartStore");
 Ext.require("Teselagen.store.ProjectStore");
+Ext.require("Teselagen.store.UserStore");
 
 Ext.onReady(function () {
-
     describe("Store tests - ", function () {
 
         describe("Project.", function () {
-
             var projStore;
-            var project, veproject, deproject;
+            var project, veproject, deproject, part, design;
 
             it("Load ProjectStore", function () {
                 projStore = Ext.create("Teselagen.store.ProjectStore");
@@ -18,7 +22,6 @@ Ext.onReady(function () {
                     expect(projStore.getCount()).toBe(3);
                 });
             });
-
             it("Load Specific Project", function () {
                 projStore.on("load", function() {
                     project = projStore.first();
@@ -40,7 +43,9 @@ Ext.onReady(function () {
                         expect(veprojects.count()).toBe(2);
                         veproject = veprojects.first();
                         expect(veproject).toBeDefined();
-                        expect(veproject.get("name")).toBe("VE Proj 1");
+                        if (veproject) {
+                            expect(veproject.get("name")).toBe("VE Proj 1");
+                        }
                     });
                 });
             });
@@ -49,10 +54,27 @@ Ext.onReady(function () {
                     return Ext.isDefined(veproject);
                 }, "VE project to be defined", 500);
                 runs(function() {
-                    veproject.getPart(function(pModel) {
+                    var parts = veproject.parts();
+                    parts.on("load", function() {
+                        expect(parts).toBeDefined();
+                        expect(parts.count()).toBe(2);
+                        part = parts.first();
+                        expect(part).toBeDefined();
+                        if (part) {
+                            expect(part.get("name")).toBe("Part 1");
+                        }
+                    });
+                });
+            });
+            it("Get SequenceFile from VE project", function() {
+                waitsFor(function() {
+                    return Ext.isDefined(veproject);
+                }, "VE project to be defined", 500);
+                runs(function() {
+                    veproject.getSequenceFile(function(pModel) {
                         expect(pModel).toBeDefined();
                         if (pModel) {
-                            expect(pModel.get("name")).toBe("Part 1");
+                            expect(pModel.get("sequenceFileName")).toBe("SequenceFile1.fas");
                         }
                     });
                 });
@@ -87,12 +109,13 @@ Ext.onReady(function () {
                     expect(j5run.get("name")).toBe("j5 Run 1");
                 });
             });
-            xit("Load device design", function () {
+            it("Load device design", function () {
                 waitsFor(function() {
                     return Ext.isDefined(deproject);
                 }, "DE Project to be defined", 500);
                 runs(function() {
                     deproject.getDesign(function(pModel) {
+                        design = pModel;
                         expect(pModel).toBeDefined();
                         if (pModel) {
                             expect(pModel.getId()).toBe(1);
@@ -100,8 +123,66 @@ Ext.onReady(function () {
                     });
                 });
             });
+            it("Device design is loaded", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(design);
+                }, "DeviceDesign to be defined.", 500);
+            });
+        });
+        
+        describe("Part.", function () {
+            var aPart, partStore;
 
+            it("Load PartStore", function () {
+                runs(function() {
+                    partStore = Ext.create("Teselagen.store.PartStore");
+                    partStore.load(function(pRecs, pOp, pSuccess) {
+                        if (pSuccess) {
+                            aPart = partStore.first();
+                        }
+                    });
+                });
+                waitsFor(function() {
+                    return Ext.isDefined(aPart);
+                }, "aPart to be defined", 500);
+                runs(function() {
+                    expect(partStore.getCount()).toBe(2);
+                });
+            });
+        });
+
+        describe("User.", function () {
+            var userStore, user, projects, project;
+
+            it("Load UserStore", function () {
+                userStore = Ext.create("Teselagen.store.UserStore");
+                userStore.load(function() {
+                    user = userStore.first();
+                });
+            });
+            it("Load user projects", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(user);
+                }, "User to be defined", 500);
+                runs(function() {
+                    expect(userStore.getCount()).toBe(2);
+                    projects = user.projects();
+                    projects.on("load", function() {
+                        expect(projects).toBeDefined();
+                        project = projects.first();
+                    });
+                });
+            });
+            it("Load project", function () {
+                waitsFor(function() {
+                    return Ext.isDefined(project);
+                }, "User to be defined", 500);
+                runs(function() {
+                    expect(project.get("name")).toBe("Project A");
+                });
+            });
         });
 
     });
+    
 });

@@ -1,12 +1,11 @@
 Ext.define('Vede.view.de.j5Controls', {
     extend: 'Ext.window.Window',
 
-    height: 412,
+    height: 500,
     width: 852,
     title: 'j5 Controls',
-    resizable: false,
-    draggable: false,
     modal: true,
+    autoScroll: true,
 
     initComponent: function () {
         var me = this;
@@ -14,7 +13,7 @@ Ext.define('Vede.view.de.j5Controls', {
         Ext.applyIf(me, {
             items: [{
                 xtype: 'tabpanel',
-                height: 379,
+                height: 467,
                 padding: 5,
                 activeTab: 0,
                 items: [{
@@ -52,7 +51,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptyPlasmidsRadioBtn',
-                            flex: 0.5,
+                            flex: 0.7,
                             margin: 'left: 10px',
                             name: 'plasmidsListSource',
                             fieldLabel: 'or',
@@ -70,7 +69,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
-                            labelPad: 15,
+                            labelPad: 10,
                             labelSeparator: ' ',
                             labelWidth: 10,
                             preventMark: false,
@@ -95,7 +94,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptyOligosRadioBtn',
-                            flex: 0.5,
+                            flex: 0.7,
                             margin: 'left: 10px',
                             name: 'oligosListSource',
                             fieldLabel: 'or',
@@ -112,7 +111,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
-                            labelPad: 15,
+                            labelPad: 10,
                             labelSeparator: ' ',
                             labelWidth: 10,
                             preventMark: false,
@@ -137,7 +136,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptySynthesesRadioBtn',
-                            flex: 0.5,
+                            flex: 0.7,
                             margin: 'left: 10px',
                             name: 'directSynthesesListSource',
                             fieldLabel: 'or',
@@ -154,7 +153,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: '',
                             fieldLabel: 'or',
                             hideLabel: false,
-                            labelPad: 15,
+                            labelPad: 10,
                             labelSeparator: ' ',
                             labelWidth: 10,
                             preventMark: false,
@@ -184,10 +183,22 @@ Ext.define('Vede.view.de.j5Controls', {
                         enableToggle: true,
                         pressed: false,
                         text: '<b>Run j5</b>'
+                    },{
+                        xtype: 'button',
+                        flex: 1,
+                        height: 23,
+                        cls: 'downloadj5Btn',
+                        maxHeight: 23,
+                        maxWidth: 140,
+                        minHeight: 23,
+                        enableToggle: true,
+                        pressed: false,
+                        text: '<b>Download Results</b>',
+                        hidden: true
                     }, {
                         xtype: 'displayfield',
                         flex: 1,
-                        //hidden: true,
+                        hidden: true,
                         border: 1,
                         style: {
                             borderColor: '#c5c5c5',
@@ -218,10 +229,10 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'gridpanel',
                         flex: 1,
-                        height: 90,
+                        height: 178,
                         cls: 'plasmidsGrid',
                         margin: '10 0 5 0',
-                        minHeight: 100,
+                        minHeight: 178,
                         width: 786,
                         title: 'Plasmids',
                         columnLines: true,
@@ -232,22 +243,23 @@ Ext.define('Vede.view.de.j5Controls', {
                         rowLines: false,
                         columns: [{
                             xtype: 'gridcolumn',
-                            dataIndex: 'string',
+                            dataIndex: 'name',
                             text: '<b>Name</b>'
                         }, {
                             xtype: 'gridcolumn',
+                            dataIndex: 'size',
+                            text: 'size',
                             draggable: false,
                             resizable: false,
                             sortable: false,
-                            hideable: false,
-                            text: ''
+                            hideable: false
                         }, {
                             xtype: 'gridcolumn',
+                            dataIndex: 'fileContent',
                             draggable: false,
                             resizable: false,
                             sortable: false,
-                            hideable: false,
-                            text: ''
+                            hideable: false
                         }],
                         viewConfig: {
                             deferEmptyText: false,

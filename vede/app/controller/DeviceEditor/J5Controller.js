@@ -3,7 +3,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     requires: ["Teselagen.constants.Constants",
                "Teselagen.manager.DeviceDesignManager",
-               "Teselagen.utils.J5ControlsUtils"],
+               "Teselagen.utils.J5ControlsUtils",
+               "Teselagen.manager.J5CommunicationManager",
+               "Teselagen.manager.ProjectManager",
+               "Teselagen.bio.parsers.GenbankManager"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -23,7 +26,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     directSynthesesListText: null,
 
     onOpenJ5: function() {
-        this.j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        currentTab.j5Window = j5Window;
+        this.j5Window = j5Window;
     },
 
     onEditJ5ParamsBtnClick: function() {
@@ -195,7 +201,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.automationParameters.setDefaultValues();
         this.populateAutomationParametersDialog();
     },
-
     populateAutomationParametersDialog: function() {
         this.automationParameters.fields.eachKey(function(key) {
             if(key !== "id") {
@@ -208,15 +213,36 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     saveAutomationParams: function() {
         this.automationParameters.fields.eachKey(function(key) {
             if(key !== "id") {
-                this.automationParameters.set(key, 
+                this.automationParameters.set(key,
                     Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
     },
 
-    onRunJ5BtnClick: function() {
-        console.log(this.automationParameters);
-        console.log(this.j5Parameters.data);
+    createLoadingMessage: function(){
+        var msgBox = Ext.MessageBox.show({
+           title: 'Please wait',
+           msg: 'Preparing input parameters',
+           progressText: 'Initializing...',
+           width:300,
+           progress:true,
+           closable:false
+       });
+
+        return {
+            close: function(){
+                msgBox.close();
+            },
+            update: function(progress,msg){
+                msgBox.updateProgress(progress/100, progress+'% completed',msg);
+            }
+        };
+    },
+
+
+
+    onRunJ5BtnClick: function(btn) {
+        var loadingMessage = this.createLoadingMessage();
 
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -263,12 +289,30 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 Ext.ComponentQuery.query("component[cls='directSynthesesListFileSelector']")[0]);
         }
 
-        console.log(masterPlasmidsList);
-        console.log(masterPlasmidsListFileName);
-        console.log(masterOligosList);
-        console.log(masterOligosListFileName);
-        console.log(masterDirectSynthesesList);
-        console.log(masterDirectSynthesesListFileName);
+        var masterFiles = {};
+        masterFiles["masterPlasmidsList"]                 = masterPlasmidsList;
+        masterFiles["masterPlasmidsListFileName"]         = masterPlasmidsListFileName;
+        masterFiles["masterOligosList"]                   = masterOligosList;
+        masterFiles["masterOligosListFileName"]           = masterOligosListFileName;
+        masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;
+        masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
+        currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles);
+        
+        loadingMessage.update(30,"Saving design");
+
+        Vede.application.fireEvent("saveDesignEvent",function(){
+            loadingMessage.update(60,"Executing request");
+            currentTab.j5Window.j5comm.generateAjaxRequest(function(){
+                loadingMessage.update(100,"Completed");
+                loadingMessage.close();
+            });
+        });
+        
+        
+
     },
 
     /**
@@ -308,7 +352,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     populateJ5ParametersDialog: function() {
         this.j5Parameters.fields.eachKey(function(key) {
-            if(key !== "id") {
+            if(key !== "id" && key !== "j5run_id") {
                 Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
                     this.j5Parameters.get(key));
             }
@@ -318,12 +362,33 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     saveJ5Parameters: function() {
         this.j5Parameters.fields.eachKey(function(key) {
             if(key !== "id") {
-                this.j5Parameters.set(key, 
+                this.j5Parameters.set(key,
                     Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
     },
-    
+    onDownloadj5Btn: function(button, e, options) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window.j5comm.downloadResults(button);
+    },
+
+    onPlasmidsItemClick: function( grid, record ){
+        
+        this.j5Window.close();
+
+        console.log(record);
+        
+        var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+            "GENBANK",
+            record.data.fileContent,
+            record.data.name,
+            ""
+        );
+        
+        Teselagen.manager.ProjectManager.openSequence(newSequence);
+        
+    },
+
     init: function() {
         this.control({
             "button[cls='editj5ParamsBtn']": {
@@ -386,6 +451,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='automationParamsResetBtn']": {
                 click: this.onResetAutomationParamsBtnClick
             },
+            "button[cls='downloadj5Btn']": {
+                click: this.onDownloadj5Btn
+            },
+            "gridpanel[title=Plasmids]": {
+                itemclick: this.onPlasmidsItemClick
+            }
         });
         
         this.application.on("openj5", this.onOpenJ5, this);
