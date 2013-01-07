@@ -1,20 +1,5 @@
 var splashscreen;
 
-Ext.onReady(function() {
-    // Start the mask on the body and get a reference to the mask
-    splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span>', 'splashscreen');
-    // Add a new class to this mask as we want it to look different from the default.
-    splashscreen.addCls('splashscreen');
-
-    Ext.select('.x-mask-msg').setStyle('top','60px');
-
-
-    // Insert a new div before the loading icon where we can place our logo.
-    Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
-        cls: 'x-splash-icon'
-    });
-});
-
 /*global console*/
 Ext.Loader.setConfig({
     enabled: true,
@@ -77,6 +62,22 @@ Ext.application({
         "Teselagen.constants.SBOLIcons",
         "Teselagen.models.SequenceFile"
     ],
+
+    init: function(){
+        // Start the mask on the body and get a reference to the mask
+        splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span>', 'splashscreen');
+        // Add a new class to this mask as we want it to look different from the default.
+        splashscreen.addCls('splashscreen');
+
+        Ext.select('.x-mask-msg').setStyle('top','60px');
+
+
+        // Insert a new div before the loading icon where we can place our logo.
+        Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
+            cls: 'x-splash-icon'
+        });
+    },
+
     launch: function() {
 
         Ext.Ajax.cors = true; // Allow CORS

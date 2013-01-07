@@ -17,7 +17,10 @@
 }
 
 .x-mask.splashscreen {
-    background-color: white;
+    background: -webkit-linear-gradient(white 0%, #F8F8F8 100%);
+    background-image: url(../images/bg/furley_bg.png);
+    background-repeat: repeat;
+    
     opacity: 1;
 }
 

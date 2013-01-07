@@ -14,9 +14,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   authResponse: null,
   username: null,
 
+  updateSplashScreenMessage: function(message){
+    if(splashscreen) Ext.get('splash-text').update(message);
+  },
+
   /*
   * Login
-  * 
+  *
   * This method init the auth process by trying to fetchVariables from
   * /deviceeditor (JSON file containing variables) for automatic authentication
   * If fail proceed to manual authentication process
@@ -24,7 +28,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
   Login: function() {
     var self = this;
-    Ext.get('splash-text').update('Getting authentication parameters');
+    self.updateSplashScreenMessage('Getting authentication parameters');
     Ext.Ajax.request({
       url: '/deviceeditor',
       params: {},
@@ -36,13 +40,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         self.sendAuthRequest(session);
       },
       failure: function(response, options) {
-        var authDialog = Ext.create('Vede.view.AuthWindow').show(); 
+        var authDialog = Ext.create('Vede.view.AuthWindow').show();
       }
     });
   },
 
   /**
-   * 
+   *
    *
    * Input parameters.
    * @param {Object} params (required) {username(optional),password(optional),server(optional),session(optional)}
@@ -55,7 +59,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
     if(params.server) Teselagen.manager.SessionManager.baseURL = params.server; // Set base URL
     
-    if(Ext.get('splash-text')) Ext.get('splash-text').update('Authenticating to server');
+    self.updateSplashScreenMessage('Authenticating to server');
     
     Ext.Ajax.request({
       url: Teselagen.manager.SessionManager.buildUrl('login'),
@@ -64,27 +68,16 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         password: params.password || "",
         sessionId: params.sessionId || ""
       },
-      success: function(response) {
+      success: function(response, options) {
         if(params.username) self.username = params.username;
         self.authResponse = JSON.parse(response.responseText);
-        if(Ext.get('splash-text')) Ext.get('splash-text').update(self.authResponse.msg);
+        self.updateSplashScreenMessage(self.authResponse.msg);
         if(Ext.getCmp('AuthWindow')) Ext.getCmp('AuthWindow').destroy();
         Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
         if (cb) return cb(true); // for Testing
       },
       failure: function(response, options) {
-        if(response.responseText != '')
-        {
-          console.log(response.responseText);
-          try {
-            var parsedResponse = JSON.parse(response.responseText);
-            Ext.get('splash-text').update(parsedResponse.msg);
-          }catch(e)
-          {
-            console.warn("Server response not parsed as a valid json");
-          }
-        }
-        if( response.status == 0 ) Ext.get('splash-text').update('Server offline.');
+        self.updateSplashScreenMessage(response.statusText);
         if (cb) return cb(false); // for Testing
       }
     });

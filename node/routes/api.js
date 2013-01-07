@@ -88,7 +88,7 @@ module.exports = function (app, express) {
     var sessionId = req.body.sessionId;
     var username = req.body.username;
     var password = req.body.password;
-//    console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
+    //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
     
     // getOrCreateUser : Create new entry in DB if User doesn't exist
     function getOrCreateUser(username) {
@@ -97,8 +97,8 @@ module.exports = function (app, express) {
       User.findOne({
         'username': username
       }, function (err, results) {
-        if(results == null) {
-          // If user not found generate a new one
+        if(results === null) {
+          // If user not found create a new one
           var newuser = new User({
             username: username
           });
@@ -107,18 +107,17 @@ module.exports = function (app, express) {
             req.session.regenerate(function () {
               req.session.user = user;
               req.user = user;
-              res.json({
+              return res.json({
                 'firstTime': true,
                 'msg': 'Welcome back ' + username + '!'
-              });
-            });
+              });});
           });
         } else {
           console.log("LOGIN: " + username);
           req.session.regenerate(function () {
             req.session.user = results;
             req.user = results;
-            res.json({
+            return res.json({
               'firstTime': false,
               'msg': 'Welcome back ' + username + '!'
             });
@@ -142,7 +141,7 @@ module.exports = function (app, express) {
     });
 
     // Loggin using just username (for Testing)
-    if(username && password != undefined && !app.program.prod) {
+    if(username && password !== undefined && !app.program.prod) {
       getOrCreateUser(username);
     }
 
@@ -167,23 +166,23 @@ module.exports = function (app, express) {
     }
 
     // Login using sessionId
-    if(app.mysql)
+    if(app.production)
     {
-    if(sessionId) {
-      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
-      app.mysql.query(query, function (err, rows, fields) {
-        if(err) res.json({
-          'msg': 'Invalid session'
-        }, 405);
-        getOrCreateUser(rows[0].username)
-      });
-    }
+      if(sessionId) {
+        var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
+        app.mysql.query(query, function (err, rows, fields) {
+          if(err) res.json({
+            'msg': 'Invalid session'
+          }, 405);
+          getOrCreateUser(rows[0].username)
+        });
+      }
     }
     else
     {
       return res.json({
           'msg': 'Authentication error.'
-        }, 405);
+      }, 405);
     }
 
   });
