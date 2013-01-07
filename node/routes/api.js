@@ -167,6 +167,8 @@ module.exports = function (app, express) {
     }
 
     // Login using sessionId
+    if(app.mysql)
+    {
     if(sessionId) {
       var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
       app.mysql.query(query, function (err, rows, fields) {
@@ -175,6 +177,13 @@ module.exports = function (app, express) {
         }, 405);
         getOrCreateUser(rows[0].username)
       });
+    }
+    }
+    else
+    {
+      return res.json({
+          'msg': 'Authentication error.'
+        }, 405);
     }
 
   });
