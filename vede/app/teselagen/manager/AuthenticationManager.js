@@ -14,8 +14,13 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   authResponse: null,
   username: null,
 
-  updateSplashScreenMessage: function(message){
+  updateSplashScreenMessage: function(message,stop){
     if(splashscreen) Ext.get('splash-text').update(message);
+    if(stop)
+    {
+      Ext.select('.x-mask-msg.splashscreen div:nth(2)').setStyle('background-image','url()');
+      if(splashscreen) Ext.get('splash-retry').show();
+    }
   },
 
   /*
@@ -26,7 +31,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
   * If fail proceed to manual authentication process
   */
 
-  Login: function() {
+  Login: function(cb) {
     var self = this;
     self.updateSplashScreenMessage('Getting authentication parameters');
     Ext.Ajax.request({
@@ -37,7 +42,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         var session = JSON.parse(response.responseText);
         self.username = session.username;
         delete session.username;
-        self.sendAuthRequest(session);
+        self.sendAuthRequest(session,cb);
       },
       failure: function(response, options) {
         var authDialog = Ext.create('Vede.view.AuthWindow').show();
@@ -77,8 +82,8 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
         if (cb) return cb(true); // for Testing
       },
       failure: function(response, options) {
-        self.updateSplashScreenMessage(response.statusText);
-        if (cb) return cb(false); // for Testing
+        self.updateSplashScreenMessage(response.statusText,true);
+        if (cb) return cb(false,response.statusText);
       }
     });
   }

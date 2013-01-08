@@ -65,7 +65,13 @@ Ext.application({
 
     init: function(){
         // Start the mask on the body and get a reference to the mask
-        splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span>', 'splashscreen');
+        splashscreen = Ext.getBody().mask('<span id="splash-text">Loading application</span><span id="splash-retry" style="visibility: hidden;"><button id="retry-btn">Retry</button></span>', 'splashscreen');
+
+        Ext.get('retry-btn').on("click",function(){
+            Ext.get('splash-retry').hide();
+            Teselagen.manager.AuthenticationManager.Login();
+        });
+
         // Add a new class to this mask as we want it to look different from the default.
         splashscreen.addCls('splashscreen');
 
@@ -91,19 +97,24 @@ Ext.application({
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
-            splashscreen.fadeOut({
-                duration: 1000,
-                remove: true
-            });
-            splashscreen.next().fadeOut({
-                duration: 1000,
-                remove: true,
-                listeners: {
-                    afteranimate: function() {
-                        Teselagen.manager.ProjectManager.loadUser();
+            if(splashscreen)
+                {
+                splashscreen.fadeOut({
+                    duration: 1000,
+                    remove: true
+                });
+                splashscreen.next().fadeOut({
+                    duration: 1000,
+                    remove: true,
+                    listeners: {
+                        afteranimate: function() {
+                            splashscreen = null;
+                            Teselagen.manager.ProjectManager.loadUser();
+                        }
                     }
-                }
-            });
+                });
+            }
+            else { Teselagen.manager.ProjectManager.loadUser(); }
         });
 
         this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});
