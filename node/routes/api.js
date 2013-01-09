@@ -126,64 +126,60 @@ module.exports = function (app, express) {
       });
     }
 
-    // Login using fake sessionId (For Testing)
-    if(sessionId == '111') return getOrCreateUser('rpavez');
+    if(!app.program.prod)
+    {
+      // TESTING AUTH
 
-    // Login using fake sessionId (For Testing)
-    if(sessionId == '000') return res.json({
-      'firstTime': true,
-      'msg': 'Welcome back Guest !'
-    });
-
-    // TESTING AUTH
-
-    // Loggin using just username (for Testing)
-    if(username && password !== undefined && !app.program.prod) {
-      getOrCreateUser(username);
+      // Login using fake sessionId (For Testing)
+      if(username) getOrCreateUser(username);
+      else if(sessionId) getOrCreateUser(sessionId);
+      else getOrCreateUser('guest');
     }
 
-    // DEV AUTH
-
-    // Manage errors (Only in production)
-    if(!sessionId && (!username || !password) && app.program.prod) return res.json({'msg': 'Credentials not sended'}, 405);
-
-    // Happy path of Login
-    if(username && password && app.prod) {
-
-      var crypto = require('crypto');
-      var hash = crypto.createHash('md5').update(password).digest("hex");
-
-      // Check the user in Mysql
-      query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password="' + hash + '" order by j5sessions.id desc limit 1;';
-
-      app.mysql.query(query, function (err, rows, fields) {
-        if(err) res.json({
-          'msg': 'Invalid session'
-        }, 405);
-        if(rows[0]) getOrCreateUser(rows[0].username);
-        else return res.json({
-          'msg': 'Username or password invalid'
-        }, 405);
-      });
-    }
-
-    // Login using sessionID
-    if(sessionId&&app.prod) {
-
-      query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
+    if(app.program.prod)
+    {
+      // PRODUCTION AUTH
       
-      if(app.mysql)
-      {
+      // Manage errors
+      if(!sessionId && (!username || !password)) return res.json({'msg': 'Credentials not sended'}, 405);
+
+      // Happy path of Login
+      if(username && password) {
+
+        var crypto = require('crypto');
+        var hash = crypto.createHash('md5').update(password).digest("hex");
+
+        // Check the user in Mysql
+        query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password="' + hash + '" order by j5sessions.id desc limit 1;';
+
         app.mysql.query(query, function (err, rows, fields) {
           if(err) res.json({
             'msg': 'Invalid session'
           }, 405);
-          getOrCreateUser(rows[0].username);
+          if(rows[0]) getOrCreateUser(rows[0].username);
+          else return res.json({
+            'msg': 'Username or password invalid'
+          }, 405);
         });
       }
-      else res.json({'msg': 'Unexpected error.'}, 405);
-    }
 
+      // Login using sessionID
+      if(sessionId&&app.prod) {
+
+        query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
+        
+        if(app.mysql)
+        {
+          app.mysql.query(query, function (err, rows, fields) {
+            if(err) res.json({
+              'msg': 'Invalid session'
+            }, 405);
+            getOrCreateUser(rows[0].username);
+          });
+        }
+        else res.json({'msg': 'Unexpected error.'}, 405);
+      }
+    }
   });
 
   // Get DEProjects
