@@ -1,11 +1,42 @@
 /*global describe, it */
+var DbManager = require("../manager/DbManager")();
+var dbManager = new DbManager();
+var UserManager, userManager;
 var expect = require("chai").expect;
 var request = require("request");
 var API_URL =  "http://teselagen.local/api/";
 
 describe("/api.", function() {
     var date, projects;
+    before(function(pDone) {
+        dbManager.connect(function(pErr) {
+            if (pErr) {
+                throw pErr;
+            }
+            else {
+                UserManager = require("../manager/UserManager")(dbManager.db);
+                userManager = new UserManager();
+                pDone();
+            }
+        });        
+    });
     describe("Basic access.", function() {
+        xit("/resetdb", function(done) {
+            request({
+                uri: API_URL+"resetdb",
+                json: true
+            },
+            function(err, res) {
+                expect(res.statusCode).to.equal(200);
+                done();
+            });
+        });
+        it("User.deleteAll", function(done) {
+            userManager.deleteAll(function(err) {
+                expect(err).to.be.null;
+                done();
+            });
+        });
         it("Get /projects/:project without login", function(done) {
             request(API_URL+"projects/1", function(err, res, body) {
                 expect(err).to.be.null;
@@ -29,7 +60,7 @@ describe("/api.", function() {
         });
     });
     describe("Projects.", function() {
-        it("Delete /user/projects", function(done) {
+        xit("Delete /user/projects", function(done) {
             request.del({
                 uri: API_URL+"user/projects",
                 json: true
@@ -90,16 +121,6 @@ describe("/api.", function() {
                 expect(proj.name).to.equal("MyProject1");
                 expect(proj.dateCreated).to.equal(date);
                 expect(proj.dateModified).to.equal(date);
-                done();
-            });
-        });
-        it("/resetdb", function(done) {
-            request({
-                uri: API_URL+"resetdb",
-                json: true
-            },
-            function(err, res) {
-                expect(res.statusCode).to.equal(200);
                 done();
             });
         });
