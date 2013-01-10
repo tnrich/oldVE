@@ -183,7 +183,13 @@ module.exports = function (app, express) {
 
   // Load Manager classes
   app.ApiManager = require("./manager/ApiManager.js")(app);
+  app.DEProjectManager = require("./manager/DEProjectManager.js")(app);
+  app.J5RunManager = require("./manager/J5RunManager.js")(app);
+  app.PartManager = require("./manager/PartManager.js")(app);
   app.ProjectManager = require("./manager/ProjectManager.js")(app);
+  app.SequenceManager = require("./manager/SequenceManager.js")(app);
+  app.UserManager = require("./manager/UserManager.js")(app);
+  app.VEProjectManager = require("./manager/VEProjectManager.js")(app);
   
   return config;
 
