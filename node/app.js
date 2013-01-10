@@ -13,6 +13,7 @@ var express = require('express');
 var app = express();
 
 /* Dependencies loading */
+app.async = require('async');
 app.fs = require('fs');
 app.xmlrpc = require('xmlrpc');
 app.fs = require('fs');
