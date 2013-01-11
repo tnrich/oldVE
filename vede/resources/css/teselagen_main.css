@@ -297,6 +297,7 @@ body {
 /*Vector Editor*/
 #VectorEditorMainMenuPanel-body {
   border: 0px;
+  border-left: 1px solid #EBEBEB  ;
 }
 
 #VectorPanel_header, #AnnotatePanel_header {
@@ -354,6 +355,11 @@ body {
     left: 2px;
 }
 
+.DeviceEditorTab {
+  border: 1px solid #E9E9E9;
+  border-top: none;
+}
+
 .DeviceEditorTitlePanel .x-toolbar-default {
    background: #FDFDFD;
 }
@@ -399,9 +405,10 @@ background: #F8F8F8;
 
 .InspectorPanel {
   z-index: 1000;
+  box-shadow: #999 0px 4px 30px 1px;
 }
 
-.DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit {
+.DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit  {
   width: auto ! important;
 }
 
