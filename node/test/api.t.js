@@ -1,24 +1,13 @@
-/*global describe, it */
-var DbManager = require("../manager/DbManager")();
-var dbManager = new DbManager();
-var UserManager, userManager;
-var expect = require("chai").expect;
-var request = require("request");
-var API_URL =  "http://teselagen.local/api/";
+/*global API_URL, before, dbManager, describe, expect, it, request */
 
-describe("/api.", function() {
+var ApiManager, apiManager;
+
+describe("api tests.", function() {
     var date, projects;
     before(function(pDone) {
-        dbManager.connect(function(pErr) {
-            if (pErr) {
-                throw pErr;
-            }
-            else {
-                UserManager = require("../manager/UserManager")(dbManager.db);
-                userManager = new UserManager();
-                pDone();
-            }
-        });        
+        ApiManager = require("../manager/ApiManager")(dbManager.mongoose);
+        apiManager = new ApiManager();
+        pDone();
     });
     describe("Basic access.", function() {
         xit("/resetdb", function(done) {
@@ -28,12 +17,6 @@ describe("/api.", function() {
             },
             function(err, res) {
                 expect(res.statusCode).to.equal(200);
-                done();
-            });
-        });
-        it("User.deleteAll", function(done) {
-            userManager.deleteAll(function(err) {
-                expect(err).to.be.null;
                 done();
             });
         });
