@@ -5,8 +5,7 @@
 
 module.exports = function (app, express) {
     var errorHandler = express.errorHandler();
-    var apiManager = new app.ApiManager;
-    var projectManager = new app.ProjectManager;
+    var apiManager = new app.ApiManager();
 
   // Login Auth Method : Find User in DB
   function authenticate(username, pass, fn) {
