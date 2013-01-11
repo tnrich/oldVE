@@ -401,7 +401,7 @@ background: #F8F8F8;
   z-index: 1000;
 }
 
-.DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit, .designGrid .x-column-inner {
+.DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit {
   width: auto ! important;
 }
 

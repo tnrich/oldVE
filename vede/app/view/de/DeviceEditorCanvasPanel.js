@@ -17,11 +17,12 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 		xtype: 'container',
 		title: 'Canvas container',
         cls: 'designGrid',
+        minWidth: 3000,
+        autoScroll: true,
         border: 0,
         layout: {
             type: 'column'
         },
-        overflowX : 'scroll',
         padding: 10,
 	}
  	]
