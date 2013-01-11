@@ -8,6 +8,7 @@ Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 		type: 'fit'
 	},
 	animCollapse: false,
+	autoScroll: true,
 	dockedItems: [{
 		xtype: 'InspectorPanel',
 	}],

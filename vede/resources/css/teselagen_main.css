@@ -397,3 +397,11 @@ background: #F8F8F8;
   -webkit-transform: rotate(180deg);
 }
 
+.InspectorPanel {
+  z-index: 1000;
+}
+
+.DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit, .designGrid .x-column-inner {
+  width: auto ! important;
+}
+
