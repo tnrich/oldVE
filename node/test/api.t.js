@@ -2,7 +2,7 @@
 
 var ApiManager, apiManager;
 
-describe("api tests.", function() {
+describe("API tests.", function() {
     var date, projects;
     before(function(pDone) {
         ApiManager = require("../manager/ApiManager")(dbManager.mongoose);
