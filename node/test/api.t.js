@@ -10,13 +10,9 @@ describe("api tests.", function() {
         pDone();
     });
     describe("Basic access.", function() {
-        xit("/resetdb", function(done) {
-            request({
-                uri: API_URL+"resetdb",
-                json: true
-            },
-            function(err, res) {
-                expect(res.statusCode).to.equal(200);
+        it("resetdb", function(done) {
+            apiManager.resetdb(function(err) {
+                expect(err).to.be.null;
                 done();
             });
         });
