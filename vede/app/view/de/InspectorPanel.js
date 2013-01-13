@@ -10,7 +10,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
     resizable: true,
     margin: '10 0 10 0',
     minWidth: 350,
-    width: 100,
     bodyBorder: false,
     animCollapse: false,
     collapseDirection: 'right',
