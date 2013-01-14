@@ -6,7 +6,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
     floating: false,
     frame: true,
     cls: 'InspectorPanel',
-    margin: '10 0 10 0',
+    margin: '0 0 10 0',
     minWidth: 350,
     width: 100,
     bodyBorder: false,
