@@ -95,15 +95,20 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     deleteDEProject: function (deproject, tab) {
+
+
         console.log("Deleting deproject");
+        var store =  deproject.store;
+        store.remove(deproject);
+
         var self = this;
-        this.workingProject.deprojects().remove(deproject);
-        this.workingProject.deprojects().sync({
+        store.sync({
             callback: function () {
-                self.loadDesignAndChildResources();
+                Vede.application.fireEvent("renderProjectsTree");
                 Ext.getCmp('mainAppPanel').remove(tab);
             }
         });
+        
     },
 
     openSequence: function (sequence) {

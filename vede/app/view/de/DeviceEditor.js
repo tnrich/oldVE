@@ -14,9 +14,12 @@ Ext.define('Vede.view.de.DeviceEditor', {
         xtype: 'DeviceEditorTitlePanel'
     }, {
         xtype: 'DeviceEditorMenuPanel'
-    }, {
+    },
+    /*{
         xtype: 'DeviceEditorStatusPanel'
-    }, {
+    },
+    */
+    {
         xtype: 'DeviceEditorPartPanel'
     }],
     items: [{
