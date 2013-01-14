@@ -264,9 +264,9 @@ app.post('/getProtocol',restrict,function(req,res){
 });
 
 var direct = false;
-var j5Method1,j5Method2;
-var j5Method1 = direct ? '/executej5t' : '/executej5';
-var j5Method2 = !direct ? '/executej5t' : '/executej5';
+var j5Method1, j5Method2;
+j5Method1 = direct ? '/executej5t' : '/executej5';
+j5Method2 = !direct ? '/executej5t' : '/executej5';
 
 // Design Assembly RPC
 app.post(j5Method1,restrict,function(req,res){
@@ -288,7 +288,7 @@ app.post(j5Method1,restrict,function(req,res){
         Sequence.findById(part.sequencefile_id,function(err,seq){
           deproject.design.j5collection.bins[binKey].parts[partKey].SequenceFile = seq;
           partsCounter--;
-          if(partsCounter==0) return cb(deproject);
+          if(partsCounter===0) return cb(deproject);
         });
       });
     });
@@ -296,12 +296,12 @@ app.post(j5Method1,restrict,function(req,res){
 
   DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
     resolveSequences(deprojectModel,function(deproject){
-      var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
+      var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
       data["username"] = 'rpavez';
       data["api_key"] = 'teselarocks';
 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-        if(error) 
+        if(error)
         {
           console.log(error);
           res.send(error["faultString"], 500);

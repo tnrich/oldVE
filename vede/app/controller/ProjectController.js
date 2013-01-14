@@ -73,7 +73,7 @@ Ext.define("Vede.controller.ProjectController", {
                             leaf: true,
                             id: deproject.data.id,
                             hrefTarget: 'j5reports',
-                            icon: "resources/images/ux/j5-tree-icon-parent"
+                            icon: "resources/images/ux/j5-tree-icon-parent.png"
                         });
 
                     });

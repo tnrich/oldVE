@@ -19,6 +19,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     masterFiles: null,
 
+    assemblyMethod: null,
+
     constructor: function () {},
 
     //================================================================
@@ -29,8 +31,13 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
      */
     generateAjaxRequest: function (cb) {
         console.log("Starting Ajax Request");
+
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
+        var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
+        
+        resultsGrid.store.removeAll();
+
         runj5Btn.toggle();
 
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
@@ -41,14 +48,14 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             params: {
                 deProjectId: deproject.data.id,
                 parameters: JSON.stringify(this.j5Parameters),
-                masterFiles: JSON.stringify(this.masterFiles)
+                masterFiles: JSON.stringify(this.masterFiles),
+                assemblyMethod: self.assemblyMethod
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
 
-                var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
 
                 var store = new Ext.data.JsonStore({
@@ -67,7 +74,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
 
-                return cb();
+                return cb(true);
+            },
+            failure: function(response, opts) {
+                return cb(false,response);
             }
         });
         
@@ -76,9 +86,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;
         btn.toggle();
     },
-    setParameters: function(j5Parameters,masterFiles){
+    setParameters: function(j5Parameters,masterFiles,assemblyMethod){
         this.j5Parameters = j5Parameters.getParametersAsArray(true);
         this.masterFiles = masterFiles;
+        this.assemblyMethod = assemblyMethod;
     }
 
 });

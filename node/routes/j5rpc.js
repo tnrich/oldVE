@@ -1,12 +1,15 @@
 var loopAndSplice = function(unordered) {
   for(var i = 0; i < unordered.length; i++) {
     for(var j = i + 1; j < unordered.length; j++) {
-      if(unordered[i])
+      if(unordered[i]&&unordered[j])
       {
-          if (unordered[i]["hash"] == unordered[j]["hash"]) {
-            unordered.splice(j, 1);
-            j--;
-          }
+        if(unordered[i]["hash"]&&unordered[j]["hash"])
+            {
+              if (unordered[i]["hash"] == unordered[j]["hash"]) {
+                unordered.splice(j, 1);
+                j--;
+              }
+            }
       }
       else
       {
@@ -62,10 +65,18 @@ function encoded_zipped_sequences_file(model)
 
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
-            var sequenceFile = part["SequenceFile"];
-            zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
+            if(part)
+            {
+                var sequenceFile = part["SequenceFile"];
+                if(sequenceFile) zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
+                else console.log("Warning: Sequence file not found");
+            }
+            else
+            {
+                console.log("Warning: Part not found");
+            }
         });
-    });   
+    });
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
     quicklog(data);
@@ -81,22 +92,27 @@ function encoded_parts_list_file(model)
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
             var sequenceFile = part["SequenceFile"];
+            if(sequenceFile)
+            {
+                var sequenceName = "";
+                if (sequenceFile["sequenceFileFormat"]=="GENBANK")
+                    {
+                        sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
+                        if(sequenceName) sequenceName = sequenceName[1];
+                        else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                    }
 
-            var sequenceName = "";
-            if (sequenceFile["sequenceFileFormat"]=="GENBANK")
-                {
-                    sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
-                    if(sequenceName) sequenceName = sequenceName[1];
-                    else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
-                }
+                if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+                if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
 
-            if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
-            if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
-
-            out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-
+                out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+            }
+            else
+            {
+                console.log("Warning: Sequence file not found");
+            }
         });
-    }); 
+    });
     quicklog(out);
     return new Buffer(out).toString('base64');  
 }
@@ -191,7 +207,7 @@ function encoded_eugene_rules_list_file(model)
     return new Buffer(out).toString('base64'); 
 }
 
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);
@@ -257,6 +273,8 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
             "reuse_zipped_sequences_file": "FALSE" \
         }');
 
+    execParams["assemblyMethod"] = assemblyMethod;
+
     execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
     execParams["encoded_master_plasmids_file"] = new Buffer(masterFiles["masterPlasmidsList"]).toString('base64');
     
@@ -290,6 +308,9 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
     Object.keys(execParams).forEach(function(prop) {
         data[prop] = execParams[prop];
     });
+
+    console.log("Executing using method: "+data["assemblyMethod"]);
+
 
     return data;
 

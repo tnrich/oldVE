@@ -6,7 +6,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                "Teselagen.utils.J5ControlsUtils",
                "Teselagen.manager.J5CommunicationManager",
                "Teselagen.manager.ProjectManager",
-               "Teselagen.bio.parsers.GenbankManager"],
+               "Teselagen.bio.parsers.GenbankManager",
+               "Ext.MessageBox"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -130,7 +131,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             var linesArray = result.split(/\n/);
             var headerFields = linesArray[0].split(/,\s*/);
 
-            if (headerFields.length != 5 || (headerFields[0] != "Oligo Name" && 
+            if (headerFields.length != 5 || (headerFields[0] != "Oligo Name" &&
                                              headerFields[0] != "Oigo Name") || //accounting for typo in example file
                 headerFields[1] != "Length" || headerFields[2] != "Tm" ||
                 headerFields[3] != "Tm (3' only)" || headerFields[4] != "Sequence") {
@@ -297,22 +298,59 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;
         masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;
 
+        var assemblyMethod = Ext.ComponentQuery.query("component[cls='assemblyMethodSelector']")[0].getValue();
+        
+        if(assemblyMethod == "Mock Assembly") assemblyMethod = "Mock";
+        if(assemblyMethod == "SLIC/Gibson/CPEC") assemblyMethod = "SLIC/Gibson/CPEC";
+        if(assemblyMethod == "Golden Gate") assemblyMethod = "GoldenGate";
+
+        if(assemblyMethod == "Combinatorial Mock Assembly") assemblyMethod = "CombinatorialMock";
+        if(assemblyMethod == "Combinatorial SLIC/Gibson/CPEC") assemblyMethod = "CombinatorialSLICGibsonCPEC";
+        if(assemblyMethod == "Combinatorial Golden Gate") assemblyMethod = "CombinatorialGoldenGate";
+
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
-        currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles);
+        currentTab.j5Window.j5comm.setParameters(this.j5Parameters,masterFiles,assemblyMethod);
         
         loadingMessage.update(30,"Saving design");
 
         Vede.application.fireEvent("saveDesignEvent",function(){
             loadingMessage.update(60,"Executing request");
-            currentTab.j5Window.j5comm.generateAjaxRequest(function(){
-                loadingMessage.update(100,"Completed");
-                loadingMessage.close();
+            currentTab.j5Window.j5comm.generateAjaxRequest(function(success,responseData){
+                if(success)
+                {
+                    loadingMessage.update(100,"Completed");
+                    loadingMessage.close();
+                }
+                else
+                {
+                    console.log(responseData.responseText);
+                    loadingMessage.close();
+                    var messagebox = Ext.MessageBox.show({
+                        title: "Execution Error",
+                        msg: responseData.responseText,
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.ERROR
+                    });
+
+                    Ext.Function.defer(function () {
+                    messagebox.zIndexManager.bringToFront(messagebox);
+                    },100);
+                }
             });
         });
         
         
 
+    },
+
+    onDistributePCRBtn: function(){
+
+        var zippedPlateFilesSelector = Ext.ComponentQuery.query("component[cls='zippedPlateFilesSelector']")[0];
+
+        console.log("Distribute PCR Reactions");
+        var fileName = this.getFileNameFromField(zippedPlateFilesSelector);
+        console.log(fileName);
     },
 
     /**
@@ -453,6 +491,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             },
             "button[cls='downloadj5Btn']": {
                 click: this.onDownloadj5Btn
+            },
+            "button[cls='distributePCRBtn']": {
+                click: this.onDistributePCRBtn
             },
             "gridpanel[title=Plasmids]": {
                 itemclick: this.onPlasmidsItemClick
