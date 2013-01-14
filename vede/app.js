@@ -7,9 +7,65 @@ Ext.Loader.setConfig({
         Ext: '.',
         'Ext.ux': '../extjs/examples/ux',
         Teselagen: './app/teselagen',
+        Vede: './app',
         'Teselagen.bio': '../biojs/src/teselagen/bio'
     }
 });
+
+Ext.Loader.syncRequire([
+        //Sync requires
+        ,'Teselagen.constants.Constants'
+        ,'Teselagen.bio.sequence.symbols.GapSymbol'
+        ,'Teselagen.bio.sequence.symbols.NucleotideSymbol'
+        ,'Teselagen.bio.sequence.symbols.AminoAcidSymbol'
+        ,'Ext.layout.container.Border'
+        ,'Ext.toolbar.Spacer'
+        ,'Ext.tree.Panel'
+        ,'Ext.toolbar.TextItem'
+        ,'Ext.form.field.ComboBox'
+        ,'Ext.layout.container.Column'
+        ,'Ext.form.Panel'
+        ,'Ext.form.RadioGroup'
+        ,'Ext.form.field.Radio'
+        ,'Ext.grid.Panel'
+        ,'Ext.grid.plugin.RowEditing'
+        ,'Ext.grid.column.Number'
+        ,'Ext.grid.column.Boolean'
+        ,'Ext.form.Label'
+        ,'Ext.button.Split'
+        ,'Ext.grid.column.Date'
+        ,'Ext.form.FieldSet'
+        ,'Teselagen.manager.ActionStackManager'
+        ,'Teselagen.models.RestrictionEnzymeGroup'
+        ,'Teselagen.event.MapperEvent'
+        ,'Teselagen.manager.ORFManager'
+        ,'Teselagen.manager.RestrictionEnzymeManager'
+        ,'Teselagen.manager.SequenceAnnotationManager'
+        ,'Teselagen.renderer.annotate.LineRenderer'
+        ,'Teselagen.manager.RowManager'
+        ,'Vede.view.annotate.Annotator'
+        ,'Teselagen.renderer.annotate.SequenceRenderer'
+        ,'Vede.view.annotate.Caret'
+        ,'Teselagen.renderer.annotate.SelectionLayer'
+        ,'Teselagen.manager.FindManager'
+        ,'Teselagen.manager.PieManager'
+        ,'Vede.view.pie.Frame'
+        ,'Vede.view.pie.Pie'
+        ,'Teselagen.renderer.pie.CutSiteRenderer'
+        ,'Teselagen.renderer.pie.FeatureRenderer'
+        ,'Teselagen.renderer.pie.ORFRenderer'
+        ,'Teselagen.renderer.pie.WireframeSelectionLayer'
+        ,'Teselagen.renderer.pie.SelectionLayer'
+        ,'Teselagen.manager.RailManager'
+        ,'Vede.view.rail.Frame'
+        ,'Vede.view.rail.Rail'
+        ,'Teselagen.renderer.rail.CutSiteRenderer'
+        ,'Teselagen.renderer.rail.FeatureRenderer'
+        ,'Teselagen.renderer.rail.ORFRenderer'
+        ,'Teselagen.renderer.rail.WireframeSelectionLayer'
+        ,'Teselagen.renderer.rail.SelectionLayer'
+        ,'Teselagen.manager.AAManager'
+]);
 
 Ext.application({
     autoCreateViewport: true,
@@ -53,7 +109,7 @@ Ext.application({
         console.warn(err);
         return true;
     },
-    require: [
+    requires: [
         "Teselagen.event.AuthenticationEvent",
         "Teselagen.manager.AuthenticationManager",
 
