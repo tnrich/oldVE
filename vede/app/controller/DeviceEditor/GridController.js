@@ -183,7 +183,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
-        console.log("bin '" + updatedBin.get("binName") + "' field " + modified + 
+        console.log("bin '" + updatedBin.get("binName") + "' field " + modified +
                     " modified, operation " + operation);
 
         this.rerenderBin(updatedBin);
@@ -273,7 +273,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             selectedBinIndex = 0;
         }
 
-        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 
+        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
     },
 
@@ -443,6 +443,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         j5Part.getSequenceFile({
         callback: function(associatedSequence,operation){
+        
         if(associatedSequence)
         {
             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
@@ -491,11 +492,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         });
 
         var partModel1 = Ext.create("Teselagen.models.Part", {
-            name: "p_con",
+            name: "p_con"
         });
 
         var partModel2 = Ext.create("Teselagen.models.Part", {
-            name: "p_bad",
+            name: "p_bad"
         });
 
         binModel.parts().add(partModel1);

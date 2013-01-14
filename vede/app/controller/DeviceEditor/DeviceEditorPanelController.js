@@ -122,23 +122,30 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         var saveAssociatedSequence = function (part, cb) {
                 part.getSequenceFile({callback: function(associatedSequence){
-                    var lastSequenceId = associatedSequence.get('id');
-                    if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                    if(associatedSequence)
                     {
-                        associatedSequence.save({
-                            callback: function (sequencefile) {
-                                if(!lastSequenceId)
-                                {
-                                    part.set("sequencefile_id", sequencefile.get('id'));
-                                    part.save({
-                                        callback: function () {
-                                            cb();
-                                        }
-                                    });
+                        var lastSequenceId = associatedSequence.get('id');
+                        if(Object.keys(associatedSequence.getChanges()).length > 0 || !associatedSequence.get('id'))
+                        {
+                            associatedSequence.save({
+                                callback: function (sequencefile) {
+                                    if(!lastSequenceId)
+                                    {
+                                        part.set("sequencefile_id", sequencefile.get('id'));
+                                        part.save({
+                                            callback: function () {
+                                                cb();
+                                            }
+                                        });
+                                    }
+                                    else { cb(); }
                                 }
-                                else { cb(); }
-                            }
-                        });
+                            });
+                        }
+                        else
+                        {
+                            cb();
+                        }
                     }
                     else
                     {

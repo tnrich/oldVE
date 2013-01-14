@@ -47,7 +47,7 @@ Ext.define('Vede.view.de.grid.Part', {
             y: 0,
             margin: '0 auto auto auto',
             hidden: true
-        }
+        },
         /*
         if(this.getBin())
         {
@@ -64,7 +64,7 @@ Ext.define('Vede.view.de.grid.Part', {
                 //html: html,
                 styleHtmlContent: true,
                 styleHtmlCls: 'gridPartCell',
-                height: 60,
+                height: 40,
                 cls: 'gridPartCell',
                 width: 125,
                 items: [

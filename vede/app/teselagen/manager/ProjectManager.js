@@ -15,6 +15,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     workingVEProject: null,
     workingSequence: null,
     workingSequenceFileManager: null,
+    sequenceStore: null,
 
     /**
      * Load User Info
@@ -218,7 +219,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 }
             };
 
-        Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed, this);
+        Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
     },
 
     createNewDEProjectAtProject: function (project) {

@@ -29,6 +29,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
         j5Part.getSequenceFile({
             callback: function (seq) {
+                console.log(seq);
                 Teselagen.manager.ProjectManager.workingSequence = seq;
                 self.sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
                 Vede.application.fireEvent("SequenceManagerChanged", self.sequenceFileManager);

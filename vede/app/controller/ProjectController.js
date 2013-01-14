@@ -2,7 +2,7 @@ Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
     requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager", "Teselagen.models.DeviceEditorProject", "Teselagen.models.SequenceFile", "Teselagen.models.Part", "Teselagen.models.VectorEditorProject"],
 
-    partsStore: null,
+    sequenceStore: null,
 
     openProject: function (project) {
         Teselagen.manager.ProjectManager.openProject(project);
@@ -14,10 +14,6 @@ Ext.define("Vede.controller.ProjectController", {
 
         var lastDEProjects = Ext.create('Ext.data.Store', {
             model: 'Teselagen.models.DeviceEditorProject'
-        });
-
-        self.partsStore = Ext.create('Ext.data.Store', {
-            model: 'Teselagen.models.Part'
         });
 
         var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
@@ -84,10 +80,22 @@ Ext.define("Vede.controller.ProjectController", {
                 }
             });
 
+
+            self.sequenceStore = Ext.create('Ext.data.Store', {
+                model: 'Teselagen.models.VectorEditorProject'
+            });
+            Teselagen.manager.ProjectManager.sequenceStore = 
+                Ext.create('Ext.data.Store', {
+                    model: 'Teselagen.models.VectorEditorProject'
+            });
+
             var veprojects = project.veprojects();
             veprojects.load({
                 callback: function () {
                     veprojects.each(function (veproject) {
+                        self.sequenceStore.add(veproject);
+                        Teselagen.manager.ProjectManager.sequenceStore.add(veproject);
+
                         var veprojectnode = projectNode.appendChild({
                             text: veproject.data.name,
                             leaf: true,
@@ -165,7 +173,7 @@ Ext.define("Vede.controller.ProjectController", {
     createSequence: function (record) {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        Teselagen.manager.ProjectManager.createNewSequence(project);        
+        Teselagen.manager.ProjectManager.createNewSequence(project);
     },
 
     promptPartName: function(cb){
