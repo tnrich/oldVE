@@ -44,7 +44,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
      *                  "start.end" indicates exact location is unknown.
      *                  "start^end" points to a single point in that range.
      * @returns {GenbankFeatureQualifier}
-     * @memberOf GenbankFeatureLocation
+     * @member GenbankFeatureLocation
      */
     constructor: function (inData) {
 
@@ -144,7 +144,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json GenbankFeatureLocation in JSON form
+     * @param {JSON} json GenbankFeatureLocation in JSON form
      * @returns {Teselagen.bio.model.GenbankFeatureLocation}
      */
     fromJSON: function(json) {

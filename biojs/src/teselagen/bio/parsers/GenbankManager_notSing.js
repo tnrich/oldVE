@@ -44,7 +44,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager_noSing", {
     /**
      * Creates a static GenbankManager class with public functions.
      * @returns {GenbankManager} Handle to execute methods.
-     * @memberOf GenbankManager
+     * @member GenbankManager
      */
     constructor: function() {
         var that = this;

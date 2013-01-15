@@ -35,7 +35,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
      * @param {String} value
      * @param {[GenbankSubKeyword]} subKeywords
      * @returns {GenbankKeyword}
-     * @memberOf GenbankKeyword
+     * @member GenbankKeyword
      */
     constructor: function (inData) {
 
@@ -143,7 +143,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json Genbank Keyword in JSON form
+     * @param {JSON} json Genbank Keyword in JSON form
      * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
      */
     fromJSON: function(json) {

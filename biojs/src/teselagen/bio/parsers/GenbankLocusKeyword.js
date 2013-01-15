@@ -64,7 +64,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
      * @param {String} divisionCode Three letter code in caps.
      * @param {String} date
      * @returns {GenbankLocusKeyword}
-     * @memberOf GenbankLocusKeyword
+     * @member GenbankLocusKeyword
      */
     constructor: function (inData) {
         //var that = this;
@@ -155,7 +155,7 @@ Ext.define("Teselagen.bio.parsers.GenbankLocusKeyword", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json Genbank Locus in JSON form
+     * @param {JSON} json Genbank Locus in JSON form
      * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
      */
     fromJSON: function(json) {
