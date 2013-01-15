@@ -1,9 +1,8 @@
-    /**
-    * AminoAcidSymbol class
-    * @description This class ssets up the data structure for Amino Acids
-    * @author Micah Lerner
-    */
-
+/**
+ * @class Teselagen.bio.sequence.symbols.AminoAcidSymbol
+ * This class sets up the data structure for Amino Acids.
+ * @author Micah Lerner
+ */
 Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 	/**
 	* Constructor

@@ -1,8 +1,7 @@
 /**
  * @class Teselagen.bio.sequence.common.StrandedAnnotation
- * Annotation with defined read direction.
- * 
- * @see Teselagen.bio.sequence.common.StrandType
+ * Annotation with defined read direction. See Teselagen.bio.sequence.common.StrandType.
+ *
  * @extends {Teselagen.bio.sequence.common.Annotation}
  * @author Micah Lerner
  */

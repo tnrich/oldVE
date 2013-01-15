@@ -85,7 +85,7 @@ Ext.define("Teselagen.models.J5Collection", {
      * Original uses splice, but don't we want to insert it, not replace an item?
      * @param {Teselagen.models.J5Bin} pJ5Bin Bin to add to collection. Can be one or array of bins.
      * @param {Number} pIndex Index to insert pJ5Bin. Optional. Defaults to end of of array if invalid or undefined value.
-     * @preturns {Boolean} True if added, False if not.
+     * @returns {Boolean} True if added, False if not.
      */
     addToBin: function(pJ5Bin, pIndex) {
         var added = false;

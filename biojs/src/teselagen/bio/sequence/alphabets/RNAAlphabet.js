@@ -1,9 +1,8 @@
 /**
  * @class Teselagen.bio.sequence.alphabets.RNAAlphabet
  * 
- * RNA alphabet. Most general alphabet to build RNA sequences.
+ * RNA alphabet. Most general alphabet to build RNA sequences.  See Teselagen.bio.sequence.symbols.NucleotideSymbol.
  * 
- * @see Teselagen.bio.sequence.symbols.NucleotideSymbol
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
  * @author Timothy Ham (original author)

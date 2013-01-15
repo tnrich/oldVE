@@ -1,6 +1,6 @@
     /**
-    * GapSymbol class
-    * @description This class sets up a Gap Symbol class
+    * @class Teselagen.bio.sequence.symbols.GapSymbol
+    * This class models a gap symbol.
     * @author Micah Lerner
     */
    Ext.define("Teselagen.bio.sequence.symbols.GapSymbol",{

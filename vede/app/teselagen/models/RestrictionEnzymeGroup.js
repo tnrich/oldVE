@@ -1,7 +1,7 @@
 /**
  * @class Teselagen.models.RestrictionEnzymeGroup
  * Class to hold a group of RestrictionEnzymes.
- * Used by @link Teselagen.manager.RestrictionEnzymeManager
+ * Used by Teselagen.manager.RestrictionEnzymeManager
  */
 Ext.define("Teselagen.models.RestrictionEnzymeGroup", {
     config: {

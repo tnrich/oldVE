@@ -1,8 +1,7 @@
 /**
 * @class Teselagen.bio.sequence.dna.DigestionFragment
-* Digestion fragment holder.
+* Digestion fragment holder. See Teselagen.bio.tools.DigestionCalculator.
 * 
-* @see Teselagen.bio.tools.DigestionCalculator
 * @author Micah Lerner
 * @author Joanna Chen (original author)
 */

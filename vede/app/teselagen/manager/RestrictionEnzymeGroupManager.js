@@ -2,7 +2,7 @@
  * @singleton
  * @class Teselagen.manager.RestrictionEnzymeGroupManager
  * This class manages the different user-defined and pre-installed groups of restriction enzymes.
- * It calls on @link Teselagen.bio.enzymes.RestrictionEnzymeManager to load them from an xml file.
+ * It calls on Teselagen.bio.enzymes.RestrictionEnzymeManager to load them from an xml file.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
@@ -62,8 +62,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
     /**
      * SHOULD BE IRRELEVANT IN JS VERSION
-     * Given a @link Teselagen.models.User object, creates
-     * @link Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
+     * Given a Teselagen.models.User object, creates
+     * Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
      * @param {Teselagen.models.UserRestrictionEnzyme} userEnzymes The UserRestrictionEnzyme object to load from.
      */
     loadUserRestrictionEnzymes: function(user) {

@@ -84,7 +84,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {Teselagen.bio.sequence.common.SymbolList} sequence
      * @param {[Teselagen.bio.sequence.dna.Feature]} features
      * @returns {Teselagen.manager.SequenceManager}
-     * @memberOf Teselagen.manager.SequenceManager
+     * @member Teselagen.manager.SequenceManager
      *
      */
     constructor: function(inData) {
@@ -1028,7 +1028,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * @see manualUpdateStart
+     * See #manualUpdateStart
      */
     manualUpdateEnd: function() {
         if(this.manualUpdateStarted) {

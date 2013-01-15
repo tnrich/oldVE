@@ -239,7 +239,7 @@ Ext.define("Teselagen.models.SequenceFile", {
      * Sets FileName based on PartSource
      * DOES NOT CHECK FOR UNIQUENESS OF NAME.
      *
-     * @params {[String]} pSequenceFileName Optional. Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
+     * @param {[String]} pSequenceFileName Optional. Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
      * @returns {[String]} Set sequenceFileName.
      */
     setSequenceFileName: function (pName) {

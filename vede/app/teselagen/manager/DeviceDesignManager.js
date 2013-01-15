@@ -189,7 +189,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pNumBins
      * @param {Boolean} pIsCircular
-     * @preturns {Teselagen.models.J5Collection}
+     * @returns {Teselagen.models.J5Collection}
      */
     createEmptyJ5Collection: function(pDevice, pNumBins, pIsCircular) {
         var collection = Ext.create("Teselagen.models.J5Collection", {
@@ -474,7 +474,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Add an empty bin to the collection, by index.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pIndex
-     * @para, {String} [pName] Optional
+     * @param, {String} [pName] Optional
      */
     addEmptyBinByIndex: function(pDevice, pIndex, pName) {
         /*if (pName === null || pName === undefined || pName === "") {
