@@ -69,11 +69,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     addPartCellClickEvent: function(partCell) {
-        //console.log(partCell);
-        //console.log(Ext.getClassName(partCell.body));
         partCell.body.on("click", function() {
             this.application.fireEvent("PartCellClick", partCell);
         },this);
+        
         partCell.body.on("dblclick", function() {
             this.application.fireEvent("PartCellVEEditClick", partCell);
         },this);
@@ -103,8 +102,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
 
-        var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
-                                                            j5Bin);
+        var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
@@ -112,7 +110,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.selectedPart = gridPart;
         gridPart.select();
-
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
 
@@ -484,7 +481,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         this.tabPanel = Ext.getCmp("mainAppPanel");
 
-        // Create a sample bin and associated parts to render.
+        // Empty model start with one bin and two empty parts
         this.totalRows = 2;
         var binModel = Ext.create("Teselagen.models.J5Bin", {
             binName: "cds",
@@ -492,11 +489,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         });
 
         var partModel1 = Ext.create("Teselagen.models.Part", {
-            name: "p_con"
+            name: "Part0"
         });
 
         var partModel2 = Ext.create("Teselagen.models.Part", {
-            name: "p_bad"
+            name: "Part1"
         });
 
         binModel.parts().add(partModel1);
@@ -566,5 +563,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onPartCellVEEditClick,
                             this);
         
-        },
+        }
 });

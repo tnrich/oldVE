@@ -142,6 +142,8 @@ Ext.application({
 
     launch: function() {
 
+        Vede.application = this;
+
         Ext.Ajax.cors = true; // Allow CORS
         Ext.Ajax.withCredentials = true;
         Ext.Error.notify = false; // prevent ie6 and ie7 popup

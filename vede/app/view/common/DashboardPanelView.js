@@ -4,24 +4,35 @@ Ext.define('Vede.view.common.DashboardPanelView', {
     id: 'DashboardPanel',
     layout: {
         align: 'stretch',
-        type: 'hbox'
+        type: 'fit'
     },
     frameHeader: false,
     border: 0,
     title: 'Dashboard',
     items: [{
         xtype: 'panel',
-        //layout: 'fit',
-        items: [
-                {
-                    xtype: 'image',
-                    height: 175,
-                    margin: '50 50 50 50',
-                    width: 330,
-                    src: 'resources/images/logo-splash.png'
+        layout: 'absolute',
+        items: [{
+            xtype: 'image',
+            height: 175,
+            margin: '50 50 50 50',
+            width: 330,
+            src: 'resources/images/logo-splash.png',
+            x: 200,
+            y: 50
+        }, {
+            xtype: 'button',
+            text: 'Click here to start a new project',
+            scale: 'large',
+            x: 300,
+            y: 350,
+            listeners: {
+                click: function () {
+                    Teselagen.manager.ProjectManager.createNewProject();
                 }
-            ]
-    }],
+            }
+        }]
+    }]
     /*
     items: [{
         xtype: 'panel',
@@ -151,12 +162,13 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 text: 'Submit Feedback'
             }]
         }]
-    }],*/
+    }],
     require: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager"],
     listeners: {
         itemclick: function (view, record, item, index, e, eOpts) {
             Vede.application.fireEvent(Teselagen.event.ProjectEvent.OPEN_PROJECT, record);;
         }
     }
+    */
 
 });

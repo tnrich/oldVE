@@ -37,19 +37,28 @@ Ext.define('Vede.view.de.InspectorPanel', {
             preventHeader: true,
             title: 'Part Info',
             items: [
+                /*
                 {
                     xtype: 'tbseparator',
                     height: 20
+                },
+                */
+                {
+                    xtype: 'button',
+                    text : 'Assign empty sequence',
+                    cls: 'emptySequenceBtn'
                 },
                 {
                     xtype: 'button',
                     text : 'Change Source',
                     cls: 'changeSequenceBtn'
                 },
+                /*
                 {
                     xtype: 'tbseparator',
                     height: 20
                 },
+                */
                 {
                     xtype: 'form',
                     flex: 1,

@@ -299,7 +299,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
         Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed, this);
 
-    },
+    }
     /*
     openSequenceFile: function () {
         var self = this;
