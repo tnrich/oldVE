@@ -170,7 +170,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         labelSeparator: ' ',
                         labelWidth: 120,
                         queryMode: 'local',
-                        store: ['Mock Assembly', 'SLIC/Gibson/CPEC', 'Golden Gate','Combinatorial Mock Assembly', 'Combinatorial SLIC/Gibson/CPEC', 'Combinatorial Golden Gate'],
+                        store: ['Mock Assembly', 'SLIC/Gibson/CPEC', 'Golden Gate', 'Combinatorial Mock Assembly', 'Combinatorial SLIC/Gibson/CPEC', 'Combinatorial Golden Gate'],
                         value: 'Mock Assembly'
                     }, {
                         xtype: 'button',
@@ -183,7 +183,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         enableToggle: true,
                         pressed: false,
                         text: '<b>Run j5</b>'
-                    },{
+                    }, {
                         xtype: 'button',
                         flex: 1,
                         height: 23,
@@ -356,6 +356,14 @@ Ext.define('Vede.view.de.j5Controls', {
                         cls: 'distributePCRBtn',
                         margin: '15 0 0 0',
                         text: '<b>Distribute PCR Reactions</b>'
+                    }, {
+                        xtype: 'button',
+                        cls: 'downloadDownstreamAutomationBtn',
+                        enableToggle: true,
+                        pressed: false,
+                        text: '<b>Download Results</b>',
+                        hidden: true,
+                        margin: '15 0 0 0'
                     }]
                 }, {
                     xtype: 'panel',
@@ -371,8 +379,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             align: 'stretch',
                             type: 'hbox'
                         },
-                        items: [
-                            {
+                        items: [{
                             xtype: 'container',
                             flex: 1,
                             padding: 5,
@@ -414,8 +421,7 @@ Ext.define('Vede.view.de.j5Controls', {
                                 text: '<b>Generate j5 Eugene Rules File</b>',
                                 tooltip: 'The Eugene (a biological design specification computer language) rules list file is a text file that contains a list of design rules. j5 checks that these rules are satisfied prior to designing an assembly. Currently, j5 only enforces three types of Eugene rules (NOTMORETHAN, NOTWITH, and WITH) and ignores all other rules and declarations; all lines that do not begin with "Rule" are ignored, as well as everything following the commenting escape characters "//".'
                             }]
-                        }, 
-                        {
+                        }, {
                             xtype: 'container',
                             flex: 1,
                             padding: 5,

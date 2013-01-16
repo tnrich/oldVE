@@ -13,6 +13,15 @@ module.exports = function (app) {
 
 var j5rpcEncode = require('./j5rpc');
 
+function quicklog(s) {
+  var logpath = "/tmp/quick.log";
+  var fs = require('fs');
+  s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
+  var fd = fs.openSync(logpath, 'a+', 0666);
+  fs.writeSync(fd, s + '\n');
+  fs.closeSync(fd);
+}
+
 function authenticate(username, pass, fn) {
   var User = app.db.model("User");
   User.findOne({
@@ -82,7 +91,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
       
       var j5parameters = base64CSVDecodeToObject(value["encoded_j5_parameters_file"]);
       var master_plasmids_list = value["encoded_master_plasmids_file"];
-      var master_oligos_list = value["encoded_master_oligos_file"]; 
+      var master_oligos_list = value["encoded_master_oligos_file"];
       var master_direct_synthesis_list = value["encoded_master_direct_syntheses_file"];
 
       var data = {};
@@ -93,18 +102,34 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 
       res.send(data);
     }
-  })
+  });
 });
 
-//Design Downstream Automation 
+//Design Downstream Automation
 app.post('/DesignDownstreamAutomation',function(req,res){
 
-  var data = JSON.parse(req.body.params);
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  var data = JSON.parse(req.body.files);
+  var params = JSON.parse(req.body.params);
+
+  var downstreamAutomationParamsEncode = function(params){
+      var out = "Parameter Name,Value\n"
+      
+      for(var prop in params) {
+          out += prop + ',' + params[prop] + '\n';
+      }
+
+      return new Buffer(out).toString('base64');    
+  }
+
+  data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
+  //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
+  data["automation_task"] = "DistributePcrReactions";
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
 
-    if(error) 
+    if(error)
     {
       console.log(error);
       res.send(error["faultString"], 500);
@@ -113,7 +138,7 @@ app.post('/DesignDownstreamAutomation',function(req,res){
     {
       res.send(value);
     }
-  })
+  });
 });
 
 // Condense AssemblyFiles
