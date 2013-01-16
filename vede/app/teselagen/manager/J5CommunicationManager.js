@@ -40,7 +40,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             url: Teselagen.manager.SessionManager.buildUrl("DesignDownstreamAutomation", ''),
             params: {
                 files: JSON.stringify(files),
-                params: JSON.stringify(data.params)
+                params: JSON.stringify(data.params),
+                reuseParams: data.reuse
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);

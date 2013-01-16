@@ -110,6 +110,7 @@ app.post('/DesignDownstreamAutomation',function(req,res){
 
   var data = JSON.parse(req.body.files);
   var params = JSON.parse(req.body.params);
+  var reuseParams = req.body.reuseParams;
 
   var downstreamAutomationParamsEncode = function(params){
       var out = "Parameter Name,Value\n"
@@ -122,6 +123,7 @@ app.post('/DesignDownstreamAutomation',function(req,res){
   }
 
   data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
+  data["reuse_downstream_automation_parameters_file"] = reuseParams;
   //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
   data["automation_task"] = "DistributePcrReactions";
   data["username"] = 'node';

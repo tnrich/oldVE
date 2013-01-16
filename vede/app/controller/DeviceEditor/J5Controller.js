@@ -398,6 +398,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
         data.assemblyFileText = this.assemblyFileText;
         data.params = this.automationParameters.data;
+        data.reuse = Ext.ComponentQuery.query("component[name='automationParamsFileSource']")[0].getValue();
 
         var loadingMessage = this.createLoadingMessage();
 
