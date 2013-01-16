@@ -28,9 +28,9 @@ Ext.define("Teselagen.models.SequenceFile", {
      * Input parameters.
      * @param {String} sequenceFileFormat (required)
      * @param {String} sequenceFileContent (required)
-     * @param {[String]} sequenceFileName If n
-     * @param {[String]} partSource
-     * @param {[String]} hash Hash code from sha256 encryption (Generated upon creating this object)
+     * @param {String} [sequenceFileName] If n
+     * @param {String} [partSource]
+     * @param {String} [hash] Hash code from sha256 encryption (Generated upon creating this object)
      */
     fields: [{
         name: "id",
@@ -191,7 +191,7 @@ Ext.define("Teselagen.models.SequenceFile", {
      * Sets PartSource based on FileFormat and FileContent.
      * DOES NOT CHECK FOR UNIQUENESS OF NAME.
      *
-     * @param {[String]} pPartSource Optional. Name of the PartSource. If undefined, will set based on SequenceFileContent and SequenceFileFormat properties.
+     * @param {String} [pPartSource] Name of the PartSource. If undefined, will set based on SequenceFileContent and SequenceFileFormat properties.
      * @returns {String} Name of the set partSource
      */
     setPartSource: function (pPartSource) {
@@ -239,8 +239,8 @@ Ext.define("Teselagen.models.SequenceFile", {
      * Sets FileName based on PartSource
      * DOES NOT CHECK FOR UNIQUENESS OF NAME.
      *
-     * @param {[String]} pSequenceFileName Optional. Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
-     * @returns {[String]} Set sequenceFileName.
+     * @param {String} [pSequenceFileName] Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
+     * @returns {String} Set sequenceFileName.
      */
     setSequenceFileName: function (pName) {
         // In The case where there is an input

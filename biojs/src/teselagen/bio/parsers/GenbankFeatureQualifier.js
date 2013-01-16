@@ -28,8 +28,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
      * @param {String} name
      * @param {String} value
      * @param {Boolean} quoted
-     * @returns {GenbankFeatureQualifer}
-     * @member GenbankFeatureQualifer
+     * @returns {GenbankFeatureQualifier}
+     * @member Teselagen.bio.parsers.GenbankFeatureQualifier
      */
     constructor: function (inData) {
 
@@ -93,8 +93,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureQualifier", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @param {JSON} json GenbankFeatureQualifier in JSON form
-     * @returns {Teselagen.bio.model.GenbankFeatureQualifier}
+     * @param {Object} json GenbankFeatureQualifier in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankFeatureQualifier}
      */
     fromJSON: function(json) {
         //console.log(json);

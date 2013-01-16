@@ -25,7 +25,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
     /**
      * Creates new Genbank
      * @returns {Genbank}
-     * @member Genbank
+     * @member Teselagen.bio.parsers.Genbank
      * */
     constructor: function () {
 
@@ -166,7 +166,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @param {JSON} json Genbank in JSON form
+     * @param {Object} json Genbank in JSON form
      * @returns {Teselagen.bio.parsers.Genbank}
      */
     fromJSON: function(json) {

@@ -20,7 +20,6 @@ Ext.define("Teselagen.models.J5Collection", {
 
     /**
      * Input parameters.
-     * @param {Ext.data.bins} bins A store of many {@link Teselagen.models.J5Bin}
      * @param {Boolean} j5Ready
      * @param {Boolean} combinatorial
      * @param {Boolean} isCircular

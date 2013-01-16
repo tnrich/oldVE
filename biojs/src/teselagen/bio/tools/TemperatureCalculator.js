@@ -105,7 +105,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
      * @private
      * Function to return deltaH table for given algorithm.
      * @param {String} type Algorithm to get table for.
-     * @return {Array<Int>} deltaH table for given algorithm.
+     * @return {Number[]} deltaH table for given algorithm.
      */
     getDeltaHTable: function(type) {
         if(type == this.TABLE_BRESLAUER) {
@@ -123,7 +123,7 @@ Ext.define("Teselagen.bio.tools.TemperatureCalculator", {
      * @private
      * Function to return deltaS table for given algorithm.
      * @param {String} type Algorithm to get table for.
-     * @return {Array<Int>} deltaS table for given algorithm.
+     * @return {Number[]} deltaS table for given algorithm.
      */
     getDeltaSTable: function(type) {
         if(type == this.TABLE_BRESLAUER) {

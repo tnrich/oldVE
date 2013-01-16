@@ -28,7 +28,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Boolean} negationOperator
      * @param {Teselagen.models.Part} operand1
      * @param {String} compositionalOperator
-     * @param {Teselagen.models.Part||Number} operand2
+     * @param {Teselagen.models.Part/Number} operand2
      */
     fields: [
         //{name: "id",                type: "long"},

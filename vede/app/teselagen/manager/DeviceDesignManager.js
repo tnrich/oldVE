@@ -217,6 +217,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Sets the isCircular flag.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Boolean} pCircular
      */
@@ -549,11 +550,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {String} pName Name of Part
      * @param {int} pStart Genbank start index
      * @param {int} pEnd Genbank end index
-     * @param {[Boolean]} pRevComp Reverse Complement. Default is false.
-     * @param {[Boolean]} pDirectionForward Direction Forward. Default is true.
+     * @param {Boolean} [pRevComp] Reverse Complement. Default is false.
+     * @param {Boolean} [pDirectionForward] Direction Forward. Default is true.
      * @param {String} fas (?)
-     * @param {pIconID} pIconID (?)
+     * @param {String} pIconID (?)
      */
+    // Todo: move optional arguments to the end of parameter list
     createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
         var part = Ext.create("Teselagen.models.Part", {
             name: pName,
@@ -669,7 +671,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
      * @param {Number} pBinIndex If invalid number, puts part in last bin.
-     * @param {[Number]} pPosition Optional index.
+     * @param {Number} [pPosition] Optional index.
      */
     addPartToBin: function(pDevice, pPart, pBinIndex, pPosition) {
         var j5Bin;
@@ -689,7 +691,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Deletes a Part after checking if a EugeneRule should also be deleted.
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
      * No need to actually delete SequenceFiles or Parts.
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart Part to be deleted.
      * @param {Number} pBinIndex
      * @returns {Boolean} True if removed, false if not.
@@ -760,11 +762,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Create a SequenceFile. Optional parameters require an empty string "" in its place.
      * Executes validation.
      *
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "jbei-seq". Case insensitive.
      * @param {String} pSequenceFileContent The content of the file in string form
-     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
-     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     * @param {String} [pSequenceFileName] If null, will generate a name based on the File Content and Format
+     * @param {String} [pPartSource] If null, will generate a display ID based on the File Content and Format
      */
     createSequenceFile: function(pDevice, pPart, pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
 
@@ -800,8 +802,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      *
      * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "JBEISEQXML". Case insensitive.
      * @param {String} pSequenceFileContent The content of the file in string form
-     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
-     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     * @param {String[]} pSequenceFileName If null, will generate a name based on the File Content and Format
+     * @param {String[]} pPartSource If null, will generate a display ID based on the File Content and Format
      */
     createSequenceFileStandAlone: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
 
@@ -824,7 +826,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     /**
      * Given a Part, get the SequenceFile. (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pPartName
      * @returns {Teselagen.models.SequenceFile}
      */

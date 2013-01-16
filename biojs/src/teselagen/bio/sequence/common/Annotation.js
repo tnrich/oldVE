@@ -114,7 +114,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the locations of the annotation.
-		 * @param {Array <Location>} pLocations sets the new list of locations.
+		 * @param {Location[]} pLocations sets the new list of locations.
 		 */
 		this.setLocations = function(pLocations){
 		    locations = [];	
@@ -462,12 +462,12 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 		}
 		/**
 		 * Denormalize the location form zero-based to offset. Calculates circularity (if needed)
-		 * @param  {Array<Location>} pTempLocations is the array of locations you want to denormalize
+		 * @param  {Location[]} pTempLocations is the array of locations you want to denormalize
 		 * @param  {Integer} pOffset the offset of the locations
 		 * @param  {Integer} pMaxLength is the max length of the locations   
 		 * @param  {Boolean} pCircular if the annotation is circular
 		 * @param  {Integer} pCircularAdjustment is adjustment that needs to be made because of circularity
-		 * @return {Array<Location>} returns denormalized locations
+		 * @return {Location[]} returns denormalized locations
 		 */
 		function deNormalizeLocations(pTempLocations, pOffset, pMaxLength, pCircular, pCircularAdjustment){
 			if (pTempLocations.length === 0) {

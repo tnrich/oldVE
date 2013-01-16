@@ -29,7 +29,7 @@ Ext.define("Teselagen.bio.parsers.Keyword", {
      * Creates a new Keyword from inData. General super class for GenbankKeywords to inherit from.
      * @param {String} keyword
      * @param {String} value
-     * @member Keyword
+     * @member Teselagen.bio.parsers.Keyword
      */
     constructor: function (inData) {
         

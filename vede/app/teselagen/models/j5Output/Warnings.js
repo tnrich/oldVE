@@ -1,9 +1,9 @@
 /**
- * @class Teselagen.models.j5Output.Warning
+ * @class Teselagen.models.j5Output.Warnings
  * Class describing a Warning.
  * @author Diana Wong
  */
-Ext.define("Teselagen.models.j5Output.Warning", {
+Ext.define("Teselagen.models.j5Output.Warnings", {
     extend: "Ext.data.Model",
 
     requires: [

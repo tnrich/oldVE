@@ -24,7 +24,7 @@
 
 		/**
 		 * Returns the list of the alphabet's symbols.
-		 * @return {Array of Symbols} an array of symbols.
+		 * @return {Symbols[]} an array of symbols.
 		 */
 		this.getSymbols = function (){
 			var symbols = [];

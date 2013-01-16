@@ -1,11 +1,13 @@
-/** THIS IS THE OLD DEPRECATED VERSION. DONT USE!!!!
- * GenbankManager. 
+/**
+ * @deprecated  
+ * @ignore
  * Takes in Genbank file (as a string) and creates the Genbank class. 
  * Static functions. (Replaces GenbankFormat.js) \n
  * 
  * Currently, this does not log errors in the Genbank file. 
  * Need to include enhancement in the future.
  * 
+ * @class Teselagen.bio.parsers.GenbankManager_noSing
  * @author Diana Wong
  * @author Timothy Ham (original author of GenbankFormat.js)
  */
@@ -44,7 +46,7 @@ Ext.define("Teselagen.bio.parsers.GenbankManager_noSing", {
     /**
      * Creates a static GenbankManager class with public functions.
      * @returns {GenbankManager} Handle to execute methods.
-     * @member GenbankManager
+     * @member Teselagen.bio.parsers.GenbankManager_noSing
      */
     constructor: function() {
         var that = this;

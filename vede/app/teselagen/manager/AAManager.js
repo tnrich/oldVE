@@ -127,7 +127,7 @@ Ext.define("Teselagen.manager.AAManager", {
     
     /**
      * Returns the amino acid sequence of a given frame.
-     * @param {Int} frame Which frame to return the amino acid sequence for.
+     * @param {Number} frame Which frame to return the amino acid sequence for.
      * @param {Boolean} sparse Whether to return the sparse version of the sequence.
      */
     getSequenceFrame: function(frame, sparse) {

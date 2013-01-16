@@ -15,8 +15,8 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
     /**
      * Constructor
-     * @param  {String} Name is the string name
-     * @param  {String} Name is the type of feature
+     * @param  {String} name is the string name
+     * @param  {String} type is the type of feature
      * @param  {Integer} start stranded annotation start
      * @param {Integer} end stranded annotation end
      * @param {Integer} Strand strand directionality

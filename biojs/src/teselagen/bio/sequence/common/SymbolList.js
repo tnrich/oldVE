@@ -8,7 +8,7 @@
 Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 	/**
 	 * Constructor
-	 * @param  {Array <Symbols>} symbols The array of symbols in the SymbolList
+	 * @param  {Symbols[]} symbols The array of symbols in the SymbolList
 	 * @param {String} alphabet Alphabet used in the SymbolList
 	 */
 
@@ -47,7 +47,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Returns the object's symbols
-		 * @return {Array <Symbols>} the objects symbols
+		 * @return {Symbols[]} the objects symbols
 		 */
 		this.getSymbols = function(){
 			return symbols;
@@ -55,7 +55,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Sets the objects' symbols.
-		 * @param {Array <Symbols>} pSymbols the objects symbols
+		 * @param {Symbols[]} pSymbols the objects symbols
 		 */
 		this.setSymbols = function(pSymbols){
 			symbols = pSymbols;
@@ -142,7 +142,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Adds a specified symbol
-		 * @param {symbols[]} pSymbols Array of symbols you want to add
+		 * @param {Symbols[]} pSymbols Array of symbols you want to add
 		 */
 		this.addSymbols = function (pSymbols) {
 			if (Array.isArray(pSymbols)){
@@ -185,7 +185,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		/**
 		 * Inserts a symbol list at a position (using non-zero-based  cardinal index) 
 		 * @param  {Integer} pPosition   The position the symbols should be inserted at
-		 * @param  {Array <Symbols>} pNewSymbols The symbols to be added
+		 * @param  {Symbols[]} pNewSymbols The symbols to be added
 		 */
 		this.insertSymbols = function (pPosition, pNewSymbols){
 			// Slices [0, pPosition)

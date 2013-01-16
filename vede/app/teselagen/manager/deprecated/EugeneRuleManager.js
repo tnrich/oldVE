@@ -1,10 +1,10 @@
 /** HAS NOT BEEN FULLY TESTED YET.
  * THIS CLASS WILL BE ELIMINATED AND FUNCTIONS WILL BE PUT IN DEVICEDESIGN.JS
- * @class Teselagen.manager.EugeneRuleManager
  * Class describing a EugeneRuleManager.
  * EugeneRuleManager holds an array of EugeneRules, for a given design project.
- *
  * Originally EugeneRulesProxy.as, FunctionMediator.as, SaveDesignXMLCommand.as
+ * @class Teselagen.manager.EugeneRuleManager
+ * @ignore
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */

@@ -20,7 +20,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
     maxAlignmentRow: 0,
 
     /**
-     * @param {Array<Teselagen.bio.orf.ORF>} The orfs to calculate sprites for.
+     * @param {Teselagen.bio.orf.ORF[]} The orfs to calculate sprites for.
      */
     constructor: function(inData) {
         this.callParent(arguments);
@@ -30,7 +30,7 @@ Ext.define("Teselagen.renderer.pie.ORFRenderer", {
 
     /**
      * Creates sprites out of the orfs given.
-     * @return {Array<Ext.draw.Sprite>} The sprites created from the orfs.
+     * @return {Ext.draw.Sprite[]} The sprites created from the orfs.
      */
     render: function() {
         var sprites = [];

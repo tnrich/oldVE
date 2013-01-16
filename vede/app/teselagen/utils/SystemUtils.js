@@ -1,3 +1,7 @@
+/**
+ * Operating system utilities
+ * @class Teselagen.utils.SystemUtils
+ */
 Ext.define("Teselagen.utils.SystemUtils",{
     singleton: true,
     

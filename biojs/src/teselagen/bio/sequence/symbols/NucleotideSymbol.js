@@ -1,6 +1,6 @@
     /**
-    * Nucleotide Symbol class
-    * @description This class sets up a Nucleotide Symbol class
+    * @class Teselagen.bio.sequence.symbols.NucleotideSymbol
+    * This class sets up a Nucleotide Symbol class
     * @author Micah Lerner
     */
    
@@ -61,7 +61,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Gets ambigous matches
-		 * @return {Array <Symbols>} Returns an array of the ambiguous matches
+		 * @return {Symbols[]} Returns an array of the ambiguous matches
 		 */		
 		this.getAmbiguousMatches = function(){
 			return ambiguousMatches;
@@ -69,7 +69,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Sets ambiguous matches
-		 * @param {Array <Symbols>} pAmbiguousMatches sets ambiguous matches
+		 * @param {Symbols[]} pAmbiguousMatches sets ambiguous matches
 		 */
 		this.setAmbiguousMatches = function(pAmbiguousMatches){
 			ambiguousMatches = pAmbiguousMatches;

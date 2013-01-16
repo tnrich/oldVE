@@ -25,7 +25,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
         //keyword: null,
         value: null,
         /**
-         * @cfg {[GenbankSubKeyword]} subKeywords
+         * @cfg {GenbankSubKeyword[]} subKeywords
          */
         subKeywords: null
     },
@@ -33,9 +33,9 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
      * Creates a new GenbankKeyword from inData.
      * @param {String} keyword
      * @param {String} value
-     * @param {[GenbankSubKeyword]} subKeywords
+     * @param {Teselagen.bio.parsers.GenbankSubKeyword[]} subKeywords
      * @returns {GenbankKeyword}
-     * @member GenbankKeyword
+     * @member Teselagen.bio.parsers.GenbankKeyword
      */
     constructor: function (inData) {
 
@@ -49,7 +49,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 
     /**
      * Adds a GenbankSubKeyword to subKeywords
-     * @param {GenbankSubKeyword} subKeyword
+     * @param {Teselagen.bio.parsers.GenbankSubKeyword} subKeyword
      */
     addSubKeyword: function(subkey) {
         if (this.subKeywords === undefined) {
@@ -71,7 +71,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
     },
     /**
      * Gets last SubKeyword on the subKeywords array.
-     * @returns {GenbankSubKeyword} subKeyword
+     * @returns {Teselagen.bio.parsers.GenbankSubKeyword} subKeyword
      */
     getLastSubKeyword: function() {
         if ( this.subKeywords.length > 0 ) {
@@ -143,7 +143,7 @@ Ext.define("Teselagen.bio.parsers.GenbankKeyword", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @param {JSON} json Genbank Keyword in JSON form
+     * @param {Object} json Genbank Keyword in JSON form
      * @returns {Teselagen.bio.parsers.GenbankLocusKeyword}
      */
     fromJSON: function(json) {

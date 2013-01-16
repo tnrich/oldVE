@@ -31,7 +31,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
      * Creates a new GenbankOriginKeyword from inData.
      * @param {String} sequence
      * @returns {GenbankOriginKeyword}
-     * @member GenbankOriginKeyword
+     * @member Teselagen.bio.parsers.GenbankOriginKeyword
      */
     constructor: function (inData) {
 
@@ -99,7 +99,7 @@ Ext.define("Teselagen.bio.parsers.GenbankOriginKeyword", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @param {JSON} json Genbank OriginKeyword in JSON form
+     * @param {Object} json Genbank OriginKeyword in JSON form
      * @returns {Teselagen.bio.parsers.GenbankOriginKeyword}
      */
     fromJSON: function(json) {
