@@ -137,8 +137,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 that.plasmidsListText = null;
             } else {
                 that.plasmidsListText = result;
-                console.log(that);
-                console.log(this);
             }
         }
 
@@ -330,15 +328,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         } else {
             masterDirectSynthesesList = this.plasmidsListText;
             masterDirectSynthesesListFileName = this.getFileNameFromField(
-                Ext.ComponentQuery.query("component[cls='directSynthesesListFileSelector']")[0]);
+                Ext.ComponentQuery.query("component[cls='directSynthesesFileSelector']")[0]);
         }
 
         var masterFiles = {};
-        masterFiles["masterPlasmidsList"]                 = masterPlasmidsList;
+        masterFiles["masterPlasmidsList"]                 = Base64.encode(masterPlasmidsList);
         masterFiles["masterPlasmidsListFileName"]         = masterPlasmidsListFileName;
-        masterFiles["masterOligosList"]                   = masterOligosList;
+        masterFiles["masterOligosList"]                   = Base64.encode(masterOligosList);
         masterFiles["masterOligosListFileName"]           = masterOligosListFileName;
-        masterFiles["masterDirectSynthesesList"]          = masterDirectSynthesesList;
+        masterFiles["masterDirectSynthesesList"]          = Base64.encode(masterDirectSynthesesList);
         masterFiles["masterDirectSynthesesListFileName"]  = masterDirectSynthesesListFileName;
 
         var assemblyMethod = Ext.ComponentQuery.query("component[cls='assemblyMethodSelector']")[0].getValue();
