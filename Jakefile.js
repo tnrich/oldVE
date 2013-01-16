@@ -15,8 +15,12 @@ task("docs", function() {
     if (fs.existsSync(DOCSROOT)) {
 	jake.rmRf(DOCSROOT);
     }
-    var cmd = util.format("jsduck -v vede/app/teselagen biojs/src" + 
-			  " --output %s 2>/tmp/jsduck.err", DOCSROOT);
+    var cmd = util.format("jsduck vede/app/teselagen biojs/src" + 
+        " --external=Ext.Base,Ext.data.Model,Ext.util.Observable,Ext.util.Memento," +
+        "Ext.Error,Ext.Ajax,Ext.data.Store,Ext.data.XmlStore,Ext.data.reader.Xml," +
+        "Ext.draw.Sprite,Ext.draw.CompositeSprite,Ext.util.HashMap,Ext.window.MessageBox," +
+        "FileInputHTMLElement" +
+        " --output %s 2>/tmp/jsduck.err", DOCSROOT);
     console.log(cmd);
     jake.exec([cmd]);
 });
