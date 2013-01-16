@@ -23,6 +23,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedPart: null,
 
     totalRows: 1,
+    totalColumns: 1,
 
     onReRenderDECanvasEvent: function(){
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -260,6 +261,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onAddColumn: function() {
+        this.totalColumns +=1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
@@ -267,7 +269,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                                         this.activeProject,
                                                         this.selectedBin.getBin());
         } else {
-            selectedBinIndex = 0;
+            selectedBinIndex = this.totalColumns;
         }
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
