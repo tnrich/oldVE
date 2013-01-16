@@ -420,7 +420,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Returns the index of a J5Bin. (Indices begin at 0.)
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.J5Bin} pJ5Bin
-     * @param {Number}
      */
     getBinIndex: function(pDevice, pJ5Bin) {
         return pDevice.getJ5Collection().getBinIndex(pJ5Bin);
@@ -543,6 +542,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     // Parts management
     //================================================================
+    // Todo: move optional arguments to the end of parameter list
     /**
      * Create a Part. Optional parameters require a "null" in its place.
      * Executes validation.
@@ -555,7 +555,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {String} fas (?)
      * @param {String} pIconID (?)
      */
-    // Todo: move optional arguments to the end of parameter list
     createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
         var part = Ext.create("Teselagen.models.Part", {
             name: pName,

@@ -39,6 +39,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Sets Alphabet
+		 * @method setAlphabet
 		 * @param {Alphabet} pAlphabet an input alphabet
 		 */
 		this.setAlphabet = function(pAlphabet){
@@ -47,6 +48,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Returns the object's symbols
+		 * @method getSymbols
 		 * @return {Symbols[]} the objects symbols
 		 */
 		this.getSymbols = function(){
@@ -55,6 +57,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Sets the objects' symbols.
+		 * @method setSymbols
 		 * @param {Symbols[]} pSymbols the objects symbols
 		 */
 		this.setSymbols = function(pSymbols){
@@ -64,6 +67,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Returns the number of symbols in the list
+		 * @method getSymbolsLength
 		 * @return {Integer} the number of symbols in the list
 		 */	
 		this.getSymbolsLength = function(){
@@ -72,6 +76,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Gets the symbol at a specific position
+		 * @method symbolAt
 		 * @param  {Integer} pPosition a specified position within the symbols
 		 * @return {Symbols}           the symbol at the specified position
 		 */
@@ -81,6 +86,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Returns whether the symbollist has a gap
+		 * @method hasGap
 		 * @return {Boolean} returns whether the alphabet has a gap
 		 */
 		this.hasGap = function(){
@@ -96,6 +102,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Returns a sublist of symbols
+		 * @method subList
 		 * @param  {Integer} pStart start of slice
 		 * @param  {Integer} pEnd   End of slice
 		 * @return {SymbolList}        a spliced array of symbols
@@ -111,6 +118,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Turns the symbol list into a string
+		 * @method seqString
 		 * @return {String} the sequence's string
 		 */	
 		this.seqString = function (){
@@ -134,6 +142,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Deletes symbols
+		 * @method clear
 		 */
 		this.clear = function (){
 			symbols = [];
@@ -142,6 +151,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Adds a specified symbol
+		 * @method addSymbols
 		 * @param {Symbols[]} pSymbols Array of symbols you want to add
 		 */
 		this.addSymbols = function (pSymbols) {
@@ -155,7 +165,8 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Adds a SymbolList to existing SymbolList.
-		 * (DW: Added 7/26/2012 because addSymbols is specfic to an array of symbols)
+		 * (DW: Added 7/26/2012 because addSymbols is specific to an array of symbols)
+		 * @method addSymbolList
 		 * @param {Teselagen.bio.sequence.common.SymbolList} pSymbols Symbols you want to add
 		 */
 		this.addSymbolList = function (pSymbols) {
@@ -174,6 +185,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		}
 		/**
 		 * Deletes a subset of symbols
+		 * @method deleteSymbols
 		 * @param  {Integer} pStart  A start to the slice
 		 * @param  {Integer} pLength The length of the delete (how many symbols to delete)
 		 */
@@ -184,6 +196,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Inserts a symbol list at a position (using non-zero-based  cardinal index) 
+		 * @method insertSymbols
 		 * @param  {Integer} pPosition   The position the symbols should be inserted at
 		 * @param  {Symbols[]} pNewSymbols The symbols to be added
 		 */
@@ -197,6 +210,7 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 
 		/**
 		 * Returns the string sequence
+		 * @method toString
 		 * @return {String} The Object's sequence
 		 */
 		this.toString = function(){

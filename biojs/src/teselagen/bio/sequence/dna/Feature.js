@@ -41,6 +41,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
         /**
          * Sets Name
+         * @method setName
          * @param {String} pName
          */
         this.setName = function(pName){
@@ -49,6 +50,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
         /**
          * Get Type
+         * @method getType
          * @return {String} Type
          */
         this.getType = function(){
@@ -57,6 +59,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
         /**
          * Sets Type
+         * @method setType
          * @param {String} pName
          */
         this.setType = function(pType){
@@ -65,6 +68,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
         /**
          * Add a FeatureNote
+         * @method addNote
          * @param {Teselagen.bio.sequence.dna.FeatureNote[]} note
          */
         this.addNote = function(pNote){
@@ -73,6 +77,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
         
         /**
          * Get Notes
+         * @method getNotes
          * @return {Teselagen.bio.sequence.dna.FeatureNote[]} Notes
          */
         this.getNotes = function(){
@@ -80,7 +85,8 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
         }
 
         /**
-         * Sets Name
+         * Set Notes
+         * @method setNotes
          * @param {Teselagen.bio.sequence.dna.FeatureNote[]} pNotes
          */
         this.setNotes = function(pNotes){
@@ -89,6 +95,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
         /**
          * Clones the feature
+         * @method clone
          * @return {Feature} cloned feature
          */
         this.clone = function(){
@@ -128,6 +135,10 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
 
     },
 
+    /**
+     * String representation of Feature.
+     * @return {String}
+     */
     toString: function() {
         return "Feature " + this.getName() + " of type " + this.getType() + " from " + 
             this.getStart() + " to " + this.getEnd();

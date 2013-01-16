@@ -69,14 +69,14 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 
     },
 
-    /** 
-     * Get the Symbol by string character
-     * @param {String} value Symbol value
-     * @param {Teselagen.bio.sequence.symbols.NucleotideSymbol} symbol Character as a Symbol
-     */
-    /*symbolByValue: function (pValue) {
-    	return this.symbolsMap[pValue].getValue();
-    },*/
+//    /** 
+//     * Get the Symbol by string character
+//     * @param {String} value Symbol value
+//     * @param {Teselagen.bio.sequence.symbols.NucleotideSymbol} symbol Character as a Symbol
+//     */
+//    /*symbolByValue: function (pValue) {
+//    	return this.symbolsMap[pValue].getValue();
+//    },*/
 
     symbolMap: function (pCharacter) {
         var safeChar = pCharacter.toLowerCase();

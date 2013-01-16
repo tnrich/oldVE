@@ -38,6 +38,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 	
 		/**
 		 * Sets Start
+		 * @method setStart
 		 * @param {Integer} pStart set pStart
 		 */
 		this.setStart = function (pStart){
@@ -46,6 +47,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 		
 		/**
 		 * Returns end
+		 * @method getEnd
 		 * @return {Integer} returns pEnd
 		 */
 		this.getEnd = function(){
@@ -54,6 +56,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Sets end
+		 * @method setEnd
 		 * @param {Integer} pEnd sets pEnd
 		 */
 		this.setEnd = function(pEnd){
@@ -62,6 +65,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Returns _length
+		 * @method getLength
 		 * @return {Integer} Returns _length
 		 */
 		this.getLength = function(){
@@ -70,6 +74,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Sets pLength
+		 * @method setLength
 		 * @param {Integer} pLength sets pLength
 		 */
 		this.setLength = function(pLength){
@@ -78,6 +83,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Returns Start Restriction Enzyme
+		 * @method getStartRE
 		 * @return {RestrictionEnzyme} Returns start restriction enzyme
 		 */
 		this.getStartRE = function(){
@@ -86,6 +92,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Sets start restriction enzyme
+		 * @method setStartRE
 		 * @param {RestrictionEnzyme} pStartRE sets start restriction Enzyme
 		 */
 		this.setStartRE = function(pStartRE){
@@ -94,6 +101,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Returns End Restriction Enzyme
+		 * @method getEndRE
 		 * @return {RestrictionEnzyme} returns end restriction enzyme
 		 */
 		this.getEndRE = function(){
@@ -102,6 +110,7 @@ Ext.define("Teselagen.bio.sequence.dna.DigestionFragment", {
 
 		/**
 		 * Sets end Restriction Enzyme
+		 * @method setEndRE
 		 * @param {RestrictionEnzyme} pEndRE sets end restriction enzyme
 		 */
 		this.setEndRE = function(pEndRE){

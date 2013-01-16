@@ -37,6 +37,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Get Accession
+         * @method getAccession
+         * @return {String}
          */
         this.getAccession = function(){
             return accession;
@@ -44,6 +46,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Set Accession
+         * @method setAccession
+         * @param {String} accession
          */
         this.setAccession= function (pAccession){
             accession = pAccession;
@@ -52,6 +56,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Get Version
+         * @method getVersion
+         * @return {Number}
          */
         this.getVersion = function(){
             return version;
@@ -60,6 +66,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Set Version
+         * @method setVersion
+         * @param {Number} version
          */
         this.setVersion= function (pVersion){
             version = pVersion;
@@ -67,6 +75,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Get Sequence Version
+         * @method getSeqVersion
+         * @return {Number}
          */
         this.getSeqVersion = function(){
             return seqVersion;
@@ -74,6 +84,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Set Sequence Version
+         * @method setSeqVersion
+         * @param {Number} seqVersion
          */
         this.setSeqVersion= function (pSeqVersion){
             seqVersion = pSeqVersion;
@@ -81,6 +93,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Get Circular
+         * @method getCircular
+         * @return {Boolean}
          */
         this.getCircular = function(){
             return circular;
@@ -88,6 +102,8 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
 
         /**
          * Set circular
+         * @method setCircular
+         * @param {Boolean} circular
          */
         this.setCircular = function (pCircular){
             circular = pCircular;

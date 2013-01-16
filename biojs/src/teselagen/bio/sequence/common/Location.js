@@ -33,6 +33,7 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 
 		/**
 		 * Sets the location start
+		 * @method setStart
 		 * @param {Integer} pStart is the new location start
 		 */
 		this.setStart = function(pStart){
@@ -41,6 +42,7 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 
 		/**
 		 * Returns the location end
+		 * @method getEnd
 		 * @return {Integer} Location end
 		 */
 		this.getEnd = function(){
@@ -50,6 +52,7 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 
 		/**
 		 * Sets the location end.
+		 * @method setEnd
 		 * @param {Integer} pEnd is the new location end
 		 */
 		this.setEnd = function(pEnd){
@@ -58,6 +61,7 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 
 		/**
 		 * Returns a copy of the location
+		 * @method clone
 		 * @return {Location} copied location
 		 */
 		this.clone = function(){
@@ -69,6 +73,7 @@ Ext.define("Teselagen.bio.sequence.common.Location", {
 
 		/**
 		 * Returns the length of the location
+		 * @method getLength
 		 * @return {Integer} length of the location
 		 */
 		this.getLength = function (){

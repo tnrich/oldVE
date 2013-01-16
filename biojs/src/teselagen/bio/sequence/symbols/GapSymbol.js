@@ -26,6 +26,7 @@
 
 		/**
 		 * Sets Name
+		 * @method setName
 		 * @param {String} pName sets name
 		 */
 		this.setName = function(pName){
@@ -34,6 +35,7 @@
 
 		/**
 		 * Gets Value
+		 * @method getValue
 		 * @return {String} gets value
 		 */
 		this.getValue = function(){
@@ -42,6 +44,7 @@
 
 		/**
 		 * Sets Value
+		 * @method setValue
 		 * @param {String} pValue sets value
 		 */
 		this.setValue = function(pValue){

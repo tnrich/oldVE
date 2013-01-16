@@ -37,6 +37,7 @@
 		/** 
 		 * SYMBOLSMAP ARRAY IS AN EMPTY ARRAY WHEN CALLED FROM DNAAlphabet
 		 * Retrieves the symbol that corresponds to the input value.
+         * @method symbolByValue
 		 * @param  {Symbol} pValue corresponds to the key for a symbol in the map of symbols
 		 * @return {Symbol} a symbol in the symbol map.
 		 */
@@ -46,6 +47,7 @@
 
 		/**
 		 * Adds an input symbol to the symbol map.
+         * @method addSymbol
 		 * @param {Symbol} pSymbol corresponds to the symbol to be added to to the map of symbols
 		 */
 		this.addSymbol = function(pSymbol){
@@ -63,6 +65,7 @@
 
 		/**
 		 * Returns the Gap Symbol for the Alphabet
+         * @method getGap
 		 * @return {Gap Symbol} the gap symbol of the alphabet
 		 */
 		this.getGap = function(){

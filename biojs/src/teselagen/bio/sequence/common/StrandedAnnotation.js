@@ -40,6 +40,7 @@ Ext.define("Teselagen.bio.sequence.common.StrandedAnnotation", {
 
 		/**
 		 * Sets strand directionality
+		 * @method setStrand
 		 * @param {Integer} pStrand strand directionality
 		 */
 		this.setStrand= function(pStrand){

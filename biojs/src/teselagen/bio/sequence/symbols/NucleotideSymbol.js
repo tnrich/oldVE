@@ -36,6 +36,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Set name
+		 * @method setName
 		 * @param {String} pName sets name
 		 */
 		this.setName = function(pName){
@@ -45,6 +46,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Gets value
+		 * @method getValue
 		 * @return {String} gets Value
 		 */
 		this.getValue = function(){
@@ -53,6 +55,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Sets Value
+		 * @method setValue
 		 * @param {String} pValue sets value
 		 */
 		this.setValue = function(pValue){
@@ -61,6 +64,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Gets ambigous matches
+		 * @method getAmbiguousMatches
 		 * @return {Symbols[]} Returns an array of the ambiguous matches
 		 */		
 		this.getAmbiguousMatches = function(){
@@ -69,6 +73,7 @@ Ext.define("Teselagen.bio.sequence.symbols.NucleotideSymbol",{
 
 		/**
 		 * Sets ambiguous matches
+		 * @method setAmbiguousMatches
 		 * @param {Symbols[]} pAmbiguousMatches sets ambiguous matches
 		 */
 		this.setAmbiguousMatches = function(pAmbiguousMatches){

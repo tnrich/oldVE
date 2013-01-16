@@ -100,13 +100,13 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
         this.keywords.push(pFeatures);
     },
 
-    /**
-     * Same as genbank.addKeyword(GenbankFeaturesKeyword}
-     * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
-     *
-    addFeature: function(pFeature) {
-        this.keywords.push(pFeatures);
-    },*/
+//    /**
+//     * Same as genbank.addKeyword(GenbankFeaturesKeyword}
+//     * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
+//     *
+//    addFeature: function(pFeature) {
+//        this.keywords.push(pFeatures);
+//    },*/
 
     /**
      * Add a single GenbankKeyword to Genbank.keywords

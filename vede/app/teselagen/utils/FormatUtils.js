@@ -564,14 +564,14 @@ Ext.define("Teselagen.utils.FormatUtils", {
         return result;
     },
 
-    /**
-     * Convert a SequenceFile model to a SequenceManager model.
-     * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Teselagen.manager.SequenceManager}
-     *
-    sequenceFileToSequenceManager: function(pSequenceFile) {
-        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
-    },*/
+//    /**
+//     * Convert a SequenceFile model to a SequenceManager model.
+//     * @param {Teselagen.models.SequenceFile} pSequenceFile
+//     * @returns {Teselagen.manager.SequenceManager}
+//     *
+//    sequenceFileToSequenceManager: function(pSequenceFile) {
+//        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
+//    },*/
 
     /**
      * Convert a SequenceFile model to a SequenceManager model.
