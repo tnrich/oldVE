@@ -38,7 +38,7 @@ Ext.define("Teselagen.manager.SequenceFileManager", {
     /**
      * Convert a SequenceFile model to a SequenceManager model.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Teselagen.models.SequenceManager}
+     * @returns {Teselagen.manager.SequenceManager}
      */
     sequenceFileToSequenceManager: function(pSequenceFile) {
         var name    = pSequenceFile.get("partSource");

@@ -1,3 +1,7 @@
+/**
+ * j5 controller
+ * @class Vede.controller.DeviceEditor.J5Controller
+ */
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
@@ -428,7 +432,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     /**
-     * Given a filefield Component, returns the name of the file selected,
+     * Given a field Component, returns the name of the file selected,
      * filtering out the directory information.
      *
      * TODO: maybe move to a utils file so we can set the display value to this

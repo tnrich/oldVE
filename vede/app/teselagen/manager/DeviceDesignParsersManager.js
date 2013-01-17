@@ -1,4 +1,5 @@
 /**
+ * Parses the DeviceDesign JSON or XML.
  * @class Teselagen.manager.DeviceDesignParsersManager
  * @author Rodrigo Pavez
  **/

@@ -1,5 +1,6 @@
 /**
  * Controls the inspector panel, on the right side of the device editor.
+ * @class Vede.controller.DeviceEditor.InspectorController
  */
 Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",

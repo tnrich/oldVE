@@ -1,3 +1,7 @@
+/**
+ * Sequence editing controller
+ * @class Vede.controller.VectorEditor.SequenceEditingController
+ */
 Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 

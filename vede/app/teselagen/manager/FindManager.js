@@ -1,3 +1,7 @@
+/**
+ * Methods for sequence searching.
+ * @class Teselagen.manager.FindManager
+ */
 Ext.define("Teselagen.manager.FindManager", {
     config: {
         sequenceManager: null,

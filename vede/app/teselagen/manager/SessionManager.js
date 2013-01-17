@@ -19,7 +19,7 @@ Ext.define("Teselagen.manager.SessionManager", {
     constants: null,
     
     /**
-     * @memberOf Teselagen.manager.SessionManager
+     * @member Teselagen.manager.SessionManager
      */
     constructor: function() {
         this.constants = Teselagen.constants.Constants;

@@ -7,8 +7,8 @@
  * Its indices are defined by GenbankFeatureLocation and it's annotations by
  * {@link Teselagen.bio.parsers.GenbankFeatureQualifier}.
  *
- * Go to {@link http://www.insdc.org/documents/feature_table.html#3.4} for specifications of Genbank file.
- * This class does not assumes all locations of one feature are complement or not complement, join or not join.
+ * See the [Genbank file specifications](http://www.insdc.org/documents/feature_table.html#3.4).
+ * This class does not assume all locations of one feature are complement or not complement, join or not join.
  * This means:
  *      complement(join(2691..4571,4918..5163))
  * is acceptable, and:
@@ -53,8 +53,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
      * @param {Boolean} join Location is not continuous
      * @param {Teselagen.bio.parsers.GenbankFeatureQualifier} [featureQualifer] Array of GenbankFeatureQualifiers
      * @param {Teselagen.bio.parsers.GenbankFeatureLocation} [featureLocation] Array of GenbankFeatureLocations
-     * @returns {Teselagen.bio.parsers.GenbankFeatureElement}
-     * @memberOf GenbankFeatureElement
+     * @returns {GenbankFeatureElement}
+     * @member Teselagen.bio.parsers.GenbankFeatureElement
      */
     constructor: function (inData) {
 
@@ -83,7 +83,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
     /**
      * Add a single GenbankFeatureQualifier to the featureQualifier array
-     * @param {Teselagen.bio.parsers.GenbankFeatureQualifer} qualifier
+     * @param {Teselagen.bio.parsers.GenbankFeatureQualifier} qualifier
      */
     addFeatureQualifier: function(pQual) {
         if (this.featureQualifier === undefined ) {
@@ -195,8 +195,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json GenbankFeatureElement in JSON form
-     * @returns {Teselagen.bio.model.GenbankFeatureElement}
+     * @param {Object} json GenbankFeatureElement in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankFeatureElement}
      */
     fromJSON: function(json) {
         var i, tmp;

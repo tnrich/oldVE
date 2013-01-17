@@ -1,3 +1,7 @@
+/**
+ * Authentication event dispatcher controller
+ * @class Vede.controller.AuthEventDispatcherController
+ */
 Ext.define('Vede.controller.AuthEventDispatcherController', {
     extend: 'Ext.app.Controller',
     requires: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],

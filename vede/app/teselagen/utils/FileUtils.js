@@ -1,8 +1,6 @@
 /**
+ * Utilities for working with files.
  * @class Teselagen.utils.FileUtils
- *
- *
- *
  * @author Diana Wong
  */
 
@@ -47,7 +45,6 @@ Ext.define("Teselagen.utils.FileUtils", {
       * Requires BlobBuilder.js and FileSaver.js.
       *
       * @param {String} text
-      * @returns {}
       */
     writeFile: function(pText, pFilename) {
         var bb = new BlobBuilder();

@@ -141,7 +141,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      /**  DOES NOT HAVE TEST CODE YET
       * Scans through a JbeiSeq JSON object to see if it has the minimum structure
       * requirements.
-      * @param {JSON} json JbeiSeq JSON object
+      * @param {Object} json JbeiSeq JSON object
       * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
       */
      validateJbeiseqJson: function (json) {
@@ -157,7 +157,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
      *
      * @param {String} xml XML file in String format
-     * @returns {JSON} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
      */
      jbeiseqXmlToJson: function (xmlStr) {
 
@@ -167,7 +167,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     /**
      * Converts an JbeiSeqXML in string format to JSON format.
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
-     * @param {JSON} json Cleaned JSON object of the JbeiSeqXml
+     * @param {Object} json Cleaned JSON object of the JbeiSeqXml
      * @returns {String} xml XML file in String format
      */
      jbeiseqJsonToXml: function(json) {
@@ -178,7 +178,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      /**
      * Converts a JbeiSeq JSON object into a Genbank model of the data.
      * Only one record per json.
-     * @param {JSON} json JbeiSeq JSON object with ONE record
+     * @param {Object} json JbeiSeq JSON object with ONE record
      * @returns {Teselagen.bio.parsers.Genbank} genbank
      */
     jbeiseqJsonToGenbank: function(json) {
@@ -221,14 +221,14 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         return Teselagen.bio.parsers.JbeiseqParser.genbankToJbeiseqXml(pGenbank);
     },
 
-    /**
-     * Creates a Sequence Hash, from a sequence. Uses Sha256.js to create this id.
-     * @param {Teselagen.} pSequence Sequence string
-     * @returns {String} seqHash Hash of the sequence using sha256
-     *
-    makeSeqHash: function(pSequence) {
-        Teselagen.bio.util.Sha256
-    },*/
+//    /**
+//     * Creates a Sequence Hash, from a sequence. Uses Sha256.js to create this id.
+//     * @param {Teselagen.} pSequence Sequence string
+//     * @returns {String} seqHash Hash of the sequence using sha256
+//     *
+//    makeSeqHash: function(pSequence) {
+//        Teselagen.bio.util.Sha256
+//    },*/
 
     // ===========================================================================
     //   SBOL & JbeiSeq Conversions
@@ -243,7 +243,7 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
      * If a non-required entry is not recognized, a default value is used.
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
      * @param {String} xml Sbol XML file in String format
-     * @returns {JSON} json Cleaned JSON object of the Sbol XML
+     * @returns {Object} json Cleaned JSON object of the Sbol XML
      */
     sbolXmlToJson: function(xmlStr) {
         return Teselagen.bio.parsers.SbolParser.sbolXmlToJson(xmlStr);

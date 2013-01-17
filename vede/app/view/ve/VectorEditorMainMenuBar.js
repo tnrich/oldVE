@@ -1,3 +1,7 @@
+/**
+ * Vector Editor main menu bar
+ * @class Vede.view.ve.VectorEditorMainMenuBar
+ */
 Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
     id: 'VectorEditorMainMenuBar',

@@ -43,8 +43,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
      *                  "start..end" means it is a continuous range.
      *                  "start.end" indicates exact location is unknown.
      *                  "start^end" points to a single point in that range.
-     * @returns {GenbankFeatureQualifier}
-     * @memberOf GenbankFeatureLocation
+     * @returns {Teselagen.bio.parsers.GenbankFeatureQualifier}
+     * @member Teselagen.bio.parsers.GenbankFeatureLocation
      */
     constructor: function (inData) {
 
@@ -144,8 +144,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeatureLocation", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json GenbankFeatureLocation in JSON form
-     * @returns {Teselagen.bio.model.GenbankFeatureLocation}
+     * @param {Object} json GenbankFeatureLocation in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankFeatureLocation}
      */
     fromJSON: function(json) {
 

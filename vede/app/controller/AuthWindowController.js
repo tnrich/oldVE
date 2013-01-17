@@ -1,3 +1,7 @@
+/**
+ * Authentication window controller
+ * @class Vede.controller.AuthWindowController
+ */
 Ext.define('Vede.controller.AuthWindowController', {
     extend: 'Ext.app.Controller',
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],

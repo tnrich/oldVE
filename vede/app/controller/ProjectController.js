@@ -1,3 +1,7 @@
+/**
+ * Project controller
+ * @class Vede.controller.ProjectController
+ */
 Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
     requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager", "Teselagen.models.DeviceEditorProject", "Teselagen.models.SequenceFile", "Teselagen.models.Part", "Teselagen.models.VectorEditorProject"],

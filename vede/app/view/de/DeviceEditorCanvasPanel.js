@@ -1,3 +1,7 @@
+/**
+ * Device Editor canvas panel
+ * @class Vede.view.de.DeviceEditorCanvasPanel
+ */
 Ext.define('Vede.view.de.DeviceEditorCanvasPanel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.DeviceEditorCanvasPanel',

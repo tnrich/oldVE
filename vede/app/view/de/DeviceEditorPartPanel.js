@@ -1,3 +1,7 @@
+/**
+ * Device Editor part panel
+ * @class Vede.view.de.DeviceEditorPartPanel
+ */
 Ext.define('Vede.view.de.DeviceEditorPartPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorPartPanel',

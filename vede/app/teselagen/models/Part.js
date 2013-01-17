@@ -146,32 +146,32 @@ Ext.define("Teselagen.models.Part", {
 
 
     // IDS ARE GENERATED ON SERVER SIDE
-    /**
-     * Generates ID based on date + 3 random digits
-     * @returns {String} id
-     * @private
-     *
-    generateId: function() {
-        var extraDigits = Math.floor(Math.random() * 1000).toString();
-
-        while (extraDigits.length < 3) {
-            extraDigits = "0" + extraDigits;
-        }
-        var id = (Date.now()) + extraDigits;
-        return id;
-    },
-    */
-
-    /**
-     * Sets a new id for this part, different than what was generated at object initiation.
-     * @returns {Boolean} True if set.
-     *
-    setId: function() {
-        var newId = this.generateId();
-        this.set("id", newId);
-        return true;
-     },
-    */
+//    /**
+//     * Generates ID based on date + 3 random digits
+//     * @returns {String} id
+//     * @private
+//     *
+//    generateId: function() {
+//        var extraDigits = Math.floor(Math.random() * 1000).toString();
+//
+//        while (extraDigits.length < 3) {
+//            extraDigits = "0" + extraDigits;
+//        }
+//        var id = (Date.now()) + extraDigits;
+//        return id;
+//    },
+//    */
+//
+//    /**
+//     * Sets a new id for this part, different than what was generated at object initiation.
+//     * @returns {Boolean} True if set.
+//     *
+//    setId: function() {
+//        var newId = this.generateId();
+//        this.set("id", newId);
+//        return true;
+//     },
+//    */
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it only has default values and no set SequenceFile

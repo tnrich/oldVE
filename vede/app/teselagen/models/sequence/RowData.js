@@ -1,3 +1,7 @@
+/**
+ * Sequence row data
+ * @class Teselagen.models.sequence.RowData
+ */
 Ext.define("Teselagen.models.sequence.RowData", {
     config: {
         start: null,

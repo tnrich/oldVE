@@ -1,3 +1,7 @@
+/**
+ * Authentication window
+ * @class Vede.view.AuthWindow
+ */
 Ext.define('Vede.view.AuthWindow', {
 	extend: 'Ext.window.Window',
 	id: 'AuthWindow',

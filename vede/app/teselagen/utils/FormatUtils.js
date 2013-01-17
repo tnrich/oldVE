@@ -282,7 +282,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /**
      * Converts a JbeiSeq XML file into a SequenceManager form of the data.
-     * @param {JSON} jbeiSeqJson JbeiSeqJson model of data
+     * @param {Object} jbeiSeqJson JbeiSeqJson model of data
      * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     jbeiseqJsonToSequenceManager: function(jbeiSeqJson) {
@@ -380,7 +380,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into
      * a JbeiSeqJson.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
-     * @returns {JSON} jbeiSeqJson JbeiSeqJson model of data
+     * @returns {Object} jbeiSeqJson JbeiSeqJson model of data
      */
     sequenceManagerToJbeiseqJson: function(seqMan) {
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
@@ -564,19 +564,19 @@ Ext.define("Teselagen.utils.FormatUtils", {
         return result;
     },
 
-    /**
-     * Convert a SequenceFile model to a SequenceManager model.
-     * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Teselagen.models.SequenceManager}
-     *
-    sequenceFileToSequenceManager: function(pSequenceFile) {
-        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
-    },*/
+//    /**
+//     * Convert a SequenceFile model to a SequenceManager model.
+//     * @param {Teselagen.models.SequenceFile} pSequenceFile
+//     * @returns {Teselagen.manager.SequenceManager}
+//     *
+//    sequenceFileToSequenceManager: function(pSequenceFile) {
+//        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
+//    },*/
 
     /**
      * Convert a SequenceFile model to a SequenceManager model.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Teselagen.models.SequenceManager}
+     * @returns {Teselagen.manager.SequenceManager}
      */
     sequenceFileToSequenceManager: function(pSequenceFile) {
         //console.log(pSequenceFile);

@@ -1,3 +1,7 @@
+/**
+ * Device Editor Inspector panel
+ * @class Vede.view.de.InspectorPanel
+ */
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',

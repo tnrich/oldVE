@@ -1,9 +1,8 @@
 /**
  * @class Teselagen.bio.sequence.alphabets.DNAAlphabet
  * 
- * DNA alphabet. Most general alphabet to build DNA sequences.
+ * DNA alphabet. Most general alphabet to build DNA sequences.  See Teselagen.bio.sequence.symbols.NucleotideSymbol.
  * 
- * @see Teselagen.bio.sequence.symbols.NucleotideSymbol
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
  * @author Timothy Ham (original author)
@@ -70,14 +69,14 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 
     },
 
-    /** 
-     * Get the Symbol by string character
-     * @param {String} value Symbol value
-     * @parama {Teselagen.bio.sequence.symbols.NucleotideSymbol} symbol Character as a Symbol
-     */
-    /*symbolByValue: function (pValue) {
-    	return this.symbolsMap[pValue].getValue();
-    },*/
+//    /** 
+//     * Get the Symbol by string character
+//     * @param {String} value Symbol value
+//     * @param {Teselagen.bio.sequence.symbols.NucleotideSymbol} symbol Character as a Symbol
+//     */
+//    /*symbolByValue: function (pValue) {
+//    	return this.symbolsMap[pValue].getValue();
+//    },*/
 
     symbolMap: function (pCharacter) {
         var safeChar = pCharacter.toLowerCase();

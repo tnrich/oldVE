@@ -1,3 +1,7 @@
+/**
+ * Vector Editor vector panel
+ * @class Vede.view.ve.VectorPanel
+ */
 Ext.define("Vede.view.ve.VectorPanel", {
     extend: "Ext.panel.Panel",
     alias: "widget.VectorPanel",

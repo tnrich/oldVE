@@ -18,7 +18,7 @@ Ext.define("Teselagen.models.digest.Ladder", {
 	/**
 	 * Input parameters.
 	 * @param {String} name The name of the ladder..
-	 * @param {Array<Int>} bandSizes A list of integers that specify ladder
+	 * @param {Number[]} bandSizes A list of integers that specify ladder
      * band sizes
 	 */
 	fields: [

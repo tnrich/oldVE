@@ -1,3 +1,7 @@
+/**
+ * Cut site renderer
+ * @class Teselagen.renderer.sequence.CutSiteRenderer
+ */
 Ext.define("Teselagen.renderer.sequence.CutSiteRenderer", {
     statics: {
         CURVY_LINE_COLOR: "#FF0000",
