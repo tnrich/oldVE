@@ -65,7 +65,7 @@ function restrict(req, res, next) {
 app.all('/GetLastUpdatedUserFiles',function(req,res){
 
   var data = {}
-  data["username"] = 'eabeliuk';
+  data["username"] = 'node';
   data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('GetLastUpdatedUserFiles', [data], function (error, value) {
@@ -324,7 +324,7 @@ app.post(j5Method1,restrict,function(req,res){
   DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
     resolveSequences(deprojectModel,function(deproject){
       var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
-      data["username"] = 'rpavez';
+      data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {

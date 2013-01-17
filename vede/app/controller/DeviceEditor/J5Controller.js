@@ -513,7 +513,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     saveJ5Parameters: function () {
         this.j5Parameters.fields.eachKey(function (key) {
-            if(key !== "id") {
+            if(key !== "id" && key !== "j5run_id") {
+                console.log(key);
                 this.j5Parameters.set(key, Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
