@@ -30,15 +30,13 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         id: 'projectTreePanel',
         rootVisible: false
     }, {
-        //xtype: 'panel',
+        hidden: true,
         flex: 1,
-        //items: [{
         xtype: 'treepanel',
         title: 'Part Library',
         id: 'projectPartsPanel',
         width: 228,
         rootVisible: false
-        //}]
     }]
 
 });

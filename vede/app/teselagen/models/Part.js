@@ -75,7 +75,7 @@ Ext.define("Teselagen.models.Part", {
             name: "name",
             convert: function(v, record) {
                 var name;
-
+                /*
                 if (v === "" || v === undefined || v === null) {
                     name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
                     record.self.highestDefaultNameIndex += 1;
@@ -88,19 +88,10 @@ Ext.define("Teselagen.models.Part", {
                     }
                 }
                 return name;
-                /*
-                if (typeof(v) === "number" || typeof(v) === "string") {
-                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
-                        return v.toString();
-                    } else {
-                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                        return Teselagen.utils.FormatUtils.reformatName(v);
-                    }
-                } else {
-                    var name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
-                    record.self.highestDefaultNameIndex += 1;
-                    return name;
-                }*/
+                */
+                name = v;
+                if (v === undefined || v === null) name="";
+                return name;
             }
         },
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
@@ -189,23 +180,7 @@ Ext.define("Teselagen.models.Part", {
      */
     isEmpty: function() {
         var partEmpty = false;
-
-        if (//this.get("name").match(this.self.defaultNamePrefix) !== null &&
-            this.get("revComp") === false &&
-            this.get("genbankStartBP") === 0 &&
-            this.get("endBP") === 0 &&
-            //this.get("sequenceFile") === null) {
-            this.getSequenceFile().get("sequenceFileContent") === "") {
-            partEmpty = true;
-        }
-        
-        if (partEmpty &&
-            this.get("directionForward") === true &&
-            this.get("fas") === "None" ) {
-            partEmpty = true;
-        } else {
-            partEmpty = false;
-        }
+        if(!this.get('sequencefile_id')) partEmpty = true;
         return partEmpty;
     },
 

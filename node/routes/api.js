@@ -132,7 +132,7 @@ module.exports = function (app, express) {
 
       // Login using fake sessionId (For Testing)
       if(username) getOrCreateUser(username);
-      else if(sessionId) getOrCreateUser(sessionId);
+      else if(sessionId) getOrCreateUser(username);
       else getOrCreateUser('guest');
     }
 

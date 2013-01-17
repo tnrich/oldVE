@@ -16,6 +16,29 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedPart: null,
     tabPanel: null,
 
+    onEmptySequenceBtnClick: function(){
+        var selectedPart = this.selectedPart;
+
+        console.log("Creating empty sequence");
+        var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileFormat: "Genbank",
+            sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+            sequenceFileName: "untitled.gb",
+            partSource: "New Part"
+        });
+        
+        newSequenceFile.save({
+            callback: function(){
+                selectedPart.setSequenceFileModel(newSequenceFile);
+                selectedPart.save({
+                    callback: function(){
+                        console.log(selectedPart);
+                    }
+                });
+            }
+        });
+    },
+
     onChangeSequenceBtnClick: function () {
         console.log("changing part");
 
@@ -88,7 +111,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.selectedPart = j5Part;
         } else {
             var newPart = this.DeviceDesignManager.createPart(this.activeProject, binIndex);
-
             partPropertiesForm.loadRecord(newPart);
 
             if(newPart.get("fas") === "") {
@@ -297,6 +319,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='changeSequenceBtn']": {
                 click: this.onChangeSequenceBtnClick
+            },
+            "button[cls='emptySequenceBtn']": {
+                click: this.onEmptySequenceBtnClick
             }
         });
     }

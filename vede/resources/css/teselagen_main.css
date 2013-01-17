@@ -412,3 +412,7 @@ background: #F8F8F8;
   width: auto ! important;
 }
 
+.gridPartCell-alert {
+  background-color: rgba(225, 0, 0, 0.1);
+}
+

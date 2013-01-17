@@ -60,6 +60,48 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.j5ParamsWindow.close();
     },
 
+    onSourcePlateListFileSelectorChange: function(me, value) {
+        var sourcePlateFile = me.button.fileInputEl.dom;
+        var fr = new FileReader();
+        me.inputEl.dom.value = this.getFileNameFromField(me);
+        var that = this;
+
+        function processSourcePlateFile() {
+            that.sourcePlateFileText = Base64.encode(fr.result);
+        }
+
+        fr.onload = processSourcePlateFile;
+        fr.readAsText(sourcePlateFile.files[0]);
+    },
+
+    onZippedPlateFilesSelectorChange: function(me, value) {
+        var zippedPlateFile = me.button.fileInputEl.dom;
+        var fr = new FileReader();
+        me.inputEl.dom.value = this.getFileNameFromField(me);
+        var that = this;
+
+        function processZippedPlateFile() {
+            that.zippedPlateFilesSelector = fr.result.replace("data:application/zip;base64,","");
+        }
+
+        fr.onload = processZippedPlateFile;
+        fr.readAsDataURL(zippedPlateFile.files[0]);
+    },
+
+    onAssemblyFileSelectorChange: function(me, value) {
+        var assemblyFileSelector = me.button.fileInputEl.dom;
+        var fr = new FileReader();
+        me.inputEl.dom.value = this.getFileNameFromField(me);
+        var that = this;
+
+        function processAssemblyFileSelector() {
+            that.assemblyFileText = Base64.encode(fr.result);
+        }
+
+        fr.onload = processAssemblyFileSelector;
+        fr.readAsText(assemblyFileSelector.files[0]);
+    },
+
     onUseServerPlasmidsRadioBtnChange: function(e) {
         // We only want to reset the file field if we are checking the radio button.
         if(e.getValue()) {
@@ -105,7 +147,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
 
         fr.onload = processPlasmidsFile;
-        fr.readAsText(plasmidsFile);
+        fr.readAsText(plasmidsFile.files[0]);
 
     },
 
@@ -150,7 +192,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
 
         fr.onload = processOligosFile;
-        fr.readAsText(oligosFile);
+        fr.readAsText(oligosFile.files[0]);
     },
 
     onUseServerSynthesesRadioBtnChange: function(e) {
@@ -193,7 +235,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }
 
         fr.onload = processSynthesesFile;
-        fr.readAsText(synthesesFile);
+        fr.readAsText(synthesesFile.files[0]);
     },
 
     onCustomizeAutomationParamsBtnClick: function() {
@@ -208,7 +250,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
     populateAutomationParametersDialog: function() {
         this.automationParameters.fields.eachKey(function(key) {
-            if(key !== "id") {
+            console.log(key);
+            if(key !== "id" && key !== "j5run_id") {
                 Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
                     this.automationParameters.get(key));
             }
@@ -217,7 +260,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     saveAutomationParams: function() {
         this.automationParameters.fields.eachKey(function(key) {
-            if(key !== "id") {
+            if(key !== "id" && key !== "j5run_id") {
                 this.automationParameters.set(key,
                     Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
@@ -350,11 +393,42 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDistributePCRBtn: function(){
 
-        var zippedPlateFilesSelector = Ext.ComponentQuery.query("component[cls='zippedPlateFilesSelector']")[0];
-
         console.log("Distribute PCR Reactions");
-        var fileName = this.getFileNameFromField(zippedPlateFilesSelector);
-        console.log(fileName);
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
+               
+        data = {};
+        data.sourcePlateFileText = this.sourcePlateFileText;
+        data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
+        data.assemblyFileText = this.assemblyFileText;
+        data.params = this.automationParameters.data;
+
+        var loadingMessage = this.createLoadingMessage();
+
+        loadingMessage.update(60,"Executing request");
+        currentTab.j5Window.j5comm.distributePCRRequest(data,function(success,responseData){
+            if(success)
+            {
+                loadingMessage.update(100,"Completed");
+                loadingMessage.close();
+            }
+            else
+            {
+                console.log(responseData.responseText);
+                loadingMessage.close();
+                var messagebox = Ext.MessageBox.show({
+                    title: "Execution Error",
+                    msg: responseData.responseText,
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+
+                Ext.Function.defer(function () {
+                messagebox.zIndexManager.bringToFront(messagebox);
+                },100);
+            }
+        });
+
     },
 
     /**
@@ -412,6 +486,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onDownloadj5Btn: function(button, e, options) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm.downloadResults(button);
+    },
+
+    onDownloadDownstreamAutomationBtn: function(button, e, options){
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.j5Window.j5comm.downloadDownstreamAutomationResults(button);
     },
 
     onPlasmidsItemClick: function( grid, record ){
@@ -495,6 +574,18 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             },
             "button[cls='downloadj5Btn']": {
                 click: this.onDownloadj5Btn
+            },
+            "button[cls='downloadDownstreamAutomationBtn']": {
+                click: this.onDownloadDownstreamAutomationBtn
+            },
+            "component[cls='sourcePlateListSelector']": {
+                change: this.onSourcePlateListFileSelectorChange
+            },
+            "component[cls='zippedPlateFilesSelector']": {
+                change: this.onZippedPlateFilesSelectorChange
+            },
+            "component[cls='assemblyFileSelector']": {
+                change: this.onAssemblyFileSelectorChange
             },
             "button[cls='distributePCRBtn']": {
                 click: this.onDistributePCRBtn
