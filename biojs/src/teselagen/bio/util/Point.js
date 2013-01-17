@@ -1,6 +1,6 @@
 /**
  * Point instance - used to manage a point in 2-D space, and compute distances, angles, polar and orbital positions, etc.
- * From [moagrius on Github](https://github.com/moagrius/Point)
+ * Obtained from [moagrius on Github](https://github.com/moagrius/Point).
  * @class Teselagen.bio.util.Point
  */
 Ext.define("Teselagen.bio.util.Point", {
