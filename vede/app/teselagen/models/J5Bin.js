@@ -44,7 +44,7 @@ Ext.define("Teselagen.models.J5Bin", {
                 var name;
 
                 if (v === "" || v === undefined || v === null) {
-                    name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
+                    name = record.self.defaultNamePrefix /*+ record.self.highestDefaultNameIndex*/;
                     record.self.highestDefaultNameIndex += 1;
                 } else {
                     if (Teselagen.utils.FormatUtils.isLegalName(v)) {

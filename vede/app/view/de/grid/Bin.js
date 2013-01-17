@@ -14,8 +14,7 @@ Ext.define('Vede.view.de.grid.Bin', {
     config: {
         bin: null,
         iconID: null,
-        totalRows: 1,
-        totalColumns: 1
+        totalRows: 1
     },
 
     binHeader: null,

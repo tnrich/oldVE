@@ -267,7 +267,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin());
+                                                        this.selectedBin.getBin()) + 1;
         } else {
             selectedBinIndex = this.totalColumns;
         }

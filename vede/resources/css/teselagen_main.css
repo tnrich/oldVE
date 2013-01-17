@@ -265,6 +265,10 @@ body {
 }
 
 /*Dashboard*/
+.welcome_text {
+  font-size: 48px;
+}
+
 #dashboard_Panel-body {
   border-top: none;
 }
