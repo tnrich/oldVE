@@ -55,11 +55,11 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Object} center An object with parameters x and y, containing the
      * coordinates of the center of the pie.
      * @param {Int} railRadius The radius of the circular sequence display.
-     * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} cutSites The
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite[]} cutSites The
      * list of cut sites to be rendered.
-     * @param {Array<Teselagen.bio.sequence.common.Annotation>} features The
+     * @param {Teselagen.bio.sequence.common.Annotation[]} features The
      * list of features to be rendered.
-     * @param {Array<Teselagen.bio.orf.ORF>} orfs The list of orfs to be
+     * @param {Teselagen.bio.orf.ORF[]} orfs The list of orfs to be
      * rendered.
      * @param {Boolean} showCutSites Whether or not to render cut sites.
      * Defaults to true.
@@ -117,7 +117,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * annotations which are currently visible.
      * @param {Int} start The start of the range of nucleotides.
      * @param {Int} end The end of the range of nucleotides.
-     * @return {Array<Teselagen.bio.sequence.common.Annotation>} All annotations
+     * @return {Teselagen.bio.sequence.common.Annotation[]} All annotations
      * (which are currently visible) that are contained in the range from start
      * to end, according to Annotation.contains().
      */
@@ -158,7 +158,7 @@ Ext.define("Teselagen.manager.PieManager", {
     /**
      * First checks to see if any parameters need to be updated on renderers,
      * then renders a list of sprites from all renderers.
-     * @return {Array<Ext.draw.Sprite>} A list of sprites aggregated from all
+     * @return {Ext.draw.Sprite[]} A list of sprites aggregated from all
      * renderers.
      */
     render: function() {

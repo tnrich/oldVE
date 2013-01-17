@@ -1,3 +1,7 @@
+/**
+ * Simulate digestion manager
+ * @class Teselagen.manager.SimulateDigestManager
+ */
 Ext.create("Teselagen.manager.SimulateDigestManager", {
     config: {
         digestPanel: null,

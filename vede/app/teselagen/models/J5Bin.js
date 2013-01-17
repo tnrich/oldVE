@@ -271,7 +271,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
      * No need to actually delete SequenceFiles or Parts.
      * @param {Teselagen.models.Part} pPart Part to be deleted.
-     * @param {Teselagen.manager.DeviceDesign}
+     * @param {Teselagen.models.DeviceDesign}
      * @returns {Boolean} True if removed, false if not.
      */
     deletePart: function(pPart, pDeviceDesign) {

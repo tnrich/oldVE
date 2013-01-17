@@ -1,3 +1,7 @@
+/**
+ * ORF Renderer
+ * @class Teselagen.renderer.sequence.ORFRenderer
+ */
 Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
     statics: {
         ORF_COLOR: ["#FF0000", "#31B440", "#3366CC"],

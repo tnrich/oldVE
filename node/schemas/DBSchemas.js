@@ -1,13 +1,15 @@
 /**
- * Schemas definitions
- * -------------------
- * User
- * j5run
- * sequence
- * part
- * veproject
- * deproject
- * project
+ * Mongoose schema definitions:
+ * 
+ * + User
+ * + j5run
+ * + sequence
+ * + part
+ * + veproject
+ * + deproject
+ * + project
+ * 
+ * @module ./schemas/DBSchemas
  */
 
 module.exports = function (app) {

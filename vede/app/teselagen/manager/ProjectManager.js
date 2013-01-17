@@ -1,4 +1,5 @@
 /**
+ * Project operations.
  * @class Teselagen.manager.ProjectManager
  * @author Rodrigo Pavez
  */

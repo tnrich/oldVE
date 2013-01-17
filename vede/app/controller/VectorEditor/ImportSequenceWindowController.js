@@ -1,3 +1,7 @@
+/**
+ * Import sequence window controller
+ * @class Vede.controller.VectorEditor.ImportSequenceWindowController
+ */
 Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
     extend: 'Ext.app.Controller',
 

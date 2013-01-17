@@ -1,3 +1,7 @@
+/**
+ * Name box
+ * @class Vede.view.rail.NameBox
+ */
 Ext.define("Vede.view.rail.NameBox", {
     extend: "Ext.draw.Sprite",
 

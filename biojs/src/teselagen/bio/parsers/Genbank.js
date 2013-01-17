@@ -25,7 +25,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
     /**
      * Creates new Genbank
      * @returns {Genbank}
-     * @memberOf Genbank
+     * @member Teselagen.bio.parsers.Genbank
      * */
     constructor: function () {
 
@@ -100,13 +100,13 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
         this.keywords.push(pFeatures);
     },
 
-    /**
-     * Same as genbank.addKeyword(GenbankFeaturesKeyword}
-     * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
-     *
-    addFeature: function(pFeature) {
-        this.keywords.push(pFeatures);
-    },*/
+//    /**
+//     * Same as genbank.addKeyword(GenbankFeaturesKeyword}
+//     * @param {Teselagen.bio.parsers.GenbankFeaturesKeyword} [featureElements]
+//     *
+//    addFeature: function(pFeature) {
+//        this.keywords.push(pFeatures);
+//    },*/
 
     /**
      * Add a single GenbankKeyword to Genbank.keywords
@@ -166,7 +166,7 @@ Ext.define("Teselagen.bio.parsers.Genbank", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json Genbank in JSON form
+     * @param {Object} json Genbank in JSON form
      * @returns {Teselagen.bio.parsers.Genbank}
      */
     fromJSON: function(json) {

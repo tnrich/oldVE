@@ -47,6 +47,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		
 		/**
 		 * Allows one to set the start of the annotation
+         * @method setStart
 		 * @param {Integer} pStart is the new start.
 		 */
 		this.setStart = function(pStart){
@@ -55,6 +56,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the first start in an annotation, unless there is more than one start.
+		 * @method setOneStart
 		 * @param {Integer} pStart sets the new start of the annotation only if there is one location.
 		 */
 		this.setOneStart = function(pStart){
@@ -71,6 +73,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Returns the end of the annotation.
+		 * @method getEnd
 		 * @return {Integer} returns the end of the annotation.
 		 */
 		this.getEnd = function(){
@@ -84,6 +87,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the end of the annotation.
+		 * @method setEnd
 		 * @param {Integer} pEnd sets the end of the annotation.
 		 */
 		this.setEnd= function(pEnd){
@@ -92,6 +96,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the end of the annotation.
+		 * @method setOneEnd
 		 * @param {Integer} pEnd sets the end of the annotation only if there is one location.
 		 */
 		this.setOneEnd = function(pEnd){
@@ -106,6 +111,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		}
 		/**
 		 * Returns the locations within the annotation.
+		 * @method getLocations
 		 * @return {Locations} returns a list of the annotation's locations.
 		 */
 		this.getLocations = function(){
@@ -114,7 +120,8 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Allows one to set the locations of the annotation.
-		 * @param {Array <Location>} pLocations sets the new list of locations.
+		 * @method setLocations
+		 * @param {Location[]} pLocations sets the new list of locations.
 		 */
 		this.setLocations = function(pLocations){
 		    locations = [];	
@@ -123,6 +130,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Calculates whether one annotation is contained within another.
+		 * @method contains
 		 * @param  {Annotation} pAnnotation is an input annotation.
 		 * @return {Boolean} returns a boolean representing whether one annotation is contained within another.
 		 */
@@ -162,6 +170,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		
 		/**
 		 * Calculates whether an annotation has more than one location.
+		 * @method isMultiLocation
 		 * @return {Boolean} returns a boolean representing whether the annotation contains more than one annotation.
 		 */
 		this.isMultiLocation = function(){
@@ -174,6 +183,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		
 		/**
 		 * Shifts the locations.
+		 * @method shift
 		 * @param  {Integer} pShiftBy represents amount by which you want to shift the locations
 		 * @param  {Integer} pMaxLength is the maximum length of the sequence
 		 * @param  {Boolean} pCircular is whether the sequence is circular or not
@@ -202,6 +212,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 		
 		/**
 		 * Inserts basepairs and updates locations. Alters only the affected locations.
+		 * @method insertAt
 		 * @param  {Integer} pPosition is the position of the insert
 		 * @param  {Integer} pInsertLength is the length of the insert
 		 * @param  {Integer} pMaxLength the max length of the locations
@@ -255,6 +266,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 
 		/**
 		 * Delete basepairs and change locations. Alter only the affected location
+		 * @method deleteAt
 		 * @param  {Integer} pCutStart  the start of the cut
 		 * @param  {Integer} pCutLength the length of the cut
 		 * @param  {Integer} pMaxLength the max length of the locations
@@ -408,7 +420,7 @@ Ext.define("Teselagen.bio.sequence.common.Annotation", {
 				combinedLocations[combinedLocations.length - 1].setEnd( newMinimum + expectedNewLength );
 			}
 			var changedLength = pMaxLength - pCutLength;
-locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, this.circularAdjustment);
+			locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCircular, this.circularAdjustment);
             //console.log("Locations denormalized");
             logFeatures(locations);
           function logFeatures(pLocations){ Ext.each(pLocations, function(location){
@@ -419,6 +431,7 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 
 		/**
 		 * Reverses the locations
+		 * @method reverseLocations
 		 * @param  {Integer} pNewStartIndex the new start index of teh locationz
 		 * @param  {Integer} pNewMaxLength the max length of the locations
 		 * @param  {Boolean} pCircular whether the annotations are circular
@@ -462,12 +475,13 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 		}
 		/**
 		 * Denormalize the location form zero-based to offset. Calculates circularity (if needed)
-		 * @param  {Array<Location>} pTempLocations is the array of locations you want to denormalize
+		 * @method deNormalizeLocations
+		 * @param  {Location[]} pTempLocations is the array of locations you want to denormalize
 		 * @param  {Integer} pOffset the offset of the locations
 		 * @param  {Integer} pMaxLength is the max length of the locations   
 		 * @param  {Boolean} pCircular if the annotation is circular
 		 * @param  {Integer} pCircularAdjustment is adjustment that needs to be made because of circularity
-		 * @return {Array<Location>} returns denormalized locations
+		 * @return {Location[]} returns denormalized locations
 		 */
 		function deNormalizeLocations(pTempLocations, pOffset, pMaxLength, pCircular, pCircularAdjustment){
 			if (pTempLocations.length === 0) {
@@ -535,6 +549,7 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 		 * Reverses locations. This function assumes normalized locations, meaning it will not
 		 * handle locations that go over zero properly, although it will calculate non-zero
 		 * offset.
+		 * @private 
 		 */
 		function reverseNormalizedLocations(tempLocations){
 			if (tempLocations.length === 0 ){
@@ -563,11 +578,10 @@ locations = deNormalizeLocations(combinedLocations, offset, changedLength, pCirc
 			return result;
 
 		}
-		/**
-		 * 
-		 */
+
 		/**
 		 * Gets the index of the location
+		 * @private
 		 * @param  {Integer} index the index
 		 * @return {Integer} The index of Location. -1 if not within a Location.
 		 */

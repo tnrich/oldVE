@@ -1,3 +1,7 @@
+/**
+ * Mapper events.
+ * @class Teselagen.event.MapperEvent
+ */
 Ext.define("Teselagen.event.MapperEvent", {
     singleton: true,
 

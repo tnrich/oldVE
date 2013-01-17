@@ -1,3 +1,7 @@
+/**
+ * Project panel view
+ * @class Vede.view.common.ProjectPanelView
+ */
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.ProjectPanelView',

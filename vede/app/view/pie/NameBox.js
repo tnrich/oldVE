@@ -1,3 +1,7 @@
+/**
+ * Name box
+ * @class Vede.view.pie.NameBox
+ */
 Ext.define("Vede.view.pie.NameBox", {
     extend: "Ext.draw.Sprite",
 

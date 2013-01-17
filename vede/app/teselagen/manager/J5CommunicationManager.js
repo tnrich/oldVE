@@ -93,7 +93,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     // Generate j5 Ajax Request
     //================================================================
     /**
-     *
+     * Generates an AJAX request to the j5 server.
      */
     generateAjaxRequest: function (cb) {
         console.log("Starting Ajax Request");

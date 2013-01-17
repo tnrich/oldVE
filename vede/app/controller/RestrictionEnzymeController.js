@@ -1,7 +1,6 @@
 /**
- * @singleton
+ * Restriction enzyme controller
  * @class Vede.controller.RestrictionEnzymeController
- * DESCRIPTION
  * @author Jenhan Tao
  */
 Ext.define("Vede.controller.RestrictionEnzymeController", {

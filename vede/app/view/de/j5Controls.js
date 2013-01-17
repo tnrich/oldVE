@@ -1,3 +1,7 @@
+/**
+ * j5 controls view
+ * @class Vede.view.de.j5Controls
+ */
 Ext.define('Vede.view.de.j5Controls', {
     extend: 'Ext.window.Window',
 
@@ -516,5 +520,4 @@ Ext.define('Vede.view.de.j5Controls', {
 
             me.callParent(arguments);
         }
-
-        });
+});

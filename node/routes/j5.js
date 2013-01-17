@@ -1,6 +1,6 @@
 /**
- * j5 API - VEDE EXT Platform
- * -----------------------
+ * j5 API
+ * @module ./routes/j5
  */
 
 var spawn = require('child_process').spawn;
@@ -13,6 +13,9 @@ module.exports = function (app) {
 
 var j5rpcEncode = require('./j5rpc');
 
+/**
+ * Write to quick.log
+ */
 function quicklog(s) {
   var logpath = "/tmp/quick.log";
   var fs = require('fs');
@@ -22,6 +25,9 @@ function quicklog(s) {
   fs.closeSync(fd);
 }
 
+/**
+ *  Login Auth Method : Find User in DB
+ */
 function authenticate(username, pass, fn) {
   var User = app.db.model("User");
   User.findOne({
@@ -32,6 +38,10 @@ function authenticate(username, pass, fn) {
   });
 };
 
+/**
+ * Authentication Restriction.
+ * If user session is active then find the user in DB.
+ */
 function restrict(req, res, next) {
   if(req.session.user) {
     var User = app.db.model("User");
@@ -168,6 +178,9 @@ app.post('/condenseAssemblyFiles',function(req,res){
 });
 
 
+/**
+ * Read file.
+ */
 function readFile(objectId,cb)
 {
   var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'r');
@@ -225,6 +238,9 @@ function readFile(objectId,cb)
   */
 }
 
+/**
+ * Save file.
+ */
 function saveFile(fileData,user,deproject,cb)
 {
   var assert = require('assert');

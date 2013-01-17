@@ -1,3 +1,7 @@
+/**
+ * Digestion manager
+ * @class Teselagen.manager.DigestionManager
+ */
 Ext.define("Teselagen.manager.DigestionManager", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite", 
                "Teselagen.bio.sequence.DNATools",

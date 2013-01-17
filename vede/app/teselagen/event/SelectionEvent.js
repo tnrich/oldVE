@@ -1,4 +1,5 @@
 /**
+ * Sequence selection events.
  * @singleton
  * @class Teselagen.event.SelectionEvent
  * @author Nick Elsbree

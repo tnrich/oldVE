@@ -1,3 +1,7 @@
+/**
+ * Header panel controller
+ * @class Vede.controller.HeaderPanelController
+ */
 Ext.define('Vede.controller.HeaderPanelController', {
     extend: 'Ext.app.Controller',
     requires: ["Teselagen.manager.ProjectManager","Teselagen.event.ProjectEvent",'Ext.window.MessageBox'],

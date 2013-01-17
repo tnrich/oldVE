@@ -1,3 +1,7 @@
+/**
+ * Dashboard panel controller
+ * @class Vede.controller.DashboardPanelController
+ */
 Ext.define("Vede.controller.DashboardPanelController", {
 	extend: "Ext.app.Controller",
 

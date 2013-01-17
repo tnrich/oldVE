@@ -1,6 +1,6 @@
 /**
  * @class Teselagen.mappers.Mapper
- * Superclass for mappers. A mapper receives a @link Teselagen.manager.SequenceManager object and records and calculates data for that sequence. When the sequence changes for whatever reason, the mapper recalculates its data, be it the amino acid translation of the sequence, 
+ * Superclass for mappers. A mapper receives a Teselagen.manager.SequenceManager object and records and calculates data for that sequence. When the sequence changes for whatever reason, the mapper recalculates its data, be it the amino acid translation of the sequence, 
  */
 Ext.define("Teselagen.mappers.Mapper", {
     requires: ["Teselagen.event.MapperEvent"],
