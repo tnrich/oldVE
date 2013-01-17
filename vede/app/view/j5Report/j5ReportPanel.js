@@ -1,3 +1,7 @@
+/**
+ * j5 report panel
+ * @class Vede.view.j5Report.j5ReportPanel
+ */
 Ext.define('Vede.view.j5Report.j5ReportPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.j5ReportPanel',

@@ -1,5 +1,6 @@
 /**
  * Class controlling the device display portion of Device Editor.
+ * @class Vede.controller.DeviceEditor.GridController
  */
 Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",

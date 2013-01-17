@@ -1,3 +1,7 @@
+/**
+ * Vector Editor status panel
+ * @class Vede.view.ve.VectorEditorStatusPanel
+ */
 Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
     extend: "Ext.panel.Panel",
     id: "VectorEditorStatusPanel",

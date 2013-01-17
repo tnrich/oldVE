@@ -1,3 +1,7 @@
+/**
+ * Main toolbar controller
+ * @class Vede.controller.MainToolbarController
+ */
 Ext.define('Vede.controller.MainToolbarController', {
     extend: 'Ext.app.Controller',
 

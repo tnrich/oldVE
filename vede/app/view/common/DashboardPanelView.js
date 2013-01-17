@@ -1,3 +1,7 @@
+/**
+ * Dashboard panel view
+ * @class Vede.view.common.DashboardPanelView
+ */
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DashboardPanelView',

@@ -1,3 +1,7 @@
+/**
+ * Vector Editor manin menu panel
+ * @class Vede.view.ve.VectorEditorMainMenuPanel
+ */
 Ext.define("Vede.view.ve.VectorEditorMainMenuPanel", {
     extend: "Ext.panel.Panel",
     id: "VectorEditorMainMenuPanel",

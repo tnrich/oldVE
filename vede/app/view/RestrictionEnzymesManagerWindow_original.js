@@ -1,10 +1,10 @@
 /**
- * @singleton
- * @class Vede.view.RestrictionEnzymesManagerWindow
- * DESCRIPTION
+ * Restriction enzymes manager window
+ * @ignore
+ * @class Vede.view.RestrictionEnzymesManagerWindow_original
  * @author Jenhan Tao
  */
-Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
+Ext.define('Vede.view.RestrictionEnzymesManagerWindow_original', {
     extend: 'Ext.window.Window',
     requires: ['Ext.ux.form.Multiselect',
                'Ext.ux.form.ItemSelector'],

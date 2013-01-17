@@ -1,3 +1,7 @@
+/**
+ * Vector Editor find panel
+ * @class Vede.view.ve.VectorEditorFindPanel
+ */
 Ext.define("Vede.view.ve.VectorEditorFindPanel", {
     extend: "Ext.panel.Panel",
     id: "FindPanel",

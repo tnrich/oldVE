@@ -1,3 +1,7 @@
+/**
+ * Vector Editor import sequence window
+ * @class Vede.view.ve.ImportSequenceWindow
+ */
 Ext.define('Vede.view.ve.ImportSequenceWindow', {
     extend: 'Ext.window.Window',
 

@@ -13,7 +13,7 @@ Ext.define("Teselagen.bio.sequence.dna.DNASequence", {
     extend: "Teselagen.bio.sequence.common.Sequence",
 
     /**
-     * Contructor
+     * Constructor
      * 
      * @param symbolList DNA sequence
      * @param name Sequence name
