@@ -576,6 +576,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return part;
     },
     /**
+     * Gets all parts in the given device. If the optional parameter pExcept is
+     * defined as a part, returns all parts except that part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pExcept
+     * @returns {Array} Array of all parts except for pExcept.
+     */
+    getAllParts: function(pDevice, pExcept) {
+        var allParts = [];
+
+        pDevice.getJ5Collection().bins().each(function(bin) {
+            allParts = allParts.concat(bin.parts().getRange());
+        });
+
+        if(pExcept && pExcept.$className === "Teselagen.models.Part") {
+            allParts.splice(allParts.indexOf(pExcept), 1);
+        }
+
+        return allParts;
+    },
+    /**
      * Determines if a Part is in the Collection.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart

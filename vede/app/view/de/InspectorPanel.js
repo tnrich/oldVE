@@ -132,21 +132,65 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'form',
+                    cls: 'eugeneRulesForm',
                     flex: 1,
                     bodyPadding: 10,
                     title: 'Eugene Rules',
-                    dockedItems: [
+                    items: [
                         {
-                            xtype: 'button',
-                            dock: 'top',
-                            text: 'Add Rule'
+                            xtype: 'gridpanel',
+                            cls: 'eugeneRulesGrid',
+                            viewConfig: {
+                                markDirty: false
+                            },
+                            columnLines: true,
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    width: 100,
+                                    text: 'Name',
+                                    dataIndex: 'name',
+                                    editor: {
+                                        xtype: 'textfield',
+                                        allowBlank: false
+                                    }
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    text: 'Operand 1',
+                                    dataIndex: 'operand1_id',
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    text: 'Operator',
+                                    dataIndex: 'compositionalOperator',
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    text: 'Operand 2',
+                                    dataIndex: 'operand2_id',
+                                }
+                            ]
                         },
                         {
-                            xtype: 'button',
-                            dock: 'top',
-                            text: 'List'
+                            xtype: 'container',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    cls: 'addEugeneRuleBtn',
+                                    text: 'Add Rule'
+                                },
+                                {
+                                    xtype: 'button',
+                                    cls: 'deleteEugeneRuleBtn',
+                                    text: 'Delete Rule',
+                                }
+                            ]
                         }
-                    ]
+                    ],
                 }
             ]
         },
@@ -205,7 +249,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
-                            margin: 10,
                             autoScroll: true,
                             columnLines: true,
                             height:400,

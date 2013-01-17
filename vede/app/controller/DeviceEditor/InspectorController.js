@@ -11,6 +11,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     activeProject: null,
     columnsGrid: null,
+    eugeneRulesGrid: null,
     inspector: null,
     selectedPart: null,
     tabPanel: null,
@@ -98,7 +99,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
+        this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel")
 
+        // If a j5Part exists for the selected part, load it. If not, create a
+        // blank part and load it into the form.
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
 
@@ -121,8 +125,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.selectedPart = newPart;
         }
 
-        Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
+        this.eugeneRulesGrid.reconfigure(this.DeviceDesignManager.getRulesInvolvingPart(
+                                        this.activeProject, this.selectedPart));
 
+        Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
     },
 
     onBinSelected: function (j5Bin) {
@@ -180,6 +186,56 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    onAddEugeneRuleBtnClick: function() {
+        var newEugeneRuleWindow = Ext.create("Vede.view.de.EugeneRuleWindow");
+        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+            compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
+        });
+        var ruleForm = newEugeneRuleWindow.down("form");
+        var operand2Field = ruleForm.down("combobox[cls='operand2Field']");
+
+        var allParts = this.DeviceDesignManager.getAllParts(
+                            this.activeProject, this.selectedPart);
+        var partsStore = [];
+        Ext.each(allParts, function(part) {
+            //partsStore = partsStore.concat([[part, part.get("name")]]);
+            partsStore = partsStore.concat([part.get("name")]);
+        });
+
+        newEugeneRule.setOperand1(this.selectedPart);
+
+        newEugeneRuleWindow.show();
+
+        ruleForm.loadRecord(newEugeneRule);
+        ruleForm.down("displayfield[cls='operand1Field']").setValue(
+                                    this.selectedPart.get("name"));
+
+        operand2Field.bindStore(partsStore); 
+        operand2Field.setValue(partsStore[0]);
+    },
+
+    onDeleteEugeneRuleBtnClick: function() {
+    },
+
+    onSubmitNewEugeneRuleBtnClick: function() {
+        var window = Ext.ComponentQuery.query("component[cls='addEugeneRuleWindow']")[0];
+        var newRule = window.down("form").getForm().getRecord();
+
+        //newRule.set("name", )
+
+        this.eugeneRulesGrid.reconfigure(
+            this.DeviceDesignManager.getRulesInvolvingPart(
+                this.activeProject, this.selectedPart));
+
+    },
+
+    onCancelNewEugeneRuleBtnClick: function() {
+        var newEugeneRuleWindow = this.activeTab.down("component[cls='addEugeneRuleWindow']");
+        var newRule = newEugeneRuleWindow.down("form").getForm().getRecord();
+
+        newRule.delete();
+    },
+
     onGridBinSelect: function (grid, j5Bin, selectedIndex) {
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
@@ -232,7 +288,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 this.columnsGrid.un("select", this.onGridBinSelect, this);
             }
 
-            this.columnsGrid = this.inspector.down("gridpanel");
+            this.columnsGrid = this.inspector.down(
+                                "form[cls='collectionInfoForm'] > gridpanel");
             this.columnsGrid.on("select", this.onGridBinSelect, this);
 
             this.renderCollectionInfo();
@@ -321,6 +378,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='emptySequenceBtn']": {
                 click: this.onEmptySequenceBtnClick
+            },
+            "button[cls='addEugeneRuleBtn']": {
+                click: this.onAddEugeneRuleBtnClick
+            },
+            "button[cls='deleteEugeneRuleBtn']": {
+                click: this.onDeleteEugeneRuleBtnClick
+            },
+            "button[cls='submitNewEugeneRuleBtn']": {
+                click: this.onSubmitNewEugeneRuleBtnClick
+            },
+            "button[cls='cancelNewEugeneRuleBtn']": {
+                click: this.onCancelNewEugeneRuleBtnClick
             }
         });
     }
