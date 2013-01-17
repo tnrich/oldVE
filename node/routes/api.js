@@ -37,7 +37,11 @@ module.exports = function (app, express) {
     }
   };
 
-  // Root Path
+  /**
+   * Send feedback
+   * @memberof module:./routes/api
+   * @method POST /sendFeedback
+   */
   app.post('/sendFeedback', function (req, res) {
     if(req.body.feedback)
     {
