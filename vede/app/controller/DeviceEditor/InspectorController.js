@@ -15,6 +15,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedPart: null,
     tabPanel: null,
 
+    onCircularPlasmidRadioChange: function(radio){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        tab.model.getDesign().getJ5Collection().set('isCircular',radio.getValue());
+    },
+
     onEmptySequenceBtnClick: function(){
         var selectedPart = this.selectedPart;
 
@@ -270,7 +275,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             j5ReadyField.setValue(this.activeProject.getJ5Collection().get("j5Ready"));
             combinatorialField.setValue(this.activeProject.getJ5Collection().get("combinatorial"));
 
-            if(this.activeProject.get("isCircular")) {
+            if(this.activeProject.getJ5Collection().get("isCircular")) {
                 circularPlasmidField.setValue(true);
             } else {
                 linearPlasmidField.setValue(true);
@@ -321,6 +326,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='emptySequenceBtn']": {
                 click: this.onEmptySequenceBtnClick
+            },
+            "radio[cls='circular_plasmid_radio']": {
+                change: this.onCircularPlasmidRadioChange
             }
         });
     }

@@ -65,8 +65,8 @@ function restrict(req, res, next) {
 app.all('/GetLastUpdatedUserFiles',function(req,res){
 
   var data = {}
-  data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  data["username"] = 'eabeliuk';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('GetLastUpdatedUserFiles', [data], function (error, value) {
 
@@ -146,16 +146,16 @@ app.post('/DesignDownstreamAutomation',function(req,res){
 // Condense AssemblyFiles
 app.post('/condenseAssemblyFiles',function(req,res){
 
-  var params = JSON.parse(req.body.params);
+  var params = JSON.parse(req.body.data);
   var data = {};
   data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
-  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];  
-  data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
 
-    if(error) 
+    if(error)
     {
       console.log(error);
       res.send(error["faultString"], 500);
@@ -164,7 +164,7 @@ app.post('/condenseAssemblyFiles',function(req,res){
     {
       res.send(value);
     }
-  })
+  });
 });
 
 
