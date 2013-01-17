@@ -1,3 +1,7 @@
+/**
+ * Development environment setup
+ * @module ./development
+ */
 module.exports = function(app){
 
 var development = this;
@@ -8,6 +12,11 @@ app.testing.sessionId = "a99be7833401c5b70de90060f3c4c82e";
 
 app.development = {};
 
+/**
+ * Reload the examples in the database.
+ * @memberof module:./development
+ * @method reloadExamples
+ */
 app.development.reloadExamples = function(){
 
 	console.log('Dev: Checking examples collection');
@@ -48,6 +57,11 @@ app.development.reloadExamples = function(){
 	});
 }
 
+/**
+ * Reload users in database.
+ * @method reloadUsers
+ * @memberof module:./development
+ */
 app.development.reloadUsers = function(){
 	var User = app.db.model("User");
 	User.findOne({'name':'Guest'},function(err,results){
