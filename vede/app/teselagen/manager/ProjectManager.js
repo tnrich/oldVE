@@ -100,6 +100,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
 
         console.log("Deleting deproject");
+        console.log(deproject);
+        console.log(deproject.store);
         var store =  deproject.store;
         store.remove(deproject);
 

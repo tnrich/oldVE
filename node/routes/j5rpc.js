@@ -318,13 +318,13 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
     execParams["assemblyMethod"] = assemblyMethod;
 
     execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
-    execParams["encoded_master_plasmids_file"] = new Buffer(masterFiles["masterPlasmidsList"]).toString('base64');
+    execParams["encoded_master_plasmids_file"] = masterFiles["masterPlasmidsList"];
     
     execParams["master_oligos_list_filename"] = masterFiles["masterOligosListFileName"];
-    execParams["encoded_master_oligos_file"] = new Buffer(masterFiles["masterOligosList"]).toString('base64');
+    execParams["encoded_master_oligos_file"] = masterFiles["masterOligosList"];
     
     execParams["master_direct_syntheses_list_filename"] = masterFiles["masterDirectSynthesesListFileName"];
-    execParams["encoded_master_direct_syntheses_file"] = new Buffer(masterFiles["masterDirectSynthesesList"]).toString('base64');
+    execParams["encoded_master_direct_syntheses_file"] = masterFiles["masterDirectSynthesesList"];
 
 
     var data = {};

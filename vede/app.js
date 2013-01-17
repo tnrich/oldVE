@@ -103,7 +103,8 @@ Ext.application({
         'ProjectController',
         'DashboardPanelController',
         'Vede.controller.VectorEditor.SequenceEditingController',
-        'Vede.controller.J5ReportController'
+        'Vede.controller.J5ReportController',
+        'Vede.controller.DeviceEditor.ChangePartDefinitionController'
     ],
     errorHandler: function(err) {
         console.warn(err);
