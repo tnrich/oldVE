@@ -1,3 +1,7 @@
+/**
+ * Builds an alignment map for sequence annotations.
+ * @class Teselagen.renderer.common.Alignment
+ */
 Ext.define("Teselagen.renderer.common.Alignment", {
     singleton: true,
 

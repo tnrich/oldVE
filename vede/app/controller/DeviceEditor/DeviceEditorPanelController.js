@@ -1,3 +1,7 @@
+/**
+ * Device Editor panel controller
+ * @class Vede.controller.DeviceEditor.DeviceEditorPanelController
+ */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
     requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager"],

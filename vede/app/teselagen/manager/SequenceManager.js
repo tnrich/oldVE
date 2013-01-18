@@ -82,9 +82,9 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {String} name
      * @param {Boolean} circular
      * @param {Teselagen.bio.sequence.common.SymbolList} sequence
-     * @param {[Teselagen.bio.sequence.dna.Feature]} features
+     * @param {Teselagen.bio.sequence.dna.Feature[]} features
      * @returns {Teselagen.manager.SequenceManager}
-     * @memberOf Teselagen.manager.SequenceManager
+     * @member Teselagen.manager.SequenceManager
      *
      */
     constructor: function(inData) {
@@ -140,6 +140,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.manualUpdateEnd();
         }
         /**
+         * @method setCircular
          * @param {Boolean} circular
          */
         this.self.prototype.setCircular = function(pCircular) {
@@ -148,6 +149,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.manualUpdateEnd();
         }
         /**
+         * @method setSequence
          * @param {Teselagen.bio.sequence.common.SymbolList} sequence
          */
         this.self.prototype.setSequence = function(pSequence) {
@@ -156,6 +158,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.sequence = pSequence;
         }
         /**
+         * @method setFeatures
          * @param {Teselagen.bio.sequence.dna.Feature} name
          */
         this.self.prototype.setFeatures = function(pFeatures) {
@@ -361,8 +364,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Adds list of Features to sequence manager.
-     * @param {Teselagen.bio.sequence.dna.Feature} [featuresToAdd] List of features to add
-     * @param{Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @param {Teselagen.bio.sequence.dna.Feature[]} featuresToAdd List of features to add
+     * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      * @returns {Boolean} done True if successful, False if nothing was done.
      */
     addFeatures: function(pFeaturesToAdd, quiet) {
@@ -409,7 +412,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * Remove list of Features to sequence manager.
      * (It is easier to just iterate through your array and use removeFeature() instead.)
-     * @param {Teselagen.bio.sequence.dna.Feature[]} [featuresToRemove] List of features to remove
+     * @param {Teselagen.bio.sequence.dna.Feature[]} featuresToRemove List of features to remove
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      * @returns {Boolean} done True if successful, False if nothing was done.
      */
@@ -1028,7 +1031,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * @see manualUpdateStart
+     * See #manualUpdateStart
      */
     manualUpdateEnd: function() {
         if(this.manualUpdateStarted) {

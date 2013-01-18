@@ -1,3 +1,7 @@
+/**
+ * Main menu controller
+ * @class Vede.controller.MainMenuController
+ */
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 

@@ -1,3 +1,7 @@
+/**
+ * Find panel controller
+ * @class Vede.controller.FindPanelController
+ */
 Ext.define('Vede.controller.FindPanelController', {
     extend: 'Ext.app.Controller',
 

@@ -32,6 +32,7 @@ function requestMessageProcessor(request, success) {
 }
 
 /**
+ * A Device Editor project.
  * @class Teselagen.models.DeviceEditorProject
  * @author
  */

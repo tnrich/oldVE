@@ -1,3 +1,7 @@
+/**
+ * Action stack controller
+ * @class Vede.controller.ActionStackController
+ */
 Ext.define("Vede.controller.ActionStackController", {
     extend: "Ext.app.Controller",
 

@@ -1,6 +1,6 @@
     /**
+    * Exception when an invalid symbol is found.
     * @class Teselagen.bio.sequence.symbols.IllegalSymbolException
-    *
     * @author Micah Lerner
     */
 Ext.define("Teselagen.bio.sequence.symbols.IllegalSymbolException", {

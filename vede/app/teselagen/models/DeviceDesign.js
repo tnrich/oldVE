@@ -124,7 +124,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /**
      * Creates a J5Collection from given J5Bins.
-     * @param {Teselagen.models.J5Bins[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
+     * @param {Teselagen.models.J5Bin[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
      * @returns {Teselagen.models.J5Collection}
      */
     createCollectionFromBins: function(pBins) {

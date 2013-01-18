@@ -1,3 +1,6 @@
+/**
+ * Device Editor tool panel
+ */
 Ext.define('Vede.view.de.DeviceEditorToolPanel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.DeviceEditorToolPanel',

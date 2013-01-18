@@ -18,7 +18,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
     },
 
     /**
-     * @param {Array<Teselagen.bio.sequence.common.Annotation>} features The
+     * @param {Teselagen.bio.sequence.common.Annotation[]} features The
      * features to be rendered.
      * @param {Ext.util.HashMap} middlePoints A hashmap of the middle points of
      * the features. Defaults to empty.
@@ -33,7 +33,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
 
     /**
      * Converts the given features and their locations to sprites.
-     * @return {Array<Ext.draw.Sprite>} The array of sprites.
+     * @return {Ext.draw.Sprite[]} The array of sprites.
      */
     render: function() {
         var sprites = [];
@@ -109,7 +109,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      * Given a feature, return its start and end angles.
      * @param {Teselagen.bio.sequence.common.Annotation} feature The feature to
      * calculate angles for.
-     * @return {Array<Int>} The start and end angles, in that order.
+     * @return {Number[]} The start and end angles, in that order.
      */
     calculateAngles: function(feature, featureRadius) {
         var angle1 = feature.getStart() * 2 * Math.PI /

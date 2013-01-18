@@ -10,7 +10,7 @@ Ext.define("Teselagen.bio.BioException", {
     statics: {
         /*
          * Raises an exception with specified input going to the console
-         * @params pInput the message you want to write to console.
+         * @param pInput the message you want to write to console.
          */
         raise: function(pInput) {
                    var passedMessage = "";
@@ -23,7 +23,7 @@ Ext.define("Teselagen.bio.BioException", {
         },
     },
     /* 
-     * @params message A message you want to display.
+     * @param message A message you want to display.
      */
     constructor: function(inData){
         var that = this;

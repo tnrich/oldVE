@@ -60,9 +60,9 @@
      },
 
      /**
+      * Adds the given memento to the undo stack.
       * @param {Teselagen.manager.SequenceManagerMemento} memento The memento to
       * be added.
-      * Adds the given memento to the undo stack.
       */
      add: function(memento) {
          this.undoStack.push(memento);

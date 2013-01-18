@@ -5,6 +5,7 @@
  * J5Manager holds an array of J5Collection, for a given design project.
  *
  * Originally J5Proxy.as, FunctionMediator.as, SaveDesignXMLCommand.as
+ * @ignore
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */

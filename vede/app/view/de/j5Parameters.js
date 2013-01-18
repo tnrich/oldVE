@@ -1,3 +1,7 @@
+/**
+ * j5 parameters view
+ * @class Vede.view.de.j5Parameters
+ */
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 

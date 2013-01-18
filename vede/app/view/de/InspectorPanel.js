@@ -1,3 +1,7 @@
+/**
+ * Device Editor Inspector panel
+ * @class Vede.view.de.InspectorPanel
+ */
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
@@ -45,13 +49,18 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 */
                 {
                     xtype: 'button',
-                    text : 'Assign empty sequence',
+                    text : 'Map empty sequence',
                     cls: 'emptySequenceBtn'
                 },
                 {
                     xtype: 'button',
-                    text : 'Change Source',
+                    text : 'Map sequence',
                     cls: 'changeSequenceBtn'
+                },
+                {
+                    xtype: 'button',
+                    text : 'Change part definition',
+                    cls: 'changePartDefinitionBtn'
                 },
                 /*
                 {

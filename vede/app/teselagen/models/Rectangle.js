@@ -1,3 +1,7 @@
+/**
+ * Rectangle
+ * @class Teselagen.models.Rectangle
+ */
 Ext.define("Teselagen.models.Rectangle", {
     config: {
         x: 0,

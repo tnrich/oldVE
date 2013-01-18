@@ -1,14 +1,15 @@
+/**
+ * Point instance - used to manage a point in 2-D space, and compute distances, angles, polar and orbital positions, etc.
+ * Obtained from [moagrius on Github](https://github.com/moagrius/Point).
+ * @class Teselagen.bio.util.Point
+ */
 Ext.define("Teselagen.bio.util.Point", {
 
 	/**
-	* Point instance - used to manage a point in 2-D space, and compute distances, angles, polar and orbital positions, etc.
-	* From [moagrius on Github](https://github.com/moagrius/Point)
+	* The Point object represents a location in a two-dimensional coordinate system, where x represents the horizontal axis and y represents the vertical axis.
 	* @constructor
-	* @function
 	* @param {number} x - The position of the point along the horizontal axis
 	* @param {number} y - The position of the point along the vertical axis
-	* @class
-	* The Point object represents a location in a two-dimensional coordinate system, where x represents the horizontal axis and y represents the vertical axis.
 	*/
 	constructor: function(x, y){
 		this.x = x || 0;
@@ -27,7 +28,7 @@ Ext.define("Teselagen.bio.util.Point", {
 
 	/**
 	* Adds the coordinates of another point to the coordinates of this point to create a new point.
-	* @function
+	* @method
 	* @param {Point} v The point to be added.
 	* @returns Point
 	*/
@@ -37,7 +38,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Creates a copy of this Point object.
-	* @function
+	* @method
 	* @returns Point
 	*/
 	clone : function(){
@@ -46,7 +47,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Returns the degrees of rotation facing the target point.
-	* @function
+	* @method
 	* @param {Point} v The point at the opposite end of the radial comparison.
 	* @returns number
 	*/
@@ -59,7 +60,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Returns the distance between this and another Point.
-	* @function
+	* @method
 	* @param {Point} v The point at the opposite end of the distance comparison.
 	* @returns number
 	*/
@@ -71,7 +72,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Determines whether two points are equal. Two points are equal if they have the same x and y values.
-	* @function
+	* @method
 	* @param {Point} toCompare The point to be compared.
 	* @returns Boolean
 	*/
@@ -81,7 +82,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Determines a point between two specified points. The parameter f determines where the new interpolated point is located relative to this and the end point (parameter v). The closer the value of the parameter f is to 1.0, the closer the interpolated point is to this. The closer the value of the parameter f is to 0, the closer the interpolated point is to the destination point (parameter v).
-	* @function
+	* @method
 	* @param {Point} v The point at the opposite end of the distance comparison.
 	* @param {number} f The level of interpolation between the two points. Indicates where the new point will be, along the line between this and the destination point. If f=1, this is returned; if f=0, v is returned.
 	* @returns Point
@@ -92,7 +93,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Returns the length of the line segment from (0,0) to this point.
-	* @function
+	* @method
 	* @returns number
 	*/
 	length : function(){
@@ -101,7 +102,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Scales the line segment between (0,0) and the current point to a set length.
-	* @function
+	* @method
 	* @param thickness The scaling value. For example, if the current point is (0,5), and you normalize it to 1, the point returned is at (0,1).
 	*/
 	normalize : function(thickness){
@@ -112,7 +113,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Updates a Point to reflect the position based on the passed parameters describing an arc.
-	* @function
+	* @method
 	* @param {Point} origin The point from which to calculate the new position of this.
 	* @param {number} arcWidth A number desribing the width of the arc definining the orbital path.
 	* @param {number} arcHeight A number desribing the height of the arc definining the orbital path.
@@ -126,7 +127,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Offsets the Point object by the specified amount. The value of dx is added to the original value of x to create the new x value. The value of dy is added to the original value of y to create the new y value.
-	* @function
+	* @method
 	* @param {number} dx The amount by which to offset the horizontal coordinate, x.
 	* @param {number} dy The amount by which to offset the vertical coordinate, y.
 	*/
@@ -137,7 +138,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Subtracts the coordinates of another point from the coordinates of this point to create a new point.
-	* @function
+	* @method
 	* @param {Point} v The point to be subtracted.
 	* @returns Point
 	*/
@@ -147,7 +148,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	
 	/**
 	* Returns the Point object expressed as a String value.
-	* @function
+	* @method
 	* @returns string
 	*/
 	toString : function(){
@@ -157,7 +158,7 @@ Ext.define("Teselagen.bio.util.Point", {
 	statics: {
     	/**
     	* Determines a point between two specified points. The parameter f determines where the new interpolated point is located relative to the two end points specified by parameters pt1 and pt2. The closer the value of the parameter f is to 1.0, the closer the interpolated point is to the first point (parameter pt1). The closer the value of the parameter f is to 0, the closer the interpolated point is to the second point (parameter pt2).
-    	* @function
+    	* @method
     	* @static
     	* @param {Point} pt1 The first point.
     	* @param {Point} pt2 The second point.
@@ -170,7 +171,7 @@ Ext.define("Teselagen.bio.util.Point", {
     	
     	/**
     	* Converts a pair of polar coordinates to a Cartesian point coordinate.
-    	* @function
+    	* @method
     	* @static
     	* @param {number} len The length coordinate of the polar pair.
     	* @param {number} angle The angle, in radians, of the polar pair.
@@ -182,7 +183,7 @@ Ext.define("Teselagen.bio.util.Point", {
     	
     	/**
     	* Returns the distance between pt1 and pt2.
-    	* @function
+    	* @method
     	* @static
     	* @returns Point
     	*/

@@ -1,3 +1,7 @@
+/**
+ * Project model.
+ * @class Teselagen.models.Project
+ */
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
     requires: ["Teselagen.manager.SessionManager",

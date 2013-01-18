@@ -1,6 +1,6 @@
 /**
+ * Utilities for working with sequences.
  * @class Teselagen.utils.SequenceUtils
- *
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceUtils.as)
  */

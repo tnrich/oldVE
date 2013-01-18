@@ -3,7 +3,7 @@
  * @class Teselagen.bio.parsers.GenbankSubKeyword class
  *
  * Stores the information from sub-keyword lines of a Genbank file.
- * These are for subkeywords not defined by {@link Teselagen.bio.parsers.GenbankFeatureElements}
+ * These are for subkeywords not defined by {@link Teselagen.bio.parsers.GenbankFeatureElement}
  * (Qualifier and Location) and from the main section of the Genbank File (e.g. Source, Authors, etc.)
  * @author Diana Wong
  * @author Timothy Ham (original author)
@@ -25,11 +25,11 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
     },
 
     /**
-     * Creates a new GenbankSubKeywords from inData.
+     * Creates a new GenbankSubKeyword from inData.
      * @param {String} keyword
      * @param {String} value
-     * @returns {GenbankSubKeywords}
-     * @memberOf GenbankSubKeywords
+     * @returns {GenbankSubKeyword}
+     * @member Teselagen.bio.parsers.GenbankSubKeyword
      */
     constructor: function (inData) {
 
@@ -87,8 +87,8 @@ Ext.define("Teselagen.bio.parsers.GenbankSubKeyword", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json Genbank SubKeyword in JSON form
-     * @returns {Teselagen.bio.parsers.GenbankSubKeywords}
+     * @param {Object} json Genbank SubKeyword in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankSubKeyword}
      */
     fromJSON: function(json) {
         //console.log("RIGHT HERE");

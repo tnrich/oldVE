@@ -1,7 +1,14 @@
+/**
+ * Rich DNA sequence
+ * @class Teselagen.bio.sequence.dna.RichDNASequence
+ */
 Ext.define("Teselagen.bio.sequence.dna.RichDNASequence", {
 	extend: "Teselagen.bio.sequence.dna.DNASequence",
 	require: ["Teselagen.bio.sequence.common.SymbolList", "Teselagen.bio.BioException", "Teselagen.bio.sequence.dna.Feature"],
 
+	/**
+	 * @param {Object} inData inData.features : Teselagen.bio.sequence.dna.Feature[]
+	 */
 	constructor: function(inData){
 		var features;
 		if (inData) {

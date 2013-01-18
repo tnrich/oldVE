@@ -40,6 +40,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
         
         /**
          * Converts the object to a string of the form "Restriction Enzyme [name]"
+         * @method toString
          * @return {String}
          */
         this.toString = function() {
@@ -48,6 +49,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
         
         /**
          * Get name.
+         * @method getName
          * @return {String}
          */
         this.getName = function() {
@@ -56,6 +58,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set name.
+         * @method setName
          * @param {String} pName 
          */
         this.setName = function(pName) {
@@ -64,6 +67,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get site.
+         * @method getSite
          * @return {String}
          */
         this.getSite = function() {
@@ -72,6 +76,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set site.
+         * @method setSite
          * @param {String} pSite
          */
         this.setSite = function(pSite) {
@@ -80,6 +85,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get cutType.
+         * @method getCutType
          * @return {Int}
          */
         this.getCutType = function() {
@@ -88,6 +94,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set name.
+         * @method setCutType
          * @param {Int} pCutType
          */
         this.setCutType = function(pCutType) {
@@ -96,6 +103,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get forwardRegex.
+         * @method getForwardRegex
          * @return {String}
          */
         this.getForwardRegex = function() {
@@ -104,6 +112,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set forwardRegex.
+         * @method setForwardRegex
          * @param {String} pForwardRegex
          */
         this.setForwardRegex = function(pForwardRegex) {
@@ -112,6 +121,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get reverseRegex.
+         * @method getReverseRegex
          * @return {String}
          */
         this.getReverseRegex = function() {
@@ -120,7 +130,8 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set reverseRegex.
-         * @param {String}
+         * @method setReverseRegex
+         * @param {String} pReverseRegex
          */
         this.setReverseRegex = function(pReverseRegex) {
             reverseRegex = pReverseRegex;
@@ -128,6 +139,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get dsForward.
+         * @method getDsForward
          * @return {Int}
          */
         this.getDsForward = function() {
@@ -136,6 +148,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set dsForward.
+         * @method setDsForward
          * @param {Int} pDsForward
          */
         this.setDsForward = function(pDsForward) {
@@ -144,6 +157,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get dsReverse.
+         * @method getDsReverse
          * @return {String}
          */
         this.getDsReverse = function() {
@@ -152,6 +166,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set dsReverse.
+         * @method setDsReverse
          * @param {Int} pDsReverse
          */
         this.setDsReverse = function(pDsReverse) {
@@ -160,6 +175,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get usForward.
+         * @method getUsForward
          * @return {Int}
          */
         this.getUsForward = function() {
@@ -168,6 +184,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set usForward.
+         * @method setUsForward
          * @param {Int} pUsForward
          */
         this.setUsForward = function(pUsForward) {
@@ -176,6 +193,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Get usReverse.
+         * @method getUsReverse
          * @return {Int}
          */
         this.getUsReverse = function() {
@@ -184,6 +202,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzyme", {
 
         /**
          * Set usReverse.
+         * @method setUsReverse
          * @param {Int} pUsReverse
          */
         this.setUsReverse = function(pUsReverse) {

@@ -1,3 +1,7 @@
+/**
+ * j5 report controller
+ * @class Vede.controller.J5ReportController
+ */
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 

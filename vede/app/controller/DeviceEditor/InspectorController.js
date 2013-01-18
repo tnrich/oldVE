@@ -1,10 +1,12 @@
 /**
  * Controls the inspector panel, on the right side of the device editor.
+ * @class Vede.controller.DeviceEditor.InspectorController
  */
 Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
-    requires: ["Teselagen.event.DeviceEvent"],
+    requires: ["Teselagen.event.DeviceEvent",
+    "Vede.view.de.ChangePartDefinitionPanel"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -14,7 +16,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     eugeneRulesGrid: null,
     inspector: null,
     selectedPart: null,
+    selectedBinIndex: null,
     tabPanel: null,
+
+    onChangePartDefinitionBtnClick: function(){
+        var self = this;
+        this.selectedPart.getSequenceFile({
+            callback: function(){
+                Vede.application.fireEvent("openChangePartDefinition",self.selectedPart,self.selectedBinIndex,self.selectedPart.getSequenceFile());
+            }
+        });
+    },
+
+    onCircularPlasmidRadioChange: function(radio){
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        tab.model.getDesign().getJ5Collection().set('isCircular',radio.getValue());
+    },
 
     onEmptySequenceBtnClick: function(){
         var selectedPart = this.selectedPart;
@@ -67,11 +84,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         var veproject = record;
                         var sequence = record.getSequenceFile({
                             callback: function(){
+                                sequence = record.getSequenceFile();
                                 var sequencefile_id = sequence.data.id;
                                 self.selectedPart.setSequenceFileModel(sequence);
                                 self.selectedPart.set('sequencefile_id',sequencefile_id);
-                                console.log(sequence);
-                                console.log(self.selectedPart);
+
                                 self.selectedPart.save({
                                     callback: function(){
                                         console.log("Part updated");
@@ -94,6 +111,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     // When a Part is selected
     onPartSelected: function (j5Part, binIndex) {
+
+        this.selectedBinIndex = binIndex;
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -341,7 +360,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             j5ReadyField.setValue(this.activeProject.getJ5Collection().get("j5Ready"));
             combinatorialField.setValue(this.activeProject.getJ5Collection().get("combinatorial"));
 
-            if(this.activeProject.get("isCircular")) {
+            if(this.activeProject.getJ5Collection().get("isCircular")) {
                 circularPlasmidField.setValue(true);
             } else {
                 linearPlasmidField.setValue(true);
@@ -367,6 +386,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on(this.DeviceEvent.SELECT_BIN, this.onBinSelected, this);
 
         this.application.on("ReRenderDECanvas", this.onReRenderDECanvasEvent, this);
+
+        this.application.on("partSelected",
+                    this.onPartSelected,
+                    this);
 
         this.control({
             "textfield[cls='partNameField']": {
@@ -405,6 +428,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             "button[cls='cancelNewEugeneRuleBtn']": {
                 click: this.onCancelNewEugeneRuleBtnClick
             }
+            "radio[cls='circular_plasmid_radio']": {
+                change: this.onCircularPlasmidRadioChange
+            },
+            "button[cls='changePartDefinitionBtn']": {
+                click: this.onChangePartDefinitionBtnClick
+            },
         });
     }
 });

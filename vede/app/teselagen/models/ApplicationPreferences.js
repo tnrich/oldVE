@@ -1,3 +1,7 @@
+/**
+ * Application preferences.
+ * @class Teselagen.models.ApplicationPreferences
+ */
 Ext.define("Teselagen.models.ApplicationPreferences", {
     extend: "Ext.data.Model",
     fields: [

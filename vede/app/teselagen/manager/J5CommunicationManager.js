@@ -25,6 +25,39 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     constructor: function () {},
 
+    downloadCondenseAssemblyResults: function(btn){
+        var response = this.condenseAssemblyFilesResults;
+        var byteArray = Base64Binary.decodeArrayBuffer(response.encoded_output_file);
+        var bb = new BlobBuilder();
+        bb.append(byteArray);
+        saveAs(bb.getBlob("data:application/stream;"), response.output_filename);
+        btn.toggle();
+    },
+
+    condenseAssemblyFiles: function(data,cb){
+        console.log("Starting Ajax Request");
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+
+        var self = this;
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("condenseAssemblyFiles", ''),
+            params: {
+                data: JSON.stringify(data)
+            },
+            success: function (response) {
+                response = JSON.parse(response.responseText);
+                var downloadBtn = currentTab.j5Window.query('button[cls=downloadCondenseAssemblyResultsBtn]')[0];
+                downloadBtn.show();
+                self.condenseAssemblyFilesResults = response;
+                return cb(true);
+            },
+            failure: function(response, opts) {
+                return cb(false,response);
+            }
+        });
+    },
+
     distributePCRRequest: function(data,cb){
         console.log("Starting Ajax Request");
 
@@ -40,7 +73,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             url: Teselagen.manager.SessionManager.buildUrl("DesignDownstreamAutomation", ''),
             params: {
                 files: JSON.stringify(files),
-                params: JSON.stringify(data.params)
+                params: JSON.stringify(data.params),
+                reuseParams: data.reuse
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
@@ -59,7 +93,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
     // Generate j5 Ajax Request
     //================================================================
     /**
-     *
+     * Generates an AJAX request to the j5 server.
      */
     generateAjaxRequest: function (cb) {
         console.log("Starting Ajax Request");

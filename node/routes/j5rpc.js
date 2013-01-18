@@ -1,3 +1,11 @@
+/**
+ * j5 RPC helper methods
+ * @module ./routes/j5rpc
+ */
+
+/**
+ * Loop and splice.
+ */
 var loopAndSplice = function(unordered) {
   for(var i = 0; i < unordered.length; i++) {
     for(var j = i + 1; j < unordered.length; j++) {
@@ -21,6 +29,10 @@ var loopAndSplice = function(unordered) {
   return unordered;
 }
 
+/**
+ * Write to quick log.
+ * @param s
+ */
 function quicklog(s) {
   var logpath = "/tmp/quick.log";
   var fs = require('fs');
@@ -30,8 +42,10 @@ function quicklog(s) {
   fs.closeSync(fd);
 }
 
-/*
- * Sequence File Name,Format
+/**
+ * Generate encoded sequences list file
+ * @param model
+ * @returns {String} base64
  */
 function encoded_sequences_list_file(model)
 {
@@ -56,6 +70,11 @@ function encoded_sequences_list_file(model)
     return new Buffer(out).toString('base64');
 }
 
+/**
+ * Generate an encoded zipped sequences file.
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_zipped_sequences_file(model)
 {
 
@@ -83,6 +102,11 @@ function encoded_zipped_sequences_file(model)
     return data;
 }
 
+/**
+ * Generate encoded parts list file
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_parts_list_file(model)
 {
     var out = "Part Name,Part Source (Sequence Display ID),Reverse Compliment?,Start (bp),End (bp)\n";
@@ -117,6 +141,11 @@ function encoded_parts_list_file(model)
     return new Buffer(out).toString('base64');  
 }
 
+/**
+ * Generate encoded j5 parameters file
+ * @param params
+ * @returns {String} base64
+ */
 function encoded_j5_parameters_file(params)
 {
     var out = "Parameter Name,Value\n"
@@ -128,6 +157,11 @@ function encoded_j5_parameters_file(params)
     return new Buffer(out).toString('base64'); 
 }
 
+/**
+ * Generate encoded target part order list file
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_target_part_order_list_file(model)
 {
  
@@ -171,6 +205,11 @@ function encoded_target_part_order_list_file(model)
     return new Buffer(out).toString('base64'); 
 }
 
+/**
+ * Generate encoded Eugene rules list file
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_eugene_rules_list_file(model)
 {
     return "";
@@ -207,6 +246,9 @@ function encoded_eugene_rules_list_file(model)
     return new Buffer(out).toString('base64'); 
 }
 
+/**
+ * Encode j5 inputs
+ */
 var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod) {
 
     var parameters = JSON.parse(encodedParameters);
@@ -276,13 +318,13 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
     execParams["assemblyMethod"] = assemblyMethod;
 
     execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
-    execParams["encoded_master_plasmids_file"] = new Buffer(masterFiles["masterPlasmidsList"]).toString('base64');
+    execParams["encoded_master_plasmids_file"] = masterFiles["masterPlasmidsList"];
     
     execParams["master_oligos_list_filename"] = masterFiles["masterOligosListFileName"];
-    execParams["encoded_master_oligos_file"] = new Buffer(masterFiles["masterOligosList"]).toString('base64');
+    execParams["encoded_master_oligos_file"] = masterFiles["masterOligosList"];
     
     execParams["master_direct_syntheses_list_filename"] = masterFiles["masterDirectSynthesesListFileName"];
-    execParams["encoded_master_direct_syntheses_file"] = new Buffer(masterFiles["masterDirectSynthesesList"]).toString('base64');
+    execParams["encoded_master_direct_syntheses_file"] = masterFiles["masterDirectSynthesesList"];
 
 
     var data = {};

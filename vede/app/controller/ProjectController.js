@@ -1,3 +1,7 @@
+/**
+ * Project controller
+ * @class Vede.controller.ProjectController
+ */
 Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
     requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager", "Teselagen.models.DeviceEditorProject", "Teselagen.models.SequenceFile", "Teselagen.models.Part", "Teselagen.models.VectorEditorProject"],
@@ -123,6 +127,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     resolveAndOpenDEProject: function (record) {
+        Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
         var deproject_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
