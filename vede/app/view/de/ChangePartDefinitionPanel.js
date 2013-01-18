@@ -1,3 +1,7 @@
+/**
+ * Change part definition panel
+ * @class Vede.view.de.ChangePartDefinitionPanel
+ */
 Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
     extend: 'Ext.window.Window',
 
