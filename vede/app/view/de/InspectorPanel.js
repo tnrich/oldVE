@@ -227,7 +227,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'gridcolumn',
                                     width: 100,
-                                    text: 'Column',
+                                    text: 'Column Name',
                                     dataIndex: 'binName',
                                     editor: {
                                         xtype: 'textfield',
