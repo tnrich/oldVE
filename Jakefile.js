@@ -1,6 +1,6 @@
 var fs = require("fs");
 var util = require("util");
-var WEBROOT, DOCSROOT; 
+var WEBROOT, DOCSROOT, cmd; 
 var USESUDO=false;
 
 if (process.platform == "darwin") {
@@ -31,15 +31,13 @@ task("jsduck", [DOCSROOT], function() {
 task("jsdoc", [DOCSROOT], function() {
     var JSDOC_OUT = DOCSROOT + "/jsdoc";
     if (fs.existsSync(JSDOC_OUT)) {
-	jake.rmRf(JSDOC_OUT);
+	exec("rm -rf " + JSDOC_OUT, USESUDO);
     }
     var cmd = util.format("./lib/jsdoc3/jsdoc -d %s node/development.js " +
 	"node/config.js node/routes/api.js node/routes/ice.js node/routes/j5.js " + 
         "node/routes/j5rpc.js node/schemas/DBSchemas.js " +
         "2>/tmp/jsdoc.err", JSDOC_OUT);
-    cmd = USESUDO ? "sudo " + cmd : cmd;
-    console.log(cmd);
-    jake.exec([cmd]);
+    exec(cmd, USESUDO);
 });
 
 task("docs", ["jsduck", "jsdoc"]);
