@@ -6,6 +6,7 @@ Ext.define('Vede.view.de.EugeneRuleWindow', {
     modal: true,
     draggable: true,
     resizable: false,
+    closable: false,
 
     initComponent: function() {
         var me = this;
@@ -28,6 +29,11 @@ Ext.define('Vede.view.de.EugeneRuleWindow', {
                             xtype: 'displayfield',
                             cls: 'operand1Field',
                             fieldLabel: 'Operand 1'
+                        },
+                        {
+                            xtype: 'checkbox',
+                            cls: 'negationOperatorField',
+                            fieldLabel: 'Negate Rule'
                         },
                         {
                             xtype: 'combobox',

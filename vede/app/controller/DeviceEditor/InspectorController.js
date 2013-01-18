@@ -218,22 +218,36 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onSubmitNewEugeneRuleBtnClick: function() {
-        var window = Ext.ComponentQuery.query("component[cls='addEugeneRuleWindow']")[0];
+        var newEugeneRuleWindow = 
+            Ext.ComponentQuery.query("component[cls='addEugeneRuleWindow']")[0];
         var newRule = window.down("form").getForm().getRecord();
 
-        //newRule.set("name", )
+        var newName = 
+            newEugeneRuleWindow.down("textfield[name='name']").getValue();
+        var newNegationOperator = 
+            newEugeneRuleWindow.down("checkbox[cls='negationOperatorField']").getValue();
+        var newCompositionalOperator = 
+            newEugeneRuleWindow.down("combobox[name='compositionalOperator']").getValue();
+        var newOperand2 =
+            newEugeneRuleWindow.down("component[cls='operand2Field']").getValue();
+
+        newRule.set("name", newName);
+        newRule.set("negationOperator", newNegationOperator);
+        newRule.set("compositionalOperator", newCompositionalOperator);
+        newRule.setOperand2(newEugeneRuleWindow.down("component[cls='operand2Field']").getValue());
 
         this.eugeneRulesGrid.reconfigure(
             this.DeviceDesignManager.getRulesInvolvingPart(
                 this.activeProject, this.selectedPart));
-
     },
 
     onCancelNewEugeneRuleBtnClick: function() {
-        var newEugeneRuleWindow = this.activeTab.down("component[cls='addEugeneRuleWindow']");
+        var newEugeneRuleWindow = 
+            Ext.ComponentQuery.query("component[cls='addEugeneRuleWindow']")[0];
         var newRule = newEugeneRuleWindow.down("form").getForm().getRecord();
 
-        newRule.delete();
+        newEugeneRuleWindow.close();
+        newRule.destroy();
     },
 
     onGridBinSelect: function (grid, j5Bin, selectedIndex) {
