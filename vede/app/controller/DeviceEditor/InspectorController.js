@@ -239,7 +239,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onSubmitNewEugeneRuleBtnClick: function() {
         var newEugeneRuleWindow = 
             Ext.ComponentQuery.query("component[cls='addEugeneRuleWindow']")[0];
-        var newRule = window.down("form").getForm().getRecord();
+        var newRule = newEugeneRuleWindow.down("form").getForm().getRecord();
 
         var newName = 
             newEugeneRuleWindow.down("textfield[name='name']").getValue();
@@ -253,7 +253,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("name", newName);
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
-        newRule.setOperand2(newEugeneRuleWindow.down("component[cls='operand2Field']").getValue());
+        newRule.setOperand2(this.DeviceDesignManager.getPartByName(this.activeProject, 
+                                                                   newOperand2));
 
         this.eugeneRulesGrid.reconfigure(
             this.DeviceDesignManager.getRulesInvolvingPart(
@@ -427,7 +428,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='cancelNewEugeneRuleBtn']": {
                 click: this.onCancelNewEugeneRuleBtnClick
-            }
+            },
             "radio[cls='circular_plasmid_radio']": {
                 change: this.onCircularPlasmidRadioChange
             },
