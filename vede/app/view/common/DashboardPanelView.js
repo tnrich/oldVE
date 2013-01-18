@@ -18,29 +18,61 @@ Ext.define('Vede.view.common.DashboardPanelView', {
             xtype: 'panel',
             flex: 1,
             border: 0,
-            html: '<div id="welcome_splash"><div class="welcome_text">Welcome back!<div id="welcomeUserIcon"></div></div><div class="welcome_sub">Get started by selecting one of the options below:</div></div>',
-            padding: 50
-            },
-            {
-            xtype: 'panel',
-            flex: 1,
-            border: 0,
             padding: 50,
             items: [
-            {
-                xtype: 'button',
-                text: 'MyButton'
-            },
-            {
-                xtype: 'button',
-                text: 'MyButton'
-            },
-            {
-                xtype: 'button',
-                text: 'MyButton'
+                {
+                xtype: 'panel',
+                flex: 1,
+                id: 'welcome_splash',
+                border: 0,
+                html: '<div class="welcome_text">Welcome back!<div id="welcomeUserIcon"></div></div><div class="welcome_sub">Get started by selecting one of the options below.</div>',
+                padding: 50, 
+                },
+                {
+                xtype: 'panel',
+                id: 'dashboardButtons',
+                flex: 1,
+                border: 0,
+                padding: 50,
+                items: [
+                {
+                    xtype: 'button',
+                    cls: 'dashBtn',
+                    text: 'Start a New Project',
+                    scale: 'large',
+                    height: '120px',
+                    icon: 'resources/images/projectstart.png',
+                    iconAlign: 'top',
+                    listeners: {
+                        click: function () {
+                            Teselagen.manager.ProjectManager.createNewProject();
+                    }
+                }
+
+                },
+                {
+                    xtype: 'button',
+                    cls: 'dashBtn',
+                    scale: 'large',
+                    height: '120px',
+                    icon: 'resources/images/watchtut.png',
+                    iconAlign: 'top',
+                    text: 'Watch a Tutorial'        
+                },
+                {
+                    xtype: 'button',
+                    cls: 'dashBtn',
+                    scale: 'large',
+                    height: '120px',
+                    icon: 'resources/images/readman.png',
+                    iconAlign: 'top',
+                    text: 'Read the Manuals'
+                }
+                ]
+                }
+                ]
             }
-            ]
-            }
+        
             ]
     /*
     items: [{
