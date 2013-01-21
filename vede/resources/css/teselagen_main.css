@@ -299,6 +299,23 @@ body {
   height: 64px;
 }
 
+.projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {
+  color: #006ADC;
+  font-weight: bold;
+}
+
+.projectStartBtn-over #projectStartBtn-btnIconEl {
+  background-image: url(../images/projectstart-over.png) !important;
+}
+
+.watchTutorialBtn-over #watchTutorialBtn-btnIconEl {
+  background-image: url(../images/watchtut-over.png) !important;
+}
+
+.readManualsBtn-over #readManualsBtn-btnIconEl {
+  background-image: url(../images/readman-over.png) !important;
+}
+
 .welcome_text {
   font-size: 48px;
   font-weight: bold;
