@@ -23,6 +23,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      */
     loadUser: function () {
         if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
+        if(Ext.getCmp('welcomeUserIcon')) Ext.getCmp('welcomeUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
         var users = Ext.create("Teselagen.store.UserStore");
         var self = this;
         var projects;
@@ -248,7 +249,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                         for(var binIndex = 0; binIndex < 1; binIndex++) {
                             var newBin = Ext.create("Teselagen.models.J5Bin", {
-                                binName: "bin" + binIndex + 1
+                                binName: "Bin"
                             });
                             var tempParts = [];
                             for(var i = 0; i < 2; i++) {

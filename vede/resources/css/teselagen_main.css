@@ -265,8 +265,48 @@ body {
 }
 
 /*Dashboard*/
-#dashboard_Panel-body {
+#DashboardPanel {
+  background: none;
+}
+
+#welcome_splash {
+  text-align: center;
+}
+
+.welcome_sub {
+  font-size: 18px;
+  color: #999999;
+}
+
+#dashboardButtons {
+  text-align: center;
+}
+
+.dashBtn {
+  margin: 10px;
+}
+
+#dashboardButtons .x-btn-default-large {
+  padding: 10px 3px 3px 3px;
+  border-color: rgb(235, 235, 235);
+}
+
+#dashboardButtons .x-btn-inner {
+  padding-top: 64px;
+}
+
+#dashboardButtons .x-btn-icon {
+  height: 64px;
+}
+
+.welcome_text {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+#DashboardPanel-body {
   border-top: none;
+  background: rgba(255,255,255,0.5);
 }
 
 #projectGrid_Panel_header, #designGrid_Panel_header, #dashboard_StatsPanel_header {
