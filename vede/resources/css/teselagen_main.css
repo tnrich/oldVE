@@ -362,6 +362,9 @@ body {
 }
 
 .projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
   color: #006ADC;
   font-weight: bold;
 }
