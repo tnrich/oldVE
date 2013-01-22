@@ -52,7 +52,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
             name: "warnings",
             //getterName: "getWarnings",
             //setterName: "setWarnings",
-            //assocationKey: "warnings",
+            //associationKey: "warnings",
             foreignKey: "warnings_id"
         },/*
         {
@@ -61,7 +61,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
             name: "targetParts"
             //getterName: "getTargetPart",
             //setterName: "setTargetPart",
-            //assocationKey: "targetPart",
+            //associationKey: "targetPart",
             foreignKey: "targetPart_id"
         },
         {
@@ -70,7 +70,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
             name: "final"
             //getterName: "getTargetPart",
             //setterName: "setTargetPart",
-            //assocationKey: "targetPart",
+            //associationKey: "targetPart",
             foreignKey: "targetPart_id"
         },*/
         {
@@ -78,7 +78,7 @@ Ext.define("Teselagen.models.j5Output.Assembly", {
             model: "Teselagen.models.j5Output.AssembledSequenceFile",
             getterName: "getAssembledSequenceFile",
             setterName: "setAssembledSequenceFile",
-            assocationKey: "assembledSequenceFile",
+            associationKey: "assembledSequenceFile",
             foreignKey: "assembledSequenceFile_id"
         }
     ]

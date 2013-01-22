@@ -24,9 +24,9 @@ Ext.define("Teselagen.models.J5Results", {
      * Input parameters.
      */
     fields: [
-        {name: "id", type: "long"},
-        {name: "j5run_id", type: "long"},
-        {name: "name", type: "String", defaultValue: ""}
+        //{name: "id", type: "long"},
+        //{name: "j5run_id", type: "long"},
+        //{name: "name", type: "String", defaultValue: ""}
 
         //
 
@@ -53,19 +53,20 @@ Ext.define("Teselagen.models.J5Results", {
         {
             type: "hasOne",
             model: "Teselagen.models.j5Output.CombinatorialAssembly",
+            associationKey: "combinatorialAssembly",
             getterName: "getCombinatorialAssembly",
-            setterName: "setCombinatorialAssembly",
-            assocationKey: "combinatorialAssembly",
-            foreignKey: "combinatorialAssembly_id"
-        },
+            setterName: "setCombinatorialAssembly"
+        }
+        /*
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Run",
             getterName: "getJ5Run",
             setterName: "setJ5Run",
-            assocationKey: "j5run",
+            associationKey: "j5run",
             foreignKey: "j5run_id"
         }
+        */
     ]
 
 });
