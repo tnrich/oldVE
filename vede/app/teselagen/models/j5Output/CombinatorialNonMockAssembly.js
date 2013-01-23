@@ -52,7 +52,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
             name: "directSynthesis",
             //getterName: "getDirectSynthesis",
             //setterName: "setDirectynthesis",
-            //assocationKey: "directSynthesis",
+            //associationKey: "directSynthesis",
             foreignKey: "directSynthesis_id"
         },
 
@@ -62,7 +62,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
             name: "oligoSynthesis",
             //getterName: "getOligoSynthesis",
             //setterName: "setOligoSynthesis",
-            //assocationKey: "oligoSynthesis",
+            //associationKey: "oligoSynthesis",
             foreignKey: "oligoSynthesis_id"
         },
 
@@ -72,7 +72,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
             name: "annealedOligoSynthesis",
             //getterName: "getAnnealedOligoSynthesis",
             //setterName: "setAnnealedOligoSynthesis",
-            //assocationKey: "annealedOligoSynthesis",
+            //associationKey: "annealedOligoSynthesis",
             foreignKey: "annealedOligoSynthesis_id"
         },
         {
@@ -81,7 +81,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
             name: "pcrReaction",
             //getterName: "getPCRReaction",
             //setterName: "setPCRReaction",
-            //assocationKey: "pcrReaction",
+            //associationKey: "pcrReaction",
             foreignKey: "pcrReaction_id"
         },
         {
@@ -89,7 +89,7 @@ Ext.define("Teselagen.models.j5Output.CombinatorialNonMockAssembly", {
             model: "Teselagen.models.J5Results",
             getterName: "getJ5Results",
             setterName: "setJ5Results",
-            assocationKey: "j5Results",
+            associationKey: "j5Results",
             foreignKey: "j5results_id"
         }
     ]

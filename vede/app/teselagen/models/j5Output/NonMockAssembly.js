@@ -55,7 +55,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             name: "comp",
             //getterName: "getIncompatibilities",
             //setterName: "setIncompatibilities",
-            //assocationKey: "incompatibilities",
+            //associationKey: "incompatibilities",
             foreignKey: "incompatibilities_id"
         },
         {
@@ -64,7 +64,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             name: "suggestedAssembly",
             //getterName: "getSuggestedAssembly",
             //setterName: "setSuggestedAssembly",
-            //assocationKey: "suggestedAssembly",
+            //associationKey: "suggestedAssembly",
             foreignKey: "suggestedAssembly_id"
         },
         {
@@ -73,7 +73,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             name: "directSynthesis",
             //getterName: "getDirectSynthesis",
             //setterName: "setDirectynthesis",
-            //assocationKey: "directSynthesis",
+            //associationKey: "directSynthesis",
             foreignKey: "directSynthesis_id"
         },
 
@@ -83,7 +83,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             name: "oligoSynthesis",
             //getterName: "getOligoSynthesis",
             //setterName: "setOligoSynthesis",
-            //assocationKey: "oligoSynthesis",
+            //associationKey: "oligoSynthesis",
             foreignKey: "oligoSynthesis_id"
         },
 
@@ -93,7 +93,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             name: "annealedOligoSynthesis",
             //getterName: "getAnnealedOligoSynthesis",
             //setterName: "setAnnealedOligoSynthesis",
-            //assocationKey: "annealedOligoSynthesis",
+            //associationKey: "annealedOligoSynthesis",
             foreignKey: "annealedOligoSynthesis_id"
         },
         {
@@ -102,7 +102,7 @@ Ext.define("Teselagen.models.j5Output.NonMockAssembly", {
             name: "pcrReaction",
             //getterName: "getPCRReaction",
             //setterName: "setPCRReaction",
-            //assocationKey: "pcrReaction",
+            //associationKey: "pcrReaction",
             foreignKey: "pcrReaction_id"
         }
     ]

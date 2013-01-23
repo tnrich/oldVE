@@ -25,6 +25,8 @@ Ext.define('Vede.view.de.grid.Part', {
     constructor: function (config) {
         var self = this;
         this.initConfig(config);
+        //if (this.getPart()) console.log(this.getPart().get("name"));
+        //else console.log("part no name");
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 

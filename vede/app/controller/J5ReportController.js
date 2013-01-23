@@ -34,10 +34,14 @@ Ext.define("Vede.controller.J5ReportController", {
 
     onJ5RunSelect: function( item, e, eOpts ){
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
-        var assemblies = this.activeJ5Run.getJ5Results().assemblies();
-        var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly().data.fileContent;
-        console.log(this.activeJ5Run);
-        this.tabPanel.down('gridpanel').reconfigure(assemblies);
+        var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
+        var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
+        var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+        console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+        console.log(j5parameters);
+        this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
+        this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+        this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
     },
 
     renderMenu: function(){
