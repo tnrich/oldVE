@@ -19,7 +19,117 @@ function processAssemblies(file,cb){
 }
 
 function processCombinatorial(file,cb){
-    cb({nonDegenerativeParts:file.fileContent});
+    try {
+
+    var lines = file.fileContent.split(/\r?\n/);
+    var obj = {};
+
+    /* Lines by line processing */
+    
+    // Type of assembly and date
+    obj.date = lines.splice(0,1)[0];
+    // Cite
+    obj.cite = lines.splice(0,1)[0];
+
+    //Warnings
+    obj.warnings = [];
+    var currentWarning = lines.splice(0,1)[0];
+    while(currentWarning.match(/"Warning:/) !== null)
+    {
+        obj.warnings.push(currentWarning);
+        currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
+    }
+
+    //Assembly Parameteres
+    obj.assemblyParameters = {};
+    lines.splice(0,1)[0]; //Assembly parameters title
+    var params = lines.splice(0,1)[0].split(',');
+    var values = lines.splice(0,1)[0].split(',');
+
+    params.forEach(function(val,key){
+        obj.assemblyParameters[val] = values[key];       
+    });
+
+    lines.splice(0,1)[0] //Empty space
+
+    obj.note = lines.splice(0,1)[0];
+
+    lines.splice(0,1)[0] //Empty space
+
+
+    //Non degenerate Part IDs and Sources
+    lines.splice(0,1)[0]; // Header
+    lines.splice(0,1)[0]; // ????
+    lines.splice(0,1)[0]; // Columns Header
+
+    obj.nondegenerateParts = [];
+    var currentPart = lines.splice(0,1)[0];
+    while(currentPart!== "")
+    {
+        splittedPart = currentPart.split(',');
+        // ""ID Number",Name,"Source Plasmid","Reverse Complement","Start (bp)","End (bp)","Size (bp)",Sequence"
+        obj.nondegenerateParts.push({
+            id: splittedPart[0],
+            name: splittedPart[1],
+            source: splittedPart[2],
+            revComp: splittedPart[3],
+            startBP: splittedPart[4],
+            stopBP: splittedPart[5],
+            size: splittedPart[6],
+            sequence: splittedPart[7]
+        });
+        currentPart = lines.splice(0,1)[0];
+    }
+
+    //Target Bins
+    lines.splice(0,1)[0]; //Header
+    lines.splice(0,1)[0]; //Columns
+
+    obj.targetBins = [];
+    var currentBin = lines.splice(0,1)[0];
+    while(currentBin!== "")
+    {
+        splittedBin = currentBin.split(',');
+        // "ID Number",Name"
+        obj.targetBins.push({
+            id: splittedBin[0],
+            name: splittedBin[1]
+        });
+        currentBin = lines.splice(0,1)[0];
+    }
+
+    //Combination of Parts
+    lines.splice(0,1)[0]; //Header
+    lines.splice(0,1)[0]; //???
+    lines.splice(0,1)[0]; //Columns
+
+    obj.combinationParts = [];
+    var currentPart = lines.splice(0,1)[0];
+    while(currentPart!== "")
+    {
+        splittedPart = currentPart.split(',');
+        
+        binNumber = splittedPart.splice(0,1)[0];
+        binName = splittedPart.splice(0,1)[0];
+
+        obj.combinationParts.push({
+            id: binNumber,
+            name: binNumber,
+            parts: splittedPart
+        });
+        currentPart = lines.splice(0,1)[0];
+    }
+
+    cb(obj);
+
+    }
+    catch(err)
+    {
+        console.log("Error processing j5 output");
+        console.log(err);
+        cb(null);
+    }
+
 }
 
 function processj5Parameters(file,cb){
@@ -104,7 +214,8 @@ var processJ5Response = function(encodedFileData,callback) {
     },
     function(err, results) {
         quicklog( require('util').inspect(results) );
-        return callback(results);
+        var warnings = results.combinatorialAssembly.warnings;
+        return callback(results,warnings);
     });
 
     /*

@@ -37,8 +37,9 @@ Ext.define("Vede.controller.J5ReportController", {
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
         var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
-        console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
-        console.log(j5parameters);
+        //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+        //console.log(j5parameters);
+        console.log(JSON.stringify(combinatorial.data));
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));

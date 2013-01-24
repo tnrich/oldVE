@@ -262,7 +262,7 @@ function saveFile(j5parameters,fileData,user,deproject,cb)
 
             var j5Run = app.db.model("j5run");
             
-            processJ5Response(fileData,function(parsedResults){
+            processJ5Response(fileData,function(parsedResults,warnings){
 
               var newj5Run = new j5Run({
                 deproject_id: deproject._id,
@@ -277,7 +277,7 @@ function saveFile(j5parameters,fileData,user,deproject,cb)
                 deproject.j5runs.push(newj5Run);
                 deproject.save(function(){
                   app.GridStoreDB.close();
-                  return cb(newj5Run);
+                  return cb(newj5Run,warnings);
                 });
               });
 
@@ -365,8 +365,12 @@ app.post(j5Method1,restrict,function(req,res){
 
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run){
-            res.send(j5run.j5Results);
+          saveFile(req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run,warnings){
+            res.send(
+              {
+                j5Results : j5run.j5Results,
+                warnings: warnings
+              });
           });
         }
       });
