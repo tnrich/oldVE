@@ -120,14 +120,14 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
             success: function (response) {
                 response = JSON.parse(response.responseText);
                 
-                self.currentResults = response.j5Results;
+                self.currentResults = response;
 
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
 
                 var store = new Ext.data.JsonStore({
                     proxy: {
                         type: 'memory',
-                        data:  self.currentResults.assemblies,
+                        data:  self.currentResults.j5Results.assemblies,
                         reader: {
                             type: 'json',
                             root: 'files'
@@ -149,7 +149,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         
     },
     downloadResults: function (btn) {
-        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;
+        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.zipfile;
         btn.toggle();
     },
 

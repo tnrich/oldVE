@@ -39,7 +39,7 @@ Ext.define("Vede.controller.J5ReportController", {
         var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
         //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
         //console.log(j5parameters);
-        console.log(JSON.stringify(combinatorial.data));
+        console.log(this.activeJ5Run);
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
@@ -50,7 +50,7 @@ Ext.define("Vede.controller.J5ReportController", {
        menu.removeAll();
        this.j5runs.forEach(function(j5run){
             var date = new Date(j5run.data.date);
-            menu.add([{text:date.toString(),id:j5run.data.id,cls:'j5runselect'}]);
+            menu.add([{text:j5run.getItemTitle(),id:j5run.data.id,cls:'j5runselect'}]);
        });
     },
 

@@ -36,7 +36,7 @@ function processCombinatorial(file,cb){
     var currentWarning = lines.splice(0,1)[0];
     while(currentWarning.match(/"Warning:/) !== null)
     {
-        obj.warnings.push(currentWarning);
+        obj.warnings.push({"message": currentWarning});
         currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
     }
 

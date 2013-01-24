@@ -416,7 +416,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     loadingMessage.close();
                     if(warnings.length > 0)
                     {
-                        alertbox = Ext.MessageBox.alert('Warnings', warnings.join("<br>"));
+                        msgWarnings = "";
+                        for(var index in warnings)
+                        {
+                            msgWarnings += warnings[index].message+"<br>";
+                        }
+                        alertbox = Ext.MessageBox.alert('Warnings', msgWarnings);
                         Ext.Function.defer(function () {
                             alertbox.zIndexManager.bringToFront(alertbox);
                         }, 100);

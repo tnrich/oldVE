@@ -242,7 +242,7 @@ function readFile(objectId,cb)
 /**
  * Save file.
  */
-function saveFile(j5parameters,fileData,user,deproject,cb)
+function saveFile(data,j5parameters,fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
@@ -269,8 +269,12 @@ function saveFile(j5parameters,fileData,user,deproject,cb)
                 name: "newResult",
                 file_id:objectId.toString(),
                 date: new Date(),
-                j5Input: { j5Parameters : JSON.parse(j5parameters) },
-                j5Results: parsedResults
+                j5Input: {
+                  j5Parameters : JSON.parse(j5parameters)
+                },
+                j5Results: parsedResults,
+                assemblyMethod: data.assemblyMethod,
+                assemblyType: data.ASSEMBLY_PRODUCT_TYPE
               });
 
               newj5Run.save(function(){
@@ -365,11 +369,12 @@ app.post(j5Method1,restrict,function(req,res){
 
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run,warnings){
+          saveFile(data,req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run,warnings){
             res.send(
               {
                 j5Results : j5run.j5Results,
-                warnings: warnings
+                warnings: warnings,
+                zipfile: encodedFileData
               });
           });
         }

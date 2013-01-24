@@ -31,91 +31,66 @@ Ext.define("Teselagen.models.J5Run", {
     statics: {
     },
 
-    /**
-     * Input parameters.
-     * @param {Teselagen.models.J5Collection[]} binsVector
-     * @param {Boolean} j5Ready
-     * @param {Boolean} combinatorial
-     * @param {Boolean} isCircular
-     */
     fields: [
         {name: "id",            type: "long"},
         {name: "file_id",            type: "long"},
-        {name: "name",          type: "String", defaultValue: ""},
+        {name: "comment",          type: "String", defaultValue: ""},
 
         // meta info
         {name: "status",        type: "String",     defaultValue: ""},
-        {name: "date",          type: "String",     defaultValue: ""},
-        {name: "assemblyType",  type: "String",     defaultValue: ""},
-        {name: "status",        type: "String",     defaultValue: ""},
-
+        {name: "date",          type: "Date",     defaultValue: "",
+            convert: function(v, record) {
+                var date = new Date(v);
+                return date;
+            }
+        },
+        {name: "assemblyType",  type: "String",     defaultValue: ""}, // Combinatorial or Not
+        {name: "assemblyMethod",  type: "String",     defaultValue: ""}, // Combinatorial or Not
+        {name: "status",        type: "String",     defaultValue: ""}, // Thread execution Status flag (Pending, Finished)
 
         // IDs
-        {name: "deproject_id",  type: "long"},
-        {name: "j5results_id",  type: "long"},
-        {name: "j5input_id",    type: "long"},
-
-        // TO BE MOVED TO J5INPUT
-        {name: "j5parameters_id", type: "long"},
-        {name: "automationparameters_id", type: "long"}
-
+        {name: "deproject_id",  type: "long"}
     ],
 
+    getItemTitle: function(){
+        return Ext.Date.format( this.get('date') , 'F j, Y, g:i a') + " | " + this.get('assemblyMethod');
+    },
+
+    /*
     validations: [
-        //{field: "assemblyType", type: "presence"},
+        
+        {field: "assemblyType", type: "presence"},
         {
             field: "assemblyType",
             type: "inclusion"
-            //list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
+            list: Teselagen.constants.Constants.ASSEMBLYTYPE_LIST
         },
 
-        //{field: "status", type: "presence"},
+        {field: "status", type: "presence"},
         {
             field: "status",
             type: "inclusion",
             list: Teselagen.constants.Constants.RUN_STATUS_LIST
         }
     ],
+    */
 
     associations: [
-        /*{ // Move this to J5Input
-            type: "hasOne",
-            model: "Teselagen.models.J5Parameters",
-            getterName: "getJ5Parameters",
-            setterName: "setJ5Parameters",
-            associationKey: "j5Parameters",
-            foreignKey: "j5parameters_id"
-        },
-        { // Move this to J5Input
-            type: "hasOne",
-            model: "Teselagen.models.DownstreamAutomationParameters",
-            getterName: "getDownstreamAutomationParameters",
-            setterName: "setDownstreamAutomationParameters",
-            associationKey: "downstreamAutomationParameters",
-            foreignKey: "automationparameters_id"
-        },*/
         {
+            // j5Parameters and Assembly files sent
             type: "hasOne",
             model: "Teselagen.models.J5Input",
             getterName: "getJ5Input",
             setterName: "setJ5Input",
-            associationKey: "j5Input",
-            foreignKey: "j5Input_id"
+            associationKey: "j5Input"
         },
         {
+            // Processed j5 Output
             type: "hasOne",
             model: "Teselagen.models.J5Results",
             getterName: "getJ5Results",
             setterName: "setJ5Results",
             associationKey: "j5Results"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.DeviceEditorProject",
-            getterName: "getDeviceEditorProject",
-            setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject",
-            foreignKey: "deproject_id"
         }
     ]
 

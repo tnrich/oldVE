@@ -25,10 +25,17 @@ Ext.define("Teselagen.models.J5Input", {
      */
     fields: [
 
-        //{name: "status",        type: "String",     defaultValue: ""},
+        /*
+        {name: "eugeneruleslist",   type: "string",     defaultValue: ""}, //.eug
+        {name: "j5parameters",      type: "string",     defaultValue: ""}, //.csv
+        {name: "masterplasmidlist", type: "string",     defaultValue: ""}, //.csv
+        {name: "mastersequences",   type: "string",     defaultValue: ""}, //.csv
+        {name: "masterzippedsequences",   type: "auto", defaultValue: ""}, //array of .gb .fas .seq files
+        {name: "partslist",         type: "string",     defaultValue: ""}, //.csv
+        {name: "combinatorial",     type: "string",     defaultValue: ""}, //.csv
+        {name: "plasmids",           type: "auto"}  //. <--- these are the RESULTS: .gb/.csv files
+        */
 
-
-        // IDs
         {name: "j5parameters_id",           type: "long"},
         {name: "automationparameters_id",   type: "long"}
     ],
