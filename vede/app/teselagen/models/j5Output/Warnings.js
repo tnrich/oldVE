@@ -38,7 +38,7 @@ Ext.define("Teselagen.models.j5Output.Warnings", {
             model: "Teselagen.models.j5Output.Assembly",
             getterName: "getAssembly",
             setterName: "setAssembly",
-            assocationKey: "assembly",
+            associationKey: "assembly",
             foreignKey: "assembly_id"
         }
     ]

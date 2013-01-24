@@ -62,7 +62,7 @@ Ext.define("Teselagen.models.j5Output.AssembledSequenceFile", {
             model: "Teselagen.models.j5Output.Assembly",
             getterName: "getAssembly",
             setterName: "setAssembly",
-            assocationKey: "assembly",
+            associationKey: "assembly",
             foreignKey: "assembly_id"
         },
         {
@@ -70,7 +70,7 @@ Ext.define("Teselagen.models.j5Output.AssembledSequenceFile", {
             model: "Teselagen.models.J5Results",
             getterName: "getJ5Results",
             setterName: "setJ5Results",
-            assocationKey: "j5Results",
+            associationKey: "j5Results",
             foreignKey: "j5results_id"
         }
     ]

@@ -50,7 +50,7 @@ Ext.define("Teselagen.models.j5Output.SuggestedAssembly", {
             model: "Teselagen.models.j5Output.NonMockAssembly",
             getterName: "getNonMockAssembly",
             setterName: "setNonMockAssembly",
-            assocationKey: "nonMockAssembly",
+            associationKey: "nonMockAssembly",
             foreignKey: "nonMockAssembly_id"
         }
     ],

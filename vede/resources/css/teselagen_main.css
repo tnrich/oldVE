@@ -28,6 +28,14 @@ body {
   background-repeat: repeat;
 }
 
+a, a img{
+  outline: none;
+}
+
+img {
+  border: 0;
+}
+
 .x-body {
   font-family: 'Quicksand', sans-serif;
   font-size: 12px;
@@ -72,8 +80,8 @@ body {
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
   font-family: 'Quicksand', sans-serif;
-    font-size: 12px;
-    color: #111;
+  font-size: 12px;
+  color: #111;
 }
 
 .x-grid-tree-node-expanded   .x-tree-icon-parent {
@@ -99,6 +107,12 @@ body {
 .x-column-header-text {
 	font-family: 'Quicksand', sans-serif;
 	color: #333;
+}
+
+.x-mask-msg div {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 12px;
+  color: #111;
 }
 
 /*Header*/
@@ -206,6 +220,7 @@ body {
 #ProjectPanel-placeholder {
   border-top-right-radius: 4px;
   border-color: #EBEBEB;
+  box-shadow: rgb(210, 210, 210) 0px 0px 15px 3px inset;
 }
 
 #projectDesignPanel-body div table td div .x-tree-icon-leaf {
@@ -356,6 +371,9 @@ body {
 }
 
 .projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
   color: #006ADC;
   font-weight: bold;
 }

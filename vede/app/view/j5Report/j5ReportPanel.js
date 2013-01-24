@@ -29,7 +29,6 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         frameHeader: false,
         hideCollapseTool: false,
         overlapHeader: false,
-        title: 'Inspector',
         titleCollapse: false,
         plain: false,
         removePanelHeader: false,
@@ -66,6 +65,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     items: [
                         {
                             xtype: 'gridpanel',
+                            name: 'assemblies',
                             margin: '10 10 20 10',
                             width: 650,
                             title: 'Output Plasmids',
@@ -95,6 +95,28 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                                     text: 'Content'
                                 }
                             ]
+                        },
+                        {
+                            xtype: 'gridpanel',
+                            name: 'j5parameters',
+                            margin: '10 10 20 10',
+                            width: 650,
+                            height:100,
+                            title: 'j5 Parameters',
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'name',
+                                    flex: 1,
+                                    text: 'Name'
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'value',
+                                    flex: 1,
+                                    text: 'Value'
+                                }
+                            ]
                         }
                     ]
                 },
@@ -106,6 +128,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     items: [
                         {
                             xtype: 'textareafield',
+                            name: 'combinatorialAssembly',
                             margin: '10 10 20 10',
                             width: 650,
                             fieldLabel: ''

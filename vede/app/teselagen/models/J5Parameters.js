@@ -411,6 +411,68 @@ Ext.define("Teselagen.models.J5Parameters", {
             return returnString;
     },
 
+    getArrayParameters: function(){
+        var arr = [];
+
+        arr.push( { value: this.get("masterOligoNumberOfDigitsValue"), name: "masterOligoNumberOfDigitsValue" } );
+        arr.push( { value: this.get("masterPlasmidNumberOfDigitsValue"), name: "masterPlasmidNumberOfDigitsValue" } );
+        arr.push( { value: this.get("gibsonOverlapBPsValue"              ), name: "gibsonOverlapBPsValue"               } );
+        arr.push( { value: this.get("gibsonOverlapMinTmValue"), name: "gibsonOverlapMinTmValue" } );
+        arr.push( { value: this.get("gibsonOverlapMaxTmValue"), name: "gibsonOverlapMaxTmValue" } );
+        arr.push( { value: this.get("maxOligoLengthBPsValue"), name: "maxOligoLengthBPsValue" } );
+        arr.push( { value: this.get("minFragmentSizeGibsonBPsValue"), name: "minFragmentSizeGibsonBPsValue" } );
+        arr.push( { value: this.get("goldenGateOverhangBPsValue"), name: "goldenGateOverhangBPsValue" } );
+        arr.push( { value: this.get("goldenGateRecognitionSeqValue"), name: "goldenGateRecognitionSeqValue" } );
+        arr.push( { value: this.get("goldenGateTerminiExtraSeqValue"), name: "goldenGateTerminiExtraSeqValue" } );
+        arr.push( { value: this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue"), name: "maxIdentitiesGoldenGateOverhangsCompatibleValue" } );
+        arr.push( { value: this.get("oligoSynthesisCostPerBPUSDValue"  ), name: "oligoSynthesisCostPerBPUSDValue"   } );
+        arr.push( { value: this.get("oligoPagePurificationCostPerPieceUSDValue"), name: "oligoPagePurificationCostPerPieceUSDValue" } );
+        arr.push( { value: this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue"), name: "oligoMaxLengthNoPagePurificationRequiredBPsValue" } );
+        arr.push( { value: this.get("minPCRProductBPsValue"), name: "minPCRProductBPsValue" } );
+        arr.push( { value: this.get("directSynthesisCostPerBPUSDValue"), name: "directSynthesisCostPerBPUSDValue" } );
+        arr.push( { value: this.get("directSynthesisMinCostPerPieceUSDValue"), name: "directSynthesisMinCostPerPieceUSDValue" } );
+        arr.push( { value: this.get("primerGCClampValue"), name: "primerGCClampValue" } );
+        arr.push( { value: this.get("primerMinSizeValue"), name: "primerMinSizeValue" } );
+        arr.push( { value: this.get("primerMaxSizeValue"), name: "primerMaxSizeValue" } );
+        arr.push( { value: this.get("primerMinTmValue"), name: "primerMinTmValue" } );
+        arr.push( { value: this.get("primerMaxTmValue"), name: "primerMaxTmValue" } );
+        arr.push( { value: this.get("primerMaxDiffTmValue"), name: "primerMaxDiffTmValue" } );
+        arr.push( { value: this.get("primerMaxSelfAnyThValue"), name: "primerMaxSelfAnyThValue" } );
+        arr.push( { value: this.get("primerMaxSelfEndThValue"), name: "primerMaxSelfEndThValue" } );
+        arr.push( { value: this.get("primerPairMaxComplAnyThValue"), name: "primerPairMaxComplAnyThValue" } );
+        arr.push( { value: this.get("primerPairMaxComplEndThValue"), name: "primerPairMaxComplEndThValue" } );
+        arr.push( { value: this.get("primerTmSantaluciaValue"), name: "primerTmSantaluciaValue" } );
+        arr.push( { value: this.get("primerSaltCorrectionsValue"), name: "primerSaltCorrectionsValue" } );
+        arr.push( { value: this.get("primerDnaConcValue"                      ), name: "primerDnaConcValue"                       } );
+        arr.push( { value: this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue"), name: "mispriming3PrimeBoundaryBPToWarnIfHitValue" } );
+        arr.push( { value: this.get("misprimingMinTmValue"     ), name: "misprimingMinTmValue"      } );
+        arr.push( { value: this.get("misprimingSaltConcValue"), name: "misprimingSaltConcValue" } );
+        arr.push( { value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue" } );
+        arr.push( { value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue" } );
+        arr.push( { value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue" } );
+        
+        return arr;
+    },
+
+    getParametersAsStore: function(){
+        var self = this;
+        var store = new Ext.data.JsonStore({
+            proxy: {
+                type: 'memory',
+                data: self.getArrayParameters(),
+                reader: {
+                    type: 'json',
+                    root: 'files'
+                }
+            },
+
+            fields: ['name','value']
+        });
+        store.load();
+
+        return store;
+    },
+
     /**
      * Creates the J5Parameters Array
      * @returns {String} Array of Parameters

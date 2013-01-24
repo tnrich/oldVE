@@ -30,7 +30,8 @@ module.exports = function (app) {
 		name: String,
 		file_id: oIDRef,
 		date: Date,
-		j5Results: Mixed
+		j5Results: Mixed,
+		j5Input: Mixed
 	});
 	registerSchema('j5run', j5RunSchema);
 
