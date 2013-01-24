@@ -28,6 +28,14 @@ body {
   background-repeat: repeat;
 }
 
+a, a img{
+  outline: none;
+}
+
+img {
+  border: 0;
+}
+
 .x-body {
   font-family: 'Quicksand', sans-serif;
   font-size: 12px;
@@ -212,6 +220,7 @@ body {
 #ProjectPanel-placeholder {
   border-top-right-radius: 4px;
   border-color: #EBEBEB;
+  box-shadow: rgb(210, 210, 210) 0px 0px 15px 3px inset;
 }
 
 #projectDesignPanel-body div table td div .x-tree-icon-leaf {

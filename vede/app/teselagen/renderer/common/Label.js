@@ -41,14 +41,14 @@ Ext.define("Teselagen.renderer.common.Label", {
             y: inData.y
         })]);
 
+/*
         if(!this.labelText() || !this.StringUtil.trim("")) {
             this.setIncludeInView(false);
         }
-/*
+*/
         if(!this.labelText() || !this.StringUtil.trim(this.labelText())) {
             this.setIncludeInView(false);
         }
-*/
 
     }
 });
