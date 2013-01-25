@@ -44,7 +44,7 @@ Ext.define("Teselagen.manager.ORFManager", {
     
     /**
      * Gets ORFs from sequence. Recalculate them if the sequence has changed.
-     * @return {Array<Teselagen.bio.orf.ORF>} Array of ORFs in DNA sequence.
+     * @return {Teselagen.bio.orf.ORF[]} Array of ORFs in DNA sequence.
      */
     getOrfs: function() {
         if(this.dirty) {

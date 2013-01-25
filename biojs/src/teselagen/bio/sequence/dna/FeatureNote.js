@@ -32,6 +32,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		/**
 		 * Sets Name
+		 * @method setName
 		 * @param {String} pName
 		 */
 		this.setName = function(pName){
@@ -40,6 +41,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		/**
 		 * Get Value
+		 * @method getValue
 		 * @return {String} Value
 		 */
 		this.getValue = function(){
@@ -48,6 +50,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		/**
 		 * Sets Value
+		 * @method setValue
 		 * @param {String} value
 		 */
 		this.setValue = function(pValue){
@@ -56,6 +59,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		/**
 		 * Get Quoted
+		 * @method getQuoted
 		 * @return {Boolean} quoted
 		 */
 		this.getQuoted = function (){
@@ -64,6 +68,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		/**
 		 * Sets Quoted
+		 * @method setQuoted
 		 * @param {Boolean} quoted
 		 */
 		this.setQuoted = function (pQuoted){
@@ -72,6 +77,7 @@ Ext.define("Teselagen.bio.sequence.dna.FeatureNote", {
 
 		/**
 		 * Clones the feature note
+		 * @method clone
 		 * @return {Feature} cloned feature note
 		 */
 		this.clone =function(){

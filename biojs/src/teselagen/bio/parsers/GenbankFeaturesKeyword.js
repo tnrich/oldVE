@@ -28,7 +28,7 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
     /**
      * Creates a new GenbankFeaturesKeyword from inData.
      * @returns {GenbankFeaturesKeyword}
-     * @memberOf GenbankFeaturesKeyword
+     * @member Teselagen.bio.parsers.GenbankFeaturesKeyword
      */
     constructor: function () {
         /**
@@ -97,8 +97,8 @@ Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 
     /**
      * Converts GenBank JSON back to GenBank model
-     * @params {JSON} json GenbankFeatureQualifier in JSON form
-     * @returns {Teselagen.bio.model.GenbankFeatureQualifier}
+     * @param {Object} json GenbankFeatureQualifier in JSON form
+     * @returns {Teselagen.bio.parsers.GenbankFeatureQualifier}
      */
     fromJSON: function(json) {
         this.keyword = json["keyword"];

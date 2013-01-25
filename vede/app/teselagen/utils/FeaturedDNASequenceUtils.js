@@ -10,7 +10,7 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
 
     /**
      * Converts a sequenceManager object to a FeaturedDNASequence object.
-     * @param  {[type]} SequenceManager The SequenceManager to be converted.
+     * @param  {Teselagen.manager.SequenceManager} SequenceManager The SequenceManager to be converted.
      * @return {Teselagen.models.FeaturedDNASequence} The SequenceManager in FeaturedDNASequence form.
      */
     sequenceManagerToFeaturedDNASequence: function(sequenceManager) {
@@ -65,7 +65,7 @@ Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
     /**
      * Converts a FeaturedDNASequence object to a SequenceManager object.
      * @param  {Teselagen.models.FeaturedDNASequence} featuredDNASequence The sequence to be converted.
-     * @return {[type]} The FeaturedDNASequence in the form of a SequenceManager.
+     * @return {Teselagen.manager.SequenceManager} The FeaturedDNASequence in the form of a SequenceManager.
      */
     featuredDNASequenceToSequenceManager: function(featuredDNASequence) {
         var convertedFeatures = [];

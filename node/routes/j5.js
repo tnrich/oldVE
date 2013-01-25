@@ -1,6 +1,6 @@
 /**
- * j5 API - VEDE EXT Platform
- * -----------------------
+ * j5 API
+ * @module ./routes/j5
  */
 
 var spawn = require('child_process').spawn;
@@ -13,6 +13,9 @@ module.exports = function (app) {
 
 var j5rpcEncode = require('./j5rpc');
 
+/**
+ * Write to quick.log
+ */
 function quicklog(s) {
   var logpath = "/tmp/quick.log";
   var fs = require('fs');
@@ -22,6 +25,9 @@ function quicklog(s) {
   fs.closeSync(fd);
 }
 
+/**
+ *  Login Auth Method : Find User in DB
+ */
 function authenticate(username, pass, fn) {
   var User = app.db.model("User");
   User.findOne({
@@ -32,6 +38,10 @@ function authenticate(username, pass, fn) {
   });
 };
 
+/**
+ * Authentication Restriction.
+ * If user session is active then find the user in DB.
+ */
 function restrict(req, res, next) {
   if(req.session.user) {
     var User = app.db.model("User");
@@ -65,8 +75,8 @@ function restrict(req, res, next) {
 app.all('/GetLastUpdatedUserFiles',function(req,res){
 
   var data = {}
-  data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('GetLastUpdatedUserFiles', [data], function (error, value) {
 
@@ -110,6 +120,7 @@ app.post('/DesignDownstreamAutomation',function(req,res){
 
   var data = JSON.parse(req.body.files);
   var params = JSON.parse(req.body.params);
+  var reuseParams = req.body.reuseParams;
 
   var downstreamAutomationParamsEncode = function(params){
       var out = "Parameter Name,Value\n"
@@ -122,6 +133,7 @@ app.post('/DesignDownstreamAutomation',function(req,res){
   }
 
   data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
+  data["reuse_downstream_automation_parameters_file"] = reuseParams;
   //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
   data["automation_task"] = "DistributePcrReactions";
   data["username"] = 'node';
@@ -144,16 +156,16 @@ app.post('/DesignDownstreamAutomation',function(req,res){
 // Condense AssemblyFiles
 app.post('/condenseAssemblyFiles',function(req,res){
 
-  var params = JSON.parse(req.body.params);
+  var params = JSON.parse(req.body.data);
   var data = {};
   data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
-  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];  
-  data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
 
-    if(error) 
+    if(error)
     {
       console.log(error);
       res.send(error["faultString"], 500);
@@ -162,10 +174,13 @@ app.post('/condenseAssemblyFiles',function(req,res){
     {
       res.send(value);
     }
-  })
+  });
 });
 
 
+/**
+ * Read file.
+ */
 function readFile(objectId,cb)
 {
   var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'r');
@@ -223,6 +238,9 @@ function readFile(objectId,cb)
   */
 }
 
+/**
+ * Save file.
+ */
 function saveFile(fileData,user,deproject,cb)
 {
   var assert = require('assert');
@@ -322,7 +340,7 @@ app.post(j5Method1,restrict,function(req,res){
   DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
     resolveSequences(deprojectModel,function(deproject){
       var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
-      data["username"] = 'rpavez';
+      data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {

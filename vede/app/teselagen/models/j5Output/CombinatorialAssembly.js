@@ -1,6 +1,6 @@
 /**
- * @class Teselagen.models.j5Output.CobinatorialAssembly
- * Class describing a CobinatorialAssembly.
+ * @class Teselagen.models.j5Output.CombinatorialAssembly
+ * Class describing a CombinatorialAssembly.
  * @author Diana Wong
  */
 Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {

@@ -1,3 +1,7 @@
+/**
+ * j5 automation parameters view
+ * @class Vede.view.de.j5AutomationParameters
+ */
 Ext.define('Vede.view.de.j5AutomationParameters', {
     extend: 'Ext.window.Window',
 

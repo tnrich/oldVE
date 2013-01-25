@@ -1,3 +1,7 @@
+/**
+ * Selection layer events.
+ * @class Teselagen.event.SelectionLayerEvent
+ */
 Ext.define("Teselagen.event.SelectionLayerEvent", {
     singleton: true,
 

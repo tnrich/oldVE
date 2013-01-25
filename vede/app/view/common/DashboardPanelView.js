@@ -1,38 +1,79 @@
+/**
+ * Dashboard panel view
+ * @class Vede.view.common.DashboardPanelView
+ */
 Ext.define('Vede.view.common.DashboardPanelView', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DashboardPanelView',
     id: 'DashboardPanel',
     layout: {
         align: 'stretch',
-        type: 'fit'
+        type: 'vbox'
     },
     frameHeader: false,
     border: 0,
     title: 'Dashboard',
-    items: [{
-        xtype: 'panel',
-        layout: 'absolute',
-        items: [{
-            xtype: 'image',
-            height: 175,
-            margin: '50 50 50 50',
-            width: 330,
-            src: 'resources/images/logo-splash.png',
-            x: 200,
-            y: 50
-        }, {
-            xtype: 'button',
-            text: 'Click here to start a new project',
-            scale: 'large',
-            x: 300,
-            y: 350,
-            listeners: {
-                click: function () {
-                    Teselagen.manager.ProjectManager.createNewProject();
+    items: [
+            {
+            xtype: 'panel',
+            flex: 1,
+            border: 0,
+            padding: 50,
+            items: [
+                {
+                xtype: 'panel',
+                flex: 1,
+                id: 'welcome_splash',
+                border: 0,
+                html: '<div class="welcome_text">Welcome back!<div id="welcomeUserIcon"></div></div><div class="welcome_sub">Get started by selecting one of the options below.</div>',
+                padding: 50, 
+                },
+                {
+                xtype: 'panel',
+                id: 'dashboardButtons',
+                flex: 1,
+                border: 0,
+                padding: 50,
+                items: [
+                {
+                    xtype: 'button',
+                    cls: 'dashBtn',
+                    text: 'Start a New Project',
+                    scale: 'large',
+                    height: '120px',
+                    icon: 'resources/images/projectstart.png',
+                    iconAlign: 'top',
+                    listeners: {
+                        click: function () {
+                            Teselagen.manager.ProjectManager.createNewProject();
+                    }
                 }
+
+                },
+                {
+                    xtype: 'button',
+                    cls: 'dashBtn',
+                    scale: 'large',
+                    height: '120px',
+                    icon: 'resources/images/watchtut.png',
+                    iconAlign: 'top',
+                    text: 'Watch a Tutorial'        
+                },
+                {
+                    xtype: 'button',
+                    cls: 'dashBtn',
+                    scale: 'large',
+                    height: '120px',
+                    icon: 'resources/images/readman.png',
+                    iconAlign: 'top',
+                    text: 'Read the Manuals'
+                }
+                ]
+                }
+                ]
             }
-        }]
-    }]
+        
+            ]
     /*
     items: [{
         xtype: 'panel',

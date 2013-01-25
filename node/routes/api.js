@@ -1,12 +1,13 @@
- /**
- * API - VEDE EXT Platform
- * -----------------------
+/**
+ * TeselaGen API
+ * @module ./routes/api
  */
-
 module.exports = function (app, express) {
     var errorHandler = express.errorHandler();
 
-  // Login Auth Method : Find User in DB
+  /**
+   *  Login Auth Method : Find User in DB
+   */
   function authenticate(username, pass, fn) {
     var User = app.db.model("User");
     User.findOne({
@@ -17,13 +18,11 @@ module.exports = function (app, express) {
     });
   }
 
-
-  // Authentication Restriction
-  /*
+  /**
+   * Authentication Restriction.
    * If user session is active then find the user in DB.
    * If no testing is enabled no option to use Guest User then Wrong Credential.
    */
-
   function restrict(req, res, next) {
     if(req.session.user) {
       var User = app.db.model("User");
@@ -38,7 +37,11 @@ module.exports = function (app, express) {
     }
   };
 
-  // Root Path
+  /**
+   * Send feedback
+   * @memberof module:./routes/api
+   * @method POST /sendFeedback
+   */
   app.post('/sendFeedback', function (req, res) {
     if(req.body.feedback)
     {
@@ -90,7 +93,9 @@ module.exports = function (app, express) {
     var password = req.body.password;
     //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
     
-    // getOrCreateUser : Create new entry in DB if User doesn't exist
+    /**
+     *  Create new entry in DB if User doesn't exist
+     */
     function getOrCreateUser(username) {
       // Check if user exist on mongoDB
       var User = app.db.model("User");

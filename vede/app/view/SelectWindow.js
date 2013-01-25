@@ -1,3 +1,7 @@
+/**
+ * Select window
+ * @class Vede.view.SelectWindow
+ */
 Ext.define('Vede.view.SelectWindow', {
     extend: 'Ext.window.Window',
 

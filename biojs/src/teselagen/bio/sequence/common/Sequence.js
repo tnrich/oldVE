@@ -37,6 +37,7 @@ Ext.define("Teselagen.bio.sequence.common.Sequence", {
 
 		/**
 		 * Set name
+		 * @method setName
 		 * @param {String} pName Sets sequence name
 		 */
 		this.setName = function(pName){

@@ -1,7 +1,7 @@
 /**
  * @class Teselagen.models.RestrictionEnzymeGroup
  * Class to hold a group of RestrictionEnzymes.
- * Used by @link Teselagen.manager.RestrictionEnzymeManager
+ * Used by Teselagen.manager.RestrictionEnzymeManager
  */
 Ext.define("Teselagen.models.RestrictionEnzymeGroup", {
     config: {
@@ -11,7 +11,7 @@ Ext.define("Teselagen.models.RestrictionEnzymeGroup", {
 
     /**
      * @param {String} name The name of the group of enzymes.
-     * @param {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} enzymes The group of restriction enzymes.
+     * @param {Teselagen.bio.enzymes.RestrictionEnzyme[]} enzymes The group of restriction enzymes.
      */
     constructor: function(inData) {
         this.initConfig(inData);

@@ -1,3 +1,7 @@
+/**
+ * Caret event
+ * @class Teselagen.event.CaretEvent
+ */
 Ext.define("Teselagen.event.CaretEvent", {
     singleton: true,
 

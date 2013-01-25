@@ -1,12 +1,12 @@
 /**
- * API - VEDE EXT Platform
- * -----------------------
+ * ICE registry interface
+ * @module ./routes/ice
  */
-
 module.exports = function (app) {
 
-
-  // Login Auth Method : Find User in DB
+  /**
+   *  Login Auth Method : Find User in DB
+   */
   function authenticate(name, pass, fn) {
     var User = app.db.model("User");
     User.findOne({
@@ -17,12 +17,11 @@ module.exports = function (app) {
     });
   };
 
-
-  // Authentication Restriction
-  /*
-  * If user session is active then find the user in DB.
-  * If no testing is enabled no option to use Guest User then Wrong Credential.
-  */
+  /**
+   * Authentication Restriction.
+   * If user session is active then find the user in DB.
+   * If no testing is enabled no option to use Guest User then Wrong Credential.
+   */
   function restrict(req, res, next) {
     if(req.session.user) {
       var User = app.db.model("User");
@@ -98,7 +97,9 @@ module.exports = function (app) {
     });
   });
 
-
+  /**
+   * Create plasmid entry.
+   */
   function createPlasmidEntry(args, cb) {
     var plasmid = {};
 
@@ -140,7 +141,10 @@ module.exports = function (app) {
       });
     });
   }
-
+  
+  /**
+   * Upload sequence.
+   */
   function uploadSequence(args, recordId, result, cb) {
     console.log('Uploading sequence to ' + recordId);
 

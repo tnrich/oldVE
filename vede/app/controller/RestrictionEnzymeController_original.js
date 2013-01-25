@@ -1,10 +1,10 @@
 /**
- * @singleton
- * @class Vede.controller.RestrictionEnzymeController
- * DESCRIPTION
+ * Restriction enzyme controller
+ * @class Vede.controller.RestrictionEnzymeController_original
+ * @ignore
  * @author Jenhan Tao
  */
-Ext.define("Vede.controller.RestrictionEnzymeController", {
+Ext.define("Vede.controller.RestrictionEnzymeController_original", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.manager.RestrictionEnzymeGroupManager"],

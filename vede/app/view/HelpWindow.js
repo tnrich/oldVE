@@ -1,3 +1,7 @@
+/**
+ * Help window
+ * @class Vede.view.HelpWindow
+ */
 Ext.define('Vede.view.HelpWindow', {
     extend: 'Ext.window.Window',
 

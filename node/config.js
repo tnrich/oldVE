@@ -1,6 +1,6 @@
 /**
- * /config.js
- * -------------
+ * Application configuration
+ * @module ./config
  */
 
 module.exports = function (app, express) {

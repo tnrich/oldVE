@@ -115,6 +115,13 @@ Ext.define('Vede.view.de.grid.Part', {
         if(this.parentBin && this.getPart().get("fas") != "None") {
             this.addFasIndicator(this.getFasConflict());
         }
+
+        // If the part is associated with a Eugene rule, add the indicator.
+        var rules = this.DeviceDesignManager.getRulesInvolvingPart(activeProject,
+                                                                   this.getPart());
+        if(rules.length > 0) {
+            this.addEugeneRuleIndicator();
+        }
     },
 
     select: function () {
@@ -152,5 +159,20 @@ Ext.define('Vede.view.de.grid.Part', {
 
         this.partCell.down().insert(0, image);
         image.show();
-    }
+    },
+
+    addEugeneRuleIndicator: function() {
+        var image = Ext.create("widget.image", {
+            xtype: "image",
+            cls: "eugeneRuleIndicator",
+            src: "resources/images/eugene_rule_indicator.png"
+        });
+
+        this.partCell.down().insert(0, image);
+        image.show();
+    },
+
+    removeEugeneRuleIndicator: function() {
+        this.partCell.remove(this.partCell.down("image[cls='eugeneRuleIndicator']"));
+    },
 });

@@ -1,3 +1,7 @@
+/**
+ * Main menu controller
+ * @class Vede.controller.MainMenuController
+ */
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
@@ -244,6 +248,9 @@ Ext.define('Vede.controller.MainMenuController', {
 
         Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
     },
+    onHelpBtnClick: function(button, e, options) {
+        if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
+    },
 
     init: function() {
         this.control({
@@ -327,6 +334,9 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
+            },
+            "#veHelpMenuItem" : {
+                click: this.onHelpBtnClick
             }
         });
 

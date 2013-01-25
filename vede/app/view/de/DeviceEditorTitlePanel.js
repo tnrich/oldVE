@@ -1,3 +1,7 @@
+/**
+ * Device Editor title panel
+ * @class Vede.view.de.DeviceEditorTitlePanel
+ */
 Ext.define('Vede.view.de.DeviceEditorTitlePanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorTitlePanel',

@@ -1,5 +1,6 @@
 /**
  * Class controlling the device display portion of Device Editor.
+ * @class Vede.controller.DeviceEditor.GridController
  */
 Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
@@ -23,6 +24,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedPart: null,
 
     totalRows: 1,
+    totalColumns: 1,
 
     onReRenderDECanvasEvent: function(){
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -144,7 +146,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 }, this);
             }
 
+            if(this.activeProject) {
+                // Unset listeners for the project's Eugene Rules, and set them for
+                // the new active project.
+                this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
+                this.activeProject.rules().un("update", this.onEugeneRulesUpdate, this);
+                this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
+            }
+
             this.activeProject = newTab.model.getDesign();
+
+            this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
+            this.activeProject.rules().on("update", this.onEugeneRulesUpdate, this);
+            this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
+
             newTab.query('label[cls="designName"]')[0].setText(newTab.model.data.name);
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
@@ -225,6 +240,53 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onRemoveFromParts: function(parts, removedPart, index) {
     },
 
+    onAddToEugeneRules: function(rules, addedRules, index) {
+        Ext.each(addedRules, function(addedRule) {
+            var operand1 = addedRule.getOperand1();
+            var operand2 = addedRule.getOperand2();
+
+            var gridOperand1 = this.getGridPartFromJ5Part(operand1);
+
+            if(!gridOperand1.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                gridOperand1.addEugeneRuleIndicator();
+            }
+
+            if(!addedRule.get("operand2isNumber")) {
+                var gridOperand2 = this.getGridPartFromJ5Part(operand2);
+
+                if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                    gridOperand2.addEugeneRuleIndicator();
+                }
+            }
+        }, this);
+    },
+
+    onEugeneRulesUpdate: function(rules, updatedRule, operation, modified) {
+    },
+
+    onRemoveFromEugeneRules: function(rules, removedRule, index) {
+        var operand1 = removedRule.getOperand1();
+        var operand2 = removedRule.getOperand2();
+
+        var operand1Rules = this.DeviceDesignManager.getRulesInvolvingPart(
+                                            this.activeProject, operand1);
+
+        // If there are no other rules involving operand 1, remove its indicator.
+        if(operand1Rules.length == 0) {
+            this.getGridPartFromJ5Part(operand1).removeEugeneRuleIndicator();
+        }
+
+        // If operand 2 is not a number, remove its Eugene rule indicator.
+        if(!removedRule.get("operand2isNumber")) {
+            var operand2Rules = this.DeviceDesignManager.getRulesInvolvingPart(
+                                                this.activeProject, operand2);
+
+            if(operand2Rules.length == 0) {
+                this.getGridPartFromJ5Part(operand2).removeEugeneRuleIndicator();
+            }
+        }
+    },
+
     /**
      * Helper function to calculate which parts need to be rerendered after the
      * fas field of a part is modified.
@@ -260,14 +322,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onAddColumn: function() {
+        this.totalColumns +=1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin());
+                                                        this.selectedBin.getBin()) + 1;
         } else {
-            selectedBinIndex = 0;
+            selectedBinIndex = this.totalColumns;
         }
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
@@ -363,7 +426,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // Insert the part at partIndex + 1, because the bin header is at index 0.
         parentGridBin.insert(partIndex + 1, newPart);
-        
+
         this.selectedPart = newPart;
         newPart.select();
     },

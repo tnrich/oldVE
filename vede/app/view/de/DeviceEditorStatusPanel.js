@@ -1,3 +1,7 @@
+/**
+ * Device Editor status panel
+ * @class Vede.view.de.DeviceEditorStatusPanel
+ */
 Ext.define('Vede.view.de.DeviceEditorStatusPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorStatusPanel',

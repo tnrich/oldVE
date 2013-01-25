@@ -1,3 +1,7 @@
+/**
+ * Device Editor Inspector panel
+ * @class Vede.view.de.InspectorPanel
+ */
 Ext.define('Vede.view.de.InspectorPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.InspectorPanel',
@@ -27,6 +31,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
         deferredRender: false,
         type: 'card'
     },
+
     items: [
         {
             xtype: 'panel',
@@ -36,6 +41,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
             },
             preventHeader: true,
             title: 'Part Info',
+            autoScroll: true,
             items: [
                 /*
                 {
@@ -45,13 +51,18 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 */
                 {
                     xtype: 'button',
-                    text : 'Assign empty sequence',
+                    text : 'Map empty sequence',
                     cls: 'emptySequenceBtn'
                 },
                 {
                     xtype: 'button',
-                    text : 'Change Source',
+                    text : 'Map sequence',
                     cls: 'changeSequenceBtn'
+                },
+                {
+                    xtype: 'button',
+                    text : 'Change part definition',
+                    cls: 'changePartDefinitionBtn'
                 },
                 /*
                 {
@@ -68,7 +79,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    overflowY: 'auto',
+                    minHeight: 150,
+                    maxHeight: 150,
                     bodyPadding: 10,
                     title: 'Properties',
                     items: [
@@ -113,6 +125,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     xtype: 'form',
                     cls: 'forcedAssemblyStrategyForm',
                     flex: 1,
+                    minHeight: 80,
                     maxHeight: 80,
                     bodyPadding: 10,
                     title: 'Forced Assembly Strategy',
@@ -134,6 +147,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     xtype: 'form',
                     cls: 'eugeneRulesForm',
                     flex: 1,
+                    minHeight: 180,
                     bodyPadding: 10,
                     title: 'Eugene Rules',
                     items: [
@@ -143,7 +157,13 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
+                            plugins: {
+                                ptype: 'rowediting',
+                                clicksToEdit: 2
+                            },
                             columnLines: true,
+                            minHeight: 100,
+                            maxHeight: 160,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -159,16 +179,40 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'gridcolumn',
                                     text: 'Operand 1',
                                     dataIndex: 'operand1_id',
+                                    renderer: function(id, metaData, rule) {
+                                        return rule.getOperand1().get("name");
+                                    }
+                                },
+                                {
+                                    xtype: 'booleancolumn',
+                                    text: 'Negated?',
+                                    dataIndex: 'negationOperator',
+                                    trueText: 'Yes',
+                                    falseText: 'No',
+                                    editor: {
+                                        xtype: 'checkbox'
+                                    }
                                 },
                                 {
                                     xtype: 'gridcolumn',
                                     text: 'Operator',
                                     dataIndex: 'compositionalOperator',
+                                    editor: {
+                                        xtype: 'combobox',
+                                        store: Teselagen.constants.Constants.COMPOP_LIST
+                                    }
                                 },
                                 {
                                     xtype: 'gridcolumn',
                                     text: 'Operand 2',
                                     dataIndex: 'operand2_id',
+                                    renderer: function(id, metaData, rule) {
+                                        if(rule.get("operand2isNumber")) {
+                                            return rule.get("operand2Number");
+                                        } else {
+                                            return rule.getOperand2().get("name");
+                                        }
+                                    }
                                 }
                             ]
                         },
@@ -251,8 +295,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             autoScroll: true,
                             columnLines: true,
-                            height:400,
-                            minHeight:400,
+                            height:200,
+                            minHeight:200,
                             plugins: {
                                 ptype: 'rowediting',
                                 clicksToEdit: 2
@@ -261,7 +305,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'gridcolumn',
                                     width: 100,
-                                    text: 'Column',
+                                    text: 'Column Name',
                                     dataIndex: 'binName',
                                     editor: {
                                         xtype: 'textfield',

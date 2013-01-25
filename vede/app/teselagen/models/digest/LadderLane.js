@@ -56,7 +56,6 @@ Ext.define("Teselagen.models.digest.LadderLane", {
 
     /**
      * Recalculates Band Y positions
-     * @return {[type]} [description]
      */
     redrawBands: function(){
         var ladderHeight = this.actualHeight * 0.8;
@@ -76,7 +75,8 @@ Ext.define("Teselagen.models.digest.LadderLane", {
     },
 
     /**
-     *  Recalculates Band Size labels (deprecated)
+     *  Recalculates Band Size labels
+     *  @deprecated
      */
     redrawBandSizeLabels: function(){
         this.bandSizeLabelYPositions = [];

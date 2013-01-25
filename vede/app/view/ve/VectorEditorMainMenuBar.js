@@ -1,3 +1,7 @@
+/**
+ * Vector Editor main menu bar
+ * @class Vede.view.ve.VectorEditorMainMenuBar
+ */
 Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
     id: 'VectorEditorMainMenuBar',
@@ -202,22 +206,24 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     }, {
         xtype: 'button',
         text: 'Help',
-        menu: {
-            xtype: 'menu',
-            minWidth: 140,
-            items: [{
-                xtype: 'menuitem',
-                text: 'Suggest Feature'
-            }, {
-                xtype: 'menuitem',
-                text: 'Report Bug'
-            }, {
-                xtype: 'menuseparator'
-            }, {
-                xtype: 'menuitem',
-                text: 'About'
-            }]
-        }
+        id: 'veHelpMenuItem'
+//         menu: {
+//             xtype: 'menu',
+//             minWidth: 140,
+//             items: [{
+//                 xtype: 'menuitem',
+//                 id: 'suggestFeatureMenuItem'
+// ,                text: 'Suggest Feature'
+//             }, {
+//                 xtype: 'menuitem',
+//                 text: 'Report Bug'
+//             }, {
+//                 xtype: 'menuseparator'
+//             }, {
+//                 xtype: 'menuitem',
+//                 text: 'About'
+//             }]
+//         }
     }, {
         xtype: 'tbfill'
     }, {

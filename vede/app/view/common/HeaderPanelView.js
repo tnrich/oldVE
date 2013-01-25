@@ -1,3 +1,7 @@
+/**
+ * Header panel view
+ * @class Vede.view.common.HeaderPanelView
+ */
 Ext.define('Vede.view.common.HeaderPanelView', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.HeaderPanelView',
