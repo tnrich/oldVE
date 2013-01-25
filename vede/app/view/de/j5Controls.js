@@ -8,6 +8,8 @@ Ext.define('Vede.view.de.j5Controls', {
     height: 500,
     width: 852,
     title: 'j5 Controls',
+    resizable: false,
+    draggable: true,
     modal: true,
     autoScroll: true,
 
@@ -23,6 +25,7 @@ Ext.define('Vede.view.de.j5Controls', {
                 items: [{
                     xtype: 'panel',
                     height: 272,
+                    id: 'j5runPanel',
                     padding: 5,
                     layout: {
                         align: 'stretch',
@@ -50,6 +53,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             cls: 'useServerPlasmidsRadioBtn',
                             name: 'plasmidsListSource',
                             fieldLabel: '<b>Master Plasmids List</b>',
+                            fieldLabelCls: 'align-middle',
                             labelWidth: 200,
                             boxLabel: 'Use latest server version'
                         }, {
@@ -59,6 +63,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: 'left: 10px',
                             name: 'plasmidsListSource',
                             fieldLabel: 'or',
+                            fieldLabelCls: 'align-middle',
                             labelPad: 15,
                             labelSeparator: ' ',
                             labelWidth: 10,
@@ -72,6 +77,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             allowBlank: false,
                             margin: '',
                             fieldLabel: 'or',
+                            fieldLabelCls: 'align-middle',
                             hideLabel: false,
                             labelPad: 10,
                             labelSeparator: ' ',
@@ -93,6 +99,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             cls: 'useServerOligosRadioBtn',
                             name: 'oligosListSource',
                             fieldLabel: '<b>Master Oligos List</b>',
+                            fieldLabelCls: 'align-middle',
                             labelWidth: 200,
                             boxLabel: 'Use latest server version'
                         }, {
@@ -102,6 +109,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: 'left: 10px',
                             name: 'oligosListSource',
                             fieldLabel: 'or',
+                            fieldLabelCls: 'align-middle',
                             labelPad: 15,
                             labelSeparator: ' ',
                             labelWidth: 10,
@@ -114,6 +122,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             validateOnChange: false,
                             margin: '',
                             fieldLabel: 'or',
+                            fieldLabelCls: 'align-middle',
                             hideLabel: false,
                             labelPad: 10,
                             labelSeparator: ' ',
@@ -135,6 +144,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             cls: 'useServerSynthesesRadioBtn',
                             name: 'directSynthesesListSource',
                             fieldLabel: '<b>Master Direct Syntheses List</b>',
+                            fieldLabelCls: 'align-middle',
                             labelWidth: 200,
                             boxLabel: 'Use latest server version'
                         }, {
@@ -144,6 +154,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             margin: 'left: 10px',
                             name: 'directSynthesesListSource',
                             fieldLabel: 'or',
+                            fieldLabelCls: 'align-middle',
                             labelPad: 15,
                             labelSeparator: ' ',
                             labelWidth: 10,
@@ -171,6 +182,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         maxWidth: 300,
                         padding: 2,
                         fieldLabel: '<b>Assembly Method:</b>',
+                        fieldLabelCls: 'align-middle',
                         labelSeparator: ' ',
                         labelWidth: 120,
                         queryMode: 'local',

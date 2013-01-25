@@ -447,6 +447,9 @@ img {
   background: #F8F8F8;
 }
 /*Device Editor*/
+#j5runPanel .x-field-label-cell {
+  vertical-align: middle !important;
+}
 
 .grid-DSF {
     border-right-color: #ff0000 ! important;
@@ -456,6 +459,7 @@ img {
 
 .binHeader {
     background-color: #fefefe;
+    border-color: rgb(150,150,150);
     text-overflow: ellipsis;
 }
 
