@@ -175,6 +175,6 @@ Ext.define('Vede.view.de.grid.Part', {
     },
 
     removeEugeneRuleIndicator: function() {
-        this.partCell.remove(this.partCell.down("image[cls='eugeneRuleIndicator']"));
+        this.partCell.down("image[cls='eugeneRuleIndicator']").destroy();
     },
 });
