@@ -38,8 +38,10 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 {
                     xtype: 'button',
                     cls: 'dashBtn',
+                    id: 'projectStartBtn',
                     text: 'Start a New Project',
                     scale: 'large',
+                    overCls: 'projectStartBtn-over',
                     height: '120px',
                     icon: 'resources/images/projectstart.png',
                     iconAlign: 'top',
@@ -53,7 +55,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 {
                     xtype: 'button',
                     cls: 'dashBtn',
+                    id: 'watchTutorialBtn',
                     scale: 'large',
+                    overCls: 'watchTutorialBtn-over',
                     height: '120px',
                     icon: 'resources/images/watchtut.png',
                     iconAlign: 'top',
@@ -62,7 +66,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 {
                     xtype: 'button',
                     cls: 'dashBtn',
+                    id: 'readManualsBtn',
                     scale: 'large',
+                    overCls: 'readManualsBtn-over',
                     height: '120px',
                     icon: 'resources/images/readman.png',
                     iconAlign: 'top',

@@ -127,7 +127,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 var store = new Ext.data.JsonStore({
                     proxy: {
                         type: 'memory',
-                        data: response,
+                        data: response.assemblies,
                         reader: {
                             type: 'json',
                             root: 'files'

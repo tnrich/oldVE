@@ -8,11 +8,11 @@ Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {
 
     requires: [
     ],
-
+    
     proxy: {
         type: "memory"
     },
-
+    
     statics: {
     },
 
@@ -22,17 +22,17 @@ Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {
     fields: [
 
         // fields that may go under J5Run
-        {name: "type",          type: "String",     defaultValue: ""},
-        {name: "date",          type: "String",     defaultValue: ""},
+        //{name: "type",          type: "String",     defaultValue: ""},
+        //{name: "date",          type: "String",     defaultValue: ""},
 
         // Tables to be stored as strings, not as models
-        {name: "nonDegenerativeParts",  type: "String",     defaultValue: ""},
-
+        {name: "nonDegenerativeParts",  type: "String",     defaultValue: ""}
+        //{name: "j5results_id",   type: "long"}
 
         // IDs
-        {name: "combinatorialAssembly_id",   type: "long"}
+        //{name: "combinatorialAssembly_id",   type: "long"}
     ],
-
+    /*
     validations: [
         { // or leave this in J5Run
             field: "type",
@@ -41,16 +41,19 @@ Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {
         }
 
     ],
-
+    */
+    
     associations: [
         {
             type: "belongsTo",
             model: "Teselagen.models.J5Results",
+            name: "j5Result",
             getterName: "getJ5Results",
             setterName: "setJ5Results",
-            assocationKey: "j5Results",
+            associationKey: "j5Results",
             foreignKey: "j5results_id"
         }
     ]
+    
 
 });

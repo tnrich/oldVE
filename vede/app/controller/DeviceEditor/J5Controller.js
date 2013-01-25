@@ -337,7 +337,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onRunJ5BtnClick: function (btn) {
         var loadingMessage = this.createLoadingMessage();
-
+        var self = this;
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
 
@@ -408,6 +408,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         loadingMessage.update(30, "Saving design");
 
         Vede.application.fireEvent("saveDesignEvent", function () {
+            loadingMessage = self.createLoadingMessage();
             loadingMessage.update(60, "Executing request");
             currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData) {
                 if(success) {

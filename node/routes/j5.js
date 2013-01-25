@@ -12,6 +12,7 @@ var parser = new xml2js.Parser();
 module.exports = function (app) {
 
 var j5rpcEncode = require('./j5rpc');
+var processJ5Response = require('./j5parser');
 
 /**
  * Write to quick.log
@@ -241,7 +242,7 @@ function readFile(objectId,cb)
 /**
  * Save file.
  */
-function saveFile(fileData,user,deproject,cb)
+function saveFile(j5parameters,fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
@@ -260,24 +261,32 @@ function saveFile(fileData,user,deproject,cb)
           app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
 
             var j5Run = app.db.model("j5run");
-            var newj5Run = new j5Run({
-              deproject_id: deproject._id,
-              name: "newResult",
-              file_id:objectId.toString(),
-              date:new Date()
-            });
-            newj5Run.save(function(){
-              deproject.j5runs.push(newj5Run);
-              deproject.save(function(){
-                app.GridStoreDB.close();
-                return cb(newj5Run);
+            
+            processJ5Response(fileData,function(parsedResults){
+
+              var newj5Run = new j5Run({
+                deproject_id: deproject._id,
+                name: "newResult",
+                file_id:objectId.toString(),
+                date: new Date(),
+                j5Input: { j5Parameters : JSON.parse(j5parameters) },
+                j5Results: parsedResults
               });
+
+              newj5Run.save(function(){
+                deproject.j5runs.push(newj5Run);
+                deproject.save(function(){
+                  app.GridStoreDB.close();
+                  return cb(newj5Run);
+                });
+              });
+
             });
           });
         });
       });
     });
-};
+}
 
 app.get('/getfile/:id',restrict,function(req,res){
   var o_id = new app.mongoose.mongo.ObjectID(req.params.id);
@@ -297,7 +306,7 @@ app.get('/getfile/:id',restrict,function(req,res){
       res.end(file,'binary');
     });
 
-  })
+  });
 });
 
 app.post('/getProtocol',restrict,function(req,res){
@@ -356,48 +365,11 @@ app.post(j5Method1,restrict,function(req,res){
 
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(encodedFileData,req.user,deprojectModel,function(j5run){
-
-            var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
-            
-            var objResponse = {};
-            objResponse.files = [];
-            objResponse.data = encodedFileData;
-
-            for(var file in zip.files)
-            {
-              var fileName = zip.files[file]['name'];
-              if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
-              {
-                var newFile = {};
-                newFile.fileContent = zip.files[file]['data'];
-                newFile.name = fileName;
-                newFile.size = zip.files[file]['data'].length;
-                objResponse.files.push(newFile);
-              }
-              if( fileName.match(/.+combinatorial.csv/) )
-              {
-                objResponse.combinatorial = zip.files[file]['data'];
-              }
-            }
-
-            objResponse.files.sort(function (a, b) {
-                if (a.name < b.name) return -1;
-                if (b.name < a.name) return 1;
-                return 0;
-            });
-            
-            j5run.j5Results = {};
-            j5run.j5Results.assemblies = objResponse.files;
-            j5run.j5Results.combinatorialAssembly = {};
-            j5run.j5Results.combinatorialAssembly.nonDegenerativeParts = objResponse.combinatorial;
-            j5run.save();
-
-            res.send(objResponse);
-
+          saveFile(req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run){
+            res.send(j5run.j5Results);
           });
         }
-      })
+      });
 
     });
 

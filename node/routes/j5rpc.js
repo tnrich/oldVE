@@ -66,7 +66,7 @@ function encoded_sequences_list_file(model)
         var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
         out += sequenceFile['sequenceFileName']+','+ format +'\n';
     });
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64');
 }
 
@@ -98,7 +98,7 @@ function encoded_zipped_sequences_file(model)
     });
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
-    quicklog(data);
+    //quicklog(data);
     return data;
 }
 
@@ -137,7 +137,7 @@ function encoded_parts_list_file(model)
             }
         });
     });
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64');  
 }
 
@@ -153,7 +153,7 @@ function encoded_j5_parameters_file(params)
     for(var prop in params) {
         out += prop + ',' + params[prop] + '\n';
     }
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
@@ -201,7 +201,7 @@ function encoded_target_part_order_list_file(model)
     >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
     ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
     */
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
@@ -242,7 +242,7 @@ function encoded_eugene_rules_list_file(model)
 
 
     });
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
