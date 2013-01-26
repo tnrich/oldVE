@@ -5,12 +5,12 @@
 
 /*global module*/
 
-module.exports = function(pApp) {
+module.exports = function(pDb) {
     function J5RunManager() {
     }
 
     J5RunManager.prototype.deleteAll = function(pNext) {
-        var J5Run = pApp.db.model("j5run");
+        var J5Run = pDb.model("j5run");
         J5Run.remove(function(pErr) {
             pNext(pErr);
         });

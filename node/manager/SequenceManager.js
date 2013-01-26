@@ -5,12 +5,12 @@
 
 /*global module*/
 
-module.exports = function(pApp) {
+module.exports = function(pDb) {
     function SequenceManager() {
     }
 
     SequenceManager.prototype.deleteAll = function(pNext) {
-        var Sequence = pApp.db.model("sequence");
+        var Sequence = pDb.model("sequence");
         Sequence.remove(function(pErr) {
             pNext(pErr);
         });

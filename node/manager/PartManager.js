@@ -5,12 +5,12 @@
 
 /*global module*/
 
-module.exports = function(pApp) {
+module.exports = function(pDb) {
     function PartManager() {
     }
 
     PartManager.prototype.deleteAll = function(pNext) {
-        var Part = pApp.db.model("part");
+        var Part = pDb.model("part");
         Part.remove(function(pErr) {
             pNext(pErr);
         });

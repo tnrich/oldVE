@@ -5,13 +5,12 @@
 
 /*global module*/
 
-module.exports = function(pApp) {
+module.exports = function(pDb) {
     function VEProjectManager() {
     }
 
     VEProjectManager.prototype.deleteAll = function(pNext) {
-        console.log("In VEProjectManager.deleteProjects");
-        var VEProject = pApp.db.model("veproject");
+        var VEProject = pDb.model("veproject");
         VEProject.remove(function(pErr) {
             pNext(pErr);
         });

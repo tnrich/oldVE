@@ -5,13 +5,12 @@
 
 /*global module*/
 
-module.exports = function(pApp) {
+module.exports = function(pDb) {
     function DEProjectManager() {
     }
 
     DEProjectManager.prototype.deleteAll = function(pNext) {
-        console.log("In DEProjectManager.deleteProjects");
-        var DEProject = pApp.db.model("deproject");
+        var DEProject = pDb.model("deproject");
         DEProject.remove(function(pErr) {
             pNext(pErr);
         });
