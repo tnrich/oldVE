@@ -189,28 +189,36 @@ Ext.define('Vede.view.de.j5Controls', {
                         store: ['Mock Assembly', 'SLIC/Gibson/CPEC', 'Golden Gate', 'Combinatorial Mock Assembly', 'Combinatorial SLIC/Gibson/CPEC', 'Combinatorial Golden Gate'],
                         value: 'Mock Assembly'
                     }, {
-                        xtype: 'button',
-                        flex: 1,
-                        height: 23,
-                        cls: 'runj5Btn',
-                        maxHeight: 23,
-                        maxWidth: 60,
-                        minHeight: 23,
-                        enableToggle: true,
-                        pressed: false,
-                        text: '<b>Run j5</b>'
-                    }, {
-                        xtype: 'button',
-                        flex: 1,
-                        height: 23,
-                        cls: 'downloadj5Btn',
-                        maxHeight: 23,
-                        maxWidth: 140,
-                        minHeight: 23,
-                        enableToggle: true,
-                        pressed: false,
-                        text: '<b>Download Results</b>',
-                        hidden: true
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox',
+                            pack: 'start'
+                        },
+                        items: [{
+                            xtype: 'button',
+                            flex: 1,
+                            height: 23,
+                            cls: 'runj5Btn',
+                            maxHeight: 23,
+                            maxWidth: 60,
+                            minHeight: 23,
+                            enableToggle: true,
+                            pressed: false,
+                            text: '<b>Run j5</b>'
+                        }, {
+                            xtype: 'button',
+                            flex: 1,
+                            height: 23,
+                            cls: 'downloadj5Btn',
+                            margin: '0 0 0 10',
+                            maxHeight: 23,
+                            maxWidth: 140,
+                            minHeight: 23,
+                            enableToggle: true,
+                            pressed: false,
+                            text: '<b>Download Results</b>',
+                            hidden: true
+                        }]
                     }, {
                         xtype: 'displayfield',
                         flex: 1,
