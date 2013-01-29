@@ -111,6 +111,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
+            timeout: 100000,
             params: {
                 deProjectId: deproject.data.id,
                 parameters: JSON.stringify(this.j5Parameters),
