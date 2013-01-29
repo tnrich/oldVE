@@ -31,7 +31,9 @@ module.exports = function (app) {
 		file_id: oIDRef,
 		date: Date,
 		j5Results: Mixed,
-		j5Input: Mixed
+		j5Input: Mixed,
+		assemblyType: String,
+		assemblyMethod: String,
 	});
 	registerSchema('j5run', j5RunSchema);
 

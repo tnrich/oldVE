@@ -515,7 +515,7 @@ Ext.define("Teselagen.models.J5Parameters", {
         obj[this.self.MOC]      =   this.get("misprimingOligoConcValue");
         obj[this.self.OSF]      =   this.get("outputSequenceFormatValue");
         obj[this.self.SPP]      =   this.get("suppressPurePrimersValue");
-        obj[this.self.APT]      =   isCollectionCircular;
+        obj[this.self.APT]      =   isCollectionCircular ? "circular" : "linear";
         return obj;
     }
 });

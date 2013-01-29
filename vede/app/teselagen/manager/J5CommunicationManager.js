@@ -111,6 +111,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
+            timeout: 100000,
             params: {
                 deProjectId: deproject.data.id,
                 parameters: JSON.stringify(this.j5Parameters),
@@ -127,7 +128,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 var store = new Ext.data.JsonStore({
                     proxy: {
                         type: 'memory',
-                        data: response.assemblies,
+                        data:  self.currentResults.j5Results.assemblies,
                         reader: {
                             type: 'json',
                             root: 'files'
@@ -140,7 +141,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
 
-                return cb(true);
+                return cb(true,null,response.warnings);
             },
             failure: function(response, opts) {
                 return cb(false,response);
@@ -149,7 +150,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         
     },
     downloadResults: function (btn) {
-        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;
+        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.zipfile;
         btn.toggle();
     },
 

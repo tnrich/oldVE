@@ -7,51 +7,43 @@ Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.models.j5Output.Warning",
+        "Teselagen.models.j5Output.CombinationPart",
+        "Teselagen.models.j5Output.TargetBin",
+        "Teselagen.models.j5Output.NonDegPart"
     ],
     
     proxy: {
         type: "memory"
     },
     
-    statics: {
-    },
-
-    /**
-     * Input parameters.
-     */
     fields: [
-
-        // fields that may go under J5Run
-        //{name: "type",          type: "String",     defaultValue: ""},
-        //{name: "date",          type: "String",     defaultValue: ""},
-
-        // Tables to be stored as strings, not as models
-        {name: "nonDegenerativeParts",  type: "String",     defaultValue: ""}
-        //{name: "j5results_id",   type: "long"}
-
-        // IDs
-        //{name: "combinatorialAssembly_id",   type: "long"}
+        {name: "cite", type: "String"},
+        {name: "date", type: "String"},
+        {name: "note", type: "String"},
+        {name: "assemblyParameters", type: "String"}
     ],
-    /*
-    validations: [
-        { // or leave this in J5Run
-            field: "type",
-            type: "inclusion",
-            list: Teselagen.constants.Constants.NONMOCKTYPE_LIST
-        }
 
-    ],
-    */
-    
     associations: [
         {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Results",
-            name: "j5Result",
-            getterName: "getJ5Results",
-            setterName: "setJ5Results",
-            associationKey: "j5Results",
-            foreignKey: "j5results_id"
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Warning",
+            name: "warnings"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.CombinationPart",
+            name: "combinationParts"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.TargetBin",
+            name: "targetBins"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.NonDegPart",
+            name: "nonDegParts"
         }
     ]
     
