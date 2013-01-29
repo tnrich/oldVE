@@ -181,6 +181,17 @@ Ext.define('Vede.controller.MainMenuController', {
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
         this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+    },    
+
+    onCreateNewFeatureMenuItemClick: function() {
+        var createNewFeatureWindow = Ext.create(
+            "Vede.view.CreateNewFeatureWindow");
+
+        createNewFeatureWindow.show();
+        createNewFeatureWindow.center();
+
+        this.application.fireEvent("RestrictionEnzymeManagerOpened",
+                                   restrictionEnzymesManagerWindow);
     },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
@@ -325,6 +336,9 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
+            },
+            "#createNewFeatureMenuItem": {
+                click: this.onCreateNewFeatureMenuItemClick
             },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick

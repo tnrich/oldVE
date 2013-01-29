@@ -371,22 +371,31 @@ img {
 }
 
 .projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
   color: #006ADC;
   font-weight: bold;
 }
 
 .projectStartBtn-over #projectStartBtn-btnIconEl {
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
   background-image: url(../images/projectstart-over.png) !important;
 }
 
 .watchTutorialBtn-over #watchTutorialBtn-btnIconEl {
+    -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
   background-image: url(../images/watchtut-over.png) !important;
 }
 
 .readManualsBtn-over #readManualsBtn-btnIconEl {
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
   background-image: url(../images/readman-over.png) !important;
 }
 

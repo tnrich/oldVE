@@ -8,8 +8,9 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
 
     height: 460,
     id: 'RestrictionEnzymeWindowManager',
+    modal: true,
     width: 340,
-    title: 'Restriction Enzyme Manage',
+    title: 'Restriction Enzyme Manager',
 
     initComponent: function() {
         var me = this;
