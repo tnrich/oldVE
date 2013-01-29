@@ -299,7 +299,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             minHeight:200,
                             plugins: {
                                 ptype: 'rowediting',
-                                clicksToEdit: 2
+                                clicksToEdit: 2,
+                                errorSummary: false
                             },
                             columns: [
                                 {
@@ -309,7 +310,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     dataIndex: 'binName',
                                     editor: {
                                         xtype: 'textfield',
-                                        allowBlank: false
+                                        allowBlank: false,
                                     }
                                 },
                                 {
