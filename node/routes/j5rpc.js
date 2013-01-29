@@ -138,7 +138,7 @@ function encoded_parts_list_file(model)
         });
     });
     //quicklog(out);
-    return new Buffer(out).toString('base64');  
+    return new Buffer(out).toString('base64');
 }
 
 /**
@@ -148,13 +148,18 @@ function encoded_parts_list_file(model)
  */
 function encoded_j5_parameters_file(params)
 {
-    var out = "Parameter Name,Value\n"
+    var out = "Parameter Name,Value\n";
     
+    params["PRIMER_TM_SANTALUCIA"] = params["PRIMER_TM_SANTALUCIA"] ? 1 : 0;
+    params["PRIMER_SALT_CORRECTIONS"] = params["PRIMER_SALT_CORRECTIONS"] ? 1 : 0;
+    params["SUPPRESS_PURE_PRIMERS"] = params["SUPPRESS_PURE_PRIMERS"] ? "TRUE" : "FALSE";
+
+
     for(var prop in params) {
         out += prop + ',' + params[prop] + '\n';
     }
     //quicklog(out);
-    return new Buffer(out).toString('base64'); 
+    return new Buffer(out).toString('base64');
 }
 
 /**
@@ -175,10 +180,10 @@ function encoded_target_part_order_list_file(model)
         out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
     
         bin.parts.forEach(function(part){
-            var fro = (bin['fro'] == 'NONE') ? '' : '';
+            var fro = (bin['fro'] == 'None') ? '' : '';
             var direction = (part["directionForward"] == 'true') ? 'forward' : '';
             var dsf = '';//bin["dsf"]
-            var fas = part["fas"];
+            var fas = (part["fas"] == 'None') ? '' : '';
 
             out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
         });
@@ -212,7 +217,6 @@ function encoded_target_part_order_list_file(model)
  */
 function encoded_eugene_rules_list_file(model)
 {
-    return "";
     var eugenes = model["rules"];
     var out = "";
 
@@ -315,7 +319,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
             "reuse_zipped_sequences_file": "FALSE" \
         }');
 
-    execParams["assemblyMethod"] = assemblyMethod;
+    execParams["assembly_method"] = assemblyMethod;
 
     execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
     execParams["encoded_master_plasmids_file"] = masterFiles["masterPlasmidsList"];
@@ -351,7 +355,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         data[prop] = execParams[prop];
     });
 
-    console.log("Executing using method: "+data["assemblyMethod"]);
+    console.log("Executing using method: "+data["assembly_method"]);
 
 
     return data;

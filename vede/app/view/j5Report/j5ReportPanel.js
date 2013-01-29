@@ -20,7 +20,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         frame: true,
         cls: 'j5ReportsPanel',
         margin: '0 0 0 0',
-        width: 300,
+        width: 350,
         bodyBorder: false,
         animCollapse: false,
         collapseDirection: 'left',
@@ -41,17 +41,8 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             xtype: 'menu',
             floating: false,
             height: 453,
-            width: 241,
-            items: [{
-                xtype: 'menuitem',
-                text: 'Menu Item'
-            }, {
-                xtype: 'menuitem',
-                text: 'Menu Item'
-            }, {
-                xtype: 'menuitem',
-                text: 'Menu Item'
-            }]
+            width: 291,
+            items: []
         }]
     }],
     items: [{

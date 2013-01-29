@@ -242,7 +242,7 @@ function readFile(objectId,cb)
 /**
  * Save file.
  */
-function saveFile(j5parameters,fileData,user,deproject,cb)
+function saveFile(data,j5parameters,fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
@@ -262,22 +262,26 @@ function saveFile(j5parameters,fileData,user,deproject,cb)
 
             var j5Run = app.db.model("j5run");
             
-            processJ5Response(fileData,function(parsedResults){
+            processJ5Response(fileData,function(parsedResults,warnings){
 
               var newj5Run = new j5Run({
                 deproject_id: deproject._id,
                 name: "newResult",
                 file_id:objectId.toString(),
                 date: new Date(),
-                j5Input: { j5Parameters : JSON.parse(j5parameters) },
-                j5Results: parsedResults
+                j5Input: {
+                  j5Parameters : JSON.parse(j5parameters)
+                },
+                j5Results: parsedResults,
+                assemblyMethod: data.assemblyMethod,
+                assemblyType: data.ASSEMBLY_PRODUCT_TYPE
               });
 
               newj5Run.save(function(){
                 deproject.j5runs.push(newj5Run);
                 deproject.save(function(){
                   app.GridStoreDB.close();
-                  return cb(newj5Run);
+                  return cb(newj5Run,warnings);
                 });
               });
 
@@ -352,6 +356,8 @@ app.post(j5Method1,restrict,function(req,res){
       data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
+      quicklog( require('util').inspect(data) );
+
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error)
         {
@@ -365,8 +371,13 @@ app.post(j5Method1,restrict,function(req,res){
 
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run){
-            res.send(j5run.j5Results);
+          saveFile(data,req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run,warnings){
+            res.send(
+              {
+                j5Results : j5run.j5Results,
+                warnings: warnings,
+                zipfile: encodedFileData
+              });
           });
         }
       });

@@ -410,10 +410,22 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         Vede.application.fireEvent("saveDesignEvent", function () {
             loadingMessage = self.createLoadingMessage();
             loadingMessage.update(60, "Executing request");
-            currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData) {
+            currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     loadingMessage.update(100, "Completed");
                     loadingMessage.close();
+                    if(warnings.length > 0)
+                    {
+                        msgWarnings = "";
+                        for(var index in warnings)
+                        {
+                            msgWarnings += warnings[index].message+"<br>";
+                        }
+                        alertbox = Ext.MessageBox.alert('Warnings', msgWarnings);
+                        Ext.Function.defer(function () {
+                            alertbox.zIndexManager.bringToFront(alertbox);
+                        }, 100);
+                    }
                 } else {
                     console.log(responseData.responseText);
                     loadingMessage.close();
