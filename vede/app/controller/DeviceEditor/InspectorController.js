@@ -236,6 +236,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     onDeleteEugeneRuleBtnClick: function() {
         var selectedRule = this.eugeneRulesGrid.getSelectionModel().getSelection()[0];
+        this.activeProject.rules().remove(selectedRule);
         selectedRule.destroy();
     },
 
