@@ -6,6 +6,7 @@ Ext.define('Vede.view.de.EugeneRuleWindow', {
     modal: true,
     draggable: true,
     resizable: false,
+    closable: false,
 
     initComponent: function() {
         var me = this;

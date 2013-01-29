@@ -278,7 +278,7 @@ Ext.define('Vede.controller.MainMenuController', {
             "#rebaseMenuItem": {
                 click: this.onRebaseMenuItemClick
             },
-            "button[text=Cancel]": {
+            "#VectorEditorPanel > button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
             "button[cls='ImportSequence']": {

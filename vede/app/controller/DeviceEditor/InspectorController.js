@@ -261,7 +261,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.set("compositionalOperator", newCompositionalOperator);
         newRule.setOperand2(this.DeviceDesignManager.getPartByName(this.activeProject, 
                                                                    newOperand2));
-        
         this.activeProject.addToRules(newRule);
 
         var rulesStore = Ext.create("Ext.data.Store", {
