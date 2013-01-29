@@ -143,12 +143,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.selectedPart = newPart;
         }
-
-        var rulesStore = Ext.create("Ext.data.Store", {
-            model: "Teselagen.models.EugeneRule",
-            data: this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                 this.selectedPart)
-        });
+        
+        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                        this.selectedPart)
 
         this.eugeneRulesGrid.reconfigure(rulesStore);
 
@@ -263,11 +260,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                                    newOperand2));
         this.activeProject.addToRules(newRule);
 
-        var rulesStore = Ext.create("Ext.data.Store", {
-            model: "Teselagen.models.EugeneRule",
-            data: this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                 this.selectedPart)
-        });
+        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                        this.selectedPart)
+
         this.eugeneRulesGrid.reconfigure(rulesStore);
 
         newEugeneRuleWindow.close();

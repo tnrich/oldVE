@@ -190,14 +190,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
-        var rules = [];
-        for (var i = 0; i < this.rules().count(); i++) {
-            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).getOperand2() === pPart) {
-                rules.push(this.rules().getAt(i));
-            }
-        }
+        this.rules().clearFilter();
 
-        return rules;
+        this.rules().filterBy(function(rule) {
+            if(rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        return this.rules();
     },
 
     /**

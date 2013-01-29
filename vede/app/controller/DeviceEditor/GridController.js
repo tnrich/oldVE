@@ -272,7 +272,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                             this.activeProject, operand1);
 
         // If there are no other rules involving operand 1, remove its indicator.
-        if(operand1Rules.length == 0) {
+        if(operand1Rules.getCount() === 0) {
             this.getGridPartFromJ5Part(operand1).removeEugeneRuleIndicator();
         }
 
@@ -281,7 +281,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var operand2Rules = this.DeviceDesignManager.getRulesInvolvingPart(
                                                 this.activeProject, operand2);
 
-            if(operand2Rules.length == 0) {
+            if(operand2Rules.getCount() === 0) {
                 this.getGridPartFromJ5Part(operand2).removeEugeneRuleIndicator();
             }
         }
