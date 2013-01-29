@@ -262,7 +262,7 @@ function saveFile(data,j5parameters,fileData,user,deproject,cb)
 
             var j5Run = app.db.model("j5run");
             
-            processJ5Response(fileData,function(parsedResults,warnings){
+            processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
 
               var newj5Run = new j5Run({
                 deproject_id: deproject._id,
@@ -273,7 +273,7 @@ function saveFile(data,j5parameters,fileData,user,deproject,cb)
                   j5Parameters : JSON.parse(j5parameters)
                 },
                 j5Results: parsedResults,
-                assemblyMethod: data.assemblyMethod,
+                assemblyMethod: data.assembly_method,
                 assemblyType: data.ASSEMBLY_PRODUCT_TYPE
               });
 
