@@ -344,18 +344,24 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             parts.on("add", this.onAddToParts, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        this.renderCollectionInfo();
     },
 
     onBinsUpdate: function (activeBins, updatedBin, operation, modified) {},
 
-    onRemoveFromBins: function (activeBins, removedBin, index) {},
+    onRemoveFromBins: function (activeBins, removedBin, index) {
+        this.renderCollectionInfo();
+    },
 
     onAddToParts: function (parts, addedParts, index) {
         this.columnsGrid.getView().refresh();
+        this.renderCollectionInfo();
     },
 
     onRemoveFromParts: function (parts, removedPart, index) {
         this.columnsGrid.getView().refresh();
+        this.renderCollectionInfo();
     },
 
     renderCollectionInfo: function () {
@@ -365,8 +371,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
 
         if(this.activeProject) {
-            j5ReadyField.setValue(this.activeProject.getJ5Collection().get("j5Ready"));
-            combinatorialField.setValue(this.activeProject.getJ5Collection().get("combinatorial"));
+            j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
+                                                            this.activeProject));
+            combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
+                                                            this.activeProject));
 
             if(this.activeProject.getJ5Collection().get("isCircular")) {
                 circularPlasmidField.setValue(true);
