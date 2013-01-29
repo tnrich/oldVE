@@ -98,7 +98,9 @@ Ext.define('Vede.view.de.grid.Part', {
             if(this.getPart().isEmpty()) {
                 this.partCell.down().removeBodyCls("gridPartCell");
                 this.partCell.down().removeBodyCls("gridPartCell-selected");
-                this.partCell.down().addBodyCls("gridPartCell-alert");
+
+                // Add the red background. Commented out for ticket #447.
+                //this.partCell.down().addBodyCls("gridPartCell-alert");
             }
         }
 
