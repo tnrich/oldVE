@@ -195,9 +195,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
-        console.log("bin '" + updatedBin.get("binName") + "' field " + modified +
-                    " modified, operation " + operation);
-
         this.rerenderBin(updatedBin);
     },
 
@@ -210,8 +207,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onAddToParts: function(parts, addedParts, index) {
-        console.log("part '" + addedParts[0].get("name") + "' added");
-
         // For each part added, insert it to the part's bin.
         Ext.each(addedParts, function(addedPart) {
             var newPart = Ext.create("Vede.view.de.grid.Part", {
@@ -224,9 +219,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
-        console.log("part '" + updatedPart.get("name") + "' field " + modified +
-                    " modified, new value " + updatedPart.get(modified));
-
         if(modified)
         {
             if(modified.indexOf("fas") >= 0) {

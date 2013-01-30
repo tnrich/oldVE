@@ -407,6 +407,18 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Gets the parent bin of a part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Teselagen.models.J5Bin}
+     */
+    getBinByPart: function(pDevice, pPart) {
+        var parentIndex = this.getBinAssignment(pDevice, pPart);
+
+        return this.getBinByIndex(pDevice, parentIndex);
+    },
+
+    /**
      * Returns the bin's name at pBinIndex. (Indices begin at 0.)
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pBinIndex

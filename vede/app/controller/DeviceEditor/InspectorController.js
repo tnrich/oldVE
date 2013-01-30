@@ -154,12 +154,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     onBinSelected: function (j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
-        var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
-        var contentArray = [];
 
         this.inspector.setActiveTab(1);
 
         selectionModel.select(j5Bin);
+
+        this.updateColumnContentDisplayField(j5Bin);
+    },
+
+    updateColumnContentDisplayField: function(j5Bin) {
+        var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
+        var contentArray = [];
 
         j5Bin.parts().each(function (part) {
             contentArray.push(part.get("name"));
@@ -282,10 +287,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
-    onInspectorGridRender: function (grid) {
-        console.log("render");
-    },
-
     /**
      * When we switch to a new tab, switch the current active project to the one
      * associated with the new tab, and reset event handlers so they refer to the
@@ -303,6 +304,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     var parts = bin.parts();
 
                     parts.un("add", this.onAddToParts, this);
+                    parts.un("update", this.onUpdateParts, this);
                     parts.un("remove", this.onRemoveFromParts, this);
                 }, this);
             }
@@ -321,6 +323,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 var parts = bin.parts();
 
                 parts.on("add", this.onAddToParts, this);
+                parts.on("update", this.onUpdateParts, this);
                 parts.on("remove", this.onRemoveFromParts, this);
             }, this);
 
@@ -343,6 +346,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         Ext.each(addedBins, function (j5Bin) {
             parts = j5Bin.parts();
             parts.on("add", this.onAddToParts, this);
+            parts.on("update", this.onUpdateParts, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
 
@@ -358,6 +362,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onAddToParts: function (parts, addedParts, index) {
         this.columnsGrid.getView().refresh();
         this.renderCollectionInfo();
+    },
+
+    onUpdateParts: function(parts, updatedPart, operation, modified) {
+        if(modified.indexOf("name") !== -1) {
+            var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
+                                                                  updatedPart);
+
+            this.updateColumnContentDisplayField(parentBin);
+        }
     },
 
     onRemoveFromParts: function (parts, removedPart, index) {
@@ -384,6 +397,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.columnsGrid.reconfigure(this.activeProject.getJ5Collection().bins());
+
+            var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
+
+            if(selectedBin) {
+                this.updateColumnContentDisplayField(selectedBin);
+            }
         }
     },
 

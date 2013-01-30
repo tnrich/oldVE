@@ -241,7 +241,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
         {
             xtype: 'panel',
             layout: {
-                type: 'fit'
+                type: 'auto'
             },
             title: 'Collection Info',
             items: [
@@ -295,8 +295,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             autoScroll: true,
                             columnLines: true,
-                            height:200,
-                            minHeight:200,
+                            height:101,
+                            minHeight:101,
                             plugins: {
                                 ptype: 'rowediting',
                                 clicksToEdit: 2,
@@ -416,18 +416,25 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     text: 'Remove Column'
                                 }
                             ]
-                        },
+                        }
+                    ]
+                },
+                {
+                    xtype: 'form',
+                    flex: 1,
+                    title: 'Column Content',
+                    items: [
                         {
                             xtype: 'displayfield',
                             cls: 'columnContentDisplayField',
                             margin: 10,
-                            fieldLabel: 'Column Content',
-                            labelAlign: 'top'
+                            fieldLabel: '',
                         }
                     ]
                 }
             ]
-        }]
+        }
+    ]
 }
 
 
