@@ -25,7 +25,6 @@ Ext.define('Vede.view.de.j5Parameters', {
                     align: 'stretch',
                     type: 'hbox'
                 },
-                autoScroll: true,
                 items: [{
                     xtype: 'container',
                     flex: 1,
