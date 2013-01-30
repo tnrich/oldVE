@@ -118,8 +118,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
-        this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel")
-
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
@@ -213,36 +211,40 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onAddEugeneRuleBtnClick: function() {
-        var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
-        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-            compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
-        });
-        var ruleForm = newEugeneRuleDialog.down("form");
-        var operand2Field = ruleForm.down("combobox[cls='operand2Field']");
+        if(this.selectedPart) {
+            var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
+            var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
+            });
+            var ruleForm = newEugeneRuleDialog.down("form");
+            var operand2Field = ruleForm.down("combobox[cls='operand2Field']");
 
-        var allParts = this.DeviceDesignManager.getAllParts(
-                            this.activeProject, this.selectedPart);
-        var partsStore = [];
-        Ext.each(allParts, function(part) {
-            partsStore = partsStore.concat([part.get("name")]);
-        });
+            var allParts = this.DeviceDesignManager.getAllParts(
+                                this.activeProject, this.selectedPart);
+            var partsStore = [];
+            Ext.each(allParts, function(part) {
+                partsStore = partsStore.concat([part.get("name")]);
+            });
 
-        newEugeneRule.setOperand1(this.selectedPart);
+            newEugeneRule.setOperand1(this.selectedPart);
 
-        newEugeneRuleDialog.show();
+            newEugeneRuleDialog.show();
 
-        ruleForm.loadRecord(newEugeneRule);
-        ruleForm.down("displayfield[cls='operand1Field']").setValue(
-                                    this.selectedPart.get("name"));
+            ruleForm.loadRecord(newEugeneRule);
+            ruleForm.down("displayfield[cls='operand1Field']").setValue(
+                                        this.selectedPart.get("name"));
 
-        operand2Field.bindStore(partsStore); 
-        operand2Field.setValue(partsStore[0]);
+            operand2Field.bindStore(partsStore); 
+            operand2Field.setValue(partsStore[0]);
+        }
     },
 
     onDeleteEugeneRuleBtnClick: function() {
-        var selectedRule = this.eugeneRulesGrid.getSelectionModel().getSelection()[0];
-        this.activeProject.rules().remove(selectedRule);
-        selectedRule.destroy();
+        if(this.eugeneRulesGrid.getSelectionModel().getSelection().length > 0) {
+            var selectedRule = this.eugeneRulesGrid.getSelectionModel().getSelection()[0];
+            this.activeProject.rules().remove(selectedRule);
+            selectedRule.destroy();
+        }
     },
 
     onSubmitNewEugeneRuleBtnClick: function() {
@@ -336,6 +338,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.columnsGrid = this.inspector.down(
                                 "form[cls='collectionInfoForm'] > gridpanel");
             this.columnsGrid.on("select", this.onGridBinSelect, this);
+
+            this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel")
 
             this.renderCollectionInfo();
         }

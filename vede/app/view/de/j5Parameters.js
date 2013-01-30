@@ -5,10 +5,10 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 600,
-    maxHeight: 830,
-    width: 845,
-    maxWidth: 845,
+    height: 610,
+    maxHeight: 610,
+    width: 850,
+    maxWidth: 850,
     title: 'j5 Parameters',
     cls: 'j5Parameters_Window',
     autoScroll: true,
@@ -25,7 +25,6 @@ Ext.define('Vede.view.de.j5Parameters', {
                     align: 'stretch',
                     type: 'hbox'
                 },
-                autoScroll: true,
                 items: [{
                     xtype: 'container',
                     flex: 1,
@@ -371,7 +370,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                 }]
             }, {
                 xtype: 'container',
-                height: 60,
+                height: 23,
                 layout: {
                     type: 'absolute'
                 },
@@ -379,7 +378,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'resetj5DefaultParamsBtn',
                     x: 0,
-                    y: 40,
+                    y: 0,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
@@ -389,7 +388,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'resetj5ServerParamsBtn',
                     x: 120,
-                    y: 40,
+                    y: 0,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
@@ -399,7 +398,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'j5ParamsCancelBtn',
                     x: 640,
-                    y: 40,
+                    y: 0,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
@@ -410,7 +409,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'j5ParamsOKBtn',
                     x: 730,
-                    y: 40,
+                    y: 0,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
