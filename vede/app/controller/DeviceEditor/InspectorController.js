@@ -365,11 +365,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onUpdateParts: function(parts, updatedPart, operation, modified) {
-        if(modified.indexOf("name") !== -1) {
-            var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
-                                                                  updatedPart);
+        if(modified)
+        {
+            if(modified.indexOf("name") !== -1) {
+                var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
+                                                                      updatedPart);
 
-            this.updateColumnContentDisplayField(parentBin);
+                this.updateColumnContentDisplayField(parentBin);
+            }
         }
     },
 
