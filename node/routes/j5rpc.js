@@ -167,7 +167,7 @@ function encoded_j5_parameters_file(params)
  * @param model
  * @returns {String} base64
  */
-function encoded_target_part_order_list_file(model)
+function encoded_target_part_order_list_file(model,method)
 {
  
 
@@ -177,18 +177,26 @@ function encoded_target_part_order_list_file(model)
     
     bins.forEach(function(bin){
         var direction = '';
-        out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
-    
-        bin.parts.forEach(function(part){
-            var fro = (bin['fro'] == 'None') ? '' : '';
-            var direction = (part["directionForward"] == 'true') ? 'forward' : '';
-            var dsf = '';//bin["dsf"]
-            var fas = (part["fas"] == 'None') ? '' : '';
+        if(method.match(/Combinatorial/))
+        {
+            out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
+        
+            bin.parts.forEach(function(part){
+                var fro = (bin['fro'] == 'None') ? '' : '';
+                var direction = (part["directionForward"] == 'true') ? 'forward' : '';
+                var dsf = '';//bin["dsf"]
+                var fas = (part["fas"] == 'None') ? '' : '';
 
-            out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
-        });
+                out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
+            });
+        }
+        else
+        {
+            direction = (bin.parts[0]["directionForward"] == 'true') ? 'forward' : '';
+            out += bin.parts[0]["name"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
+        }
     });
-    /* 
+    /*
     (>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps
     >vector_backbone,,,2,,,
     pS8c-vector_backbone,forward,,,,,
@@ -336,7 +344,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
     data["encoded_sequences_list_file"] = encoded_sequences_list_file(model);
     data["encoded_zipped_sequences_file"] = encoded_zipped_sequences_file(model);
     data["encoded_parts_list_file"] = encoded_parts_list_file(model);
-    data["encoded_target_part_order_list_file"] = encoded_target_part_order_list_file(model);
+    data["encoded_target_part_order_list_file"] = encoded_target_part_order_list_file(model,assemblyMethod);
     data["encoded_eugene_rules_list_file"] = encoded_eugene_rules_list_file(model);
     data["encoded_j5_parameters_file"] = encoded_j5_parameters_file(parameters);
     
