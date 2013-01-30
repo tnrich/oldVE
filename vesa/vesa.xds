@@ -16,7 +16,7 @@
         "appName": "MyApp"
     },
     "xdsVersion": "2.1.0",
-    "xdsBuild": 676,
+    "xdsBuild": 678,
     "schemaVersion": 1,
     "upgradeVersion": 210000000498,
     "framework": "ext40",
@@ -215,6 +215,14 @@
                 "app/view/ProjectManagerWindow.js"
             ],
             "className": "ProjectManagerWindow"
+        },
+        "5f55a0d3-e51a-4747-a1e5-33469cabd931": {
+            "paths": [
+                "metadata/view/MyWindow4",
+                "app/view/override/MyWindow4.js",
+                "app/view/MyWindow4.js"
+            ],
+            "className": "MyWindow4"
         }
     },
     "viewOrderMap": {
@@ -223,7 +231,8 @@
             "36796554-cdfd-4b2b-bfce-3a09263e3130",
             "80fca5e0-4950-4656-b37a-ee0401bd3048",
             "b2e50587-a656-45cb-8b69-0312e55ad096",
-            "52420128-9754-4bb8-92c8-187a378e4e5f"
+            "52420128-9754-4bb8-92c8-187a378e4e5f",
+            "5f55a0d3-e51a-4747-a1e5-33469cabd931"
         ],
         "store": [],
         "controller": [

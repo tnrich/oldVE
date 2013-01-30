@@ -569,3 +569,15 @@ background: #F8F8F8;
   background-color: rgba(225, 0, 0, 0.1);
 }
 
+.j5Parameters_Window label {
+  font-size: 10px !important;
+}
+
+.j5Parameters_Window, .j5Parameters_Window .x-window-body {
+  background: rgb(240,240,240);
+}
+
+.j5Parameters_Buttons {
+  background: rgb(225,225,225);
+}
+

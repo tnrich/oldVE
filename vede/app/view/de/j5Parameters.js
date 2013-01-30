@@ -5,7 +5,7 @@
 Ext.define('Vede.view.de.j5Parameters', {
     extend: 'Ext.window.Window',
 
-    height: 600,
+    height: 620,
     maxHeight: 830,
     width: 845,
     maxWidth: 845,
@@ -371,7 +371,8 @@ Ext.define('Vede.view.de.j5Parameters', {
                 }]
             }, {
                 xtype: 'container',
-                height: 60,
+                cls: 'j5Parameters_Buttons',
+                height: '40px',
                 layout: {
                     type: 'absolute'
                 },
@@ -379,7 +380,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'resetj5DefaultParamsBtn',
                     x: 0,
-                    y: 40,
+                    y: 5,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
@@ -389,7 +390,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'resetj5ServerParamsBtn',
                     x: 120,
-                    y: 40,
+                    y: 5,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
@@ -399,7 +400,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'j5ParamsCancelBtn',
                     x: 640,
-                    y: 40,
+                    y: 5,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
@@ -410,7 +411,7 @@ Ext.define('Vede.view.de.j5Parameters', {
                     xtype: 'button',
                     cls: 'j5ParamsOKBtn',
                     x: 730,
-                    y: 40,
+                    y: 5,
                     margin: 5,
                     maxHeight: 23,
                     minHeight: 23,
