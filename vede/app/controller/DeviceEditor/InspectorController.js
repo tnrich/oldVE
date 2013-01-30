@@ -166,6 +166,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         j5Bin.parts().each(function (part) {
             contentArray.push(part.get("name"));
+            contentArray.push(": ");
+            contentArray.push(part.get("fas"));
             contentArray.push("<br>");
         });
 
@@ -371,7 +373,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onUpdateParts: function(parts, updatedPart, operation, modified) {
         if(modified)
         {
-            if(modified.indexOf("name") !== -1) {
+            if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
                                                                       updatedPart);
 
