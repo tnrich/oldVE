@@ -1,11 +1,12 @@
-Ext.define('Vede.view.de.EugeneRuleWindow', {
+Ext.define('Vede.view.de.EugeneRuleDialog', {
     extend: 'Ext.window.Window',
 
     title: 'Add Eugene Rule',
-    cls: 'addEugeneRuleWindow',
+    cls: 'addEugeneRuleDialog',
     modal: true,
     draggable: true,
     resizable: false,
+    closable: false,
 
     initComponent: function() {
         var me = this;

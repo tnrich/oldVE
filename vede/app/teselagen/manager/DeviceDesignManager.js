@@ -131,7 +131,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Returns the EugeneRules Store of EugeneRules that containt the Part in either operand.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
-     * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
+     * @return {Ext.data.Store} Store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pDevice, pPart) {
         return pDevice.getRulesInvolvingPart(pPart);
@@ -404,6 +404,18 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     getBinByIndex: function(pDevice, pBinIndex) {
         return pDevice.getJ5Collection().bins().getAt(pBinIndex);
+    },
+
+    /**
+     * Gets the parent bin of a part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Teselagen.models.J5Bin}
+     */
+    getBinByPart: function(pDevice, pPart) {
+        var parentIndex = this.getBinAssignment(pDevice, pPart);
+
+        return this.getBinByIndex(pDevice, parentIndex);
     },
 
     /**
