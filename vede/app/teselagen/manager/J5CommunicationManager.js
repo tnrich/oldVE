@@ -143,8 +143,9 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
                 return cb(true,null,response.warnings);
             },
-            failure: function(response, opts) {
-                return cb(false,response);
+            failure: function(response) {
+                if(response.status == -1) return cb(false,{"responseText":"Execution aborted."});
+                else return cb(false,response);
             }
         });
         

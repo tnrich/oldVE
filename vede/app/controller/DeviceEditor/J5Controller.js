@@ -313,6 +313,35 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }, this);
     },
 
+    createAbortableMessage: function () {
+        var msgBox = Ext.MessageBox.show({
+            title: 'Please wait',
+            msg: 'Executing j5 request',
+            width: 300,
+            closable: false,
+            buttons: Ext.MessageBox.CANCEL,
+            fn: function(){
+                Ext.Function.defer(function () {
+                    Ext.Ajax.abort();
+                }, 100);
+            },
+            progress: true
+        });
+
+        Ext.Function.defer(function () {
+            msgBox.zIndexManager.bringToFront(msgBox);
+        }, 100);
+
+        return {
+            close: function () {
+                msgBox.close();
+            },
+            update: function (progress, msg) {
+                msgBox.updateProgress(progress / 100, progress + '% completed', msg);
+            }
+        };
+    },
+
     createLoadingMessage: function () {
         var msgBox = Ext.MessageBox.show({
             title: 'Please wait',
@@ -408,7 +437,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         loadingMessage.update(30, "Saving design");
 
         Vede.application.fireEvent("saveDesignEvent", function () {
-            loadingMessage = self.createLoadingMessage();
+            loadingMessage = self.createAbortableMessage();
             loadingMessage.update(60, "Executing request");
             currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {

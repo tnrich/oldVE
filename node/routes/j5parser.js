@@ -14,15 +14,9 @@ function quicklog(s) {
   fs.closeSync(fd);
 }
 
-function processNonCombinatorial(file,cb)
-{
-    processAssembly(file,cb);
-}
-
-function processAssembly(file,cb){
+function processNonCombinatorial_MOCK(lines,cb){
     try {
-
-        var lines = file.fileContent.split(/\r?\n/);
+        console.log("Processing processNonCombinatorial_MOCK");
 
         var obj = {};
         /* Lines by line processing */
@@ -32,14 +26,7 @@ function processAssembly(file,cb){
         // Cite
         obj.cite = lines.splice(0,1)[0];
 
-        //Warnings
-        obj.warnings = [];
-        var currentWarning = lines.splice(0,1)[0];
-        while(currentWarning.match(/"Warning:/) !== null)
-        {
-            obj.warnings.push({"message": currentWarning});
-            currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
-        }
+        lines.splice(0,1)[0]; // Empty space
 
         //Assembly Parameteres
         obj.assemblyParameters = {};
@@ -51,9 +38,18 @@ function processAssembly(file,cb){
             obj.assemblyParameters[val] = values[key];       
         });
 
-        lines.splice(0,1)[0] //Empty space
+        lines.splice(0,1)[0]; // Empty space
 
-        obj.note = lines.splice(0,1)[0];
+        //Warnings
+        obj.warnings = [];
+        var currentWarning = lines.splice(0,1)[0];
+        while(currentWarning.match(/"Warning:/) !== null)
+        {
+            obj.warnings.push({"message": currentWarning});
+            currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
+        }
+
+        obj.note = currentWarning; // In this method there is not space between warnings and note
 
         lines.splice(0,1)[0] //Empty space
 
@@ -82,10 +78,11 @@ function processAssembly(file,cb){
             currentPart = lines.splice(0,1)[0];
         }
 
+        lines.splice(0,1)[0]; // Extra empty space
+
         //Target Parts
-        lines.splice(0,1)[0];
-        lines.splice(0,1)[0];
         lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Part
         lines.splice(0,1)[0]; //Columns
 
         obj.targetParts = [];
@@ -104,13 +101,136 @@ function processAssembly(file,cb){
             currentPart = lines.splice(0,1)[0];
         }
 
+        lines.splice(0,1)[0]; // Extra empty space
+
+        //Final Assembled Vector
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.finalAssembledVector = [];
+        var currentLine = lines.splice(0,1)[0];
+        while(currentLine!== "" && currentLine != null)
+        {
+            var splitted = currentLine.split(',');  // Length,Sequence
+
+            obj.finalAssembledVector.push({
+                length: splitted[0],
+                sequence: splitted[1]
+            });
+            currentLine = lines.splice(0,1)[0];
+        }
+
+
+        cb(obj);
+    
+        }
+    catch(err)
+        {
+            console.log("Error processing j5 output");
+            console.log(err);
+            cb({warnings:["Error processing j5 output"]});
+        }
+}
+
+function processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb){
+    try {
+        console.log("Processing processNonCombinatorial_SLIC_GIBSON_CPEC");
+
+        var obj = {};
+        /* Lines by line processing */
+        
+        // Type of assembly and date
+        obj.date = lines.splice(0,1)[0];
+        // Cite
+        obj.cite = lines.splice(0,1)[0];
+
+        lines.splice(0,1)[0]; // Empty space
+
+        //Assembly Parameteres
+        obj.assemblyParameters = {};
+        lines.splice(0,1)[0]; //Assembly parameters title
+        var params = lines.splice(0,1)[0].split(',');
+        var values = lines.splice(0,1)[0].split(',');
+
+        params.forEach(function(val,key){
+            obj.assemblyParameters[val] = values[key];       
+        });
+
+        lines.splice(0,1)[0]; // Empty space
+
+        //Warnings
+        obj.warnings = [];
+        var currentWarning = lines.splice(0,1)[0];
+        while(currentWarning.match(/"Warning:/) !== null)
+        {
+            obj.warnings.push({"message": currentWarning});
+            currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
+        }
+
+        obj.note = currentWarning; // In this method there is not space between warnings and note
+
+        lines.splice(0,1)[0] //Empty space
+
+
+        //Non degenerate Part IDs and Sources
+        lines.splice(0,1)[0]; // Header
+        lines.splice(0,1)[0]; // ????
+        lines.splice(0,1)[0]; // Columns Header
+
+        obj.nondegenerateParts = [];
+        var currentPart = lines.splice(0,1)[0];
+        while(currentPart!== "")
+        {
+            splittedPart = currentPart.split(',');
+            // ""ID Number",Name,"Source Plasmid","Reverse Complement","Start (bp)","End (bp)","Size (bp)",Sequence"
+            obj.nondegenerateParts.push({
+                id: splittedPart[0],
+                name: splittedPart[1],
+                source: splittedPart[2],
+                revComp: splittedPart[3],
+                startBP: splittedPart[4],
+                stopBP: splittedPart[5],
+                size: splittedPart[6],
+                sequence: splittedPart[7]
+            });
+            currentPart = lines.splice(0,1)[0];
+        }
+
+        lines.splice(0,1)[0]; // Extra empty space
+
+        //Target Parts
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Part
+        lines.splice(0,1)[0]; //Columns
+
+        obj.targetParts = [];
+        var currentPart = lines.splice(0,1)[0];
+        while(currentPart!== "")
+        {
+            splitted = currentPart.split(',');
+            // "ID Number",Name"
+            obj.targetParts.push({
+                order: splitted[0],
+                id: splitted[1],
+                name: splitted[2],
+                direction: splitted[3],
+                strategy: splitted[4]
+            });
+            currentPart = lines.splice(0,1)[0];
+        }
+
+        // Extra warnings
+        lines.splice(0,1)[0]; //Extra empty space
+
         var currentLine = lines.splice(0,1)[0];
         if(currentLine.match(/Warning:/))
         {
-            obj.warnings.push({"message": nextLine});
+            obj.warnings.push({"message": currentLine});
             currentLine = lines.splice(0,1)[0];
         }
         else lines.splice(0,0,currentLine)[0];
+
+        lines.splice(0,1)[0]; // Empty space
 
         //"Incompatibilities between Assembly Pieces:"
         lines.splice(0,1)[0]; //Columns
@@ -129,20 +249,361 @@ function processAssembly(file,cb){
             currentAssembly = lines.splice(0,1)[0];
         }
 
-        cb(obj);
+        //"Suggested Assembly Piece Contigs For Hierarchical Assembly:"
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
 
+        obj.suggestedAssemblyPieceContigs = [];
+        var currentAssembly = lines.splice(0,1)[0];
+        while(currentAssembly!== "")
+        {
+            var splitted = currentAssembly.split(',');  // "Suggested Assembly Piece Contigs For Hierarchical Assembly:"
+
+            obj.suggestedAssemblyPieceContigs.push({
+                contig: splitted[0],
+                assembly_piece_container: splitted[1]
+            });
+            currentAssembly = lines.splice(0,1)[0];
+        }
+
+        //Oligo Synthesis
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.oligoSynthesis = [];
+        var currentLine = lines.splice(0,1)[0];
+        while(currentLine!== "")
+        {
+            var splitted = currentLine.split(',');  // "ID Number",Name,"First Target Part","Last Target Part",Length,Tm,"Tm (3' only)",Cost,Sequence
+
+            obj.oligoSynthesis.push({
+                id_number: splitted[0],
+                name: splitted[1],
+                first_target_part: splitted[2],
+                last_target_part: splitted[3],
+                length: splitted[4],
+                tm: splitted[5],
+                tm3: splitted[6],
+                cost: splitted[7],
+                sequence: splitted[8]
+            });
+            currentLine = lines.splice(0,1)[0];
+        }
+
+        //PCR Reactions
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.pcrReactions = [];
+        var currentPCR = lines.splice(0,1)[0];
+        while(currentPCR!== "")
+        {
+            splitted = currentPCR.split(',');
+            // "ID Number","Primary Template","Alternate Template","ID Number",Name,"ID Number",Name,Note,"Mean Oligo Tm","Delta Oligo Tm","Mean Oligo Tm (3' only)","Delta Oligo Tm (3' only)",Length,Sequence
+            obj.pcrReactions.push({
+                pcrReaction:
+                    {
+                        id: splitted[0],
+                        primary_template: splitted[1],
+                        alternate_template: splitted[2]
+                    },
+                forwardOligo:
+                    {
+                        id: splitted[3],
+                        name: splitted[4]
+                    },
+                reverseOligo:
+                    {
+                        id: splitted[5],
+                        name: splitted[6]
+                    },
+                note: splitted[7],
+                mean_oligo: splitted[8]
+            });
+            currentPCR = lines.splice(0,1)[0];
+        }
+
+        // Assembly Pieces (SLIC/GIBSON/CPEC)
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.assemblyPieces = [];
+        var currentPiece = lines.splice(0,1)[0];
+        while(currentPiece!== "")
+        {
+            splitted = currentPiece.split(',');
+            // "ID Number",Type,"Type ID Number",Part(s),"Overhang with Previous","Overhang with Next","Relative Overhang Position","Sequence Length",Sequence
+            obj.assemblyPieces.push({
+                id_number: splitted[0],
+                type: splitted[1],
+                type_id: splitted[2],
+                parts: splitted[3],
+                overhang_with_next: splitted[4],
+                relative_overhang_position: splitted[5],
+                sequence_length: splitted[6],
+                sequence: splitted[7]
+            });
+            currentPiece = lines.splice(0,1)[0];
+        }
+
+        // Extra warnings
+
+        var currentLine = lines.splice(0,1)[0];
+        if(currentLine.match(/Warning:/))
+        {
+            obj.warnings.push({"message": currentLine});
+            currentLine = lines.splice(0,1)[0];
+        }
+        else lines.splice(0,0,currentLine)[0];
+
+
+        //Final Assembled Vector
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.finalAssembledVector = [];
+        var currentLine = lines.splice(0,1)[0];
+        while(currentLine!== "" && currentLine != null)
+        {
+            var splitted = currentLine.split(',');  // Length,Sequence
+
+            obj.finalAssembledVector.push({
+                length: splitted[0],
+                sequence: splitted[1]
+            });
+            currentLine = lines.splice(0,1)[0];
+        }
+
+
+        cb(obj);
+    
         }
     catch(err)
         {
             console.log("Error processing j5 output");
             console.log(err);
             cb({warnings:["Error processing j5 output"]});
-        }
+        }   
 }
 
-function processAssemblies(file,cb)
-{
-    cb(file);
+function processNonCombinatorial_GOLDEN_GATE(lines,cb){
+    try {
+        console.log("Processing processNonCombinatorial_GOLDEN_GATE");
+
+        var obj = {};
+        /* Lines by line processing */
+        
+        // Type of assembly and date
+        obj.date = lines.splice(0,1)[0];
+        // Cite
+        obj.cite = lines.splice(0,1)[0];
+
+        lines.splice(0,1)[0]; // Empty space
+
+        //Assembly Parameteres
+        obj.assemblyParameters = {};
+        lines.splice(0,1)[0]; //Assembly parameters title
+        var params = lines.splice(0,1)[0].split(',');
+        var values = lines.splice(0,1)[0].split(',');
+
+        params.forEach(function(val,key){
+            obj.assemblyParameters[val] = values[key];       
+        });
+
+        lines.splice(0,1)[0]; // Empty space
+
+        //Warnings
+        obj.warnings = [];
+        var currentWarning = lines.splice(0,1)[0];
+        while(currentWarning.match(/"Warning:/) !== null)
+        {
+            obj.warnings.push({"message": currentWarning});
+            currentWarning = lines.splice(0,1)[0]; // Empty space after warnings
+        }
+
+        obj.note = currentWarning; // In this method there is not space between warnings and note
+
+        lines.splice(0,1)[0] //Empty space
+
+        //Non degenerate Part IDs and Sources
+        lines.splice(0,1)[0]; // Header
+        lines.splice(0,1)[0]; // ????
+        lines.splice(0,1)[0]; // Columns Header
+
+        obj.nondegenerateParts = [];
+        var currentPart = lines.splice(0,1)[0];
+        while(currentPart!== "")
+        {
+            splittedPart = currentPart.split(',');
+            // ""ID Number",Name,"Source Plasmid","Reverse Complement","Start (bp)","End (bp)","Size (bp)",Sequence"
+            obj.nondegenerateParts.push({
+                id: splittedPart[0],
+                name: splittedPart[1],
+                source: splittedPart[2],
+                revComp: splittedPart[3],
+                startBP: splittedPart[4],
+                stopBP: splittedPart[5],
+                size: splittedPart[6],
+                sequence: splittedPart[7]
+            });
+            currentPart = lines.splice(0,1)[0];
+        }
+
+        lines.splice(0,1)[0]; // Extra empty space
+
+        //Target Parts
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Part
+        lines.splice(0,1)[0]; //Columns
+
+        obj.targetParts = [];
+        var currentPart = lines.splice(0,1)[0];
+        while(currentPart!== "")
+        {
+            splitted = currentPart.split(',');
+            // "ID Number",Name"
+            obj.targetParts.push({
+                order: splitted[0],
+                id: splitted[1],
+                name: splitted[2],
+                direction: splitted[3],
+                strategy: splitted[4]
+            });
+            currentPart = lines.splice(0,1)[0];
+        }
+
+        lines.splice(0,1)[0]; //Extra empty space
+
+        //Oligo Synthesis
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.oligoSynthesis = [];
+        var currentLine = lines.splice(0,1)[0];
+        while(currentLine!== "")
+        {
+            var splitted = currentLine.split(',');  // "ID Number",Name,"First Target Part","Last Target Part",Length,Tm,"Tm (3' only)",Cost,Sequence
+
+            obj.oligoSynthesis.push({
+                id_number: splitted[0],
+                name: splitted[1],
+                first_target_part: splitted[2],
+                last_target_part: splitted[3],
+                length: splitted[4],
+                tm: splitted[5],
+                tm3: splitted[6],
+                cost: splitted[7],
+                sequence: splitted[8]
+            });
+            currentLine = lines.splice(0,1)[0];
+        }
+
+        //PCR Reactions
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.pcrReactions = [];
+        var currentPCR = lines.splice(0,1)[0];
+        while(currentPCR!== "")
+        {
+            splitted = currentPCR.split(',');
+            // "ID Number","Primary Template","Alternate Template","ID Number",Name,"ID Number",Name,Note,"Mean Oligo Tm","Delta Oligo Tm","Mean Oligo Tm (3' only)","Delta Oligo Tm (3' only)",Length,Sequence
+            obj.pcrReactions.push({
+                pcrReaction:
+                    {
+                        id: splitted[0],
+                        primary_template: splitted[1],
+                        alternate_template: splitted[2]
+                    },
+                forwardOligo:
+                    {
+                        id: splitted[3],
+                        name: splitted[4]
+                    },
+                reverseOligo:
+                    {
+                        id: splitted[5],
+                        name: splitted[6]
+                    },
+                note: splitted[7],
+                mean_oligo: splitted[8]
+            });
+            currentPCR = lines.splice(0,1)[0];
+        }
+
+        // Assembly Pieces (GOLDEN-GATE)
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.assemblyPieces = [];
+        var currentPiece = lines.splice(0,1)[0];
+        while(currentPiece!== "")
+        {
+            splitted = currentPiece.split(',');
+            // "ID Number",Type,"Type ID Number",Part(s),"Overhang with Previous","Overhang with Next","Relative Overhang Position","Sequence Length",Sequence
+            obj.assemblyPieces.push({
+                id_number: splitted[0],
+                type: splitted[1],
+                type_id: splitted[2],
+                parts: splitted[3],
+                overhang_with_next: splitted[4],
+                relative_overhang_position: splitted[5],
+                sequence_length: splitted[6],
+                sequence: splitted[7]
+            });
+            currentPiece = lines.splice(0,1)[0];
+        }
+
+        //Final Assembled Vector
+        lines.splice(0,1)[0]; //Header
+        lines.splice(0,1)[0]; //Columns
+
+        obj.finalAssembledVector = [];
+        var currentLine = lines.splice(0,1)[0];
+        while(currentLine!== "" && currentLine != null)
+        {
+            var splitted = currentLine.split(',');  // Length,Sequence
+
+            obj.finalAssembledVector.push({
+                length: splitted[0],
+                sequence: splitted[1]
+            });
+            currentLine = lines.splice(0,1)[0];
+        }
+
+
+        cb(obj);
+    
+        }
+    catch(err)
+        {
+            console.log("Error processing j5 output");
+            console.log(err);
+            cb({warnings:["Error processing j5 output"]});
+        }   
+}
+
+function processNonCombinatorial(method,file,cb) {
+    var lines = file.fileContent.split(/\r?\n/);
+    var obj = {};
+
+    /* First step is identify assembly */
+    /*
+        Mock
+        Golden-gate
+        SLIC/Gibson/CPEC
+    */
+
+    type = method;
+    console.log(method);
+
+    if(type.match(/Mock/)) return processNonCombinatorial_MOCK(lines,cb);
+    else if(type.match(/SLIC\/Gibson\/CPEC/)) return processNonCombinatorial_SLIC_GIBSON_CPEC(lines,cb);
+    else if(type.match(/GoldenGate/)) return processNonCombinatorial_GOLDEN_GATE(lines,cb);
+    else
+    {
+        return cb({warnings:["Wrong assembly method"]});
+    }
 }
 
 function processCombinatorial_MOCK(lines,cb){
@@ -658,6 +1119,11 @@ function processCombinatorial(file,cb){
     }
 }
 
+function processAssemblies(file,cb)
+{
+    cb(file);
+}
+
 function processj5Parameters(file,cb){
     csv().from( file.fileContent ).to.array( function(data, count){
         var obj = {};
@@ -671,8 +1137,6 @@ function processj5Parameters(file,cb){
 }
 
 var processJ5Response = function(method,encodedFileData,callback) {
-
-    console.log("Processing: "+method);
 
     var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
@@ -733,19 +1197,19 @@ var processJ5Response = function(method,encodedFileData,callback) {
                     callback(null, j5parameters);
                 });
         },
-        Assembly: function(callback){
+        processedData: function(callback){
             if(method.match(/Combinatorial/))
             {
                 processCombinatorial(files.combinatorial,
-                    function(combinatorial){
-                        callback(null, combinatorial);
+                    function(data){
+                        callback(null, data);
                     });
             }
             else
             {
-                processNonCombinatorial(files.assembly,
-                    function(noncombinatorial){
-                        callback(null, noncombinatorial);
+                processNonCombinatorial(method,files.assembly,
+                    function(data){
+                        callback(null, data);
                     });
             }                
         }
@@ -753,7 +1217,7 @@ var processJ5Response = function(method,encodedFileData,callback) {
     function(err, results) {
         //quicklog( require('util').inspect(results) );
         var warnings = '';
-        if(results.combinatorialAssembly) warnings = results.combinatorialAssembly.warnings;
+        if(results.processedData.warnings) warnings = results.processedData.warnings;
         return callback(results,warnings);
     });
 
