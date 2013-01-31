@@ -19,6 +19,38 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     tabPanel: null,
 
+    checkCombinatorial:function(j5collection,cb){
+        combinatorial = false;
+        j5collection.bins().each(function(bin,binKey){
+            if(bin.parts().getCount()>1) combinatorial = true;
+        });
+        return cb(combinatorial);
+    },
+
+    onCheckj5Ready: function(cb){
+        /*
+        non-combinatorial designs: each collection bin (column) must contain exactly one mapped part.
+        combinatorial designs: each collection bin must contain at least one mapped part, and at least 
+        one bin must contain more than one mapped part. No column should contained a non-mapped (but named) part.
+        */
+
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5collection = tab.model.getDesign().getJ5Collection();
+        this.checkCombinatorial(j5collection,function(combinatorial){
+            j5ready = true;
+            j5collection.bins().each(function(bin,binKey){
+                var firstPart = bin.parts().first();
+                if(firstPart != undefined) {if(firstPart.get('sequencefile_id') === "") j5ready = false;}
+                else {j5ready = false;}
+            });
+            tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
+            tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
+
+            if (typeof(cb) == "function") {cb(combinatorial,j5ready);}
+
+        });
+    },
+
     onChangePartDefinitionBtnClick: function(){
         var self = this;
         this.selectedPart.getSequenceFile({
@@ -431,6 +463,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on(this.DeviceEvent.SELECT_BIN, this.onBinSelected, this);
 
         this.application.on("ReRenderDECanvas", this.onReRenderDECanvasEvent, this);
+
+        this.application.on("checkj5Ready", this.onCheckj5Ready, this);
 
         this.application.on("partSelected",
                     this.onPartSelected,
