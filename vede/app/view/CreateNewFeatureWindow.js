@@ -31,7 +31,6 @@ var me = this;
                             width: 325,
                             fieldLabel: 'Name',
                             allowBlank: false,
-                            grow: false
                         },
                         {
                             xtype: 'radiogroup',

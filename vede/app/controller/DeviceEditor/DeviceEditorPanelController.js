@@ -38,11 +38,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              title:'Are you sure you want to delete this design?',
              msg: 'WARNING: This will remove the current design. This action is not undoable!',
              buttons: Ext.Msg.OKCANCEL,
-             fn: loadExample,
+             fn: deleteDEProjectBtn,
              icon: Ext.Msg.QUESTION
         });
 
-        function loadExample (btn) { 
+        function deleteDEProjectBtn (btn) { 
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model, activeTab);
