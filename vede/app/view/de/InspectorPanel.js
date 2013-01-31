@@ -162,8 +162,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 clicksToEdit: 2
                             },
                             columnLines: true,
-                            minHeight: 100,
-                            maxHeight: 160,
+                            minHeight: 225,
+                            maxHeight: 225,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -295,8 +295,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             autoScroll: true,
                             columnLines: true,
-                            height:101,
-                            minHeight:101,
+                            height:132,
+                            minHeight:132,
                             plugins: {
                                 ptype: 'rowediting',
                                 clicksToEdit: 2,
