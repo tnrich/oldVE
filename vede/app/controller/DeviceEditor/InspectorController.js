@@ -19,6 +19,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     tabPanel: null,
 
+    onCheckj5Ready: function(){
+        console.log("Checking j5 ready");
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5collection = tab.model.getDesign().getJ5Collection();
+        console.log(j5collection);
+    },
+
     onChangePartDefinitionBtnClick: function(){
         var self = this;
         this.selectedPart.getSequenceFile({
@@ -425,6 +432,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on(this.DeviceEvent.SELECT_BIN, this.onBinSelected, this);
 
         this.application.on("ReRenderDECanvas", this.onReRenderDECanvasEvent, this);
+
+        this.application.on("checkj5Ready", this.onCheckj5Ready, this);
 
         this.application.on("partSelected",
                     this.onPartSelected,
