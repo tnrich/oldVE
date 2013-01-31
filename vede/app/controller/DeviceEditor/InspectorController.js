@@ -19,11 +19,36 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     tabPanel: null,
 
-    onCheckj5Ready: function(){
-        console.log("Checking j5 ready");
+    checkCombinatorial:function(j5collection,cb){
+        combinatorial = false;
+        j5collection.bins().each(function(bin,binKey){
+            if(bin.parts().getCount()>1) combinatorial = true;
+        });
+        return cb(combinatorial);
+    },
+
+    onCheckj5Ready: function(cb){
+        /*
+        non-combinatorial designs: each collection bin (column) must contain exactly one mapped part.
+        combinatorial designs: each collection bin must contain at least one mapped part, and at least 
+        one bin must contain more than one mapped part. No column should contained a non-mapped (but named) part.
+        */
+
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         var j5collection = tab.model.getDesign().getJ5Collection();
-        console.log(j5collection);
+        this.checkCombinatorial(j5collection,function(combinatorial){
+            j5ready = true;
+            j5collection.bins().each(function(bin,binKey){
+                var firstPart = bin.parts().first();
+                if(firstPart != undefined) {if(firstPart.get('sequencefile_id') === "") j5ready = false;}
+                else {j5ready = false;}
+            });
+            tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
+            tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
+
+            if (typeof(cb) == "function") {cb(combinatorial,j5ready);}
+
+        });
     },
 
     onChangePartDefinitionBtnClick: function(){
