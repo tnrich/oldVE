@@ -156,8 +156,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 clicksToEdit: 2
                             },
                             columnLines: true,
-                            minHeight: 225,
-                            maxHeight: 225,
+                            rowLines: true,
+                            minHeight: 180,
+                            maxHeight: 180,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -212,6 +213,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'container',
+                            margin: '5 5 5 5',
                             layout: {
                                 type: 'hbox'
                             },
