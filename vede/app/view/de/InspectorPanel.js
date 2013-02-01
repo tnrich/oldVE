@@ -141,7 +141,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     xtype: 'form',
                     cls: 'eugeneRulesForm',
                     flex: 1,
-                    minHeight: 180,
+                    autoScroll: true,
                     bodyPadding: 10,
                     title: 'Eugene Rules',
                     items: [
