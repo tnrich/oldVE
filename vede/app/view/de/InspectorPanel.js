@@ -51,17 +51,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 */
                 {
                     xtype: 'button',
-                    text : 'Map empty sequence',
-                    cls: 'emptySequenceBtn'
-                },
-                {
-                    xtype: 'button',
-                    text : 'Map sequence',
+                    text : 'Open Part Library',
                     cls: 'changeSequenceBtn'
                 },
                 {
                     xtype: 'button',
-                    text : 'Change part definition',
+                    text : 'Change Part Definition',
                     cls: 'changePartDefinitionBtn'
                 },
                 /*
