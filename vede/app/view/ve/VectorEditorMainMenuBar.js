@@ -204,10 +204,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Preferences'
             }]
         }
-    }, {
-        xtype: 'button',
-        text: 'Help',
-        id: 'veHelpMenuItem'
+    },
+    // }, {
+    //     xtype: 'button',
+    //     text: 'Help',
+    //     id: 'veHelpMenuItem'
 //         menu: {
 //             xtype: 'menu',
 //             minWidth: 140,
@@ -225,7 +226,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //                 text: 'About'
 //             }]
 //         }
-    }, {
+     {
         xtype: 'tbfill'
     }, {
         xtype: 'button',

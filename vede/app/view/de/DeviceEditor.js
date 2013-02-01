@@ -25,6 +25,9 @@ Ext.define('Vede.view.de.DeviceEditor', {
     */
     {
         xtype: 'DeviceEditorPartPanel'
+    },
+    {
+        xtype: 'InspectorPanel'
     }],
     items: [{
         xtype: 'panel',

@@ -13,7 +13,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
     dock: 'right',
     floatable: true,
     frame: true,
-    margin: '0 0 10 0',
     minWidth: 350,
     bodyBorder: false,
     collapseDirection: 'right',

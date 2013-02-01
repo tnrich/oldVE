@@ -348,10 +348,10 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
-            },
-            "#veHelpMenuItem" : {
-                click: this.onHelpBtnClick
             }
+            // "#veHelpMenuItem" : {
+            //     click: this.onHelpBtnClick
+            // }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
