@@ -75,6 +75,12 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                         },
                         {
                             xtype: 'button',
+                            text: 'Save Part',
+                            cls: 'saveDefinitionPartBtn',
+                            hidden: true
+                        },
+                        {
+                            xtype: 'button',
                             text: 'Done',
                             cls: 'changePartDefinitionDoneBtn'
                         },

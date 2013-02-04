@@ -88,6 +88,7 @@ Ext.define("Vede.controller.ProjectController", {
             self.sequenceStore = Ext.create('Ext.data.Store', {
                 model: 'Teselagen.models.VectorEditorProject'
             });
+
             Teselagen.manager.ProjectManager.sequenceStore =
                 Ext.create('Ext.data.Store', {
                     model: 'Teselagen.models.VectorEditorProject'
@@ -116,7 +117,6 @@ Ext.define("Vede.controller.ProjectController", {
                             hrefTarget: 'opensequence',
                             icon: "resources/images/ux/sequence-tree-icon-leaf.png"
                         });
-
                     });
                 }
             });

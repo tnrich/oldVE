@@ -19,6 +19,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     tabPanel: null,
 
+    findBinByPart:function(findingPart,cb){
+        var foundBin = null;
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5collection = tab.model.getDesign().getJ5Collection();
+        j5collection.bins().each(function(bin,binKey){
+            bin.parts().each(function(part){
+                if(part.internalId===findingPart.internalId) foundBin = bin;
+            });
+        });
+        return cb(foundBin);
+    },
+
     checkCombinatorial:function(j5collection,cb){
         combinatorial = false;
         j5collection.bins().each(function(bin,binKey){
@@ -88,52 +100,72 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         });
     },
 
-    onChangeSequenceBtnClick: function () {
+    onopenPartLibraryBtnClick: function () {
         console.log("changing part");
-
         var self = this;
-        var selectWindow = Ext.create('Ext.window.Window', {
-            title: 'Select sequence from Library',
-            height: 200,
-            width: 400,
-            layout: 'fit',
-            items: {
-                xtype: 'grid',
-                border: false,
-                columns: {
-                    items: {
-                        text: "Name",
-                        dataIndex: "name"
-                    },
-                    defaults: {
-                        flex: 1
-                    }
-                },
-                store: Teselagen.manager.ProjectManager.sequenceStore,
-                listeners: {
-                    "itemclick": function(grid, record, item){
-                        console.log(record);
-                        var veproject = record;
-                        var sequence = record.getSequenceFile({
-                            callback: function(){
-                                sequence = record.getSequenceFile();
-                                var sequencefile_id = sequence.data.id;
-                                self.selectedPart.setSequenceFileModel(sequence);
-                                self.selectedPart.set('sequencefile_id',sequencefile_id);
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''),
+            method: 'GET',
+            success: function (response) {
+            response = JSON.parse(response.responseText);
 
-                                self.selectedPart.save({
-                                    callback: function(){
-                                        console.log("Part updated");
-                                        selectWindow.close();
-                                    }
-                                });
-                            }
-                        });
+         var partLibrary = Ext.create('Teselagen.store.PartStore', {
+             model: 'Teselagen.models.Part',
+             data:response,
+             proxy: {
+                 type: 'memory',
+                 reader: {
+                     type: 'json',
+                     root: 'parts'
+                 }
+             },
+             autoLoad: true
+         });
+
+            var selectWindow = Ext.create('Ext.window.Window', {
+                title: 'Part Library',
+                height: 200,
+                width: 400,
+                layout: 'fit',
+                items: {
+                    xtype: 'grid',
+                    border: false,
+                    columns: {
+                        items: {
+                            text: "Name",
+                            dataIndex: "name"
+                        },
+                        defaults: {
+                            flex: 1
+                        }
+                    },
+                    store: partLibrary,
+                    listeners: {
+                        "itemclick": function(grid, part, item){
+                            console.log(part);
+                            console.log(self.selectedPart);
+                            self.findBinByPart(self.selectedPart,function(bin){
+                                if(bin)
+                                {
+                                    bin.parts().remove(self.selectedPart);
+                                    bin.parts().add(part);
+                                    self.onReRenderDECanvasEvent();
+                                    selectWindow.close();
+                                    self.selectedPart = part;
+                                    Vede.application.fireEvent("partSelected",part);
+                                }
+                                else
+                                {
+                                    Ext.alert('Error','Failed mapping part from library');
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        }).show();
-
+            }).show();
+            
+        //end ajax request
+        }});
     },
 
     onReRenderDECanvasEvent: function () {
@@ -489,8 +521,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             "gridpanel[cls='inspectorGrid']": {
                 select: this.onGridBinSelect
             },
-            "button[cls='changeSequenceBtn']": {
-                click: this.onChangeSequenceBtnClick
+            "button[cls='openPartLibraryBtn']": {
+                click: this.onopenPartLibraryBtnClick
             },
             "button[cls='emptySequenceBtn']": {
                 click: this.onEmptySequenceBtnClick

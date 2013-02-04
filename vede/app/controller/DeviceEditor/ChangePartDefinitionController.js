@@ -5,6 +5,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     selectedWindow: null,
     selectedSequence: null,
     selectedBinIndex: null,
+    selectedVEProject: null,
 
     populateFields:function(){
         var form = this.selectedWindow.down('form').getForm();
@@ -35,7 +36,20 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex =selectedBinIndex;
+        this.selectedVEProject = null,
         this.populateFields();
+    },
+
+    openCreatePart: function(veproject,selectedPart,selectedSequence){
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        this.selectedPart = selectedPart;
+        this.selectedVEProject = veproject;
+        this.selectedSequence = selectedSequence;
+        this.selectedBinIndex = null;
+        this.selectedBinIndex = -1;
+        this.populateFields();
+
+        this.selectedWindow.setTitle('Create Part');
     },
 
     onChangePartDefinitionDoneBtnClick: function(){
@@ -62,7 +76,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedPart.set('endBP',stopBP.getValue());
         this.selectedPart.set('revComp',revComp.getValue());
 
-        Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
+        if(this.selectedBinIndex!=-1) Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
+        else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
+
         this.selectedWindow.close();
     },
 
@@ -75,6 +91,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         });
         
         this.application.on("openChangePartDefinition", this.open, this);
+        this.application.on("createPartDefinition", this.openCreatePart, this);
         /*
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
