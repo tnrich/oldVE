@@ -31,7 +31,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     open: function(selectedPart,selectedBinIndex,selectedSequence){
-        this.selectedWindow = Ext.create('Vede.view.de.ChangePartDefinitionPanel').show();
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex =selectedBinIndex;

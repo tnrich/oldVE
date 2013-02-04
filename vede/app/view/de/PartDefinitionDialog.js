@@ -1,8 +1,8 @@
 /**
  * Change part definition panel
- * @class Vede.view.de.ChangePartDefinitionPanel
+ * @class Vede.view.de.PartDefinitionDialog
  */
-Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
+Ext.define('Vede.view.de.PartDefinitionDialog', {
     extend: 'Ext.window.Window',
 
     height: 400,

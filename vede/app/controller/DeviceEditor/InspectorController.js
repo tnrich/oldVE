@@ -6,7 +6,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-    "Vede.view.de.ChangePartDefinitionPanel"],
+    "Vede.view.de.PartDefinitionDialog"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
