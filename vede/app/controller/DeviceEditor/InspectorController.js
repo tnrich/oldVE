@@ -159,8 +159,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             self.findBinByPart(self.selectedPart,function(bin){
                                 if(bin)
                                 {
-                                    bin.parts().remove(self.selectedPart);
-                                    bin.parts().add(part);
+                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                    bin.parts().removeAt(insertIndex);
+                                    bin.parts().insert(insertIndex,part);
                                     self.onReRenderDECanvasEvent();
                                     selectWindow.close();
                                     self.selectedPart = part;
