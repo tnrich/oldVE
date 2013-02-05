@@ -93,7 +93,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var self = this;
         var selectWindow = Ext.create('Ext.window.Window', {
-            title: 'Select sequence from Library',
+            title: 'Select Part from Library',
             height: 200,
             width: 400,
             layout: 'fit',
