@@ -103,10 +103,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onopenPartLibraryBtnClick: function () {
         console.log("changing part");
         var self = this;
+
+        var loadingMsgBox = Ext.MessageBox.show({
+            title: 'Loading Part',
+            progressText: 'Loading Part Library',
+            progress: true,
+            width: 300,
+            closable: false
+        });
+
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''),
             method: 'GET',
             success: function (response) {
+
+            loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
+            
             response = JSON.parse(response.responseText);
 
          var partLibrary = Ext.create('Teselagen.store.PartStore', {
@@ -163,7 +175,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     }
                 }
             }).show();
-            
+            loadingMsgBox.close();
         //end ajax request
         }});
     },
