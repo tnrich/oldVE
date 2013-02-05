@@ -42,12 +42,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
             title: 'Part Info',
             autoScroll: true,
             items: [
-                /*
-                {
-                    xtype: 'tbseparator',
-                    height: 20
-                },
-                */
                 {
                     xtype: 'button',
                     text : 'Open Part Library',
@@ -58,12 +52,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     text : 'Change Part Definition',
                     cls: 'changePartDefinitionBtn'
                 },
-                /*
                 {
-                    xtype: 'tbseparator',
-                    height: 20
+                    xtype: 'button',
+                    text : 'Delete Part',
+                    cls: 'deletePartBtn'
                 },
-                */
                 {
                     xtype: 'form',
                     flex: 1,

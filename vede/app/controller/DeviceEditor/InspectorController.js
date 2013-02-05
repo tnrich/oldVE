@@ -19,6 +19,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     tabPanel: null,
 
+    onDeletePartBtnClick: function(){
+        var self = this;
+        this.findBinByPart(this.selectedPart,function(bin){
+            if(bin) bin.parts().remove(self.selectedPart);
+        });
+    },
+
     findBinByPart:function(findingPart,cb){
         var foundBin = null;
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -534,6 +541,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='openPartLibraryBtn']": {
                 click: this.onopenPartLibraryBtnClick
+            },
+            "button[cls='deletePartBtn']": {
+                click: this.onDeletePartBtnClick
             },
             "button[cls='emptySequenceBtn']": {
                 click: this.onEmptySequenceBtnClick
