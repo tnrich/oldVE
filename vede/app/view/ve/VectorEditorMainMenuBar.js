@@ -230,8 +230,17 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         xtype: 'tbfill'
     }, {
         xtype: 'button',
+        text: 'Create Part',
+        cls: 'createPartBtn'
+    }, {
+        xtype: 'button',
         text: 'Save changes',
         cls: 'saveSequenceBtn',
+        hidden: true
+    }, {
+        xtype: 'button',
+        text: 'Save',
+        cls: 'saveNewSequenceBtn',
         hidden: true
     }]
 });

@@ -6,7 +6,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-    "Vede.view.de.ChangePartDefinitionPanel"],
+    "Vede.view.de.PartDefinitionDialog"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -18,6 +18,25 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedPart: null,
     selectedBinIndex: null,
     tabPanel: null,
+
+    onDeletePartBtnClick: function(){
+        var self = this;
+        this.findBinByPart(this.selectedPart,function(bin){
+            if(bin) bin.parts().remove(self.selectedPart);
+        });
+    },
+
+    findBinByPart:function(findingPart,cb){
+        var foundBin = null;
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5collection = tab.model.getDesign().getJ5Collection();
+        j5collection.bins().each(function(bin,binKey){
+            bin.parts().each(function(part){
+                if(part.internalId===findingPart.internalId) foundBin = bin;
+            });
+        });
+        return cb(foundBin);
+    },
 
     checkCombinatorial:function(j5collection,cb){
         combinatorial = false;
@@ -88,52 +107,83 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         });
     },
 
-    onChangeSequenceBtnClick: function () {
+    onopenPartLibraryBtnClick: function () {
         console.log("changing part");
-
         var self = this;
-        var selectWindow = Ext.create('Ext.window.Window', {
-            title: 'Select Part from Library',
-            height: 200,
-            width: 400,
-            layout: 'fit',
-            items: {
-                xtype: 'grid',
-                border: false,
-                columns: {
-                    items: {
-                        text: "Name",
-                        dataIndex: "name"
-                    },
-                    defaults: {
-                        flex: 1
-                    }
-                },
-                store: Teselagen.manager.ProjectManager.sequenceStore,
-                listeners: {
-                    "itemclick": function(grid, record, item){
-                        console.log(record);
-                        var veproject = record;
-                        var sequence = record.getSequenceFile({
-                            callback: function(){
-                                sequence = record.getSequenceFile();
-                                var sequencefile_id = sequence.data.id;
-                                self.selectedPart.setSequenceFileModel(sequence);
-                                self.selectedPart.set('sequencefile_id',sequencefile_id);
 
-                                self.selectedPart.save({
-                                    callback: function(){
-                                        console.log("Part updated");
-                                        selectWindow.close();
-                                    }
-                                });
-                            }
-                        });
+        var loadingMsgBox = Ext.MessageBox.show({
+            title: 'Loading Part',
+            progressText: 'Loading Part Library',
+            progress: true,
+            width: 300,
+            closable: false
+        });
+
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''),
+            method: 'GET',
+            success: function (response) {
+
+            loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
+            
+            response = JSON.parse(response.responseText);
+
+         var partLibrary = Ext.create('Teselagen.store.PartStore', {
+             model: 'Teselagen.models.Part',
+             data:response,
+             proxy: {
+                 type: 'memory',
+                 reader: {
+                     type: 'json',
+                     root: 'parts'
+                 }
+             },
+             autoLoad: true
+         });
+
+            var selectWindow = Ext.create('Ext.window.Window', {
+                title: 'Part Library',
+                height: 200,
+                width: 400,
+                layout: 'fit',
+                items: {
+                    xtype: 'grid',
+                    border: false,
+                    columns: {
+                        items: {
+                            text: "Name",
+                            dataIndex: "name"
+                        },
+                        defaults: {
+                            flex: 1
+                        }
+                    },
+                    store: partLibrary,
+                    listeners: {
+                        "itemclick": function(grid, part, item){
+                            self.findBinByPart(self.selectedPart,function(bin){
+                                if(bin)
+                                {
+                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                    bin.parts().removeAt(insertIndex);
+                                    bin.parts().insert(insertIndex,part);
+                                    self.onReRenderDECanvasEvent();
+                                    selectWindow.close();
+                                    self.selectedPart = part;
+                                    Vede.application.fireEvent("partSelected",part);
+                                }
+                                else
+                                {
+                                    Ext.alert('Error','Failed mapping part from library');
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        }).show();
-
+            }).show();
+            loadingMsgBox.close();
+        //end ajax request
+        }});
     },
 
     onReRenderDECanvasEvent: function () {
@@ -489,8 +539,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             "gridpanel[cls='inspectorGrid']": {
                 select: this.onGridBinSelect
             },
-            "button[cls='changeSequenceBtn']": {
-                click: this.onChangeSequenceBtnClick
+            "button[cls='openPartLibraryBtn']": {
+                click: this.onopenPartLibraryBtnClick
+            },
+            "button[cls='deletePartBtn']": {
+                click: this.onDeletePartBtnClick
             },
             "button[cls='emptySequenceBtn']": {
                 click: this.onEmptySequenceBtnClick

@@ -46,6 +46,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       
       //Ext.getCmp('mainAppPanel').getActiveTab().setTitle(fileName.replace(/.json/g));
       Vede.application.fireEvent("ReRenderDECanvas");
+      Vede.application.fireEvent("checkj5Ready");
     };
 
     /*

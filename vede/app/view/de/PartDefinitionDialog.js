@@ -1,8 +1,8 @@
 /**
  * Change part definition panel
- * @class Vede.view.de.ChangePartDefinitionPanel
+ * @class Vede.view.de.PartDefinitionDialog
  */
-Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
+Ext.define('Vede.view.de.PartDefinitionDialog', {
     extend: 'Ext.window.Window',
 
     height: 400,
@@ -72,6 +72,12 @@ Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
                             boxLabel: 'Reverse Complement',
                             margin: '10 10 30 0',
                             name: 'revComp'
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Save Part',
+                            cls: 'saveDefinitionPartBtn',
+                            hidden: true
                         },
                         {
                             xtype: 'button',
