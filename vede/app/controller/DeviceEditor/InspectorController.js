@@ -154,8 +154,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     store: partLibrary,
                     listeners: {
                         "itemclick": function(grid, part, item){
-                            console.log(part);
-                            console.log(self.selectedPart);
                             self.findBinByPart(self.selectedPart,function(bin){
                                 if(bin)
                                 {
