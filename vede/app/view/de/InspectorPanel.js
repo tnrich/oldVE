@@ -45,17 +45,26 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 {
                     xtype: 'button',
                     text : 'Open Part Library',
-                    cls: 'openPartLibraryBtn'
+                    cls: 'openPartLibraryBtn',
+                    overCls: 'openPartLibraryBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    border: 0
                 },
                 {
                     xtype: 'button',
                     text : 'Change Part Definition',
-                    cls: 'changePartDefinitionBtn'
+                    cls: 'changePartDefinitionBtn',
+                    overCls: 'changePartDefinitionBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    border: 0
                 },
                 {
                     xtype: 'button',
                     text : 'Delete Part',
-                    cls: 'deletePartBtn'
+                    cls: 'deletePartBtn',
+                    overCls: 'deletePartBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    border: 0
                 },
                 {
                     xtype: 'form',
@@ -150,8 +159,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             columnLines: true,
                             rowLines: true,
-                            minHeight: 180,
-                            maxHeight: 180,
+                            minHeight: 175,
+                            maxHeight: 175,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
