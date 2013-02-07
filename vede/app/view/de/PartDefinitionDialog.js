@@ -41,7 +41,8 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             fieldLabel: 'Source Data',
                             labelAlign: 'top',
                             margin: '10 10 0 0',
-                            name: 'sourceData'
+                            name: 'sourceData',
+                            readOnly: true
                         },
                         {
                             xtype: 'combobox',
