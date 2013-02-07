@@ -75,8 +75,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    minHeight: 150,
-                    maxHeight: 150,
+                    minHeight: 170,
+                    maxHeight: 170,
                     bodyPadding: 10,
                     title: 'Properties',
                     items: [
@@ -121,8 +121,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     xtype: 'form',
                     cls: 'forcedAssemblyStrategyForm',
                     flex: 1,
-                    minHeight: 80,
-                    maxHeight: 80,
+                    minHeight: 70,
+                    maxHeight: 70,
                     bodyPadding: 10,
                     title: 'Forced Assembly Strategy',
                     items: [
@@ -159,8 +159,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             columnLines: true,
                             rowLines: true,
-                            minHeight: 175,
-                            maxHeight: 175,
+                            minHeight: 150,
+                            maxHeight: 150,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
