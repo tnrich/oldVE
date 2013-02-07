@@ -179,7 +179,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         xtype: 'combobox',
                         flex: 1,
                         cls: 'assemblyMethodSelector',
-                        maxWidth: 300,
+                        maxWidth: 333,
                         padding: 2,
                         fieldLabel: '<b>Assembly Method:</b>',
                         fieldLabelCls: 'align-middle',
