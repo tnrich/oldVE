@@ -326,8 +326,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onDeleteEugeneRuleBtnClick: function() {
         if(this.eugeneRulesGrid.getSelectionModel().getSelection().length > 0) {
             var selectedRule = this.eugeneRulesGrid.getSelectionModel().getSelection()[0];
-            this.activeProject.rules().remove(selectedRule);
-            selectedRule.destroy();
+
+            Ext.Msg.confirm("Delete Rule", "Are you sure you want to delete this rule?", function(button) {
+                if(button === "yes") {
+                    this.activeProject.rules().remove(selectedRule);
+                    selectedRule.destroy();
+                }
+            }, this);
         }
     },
 
