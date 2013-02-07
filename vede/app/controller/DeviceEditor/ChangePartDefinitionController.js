@@ -139,6 +139,10 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedWindow.close();
     },
 
+    onCancelPartDefinitionBtnClick: function() {
+        this.selectedWindow.close();
+    },
+
     init: function () {
     
         this.SelectionEvent = Teselagen.event.SelectionEvent;
