@@ -51,7 +51,7 @@ img {
 .x-window-header-text-default {
   font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
-  color: #555;
+  color: white;
 }
 
 .x-fieldset {
@@ -113,6 +113,26 @@ img {
   font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
   color: #111;
+}
+
+.x-window-header-default-top{
+  background: #333 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  padding: 5px !important;
+  border-width: 0 !important;
+}
+
+/*.messageBox{
+  background: #333;
+  box-shadow: none;
+  -moz-box-shadow:none;
+  -webkit-box-shadow:none;
+}*/
+
+.x-window-body-default {
+  border: 0;
 }
 
 /*Header*/
@@ -470,6 +490,8 @@ img {
     background-color: #fefefe;
     border-color: #EBEBEB;
     text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .binHeader:hover {    
@@ -482,6 +504,10 @@ img {
 .binHeader-selected {
     background-color: rgb(240,240,240);
     border-color: #0082DB;
+}
+
+.gridPartCell {
+  font-size:13px;
 }
 
 .gridPartCell:hover {

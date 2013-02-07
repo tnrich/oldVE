@@ -71,7 +71,7 @@ Ext.define('Vede.view.de.grid.Part', {
                 items: [{
                     xtype: 'container',
                     style: {
-                        'padding-top': '20px',
+                        'padding-top': '10px',
                         'text-align': 'center'
                     },
                     html: html,

@@ -37,6 +37,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Ext.Msg.show({
              title:'Are you sure you want to delete this design?',
              msg: 'WARNING: This will remove the current design. This action is not undoable!',
+             cls: 'messageBox',
              buttons: Ext.Msg.OKCANCEL,
              fn: deleteDEProjectBtn,
              icon: Ext.Msg.QUESTION
@@ -63,6 +64,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              title:'Are you sure you want to load example?',
              msg: 'WARNING: This will clear the current design. Any unsaved changes will be lost.',
              buttons: Ext.Msg.OKCANCEL,
+             cls: 'messageBox',
              fn: loadExample,
              icon: Ext.Msg.QUESTION
         });
