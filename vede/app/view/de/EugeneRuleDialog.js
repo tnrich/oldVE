@@ -38,15 +38,26 @@ Ext.define('Vede.view.de.EugeneRuleDialog', {
                         {
                             xtype: 'combobox',
                             name: 'compositionalOperator',
+                            cls: 'compositionalOperatorCombobox',
                             fieldLabel: 'Operator',
                             store: Teselagen.constants.Constants.COMPOP_LIST
                         },
                         {
                             xtype: 'combobox',
-                            cls: 'operand2Field',
+                            cls: 'operand2PartField',
                             fieldLabel: 'Operand 2',
                             store: [],
                             queryMode: 'local'
+                        },
+                        {
+                            xtype: 'numberfield',
+                            cls: 'operand2NumberField',
+                            fieldLabel: 'Operand 2',
+                            hidden: true,
+                            value: 0,
+                            step: 1,
+                            minValue: 0,
+                            allowDecimals: false
                         }
                     ]
                 }
@@ -67,3 +78,4 @@ Ext.define('Vede.view.de.EugeneRuleDialog', {
         me.center();
     }
 });
+
