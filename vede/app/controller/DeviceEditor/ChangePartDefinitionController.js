@@ -113,11 +113,18 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedWindow.close();
     },
 
+    onCancelPartDefinitionCancelBtnClick: function() {
+        this.selectedWindow.close();
+    },
+
     init: function () {
     
         this.control({
             "button[cls='changePartDefinitionDoneBtn']": {
                 click: this.onChangePartDefinitionDoneBtnClick
+            },
+            "button[cls='cancelPartDefinitionCancelBtn']": {
+                click: this.onCancelPartDefinitionCancelBtnClick
             },
             "combobox[name='specifiedSequence']": {
                 change: this.onSpecifiedSequenceChange
