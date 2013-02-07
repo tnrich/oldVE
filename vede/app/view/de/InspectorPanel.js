@@ -311,6 +311,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     editor: {
                                         xtype: 'textfield',
                                         allowBlank: false,
+                                    },
+                                    renderer: function(value, metadata) {
+                                        metadata.tdAttr = 'data-qtip="' + value + '"';
+                                        return value;
                                     }
                                 },
                                 {
@@ -341,6 +345,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     text: 'FAS',
                                     dataIndex: 'fas',
                                     renderer: function(value, metadata, record) {
+                                        metadata.tdAttr = 'data-qtip="' + value + '"';
+
                                         if(record.parts().getRange().length > 0) {
                                             return record.parts().getRange()[0].get("fas");
                                         } else {
