@@ -7,6 +7,25 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     selectedBinIndex: null,
     selectedVEProject: null,
 
+    onSpecifiedSequenceChange: function(combobox){
+        var form = this.selectedWindow.down('form').getForm();
+        var startBP = form.findField('startBP');
+        var stopBP = form.findField('stopBP');
+
+        if(combobox.getValue() === "Whole sequence")
+        {
+            startBP.setValue(1);
+            stopBP.setValue(this.selectedSequence.getLength());
+            startBP.setReadOnly(true);
+            stopBP.setReadOnly(true);
+        }
+        else
+        {
+            startBP.setReadOnly(false);
+            stopBP.setReadOnly(false);
+        }
+    },
+
     populateFields:function(){
         var form = this.selectedWindow.down('form').getForm();
         var name = form.findField('partName');
@@ -17,17 +36,29 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var stopBP = form.findField('stopBP');
         var revComp = form.findField('revComp');
 
+        var sequenceLength = this.selectedSequence.getLength();
+
         name.setValue(this.selectedPart.get('name'));
 
         if(this.selectedSequence)
         {
             partSource.setValue(this.selectedSequence.get('partSource'));
             sourceData.setValue(this.selectedSequence.get('sequenceFileContent'));
+            if(startBP.getValue()===1 && stopBP.getValue()===sequenceLength)
+            {
+                startBP.setReadOnly(true);
+                stopBP.setReadOnly(true);
+                specifiedSequence.setValue('Whole sequence');
+            }
+            else specifiedSequence.setValue('Specified sequence');
         }
 
-        specifiedSequence.setValue('Whole sequence');
         startBP.setValue(this.selectedPart.get('genbankStartBP'));
         stopBP.setValue(this.selectedPart.get('endBP'));
+
+        startBP.setMaxValue(sequenceLength);
+        stopBP.setMaxValue(sequenceLength);
+
         revComp.setValue(this.selectedPart.get('revComp'));
     },
 
@@ -87,6 +118,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.control({
             "button[cls='changePartDefinitionDoneBtn']": {
                 click: this.onChangePartDefinitionDoneBtnClick
+            },
+            "combobox[name='specifiedSequence']": {
+                change: this.onSpecifiedSequenceChange
             }
         });
         
