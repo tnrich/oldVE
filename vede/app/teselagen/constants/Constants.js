@@ -56,8 +56,6 @@ Ext.define("Teselagen.constants.Constants", {
     MORETHAN:           "MORETHAN",
 
     COMPOP_LIST: [
-        "NOTMORETHAN",
-        "NOTWITH",
         "AFTER",
         "BEFORE",
         "WITH",

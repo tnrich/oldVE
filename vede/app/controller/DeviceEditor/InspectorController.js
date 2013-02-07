@@ -301,7 +301,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 compositionalOperator: Teselagen.constants.Constants.COMPOP_LIST[0]
             });
             var ruleForm = newEugeneRuleDialog.down("form");
-            var operand2Field = ruleForm.down("combobox[cls='operand2Field']");
+            var operand2Field = ruleForm.down("combobox[cls='operand2PartField']");
 
             var allParts = this.DeviceDesignManager.getAllParts(
                                 this.activeProject, this.selectedPart);
@@ -342,14 +342,25 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             newEugeneRuleDialog.down("checkbox[cls='negationOperatorField']").getValue();
         var newCompositionalOperator = 
             newEugeneRuleDialog.down("combobox[name='compositionalOperator']").getValue();
-        var newOperand2 =
-            newEugeneRuleDialog.down("component[cls='operand2Field']").getValue();
+
+        var newOperand2;
+        var newOperand2Name;
+        if(newCompositionalOperator === Teselagen.constants.Constants.MORETHAN) {
+            var newOperand2 = 
+                newEugeneRuleDialog.down("numberfield[cls='operand2NumberField']").getValue();
+        } else {
+            newOperand2Name =
+                newEugeneRuleDialog.down("component[cls='operand2PartField']").getValue();
+
+            newOperand2 = this.DeviceDesignManager.getPartByName(this.activeProject, 
+                                                                 newOperand2Name);
+        }
 
         newRule.set("name", newName);
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
-        newRule.setOperand2(this.DeviceDesignManager.getPartByName(this.activeProject, 
-                                                                   newOperand2));
+        newRule.setOperand2(newOperand2);
+
         this.activeProject.addToRules(newRule);
 
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
@@ -367,6 +378,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         newEugeneRuleDialog.close();
         newRule.destroy();
+    },
+
+    onCompositionalOperatorSelect: function(box) {
+        var operator = box.getValue();
+        var ruleDialog = 
+            Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
+
+        if(operator === Teselagen.constants.Constants.MORETHAN) {
+            ruleDialog.down("combobox[cls='operand2PartField']").setVisible(false);
+            ruleDialog.down("numberfield[cls='operand2NumberField']").setVisible(true);
+        } else {
+            ruleDialog.down("combobox[cls='operand2PartField']").setVisible(true);
+            ruleDialog.down("numberfield[cls='operand2NumberField']").setVisible(false);
+        }
     },
 
     onGridBinSelect: function (grid, j5Bin, selectedIndex) {
@@ -423,7 +448,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 "form[cls='collectionInfoForm'] > gridpanel");
             this.columnsGrid.on("select", this.onGridBinSelect, this);
 
-            this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel")
+            this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel");
 
             this.renderCollectionInfo();
         }
@@ -559,6 +584,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             },
             "button[cls='cancelNewEugeneRuleBtn']": {
                 click: this.onCancelNewEugeneRuleBtnClick
+            },
+            "combobox[cls='compositionalOperatorCombobox']": {
+                select: this.onCompositionalOperatorSelect
             },
             "radio[cls='circular_plasmid_radio']": {
                 change: this.onCircularPlasmidRadioChange
