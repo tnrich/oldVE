@@ -113,7 +113,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             height: 20,
                             cls: 'stopBPField',
                             name: 'endBP',
-                            fieldLabel: 'End BP'
+                            fieldLabel: 'Stop BP'
                         }
                     ]
                 },
