@@ -49,21 +49,24 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             fieldLabel: 'Sequence',
                             store: ['Whole sequence','Specified sequence'],
                             margin: '10 10 0 0',
-                            name: 'specifiedSequence'
+                            name: 'specifiedSequence',
+                            editable: false
                         },
                         {
                             xtype: 'numberfield',
                             anchor: '100%',
                             fieldLabel: 'Start BP',
                             margin: '10 10 0 0',
-                            name: 'startBP'
+                            name: 'startBP',
+                            minValue: 1
                         },
                         {
                             xtype: 'numberfield',
                             anchor: '100%',
                             fieldLabel: 'Stop BP:',
                             margin: '10 10 0 0',
-                            name: 'stopBP'
+                            name: 'stopBP',
+                            minValue: 1
                         },
                         {
                             xtype: 'checkboxfield',
