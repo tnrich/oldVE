@@ -131,6 +131,10 @@ img {
   -webkit-box-shadow:none;
 }*/
 
+.x-tab-bar-top .x-tab-bar-body {
+  border: 0 none;
+}
+
 .x-window-body-default {
   border: 0;
 }
