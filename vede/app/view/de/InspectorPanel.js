@@ -98,8 +98,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             height: 20,
                             cls: 'reverseComplementField',
                             name: 'revComp',
-                            fieldLabel: 'Reverse Complement',
-                            labelWidth: 160
+                            fieldLabel: 'Reverse Complement? (on source)',
+                            labelWidth: 210
                         },
                         {
                             xtype: 'displayfield',
