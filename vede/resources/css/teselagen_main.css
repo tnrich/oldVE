@@ -53,11 +53,11 @@ img {
   font-size: 12px;
   color: white;
 }
-
+/*
 .x-tool img {
   background-image: url(../../../extjs/resources/themes/images/gray/tools/tool-sprites.png);
 }
-
+*/
 .x-fieldset {
   border:0 none;
 }
