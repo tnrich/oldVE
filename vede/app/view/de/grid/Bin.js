@@ -122,7 +122,14 @@ Ext.define('Vede.view.de.grid.Bin', {
     },
 
     applyTotalRows: function(pTotalRows) {
-        var currentRows = this.getTotalRows();
+        var currentRows;
+
+        if(this.items) {
+            currentRows = this.query("Part").length;
+        } else {
+            currentRows = this.getTotalRows();
+        }
+
         while(currentRows < pTotalRows) {
             this.add(Ext.create("Vede.view.de.grid.Part"));
             currentRows += 1;

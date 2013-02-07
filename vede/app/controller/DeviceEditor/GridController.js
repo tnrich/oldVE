@@ -231,7 +231,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
     },
 
-    onRemoveFromParts: function(parts, removedPart, index) {
+    onRemoveFromParts: function(parts, removedPart, index, opts) {
+        var gridPart = this.getGridPartFromJ5Part(removedPart);
+        var gridBin = gridPart.up("Bin");
+
+        gridBin.remove(gridPart);
+        gridBin.setTotalRows(this.totalRows);
+
+        if(this.selectedPart === removedPart) {
+            this.selectedPart = null;
+        }
     },
 
     onAddToEugeneRules: function(rules, addedRules, index) {

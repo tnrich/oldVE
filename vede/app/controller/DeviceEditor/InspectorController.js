@@ -20,22 +20,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     tabPanel: null,
 
     onDeletePartBtnClick: function(){
-        var self = this;
-        this.findBinByPart(this.selectedPart,function(bin){
-            if(bin) bin.parts().remove(self.selectedPart);
-        });
-    },
+        if(this.selectedPart) {
+            var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
+                                                                  this.selectedPart);
 
-    findBinByPart:function(findingPart,cb){
-        var foundBin = null;
-        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var j5collection = tab.model.getDesign().getJ5Collection();
-        j5collection.bins().each(function(bin,binKey){
-            bin.parts().each(function(part){
-                if(part.internalId===findingPart.internalId) foundBin = bin;
-            });
-        });
-        return cb(foundBin);
+            parentBin.parts().remove(this.selectedPart);
+        }
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -327,7 +317,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.eugeneRulesGrid.getSelectionModel().getSelection().length > 0) {
             var selectedRule = this.eugeneRulesGrid.getSelectionModel().getSelection()[0];
 
-            Ext.Msg.confirm("Delete Rule", "Are you sure you want to delete this rule?", function(button) {
+            Ext.Msg.confirm("Delete Rule", "Are you sure you want to delete this Eugene rule?", function(button) {
                 if(button === "yes") {
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
