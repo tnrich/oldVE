@@ -33,7 +33,8 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
                             anchor: '100%',
                             fieldLabel: 'Part Source',
                             margin: '10 10 0 0',
-                            name: 'partSource'
+                            name: 'partSource',
+                            readOnly: true
                         },
                         {
                             xtype: 'textareafield',
