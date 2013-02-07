@@ -53,7 +53,7 @@ Ext.define('Vede.view.de.grid.Bin', {
                 height: 100,
                 width: 125,
                 bodyStyle: {
-                    'padding-top': '80px',
+                    'padding-top': '75px',
                     'text-align': 'center'
                 },
                 style: {

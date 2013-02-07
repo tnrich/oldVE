@@ -37,29 +37,33 @@ img {
 }
 
 .x-body {
-  font-family: 'Tahoma', sans-serif;
+  font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
 }
 
 .x-panel-header-text-default,
 .x-panel-header-text-default-framed {
-    font-family: 'Tahoma', sans-serif;
+    font-family: 'Maven Pro', sans-serif;
     font-size: 12px;
     color: #333;
 }
 
 .x-window-header-text-default {
-  font-family: 'Tahoma', sans-serif;
+  font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
-  color: #555;
+  color: white;
 }
-
+/*
+.x-tool img {
+  background-image: url(../../../extjs/resources/themes/images/gray/tools/tool-sprites.png);
+}
+*/
 .x-fieldset {
   border:0 none;
 }
 
 .x-tab-inner {
-  font-family: 'Tahoma', sans-serif;
+  font-family: 'Maven Pro', sans-serif;
     font-size: 12px;
     color: #333;
 }
@@ -74,12 +78,12 @@ img {
 .x-btn-default-toolbar-small .x-btn-inner,
 .x-btn-default-small .x-btn-inner,
 .x-grid-row .x-grid-cell {
-  font-family: 'Tahoma', sans-serif;
+  font-family: 'Maven Pro', sans-serif;
     font-size: 12px;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
-  font-family: 'Tahoma', sans-serif;
+  font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
   color: #111;
 }
@@ -105,14 +109,38 @@ img {
 }
 
 .x-column-header-text {
-	font-family: 'Tahoma', sans-serif;
+	font-family: 'Maven Pro', sans-serif;
 	color: #333;
 }
 
 .x-mask-msg div {
-  font-family: 'Tahoma', sans-serif;
+  font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
   color: #111;
+}
+
+.x-window-header-default-top{
+  background: #333 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  padding: 5px !important;
+  border-width: 0 !important;
+}
+
+/*.messageBox{
+  background: #333;
+  box-shadow: none;
+  -moz-box-shadow:none;
+  -webkit-box-shadow:none;
+}*/
+
+.x-tab-bar-top .x-tab-bar-body {
+  border: 0 none;
+}
+
+.x-window-body-default {
+  border: 0;
 }
 
 /*Header*/
@@ -131,9 +159,9 @@ img {
   border: 0 none;
 }
 
-#mainAppPanel div:first-child div:first-child{
+/*#mainAppPanel div:first-child div:first-child{
   background-color:none;
-}
+}*/
 
 
 #mainAppPanel .x-tab-default-top {
@@ -470,6 +498,8 @@ img {
     background-color: #fefefe;
     border-color: #EBEBEB;
     text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .binHeader:hover {    
@@ -482,6 +512,10 @@ img {
 .binHeader-selected {
     background-color: rgb(240,240,240);
     border-color: #0082DB;
+}
+
+.gridPartCell {
+  font-size:13px;
 }
 
 .gridPartCell:hover {
@@ -581,3 +615,14 @@ background: #F8F8F8;
   background: rgb(225,225,225);
 }
 
+.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn {
+  background: rgb(21, 133, 197);
+}
+
+.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner{
+  color: white;
+}
+
+.openPartLibraryBtn-over, .changePartDefinitionBtn-over, .deletePartBtn-over {
+  background: rgb(17, 101, 150);
+}

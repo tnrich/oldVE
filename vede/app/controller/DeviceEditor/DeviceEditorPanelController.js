@@ -33,8 +33,22 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onDeviceEditorDeleteBtnClick: function () {
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model, activeTab);
+
+        Ext.Msg.show({
+             title:'Are you sure you want to delete this design?',
+             msg: 'WARNING: This will remove the current design. This action is not undoable!',
+             cls: 'messageBox',
+             buttons: Ext.Msg.OKCANCEL,
+             fn: deleteDEProjectBtn,
+             icon: Ext.Msg.QUESTION
+        });
+
+        function deleteDEProjectBtn (btn) { 
+            if (btn=='ok') {
+                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model, activeTab);
+             }
+         }
     },
 
     onOpenExampleItemBtnClick: function (item, e, eOpts) {
@@ -46,13 +60,26 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             "Combinatorial Golden Gate": "resources/examples/Combinatorial_Golden_Gate.json"
         };
 
-        Ext.Ajax.request({
-            url: examplesMap[selectedItem],
-            method: 'GET',
-            success: function (response) {
-                Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
-            }
+        Ext.Msg.show({
+             title:'Are you sure you want to load example?',
+             msg: 'WARNING: This will clear the current design. Any unsaved changes will be lost.',
+             buttons: Ext.Msg.OKCANCEL,
+             cls: 'messageBox',
+             fn: loadExample,
+             icon: Ext.Msg.QUESTION
         });
+
+        function loadExample (btn) { 
+            if (btn=='ok') {
+                Ext.Ajax.request({
+                url: examplesMap[selectedItem],
+                method: 'GET',
+                success: function (response) {
+                    Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
+                }
+                });
+             }
+     }
     },
 
     importDesignFromFormat: function (format, cb) {

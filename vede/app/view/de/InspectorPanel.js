@@ -13,7 +13,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
     dock: 'right',
     floatable: true,
     frame: true,
-    margin: '0 0 10 0',
     minWidth: 350,
     bodyBorder: false,
     collapseDirection: 'right',
@@ -43,33 +42,30 @@ Ext.define('Vede.view.de.InspectorPanel', {
             title: 'Part Info',
             autoScroll: true,
             items: [
-                /*
-                {
-                    xtype: 'tbseparator',
-                    height: 20
-                },
-                */
                 {
                     xtype: 'button',
-                    text : 'Map empty sequence',
-                    cls: 'emptySequenceBtn'
+                    text : 'Open Part Library',
+                    cls: 'openPartLibraryBtn',
+                    overCls: 'openPartLibraryBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    border: 0
                 },
                 {
                     xtype: 'button',
-                    text : 'Map sequence',
-                    cls: 'changeSequenceBtn'
+                    text : 'Change Part Definition',
+                    cls: 'changePartDefinitionBtn',
+                    overCls: 'changePartDefinitionBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    border: 0
                 },
                 {
                     xtype: 'button',
-                    text : 'Change part definition',
-                    cls: 'changePartDefinitionBtn'
+                    text : 'Delete Part',
+                    cls: 'deletePartBtn',
+                    overCls: 'deletePartBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    border: 0
                 },
-                /*
-                {
-                    xtype: 'tbseparator',
-                    height: 20
-                },
-                */
                 {
                     xtype: 'form',
                     flex: 1,
@@ -79,8 +75,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    minHeight: 150,
-                    maxHeight: 150,
+                    minHeight: 170,
+                    maxHeight: 170,
                     bodyPadding: 10,
                     title: 'Properties',
                     items: [
@@ -125,8 +121,8 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     xtype: 'form',
                     cls: 'forcedAssemblyStrategyForm',
                     flex: 1,
-                    minHeight: 80,
-                    maxHeight: 80,
+                    minHeight: 70,
+                    maxHeight: 70,
                     bodyPadding: 10,
                     title: 'Forced Assembly Strategy',
                     items: [
@@ -147,7 +143,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     xtype: 'form',
                     cls: 'eugeneRulesForm',
                     flex: 1,
-                    minHeight: 180,
+                    autoScroll: true,
                     bodyPadding: 10,
                     title: 'Eugene Rules',
                     items: [
@@ -162,8 +158,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 clicksToEdit: 2
                             },
                             columnLines: true,
-                            minHeight: 225,
-                            maxHeight: 225,
+                            rowLines: true,
+                            minHeight: 150,
+                            maxHeight: 150,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -218,6 +215,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'container',
+                            margin: '5 5 5 5',
                             layout: {
                                 type: 'hbox'
                             },
@@ -348,8 +346,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
 
                                         if(record.parts().getRange().length > 0) {
+                                            metadata.tdAttr = 'data-qtip="' + record.parts().getRange()[0].get("fas") + '"';
                                             return record.parts().getRange()[0].get("fas");
                                         } else {
+                                            metadata.tdAttr = 'data-qtip="' + value + '"';
                                             return value;
                                         }
                                     }

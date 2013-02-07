@@ -221,6 +221,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
         if(modified)
         {
+            Vede.application.fireEvent("checkj5Ready");
+
             if(modified.indexOf("fas") >= 0) {
                 this.renderFasConflicts(parts, updatedPart);
             } else {

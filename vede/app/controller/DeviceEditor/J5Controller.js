@@ -29,6 +29,43 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var j5Window = Ext.create("Vede.view.de.j5Controls").show();
         currentTab.j5Window = j5Window;
         this.j5Window = j5Window;
+
+        Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
+            if(!j5ready)
+            {
+                j5Window.close();
+                var messagebox = Ext.MessageBox.show({
+                    title: "Alert",
+                    msg: "Not ready to run j5",
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+
+                Ext.Function.defer(function () {
+                    messagebox.zIndexManager.bringToFront(messagebox);
+                }, 100);
+            }
+
+            var store;
+            if(combinatorial)
+            {
+                store = new Ext.data.ArrayStore({
+                    fields: ['assemblyMethod'],
+                    data : [['Combinatorial Mock Assembly'], ['Combinatorial SLIC/Gibson/CPEC'], ['Combinatorial Golden Gate']]
+                });
+            }
+            else
+            {
+                store = new Ext.data.ArrayStore({
+                    fields: ['assemblyMethod'],
+                    data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
+                });            }
+
+            var combobox = j5Window.down('component[cls="assemblyMethodSelector"]');
+            combobox.bindStore(store);
+            combobox.setValue(store.first());
+        });
+
     },
 
     onEditJ5ParamsBtnClick: function () {

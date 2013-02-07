@@ -186,8 +186,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         labelSeparator: ' ',
                         labelWidth: 120,
                         queryMode: 'local',
-                        store: ['Mock Assembly', 'SLIC/Gibson/CPEC', 'Golden Gate'],
-                        value: 'Mock Assembly'
+                        displayField: 'assemblyMethod',
+                        valueField: 'assemblyMethod'
                     }, {
                         xtype: 'container',
                         layout: {

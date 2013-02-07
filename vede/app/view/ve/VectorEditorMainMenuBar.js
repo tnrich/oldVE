@@ -204,10 +204,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Preferences'
             }]
         }
-    }, {
-        xtype: 'button',
-        text: 'Help',
-        id: 'veHelpMenuItem'
+    },
+    // }, {
+    //     xtype: 'button',
+    //     text: 'Help',
+    //     id: 'veHelpMenuItem'
 //         menu: {
 //             xtype: 'menu',
 //             minWidth: 140,
@@ -225,12 +226,21 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //                 text: 'About'
 //             }]
 //         }
-    }, {
+     {
         xtype: 'tbfill'
+    }, {
+        xtype: 'button',
+        text: 'Create Part',
+        cls: 'createPartBtn'
     }, {
         xtype: 'button',
         text: 'Save changes',
         cls: 'saveSequenceBtn',
+        hidden: true
+    }, {
+        xtype: 'button',
+        text: 'Save',
+        cls: 'saveNewSequenceBtn',
         hidden: true
     }]
 });

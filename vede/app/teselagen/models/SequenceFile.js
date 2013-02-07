@@ -275,7 +275,15 @@ Ext.define("Teselagen.models.SequenceFile", {
 
         if(format === constants.GENBANK) {
             var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(content);
-            end = gb.findKeyword("ORIGIN").getSequence().length;
+            if(gb)
+            {
+                if(gb.findKeyword("ORIGIN"))
+                {
+                    end = gb.findKeyword("ORIGIN").getSequence().length;
+                }
+                else end = -1;
+            }
+            else end = -1;
         } else if(format === constants.FASTA) {
             var seq = content.replace(/>\s*(\S*)\s*/, "");
             seq = seq.replace(/\s/, "");

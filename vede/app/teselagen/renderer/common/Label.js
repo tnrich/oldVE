@@ -41,12 +41,13 @@ Ext.define("Teselagen.renderer.common.Label", {
             y: inData.y
         })]);
 
-/*
-        if(!this.labelText() || !this.StringUtil.trim("")) {
-            this.setIncludeInView(false);
-        }
-*/
-        if(!this.labelText() || !this.StringUtil.trim(this.labelText())) {
+        /*
+            Line 48 fix: this.StringUtil.trim fails because it used to receive this.labelText() of type Object
+        */
+
+        labelString = (typeof(this.labelText()) == "object") ? "" : this.labelText();
+
+        if(!this.labelText() || !this.StringUtil.trim(labelString)) {
             this.setIncludeInView(false);
         }
 

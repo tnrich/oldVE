@@ -1,8 +1,8 @@
 /**
  * Change part definition panel
- * @class Vede.view.de.ChangePartDefinitionPanel
+ * @class Vede.view.de.PartDefinitionDialog
  */
-Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
+Ext.define('Vede.view.de.PartDefinitionDialog', {
     extend: 'Ext.window.Window',
 
     height: 400,
@@ -49,21 +49,24 @@ Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
                             fieldLabel: 'Sequence',
                             store: ['Whole sequence','Specified sequence'],
                             margin: '10 10 0 0',
-                            name: 'specifiedSequence'
+                            name: 'specifiedSequence',
+                            editable: false
                         },
                         {
                             xtype: 'numberfield',
                             anchor: '100%',
                             fieldLabel: 'Start BP',
                             margin: '10 10 0 0',
-                            name: 'startBP'
+                            name: 'startBP',
+                            minValue: 1
                         },
                         {
                             xtype: 'numberfield',
                             anchor: '100%',
                             fieldLabel: 'Stop BP:',
                             margin: '10 10 0 0',
-                            name: 'stopBP'
+                            name: 'stopBP',
+                            minValue: 1
                         },
                         {
                             xtype: 'checkboxfield',
@@ -75,13 +78,20 @@ Ext.define('Vede.view.de.ChangePartDefinitionPanel', {
                         },
                         {
                             xtype: 'button',
+                            text: 'Save Part',
+                            cls: 'saveDefinitionPartBtn',
+                            hidden: true
+                        },
+                        {
+                            xtype: 'button',
                             text: 'Done',
                             cls: 'changePartDefinitionDoneBtn'
                         },
                         {
                             xtype: 'button',
                             margin: '0 0 0 10',
-                            text: 'Cancel'
+                            text: 'Cancel',
+                            cls: 'cancelPartDefinitionBtn'
                         }
                     ]
                 }

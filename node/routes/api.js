@@ -759,4 +759,12 @@ module.exports = function (app, express) {
     });
   });
 
+  //Get Part Library
+  app.get('/partLibrary', restrict, function (req, res) {
+    var Part = app.db.model("part");
+    Part.find({},function(err,parts){
+      res.json({'parts':parts});
+    });
+  });
+
 };
