@@ -1,11 +1,24 @@
 Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     extend: 'Ext.app.Controller',
+    requires: ["Teselagen.event.MapperEvent"],
 
     selectedPart: null,
     selectedWindow: null,
     selectedSequence: null,
     selectedBinIndex: null,
     selectedVEProject: null,
+
+    selectedStartBP: null,
+    selectedStopBP: null,
+
+    onCancelPartDefinitionBtnClick: function(){
+        this.selectedWindow.close();
+    },
+
+    onSequenceSelectionChanged: function(pieController,start,end){
+        this.selectedStartBP = start;
+        this.selectedStopBP = end;
+    },
 
     onSpecifiedSequenceChange: function(combobox){
         var form = this.selectedWindow.down('form').getForm();
@@ -40,6 +53,20 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         name.setValue(this.selectedPart.get('name'));
 
+        if(this.selectedStartBP!==null && this.selectedStopBP!==null)
+        {
+            startBP.setValue(this.selectedStartBP);
+            stopBP.setValue(this.selectedStopBP);
+            this.selectedStopBP = null;
+            this.selectedStartBP = null;
+        }
+        else
+        {
+            startBP.setValue(this.selectedPart.get('genbankStartBP'));
+            stopBP.setValue(this.selectedPart.get('endBP'));
+        }
+
+
         if(this.selectedSequence)
         {
             partSource.setValue(this.selectedSequence.get('partSource'));
@@ -52,9 +79,6 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             }
             else specifiedSequence.setValue('Specified sequence');
         }
-
-        startBP.setValue(this.selectedPart.get('genbankStartBP'));
-        stopBP.setValue(this.selectedPart.get('endBP'));
 
         startBP.setMaxValue(sequenceLength);
         stopBP.setMaxValue(sequenceLength);
@@ -72,12 +96,14 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     openCreatePart: function(veproject,selectedPart,selectedSequence){
+
         this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
         this.selectedPart = selectedPart;
         this.selectedVEProject = veproject;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex = null;
         this.selectedBinIndex = -1;
+
         this.populateFields();
 
         this.selectedWindow.setTitle('Create Part');
@@ -102,9 +128,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             this.selectedSequence.set('sequenceFileContent',sourceData.getValue());
         }
 
-        //specifiedSequence.getValue()('Whole sequence');
         this.selectedPart.set('genbankStartBP',startBP.getValue());
         this.selectedPart.set('endBP',stopBP.getValue());
+        
         this.selectedPart.set('revComp',revComp.getValue());
 
         if(this.selectedBinIndex!=-1) Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
@@ -113,18 +139,20 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         this.selectedWindow.close();
     },
 
-    onCancelPartDefinitionCancelBtnClick: function() {
+    onCancelPartDefinitionBtnClick: function() {
         this.selectedWindow.close();
     },
 
     init: function () {
     
+        this.SelectionEvent = Teselagen.event.SelectionEvent;
+
         this.control({
             "button[cls='changePartDefinitionDoneBtn']": {
                 click: this.onChangePartDefinitionDoneBtnClick
             },
-            "button[cls='cancelPartDefinitionCancelBtn']": {
-                click: this.onCancelPartDefinitionCancelBtnClick
+            "button[cls='cancelPartDefinitionBtn']": {
+                click: this.onCancelPartDefinitionBtnClick
             },
             "combobox[name='specifiedSequence']": {
                 change: this.onSpecifiedSequenceChange
@@ -133,7 +161,10 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         
         this.application.on("openChangePartDefinition", this.open, this);
         this.application.on("createPartDefinition", this.openCreatePart, this);
-        /*
+
+        this.application.on(this.SelectionEvent.SELECTION_CHANGED, this.onSequenceSelectionChanged, this);
+
+        /*+
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
         this.J5ControlsUtils = Teselagen.utils.J5ControlsUtils;
 
