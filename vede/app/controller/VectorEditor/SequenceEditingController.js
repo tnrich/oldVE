@@ -18,7 +18,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                 part.set('sequencefile_id', sequence.data.id);
                 part.save({
                     callback: function () {
-                        Ext.MessageBox.alert('Information', 'Part created');
+                        Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText('Part created');
                     }
                 });
             }
