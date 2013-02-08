@@ -158,22 +158,23 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     store: partLibrary,
                     listeners: {
                         "itemclick": function(grid, part, item){
-                            self.findBinByPart(self.selectedPart,function(bin){
-                                if(bin)
-                                {
-                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                    bin.parts().removeAt(insertIndex);
-                                    bin.parts().insert(insertIndex,part);
-                                    self.onReRenderDECanvasEvent();
-                                    selectWindow.close();
-                                    self.selectedPart = part;
-                                    Vede.application.fireEvent("partSelected",part);
-                                }
-                                else
-                                {
-                                    Ext.alert('Error','Failed mapping part from library');
-                                }
-                            });
+                            var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
+                                                                            self.selectedPart);
+
+                            if(bin)
+                            {
+                                var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                bin.parts().removeAt(insertIndex);
+                                bin.parts().insert(insertIndex,part);
+                                self.onReRenderDECanvasEvent();
+                                selectWindow.close();
+                                self.selectedPart = part;
+                                Vede.application.fireEvent("partSelected",part);
+                            }
+                            else
+                            {
+                                Ext.alert('Error','Failed mapping part from library');
+                            }
                         }
                     }
                 }
