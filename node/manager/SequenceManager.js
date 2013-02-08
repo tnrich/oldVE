@@ -5,12 +5,13 @@
 
 /*global module*/
 
-module.exports = function(pDb) {
-    function SequenceManager() {
+module.exports = function() {
+    function SequenceManager(pDb) {
+        this.db = pDb;
     }
 
     SequenceManager.prototype.deleteAll = function(pNext) {
-        var Sequence = pDb.model("sequence");
+        var Sequence = this.db.model("sequence");
         Sequence.remove(function(pErr) {
             pNext(pErr);
         });

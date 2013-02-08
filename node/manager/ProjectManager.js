@@ -5,12 +5,13 @@
 
 /*global module*/
 
-module.exports = function(pDb) {
-    function ProjectManager() {
+module.exports = function() {
+    function ProjectManager(pDb) {
+        this.db = pDb;
     }
 
     ProjectManager.prototype.deleteAll = function(pNext) {
-        var Project = pDb.model("project");
+        var Project = this.db.model("project");
         Project.remove(function(pErr) {
             pNext(pErr);
         });

@@ -1,13 +1,12 @@
 /*global API_URL, before, dbManager, describe, expect, it, request */
 
-var ApiManager, apiManager;
+var ApiManager = require("../manager/ApiManager")();
+var apiManager;
 
 describe("API tests.", function() {
     var date, projects;
-    before(function(pDone) {
-        ApiManager = require("../manager/ApiManager")(dbManager.mongoose);
-        apiManager = new ApiManager();
-        pDone();
+    before(function() {
+        apiManager = new ApiManager(dbManager.mongoose);
     });
     describe("Basic access.", function() {
         it("resetdb", function(done) {
@@ -39,7 +38,7 @@ describe("API tests.", function() {
         });
     });
     describe("Projects.", function() {
-        xit("Delete /user/projects", function(done) {
+        it("Delete /user/projects", function(done) {
             request.del({
                 uri: API_URL+"user/projects",
                 json: true

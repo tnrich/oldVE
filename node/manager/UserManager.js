@@ -5,12 +5,13 @@
 
 /*global module*/
 
-module.exports = function(pDb) {
-    function UserManager() {
+module.exports = function() {
+    function UserManager(pDb) {
+        this.db = pDb;
     }
 
     UserManager.prototype.deleteAll = function(pNext) {
-        var User = pDb.model("User");
+        var User = this.db.model("User");
         User.remove(function(pErr) {
             pNext(pErr);
         });

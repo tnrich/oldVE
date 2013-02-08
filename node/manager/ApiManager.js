@@ -5,28 +5,29 @@
 
 /*global module*/
 
-module.exports = function(pDb) {
+module.exports = function() {
     var async = require("async");
-    var DEProjectManager = require("./DEProjectManager")(pDb);
-    var J5RunManager = require("./J5RunManager")(pDb);
-    var PartManager = require("./PartManager")(pDb);
-    var ProjectManager = require("./ProjectManager")(pDb);
-    var SequenceManager = require("./SequenceManager")(pDb);
-    var UserManager = require("./UserManager")(pDb);
-    var VEProjectManager = require("./VEProjectManager")(pDb);
+    var DEProjectManager = require("./DEProjectManager")();
+    var J5RunManager = require("./J5RunManager")();
+    var PartManager = require("./PartManager")();
+    var ProjectManager = require("./ProjectManager")();
+    var SequenceManager = require("./SequenceManager")();
+    var UserManager = require("./UserManager")();
+    var VEProjectManager = require("./VEProjectManager")();
 
-    function ApiManager() {
-        this.deprojectManager = new DEProjectManager();
-        this.j5RunManager = new J5RunManager();
-        this.partManager = new PartManager();
-        this.projectManager = new ProjectManager();
-        this.sequenceManager = new SequenceManager();
-        this.userManager = new UserManager();
-        this.veprojectManager = new VEProjectManager();
+    function ApiManager(pDb) {
+        this.db = pDb;
+        this.deprojectManager = new DEProjectManager(pDb);
+        this.j5RunManager = new J5RunManager(pDb);
+        this.partManager = new PartManager(pDb);
+        this.projectManager = new ProjectManager(pDb);
+        this.sequenceManager = new SequenceManager(pDb);
+        this.userManager = new UserManager(pDb);
+        this.veprojectManager = new VEProjectManager(pDb);
     }
 
     ApiManager.prototype.resetdb = function(pNext) {
-        async.parallel([this.deprojectManager.deleteAll,
+        async.parallel([me.deprojectManager.deleteAll(this.db)],
                         this.j5RunManager.deleteAll,
                         this.partManager.deleteAll,
                         this.projectManager.deleteAll,
