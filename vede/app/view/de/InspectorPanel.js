@@ -183,7 +183,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'booleancolumn',
-                                    text: 'Negated?',
+                                    text: 'NOT?',
                                     dataIndex: 'negationOperator',
                                     trueText: 'Yes',
                                     falseText: 'No',
