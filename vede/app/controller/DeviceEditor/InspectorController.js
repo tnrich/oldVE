@@ -167,22 +167,23 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     store: partLibrary,
                     listeners: {
                         "itemclick": function(grid, part, item){
-                            self.findBinByPart(self.selectedPart,function(bin){
-                                if(bin)
-                                {
-                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                    bin.parts().removeAt(insertIndex);
-                                    bin.parts().insert(insertIndex,part);
-                                    self.onReRenderDECanvasEvent();
-                                    selectWindow.close();
-                                    self.selectedPart = part;
-                                    Vede.application.fireEvent("partSelected",part);
-                                }
-                                else
-                                {
-                                    Ext.alert('Error','Failed mapping part from library');
-                                }
-                            });
+                            var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
+                                                                            self.selectedPart);
+
+                            if(bin)
+                            {
+                                var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                bin.parts().removeAt(insertIndex);
+                                bin.parts().insert(insertIndex,part);
+                                self.onReRenderDECanvasEvent();
+                                selectWindow.close();
+                                self.selectedPart = part;
+                                Vede.application.fireEvent("partSelected",part);
+                            }
+                            else
+                            {
+                                Ext.alert('Error','Failed mapping part from library');
+                            }
                         }
                     }
                 }
@@ -205,8 +206,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
-        console.log(j5Part.get("name"));
-        console.log(j5Part.get("partSource"));
+
+        if(j5Part) {
+            console.log(j5Part.get("name"));
+            console.log(j5Part.get("partSource"));
+        }
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {

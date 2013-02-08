@@ -19,7 +19,12 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
         id: "VectorEditorStatusBar",
         items: [{
             xtype: "tbfill"
-        }, {
+        },
+        {
+            xtype: "tbtext",
+            id: "VectorEditorStatusBarAlert"
+        },
+        {
             xtype: "tbseparator"
         }, {
             xtype: "tbtext",
