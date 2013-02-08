@@ -27,13 +27,13 @@ module.exports = function() {
     }
 
     ApiManager.prototype.resetdb = function(pNext) {
-        async.parallel([me.deprojectManager.deleteAll(this.db)],
-                        this.j5RunManager.deleteAll,
-                        this.partManager.deleteAll,
-                        this.projectManager.deleteAll,
-                        this.sequenceManager.deleteAll,
-                        this.userManager.deleteAll,
-                        this.veprojectManager.deleteAll],
+        async.parallel([this.deprojectManager.deleteAll.bind(this.deprojectManager),
+                        this.j5RunManager.deleteAll.bind(this.j5RunManager),
+                        this.partManager.deleteAll.bind(this.partManager),
+                        this.projectManager.deleteAll.bind(this.projectManager),
+                        this.sequenceManager.deleteAll.bind(this.sequenceManager),
+                        this.userManager.deleteAll.bind(this.userManager),
+                        this.veprojectManager.deleteAll.bind(this.veprojectManager)],
                         pNext);
     };
 
