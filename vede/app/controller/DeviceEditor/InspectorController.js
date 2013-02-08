@@ -23,6 +23,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.selectedPart) {
             var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
                                                                   this.selectedPart);
+            var involvedRules = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                                               this.selectedPart);
+
+            involvedRules.each(function(rule) {
+                this.activeProject.rules().remove(rule);
+                rule.destroy();
+            }, this);
 
             parentBin.parts().remove(this.selectedPart);
         }
@@ -220,6 +227,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.eugeneRulesGrid.reconfigure(rulesStore);
 
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
+    },
+
+    clearPartInfo: function() {
+        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+        var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
+
+        partPropertiesForm.getForm().reset();
+        fasForm.getForm().reset();
+
+        this.eugeneRulesGrid.reconfigure();
     },
 
     onBinSelected: function (j5Bin) {
@@ -487,6 +504,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onRemoveFromParts: function (parts, removedPart, index) {
         this.columnsGrid.getView().refresh();
         this.renderCollectionInfo();
+
+        this.clearPartInfo();
     },
 
     renderCollectionInfo: function () {
