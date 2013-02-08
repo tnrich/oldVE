@@ -90,6 +90,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'displayfield',
                             height: 20,
+                            name: "partSource",
                             cls: 'partSourceField',
                             fieldLabel: 'Part Source'
                         },

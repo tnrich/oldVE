@@ -52,7 +52,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         combinatorial designs: each collection bin must contain at least one mapped part, and at least 
         one bin must contain more than one mapped part. No column should contained a non-mapped (but named) part.
         */
-
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         var j5collection = tab.model.getDesign().getJ5Collection();
         this.checkCombinatorial(j5collection,function(combinatorial){
@@ -199,7 +198,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
-
+        console.log(j5Part.get("name"));
+        console.log(j5Part.get("partSource"));
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
@@ -478,8 +478,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.activeProject) {
             j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
                                                             this.activeProject));
+            if (this.DeviceDesignManager.checkJ5Ready(this.activeProject) == true) {
+                    j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
+                } else {
+                    j5ReadyField.setFieldStyle("color:red");
+                }
+
             combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
                                                             this.activeProject));
+
+            if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
+                    combinatorialField.setFieldStyle("color:purple");
+                } else {
+                    combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
+                }
 
             if(this.activeProject.getJ5Collection().get("isCircular")) {
                 circularPlasmidField.setValue(true);

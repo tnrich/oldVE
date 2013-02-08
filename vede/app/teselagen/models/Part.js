@@ -94,6 +94,7 @@ Ext.define("Teselagen.models.Part", {
                 return name;
             }
         },
+        {name: "partSource",        type: "string",     defaultValue: "blah"},
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
@@ -102,6 +103,7 @@ Ext.define("Teselagen.models.Part", {
 
     validations: [
         {field: "name",             type: "presence"},
+        {field: "partSource",       type: "presence"},
         {field: "revComp",          type: "presence"},
         {field: "genbankStartBP",   type: "presence"},
         {field: "endBP",            type: "presence"},
@@ -198,6 +200,7 @@ Ext.define("Teselagen.models.Part", {
         }
 
         if (this.get("name") === otherPart.get("name") &&
+            this.get("partSouce") == otherPart.get("partSource") &&
             this.get("revComp") === otherPart.get("revComp") &&
             this.get("genbankStartBP") === otherPart.get("genbankStartBP") &&
             this.get("endBP") === otherPart.get("endBP") &&

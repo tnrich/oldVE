@@ -29,6 +29,7 @@ Ext.define("Teselagen.models.PartVO", {
      */
     fields: [
         {name: "name",              type: "string",     defaultValue: ""},
+        {name: "partSouce",         type: "string",     defaultValue: ""},
         {name: "revComp",           type: "boolean",    defaultValue: false},
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},
         {name: "endBP",             type: "int",        defaultValue: 0},
@@ -92,6 +93,7 @@ Ext.define("Teselagen.models.PartVO", {
         }
 
         if (   this.get("name") === otherPartVO.get("name")
+            && this.get("partSource") === otherPartVO.get("partSource")
             && this.get("revComp") === otherPartVO.get("revComp")
             && this.get("genbankStartBP") === otherPartVO.get("genbankStartBP")
             && this.get("endBP") === otherPartVO.get("endBP")
@@ -109,6 +111,7 @@ Ext.define("Teselagen.models.PartVO", {
     isEmpty: function() {
 
         if (   this.get("name") === ""
+            && this.get("partSource") === ""
             && this.get("revComp") === false
             && this.get("genbankStartBP") === 0
             && this.get("endBP") === 0
