@@ -33,7 +33,7 @@ Ext.define('Vede.view.de.EugeneRuleDialog', {
                         {
                             xtype: 'checkbox',
                             cls: 'negationOperatorField',
-                            fieldLabel: 'Negate Rule?'
+                            fieldLabel: 'Negate Operator?'
                         },
                         {
                             xtype: 'combobox',
