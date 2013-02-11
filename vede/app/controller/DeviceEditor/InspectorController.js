@@ -19,6 +19,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     selectedBinIndex: null,
     tabPanel: null,
 
+    findBinByPart:function(findingPart,cb){
+        var foundBin = null;
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var j5collection = tab.model.getDesign().getJ5Collection();
+        j5collection.bins().each(function(bin,binKey){
+            bin.parts().each(function(part){
+                if(part.internalId===findingPart.internalId) foundBin = bin;
+            });
+        });
+        return cb(foundBin);
+    },
+
     onDeletePartBtnClick: function(){
         if(this.selectedPart) {
             var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
@@ -158,6 +170,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     listeners: {
                         "itemclick": function(grid, part, item){
                             self.findBinByPart(self.selectedPart,function(bin){
+                                console.log(bin);
                                 if(bin)
                                 {
                                     var insertIndex = bin.parts().indexOf(self.selectedPart);
@@ -170,7 +183,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 }
                                 else
                                 {
-                                    Ext.alert('Error','Failed mapping part from library');
+                                    Ext.MessageBox.alert('Error','Failed mapping part from library');
                                 }
                             });
                         }
@@ -195,8 +208,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
-        console.log(j5Part.get("name"));
-        console.log(j5Part.get("partSource"));
+        
+        if(j5Part) {
+            // Remember that j5Part may not exist
+            console.log(j5Part.get("name"));
+            console.log(j5Part.get("partSource"));
+        }
+
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
@@ -502,10 +520,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onRemoveFromParts: function (parts, removedPart, index) {
-        this.columnsGrid.getView().refresh();
-        this.renderCollectionInfo();
+        
+        try {
+            this.columnsGrid.getView().refresh();
+            this.renderCollectionInfo();
 
-        this.clearPartInfo();
+            this.clearPartInfo();
+        } catch(err)
+        {
+            console.log("Failed removing part from bin.");
+            console.log(err);
+        }
     },
 
     renderCollectionInfo: function () {
