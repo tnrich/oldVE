@@ -122,12 +122,12 @@ Ext.define("Teselagen.manager.FindManager", {
         };
 
         for(var i = 0; i < expression.length; i++) {
-            var char = expression.charAt(i);
+            var character = expression.characterAt(i);
 
-            if(char == "a" || char == "t" || char == "c" || char == "g" || char == "u") {
-                ambiguous.push(char);
+            if(character == "a" || character == "t" || character == "c" || character == "g" || character == "u") {
+                ambiguous.push(character);
             } else {
-                ambiguous.push(switchObj[char]);
+                ambiguous.push(switchObj[character]);
             }
         }
 
