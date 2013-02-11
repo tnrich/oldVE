@@ -9,17 +9,17 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     items: [
         {
             xtype: 'button',
-            id: 'exportBtn',
-            icon: 'resources/images/export.png',
-            scale: 'medium',
-            tooltip: 'Save to Registry'
-        },
-        {
-            xtype: 'button',
             id: 'saveBtn',
             icon: 'resources/images/save.png',
             scale: 'medium',
             tooltip: 'Save Project'
+        },
+        {
+            xtype: 'button',
+            id: 'exportBtn',
+            icon: 'resources/images/export.png',
+            scale: 'medium',
+            tooltip: 'Save to Registry'
         },
         {
             xtype: 'button',
