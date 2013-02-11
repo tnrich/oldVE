@@ -63,15 +63,25 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         */
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         var j5collection = tab.model.getDesign().getJ5Collection();
+        var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
             j5collection.bins().each(function(bin,binKey){
                 var firstPart = bin.parts().first();
-                if(firstPart != undefined) {if(firstPart.get('sequencefile_id') === "") j5ready = false;}
+                if(firstPart != undefined) {
+                    if(firstPart.get('sequencefile_id') === "") {j5ready = false;}
+                }
                 else {j5ready = false;}
             });
+            console.log(j5ready);
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
+
+            if (j5ready ==  true) {
+                    j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
+                } else {
+                    j5ReadyField.setFieldStyle("color:red");
+                }
 
             if (typeof(cb) == "function") {cb(combinatorial,j5ready);}
 
@@ -169,6 +179,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     store: partLibrary,
                     listeners: {
                         "itemclick": function(grid, part, item){
+<<<<<<< HEAD
                             self.findBinByPart(self.selectedPart,function(bin){
                                 console.log(bin);
                                 if(bin)
@@ -186,6 +197,25 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                     Ext.MessageBox.alert('Error','Failed mapping part from library');
                                 }
                             });
+=======
+                            var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
+                                                                            self.selectedPart);
+
+                            if(bin)
+                            {
+                                var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                bin.parts().removeAt(insertIndex);
+                                bin.parts().insert(insertIndex,part);
+                                self.onReRenderDECanvasEvent();
+                                selectWindow.close();
+                                self.selectedPart = part;
+                                Vede.application.fireEvent("partSelected",part);
+                            }
+                            else
+                            {
+                                Ext.alert('Error','Failed mapping part from library');
+                            }
+>>>>>>> 6178ac906d6b99f4e53a26b4f22ab5349223dfef
                         }
                     }
                 }
@@ -542,7 +572,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.activeProject) {
             j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
                                                             this.activeProject));
-            if (this.DeviceDesignManager.checkJ5Ready(this.activeProject) == true) {
+
+                console.log(this.DeviceDesignManager.checkJ5Ready(this.activeProject));
+
+             if (this.DeviceDesignManager.checkJ5Ready(this.activeProject)) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
                 } else {
                     j5ReadyField.setFieldStyle("color:red");
