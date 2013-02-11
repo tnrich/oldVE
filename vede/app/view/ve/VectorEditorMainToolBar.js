@@ -10,14 +10,14 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         {
             xtype: 'button',
             id: 'saveBtn',
-            icon: 'resources/images/save.png',
+            icon: 'resources/images/export.png',
             scale: 'medium',
             tooltip: 'Save Project'
         },
         {
             xtype: 'button',
             id: 'exportBtn',
-            icon: 'resources/images/export.png',
+            icon: 'resources/images/save.png',
             scale: 'medium',
             tooltip: 'Save to Registry'
         },
