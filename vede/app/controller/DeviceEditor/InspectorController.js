@@ -179,25 +179,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     store: partLibrary,
                     listeners: {
                         "itemclick": function(grid, part, item){
-<<<<<<< HEAD
-                            self.findBinByPart(self.selectedPart,function(bin){
-                                console.log(bin);
-                                if(bin)
-                                {
-                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                    bin.parts().removeAt(insertIndex);
-                                    bin.parts().insert(insertIndex,part);
-                                    self.onReRenderDECanvasEvent();
-                                    selectWindow.close();
-                                    self.selectedPart = part;
-                                    Vede.application.fireEvent("partSelected",part);
-                                }
-                                else
-                                {
-                                    Ext.MessageBox.alert('Error','Failed mapping part from library');
-                                }
-                            });
-=======
                             var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
                                                                             self.selectedPart);
 
@@ -215,7 +196,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             {
                                 Ext.alert('Error','Failed mapping part from library');
                             }
->>>>>>> 6178ac906d6b99f4e53a26b4f22ab5349223dfef
                         }
                     }
                 }
