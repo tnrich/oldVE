@@ -30,7 +30,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         var veproject = Teselagen.manager.ProjectManager.workingVEProject;
         var sequence = Teselagen.manager.ProjectManager.workingSequence;
         var part = Ext.create("Teselagen.models.Part", {
-            name: veproject.get('name'),
+            name: '',
             genbankStartBP: 1,
             endBP: sequence.getLength()
         });

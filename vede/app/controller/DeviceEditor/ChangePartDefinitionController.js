@@ -69,7 +69,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         if(this.selectedSequence)
         {
-            partSource.setValue(this.selectedSequence.get('partSource'));
+            if(this.selectedVEProject) partSource.setValue(this.selectedVEProject.get('name'));
             sourceData.setValue(this.selectedSequence.get('sequenceFileContent'));
             if(startBP.getValue()===1 && stopBP.getValue()===sequenceLength)
             {

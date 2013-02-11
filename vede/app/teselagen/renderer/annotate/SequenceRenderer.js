@@ -53,8 +53,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     update: function(){
         this.rows = [];
-
-        this.numRows = int (Math.ceil(((contentHolder.sequenceProvider.sequence.length + 1) / 50)));
+        this.numRows = Math.round((Math.ceil(((contentHolder.sequenceProvider.sequence.length + 1) / 50))));
     },
 
     render: function(){
