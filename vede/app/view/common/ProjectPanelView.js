@@ -7,8 +7,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     alias: 'widget.ProjectPanelView',
     region: 'west',
     id: 'ProjectPanel',
-    minWidth: 228,
-    width: 228,
+    minWidth: 220,
+    width: 220,
     collapseDirection: 'left',
     collapsible: true,
     frameHeader: false,
@@ -35,7 +35,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         xtype: 'treepanel',
         title: 'Part Library',
         id: 'projectPartsPanel',
-        width: 228,
+        width: 220,
         rootVisible: false
     }]
 

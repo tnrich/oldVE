@@ -42,7 +42,7 @@ Ext.define("Vede.view.ve.VectorEditorPanel", {
             collapseTarget: "prev"
         }, {
             xtype: "AnnotatePanel",
-            flex: 1
+            flex: 1.2
         }]
     }]
 });

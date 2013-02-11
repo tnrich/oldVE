@@ -7,6 +7,7 @@ Ext.define("Vede.view.ve.AnnotatePanel", {
     alias: "widget.AnnotatePanel",
     id: "AnnotatePanel",
     autoScroll: true,
+    width: "645px",
     layout: {
         type: "fit"
     },
