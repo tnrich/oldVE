@@ -1,21 +1,33 @@
-/*global console, task*/
-var request = require("request");
+/*global complete, fail, jake, process, task*/
+
 var DbManager = require("./manager/DbManager")();
+var ApiManager = require("./manager/ApiManager")();
 var dbManager = new DbManager();
-ApiManager = require("../manager/ApiManager")(dbManager.mongoose);
-apiManager = new ApiManager();
-var API_URL =  "http://teselagen.local/api/";
+var apiManager;
+
+jake.addListener("complete", function () {
+    dbManager.closeMongoose();
+    process.exit();
+});
 
 task("connectdb", function() {
     dbManager.connectMongoose(function(pErr) {
         if (pErr) {
-            throw pErr;
+            fail(pErr);
         }
         else {
             require("./schemas/DBSchemas")(dbManager.mongoose);
+            apiManager = new ApiManager(dbManager.mongoose);
+            complete();
         }
     });
-});
-task("resetdb", function() {
-    apiManager.resetdb(function(err));
-});
+}, {async:true});
+
+task("resetdb", ["connectdb"], function() {
+    apiManager.resetdb(function(pErr) {
+        if (pErr) {
+            fail(pErr);
+        }
+        complete();
+    });
+}, {async:true});
