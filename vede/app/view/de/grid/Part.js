@@ -1,6 +1,9 @@
 /**
  * Class which creates components for given parts to display in the Device
  * Editor canvas.
+ * @class Vede.view.de.grid.Part
+ *
+ * @author Nick Elsbree
  */
 Ext.define('Vede.view.de.grid.Part', {
     extend: 'Ext.container.Container',
@@ -9,6 +12,10 @@ Ext.define('Vede.view.de.grid.Part', {
 
     alias: 'widget.Part',
 
+    /**
+     * @cfg {Teselagen.models.Part} part The part model to render on the grid.
+     * @cfg {Boolean} fasConflict Whether to display a FAS conflict indicator.
+     */
     config: {
         part: null,
         fasConflict: false
@@ -19,9 +26,7 @@ Ext.define('Vede.view.de.grid.Part', {
     parentBin: null,
     partCell: null,
     eugeneFlag: null,
-    /**
-     * @param Teselagen.models.Part
-     */
+
     constructor: function (config) {
         var self = this;
         this.initConfig(config);
@@ -128,21 +133,24 @@ Ext.define('Vede.view.de.grid.Part', {
         }
     },
 
+    /**
+     * Applies the correct CSS class to the part when it is selected.
+     */
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
     },
 
+    /**
+     * Removes the 'selected' CSS class from the part when it is deselected.
+     */
     deselect: function () {
         this.partCell.down().removeBodyCls("gridPartCell-selected");
-    },
-
-    applyPart: function (pPart) {
-        return pPart;
     },
 
     /**
      * If the fas is set, add either a red or blue rectangle, depending on
      * whether the fasConflict flag is true or false.
+     * @param {Boolean} fasConflict True to add a red rectangle, false for blue.
      */
     addFasIndicator: function (fasConflict) {
         var image;
@@ -165,6 +173,9 @@ Ext.define('Vede.view.de.grid.Part', {
         image.show();
     },
 
+    /**
+     * Adds the Eugene Rule indicator image to the part.
+     */
     addEugeneRuleIndicator: function() {
         var image = Ext.create("widget.image", {
             xtype: "image",
@@ -176,6 +187,9 @@ Ext.define('Vede.view.de.grid.Part', {
         image.show();
     },
 
+    /**
+     * Removes the Eugene Rule indicator image.
+     */
     removeEugeneRuleIndicator: function() {
         this.partCell.down("image[cls='eugeneRuleIndicator']").destroy();
     },
