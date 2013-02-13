@@ -139,6 +139,8 @@ Ext.application({
         Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
             cls: 'x-splash-icon'
         });
+
+        Ext.QuickTips.init();
     },
 
     launch: function() {
