@@ -305,7 +305,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {
                                     xtype: 'gridcolumn',
                                     width: 100,
-                                    text: 'Column Name',
+                                    text: '<div data-qtip="Column Name">Column Name</div>',
                                     dataIndex: 'binName',
                                     editor: {
                                         xtype: 'textfield',
@@ -318,7 +318,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: 'Direction',
+                                    text: '<div data-qtip="Direction">Direction</div>',
                                     dataIndex: 'directionForward',
                                     editor: {
                                         xtype: 'combobox',
@@ -334,14 +334,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'numbercolumn',
-                                    text: 'Items',
+                                    text: '<div data-qtip="Items">Items</div>',
                                     renderer: function(value, metadata, record) {
                                         return record.parts().getRange().length;
                                     }
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: 'FAS',
+                                    text: '<div data-qtip="FAS">FAS</div>',
                                     dataIndex: 'fas',
                                     renderer: function(value, metadata, record) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
@@ -357,7 +357,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'booleancolumn',
-                                    text: 'DSF',
+                                    text: '<div data-qtip="DSF">DSF</div>',
                                     dataIndex: 'dsf',
                                     editor: {
                                         xtype: 'checkbox'
@@ -365,7 +365,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: 'FRO',
+                                    text: '<div data-qtip="FRO">FRO</div>',
                                     dataIndex: 'fro',
                                     editor: {
                                         xtype: 'textfield',

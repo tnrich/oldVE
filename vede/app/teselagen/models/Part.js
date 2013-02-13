@@ -94,7 +94,7 @@ Ext.define("Teselagen.models.Part", {
                 return name;
             }
         },
-        {name: "partSource",        type: "string",     defaultValue: "blah"},
+        {name: "partSource",        type: "string",     defaultValue: ""},
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
