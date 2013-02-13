@@ -25,6 +25,7 @@ Ext.define('Vede.view.de.grid.Part', {
     constructor: function (config) {
         var self = this;
         this.initConfig(config);
+
         //if (this.getPart()) console.log(this.getPart().get("name"));
         //else console.log("part no name");
 
@@ -41,7 +42,6 @@ Ext.define('Vede.view.de.grid.Part', {
             if(html.length > 14) html = html.substring(0, 14) + '..';
             if(html==="") html = "Unnamed part";
         }
-
         this.eugeneFlag = {
             xtype: 'button',
             cls: 'eugeneFlag',
@@ -77,15 +77,9 @@ Ext.define('Vede.view.de.grid.Part', {
                     html: html,
                     listeners: {
                         afterrender: function (obj) {
-                            if(self.getPart()) {
-                                if(self.getPart().isEmpty() && this.max !== null && this.ave !== null && this.min !== null) {
-                                    obj.tip = Ext.create('Ext.tip.ToolTip', {
-                                        target: obj.getEl().getAttribute("id"),
-                                        trackMouse: true,
-                                        renderTo: document.body,
-                                        html: 'Part is empty',
-                                        title: 'Warning'
-                                    });
+                            if(self.getPart()) { 
+                                if(self.getPart().isEmpty()) {
+                                    console.log(obj.getEl().getAttribute("id"));
                                 }
                             }
                         }
@@ -130,6 +124,18 @@ Ext.define('Vede.view.de.grid.Part', {
 
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        if(this.getPart()) {
+            html = this.getPart().get("name");
+            if(html==="") {
+            var tip = Ext.create('Ext.tip.ToolTip', {
+                target: this.partCell.getId(),
+                trackMouse: true,
+                renderTo: document.body,
+                html: 'Part is empty',
+                title: 'Warning'
+            });
+        }
+    }
     },
 
     deselect: function () {

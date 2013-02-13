@@ -135,7 +135,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         if(this.selectedBinIndex!=-1) Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
         else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
-
+        
         this.selectedWindow.close();
     },
 

@@ -111,7 +111,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
 
         this.selectedPart = gridPart;
+
         gridPart.select();
+
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
 
@@ -363,7 +365,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             });
         });
         */
-
         gridBin.select();
     },
 
@@ -433,6 +434,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         parentGridBin.insert(partIndex + 1, newPart);
 
         this.selectedPart = newPart;
+
         newPart.select();
     },
 

@@ -73,7 +73,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
                 else {j5ready = false;}
             });
-            console.log(j5ready);
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
 
@@ -222,7 +221,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             // Remember that j5Part may not exist
             console.log(j5Part.get("name"));
-            console.log(j5Part.get("partSource"));
+            console.log(j5Part);
         }
 
         // If a j5Part exists for the selected part, load it. If not, create a
@@ -247,7 +246,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.selectedPart = newPart;
-        }
+    }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
                                                                         this.selectedPart)
@@ -552,8 +551,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.activeProject) {
             j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
                                                             this.activeProject));
-
-                console.log(this.DeviceDesignManager.checkJ5Ready(this.activeProject));
 
              if (this.DeviceDesignManager.checkJ5Ready(this.activeProject)) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
