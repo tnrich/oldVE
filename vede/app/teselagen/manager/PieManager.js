@@ -327,7 +327,6 @@ Ext.define("Teselagen.manager.PieManager", {
 
         if(this.showFeatures && this.showFeatureLabels) {
             Ext.each(this.features, function(feature) {
-                console.log("Feature Name: " + feature.getName());
                 center = this.featureRenderer.middlePoints.get(feature);
 
                 label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {

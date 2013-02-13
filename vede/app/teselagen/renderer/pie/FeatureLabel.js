@@ -25,11 +25,13 @@ Ext.define("Teselagen.renderer.pie.FeatureLabel", {
             var notes = this.annotation.getNotes();
 
             Ext.each(notes, function(note) {
-                if(note.getName() == "label" || note.getName() == "apeinfo_label" || 
-                    note.getName() == "note" || note.getName() == "gene") {
- 
+                if(note.getName() == "label") {
                     label = note.getValue();
                     return false;
+                } else if(note.getName() == "apeinfo_label" || 
+                          note.getName() == "note" ||
+                          note.getName() == "gene") {
+                    label = note.getValue();
                 }
             });
         } else {
