@@ -341,7 +341,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: '<div data-qtip="FAS">FAS</div>',
+                                    text: '<div data-qtip="Forced Assembly Strategy">FAS</div>',
                                     dataIndex: 'fas',
                                     renderer: function(value, metadata, record) {
                                         metadata.tdAttr = 'data-qtip="' + value + '"';
@@ -357,7 +357,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'booleancolumn',
-                                    text: '<div data-qtip="DSF">DSF</div>',
+                                    text: '<div data-qtip="Direct Synthesis Firewall">DSF</div>',
                                     dataIndex: 'dsf',
                                     editor: {
                                         xtype: 'checkbox'
@@ -365,7 +365,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    text: '<div data-qtip="FRO">FRO</div>',
+                                    text: '<div data-qtip="Forced Relative Overhang">FRO</div>',
                                     dataIndex: 'fro',
                                     editor: {
                                         xtype: 'textfield',
@@ -380,7 +380,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'numbercolumn',
-                                    text: '5\' Ex',
+                                    text: '<div data-qtip="5\' Extra CPEC Overhang Bps">5\' Ex</div>',
                                     dataIndex: 'extra5PrimeBps',
                                     editor: {
                                         xtype: 'numberfield',
@@ -393,7 +393,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {
                                     xtype: 'numbercolumn',
-                                    text: '3\' Ex',
+                                    text: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
                                     dataIndex: 'extra3PrimeBps',
                                     editor: {
                                         xtype: 'numberfield',
