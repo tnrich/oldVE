@@ -247,7 +247,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
             this.selectedPart = j5Part;
         } else {
-            var newPart = this.DeviceDesignManager.createPart(this.activeProject, binIndex);
+            var newPart = Ext.create("Teselagen.models.Part");
             partPropertiesForm.loadRecord(newPart);
 
             if(newPart.get("fas") === "") {
@@ -257,7 +257,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.selectedPart = newPart;
-    }
+        }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
                                                                         this.selectedPart)
@@ -313,13 +313,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     /**
-     * Handles the event that the Part Name field changes.
+     * Handles the event that the Part Name field changes. Checks to see if the
+     * part is already owned by a bin. If not, this is a new part, so we have to
+     * add the part to the design.
      * @param {Ext.form.field.Text} nameField The Part Name textfield.
      */
     onPartNameFieldChange: function (nameField) {
         var newName = nameField.getValue();
 
         this.selectedPart.set("name", newName);
+
+        if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
+                                                     this.selectedPart) < 0) {
+            this.DeviceDesignManager.addPartToBin(this.activeProject,
+                                                  this.selectedPart,
+                                                  this.selectedBinIndex);
+        }
     },
 
     /**

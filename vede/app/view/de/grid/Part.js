@@ -45,8 +45,8 @@ Ext.define('Vede.view.de.grid.Part', {
         if(this.getPart()) {
             html = this.getPart().get("name");
             if(html.length > 14) html = html.substring(0, 14) + '..';
-            if(html==="") html = "Unnamed part";
         }
+
         this.eugeneFlag = {
             xtype: 'button',
             cls: 'eugeneFlag',
@@ -80,7 +80,7 @@ Ext.define('Vede.view.de.grid.Part', {
                         'text-align': 'center'
                     },
                     html: html,
-                    listeners: {
+                    /*listeners: {
                         afterrender: function (obj) {
                             if(self.getPart()) { 
                                 if(self.getPart().isEmpty()) {
@@ -88,7 +88,7 @@ Ext.define('Vede.view.de.grid.Part', {
                                 }
                             }
                         }
-                    }
+                    }*/
                 }]
             }]
         });
