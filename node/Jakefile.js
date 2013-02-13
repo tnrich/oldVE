@@ -2,6 +2,7 @@
 
 var DbManager = require("./manager/DbManager")();
 var ApiManager = require("./manager/ApiManager")();
+var JakeUtil = require("../jakelib/JakeUtil");
 var dbManager = new DbManager();
 var apiManager;
 
@@ -17,17 +18,17 @@ jake.addListener("complete", function () {
 
 task("startNode", function() {
     var cmd = "forever start -w --watchDirectory routes/ -a -l forever.log -o out.log -e err.log app.js";
-    exec(cmd);
+    JakeUtil.exec(cmd);
 });
 
 task("stopNode", function() {
     var cmd = "forever stop app.js";
-    exec(cmd);
+    JakeUtil.exec(cmd);
 });
 
 task("restartNode", function() {
     var cmd = "forever restart app.js";
-    exec(cmd);
+    JakeUtil.exec(cmd);
 });
 
 /*
@@ -56,7 +57,4 @@ task("resetdb", ["connectdb"], function() {
     });
 }, {async:true});
 
-function exec(pCmd) {
-    console.log(pCmd);
-    jake.exec([pCmd], {printStdout:true, printStderr:true});
-}
+
