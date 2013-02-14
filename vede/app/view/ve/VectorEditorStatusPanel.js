@@ -25,24 +25,39 @@ Ext.define("Vede.view.ve.VectorEditorStatusPanel", {
             id: "VectorEditorStatusBarAlert"
         },
         {
+            xtype: "tbtext",
+            cls: "meltingTemperatureText",
+            text: ""
+        },
+        {
             xtype: "tbseparator"
-        }, {
+        }, 
+        {
             xtype: "tbtext",
             text: "Read only"
-        }, {
+        }, 
+        {
             xtype: "tbseparator"
-        }, {
-            xtype: "tbspacer",
-            width: 10
-        }, {
-            xtype: "tbseparator"
-        }, {
+        }, 
+        {
             xtype: "tbtext",
+            cls: "caretPositionText",
+            text: "0",
+        }, 
+        {
+            xtype: "tbseparator"
+        }, 
+        {
+            xtype: "tbtext",
+            cls: "selectionPositionText",
             text: "- : -"
-        }, {
+        }, 
+        {
             xtype: "tbseparator"
-        }, {
+        }, 
+        {
             xtype: "tbtext",
+            cls: "sequenceLengthText",
             text: "0"
         }]
     }]
