@@ -63,7 +63,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
      /**  DOES NOT HAVE TEST CODE YET
       * Scans through a JbeiSeq JSON object to see if it has the minimum structure
       * requirements.
-      * @param {JSON} json JbeiSeq JSON object
+      * @param {Object} json JbeiSeq JSON object
       * @returns {Boolean} isJbeiSeq True if structure is good, false if missing key elements.
       */
      validateJbeiseqJson: function (json) {
@@ -172,7 +172,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
      * XXXXCurrently eliminates the "seq:" namespace by replaceing it with "seq".
      * @param {String} xml XML file in String format
-     * @returns {JSON} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {Object} json Cleaned JSON object of the JbeiSeqXml
      */
      jbeiseqXmlToJson: function (xmlStr) {
         var result = {};
@@ -364,7 +364,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
     /**
      * Converts an JbeiSeq JSON to JbeiSeq XML format.
      *
-     * @param {JSON} json Cleaned JSON object of the JbeiSeqXml
+     * @param {Object} json Cleaned JSON object of the JbeiSeqXml
      * @returns {String} xml XML file in String format
      */
      jbeiseqJsonToXml: function(json) {
@@ -443,7 +443,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
      /**
      * Converts a JbeiSeq JSON object into a Genbank model of the data.
      * Only one record per json.
-     * @param {JSON} json JbeiSeq JSON object with ONE record
+     * @param {Object} json JbeiSeq JSON object with ONE record
      * @returns {Teselagen.bio.parsers.Genbank} genbank
      */
     jbeiseqJsonToGenbank: function(json) {
@@ -605,7 +605,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         }
         var json = {};
 
-        var feat      = pGenbank.getFeatures().getFeaturesElements();
+        var feat      = pGenbank.getFeatures() ? pGenbank.getFeatures().getFeaturesElements() : "";
         var sequence = "";
         if(pGenbank.getOrigin()) sequence = pGenbank.getOrigin().getSequence();
         // FEATURES Label/Complement/type population
@@ -673,7 +673,7 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
                         //}
                     });
                 }
-                console.log(label);
+                //console.log(label);
             }
 
             newFt = {
@@ -694,8 +694,8 @@ Ext.define("Teselagen.bio.parsers.JbeiseqParser", {
         // MAKE JSON
         json = {
             "seq:seq" : {
-                "seq:name" : pGenbank.getLocus().getLocusName(),
-                "seq:circular" : !pGenbank.getLocus().getLinear(),
+                "seq:name" : pGenbank.getLocus() ? pGenbank.getLocus().getLocusName() : "",
+                "seq:circular" : pGenbank.getLocus() ? !pGenbank.getLocus().getLinear() : "",
                 "seq:sequence" : pGenbank.getOrigin() ? pGenbank.getOrigin().getSequence() : "",
                 "seq:features" : newFeatures,
                 "_xmlns:seq": "http://jbei.org/sequence",

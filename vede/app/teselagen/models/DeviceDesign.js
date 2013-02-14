@@ -33,8 +33,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 record.getJ5Collection().bins().each(function(bin,binKey){
                     var partsTempArray = [];
                     bin.parts().each(function(part){
-                        //part.save();
-                        partsTempArray.push(part.getData().id);
+                        if(!part.isEmpty()) partsTempArray.push(part.getData().id);
                     });
                     binsTempArray.push(partsTempArray);
                 });
@@ -125,7 +124,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /**
      * Creates a J5Collection from given J5Bins.
-     * @param {Teselagen.models.J5Bins[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
+     * @param {Teselagen.models.J5Bin[]} pJ5Bins Array of J5Bins to put into Collection, in the order the bins should be placed.
      * @returns {Teselagen.models.J5Collection}
      */
     createCollectionFromBins: function(pBins) {
@@ -191,14 +190,17 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
-        var rules = [];
-        for (var i = 0; i < this.rules().count(); i++) {
-            if (this.rules().getAt(i).getOperand1() === pPart || this.rules().getAt(i).getOperand2() === pPart) {
-                rules.push(this.rules().getAt(i));
-            }
-        }
+        this.rules().clearFilter();
 
-        return rules;
+        this.rules().filterBy(function(rule) {
+            if(rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        return this.rules();
     },
 
     /**

@@ -16,8 +16,8 @@ Ext.define("Teselagen.bio.tools.DigestionCalculator", {
     /**
      * Calculates position where enzyme cuts sequence and lists digestion fragments.
      * @param  {Teselagen.bio.sequence.dna.DNASequence} dnaSequence DNA sequence to digest.
-     * @param  {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} enzymes List of enzymes that participate in digestion.
-     * @return {Array<Teselagen.bio.sequence.dna.DigestionFragment>} List of resulting digestion fragments.
+     * @param  {Teselagen.bio.enzymes.RestrictionEnzyme[]} enzymes List of enzymes that participate in digestion.
+     * @return {Teselagen.bio.sequence.dna.DigestionFragment[]} List of resulting digestion fragments.
      */
     digestSequence: function(dnaSequence, enzymes) {
         var seqLength = dnaSequence.toString().length;

@@ -1,5 +1,6 @@
 /**
  * Class controlling the device display portion of Device Editor.
+ * @class Vede.controller.DeviceEditor.GridController
  */
 Ext.define("Vede.controller.DeviceEditor.GridController", {
     extend: "Ext.app.Controller",
@@ -23,6 +24,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedPart: null,
 
     totalRows: 1,
+    totalColumns: 1,
 
     onReRenderDECanvasEvent: function(){
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -31,7 +33,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     /**
      * Renders a given DeviceDesign.
-     * @param {Teselagen.models.DeviceDesign} The design to render.
      */
     renderDevice: function() {
         var bins = this.activeProject.getJ5Collection().bins();
@@ -41,10 +42,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }, this);
     },
 
+    /**
+     * Changes the selected bin's icon to the clicked icon button.
+     * @param {Ext.button.Button} button The clicked button.
+     */
     onPartPanelButtonClick: function(button) {
         if(this.selectedBin) this.selectedBin.bin.set('iconID',button.data.iconKey);
     },
 
+    /**
+     * Flips a bin icon and reverses its direction when the reverse button is 
+     * clicked.
+     * @param {Ext.button.Button} button The clicked reverse button.
+     */
     onFlipBinButtonClick: function(button) {
         if(button.icon === Vede.view.de.grid.Bin.forwardButtonIconPath) {
             button.setIcon(Vede.view.de.grid.Bin.reverseButtonIconPath);
@@ -69,16 +79,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     addPartCellClickEvent: function(partCell) {
-        //console.log(partCell);
-        //console.log(Ext.getClassName(partCell.body));
         partCell.body.on("click", function() {
             this.application.fireEvent("PartCellClick", partCell);
         },this);
+        
         partCell.body.on("dblclick", function() {
             this.application.fireEvent("PartCellVEEditClick", partCell);
         },this);
     },
 
+    /**
+     * Selects the bin when a bin header is clicked.
+     * @param {Ext.container.Container} binHeader The clicked bin header.
+     */
     onBinHeaderClick: function(binHeader) {
         var gridBin = binHeader.up().up();
         var j5Bin = gridBin.getBin();
@@ -98,24 +111,36 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
+    /**
+     * Selects a part when it is clicked in the grid.
+     * @param {Ext.container.Container} partCell The clicked part cell.
+     */
     onPartCellClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
 
-        var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,
-                                                            j5Bin);
+        var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
         }
 
         this.selectedPart = gridPart;
+
         gridPart.select();
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
 
+    /**
+     * When the tab changes on the main panel, handles loading and rendering the
+     * new device design, assuming the new tab is a device editor tab. Also sets
+     * all the event listeners on the new device.
+     * @param {Ext.tab.Panel} tabPanel The tabpanel.
+     * @param {Ext.Component} newTab The tab that is being switched to.
+     * @param {Ext.Component} oldTab The tab that is being switched from.
+     */
     onTabChange: function(tabPanel, newTab, oldTab) {
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
@@ -132,6 +157,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid
 
+            Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
+
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("update", this.onBinsUpdate, this);
@@ -147,7 +174,18 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 }, this);
             }
 
+            if(this.activeProject) {
+                // Unset listeners for the project's Eugene Rules, and set them for
+                // the new active project.
+                this.activeProject.rules().un("add", this.onAddToEugeneRules, this);
+                this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
+            }
+
             this.activeProject = newTab.model.getDesign();
+
+            this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
+            this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
+
             newTab.query('label[cls="designName"]')[0].setText(newTab.model.data.name);
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
@@ -170,6 +208,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
     },
 
+    /**
+     * Handles the event that one or more bins are added to the device design's
+     * store of bins.
+     * @param {Ext.data.Store} activeBins The device design's store of bins.
+     * @param {Teselagen.model.J5Bin[]} addedBins An array of all the bins that 
+     * have been added.
+     * @param {Number} index The index where the bins were added.
+     */
     onAddToBins: function(activeBins, addedBins, index) {
         Ext.each(addedBins, function(j5Bin) {
             this.addJ5Bin(j5Bin, index);
@@ -182,66 +228,215 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }, this);
     },
 
+    /**
+     * Handles the event where a bin has been changed directly. Simply rerenders
+     * the bin in question.
+     * @param {Ext.data.Store} activeBins The current device design's store of
+     * bins.
+     * @param {Teselagen.models.J5Bin} updatedBin The bin that has been updated.
+     * @param {String} operation The type of update that occurred.
+     * @param {String} modified The name of the field that was edited.
+     */
     onBinsUpdate: function(activeBins, updatedBin, operation, modified) {
-        console.log("bin '" + updatedBin.get("binName") + "' field " + modified + 
-                    " modified, operation " + operation);
-
         this.rerenderBin(updatedBin);
     },
 
+    /**
+     * Handles the deletion of a bin.
+     * @param {Ext.data.Store} activeBins The current device design's store of
+     * bins.
+     * @param {Teselagen.models.J5Bin} removedBin The bin that was removed.
+     * @param {Number} index The index of the removed bin.
+     */
     onRemoveFromBins: function(activeBins, removedBin, index) {
-        if(this.selectedBin.getBin() == removedBin) {
+        if(this.selectedBin && this.selectedBin.getBin() == removedBin) {
             this.selectedBin = null;
         }
 
         this.grid.remove(this.grid.query("Bin")[index]);
     },
 
+    /**
+     * Handles the event that one or more parts are added to any bin.
+     * @param {Ext.data.Store} parts The parts store of the bin which has been
+     * added to.
+     * @param {Teselagen.model.Part[]} addedParts An array of all the parts that 
+     * have been added.
+     * @param {Number} index The index where the parts were added.
+     */
     onAddToParts: function(parts, addedParts, index) {
-        console.log("part '" + addedParts[0].get("name") + "' added");
-
-        // For each part added, re-render that part's bin.
+        // For each part added, insert it to the part's bin.
         Ext.each(addedParts, function(addedPart) {
-            var ownerIndex = this.DeviceDesignManager.getBinAssignment(
-                                                this.activeProject, addedPart);
+            var newPart = Ext.create("Vede.view.de.grid.Part", {
+                part: addedPart,
+                fasConflict: false
+            });
 
-            this.rerenderBin(this.DeviceDesignManager.getBinByIndex(this.activeProject,
-                                                                    ownerIndex));
+            this.renderFasConflicts(parts, addedPart);
         }, this);
     },
 
+    /**
+     * Handles the event where a part has been changed directly. 
+     * @param {Ext.data.Store} parts The parts store of the bin which owns the
+     * modified part.
+     * @param {Teselagen.models.Part} updatedPart The part that has been updated.
+     * @param {String} operation The type of update that occurred.
+     * @param {String} modified The name of the field that was edited.
+     */
     onPartsUpdate: function(parts, updatedPart, operation, modified) {
-        console.log("part '" + updatedPart.get("name") + "' field " + modified + 
-                    " modified, operation " + operation);
+        if(modified)
+        {
+            Vede.application.fireEvent("checkj5Ready");
 
-        this.rerenderPart(updatedPart);
+            if(modified.indexOf("fas") >= 0) {
+                this.renderFasConflicts(parts, updatedPart);
+            } else {
+                this.rerenderPart(updatedPart, false);
+            }
+        }
     },
 
+    /**
+     * Handles the deletion of a part from a bin.
+     * @param {Ext.data.Store} parts The parts store of the bin which owned the
+     * deleted part.
+     * @param {Teselagen.models.Part} removedPart The part that was removed.
+     * @param {Number} index The index of the removed part.
+     */
     onRemoveFromParts: function(parts, removedPart, index) {
+        var gridPart = this.getGridPartFromJ5Part(removedPart);
+        var gridBin = gridPart.up("Bin");
+
+        gridBin.remove(gridPart);
+        gridBin.setTotalRows(this.totalRows);
+
+        if(this.selectedPart === removedPart) {
+            this.selectedPart = null;
+        }
     },
 
+    /**
+     * Handles the event that one or more Eugene Rules are added to the device.
+     * @param {Ext.data.Store} rules The device's store of rules.
+     * @param {Teselagen.model.EugeneRule[]} addedRules An array of added rules.
+     * @param {Number} index The index where the rules were added.
+     */
+    onAddToEugeneRules: function(rules, addedRules, index) {
+        Ext.each(addedRules, function(addedRule) {
+            var operand1 = addedRule.getOperand1();
+            var operand2 = addedRule.getOperand2();
+
+            var gridOperand1 = this.getGridPartFromJ5Part(operand1);
+
+            if(!gridOperand1.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                gridOperand1.addEugeneRuleIndicator();
+            }
+
+            if(!addedRule.get("operand2isNumber")) {
+                var gridOperand2 = this.getGridPartFromJ5Part(operand2);
+
+                if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                    gridOperand2.addEugeneRuleIndicator();
+                }
+            }
+        }, this);
+    },
+
+    /**
+     * Handles the deletion of a Eugene Rule from the device. Removes the rule
+     * indicator from the involved parts if they have no other rules applied to 
+     * them.
+     * @param {Ext.data.Store} rules The device's store of rules.
+     * @param {Teselagen.models.EugeneRule} removedRule The rule that was removed.
+     * @param {Number} index The index of the removed rule.
+     */
+    onRemoveFromEugeneRules: function(rules, removedRule, index) {
+        var operand1 = removedRule.getOperand1();
+        var operand2 = removedRule.getOperand2();
+
+        var operand1Rules = this.DeviceDesignManager.getRulesInvolvingPart(
+                                            this.activeProject, operand1);
+
+        // If there are no other rules involving operand 1, remove its indicator.
+        if(operand1Rules.getCount() === 0) {
+            this.getGridPartFromJ5Part(operand1).removeEugeneRuleIndicator();
+        }
+
+        // If operand 2 is not a number, remove its Eugene rule indicator.
+        if(!removedRule.get("operand2isNumber")) {
+            var operand2Rules = this.DeviceDesignManager.getRulesInvolvingPart(
+                                                this.activeProject, operand2);
+
+            if(operand2Rules.getCount() === 0) {
+                this.getGridPartFromJ5Part(operand2).removeEugeneRuleIndicator();
+            }
+        }
+    },
+
+    /**
+     * Helper function to calculate which parts need to be rerendered after the
+     * fas field of a part is modified.
+     * @param {Ext.data.Store} parts A store of the parts in a bin.
+     * @param {Teselagen.models.Part} updatedPart The part which has been updated.
+     */
+    renderFasConflicts: function(parts, updatedPart) {
+        var partsArray = parts.getRange();
+
+        // If the modified part is at index 0, update all the other parts
+        // with the appropriate fasConflict flag.
+        if(parts.indexOf(updatedPart) == 0) {
+            Ext.each(partsArray.slice(1, partsArray.length), function(part) {
+                if(part.get("fas") != "None" && 
+                   updatedPart.get("fas") != "None" &&
+                   part.get("fas") != updatedPart.get("fas")) {
+                    this.rerenderPart(part, true);
+                } else if(part.get("fas") == updatedPart.get("fas") ||
+                          updatedPart.get("fas") == "None") {
+                    this.rerenderPart(part, false);
+                }
+            }, this);
+
+            this.rerenderPart(updatedPart, false);
+        } else if(partsArray[0].get("fas") != updatedPart.get("fas")) {
+            this.rerenderPart(updatedPart, true);
+        } else {
+            this.rerenderPart(updatedPart, false);
+        }
+    },
+
+    /**
+     * Handler for the Insert Row button.
+     */
     onAddRow: function() {
         this.totalRows += 1;
         this.updateBinsWithTotalRows();
     },
 
+    /**
+     * Handler for the Insert Column button. Inserts a bin after the selected
+     * bin, or at the end of the device if there is no selected bin.
+     */
     onAddColumn: function() {
+        this.totalColumns +=1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin());
+                                                        this.selectedBin.getBin()) + 1;
         } else {
-            selectedBinIndex = 0;
+            selectedBinIndex = this.totalColumns;
         }
 
-        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 
+        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
     },
 
     /**
-     * Handler for the SELECT_BIN event.
+     * Handler for the SELECT_BIN event. This event is fired when a bin is
+     * selected in the Inspector.
+     * @param {Teselagen.models.J5Bin} j5Bin The bin which has been selected.
      */
     onSelectBin: function(j5Bin) {
         var gridBin = this.getGridBinFromJ5Bin(j5Bin);
@@ -261,13 +456,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             });
         });
         */
-
         gridBin.select();
     },
 
     /**
-     * Re-renders a grid bin given a j5Bin. Used when a bin or one of its child
-     * parts is changed.
+     * Re-renders a grid bin given a j5Bin. Used when a bin is updated.
+     * @param {Teselagen.models.J5Bin} j5Bin The bin to be rerendered.
      */
     rerenderBin: function(j5Bin) {
         var gridBin = this.getGridBinFromJ5Bin(j5Bin);
@@ -305,8 +499,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     /**
      * Re-renders a part in the grid by deleting it and re-adding it. Used when
      * a part is updated.
+     * @param {Teselagen.models.Part} j5Part The part model to be rerendered.
+     * @param {Boolean} fasConflict Whether the part should be rendered with a
+     * fas conflict indicator or not.
      */
-    rerenderPart: function(j5Part) {
+    rerenderPart: function(j5Part, fasConflict) {
         var binIndex = this.DeviceDesignManager.getBinAssignment(
                             this.activeProject, j5Part);
         var parentBin = this.DeviceDesignManager.getBinByIndex(
@@ -324,16 +521,23 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Remove part from grid and re-add it.
         parentGridBin.remove(gridPart);
         var newPart = Ext.create("Vede.view.de.grid.Part", {
-            part: j5Part
+            part: j5Part,
+            fasConflict: fasConflict
         });
 
         // Insert the part at partIndex + 1, because the bin header is at index 0.
         parentGridBin.insert(partIndex + 1, newPart);
-        
+
         this.selectedPart = newPart;
+
         newPart.select();
     },
 
+    /**
+     * Renders a new bin from a j5Bin model at the given index.
+     * @param {Teselagen.models.J5Bin} j5Bin The model of the bin to be added.
+     * @param {Number} index The location to add the bin to on the grid.
+     */
     addJ5Bin: function(j5Bin, index) {
         var iconSource;
         iconSource = "resources/images/icons/device/small/origin_of_replication.png";
@@ -353,12 +557,24 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         }
     },
 
+    /**
+     * Adds empty part cells to bins which don't have the maximum number of
+     * parts already.
+     */
     updateBinsWithTotalRows: function() {
         this.grid.items.each(function(bin) {
             bin.setTotalRows(this.totalRows);
         }, this);
     },
 
+    /**
+     * Helper function to retrieve the class of the bin rendered on the grid
+     * given its corresponding J5Bin model.
+     * @param {Teselagen.models.J5Bin} j5Bin The model to match to a bin
+     * rendered on the grid.
+     * @return {Vede.view.de.grid.Bin} The grid bin corresponding to the given 
+     * J5Bin.
+     */
     getGridBinFromJ5Bin: function(j5Bin) {
         var targetGridBin = null;
 
@@ -372,6 +588,14 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         return targetGridBin;
     },
 
+    /**
+     * Helper function to retrieve the class of the part rendered on the grid
+     * given its corresponding Part model.
+     * @param {Teselagen.models.Part} j5Part The model to match to a part
+     * rendered on the grid.
+     * @return {Vede.view.de.grid.Part} The grid part corresponding to the given 
+     * part model.
+     */
     getGridPartFromJ5Part: function(j5Part) {
         var targetGridPart = null;
 
@@ -382,6 +606,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         });
 
+        // If this method fails, we may be trying to retrieve a grid part which
+        // has no part associated with it yet. In this case, first retrieve the
+        // bin associated with the j5Part, then the index of the part itself.
+        if(!targetGridPart) {
+            var ownerBinIndex = this.DeviceDesignManager.getBinAssignment(
+                                        this.activeProject, j5Part);
+            var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
+                                                                  ownerBinIndex);
+            var gridBin = this.getGridBinFromJ5Bin(ownerBin);
+
+            var partIndex = ownerBin.parts().indexOf(j5Part);
+            targetGridPart = gridBin.query("container[cls='gridPartContainer']")[partIndex];
+        }
+
         return targetGridPart;
     },
 
@@ -389,26 +627,31 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-
-        if(j5Part.data.sequencefile_id)
+        
+        j5Part.getSequenceFile({
+        callback: function(associatedSequence,operation){
+        
+        if(associatedSequence)
         {
             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
         }
         else
         {
-            console.log("This part doesn't have an associated sequence");
+            console.log("This part doesn't have an associated sequence, creating new empty sequence");
             var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                 sequenceFileFormat: "Genbank",
-                sequenceFileContent: "LOCUS       NO_NAME                  1 bp    DNA     circular     03-DEC-2012\nFEATURES             Location/Qualifiers\n\nORIGIN      \n        1 g     \n\n//",
+                sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                 sequenceFileName: "untitled.gb",
                 partSource: "New Part"
             });
-            j5Part.setSequenceFileModel(newSequenceFile);
-            j5Part.save({
+            
+            newSequenceFile.save({
                 callback: function(){
-                    newSequenceFile.save({
+                    j5Part.setSequenceFileModel(newSequenceFile);
+                    j5Part.save({
                         callback: function(){
+                            console.log(j5Part);
                             var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
                         }
@@ -416,6 +659,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 }
             });
         }
+        
+        }});
 
     },
 
@@ -426,7 +671,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         
         this.tabPanel = Ext.getCmp("mainAppPanel");
 
-        // Create a sample bin and associated parts to render.
+        // Empty model start with one bin and two empty parts
         this.totalRows = 2;
         var binModel = Ext.create("Teselagen.models.J5Bin", {
             binName: "cds",
@@ -434,11 +679,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         });
 
         var partModel1 = Ext.create("Teselagen.models.Part", {
-            name: "p_con",
+            name: "Part0"
         });
 
         var partModel2 = Ext.create("Teselagen.models.Part", {
-            name: "p_bad",
+            name: "Part1"
         });
 
         binModel.parts().add(partModel1);
@@ -508,5 +753,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onPartCellVEEditClick,
                             this);
         
-        },
+        }
 });

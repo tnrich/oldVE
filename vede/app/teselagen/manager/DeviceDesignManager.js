@@ -131,7 +131,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Returns the EugeneRules Store of EugeneRules that containt the Part in either operand.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
-     * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
+     * @return {Ext.data.Store} Store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pDevice, pPart) {
         return pDevice.getRulesInvolvingPart(pPart);
@@ -189,7 +189,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pNumBins
      * @param {Boolean} pIsCircular
-     * @preturns {Teselagen.models.J5Collection}
+     * @returns {Teselagen.models.J5Collection}
      */
     createEmptyJ5Collection: function(pDevice, pNumBins, pIsCircular) {
         var collection = Ext.create("Teselagen.models.J5Collection", {
@@ -217,6 +217,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Sets the isCircular flag.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Boolean} pCircular
      */
@@ -406,6 +407,18 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Gets the parent bin of a part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Teselagen.models.J5Bin}
+     */
+    getBinByPart: function(pDevice, pPart) {
+        var parentIndex = this.getBinAssignment(pDevice, pPart);
+
+        return this.getBinByIndex(pDevice, parentIndex);
+    },
+
+    /**
      * Returns the bin's name at pBinIndex. (Indices begin at 0.)
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pBinIndex
@@ -419,7 +432,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Returns the index of a J5Bin. (Indices begin at 0.)
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.J5Bin} pJ5Bin
-     * @param {Number}
      */
     getBinIndex: function(pDevice, pJ5Bin) {
         return pDevice.getJ5Collection().getBinIndex(pJ5Bin);
@@ -474,7 +486,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Add an empty bin to the collection, by index.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Number} pIndex
-     * @para, {String} [pName] Optional
+     * @param, {String} [pName] Optional
      */
     addEmptyBinByIndex: function(pDevice, pIndex, pName) {
         /*if (pName === null || pName === undefined || pName === "") {
@@ -542,6 +554,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     // Parts management
     //================================================================
+    // Todo: move optional arguments to the end of parameter list
     /**
      * Create a Part. Optional parameters require a "null" in its place.
      * Executes validation.
@@ -549,10 +562,10 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {String} pName Name of Part
      * @param {int} pStart Genbank start index
      * @param {int} pEnd Genbank end index
-     * @param {[Boolean]} pRevComp Reverse Complement. Default is false.
-     * @param {[Boolean]} pDirectionForward Direction Forward. Default is true.
+     * @param {Boolean} [pRevComp] Reverse Complement. Default is false.
+     * @param {Boolean} [pDirectionForward] Direction Forward. Default is true.
      * @param {String} fas (?)
-     * @param {pIconID} pIconID (?)
+     * @param {String} pIconID (?)
      */
     createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
         var part = Ext.create("Teselagen.models.Part", {
@@ -574,6 +587,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         pDevice.getJ5Collection().bins().getAt(pBinIndex).addToParts(part, -1); // put this here?
         return part;
+    },
+    /**
+     * Gets all parts in the given device. If the optional parameter pExcept is
+     * defined as a part, returns all parts except that part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pExcept
+     * @returns {Array} Array of all parts except for pExcept.
+     */
+    getAllParts: function(pDevice, pExcept) {
+        var allParts = [];
+
+        pDevice.getJ5Collection().bins().each(function(bin) {
+            allParts = allParts.concat(bin.parts().getRange());
+        });
+
+        if(pExcept && pExcept.$className === "Teselagen.models.Part") {
+            allParts.splice(allParts.indexOf(pExcept), 1);
+        }
+
+        return allParts;
     },
     /**
      * Determines if a Part is in the Collection.
@@ -669,7 +702,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
      * @param {Number} pBinIndex If invalid number, puts part in last bin.
-     * @param {[Number]} pPosition Optional index.
+     * @param {Number} [pPosition] Optional index.
      */
     addPartToBin: function(pDevice, pPart, pBinIndex, pPosition) {
         var j5Bin;
@@ -689,7 +722,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Deletes a Part after checking if a EugeneRule should also be deleted.
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
      * No need to actually delete SequenceFiles or Parts.
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart Part to be deleted.
      * @param {Number} pBinIndex
      * @returns {Boolean} True if removed, false if not.
@@ -760,11 +793,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Create a SequenceFile. Optional parameters require an empty string "" in its place.
      * Executes validation.
      *
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "jbei-seq". Case insensitive.
      * @param {String} pSequenceFileContent The content of the file in string form
-     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
-     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     * @param {String} [pSequenceFileName] If null, will generate a name based on the File Content and Format
+     * @param {String} [pPartSource] If null, will generate a display ID based on the File Content and Format
      */
     createSequenceFile: function(pDevice, pPart, pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
 
@@ -800,8 +833,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      *
      * @param {String} pSequenceFileFormat "Genbank", "FASTA", or "JBEISEQXML". Case insensitive.
      * @param {String} pSequenceFileContent The content of the file in string form
-     * @param {[String]} pSequenceFileName If null, will generate a name based on the File Content and Format
-     * @param {[String]} pPartSource If null, will generate a display ID based on the File Content and Format
+     * @param {String[]} pSequenceFileName If null, will generate a name based on the File Content and Format
+     * @param {String[]} pPartSource If null, will generate a display ID based on the File Content and Format
      */
     createSequenceFileStandAlone: function(pSequenceFileFormat, pSequenceFileContent, pSequenceFileName, pPartSource) {
 
@@ -824,7 +857,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
     /**
      * Given a Part, get the SequenceFile. (pDevice is not used.)
-     * @param {Teselagen.manager.DeviceDesign} pDevice
+     * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pPartName
      * @returns {Teselagen.models.SequenceFile}
      */

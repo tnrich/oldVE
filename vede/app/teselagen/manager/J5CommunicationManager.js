@@ -19,44 +19,119 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 
     masterFiles: null,
 
+    assemblyMethod: null,
+
+    designDownstreamAutomationResults: null,
+
     constructor: function () {},
+
+    downloadCondenseAssemblyResults: function(btn){
+        var response = this.condenseAssemblyFilesResults;
+        var byteArray = Base64Binary.decodeArrayBuffer(response.encoded_output_file);
+        var bb = new BlobBuilder();
+        bb.append(byteArray);
+        saveAs(bb.getBlob("data:application/stream;"), response.output_filename);
+        btn.toggle();
+    },
+
+    condenseAssemblyFiles: function(data,cb){
+        console.log("Starting Ajax Request");
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+
+        var self = this;
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("condenseAssemblyFiles", ''),
+            params: {
+                data: JSON.stringify(data)
+            },
+            success: function (response) {
+                response = JSON.parse(response.responseText);
+                var downloadBtn = currentTab.j5Window.query('button[cls=downloadCondenseAssemblyResultsBtn]')[0];
+                downloadBtn.show();
+                self.condenseAssemblyFilesResults = response;
+                return cb(true);
+            },
+            failure: function(response, opts) {
+                return cb(false,response);
+            }
+        });
+    },
+
+    distributePCRRequest: function(data,cb){
+        console.log("Starting Ajax Request");
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+
+        var files = {};
+        files.encoded_plate_list_file = data.sourcePlateFileText;
+        files.encoded_zipped_plate_files_file = data.zippedPlateFilesSelector;
+        files.encoded_assembly_to_automate_file = data.assemblyFileText;
+
+        var self = this;
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("DesignDownstreamAutomation", ''),
+            params: {
+                files: JSON.stringify(files),
+                params: JSON.stringify(data.params),
+                reuseParams: data.reuse
+            },
+            success: function (response) {
+                response = JSON.parse(response.responseText);
+                var downloadBtn = currentTab.j5Window.query('button[cls=downloadDownstreamAutomationBtn]')[0];
+                downloadBtn.show();
+                self.designDownstreamAutomationResults = response;
+                return cb(true);
+            },
+            failure: function(response, opts) {
+                return cb(false,response);
+            }
+        });
+    },
 
     //================================================================
     // Generate j5 Ajax Request
     //================================================================
     /**
-     *
+     * Generates an AJAX request to the j5 server.
      */
-    generateAjaxRequest: function () {
+    generateAjaxRequest: function (cb) {
         console.log("Starting Ajax Request");
+
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
+        var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
+        
+        resultsGrid.store.removeAll();
+
+        runj5Btn.toggle();
 
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
 
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("executej5", ''),
+            timeout: 100000,
             params: {
                 deProjectId: deproject.data.id,
                 parameters: JSON.stringify(this.j5Parameters),
-                masterFiles: JSON.stringify(this.masterFiles)
+                masterFiles: JSON.stringify(this.masterFiles),
+                assemblyMethod: self.assemblyMethod
             },
             success: function (response) {
-                var response = JSON.parse(response.responseText);
+                response = JSON.parse(response.responseText);
                 
                 self.currentResults = response;
 
-                var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
                 var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
-                var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
 
                 var store = new Ext.data.JsonStore({
                     proxy: {
                         type: 'memory',
-                        data: response,
+                        data:  self.currentResults.j5Results.assemblies,
                         reader: {
                             type: 'json',
-                            root: 'files',
+                            root: 'files'
                         }
                     },
 
@@ -65,25 +140,34 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 store.load();
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
-                runj5Btn.toggle();
 
-                deproject.j5runs().load({
-                    callback : function(runs){
-                        console.log(runs);
-                    }
-                });
-
+                return cb(true,null,response.warnings);
+            },
+            failure: function(response) {
+                if(response.status == -1) return cb(false,{"responseText":"Execution aborted."});
+                else return cb(false,response);
             }
         });
         
     },
     downloadResults: function (btn) {
-        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.data;
+        if(this.currentResults) location.href="data:application/zip;base64,"+this.currentResults.zipfile;
         btn.toggle();
     },
-    setParameters: function(j5Parameters,masterFiles){
+
+    downloadDownstreamAutomationResults: function(btn){
+        var response = this.designDownstreamAutomationResults;
+        var byteArray = Base64Binary.decodeArrayBuffer(response.encoded_output_file);
+        var bb = new BlobBuilder();
+        bb.append(byteArray);
+        saveAs(bb.getBlob("data:application/stream;"), response.output_filename);
+        btn.toggle();
+    },
+
+    setParameters: function(j5Parameters,masterFiles,assemblyMethod){
         this.j5Parameters = j5Parameters.getParametersAsArray(true);
         this.masterFiles = masterFiles;
+        this.assemblyMethod = assemblyMethod;
     }
 
 });

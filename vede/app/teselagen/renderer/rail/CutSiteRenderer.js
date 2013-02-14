@@ -19,7 +19,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
     },
 
     /**
-     * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} cutSites The cut
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite[]} cutSites The cut
      * sites to be rendered.
      */
     constructor: function(inData) {
@@ -32,7 +32,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
 
     /**
      * Generates sprites from the given cut sites.
-     * @return {Array<Ext.draw.Sprite>} Sprites made from cut sites.
+     * @return {Ext.draw.Sprite[]} Sprites made from cut sites.
      */
     render: function() {
         var sprites = [];

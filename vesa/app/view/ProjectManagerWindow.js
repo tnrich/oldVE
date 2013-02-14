@@ -63,8 +63,8 @@ Ext.define('Vesa.view.ProjectManagerWindow', {
             dockedItems: [
                 {
                     xtype: 'toolbar',
-                    dock: 'top',
                     flex: 1,
+                    dock: 'top',
                     items: [
                         {
                             xtype: 'button',

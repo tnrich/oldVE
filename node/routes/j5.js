@@ -1,6 +1,6 @@
 /**
- * j5 API - VEDE EXT Platform
- * -----------------------
+ * j5 API
+ * @module ./routes/j5
  */
 
 var spawn = require('child_process').spawn;
@@ -12,7 +12,23 @@ var parser = new xml2js.Parser();
 module.exports = function (app) {
 
 var j5rpcEncode = require('./j5rpc');
+var processJ5Response = require('./j5parser');
 
+/**
+ * Write to quick.log
+ */
+function quicklog(s) {
+  var logpath = "/tmp/quick.log";
+  var fs = require('fs');
+  s = s.toString().replace(/\r\n|\r/g, '\n'); // hack
+  var fd = fs.openSync(logpath, 'a+', 0666);
+  fs.writeSync(fd, s + '\n');
+  fs.closeSync(fd);
+}
+
+/**
+ *  Login Auth Method : Find User in DB
+ */
 function authenticate(username, pass, fn) {
   var User = app.db.model("User");
   User.findOne({
@@ -23,6 +39,10 @@ function authenticate(username, pass, fn) {
   });
 };
 
+/**
+ * Authentication Restriction.
+ * If user session is active then find the user in DB.
+ */
 function restrict(req, res, next) {
   if(req.session.user) {
     var User = app.db.model("User");
@@ -56,8 +76,8 @@ function restrict(req, res, next) {
 app.all('/GetLastUpdatedUserFiles',function(req,res){
 
   var data = {}
-  data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('GetLastUpdatedUserFiles', [data], function (error, value) {
 
@@ -82,7 +102,7 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
       
       var j5parameters = base64CSVDecodeToObject(value["encoded_j5_parameters_file"]);
       var master_plasmids_list = value["encoded_master_plasmids_file"];
-      var master_oligos_list = value["encoded_master_oligos_file"]; 
+      var master_oligos_list = value["encoded_master_oligos_file"];
       var master_direct_synthesis_list = value["encoded_master_direct_syntheses_file"];
 
       var data = {};
@@ -93,18 +113,36 @@ app.all('/GetLastUpdatedUserFiles',function(req,res){
 
       res.send(data);
     }
-  })
+  });
 });
 
-//Design Downstream Automation 
+//Design Downstream Automation
 app.post('/DesignDownstreamAutomation',function(req,res){
 
-  var data = JSON.parse(req.body.params);
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  var data = JSON.parse(req.body.files);
+  var params = JSON.parse(req.body.params);
+  var reuseParams = req.body.reuseParams;
+
+  var downstreamAutomationParamsEncode = function(params){
+      var out = "Parameter Name,Value\n"
+      
+      for(var prop in params) {
+          out += prop + ',' + params[prop] + '\n';
+      }
+
+      return new Buffer(out).toString('base64');    
+  }
+
+  data["encoded_downstream_automation_parameters_file"] =  downstreamAutomationParamsEncode(params);
+  data["reuse_downstream_automation_parameters_file"] = reuseParams;
+  //data["encoded_downstream_automation_parameters_file"] = "UGFyYW1ldGVyIE5hbWUsVmFsdWUsRGVmYXVsdCBWYWx1ZSxEZXNjcmlwdGlvbg1NQVhERUxUQVRF TVBFUkFUVVJFQURKQUNFTlRaT05FUyw1LDUsVGhlIG1heGltdW0gZGlmZmVyZW5jZSBpbiB0ZW1w ZXJhdHVyZSAoaW4gQykgYmV0d2VlbiBhZGphY2VudCB6b25lcyBvbiB0aGUgdGhlcm1vY3ljbGVy IGJsb2NrDU1BWERFTFRBVEVNUEVSQVRVUkVSRUFDVElPTk9QVElNVU1aT05FQUNDRVBUQ";
+  data["automation_task"] = "DistributePcrReactions";
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('DesignDownstreamAutomation', [data], function (error, value) {
 
-    if(error) 
+    if(error)
     {
       console.log(error);
       res.send(error["faultString"], 500);
@@ -113,22 +151,22 @@ app.post('/DesignDownstreamAutomation',function(req,res){
     {
       res.send(value);
     }
-  })
+  });
 });
 
 // Condense AssemblyFiles
 app.post('/condenseAssemblyFiles',function(req,res){
 
-  var params = JSON.parse(req.body.params);
+  var params = JSON.parse(req.body.data);
   var data = {};
   data["encoded_assembly_files_to_condense_file"] = params["assemblyFiles"]["content"];
-  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];  
-  data["j5_session_id"] = req.body.sessionID;
-  if(app.testing.enabled) data["j5_session_id"] = app.testing.sessionId;
+  data["encoded_zipped_assembly_files_file"] = params["zippedFiles"]["content"];
+  data["username"] = 'node';
+  data["api_key"] = 'teselarocks';
 
   app.j5client.methodCall('CondenseMultipleAssemblyFiles', [data], function (error, value) {
 
-    if(error) 
+    if(error)
     {
       console.log(error);
       res.send(error["faultString"], 500);
@@ -137,10 +175,13 @@ app.post('/condenseAssemblyFiles',function(req,res){
     {
       res.send(value);
     }
-  })
+  });
 });
 
 
+/**
+ * Read file.
+ */
 function readFile(objectId,cb)
 {
   var gridStore = new app.mongo.GridStore(app.GridStoreDB, objectId, 'r');
@@ -198,7 +239,10 @@ function readFile(objectId,cb)
   */
 }
 
-function saveFile(fileData,user,deproject,cb)
+/**
+ * Save file.
+ */
+function saveFile(data,j5parameters,fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
@@ -217,24 +261,36 @@ function saveFile(fileData,user,deproject,cb)
           app.mongo.GridStore.exist(app.GridStoreDB, objectId, function(err, result) {
 
             var j5Run = app.db.model("j5run");
-            var newj5Run = new j5Run({
-              deproject_id: deproject._id,
-              name: "newResult",
-              file_id:objectId.toString(),
-              date:new Date()
-            });
-            newj5Run.save(function(){
-              deproject.j5runs.push(newj5Run);
-              deproject.save(function(){
-                app.GridStoreDB.close();
-                return cb(newj5Run);
+            
+            processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
+
+              var newj5Run = new j5Run({
+                deproject_id: deproject._id,
+                name: "newResult",
+                file_id:objectId.toString(),
+                date: new Date(),
+                j5Input: {
+                  j5Parameters : JSON.parse(j5parameters)
+                },
+                j5Results: parsedResults,
+                assemblyMethod: data.assembly_method,
+                assemblyType: data.ASSEMBLY_PRODUCT_TYPE
               });
+
+              newj5Run.save(function(){
+                deproject.j5runs.push(newj5Run);
+                deproject.save(function(){
+                  app.GridStoreDB.close();
+                  return cb(newj5Run,warnings);
+                });
+              });
+
             });
           });
         });
       });
     });
-};
+}
 
 app.get('/getfile/:id',restrict,function(req,res){
   var o_id = new app.mongoose.mongo.ObjectID(req.params.id);
@@ -254,7 +310,7 @@ app.get('/getfile/:id',restrict,function(req,res){
       res.end(file,'binary');
     });
 
-  })
+  });
 });
 
 app.post('/getProtocol',restrict,function(req,res){
@@ -264,9 +320,9 @@ app.post('/getProtocol',restrict,function(req,res){
 });
 
 var direct = false;
-var j5Method1,j5Method2;
-var j5Method1 = direct ? '/executej5t' : '/executej5';
-var j5Method2 = !direct ? '/executej5t' : '/executej5';
+var j5Method1, j5Method2;
+j5Method1 = direct ? '/executej5t' : '/executej5';
+j5Method2 = !direct ? '/executej5t' : '/executej5';
 
 // Design Assembly RPC
 app.post(j5Method1,restrict,function(req,res){
@@ -288,7 +344,7 @@ app.post(j5Method1,restrict,function(req,res){
         Sequence.findById(part.sequencefile_id,function(err,seq){
           deproject.design.j5collection.bins[binKey].parts[partKey].SequenceFile = seq;
           partsCounter--;
-          if(partsCounter==0) return cb(deproject);
+          if(partsCounter===0) return cb(deproject);
         });
       });
     });
@@ -296,12 +352,14 @@ app.post(j5Method1,restrict,function(req,res){
 
   DEProject.findById(req.body.deProjectId).populate('design.j5collection.bins.parts').exec(function(err,deprojectModel){
     resolveSequences(deprojectModel,function(deproject){
-      var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles);
-      data["username"] = 'rpavez';
+      var data = j5rpcEncode(deproject.design,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
+      data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
+      quicklog( require('util').inspect(data) );
+
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
-        if(error) 
+        if(error)
         {
           console.log(error);
           res.send(error["faultString"], 500);
@@ -313,48 +371,16 @@ app.post(j5Method1,restrict,function(req,res){
 
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(encodedFileData,req.user,deprojectModel,function(j5run){
-
-            var zip = new require('node-zip')(decodedFile, {base64: false, checkCRC32: true});
-            
-            var objResponse = {};
-            objResponse.files = [];
-            objResponse.data = encodedFileData;
-
-            for(var file in zip.files)
-            {
-              var fileName = zip.files[file]['name'];
-              if( fileName.match(/\w+.(\w+)/)[1] == "gb" )
+          saveFile(data,req.body.parameters,encodedFileData,req.user,deprojectModel,function(j5run,warnings){
+            res.send(
               {
-                var newFile = {};
-                newFile.fileContent = zip.files[file]['data'];
-                newFile.name = fileName;
-                newFile.size = zip.files[file]['data'].length;
-                objResponse.files.push(newFile);
-              }
-              if( fileName.match(/.+combinatorial.csv/) )
-              {
-                objResponse.combinatorial = zip.files[file]['data'];
-              }
-            }
-
-            objResponse.files.sort(function (a, b) {
-                if (a.name < b.name) return -1;
-                if (b.name < a.name) return 1;
-                return 0;
-            });
-            
-            j5run.j5Results = {};
-            j5run.j5Results.assemblies = objResponse.files;
-            j5run.j5Results.combinatorialAssembly = {};
-            j5run.j5Results.combinatorialAssembly.nonDegenerativeParts = objResponse.combinatorial;
-            j5run.save();
-
-            res.send(objResponse);
-
+                j5Results : j5run.j5Results,
+                warnings: warnings,
+                zipfile: encodedFileData
+              });
           });
         }
-      })
+      });
 
     });
 

@@ -18,7 +18,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
      * No open read frames shorter than minimumLength will be returned.
      * @param  {Teselagen.bio.sequence.common.SymbolList} dnaSymbolList A DNA sequence.
      * @param  {Int} minimumLength Minimum ORF length. If value is -1 or not given, no minimum length will be applied.
-     * @return {Array<Teselagen.bio.orf.ORF} All open read frames in forward strand with length > minimumLength.
+     * @return {Teselagen.bio.orf.ORF[]} All open read frames in forward strand with length > minimumLength.
      */
     calculateORFs: function(dnaSymbolList, minimumLength) {
         if(typeof(minimumLength) === "undefined") {
@@ -45,7 +45,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
      * @param  {Teselagen.bio.sequence.common.SymbolList} forwardSymbolList The forward DNA sequence.
      * @param  {Teselagen.bio.sequence.common.SymbolList} reverseSymbolList  The reverse DNA sequence.
      * @param  {Int} minimumLength      Minimum ORF length. If value is -1 or not given, no minimum length will be applied.
-     * @return {Array<Teselagen.bio.orf.ORF>} All open read frames in forward and reverse strands with length > minimumLength.
+     * @return {Teselagen.bio.orf.ORF[]} All open read frames in forward and reverse strands with length > minimumLength.
      */
     calculateORFBothDirections: function(forwardSymbolList, reverseSymbolList, minimumLength) {
         if(typeof(forwardSymbolList) === "undefined" || forwardSymbolList.length < 6) {
@@ -99,7 +99,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
      * @param  {Teselagen.bio.sequence.common.SymbolList} dnaSymbolList The dna sequence.
      * @param  {Int} minimumLength The minimum length of ORF to return.
      * @param  {Teselagen.bio.sequence.common.StrandType} strand The strand we are looking at.
-     * @return {Array<Teselagen.bio.orf.ORF>} The list of ORFs found.
+     * @return {Teselagen.bio.orf.ORF[]} The list of ORFs found.
      */
     orfPerFrame: function(frame, dnaSymbolList, minimumLength, strand) {
         if(typeof(minimumLength) === "undefined") {
@@ -189,9 +189,9 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
     /**
      * @private
      * Takes three nucleotides and determines if they (and their ambiguous matches) form a stop codon.
-     * @param  {Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)} nucleotideOne
-     * @param  {Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)} nucleotideTwo
-     * @param  {{Teselagen.bio.sequence.symbols (NucleotideSymbol or GapSymbol)}} nucleotideThree
+     * @param  {Teselagen.bio.sequence.symbols.NucleotideSymbol/Teselagen.bio.sequence.symbols.GapSymbol} nucleotideOne
+     * @param  {Teselagen.bio.sequence.symbols.NucleotideSymbol/Teselagen.bio.sequence.symbols.GapSymbol} nucleotideTwo
+     * @param  {Teselagen.bio.sequence.symbols.NucleotideSymbol/Teselagen.bio.sequence.symbols.GapSymbol} nucleotideThree
      * @return {Boolean} True if the nucleotides given form a stop codon.
      */
     evaluatePossibleStop: function(nucleotideOne, nucleotideTwo, nucleotideThree) {
@@ -223,7 +223,7 @@ Ext.define("Teselagen.bio.orf.ORFFinder", {
      * Helper function to return ambiguous matches of a nucleotide if they exist, and
      * otherwise return an array just containing the nucleotide.
      * @param {Teselagen.bio.sequence.symbols.NucleotideSymbol} nucleotide The nucleotide to get matches for.
-     * @return {Array<Teselagen.bio.sequence.symbols.NucleotideSymbol>} The array containing matches.
+     * @return {Teselagen.bio.sequence.symbols.NucleotideSymbol[]} The array containing matches.
      */
     returnMatches: function(nucleotide) {
         if(!nucleotide.getAmbiguousMatches() || 

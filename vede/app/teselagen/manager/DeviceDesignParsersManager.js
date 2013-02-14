@@ -1,4 +1,5 @@
 /**
+ * Parses the DeviceDesign JSON or XML.
  * @class Teselagen.manager.DeviceDesignParsersManager
  * @author Rodrigo Pavez
  **/
@@ -45,6 +46,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       
       //Ext.getCmp('mainAppPanel').getActiveTab().setTitle(fileName.replace(/.json/g));
       Vede.application.fireEvent("ReRenderDECanvas");
+      Vede.application.fireEvent("checkj5Ready");
     };
 
     /*
@@ -83,6 +85,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         getPartByID(parts[indexPart],function(part){
           var newPart = Ext.create("Teselagen.models.Part", {
               name: part["de:name"],
+              partSource: part["de:partSource"],
               genbankStartBP: part["de:startBP"],
               endBP: part["de:stopBP"],
               revComp: part["de:revComp"],

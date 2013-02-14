@@ -25,10 +25,17 @@ Ext.define("Teselagen.models.J5Input", {
      */
     fields: [
 
-        //{name: "status",        type: "String",     defaultValue: ""},
+        /*
+        {name: "eugeneruleslist",   type: "string",     defaultValue: ""}, //.eug
+        {name: "j5parameters",      type: "string",     defaultValue: ""}, //.csv
+        {name: "masterplasmidlist", type: "string",     defaultValue: ""}, //.csv
+        {name: "mastersequences",   type: "string",     defaultValue: ""}, //.csv
+        {name: "masterzippedsequences",   type: "auto", defaultValue: ""}, //array of .gb .fas .seq files
+        {name: "partslist",         type: "string",     defaultValue: ""}, //.csv
+        {name: "combinatorial",     type: "string",     defaultValue: ""}, //.csv
+        {name: "plasmids",           type: "auto"}  //. <--- these are the RESULTS: .gb/.csv files
+        */
 
-
-        // IDs
         {name: "j5parameters_id",           type: "long"},
         {name: "automationparameters_id",   type: "long"}
     ],
@@ -43,7 +50,7 @@ Ext.define("Teselagen.models.J5Input", {
             model: "Teselagen.models.J5Parameters",
             getterName: "getJ5Parameters",
             setterName: "setJ5Parameters",
-            assocationKey: "j5Parameters",
+            associationKey: "j5Parameters",
             foreignKey: "j5parameters_id"
         },
         {
@@ -51,7 +58,7 @@ Ext.define("Teselagen.models.J5Input", {
             model: "Teselagen.models.DownstreamAutomationParameters",
             getterName: "getDownstreamAutomationParameters",
             setterName: "setDownstreamAutomationParameters",
-            assocationKey: "downstreamAutomationParameters",
+            associationKey: "downstreamAutomationParameters",
             foreignKey: "automationparameters_id"
         },
         {
@@ -59,7 +66,7 @@ Ext.define("Teselagen.models.J5Input", {
             model: "Teselagen.models.J5Run",
             getterName: "getJ5Run",
             setterName: "setJ5Run",
-            assocationKey: "j5run",
+            associationKey: "j5run",
             foreignKey: "j5run_id"
         }
     ]

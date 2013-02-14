@@ -6,10 +6,6 @@
 Ext.define("Teselagen.models.j5Output.AssembledSequenceFile", {
     extend: "Ext.data.Model",
 
-    requires: [
-        "Teselagen.models.j5Output.Assembly"
-    ],
-
     proxy: {
         type: "memory"
     },
@@ -40,39 +36,7 @@ Ext.define("Teselagen.models.j5Output.AssembledSequenceFile", {
         },
         {name: "name",   type: "String",     defaultValue: ""},
         {name: "fileContent",   type: "String",     defaultValue: ""},
-        {name: "size",   type: "String",     defaultValue: ""},
-
-
-        // IDs
-        {name: "assembly_id",   type: "long"}
-    ],
-
-    validations: [
-        {
-            field: "fileType",
-            type: "inclusion",
-            list: Teselagen.constants.Constants.FORMATS_LIST
-        }
-
-    ],
-
-    associations: [
-        {
-            type: "hasOne",
-            model: "Teselagen.models.j5Output.Assembly",
-            getterName: "getAssembly",
-            setterName: "setAssembly",
-            assocationKey: "assembly",
-            foreignKey: "assembly_id"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Results",
-            getterName: "getJ5Results",
-            setterName: "setJ5Results",
-            assocationKey: "j5Results",
-            foreignKey: "j5results_id"
-        }
+        {name: "size",   type: "String",     defaultValue: ""}
     ]
 
 });

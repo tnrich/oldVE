@@ -342,8 +342,7 @@ Ext.define('Vede.controller.PieController', {
      */
     bpAtAngle: function(angle) {
         return Math.floor(angle * 
-            this.pieManager.sequenceManager.getSequence().seqString().length
-            / (2 * Math.PI));
+            this.pieManager.sequenceManager.getSequence().seqString().length/ (2 * Math.PI));
     },
 
     /**

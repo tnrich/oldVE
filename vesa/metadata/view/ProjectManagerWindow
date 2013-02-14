@@ -25,8 +25,8 @@
             },
             "codeClass": null,
             "userConfig": {
-                "dock": null,
                 "layout|flex": 2,
+                "dock": null,
                 "designer|userClassName": "MyGridPanel3",
                 "id": "projectGrid_Panel",
                 "title": "Your Projects"
@@ -100,8 +100,8 @@
             },
             "codeClass": null,
             "userConfig": {
-                "dock": "top",
                 "layout|flex": 1,
+                "dock": "top",
                 "designer|userClassName": "MyToolbar"
             },
             "designerId": "35991d80-cc59-4977-b321-48543f266412",

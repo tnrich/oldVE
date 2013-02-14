@@ -1,3 +1,7 @@
+/**
+ * j5 analysis panel
+ * @class Vede.view.j5.AnalysisPanel
+ */
 Ext.define('Vede.view.j5.AnalysisPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.AnalysisPanel',

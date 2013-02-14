@@ -1,10 +1,14 @@
+/**
+ * Project panel view
+ * @class Vede.view.common.ProjectPanelView
+ */
 Ext.define('Vede.view.common.ProjectPanelView', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.ProjectPanelView',
     region: 'west',
     id: 'ProjectPanel',
-    minWidth: 228,
-    width: 228,
+    minWidth: 220,
+    width: 220,
     collapseDirection: 'left',
     collapsible: true,
     frameHeader: false,
@@ -12,6 +16,7 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     preventHeader: false,
     title: 'Project',
     plain: false,
+    removePanelHeader: false,
     margin: '0 10 0 0',
 
     layout: {
@@ -25,15 +30,13 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         id: 'projectTreePanel',
         rootVisible: false
     }, {
-        //xtype: 'panel',
+        hidden: true,
         flex: 1,
-        //items: [{
         xtype: 'treepanel',
-        title: 'Parts',
+        title: 'Part Library',
         id: 'projectPartsPanel',
-        width: 228,
+        width: 220,
         rootVisible: false
-        //}]
     }]
 
 });

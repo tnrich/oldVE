@@ -186,6 +186,8 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
     /* -----------------------------------------------------
      *  KEYWORD/SUBKEYWORD PARSING FUNCTIONS
      * -----------------------------------------------------*/
+     // NOTE: It looks inefficient, but we for loop the lineArr because it's easier to
+     // to correct the parser for different cases in the future.
     /**
      * Parses Locus Line in Genbank file.
      * @param {String} line
@@ -193,8 +195,6 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
      * @returns {GenbankLocusKeyword} result
      * @private
      */
-     // NOTE: It looks inefficient, but we for loop the lineArr because it's easier to
-     // to correct the parser for different cases in the future.
     parseLocus: function(line, gb) {
         var result, locusName, seqLen, strand, naType, linear, div, date;
         var lineArr = line.split(/[\s]+/g);
@@ -535,10 +535,16 @@ Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
         var quoted = false;
         var val = lineArr[1];
+
+        val = val.replace(/\\/g, " ");
+
         if (line.match(/=\"/g)) {
             quoted = true;
-        } else {
+            val = val.replace(/\".*/g, "");
+        } else if (val.match(/^\d+$/g)) {
             val = parseInt(val);
+        } else {
+            quoted = false;
         }
 
         featQual = Ext.create("Teselagen.bio.parsers.GenbankFeatureQualifier", {

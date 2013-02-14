@@ -1,7 +1,11 @@
+/**
+ * j5 report controller
+ * @class Vede.controller.J5ReportController
+ */
 Ext.define("Vede.controller.J5ReportController", {
     extend: "Ext.app.Controller",
 
-    requires: [],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.manager.ProjectManager"],
 
     activeProject: null,
     activeJ5Run: null,
@@ -9,17 +13,37 @@ Ext.define("Vede.controller.J5ReportController", {
     j5runs: null,
     cls: 'j5ReportTab',
 
+    onPlasmidsItemClick: function(row,record){
+        console.log("PLASMID SELECTED");
+        console.log(record);
+
+        var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
+            "GENBANK",
+            record.data.fileContent,
+            record.data.name,
+            ""
+        );
+
+        Teselagen.manager.ProjectManager.openSequence(sequence);
+
+    },
+
     downloadResults: function(){
-        location.href = '/api/getfile/'+this.activeJ5Run.data.file_id
+        location.href = '/api/getfile/'+this.activeJ5Run.data.file_id;
     },
 
     onJ5RunSelect: function( item, e, eOpts ){
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
-        var assemblies = this.activeJ5Run.getJ5Results().assemblies();
-        var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly().data.fileContent;
+        var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
+        var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
+        var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+        //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
+        //console.log(j5parameters);
         console.log(this.activeJ5Run);
-        this.tabPanel.down('gridpanel').reconfigure(assemblies);
-        //this.tabPanel.down('textareafield').setValue(combinatorial);
+        this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
+        this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+        this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+        this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
     renderMenu: function(){
@@ -27,7 +51,7 @@ Ext.define("Vede.controller.J5ReportController", {
        menu.removeAll();
        this.j5runs.forEach(function(j5run){
             var date = new Date(j5run.data.date);
-            menu.add([{text:date.toString(),id:j5run.data.id,cls:'j5runselect'}]);
+            menu.add([{text:j5run.getItemTitle(),id:j5run.data.id,cls:'j5runselect'}]);
        });
     },
 
@@ -63,8 +87,11 @@ Ext.define("Vede.controller.J5ReportController", {
             },
             'button[cls="downloadResults"]': {
                 click: this.downloadResults
+            },
+            "gridpanel[title=Output Plasmids]": {
+                itemclick: this.onPlasmidsItemClick
             }
 
-    });
-    },
+        });
+    }
 });

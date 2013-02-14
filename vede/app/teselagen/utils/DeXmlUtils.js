@@ -21,7 +21,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
     /**
      * Converts Device Editor XML (DE-XML) into Device Editor JSON (DE-JSON) format.
      * @param {String} xmlStr DE-XML in string format
-     * @returns {JSON} result DE-JSON as JSON object.
+     * @returns {Object} result DE-JSON as JSON object.
      */
     deXmlToJson: function(xmlStr) {
         var result = {};
@@ -195,9 +195,9 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
       * Checks if a structure of the XML2JSON data structure has the minimal structure requirements.
       * Inserts blank entries for entries that are needed.
       *
-      * @param {JSON} json a Raw De-XML2JSON object
+      * @param {Object} json a Raw De-XML2JSON object
       * //@returns {Boolean} isValid True if structure is good, false if missing key elements.
-      * @returns {JSON} json Repaired raw DE-JSON object.
+      * @returns {Object} json Repaired raw DE-JSON object.
       */
     validateRawDeJson: function(json) {
         //var isValid = true;
@@ -446,7 +446,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
       /**
       * Validates if structure of the JSON datastructure has the minimal structure requirements.
       *
-      * @param {JSON} json a DE-JSON object
+      * @param {Object} json a DE-JSON object
       * @returns {Boolean} isValid True if structure is good, false if missing key elements.
       */
     validateDeJson: function(json) {

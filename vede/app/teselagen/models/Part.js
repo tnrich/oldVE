@@ -75,7 +75,7 @@ Ext.define("Teselagen.models.Part", {
             name: "name",
             convert: function(v, record) {
                 var name;
-
+                /*
                 if (v === "" || v === undefined || v === null) {
                     name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
                     record.self.highestDefaultNameIndex += 1;
@@ -88,21 +88,13 @@ Ext.define("Teselagen.models.Part", {
                     }
                 }
                 return name;
-                /*
-                if (typeof(v) === "number" || typeof(v) === "string") {
-                    if (Teselagen.utils.FormatUtils.isLegalName(v)) {
-                        return v.toString();
-                    } else {
-                        console.warn("Illegal name " + v + ". Name can only contain alphanumeric characters, underscore (_), and hyphen (-). Removing non-alphanumerics.");
-                        return Teselagen.utils.FormatUtils.reformatName(v);
-                    }
-                } else {
-                    var name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
-                    record.self.highestDefaultNameIndex += 1;
-                    return name;
-                }*/
+                */
+                name = v;
+                if (v === undefined || v === null) name="";
+                return name;
             }
         },
+        {name: "partSource",        type: "string",     defaultValue: ""},
         {name: "revComp",           type: "boolean",    defaultValue: false},   //revComp
         {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
         {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
@@ -111,6 +103,7 @@ Ext.define("Teselagen.models.Part", {
 
     validations: [
         {field: "name",             type: "presence"},
+        {field: "partSource",       type: "presence"},
         {field: "revComp",          type: "presence"},
         {field: "genbankStartBP",   type: "presence"},
         {field: "endBP",            type: "presence"},
@@ -155,32 +148,32 @@ Ext.define("Teselagen.models.Part", {
 
 
     // IDS ARE GENERATED ON SERVER SIDE
-    /**
-     * Generates ID based on date + 3 random digits
-     * @returns {String} id
-     * @private
-     *
-    generateId: function() {
-        var extraDigits = Math.floor(Math.random() * 1000).toString();
-
-        while (extraDigits.length < 3) {
-            extraDigits = "0" + extraDigits;
-        }
-        var id = (Date.now()) + extraDigits;
-        return id;
-    },
-    */
-
-    /**
-     * Sets a new id for this part, different than what was generated at object initiation.
-     * @returns {Boolean} True if set.
-     *
-    setId: function() {
-        var newId = this.generateId();
-        this.set("id", newId);
-        return true;
-     },
-    */
+//    /**
+//     * Generates ID based on date + 3 random digits
+//     * @returns {String} id
+//     * @private
+//     *
+//    generateId: function() {
+//        var extraDigits = Math.floor(Math.random() * 1000).toString();
+//
+//        while (extraDigits.length < 3) {
+//            extraDigits = "0" + extraDigits;
+//        }
+//        var id = (Date.now()) + extraDigits;
+//        return id;
+//    },
+//    */
+//
+//    /**
+//     * Sets a new id for this part, different than what was generated at object initiation.
+//     * @returns {Boolean} True if set.
+//     *
+//    setId: function() {
+//        var newId = this.generateId();
+//        this.set("id", newId);
+//        return true;
+//     },
+//    */
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it only has default values and no set SequenceFile
@@ -189,23 +182,7 @@ Ext.define("Teselagen.models.Part", {
      */
     isEmpty: function() {
         var partEmpty = false;
-
-        if (//this.get("name").match(this.self.defaultNamePrefix) !== null &&
-            this.get("revComp") === false &&
-            this.get("genbankStartBP") === 0 &&
-            this.get("endBP") === 0 &&
-            //this.get("sequenceFile") === null) {
-            this.getSequenceFile().get("sequenceFileContent") === "") {
-            partEmpty = true;
-        }
-        
-        if (partEmpty &&
-            this.get("directionForward") === true &&
-            this.get("fas") === "None" ) {
-            partEmpty = true;
-        } else {
-            partEmpty = false;
-        }
+        if(!this.get('sequencefile_id')) partEmpty = true;
         return partEmpty;
     },
 
@@ -223,6 +200,7 @@ Ext.define("Teselagen.models.Part", {
         }
 
         if (this.get("name") === otherPart.get("name") &&
+            this.get("partSouce") == otherPart.get("partSource") &&
             this.get("revComp") === otherPart.get("revComp") &&
             this.get("genbankStartBP") === otherPart.get("genbankStartBP") &&
             this.get("endBP") === otherPart.get("endBP") &&

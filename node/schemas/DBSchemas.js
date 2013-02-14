@@ -1,13 +1,15 @@
 /**
- * Schemas definitions
- * -------------------
- * User
- * j5run
- * sequence
- * part
- * veproject
- * deproject
- * project
+ * Mongoose schema definitions:
+ * 
+ * + User
+ * + j5run
+ * + sequence
+ * + part
+ * + veproject
+ * + deproject
+ * + project
+ * 
+ * @module ./schemas/DBSchemas
  */
 
 module.exports = function (db) {
@@ -30,7 +32,10 @@ module.exports = function (db) {
 		name: String,
 		file_id: oIDRef,
 		date: Date,
-		j5Results: Mixed
+		j5Results: Mixed,
+		j5Input: Mixed,
+		assemblyType: String,
+		assemblyMethod: String,
 	});
 	registerSchema('j5run', j5RunSchema);
 
@@ -80,7 +85,7 @@ module.exports = function (db) {
 	var VEProjectSchema = new Schema({
 		name: String,
 		project_id : { type: oIDRef, ref: 'project' },
-		sequences: [{ type: oIDRef, ref: 'sequence' }],
+		sequencefile_id: { type: oIDRef, ref: 'sequence' },
 		parts: [ { type: oIDRef, ref: 'part' } ]
 	});
 	registerSchema('veproject', VEProjectSchema);

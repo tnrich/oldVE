@@ -1,31 +1,18 @@
+/**
+ * Restriction enzymes manager window
+ * @class Vede.view.RestrictionEnzymesManagerWindow
+ * @author Jenhan Tao
+ */
 Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
     extend: 'Ext.window.Window',
-    requires: ['Ext.ux.form.Multiselect',
-               'Ext.ux.form.ItemSelector'],
 
-    height: 474,
-    width: 551,
-    layout: {
-        align: 'stretch',
-        type: 'vbox'
-    },
-    title: 'Restriction Enzyme Manager',
-    resizable: false,
-    draggable: false,
+    height: 460,
+    id: 'RestrictionEnzymeWindowManager',
     modal: true,
+    width: 340,
+    title: 'Restriction Enzyme Manager',
 
     initComponent: function() {
-        var groupStore = Ext.create("Ext.data.Store", {
-            fields: [{name: "name", type: "string"}],
-            data: []
-        });
-
-        var enzymeListStore = Ext.create("Ext.data.Store", {
-            fields: [{name: "name", type: "string"}],
-            data: [],
-            sorters: [{property: "name", direction: "ASC"}]
-        });
-
         var me = this;
 
         Ext.applyIf(me, {
@@ -36,152 +23,61 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                         align: 'stretch',
                         type: 'hbox'
                     },
-                    flex: 1,
                     items: [
                         {
                             xtype: 'container',
-                            id: 'selectionAreaContainer',
-                            layout: {
-                                align: 'stretch',
-                                type: 'hbox'
-                            },
-                            flex: 1,
                             items: [
                                 {
-                                    xtype: 'container',
-                                    id: 'leftEnzymeSelectionContainer',
-                                    padding: 3,
-                                    layout: {
-                                        align: 'stretch',
-                                        padding: 3,
-                                        type: 'vbox'
-                                    },
-                                    flex: 1,
-                                    items: [
-                                        {
-                                            xtype: 'container',
-                                            id: 'leftDropdownContainer',
-                                            flex: 0.15,
-                                            margin: 10,
-                                            items: [
-                                                {
-                                                    xtype: 'combobox',
-                                                    id: 'enzymeGroupSelector',
-                                                    store: groupStore,
-                                                    displayField: 'name',
-                                                    fieldLabel: 'Enzymes',
-                                                    labelAlign: 'top',
-                                                    queryMode: 'local',
-                                                    editable: false,
-                                                    fieldLabel: 'Active Enzymes'
-
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            xtype: 'textfield',
-                                            id: 'enzymeSearchField',
-                                            fieldLabel: 'Label',
-                                            hideLabel: true,
-                                            margin: 10,
-                                            emptyText: 'Enzyme name',
-                                            maxWidth: 150,
-                                            enableKeyEvents: true
-                                        },
-                                        {
-                                            xtype: 'itemselector',
-                                            id: 'enzymeSelector',
-                                            imagePath: '../../../extjs/examples/ux/css/images/',
-                                            store: enzymeListStore,
-                                            displayField: 'name', 
-                                            flex: 1,
-                                            buttons: ["oneRight", "allRight",
-                                                      "oneLeft", "allLeft"],
-                                            buttonsText: {oneRight: ">", allRight: ">>",
-                                                          oneLeft: "<", allLeft: "<<"},
-                                            appendOnly: true
-                                        }
-                                    ]
+                                    xtype: 'combobox',
+                                    id: 'GroupComboBox',
+                                    width: 150,
+                                    fieldLabel: 'Active Enzymes:',
+                                    labelAlign: 'top'
                                 },
+                                {
+                                    xtype: 'textfield',
+                                    id: 'EnzymeSearchBox',
+                                    fieldLabel: '',
+                                    emptyText: 'Search...'
+                                }
                             ]
                         },
                         {
                             xtype: 'container',
-                            id: 'enzymeWindowRightButtonContainer',
+                            flex: 1,
                             layout: {
-                                type: 'absolute'
+                                align: 'center',
+                                defaultMargins: {
+                                    top: 5,
+                                    right: 5,
+                                    bottom: 5,
+                                    left: 5
+                                },
+                                type: 'vbox'
                             },
-                            flex: 0.3,
                             items: [
-                                /*{
-                                    xtype: 'container',
-                                    height: 140,
-                                    id: 'upperEnzymeGroupButtonContainer',
-                                    padding: 2,
-                                    width: 130,
-                                    layout: {
-                                        align: 'stretch',
-                                        padding: 2,
-                                        type: 'vbox'
-                                    },
-                                    x: -5,
-                                    y: 60,
-                                    items: [
-                                        {
-                                            xtype: 'button',
-                                            margin: 2,
-                                            text: 'New Group',
-                                            flex: 1
-                                        },
-                                        {
-                                            xtype: 'button',
-                                            margin: 2,
-                                            text: 'Remove Group',
-                                            flex: 1
-                                        },
-                                        {
-                                            xtype: 'button',
-                                            margin: 2,
-                                            text: 'Remove Enzyme',
-                                            flex: 1
-                                        },
-                                        {
-                                            xtype: 'button',
-                                            margin: 2,
-                                            text: 'Make Active',
-                                            flex: 1
-                                        }
-                                    ]
-                                },*/
                                 {
-                                    xtype: 'container',
-                                    height: 70,
-                                    id: 'lowerEnzymeGroupButtonContainer',
-                                    padding: 2,
-                                    width: 130,
-                                    layout: {
-                                        align: 'stretch',
-                                        padding: 2,
-                                        type: 'vbox'
-                                    },
-                                    x: -5,
-                                    y: 170,
-                                    items: [
-                                        {
-                                            xtype: 'button',
-                                            margin: 2,
-                                            text: 'Save as Group',
-                                            id: 'saveGroupButton',
-                                            flex: 1
-                                        },
-                                        {
-                                            xtype: 'button',
-                                            margin: 2,
-                                            text: 'Delete Group',
-                                            id: 'deleteGroupButton',
-                                            flex: 1
-                                        }
-                                    ]
+                                    xtype: 'button',
+                                    height: 30,
+                                    id: 'SaveGroupButton',
+                                    maxHeight: 30,
+                                    maxWidth: 100,
+                                    minHeight: 30,
+                                    minWidth: 100,
+                                    width: 100,
+                                    text: 'Save as Group'
+                                },
+                                {
+                                    xtype: 'button',
+                                    flex: 1,
+                                    height: 30,
+                                    id: 'DeleteGroupButton',
+                                    maxHeight: 30,
+                                    maxWidth: 100,
+                                    minHeight: 30,
+                                    minWidth: 100,
+                                    width: 100,
+                                    text: 'Delete Group'
                                 }
                             ]
                         }
@@ -189,47 +85,115 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                 },
                 {
                     xtype: 'container',
-                    id: 'bottomButtonContainer',
-                    margin: '',
-                    padding: 0,
+                    width: 322,
                     layout: {
-                        type: 'absolute'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
-                    flex: 0.1,
                     items: [
                         {
+                            xtype: 'gridpanel',
+                            height: 305,
+                            id: 'AvailableEnzymeGridPanel',
+                            width: 148,
+                            frameHeader: false,
+                            title: '',
+                            enableColumnHide: false,
+                            enableColumnMove: false,
+                            enableColumnResize: false,
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    draggable: false,
+                                    width: 139,
+                                    resizable: false,
+                                    detachOnRemove: false,
+                                    sortable: false,
+                                    dataIndex: 'string',
+                                    hideable: false,
+                                    text: ''
+                                }
+                            ]
+                        },
+                        {
                             xtype: 'container',
-                            height: 40,
-                            id: 'enzymeWindowCloseButtonContainer',
-                            padding: 2,
-                            width: 160,
+                            flex: 1,
+                            maxWidth: 30,
+                            minWidth: 30,
+                            width: 30,
                             layout: {
-                                align: 'stretch',
-                                padding: 2,
-                                type: 'hbox'
+                                type: 'column'
                             },
-                            x: 380,
-                            y: 0,
                             items: [
                                 {
                                     xtype: 'button',
-                                    height: 23,
-                                    id: 'restrictionEnzymesManagerOKButton',
-                                    margin: 2,
-                                    maxHeight: 28,
-                                    padding: '',
-                                    width: 69,
-                                    text: 'OK'
+                                    id: 'selectAllButton',
+                                    maxWidth: 30,
+                                    minWidth: 30,
+                                    text: '>>'
                                 },
                                 {
                                     xtype: 'button',
-                                    id: 'restrictionEnzymesManagerCancelButton',
-                                    margin: 2,
-                                    maxHeight: 28,
-                                    width: 69,
-                                    text: 'Cancel'
+                                    id: 'selectButton',
+                                    maxWidth: 30,
+                                    minWidth: 30,
+                                    text: '>'
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: 'deselectButton',
+                                    maxWidth: 30,
+                                    minWidth: 30,
+                                    text: '<'
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: 'deselectAllButton',
+                                    maxWidth: 30,
+                                    minWidth: 30,
+                                    text: '<<'
                                 }
                             ]
+                        },
+                        {
+                            xtype: 'gridpanel',
+                            height: 305,
+                            id: 'SelectedEnzymeGridPanel',
+                            width: 141,
+                            frameHeader: false,
+                            title: '',
+                            enableColumnHide: false,
+                            enableColumnMove: false,
+                            enableColumnResize: false,
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    draggable: false,
+                                    width: 139,
+                                    resizable: false,
+                                    detachOnRemove: false,
+                                    sortable: false,
+                                    dataIndex: 'string',
+                                    hideable: false,
+                                    text: ''
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container',
+                    height: 43,
+                    items: [
+                        {
+                            xtype: 'button',
+                            id: 'OkButton',
+                            text: 'Ok'
+                        },
+                        {
+                            xtype: 'button',
+                            id: 'CancelButton',
+                            text: 'Cancel'
                         }
                     ]
                 }

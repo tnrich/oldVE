@@ -1,9 +1,8 @@
 /**
  * @class Teselagen.bio.sequence.alphabets.ProteinAlphabet
  * 
- * Protein alphabet. Most general alphabet to build Protein sequences.
+ * Protein alphabet. Most general alphabet to build Protein sequences.  See Teselagen.bio.sequence.symbols.AminoAcidSymbol.
  * 
- * @see Teselagen.bio.sequence.symbols.AminoAcidSymbol
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
  * @author Timothy Ham (original author)

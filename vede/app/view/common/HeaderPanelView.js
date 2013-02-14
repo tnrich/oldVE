@@ -1,3 +1,7 @@
+/**
+ * Header panel view
+ * @class Vede.view.common.HeaderPanelView
+ */
 Ext.define('Vede.view.common.HeaderPanelView', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.HeaderPanelView',
@@ -22,12 +26,11 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 			width: 201,
 			src: 'resources/images/teselagen_toplogo.png'
 		}]
-	},
-	{
-			xtype: 'panel',
-            flex: 3,
-            id: 'headerButs',
-            floating: false,
+	}, {
+		xtype: 'panel',
+		flex: 3,
+		id: 'headerButs',
+		floating: false,
 	}, {
 		xtype: 'panel',
 		flex: 1,
@@ -37,8 +40,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 			align: 'stretch',
 			type: 'hbox'
 		},
-		items: [
-		{
+		items: [{
 			xtype: 'button',
 			flex: 1,
 			id: 'help_btn',
@@ -46,9 +48,10 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 			text: 'Help',
 			cls: 'header_btn',
 			overCls: 'header_btn_over'
-		},
-		{ xtype: 'tbspacer', width: 5 },
-		{
+		}, {
+			xtype: 'tbspacer',
+			width: 5
+		}, {
 			xtype: 'button',
 			flex: 1,
 			styleHtmlContent: false,
@@ -58,6 +61,10 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 			menu: {
 				xtype: 'menu',
 				items: [{
+					xtype: 'menuitem',
+					id: 'auth-reconnect-btn',
+					text: 'Reconnect'
+				}, {
 					xtype: 'menuitem',
 					id: 'auth-logout-btn',
 					text: 'Logout'

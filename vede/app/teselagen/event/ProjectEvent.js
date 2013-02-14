@@ -1,6 +1,6 @@
 /**
- * @class Teselagen.event.AuthenticationEvent
- * This class defines events for when user is logged in or not.
+ * Project events.
+ * @class Teselagen.event.ProjectEvent
  * @author Rodrigo Pavez
  */
 Ext.define("Teselagen.event.ProjectEvent", {

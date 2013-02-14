@@ -33,7 +33,8 @@ Ext.application({
         'AppViewport',
         'FileImportWindow',
         'RestrictionEnzymesManagerWindow',
-        'SimulateDigestionWindow'
+        'SimulateDigestionWindow',
+        'MyWindow4'
     ],
     autoCreateViewport: true,
     name: 'Vesa',

@@ -1,3 +1,7 @@
+/**
+ * Authentication window controller
+ * @class Vede.controller.AuthWindowController
+ */
 Ext.define('Vede.controller.AuthWindowController', {
     extend: 'Ext.app.Controller',
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
@@ -26,8 +30,12 @@ Ext.define('Vede.controller.AuthWindowController', {
                 self.window.close();
             }
         });
-
     },
+
+    onReconnectClick: function(){
+        Teselagen.manager.AuthenticationManager.Login();
+    },
+
     init: function () {
         var that = this;
         this.control({
@@ -36,6 +44,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             },
             "#auth-logout-btn": {
                 click: this.onLogoutClick
+            },
+            "#auth-reconnect-btn": {
+                click: this.onReconnectClick
             },
             "#auth-nosession-btn": {
                 click: this.onNoSessionClick

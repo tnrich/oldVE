@@ -1,15 +1,38 @@
+/**
+ * j5 RPC helper methods
+ * @module ./routes/j5rpc
+ */
+
+/**
+ * Loop and splice.
+ */
 var loopAndSplice = function(unordered) {
   for(var i = 0; i < unordered.length; i++) {
     for(var j = i + 1; j < unordered.length; j++) {
-      if (unordered[i]["hash"] == unordered[j]["hash"]) {
-        unordered.splice(j, 1);
-        j--;
+      if(unordered[i]&&unordered[j])
+      {
+        if(unordered[i]["hash"]&&unordered[j]["hash"])
+            {
+              if (unordered[i]["hash"] == unordered[j]["hash"]) {
+                unordered.splice(j, 1);
+                j--;
+              }
+            }
+      }
+      else
+      {
+          console.log("Error: sequence not found");
+          return [];
       }
     }
   }
   return unordered;
 }
 
+/**
+ * Write to quick log.
+ * @param s
+ */
 function quicklog(s) {
   var logpath = "/tmp/quick.log";
   var fs = require('fs');
@@ -19,8 +42,10 @@ function quicklog(s) {
   fs.closeSync(fd);
 }
 
-/*
- * Sequence File Name,Format
+/**
+ * Generate encoded sequences list file
+ * @param model
+ * @returns {String} base64
  */
 function encoded_sequences_list_file(model)
 {
@@ -41,10 +66,15 @@ function encoded_sequences_list_file(model)
         var format = (sequenceFile["sequenceFileFormat"]=="GENBANK") ? "Genbank" : sequenceFile["sequenceFileFormat"];
         out += sequenceFile['sequenceFileName']+','+ format +'\n';
     });
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64');
 }
 
+/**
+ * Generate an encoded zipped sequences file.
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_zipped_sequences_file(model)
 {
 
@@ -54,16 +84,29 @@ function encoded_zipped_sequences_file(model)
 
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
-            var sequenceFile = part["SequenceFile"];
-            zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
+            if(part)
+            {
+                var sequenceFile = part["SequenceFile"];
+                if(sequenceFile) zip.file(sequenceFile['sequenceFileName'], sequenceFile["sequenceFileContent"]);
+                else console.log("Warning: Sequence file not found");
+            }
+            else
+            {
+                console.log("Warning: Part not found");
+            }
         });
-    });   
+    });
 
     var data = zip.generate({base64:true,compression:'DEFLATE'});
-    quicklog(data);
+    //quicklog(data);
     return data;
 }
 
+/**
+ * Generate encoded parts list file
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_parts_list_file(model)
 {
     var out = "Part Name,Part Source (Sequence Display ID),Reverse Compliment?,Start (bp),End (bp)\n";
@@ -73,38 +116,58 @@ function encoded_parts_list_file(model)
     bins.forEach(function(bin){
         bin.parts.forEach(function(part){
             var sequenceFile = part["SequenceFile"];
+            if(sequenceFile)
+            {
+                var sequenceName = "";
+                if (sequenceFile["sequenceFileFormat"]=="GENBANK")
+                    {
+                        sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
+                        if(sequenceName) sequenceName = sequenceName[1];
+                        else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
+                    }
 
-            var sequenceName = "";
-            if (sequenceFile["sequenceFileFormat"]=="GENBANK")
-                {
-                    sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS +(\w+) +/);
-                    if(sequenceName) sequenceName = sequenceName[1];
-                    else sequenceName = sequenceFile['sequenceFileContent'].match(/LOCUS\s+((\w|-)+).+/)[1];
-                }
+                if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
+                if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
 
-            if (sequenceFile["sequenceFileFormat"]=="JBEI_SEQ") sequenceName = sequenceFile['sequenceFileContent'].match(/<seq:name>(.+)<\/seq:name>/)[1];
-            if (sequenceFile["sequenceFileFormat"]=="FASTA") sequenceName = sequenceFile['sequenceFileContent'].match(/>(.+)\n/)[1];
-
-            out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
-
+                out += part['name']+','+ sequenceName +','+part["revComp"]+','+part["genbankStartBP"]+','+part["endBP"]+'\n';
+            }
+            else
+            {
+                console.log("Warning: Sequence file not found");
+            }
         });
-    }); 
-    quicklog(out);
-    return new Buffer(out).toString('base64');  
+    });
+    //quicklog(out);
+    return new Buffer(out).toString('base64');
 }
 
+/**
+ * Generate encoded j5 parameters file
+ * @param params
+ * @returns {String} base64
+ */
 function encoded_j5_parameters_file(params)
 {
-    var out = "Parameter Name,Value\n"
+    var out = "Parameter Name,Value\n";
     
+    params["PRIMER_TM_SANTALUCIA"] = params["PRIMER_TM_SANTALUCIA"] ? 1 : 0;
+    params["PRIMER_SALT_CORRECTIONS"] = params["PRIMER_SALT_CORRECTIONS"] ? 1 : 0;
+    params["SUPPRESS_PURE_PRIMERS"] = params["SUPPRESS_PURE_PRIMERS"] ? "TRUE" : "FALSE";
+
+
     for(var prop in params) {
         out += prop + ',' + params[prop] + '\n';
     }
-    quicklog(out);
-    return new Buffer(out).toString('base64'); 
+    //quicklog(out);
+    return new Buffer(out).toString('base64');
 }
 
-function encoded_target_part_order_list_file(model)
+/**
+ * Generate encoded target part order list file
+ * @param model
+ * @returns {String} base64
+ */
+function encoded_target_part_order_list_file(model,method)
 {
  
 
@@ -114,18 +177,26 @@ function encoded_target_part_order_list_file(model)
     
     bins.forEach(function(bin){
         var direction = '';
-        out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
-    
-        bin.parts.forEach(function(part){
-            var fro = (bin['fro'] == 'NONE') ? '' : '';
-            var direction = (part["directionForward"] == 'true') ? 'forward' : '';
-            var dsf = '';//bin["dsf"]
-            var fas = part["fas"];
+        if(method.match(/Combinatorial/))
+        {
+            out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
+        
+            bin.parts.forEach(function(part){
+                var fro = (bin['fro'] == 'None') ? '' : '';
+                var direction = (part["directionForward"] == 'true') ? 'forward' : '';
+                var dsf = '';//bin["dsf"]
+                var fas = (part["fas"] == 'None') ? '' : '';
 
-            out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
-        });
+                out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
+            });
+        }
+        else
+        {
+            direction = (bin.parts[0]["directionForward"] == 'true') ? 'forward' : '';
+            out += bin.parts[0]["name"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
+        }
     });
-    /* 
+    /*
     (>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps
     >vector_backbone,,,2,,,
     pS8c-vector_backbone,forward,,,,,
@@ -143,13 +214,17 @@ function encoded_target_part_order_list_file(model)
     >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
     ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
     */
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
+/**
+ * Generate encoded Eugene rules list file
+ * @param model
+ * @returns {String} base64
+ */
 function encoded_eugene_rules_list_file(model)
 {
-    return "";
     var eugenes = model["rules"];
     var out = "";
 
@@ -179,11 +254,14 @@ function encoded_eugene_rules_list_file(model)
 
 
     });
-    quicklog(out);
+    //quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
-var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
+/**
+ * Encode j5 inputs
+ */
+var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMethod) {
 
     var parameters = JSON.parse(encodedParameters);
     var masterFiles = JSON.parse(encodedMasterFiles);
@@ -249,14 +327,16 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
             "reuse_zipped_sequences_file": "FALSE" \
         }');
 
+    execParams["assembly_method"] = assemblyMethod;
+
     execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
-    execParams["encoded_master_plasmids_file"] = new Buffer(masterFiles["masterPlasmidsList"]).toString('base64');
+    execParams["encoded_master_plasmids_file"] = masterFiles["masterPlasmidsList"];
     
     execParams["master_oligos_list_filename"] = masterFiles["masterOligosListFileName"];
-    execParams["encoded_master_oligos_file"] = new Buffer(masterFiles["masterOligosList"]).toString('base64');
+    execParams["encoded_master_oligos_file"] = masterFiles["masterOligosList"];
     
     execParams["master_direct_syntheses_list_filename"] = masterFiles["masterDirectSynthesesListFileName"];
-    execParams["encoded_master_direct_syntheses_file"] = new Buffer(masterFiles["masterDirectSynthesesList"]).toString('base64');
+    execParams["encoded_master_direct_syntheses_file"] = masterFiles["masterDirectSynthesesList"];
 
 
     var data = {};
@@ -264,7 +344,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
     data["encoded_sequences_list_file"] = encoded_sequences_list_file(model);
     data["encoded_zipped_sequences_file"] = encoded_zipped_sequences_file(model);
     data["encoded_parts_list_file"] = encoded_parts_list_file(model);
-    data["encoded_target_part_order_list_file"] = encoded_target_part_order_list_file(model);
+    data["encoded_target_part_order_list_file"] = encoded_target_part_order_list_file(model,assemblyMethod);
     data["encoded_eugene_rules_list_file"] = encoded_eugene_rules_list_file(model);
     data["encoded_j5_parameters_file"] = encoded_j5_parameters_file(parameters);
     
@@ -282,6 +362,9 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles) {
     Object.keys(execParams).forEach(function(prop) {
         data[prop] = execParams[prop];
     });
+
+    console.log("Executing using method: "+data["assembly_method"]);
+
 
     return data;
 

@@ -1,5 +1,6 @@
-/*
+/**
  * A Generic class that stores data about a text sequence you want to render
+ * @class Teselagen.renderer.common.TextRenderer
  */
 Ext.define("Teselagen.renderer.common.TextRenderer", {
 

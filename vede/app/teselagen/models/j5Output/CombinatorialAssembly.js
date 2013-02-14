@@ -1,56 +1,51 @@
 /**
- * @class Teselagen.models.j5Output.CobinatorialAssembly
- * Class describing a CobinatorialAssembly.
+ * @class Teselagen.models.j5Output.CombinatorialAssembly
+ * Class describing a CombinatorialAssembly.
  * @author Diana Wong
  */
 Ext.define("Teselagen.models.j5Output.CombinatorialAssembly", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.models.j5Output.Warning",
+        "Teselagen.models.j5Output.CombinationPart",
+        "Teselagen.models.j5Output.TargetBin",
+        "Teselagen.models.j5Output.NonDegPart"
     ],
-
+    
     proxy: {
         type: "memory"
     },
-
-    statics: {
-    },
-
-    /**
-     * Input parameters.
-     */
+    
     fields: [
-
-        // fields that may go under J5Run
-        {name: "type",          type: "String",     defaultValue: ""},
-        {name: "date",          type: "String",     defaultValue: ""},
-
-        // Tables to be stored as strings, not as models
-        {name: "nonDegenerativeParts",  type: "String",     defaultValue: ""},
-
-
-        // IDs
-        {name: "combinatorialAssembly_id",   type: "long"}
-    ],
-
-    validations: [
-        { // or leave this in J5Run
-            field: "type",
-            type: "inclusion",
-            list: Teselagen.constants.Constants.NONMOCKTYPE_LIST
-        }
-
+        {name: "cite", type: "String"},
+        {name: "date", type: "String"},
+        {name: "note", type: "String"},
+        {name: "assemblyParameters", type: "String"}
     ],
 
     associations: [
         {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Results",
-            getterName: "getJ5Results",
-            setterName: "setJ5Results",
-            assocationKey: "j5Results",
-            foreignKey: "j5results_id"
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.Warning",
+            name: "warnings"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.CombinationPart",
+            name: "combinationParts"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.TargetBin",
+            name: "targetBins"
+        },
+        {
+            type: "hasMany",
+            model: "Teselagen.models.j5Output.NonDegPart",
+            name: "nonDegParts"
         }
     ]
+    
 
 });

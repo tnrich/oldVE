@@ -5,15 +5,14 @@
  */
 Ext.define("Teselagen.models.User", {
     extend: "Ext.data.Model",
-    requires: ["Teselagen.manager.SessionManager",
-               "Teselagen.models.ApplicationPreferences",
-               "Teselagen.models.Project"],
+    requires: ["Teselagen.manager.SessionManager", "Teselagen.models.ApplicationPreferences", "Teselagen.models.Project"],
     fields: [{
         name: "id",
         type: "long"
-    },
-    { name: "applicationpreferences_id", type: "long" },
-    {
+    }, {
+        name: "applicationpreferences_id",
+        type: "long"
+    }, {
         name: "username",
         type: "String"
     }],
@@ -48,7 +47,7 @@ Ext.define("Teselagen.models.User", {
         writer: {
             type: "json"
         },
-        buildUrl: function() {
+        buildUrl: function () {
             return Teselagen.manager.SessionManager.buildUrl("user", this.url);
         }
     }

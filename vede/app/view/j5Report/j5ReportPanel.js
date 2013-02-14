@@ -1,3 +1,7 @@
+/**
+ * j5 report panel
+ * @class Vede.view.j5Report.j5ReportPanel
+ */
 Ext.define('Vede.view.j5Report.j5ReportPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.j5ReportPanel',
@@ -16,7 +20,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         frame: true,
         cls: 'j5ReportsPanel',
         margin: '0 0 0 0',
-        width: 300,
+        width: 350,
         bodyBorder: false,
         animCollapse: false,
         collapseDirection: 'left',
@@ -25,7 +29,6 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         frameHeader: false,
         hideCollapseTool: false,
         overlapHeader: false,
-        title: 'Inspector',
         titleCollapse: false,
         plain: false,
         removePanelHeader: false,
@@ -38,17 +41,8 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             xtype: 'menu',
             floating: false,
             height: 453,
-            width: 241,
-            items: [{
-                xtype: 'menuitem',
-                text: 'Menu Item'
-            }, {
-                xtype: 'menuitem',
-                text: 'Menu Item'
-            }, {
-                xtype: 'menuitem',
-                text: 'Menu Item'
-            }]
+            width: 291,
+            items: []
         }]
     }],
     items: [{
@@ -59,13 +53,13 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     xtype: 'fieldset',
                     margin: '10 10 10 10',
                     width: 700,
-                    title: 'Plasmids',
                     items: [
                         {
                             xtype: 'gridpanel',
+                            name: 'assemblies',
                             margin: '10 10 20 10',
                             width: 650,
-                            title: '',
+                            title: 'Output Plasmids',
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -92,6 +86,28 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                                     text: 'Content'
                                 }
                             ]
+                        },
+                        {
+                            xtype: 'gridpanel',
+                            name: 'j5parameters',
+                            margin: '10 10 20 10',
+                            width: 650,
+                            height:100,
+                            title: 'j5 Parameters',
+                            columns: [
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'name',
+                                    flex: 1,
+                                    text: 'Name'
+                                },
+                                {
+                                    xtype: 'gridcolumn',
+                                    dataIndex: 'value',
+                                    flex: 1,
+                                    text: 'Value'
+                                }
+                            ]
                         }
                     ]
                 },
@@ -103,6 +119,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                     items: [
                         {
                             xtype: 'textareafield',
+                            name: 'combinatorialAssembly',
                             margin: '10 10 20 10',
                             width: 650,
                             fieldLabel: ''

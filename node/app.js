@@ -1,12 +1,10 @@
 #!/usr/bin/env node
 
-/*
-  Teselagen
-  Device Editor MongoDB Backend
-  Repos: pushscience/opt/git/de.git
-*/
-
 /**
+ *  Teselagen Node.js application
+ */
+
+/*
  * Module dependencies.
  */
 var express = require('express');

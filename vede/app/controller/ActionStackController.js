@@ -1,3 +1,7 @@
+/**
+ * Action stack controller
+ * @class Vede.controller.ActionStackController
+ */
 Ext.define("Vede.controller.ActionStackController", {
     extend: "Ext.app.Controller",
 
@@ -40,7 +44,7 @@ Ext.define("Vede.controller.ActionStackController", {
     },
 
     onSequenceChanging: function(kind, memento) {
-        console.log("adding memento");
+        //console.log("adding memento");
         this.ActionStackManager.add(memento);
     },
 

@@ -1,3 +1,7 @@
+/**
+ * Vector Editor main menu bar
+ * @class Vede.view.ve.VectorEditorMainMenuBar
+ */
 Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     extend: 'Ext.toolbar.Toolbar',
     id: 'VectorEditorMainMenuBar',
@@ -14,7 +18,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Import from File'
             }, {
                 xtype: 'menuitem',
-                text: 'Download Genbank'
+                text: 'Download Genbank',
+                id: 'downloadGenbankMenuItem'
+            }, {
+                xtype: 'menuitem',
+                text: 'Rename Sequence',
+                id: 'renameSequenceItem'
             }, {
                 xtype: 'menuseparator'
             }, {
@@ -175,6 +184,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             minWidth: 140,
             items: [{
                 xtype: 'menuitem',
+                id: 'createNewFeatureMenuItem',
                 text: 'Create New Feature'
             }, {
                 xtype: 'menuitem',
@@ -194,31 +204,43 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Preferences'
             }]
         }
-    }, {
-        xtype: 'button',
-        text: 'Help',
-        menu: {
-            xtype: 'menu',
-            minWidth: 140,
-            items: [{
-                xtype: 'menuitem',
-                text: 'Suggest Feature'
-            }, {
-                xtype: 'menuitem',
-                text: 'Report Bug'
-            }, {
-                xtype: 'menuseparator'
-            }, {
-                xtype: 'menuitem',
-                text: 'About'
-            }]
-        }
-    }, {
+    },
+    // }, {
+    //     xtype: 'button',
+    //     text: 'Help',
+    //     id: 'veHelpMenuItem'
+//         menu: {
+//             xtype: 'menu',
+//             minWidth: 140,
+//             items: [{
+//                 xtype: 'menuitem',
+//                 id: 'suggestFeatureMenuItem'
+// ,                text: 'Suggest Feature'
+//             }, {
+//                 xtype: 'menuitem',
+//                 text: 'Report Bug'
+//             }, {
+//                 xtype: 'menuseparator'
+//             }, {
+//                 xtype: 'menuitem',
+//                 text: 'About'
+//             }]
+//         }
+     {
         xtype: 'tbfill'
     }, {
         xtype: 'button',
-        text: 'Done Editing',
-        cls: 'doneEditingBtn',
+        text: 'Create Part',
+        cls: 'createPartBtn'
+    }, {
+        xtype: 'button',
+        text: 'Save changes',
+        cls: 'saveSequenceBtn',
+        hidden: true
+    }, {
+        xtype: 'button',
+        text: 'Save',
+        cls: 'saveNewSequenceBtn',
         hidden: true
     }]
 });

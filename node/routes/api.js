@@ -1,13 +1,14 @@
- /**
- * API - VEDE EXT Platform
- * -----------------------
+/**
+ * TeselaGen API
+ * @module ./routes/api
  */
-
 module.exports = function (app, express) {
     var errorHandler = express.errorHandler();
     var apiManager = new app.ApiManager();
 
-  // Login Auth Method : Find User in DB
+  /**
+   *  Login Auth Method : Find User in DB
+   */
   function authenticate(username, pass, fn) {
     var User = app.db.model("User");
     User.findOne({
@@ -16,15 +17,13 @@ module.exports = function (app, express) {
       if(err) return fn(new Error('cannot find user'));
       return fn(null, user);
     });
-  };
+  }
 
-
-  // Authentication Restriction
-  /*
+  /**
+   * Authentication Restriction.
    * If user session is active then find the user in DB.
    * If no testing is enabled no option to use Guest User then Wrong Credential.
    */
-
   function restrict(req, res, next) {
     if(req.session.user) {
       var User = app.db.model("User");
@@ -39,7 +38,11 @@ module.exports = function (app, express) {
     }
   };
 
-  // Root Path
+  /**
+   * Send feedback
+   * @memberof module:./routes/api
+   * @method POST /sendFeedback
+   */
   app.post('/sendFeedback', function (req, res) {
     if(req.body.feedback)
     {
@@ -89,17 +92,19 @@ module.exports = function (app, express) {
     var sessionId = req.body.sessionId;
     var username = req.body.username;
     var password = req.body.password;
-//    console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
+    //console.log("sessionId:[%s], username:[%s], password:[%s]",sessionId, username, password);
     
-    // getOrCreateUser : Create new entry in DB if User doesn't exist
+    /**
+     *  Create new entry in DB if User doesn't exist
+     */
     function getOrCreateUser(username) {
       // Check if user exist on mongoDB
       var User = app.db.model("User");
       User.findOne({
         'username': username
       }, function (err, results) {
-        if(results == null) {
-          // If user not found generate a new one
+        if(results === null) {
+          // If user not found create a new one
           var newuser = new User({
             username: username
           });
@@ -108,18 +113,17 @@ module.exports = function (app, express) {
             req.session.regenerate(function () {
               req.session.user = user;
               req.user = user;
-              res.json({
+              return res.json({
                 'firstTime': true,
                 'msg': 'Welcome back ' + username + '!'
-              });
-            });
+              });});
           });
         } else {
           console.log("LOGIN: " + username);
           req.session.regenerate(function () {
             req.session.user = results;
             req.user = results;
-            res.json({
+            return res.json({
               'firstTime': false,
               'msg': 'Welcome back ' + username + '!'
             });
@@ -128,56 +132,61 @@ module.exports = function (app, express) {
       });
     }
 
-    // Manage errors (Only in production)
-    if(!sessionId && (!username || !password) && app.program.prod) return res.json({
-      'msg': 'Credentials not sended'
-    }, 405);
+    if(!app.program.prod)
+    {
+      // TESTING AUTH
 
-    // Login using fake sessionId (For Testing)
-    if(sessionId == '111') return getOrCreateUser('rpavez');
-
-    // Login using fake sessionId (For Testing)
-    if(sessionId == '000') return res.json({
-      'firstTime': true,
-      'msg': 'Welcome back Guest !'
-    });
-
-    // Loggin using just username (for Testing)
-    if(username && password != undefined && !app.program.prod) {
-      getOrCreateUser(username);
+      // Login using fake sessionId (For Testing)
+      if(username) getOrCreateUser(username);
+      else if(sessionId) getOrCreateUser(username);
+      else getOrCreateUser('guest');
     }
 
-    // Happy path of Login
-    if(username && password && app.production) {
+    if(app.program.prod)
+    {
+      // PRODUCTION AUTH
+      
+      // Manage errors
+      if(!sessionId && (!username || !password)) return res.json({'msg': 'Credentials not sended'}, 405);
 
-      var crypto = require('crypto');
-      var hash = crypto.createHash('md5').update(password).digest("hex");
+      // Happy path of Login
+      if(username && password) {
 
-      // Check the user in Mysql
-      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password="' + hash + '" order by j5sessions.id desc limit 1;';
+        var crypto = require('crypto');
+        var hash = crypto.createHash('md5').update(password).digest("hex");
 
-      app.mysql.query(query, function (err, rows, fields) {
-        if(err) res.json({
-          'msg': 'Invalid session'
-        }, 405);
-        if(rows[0]) getOrCreateUser(rows[0].username)
-        else return res.json({
-          'msg': 'Username or password invalid'
-        }, 405);
-      });
+        // Check the user in Mysql
+        query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and tbl_users.password="' + hash + '" order by j5sessions.id desc limit 1;';
+
+        app.mysql.query(query, function (err, rows, fields) {
+          if(err) res.json({
+            'msg': 'Invalid session'
+          }, 405);
+          if(rows[0]) getOrCreateUser(rows[0].username);
+          else return res.json({
+            'msg': 'Username or password invalid'
+          }, 405);
+        });
+      }
+
+      // Login using sessionID
+      if(sessionId&&app.prod) {
+
+        query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
+        
+        if(app.mysql)
+        {
+          app.mysql.query(query, function (err, rows, fields) {
+            if(err) res.json({
+              'msg': 'Invalid session'
+            }, 405);
+            getOrCreateUser(rows[0].username);
+          });
+        }
+        else res.json({'msg': 'Unexpected error.'}, 405);
+      }
+      debugger;
     }
-
-    // Login using sessionId
-    if(sessionId) {
-      var query = 'select * from j5sessions,tbl_users where j5sessions.user_id=tbl_users.id and j5sessions.session_id="' + sessionId + '";';
-      app.mysql.query(query, function (err, rows, fields) {
-        if(err) res.json({
-          'msg': 'Invalid session'
-        }, 405);
-        getOrCreateUser(rows[0].username)
-      });
-    }
-
   });
 
   // Get DEProjects
@@ -191,7 +200,7 @@ module.exports = function (app, express) {
             res.json({"projects": projs});
         }
     });
-  });  
+  });
 
   // Delete DEProjects
   app.delete('/deprojects', restrict, function (req, res) {
@@ -204,7 +213,7 @@ module.exports = function (app, express) {
             res.json({});
         }
     });
-  });  
+  });
 
   // Get Parts
   app.get('/parts', restrict, function (pReq, pRes) {
@@ -601,7 +610,7 @@ module.exports = function (app, express) {
         }
 
         newSequence.save(function(){
-          veproject.sequences.push(newSequence);
+          veproject.sequencefile_id = newSequence;
           veproject.save(function(err){
             if(err) console.log(err);
             console.log("New Sequence Saved!");
@@ -652,7 +661,6 @@ module.exports = function (app, express) {
 
   //READ
   app.get('/user/projects/veprojects/sequences', restrict, function (req, res) {
-
     var Sequence = app.db.model("sequence");
     Sequence.findById(req.query.id, function (err, sequence) {
       if(err) console.log("There was a problem!/");
@@ -715,16 +723,14 @@ module.exports = function (app, express) {
     var DEProject = app.db.model("deproject");
     var id = JSON.parse(req.query.filter)[0].value;
     DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
-      res.json({'j5runs':deproject.j5runs});
-    });
-  });
-
-  //READ
-  app.get('/user/projects/deprojects/j5runs', restrict, function (req, res) {
-    var DEProject = app.db.model("deproject");
-    var id = JSON.parse(req.query.filter)[0].value;
-    DEProject.findById(id).populate('j5runs').exec(function (err, deproject) {
-      res.json({'j5runs':deproject.j5runs});
+      var j5runs = deproject.j5runs;
+      deproject.j5runs.forEach(function(j5run){
+        var j5parameters = j5run.j5Results.j5parameters;
+        j5run.j5Input = {};
+        j5run.j5Input.j5Parameters = j5parameters;
+        //delete j5run.j5Results.j5parameters;
+      });
+      res.json({'j5runs':j5runs});
     });
   });
 
@@ -766,5 +772,14 @@ module.exports = function (app, express) {
         }
     });
   });  
+
+  //Get Part Library
+  app.get('/partLibrary', restrict, function (req, res) {
+    var Part = app.db.model("part");
+    Part.find({},function(err,parts){
+      res.json({'parts':parts});
+    });
+  });
+
 
 };

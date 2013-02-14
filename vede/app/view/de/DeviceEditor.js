@@ -1,3 +1,7 @@
+/**
+ * Device Editor view
+ * @class Vede.view.de.DeviceEditor
+ */
 Ext.define('Vede.view.de.DeviceEditor', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.DeviceEditorPanel',
@@ -9,17 +13,22 @@ Ext.define('Vede.view.de.DeviceEditor', {
     },
     frameHeader: false,
     closable: true,
+    border: 0,
     title: 'Device Editor',
     dockedItems: [{
         xtype: 'DeviceEditorTitlePanel'
     }, {
         xtype: 'DeviceEditorMenuPanel'
-    }, {
-        xtype: 'DeviceEditorToolPanel'
-    }, {
+    },
+    /*{
         xtype: 'DeviceEditorStatusPanel'
-    }, {
+    },
+    */
+    {
         xtype: 'DeviceEditorPartPanel'
+    },
+    {
+        xtype: 'InspectorPanel'
     }],
     items: [{
         xtype: 'panel',
@@ -30,7 +39,8 @@ Ext.define('Vede.view.de.DeviceEditor', {
         },
         border: 0,
         items: [{
-            xtype: 'DeviceEditorCanvasPanel'
+            xtype: 'DeviceEditorCanvasPanel',
+            border: 0,
         }
         ]
     }],

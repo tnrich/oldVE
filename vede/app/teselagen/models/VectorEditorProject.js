@@ -1,3 +1,7 @@
+/**
+ * Vector Editor project.
+ * @class Teselagen.models.VectorEditorProject
+ */
 Ext.define("Teselagen.models.VectorEditorProject", {
     extend: "Ext.data.Model",
     requires: ["Teselagen.manager.SessionManager", "Teselagen.models.Part"],
@@ -20,7 +24,6 @@ Ext.define("Teselagen.models.VectorEditorProject", {
         model: "Teselagen.models.SequenceFile",
         getterName: "getSequenceFile",
         setterName: "setSequenceFile",
-//        associationKey: "sequenceFile",
         foreignKey: "sequencefile_id"
     },
     {

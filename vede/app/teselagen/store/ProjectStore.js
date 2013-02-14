@@ -1,3 +1,7 @@
+/**
+ * Collection of projects
+ * @class Teselagen.store.ProjectStore
+ */
 Ext.define("Teselagen.store.ProjectStore", {
     requires: ["Teselagen.models.Project"],
     extend: "Ext.data.Store",

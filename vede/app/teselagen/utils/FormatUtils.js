@@ -282,7 +282,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
     /**
      * Converts a JbeiSeq XML file into a SequenceManager form of the data.
-     * @param {JSON} jbeiSeqJson JbeiSeqJson model of data
+     * @param {Object} jbeiSeqJson JbeiSeqJson model of data
      * @returns {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
      */
     jbeiseqJsonToSequenceManager: function(jbeiSeqJson) {
@@ -380,7 +380,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
      * Converts a SequenceManager {@link Teselagen.manager.SequenceManager} into
      * a JbeiSeqJson.
      * @param {Teselagen.manager.SequenceManager} sequenceManager A sequenceManager model of your data
-     * @returns {JSON} jbeiSeqJson JbeiSeqJson model of data
+     * @returns {Object} jbeiSeqJson JbeiSeqJson model of data
      */
     sequenceManagerToJbeiseqJson: function(seqMan) {
         if (Ext.getClassName(seqMan) !== "Teselagen.manager.SequenceManager" ) {
@@ -536,7 +536,7 @@ Ext.define("Teselagen.utils.FormatUtils", {
 
         //var jbeiseqJson = this.ParsersManager.genbankToJbeiseqJson(genbank);
         var jbeiseqJson = Teselagen.bio.parsers.ParsersManager.genbankToJbeiseqJson(genbank);
-        console.log(jbeiseqJson);
+        //console.log(jbeiseqJson);
 
         var result = this.jbeiseqJsonToSequenceManager(jbeiseqJson);
         
@@ -564,19 +564,19 @@ Ext.define("Teselagen.utils.FormatUtils", {
         return result;
     },
 
-    /**
-     * Convert a SequenceFile model to a SequenceManager model.
-     * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Teselagen.models.SequenceManager}
-     *
-    sequenceFileToSequenceManager: function(pSequenceFile) {
-        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
-    },*/
+//    /**
+//     * Convert a SequenceFile model to a SequenceManager model.
+//     * @param {Teselagen.models.SequenceFile} pSequenceFile
+//     * @returns {Teselagen.manager.SequenceManager}
+//     *
+//    sequenceFileToSequenceManager: function(pSequenceFile) {
+//        return SequenceFileManager.sequenceFileToSequenceManager(pSequenceFile);
+//    },*/
 
     /**
      * Convert a SequenceFile model to a SequenceManager model.
      * @param {Teselagen.models.SequenceFile} pSequenceFile
-     * @returns {Teselagen.models.SequenceManager}
+     * @returns {Teselagen.manager.SequenceManager}
      */
     sequenceFileToSequenceManager: function(pSequenceFile) {
         //console.log(pSequenceFile);
@@ -592,11 +592,11 @@ Ext.define("Teselagen.utils.FormatUtils", {
         
         switch (format) {
         case Constants.GENBANK:
-            console.log(content);
+            //console.log(content);
             var genbank = GenbankManager.parseGenbankFile(content);
             //console.log(JSON.stringify(genbank, null, "  "));
             seqMan = this.genbankToSequenceManager(genbank);
-            console.log(seqMan);
+            //console.log(seqMan);
             break;
         case Constants.FASTA:
             seqMan = this.fastaToSequenceManager(content);

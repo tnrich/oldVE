@@ -1,3 +1,7 @@
+/**
+ * File import window
+ * @class Vede.view.FileImportWindow
+ */
 Ext.define('Vede.view.FileImportWindow', {
     extend: 'Ext.window.Window',
 

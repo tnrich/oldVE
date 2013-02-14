@@ -1,5 +1,5 @@
 /**
- *
+ * SequenceManager events.
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceProviderEvent.as)
  */

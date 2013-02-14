@@ -1,3 +1,7 @@
+/**
+ * Main menu controller
+ * @class Vede.controller.MainMenuController
+ */
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
@@ -52,7 +56,7 @@ Ext.define('Vede.controller.MainMenuController', {
             button.up('window').close();
         }
     },
-
+    
     onImportButtonClick: function(button, e, options) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
         // Change this at a later date when that class is tested. --DW 10.17.2012
@@ -86,9 +90,9 @@ Ext.define('Vede.controller.MainMenuController', {
             //console.log(seqMgr.getName());
         }
     },
-
+    
     onImportMenuItemClick: function(item, e, options) {
-        Ext.create("Vede.view.FileImportWindow").show();
+        Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
     },
 
     onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
@@ -177,6 +181,17 @@ Ext.define('Vede.controller.MainMenuController', {
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
         this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+    },    
+
+    onCreateNewFeatureMenuItemClick: function() {
+        var createNewFeatureWindow = Ext.create(
+            "Vede.view.CreateNewFeatureWindow");
+
+        createNewFeatureWindow.show();
+        createNewFeatureWindow.center();
+
+        this.application.fireEvent("RestrictionEnzymeManagerOpened",
+                                   restrictionEnzymesManagerWindow);
     },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
@@ -214,6 +229,40 @@ Ext.define('Vede.controller.MainMenuController', {
         //console.log(gbMng.);
     },
 
+    onDownloadGenbankMenuItemClick: function (item, e, options) {
+        console.log("Download genbank called");
+
+
+        var saveFile = function (name, gb) {
+                var flag;
+                var text = gb.toString();
+                var filename = name;
+                var bb = new BlobBuilder();
+                bb.append(text);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            };
+
+        var sequenceFileManager = Teselagen.manager.ProjectManager.workingSequenceFileManager;
+        var fileName = sequenceFileManager.getName()+".gb";
+        saveFile(fileName, sequenceFileManager.toGenbank());
+
+    },
+
+    onRenameSequenceItemClick: function(item, e, options){
+
+        var onPromptClosed = function (answer, text) {
+            Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
+            Teselagen.manager.ProjectManager.workingVEProject.save({callback: function(){
+                Vede.application.fireEvent("renderProjectsTree");
+            }});
+        };
+
+        Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
+    },
+    onHelpBtnClick: function(button, e, options) {
+        if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
+    },
+
     init: function() {
         this.control({
             "#undoMenuItem": {
@@ -240,14 +289,20 @@ Ext.define('Vede.controller.MainMenuController', {
             "#rebaseMenuItem": {
                 click: this.onRebaseMenuItemClick
             },
-            "button[text=Cancel]": {
+            "#VectorEditorPanel > button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
             "button[cls='ImportSequence']": {
                 click: this.onImportButtonClick
             },
+            "#downloadGenbankMenuItem": {
+                click: this.onDownloadGenbankMenuItemClick
+            },
             "#importMenuItem": {
                 click: this.onImportMenuItemClick
+            },
+            "#renameSequenceItem": {
+                click: this.onRenameSequenceItemClick
             },
             "#circularViewMenuItem": {
                 checkchange: this.onCircularViewMenuItemCheckChange
@@ -282,6 +337,9 @@ Ext.define('Vede.controller.MainMenuController', {
             "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
             },
+            "#createNewFeatureMenuItem": {
+                click: this.onCreateNewFeatureMenuItemClick
+            },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             },
@@ -290,12 +348,15 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
-            },
+            }
+            // "#veHelpMenuItem" : {
+            //     click: this.onHelpBtnClick
+            // }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-    },
+    }
 });

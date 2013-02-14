@@ -1,3 +1,7 @@
+/**
+ * Vector Editor main toolbar
+ * @class Vede.view.ve.VectorEditorMainToolBar
+ */
 Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     extend: 'Ext.toolbar.Toolbar',
     id: 'VectorEditorMainToolBar',
@@ -5,17 +9,17 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     items: [
         {
             xtype: 'button',
-            id: 'exportBtn',
+            id: 'saveBtn',
             icon: 'resources/images/export.png',
             scale: 'medium',
-            tooltip: 'Save to Registry'
+            tooltip: 'Save Project'
         },
         {
             xtype: 'button',
-            id: 'saveBtn',
+            id: 'exportBtn',
             icon: 'resources/images/save.png',
             scale: 'medium',
-            tooltip: 'Save Project'
+            tooltip: 'Save to Registry'
         },
         {
             xtype: 'button',

@@ -5,6 +5,7 @@
  * PartManager holds an array of Parts, for a given design project.
  *
  * Originally PartFileProxy.as, FunctionMediator.as, SaveDesignXMLCommand.as
+ * @ignore
  * @author Diana Wong
  * @author Douglas Densmore (original author) ?
  */
