@@ -35,6 +35,7 @@ task("jsdoc", [DOCSROOT], function() {
     var cmd = util.format("./lib/jsdoc3/jsdoc -d %s node/development.js " +
 	"node/config.js node/routes/api.js node/routes/ice.js node/routes/j5.js " + 
         "node/routes/j5rpc.js node/schemas/DBSchemas.js " +
+        "node/manager " + 
         "2>/tmp/jsdoc.err", JSDOC_OUT);
     JakeUtil.exec(cmd);
 });

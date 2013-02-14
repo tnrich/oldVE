@@ -1,15 +1,24 @@
-/*
- * @class DEProjectManager
+/*global module*/
+
+/**
+ * Device Editor Project Manager   
+ * @module ./manager/DEProjectManager
  * @author Yuri Bendana
  */
 
-/*global module*/
-
 module.exports = function() {
+
+    /**
+     * @constructor
+     * @param pDb database connection
+     */
     function DEProjectManager(pDb) {
         this.db = pDb;
     }
 
+    /**
+     * Delete all Device Editor projects
+     */
     DEProjectManager.prototype.deleteAll = function(pNext) {
         var DEProject = this.db.model("deproject");
         DEProject.remove(function(pErr) {

@@ -1,15 +1,24 @@
-/*
- * @class PartManager
+/*global module*/
+
+/**
+ * Part Manager
+ * @module ./manager/PartManager
  * @author Yuri Bendana
  */
 
-/*global module*/
-
 module.exports = function() {
+
+    /**
+     * @constructor
+     * @param pDb database connection
+     */
     function PartManager(pDb) {
         this.db = pDb;
     }
 
+    /**
+     * Delete all parts
+     */
     PartManager.prototype.deleteAll = function(pNext) {
         var Part = this.db.model("part");
         Part.remove(function(pErr) {

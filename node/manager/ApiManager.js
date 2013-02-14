@@ -1,9 +1,10 @@
-/*
- * @class ApiManager
+/*global module*/
+
+/**
+ * API Manager
+ * @module ./manager/ApiManager
  * @author Yuri Bendana
  */
-
-/*global module*/
 
 module.exports = function() {
     var async = require("async");
@@ -15,6 +16,10 @@ module.exports = function() {
     var UserManager = require("./UserManager")();
     var VEProjectManager = require("./VEProjectManager")();
 
+    /**
+     * @constructor
+     * @param pDb database connection
+     */
     function ApiManager(pDb) {
         this.db = pDb;
         this.deprojectManager = new DEProjectManager(pDb);
@@ -26,6 +31,9 @@ module.exports = function() {
         this.veprojectManager = new VEProjectManager(pDb);
     }
 
+    /**
+     * Reset the database
+     */
     ApiManager.prototype.resetdb = function(pNext) {
         async.parallel([this.deprojectManager.deleteAll.bind(this.deprojectManager),
                         this.j5RunManager.deleteAll.bind(this.j5RunManager),
