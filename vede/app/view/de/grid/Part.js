@@ -1,6 +1,9 @@
 /**
  * Class which creates components for given parts to display in the Device
  * Editor canvas.
+ * @class Vede.view.de.grid.Part
+ *
+ * @author Nick Elsbree
  */
 Ext.define('Vede.view.de.grid.Part', {
     extend: 'Ext.container.Container',
@@ -9,6 +12,10 @@ Ext.define('Vede.view.de.grid.Part', {
 
     alias: 'widget.Part',
 
+    /**
+     * @cfg {Teselagen.models.Part} part The part model to render on the grid.
+     * @cfg {Boolean} fasConflict Whether to display a FAS conflict indicator.
+     */
     config: {
         part: null,
         fasConflict: false
@@ -19,12 +26,11 @@ Ext.define('Vede.view.de.grid.Part', {
     parentBin: null,
     partCell: null,
     eugeneFlag: null,
-    /**
-     * @param Teselagen.models.Part
-     */
+
     constructor: function (config) {
         var self = this;
         this.initConfig(config);
+
         //if (this.getPart()) console.log(this.getPart().get("name"));
         //else console.log("part no name");
 
@@ -39,7 +45,6 @@ Ext.define('Vede.view.de.grid.Part', {
         if(this.getPart()) {
             html = this.getPart().get("name");
             if(html.length > 14) html = html.substring(0, 14) + '..';
-            if(html==="") html = "Unnamed part";
         }
 
         this.eugeneFlag = {
@@ -75,21 +80,15 @@ Ext.define('Vede.view.de.grid.Part', {
                         'text-align': 'center'
                     },
                     html: html,
-                    listeners: {
+                    /*listeners: {
                         afterrender: function (obj) {
-                            if(self.getPart()) {
-                                if(self.getPart().isEmpty() && this.max !== null && this.ave !== null && this.min !== null) {
-                                    obj.tip = Ext.create('Ext.tip.ToolTip', {
-                                        target: obj.getEl().getAttribute("id"),
-                                        trackMouse: true,
-                                        renderTo: document.body,
-                                        html: 'Part is empty',
-                                        title: 'Warning'
-                                    });
+                            if(self.getPart()) { 
+                                if(self.getPart().isEmpty()) {
+                                    console.log(obj.getEl().getAttribute("id"));
                                 }
                             }
                         }
-                    }
+                    }*/
                 }]
             }]
         });
@@ -128,21 +127,36 @@ Ext.define('Vede.view.de.grid.Part', {
         }
     },
 
+    /**
+     * Applies the correct CSS class to the part when it is selected.
+     */
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        if(this.getPart()) {
+            html = this.getPart().get("name");
+            if(html==="") {
+            var tip = Ext.create('Ext.tip.ToolTip', {
+                target: this.partCell.getId(),
+                trackMouse: true,
+                renderTo: document.body,
+                html: 'Part is empty',
+                title: 'Warning'
+            });
+        }
+    }
     },
 
+    /**
+     * Removes the 'selected' CSS class from the part when it is deselected.
+     */
     deselect: function () {
         this.partCell.down().removeBodyCls("gridPartCell-selected");
-    },
-
-    applyPart: function (pPart) {
-        return pPart;
     },
 
     /**
      * If the fas is set, add either a red or blue rectangle, depending on
      * whether the fasConflict flag is true or false.
+     * @param {Boolean} fasConflict True to add a red rectangle, false for blue.
      */
     addFasIndicator: function (fasConflict) {
         var image;
@@ -165,6 +179,9 @@ Ext.define('Vede.view.de.grid.Part', {
         image.show();
     },
 
+    /**
+     * Adds the Eugene Rule indicator image to the part.
+     */
     addEugeneRuleIndicator: function() {
         var image = Ext.create("widget.image", {
             xtype: "image",
@@ -176,6 +193,9 @@ Ext.define('Vede.view.de.grid.Part', {
         image.show();
     },
 
+    /**
+     * Removes the Eugene Rule indicator image.
+     */
     removeEugeneRuleIndicator: function() {
         this.partCell.down("image[cls='eugeneRuleIndicator']").destroy();
     },

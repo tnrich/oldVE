@@ -143,6 +143,18 @@ img {
   border: 0;
 }
 
+.x-tip {
+  background-color: rgba(51,51,51,0.85);
+  border: 0 none;
+}
+
+.x-tip-header, .x-tip-body, .x-form-invalid-tip-body {
+  color: white;
+}
+
+.x-tip-header-text {
+  color: rgb(0, 183, 255);
+}
 /*Header*/
 #headerPanel-body, #headerMain-body, #headerButs-body, #headerSub-body {
   border: none;

@@ -1,6 +1,9 @@
 /**
  * Class which creates a component for a given bin to display in the Device
  * Editor.
+ * @class Vede.view.de.grid.Bin
+ *
+ * @author Nick Elsbree
  */
 Ext.define('Vede.view.de.grid.Bin', {
     extend: 'Ext.container.Container',
@@ -11,17 +14,18 @@ Ext.define('Vede.view.de.grid.Bin', {
         reverseButtonIconPath: 'resources/images/ux/left2.gif'
     },
 
+    /**
+     * @cfg {Teselagen.models.J5Bin} bin The bin model to render on the grid.
+     * @cfg {Number} totalRows The total number of rows that the bin should 
+     * display, regardless of whether they are filled with parts.
+     */
     config: {
         bin: null,
-        iconID: null,
         totalRows: 1
     },
 
     binHeader: null,
 
-    /**
-     * @param Teselagen.models.J5Bin
-     */
     constructor: function(config) {
         this.initConfig(config);
 
@@ -121,6 +125,11 @@ Ext.define('Vede.view.de.grid.Bin', {
         }
     },
 
+    /**
+     * When the totalRows config item is set, add blank rows to the bin to 
+     * ensure it has the correct number of rows displayed.
+     * @param {Number} pTotalRows The correct number of rows to display.
+     */
     applyTotalRows: function(pTotalRows) {
         var currentRows;
 
@@ -138,10 +147,16 @@ Ext.define('Vede.view.de.grid.Bin', {
         return pTotalRows;
     },
 
+    /**
+     * Applies the correct CSS class to the bin when it is selected.
+     */
     select: function() {
         this.binHeader.down().addBodyCls("binHeader-selected");
     },
 
+    /**
+     * Removes the 'selected' CSS class from the bin when it is deselected.
+     */
     deselect: function() {
         this.binHeader.down().removeBodyCls("binHeader-selected");
     },

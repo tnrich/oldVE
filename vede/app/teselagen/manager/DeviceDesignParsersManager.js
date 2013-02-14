@@ -85,6 +85,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         getPartByID(parts[indexPart],function(part){
           var newPart = Ext.create("Teselagen.models.Part", {
               name: part["de:name"],
+              partSource: part["de:partSource"],
               genbankStartBP: part["de:startBP"],
               endBP: part["de:stopBP"],
               revComp: part["de:revComp"],

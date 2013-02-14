@@ -31,6 +31,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         return cb(foundBin);
     },
 
+    /**
+     * Handler for the Delete Part button. Destroys the selected part and all
+     * the Eugene Rules that it is involved with.
+     */
     onDeletePartBtnClick: function(){
         if(this.selectedPart) {
             var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
@@ -73,7 +77,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
                 else {j5ready = false;}
             });
-            console.log(j5ready);
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
 
@@ -97,6 +100,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         });
     },
 
+    /**
+     * Handler for the Circular Plasmid radio button.
+     */
     onCircularPlasmidRadioChange: function(radio){
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         tab.model.getDesign().getJ5Collection().set('isCircular',radio.getValue());
@@ -210,7 +216,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.onTabChange(tab, tab, tab);
     },
 
-    // When a Part is selected
+    /**
+     * Handles the event that a part is selected on the grid.
+     * @param {Teselagen.models.Part} j5Part The part model that has been selected.
+     * @param {Number} binIndex The index of the bin that owns the selected part.
+     */
     onPartSelected: function (j5Part, binIndex) {
 
         this.selectedBinIndex = binIndex;
@@ -222,7 +232,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             // Remember that j5Part may not exist
             console.log(j5Part.get("name"));
-            console.log(j5Part.get("partSource"));
+            console.log(j5Part);
         }
 
         // If a j5Part exists for the selected part, load it. If not, create a
@@ -237,7 +247,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
             this.selectedPart = j5Part;
         } else {
-            var newPart = this.DeviceDesignManager.createPart(this.activeProject, binIndex);
+            var newPart = Ext.create("Teselagen.models.Part");
             partPropertiesForm.loadRecord(newPart);
 
             if(newPart.get("fas") === "") {
@@ -257,6 +267,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         Ext.getCmp('mainAppPanel').getActiveTab().down('InspectorPanel').expand();
     },
 
+    /**
+     * Clears all the fields in the Part Info tab. Used when a part is deleted.
+     */
     clearPartInfo: function() {
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
@@ -267,6 +280,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.eugeneRulesGrid.reconfigure();
     },
 
+    /**
+     * Handles the event that a bin is selected on the grid.
+     * @param {Teselagen.models.J5Bin} j5Bin The selected bin.
+     */
     onBinSelected: function (j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
 
@@ -277,6 +294,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.updateColumnContentDisplayField(j5Bin);
     },
 
+    /**
+     * Updates the Column Contents field of a given bin model.
+     * @param {Teselagen.models.J5Bin} j5Bin The bin model to update info for.
+     */
     updateColumnContentDisplayField: function(j5Bin) {
         var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
         var contentArray = [];
@@ -291,12 +312,29 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         contentField.setValue(contentArray.join(""));
     },
 
+    /**
+     * Handles the event that the Part Name field changes. Checks to see if the
+     * part is already owned by a bin. If not, this is a new part, so we have to
+     * add the part to the design.
+     * @param {Ext.form.field.Text} nameField The Part Name textfield.
+     */
     onPartNameFieldChange: function (nameField) {
         var newName = nameField.getValue();
 
         this.selectedPart.set("name", newName);
+
+        if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
+                                                     this.selectedPart) < 0) {
+            this.DeviceDesignManager.addPartToBin(this.activeProject,
+                                                  this.selectedPart,
+                                                  this.selectedBinIndex);
+        }
     },
 
+    /**
+     * Handles the event that a part's assembly strategy combobox changes value.
+     * @param {Ext.form.field.Combobox} box The FAS combobox.
+     */
     onPartAssemblyStrategyChange: function (box) {
         var newStrategy = box.getValue();
 
@@ -305,10 +343,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.columnsGrid.getView().refresh();
     },
 
+    /**
+     * Handles the event that the design's geometry radio button changes.
+     * @param {Ext.form.RadioGroup} radioGroup The radio button group.
+     * @param {Boolean} newValue Whether the plasmid is now circular.
+     */
     onPlasmidGeometryChange: function (radioGroup, newValue) {
         this.activeProject.set("isCircular", newValue);
     },
 
+    /**
+     * Handler for the Add Column button. Calls on the DeviceDesignManager to 
+     * add a new empty bin to the design.
+     */
     onAddColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
         var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
@@ -316,6 +363,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
     },
 
+    /**
+     * Handler for the Remove Column button. Deletes the selected bin.
+     */
     onRemoveColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
 
@@ -329,6 +379,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Handler for the Add Eugene Rule button. Brings up the Eugene Rule Dialog
+     * and loads data into its fields.
+     */
     onAddEugeneRuleBtnClick: function() {
         if(this.selectedPart) {
             var newEugeneRuleDialog = Ext.create("Vede.view.de.EugeneRuleDialog");
@@ -358,6 +412,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Handler for the Delete Eugene Rule button. Brings up a confirmation
+     * window, and then deletes the selected rule.
+     */
     onDeleteEugeneRuleBtnClick: function() {
         if(this.eugeneRulesGrid.getSelectionModel().getSelection().length > 0) {
             var selectedRule = this.eugeneRulesGrid.getSelectionModel().getSelection()[0];
@@ -371,6 +429,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Handler for the confirmation button in the Eugene Rule Dialog. Saves
+     * the new Eugene Rule and adds it to the design's store of rules.
+     */
     onSubmitNewEugeneRuleBtnClick: function() {
         var newEugeneRuleDialog = 
             Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
@@ -411,6 +473,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newEugeneRuleDialog.close();
     },
 
+    /**
+     * Handler for the Eugene Rule Dialog cancel button.
+     */
     onCancelNewEugeneRuleBtnClick: function() {
         var newEugeneRuleDialog = 
             Ext.ComponentQuery.query("component[cls='addEugeneRuleDialog']")[0];
@@ -420,6 +485,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         newRule.destroy();
     },
 
+    /**
+     * Handler for the Eugene Rule Dialog compositional operator combobox.
+     * Ensures that the operator 2 field is the appropriate type of input field
+     * (numeric for the MORETHAN operator, combobox for all others).
+     * @param {Ext.form.field.ComboBox} box The compositional operator combobox.
+     */
     onCompositionalOperatorSelect: function(box) {
         var operator = box.getValue();
         var ruleDialog = 
@@ -434,6 +505,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Handles the event that a bin is selected in the Inspector.
+     */
     onGridBinSelect: function (grid, j5Bin, selectedIndex) {
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
@@ -442,12 +516,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * When we switch to a new tab, switch the current active project to the one
      * associated with the new tab, and reset event handlers so they refer to the
      * new grid and j5 bins.
+     * @param {Ext.tab.Panel} tabPanel The tabpanel.
+     * @param {Ext.Component} newTab The tab that is being switched to.
+     * @param {Ext.Component} oldTab The tab that is being switched from.
      */
     onTabChange: function (tabPanel, newTab, oldTab) {
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
-                this.activeBins.un("update", this.onBinsUpdate, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
 
                 // Unset listeners for the parts store of each bin.
@@ -466,7 +542,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
-            this.activeBins.on("update", this.onBinsUpdate, this);
             this.activeBins.on("remove", this.onRemoveFromBins, this);
 
             // Add listeners to each bin's parts store.
@@ -494,6 +569,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Handles the event that one or more bins are added to the device design's
+     * store of bins.
+     * @param {Ext.data.Store} activeBins The device design's store of bins.
+     * @param {Teselagen.model.J5Bin[]} addedBins An array of all the bins that 
+     * have been added.
+     * @param {Number} index The index where the bins were added.
+     */
     onAddToBins: function (activeBins, addedBins, index) {
         // Add event listeners to the parts store of this bin.
         Ext.each(addedBins, function (j5Bin) {
@@ -506,17 +589,38 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.renderCollectionInfo();
     },
 
-    onBinsUpdate: function (activeBins, updatedBin, operation, modified) {},
-
+    /**
+     * Handles the deletion of a bin. Simply rerenders the collection info.
+     * @param {Ext.data.Store} activeBins The current device design's store of
+     * bins.
+     * @param {Teselagen.models.J5Bin} removedBin The bin that was removed.
+     * @param {Number} index The index of the removed bin.
+     */
     onRemoveFromBins: function (activeBins, removedBin, index) {
         this.renderCollectionInfo();
     },
 
+    /**
+     * Handles the event that one or more parts are added to any bin.
+     * @param {Ext.data.Store} parts The parts store of the bin which has been
+     * added to.
+     * @param {Teselagen.model.Part[]} addedParts An array of all the parts that 
+     * have been added.
+     * @param {Number} index The index where the parts were added.
+     */
     onAddToParts: function (parts, addedParts, index) {
         this.columnsGrid.getView().refresh();
         this.renderCollectionInfo();
     },
 
+    /**
+     * Handles the event where a part has been changed directly. 
+     * @param {Ext.data.Store} parts The parts store of the bin which owns the
+     * modified part.
+     * @param {Teselagen.models.Part} updatedPart The part that has been updated.
+     * @param {String} operation The type of update that occurred.
+     * @param {String} modified The name of the field that was edited.
+     */
     onUpdateParts: function(parts, updatedPart, operation, modified) {
         if(modified)
         {
@@ -529,8 +633,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Handles the deletion of a part from a bin.
+     * @param {Ext.data.Store} parts The parts store of the bin which owned the
+     * deleted part.
+     * @param {Teselagen.models.Part} removedPart The part that was removed.
+     * @param {Number} index The index of the removed part.
+     */
     onRemoveFromParts: function (parts, removedPart, index) {
-        
         try {
             this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
@@ -543,6 +653,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    /**
+     * Fills in the Collection Info tab's various fields.
+     */
     renderCollectionInfo: function () {
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
@@ -552,8 +665,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(this.activeProject) {
             j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
                                                             this.activeProject));
-
-                console.log(this.DeviceDesignManager.checkJ5Ready(this.activeProject));
 
              if (this.DeviceDesignManager.checkJ5Ready(this.activeProject)) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
