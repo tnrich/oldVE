@@ -638,3 +638,27 @@ background: #F8F8F8;
 .openPartLibraryBtn-over, .changePartDefinitionBtn-over, .deletePartBtn-over {
   background: rgb(17, 101, 150);
 }
+
+/*j5 Reports*/
+.j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body {
+  background: #333 !important;
+  border:0 none;
+  color: white;
+}
+
+.j5ReportsPanel .x-menu-item-text {
+  background: none;
+  color: white;
+}
+
+.j5ReportsPanel .x-menu-item-active .x-menu-item-link{
+  background: black;
+  color: rgb(0, 183, 255);
+  border-color: black;
+
+}
+
+.j5ReportsPanel .x-menu-icon-separator {
+  border: 0 none;
+  width: 0px;
+}

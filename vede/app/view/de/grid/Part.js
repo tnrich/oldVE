@@ -36,7 +36,7 @@ Ext.define('Vede.view.de.grid.Part', {
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-        var html = "";
+        var html;
         var activeProject = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign();
 
         var parentIndex = this.DeviceDesignManager.getBinAssignment(activeProject, this.getPart());
@@ -132,9 +132,7 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
-        if(this.getPart()) {
-            html = this.getPart().get("name");
-            if(html==="") {
+        if(this.getPart()==null) {
             var tip = Ext.create('Ext.tip.ToolTip', {
                 target: this.partCell.getId(),
                 trackMouse: true,
@@ -142,7 +140,6 @@ Ext.define('Vede.view.de.grid.Part', {
                 html: 'Part is empty',
                 title: 'Warning'
             });
-        }
     }
     },
 
