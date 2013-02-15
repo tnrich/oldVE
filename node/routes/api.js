@@ -4,7 +4,6 @@
  */
 module.exports = function (app, express) {
     var errorHandler = express.errorHandler();
-    var apiManager = new app.ApiManager();
 
   /**
    *  Login Auth Method : Find User in DB
@@ -215,6 +214,32 @@ module.exports = function (app, express) {
     });
   });
 
+  // Get VEProjects
+  app.get('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.find(function(err, projs) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"projects": projs});
+        }
+    });
+  });  
+
+  // Delete VEProjects
+  app.delete('/veprojects', restrict, function (req, res) {
+    var VEProject = app.db.model("veproject");
+    VEProject.remove(function(err) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({});
+        }
+    });
+  });  
+
   // Get Parts
   app.get('/parts', restrict, function (pReq, pRes) {
     var Part = app.db.model("part");
@@ -279,18 +304,6 @@ module.exports = function (app, express) {
           }
       });
   });
-
-  // Reset database
-  app.get('/resetdb', restrict, function (pReq, pRes) {
-      apiManager.resetdb(function(pErr) {
-        if (pErr) {
-            errorHandler(pErr, pReq, pRes);
-        }
-        else {
-            pRes.json({});
-        }
-    });
-  });  
 
   // Get Sequences
   app.get('/sequences', restrict, function (pReq, pRes) {
@@ -747,39 +760,12 @@ module.exports = function (app, express) {
     });
   });
 
-  // Get VEProjects
-  app.get('/veprojects', restrict, function (req, res) {
-    var VEProject = app.db.model("veproject");
-    VEProject.find(function(err, projs) {
-        if (err) {
-            errorHandler(err, req, res);
-        }
-        else {
-            res.json({"projects": projs});
-        }
-    });
-  });  
-
-  // Delete VEProjects
-  app.delete('/veprojects', restrict, function (req, res) {
-    var VEProject = app.db.model("veproject");
-    VEProject.remove(function(err) {
-        if (err) {
-            errorHandler(err, req, res);
-        }
-        else {
-            res.json({});
-        }
-    });
-  });  
-
   //Get Part Library
   app.get('/partLibrary', restrict, function (req, res) {
     var Part = app.db.model("part");
-    Part.find({},function(err,parts){
+    Part.find({ name : { $ne: "" } }).sort({'name':1}).exec(function(err,parts){
       res.json({'parts':parts});
     });
   });
-
 
 };
