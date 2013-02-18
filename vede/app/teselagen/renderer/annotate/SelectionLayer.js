@@ -1,4 +1,4 @@
-/**
+        /**
  * @class Teselagen.renderer.annotate.SelectionLayer
  * Class which handles generating and rendering the blue selection area.
  * @author Nick Elsbree

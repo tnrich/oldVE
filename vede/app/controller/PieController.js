@@ -125,7 +125,7 @@ Ext.define('Vede.controller.PieController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(end);
+            this.changeCaretPosition(start);
         }
 
         this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
@@ -195,6 +195,7 @@ Ext.define('Vede.controller.PieController', {
 
         if(this.pieManager.sequenceManager) {
             this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
+
             this.changeCaretPosition(this.startSelectionIndex);
         }
 
@@ -261,7 +262,7 @@ Ext.define('Vede.controller.PieController', {
             } else {
                 this.stickySelect(start, end);
             }
-            this.changeCaretPosition(end);
+            this.changeCaretPosition(start);
         }
     },
 
@@ -283,7 +284,7 @@ Ext.define('Vede.controller.PieController', {
                 this.SelectionLayer.endSelecting();
 
                 if(this.SelectionLayer.end != -1) {
-                    this.changeCaretPosition(this.SelectionLayer.end);
+                    this.changeCaretPosition(this.SelectionLayer.start);
                 }
 
             } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
@@ -314,8 +315,7 @@ Ext.define('Vede.controller.PieController', {
 
         this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
-
-        this.changeCaretPosition(this.SelectionLayer.end);
+        this.changeCaretPosition(this.SelectionLayer.start);
     },
 
     /**
