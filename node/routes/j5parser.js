@@ -1119,9 +1119,22 @@ function processCombinatorial(file,cb){
     }
 }
 
-function processAssemblies(file,cb)
+function processAssemblies(files,cb)
 {
-    cb(file);
+    files.forEach(function(file){
+        var sequence = file.fileContent;
+        // Try get Size (BP) from Genbank file.
+        try {
+            file.sizeBP = file.fileContent.match(/\s(\d+)\sbp/)[1];
+        }
+        catch(err)
+        {
+            console.log("Error parsing size BP");
+            file.sizeBP = 0;
+        }
+        console.log(file.sizeBP);
+    });
+    cb(files);
 }
 
 function processj5Parameters(file,cb){

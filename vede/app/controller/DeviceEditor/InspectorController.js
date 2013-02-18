@@ -54,7 +54,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     checkCombinatorial:function(j5collection,cb){
         combinatorial = false;
         j5collection.bins().each(function(bin,binKey){
-            console.log(bin.parts().getCount());
             if(bin.parts().getCount()>1) combinatorial = true;
         });
         return cb(combinatorial);
