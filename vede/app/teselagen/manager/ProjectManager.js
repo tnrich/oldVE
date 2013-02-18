@@ -86,7 +86,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
                     selectedDesign = selectedDEProject.getDesign();
                     tabPanel.add(Ext.create('Vede.view.de.DeviceEditor', {
-                        title: selectedDEProject.data.name,
+                        title: "Device Editor | " + selectedDEProject.data.name,
                         model: selectedDEProject,
                         modelId: selectedDEProject.data.id
                     })).show();
