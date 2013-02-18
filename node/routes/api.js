@@ -700,14 +700,24 @@ module.exports = function (app, express) {
   //GET
   app.get('/user/projects/deprojects/parts', function (req, res) {
 
-    var veproject_id = JSON.parse(req.query.filter)[0].value;
+    if(req.query.filter)
+    {
+      var veproject_id = JSON.parse(req.query.filter)[0].value;
 
-    var VEProject = app.db.model("veproject");
+      var VEProject = app.db.model("veproject");
 
-    VEProject.findById(veproject_id).populate("parts").exec(function(err,veproject){
-      if (!veproject || err) return res.json({"fault":"Unexpected error"},500);
-      res.send({"parts":veproject.parts});
-    });
+      VEProject.findById(veproject_id).populate("parts").exec(function(err,veproject){
+        if (!veproject || err) return res.json({"fault":"Unexpected error"},500);
+        res.send({"parts":veproject.parts});
+      });
+    }
+    else if(req.query.id)
+    {
+      var Part = app.db.model("part");
+      Part.findById(req.body.id,function(err,part){
+          res.json({'parts':part});
+      });
+    }
   });
 
   //GET

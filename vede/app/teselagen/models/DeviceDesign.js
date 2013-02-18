@@ -84,20 +84,20 @@ Ext.define("Teselagen.models.DeviceDesign", {
             model: "Teselagen.models.SBOLvIconInfo",
             getterName: "getSBOLvIconInfo",
             setterName: "setSBOLvIconInfo",
-            associationKey: "sbolvIconInfo",
+            associationKey: "sbolvIconInfo"
         },
         {
             type: "hasMany",
             model: "Teselagen.models.EugeneRule",
-            associationKey: "rules",
             name: "rules",
+            associationKey: "rules"
         },
         {
             type: "belongsTo",
             model: "Teselagen.models.DeviceEditorProject",
             getterName: "getDeviceEditorProject",
             setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject",
+            associationKey: "deviceEditorProject"
         }
     ],
 
