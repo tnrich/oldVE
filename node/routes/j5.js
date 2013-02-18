@@ -356,7 +356,7 @@ app.post(j5Method1,restrict,function(req,res){
       data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
-      quicklog( require('util').inspect(data) );
+      //quicklog( require('util').inspect(data) );
 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error)

@@ -1132,7 +1132,7 @@ function processAssemblies(files,cb)
             console.log("Error parsing size BP");
             file.sizeBP = 0;
         }
-        console.log(file.sizeBP);
+        //console.log(file.sizeBP);
     });
     cb(files);
 }

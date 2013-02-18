@@ -225,37 +225,43 @@ function encoded_target_part_order_list_file(model,method)
  */
 function encoded_eugene_rules_list_file(model)
 {
+    var partsIndex = {};
     var eugenes = model["rules"];
+    //console.log("Processing "+eugenes.length+" eugene rules");
     var out = "";
 
-    eugenes.forEach(function(val,key){
-        var operand1 = val["operand1"];
-        var operator = val["compositionalOperator"]
-        var operand2 = val["operand2"];
-
-        parts.forEach(function(part1){
-            if(part1["id"] == operand1)
-            {
-                if( operator == "MORETHAN" || operator == "NOT MORETHAN" )
-                {
-                    out += "Rule Rule_"+(key+1)+"("+part1["name"]+" "+operator+" "+operand2+");\n";                    
-                }
-                else
-                {
-                    parts.forEach(function(part2){
-                        if(part2["id"] == operand2)
-                        {
-                            out += "Rule Rule_"+(key+1)+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
-                        }
-                    });
-                }                  
-            }
+    var bins = model["j5collection"]["bins"];
+    bins.forEach(function(bin){
+        bin.parts.forEach(function(part){
+            partsIndex[part.id] = part;
         });
+    });
+
+
+    
+    eugenes.forEach(function(val,key){
+        var operand1 = val["operand1_id"];
+        var operator = val["compositionalOperator"];
+        var operand2 = val["operand2_id"];
+
+        part1 = partsIndex[operand1];
+        if(!val["operand2isNumber"])
+        {
+            part2 = partsIndex[operand2];
+            if(val["negationOperator"]) out += "Rule Rule_"+(key+1)+"(NOT "+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+            else out += "Rule Rule_"+(key+1)+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+        }
+        else
+        {
+            operand2 = val["operand2Number"];
+            out += "Rule Rule_"+(key+1)+"("+part1["name"]+" "+operator+" "+operand2+");\n";
+        }
 
 
     });
+    
     //quicklog(out);
-    return new Buffer(out).toString('base64'); 
+    return new Buffer(out).toString('base64');
 }
 
 /**

@@ -114,7 +114,7 @@ module.exports = function (db) {
 					parts: [ { type: oIDRef, ref: 'part' } ]
 				}]
 			},
-			rules: Mixed
+			rules: [Mixed]
 		},
 		j5runs : [{ type: oIDRef, ref: 'j5run' }]
 	});
