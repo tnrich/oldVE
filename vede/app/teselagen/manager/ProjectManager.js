@@ -249,7 +249,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                         for(var binIndex = 0; binIndex < 1; binIndex++) {
                             var newBin = Ext.create("Teselagen.models.J5Bin", {
-                                binName: "Bin 1"
+                                binName: "Bin1"
                             });
                             var tempParts = [];
                             for(var i = 0; i < 2; i++) {

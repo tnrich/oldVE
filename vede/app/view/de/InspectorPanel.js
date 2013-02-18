@@ -255,14 +255,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             xtype: 'displayfield',
                             anchor: '100%',
                             cls: 'j5_ready_field',
-                            value: 'Display Field',
+                            value: 'false',
                             fieldLabel: 'j5 Ready'
                         },
                         {
                             xtype: 'displayfield',
                             anchor: '100%',
                             cls: 'combinatorial_field',
-                            value: 'Display Field',
+                            value: 'false',
                             fieldLabel: 'Combinatorial'
                         },
                         {

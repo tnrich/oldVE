@@ -57,9 +57,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var device = Ext.create("Teselagen.models.DeviceDesign");
         device.createCollectionFromBins(pBins);
 
-        var combo = this.setCombinatorial(device);
+        // var combo = this.setCombinatorial(device);
         //console.log(combo);
-        device.getJ5Collection().set("combinatorial", combo);
+        // device.getJ5Collection().set("combinatorial", combo);
         //this.setCombinatorial(device);
 
         var err = device.validate();
@@ -249,19 +249,19 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
 
         if (collection === null || collection === undefined) {
             return combo;
-        }
-
-        if (collection.bins() === null || collection.bins() === undefined) {
+        } else if (collection.bins() === null || collection.bins() === undefined) {
             return combo;
-        }
-
+        } else {
         for (var i = 0; i < collection.bins().count(); i++) {
-            if (collection.bins().getAt(i).parts().count() > 1) {
+            if (collection.bins().getAt(i).getPartByName("") != null) {
+                if (collection.bins().getAt(i).parts().count() > 1) {
                 combo = true;
             }
         }
         collection.set("combinatorial", combo);
         return combo;
+        }
+    }
     },
 
     /**
