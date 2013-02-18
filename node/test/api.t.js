@@ -1,11 +1,20 @@
-/*global describe, it */
-var expect = require("chai").expect;
-var request = require("request");
-var API_URL =  "http://teselagen.local/api/";
+/*global API_URL, before, dbManager, describe, expect, it, request */
 
-describe("/api.", function() {
+var ApiManager = require("../manager/ApiManager")();
+var apiManager;
+
+describe("API tests.", function() {
     var date, projects;
+    before(function() {
+        apiManager = new ApiManager(dbManager.mongoose);
+    });
     describe("Basic access.", function() {
+        it("resetdb", function(done) {
+            apiManager.resetdb(function(err) {
+                expect(err).to.be.null;
+                done();
+            });
+        });
         it("Get /projects/:project without login", function(done) {
             request(API_URL+"projects/1", function(err, res, body) {
                 expect(err).to.be.null;
@@ -58,7 +67,7 @@ describe("/api.", function() {
                 uri: API_URL+"projects/1",
                 json: true
             },
-            function(err, res, body) {
+            function(err, res) {
                 expect(res.statusCode).to.equal(500);
                 done();
             });

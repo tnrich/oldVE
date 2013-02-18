@@ -14,6 +14,7 @@ Ext.Loader.setConfig({
 
 Ext.Loader.syncRequire([
         //Sync requires
+        'Ext.Error'
         ,'Teselagen.constants.Constants'
         ,'Teselagen.bio.sequence.symbols.GapSymbol'
         ,'Teselagen.bio.sequence.symbols.NucleotideSymbol'

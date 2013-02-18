@@ -86,10 +86,14 @@ module.exports = function (app, express) {
   };
   */
 
-  app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen', function () {
+  app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen');
+  if (app.db) {
     console.log('MONGODB: MONGODB is online');
-    require('./schemas/DBSchemas.js')(app);
-  });
+    require('./schemas/DBSchemas.js')(app.db);
+  }
+  else {
+      throw new Error ("Cannot create Mongoose connection");
+  }
 
   // MYSQL CONNECTION
   if(app.program.stage || app.program.prod) {
@@ -181,6 +185,16 @@ module.exports = function (app, express) {
       host: 'localhost'
   });
 
+  // Load Manager classes
+  app.ApiManager = require("./manager/ApiManager")(app.db);
+  app.DEProjectManager = require("./manager/DEProjectManager")(app.db);
+  app.J5RunManager = require("./manager/J5RunManager")(app.db);
+  app.PartManager = require("./manager/PartManager")(app.db);
+  app.ProjectManager = require("./manager/ProjectManager")(app.db);
+  app.SequenceManager = require("./manager/SequenceManager")(app.db);
+  app.UserManager = require("./manager/UserManager")(app.db);
+  app.VEProjectManager = require("./manager/VEProjectManager")(app.db);
+  
   return config;
 
 };

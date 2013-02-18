@@ -187,7 +187,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         "itemclick": function(grid, part, item){
                             var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
                                                                             self.selectedPart);
-
+                            console.log(self.selectedPart);
+                            console.log(self.activeProject);
+                            console.log(bin);
                             if(bin)
                             {
                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
@@ -200,7 +202,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             }
                             else
                             {
-                                Ext.alert('Error','Failed mapping part from library');
+                                Ext.MessageBox.alert('Error','Failed mapping part from library');
                             }
                         }
                     }

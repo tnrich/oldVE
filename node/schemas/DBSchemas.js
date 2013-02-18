@@ -12,18 +12,20 @@
  * @module ./schemas/DBSchemas
  */
 
-module.exports = function (app) {
+module.exports = function (db) {
 
-	var registerSchema = function(name,schema){
-		app.db.model(name, schema);
+    var mongoose = require("mongoose");
+
+    var registerSchema = function(name,schema){
+		db.model(name, schema);
 		schema.virtual('id').get(function () {return this._id.toString();});
 		schema.set('toJSON', { virtuals: true });
 		schema.set('toJSON', { virtuals: true });
 	};
 
-	var Schema = app.mongoose.Schema;
-	var oIDRef = app.mongoose.Schema.Types.ObjectId;
-	var Mixed = app.mongoose.Schema.Types.Mixed;
+	var Schema = mongoose.Schema;
+	var oIDRef = mongoose.Schema.Types.ObjectId;
+	var Mixed = mongoose.Schema.Types.Mixed;
 
 	var j5RunSchema = new Schema({
 		deproject_id: String,
@@ -78,7 +80,7 @@ module.exports = function (app) {
 	  next();
 	})
 
-	app.db.model('part', PartSchema);
+	db.model('part', PartSchema);
 
 	var VEProjectSchema = new Schema({
 		name: String,
@@ -142,7 +144,7 @@ module.exports = function (app) {
 	registerSchema('User', UserSchema);
 
 	DEProjectSchema.post('save', function() {
-		var Project = app.db.model("project");
+		var Project = db.model("project");
 		var self = this;
 	    Project.findById(this.project_id,function(err,proj){	
 	     	proj.projecttree.deprojects.push({'name':self.name,'id':self.id});
