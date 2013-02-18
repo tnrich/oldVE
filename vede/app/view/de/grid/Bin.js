@@ -39,7 +39,11 @@ Ext.define('Vede.view.de.grid.Bin', {
             html = "New Bin";
         } else if(this.getBin().get("directionForward")) {
             flipButtonIconPath = this.self.forwardButtonIconPath;
-            html = this.getBin().get("binName");
+            if (this.getBin().get("binName") == "Bin") {
+                html = this.getBin().get("binName")+this.getBin().get("binNum");
+            } else {
+                html = this.getBin().get("binName");
+            }
         } else {
             flipButtonIconPath = this.self.reverseButtonIconPath;
             html = this.getBin().get("binName");
