@@ -124,7 +124,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     drawFeatureForwardArrow(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                     drawFeatureForwardRect(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 } else if(this.feature.getStrand() === -1){
-                    drawFeatureBackwardRect(g, featureX1, featureYCommon, featureRowWidth1, featureRowHeightCommon);
+                    drawFeatureBackwardRect(g, (featureX1-8), featureYCommon, featureRowWidth1, featureRowHeightCommon);
                     drawFeatureBackwardArrow(g, featureX2, featureYCommon, featureRowWidth1, featureRowHeightCommon);
                 }
             }else{
@@ -157,7 +157,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     if(this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() <= row.getRowData().getEnd()){
                         drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else{
-                        drawFeatureBackwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
+                        drawFeatureBackwardRect(g, (featureX-8), featureY, featureRowWidth, featureRowHeight);
                     }
                 }
 
@@ -245,7 +245,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                         featureY += (3* 20);
                     }
 
-                    featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 17;
+                    featureRowWidth = bpEndMetrics.x - bpStartMetrics.x + 10;
                     featureRowHeight = 6;
 
                     if(this.feature.getStrand() == 0){
