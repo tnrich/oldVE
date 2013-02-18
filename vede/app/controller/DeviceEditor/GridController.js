@@ -186,7 +186,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
 
-            newTab.query('label[cls="designName"]')[0].setText(newTab.model.data.name);
+            // newTab.query('label[cls="designName"]')[0].setText(newTab.model.data.name);
             this.activeBins = this.activeProject.getJ5Collection().bins();
 
             this.activeBins.on("add", this.onAddToBins, this);
