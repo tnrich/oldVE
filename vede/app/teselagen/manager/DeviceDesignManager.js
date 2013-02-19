@@ -589,6 +589,24 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return part;
     },
     /**
+     * Gets all parts in the given device as a store.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @returns {Store} Store of parts.
+     */
+    getAllPartsAsStore: function(pDevice, pExcept) {
+        allParts = Ext.create('Ext.data.Store', {
+            model: 'Teselagen.models.Part'
+        });
+
+        pDevice.getJ5Collection().bins().each(function(bin) {
+            bin.parts().each(function(part){
+                allParts.add(part);
+            });
+        });
+
+        return allParts;
+    },
+    /**
      * Gets all parts in the given device. If the optional parameter pExcept is
      * defined as a part, returns all parts except that part.
      * @param {Teselagen.models.DeviceDesign} pDevice

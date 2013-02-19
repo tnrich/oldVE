@@ -9,6 +9,40 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     DeviceDesignManager: null,
     DeviceEvent: null,
 
+    onLoadEugeneRulesEvent: function(){
+        var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+        var deproject_id = currentProject.data.id;
+        var self = this;
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign/eugenerules", ''),
+            method: 'GET',
+            params: {
+                id: deproject_id
+            },
+            success: function (response) {
+                response = JSON.parse(response.responseText);
+                rules = response.rules;
+
+                var allParts = self.DeviceDesignManager.getAllPartsAsStore(currentProject.getDesign());
+
+                rules.forEach(function(rule){
+                    var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                        name: rule.name,
+                        compositionalOperator: rule.compositionalOperator,
+                        negationOperator: rule.negationOperator
+                    });
+
+                    newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
+                    newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
+                    currentProject.getDesign().addToRules(newEugeneRule);
+                });
+            },
+            failure: function(response, opts) {
+                Ext.MessageBox.alert('Error','Problem while loading Eugene Rules');
+            }
+        });
+    },
+
     openProject: function (project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
@@ -281,6 +315,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
 
         this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
+
+        this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {

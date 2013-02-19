@@ -524,7 +524,20 @@ module.exports = function (app, express) {
       deproject.save(function(err){
         if(err) console.log(err);
         res.json({"design":req.body});
-      }); 
+      });
+    });
+  });
+
+  //READ EUGENE RULES
+  app.get('/user/projects/deprojects/devicedesign/eugenerules', restrict, function (req, res) {
+    var DEProject = app.db.model("deproject");
+    DEProject.findById(req.query.id).exec(function (err, project) {
+        if (err) {
+            errorHandler(err, req, res);
+        }
+        else {
+            res.json({"rules":project.design.rules});
+        }
     });
   });
 
@@ -532,6 +545,9 @@ module.exports = function (app, express) {
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DEProject = app.db.model("deproject");
     DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
+        // Eugene rules to be send on a different request
+        delete project.design.rules;
+        
         if (err) {
             errorHandler(err, req, res);
         }
