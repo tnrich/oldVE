@@ -115,7 +115,7 @@ Ext.define('Vede.controller.RailController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope != this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(end);
+            this.changeCaretPosition(start);
         }
 
         this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
@@ -250,7 +250,7 @@ Ext.define('Vede.controller.RailController', {
             } else {
                 this.stickySelect(start, end);
             }
-            this.changeCaretPosition(end);
+            this.changeCaretPosition(start);
         }
     },
 
@@ -272,7 +272,7 @@ Ext.define('Vede.controller.RailController', {
                 this.SelectionLayer.endSelecting();
 
                 if(this.SelectionLayer.end != -1) {
-                    this.changeCaretPosition(this.SelectionLayer.end);
+                    this.changeCaretPosition(this.SelectionLayer.start);
                 }
 
             } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
@@ -299,7 +299,7 @@ Ext.define('Vede.controller.RailController', {
         this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
         this.SelectionLayer.selectionSprite.show(true);
 
-        this.changeCaretPosition(this.SelectionLayer.end);
+        this.changeCaretPosition(this.SelectionLayer.start);
     },
 
     /**

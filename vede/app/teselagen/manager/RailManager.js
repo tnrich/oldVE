@@ -479,8 +479,9 @@ Ext.define("Teselagen.manager.RailManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
+        if (this.rail) {
         this.caret.show(true);
-        this.nameBox.destroy();
+        this.rail.surface.remove(this.nameBox);
 
         this.nameBox = Ext.create("Vede.view.rail.NameBox", {
             center: this.center,
@@ -491,7 +492,7 @@ Ext.define("Teselagen.manager.RailManager", {
         this.rail.surface.add(this.nameBox);
         this.nameBox.show(true);
         this.nameBox.setStyle("dominant-baseline", "central");
-
+        }
         return pSequenceManager;
     },
 

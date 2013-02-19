@@ -7,7 +7,8 @@ Ext.define("Vede.view.rail.NameBox", {
 
     config: {
         center: {x:150, y: 50},
-        name: ""
+        name: "",
+        length: 0
     },
 
     constructor: function(inData) {
@@ -15,7 +16,7 @@ Ext.define("Vede.view.rail.NameBox", {
 
         this.callParent([{
             type: "text",
-            text: inData.name + '\n(' + inData.length + ' bp)',
+            text: inData.name /*+ '\n(' + inData.length + ' bp)'*/,
             "font-size": "10px",
             "font-weight": "bold",
             x: this.center.x,
