@@ -26,9 +26,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var j5Window = Ext.create("Vede.view.de.j5Controls").show();
-        currentTab.j5Window = j5Window;
-        this.j5Window = j5Window;
+        
+        if(currentTab.j5Window) currentTab.j5Window.show();
+        else currentTab.j5Window = Ext.create("Vede.view.de.j5Controls").show();
+
+        this.j5Window = currentTab.j5Window;
+        j5Window = currentTab.j5Window;
 
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
