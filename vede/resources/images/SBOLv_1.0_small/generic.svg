@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1"
-	 id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="generic.svg" inkscape:version="0.48.3.1 r9886"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px"
-	 viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
-<sodipodi:namedview  inkscape:cy="25" inkscape:cx="-26.694915" inkscape:zoom="4.72" showgrid="false" id="namedview10" guidetolerance="10" gridtolerance="10" objecttolerance="10" borderopacity="1" bordercolor="#666666" pagecolor="#ffffff" inkscape:current-layer="svg2" inkscape:window-maximized="0" inkscape:window-y="36" inkscape:window-x="143" inkscape:window-height="782" inkscape:pageshadow="2" inkscape:window-width="1155" inkscape:pageopacity="0">
-	</sodipodi:namedview>
+<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="50px" height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
 <g>
-	<line x1="7.5" y1="29" x2="43.5" y2="29"/>
-	<g>
-		<path d="M7.5,31.5c12,0,24,0,36,0c3.225,0,3.225-5,0-5c-12,0-24,0-36,0C4.276,26.5,4.276,31.5,7.5,31.5L7.5,31.5z"/>
-	</g>
+	<path fill="none" stroke="#000000" stroke-width="4" stroke-miterlimit="10" d="M4.833,37.25c0,1.104,0.896,2,2,2h36.542
+		c1.104,0,2-0.896,2-2V15.042c0-1.104-0.896-2-2-2H6.833c-1.104,0-2,0.896-2,2V37.25z"/>
 </g>
 </svg>
