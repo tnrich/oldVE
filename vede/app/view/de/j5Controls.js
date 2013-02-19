@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.view.de.j5Controls', {
     extend: 'Ext.window.Window',
-
+    closeAction: 'hide',
     height: 500,
     width: 852,
     title: 'j5 Controls',
