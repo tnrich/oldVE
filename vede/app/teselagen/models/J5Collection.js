@@ -164,10 +164,15 @@ Ext.define("Teselagen.models.J5Collection", {
 
         var cnt     = this.binCount();
 
-        var j5Bin = Ext.create("Teselagen.models.J5Bin", {
-            binName: pName,
-            binNum: (cnt+1)
-        });
+        if (pName === "" || pName === undefined || pName === null) {
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "Bin" + (cnt+1)
+            });
+        } else {
+            var j5Bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: pName
+            });
+        }
 
         if (pIndex >= 0 && pIndex < this.bins().count()) {
             //this.bins().splice(pIndex, 0, j5Bin);
