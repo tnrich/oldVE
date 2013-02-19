@@ -46,6 +46,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 });
 
                 data.rules = rules;
+
+                data.rules.forEach(function(rule,ruleKey){
+                    delete data.rules[ruleKey]["Teselagen.models.Part"];
+                });
+
                 return data;
             }
         },

@@ -271,15 +271,8 @@ Ext.define('Vede.view.de.j5Controls', {
                             text: '<b>Name</b>'
                         }, {
                             xtype: 'gridcolumn',
-                            dataIndex: 'size',
-                            text: 'size',
-                            draggable: false,
-                            resizable: false,
-                            sortable: false,
-                            hideable: false
-                        }, {
-                            xtype: 'gridcolumn',
-                            dataIndex: 'fileContent',
+                            dataIndex: 'sizeBP',
+                            text: 'Size (bp)',
                             draggable: false,
                             resizable: false,
                             sortable: false,

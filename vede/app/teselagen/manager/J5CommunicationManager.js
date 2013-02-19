@@ -134,10 +134,10 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                             root: 'files'
                         }
                     },
-
-                    fields: ['name','fileContent','size']
+                    fields: ['name','sizeBP','size','fileContent']
                 });
                 store.load();
+                store.sort('name','ASC');
                 resultsGrid.reconfigure(store);
                 downloadBtn.show();
 
