@@ -165,13 +165,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     saveDEProject: function (cb) {
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var deproject = activeTab.model;
 
         var design = deproject.getDesign();
-        loadingMessage.update(30, "Saving design");
+        // loadingMessage.update(30, "Saving design");
         deproject.save({callback:function(){
 
         var saveAssociatedSequence = function (part, cb) {
@@ -212,7 +212,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 design = activeTab.model.getDesign();
                 design.save({
                     callback: function (record, operation) {
-                        loadingMessage.close();
+                        // loadingMessage.close();
                         if(typeof (cb) == "function") cb();
                     }
                 });
@@ -225,7 +225,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 countParts++;
             });
         });
-        loadingMessage.update(30, "Saving "+countParts+" parts");
+        // loadingMessage.update(30, "Saving "+countParts+" parts");
         design.getJ5Collection().bins().each(function (bin, binKey) {
             bin.parts().each(function (part, partIndex) {
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
@@ -234,7 +234,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                             saveAssociatedSequence(part, function () {
                                 if(countParts == 1) saveDesign();
                                 countParts--;
-                                loadingMessage.update(30, "Saving "+countParts+" parts");
+                                // loadingMessage.update(30, "Saving "+countParts+" parts");
                             });
                         }
                     });
@@ -242,7 +242,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     saveAssociatedSequence(part,function(){
                     if(countParts == 1) saveDesign();
                     countParts--;
-                    loadingMessage.update(30, "Saving "+countParts+" parts");
+                    // loadingMessage.update(30, "Saving "+countParts+" parts");
                     });
                 }
             });

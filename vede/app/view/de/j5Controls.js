@@ -24,7 +24,6 @@ Ext.define('Vede.view.de.j5Controls', {
                 activeTab: 0,
                 items: [{
                     xtype: 'panel',
-                    height: 272,
                     id: 'j5runPanel',
                     padding: 5,
                     layout: {
@@ -44,6 +43,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         xtype: 'container',
                         flex: 1,
                         padding: 2,
+                        height: 33,
+                        minHeight: 33,
                         layout: {
                             align: 'stretch',
                             type: 'hbox'
@@ -90,6 +91,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         xtype: 'container',
                         flex: 1,
                         padding: 2,
+                        height: 33,
+                        minHeight: 33,
                         layout: {
                             align: 'stretch',
                             type: 'hbox'
@@ -135,6 +138,8 @@ Ext.define('Vede.view.de.j5Controls', {
                         xtype: 'container',
                         flex: 1,
                         padding: 2,
+                        height: 33,
+                        minHeight: 33,
                         layout: {
                             align: 'stretch',
                             type: 'hbox'
@@ -178,6 +183,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'combobox',
                         flex: 1,
+                        minHeight: 33,
                         cls: 'assemblyMethodSelector',
                         maxWidth: 333,
                         padding: 2,
@@ -194,6 +200,8 @@ Ext.define('Vede.view.de.j5Controls', {
                             type: 'hbox',
                             pack: 'start'
                         },
+                        height: 23,
+                        minHeight: 23,
                         items: [{
                             xtype: 'button',
                             flex: 1,
@@ -219,21 +227,38 @@ Ext.define('Vede.view.de.j5Controls', {
                             text: '<b>Download Results</b>',
                             hidden: true
                         }]
-                    }, {
+                    },{
+                        xtype: 'container',
+                        id: 'j5progressContainer',
+                        margin: '10 0 0 0',
+                        hidden: true,
+                        height: 24,
+                        minHeight: 24,
+                        items: [{
+                            xtype: 'container',
+                            height: 18,
+                            cls: 'progress progress-info progress-striped active',
+                            width: 500,
+                            items: [{
+                                xtype: 'container',
+                                height:18,
+                                cls: 'bar',
+                                width: 500
+                            }]
+                        }]
+                    },  {
                         xtype: 'displayfield',
                         flex: 1,
                         hidden: true,
-                        border: 1,
-                        style: {
-                            borderColor: '#c5c5c5',
-                            borderStyle: 'solid'
-                        },
-                        cls: 'j5ResponseTextField',
+                        height: 15,
+                        id: 'j5ResponseTextField',
                         value: '',
                         hideLabel: true
-                    }, {
+                    },{
                         xtype: 'container',
+                        cls: 'loadAssemblyContainer',
                         flex: 1,
+                        minHeight: 40,
                         layout: {
                             align: 'stretch',
                             pack: 'end',
@@ -241,13 +266,11 @@ Ext.define('Vede.view.de.j5Controls', {
                         },
                         items: [{
                             xtype: 'filefield',
-                            height: 23,
+                            minHeight: 35,
                             buttonOnly: true,
                             cls: 'loadAssemblyBtn',
                             validateOnChange: false,
                             margin: '10 0 10 0',
-                            maxHeight: 23,
-                            minHeight: 23,
                             buttonText: '<b>Load Existing Assembly File</b>'
                         }]
                     }, {

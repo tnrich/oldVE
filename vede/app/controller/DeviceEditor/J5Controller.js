@@ -402,7 +402,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
 
     onRunJ5BtnClick: function (btn) {
-        var loadingMessage = this.createLoadingMessage();
+        var loadingMessage = Ext.getCmp("j5progressContainer").show();
+        var responseMessage = Ext.getCmp("j5ResponseTextField").show();
         var self = this;
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -471,15 +472,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
         currentTab.j5Window.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
-        loadingMessage.update(30, "Saving design");
+        responseMessage.setValue("Saving design...");
 
         Vede.application.fireEvent("saveDesignEvent", function () {
-            loadingMessage = self.createAbortableMessage();
-            loadingMessage.update(60, "Executing request");
+            responseMessage.setValue("Executing j5 Run...");
             currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    loadingMessage.update(100, "Completed");
-                    loadingMessage.close();
+                    responseMessage.setValue("Completed");
+                    loadingMessage.hide();
+                    responseMessage.hide();
                     if(warnings.length > 0)
                     {
                         msgWarnings = "";
@@ -494,7 +495,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     }
                 } else {
                     console.log(responseData.responseText);
-                    loadingMessage.close();
+                    loadingMessage.hide();
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
                         msg: responseData.responseText,
