@@ -32,7 +32,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      */
     fields: [
         //{name: "id",                type: "long"},
-        {name: "devicedesign_id",   type: "long"},
+        //{name: "devicedesign_id",   type: "long"},
         {name: "operand1_id",   type: "long"},
         {name: "operand2_id",   type: "long"},
         {
@@ -127,7 +127,9 @@ Ext.define("Teselagen.models.EugeneRule", {
             foreignKey: "operand2_id", 
 
         },
-        {//Needed to find the parent of a child
+        //Needed to find the parent of a child
+        /*
+        {
             type: "belongsTo",
             model: "Teselagen.models.DeviceDesign",
             getterName: "getDeviceDesign",
@@ -135,6 +137,7 @@ Ext.define("Teselagen.models.EugeneRule", {
             associationKey: "deviceDesign",
             foreignKey: "devicedesign_id" 
         }
+        */
     ],
 
     /**
