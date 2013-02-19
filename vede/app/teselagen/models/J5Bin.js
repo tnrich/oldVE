@@ -45,7 +45,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
                 if (v === "" || v === undefined || v === null) {
                     record.self.highestDefaultNameIndex += 1;
-                    name = record.self.defaultNamePrefix /*+ record.self.highestDefaultNameIndex*/;
+                    name = record.self.defaultNamePrefix/*+ record.self.highestDefaultNameIndex*/;
                 } else {
                     if (Teselagen.utils.FormatUtils.isLegalName(v)) {
                         name = v.toString();
@@ -56,9 +56,6 @@ Ext.define("Teselagen.models.J5Bin", {
                 }
                 return name;
             }
-        },
-        {
-            name: "binNum"
         },
         {
             name: "iconID",
