@@ -829,3 +829,14 @@ background: #F8F8F8;
 
     to { background-position: 40px 0 }
 }
+
+
+.plasmidsGrid .x-grid-cell-first .x-grid-cell-inner {
+  color: black;
+  text-decoration: underline;
+}
+
+.plasmidsGrid .x-grid-cell-first .x-grid-cell-inner:hover{
+  color: blue;
+  text-decoration: underline;
+}
