@@ -10,6 +10,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     DeviceDesignManager: null,
     J5ControlsUtils: null,
 
+    currentTab: null,
     j5Window: null,
     j5ParamsWindow: null,
     automationParamsWindow: null,
@@ -27,16 +28,17 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         
-        if(currentTab.j5Window) currentTab.j5Window.show();
+        if(currentTab.j5Window && currentTab === this.currentTab) currentTab.j5Window.show();
         else currentTab.j5Window = Ext.create("Vede.view.de.j5Controls").show();
 
         this.j5Window = currentTab.j5Window;
-        j5Window = currentTab.j5Window;
+        this.currentTab = currentTab;
 
+        var self = this;
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
             {
-                j5Window.close();
+                self.j5Window.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Alert",
                     msg: "Not ready to run j5",
@@ -64,7 +66,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
                 });            }
 
-            var combobox = j5Window.down('component[cls="assemblyMethodSelector"]');
+            var combobox = self.j5Window.down('component[cls="assemblyMethodSelector"]');
             combobox.bindStore(store);
             combobox.setValue(store.first());
         });
