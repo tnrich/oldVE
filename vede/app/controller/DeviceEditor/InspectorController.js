@@ -47,7 +47,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 rule.destroy();
             }, this);
 
-            parentBin.parts().remove(this.selectedPart);
+            if(parentBin) {
+                parentBin.parts().remove(this.selectedPart);
+            }
         }
     },
 
@@ -93,11 +95,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
     onChangePartDefinitionBtnClick: function(){
         var self = this;
-        this.selectedPart.getSequenceFile({
-            callback: function(){
-                Vede.application.fireEvent("openChangePartDefinition",self.selectedPart,self.selectedBinIndex,self.selectedPart.getSequenceFile());
-            }
-        });
+        if(this.selectedPart) {
+            this.selectedPart.getSequenceFile({
+                callback: function(){
+                    Vede.application.fireEvent("openChangePartDefinition",self.selectedPart,self.selectedBinIndex,self.selectedPart.getSequenceFile());
+                }
+            });
+        }
     },
 
     /**
@@ -132,87 +136,97 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onopenPartLibraryBtnClick: function () {
-        console.log("changing part");
-        var self = this;
+        if(this.selectedPart) {
+            // If the part is not owned by a bin yet, add it to the bin.
+            if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
+                                                         this.selectedPart) < 0) {
+                this.DeviceDesignManager.addPartToBin(this.activeProject,
+                                                      this.selectedPart,
+                                                      this.selectedBinIndex);
+            }
 
-        var loadingMsgBox = Ext.MessageBox.show({
-            title: 'Loading Part',
-            progressText: 'Loading Part Library',
-            progress: true,
-            width: 300,
-            closable: false
-        });
+            console.log("changing part");
+            var self = this;
 
-        Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''),
-            method: 'GET',
-            success: function (response) {
+            var loadingMsgBox = Ext.MessageBox.show({
+                title: 'Loading Part',
+                progressText: 'Loading Part Library',
+                progress: true,
+                width: 300,
+                closable: false
+            });
 
-            loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
-            
-            response = JSON.parse(response.responseText);
+            Ext.Ajax.request({
+                url: Teselagen.manager.SessionManager.buildUrl("partLibrary", ''),
+                method: 'GET',
+                success: function (response) {
 
-         var partLibrary = Ext.create('Teselagen.store.PartStore', {
-             model: 'Teselagen.models.Part',
-             data:response,
-             proxy: {
-                 type: 'memory',
-                 reader: {
-                     type: 'json',
-                     root: 'parts'
-                 }
-             },
-             autoLoad: true
-         });
+                loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
+                
+                response = JSON.parse(response.responseText);
 
-            var selectWindow = Ext.create('Ext.window.Window', {
-                title: 'Part Library',
-                height: 200,
-                width: 400,
-                layout: 'fit',
-                items: {
-                    xtype: 'grid',
-                    border: false,
-                    columns: {
-                        items: {
-                            text: "Name",
-                            dataIndex: "name"
-                        },
-                        defaults: {
-                            flex: 1
-                        }
-                    },
-                    store: partLibrary,
-                    listeners: {
-                        "itemclick": function(grid, part, item){
-                            var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
-                                                                            self.selectedPart);
-                            console.log(self.selectedPart);
-                            console.log(self.activeProject);
-                            console.log(bin);
-                            if(bin)
-                            {
-                                /*
-                                var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                bin.parts().removeAt(insertIndex);
-                                bin.parts().insert(insertIndex,part);
-                                self.onReRenderDECanvasEvent();
-                                selectWindow.close();
-                                self.selectedPart = part;
-                                Vede.application.fireEvent("partSelected",part);
-                                */
+             var partLibrary = Ext.create('Teselagen.store.PartStore', {
+                 model: 'Teselagen.models.Part',
+                 data:response,
+                 proxy: {
+                     type: 'memory',
+                     reader: {
+                         type: 'json',
+                         root: 'parts'
+                     }
+                 },
+                 autoLoad: true
+             });
+
+                var selectWindow = Ext.create('Ext.window.Window', {
+                    title: 'Part Library',
+                    height: 200,
+                    width: 400,
+                    layout: 'fit',
+                    items: {
+                        xtype: 'grid',
+                        border: false,
+                        columns: {
+                            items: {
+                                text: "Name",
+                                dataIndex: "name"
+                            },
+                            defaults: {
+                                flex: 1
                             }
-                            else
-                            {
-                                Ext.MessageBox.alert('Error','Failed mapping part from library');
+                        },
+                        store: partLibrary,
+                        listeners: {
+                            "itemclick": function(grid, part, item){
+                                var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
+                                                                                self.selectedPart);
+                                console.log(self.selectedPart);
+                                console.log(self.activeProject);
+                                console.log(bin);
+                                if(bin)
+                                {
+                                    ///*
+                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                    bin.parts().removeAt(insertIndex);
+                                    bin.parts().insert(insertIndex,part);
+                                    self.onReRenderDECanvasEvent();
+                                    selectWindow.close();
+                                    self.selectedPart = part;
+                                    Vede.application.fireEvent("partSelected",part);
+                                    //*/
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Error','Failed mapping part from library');
+                                }
                             }
                         }
                     }
-                }
-            }).show();
-            loadingMsgBox.close();
-        //end ajax request
-        }});
+                }).show();
+                loadingMsgBox.close();
+            //end ajax request
+            }});
+        }
     },
 
     onReRenderDECanvasEvent: function () {
@@ -235,8 +249,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         if(j5Part) {
             // Remember that j5Part may not exist
-            console.log(j5Part.get("name"));
-            console.log(j5Part);
+            //console.log(j5Part.get("name"));
+            //console.log(j5Part);
         }
 
         // If a j5Part exists for the selected part, load it. If not, create a

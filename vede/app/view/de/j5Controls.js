@@ -261,7 +261,6 @@ Ext.define('Vede.view.de.j5Controls', {
                         hidden: true,
                         height: 15,
                         cls: 'j5ResponseTextField',
-                        name: 'j5Response_TextField',
                         value: '',
                         hideLabel: true
                     },{

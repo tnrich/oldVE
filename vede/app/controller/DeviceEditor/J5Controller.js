@@ -380,12 +380,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
 
     onRunJ5BtnClick: function (btn) {
-        var loadingMessage = this.j5Window.query('container[cls="j5progressContainer"]')[0];
-        var responseMessage = this.j5Window.query('displayfield[cls="j5ResponseTextField"]')[0];
+        var loadingMessage = this.j5Window.query('container[cls="j5progressContainer"]')[0].show();
+        var responseMessage = this.j5Window.query('displayfield[cls="j5ResponseTextField"]')[0].show();
         
-        loadingMessage.show();
-        responseMessage.show();
-
         var self = this;
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
