@@ -205,15 +205,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 console.log(bin);
                                 if(bin)
                                 {
-                                    ///*
                                     var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                    bin.parts().removeAt(insertIndex);
+                                    console.log("index is: "+insertIndex);
+                                    bin.parts().removeAt(self.selectedPart);
                                     bin.parts().insert(insertIndex,part);
                                     self.onReRenderDECanvasEvent();
                                     selectWindow.close();
-                                    self.selectedPart = part;
-                                    Vede.application.fireEvent("partSelected",part);
-                                    //*/
                                 }
                                 else
                                 {
@@ -249,8 +246,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         
         if(j5Part) {
             // Remember that j5Part may not exist
-            console.log(j5Part.get("name"));
-            console.log(j5Part);
+            //console.log(j5Part.get("name"));
+            //console.log(j5Part);
         }
 
         // If a j5Part exists for the selected part, load it. If not, create a
