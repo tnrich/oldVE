@@ -24,7 +24,7 @@ Ext.define('Vede.view.de.j5Controls', {
                 activeTab: 0,
                 items: [{
                     xtype: 'panel',
-                    id: 'j5runPanel',
+                    cls: 'j5runPanel',
                     padding: 5,
                     layout: {
                         align: 'stretch',
@@ -229,7 +229,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     },{
                         xtype: 'container',
-                        id: 'j5progressContainer',
+                        cls: 'j5progressContainer',
                         margin: '10 0 0 0',
                         hidden: true,
                         height: 24,
@@ -251,7 +251,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         flex: 1,
                         hidden: true,
                         height: 15,
-                        id: 'j5ResponseTextField',
+                        cls: 'j5ResponseTextField',
                         value: '',
                         hideLabel: true
                     },{
