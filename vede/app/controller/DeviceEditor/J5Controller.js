@@ -10,7 +10,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     DeviceDesignManager: null,
     J5ControlsUtils: null,
 
-    currentTab: null,
     j5Window: null,
     j5ParamsWindow: null,
     automationParamsWindow: null,
@@ -27,18 +26,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        
-        if(currentTab.j5Window && currentTab === this.currentTab) currentTab.j5Window.show();
-        else currentTab.j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        var j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        currentTab.j5Window = j5Window;
+        this.j5Window = j5Window;
 
-        this.j5Window = currentTab.j5Window;
-        this.currentTab = currentTab;
-
-        var self = this;
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
             {
-                self.j5Window.close();
+                j5Window.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Alert",
                     msg: "Not ready to run j5",
@@ -50,7 +45,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     messagebox.zIndexManager.bringToFront(messagebox);
                 }, 100);
             }
-
+            
             var store;
             if(combinatorial)
             {
@@ -66,7 +61,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
                 });            }
 
-            var combobox = self.j5Window.down('component[cls="assemblyMethodSelector"]');
+            var combobox = j5Window.down('component[cls="assemblyMethodSelector"]');
             combobox.bindStore(store);
             combobox.setValue(store.first());
         });
@@ -355,33 +350,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         }, this);
     },
 
-    createAbortableMessage: function () {
-        var msgBox = Ext.MessageBox.show({
-            title: 'Please wait',
-            msg: 'Executing j5 request',
-            width: 300,
-            closable: false,
-            buttons: Ext.MessageBox.CANCEL,
-            fn: function(){
-                Ext.Function.defer(function () {
-                    Ext.Ajax.abort();
-                }, 100);
-            },
-            progress: true
-        });
-
+    abortJ5Run: function () {
         Ext.Function.defer(function () {
-            msgBox.zIndexManager.bringToFront(msgBox);
+            Ext.Ajax.abort();
         }, 100);
 
-        return {
-            close: function () {
-                msgBox.close();
-            },
-            update: function (progress, msg) {
-                msgBox.updateProgress(progress / 100, progress + '% completed', msg);
-            }
-        };
     },
 
     createLoadingMessage: function () {
@@ -407,8 +380,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
 
     onRunJ5BtnClick: function (btn) {
-        var loadingMessage = Ext.getCmp("j5progressContainer").show();
-        var responseMessage = Ext.getCmp("j5ResponseTextField").show();
+        var loadingMessage = this.j5Window.query('container[cls="j5progressContainer"]')[0];
+        var responseMessage = this.j5Window.query('displayfield[cls="j5ResponseTextField"]')[0];
+        
+        loadingMessage.show();
+        responseMessage.show();
+
         var self = this;
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -477,10 +454,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
         currentTab.j5Window.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
-        responseMessage.setValue("Saving design...");
+        responseMessage.setValue("Saving design");
 
         Vede.application.fireEvent("saveDesignEvent", function () {
-            responseMessage.setValue("Executing j5 Run...");
+            responseMessage.setValue("Executing j5 Run...Please wait...");
             currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     responseMessage.setValue("Completed");
@@ -773,8 +750,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             "button[cls='downloadCondenseAssemblyResultsBtn']": {
                 click: this.onDownloadCondenseAssemblyResultsBtnClick
             },
+            "button[cls='stopj5runBtn']": {
+                click: this.abortJ5Run
+            }
         });
-
+        
         this.application.on("openj5", this.onOpenJ5, this);
 
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;

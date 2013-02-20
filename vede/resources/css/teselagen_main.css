@@ -506,7 +506,7 @@ img {
 }
 
 /*Device Editor*/
-#j5runPanel .x-field-label-cell {
+.j5runPanel .x-field-label-cell {
   vertical-align: middle !important;
 }
 
@@ -675,6 +675,14 @@ background: #F8F8F8;
 
 #j5ResponseTextField-inputEl {
   color:black;
+}
+
+.stopj5runBtn, .stopj5runBtn .x-btn-inner {
+  background: rgba(225,0,0,0.8);
+  border-radius: 0;
+  color: white;
+  box-shadow: none;
+  border: 0 none;
 }
 
 .progress {
