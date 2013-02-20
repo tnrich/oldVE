@@ -45,7 +45,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     messagebox.zIndexManager.bringToFront(messagebox);
                 }, 100);
             }
-            
+
             var store;
             if(combinatorial)
             {
@@ -382,7 +382,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onRunJ5BtnClick: function (btn) {
         var loadingMessage = this.j5Window.query('container[cls="j5progressContainer"]')[0].show();
         var responseMessage = this.j5Window.query('displayfield[cls="j5ResponseTextField"]')[0].show();
-        
+
         var self = this;
         var masterPlasmidsList;
         var masterPlasmidsListFileName;
@@ -475,6 +475,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 } else {
                     console.log(responseData.responseText);
                     loadingMessage.hide();
+                    responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
                         msg: responseData.responseText,

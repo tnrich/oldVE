@@ -237,6 +237,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         margin: '10 0 0 0',
                         height: 24,
                         minHeight: 24,
+                        hidden: true,
                         items: [{
                             xtype: 'container',
                             height: 18,
