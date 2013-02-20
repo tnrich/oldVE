@@ -205,7 +205,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 console.log(bin);
                                 if(bin)
                                 {
-                                    /*
+                                    ///*
                                     var insertIndex = bin.parts().indexOf(self.selectedPart);
                                     bin.parts().removeAt(insertIndex);
                                     bin.parts().insert(insertIndex,part);
@@ -213,7 +213,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                     selectWindow.close();
                                     self.selectedPart = part;
                                     Vede.application.fireEvent("partSelected",part);
-                                    */
+                                    //*/
                                 }
                                 else
                                 {
