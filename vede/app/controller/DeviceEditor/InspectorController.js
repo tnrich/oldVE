@@ -261,6 +261,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.selectedPart = newPart;
+
+            if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
+                                                         this.selectedPart) < 0) {
+                this.DeviceDesignManager.addPartToBin(this.activeProject,
+                                                      this.selectedPart,
+                                                      this.selectedBinIndex);
+            }
         }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
@@ -327,12 +334,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.selectedPart.set("name", newName);
 
-        if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
+        /*if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
                                                      this.selectedPart) < 0) {
             this.DeviceDesignManager.addPartToBin(this.activeProject,
                                                   this.selectedPart,
                                                   this.selectedBinIndex);
-        }
+        }*/
     },
 
     /**
