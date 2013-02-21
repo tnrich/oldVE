@@ -27,9 +27,13 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
-        var j5Window = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
-        currentTab.j5Window = j5Window;
-        this.j5Window = j5Window;
+
+        if(!currentTab.j5Window) currentTab.j5Window = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
+        else currentTab.j5Window.show();
+        this.j5Window = currentTab.j5Window;
+
+        var self = this;
+
 
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
@@ -62,7 +66,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
                 });            }
 
-            var combobox = j5Window.down('component[cls="assemblyMethodSelector"]');
+            var combobox = self.j5Window.down('component[cls="assemblyMethodSelector"]');
             combobox.bindStore(store);
             combobox.setValue(store.first());
         });
