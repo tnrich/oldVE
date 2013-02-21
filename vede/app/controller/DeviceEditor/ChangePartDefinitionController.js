@@ -52,6 +52,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var sequenceLength = this.selectedSequence.getLength();
 
         name.setValue(this.selectedPart.get('name'));
+        partSource.setValue(this.selectedPart.get('partSource'));
 
         if(this.selectedStartBP!==null && this.selectedStopBP!==null)
         {
@@ -87,7 +88,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     open: function(selectedPart,selectedBinIndex,selectedSequence){
-        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog', {renderTo: currentTabEl}).show();
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex =selectedBinIndex;

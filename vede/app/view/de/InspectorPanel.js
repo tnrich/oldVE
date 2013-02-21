@@ -216,19 +216,26 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         },
                         {
                             xtype: 'container',
-                            margin: '5 5 5 5',
+                            margin: '10 0 10 0',
                             layout: {
                                 type: 'hbox'
                             },
                             items: [
                                 {
                                     xtype: 'button',
+                                    flex: 1,
                                     cls: 'addEugeneRuleBtn',
+                                    overCls: 'addEugeneRuleBtn-over',
+                                    border: 0,
                                     text: 'Add Rule'
                                 },
                                 {
                                     xtype: 'button',
+                                    flex: 1,
                                     cls: 'deleteEugeneRuleBtn',
+                                    margin: '0 0 0 5',
+                                    overCls: 'deleteEugeneRuleBtn-over',
+                                    border: 0,
                                     text: 'Delete Rule',
                                 }
                             ]
@@ -409,17 +416,26 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'container',
                             cls: 'inspector_containerActions',
-                            margin: 10,
+                            margin: '10 0 10 0',
+                            layout: {
+                                type: 'hbox',
+                            },
                             items: [
                                 {
                                     xtype: 'button',
+                                    flex: 1,
                                     cls: 'inspectorAddColumnBtn',
+                                    border: 0,
+                                    overCls: 'inspectorAddColumnBtn-over',
                                     text: 'Add Column'
                                 },
                                 {
                                     xtype: 'button',
+                                    flex: 1,
                                     cls: 'inspectorRemoveColumnBtn',
-                                    width: 130,
+                                    border: 0,
+                                    overCls: 'inspectorRemoveColumnBtn-over',
+                                    margin: '0 0 0 5',
                                     text: 'Remove Column'
                                 }
                             ]

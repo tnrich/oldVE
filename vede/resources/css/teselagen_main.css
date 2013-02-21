@@ -77,9 +77,10 @@ img {
 .x-btn .x-btn-center .x-btn-inner,
 .x-btn-default-toolbar-small .x-btn-inner,
 .x-btn-default-small .x-btn-inner,
-.x-grid-row .x-grid-cell {
+.x-grid-row .x-grid-cell,
+.x-toolbar .x-toolbar-text {
   font-family: 'Maven Pro', sans-serif;
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
@@ -348,7 +349,8 @@ img {
 #ProjectPanel-body {
   border-width: 0 1px;
   border-color: #D6D6D6;
-  width:230px;
+  width:220px;
+  overflow-y: scroll;
 }
 
 #ProjectPanel .x-tab-bar { 
@@ -375,6 +377,9 @@ img {
   top:37px;
 }
 
+#projectTreePanel, #projectTreePanel-body {
+  width: 220px;
+}
 /*Dashboard*/
 #DashboardPanel {
   background: none;
@@ -503,6 +508,11 @@ img {
 
 #RailContainer svg {
   height: 600px !important;
+}
+
+#VectorEditorStatusBarAlert {
+  left: 10px !important;
+  color: rgb(0, 219, 0);
 }
 
 /*Device Editor*/
@@ -649,6 +659,17 @@ background: #F8F8F8;
   background: rgb(17, 101, 150);
 }
 
+.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn {
+  background: rgba(0,0,0,0.4);
+}
+
+.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner {
+  color: white;
+}
+
+.addEugeneRuleBtn-over, .deleteEugeneRuleBtn-over, .inspectorAddColumnBtn-over, .inspectorRemoveColumnBtn-over {
+  background: rgba(0,0,0,0.7);
+}
 /*j5 Reports*/
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body {
   background: #333 !important;
