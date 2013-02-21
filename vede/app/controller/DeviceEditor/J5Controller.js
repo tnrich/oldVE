@@ -27,7 +27,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onOpenJ5: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
-        var j5Window = Ext.create("Vede.view.de.j5Controls").show();
+        var j5Window = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
         currentTab.j5Window = j5Window;
         this.j5Window = j5Window;
 
@@ -596,7 +596,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onPlasmidsItemClick: function (grid, record) {
 
-        this.j5Window.close();
+        // this.j5Window.close();
 
         console.log(record);
 
