@@ -349,7 +349,8 @@ img {
 #ProjectPanel-body {
   border-width: 0 1px;
   border-color: #D6D6D6;
-  width:230px;
+  width:220px;
+  overflow-y: scroll;
 }
 
 #ProjectPanel .x-tab-bar { 
@@ -376,6 +377,9 @@ img {
   top:37px;
 }
 
+#projectTreePanel, #projectTreePanel-body {
+  width: 220px;
+}
 /*Dashboard*/
 #DashboardPanel {
   background: none;
@@ -509,7 +513,6 @@ img {
 #VectorEditorStatusBarAlert {
   left: 10px !important;
   color: rgb(0, 219, 0);
-  font-weight: bold;
 }
 
 /*Device Editor*/
