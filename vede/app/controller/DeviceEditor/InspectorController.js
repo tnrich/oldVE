@@ -136,6 +136,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onopenPartLibraryBtnClick: function () {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+
         if(this.selectedPart) {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
@@ -153,6 +156,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 progressText: 'Loading Part Library',
                 progress: true,
                 width: 300,
+                renderTo: currentTabEl,
                 closable: false
             });
 
@@ -183,6 +187,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     height: 200,
                     width: 400,
                     layout: 'fit',
+                    renderTo: currentTabEl,
                     items: {
                         xtype: 'grid',
                         border: false,
