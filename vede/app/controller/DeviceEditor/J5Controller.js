@@ -476,12 +476,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     console.log(responseData.responseText);
                     loadingMessage.hide();
                     responseMessage.hide();
-                    var messagebox = Ext.MessageBox.show({
-                        title: "Execution Error",
-                        msg: responseData.responseText,
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.ERROR
-                    });
+                    // var messagebox = Ext.MessageBox.show({
+                    //     title: "Execution Error",
+                    //     msg: responseData.responseText,
+                    //     buttons: Ext.MessageBox.OK,
+                    //     icon: Ext.MessageBox.ERROR
+                    // });
 
                     Ext.Function.defer(function () {
                         messagebox.zIndexManager.bringToFront(messagebox);
