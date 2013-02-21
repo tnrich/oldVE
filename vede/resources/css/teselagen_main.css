@@ -77,9 +77,10 @@ img {
 .x-btn .x-btn-center .x-btn-inner,
 .x-btn-default-toolbar-small .x-btn-inner,
 .x-btn-default-small .x-btn-inner,
-.x-grid-row .x-grid-cell {
+.x-grid-row .x-grid-cell,
+.x-toolbar .x-toolbar-text {
   font-family: 'Maven Pro', sans-serif;
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
@@ -503,6 +504,12 @@ img {
 
 #RailContainer svg {
   height: 600px !important;
+}
+
+#VectorEditorStatusBarAlert {
+  left: 10px !important;
+  color: rgb(0, 219, 0);
+  font-weight: bold;
 }
 
 /*Device Editor*/
