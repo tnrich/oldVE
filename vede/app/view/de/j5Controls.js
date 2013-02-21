@@ -10,8 +10,9 @@ Ext.define('Vede.view.de.j5Controls', {
     title: 'j5 Controls',
     resizable: false,
     draggable: true,
-    modal: true,
+    modal: false,
     autoScroll: true,
+    renderTo: Ext.getCmp('mainAppPanel').getActiveTab().getEl(),
 
     initComponent: function () {
         var me = this;
