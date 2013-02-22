@@ -29,13 +29,15 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         {
             startBP.setValue(1);
             stopBP.setValue(this.selectedSequence.getLength());
-            startBP.setReadOnly(true);
-            stopBP.setReadOnly(true);
+            startBP.disable();
+            stopBP.disable();
         }
         else
-        {
-            startBP.setReadOnly(false);
-            stopBP.setReadOnly(false);
+        {   
+            startBP.enable();
+            stopBP.enable();
+            startBP.setValue(this.selectedStartBP);
+            stopBP.setValue(this.selectedStopBP);
         }
     },
 
@@ -58,8 +60,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         {
             startBP.setValue(this.selectedStartBP);
             stopBP.setValue(this.selectedStopBP);
-            this.selectedStopBP = null;
-            this.selectedStartBP = null;
+            // this.selectedStopBP = null;
+            // this.selectedStartBP = null;
         }
         else
         {
