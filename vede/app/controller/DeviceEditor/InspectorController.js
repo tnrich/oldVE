@@ -50,6 +50,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(parentBin) {
                 parentBin.parts().remove(this.selectedPart);
             }
+
+            this.clearPartInfo();
         }
     },
 
@@ -283,7 +285,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                        this.selectedPart)
+                                                                        this.selectedPart);
 
         this.eugeneRulesGrid.reconfigure(rulesStore);
 
@@ -300,7 +302,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         partPropertiesForm.getForm().reset();
         fasForm.getForm().reset();
 
-        this.eugeneRulesGrid.reconfigure();
+        //this.eugeneRulesGrid.reconfigure();
     },
 
     /**
@@ -668,7 +670,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
 
-            this.clearPartInfo();
+            //this.clearPartInfo();
         } catch(err)
         {
             console.log("Failed removing part from bin.");

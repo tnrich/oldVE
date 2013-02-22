@@ -725,6 +725,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
+        this.application.on("rerenderPart",this.rerenderPart, this);
+
         this.application.on(this.DeviceEvent.ADD_ROW,
                             this.onAddRow,
                             this);
