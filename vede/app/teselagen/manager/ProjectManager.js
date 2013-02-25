@@ -260,7 +260,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 parts.push(newPart);
                                 tempParts.push(newPart);
                             }
-                            newBin.addToParts(tempParts);
                             binsArray.push(newBin);
                         }
 
