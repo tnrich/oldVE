@@ -214,12 +214,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 {
                                     ///*
                                     var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                    var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                     bin.parts().removeAt(insertIndex);
                                     bin.parts().insert(insertIndex,part);
                                     self.onReRenderDECanvasEvent();
                                     selectWindow.close();
                                     self.selectedPart = part;
-                                    Vede.application.fireEvent("partSelected",part);
+                                    self.onReRenderDECanvasEvent();
+                                    Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
                                     //*/
                                 }
                                 else
@@ -253,17 +255,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
-        
-        if(j5Part) {
-            // Remember that j5Part may not exist
-            //console.log(j5Part.get("name"));
-            //console.log(j5Part);
-        }
 
+    
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
+
             partPropertiesForm.loadRecord(j5Part);
+            partPropertiesForm.loadRecord(j5Part.getSequenceFile());
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");

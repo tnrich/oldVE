@@ -11,5 +11,6 @@ Ext.define("Teselagen.event.DeviceEvent", {
     ADD_ROW: "AddRow",
 
     SELECT_BIN: "SelectBin",
-    SELECT_PART: "SelectPart"
+    SELECT_PART: "SelectPart",
+    MAP_PART: "MapPart",
 });
