@@ -266,7 +266,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             j5Part.getSequenceFile({
                 reload: true,
                 callback: function(sequenceFile){
-                    partPropertiesForm.loadRecord(sequenceFile);
+                    if(sequenceFile) {
+                        partPropertiesForm.loadRecord(sequenceFile);
+                    }
                 }
             });
 
