@@ -262,7 +262,30 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
 
             partPropertiesForm.loadRecord(j5Part);
-            partPropertiesForm.loadRecord(j5Part.getSequenceFile());
+
+
+            var createWaitForDelayedTask = function(checkFn,task){
+                var taskSchedule = new Ext.util.DelayedTask(function(){
+                    if(checkFn()) task();
+                    else
+                    {
+                        //console.log("Delaying task");
+                        createWaitForDelayedTask(checkFn,task);
+                    }
+                }).delay(100);
+            };
+
+            var task = function(){
+                //console.log("Executing task");
+                //console.log(j5Part.getSequenceFile().get("partSource"));
+                partPropertiesForm.loadRecord(j5Part.getSequenceFile());
+            };
+
+            var checkPartSourceDefined = function(){
+                return (j5Part.getSequenceFile().get("partSource")!=="");
+            };
+
+            createWaitForDelayedTask(checkPartSourceDefined,task);
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");

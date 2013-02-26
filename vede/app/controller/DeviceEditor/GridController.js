@@ -120,6 +120,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
 
+        if(j5Part) console.log(j5Part.getSequenceFile().get("partSource"));
+
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
@@ -627,7 +629,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellSelectByMap: function(j5Part) {
         var gridPart = this.getGridPartFromJ5Part(j5Part);
         var j5Part = gridPart.getPart();
-        console.log(j5Part.getSequenceFile().get("partSource"));
+
         var j5Bin = gridPart.up("Bin").getBin();
         
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
