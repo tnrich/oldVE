@@ -10,6 +10,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                "Teselagen.models.DeviceEditorProject",
                "Teselagen.constants.SBOLIcons"],
 
+    statics: {
+        DEFAULT_ROWS: 2
+    },
+
     DeviceEvent: null,
     ProjectEvent: null,
 
@@ -23,7 +27,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedBin: null,
     selectedPart: null,
 
-    totalRows: 1,
+    totalRows: 2,
     totalColumns: 1,
 
     onReRenderDECanvasEvent: function(){
@@ -206,6 +210,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             this.totalRows = this.DeviceDesignManager.findMaxNumParts(
                                                             this.activeProject);
+
+            if(this.totalRows == 0) {
+                this.totalRows = this.self.DEFAULT_ROWS;
+            }
 
             this.renderDevice();
         }
