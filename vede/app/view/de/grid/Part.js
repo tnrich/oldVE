@@ -134,7 +134,7 @@ Ext.define('Vede.view.de.grid.Part', {
         var tip;
 
         this.partCell.down().addBodyCls("gridPartCell-selected");
-        if(this.getPart()==null) {
+        if(this.getPart()==null || this.getPart().getSequenceFile({reload: true}).get("partSource")=="") {
                 tip = Ext.create('Ext.tip.ToolTip', {
                 target: this.partCell.getId(),
                 trackMouse: true,
