@@ -610,7 +610,15 @@ background: #F8F8F8;
 }
 
 .gridPartCell-alert {
-  background-color: rgba(225, 0, 0, 0.1);
+  border-color: rgb(225, 0, 0);
+}
+
+.mapAlert {
+  color: white;
+  background: rgb(255, 115, 115);
+  padding: 3px;
+  font-size: 10px;
+  border-radius: 4px;
 }
 
 .j5Parameters_Window label {

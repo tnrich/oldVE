@@ -260,7 +260,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
-
+            partPropertiesForm.query("component[cls='mapAlert']")[0].hide();
+            partPropertiesForm.query("component[cls='mapAlert']")[0].animate({duration: 300, to: {opacity: 0}});
             partPropertiesForm.loadRecord(j5Part);
 
             j5Part.getSequenceFile({
@@ -269,6 +270,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     partPropertiesForm.loadRecord(sequenceFile);
                 }
             });
+
+            this.application.fireEvent(this.DeviceEvent.MAP_PART_SELECT, j5Part);
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
@@ -285,6 +288,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             } else {
                 fasForm.loadRecord(newPart);
             }
+
+            partPropertiesForm.query("component[cls='mapAlert']")[0].show();
+            partPropertiesForm.query("component[cls='mapAlert']")[0].animate({duration: 300, to: {opacity: 1}});
 
             this.selectedPart = newPart;
         }

@@ -75,11 +75,18 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    minHeight: 170,
-                    maxHeight: 170,
+                    minHeight: 180,
+                    maxHeight: 200,
                     bodyPadding: 10,
                     title: 'Properties',
                     items: [
+                        {
+                            xtype: 'container',
+                            cls: 'mapAlert',
+                            html: 'Map Part to Edit!',
+                            margin: '0 0 10 0',
+                            opacity: 0
+                        },
                         {
                             xtype: 'textfield',
                             cls: 'partNameField',

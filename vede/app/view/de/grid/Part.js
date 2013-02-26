@@ -134,24 +134,21 @@ Ext.define('Vede.view.de.grid.Part', {
         var tip;
 
         this.partCell.down().addBodyCls("gridPartCell-selected");
-        if(this.getPart()==null || this.getPart().getSequenceFile({reload: true}).get("partSource")=="") {
-                tip = Ext.create('Ext.tip.ToolTip', {
-                target: this.partCell.getId(),
-                trackMouse: true,
-                renderTo: document.body,
-                html: 'Part is empty',
-                title: 'Warning'
-            });
-        }
+
+                this.partCell.down().addBodyCls("gridPartCell-alert");
     },
 
     /**
      * Removes the 'selected' CSS class from the part when it is deselected.
      */
     deselect: function () {
+        this.partCell.down().removeBodyCls("gridPartCell-alert");
         this.partCell.down().removeBodyCls("gridPartCell-selected");
     },
 
+    mapSelect: function() {
+        this.partCell.down().removeBodyCls("gridPartCell-alert");
+    },
     /**
      * If the fas is set, add either a red or blue rectangle, depending on
      * whether the fasConflict flag is true or false.

@@ -135,7 +135,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.selectedPart = gridPart;
 
         gridPart.deselect();
-        gridPart.select();
+        gridPart.select(j5Part);
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
@@ -653,6 +653,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
 
+    onPartCellHasBeenMapped: function(j5Part) {
+        var gridPart = this.getGridPartFromJ5Part(j5Part);
+
+        gridPart.mapSelect();
+    },
+
+
     onPartCellVEEditClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
@@ -770,6 +777,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART, this.onPartCellSelectByMap, this);
+
+        this.application.on(this.DeviceEvent.MAP_PART_SELECT,
+                            this.onPartCellHasBeenMapped,
+                            this);
 
         this.application.on("BinHeaderClick",
                             this.onBinHeaderClick,
