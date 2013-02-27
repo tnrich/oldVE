@@ -8,6 +8,7 @@ Ext.define("Vede.controller.VectorPanelController", {
     require: ["Teselagen.manager.ProjectManager"],
     isRendered: false,
     saveSequenceBtn : null,
+
     onTabChange: function (tabPanel, newTab, oldTab) {
         var self = this;
         if(newTab.xtype == "VectorEditorPanel") {
@@ -30,10 +31,6 @@ Ext.define("Vede.controller.VectorPanelController", {
 
                 //project.veprojects().add(veproject);
                 Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
-                self.saveSequenceBtn = Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveNewSequenceBtn"]')[0].show();
-
-                self.saveSequenceBtn.on("click", self.saveSequence,self);
-
             }
             else if(Teselagen.manager.ProjectManager.workingSequence&&!Teselagen.manager.ProjectManager.workingVEProject) {
                 console.log("Creating empty VEProject/Sequence");
@@ -47,10 +44,6 @@ Ext.define("Vede.controller.VectorPanelController", {
 
                 //project.veprojects().add(veproject);
                 Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
-                self.saveSequenceBtn = Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveNewSequenceBtn"]')[0].show();
-
-                self.saveSequenceBtn.on("click", self.saveSequence,self);
-
             }
         }
     },
