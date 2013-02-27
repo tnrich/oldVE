@@ -17,7 +17,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         {
             xtype: 'button',
             id: 'exportBtn',
-            icon: 'resources/images/save.png',
+            icon: 'resources/images/save_disabled.png',
             scale: 'medium',
             tooltip: 'Save to Registry'
         },
