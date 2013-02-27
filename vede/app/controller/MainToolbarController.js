@@ -109,7 +109,19 @@ Ext.define('Vede.controller.MainToolbarController', {
         }
     },
     onSaveBtnClick: function(button, e, options){
-        this.application.fireEvent("saveCurrentVEProject");
+//        this.application.fireEvent("saveCurrentVEProject");
+    },
+    
+    onSaveToRegistryButtonClick: function(){
+        Ext.create("Vede.view.SaveToRegistryWindow").show();
+    },
+
+    onSaveToRegistryConfirmationButtonClick: function(button, e, options) {
+        var form = button.up('form').getForm();
+        var name = form.findField('Name');
+        console.log(name.value);
+        var gbMng = Teselagen.bio.parsers.GenbankManager;
+        //console.log(gbMng.);
     },
 
     init: function() {
@@ -142,8 +154,14 @@ Ext.define('Vede.controller.MainToolbarController', {
                 click: this.onLinearViewBtnClick
             },
             "#saveBtn": {
-                click: this.onSaveBtnClick
+//                click: this.onSaveBtnClick
             },
+            "#exportBtn": {
+//                click: this.onSaveToRegistryButtonClick
+            },
+            "#saveToRegistryConfirmation": {
+                click: this.onSaveToRegistryConfirmationButtonClick
+            }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
