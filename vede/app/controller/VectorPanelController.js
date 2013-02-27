@@ -7,7 +7,7 @@ Ext.define("Vede.controller.VectorPanelController", {
     extend: "Ext.app.Controller",
     require: ["Teselagen.manager.ProjectManager"],
     isRendered: false,
-    saveSequenceBtn : null,
+//    saveSequenceBtn : null,
 
     onTabChange: function (tabPanel, newTab, oldTab) {
         var self = this;
@@ -31,6 +31,8 @@ Ext.define("Vede.controller.VectorPanelController", {
 
                 //project.veprojects().add(veproject);
                 Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
+//                self.saveSequenceBtn = Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveNewSequenceBtn"]')[0].show();
+//                self.saveSequenceBtn.on("click", self.saveSequence,self);
             }
             else if(Teselagen.manager.ProjectManager.workingSequence&&!Teselagen.manager.ProjectManager.workingVEProject) {
                 console.log("Creating empty VEProject/Sequence");
@@ -44,61 +46,63 @@ Ext.define("Vede.controller.VectorPanelController", {
 
                 //project.veprojects().add(veproject);
                 Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
+//                self.saveSequenceBtn = Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveNewSequenceBtn"]')[0].show();
+//                self.saveSequenceBtn.on("click", self.saveSequence,self);
             }
         }
     },
 
-    saveSequence: function () {
-        var self = this;
-        var onPromptClosed = function (btn, sequenceName) {
-                var self = this;
-                var selectWindow = Ext.create('Ext.window.Window', {
-                    title: 'Select Project',
-                    height: 200,
-                    width: 400,
-                    layout: 'fit',
-                    items: {
-                        xtype: 'grid',
-                        border: false,
-                        columns: {
-                            items: {
-                                text: "Name",
-                                dataIndex: "name"
-                            },
-                            defaults: {
-                                flex: 1
-                            }
-                        },
-                        store: Teselagen.manager.ProjectManager.projects,
-                        listeners: {
-                            "itemclick": function (grid, project, item) {
-                                Teselagen.manager.ProjectManager.workingVEProject.set('name', sequenceName);
-                                project.veprojects().add(Teselagen.manager.ProjectManager.workingVEProject);
-                                project.save({
-                                    callback: function () {
-                                        Teselagen.manager.ProjectManager.workingVEProject.save({
-                                            callback: function () {
-                                                Teselagen.manager.ProjectManager.workingSequence.save({
-                                                    callback: function () {
-                                                        selectWindow.close();
-                                                        Vede.application.fireEvent("renderProjectsTree");
-                                                        self.saveSequenceBtn.un('click',self);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                                selectWindow.close();
-                            }
-                        }
-                    }
-                }).show();
-            };
-
-
-        Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
-    },
+//    saveSequence: function () {
+//        var self = this;
+//        var onPromptClosed = function (btn, sequenceName) {
+//                var self = this;
+//                var selectWindow = Ext.create('Ext.window.Window', {
+//                    title: 'Select Project',
+//                    height: 200,
+//                    width: 400,
+//                    layout: 'fit',
+//                    items: {
+//                        xtype: 'grid',
+//                        border: false,
+//                        columns: {
+//                            items: {
+//                                text: "Name",
+//                                dataIndex: "name"
+//                            },
+//                            defaults: {
+//                                flex: 1
+//                            }
+//                        },
+//                        store: Teselagen.manager.ProjectManager.projects,
+//                        listeners: {
+//                            "itemclick": function (grid, project, item) {
+//                                Teselagen.manager.ProjectManager.workingVEProject.set('name', sequenceName);
+//                                project.veprojects().add(Teselagen.manager.ProjectManager.workingVEProject);
+//                                project.save({
+//                                    callback: function () {
+//                                        Teselagen.manager.ProjectManager.workingVEProject.save({
+//                                            callback: function () {
+//                                                Teselagen.manager.ProjectManager.workingSequence.save({
+//                                                    callback: function () {
+//                                                        selectWindow.close();
+//                                                        Vede.application.fireEvent("renderProjectsTree");
+//                                                        self.saveSequenceBtn.un('click',self);
+//                                                    }
+//                                                });
+//                                            }
+//                                        });
+//                                    }
+//                                });
+//                                selectWindow.close();
+//                            }
+//                        }
+//                    }
+//                }).show();
+//            };
+//
+//
+//        Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
+//    },
 
     /**
      * @member Vede.controller.VectorPanelController
