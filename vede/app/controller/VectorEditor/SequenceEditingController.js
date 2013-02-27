@@ -77,7 +77,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         self.sequenceFileManager = sequenceFileManager;
         Teselagen.manager.ProjectManager.workingSequenceFileManager = sequenceFileManager;
         Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
-        Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
+//        Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
         currentTabPanel.setLoading(false);
     },
 
@@ -95,30 +95,30 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                 Teselagen.manager.ProjectManager.workingSequence = seq;
                 self.sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
                 Vede.application.fireEvent("SequenceManagerChanged", self.sequenceFileManager);
-                Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
+//                Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
                 currentTabPanel.setLoading(false);
             }
         });
 
     },
 
-    onsaveSequenceBtnClick: function () {
-        var currentTabPanel = Ext.getCmp('mainAppPanel');
-        var editingSequence = Teselagen.manager.ProjectManager.workingSequence;
-        currentTabPanel.setLoading(true);
-
-        rawGenbank = this.sequenceFileManager.toGenbank().toString();
-        editingSequence.setSequenceFileContent(rawGenbank);
-
-        var self = this;
-
-        editingSequence.save({
-            callback: function () {
-                currentTabPanel.setLoading(false);
-                currentTabPanel.setActiveTab(self.editingDETab);
-            }
-        });
-    },
+//    onsaveSequenceBtnClick: function () {
+//        var currentTabPanel = Ext.getCmp('mainAppPanel');
+//        var editingSequence = Teselagen.manager.ProjectManager.workingSequence;
+//        currentTabPanel.setLoading(true);
+//
+//        rawGenbank = this.sequenceFileManager.toGenbank().toString();
+//        editingSequence.setSequenceFileContent(rawGenbank);
+//
+//        var self = this;
+//
+//        editingSequence.save({
+//            callback: function () {
+//                currentTabPanel.setLoading(false);
+//                currentTabPanel.setActiveTab(self.editingDETab);
+//            }
+//        });
+//    },
 
     onSequenceManagerChanged: function (newSequenceFileManager) {
         this.sequenceFileManager = newSequenceFileManager;
@@ -127,9 +127,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     init: function () {
 
         this.control({
-            '#VectorEditorMainMenuBar > button[cls="saveSequenceBtn"]': {
-                click: this.onsaveSequenceBtnClick
-            },
+//            '#VectorEditorMainMenuBar > button[cls="saveSequenceBtn"]': {
+//                click: this.onsaveSequenceBtnClick
+//            },
             '#VectorEditorMainMenuBar > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
             }
