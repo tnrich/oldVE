@@ -66,20 +66,20 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
 //            scale: 'medium',
 //            tooltip: 'Paste'
 //        },
-//        {
-//            xtype: 'button',
-//            id: 'undoBtn',
-//            icon: 'resources/images/undo_disabled.png',
-//            scale: 'medium',
-//            tooltip: 'Undo'
-//        },
-//        {
-//            xtype: 'button',
-//            id: 'redoBtn',
-//            icon: 'resources/images/redo_disabled.png',
-//            scale: 'medium',
-//            tooltip: 'Redo'
-//        },
+        {
+            xtype: 'button',
+            id: 'undoBtn',
+            icon: 'resources/images/undo.png',
+            scale: 'medium',
+            tooltip: 'Undo'
+        },
+        {
+            xtype: 'button',
+            id: 'redoBtn',
+            icon: 'resources/images/redo.png',
+            scale: 'medium',
+            tooltip: 'Redo'
+        },
 //        {
 //            xtype: 'button',
 //            id: 'safeBtn',
