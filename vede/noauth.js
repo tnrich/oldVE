@@ -24,7 +24,6 @@ Ext.application({
     name: 'Vede',
     views: [
         'AppViewport',
-        'FileImportWindow',
         'SimulateDigestionWindow'
     ],
     controllers: [
