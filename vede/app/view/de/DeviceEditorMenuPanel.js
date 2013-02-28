@@ -26,10 +26,12 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 items: [{
                     xtype: 'menuitem',
                     text: 'Save Design'
-                }, {
-                    xtype: 'menuitem',
-                    text: 'Delete Design'
-                }, {
+                }, 
+//                {
+//                    xtype: 'menuitem',
+//                    text: 'Delete Design'
+//                }, 
+                {
                     xtype: 'menuitem',
                     text: 'Rename Design'
                 }]

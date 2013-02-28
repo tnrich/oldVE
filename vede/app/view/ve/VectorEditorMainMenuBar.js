@@ -16,37 +16,42 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'importMenuItem',
                 text: 'Import from File'
-            }, {
-                xtype: 'menuitem',
-                text: 'Download Genbank',
-                id: 'downloadGenbankMenuItem'
-            }, {
-                xtype: 'menuitem',
-                text: 'Rename Sequence',
-                id: 'renameSequenceItem'
-            }, {
-                xtype: 'menuseparator'
-            }, {
-                xtype: 'menuitem',
-                text: 'Project Properties'
-            }, {
-                xtype: 'menuitem',
-                text: 'Print',
-                menu: {
-                    xtype: 'menu',
-                    width: 120,
-                    items: [{
-                        xtype: 'menuitem',
-                        text: 'Sequence'
-                    }, {
-                        xtype: 'menuitem',
-                        text: 'Circular View'
-                    }, {
-                        xtype: 'menuitem',
-                        text: 'Linear View'
-                    }]
-                }
-            }
+            },
+//            {
+//                xtype: 'menuitem',
+//                text: 'Download Genbank',
+//                id: 'downloadGenbankMenuItem'
+//            },
+//            {
+//                xtype: 'menuitem',
+//                text: 'Rename Sequence',
+//                id: 'renameSequenceItem'
+//            },
+//            {
+//                xtype: 'menuseparator'
+//            },
+//            {
+//                xtype: 'menuitem',
+//                text: 'Project Properties'
+//            },
+//            {
+//                xtype: 'menuitem',
+//                text: 'Print',
+//                menu: {
+//                    xtype: 'menu',
+//                    width: 120,
+//                    items: [{
+//                        xtype: 'menuitem',
+//                        text: 'Sequence'
+//                    }, {
+//                        xtype: 'menuitem',
+//                        text: 'Circular View'
+//                    }, {
+//                        xtype: 'menuitem',
+//                        text: 'Linear View'
+//                    }]
+//                }
+//            }
 
             ]
         }
@@ -56,7 +61,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 150,
-            items: [{
+            items: [
+            {
                 xtype: 'menuitem',
                 id: 'undoMenuItem',
                 text: 'Undo'
@@ -66,27 +72,31 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Redo'
             }, {
                 xtype: 'menuseparator'
-            }, {
-                xtype: 'menuitem',
-                text: 'Copy'
-            }, {
-                xtype: 'menuitem',
-                text: 'Cut'
-            }, {
-                xtype: 'menuitem',
-                text: 'Paste'
-            }, {
-                xtype: 'menuseparator'
-            }, {
-                xtype: 'menuitem',
-                id: 'findMenuItem',
-                text: 'Find...'
-            }, {
-                xtype: 'menuitem',
-                text: 'Go To...'
-            }, {
-                xtype: 'menuseparator'
-            }, {
+            }, 
+//                    {
+//                xtype: 'menuitem',
+//                text: 'Copy'
+//            }, {
+//                xtype: 'menuitem',
+//                text: 'Cut'
+//            }, {
+//                xtype: 'menuitem',
+//                text: 'Paste'
+//            },
+//            {
+//                xtype: 'menuseparator'
+//            },
+//            {
+//                xtype: 'menuitem',
+//                id: 'findMenuItem',
+//                text: 'Find...'
+//            }, {
+//                xtype: 'menuitem',
+//                text: 'Go To...'
+//            }, {
+//                xtype: 'menuseparator'
+//            },
+            {
                 xtype: 'menuitem',
                 id: 'selectMenuItem',
                 text: 'Select...'
@@ -176,56 +186,38 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 checked: true
             }]
         }
-    }, {
-        xtype: 'button',
-        text: 'Tools',
-        menu: {
-            xtype: 'menu',
-            minWidth: 140,
-            items: [{
-                xtype: 'menuitem',
-                id: 'createNewFeatureMenuItem',
-                text: 'Create New Feature'
-            }, {
-                xtype: 'menuitem',
-                id: 'restrictionEnzymesManagerMenuItem',
-                text: 'Restriction Enzymes Manager'
-            }, {
-                xtype: 'menuitem',
-                id: 'simulateDigestionMenuItem',
-                text: 'Simulate Digestion'
-            }, {
-                xtype: 'menuitem',
-                text: 'Properties'
-            }, {
-                xtype: 'menuseparator'
-            }, {
-                xtype: 'menuitem',
-                text: 'Preferences'
-            }]
-        }
-    },
-    // }, {
-    //     xtype: 'button',
-    //     text: 'Help',
-    //     id: 'veHelpMenuItem'
-//         menu: {
-//             xtype: 'menu',
-//             minWidth: 140,
-//             items: [{
-//                 xtype: 'menuitem',
-//                 id: 'suggestFeatureMenuItem'
-// ,                text: 'Suggest Feature'
-//             }, {
-//                 xtype: 'menuitem',
-//                 text: 'Report Bug'
-//             }, {
-//                 xtype: 'menuseparator'
-//             }, {
-//                 xtype: 'menuitem',
-//                 text: 'About'
-//             }]
-//         }
+    }, 
+//    {
+//        xtype: 'button',
+//        text: 'Tools',
+//        menu: {
+//            xtype: 'menu',
+//            minWidth: 140,
+//            items: [
+//            {
+//                xtype: 'menuitem',
+//                id: 'createNewFeatureMenuItem',
+//                text: 'Create New Feature'
+//            }, {
+//                xtype: 'menuitem',
+//                id: 'restrictionEnzymesManagerMenuItem',
+//                text: 'Restriction Enzymes Manager'
+//            }, {
+//                xtype: 'menuitem',
+//                id: 'simulateDigestionMenuItem',
+//                text: 'Simulate Digestion'
+//            }, {
+//                xtype: 'menuitem',
+//                text: 'Properties'
+//            }, {
+//                xtype: 'menuseparator'
+//            }, {
+//                xtype: 'menuitem',
+//                text: 'Preferences'
+//            }
+//            ]
+//        }
+//    },
      {
         xtype: 'tbfill'
     }, {
