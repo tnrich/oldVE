@@ -7,20 +7,20 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     id: 'VectorEditorMainToolBar',
     alias: 'widget.VectorEditorMainToolBar',
     items: [
-        {
-            xtype: 'button',
-            id: 'saveBtn',
-            icon: 'resources/images/export_disabled.png',
-            scale: 'medium',
-            tooltip: 'Save Project'
-        },
-        {
-            xtype: 'button',
-            id: 'exportBtn',
-            icon: 'resources/images/save_disabled.png',
-            scale: 'medium',
-            tooltip: 'Save to Registry'
-        },
+//        {
+//            xtype: 'button',
+//            id: 'saveBtn',
+//            icon: 'resources/images/export_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Save Project'
+//        },
+//        {
+//            xtype: 'button',
+//            id: 'exportBtn',
+//            icon: 'resources/images/save_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Save to Registry'
+//        },
 //        {
 //            xtype: 'button',
 //            id: 'projectPropsBtn',
@@ -45,41 +45,41 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
             scale: 'medium',
             tooltip: 'Linear View'
         },
-        {
-            xtype: 'button',
-            id: 'copyBtn',
-            icon: 'resources/images/copy_disabled.png',
-            scale: 'medium',
-            tooltip: 'Copy'
-        },
-        {
-            xtype: 'button',
-            id: 'cutBtn',
-            icon: 'resources/images/cut_disabled.png',
-            scale: 'medium',
-            tooltip: 'Cut'
-        },
-        {
-            xtype: 'button',
-            id: 'pasteBtn',
-            icon: 'resources/images/paste_disabled.png',
-            scale: 'medium',
-            tooltip: 'Paste'
-        },
-        {
-            xtype: 'button',
-            id: 'undoBtn',
-            icon: 'resources/images/undo_disabled.png',
-            scale: 'medium',
-            tooltip: 'Undo'
-        },
-        {
-            xtype: 'button',
-            id: 'redoBtn',
-            icon: 'resources/images/redo_disabled.png',
-            scale: 'medium',
-            tooltip: 'Redo'
-        },
+//        {
+//            xtype: 'button',
+//            id: 'copyBtn',
+//            icon: 'resources/images/copy_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Copy'
+//        },
+//        {
+//            xtype: 'button',
+//            id: 'cutBtn',
+//            icon: 'resources/images/cut_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Cut'
+//        },
+//        {
+//            xtype: 'button',
+//            id: 'pasteBtn',
+//            icon: 'resources/images/paste_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Paste'
+//        },
+//        {
+//            xtype: 'button',
+//            id: 'undoBtn',
+//            icon: 'resources/images/undo_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Undo'
+//        },
+//        {
+//            xtype: 'button',
+//            id: 'redoBtn',
+//            icon: 'resources/images/redo_disabled.png',
+//            scale: 'medium',
+//            tooltip: 'Redo'
+//        },
 //        {
 //            xtype: 'button',
 //            id: 'safeBtn',
