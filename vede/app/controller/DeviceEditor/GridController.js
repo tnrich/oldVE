@@ -124,8 +124,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
 
-        if(j5Part) console.log(j5Part.getSequenceFile().get("partSource"));
-
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
@@ -135,7 +133,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.selectedPart = gridPart;
 
         gridPart.deselect();
-        gridPart.select(j5Part);
+        gridPart.select();
+
+         if(j5Part) {
+            if(j5Part.getSequenceFile().get("partSource")=="") {
+                console.log("hello");
+                gridPart.select();
+            } else {
+                console.log(j5Part.getSequenceFile().get("partSource"));
+                gridPart.mapSelect();
+            }
+        } else {
+            gridPart.select();
+        }
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
@@ -648,9 +658,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.selectedPart = gridPart;
 
-        gridPart.select();
-
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
+
+        this.onPartCellHasBeenMapped(j5Part);
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
@@ -659,6 +669,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.mapSelect();
     },
 
+    onPartCellHasNotBeenMapped: function(j5Part) {
+        var gridPart = this.getGridPartFromJ5Part(j5Part);
+
+        gridPart.select();
+    },
 
     onPartCellVEEditClick: function(partCell) {
         var gridPart = partCell.up().up();
@@ -776,10 +791,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onSelectBin,
                             this);
 
-        this.application.on(this.DeviceEvent.MAP_PART, this.onPartCellSelectByMap, this);
+        this.application.on(this.DeviceEvent.MAP_PART, 
+                            this.onPartCellSelectByMap, 
+                            this);
 
         this.application.on(this.DeviceEvent.MAP_PART_SELECT,
                             this.onPartCellHasBeenMapped,
+                            this);
+
+        this.application.on(this.DeviceEvent.MAP_PART_NOTSELECT,
+                            this.onPartCellHasNotBeenMapped,
                             this);
 
         this.application.on("BinHeaderClick",

@@ -131,11 +131,8 @@ Ext.define('Vede.view.de.grid.Part', {
      * Applies the correct CSS class to the part when it is selected.
      */
     select: function () {
-        var tip;
-
         this.partCell.down().addBodyCls("gridPartCell-selected");
-
-                this.partCell.down().addBodyCls("gridPartCell-alert");
+        this.partCell.down().addBodyCls("gridPartCell-alert");
     },
 
     /**
@@ -148,6 +145,7 @@ Ext.define('Vede.view.de.grid.Part', {
 
     mapSelect: function() {
         this.partCell.down().removeBodyCls("gridPartCell-alert");
+        this.partCell.down().addBodyCls("gridPartCell-selected");
     },
     /**
      * If the fas is set, add either a red or blue rectangle, depending on

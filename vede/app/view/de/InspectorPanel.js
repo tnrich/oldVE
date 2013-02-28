@@ -83,7 +83,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'container',
                             cls: 'mapAlert',
-                            html: 'Map Part to Edit!',
+                            html: 'Select Part From Library',
                             margin: '0 0 10 0',
                             opacity: 0
                         },
