@@ -329,7 +329,6 @@ img {
   border-width: 0 1px;
   border-color: #D6D6D6;
   width:220px;
-  overflow-y: scroll;
 }
 
 #ProjectPanel .x-tab-bar { 
