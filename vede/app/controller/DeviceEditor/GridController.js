@@ -681,6 +681,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         
         j5Part.getSequenceFile({
+        reload: true,
         callback: function(associatedSequence,operation){
         
         if(associatedSequence)
