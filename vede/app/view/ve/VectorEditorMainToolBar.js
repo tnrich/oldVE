@@ -68,14 +68,14 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
 //        },
         {
             xtype: 'button',
-            id: 'undoBtn',
+            id: 'undoViewBtn',
             icon: 'resources/images/undo.png',
             scale: 'medium',
             tooltip: 'Undo'
         },
         {
             xtype: 'button',
-            id: 'redoBtn',
+            id: 'redoViewBtn',
             icon: 'resources/images/redo.png',
             scale: 'medium',
             tooltip: 'Redo'
