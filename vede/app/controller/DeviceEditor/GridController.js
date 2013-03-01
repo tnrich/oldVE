@@ -644,12 +644,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         return targetGridPart;
     },
 
-    onPartCellSelectByMap: function(j5Part) {
-        var gridPart = this.getGridPartFromJ5Part(j5Part);
+    onPartCellSelectByMap: function(pj5Part) {
+        var gridPart = this.getGridPartFromJ5Part(pj5Part);
         var j5Part = gridPart.getPart();
 
         var j5Bin = gridPart.up("Bin").getBin();
-        
+
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
@@ -681,11 +681,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         
         j5Part.getSequenceFile({
-        reload: true,
         callback: function(associatedSequence,operation){
         
         if(associatedSequence)
         {
+            console.log("onPartCellVEEditClick");
+            console.log(associatedSequence);
             Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
         }

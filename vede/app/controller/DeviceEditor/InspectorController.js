@@ -207,27 +207,28 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part, item){
                                 var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
                                                                                 self.selectedPart);
-                                console.log(self.selectedPart);
-                                console.log(self.activeProject);
-                                console.log(bin);
-                                if(bin)
-                                {
-                                    ///*
-                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                    var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-                                    bin.parts().removeAt(insertIndex);
-                                    bin.parts().insert(insertIndex,part);
-                                    self.onReRenderDECanvasEvent();
-                                    selectWindow.close();
-                                    self.selectedPart = part;
-                                    self.onReRenderDECanvasEvent();
-                                    Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
-                                    //*/
-                                }
-                                else
-                                {
-                                    Ext.MessageBox.alert('Error','Failed mapping part from library');
-                                }
+
+                                part.getSequenceFile({
+                                    callback: function(sequence){
+                                        console.log(sequence);
+                                        if(bin)
+                                        {
+                                            var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                            var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
+                                            bin.parts().removeAt(insertIndex);
+                                            bin.parts().insert(insertIndex,part);
+                                            self.onReRenderDECanvasEvent();
+                                            selectWindow.close();
+                                            self.selectedPart = part;
+                                            self.onReRenderDECanvasEvent();
+                                            Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                        }
+                                        else
+                                        {
+                                            Ext.MessageBox.alert('Error','Failed mapping part from library');
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -263,8 +264,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             partPropertiesForm.loadRecord(j5Part);
 
             j5Part.getSequenceFile({
-                reload: true,
                 callback: function(sequenceFile){
+                    console.log("onPartSelected");
+                    console.log(sequenceFile);
                     if(sequenceFile) {
                         partPropertiesForm.loadRecord(sequenceFile);
                         partPropertiesForm.query("component[cls='mapAlert']")[0].hide();
