@@ -188,7 +188,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 checked: true
             }]
         }
-    }, 
+    }
 //    {
 //        xtype: 'button',
 //        text: 'Tools',
@@ -220,11 +220,5 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //            ]
 //        }
 //    },
-     {
-        xtype: 'tbfill'
-    }, {
-        xtype: 'button',
-        text: 'Create Part',
-        cls: 'createPartBtn'
-    }]
+    ]
 });

@@ -150,7 +150,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                       this.selectedBinIndex);
             }
 
-            console.log("changing part");
             var self = this;
 
             var loadingMsgBox = Ext.MessageBox.show({
@@ -210,7 +209,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                                 part.getSequenceFile({
                                     callback: function(sequence){
-                                        console.log(sequence);
                                         if(bin)
                                         {
                                             var insertIndex = bin.parts().indexOf(self.selectedPart);
@@ -260,13 +258,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
-            
             partPropertiesForm.loadRecord(j5Part);
 
             j5Part.getSequenceFile({
                 callback: function(sequenceFile){
-                    console.log("onPartSelected");
-                    console.log(sequenceFile);
                     if(sequenceFile) {
                         partPropertiesForm.loadRecord(sequenceFile);
                         partPropertiesForm.query("component[cls='mapAlert']")[0].hide();

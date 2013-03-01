@@ -130,7 +130,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 //            '#VectorEditorMainMenuBar > button[cls="saveSequenceBtn"]': {
 //                click: this.onsaveSequenceBtnClick
 //            },
-            '#VectorEditorMainMenuBar > button[cls="createPartBtn"]': {
+            '#VectorEditorMainToolBar > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
             }
         });

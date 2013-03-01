@@ -137,10 +137,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
          if(j5Part) {
             if(j5Part.getSequenceFile().get("partSource")=="") {
-                console.log("hello");
                 gridPart.select();
             } else {
-                console.log(j5Part.getSequenceFile().get("partSource"));
                 gridPart.mapSelect();
             }
         } else {
