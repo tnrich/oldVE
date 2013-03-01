@@ -59,25 +59,27 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Combinatorial Golden Gate'
                 }]
             }
-        }, {
-            xtype: 'button',
-            text: 'Import',
-            cls: 'importMenu',
-            menu: {
-                xtype: 'menu',
-                minWidth: 140,
-                width: 140,
-                items: [{
-                    xtype: 'menuitem',
-                    cls: 'importXML',
-                    text: 'XML file'
-                }, {
-                    xtype: 'menuitem',
-                    cls: 'importJSON',
-                    text: 'JSON file'
-                }]
-            }
-        }, {
+        }, 
+//        {
+//            xtype: 'button',
+//            text: 'Import',
+//            cls: 'importMenu',
+//            menu: {
+//                xtype: 'menu',
+//                minWidth: 140,
+//                width: 140,
+//                items: [{
+//                    xtype: 'menuitem',
+//                    cls: 'importXML',
+//                    text: 'XML file'
+//                }, {
+//                    xtype: 'menuitem',
+//                    cls: 'importJSON',
+//                    text: 'JSON file'
+//                }]
+//            }
+//        }, 
+        {
             xtype: 'button',
             text: 'Insert',
             cls: 'insertMenu',
