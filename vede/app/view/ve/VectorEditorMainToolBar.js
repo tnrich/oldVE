@@ -13,7 +13,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'button',
         text: 'Create Part',
         cls: 'createPartBtn',
-        icon: 'resources/images/save_disabled.png',
+        icon: 'resources/images/save.png',
         scale: 'medium',
         tooltip: 'Create Part'
     },
