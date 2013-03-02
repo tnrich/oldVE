@@ -486,6 +486,11 @@ img {
   background: #F8F8F8;
 }
 
+.vetbseparator {
+  border-left: 1px solid rgb(231, 231, 231) !important;
+  border-right: 1px solid rgb(255, 255, 255) !important;
+}
+
 #RailContainer {
   position: relative;
   top: 100px;

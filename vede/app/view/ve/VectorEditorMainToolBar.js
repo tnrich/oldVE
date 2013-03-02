@@ -11,11 +11,15 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
 
     {
         xtype: 'button',
-        text: 'Create Part',
         cls: 'createPartBtn',
-        icon: 'resources/images/save.png',
+        icon: 'resources/images/create.png',
         scale: 'medium',
         tooltip: 'Create Part'
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20,
     },
 
     //        {
@@ -41,19 +45,53 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     //        },
     {
         xtype: 'button',
+        id: 'undoViewBtn',
+        icon: 'resources/images/undo_new.png',
+        scale: 'medium',
+        tooltip: 'Undo'
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20,
+    }, {
+        xtype: 'button',
+        id: 'redoViewBtn',
+        icon: 'resources/images/redo_new.png',
+        scale: 'medium',
+        tooltip: 'Redo'
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20,
+    },
+    {
+        xtype: 'button',
         id: 'circularViewBtn',
         enableToggle: true,
         icon: 'resources/images/pie.png',
         pressed: true,
         scale: 'medium',
         tooltip: 'Circular View'
-    }, {
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20,
+    },
+    {
         xtype: 'button',
         id: 'linearViewBtn',
         enableToggle: true,
         icon: 'resources/images/rail.png',
         scale: 'medium',
         tooltip: 'Linear View'
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20,
     },
     //        {
     //            xtype: 'button',
@@ -76,19 +114,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     //            scale: 'medium',
     //            tooltip: 'Paste'
     //        },
-    {
-        xtype: 'button',
-        id: 'undoViewBtn',
-        icon: 'resources/images/undo.png',
-        scale: 'medium',
-        tooltip: 'Undo'
-    }, {
-        xtype: 'button',
-        id: 'redoViewBtn',
-        icon: 'resources/images/redo.png',
-        scale: 'medium',
-        tooltip: 'Redo'
-    },
     //        {
     //            xtype: 'button',
     //            id: 'safeBtn',
@@ -111,14 +136,26 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         pressed: true,
         scale: 'medium',
         tooltip: 'Show Features'
-    }, {
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20
+    },
+    {
         xtype: 'button',
         id: 'cutsitesBtn',
         enableToggle: true,
         icon: 'resources/images/cut_sites.png',
         scale: 'medium',
         tooltip: 'Show Cut Sites'
-    }, {
+    }, 
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20
+    },
+    {
         xtype: 'button',
         id: 'orfsBtn',
         enableToggle: true,
