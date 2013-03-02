@@ -254,6 +254,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+        var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+        var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+        var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
         // If a j5Part exists for the selected part, load it. If not, create a
@@ -266,12 +269,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 reload: true,
                 callback: function(sequenceFile){
                     if(sequenceFile) {
+                        changePartDefinitionBtn.removeCls('btnDisabled');
+                        openPartLibraryBtn.setText("Open Part Library");
+                        openPartLibraryBtn.removeCls('selectPartFocus');
+                        changePartDefinitionBtn.enable();
                         partPropertiesForm.loadRecord(sequenceFile);
-                        partPropertiesForm.query("component[cls='mapAlert']")[0].hide();
-                        partPropertiesForm.query("component[cls='mapAlert']")[0].animate({duration: 300, to: {opacity: 0}});
                     } else {
-                        partPropertiesForm.query("component[cls='mapAlert']")[0].show();
-                        partPropertiesForm.query("component[cls='mapAlert']")[0].animate({duration: 300, to: {opacity: 1}});
+                        changePartDefinitionBtn.disable();
+                        openPartLibraryBtn.setText("Select Part From Library");
+                        openPartLibraryBtn.addCls('selectPartFocus');
+                        changePartDefinitionBtn.addCls('btnDisabled');
                     }
                 }
             });
@@ -291,9 +298,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             } else {
                 fasForm.loadRecord(newPart);
             }
-
-            partPropertiesForm.query("component[cls='mapAlert']")[0].show();
-            partPropertiesForm.query("component[cls='mapAlert']")[0].animate({duration: 300, to: {opacity: 1}});
+            
+            changePartDefinitionBtn.disable();
+            changePartDefinitionBtn.addCls('btnDisabled');
+            openPartLibraryBtn.setText("Select Part From Library");
+            openPartLibraryBtn.addCls('selectPartFocus');
 
             this.selectedPart = newPart;
         }

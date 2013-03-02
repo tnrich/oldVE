@@ -40,6 +40,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
             },
             preventHeader: true,
             title: 'Part Info',
+            cls: 'partInfoTab',
             autoScroll: true,
             items: [
                 {
@@ -76,17 +77,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         type: 'vbox'
                     },
                     minHeight: 180,
-                    maxHeight: 200,
+                    maxHeight: 180,
                     bodyPadding: 10,
                     title: 'Properties',
                     items: [
-                        {
-                            xtype: 'container',
-                            cls: 'mapAlert',
-                            html: 'Select Part From Library',
-                            margin: '0 0 10 0',
-                            opacity: 0
-                        },
                         {
                             xtype: 'textfield',
                             cls: 'partNameField',

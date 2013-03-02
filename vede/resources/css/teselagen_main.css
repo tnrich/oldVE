@@ -38,18 +38,21 @@ img {
 
 .x-body {
   font-family: 'Maven Pro', sans-serif;
+  font-weight: 500;
   font-size: 12px;
 }
 
 .x-panel-header-text-default,
 .x-panel-header-text-default-framed {
     font-family: 'Maven Pro', sans-serif;
+    font-weight: 500;
     font-size: 12px;
     color: #333;
 }
 
 .x-window-header-text-default {
   font-family: 'Maven Pro', sans-serif;
+  font-weight: 500;
   font-size: 12px;
   color: white;
 }
@@ -64,8 +67,9 @@ img {
 
 .x-tab-inner {
   font-family: 'Maven Pro', sans-serif;
-    font-size: 12px;
-    color: #333;
+  font-weight: 700;
+  font-size: 12px;
+  color: #333;
 }
 
 .x-panel-body-default {
@@ -80,11 +84,13 @@ img {
 .x-grid-row .x-grid-cell,
 .x-toolbar .x-toolbar-text {
   font-family: 'Maven Pro', sans-serif;
+  font-weight: 500;
   font-size: 12px;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
   font-family: 'Maven Pro', sans-serif;
+  font-weight: 500;
   font-size: 12px;
   color: #111;
 }
@@ -111,11 +117,13 @@ img {
 
 .x-column-header-text {
 	font-family: 'Maven Pro', sans-serif;
+      font-weight: 500;
 	color: #333;
 }
 
 .x-mask-msg div {
   font-family: 'Maven Pro', sans-serif;
+  font-weight: 500;
   font-size: 12px;
   color: #111;
 }
@@ -398,7 +406,6 @@ img {
   -moz-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;
   color: #006ADC;
-  font-weight: bold;
 }
 
 .projectStartBtn-over #projectStartBtn-btnIconEl {
@@ -654,6 +661,15 @@ background: #F8F8F8;
 
 .addEugeneRuleBtn-over, .deleteEugeneRuleBtn-over, .inspectorAddColumnBtn-over, .inspectorRemoveColumnBtn-over {
   background: rgba(0,0,0,0.7);
+}
+
+.selectPartFocus {
+  background: rgba(255, 0, 0, 0.75);
+}
+
+.btnDisabled {
+  background: #ddd;
+  color: #999;
 }
 /*j5 Reports*/
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body {
