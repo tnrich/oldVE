@@ -5,13 +5,18 @@
 Ext.define('Vede.view.de.j5Controls', {
     extend: 'Ext.window.Window',
     closeAction: 'hide',
-    height: 500,
+    height: 517,
     width: 852,
+    layout: {
+        align: 'stretch',
+        type: 'vbox'
+    },
     title: 'j5 Controls',
-    resizable: false,
+    resizable: true,
+    constrainHeader: true,
+    resizeHandles: 's',
     draggable: true,
     modal: true,
-    autoScroll: true,
 
     initComponent: function () {
         var me = this;
@@ -19,30 +24,35 @@ Ext.define('Vede.view.de.j5Controls', {
         Ext.applyIf(me, {
             items: [{
                 xtype: 'tabpanel',
-                height: 467,
-                padding: 5,
+                flex: 1,
                 activeTab: 0,
                 items: [{
                     xtype: 'panel',
                     cls: 'j5runPanel',
-                    padding: 5,
+                    autoScroll: true,
                     layout: {
                         align: 'stretch',
                         type: 'vbox'
                     },
                     title: 'Run j5 on Server',
                     items: [{
-                        xtype: 'button',
-                        flex: 1,
-                        cls: 'editj5ParamsBtn',
-                        maxHeight: 23,
-                        maxWidth: 130,
-                        minHeight: 23,
-                        text: '<b>Edit j5 Parameters</b>'
+                        xtype: 'container',
+                        padding: 5,
+                        layout: {
+                            align: 'start',
+                            type: 'hbox'
+                        },
+                        items: [{
+                            xtype: 'button',
+                            cls: 'editj5ParamsBtn',
+                            maxHeight: 23,
+                            maxWidth: 130,
+                            minHeight: 23,
+                            text: '<b>Edit j5 Parameters</b>'
+                        }]
                     }, {
                         xtype: 'container',
-                        flex: 1,
-                        padding: 2,
+                        padding: 5,
                         height: 33,
                         minHeight: 33,
                         layout: {
@@ -89,8 +99,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     }, {
                         xtype: 'container',
-                        flex: 1,
-                        padding: 2,
+                        padding: 5,
                         height: 33,
                         minHeight: 33,
                         layout: {
@@ -136,8 +145,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     }, {
                         xtype: 'container',
-                        flex: 1,
-                        padding: 2,
+                        padding: 5,
                         height: 33,
                         minHeight: 33,
                         layout: {
@@ -182,11 +190,10 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     }, {
                         xtype: 'combobox',
-                        flex: 1,
                         minHeight: 33,
                         cls: 'assemblyMethodSelector',
                         maxWidth: 333,
-                        padding: 2,
+                        padding: 5,
                         fieldLabel: '<b>Assembly Method:</b>',
                         fieldLabelCls: 'align-middle',
                         labelSeparator: ' ',
@@ -200,8 +207,8 @@ Ext.define('Vede.view.de.j5Controls', {
                             type: 'hbox',
                             pack: 'start'
                         },
-                        height: 23,
                         minHeight: 23,
+                        padding: 5,
                         items: [{
                             xtype: 'button',
                             flex: 1,
@@ -234,7 +241,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             type: 'hbox',
                             pack: 'start'
                         },
-                        margin: '10 0 0 0',
+                        padding: 5,
                         height: 24,
                         minHeight: 24,
                         hidden: true,
@@ -258,7 +265,7 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     },  {
                         xtype: 'displayfield',
-                        flex: 1,
+                        padding: 5,
                         hidden: true,
                         height: 15,
                         cls: 'j5ResponseTextField',
@@ -267,8 +274,7 @@ Ext.define('Vede.view.de.j5Controls', {
                     },{
                         xtype: 'container',
                         cls: 'loadAssemblyContainer',
-                        flex: 1,
-                        minHeight: 40,
+                        padding: 5,
                         layout: {
                             align: 'stretch',
                             pack: 'end',
@@ -287,9 +293,8 @@ Ext.define('Vede.view.de.j5Controls', {
                     }, {
                         xtype: 'gridpanel',
                         flex: 1,
-                        height: 178,
                         cls: 'plasmidsGrid',
-                        margin: '10 0 5 0',
+                        margin: '5 5 5 5',
                         minHeight: 178,
                         width: 786,
                         title: 'Plasmids',
@@ -320,27 +325,30 @@ Ext.define('Vede.view.de.j5Controls', {
                     }]
                 }, {
                     xtype: 'panel',
-                    height: 366,
                     padding: 5,
                     title: 'Condense Assembly Files',
+                    autoScroll: true,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
                     items: [{
                         xtype: 'filefield',
                         cls: 'condenseAssemblyFilesSelector',
                         validateOnChange: false,
-                        maxWidth: 500,
-                        width: 500,
+                        maxWidth: 520,
                         fieldLabel: '<b>Assembly Files To Condense List:</b>',
                         labelSeparator: ' ',
-                        labelWidth: 200,
+                        labelWidth: 220,
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'filefield',
                         cls: 'zippedAssemblyFilesSelector',
                         validateOnChange: false,
-                        width: 500,
+                        maxWidth: 520,
                         fieldLabel: '<b>Zipped Assembly Files:</b>',
                         labelSeparator: ' ',
-                        labelWidth: 200,
+                        labelWidth: 220,
                         buttonText: '<b>Choose File</b>'
                     }, {
                         xtype: 'panel',
@@ -360,19 +368,19 @@ Ext.define('Vede.view.de.j5Controls', {
                             hidden: true
                         }]
                     }]
-                    }, {
-                        xtype: 'panel',
-                        height: 342,
-                        padding: 5,
-                        title: 'Downstream Automation',
-                        items: [{
+                }, {
+                    xtype: 'panel',
+                    padding: 5,
+                    title: 'Downstream Automation',
+                    autoScroll: true,
+                    items: [{
                             xtype: 'radiogroup',
                             margin: '5 0 0 0',
                             padding: 0,
                             width: 650,
                             fieldLabel: '<b>Downstream Automation Parameters File:</b>',
                             labelSeparator: ' ',
-                            labelWidth: 265,
+                            labelWidth: 285,
                             items: [{
                                 xtype: 'radiofield',
                                 boxLabel: 'Use latest server version',
@@ -565,8 +573,8 @@ Ext.define('Vede.view.de.j5Controls', {
 //                    }]
                     ]
                 }]
-            });
+        });
 
-            me.callParent(arguments);
-        }
+        me.callParent(arguments);
+    }
 });
