@@ -67,24 +67,39 @@ Ext.define('Vede.controller.MainMenuController', {
         else {
             var fileInput = pBtn.extractFileInput();
             var file = fileInput.files[0];
-            var fr = new FileReader();
-            fr.onload = this.onImportFileLoad.bind(this);
-            fr.onerror = this.onImportFileError;
-            // Unimplemented handler to show load progress
-//            fr.onprogress = importFileProgress;
-            fr.readAsText(file);
+            var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+            if (ext) {
+                var fr = new FileReader();
+                fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
+                fr.onerror = this.onImportFileError;
+//              fr.onprogress = importFileProgress; // Unimplemented handler to show load progress
+                fr.readAsText(file);
+            }
+            else {
+                Ext.MessageBox.alert('Error', 'Invalid file format');
+            }
+
         }
         pBtn.up("menu").hide();
     },
     
-    onImportFileLoad: function(pEvt) {
+    onImportFileLoad: function(pFile, pExt, pEvt) {
         var result  = pEvt.target.result;
-        var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
+        var gb      = this.toGenbank(result, pExt);
         var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-        this.application.fireEvent("SequenceManagerChanged", seqMgr);
-        this.application.fireEvent("SaveImportedSequence", seqMgr);
         //console.log(gb.toString());
         //console.log(seqMgr.getName());
+        this.application.fireEvent("SequenceManagerChanged", seqMgr);
+        this.application.fireEvent("SaveImportedSequence", seqMgr);
+        var sequence = Teselagen.manager.ProjectManager.workingSequence;
+        sequence.set('sequenceFileContent',gb.toString());
+        sequence.set('sequenceFileFormat',"GENBANK");
+        sequence.set('sequenceFileName',pFile.name);
+        var veproject = Teselagen.manager.ProjectManager.workingVEProject;
+        veproject.set('name',seqMgr.getName());
+        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
+        parttext.animate({duration: 5000, to: {opacity: 0}});
     },
 
     onImportFileError: function(pEvt) {
@@ -92,6 +107,28 @@ Ext.define('Vede.controller.MainMenuController', {
         if (err) {
             throw err;
         }
+    },
+    
+    toGenbank: function(pString, pExt){
+        var gb;
+        switch(pExt)
+        {
+            case "genbank":
+            case "gb":
+                gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(pString);
+                break;
+            case "fasta":
+            case "fas":
+                gb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(pString);
+                break;
+            case "xml":
+                gb = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(pString);
+                break;
+            case "json":
+                gb = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(pText);
+                break;
+        }
+        return gb;
     },
     
 //    onImportMenuItemClick: function(item, e, options) {
@@ -288,6 +325,7 @@ Ext.define('Vede.controller.MainMenuController', {
                 click: this.onDownloadGenbankMenuItemClick
             },
             "#importMenuItem": {
+//                click: this.onImportMenuItemClick
                 change: this.onImportButtonChange
             },
             "#renameSequenceItem": {
