@@ -180,16 +180,16 @@ Ext.application({
         });
 
 
-        Ext.EventManager.on(window, 'beforeunload', function() {
-            // Here we can trigger save current state to avoid accidental data lose
-            var task = new Ext.util.DelayedTask(function(){
-                //console.log("Saving data");
-            });
-
-            task.delay(1000);
-
-            return 'Unsaved data may be lost.';
-        });
+//        Ext.EventManager.on(window, 'beforeunload', function() {
+//            // Here we can trigger save current state to avoid accidental data lose
+//            var task = new Ext.util.DelayedTask(function(){
+//                //console.log("Saving data");
+//            });
+//
+//            task.delay(1000);
+//
+//            return 'Unsaved data may be lost.';
+//        });
 
         this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});        
 
