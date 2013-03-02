@@ -57,39 +57,39 @@ Ext.define('Vede.controller.MainMenuController', {
         }
     },
     
-    onImportButtonClick: function(button, e, options) {
-        // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
-        // Change this at a later date when that class is tested. --DW 10.17.2012
-
-        if (typeof window.FileReader !== 'function') {
-            Ext.Msg.alert('Browser does not support File API.');
-        }
-        else {
-            var form = button.up('form').getForm();
-            var fileField = form.findField('importedFile');
-            var fileInput = fileField.extractFileInput();
-            var file = fileInput.files[0];
-            fr = new FileReader();
-            fr.onload = processText;
-            fr.readAsText(file);
-        }
-        button.up('window').close();
-
-        var seqMgr;
-        var that = this;
-
-        function processText() {
-            var result  = fr.result;
-            //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
-            //var gb      = gbm.parseGenbankFile(result);
-            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
-            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-            that.application.fireEvent("SequenceManagerChanged", seqMgr);
-            that.application.fireEvent("SaveImportedSequence", seqMgr);
-            //console.log(gb.toString());
-            //console.log(seqMgr.getName());
-        }
-    },
+//    onImportButtonClick: function(button, e, options) {
+//        // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
+//        // Change this at a later date when that class is tested. --DW 10.17.2012
+//
+//        if (typeof window.FileReader !== 'function') {
+//            Ext.Msg.alert('Browser does not support File API.');
+//        }
+//        else {
+//            var form = button.up('form').getForm();
+//            var fileField = form.findField('importedFile');
+//            var fileInput = fileField.extractFileInput();
+//            var file = fileInput.files[0];
+//            fr = new FileReader();
+//            fr.onload = processText;
+//            fr.readAsText(file);
+//        }
+//        button.up('window').close();
+//
+//        var seqMgr;
+//        var that = this;
+//
+//        function processText() {
+//            var result  = fr.result;
+//            //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
+//            //var gb      = gbm.parseGenbankFile(result);
+//            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
+//            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+//            that.application.fireEvent("SequenceManagerChanged", seqMgr);
+//            that.application.fireEvent("SaveImportedSequence", seqMgr);
+//            //console.log(gb.toString());
+//            //console.log(seqMgr.getName());
+//        }
+//    },
     
     onImportMenuItemClick: function(item, e, options) {
         Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
@@ -281,9 +281,6 @@ Ext.define('Vede.controller.MainMenuController', {
             "#VectorEditorPanel > button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
-            "button[cls='ImportSequence']": {
-                click: this.onImportButtonClick
-            },
             "#downloadGenbankMenuItem": {
                 click: this.onDownloadGenbankMenuItemClick
             },
@@ -332,9 +329,6 @@ Ext.define('Vede.controller.MainMenuController', {
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             }
-            // "#veHelpMenuItem" : {
-            //     click: this.onHelpBtnClick
-            // }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;

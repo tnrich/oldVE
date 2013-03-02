@@ -150,7 +150,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                       this.selectedBinIndex);
             }
 
-            console.log("changing part");
             var self = this;
 
             var loadingMsgBox = Ext.MessageBox.show({
@@ -207,27 +206,27 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part, item){
                                 var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
                                                                                 self.selectedPart);
-                                console.log(self.selectedPart);
-                                console.log(self.activeProject);
-                                console.log(bin);
-                                if(bin)
-                                {
-                                    ///*
-                                    var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                    var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-                                    bin.parts().removeAt(insertIndex);
-                                    bin.parts().insert(insertIndex,part);
-                                    self.onReRenderDECanvasEvent();
-                                    selectWindow.close();
-                                    self.selectedPart = part;
-                                    self.onReRenderDECanvasEvent();
-                                    Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
-                                    //*/
-                                }
-                                else
-                                {
-                                    Ext.MessageBox.alert('Error','Failed mapping part from library');
-                                }
+
+                                part.getSequenceFile({
+                                    callback: function(sequence){
+                                        if(bin)
+                                        {
+                                            var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                            var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
+                                            bin.parts().removeAt(insertIndex);
+                                            bin.parts().insert(insertIndex,part);
+                                            self.onReRenderDECanvasEvent();
+                                            selectWindow.close();
+                                            self.selectedPart = part;
+                                            self.onReRenderDECanvasEvent();
+                                            Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                        }
+                                        else
+                                        {
+                                            Ext.MessageBox.alert('Error','Failed mapping part from library');
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -262,11 +261,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
-            
             partPropertiesForm.loadRecord(j5Part);
 
             j5Part.getSequenceFile({
-                reload: true,
                 callback: function(sequenceFile){
                     if(sequenceFile) {
                         changePartDefinitionBtn.removeCls('btnDisabled');
