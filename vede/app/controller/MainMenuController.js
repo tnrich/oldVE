@@ -74,6 +74,7 @@ Ext.define('Vede.controller.MainMenuController', {
 //            fr.onprogress = importFileProgress;
             fr.readAsText(file);
         }
+        pBtn.up("menu").hide();
     },
     
     onImportFileLoad: function(pEvt) {
