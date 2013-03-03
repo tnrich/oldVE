@@ -5,12 +5,14 @@
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
-    requires: ['Teselagen.bio.parsers.GenbankManager',
-               'Teselagen.event.MenuItemEvent',
+    requires: ['Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
+               'Teselagen.manager.ProjectManager',
                'Teselagen.utils.FormatUtils'],
 
+    FormatUtils: null,
     MenuItemEvent: null,
+    ProjectManager: null,
     VisibilityEvent: null,
 
     onUndoMenuItemClick: function() {
@@ -57,7 +59,7 @@ Ext.define('Vede.controller.MainMenuController', {
         }
     },
     
-    onImportButtonChange: function(pBtn, pValue, pOptions) {
+    onImportMenuItemChange: function(pBtn) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
         // Change this at a later date when that class is tested. --DW 10.17.2012
         
@@ -78,24 +80,22 @@ Ext.define('Vede.controller.MainMenuController', {
             else {
                 Ext.MessageBox.alert('Error', 'Invalid file format');
             }
-
         }
         pBtn.up("menu").hide();
     },
     
     onImportFileLoad: function(pFile, pExt, pEvt) {
         var result  = pEvt.target.result;
-        var gb      = this.toGenbank(result, pExt);
-        var seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
+        var gb      = this.FormatUtils.fileToGenbank(result, pExt);
+        var seqMgr = this.FormatUtils.genbankToSequenceManager(gb);
         //console.log(gb.toString());
         //console.log(seqMgr.getName());
         this.application.fireEvent("SequenceManagerChanged", seqMgr);
-        this.application.fireEvent("SaveImportedSequence", seqMgr);
-        var sequence = Teselagen.manager.ProjectManager.workingSequence;
+        var sequence = this.ProjectManager.workingSequence;
         sequence.set('sequenceFileContent',gb.toString());
         sequence.set('sequenceFileFormat',"GENBANK");
         sequence.set('sequenceFileName',pFile.name);
-        var veproject = Teselagen.manager.ProjectManager.workingVEProject;
+        var veproject = this.ProjectManager.workingVEProject;
         veproject.set('name',seqMgr.getName());
         var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
@@ -109,27 +109,6 @@ Ext.define('Vede.controller.MainMenuController', {
         }
     },
     
-    toGenbank: function(pString, pExt){
-        var gb;
-        switch(pExt)
-        {
-            case "genbank":
-            case "gb":
-                gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(pString);
-                break;
-            case "fasta":
-            case "fas":
-                gb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(pString);
-                break;
-            case "xml":
-                gb = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(pString);
-                break;
-            case "json":
-                gb = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(pText);
-                break;
-        }
-        return gb;
-    },
     
 //    onImportMenuItemClick: function(item, e, options) {
 //        Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
@@ -325,8 +304,7 @@ Ext.define('Vede.controller.MainMenuController', {
                 click: this.onDownloadGenbankMenuItemClick
             },
             "#importMenuItem": {
-//                click: this.onImportMenuItemClick
-                change: this.onImportButtonChange
+                change: this.onImportMenuItemChange
             },
             "#renameSequenceItem": {
                 click: this.onRenameSequenceItemClick
@@ -372,7 +350,9 @@ Ext.define('Vede.controller.MainMenuController', {
             }
         });
 
+        this.FormatUtils = Teselagen.utils.FormatUtils;
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+        this.ProjectManager = Teselagen.manager.ProjectManager;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
