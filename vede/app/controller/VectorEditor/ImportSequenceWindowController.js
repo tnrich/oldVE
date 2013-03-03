@@ -33,6 +33,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
             ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
             if(ext)
             {
+                this.importWindow.close();
+                Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Sequence');
                 fr = new FileReader();
                 fr.onload = processText;
                 fr.readAsText(file);
@@ -47,6 +49,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
 
         function processText() {
             self.formatParser(file,fr.result,ext[1],details,cb);
+            Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
         }
     },
 

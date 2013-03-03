@@ -242,6 +242,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     resolveAndOpenSequence: function (record) {
+        Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
         var veproject_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
