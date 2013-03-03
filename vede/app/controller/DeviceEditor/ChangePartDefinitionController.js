@@ -29,13 +29,23 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         {
             startBP.setValue(1);
             stopBP.setValue(this.selectedSequence.getLength());
-            startBP.setReadOnly(true);
-            stopBP.setReadOnly(true);
+            startBP.disable();
+            stopBP.disable();
+        }
+        else
+        {   
+            startBP.enable();
+            stopBP.enable();
+        if(this.selectedStartBP!==null && this.selectedStopBP!==null)
+        {
+            startBP.setValue(this.selectedStartBP);
+            stopBP.setValue(this.selectedStopBP);
         }
         else
         {
-            startBP.setReadOnly(false);
-            stopBP.setReadOnly(false);
+            startBP.setValue(this.selectedPart.get('genbankStartBP'));
+            stopBP.setValue(this.selectedPart.get('endBP'));
+        }
         }
     },
 
@@ -50,16 +60,14 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var revComp = form.findField('revComp');
 
         var sequenceLength = this.selectedSequence.getLength();
-
+        
         name.setValue(this.selectedPart.get('name'));
+        partSource.setValue(this.selectedSequence.get('partSource'));
 
         if(this.selectedStartBP!==null && this.selectedStopBP!==null)
         {
             startBP.setValue(this.selectedStartBP);
-            stopBP.setValue(this.selectedStopBP);
-            this.selectedStopBP = null;
-            this.selectedStartBP = null;
-        }
+            stopBP.setValue(this.selectedStopBP);        }
         else
         {
             startBP.setValue(this.selectedPart.get('genbankStartBP'));
@@ -69,7 +77,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         if(this.selectedSequence)
         {
-            if(this.selectedVEProject) partSource.setValue(this.selectedVEProject.get('name'));
+            if(this.selectedVEProject)
+            partSource.setValue(this.selectedVEProject.get('name'));
             sourceData.setValue(this.selectedSequence.get('sequenceFileContent'));
             if(startBP.getValue()===1 && stopBP.getValue()===sequenceLength)
             {
@@ -87,7 +96,9 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     open: function(selectedPart,selectedBinIndex,selectedSequence){
-        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+        this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog', {renderTo: currentTabEl}).show();
         this.selectedPart = selectedPart;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex =selectedBinIndex;
@@ -121,10 +132,13 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         var revComp = form.findField('revComp');
 
         this.selectedPart.set('name',name.getValue());
+        this.selectedSequence.set('partSource',partSource.getValue());
+        this.selectedPart.set('partSource',partSource.getValue());
 
         if(this.selectedSequence)
         {
             this.selectedSequence.set('partSource',partSource.getValue());
+            this.selectedPart.set('partSource',partSource.getValue());
             this.selectedSequence.set('sequenceFileContent',sourceData.getValue());
         }
 

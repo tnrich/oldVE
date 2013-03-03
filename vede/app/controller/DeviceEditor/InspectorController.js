@@ -50,6 +50,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(parentBin) {
                 parentBin.parts().remove(this.selectedPart);
             }
+
+            this.clearPartInfo();
         }
     },
 
@@ -136,6 +138,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     onopenPartLibraryBtnClick: function () {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+
         if(this.selectedPart) {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
@@ -153,6 +158,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 progressText: 'Loading Part Library',
                 progress: true,
                 width: 300,
+                renderTo: currentTabEl,
                 closable: false
             });
 
@@ -183,6 +189,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     height: 200,
                     width: 400,
                     layout: 'fit',
+                    renderTo: currentTabEl,
                     items: {
                         xtype: 'grid',
                         border: false,
@@ -205,15 +212,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                 console.log(bin);
                                 if(bin)
                                 {
-                                    /*
+                                    ///*
                                     var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                    var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                     bin.parts().removeAt(insertIndex);
                                     bin.parts().insert(insertIndex,part);
                                     self.onReRenderDECanvasEvent();
                                     selectWindow.close();
                                     self.selectedPart = part;
-                                    Vede.application.fireEvent("partSelected",part);
-                                    */
+                                    self.onReRenderDECanvasEvent();
+                                    Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                    //*/
                                 }
                                 else
                                 {
@@ -246,17 +255,22 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
-        
-        if(j5Part) {
-            // Remember that j5Part may not exist
-            console.log(j5Part.get("name"));
-            console.log(j5Part);
-        }
 
+    
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
+
             partPropertiesForm.loadRecord(j5Part);
+
+            j5Part.getSequenceFile({
+                reload: true,
+                callback: function(sequenceFile){
+                    if(sequenceFile) {
+                        partPropertiesForm.loadRecord(sequenceFile);
+                    }
+                }
+            });
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
@@ -278,7 +292,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                        this.selectedPart)
+                                                                        this.selectedPart);
 
         this.eugeneRulesGrid.reconfigure(rulesStore);
 
@@ -295,7 +309,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         partPropertiesForm.getForm().reset();
         fasForm.getForm().reset();
 
-        this.eugeneRulesGrid.reconfigure();
+        //this.eugeneRulesGrid.reconfigure();
     },
 
     /**
@@ -663,7 +677,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
 
-            this.clearPartInfo();
+            //this.clearPartInfo();
         } catch(err)
         {
             console.log("Failed removing part from bin.");

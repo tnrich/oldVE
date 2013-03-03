@@ -122,7 +122,7 @@ Ext.define('Vede.view.de.grid.Part', {
         // If the part is associated with a Eugene rule, add the indicator.
         var rules = this.DeviceDesignManager.getRulesInvolvingPart(activeProject,
                                                                    this.getPart());
-        if(rules.length > 0) {
+        if(rules.getRange().length > 0) {
             this.addEugeneRuleIndicator();
         }
     },
@@ -131,16 +131,18 @@ Ext.define('Vede.view.de.grid.Part', {
      * Applies the correct CSS class to the part when it is selected.
      */
     select: function () {
+        var tip;
+
         this.partCell.down().addBodyCls("gridPartCell-selected");
         if(this.getPart()==null) {
-            var tip = Ext.create('Ext.tip.ToolTip', {
+                tip = Ext.create('Ext.tip.ToolTip', {
                 target: this.partCell.getId(),
                 trackMouse: true,
                 renderTo: document.body,
                 html: 'Part is empty',
                 title: 'Warning'
             });
-    }
+        }
     },
 
     /**

@@ -77,6 +77,9 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceWindowController', {
         seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
         Vede.application.fireEvent("SequenceManagerChanged", seqMgr);
         if(cb) cb(seqMgr);
+        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+            parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
+            parttext.animate({duration: 5000, to: {opacity: 0}});
     },
 
     loadAndSaveToSequence: function(btn,event,sequence){

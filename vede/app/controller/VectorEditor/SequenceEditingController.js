@@ -18,7 +18,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                 part.set('sequencefile_id', sequence.data.id);
                 part.save({
                     callback: function () {
-                        Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText('Part created');
+                        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
+                        parttext.animate({duration: 5000, to: {opacity: 0}});
                     }
                 });
             }
@@ -31,6 +33,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         var sequence = Teselagen.manager.ProjectManager.workingSequence;
         var part = Ext.create("Teselagen.models.Part", {
             name: '',
+            partSource: '',
             genbankStartBP: 1,
             endBP: sequence.getLength()
         });

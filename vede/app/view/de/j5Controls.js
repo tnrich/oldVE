@@ -24,7 +24,7 @@ Ext.define('Vede.view.de.j5Controls', {
                 activeTab: 0,
                 items: [{
                     xtype: 'panel',
-                    id: 'j5runPanel',
+                    cls: 'j5runPanel',
                     padding: 5,
                     layout: {
                         align: 'stretch',
@@ -229,11 +229,15 @@ Ext.define('Vede.view.de.j5Controls', {
                         }]
                     },{
                         xtype: 'container',
-                        id: 'j5progressContainer',
+                        cls: 'j5progressContainer',
+                        layout: {
+                            type: 'hbox',
+                            pack: 'start'
+                        },
                         margin: '10 0 0 0',
-                        hidden: true,
                         height: 24,
                         minHeight: 24,
+                        hidden: true,
                         items: [{
                             xtype: 'container',
                             height: 18,
@@ -245,13 +249,19 @@ Ext.define('Vede.view.de.j5Controls', {
                                 cls: 'bar',
                                 width: 500
                             }]
+                        },{
+                           xtype: 'button',
+                           cls: 'stopj5runBtn',
+                           height: 18,
+                           margin: '0 0 0 5',
+                           text: 'Cancel Run'
                         }]
                     },  {
                         xtype: 'displayfield',
                         flex: 1,
                         hidden: true,
                         height: 15,
-                        id: 'j5ResponseTextField',
+                        cls: 'j5ResponseTextField',
                         value: '',
                         hideLabel: true
                     },{

@@ -77,9 +77,10 @@ img {
 .x-btn .x-btn-center .x-btn-inner,
 .x-btn-default-toolbar-small .x-btn-inner,
 .x-btn-default-small .x-btn-inner,
-.x-grid-row .x-grid-cell {
+.x-grid-row .x-grid-cell,
+.x-toolbar .x-toolbar-text {
   font-family: 'Maven Pro', sans-serif;
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .x-form-field, .x-form-item, .x-form-text, .x-form-item-label, .x-boundlist-item, .x-form-display-field {
@@ -207,25 +208,11 @@ img {
 }
 
 #help_btn {
-  background: -webkit-linear-gradient(#0082DB 0.33%, #0084B4 100%); 
-  background: -moz-linear-gradient(top, #0082DB 0%, #0084B4  100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0082DB), color-stop(100%,#0084B4)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #0082DB 0%,#0084B4  100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0082DB', endColorstr='#0084B4',GradientType=0 ); /* IE6-9 */
+  background: #097CB5;
 }
 
 #headerUserIcon {
-  background: -webkit-linear-gradient(#0082DB 0.33%, #0084B4 100%); 
-  background: -moz-linear-gradient(top, #0082DB 0%, #0084B4  100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0082DB), color-stop(100%,#0084B4)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #0082DB 0%,#0084B4  100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0082DB', endColorstr='#0084B4',GradientType=0 ); /* IE6-9 */
+  background: #097CB5;
 }
 
 
@@ -234,14 +221,7 @@ img {
 }
 
 .header_btn_over {
-  background: -webkit-linear-gradient(#0082DB 0.33%, #0084B4 100%); 
-  background: -moz-linear-gradient(top, #0082DB 0%, #0084B4  100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0082DB), color-stop(100%,#0084B4)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #0082DB 0%,#0084B4  100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #0082DB 0%,#0084B4  100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0082DB', endColorstr='#0084B4',GradientType=0 ); /* IE6-9 */
+  background: #097CB5;
   color: #fafafa;
 }
 
@@ -348,7 +328,8 @@ img {
 #ProjectPanel-body {
   border-width: 0 1px;
   border-color: #D6D6D6;
-  width:230px;
+  width:220px;
+  overflow-y: scroll;
 }
 
 #ProjectPanel .x-tab-bar { 
@@ -375,6 +356,9 @@ img {
   top:37px;
 }
 
+#projectTreePanel, #projectTreePanel-body {
+  width: 220px;
+}
 /*Dashboard*/
 #DashboardPanel {
   background: none;
@@ -505,8 +489,12 @@ img {
   height: 600px !important;
 }
 
+#VectorEditorStatusBarAlert {
+  left: 10px !important;
+}
+
 /*Device Editor*/
-#j5runPanel .x-field-label-cell {
+.j5runPanel .x-field-label-cell {
   vertical-align: middle !important;
 }
 
@@ -649,6 +637,17 @@ background: #F8F8F8;
   background: rgb(17, 101, 150);
 }
 
+.addEugeneRuleBtn, .deleteEugeneRuleBtn, .inspectorAddColumnBtn, .inspectorRemoveColumnBtn {
+  background: rgba(0,0,0,0.4);
+}
+
+.addEugeneRuleBtn .x-btn-inner, .deleteEugeneRuleBtn .x-btn-inner, .inspectorAddColumnBtn .x-btn-inner, .inspectorRemoveColumnBtn .x-btn-inner {
+  color: white;
+}
+
+.addEugeneRuleBtn-over, .deleteEugeneRuleBtn-over, .inspectorAddColumnBtn-over, .inspectorRemoveColumnBtn-over {
+  background: rgba(0,0,0,0.7);
+}
 /*j5 Reports*/
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body {
   background: #333 !important;
@@ -673,8 +672,18 @@ background: #F8F8F8;
   width: 0px;
 }
 
-#j5ResponseTextField-inputEl {
+.j5ResponseTextField-inputEl {
   color:black;
+}
+
+.stopj5runBtn, .stopj5runBtn .x-btn-inner {
+  background: rgba(245,66,66,0.5);
+  color: white;
+  box-shadow: none;
+  border: 0 none;    
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 
 .progress {
@@ -718,7 +727,10 @@ background: #F8F8F8;
     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    box-sizing: border-box;    
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
     -webkit-transition: width 0.6s ease;
     -moz-transition: width 0.6s ease;
     -ms-transition: width 0.6s ease;
@@ -799,6 +811,9 @@ background: #F8F8F8;
     background-image: -o-linear-gradient(top, #5bc0de, #339bb9);
     background-image: linear-gradient(top, #5bc0de, #339bb9);
     background-repeat: repeat-x;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bc0de', endColorstr='#339bb9', GradientType=0);
 }
 
