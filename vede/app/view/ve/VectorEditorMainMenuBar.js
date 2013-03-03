@@ -11,11 +11,21 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         text: 'File',
         menu: {
             xtype: 'menu',
+            id: 'veFileMenu',
             minWidth: 140,
             items: [{
-                xtype: 'menuitem',
+                xtype: 'filefield',
+                buttonOnly: true,
                 id: 'importMenuItem',
-                text: 'Import from File'
+                buttonConfig: {
+                    border: false,
+                    text: 'Import from File',
+//                    listeners: {
+//                        click: function() {
+//                            Ext.getCmp('veFileMenu').hide();
+//                        }
+//                    }
+                }
             },
 //            {
 //                xtype: 'menuitem',
