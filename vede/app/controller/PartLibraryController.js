@@ -57,11 +57,15 @@ Ext.define("Vede.controller.PartLibraryController", {
     },
 
     onOpenPartLibrary: function(inCallbackFn) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
         //console.log("Opening part Library");
         if (this.partLibraryWindow === null)
         {
-            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow');
-            this.partLibraryWindow.render(Ext.getCmp('mainAppPanel').getActiveTab().getEl());
+            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow', {renderTo: currentTabEl});
+        } else {
+            this.partLibraryWindow.remove();
+            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow', {renderTo: currentTabEl});
         }
         this.fetchPartLibrary();
         this.callbackFn = inCallbackFn;
