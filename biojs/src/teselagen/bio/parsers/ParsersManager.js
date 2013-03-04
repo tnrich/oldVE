@@ -46,6 +46,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     //XmlToJson: null,
     //DNATools: null,
 
+    /**
+     * @member Teselagen.bio.parsers.ParsersManager
+     */
     constructor: function() {
         XmlToJson   = Teselagen.bio.util.XmlToJson;
         DNATools    = Teselagen.bio.sequence.DNATools;
@@ -262,9 +265,6 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
     jbeiJsonToSbolJson: function(jbei) {
         return Teselagen.bio.parsers.SbolParser.jbeiJsonToSbolJson(jbei);
     },
-
-
-
 
     // ===========================================================================
     //      UTILITY FUNCTIONS

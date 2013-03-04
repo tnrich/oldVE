@@ -1,12 +1,17 @@
 Ext.define('Vede.view.de.EugeneRuleDialog', {
     extend: 'Ext.window.Window',
 
+    statics: {
+        FORM_WIDTH: 285
+    },
+
     title: 'Add Eugene Rule',
     cls: 'addEugeneRuleDialog',
-    modal: true,
-    draggable: true,
-    resizable: false,
     closable: false,
+    draggable: true,
+    modal: true,
+    resizable: false,
+    maxWidth: 400,
 
     initComponent: function() {
         var me = this;
@@ -23,31 +28,36 @@ Ext.define('Vede.view.de.EugeneRuleDialog', {
                         {
                             xtype: 'textfield',
                             name: 'name',
-                            fieldLabel: 'Name'
+                            fieldLabel: 'Name',
+                            width: this.self.FORM_WIDTH
                         },
                         {
                             xtype: 'displayfield',
                             cls: 'operand1Field',
-                            fieldLabel: 'Operand 1'
+                            fieldLabel: 'Operand 1',
+                            width: this.self.FORM_WIDTH
                         },
                         {
                             xtype: 'checkbox',
                             cls: 'negationOperatorField',
-                            fieldLabel: 'NOT?'
+                            fieldLabel: 'NOT?',
+                            width: this.self.FORM_WIDTH
                         },
                         {
                             xtype: 'combobox',
                             name: 'compositionalOperator',
                             cls: 'compositionalOperatorCombobox',
                             fieldLabel: 'Operator',
-                            store: Teselagen.constants.Constants.COMPOP_LIST
+                            store: Teselagen.constants.Constants.COMPOP_LIST,
+                            width: this.self.FORM_WIDTH
                         },
                         {
                             xtype: 'combobox',
                             cls: 'operand2PartField',
                             fieldLabel: 'Operand 2',
                             store: [],
-                            queryMode: 'local'
+                            queryMode: 'local',
+                            width: this.self.FORM_WIDTH
                         },
                         {
                             xtype: 'numberfield',
@@ -57,7 +67,8 @@ Ext.define('Vede.view.de.EugeneRuleDialog', {
                             value: 0,
                             step: 1,
                             minValue: 0,
-                            allowDecimals: false
+                            allowDecimals: false,
+                            width: this.self.FORM_WIDTH
                         }
                     ]
                 }

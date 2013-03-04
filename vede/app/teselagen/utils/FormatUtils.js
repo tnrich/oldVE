@@ -73,6 +73,9 @@ Ext.define("Teselagen.utils.FormatUtils", {
     ParsersManager: null,
     //SequenceFileManager: null,
     
+    /**
+     * @member Teselagen.utils.FormatUtils
+     */
     constructor: function() {
         DNAAlphabet     = Teselagen.bio.sequence.alphabets.DNAAlphabet;
         DNATools        = Teselagen.bio.sequence.DNATools;
@@ -652,8 +655,8 @@ Ext.define("Teselagen.utils.FormatUtils", {
      */
     fileToSequenceFile: function(pFile, pFormat) {
 
-        if (typeOf(pFile) !== "string") {
-            console.warn("FormatUtils.fileToSequenceFile(): '" + pFile + "' is not a string. Returning null.");
+        if (!Ext.isString(pFile)) {
+            console.warn("File content is not a String. Returning null.");
             return null;
         }
 
@@ -666,7 +669,41 @@ Ext.define("Teselagen.utils.FormatUtils", {
         });
 
         return seqFile;
+    },
+    
+    /**
+     * Convert file content to Genbank
+     * @param {String} content File content
+     * @param {String} ext File extension which must be 'genbank', 'gb', 'fasta', 'fas', 'xml', or 'json'.
+     * @returns {Teselagen.bio.parsers.Genbank}
+     */
+    fileToGenbank: function(pContent, pExt){
+        var gb = null;
+        if (!Ext.isString(pContent)) {
+            console.warn("File content is not a String.");
+        }
+        else {
+            switch(pExt)
+            {
+            case "genbank":
+            case "gb":
+                gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(pContent);
+                break;
+            case "fasta":
+            case "fas":
+                gb = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(pContent);
+                break;
+            case "xml":
+                gb = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(pContent);
+                break;
+            case "json":
+                gb = Teselagen.bio.parsers.ParsersManager.jbeiseqJsonToGenbank(pContent);
+                break;
+            default:
+                console.warn("File extension '" + pExt + "' is not supported." );
+            }
+        }
+        return gb;
     }
-
 
 });

@@ -26,35 +26,38 @@ Ext.define('Vede.view.ve.ImportSequenceWindow', {
                     xtype: 'filefield',
                     anchor: '100%',
                     name: 'importedFile',
-                    fieldLabel: 'Local file path'
-                }, {
-                    xtype: 'fieldset',
-                    title: 'Sequence details (optional)',
-                    hidden: true,
-                    items: [{
-                        xtype: 'textfield',
-                        anchor: '100%',
-                        fieldLabel: 'Name',
-                        name: 'sequenceName',
-                        cls: 'sequenceName'
-                    }, {
-                        xtype: 'textfield',
-                        anchor: '100%',
-                        fieldLabel: 'Author',
-                        name: 'sequenceAuthor',
-                        cls: 'sequenceAuthor'
-                    }]
-                }, {
-                    xtype: 'button',
-                    text: 'Import file',
-                    cls: 'import',
-                    formBind: true
-                }, {
-                    xtype: 'label',
-                    margin: 10,
-                    cls: 'importProgressLabel',
-                    text: ''
-                }]
+                    buttonOnly: true
+//                    fieldLabel: 'Local file path'
+                }, 
+//                {
+//                    xtype: 'fieldset',
+//                    title: 'Sequence details (optional)',
+//                    hidden: true,
+//                    items: [{
+//                        xtype: 'textfield',
+//                        anchor: '100%',
+//                        fieldLabel: 'Name',
+//                        name: 'sequenceName',
+//                        cls: 'sequenceName'
+//                    }, {
+//                        xtype: 'textfield',
+//                        anchor: '100%',
+//                        fieldLabel: 'Author',
+//                        name: 'sequenceAuthor',
+//                        cls: 'sequenceAuthor'
+//                    }]
+//                }, {
+//                    xtype: 'button',
+//                    text: 'Import file',
+//                    cls: 'import',
+//                    formBind: true
+//                }, {
+//                    xtype: 'label',
+//                    margin: 10,
+//                    cls: 'importProgressLabel',
+//                    text: ''
+//                }
+                ]
             }]
         });
 
