@@ -128,6 +128,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+
+            if (this.selectedPart.getPart()==null || this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
+                this.selectedPart.select();
+             }
         }
 
         this.selectedPart = gridPart;
