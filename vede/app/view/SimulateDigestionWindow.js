@@ -87,7 +87,7 @@ var searchStore = Ext.create("Ext.data.Store",{
                                     height: 370,
                                     width: 420,
                                     id: 'enzymeListSelector-digest',
-                                    imagePath: '../../extjs/examples/ux/css/images/',
+                                    imagePath: '/extjs/examples/ux/css/images/',
                                     store: enzymeListStore,
                                     displayField: 'name',
                                     buttons: ["oneRight", "allRight",

@@ -188,37 +188,37 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 checked: true
             }]
         }
+    },
+    {
+        xtype: 'button',
+        text: 'Tools',
+        menu: {
+            xtype: 'menu',
+            minWidth: 140,
+            items: [
+            {
+                xtype: 'menuitem',
+                id: 'createNewFeatureMenuItem',
+                text: 'Create New Feature'
+            }, {
+                xtype: 'menuitem',
+                id: 'restrictionEnzymesManagerMenuItem',
+                text: 'Restriction Enzymes Manager'
+            }, {
+                xtype: 'menuitem',
+                id: 'simulateDigestionMenuItem',
+                text: 'Simulate Digestion'
+            }, {
+                xtype: 'menuitem',
+                text: 'Properties'
+            }, {
+                xtype: 'menuseparator'
+            }, {
+                xtype: 'menuitem',
+                text: 'Preferences'
+            }
+            ]
+        }
     }
-//    {
-//        xtype: 'button',
-//        text: 'Tools',
-//        menu: {
-//            xtype: 'menu',
-//            minWidth: 140,
-//            items: [
-//            {
-//                xtype: 'menuitem',
-//                id: 'createNewFeatureMenuItem',
-//                text: 'Create New Feature'
-//            }, {
-//                xtype: 'menuitem',
-//                id: 'restrictionEnzymesManagerMenuItem',
-//                text: 'Restriction Enzymes Manager'
-//            }, {
-//                xtype: 'menuitem',
-//                id: 'simulateDigestionMenuItem',
-//                text: 'Simulate Digestion'
-//            }, {
-//                xtype: 'menuitem',
-//                text: 'Properties'
-//            }, {
-//                xtype: 'menuseparator'
-//            }, {
-//                xtype: 'menuitem',
-//                text: 'Preferences'
-//            }
-//            ]
-//        }
-//    },
     ]
 });
