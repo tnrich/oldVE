@@ -17,7 +17,7 @@ Ext.define("Vede.controller.PartLibraryController", {
             progressText: 'Loading Part Library',
             progress: true,
             width: 300,
-            //renderTo: currentTabEl,
+            renderTo: Ext.getCmp('mainAppPanel').getActiveTab().getEl(),
             closable: false
         });
 
@@ -52,12 +52,12 @@ Ext.define("Vede.controller.PartLibraryController", {
     },
 
     onPartListSelected: function(grid,part,item) {
-        console.log("Part selected");
+        //console.log("Part selected");
         this.callbackFn(grid,part,item,this.partLibraryWindow);
     },
 
     onOpenPartLibrary: function(inCallbackFn) {
-        console.log("Opening part Library");
+        //console.log("Opening part Library");
         if (this.partLibraryWindow === null)
         {
             this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow');
@@ -77,10 +77,9 @@ Ext.define("Vede.controller.PartLibraryController", {
 
         this.partLibraryStore = Teselagen.manager.ProjectManager.partLibrary;
 
-        this.callParent();
-        //this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
         this.application.on("openPartLibrary", this.onOpenPartLibrary, this);
 
-        //this.control({});
+        this.callParent();
+
     }
 });
