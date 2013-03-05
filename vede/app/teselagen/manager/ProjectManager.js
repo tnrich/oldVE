@@ -17,7 +17,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
     workingSequence: null,
     workingSequenceFileManager: null,
     sequenceStore: null,
-    partLibrary: null,
 
     /**
      * Load User Info
