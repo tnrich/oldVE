@@ -8,19 +8,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     alias: 'widget.VectorEditorMainToolBar',
     items: [
 
-
-    {
-        xtype: 'button',
-        cls: 'createPartBtn',
-        icon: 'resources/images/create.png',
-        scale: 'medium',
-        tooltip: 'Create Part'
-    },
-    {
-        xtype: 'tbseparator',
-        cls: 'vetbseparator',
-        height: 20,
-    },
     {
         xtype: 'filefield',
         buttonOnly: true,
@@ -31,7 +18,20 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
             scale: 'medium',
             tooltip: 'Import File'
         },
-        id: 'importMenuItem'
+        id: 'importBtn',
+//        tooltip: 'Import File'
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20,
+    },
+    {
+        xtype: 'button',
+        cls: 'createPartBtn',
+        icon: 'resources/images/create.png',
+        scale: 'medium',
+        tooltip: 'Create Part'
     },
     {
         xtype: 'tbseparator',
