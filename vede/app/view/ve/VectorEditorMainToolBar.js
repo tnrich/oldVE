@@ -11,12 +11,17 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'filefield',
         buttonOnly: true,
-        html: '<div data-qtip="Import From File"></div>',
+
         buttonConfig: {
             icon: 'resources/images/import_new.png',
             text: "Import",
             scale: 'medium',
-            tooltip: 'Import File'
+            tooltip: 'Import File',
+            listeners: {
+                click: function() {
+                        console.log(Ext.getCmp("importBtn-button-fileInputEl"));
+                    }
+            }
         },
         id: 'importBtn',
 //        tooltip: 'Import File'

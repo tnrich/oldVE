@@ -465,6 +465,10 @@ img {
 }
 
 /*Vector Editor*/
+#importBtn-button-fileInputEl {
+  visibility: hidden;
+}
+
 #VectorEditorMainMenuPanel-body {
   border: 0px;
   border-left: 1px solid #EBEBEB  ;
