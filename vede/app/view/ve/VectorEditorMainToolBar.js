@@ -21,22 +21,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         cls: 'vetbseparator',
         height: 20,
     },
-    {
-        xtype: 'filefield',
-        buttonOnly: true,
-        buttonConfig: {
-            icon: 'resources/images/import_new.png',
-            text: "",
-            scale: 'medium',
-            tooltip: 'Import File'
-        },
-        id: 'importMenuItem'
-    },
-    {
-        xtype: 'tbseparator',
-        cls: 'vetbseparator',
-        height: 20,
-    },
 
     //        {
     //            xtype: 'button',
