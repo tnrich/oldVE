@@ -26,6 +26,7 @@ Ext.define('Vede.controller.MainToolbarController', {
             var file = fileInput.files[0];
             var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
             if (ext) {
+                Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
                 var fr = new FileReader();
                 fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
                 fr.onerror = this.onImportFileError;
@@ -54,6 +55,7 @@ Ext.define('Vede.controller.MainToolbarController', {
         var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
         parttext.animate({duration: 5000, to: {opacity: 0}});
+        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
     },
 
     onImportFileError: function(pEvt) {

@@ -24,7 +24,9 @@ Ext.define("Vede.controller.J5ReportController", {
             ""
         );
 
+        Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Sequence');
         Teselagen.manager.ProjectManager.openSequence(sequence);
+        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
 
     },
 
