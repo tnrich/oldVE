@@ -24,6 +24,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'filefield',
         buttonOnly: true,
+        html: '<div data-qtip="Import From File"></div>',
         buttonConfig: {
             icon: 'resources/images/import_new.png',
             text: "",
