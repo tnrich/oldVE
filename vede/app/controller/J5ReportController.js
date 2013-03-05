@@ -17,7 +17,8 @@ Ext.define("Vede.controller.J5ReportController", {
         console.log("PLASMID SELECTED");
         console.log(record);
 
-        Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Sequence');
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        currentTab.el.mask('Loading Sequence');
 
         var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
             "GENBANK",
@@ -26,9 +27,8 @@ Ext.define("Vede.controller.J5ReportController", {
             ""
         );
 
-        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
         Teselagen.manager.ProjectManager.openSequence(sequence);
-
+        currentTab.el.unmask();
     },
 
     downloadResults: function(){
