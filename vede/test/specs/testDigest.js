@@ -94,5 +94,18 @@ Ext.onReady(function() {
         it("DigestionManager exists", function(){
             expect(dm).toBeDefined();
         });
+        it("Source DNA initialized", function(){
+            expect(dm.sourceOverhangStartSequence && dm.sourceOverhangEndSequence && dm.sourceOverhangStartType && dm.sourceOverhangEndType).toBeTruthy();
+        });
+        it("Destination DNA initialized", function(){
+            expect(dm.destinationOverhangStartType && dm.destinationOverhangEndType && dm.destinationOverhangStartSequence && dm.destinationOverhangEndSequence).toBeTruthy();
+        });
+        it("Matching type calculated", function(){
+            expect(dm._matchType).toBeTruthy();
+        });
+        it("DestinationDNA digested", function(){
+            dm.digest(dm.self.matchNormalOnly);
+            expect(dm._matchType).toBeTruthy();
+        });
     });
 });
