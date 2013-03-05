@@ -209,21 +209,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             j5Part.getSequenceFile({
                 callback: function(sequenceFile){
-                    if(sequenceFile.get("partSource")!="") {
+                    if(sequenceFile) {
                         changePartDefinitionBtn.removeCls('btnDisabled');
                         openPartLibraryBtn.setText("Open Part Library");
                         openPartLibraryBtn.removeCls('selectPartFocus');
                         changePartDefinitionBtn.enable();
-                        partPropertiesForm.loadRecord(sequenceFile);     
-                        deletePartBtn.enable();
-                        deletePartBtn.removeCls('btnDisabled');
+                        partPropertiesForm.loadRecord(sequenceFile);
                     } else {
                         changePartDefinitionBtn.disable();
                         openPartLibraryBtn.setText("Select Part From Library");
                         openPartLibraryBtn.addCls('selectPartFocus');
-                        changePartDefinitionBtn.addCls('btnDisabled');     
-                        deletePartBtn.enable();
-                        deletePartBtn.removeCls('btnDisabled');
+                        changePartDefinitionBtn.addCls('btnDisabled');
                     }
                 }
             });
@@ -246,8 +242,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             
             changePartDefinitionBtn.disable();
             changePartDefinitionBtn.addCls('btnDisabled');
-            deletePartBtn.disable();
-            deletePartBtn.addCls('btnDisabled');
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.addCls('selectPartFocus');
 
