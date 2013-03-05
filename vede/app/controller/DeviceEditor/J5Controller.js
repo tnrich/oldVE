@@ -37,8 +37,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
-            {
-                j5Window.close();
+            {   
+                if (currentTab.j5Window) {currentTab.j5Window.close();}
+
                 var messagebox = Ext.MessageBox.show({
                     title: "Alert",
                     msg: "Not ready to run j5",
