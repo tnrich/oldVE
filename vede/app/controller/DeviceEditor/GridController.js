@@ -685,42 +685,47 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        
-        j5Part.getSequenceFile({
-        callback: function(associatedSequence,operation){
-        
-        if(associatedSequence)
-        {
-            console.log("onPartCellVEEditClick");
-            console.log(associatedSequence);
-            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
 
-        }
-        else
-        {
-            console.log("This part doesn't have an associated sequence, creating new empty sequence");
-            var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileFormat: "Genbank",
-                sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                sequenceFileName: "untitled.gb",
-                partSource: "New Part"
-            });
-            
-            newSequenceFile.save({
-                callback: function(){
-                    j5Part.setSequenceFileModel(newSequenceFile);
-                    j5Part.save({
-                        callback: function(){
-                            console.log(j5Part);
-                            var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
-                        }
-                    });
-                }
-            });
-        }
+        activeTab.setLoading(true);
         
-        }});
+        setTimeout(function() {
+            j5Part.getSequenceFile({
+            callback: function(associatedSequence,operation){
+            
+            if(associatedSequence)
+            {
+                console.log("onPartCellVEEditClick");
+                console.log(associatedSequence);
+                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
+
+            }
+            else
+            {
+                console.log("This part doesn't have an associated sequence, creating new empty sequence");
+                var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "Genbank",
+                    sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                    sequenceFileName: "untitled.gb",
+                    partSource: "New Part"
+                });
+                
+                newSequenceFile.save({
+                    callback: function(){
+                        j5Part.setSequenceFileModel(newSequenceFile);
+                        j5Part.save({
+                            callback: function(){
+                                console.log(j5Part);
+                                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
+                                activeTab.setLoading(false);
+                            }
+                        });
+                    }
+                });
+            }
+            
+            }});
+        }, 1);
 
     },
 

@@ -14,11 +14,10 @@ Ext.define("Vede.controller.J5ReportController", {
     cls: 'j5ReportTab',
 
     onPlasmidsItemClick: function(row,record){
-        console.log("PLASMID SELECTED");
-        console.log(record);
+        var currentTab = Ext.getCmp("mainAppPanel");
+        var mask = new Ext.LoadMask(currentTab);
 
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.el.mask('Loading Sequence');
+        mask.setVisible(true, false);
 
         var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
             "GENBANK",
@@ -27,8 +26,14 @@ Ext.define("Vede.controller.J5ReportController", {
             ""
         );
 
-        Teselagen.manager.ProjectManager.openSequence(sequence);
-        currentTab.el.unmask();
+        // Javascript waits to render the loading mask until after the call to
+        // openSequence, so we force it to wait a millisecond before calling
+        // to give it time to render the loading mask.
+        setTimeout(function() {
+            Teselagen.manager.ProjectManager.openSequence(sequence);
+            mask.setVisible(false);
+        }, 1);
+
     },
 
     downloadResults: function(){
