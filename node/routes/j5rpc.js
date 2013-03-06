@@ -185,7 +185,10 @@ function encoded_target_part_order_list_file(model,method)
                 var fro = (bin['fro'] == 'None') ? '' : '';
                 var direction = (part["directionForward"] == 'true') ? 'forward' : '';
                 var dsf = '';//bin["dsf"]
-                var fas = (part["fas"] == 'None') ? '' : '';
+                console.log("---");
+                console.log(part["fas"]);
+                var fas = (part["fas"] == 'None') ? '' : part["fas"];
+                console.log(fas);
 
                 out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
             });
