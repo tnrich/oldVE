@@ -267,17 +267,18 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         callback: function (part) {
                             saveAssociatedSequence(part, function () {
                                 if(countParts == 1) saveDesign();
+                                Vede.application.fireEvent("PartCellClick", part);
                                 countParts--;
                                 // loadingMessage.update(30, "Saving "+countParts+" parts");
                             });
-                            Vede.application.fireEvent("PartCellClick", part);
+                            
                         }
                     });
                 } else {
                     saveAssociatedSequence(part,function(){
                     if(countParts == 1) saveDesign();
                     countParts--;
-                    Vede.application.fireEvent("PartCellClick", part);
+                    Vede.application.fireEvent("MapPart", part)
                     // loadingMessage.update(30, "Saving "+countParts+" parts");
                     });
                 }
