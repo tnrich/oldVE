@@ -39,27 +39,13 @@ Ext.define('Vede.view.AppViewport', {
                     border: 0,
                     activeTab: 0,
                     items: [
-                        
                         {
                             xtype: 'DashboardPanelView',
                             hidden: true
                         },
 
                         {
-                            xtype: 'VectorEditorPanel',
-                            hidden: false
-                        },
-                        {
-                            xtype: 'DeviceEditorPanel',
-                            hidden: true
-                        },
-                        {
-                           xtype: 'AnalysisPanel',
-                           hidden: true
-                        },
-                        {
-                            xtype: 'j5ReportPanel',
-                            hidden: true
+                            xtype: 'VectorEditorPanel'
                         }
                     ]
                 }

@@ -7,9 +7,11 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
     alias: 'widget.j5ReportPanel',
     requires: [],
     cls: 'j5ReportTab',
+    /*
     layout: {
         type: 'fit'
     },
+    */
     frameHeader: false,
     closable: true,
     title: 'j5Report',
