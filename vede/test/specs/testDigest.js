@@ -10,6 +10,7 @@ Ext.require("Teselagen.bio.sequence.DNATools");
 Ext.require("Teselagen.bio.sequence.TranslationUtils");
 Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 Ext.require("Teselagen.manager.RestrictionEnzymeGroupManager");
+Ext.require("Teselagen.manager.RestrictionEnzymeManager");
 Ext.require("Teselagen.utils.SystemUtils");
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
 
@@ -22,7 +23,7 @@ Ext.onReady(function() {
 
     describe("DigestionManager.js Tests", function() {
         var reSequence, feat1, feat2, feat3, sm, digestionSequence,
-            restrictionEnzymeMapper, agcEnz, gntEnz, reGroup, dm;
+            restrictionEnzymeMapper, agcEnz, gntEnz, reGroup, dm, re, firstCut, lastCut;
 
         beforeEach(function() {
             reSequence = Teselagen.bio.sequence.DNATools.createDNA("tagccccgctaaagccccccccctctctgatccgc");
@@ -41,14 +42,6 @@ Ext.onReady(function() {
                 circular: false,
                 sequence: reSequence,
                 features: [feat1]
-            });
-            digestionSequence = Ext.create("Teselagen.data.DigestionSequence", {
-                _sequenceManager: sm,
-                _startRestrictionEnzyme: agcEnz,
-                _endRestrictionEnzyme: gntEnz,
-                _startRelativePosition: 0,
-                _endRelativePosition: 1,
-
             });
             agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
                 name: "agc enzyme",
@@ -82,30 +75,34 @@ Ext.onReady(function() {
                 restrictionEnzymeGroup: reGroup,
                 sequenceManager: sm
             });
+           digestionSequence = Ext.create("Teselagen.models.DigestionSequence", {
+               sequenceManager: sm,
+               startRestrictionEnzyme: agcEnz,
+               endRestrictionEnzyme: gntEnz,
+               startRelativePosition: 0,
+               endRelativePosition: 1,
 
+           });
             dm = Ext.create("Teselagen.manager.DigestionManager", {
                 sequenceManager: sm,
                 start: 1,
-                end: 5,
+                end: 31,
                 digestionSequence: digestionSequence,
-                restrictionEnzymeMapper: re,
+                restrictionEnzymeManager: re,
             });
          });
         it("DigestionManager exists", function(){
             expect(dm).toBeDefined();
         });
         it("Source DNA initialized", function(){
-            expect(dm.sourceOverhangStartSequence && dm.sourceOverhangEndSequence && dm.sourceOverhangStartType && dm.sourceOverhangEndType).toBeTruthy();
+            expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
         });
         it("Destination DNA initialized", function(){
-            expect(dm.destinationOverhangStartType && dm.destinationOverhangEndType && dm.destinationOverhangStartSequence && dm.destinationOverhangEndSequence).toBeTruthy();
-        });
-        it("Matching type calculated", function(){
-            expect(dm._matchType).toBeTruthy();
+            expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
         });
         it("DestinationDNA digested", function(){
             dm.digest(dm.self.matchNormalOnly);
-            expect(dm._matchType).toBeTruthy();
+            expect(dm.sequenceManager).toBeDefined();
         });
     });
 });
