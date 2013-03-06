@@ -61,7 +61,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
-                    text : 'Delete Part',
+                    text : 'Clear Part',
                     cls: 'deletePartBtn',
                     overCls: 'deletePartBtn-over',
                     margin: '2.5 0 2.5 0',

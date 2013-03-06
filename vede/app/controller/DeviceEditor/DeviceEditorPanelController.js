@@ -270,12 +270,14 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                                 countParts--;
                                 // loadingMessage.update(30, "Saving "+countParts+" parts");
                             });
+                            Vede.application.fireEvent("PartCellClick", part);
                         }
                     });
                 } else {
                     saveAssociatedSequence(part,function(){
                     if(countParts == 1) saveDesign();
                     countParts--;
+                    Vede.application.fireEvent("PartCellClick", part);
                     // loadingMessage.update(30, "Saving "+countParts+" parts");
                     });
                 }
