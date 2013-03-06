@@ -601,14 +601,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onPlasmidsItemClick: function (grid, record) {
 
-        // this.j5Window.close();
+        var j5Window = Ext.getCmp("mainAppPanel").getActiveTab().j5Window;
+        j5Window.setLoading(true);
 
-        console.log(record);
+        setTimeout(function() {
+            var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
+            Teselagen.manager.ProjectManager.openSequence(newSequence);
 
-        var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
-
-        Teselagen.manager.ProjectManager.openSequence(newSequence);
-
+            j5Window.setLoading(false);
+        });
     },
 
     onCondenseAssembliesBtnClick: function (btn) {
