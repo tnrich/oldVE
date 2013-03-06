@@ -68,6 +68,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // Get the bin that the button refers to and reverse its direction.
         var parentBin = button.up().up().up().getBin();
+
+        this.application.fireEvent("BinHeaderClick", parentBin);
+
         parentBin.set("directionForward", !parentBin.get("directionForward"));
     },
 
@@ -123,11 +126,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
-
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+        
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+
+            if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
+                this.selectedPart.select();
+             }
         }
 
         this.selectedPart = gridPart;
