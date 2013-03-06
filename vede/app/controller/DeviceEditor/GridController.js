@@ -684,9 +684,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellVEEditClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
 
-        activeTab.setLoading(true);
+        DETab.setLoading(true);
         
         setTimeout(function() {
             j5Part.getSequenceFile({
@@ -696,8 +696,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             {
                 console.log("onPartCellVEEditClick");
                 console.log(associatedSequence);
-                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
-
+                Vede.application.fireEvent("VectorEditorEditingMode",j5Part, DETab);
+                DETab.setLoading(false);
             }
             else
             {
@@ -717,7 +717,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                 console.log(j5Part);
                                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                                 Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
-                                activeTab.setLoading(false);
+                                DETab.setLoading(false);
                             }
                         });
                     }
@@ -730,39 +730,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onLaunch: function() {
-        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-        this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
-        
         this.tabPanel = Ext.getCmp("mainAppPanel");
-
-        // Empty model start with one bin and two empty parts
-        this.totalRows = 2;
-        var binModel = Ext.create("Teselagen.models.J5Bin", {
-            binName: "cds",
-            iconID: ""
-        });
-
-        var partModel1 = Ext.create("Teselagen.models.Part", {
-            name: "Part0"
-        });
-
-        var partModel2 = Ext.create("Teselagen.models.Part", {
-            name: "Part1"
-        });
-
-        binModel.parts().add(partModel1);
-        binModel.parts().add(partModel2);
-
-        var deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-            name: "Untitled Project"
-        });
-
-        var design = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
-
-        deproject.setDesign(design);
-
-        this.tabPanel.down("DeviceEditorPanel").model = deproject;
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
         this.tabPanel.on("tabchange",
                          this.onTabChange,
