@@ -684,9 +684,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellVEEditClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
 
-        activeTab.setLoading(true);
+        DETab.setLoading(true);
         
         setTimeout(function() {
             j5Part.getSequenceFile({
@@ -696,8 +696,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             {
                 console.log("onPartCellVEEditClick");
                 console.log(associatedSequence);
-                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
-
+                Vede.application.fireEvent("VectorEditorEditingMode",j5Part, DETab);
+                DETab.setLoading(false);
             }
             else
             {
@@ -717,7 +717,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                 console.log(j5Part);
                                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                                 Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
-                                activeTab.setLoading(false);
+                                DETab.setLoading(false);
                             }
                         });
                     }
