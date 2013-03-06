@@ -1,0 +1,8 @@
+Rule rule1(NOT ADH4_CDS MORETHAN 1);
+Rule rule2(NOT ADH1_terminator MORETHAN 1);
+Rule rule3(NOT ADH1_promoter MORETHAN 1);
+Rule rule4(NOT ADH3_CDS MORETHAN 1);
+Rule rule5(NOT TEF1_terminator MORETHAN 1);
+Rule rule6(NOT TEF1_promoter MORETHAN 1);
+Rule rule7(NOT ADH1_terminator NEXTTO ADH1_promoter);
+Rule rule8(NOT TEF1_terminator NEXTTO TEF1_promoter);

@@ -17,7 +17,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
     
     /**
      * Retrieves and returns common enzymes from common.xml.
-     * @return {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} List of common enzymes.
+     * @return {Teselagen.bio.enzymes.RestrictionEnzyme[]} List of common enzymes.
      */
     getCommonRestrictionEnzymes: function() {
         if(this.commonRestrictionEnzymes != null) {
@@ -30,7 +30,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
     
     /**
      * Retrieves and returns rebase enzymes from rebase.xml.
-     * @return {Array<Teselagen.bio.enzymes.RestrictionEnzyme>} List of enzymes in REBASE.
+     * @return {Teselagen.bio.enzymes.RestrictionEnzyme[]} List of enzymes in REBASE.
      */
     getRebaseRestrictionEnzymes: function() {
         if(this.rebaseRestrictionEnzymes != null) {

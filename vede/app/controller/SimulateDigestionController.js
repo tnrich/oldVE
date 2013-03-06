@@ -1,5 +1,6 @@
-/*
+/**
  * A controller that handles events in the SimulateDigestionWindow
+ * @class Vede.controller.SimulateDigestionController
  */
 Ext.define('Vede.controller.SimulateDigestionController', {
     extend: 'Ext.app.Controller',
@@ -59,7 +60,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
            this.dnaSequence = ""; 
         };
         
-        console.log("able to deal with completeSequence");
+//        console.log("able to deal with completeSequence");
     },
 
     onSimulateDigestionOpened: function(manager) {

@@ -1,6 +1,6 @@
 /**
+ * Utilities for working with sequences.
  * @class Teselagen.utils.SequenceUtils
- *
  * @author Diana Wong
  * @author Zinovii Dmytriv (original author of SequenceUtils.as)
  */
@@ -41,6 +41,35 @@ Ext.define("Teselagen.utils.SequenceUtils", {
         "8",
         "9"
     ],
+
+    /**
+     * Finds reverse complement of a sequence.
+     * (REFACTORED FROM DEVICEDESIGNMANAGER)
+     * @param {String} pSeq
+     * @returns {String} reverse complement sequence
+     */
+    reverseComplement: function(pSeq) {
+        var revComp = [];
+        pSeq = pSeq.toLowerCase();
+
+        for (var i = pSeq.length-1; i >= 0; i--) {
+            switch (pSeq.charAt(i)) {
+                case "a":
+                    revComp.push("t");
+                    break;
+                case "c":
+                    revComp.push("g");
+                    break;
+                case "g":
+                    revComp.push("c");
+                    break;
+                case "t":
+                    revComp.push("a");
+                    break;
+            }
+        }
+        return revComp.join("");
+    },
 
     /**
      * Determines if sequence compatible:

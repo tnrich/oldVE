@@ -15,7 +15,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     statics: {
         FONT_SIZE: 12,
-        FONT_FAMILY: "Monospace",
+        FONT_FAMILY: "Ubuntu Mono",
         COMPLEMENTARY_VERTICAL_OFFSET: 16,
         LETTER_SPACING: 3
     },
@@ -53,8 +53,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
     update: function(){
         this.rows = [];
-
-        this.numRows = int (Math.ceil(((contentHolder.sequenceProvider.sequence.length + 1) / 50)));
+        this.numRows = Math.round((Math.ceil(((contentHolder.sequenceProvider.sequence.length + 1) / 50))));
     },
 
     render: function(){

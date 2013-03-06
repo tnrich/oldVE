@@ -1,8 +1,14 @@
-
 /**
  * @class Teselagen.bio.parsers.SbolParser
  * Converts SBOL formats.
  * Specifications for SBOL can be found at http://www.sbolstandard.org/specification/core-data-model
+ *
+ * The hierarcy of the components in an SBOL object is:
+ *
+ *          The hierarchy is Collection -> DnaComponent -> DnaSequence
+ *
+ * Check for each level and parse downward from there.
+ *
  * @author Diana Wong
  */
 
@@ -23,6 +29,16 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         namespace = "";
     },
 
+    /** NOT WRITTEN NOT TESTED
+     * Converts an JbeiSeqXML in string format to JSON format.
+     * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
+     * @param {Object} json Cleaned JSON object of the JbeiSeqXml
+     * @returns {String} xml XML file in String format
+     */
+     jbeiseqJsonToXml: function(json) {
+
+     },
+
     /**
      * Converts an SbolXML in string format to JSON format.
      * This checks for valid entries in the XML file.
@@ -30,9 +46,10 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
      * If a non-required entry is not recognized, a default value is used.
      * Use this for a cleaned version of JSON (from {@link Teselagen.bio.util.XmlToJson})
      * @param {String} xml Sbol XML file in String format
-     * @returns {JSON} json Cleaned JSON object of the Sbol XML
+     * @param {String} pRootNameSpace e.g. "rdf:RDF" would have a namespace of "RDF"; Default is "RDF"
+     * @returns {Object} json Cleaned JSON object of the Sbol XML
      */
-    sbolXmlToJson: function(xmlStr) {
+    sbolXmlToJson: function(xmlStr, pRootNamespace) {
         var result = {};
 
         var i, j;
@@ -40,11 +57,11 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         var json = XmlToJson.xml_str2json(xmlStr);
         json     = this.checkRawSbolJson(json);
 
-        var name = "RDF";
+        var name = pRootNamespace || "RDF";
 
         if (json[name] === undefined) {
             throw Ext.create("Teselagen.bio.BioException", {
-                message: "Invalid SBOL-XML file. No root or record tag 'RDF'"
+                message: "Invalid SBOL-XML file. No root or record tag" + name
             });
         }
 
@@ -56,6 +73,8 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         } else {
             namespace = prefix + ":" + name;
         }
+
+        console.warn("sbolXmlToJson: Namespace used is: '" + namespace + "'. No error at this time.");
 
         var xmlns   = json[name]["_xmlns"];
         var xrdf    = json[name]["_xmlns:rdf"];
@@ -70,7 +89,10 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         if ( json[name]["Collection"] !== undefined) {
             topName = "Collection";
 
+            console.warn("sbolXmlToJson: Collection Detected");
+
             if (json[name]["Collection"] === "HASH") {
+                console.warn("sbolXmlToJson: Found 'HASH'. Not handling.");
                 //top = {
                 //    "Collection" : this.collectionXmlToJson(json["RDF"]["Collection"])
                 //}
@@ -86,6 +108,9 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
 
         } else if ( json[name]["DnaComponent"] !== undefined) {
             topName = "DnaComponent";
+
+            console.warn("sbolXmlToJson: DnaComponent Detected.");
+
             if (json[name]["DnaComponent_asArray"] !== undefined) {
                 top = [];
                 for (i = 0; i < json[name]["DnaComponent_asArray"].length; i++) {
@@ -97,6 +122,9 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
 
         } else if ( json[name]["DnaSequence"] !== undefined) {
             topName = "DnaSequence";
+
+            console.warn("sbolXmlToJson: DnaSequence Detected.");
+
             if (json[name]["DnaSequence_asArray"] !== undefined) {
                 top = [];
                 for (i = 0; i < json[name]["DnaSequence_asArray"].length; i++) {
@@ -125,12 +153,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
     },
 
 
-    /**
+    /** NOTE DONE && NOT TESTED
       * Checks if a structure of the XML2JSON data structure has the minimal structure requirements.
       * Inserts blank entries for entries that are needed.
       *
-      * @param {JSON} json a Raw SBOL-XML2JSON object
-      * @returns {JSON} json Repaired raw SBOL-JSON object.
+      * @param {Object} json a Raw SBOL-XML2JSON object
+      * @returns {Object} json Repaired raw SBOL-JSON object.
       */
     checkRawSbolJson: function(json) {
 
@@ -147,6 +175,62 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return json;
     },
 
+    /** NOT WRITTEN; LAST HERE DW 2012.12_07 (last day)
+     */
+    sbolJsonToJbeiJson: function(json, prefix) {
+        var name = json["rdf:RDF"]["DnaComponent"][0]["displayId"];
+        var seq  = json["rdf:RDF"]["DnaComponent"][0]["dnaSequence"]["DnaSequence"]["nucleotides"];
+        var seqHash = Teselagen.bio.util.Sha256.hex_sha256(seq);
+
+        var circ = true; // DONT KNOW HOW TO SET YET
+
+        var feats = json["rdf:RDF"]["DnaComponent"][0]["annotation"]["SequenceAnnotation"];
+
+        for (var i=0; i < feats.length; i++) {
+            var ft = feats[0];
+        }
+
+        var features= [];
+
+        /*var features = {
+            "seq:feature" : {
+                "seq:label" : label,
+                "seq:complement" : complement,
+                "seq:type" : type,
+                "seq:location": locations,
+                "seq:attribute" : attributes //this should not be saved as a subset
+            }
+        };*/
+
+        var jbei = {
+            "seq:seq" : {
+                "seq:name" : name,
+                "seq:circular" : circ,
+                "seq:sequence" : seq,
+                "seq:features" : features,
+                "seq:seqHash"  : seqHash,
+                "_xmlns:seq": "http://jbei.org/sequence",
+                "_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "_xsi:schemaLocation": "http://jbei.org/sequence seq.xsd"
+            }
+        };
+
+        return jbei;
+
+    },
+
+    /** NOT WRITTEN
+     */
+    jbeiJsonToSbolJson: function(json, prefix) {
+
+    },
+
+    /** NOT TESTED
+     * Parses a Raw Collection JSON to something more readable.
+     * @param {Object} coll
+     * @param {String} prefix
+     * @returns {Object}
+     */
     parseRawCollection: function(coll, prefix) {
         var result = {};
 
@@ -172,6 +256,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
 
     },
 
+    /** NOT TESTED
+     * Parses a Raw DnaComponent JSON to something more readable.
+     * @param {Object} comp
+     * @param {String} prefix
+     * @returns {Object}
+     */
     parseRawDnaComponent: function(comp, prefix) {
         var result      = {};
 
@@ -222,6 +312,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return result;
     },
 
+    /** NOT TESTED
+     * Parses a Raw RawDnaSequence JSON to something more readable.
+     * @param {Object} seq
+     * @param {String} prefix
+     * @returns {Object}
+     */
     parseRawDnaSequence: function(seq, prefix) {
         var result;
 
@@ -239,6 +335,12 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
         return result;
     },
 
+    /** NOT TESTED
+     * Parses a Raw SequenceAnnotation JSON to something more readable.
+     * @param {Object} annotation
+     * @param {String} prefix
+     * @returns {Object}
+     */
     parseRawSequenceAnnotation: function(annotation, prefix) {
         var result = {};
 

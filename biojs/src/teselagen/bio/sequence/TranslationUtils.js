@@ -1,8 +1,7 @@
 /**
+ * Translation Utilities to convert between RNA, DNA, and Protein.
+ * See Teselagen.bio.sequence.symbols.NucleotideSymbol.
  * @class Teselagen.bio.sequence.TranslationUtils
- * 
- * Translation Utilities to convert between RNA, DNA, and  Protein
- * @see Teselagen.bio.sequence.symbols.NucleotideSymbol
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
  */
@@ -78,7 +77,7 @@ Ext.define("Teselagen.bio.sequence.TranslationUtils", {
 
 	/**
 	 * Converts an RNA symbol to a DNA symbol
-	 * @return {[type]} [description]
+	 * @return {NucleotideSymbol}
 	 */
 	rnaToDNASymbol: function(pSymbol){
 		this.initializeRNAToDNATranslationTable();

@@ -1,0 +1,79 @@
+!!! 5
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title Vector Editor
+    meta(name='apptype', content='ve')
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width')
+    script(src="/assets/js/lib/jquery.min.js")
+    script(src="/socket.io/socket.io.js")
+    script(src="/assets/js/teselagenAPI.js")
+    script
+        $(function() {
+            var params = {
+                    sessionId : '123',
+                    appType : 've',
+                    host: '#{host}'
+                };
+
+            teselagen.connect(params,function(){
+                console.log("Connected to Server");
+            });
+
+            teselagen.bindToUpdates(function(data){
+                //log("There are "+data.count.de+" DE and "+data.count.ve+" VE instances.");
+            });
+
+            teselagen.bindAction('openSequence',function(data){
+                log("openModel triggered"+" - "+JSON.stringify(data));
+            });
+
+
+            teselagen.bindAction('anotherAction',function(data){
+                log("anotherAction triggered"+" - "+JSON.stringify(data));
+            });
+
+            $("#triggerAction").click(function(){
+                var data = $("#data").val();
+                teselagen.triggerAction('de','openModel',data);
+                log("Remote action triggered via "+teselagen.triggerMethod)
+            });
+
+            $("#getSequence").click(function(){
+                teselagen.getSequence({modelId:'501ad23663086d76c4000001',sequenceId:'23d714d34632e24f53c2095f05e79f17aded7ec22651c20e4b320f82bc2bf731'},function(sequence){
+                    log("Received "+sequence["de:fileName"]+" "+sequence["de:format"]+" sequence"+" (check the console for the Object)");
+                    console.log(sequence);
+                });
+            });
+
+            $("#commMethod").bind('change',function(){
+                $("#data").val($("#commMethod").val());
+                teselagen.triggerMethod = $("#commMethod").val();
+            });
+
+            function log(msg)
+            {
+                $("#log").append(msg+'<br>');
+            }
+
+            $("#data").val($("#commMethod").val());
+
+        });
+  body
+    h2 Vector Editor
+    br
+    textarea#data Data Example
+    br
+    label Trigger Method: 
+    select#commMethod
+        option postMessage
+        option localStorage
+        option Sockets
+    br
+    br
+    button#triggerAction Trigger Event in DE
+    br
+    button#getSequence Get Sequence from MongoDB
+    #log

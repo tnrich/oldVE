@@ -369,7 +369,7 @@ Ext.define("Vede.controller.SequenceController", {
     onCaretPositionChanged: function(scope, index) {
         if(scope !== this && this.SelectionLayer && 
            !this.SelectionLayer.selecting) {
-            this.changeCaretPosition(index, true);
+            // this.changeCaretPosition(index, true); #this seemed to be changing caret position to the end of the feature selected
         }
     },
 
@@ -399,7 +399,6 @@ Ext.define("Vede.controller.SequenceController", {
 
     changeCaretPosition: function(index, silent) {
         this.caretIndex = index;
-
         if(!silent && this.SequenceManager) {
             this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
                                        this,

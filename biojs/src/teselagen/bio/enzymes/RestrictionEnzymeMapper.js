@@ -12,11 +12,10 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
         "Teselagen.bio.sequence.common.StrandType",],
     
     /**
-     * Cut sequence by list of restriction enzymes.
+     * Cut sequence by list of restriction enzymes.  See Teselagen.bio.enzymes.RestrictionCutSite.
      * @param {Array} restrictionEnzymes List of restriction enzymes to cut sequence with.
      * @param {Teselagen.bio.sequence.dna.DNASequence} symbolList The DNA sequence to be cut.
      * @return 
-     * @see Teselegen.bio.enzymes.RestrictionCutSite
      */
     cutSequence: function(restrictionEnzymes, symbolList) {
         var reCuts = new Ext.util.HashMap();
@@ -30,11 +29,10 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeMapper", {
     },
     
     /**
-     * Cut sequence with one restriction enzyme.
+     * Cut sequence with one restriction enzyme. See Teselagen.bio.enzymes.RestrictionCutSite.
      * @param {RestrictionEnzyme} restrictionEnzyme Restriction enzyme to cut the sequence with.
      * @param {SymbolList} symbolList DNA sequence.
      * @return {Array} List of RestrictionCutSite's.
-     * @see Teselegen.bio.enzymes.RestrictionCutSite
      */
     cutSequenceByRestrictionEnzyme: function(restrictionEnzyme, symbolList) {
         var restrictionCutSites = new Array();

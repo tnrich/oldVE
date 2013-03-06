@@ -20,6 +20,8 @@ Ext.define('Vesa.view.Viewport', {
         'Vesa.view.AppViewport',
         'Vesa.view.FileImportWindow',
         'Vesa.view.RestrictionEnzymesManagerWindow',
-        'Vesa.view.SimulateDigestionWindow'
+        'Vesa.view.SimulateDigestionWindow',
+        'Vesa.view.ProjectManagerWindow',
+        'Vesa.view.MyWindow4'
     ]
 });

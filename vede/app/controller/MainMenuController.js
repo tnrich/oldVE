@@ -1,12 +1,17 @@
+/**
+ * Main menu controller
+ * @class Vede.controller.MainMenuController
+ */
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
-    requires: ['Teselagen.bio.parsers.GenbankManager',
-               'Teselagen.event.MenuItemEvent',
+    requires: ['Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
+               'Teselagen.manager.ProjectManager',
                'Teselagen.utils.FormatUtils'],
 
     MenuItemEvent: null,
+    ProjectManager: null,
     VisibilityEvent: null,
 
     onUndoMenuItemClick: function() {
@@ -48,42 +53,15 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onCancelButtonClick: function(button, e, options) {
-        button.up('window').close();
-    },
-
-    onImportButtonClick: function(button, e, options) {
-        if (typeof window.FileReader !== 'function') {
-            Ext.Msg.alert('Browser does not support File API.');
-        }
-        else {
-            var form = button.up('form').getForm();
-            var fileField = form.findField('importedFile');
-            var fileInput = fileField.extractFileInput();
-            var file = fileInput.files[0];
-            fr = new FileReader();
-            fr.onload = processText;
-            fr.readAsText(file);
-        }
-        button.up('window').close();
-
-        var seqMgr;
-        var that = this;
-
-        function processText() {
-            var result  = fr.result;
-            //var gbm     = Ext.create('Teselagen.bio.parsers.GenbankManager');
-            //var gb      = gbm.parseGenbankFile(result);
-            var gb      = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(result);
-            seqMgr = Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-            that.application.fireEvent("SequenceManagerChanged", seqMgr);
-            //console.log(gb.toString());
-            //console.log(seqMgr.getName());
+        if(button.up('window')) {
+            button.up('window').close();
         }
     },
+    
 
-    onImportMenuItemClick: function(item, e, options) {
-        Ext.create("Vede.view.FileImportWindow").show();
-    },
+//    onImportMenuItemClick: function(item, e, options) {
+//        Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
+//    },
 
     onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
         var viewMode;
@@ -96,7 +74,7 @@ Ext.define('Vede.controller.MainMenuController', {
         }
 
         this.application.fireEvent("ViewModeChanged", viewMode);
-    }, 
+    },
 
     onFeaturesMenuItemCheckChange: function(menucheckitem, checked, options) {
         var btn = Ext.ComponentQuery.query('#featuresBtn')[0];
@@ -171,6 +149,17 @@ Ext.define('Vede.controller.MainMenuController', {
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
         this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+    },    
+
+    onCreateNewFeatureMenuItemClick: function() {
+        var createNewFeatureWindow = Ext.create(
+            "Vede.view.CreateNewFeatureWindow");
+
+        createNewFeatureWindow.show();
+        createNewFeatureWindow.center();
+
+        this.application.fireEvent("RestrictionEnzymeManagerOpened",
+                                   restrictionEnzymesManagerWindow);
     },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
@@ -195,6 +184,40 @@ Ext.define('Vede.controller.MainMenuController', {
             circularMenuItem.setChecked(true, false);
             linearMenuItem.setChecked(false, true);
         }
+    },
+
+    onDownloadGenbankMenuItemClick: function (item, e, options) {
+        console.log("Download genbank called");
+
+
+        var saveFile = function (name, gb) {
+                var flag;
+                var text = gb.toString();
+                var filename = name;
+                var bb = new BlobBuilder();
+                bb.append(text);
+                saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+            };
+
+        var sequenceFileManager = Teselagen.manager.ProjectManager.workingSequenceFileManager;
+        var fileName = sequenceFileManager.getName()+".gb";
+        saveFile(fileName, sequenceFileManager.toGenbank());
+
+    },
+
+    onRenameSequenceItemClick: function(item, e, options){
+
+        var onPromptClosed = function (answer, text) {
+            Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
+            Teselagen.manager.ProjectManager.workingVEProject.save({callback: function(){
+                Vede.application.fireEvent("renderProjectsTree");
+            }});
+        };
+
+        Ext.MessageBox.prompt("Rename Sequence", 'New name:', onPromptClosed, this);
+    },
+    onHelpBtnClick: function(button, e, options) {
+        if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },
 
     init: function() {
@@ -223,14 +246,14 @@ Ext.define('Vede.controller.MainMenuController', {
             "#rebaseMenuItem": {
                 click: this.onRebaseMenuItemClick
             },
-            "button[text=Cancel]": {
+            "#VectorEditorPanel > button[text=Cancel]": {
                 click: this.onCancelButtonClick
             },
-            "button[text='Import']": {
-                click: this.onImportButtonClick
+            "#downloadGenbankMenuItem": {
+                click: this.onDownloadGenbankMenuItemClick
             },
-            "#importMenuItem": {
-                click: this.onImportMenuItemClick
+            "#renameSequenceItem": {
+                click: this.onRenameSequenceItemClick
             },
             "#circularViewMenuItem": {
                 checkchange: this.onCircularViewMenuItemCheckChange
@@ -265,14 +288,18 @@ Ext.define('Vede.controller.MainMenuController', {
             "#simulateDigestionMenuItem": {
                 click: this.onSimulateDigestionMenuItemClick
             },
+            "#createNewFeatureMenuItem": {
+                click: this.onCreateNewFeatureMenuItemClick
+            },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
-            },
+            }
         });
 
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
+        this.ProjectManager = Teselagen.manager.ProjectManager;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
-    },
+    }
 });

@@ -1,9 +1,7 @@
 
 /**
  * @class Teselagen.bio.sequence.DNATools
- * 
- * DNA tools. Main class used to create DNA sequences.
- * @see Teselagen.bio.sequence.symbols.NucleotideSymbol
+ * Main class used to create DNA sequences. See Teselagen.bio.sequence.symbols.NucleotideSymbol.
  * @author Micah Lerner
  * @author Zinovii Dmytriv (original author)
  */

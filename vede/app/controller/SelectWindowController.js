@@ -1,3 +1,7 @@
+/**
+ * Select window controller
+ * @class Vede.controller.SelectWindowController
+ */
 Ext.define("Vede.controller.SelectWindowController", {
     extend: "Ext.app.Controller",
 

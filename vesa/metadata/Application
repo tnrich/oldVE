@@ -6,43 +6,34 @@
     },
     "codeClass": null,
     "userConfig": {
-        "paths": null,
         "views": [
             "AppViewport",
             "FileImportWindow",
+            "RestrictionEnzymesManagerWindow",
             "SimulateDigestionWindow",
-            "RestrictionEnzymesManagerWindow"
+            "MyWindow4"
         ],
         "autoCreateViewport": true,
         "name": "Vesa",
         "controllers": [
-            "MainToolbarController",
             "MainMenuController",
+            "MainToolbarController",
             "VectorPanelController",
             "AppTabController",
             "ActionStackController",
             "AppController",
+            "FindPanelController",
             "MainPanelController",
             "PieController",
             "RailController",
-            "SequenceController",
             "RestrictionEnzymeController",
+            "SequenceController",
             "AnnotatePanelController",
             "SimulateDigestionController"
         ]
     },
-    "configAlternates": {
-        "paths": "array"
-    },
-    "id": "ExtBox1-ext-gen2524",
+    "id": "ExtBox1-ext-gen1550",
     "designerId": "application",
-    "customConfigs": [
-        {
-            "group": "(Custom Properties)",
-            "name": "paths",
-            "type": "string"
-        }
-    ],
     "cn": [
         {
             "type": "loader",
@@ -52,51 +43,17 @@
             },
             "codeClass": null,
             "userConfig": {
-                "designer|userClassName": "Loader",
+                "designer|userClassName": "Loader2",
                 "enabled": true,
                 "paths": [
-                    "{Ext: '.','Ext.ux': '../extjs/examples/ux', Teselagen: './app/teselagen','Teselagen.bio':'../biojs/src/teselagen/bio'}"
+                    "{\"Ext\":\".\", ",
+                    "\"Ext.ux\": \"../extjs/examples/ux\",",
+                    "\"Teselagen\": \"./app/teselagen\",",
+                    " \"Teselagen.bio\": \"../biojs/src/teselagen/bio\"",
+                    "}"
                 ]
             },
-            "designerId": "0feb16f1-ad5a-46e6-af2b-491d531d100b"
-        },
-        {
-            "type": "basicfunction",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "designer|userClassName": "errorHandler",
-                "fn": "errorHandler",
-                "designer|params": [
-                    "err"
-                ],
-                "implHandler": [
-                    "console.warn(err);",
-                    "return true;"
-                ]
-            },
-            "designerId": "123ffb4e-5dcc-4557-b340-b6da0dd68f5e"
-        },
-        {
-            "type": "fixedfunction",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "designer|userClassName": "launch",
-                "fn": "launch",
-                "implHandler": [
-                    " Ext.Error.notify = false; // prevent ie6 and ie7 popup",
-                    " Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error",
-                    ""
-                ]
-            },
-            "designerId": "2dc2a510-e9b6-4287-91f6-e9e4046dce1e"
+            "designerId": "ed1fd213-2fd7-4a56-a777-4386d4559d49"
         }
     ]
 }

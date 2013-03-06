@@ -551,50 +551,44 @@ $( document ).bind( 'loadDE', function() {
     
         function loadModel(_id)
         {
-        $.ajax({
-        type: "POST",
-        url: '/api/getUserModel',
-        data: {'_id':_id},
-        success: function(model) {
-            deviceeditor._id = model["_id"];
-            j5._id = model["_id"];
-            console.log("Model ID: "+deviceeditor._id);
-            decodeModel(model["payload"]);
-            $('#design-name').val(model['name']);
+          $.ajax({
+          type: "POST",
+          url: '/api/getUserModel',
+          data: {'_id':_id},
+          success: function(model) {
+              deviceeditor._id = model["_id"];
+              j5._id = model["_id"];
+              console.log("Model ID: "+deviceeditor._id);
+              decodeModel(model["payload"]);
+              $('#design-name').val(model['name']);
 
-            $('#created').html(parseTimeStamp(model['created']));
-            $('#modified').html(parseTimeStamp(model['last_modified']));
-             
-            flashCallback("Design loaded!",true);
-            $('#loadModel').modal('hide');
-            }
-        });
+              $('#created').html(parseTimeStamp(model['created']));
+              $('#modified').html(parseTimeStamp(model['last_modified']));
+               
+              flashCallback("Design loaded!",true);
+              $('#loadModel').modal('hide');
+              }
+          });
         }
 
     $(document).bind("openSelectedDesign", function(evt,_id) {
       loadModel(_id);
     });
        
-    /* 
-        $.ajax({
-        type: "GET",
-        url: '/api/getModels',
-        data: {},
-        success: function(data) {
-            $('#loadModelsTable tbody').html('');
-            $.each(data,function(key,value){
-                $('#loadModelsTable tbody').append('<tr data-id="'+value._id+'"><td>'+value.name+'</td><td>'+parseTimeStamp(value.created)+'</td><td>'+parseTimeStamp(value.last_modified)+'</td></tr>');
-            });
-
-            $('#loadModelsTable tbody tr').each(function(key,value){
-                $(value).click(function(){
-                    loadModel($(value).attr('data-id'));
-                });
-            });
-
-            $('#loadModel').modal();
-        }});
-    */
+    $(document).bind("openExampleDesign", function(evt,_id) {
+          console.log("Trying to open example");
+          $.ajax({
+          type: "POST",
+          url: '/api/getExampleModel',
+          data: {'_id':_id},
+          success: function(model) {
+              deviceeditor._id = model["_id"];
+              j5._id = model["_id"];
+              decodeModel(model["payload"]);
+              $('#design-name').val(model['name']);
+              }
+          });   
+    });
 
     // Provides method to hide on clickOut oof selector
     function hideCallback(el,fn)
@@ -782,9 +776,7 @@ $( document ).bind( 'loadDE', function() {
             });
 
             $("btn#j5-run").click(function(){
-                  //_self.saveDesign(function(){
-                  j5.j5Run();
-                  //});    
+                  j5.j5Run();    
             });
 
             $("#export-json-btn").click(function(){
@@ -893,6 +885,7 @@ $( document ).bind( 'loadDE', function() {
             });
 
             $(document).bind("saveDesign", function() {  
+              console.log("Received save design");
                 _self.saveDesign();
             }); 
 
@@ -1065,9 +1058,12 @@ $( document ).bind( 'loadDE', function() {
         },
         saveDesign : function(cb)
         {
-            this.encodeDesign(function(model){
 
-                var modelName = $('#design-name').val();
+            var modelName = $('#design-name').val();
+            console.log(modelName);
+            if(modelName=="") alert("No design name defined");
+            
+            this.encodeDesign(function(model){
                 $.ajax({
                     type: "POST",
                     url: '/api/saveUserModel',
@@ -1695,10 +1691,6 @@ $( document ).bind( 'loadDE', function() {
     var inspector = new Inspector();
     var deviceeditor = new DeviceEditor();
     var j5 = new J5();
-    var sessionID = $.url().param('sessionId');
-
-    if(!sessionID) {console.log('no session id');}
-
   });
 
 });

@@ -1,14 +1,28 @@
 /**
  * @class Teselagen.models.J5Parameters
  * Class describing J5Parameters.
+ * Creating a J5Parameters results in default values, regardless if parameters are included as seen in:
+ *          Ext.create("Teselagen.models.J5Parameters", {PARAMETERS}).
+ * User must specify non-default values by creating the object and calling:
+ *          j5param = Ext.create("Teselagen.models.J5Parameters");
+ *          j5param.set("FILEDNAME", newParameter);
+ *
+ * Originally J5Parameters.as and J5ParametersProxy.as
+ *
  * @author Diana Wong
- * @author Zinovii Dmytriv (original author) ?
+ * @author Douglas Densmore (original author) ?
  */
 Ext.define("Teselagen.models.J5Parameters", {
     extend: "Ext.data.Model",
 
     requires: [
+        "Teselagen.constants.Constants"
     ],
+
+    proxy: {
+        type: "memory",
+        reader: {type: "json"}
+    },
 
     statics: {
         //parameter names
@@ -95,53 +109,63 @@ Ext.define("Teselagen.models.J5Parameters", {
         GOB_Default:            26,
         GOMT_Default:           60,
         GOMAXT_Default:         70,
+
         MOLB_Default:           110,
         MFSGB_Default:          250,
         GGOHB_Default:          4,
         GGRS_Default:           "GGTCTC",
         GGTES_Default:          "CACACCAGGTCTCA",
+
         MIGGOC_Default:         2,
         OSCPB_Default:          0.1,
         OPPCPP_Default:         40,
         OMLPPRB_Default:        60,
         MPPB_Default:           100,
+
         DSCPB_Default:          0.39,
         DSMCPP_Default:         159,
         PGC_Default:            2,
         PMS_Default:            18,
         PMAXS_Default:          36,
+
         PMT_Default:            60,
         PMAXT_Default:          70,
         PMDT_Default:           5,
         PMSAT_Default:          47,
         PMSET_Default:          47,
+
         PPMCAT_Default:         47,
         PPMCET_Default:         47,
         PTS_Default:            true,
         PSC_Default:            true,
         PDC_Default:            250,
+
         M3BBTWIH_Default:       4,
         MMT_Default:            45,
         MSC_Default:            0.05,
         MOC_Default:            0.00000025,
-        OSF_Default:            Constants.GENBANK,
+        OSF_Default:            "Genbank",//Teselagen.constants.Constants.self.GENBANK,
+
         SPP_Default:            true,
         
         //combobox choices data providers
-        outputSequenceFormatOptions:   [Constants.GENBANK, Constants.FASTA, Constants.JBEI_SEQ, Constants.SBOL_XML],
-        booleanOptions:                [false, true],
+        //outputSequenceFormatOptions:   [Teselagen.constants.Constants.self.GENBANK, Teselagen.constants.Constants.self.FASTA, Teselagen.constants.Constants.self.JBEI_SEQ, Teselagen.constants.Constants.self.SBOL_XML],
+        booleanOptions:         [false, true]
     },
 
     /**
      * Input parameters:
-     * J5 Parameter Values
+     * J5 Parameter Values. Default values DO NOT SET when creating this obect
+     * FIX ME!!! COPY THE CONVERT STATMENTS AS SEEN IN DOWNSTREAMAUTOMATIONPARAMETERS
      */
     fields: [
+        {name: "id", type: "long"},
+        {name: "j5run_id", type: "long"},
         {name: "masterOligoNumberOfDigitsValue",                   type: "int",        defaultValue: this.self.MONOD_Default},
         {name: "masterPlasmidNumberOfDigitsValue",                 type: "int",        defaultValue: this.self.MPNOD_Default},
         {name: "gibsonOverlapBPsValue",                            type: "int",        defaultValue: this.self.GOB_Default},
-        {name: "gibsonOverlapMinTmValue",                          type: "Number",     defaultValue: this.self.GOMT_Default},
-        {name: "gibsonOverlapMaxTmValue",                          type: "Number",     defaultValue: this.self.MOLB_Default},
+        {name: "gibsonOverlapMinTmValue",                          type: "Float",      defaultValue: this.self.GOMT_Default},
+        {name: "gibsonOverlapMaxTmValue",                          type: "Float",      defaultValue: this.self.MOLB_Default},
 
         {name: "maxOligoLengthBPsValue",                           type: "int",        defaultValue: this.self.MFSGB_Default},
         {name: "minFragmentSizeGibsonBPsValue",                    type: "int",        defaultValue: this.self.GGOHB_Default},
@@ -150,20 +174,20 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "goldenGateTerminiExtraSeqValue",                   type: "String",     defaultValue: this.self.GGTES_Default},
 
         {name: "maxIdentitiesGoldenGateOverhangsCompatibleValue",  type: "int",        defaultValue: this.self.MIGGOC_Default},
-        {name: "oligoSynthesisCostPerBPUSDValue",                  type: "Number",     defaultValue: this.self.OSCPB_Default},
-        {name: "oligoPagePurificationCostPerPieceUSDValue",        type: "Number",     defaultValue: this.self.OPPCPP_Default},
+        {name: "oligoSynthesisCostPerBPUSDValue",                  type: "Float",      defaultValue: this.self.OSCPB_Default},
+        {name: "oligoPagePurificationCostPerPieceUSDValue",        type: "Float",      defaultValue: this.self.OPPCPP_Default},
         {name: "oligoMaxLengthNoPagePurificationRequiredBPsValue", type: "int",        defaultValue: this.self.OMLPPRB_Default},
         {name: "minPCRProductBPsValue",                            type: "int",        defaultValue: this.self.MPPB_Default},
 
-        {name: "directSynthesisCostPerBPUSDValue",                 type: "Number",     defaultValue: this.self.DSCPB_Default},
-        {name: "directSynthesisMinCostPerPieceUSDValue",           type: "Number",     defaultValue: this.self.DSMCPP_Default},
+        {name: "directSynthesisCostPerBPUSDValue",                 type: "Float",      defaultValue: this.self.DSCPB_Default},
+        {name: "directSynthesisMinCostPerPieceUSDValue",           type: "Float",      defaultValue: this.self.DSMCPP_Default},
         {name: "primerGCClampValue",                               type: "int",        defaultValue: this.self.PGC_Default},
         {name: "primerMinSizeValue",                               type: "int",        defaultValue: this.self.PMS_Default},
         {name: "primerMaxSizeValue",                               type: "int",        defaultValue: this.self.PMAXS_Default},
 
-        {name: "primerMinTmValue",                                 type: "Number",     defaultValue: this.self.PMT_Default},
-        {name: "primerMaxTmValue",                                 type: "Number",     defaultValue: this.self.PMAXT_Default},
-        {name: "primerMaxDiffTmValue",                             type: "Number",     defaultValue: this.self.PMDT_Default},
+        {name: "primerMinTmValue",                                 type: "Float",      defaultValue: this.self.PMT_Default},
+        {name: "primerMaxTmValue",                                 type: "Float",      defaultValue: this.self.PMAXT_Default},
+        {name: "primerMaxDiffTmValue",                             type: "Float",      defaultValue: this.self.PMDT_Default},
         {name: "primerMaxSelfAnyThValue",                          type: "int",        defaultValue: this.self.PMSAT_Default},
         {name: "primerMaxSelfEndThValue",                          type: "int",        defaultValue: this.self.PMSET_Default},
 
@@ -174,12 +198,324 @@ Ext.define("Teselagen.models.J5Parameters", {
         {name: "primerDnaConcValue",                               type: "int",        defaultValue: this.self.PDC_Default},
 
         {name: "mispriming3PrimeBoundaryBPToWarnIfHitValue",       type: "int",        defaultValue: this.self.M3BBTWIH_Default},
-        {name: "misprimingMinTmValue",                             type: "Number",     defaultValue: this.self.MMT_Default},
-        {name: "misprimingSaltConcValue",                          type: "Number",     defaultValue: this.self.MSC_Default},
-        {name: "misprimingOligoConcValue",                         type: "Number",     defaultValue: this.self.MOC_Default},
+        {name: "misprimingMinTmValue",                             type: "Float",      defaultValue: this.self.MMT_Default},
+        {name: "misprimingSaltConcValue",                          type: "Float",      defaultValue: this.self.MSC_Default},
+        {name: "misprimingOligoConcValue",                         type: "Float",      defaultValue: this.self.MOC_Default},
         {name: "outputSequenceFormatValue",                        type: "String",     defaultValue: this.self.OSF_Default},
 
         {name: "suppressPurePrimersValue",                         type: "Boolean",    defaultValue: this.self.SPP_Default}
-    ]
+    ],
 
+    validation: [
+    ],
+
+    associations: [
+        {
+            type: "belongsTo",
+            model: "Teselagen.models.J5Run",
+            getterName: "getJ5Run",
+            setterName: "setJ5Run",
+            associationKey: "j5run",
+            foreignKey: "j5run_id"
+        }
+    ],
+
+    // Need this because fields:[] does not actually set the defaults!
+    // Keep the inputted values if they are not undefined
+    init: function() {
+        //console.log("init J5 Param");
+        //console.log(this.data);
+
+        /*if (this.get("masterOligoNumberOfDigitsValue") === undefined) {
+            this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
+        }*/
+        //console.log(Teselagen.constants.Constants.self.GENBANK);
+        this.setDefaultValues();
+    },
+
+    loadValues: function(values) {
+
+        /*
+        ASSEMBLY_PRODUCT_TYPE                              
+        DIRECTSYNTHESISCOSTPERBPUSD                           ok
+        DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD                wrong field name DIRECTSYNTHESISMINCOSTPERPIECEUSD
+        GIBSONOVERLAPBPS                                      ok
+        GIBSONOVERLAPMAXTM                                    ok
+        GIBSONOVERLAPMINTM                                    ok
+        GOLDENGATEOVERHANGBPS                                 ok
+        GOLDENGATERECOGNITIONSEQ                              ok
+        GOLDENGATETERMINIEXTRASEQ                             ok
+        MASTEROLIGONUMBEROFDIGITS                             ok
+        MASTERPLASMIDNUMBEROFDIGITS                           ok
+        MAXIMUMOLIGOLENGTHBPS                                 wrong field name MAXOLIGOLENGTHBPS
+        MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE   wrong field name MAXIDENTITIESGOLDENGATEOVERHANGSCOMPATIBLE
+        MINIMUMFRAGMENTSIZEGIBSONBPS                          wrong field name MINFRAGMENTSIZEGIBSONBPS
+        MINIMUMPCRPRODUCTBPS                                  wrong field name MINPCRPRODUCTBPS
+        MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT          wrong field name MISPRIMING3PRIMEBOUNDARYBPTOWARNIFHIT
+        MISPRIMING_MIN_TM                                     wrong field name MISPRIMINGMINTM
+        MISPRIMING_OLIGO_CONC                                 wrong field name MISPRIMINGOLIGOCONC
+        MISPRIMING_SALT_CONC                                  wrong field name MISPRIMINGSALTCONC
+        OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS           ok
+        OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD                  ok
+        OLIGOSYNTHESISCOSTPERBPUSD                            ok
+        OUTPUT_SEQUENCE_FORMAT                                wrong field name OUTPUTSEQUENCEFORMAT
+        PRIMER_DNA_CONC                                       wrong field name PRIMERDNACONC
+        PRIMER_GC_CLAMP                                       wrong field name PRIMERGCCLAMP
+        PRIMER_MAX_DIFF_TM                                    wrong field name PRIMERMAXDIFFTM
+        PRIMER_MAX_SELF_ANY_TH                                wrong field name PRIMERMAXSELFANYTH
+        PRIMER_MAX_SELF_END_TH                                wrong field name PRIMERMAXSELFENDTH
+        PRIMER_MAX_SIZE                                       wrong field name PRIMERMAXSIZE
+        PRIMER_MAX_TM                                         wrong field name PRIMERMAXTM
+        PRIMER_MIN_SIZE                                       wrong field name PRIMERMINSIZE
+        PRIMER_MIN_TM                                         wrong field name PRIMERMINTM
+        PRIMER_PAIR_MAX_COMPL_ANY_TH                          wrong field name PRIMERPAIRMAXCOMPLANYTH
+        PRIMER_PAIR_MAX_COMPL_END_TH                          wrong field name PRIMERPAIRMAXCOMPLENDTH
+        PRIMER_SALT_CORRECTIONS                               wrong field name PRIMERSALTCORRECTIONS
+        PRIMER_TM_SANTALUCIA                                  wrong field name PRIMERTMSANTALUCIA
+        SUPPRESS_PURE_PRIMERS                                 wrong field name SPP_DEFAULT
+        */
+
+        if(values.MASTEROLIGONUMBEROFDIGITS                            ) this.set("masterOligoNumberOfDigitsValue            " , values.MASTEROLIGONUMBEROFDIGITS            );
+        if(values.MASTERPLASMIDNUMBEROFDIGITS                          ) this.set("masterPlasmidNumberOfDigitsValue          " , values.MASTERPLASMIDNUMBEROFDIGITS          );
+        if(values.GIBSONOVERLAPBPS                                     ) this.set("gibsonOverlapBPsValue                     " , values.GIBSONOVERLAPBPS                     );
+        if(values.GIBSONOVERLAPMINTM                                   ) this.set("gibsonOverlapMinTmValue                   " , values.GIBSONOVERLAPMINTM                   );
+        if(values.GIBSONOVERLAPMAXTM                                   ) this.set("gibsonOverlapMaxTmValue                   " , values.GIBSONOVERLAPMAXTM                   );
+        if(values.MAXIMUMOLIGOLENGTHBPS                                ) this.set("maxOligoLengthBPsValue                    " , values.MAXIMUMOLIGOLENGTHBPS                    );
+        if(values.MINIMUMFRAGMENTSIZEGIBSONBPS                         ) this.set("minFragmentSizeGibsonBPsValue             " , values.MINIMUMFRAGMENTSIZEGIBSONBPS             );
+        if(values.GOLDENGATEOVERHANGBPS                                ) this.set("goldenGateOverhangBPsValue                " , values.GOLDENGATEOVERHANGBPS                );
+        if(values.GOLDENGATERECOGNITIONSEQ                             ) this.set("goldenGateRecognitionSeqValue             " , values.GOLDENGATERECOGNITIONSEQ             );
+        if(values.GOLDENGATETERMINIEXTRASEQ                            ) this.set("goldenGateTerminiExtraSeqValue            " , values.GOLDENGATETERMINIEXTRASEQ            );
+        if(values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE  ) this.set("maxIdentitiesGoldenGateOverhangsCompatible" , values.MAXIMUM_IDENTITIES_GOLDEN_GATE_OVERHANGS_COMPATIBLE);
+        if(values.OLIGOSYNTHESISCOSTPERBPUSD                           ) this.set("oligoSynthesisCostPerBPUSDValue           " , values.OLIGOSYNTHESISCOSTPERBPUSD           );
+        if(values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD                 ) this.set("oligoPagePurificationCostPerPieceUSDValue " , values.OLIGOPAGEPURIFICATIONCOSTPERPIECEUSD );
+        if(values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBPS          ) this.set("oligoMaxLengthNoPagePurificationRequiredBP" , values.OLIGOMAXLENGTHNOPAGEPURIFICATIONREQUIREDBP);
+        if(values.MINIMUMPCRPRODUCTBPS                                 ) this.set("minPCRProductBPsValue                     " , values.MINIMUMPCRPRODUCTBPS                     );
+        if(values.DIRECTSYNTHESISCOSTPERBPUSD                          ) this.set("directSynthesisCostPerBPUSDValue          " , values.DIRECTSYNTHESISCOSTPERBPUSD          );
+        if(values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD               ) this.set("directSynthesisMinCostPerPieceUSDValue    " , values.DIRECTSYNTHESISMINIUMUMCOSTPERPIECEUSD    );
+        if(values.PRIMER_GC_CLAMP                                      ) this.set("primerGCClampValue                        " , values.PRIMER_GC_CLAMP                        );
+        if(values.PRIMER_MIN_SIZE                                      ) this.set("primerMinSizeValue                        " , values.PRIMER_MIN_SIZE                        );
+        if(values.PRIMER_MAX_SIZE                                      ) this.set("primerMaxSizeValue                        " , values.PRIMER_MAX_SIZE                        );
+        if(values.PRIMER_MIN_TM                                        ) this.set("primerMinTmValue                          " , values.PRIMER_MIN_TM                          );
+        if(values.PRIMER_MAX_TM                                        ) this.set("primerMaxTmValue                          " , values.PRIMER_MAX_TM                          );
+        if(values.PRIMER_MAX_DIFF_TM                                   ) this.set("primerMaxDiffTmValue                      " , values.PRIMER_MAX_DIFF_TM                      );
+        if(values.PRIMER_MAX_SELF_ANY_TH                               ) this.set("primerMaxSelfAnyThValue                   " , values.PRIMER_MAX_SELF_ANY_TH                   );
+        if(values.PRIMER_MAX_SELF_END_TH                               ) this.set("primerMaxSelfEndThValue                   " , values.PRIMER_MAX_SELF_END_TH                   );
+        if(values.PRIMER_PAIR_MAX_COMPL_ANY_TH                         ) this.set("primerPairMaxComplAnyThValue              " , values.PRIMER_PAIR_MAX_COMPL_ANY_TH              );
+        if(values.PRIMER_PAIR_MAX_COMPL_END_TH                         ) this.set("primerPairMaxComplEndThValue              " , values.PRIMER_PAIR_MAX_COMPL_END_TH              );
+        if(values.PRIMER_TM_SANTALUCIA                                 ) this.set("primerTmSantaluciaValue                   " , values.PRIMER_TM_SANTALUCIA                   );
+        if(values.PRIMER_SALT_CORRECTIONS                              ) this.set("primerSaltCorrectionsValue                " , values.PRIMER_SALT_CORRECTIONS                );
+        if(values.PRIMER_DNA_CONC                                      ) this.set("primerDnaConcValue                        " , values.PRIMER_DNA_CONC                        );
+        if(values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT         ) this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue" , values.MISPRIMING_3PRIME_BOUNDARY_BP_TO_WARN_IF_HIT);
+        if(values.MISPRIMING_MIN_TM                                    ) this.set("misprimingMinTmValue                      " , values.MISPRIMING_MIN_TM                      );
+        if(values.MISPRIMING_SALT_CONC                                 ) this.set("misprimingSaltConcValue                   " , values.MISPRIMING_SALT_CONC                   );
+        if(values.MISPRIMING_OLIGO_CONC                                ) this.set("misprimingOligoConcValue                  " , values.MISPRIMING_OLIGO_CONC                  );
+        if(values.OUTPUT_SEQUENCE_FORMAT                               ) this.set("outputSequenceFormatValue                 " , values.OUTPUT_SEQUENCE_FORMAT                 );
+        if(values.SUPPRESS_PURE_PRIMERS                                ) this.set("SPP_Default                          " , values.SUPPRESS_PURE_PRIMERS                               );
+    },
+
+    setDefaultValues: function() {
+        this.set("masterOligoNumberOfDigitsValue", this.self.MONOD_Default);
+        this.set("masterPlasmidNumberOfDigitsValue", this.self.MPNOD_Default);
+        this.set("gibsonOverlapBPsValue", this.self.GOB_Default);
+        this.set("gibsonOverlapMinTmValue", this.self.GOMT_Default);
+        this.set("gibsonOverlapMaxTmValue", this.self.GOMAXT_Default);
+
+        this.set("maxOligoLengthBPsValue", this.self.MOLB_Default);
+        this.set("minFragmentSizeGibsonBPsValue", this.self.MFSGB_Default);
+        this.set("goldenGateOverhangBPsValue", this.self.GGOHB_Default);
+        this.set("goldenGateRecognitionSeqValue", this.self.GGRS_Default);
+        this.set("goldenGateTerminiExtraSeqValue", this.self.GGTES_Default);
+
+        this.set("maxIdentitiesGoldenGateOverhangsCompatibleValue", this.self.MIGGOC_Default);
+        this.set("oligoSynthesisCostPerBPUSDValue", this.self.OSCPB_Default);
+        this.set("oligoPagePurificationCostPerPieceUSDValue", this.self.OPPCPP_Default);
+        this.set("oligoMaxLengthNoPagePurificationRequiredBPsValue", this.self.OMLPPRB_Default);
+        this.set("minPCRProductBPsValue", this.self.MPPB_Default);
+
+        this.set("directSynthesisCostPerBPUSDValue", this.self.DSCPB_Default);
+        this.set("directSynthesisMinCostPerPieceUSDValue", this.self.DSMCPP_Default);
+        this.set("primerGCClampValue", this.self.PGC_Default);
+        this.set("primerMinSizeValue", this.self.PMS_Default);
+        this.set("primerMaxSizeValue", this.self.PMAXS_Default);
+
+        this.set("primerMinTmValue", this.self.PMT_Default);
+        this.set("primerMaxTmValue", this.self.PMAXT_Default);
+        this.set("primerMaxDiffTmValue", this.self.PMDT_Default);
+        this.set("primerMaxSelfAnyThValue", this.self.PMSAT_Default);
+        this.set("primerMaxSelfEndThValue", this.self.PMSET_Default);
+
+        this.set("primerPairMaxComplAnyThValue", this.self.PPMCAT_Default);
+        this.set("primerPairMaxComplEndThValue", this.self.PPMCET_Default);
+        this.set("primerTmSantaluciaValue", this.self.PTS_Default);
+        this.set("primerSaltCorrectionsValue", this.self.PSC_Default);
+        this.set("primerDnaConcValue", this.self.PDC_Default);
+
+        this.set("mispriming3PrimeBoundaryBPToWarnIfHitValue", this.self.M3BBTWIH_Default);
+        this.set("misprimingMinTmValue", this.self.MMT_Default);
+        this.set("misprimingSaltConcValue", this.self.MSC_Default);
+        this.set("misprimingOligoConcValue", this.self.MOC_Default);
+        this.set("outputSequenceFormatValue", this.self.OSF_Default);
+        
+        this.set("suppressPurePrimersValue", this.self.SPP_Default);
+    },
+
+    /**
+     * Creates the J5Parameters String
+     * @param {String} isCollectionCircular circular or linear
+     * @returns {String} j5String
+     */
+    createJ5ParametersString: function(isCollectionCircular) {
+        var returnString = "Parameter Name,Value,Default Value,Description\n" +
+            this.self.MONOD + "," + this.get("masterOligoNumberOfDigitsValue") + "," + this.self.MONOD_Default + "," + this.self.MONOD_DESC + "\n" +
+            this.self.MPNOD + "," + this.get("masterPlasmidNumberOfDigitsValue") + "," + this.self.MPNOD_Default + "," + this.self.MPNOD_DESC + "\n" +
+            this.self.GOB + "," + this.get("gibsonOverlapBPsValue") + "," + this.self.GOB_Default + "," + this.self.GOB_DESC + "\n" +
+            this.self.GOMT + "," + this.get("gibsonOverlapMinTmValue") + "," + this.self.GOMT_Default + "," + this.self.GOMT_DESC + "\n" +
+            this.self.GOMAXT + "," + this.get("gibsonOverlapMaxTmValue") + "," + this.self.GOMAXT_Default + "," + this.self.GOMAXT_DESC + "\n" +
+            this.self.MOLB + "," + this.get("maxOligoLengthBPsValue") + "," + this.self.MOLB_Default + "," + this.self.MOLB_DESC + "\n" +
+            this.self.MFSGB + "," + this.get("minFragmentSizeGibsonBPsValue") + "," + this.self.MFSGB_Default + "," + this.self.MFSGB_DESC + "\n" +
+            this.self.GGOHB + "," + this.get("goldenGateOverhangBPsValue") + "," + this.self.GGOHB_Default + "," + this.self.GGOHB_DESC + "\n" +
+            this.self.GGRS + "," + this.get("goldenGateRecognitionSeqValue") + "," + this.self.GGRS_Default + "," + this.self.GGRS_DESC + "\n" +
+            this.self.GGTES + "," + this.get("goldenGateTerminiExtraSeqValue") + "," + this.self.GGTES_Default + "," + this.self.GGTES_DESC + "\n" +
+            this.self.MIGGOC + "," + this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue") + "," + this.self.MIGGOC_Default + "," + this.self.MIGGOC_DESC + "\n" +
+            this.self.OSCPB + "," + this.get("oligoSynthesisCostPerBPUSDValue") + "," + this.self.OSCPB_Default + "," + this.self.OSCPB_DESC + "\n" +
+            this.self.OPPCPP + "," + this.get("oligoPagePurificationCostPerPieceUSDValue") + "," + this.self.OPPCPP_Default + "," + this.self.OPPCPP_DESC + "\n" +
+            this.self.OMLPPRB + "," + this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue") + "," + this.self.OMLPPRB_Default + "," + this.self.OMLPPRB_DESC + "\n" +
+            this.self.MPPB + "," + this.get("minPCRProductBPsValue") + "," + this.self.MPPB_Default + "," + this.self.MPPB_DESC + "\n" +
+            this.self.DSCPB + "," + this.get("directSynthesisCostPerBPUSDValue") + "," + this.self.DSCPB_Default + "," + this.self.DSCPB_DESC + "\n" +
+            this.self.DSMCPP + "," + this.get("directSynthesisMinCostPerPieceUSDValue") + "," + this.self.DSMCPP_Default + "," + this.self.DSMCPP_DESC + "\n" +
+            this.self.PGC + "," + this.get("primerGCClampValue") + "," + this.self.PGC_Default + "," + this.self.PGC_DESC + "\n" +
+            this.self.PMS + "," + this.get("primerMinSizeValue") + "," + this.self.PMS_Default + "," + this.self.PMS_DESC + "\n" +
+            this.self.PMAXS + "," + this.get("primerMaxSizeValue") + "," + this.self.PMAXS_Default + "," + this.self.PMAXS_DESC + "\n" +
+            this.self.PMT + "," + this.get("primerMinTmValue") + "," + this.self.PMT_Default + "," + this.self.PMT_DESC + "\n" +
+            this.self.PMAXT + "," + this.get("primerMaxTmValue") + "," + this.self.PMAXT_Default + "," + this.self.PMAXT_DESC + "\n" +
+            this.self.PMDT + "," + this.get("primerMaxDiffTmValue") + "," + this.self.PMDT_Default + "," + this.self.PMDT_DESC + "\n" +
+            this.self.PMSAT + "," + this.get("primerMaxSelfAnyThValue") + "," + this.self.PMSAT_Default + "," + this.self.PMSAT_DESC + "\n" +
+            this.self.PMSET + "," + this.get("primerMaxSelfEndThValue") + "," + this.self.PMSET_Default + "," + this.self.PMSET_DESC + "\n" +
+            this.self.PPMCAT + "," + this.get("primerPairMaxComplAnyThValue") + "," + this.self.PPMCAT_Default + "," + this.self.PPMCAT_DESC + "\n" +
+            this.self.PPMCET + "," + this.get("primerPairMaxComplEndThValue") + "," + this.self.PPMCET_Default + "," + this.self.PPMCET_DESC + "\n" +
+            this.self.PTS + "," + (this.get("primerTmSantaluciaValue") /*? "1" : "0"*/) + "," + (this.self.PTS_Default ? "1" : "0") + "," + this.self.PTS_DESC + "\n" +
+            this.self.PSC + "," + (this.get("primerSaltCorrectionsValue") /*? "1" : "0"*/) + "," + (this.self.PSC_Default /*? "1" : "0"*/) + "," + this.self.PSC_DESC + "\n" +
+            this.self.PDC + "," + this.get("primerDnaConcValue") + "," + this.self.PDC_Default + "," + this.self.PDC_DESC + "\n" +
+            this.self.M3BBTWIH + "," + this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue") + "," + this.self.M3BBTWIH_Default + "," + this.self.M3BBTWIH_DESC + "\n" +
+            this.self.MMT + "," + this.get("misprimingMinTmValue") + "," + this.self.MMT_Default + "," + this.self.MMT_DESC + "\n" +
+            this.self.MSC + "," + this.get("misprimingSaltConcValue") + "," + this.self.MSC_Default + "," + this.self.MSC_DESC + "\n" +
+            this.self.MOC + "," + this.get("misprimingOligoConcValue") + "," + this.self.MOC_Default + "," + this.self.MOC_DESC + "\n" +
+            this.self.OSF + "," + this.get("outputSequenceFormatValue") + "," + this.self.OSF_Default + "," + this.self.OSF_DESC + "\n" +
+
+            //+ this.self.APT + "," + (j5CollectionProxy.isCollectionCircular() ? Constants.CIRCULAR : Constants.LINEAR) + "," + Constants.CIRCULAR + "," + this.self.APT_DESC + "\n"
+            this.self.APT + "," + isCollectionCircular + "," + Teselagen.constants.Constants.self.CIRCULAR + "," + this.self.APT_DESC + "\n" +
+
+            //+ this.self.SPP + "," + (this.get("suppressPurePrimersValue") ? "TRUE" : "FALSE") + "," + (this.self.SPP_Default ? "TRUE" : "FALSE") + "," + J5Parameters.SPP_DESC + "\n";
+            this.self.SPP + "," + this.get("suppressPurePrimersValue") + "," + this.self.SPP_Default + "," + this.self.SPP_DESC + "\n";
+
+            return returnString;
+    },
+
+    getArrayParameters: function(){
+        var arr = [];
+
+        arr.push( { value: this.get("masterOligoNumberOfDigitsValue"), name: "masterOligoNumberOfDigitsValue" } );
+        arr.push( { value: this.get("masterPlasmidNumberOfDigitsValue"), name: "masterPlasmidNumberOfDigitsValue" } );
+        arr.push( { value: this.get("gibsonOverlapBPsValue"              ), name: "gibsonOverlapBPsValue"               } );
+        arr.push( { value: this.get("gibsonOverlapMinTmValue"), name: "gibsonOverlapMinTmValue" } );
+        arr.push( { value: this.get("gibsonOverlapMaxTmValue"), name: "gibsonOverlapMaxTmValue" } );
+        arr.push( { value: this.get("maxOligoLengthBPsValue"), name: "maxOligoLengthBPsValue" } );
+        arr.push( { value: this.get("minFragmentSizeGibsonBPsValue"), name: "minFragmentSizeGibsonBPsValue" } );
+        arr.push( { value: this.get("goldenGateOverhangBPsValue"), name: "goldenGateOverhangBPsValue" } );
+        arr.push( { value: this.get("goldenGateRecognitionSeqValue"), name: "goldenGateRecognitionSeqValue" } );
+        arr.push( { value: this.get("goldenGateTerminiExtraSeqValue"), name: "goldenGateTerminiExtraSeqValue" } );
+        arr.push( { value: this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue"), name: "maxIdentitiesGoldenGateOverhangsCompatibleValue" } );
+        arr.push( { value: this.get("oligoSynthesisCostPerBPUSDValue"  ), name: "oligoSynthesisCostPerBPUSDValue"   } );
+        arr.push( { value: this.get("oligoPagePurificationCostPerPieceUSDValue"), name: "oligoPagePurificationCostPerPieceUSDValue" } );
+        arr.push( { value: this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue"), name: "oligoMaxLengthNoPagePurificationRequiredBPsValue" } );
+        arr.push( { value: this.get("minPCRProductBPsValue"), name: "minPCRProductBPsValue" } );
+        arr.push( { value: this.get("directSynthesisCostPerBPUSDValue"), name: "directSynthesisCostPerBPUSDValue" } );
+        arr.push( { value: this.get("directSynthesisMinCostPerPieceUSDValue"), name: "directSynthesisMinCostPerPieceUSDValue" } );
+        arr.push( { value: this.get("primerGCClampValue"), name: "primerGCClampValue" } );
+        arr.push( { value: this.get("primerMinSizeValue"), name: "primerMinSizeValue" } );
+        arr.push( { value: this.get("primerMaxSizeValue"), name: "primerMaxSizeValue" } );
+        arr.push( { value: this.get("primerMinTmValue"), name: "primerMinTmValue" } );
+        arr.push( { value: this.get("primerMaxTmValue"), name: "primerMaxTmValue" } );
+        arr.push( { value: this.get("primerMaxDiffTmValue"), name: "primerMaxDiffTmValue" } );
+        arr.push( { value: this.get("primerMaxSelfAnyThValue"), name: "primerMaxSelfAnyThValue" } );
+        arr.push( { value: this.get("primerMaxSelfEndThValue"), name: "primerMaxSelfEndThValue" } );
+        arr.push( { value: this.get("primerPairMaxComplAnyThValue"), name: "primerPairMaxComplAnyThValue" } );
+        arr.push( { value: this.get("primerPairMaxComplEndThValue"), name: "primerPairMaxComplEndThValue" } );
+        arr.push( { value: this.get("primerTmSantaluciaValue"), name: "primerTmSantaluciaValue" } );
+        arr.push( { value: this.get("primerSaltCorrectionsValue"), name: "primerSaltCorrectionsValue" } );
+        arr.push( { value: this.get("primerDnaConcValue"                      ), name: "primerDnaConcValue"                       } );
+        arr.push( { value: this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue"), name: "mispriming3PrimeBoundaryBPToWarnIfHitValue" } );
+        arr.push( { value: this.get("misprimingMinTmValue"     ), name: "misprimingMinTmValue"      } );
+        arr.push( { value: this.get("misprimingSaltConcValue"), name: "misprimingSaltConcValue" } );
+        arr.push( { value: this.get("misprimingOligoConcValue"), name: "misprimingOligoConcValue" } );
+        arr.push( { value: this.get("outputSequenceFormatValue"), name: "outputSequenceFormatValue" } );
+        arr.push( { value: this.get("suppressPurePrimersValue"), name: "suppressPurePrimersValue" } );
+        
+        return arr;
+    },
+
+    getParametersAsStore: function(){
+        var self = this;
+        var store = new Ext.data.JsonStore({
+            proxy: {
+                type: 'memory',
+                data: self.getArrayParameters(),
+                reader: {
+                    type: 'json',
+                    root: 'files'
+                }
+            },
+
+            fields: ['name','value']
+        });
+        store.load();
+
+        return store;
+    },
+
+    /**
+     * Creates the J5Parameters Array
+     * @returns {String} Array of Parameters
+     */
+    getParametersAsArray: function(isCollectionCircular) {
+        var obj = {};
+        obj[this.self.MONOD]    =   this.get("masterOligoNumberOfDigitsValue");
+        obj[this.self.MPNOD]    =   this.get("masterPlasmidNumberOfDigitsValue");
+        obj[this.self.GOB]      =   this.get("gibsonOverlapBPsValue"              );
+        obj[this.self.GOMT]     =   this.get("gibsonOverlapMinTmValue");
+        obj[this.self.GOMAXT]   =   this.get("gibsonOverlapMaxTmValue");
+        obj[this.self.MOLB]     =   this.get("maxOligoLengthBPsValue");
+        obj[this.self.MFSGB]    =   this.get("minFragmentSizeGibsonBPsValue");
+        obj[this.self.GGOHB]    =   this.get("goldenGateOverhangBPsValue");
+        obj[this.self.GGRS]     =   this.get("goldenGateRecognitionSeqValue");
+        obj[this.self.GGTES]    =   this.get("goldenGateTerminiExtraSeqValue");
+        obj[this.self.MIGGOC]   =   this.get("maxIdentitiesGoldenGateOverhangsCompatibleValue");
+        obj[this.self.OSCPB]    =   this.get("oligoSynthesisCostPerBPUSDValue"  );
+        obj[this.self.OPPCPP]   =   this.get("oligoPagePurificationCostPerPieceUSDValue");
+        obj[this.self.OMLPPRB]  =   this.get("oligoMaxLengthNoPagePurificationRequiredBPsValue");
+        obj[this.self.MPPB]     =   this.get("minPCRProductBPsValue");
+        obj[this.self.DSCPB]    =   this.get("directSynthesisCostPerBPUSDValue");
+        obj[this.self.DSMCPP]   =   this.get("directSynthesisMinCostPerPieceUSDValue");
+        obj[this.self.PGC]      =   this.get("primerGCClampValue");
+        obj[this.self.PMS]      =   this.get("primerMinSizeValue");
+        obj[this.self.PMAXS]    =   this.get("primerMaxSizeValue");
+        obj[this.self.PMT]      =   this.get("primerMinTmValue");
+        obj[this.self.PMAXT]    =   this.get("primerMaxTmValue");
+        obj[this.self.PMDT]     =   this.get("primerMaxDiffTmValue");
+        obj[this.self.PMSAT]    =   this.get("primerMaxSelfAnyThValue");
+        obj[this.self.PMSET]    =   this.get("primerMaxSelfEndThValue");
+        obj[this.self.PPMCAT]   =   this.get("primerPairMaxComplAnyThValue");
+        obj[this.self.PPMCET]   =   this.get("primerPairMaxComplEndThValue");
+        obj[this.self.PTS]      =   this.get("primerTmSantaluciaValue");
+        obj[this.self.PSC]      =   this.get("primerSaltCorrectionsValue");
+        obj[this.self.PDC]      =   this.get("primerDnaConcValue"                      );
+        obj[this.self.M3BBTWIH] =   this.get("mispriming3PrimeBoundaryBPToWarnIfHitValue");
+        obj[this.self.MMT]      =   this.get("misprimingMinTmValue"     );
+        obj[this.self.MSC]      =   this.get("misprimingSaltConcValue");
+        obj[this.self.MOC]      =   this.get("misprimingOligoConcValue");
+        obj[this.self.OSF]      =   this.get("outputSequenceFormatValue");
+        obj[this.self.SPP]      =   this.get("suppressPurePrimersValue");
+        obj[this.self.APT]      =   isCollectionCircular ? "circular" : "linear";
+        return obj;
+    }
 });

@@ -13,8 +13,8 @@ Ext.define("Teselagen.models.DNAFeature", {
 	 * @param {String} name The name of the feature.
 	 * @param {String} type The type of the feature.
 	 * @param {String} annotationType The type of the annotation.
-	 * @param {Array<Teselagen.models.DNAFeatureNote>} notes Any notes associated with the feature.
-	 * @param {Array<Teselagen.models.DNAFeatureLocation>} locations The location(s) of the feature.
+	 * @param {Teselagen.models.DNAFeatureNote[]} notes Any notes associated with the feature.
+	 * @param {Teselagen.models.DNAFeatureLocation[]} locations The location(s) of the feature.
 	 */
 	fields: [
 		{name: "strand", type: "int", defaultValue: 0},

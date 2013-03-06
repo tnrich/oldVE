@@ -1,0 +1,21 @@
+{
+    "success": true,
+    "user": [
+        {
+            "id": 1,
+            "name": "Rodrigo Pavez",
+            "applicationPreferences" :
+            {
+            	"testPreference" : "Preference Test"
+            }
+        },
+        {
+            "id": 2,
+            "name": "Diana Wong",
+            "applicationPreferences" :
+            {
+            	"testPreference" : "obama"
+            }
+        }
+    ]
+}

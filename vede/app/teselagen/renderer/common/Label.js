@@ -18,11 +18,15 @@ Ext.define("Teselagen.renderer.common.Label", {
 
     StringUtil: null,
 
+    labelText: function() {
+        return "";
+    },
+
     /**
      * @param {Teselagen.bio.sequence.common.Annotation} annotation The
      * annotation to generate a label for.
      * @param {Boolean} includeInView Whether to show the label. Defaults to
-     * true. 
+     * true.
      */
     constructor: function(inData) {
         this.initConfig(inData);
@@ -34,15 +38,18 @@ Ext.define("Teselagen.renderer.common.Label", {
             fill: inData.color || "black",
             "font-size": "6px",
             x: inData.x,
-            y: inData.y,
+            y: inData.y
         })]);
 
-        if(!this.labelText() || !this.StringUtil.trim(this.labelText())) {
+        /*
+            Line 48 fix: this.StringUtil.trim fails because it used to receive this.labelText() of type Object
+        */
+
+        labelString = (typeof(this.labelText()) == "object") ? "" : this.labelText();
+
+        if(!this.labelText() || !this.StringUtil.trim(labelString)) {
             this.setIncludeInView(false);
         }
-    },
 
-    labelText: function() {
-        return "";
     }
 });

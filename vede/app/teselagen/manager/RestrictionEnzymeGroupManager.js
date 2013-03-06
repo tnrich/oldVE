@@ -2,7 +2,7 @@
  * @singleton
  * @class Teselagen.manager.RestrictionEnzymeGroupManager
  * This class manages the different user-defined and pre-installed groups of restriction enzymes.
- * It calls on @link Teselagen.bio.enzymes.RestrictionEnzymeManager to load them from an xml file.
+ * It calls on Teselagen.bio.enzymes.RestrictionEnzymeManager to load them from an xml file.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author)
  */
@@ -22,8 +22,8 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     RestrictionEnzymeManager: null,
 
     /**
-     * @param {Array<Teselagen.models.RestrictionEnzymeGroup>} systemGroups Groups of enzymes which are pre-defined by the program.
-     * @param {Array<Teselagen.models.RestrictionEnzymeGroup>} userGroups Groups defined by the user.
+     * @param {Teselagen.models.RestrictionEnzymeGroup[]} systemGroups Groups of enzymes which are pre-defined by the program.
+     * @param {Teselagen.models.RestrictionEnzymeGroup[]} userGroups Groups defined by the user.
      * @param {Teselagen.models.RestrictionEnzymeGroup} activeGroup A list of enzymes which is currently in use.
      * @param {Ext.util.HashMap} rebaseEnzymesDatabase A hashmap mapping enzyme names to the RestrictionEnzyme objects.
      * @param {Boolean} isInitialized Whether the database has already been read from the xml file.
@@ -61,15 +61,16 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     },
 
     /**
-     * Given a @link Teselagen.models.UserRestrictionEnzymes object, creates
-     * @link Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
-     * @param {Teselagen.models.UserRestrictionEnzymes} userEnzymes The UserRestrictionEnzymes object to load from.
+     * SHOULD BE IRRELEVANT IN JS VERSION
+     * Given a Teselagen.models.User object, creates
+     * Teselagen.models.RestrictionEnzymeGroup objects for its groups and loads them in userGroups.
+     * @param {Teselagen.models.UserRestrictionEnzyme} userEnzymes The UserRestrictionEnzyme object to load from.
      */
-    loadUserRestrictionEnzymes: function(userEnzymes) {
+    loadUserRestrictionEnzymes: function(user) {
         this.setUserGroups([]);
         var newUserGroups = [];
         
-        Ext.each(userEnzymes.get("groups"), function(group) {
+        Ext.each(user.restrictionEnzymeGroups(), function(group) {
             if(!group || !group.get("groupName") || group.get("enzymeNames").length == 0) {
                 return true; // This simply tells Ext.each to continue to the next iteration.
             }
@@ -153,7 +154,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     /**
      * Creates a RestrictionEnzymeGroup, given a name and a list of enzyme names.
      * @param {String} name The name of the group.
-     * @param {Array<String>} enzymeNames A list of enzyme names. Will be used to search the database
+     * @param {String[]} enzymeNames A list of enzyme names. Will be used to search the database
      * to get each enzyme object.
      * @return {Teselagen.models.RestrictionEnzymeGroup} The newly created group.
      */

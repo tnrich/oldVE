@@ -1,16 +1,18 @@
-Ext.require('Ext.app.Application');
+Ext.application({
+    name: "Vede",
+    appFolder: "../app",
 
-var application = null;
-Ext.onReady(function() {
-    application = Ext.create('Ext.app.Application', {
-        name: 'Vede',
-        appFolder: '../app',
-        
-        controllers: [
-            'AppController'
-        ],
+    requires: ["Teselagen.constants.Constants",
+               "Teselagen.constants.SBOLIcons",
+               "Teselagen.manager.SessionManager"],
 
-        launch: function() {
-        }
-    });
+    sessionManager: null,
+
+    controllers: ["AppController"],
+
+    launch: function() {
+        this.sessionManager = Teselagen.manager.SessionManager;
+        this.sessionManager.setEnv(Teselagen.constants.Constants.ENV_TEST);
+    }
 });
+

@@ -32,36 +32,26 @@ Ext.application({
     views: [
         'AppViewport',
         'FileImportWindow',
+        'RestrictionEnzymesManagerWindow',
         'SimulateDigestionWindow',
-        'RestrictionEnzymesManagerWindow'
+        'MyWindow4'
     ],
     autoCreateViewport: true,
     name: 'Vesa',
     controllers: [
-        'MainToolbarController',
         'MainMenuController',
+        'MainToolbarController',
         'VectorPanelController',
         'AppTabController',
         'ActionStackController',
         'AppController',
+        'FindPanelController',
         'MainPanelController',
         'PieController',
         'RailController',
-        'SequenceController',
         'RestrictionEnzymeController',
+        'SequenceController',
         'AnnotatePanelController',
         'SimulateDigestionController'
-    ],
-
-    errorHandler: function(err) {
-        console.warn(err);
-        return true;
-    },
-
-    launch: function() {
-        Ext.Error.notify = false; // prevent ie6 and ie7 popup
-        Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
-
-    }
-
+    ]
 });

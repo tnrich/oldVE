@@ -1,3 +1,7 @@
+/**
+ * Digestion manager
+ * @class Teselagen.manager.DigestionManager
+ */
 Ext.define("Teselagen.manager.DigestionManager", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite", 
                "Teselagen.bio.sequence.DNATools",
@@ -62,7 +66,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
 
         if (pType == matchReverseComOnly){
             //reverseComplementSequence();
-        },
+        };
         var startPosition = destinationStartCutSite.getStart();
         var endPosition = destinationStartCutSite.getEnd() 
             + destinationStartCutSite.getRestrictionEnzyme.getDsForward();

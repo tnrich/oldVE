@@ -1,0 +1,15 @@
+{
+    "success": true,
+    "parts": [
+        {
+        	"id": 1,
+        	"veproject_id": 1,
+            "name": "Part 1"
+        },
+        {
+        	"id": 2,
+        	"veproject_id": 1,
+            "name": "Part 2"
+        }
+    ]
+}

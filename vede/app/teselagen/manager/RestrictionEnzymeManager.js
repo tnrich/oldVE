@@ -8,8 +8,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
     extend: "Teselagen.mappers.Mapper",
 
     requires: ["Teselagen.bio.enzymes.RestrictionEnzymeMapper",
-               "Teselagen.bio.sequence.DNATools",
-               "Teselagen.event.MapperEvent"],
+               "Teselagen.bio.sequence.DNATools"],
 
     config: {
         restrictionEnzymeGroup: null,
@@ -24,20 +23,17 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         observable: "Ext.util.Observable"
     },
 
-    updateEventString: null,
-
     DNATools: null,
 
     /**
      * @param {Teselagen.models.RestrictionEnzymeGroup} restrictionEnzymeGroup The group of enzymes to map to the sequence.
-     * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} allCutSites All cut sites produced by the enzymes in the group.
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite[]} allCutSites All cut sites produced by the enzymes in the group.
      * @param {Ext.util.HashMap} allCutSitesMap A map of all cut sites with RestrictionEnzymes as keys and arrays of cut sites as values.
-     * @param {Array<Teselagen.bio.enzymes.RestrictionCutSite>} cutSites Cut sites which belong to enzymes that cut the sequence less than maxCuts times.
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite[]} cutSites Cut sites which belong to enzymes that cut the sequence less than maxCuts times.
      * @param {Ext.util.HashMap} cutSitesMap A map of the cut sites filtered by maximum cuts.
      * @param {Int} maxCuts The maximum number of cuts an enzyme can make before its cut sites are not returned. Defaults to -1, meaning no limit.
      */
     constructor: function(inData) {
-        this.updateEventString = Teselagen.event.MapperEvent.RESTRICTION_ENZYME_MAPPER_UPDATED;
         this.DNATools = Teselagen.bio.sequence.DNATools;
 
         this.mixins.observable.constructor.call(this, inData);
@@ -58,7 +54,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
 
     /**
      * Recalculates (if needed) and returns allCutSites.
-     * @return {Array<Teselagen.bio.enzymes.RestrictionCutSite>} List of all cut sites produced by enzymes in the group.
+     * @return {Teselagen.bio.enzymes.RestrictionCutSite[]} List of all cut sites produced by enzymes in the group.
      */
     getAllCutSites: function() {
         this.recalcIfNeeded();
@@ -67,7 +63,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
 
     /**
      * Recalculates (if needed) and returns cutSites.
-     * @return {Array<Teselagen.bio.enzymes.RestrictionCutSite>} List of cut sites filtered by maxCuts.
+     * @return {Teselagen.bio.enzymes.RestrictionCutSite[]} List of cut sites filtered by maxCuts.
      */
     getCutSites: function() {
         this.recalcIfNeeded();
@@ -130,8 +126,6 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
             this.cutSites = null;
             this.cutSitesMap = null;
         }
-
-        Vede.application.fireEvent(this.updateEventString);
     },
 
     /**

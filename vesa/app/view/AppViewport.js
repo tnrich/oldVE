@@ -28,25 +28,44 @@ Ext.define('Vesa.view.AppViewport', {
                 {
                     xtype: 'panel',
                     region: 'north',
+<<<<<<< HEAD
                     height: 50,
                     id: 'headerPanel',
                     layout: {
                         type: 'fit'
+=======
+                    height: 60,
+                    id: 'headerPanel',
+                    layout: {
+                        align: 'stretch',
+                        type: 'hbox'
+>>>>>>> master
                     },
                     items: [
                         {
                             xtype: 'panel',
+<<<<<<< HEAD
                             id: 'headerMain',
+=======
+                            flex: 0,
+                            id: 'headerMain',
+                            maxWidth: 220,
+>>>>>>> master
                             items: [
                                 {
                                     xtype: 'image',
                                     height: 32,
                                     id: 'headerIcon',
+<<<<<<< HEAD
                                     margin: 10,
+=======
+                                    margin: '12 10 10 10',
+>>>>>>> master
                                     width: 201,
                                     src: 'resources/images/teselagen_toplogo.png'
                                 }
                             ]
+<<<<<<< HEAD
                         }
                     ],
                     dockedItems: [
@@ -56,10 +75,38 @@ Ext.define('Vesa.view.AppViewport', {
                             id: 'headerSub',
                             layout: {
                                 type: 'fit'
+=======
+                        },
+                        {
+                            xtype: 'panel',
+                            flex: 2,
+                            floating: false,
+                            id: 'headerButs',
+                            margin: '0 0 0 15'
+                        },
+                        {
+                            xtype: 'panel',
+                            flex: 1,
+                            id: 'headerSub',
+                            layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+>>>>>>> master
                             },
                             items: [
                                 {
                                     xtype: 'button',
+<<<<<<< HEAD
+=======
+                                    flex: 1,
+                                    cls: 'header_btn',
+                                    overCls: 'projectButton_ober',
+                                    text: 'MyButton'
+                                },
+                                {
+                                    xtype: 'button',
+                                    id: 'headerUserIcon',
+>>>>>>> master
                                     styleHtmlContent: false,
                                     iconAlign: 'right',
                                     text: 'user_Name',
@@ -78,6 +125,7 @@ Ext.define('Vesa.view.AppViewport', {
                     ]
                 },
                 {
+<<<<<<< HEAD
                     xtype: 'tabpanel',
                     region: 'west',
                     split: true,
@@ -191,20 +239,163 @@ Ext.define('Vesa.view.AppViewport', {
                             ]
                         }
                     ]
+=======
+                    xtype: 'treepanel',
+                    margins: '0 10 0 0',
+                    region: 'west',
+                    id: 'projectDesignPanel',
+                    width: 230,
+                    collapsible: true,
+                    title: 'Your Designs',
+                    viewConfig: {
+
+                    }
+>>>>>>> master
                 },
                 {
                     xtype: 'tabpanel',
                     region: 'center',
+<<<<<<< HEAD
+=======
+                    border: 0,
+>>>>>>> master
                     id: 'mainAppPanel',
                     activeTab: 0,
                     items: [
                         {
                             xtype: 'panel',
+                            border: 0,
+                            layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
                             title: 'Dashboard',
                             tabConfig: {
                                 xtype: 'tab',
                                 id: 'DashboardTab'
-                            }
+                            },
+                            dockedItems: [
+                                {
+                                    xtype: 'panel',
+                                    flex: 1,
+                                    dock: 'top',
+                                    border: '0 1 0 1',
+                                    id: 'dashboardWelcomePanel',
+                                    items: [
+                                        {
+                                            xtype: 'displayfield',
+                                            padding: '0 0 0 10',
+                                            value: 'Tim',
+                                            fieldLabel: 'Welcome back',
+                                            labelPad: 0,
+                                            labelSeparator: ' '
+                                        }
+                                    ]
+                                }
+                            ],
+                            items: [
+                                {
+                                    xtype: 'panel',
+                                    flex: 1,
+                                    id: 'dashboard_Panel',
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            border: 0,
+                                            id: 'dashboard_TopPanel',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: 'gridpanel',
+                                                    id: 'designGrid_Panel',
+                                                    margin: 10,
+                                                    width: 100,
+                                                    title: 'Recent Designs',
+                                                    forceFit: true,
+                                                    columns: [
+                                                        {
+                                                            xtype: 'gridcolumn',
+                                                            id: 'designGrid_Name',
+                                                            dataIndex: 'string',
+                                                            text: 'Name'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            id: 'designGrid_DateCreated',
+                                                            dataIndex: 'date',
+                                                            text: 'Date Created'
+                                                        },
+                                                        {
+                                                            xtype: 'datecolumn',
+                                                            id: 'designGrid_DateModified',
+                                                            dataIndex: 'date',
+                                                            text: 'Last Modified'
+                                                        }
+                                                    ],
+                                                    viewConfig: {
+                                                        id: 'designGridView'
+                                                    },
+                                                    dockedItems: [
+                                                        {
+                                                            xtype: 'toolbar',
+                                                            dock: 'top',
+                                                            height: 40,
+                                                            width: 332,
+                                                            layout: {
+                                                                pack: 'end',
+                                                                type: 'hbox'
+                                                            },
+                                                            items: [
+                                                                {
+                                                                    xtype: 'button',
+                                                                    id: 'newDE_Btn',
+                                                                    icon: 'resources/images/add_DE.png',
+                                                                    scale: 'medium',
+                                                                    tooltip: 'New Device Editor Design'
+                                                                },
+                                                                {
+                                                                    xtype: 'button',
+                                                                    id: 'removeDesign_Btn',
+                                                                    icon: 'resources/images/ux/remove.png',
+                                                                    scale: 'medium',
+                                                                    text: ''
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            xtype: 'panel',
+                                            flex: 1,
+                                            border: 0,
+                                            id: 'dashboard_BottomPanel',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: 'panel',
+                                                    id: 'dashboard_StatsPanel',
+                                                    margin: 10,
+                                                    layout: {
+                                                        type: 'fit'
+                                                    },
+                                                    title: 'Analytics'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
                             xtype: 'panel',
@@ -656,6 +847,7 @@ Ext.define('Vesa.view.AppViewport', {
                                         {
                                             xtype: 'toolbar',
                                             dock: 'top',
+                                            border: 0,
                                             id: 'StatusBar',
                                             items: [
                                                 {
@@ -697,6 +889,10 @@ Ext.define('Vesa.view.AppViewport', {
                             items: [
                                 {
                                     xtype: 'panel',
+<<<<<<< HEAD
+=======
+                                    border: 0,
+>>>>>>> master
                                     id: 'VectorEditorPanel',
                                     layout: {
                                         align: 'stretch',
@@ -736,7 +932,6 @@ Ext.define('Vesa.view.AppViewport', {
                                             ]
                                         },
                                         {
-                                            xtype: 'splitter',
                                             collapseTarget: 'prev'
                                         },
                                         {
@@ -923,6 +1118,455 @@ Ext.define('Vesa.view.AppViewport', {
                                                     tooltip: 'j5'
                                                 }
                                             ]
+<<<<<<< HEAD
+=======
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'panel',
+                                    dock: 'top',
+                                    floating: false,
+                                    frame: false,
+                                    id: 'DeviceEditorPartPanel',
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    animCollapse: false,
+                                    collapseDirection: 'top',
+                                    collapsed: true,
+                                    collapsible: true,
+                                    frameHeader: false,
+                                    hideCollapseTool: false,
+                                    title: 'Parts',
+                                    titleCollapse: true,
+                                    items: [
+                                        {
+                                            xtype: 'toolbar',
+                                            border: 0,
+                                            height: 45,
+                                            id: 'DeviceEditorPartsBar',
+                                            enableOverflow: true,
+                                            layout: {
+                                                pack: 'center',
+                                                type: 'hbox'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'ori_Btn',
+                                                    icon: 'resources/images/symbols/origin-of-replication.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Origin of Replication'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'cds_Btn',
+                                                    icon: 'resources/images/symbols/cds.png',
+                                                    scale: 'large',
+                                                    tooltip: 'CDS'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'five_prime_ov_Btn',
+                                                    icon: 'resources/images/symbols/five-prime-overhang.png',
+                                                    scale: 'large',
+                                                    tooltip: '5\' Overhang'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'three_prime_ov_Btn',
+                                                    icon: 'resources/images/symbols/three-prime-overhang.png',
+                                                    scale: 'large',
+                                                    tooltip: '3\' Overhang'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'translational_start_site_Btn',
+                                                    icon: 'resources/images/symbols/translational-start-site.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Translational Start Site'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'promoter_Btn',
+                                                    icon: 'resources/images/symbols/promoter.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Promoter'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'primer_binding_site_Btn',
+                                                    icon: 'resources/images/symbols/primer-binding-site.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Primer Binding Site'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'restriction_enz_recog_site_Btn',
+                                                    icon: 'resources/images/symbols/restriction-enzyme-recognition-site.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Restriction Enzyme Recognition Site'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'restriction_site_w_no_overhang_Btn',
+                                                    icon: 'resources/images/symbols/restriction-site-with-no-overhang.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Restriction Site With No Overhangs'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'protease_site_Btn',
+                                                    icon: 'resources/images/symbols/protease-site.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Protease Site'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'protein_stability_element_Btn',
+                                                    icon: 'resources/images/symbols/protein-stability-element.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Protein Stability Element'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'assembly_junction_Btn',
+                                                    icon: 'resources/images/symbols/assembly-junction.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Assembly Junction'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'insulator_Btn',
+                                                    icon: 'resources/images/symbols/insulator.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Insulator'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'operator_Btn',
+                                                    icon: 'resources/images/symbols/operator.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Operator'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'ribonuclease_site_Btn',
+                                                    icon: 'resources/images/symbols/ribonuclease-site.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Ribonuclease Site'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'rna_stability_element_Btn',
+                                                    icon: 'resources/images/symbols/rna-stability-element.png',
+                                                    scale: 'large',
+                                                    tooltip: 'RNA Stability Element'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'terminator_Btn',
+                                                    icon: 'resources/images/symbols/terminator.png',
+                                                    scale: 'large',
+                                                    tooltip: 'Terminator'
+                                                },
+                                                {
+                                                    xtype: 'tbseparator'
+                                                },
+                                                {
+                                                    xtype: 'button',
+                                                    id: 'signature_Btn',
+                                                    icon: 'resources/images/symbols/signature.png',
+                                                    params: 'Signature',
+                                                    scale: 'large',
+                                                    tooltip: 'Signature'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    xtype: 'tabpanel',
+                                    dock: 'right',
+                                    floating: false,
+                                    frame: true,
+                                    id: 'InspectorPanel',
+                                    minWidth: 350,
+                                    width: 100,
+                                    bodyBorder: false,
+                                    animCollapse: false,
+                                    collapseDirection: 'right',
+                                    collapsed: false,
+                                    collapsible: true,
+                                    frameHeader: false,
+                                    hideCollapseTool: false,
+                                    overlapHeader: false,
+                                    title: 'Inspector',
+                                    titleCollapse: false,
+                                    activeTab: 0,
+                                    plain: false,
+                                    removePanelHeader: false,
+                                    layout: {
+                                        deferredRender: false,
+                                        type: 'card'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'panel',
+                                            layout: {
+                                                align: 'stretch',
+                                                type: 'vbox'
+                                            },
+                                            preventHeader: true,
+                                            title: 'Part Info',
+                                            items: [
+                                                {
+                                                    xtype: 'form',
+                                                    flex: 1,
+                                                    id: 'PartPropertiesForm',
+                                                    width: 287,
+                                                    layout: {
+                                                        align: 'stretch',
+                                                        type: 'vbox'
+                                                    },
+                                                    bodyPadding: 10,
+                                                    title: 'Properties',
+                                                    items: [
+                                                        {
+                                                            xtype: 'textfield',
+                                                            id: 'partNameField',
+                                                            fieldLabel: 'Part Name'
+                                                        },
+                                                        {
+                                                            xtype: 'displayfield',
+                                                            height: 20,
+                                                            id: 'partSourceField',
+                                                            fieldLabel: 'Part Source'
+                                                        },
+                                                        {
+                                                            xtype: 'displayfield',
+                                                            height: 20,
+                                                            id: 'reverseComplementField',
+                                                            fieldLabel: 'Reverse Complement',
+                                                            labelWidth: 160
+                                                        },
+                                                        {
+                                                            xtype: 'displayfield',
+                                                            height: 20,
+                                                            id: 'startBPField',
+                                                            fieldLabel: 'Start BP'
+                                                        },
+                                                        {
+                                                            xtype: 'displayfield',
+                                                            height: 20,
+                                                            id: 'stopBPField',
+                                                            fieldLabel: 'End BP'
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    xtype: 'form',
+                                                    flex: 1,
+                                                    maxHeight: 80,
+                                                    bodyPadding: 10,
+                                                    title: 'Forced Assembly Strategy',
+                                                    items: [
+                                                        {
+                                                            xtype: 'combobox',
+                                                            anchor: '100%'
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    xtype: 'form',
+                                                    flex: 1,
+                                                    bodyPadding: 10,
+                                                    title: 'Eugene Rules',
+                                                    dockedItems: [
+                                                        {
+                                                            xtype: 'button',
+                                                            dock: 'top',
+                                                            text: 'Add Rule'
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            dock: 'top',
+                                                            text: 'List'
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            xtype: 'panel',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            title: 'Collection Info',
+                                            items: [
+                                                {
+                                                    xtype: 'form',
+                                                    id: 'collectionInfoForm',
+                                                    bodyBorder: false,
+                                                    bodyPadding: 10,
+                                                    items: [
+                                                        {
+                                                            xtype: 'displayfield',
+                                                            anchor: '100%',
+                                                            id: 'j5_ready_field',
+                                                            value: 'Display Field',
+                                                            fieldLabel: 'j5 Ready'
+                                                        },
+                                                        {
+                                                            xtype: 'displayfield',
+                                                            anchor: '100%',
+                                                            id: 'combinatorial_field',
+                                                            value: 'Display Field',
+                                                            fieldLabel: 'Combinatorial'
+                                                        },
+                                                        {
+                                                            xtype: 'radiogroup',
+                                                            id: 'plasmid_geometry',
+                                                            fieldLabel: 'Plasmid Type',
+                                                            allowBlank: false,
+                                                            items: [
+                                                                {
+                                                                    xtype: 'radiofield',
+                                                                    id: 'circular_plasmid_radio',
+                                                                    name: 'plasmidtype',
+                                                                    boxLabel: 'Circular',
+                                                                    checked: true
+                                                                },
+                                                                {
+                                                                    xtype: 'radiofield',
+                                                                    id: 'linear_plasmid_radio',
+                                                                    name: 'plasmidtype',
+                                                                    boxLabel: 'Linear'
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            xtype: 'gridpanel',
+                                                            margin: 10,
+                                                            autoScroll: true,
+                                                            columnLines: true,
+                                                            columns: [
+                                                                {
+                                                                    xtype: 'rownumberer',
+                                                                    width: 50,
+                                                                    text: 'Column'
+                                                                },
+                                                                {
+                                                                    xtype: 'gridcolumn',
+                                                                    text: 'Direction'
+                                                                },
+                                                                {
+                                                                    xtype: 'numbercolumn',
+                                                                    text: 'Items'
+                                                                },
+                                                                {
+                                                                    xtype: 'gridcolumn',
+                                                                    text: 'FAS'
+                                                                },
+                                                                {
+                                                                    xtype: 'booleancolumn',
+                                                                    text: 'DSF'
+                                                                },
+                                                                {
+                                                                    xtype: 'gridcolumn',
+                                                                    text: 'FRO'
+                                                                },
+                                                                {
+                                                                    xtype: 'numbercolumn',
+                                                                    text: '5\' Ex'
+                                                                },
+                                                                {
+                                                                    xtype: 'numbercolumn',
+                                                                    text: '3\' Ex'
+                                                                }
+                                                            ],
+                                                            viewConfig: {
+
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'container',
+                                                            id: 'inspector_containerActions',
+                                                            margin: 10,
+                                                            items: [
+                                                                {
+                                                                    xtype: 'button',
+                                                                    text: 'Add Column'
+                                                                },
+                                                                {
+                                                                    xtype: 'button',
+                                                                    width: 100,
+                                                                    text: 'Remove Column'
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            xtype: 'textfield',
+                                                            anchor: '100%',
+                                                            height: 200,
+                                                            margin: 10,
+                                                            width: 269,
+                                                            fieldLabel: 'Column Content',
+                                                            labelAlign: 'top'
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+>>>>>>> master
                                         }
                                     ]
                                 },
@@ -979,14 +1623,33 @@ Ext.define('Vesa.view.AppViewport', {
                             ],
                             items: [
                                 {
-                                    xtype: 'container',
-                                    id: 'DeviceEditorContainer',
+                                    xtype: 'panel',
+                                    border: 0,
+                                    id: 'DeviceEditorCanvas',
                                     layout: {
-                                        align: 'stretch',
-                                        type: 'hbox'
+                                        type: 'fit'
                                     },
+                                    animCollapse: false
+                                }
+                            ]
+                        },
+                        {
+                            xtype: 'panel',
+                            layout: {
+                                type: 'fit'
+                            },
+                            title: 'Analysis',
+                            items: [
+                                {
+                                    xtype: 'panel',
+                                    width: 1513,
+                                    layout: {
+                                        type: 'fit'
+                                    },
+                                    title: 'Project Info',
                                     items: [
                                         {
+<<<<<<< HEAD
                                             xtype: 'panel',
                                             flex: 1,
                                             id: 'DeviceEditorCanvas',
@@ -1016,10 +1679,33 @@ Ext.define('Vesa.view.AppViewport', {
                                                             layout: {
                                                                 align: 'middle',
                                                                 pack: 'center',
+=======
+                                            xtype: 'tabpanel',
+                                            border: 0,
+                                            id: 'AnalysisTabPanel',
+                                            activeTab: 0,
+                                            items: [
+                                                {
+                                                    xtype: 'panel',
+                                                    layout: {
+                                                        align: 'stretch',
+                                                        type: 'vbox'
+                                                    },
+                                                    title: 'Info',
+                                                    items: [
+                                                        {
+                                                            xtype: 'panel',
+                                                            flex: 1,
+                                                            border: 0,
+                                                            id: 'j5_info',
+                                                            layout: {
+                                                                align: 'stretch',
+>>>>>>> master
                                                                 type: 'hbox'
                                                             },
                                                             items: [
                                                                 {
+<<<<<<< HEAD
                                                                     xtype: 'button',
                                                                     id: 'ori_Btn',
                                                                     icon: 'resources/images/symbols/origin-of-replication.png',
@@ -1207,10 +1893,300 @@ Ext.define('Vesa.view.AppViewport', {
                                                     xtype: 'container',
                                                     id: 'designContainer',
                                                     margin: 10
+=======
+                                                                    xtype: 'panel',
+                                                                    flex: 1,
+                                                                    border: 0,
+                                                                    id: 'j5-status-Panel',
+                                                                    layout: {
+                                                                        align: 'stretch',
+                                                                        type: 'vbox'
+                                                                    },
+                                                                    items: [
+                                                                        {
+                                                                            xtype: 'fieldcontainer',
+                                                                            flex: 1,
+                                                                            margins: '10',
+                                                                            height: 150,
+                                                                            id: 'j5-status-Fields',
+                                                                            minHeight: 150,
+                                                                            width: 389,
+                                                                            layout: {
+                                                                                align: 'stretch',
+                                                                                padding: 10,
+                                                                                type: 'vbox'
+                                                                            },
+                                                                            fieldLabel: '',
+                                                                            hideLabel: true,
+                                                                            items: [
+                                                                                {
+                                                                                    xtype: 'displayfield',
+                                                                                    value: 'Display Field',
+                                                                                    fieldLabel: 'Status'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'displayfield',
+                                                                                    value: 'Display Field',
+                                                                                    fieldLabel: 'Run Date'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'displayfield',
+                                                                                    value: 'Display Field',
+                                                                                    fieldLabel: 'Run Time'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'displayfield',
+                                                                                    value: 'Display Field',
+                                                                                    fieldLabel: 'Assembly Type'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'displayfield',
+                                                                                    value: 'Display Field',
+                                                                                    fieldLabel: 'j5 Ready'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'displayfield',
+                                                                                    value: 'Display Field',
+                                                                                    fieldLabel: 'Combinatorial'
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            xtype: 'panel',
+                                                                            flex: 2,
+                                                                            border: 0,
+                                                                            margin: 10,
+                                                                            layout: {
+                                                                                align: 'stretch',
+                                                                                padding: 5,
+                                                                                type: 'vbox'
+                                                                            },
+                                                                            items: [
+                                                                                {
+                                                                                    xtype: 'button',
+                                                                                    margins: '5',
+                                                                                    icon: 'resources/images/ux/edit_button.png',
+                                                                                    scale: 'medium',
+                                                                                    text: 'Edit in Device Editor'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'button',
+                                                                                    margins: '5',
+                                                                                    maxHeight: 30,
+                                                                                    minHeight: 30,
+                                                                                    maintainFlex: false,
+                                                                                    autoWidth: true,
+                                                                                    icon: 'resources/images/ux/view_button.png',
+                                                                                    scale: 'medium',
+                                                                                    text: 'View j5 Parameters'
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'splitbutton',
+                                                                                    flex: 3,
+                                                                                    margins: '5',
+                                                                                    maxHeight: 30,
+                                                                                    autoWidth: true,
+                                                                                    icon: 'resources/images/ux/submit_button.png',
+                                                                                    scale: 'large',
+                                                                                    text: 'Submit j5 Run',
+                                                                                    menu: {
+                                                                                        xtype: 'menu',
+                                                                                        items: [
+                                                                                            {
+                                                                                                xtype: 'menuitem',
+                                                                                                text: 'j5 Inputs'
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'button',
+                                                                                    flex: 4,
+                                                                                    margins: '5',
+                                                                                    maxHeight: 30,
+                                                                                    minHeight: 30,
+                                                                                    maintainFlex: false,
+                                                                                    autoWidth: false,
+                                                                                    icon: 'resources/images/ux/downstream_button.png',
+                                                                                    scale: 'medium',
+                                                                                    text: 'Downstream Automation'
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    xtype: 'panel',
+                                                                    flex: 1,
+                                                                    margin: 30,
+                                                                    layout: {
+                                                                        align: 'stretch',
+                                                                        type: 'vbox'
+                                                                    },
+                                                                    title: 'Download Results',
+                                                                    items: [
+                                                                        {
+                                                                            xtype: 'panel',
+                                                                            flex: 1,
+                                                                            border: 0,
+                                                                            margin: 15,
+                                                                            maxHeight: 50,
+                                                                            layout: {
+                                                                                align: 'stretch',
+                                                                                type: 'vbox'
+                                                                            },
+                                                                            items: [
+                                                                                {
+                                                                                    xtype: 'button',
+                                                                                    flex: 1,
+                                                                                    margins: '5',
+                                                                                    margin: '',
+                                                                                    icon: 'resources/images/ux/download_button.png',
+                                                                                    scale: 'large',
+                                                                                    text: 'Download All'
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            xtype: 'panel',
+                                                                            flex: 1,
+                                                                            border: 0,
+                                                                            margin: 15,
+                                                                            maintainFlex: false,
+                                                                            layout: {
+                                                                                align: 'stretch',
+                                                                                type: 'hbox'
+                                                                            },
+                                                                            items: [
+                                                                                {
+                                                                                    xtype: 'panel',
+                                                                                    flex: 1,
+                                                                                    border: 0,
+                                                                                    layout: {
+                                                                                        align: 'stretch',
+                                                                                        type: 'vbox'
+                                                                                    },
+                                                                                    items: [
+                                                                                        {
+                                                                                            xtype: 'button',
+                                                                                            margins: '5',
+                                                                                            icon: 'resources/images/ux/download_button2.png',
+                                                                                            scale: 'medium',
+                                                                                            text: 'Sequence File'
+                                                                                        },
+                                                                                        {
+                                                                                            xtype: 'button',
+                                                                                            margins: '5',
+                                                                                            icon: 'resources/images/ux/download_button2.png',
+                                                                                            scale: 'medium',
+                                                                                            text: 'Parts File'
+                                                                                        }
+                                                                                    ]
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'panel',
+                                                                                    flex: 1,
+                                                                                    border: 0,
+                                                                                    minWidth: 100,
+                                                                                    layout: {
+                                                                                        align: 'stretch',
+                                                                                        type: 'vbox'
+                                                                                    },
+                                                                                    items: [
+                                                                                        {
+                                                                                            xtype: 'button',
+                                                                                            margins: '5',
+                                                                                            icon: 'resources/images/ux/download_button2.png',
+                                                                                            scale: 'medium',
+                                                                                            text: 'Target Parts File'
+                                                                                        },
+                                                                                        {
+                                                                                            xtype: 'button',
+                                                                                            margins: '5',
+                                                                                            icon: 'resources/images/ux/download_button2.png',
+                                                                                            scale: 'medium',
+                                                                                            text: 'Eugene Rules File'
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            xtype: 'panel',
+                                                                            flex: 1,
+                                                                            border: 0,
+                                                                            margin: 15,
+                                                                            maintainFlex: false,
+                                                                            layout: {
+                                                                                align: 'stretch',
+                                                                                type: 'hbox'
+                                                                            },
+                                                                            items: [
+                                                                                {
+                                                                                    xtype: 'panel',
+                                                                                    flex: 1,
+                                                                                    border: 0,
+                                                                                    layout: {
+                                                                                        align: 'stretch',
+                                                                                        type: 'vbox'
+                                                                                    },
+                                                                                    items: [
+                                                                                        {
+                                                                                            xtype: 'button',
+                                                                                            margins: '5',
+                                                                                            icon: 'resources/images/ux/download_button2.png',
+                                                                                            scale: 'medium',
+                                                                                            text: 'j5 Parameters'
+                                                                                        }
+                                                                                    ]
+                                                                                },
+                                                                                {
+                                                                                    xtype: 'panel',
+                                                                                    flex: 1,
+                                                                                    border: 0,
+                                                                                    minWidth: 100,
+                                                                                    layout: {
+                                                                                        align: 'stretch',
+                                                                                        type: 'vbox'
+                                                                                    },
+                                                                                    items: [
+                                                                                        {
+                                                                                            xtype: 'button',
+                                                                                            margins: '5',
+                                                                                            icon: 'resources/images/ux/download_button2.png',
+                                                                                            scale: 'medium',
+                                                                                            text: 'Downstream Parameters'
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            xtype: 'form',
+                                                            flex: 1,
+                                                            maxHeight: 250,
+                                                            bodyPadding: 10,
+                                                            title: 'Warnings'
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    xtype: 'panel',
+                                                    title: 'Design Overview'
+                                                },
+                                                {
+                                                    xtype: 'panel',
+                                                    title: 'Sequences'
+>>>>>>> master
                                                 }
                                             ]
                                         },
                                         {
+<<<<<<< HEAD
                                             xtype: 'tabpanel',
                                             flex: 2,
                                             id: 'InspectorPanel',
@@ -1436,6 +2412,44 @@ Ext.define('Vesa.view.AppViewport', {
                                                     ]
                                                 }
                                             ]
+=======
+                                            xtype: 'gridpanel',
+                                            hidden: true,
+                                            title: 'My Grid Panel',
+                                            columns: [
+                                                {
+                                                    xtype: 'gridcolumn',
+                                                    dataIndex: 'string',
+                                                    text: 'String'
+                                                },
+                                                {
+                                                    xtype: 'numbercolumn',
+                                                    dataIndex: 'number',
+                                                    text: 'Number'
+                                                },
+                                                {
+                                                    xtype: 'datecolumn',
+                                                    dataIndex: 'date',
+                                                    text: 'Date'
+                                                },
+                                                {
+                                                    xtype: 'booleancolumn',
+                                                    dataIndex: 'bool',
+                                                    text: 'Boolean'
+                                                }
+                                            ],
+                                            viewConfig: {
+
+                                            }
+                                        },
+                                        {
+                                            xtype: 'form',
+                                            layout: {
+                                                type: 'fit'
+                                            },
+                                            bodyPadding: 10,
+                                            title: 'j5 Run Info'
+>>>>>>> master
                                         }
                                     ]
                                 }

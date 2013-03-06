@@ -1,5 +1,5 @@
 /**
- * @class Teselsagen.renderer.annotate.ORFRenderer
+ * @class Teselagen.renderer.annotate.ORFRenderer
  * Class which generates and renders SVG for a given ORF.
  * @author Nick Elsbree
  * @author Zinovii Dmytriv (original author of ORFRenderer.as)
@@ -56,7 +56,7 @@ Ext.define("Teselagen.renderer.annotate.ORFRenderer", {
             if(orf.getStart() > orf.getEnd()) { // circular case
 					/* |---------------------------------------------------|
 					*  FFFFFFFFFFFFFFFFFFFFFFF|                              */
-					if(orf.getEnd() >= row.rowData.getStart() && 
+					if(orf.getEnd() >= row.rowData.getStart() &&
                        orf.getEnd() <= row.rowData.getEnd()) {
 						endBP = orf.getEnd() - 1;
 					}

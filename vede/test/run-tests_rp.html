@@ -1,0 +1,106 @@
+<html>
+<head>
+    <title id="page-title">RP's VEDE Tester</title>
+
+    <link rel="stylesheet" type="text/css" href="/lib/jasmine-1.2.0-update/jasmine.css">
+     
+    <script type="text/javascript" src="/extjs/ext-all-dev.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/lib/jasmine-1.2.0/jasmine.js"></script>
+    <script type="text/javascript" src="/lib/jasmine-1.2.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="/lib/jasmine-dom-fixtures.js"></script>
+    
+    
+    <!-- Setup environment -->
+ 	<script type="text/javascript" src="js/setup.js"></script>
+ 	<script type="text/javascript" src="js/app_test.js"></script>
+    
+    <!-- include specs here -->
+    <!--  <script type="text/javascript" src="./specs/testModels_RP.js"></script> -->
+    <!--<script type="text/javascript" src="specs/store.t.js"></script> -->
+    <!--
+    <script type="text/javascript" src="./specs/backend/server.read.t.js"></script>
+    
+    <script type="text/javascript" src="js/exec_jasmine.js"></script>
+    -->
+
+    <style>
+        h2 { font-size: 11px; font-family: Monaco, "Lucida Console", monospace; line-height: 14px; color: #333333; }
+    </style>
+
+<script>
+$(function(){
+
+    var injectSelectedTest = function(){
+        var script = $('#selectedTest').find(":selected").val();
+        localStorage.setItem("selectedTest", script);
+        injectTest(script);
+    };
+
+
+    var tests =
+    {
+        'VE Project' : './specs/backend/VEProject.Tests.js',
+        'DE Project' : './specs/backend/DEProject.Tests.js',
+        'Project'    : './specs/backend/Project.Tests.js',
+        'READ'       : './specs/backend/server.read.t.js'
+    };
+
+    var autoload = decodeURI(getUrlVars()["test"]);
+
+    for(var test in tests)
+    {
+        $('#selectedTest').append('<option value="'+tests[test]+'">'+test+'</option>');
+        if(localStorage.getItem("selectedTest")===tests[test]) $('#selectedTest :last').attr('selected',true);
+        if (autoload===$('#selectedTest').find(":last")[0].text) injectSelectedTest($('#selectedTest').find(":last").val());
+    }
+
+    $('#goTest').click(injectSelectedTest);
+
+    $('#reloadTest').click(function(){
+        location.href = location.origin + location.pathname + '?test='+$('#selectedTest').find(":selected")[0].text;
+    });
+
+    $('#addTest').click(function(){
+        var a = prompt("Enter path of the test",'');
+    });
+
+});
+
+function injectTest(inScript){
+    var head=document.getElementsByTagName('head')[0];
+
+    var script=document.createElement('script');
+    script.src = inScript;
+    head.appendChild(script);
+
+    var script=document.createElement('script');
+    script.src = 'js/exec_jasmine.js';
+    head.appendChild(script);
+}
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+
+</script>
+
+</head>
+<body>
+<h2>RP's VEDE Testing page</h2>
+
+<select id="selectedTest">
+</select>
+<button id="goTest">Run</button>
+<button id="reloadTest">Reload</button>
+<button id="addTest">AddTest</button>
+<br>
+
+</body>
+</html>

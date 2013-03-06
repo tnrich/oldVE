@@ -1,0 +1,27 @@
+{
+    "name": "DeviceEditor"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "async":"0.1.22"
+    , "bson":"0.1.5"
+    , "chai":"1.5.0"
+    , "commander":"1.0.5"
+    , "csv":"0.2.6"
+    , "express": "3.0.0rc3"
+    , "jade": "0.27.5"
+    , "mongodb":"1.1.7"
+    , "mongoose":"3.1.2"
+    , "markdown-js":"0.0.3"
+    , "mysql":"2.0.0-alpha3"
+    , "nodemailer": "0.3.35"
+    , "node-zip":"0.0.1"
+    , "request":"2.12.0"
+    , "require-all":"0.0.4"
+    , "soap":"0.2.6"
+    , "socket.io":"0.9.9"
+    , "xml2js":"0.2.2"
+    , "xmlbuilder":"0.4.2"
+    , "xmlrpc": "1.0.2"
+  }
+}

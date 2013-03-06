@@ -21,7 +21,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
     },
 
     /**
-     * @param {Array<Teselagen.bio.sequence.common.Annotation>} features The
+     * @param {Teselagen.bio.sequence.common.Annotation[]} features The
      * features to be rendered.
      * @param {Ext.util.HashMap} headPoints A hashmap of the middle points of
      * the features. Defaults to empty.
@@ -36,7 +36,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
 
     /**
      * Converts the given features and their locations to sprites.
-     * @return {Array<Ext.draw.Sprite>} The array of sprites.
+     * @return {Ext.draw.Sprite[]} The array of sprites.
      */
     render: function() {
         var sprites = [];
@@ -118,7 +118,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
         }, this);
         
 
-        console.log("All sprites calculated.");
+//        console.log("All sprites calculated.");
         return sprites;
     },
 
@@ -127,7 +127,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
      * Given a feature, return its start and end angles.
      * @param {Teselagen.bio.sequence.common.Annotation} feature The feature to
      * calculate angles for.
-     * @return {Array<Int>} The start and end angles, in that order.
+     * @return {Number[]} The start and end angles, in that order.
      */
     calculateLocations: function(feature, featureGap) {
         var locate1 = feature.getStart()/

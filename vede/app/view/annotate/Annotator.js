@@ -7,7 +7,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     alias: "widget.annotator",
 
     statics: {
-        CHAR_WIDTH: 10
+        CHAR_WIDTH: 9
     },
 
     autoScroll: true,

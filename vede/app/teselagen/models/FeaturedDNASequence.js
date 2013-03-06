@@ -12,7 +12,7 @@ Ext.define("Teselagen.models.FeaturedDNASequence", {
 	 * @param {String} name The name of the DNA sequence.
 	 * @param {String} sequence The DNA sequence in string form.
 	 * @param {Boolean} isCircular Whether the DNA is circular.
-	 * @param {Array<Teselagen.models.DNAFeature>} features DNA features on the sequence.
+	 * @param {Teselagen.models.DNAFeature[]} features DNA features on the sequence.
 	 * @param {String} accessionNumber The DNA sequence's accession number.
 	 * @param {String} identifier An identifier for the sequence.
 	 */

@@ -1,4 +1,3 @@
-
 /**
  * @class Teselagen.utils.DeXmlUtils
  * Converts formats for Device Editor.
@@ -7,13 +6,12 @@
 
 Ext.define("Teselagen.utils.DeXmlUtils", {
 
+    singleton: true,
 
     requires: [
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.util.XmlToJson"
     ],
-
-    singleton: true,
 
     constructor: function() {
         XmlToJson = Teselagen.bio.util.XmlToJson;
@@ -23,7 +21,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
     /**
      * Converts Device Editor XML (DE-XML) into Device Editor JSON (DE-JSON) format.
      * @param {String} xmlStr DE-XML in string format
-     * @returns {JSON} result DE-JSON as JSON object.
+     * @returns {Object} result DE-JSON as JSON object.
      */
     deXmlToJson: function(xmlStr) {
         var result = {};
@@ -59,7 +57,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
                 "hash" : hash,
                 "de:format" : format,
                 "de:content" : content,
-                "de:filename" : filename
+                "de:fileName" : filename
             });
         }
 
@@ -76,7 +74,8 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
             var seqFileHash = part[i]["sequenceFileHash"]["__text"];
             var parts       = [];
 
-            var pt = part[i]["parts"]["part_asArray"]; //NOT SURE where array will occur when ther is more than one part
+            // ASSUMES THERE ARE MORE THAN ONE PART
+            /*var pt = part[i]["parts"]["part_asArray"];
             for (var j=0; j < pt.length; j++) {
                 var ptId    = parseInt(pt[j]["_id"]);
                 var fas     = pt[j]["fas"]["__text"] || "";
@@ -85,7 +84,18 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
                     "id" : ptId,
                     "de:fas" : fas
                 });
-            }
+            }*/
+
+            // ASSUMES ONLY ONE PART
+            //var pt      = part[i]["parts"]["part"];
+            var ptId    = parseInt(part[i]["parts"]["part"]["_id"]) || "";
+            var fas     = part[i]["parts"]["part"]["fas"]["__text"] || "";
+            parts = {
+                "id": ptId,
+                "de:fas": fas
+            };
+
+
             partVOs.push({
                 "id": id,
                 "de:name":      name,
@@ -133,10 +143,14 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
             var dsf         = (j5[i]["dsf"]["__text"] === "true");
             var binItems    = [];
 
+            // ASSUMES MORE thAN ONE PARTID
             var bin         = j5[i]["binItems"]["partID_asArray"];
             for (var j = 0; j < bin.length; j++) {
                 binItems.push(parseInt(bin[j]["__text"]));
             }
+            // ASSUMES ONE PARTID
+            // J5Collection Model says this should be a string
+            //binItems        = parseInt(j5[i]["binItems"]["partID"]["__text"]);
 
             j5Bins.push({
                 "de:binName": binName,
@@ -181,9 +195,9 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
       * Checks if a structure of the XML2JSON data structure has the minimal structure requirements.
       * Inserts blank entries for entries that are needed.
       *
-      * @param {JSON} json a Raw De-XML2JSON object
+      * @param {Object} json a Raw De-XML2JSON object
       * //@returns {Boolean} isValid True if structure is good, false if missing key elements.
-      * @returns {JSON} json Repaired raw DE-JSON object.
+      * @returns {Object} json Repaired raw DE-JSON object.
       */
     validateRawDeJson: function(json) {
         //var isValid = true;
@@ -432,7 +446,7 @@ Ext.define("Teselagen.utils.DeXmlUtils", {
       /**
       * Validates if structure of the JSON datastructure has the minimal structure requirements.
       *
-      * @param {JSON} json a DE-JSON object
+      * @param {Object} json a DE-JSON object
       * @returns {Boolean} isValid True if structure is good, false if missing key elements.
       */
     validateDeJson: function(json) {

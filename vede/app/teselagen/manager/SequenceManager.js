@@ -10,17 +10,19 @@
  * is:
  *          GATTACA
  *          --234--
- *          or 
+ *          or
  *            TTA
  *
  *
- * NOTE: When dealing with Features, if there is only one Location, then 
+ * NOTE: When dealing with Features, if there is only one Location, then
  *          sm.getFeatures()[0].getName()
  * is functional.
  * If there is more than one Location, a getLocations()
  * call is necessary:
  *          eg. sm.getFeatures()[0].getLocations[0].getName()
  *
+ * REFACTOR NOTE: This class needs to be refactored. This manager represents both a manager as well as the model.
+ * The model should not be embedded in the manager.
  *
  * Based off SequenceProvider.as
  *
@@ -80,10 +82,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @param {String} name
      * @param {Boolean} circular
      * @param {Teselagen.bio.sequence.common.SymbolList} sequence
-     * @param {[Teselagen.bio.sequence.dna.Feature]} features
+     * @param {Teselagen.bio.sequence.dna.Feature[]} features
      * @returns {Teselagen.manager.SequenceManager}
-     * @memberOf Teselagen.manager.SequenceManager
-     * 
+     * @member Teselagen.manager.SequenceManager
+     *
      */
     constructor: function(inData) {
         //this.mixins.observable.constructor.call(this, inData);
@@ -138,6 +140,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.manualUpdateEnd();
         }
         /**
+         * @method setCircular
          * @param {Boolean} circular
          */
         this.self.prototype.setCircular = function(pCircular) {
@@ -146,6 +149,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.manualUpdateEnd();
         }
         /**
+         * @method setSequence
          * @param {Teselagen.bio.sequence.common.SymbolList} sequence
          */
         this.self.prototype.setSequence = function(pSequence) {
@@ -154,6 +158,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.sequence = pSequence;
         }
         /**
+         * @method setFeatures
          * @param {Teselagen.bio.sequence.dna.Feature} name
          */
         this.self.prototype.setFeatures = function(pFeatures) {
@@ -162,14 +167,14 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * @param {Boolean} manualUpdateStarted Manual update event started 
+     * @param {Boolean} manualUpdateStarted Manual update event started
      */
     getManualUpdateStarted:function() {
         return this.manualUpdateStarted;
     },
 
     /**
-     * @returns {Teselagen.manager.SequenceManagerMemento} memento 
+     * @returns {Teselagen.manager.SequenceManagerMemento} memento
      */
     createMemento: function() {
         var clonedFeatures = [];
@@ -191,7 +196,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * @param {Teselagen.manager.SequenceManagerMemento} memento 
+     * @param {Teselagen.manager.SequenceManagerMemento} memento
      */
     setMemento: function(pMemento) {
         var sequenceManagerMemento = pMemento;
@@ -222,7 +227,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /** Calculates the complement sequence
-     * @returns {Teselagen.bio.sequence.common.SymbolList} complementSequence 
+     * @returns {Teselagen.bio.sequence.common.SymbolList} complementSequence
      */
     getComplementSequence: function() {
         this.updateComplementSequence();
@@ -230,7 +235,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /** Calculates the reverse complement sequence
-     * @returns {Teselagen.bio.sequence.common.SymbolList} reverseComplementSequence 
+     * @returns {Teselagen.bio.sequence.common.SymbolList} reverseComplementSequence
      */
     getReverseComplementSequence: function() {
         this.updateReverseComplementSequence();
@@ -261,7 +266,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Extracts the sub sequence manager by range.
-     * If the range of the sub sequence you choose is only a subset of a feature, 
+     * If the range of the sub sequence you choose is only a subset of a feature,
      * that feature is not transfered to your new subSequenceManager.
      * @param {Number} start Range start, inclusive.
      * @param {Number} end Range end, exclusive.
@@ -303,7 +308,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 }
             } else if ( pStart > pEnd && featStart >= featEnd) {
                 // FFFF-------------------FFFF
-                // SSSSSS               SSSSSS or 
+                // SSSSSS               SSSSSS or
                 // SSSS                   SSSS
                 if ( pStart <= featStart && pEnd >= featEnd) {
                     var clonedFeature2 = feature.clone();
@@ -359,8 +364,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Adds list of Features to sequence manager.
-     * @param {Teselagen.bio.sequence.dna.Feature} [featuresToAdd] List of features to add
-     * @param{Boolean} quiet When true not SequenceProviderEvent will be dispatched
+     * @param {Teselagen.bio.sequence.dna.Feature[]} featuresToAdd List of features to add
+     * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      * @returns {Boolean} done True if successful, False if nothing was done.
      */
     addFeatures: function(pFeaturesToAdd, quiet) {
@@ -407,7 +412,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * Remove list of Features to sequence manager.
      * (It is easier to just iterate through your array and use removeFeature() instead.)
-     * @param {Teselagen.bio.sequence.dna.Feature[]} [featuresToRemove] List of features to remove
+     * @param {Teselagen.bio.sequence.dna.Feature[]} featuresToRemove List of features to remove
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
      * @returns {Boolean} done True if successful, False if nothing was done.
      */
@@ -441,7 +446,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * Insert another sequence manager at position. This method is used on sequence paste. 
+     * Insert another sequence manager at position. This method is used on sequence paste.
      *
      * @param {Teselagen.manager.SequenceManager} sequenceManager SequenceManager to insert
      * @param {Number} position Position where to insert
@@ -480,7 +485,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Insert another sequence at position. This method is used on sequence paste
-     * 
+     *
      * @param {Teselagen.bio.sequence.common.SymbolList} insertSequence SymbolList to insert
      * @param {Number} position Position where to insert; non-zero based
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
@@ -510,7 +515,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         for (var i=0; i < this.features.length; i++) {
             this.features[i].insertAt(pPosition, insertSequenceLength, lengthBefore, this.circular);
-        } 
+        }
         if(!pQuiet && !this.manualUpdateStarted) {
             Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceInsert, {sequence: pInsertSequence, position: pPosition});
         }
@@ -520,7 +525,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     /**
      * TEMP: USING Ext.Error.raise to throw errors for now
      * Remove sequence in range.
-     * 
+     *
      * @param {Number} pStartIndex Range start, inclusive.
      * @param {Number} pEndIndex Range end, exclusive.
      * @param {Boolean} quiet When true not SequenceProviderEvent will be dispatched
@@ -587,7 +592,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             //console.log("New Feature Info (" + feature.getName() + ") " + featStart + ":" + featEnd);
         }
 
-        // Deleting entire features if necessary 
+        // Deleting entire features if necessary
         for (var d=0; d < deletions.length; d++) {
             //console.log(deletions.length);
             var success = this.removeFeature(deletions[d], true);
@@ -612,7 +617,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         
         if(!quiet && !this.manualUpdateStarted) {
-            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength}); 
+            Vede.application.fireEvent(this.updateSequenceChanged, this.updateKindSequenceRemove, {position: pStartIndex, length: removeSequenceLength});
             //DW orig length was length...wrong?
         }
 
@@ -620,7 +625,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
         // Helper Functions here
         // These take care of existing this.features that may be affected by an inserted seq/seqMgr
-        // 
+        //
 
         function normFeatureNormSelection() {
             if (DEBUG_MODE) console.log("norm-norm");
@@ -689,7 +694,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
              * |SSSSSSSSSSS-------------------------------------------------------------------------SSSSSSSSSSSSSS|
              *                                  |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|                                    */
             if(pStartIndex > featEnd && (pEndIndex) <= featStart) {
-                feature.shift(-pEndIndex, lengthBefore, circular); 
+                feature.shift(-pEndIndex, lengthBefore, circular);
                 if (DEBUG_MODE) console.log("case Fn,Sc 1");
             }
             /* Selection and feature left partial overlap => cut and shift
@@ -698,8 +703,8 @@ Ext.define("Teselagen.manager.SequenceManager", {
             else if(pStartIndex > featEnd && (pEndIndex) > featStart && pEndIndex <= featEnd) {
                 delLengthOutside = featStart;
                 delLengthInside = pEndIndex - featStart;
-                feature.deleteAt(0, delLengthOutside, lengthBefore, circular); 
-                feature.deleteAt(featStart, delLengthInside, lengthBefore, circular); 
+                feature.deleteAt(0, delLengthOutside, lengthBefore, circular);
+                feature.deleteAt(featStart, delLengthInside, lengthBefore, circular);
                 if (DEBUG_MODE) console.log("case Fn,Sc 2");
             }
             /* Selection and feature right partial overlap => cut and shift
@@ -707,7 +712,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
              *                                                       |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF|               */
             else if(pStartIndex > featStart && pStartIndex < featEnd && (pEndIndex) < featStart) {
                 feature.deleteAt(pStartIndex, featEnd - pStartIndex, lengthBefore, circular);
-                feature.shift(-pEndIndex, lengthBefore, circular); 
+                feature.shift(-pEndIndex, lengthBefore, circular);
                 if (DEBUG_MODE) console.log("case Fn,Sc 3");
             }
             /* Double selection overlap => cut and shift
@@ -935,7 +940,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Get list of features in range
      *
      * @param {Number} start Start inclusive
-     * @param {Number} end End expclusive 
+     * @param {Number} end End expclusive
      * @returns {Teselagen.bio.sequence.dna.Feature[]} features List of features
      */
      featuresByRange: function(pStart, pEnd) {
@@ -957,10 +962,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
                     if (pStart < featEnd || pEnd >= featStart) { //DW; ORIG WAS >, should be inclusive >=
                         result.push(feat); //circ feat
                     }
-                } 
+                }
             } else {            // CIRCULAR selection
                 if (featStart <= featEnd) {
-                    if (featStart >= pEnd  &&  featEnd <= pStart) { 
+                    if (featStart >= pEnd  &&  featEnd <= pStart) {
                     //DW ORIG CODE > instead of >=: featEnd < pStart is WRONG; featEnd is exclusive so need =
                         // none
                     } else {
@@ -990,7 +995,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             featEnd     = feat.getEnd();
             if (featStart <= featEnd) { //Feat is normal
                 if (featStart <= pPosition  && featEnd > pPosition) {
-                    // DW : ORIG should be featStart <= not < pPosition 
+                    // DW : ORIG should be featStart <= not < pPosition
                     result.push(feat);
                 }
             } else { // Feat is circular.
@@ -1005,10 +1010,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
 
     /**
      * Use this method for manually operate sequence changing state.
-     * 
+     *
      * <pre>
      * Usage:
-     * 
+     *
      * sequenceProvider.manualUpdateStart();
      * sequenceProvider.addFeature(feature1);
      * sequenceProvider.addFeature(feature2);
@@ -1026,7 +1031,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
     },
 
     /**
-     * @see manualUpdateStart
+     * See #manualUpdateStart
      */
     manualUpdateEnd: function() {
         if(this.manualUpdateStarted) {
@@ -1181,7 +1186,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * Converts a Sequence Manager into a Genbank {@link Teselagen.bio.parsers.Genbank}
      * form of the data.
      * @returns {Teselagen.bio.parsers.Genbank} genbank A Genbank model of your data
-     */ 
+     */
 
     toGenbank: function() {
 
@@ -1286,13 +1291,13 @@ Ext.define("Teselagen.manager.SequenceManager", {
         for (var i=0; i < gbFeats.length; i++) {
             var locations   = [];
             var notes       = [];
-            var featName    = gbFeats[i].getKeyword();   
+            var featName    = gbFeats[i].getKeyword();
             //var tmpFeat = null;
 
             for (var j=0; j < gbFeats[i].getFeatureLocation().length; j++) {
-                var tmpLoc = Ext.create("Teselagen.bio.sequence.common.Location", { 
-                    start:  gbFeats[i].getFeatureLocation()[j].getStart(), 
-                    end:    gbFeats[i].getFeatureLocation()[j].getEnd() 
+                var tmpLoc = Ext.create("Teselagen.bio.sequence.common.Location", {
+                    start:  gbFeats[i].getFeatureLocation()[j].getStart(),
+                    end:    gbFeats[i].getFeatureLocation()[j].getEnd()
                 });
                 locations.push(tmpLoc);
             }
@@ -1300,7 +1305,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             for (var k=0; k < gbFeats[i].getFeatureQualifier().length; k++) {
                 var tmpName = gbFeats[i].getFeatureQualifier()[k].getName();
                 if (tmpName === "label" | tmpName === "ApEinfo_label" ||
-                    tmpName === "note" || tmpName === "gene" || 
+                    tmpName === "note" || tmpName === "gene" ||
                     tmpName === "organism" || tmpName === "name" ) {
                     featName = gbFeats[i].getFeatureQualifier()[k].getValue();
                 } //else {
@@ -1365,7 +1370,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
      * @returns {Teselagen.models.FeaturedDNASequence} featuredDNASequence or this output
      */
     fromFasta: function(pFasta) {
-        return Teselagen.utils.FormatUtils.fastaToFeaturedDNASequence(pFasta);  
+        return Teselagen.utils.FormatUtils.fastaToFeaturedDNASequence(pFasta);
     },
     
     /**

@@ -81,7 +81,7 @@ package org.jbei.registry.mediators
         private var zippedPlateFilesFileRef:FileReference;
         private var condensedJ5AssemblyFileFileRef:FileReference;
 
-        private var assemblyMethodOptions:ArrayCollection = new ArrayCollection();
+        arivate var assemblyMethodOptions:ArrayCollection = new ArrayCollection();
 
         private var xmlrpcObject:XMLRPCObject;
         

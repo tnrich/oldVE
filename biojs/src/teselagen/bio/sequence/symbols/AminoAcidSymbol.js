@@ -1,15 +1,14 @@
-    /**
-    * AminoAcidSymbol class
-    * @description This class ssets up the data structure for Amino Acids
-    * @author Micah Lerner
-    */
-
+/**
+ * @class Teselagen.bio.sequence.symbols.AminoAcidSymbol
+ * This class sets up the data structure for Amino Acids.
+ * @author Micah Lerner
+ */
 Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 	/**
 	* Constructor
-	* @param  String name  	Full Name
-	* @param  String value 	One Letter Symbol
-	* @param  String threeLettersName 	Three letter symbol abbreviation
+	* @param  {String} name Full Name
+	* @param  {String} value One Letter Symbol
+	* @param  {String} threeLettersName Three letter symbol abbreviation
 	*/
 
 	constructor: function(inData){
@@ -36,6 +35,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 
 		/**
 		 * Set Name
+		 * @method setName
 		 * @param {String} pName input name
 		 */
 		this.setName = function(pName){
@@ -44,6 +44,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 
 		/**
 		 * Get threeLettersName
+		 * @method getThreeLettersName
 		 * @return {String} returns threelettername
 		 */
 		this.getThreeLettersName = function(){
@@ -52,6 +53,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 
 		/**
 		 * Set threeLettersName
+		 * @method setThreeLettersName
 		 * @param {String} pThreeLettersName input threelettersname
 		 */
 		this.setThreeLettersName = function(pThreeLettersName){
@@ -60,6 +62,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 
 		/**
 		 * Get value
+		 * @method getValue
 		 * @return {String} returns value
 		 */
 		this.getValue = function() {
@@ -68,6 +71,7 @@ Ext.define("Teselagen.bio.sequence.symbols.AminoAcidSymbol",{
 
 		/**
 		 * Set value
+		 * @method setValue
 		 * @param {String} pValue input value
 		 */
 		this.setValue = function(pValue) {
