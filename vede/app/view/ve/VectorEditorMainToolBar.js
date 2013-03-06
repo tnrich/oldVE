@@ -11,7 +11,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'filefield',
         buttonOnly: true,
-        html: '<div data-qtip="3\' Extra CPEC Overhang Bps">3\' Ex</div>',
         buttonConfig: {
             icon: 'resources/images/import_new.png',
             text: "Import",
