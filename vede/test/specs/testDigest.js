@@ -13,6 +13,7 @@ Ext.require("Teselagen.manager.RestrictionEnzymeGroupManager");
 Ext.require("Teselagen.manager.RestrictionEnzymeManager");
 Ext.require("Teselagen.utils.SystemUtils");
 Ext.require("Teselagen.utils.FeaturedDNASequenceUtils");
+Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 
 Ext.onReady(function() {
     //console.log(Ext.Loader.getConfig());
@@ -22,27 +23,66 @@ Ext.onReady(function() {
     // ====================================
 
     describe("DigestionManager.js Tests", function() {
-        var reSequence, feat1, feat2, feat3, sm, digestionSequence,
-            restrictionEnzymeMapper, agcEnz, gntEnz, reGroup, dm, re, firstCut, lastCut;
+        var reSequence, feat1, feat2, feat3, feat4, sm, digestionSequence,
+            restrictionEnzymeMapper, agcEnz, gntEnz, reGroup, dm, re, firstCut, 
+            lastCut, sourceDNA, targetDNA, sourceSM, EcoRI, hinDIII, sourceRE;
 
         beforeEach(function() {
+            targetDNA = Teselagen.bio.sequence.DNATools.createDNA("tgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtc");
+//                                                                "          HindIII                                            EcoRI           "
+//                                                                "01234567890123456789012345678901234567890123456789012345678901234567890123456"
+            sourceDNA = Teselagen.bio.sequence.DNATools.createDNA("ttacgccaagcttaaaaaaaaaaaaaaaaaaaaaaaagaattcatccgacagag");
+//                                                                "      HindIII                        EcoRI           "
+//                                                                "012345678901234567890123456789012345678901234567890123"
+            
             reSequence = Teselagen.bio.sequence.DNATools.createDNA("tagccccgctaaagccccccccctctctgatccgc");
             feat1   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "feat1",
                 start: 1,
-                end: 3,
+                end: 15,
                 _type: "CDS",
                 strand: 1,
                 notes: null
             });
-
-
-            sm  = Ext.create("Teselagen.manager.SequenceManager", {
-                name: "test",
-                circular: false,
-                sequence: reSequence,
-                features: [feat1]
+            feat2   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: "feat2",
+                start: 20,
+                end: 25,
+                _type: "CDS",
+                strand: 1,
+                notes: null
             });
+            feat3   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: "feat3",
+                start: 1,
+                end: 15,
+                _type: "CDS",
+                strand: 1,
+                notes: null
+            });
+            feat4   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
+                name: "feat4",
+                start: 20,
+                end: 25,
+                _type: "CDS",
+                strand: 1,
+                notes: null
+            });
+            sm  = Ext.create("Teselagen.manager.SequenceManager", {
+                name: "target",
+                circular: false,
+                sequence: targetDNA,
+                features: [feat1, feat2]
+            });
+            sourceSM  = Ext.create("Teselagen.manager.SequenceManager", {
+                name: "source",
+                circular: false,
+                sequence: sourceDNA,
+                features: [feat3, feat4]
+            });
+            ecoRI = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme("EcoRI");
+            hinDIII = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme("HindIII");
+            kpnI = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme("KpnI");
             agcEnz = Ext.create("Teselagen.bio.enzymes.RestrictionEnzyme", {
                 name: "agc enzyme",
                 site: "agc",
@@ -68,25 +108,30 @@ Ext.onReady(function() {
             });
              reGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
                 name:"my group",
-                enzymes: [agcEnz, gntEnz]
+                enzymes: [ecoRI, hinDIII]
+                //enzymes: [ecoRI, hinDIII, agcEnz, gntEnz]
             });
 
            re = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
                 restrictionEnzymeGroup: reGroup,
                 sequenceManager: sm
             });
+           sourceRE = Ext.create("Teselagen.manager.RestrictionEnzymeManager", {
+               restrictionEnzymeGroup: reGroup,
+               sequenceManager: sourceSM
+           });
            digestionSequence = Ext.create("Teselagen.models.DigestionSequence", {
-               sequenceManager: sm,
-               startRestrictionEnzyme: agcEnz,
-               endRestrictionEnzyme: gntEnz,
-               startRelativePosition: 0,
-               endRelativePosition: 1,
+               sequenceManager: sourceSM,
+               startRestrictionEnzyme: hinDIII,
+               endRestrictionEnzyme: ecoRI,
+               startRelativePosition: 7,
+               endRelativePosition: 37,
 
            });
             dm = Ext.create("Teselagen.manager.DigestionManager", {
                 sequenceManager: sm,
-                start: 1,
-                end: 31,
+                start: 10,
+                end: 67,
                 digestionSequence: digestionSequence,
                 restrictionEnzymeManager: re,
             });

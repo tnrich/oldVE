@@ -60,18 +60,30 @@ Ext.define("Teselagen.manager.DigestionManager", {
     initializeSource: function(){
         this.sourceSequence = this.digestionSequence.get("sequenceManager").sequence.toString();
         this.sourceRevComSequence = this.digestionSequence.get("sequenceManager").sequence.toString();
-        
-        var pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsForward();
+
+        //The position the starting restriction enzyme matches on the sequence
+        var relativeStart =  this.digestionSequence.get("startRelativePosition");
+        var pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart;
         var pastableEndIndex = this.digestionSequence.get("endRelativePosition") + this.digestionSequence.get("endRestrictionEnzyme").getDsReverse();
-        
+        //Check to see if this enzyme has a top overhang or bottom
+        //       * - DsForward = 5
+        // 5-CTGCA     G-3
+        // 3-G     ACGTC-3  --Bottom overhang - DsForward > DsReverse
+        //   * - DsReverse = 1
+        //
+        //   * - DsForward = 1
+        // 5-A     AGCTT-3
+        // 3-TTCGA     A-3  --Top overhang - DsForward < DsReverse
+        //       * - DsReverse = 5
+        //Basically, we always use the smaller of the two because We are going to use the overhang sequence from the destination, not the source
         if(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() < this.digestionSequence.get("startRestrictionEnzyme").getDsReverse()) {
             this.sourceOverhangStartType = this.self.overhangTop;
-            this.sourceOverhangStartSequence = this.sourceSequence.substring(this.digestionSequence.get("startRestrictionEnzyme").getDsForward(), this.digestionSequence.get("startRestrictionEnzyme").getDsReverse());
-            pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsForward();
+            this.sourceOverhangStartSequence = this.sourceSequence.substring(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart, this.digestionSequence.get("startRestrictionEnzyme").getDsReverse() + relativeStart);//taking into account the offset
+            pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart;//SHould be reverse?
         } else if(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() > this.digestionSequence.get("startRestrictionEnzyme").getDsReverse()) {
             this.sourceOverhangStartType = this.self.overhangBottom;
-            this.sourceOverhangStartSequence = this.sourceRevComSequence.substring(this.digestionSequence.get("startRestrictionEnzyme").getDsForward(), this.digestionSequence.get("startRestrictionEnzyme").getDsReverse());
-            pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsReverse();
+            this.sourceOverhangStartSequence = this.sourceRevComSequence.substring(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart, this.digestionSequence.get("startRestrictionEnzyme").getDsReverse() + relativeStart);
+            pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsReverse() + relativeStart;
         } else {
             this.sourceOverhangStartType = this.self.overhangNone;
             this.sourceOverhangStartSequence = "";
@@ -157,21 +169,37 @@ Ext.define("Teselagen.manager.DigestionManager", {
         }
         var startPosition = this.destinationStartCutSite.getStart();
         var endPosition = this.destinationStartCutSite.getEnd() + this.destinationStartCutSite.getRestrictionEnzyme().getDsForward();
-
+        
+        //Check to see if this enzyme has a top overhang or bottom
+        //       * - DsForward = 5
+        // 5-CTGCA     G-3
+        // 3-G     ACGTC-3  --Bottom overhang - DsForward > DsReverse
+        //   * - DsReverse = 1
+        //
+        //   * - DsForward = 1
+        // 5-A     AGCTT-3
+        // 3-TTCGA     A-3  --Top overhang - DsForward < DsReverse
+        //       * - DsReverse = 5
+        //Basically, we always use the smaller of the two because we want to start at the left end of the sequence whether that sequence overhangs on the top or bottom
         if (this.destinationStartCutSite.getRestrictionEnzyme().getDsForward() > this.destinationStartCutSite.getRestrictionEnzyme().getDsReverse()){
+            //If the overhang is on the bottom
             startPosition = this.destinationStartCutSite.getStart() + this.destinationStartCutSite.getRestrictionEnzyme().getDsReverse();
-
         } else if(this.destinationStartCutSite.getRestrictionEnzyme().getDsForward() < this.destinationStartCutSite.getRestrictionEnzyme().getDsReverse()){
+            //If the overhang is on the top
             startPosition = this.destinationStartCutSite.getStart() + this.destinationStartCutSite.getRestrictionEnzyme().getDsForward();
         } else {
+            //If this is blunt
             startPosition = this.destinationStartCutSite.getStart() + this.destinationStartCutSite.getRestrictionEnzyme().getDsForward();
         }
-
+        //For the end position we do the opposite, taking the larger of the two values, because we are taking the right end of the sequence
         if (this.destinationEndCutSite.getRestrictionEnzyme().getDsForward() > this.destinationEndCutSite.getRestrictionEnzyme().getDsReverse()){
+            //Top Overhang
             endPosition = this.destinationEndCutSite.getStart() + this.destinationEndCutSite.getRestrictionEnzyme().getDsForward();
         } else if (this.destinationEndCutSite.getRestrictionEnzyme().getDsForward() < this.destinationEndCutSite.getRestrictionEnzyme().getDsReverse()){
+            //Bottom overhang
             endPosition = this.destinationEndCutSite.getStart() + this.destinationEndCutSite.getRestrictionEnzyme().getDsReverse();
         } else {
+            //Blunt
             endPosition = this.destinationEndCutSite.getStart() + this.destinationEndCutSite.getRestrictionEnzyme().getDsReverse();
         }
         this.sequenceManager.manualUpdateStart();
