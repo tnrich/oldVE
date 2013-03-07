@@ -34,7 +34,53 @@ Ext.onReady(function() {
             sourceDNA = Teselagen.bio.sequence.DNATools.createDNA("ttacgccaagcttaaaaaaaaaaaaaaaaaaaaaaaagaattcatccgacagag");
 //                                                                "      HindIII                        EcoRI           "
 //                                                                "012345678901234567890123456789012345678901234567890123"
-            
+// Some examples
+// A  	Adenine
+// G	Guanine
+// C	Cytosine
+// T	Thymine
+// U	Uracil
+// R	Purine (A or G)
+// Y	Pyrimidine (C or T)
+// N	Any nucleotide
+// W	Weak (A or T)
+// S	Strong (G or C)
+// M	Amino (A or C)
+// K	Keto (G or T)
+// B	Not A (G or C or T)
+// H	Not G (A or C or T)
+// D	Not C (A or G or T)
+// V	Not T (A or G or C)
+// 
+// Compatible ends BamHI/BglII
+// BamHI - R/GATCY
+// ggatcc
+// BglII - A/GATCT
+// agatct
+// source
+//    ttacgccggatccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcatccgacagag
+//           BamHI
+// target
+// tgattacgccagatctgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtc
+//           BglII
+// pasted
+// tgattacgccagatccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcactggccgtc
+//           MIXED
+// 
+// BsaI - GGTCTCN/N
+//        CCAGAGNNNNN/N
+// ggtctagggg
+// 
+// TypeIIs
+// source
+//    cagggtctaggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcatccgacagag
+//             ^^^^
+// target
+// gacctaggtctcgggggcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtc
+//             ^^^^
+// pasted
+// gacctaggtctcggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcactggccgtc
+//             ^^^^
             reSequence = Teselagen.bio.sequence.DNATools.createDNA("tagccccgctaaagccccccccctctctgatccgc");
             feat1   = Ext.create("Teselagen.bio.sequence.dna.Feature",{
                 name: "feat1",
@@ -120,21 +166,6 @@ Ext.onReady(function() {
                restrictionEnzymeGroup: reGroup,
                sequenceManager: sourceSM
            });
-           digestionSequence = Ext.create("Teselagen.models.DigestionSequence", {
-               sequenceManager: sourceSM,
-               startRestrictionEnzyme: hinDIII,
-               endRestrictionEnzyme: ecoRI,
-               startRelativePosition: 7,
-               endRelativePosition: 37,
-
-           });
-            dm = Ext.create("Teselagen.manager.DigestionManager", {
-                sequenceManager: sm,
-                start: 10,
-                end: 67,
-                digestionSequence: digestionSequence,
-                restrictionEnzymeManager: re,
-            });
          });
         it("DigestionManager exists", function(){
             expect(dm).toBeDefined();
@@ -146,8 +177,37 @@ Ext.onReady(function() {
             expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
         });
         it("DestinationDNA digested", function(){
+            digestionSequence = Ext.create("Teselagen.models.DigestionSequence", {
+                sequenceManager: sourceSM,
+                startRestrictionEnzyme: hinDIII,
+                endRestrictionEnzyme: ecoRI,
+                startRelativePosition: 7,
+                endRelativePosition: 37,
+
+            });
+             dm = Ext.create("Teselagen.manager.DigestionManager", {
+                 sequenceManager: sm,
+                 start: 10,
+                 end: 67,
+                 digestionSequence: digestionSequence,
+                 restrictionEnzymeManager: re,
+             });
             dm.digest(dm.self.matchNormalOnly);
-            expect(dm.sequenceManager).toBeDefined();
+            expect(dm.sequenceManager.sequence.toString() === "tgattacgccaagcttaaaaaaaaaaaaaaaaaaaaaaaagaattcactggccgtc").toBeTruthy();
         });
+        runDigest: function(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop){
+        	oSourceLeftRE = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(sourceLeftRE);
+        	oSourceRightRE = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(sourceRightRE);
+        	oDestLeftRE = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(destLeftRE);
+        	oDestRightRE = Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(destRightRE);
+        	digestionSequence = Ext.create("Teselagen.models.DigestionSequence", {
+                sequenceManager: sourceSM,
+                startRestrictionEnzyme: hinDIII,
+                endRestrictionEnzyme: ecoRI,
+                startRelativePosition: 7,
+                endRelativePosition: 37,
+
+            });
+        }
     });
 });
