@@ -243,6 +243,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             };
 
         var saveDesign = function () {
+                //console.log("saving design");
                 design = activeTab.model.getDesign();
                 design.save({
                     callback: function (record, operation) {
@@ -260,25 +261,26 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             });
         });
         // loadingMessage.update(30, "Saving "+countParts+" parts");
+        //console.log("Saving "+countParts+" parts");
         design.getJ5Collection().bins().each(function (bin, binKey) {
             bin.parts().each(function (part, partIndex) {
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
                     part.save({
                         callback: function (part) {
                             saveAssociatedSequence(part, function () {
-                                if(countParts == 1) saveDesign();
-                                Vede.application.fireEvent("PartCellClick", part);
+                                if(countParts === 1) saveDesign();
+                                //Vede.application.fireEvent("PartCellClick", part);
                                 countParts--;
                                 // loadingMessage.update(30, "Saving "+countParts+" parts");
+                                //console.log("Saving "+countParts+" parts");
                             });
-                            
                         }
                     });
                 } else {
                     saveAssociatedSequence(part,function(){
-                    if(countParts == 1) saveDesign();
+                    if(countParts === 1) saveDesign();
                     countParts--;
-                    Vede.application.fireEvent("MapPart", part)
+                    Vede.application.fireEvent("MapPart", part);
                     // loadingMessage.update(30, "Saving "+countParts+" parts");
                     });
                 }

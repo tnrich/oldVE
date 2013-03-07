@@ -128,13 +128,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-        
+
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
 
-            if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
+            if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")==="") {
                 this.selectedPart.select();
                 this.selectedPart.leaveselect();
             }
@@ -146,7 +146,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.select();
 
          if(j5Part) {
-            if(j5Part.getSequenceFile().get("partSource")=="") {
+            if(j5Part.getSequenceFile().get("partSource")==="") {
                 gridPart.select();
             } else {
                 gridPart.mapSelect();
