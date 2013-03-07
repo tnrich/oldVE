@@ -79,7 +79,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
         if(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() < this.digestionSequence.get("startRestrictionEnzyme").getDsReverse()) {
             this.sourceOverhangStartType = this.self.overhangTop;
             this.sourceOverhangStartSequence = this.sourceSequence.substring(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart, this.digestionSequence.get("startRestrictionEnzyme").getDsReverse() + relativeStart);//taking into account the offset
-            pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart;//SHould be reverse?
+            pastableStartIndex = this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart;
         } else if(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() > this.digestionSequence.get("startRestrictionEnzyme").getDsReverse()) {
             this.sourceOverhangStartType = this.self.overhangBottom;
             this.sourceOverhangStartSequence = this.sourceRevComSequence.substring(this.digestionSequence.get("startRestrictionEnzyme").getDsForward() + relativeStart, this.digestionSequence.get("startRestrictionEnzyme").getDsReverse() + relativeStart);
@@ -167,6 +167,8 @@ Ext.define("Teselagen.manager.DigestionManager", {
             //reverseComplementSequence();
             this.pasteSequenceManager.reverseComplementSequence();
         }
+        //startPosition and stopPosition are the start and stop of the sequence that we are going to remove from the destination.
+        //We will be replacing it with sequence from the source, so we need to remove the overhang as well or it will be duplicated in the final.
         var startPosition = this.destinationStartCutSite.getStart();
         var endPosition = this.destinationStartCutSite.getEnd() + this.destinationStartCutSite.getRestrictionEnzyme().getDsForward();
         
@@ -180,7 +182,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
         // 5-A     AGCTT-3
         // 3-TTCGA     A-3  --Top overhang - DsForward < DsReverse
         //       * - DsReverse = 5
-        //Basically, we always use the smaller of the two because we want to start at the left end of the sequence whether that sequence overhangs on the top or bottom
+        //Basically, we always use the smaller of the two because we always remove the overhang from the destination
         if (this.destinationStartCutSite.getRestrictionEnzyme().getDsForward() > this.destinationStartCutSite.getRestrictionEnzyme().getDsReverse()){
             //If the overhang is on the bottom
             startPosition = this.destinationStartCutSite.getStart() + this.destinationStartCutSite.getRestrictionEnzyme().getDsReverse();
@@ -191,7 +193,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
             //If this is blunt
             startPosition = this.destinationStartCutSite.getStart() + this.destinationStartCutSite.getRestrictionEnzyme().getDsForward();
         }
-        //For the end position we do the opposite, taking the larger of the two values, because we are taking the right end of the sequence
+        //For the end position we do the opposite, taking the larger of the two values, to remove the overhang
         if (this.destinationEndCutSite.getRestrictionEnzyme().getDsForward() > this.destinationEndCutSite.getRestrictionEnzyme().getDsReverse()){
             //Top Overhang
             endPosition = this.destinationEndCutSite.getStart() + this.destinationEndCutSite.getRestrictionEnzyme().getDsForward();
