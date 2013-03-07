@@ -177,7 +177,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 });
             };
 
-            Vede.application.fireEvent("openPartLibrary",callback, currentTabEl);
+            Vede.application.fireEvent("openPartLibrary",callback);
         }
     },
 
