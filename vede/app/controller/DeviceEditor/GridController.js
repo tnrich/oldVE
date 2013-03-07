@@ -100,6 +100,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.container.Container} binHeader The clicked bin header.
      */
     onBinHeaderClick: function(binHeader) {
+
         var gridBin = binHeader.up().up();
         var j5Bin = gridBin.getBin();
 
@@ -135,7 +136,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
                 this.selectedPart.select();
-             }
+                this.selectedPart.leaveselect();
+            }
         }
 
         this.selectedPart = gridPart;
