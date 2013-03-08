@@ -244,6 +244,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         var saveDesign = function () {
                 //console.log("saving design");
+                Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
                 design = activeTab.model.getDesign();
                 design.save({
                     callback: function (record, operation) {
