@@ -243,6 +243,7 @@ function encoded_eugene_rules_list_file(model)
 
     
     eugenes.forEach(function(val,key){
+        var name = val["name"];
         var operand1 = val["operand1_id"];
         var operator = val["compositionalOperator"];
         var operand2 = val["operand2_id"];
@@ -251,13 +252,13 @@ function encoded_eugene_rules_list_file(model)
         if(!val["operand2isNumber"])
         {
             part2 = partsIndex[operand2];
-            if(val["negationOperator"]) out += "Rule Rule_"+(key+1)+"(NOT "+part1["name"]+" "+operator+" "+part2["name"]+");\n";
-            else out += "Rule Rule_"+(key+1)+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+            if(val["negationOperator"]) out += name+"(NOT "+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+            else out += name+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
         }
         else
         {
             operand2 = val["operand2Number"];
-            out += "Rule Rule_"+(key+1)+"("+part1["name"]+" "+operator+" "+operand2+");\n";
+            out += name+"("+part1["name"]+" "+operator+" "+operand2+");\n";
         }
 
 
