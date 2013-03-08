@@ -739,6 +739,27 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     },
 
+    suspendPartAlerts: function(){
+        //console.log("suspending part alerts");
+        this.activeBins.each(function(bin) {
+            var parts = bin.parts();
+
+            parts.un("add", this.onAddToParts, this);
+            parts.un("update", this.onPartsUpdate, this);
+            parts.un("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+    resumePartAlerts: function(){
+        //console.log("resuming part alerts");
+        this.activeBins.each(function(bin) {
+            var parts = bin.parts();
+
+            parts.on("add", this.onAddToParts, this);
+            parts.on("update", this.onPartsUpdate, this);
+            parts.on("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+
     onLaunch: function() {
 
         this.tabPanel = Ext.getCmp("mainAppPanel");
@@ -769,6 +790,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
+
+        this.application.on("suspendPartAlerts",this.suspendPartAlerts, this);
+        this.application.on("resumePartAlerts",this.resumePartAlerts, this);
 
         this.application.on("rerenderPart",this.rerenderPart, this);
 

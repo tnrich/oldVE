@@ -456,16 +456,22 @@ onopenPartLibraryBtnClick: function () {
                 partsStore = partsStore.concat([part.get("name")]);
             });
 
-            newEugeneRule.setOperand1(this.selectedPart);
+            var self = this;
+            this.selectedPart.save({
+                callback: function(){
+                    newEugeneRule.setOperand1(self.selectedPart);
 
-            newEugeneRuleDialog.show();
+                    newEugeneRuleDialog.show();
 
-            ruleForm.loadRecord(newEugeneRule);
-            ruleForm.down("displayfield[cls='operand1Field']").setValue(
-                                        this.selectedPart.get("name"));
+                    ruleForm.loadRecord(newEugeneRule);
+                    ruleForm.down("displayfield[cls='operand1Field']").setValue(
+                                                self.selectedPart.get("name"));
 
-            operand2Field.bindStore(partsStore); 
-            operand2Field.setValue(partsStore[0]);
+                    operand2Field.bindStore(partsStore);
+                    operand2Field.setValue(partsStore[0]);
+                }
+            });
+
         }
     },
 
@@ -518,16 +524,21 @@ onopenPartLibraryBtnClick: function () {
         newRule.set("name", newName);
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
-        newRule.setOperand2(newOperand2);
+        var self = this;
+        newOperand2.save({
+            callback: function(){
+                newRule.setOperand2(newOperand2);                
 
-        this.activeProject.addToRules(newRule);
+                self.activeProject.addToRules(newRule);
 
-        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                        this.selectedPart)
+                var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
+                                                                                self.selectedPart)
 
-        this.eugeneRulesGrid.reconfigure(rulesStore);
+                self.eugeneRulesGrid.reconfigure(rulesStore);
 
-        newEugeneRuleDialog.close();
+                newEugeneRuleDialog.close();
+            }
+        });
     },
 
     /**
