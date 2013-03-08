@@ -301,6 +301,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 markDirty: false
                             },
                             autoScroll: true,
+                            allowDeselect: true,
                             columnLines: true,
                             height:132,
                             minHeight:132,
