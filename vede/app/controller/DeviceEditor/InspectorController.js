@@ -578,6 +578,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Number} index The index where the bins were added.
      */
     onAddToBins: function (activeBins, addedBins, index) {
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+
         // Add event listeners to the parts store of this bin.
         Ext.each(addedBins, function (j5Bin) {
             parts = j5Bin.parts();
@@ -586,10 +588,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
 
-        if(this.selectedBin) {
-            this.selectedBin.deselect();
-            this.selectedBin = null;
-        }
+        this.columnsGrid.getSelectionModel().deselect(selectedPart);
+
+        // Remove the highlighting from the selected row- it appears that a bug
+        // is preventing this from happening automatically.
+        this.columnsGrid.getView().removeRowCls(selectedPart,
+                                    this.columnsGrid.getView().selectedItemCls);
+        this.columnsGrid.getView().removeRowCls(selectedPart,
+                                    this.columnsGrid.getView().focusedItemCls);
+
 
         this.renderCollectionInfo();
     },
