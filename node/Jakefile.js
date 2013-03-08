@@ -16,6 +16,12 @@ jake.addListener("complete", function () {
  * Node tasks
  */
 
+// Patch node_modules
+task("patchNode", function() {
+    var cmd = "cd resources/utils; ./patchDependencies.sh";
+    JakeUtil.exec(cmd);
+});
+
 task("startNode", function() {
     var cmd = "forever start -w --watchDirectory routes/ -a -l forever.log -o out.log -e err.log app.js";
     JakeUtil.exec(cmd);
