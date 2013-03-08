@@ -201,6 +201,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         // var loadingMessage = this.createLoadingMessage();
 
+        Vede.application.fireEvent("suspendPartAlerts");
+
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var deproject = activeTab.model;
 
@@ -249,6 +251,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 design.save({
                     callback: function (record, operation) {
                         // loadingMessage.close();
+                        Vede.application.fireEvent("resumePartAlerts");
                         if(typeof (cb) == "function") cb();
                     }
                 });
