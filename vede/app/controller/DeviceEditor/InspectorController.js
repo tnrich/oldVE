@@ -410,9 +410,14 @@ onopenPartLibraryBtnClick: function () {
      */
     onAddColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
 
-        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+        if(selectedBin) {
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin); 
+            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+            this.columnsGrid.getSelectionModel().deselectAll();
+        } else {
+            this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
+        }
     },
 
     /**
@@ -637,6 +642,11 @@ onopenPartLibraryBtnClick: function () {
             parts.on("update", this.onUpdateParts, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        if(this.selectedBin) {
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
 
         this.renderCollectionInfo();
     },
