@@ -182,6 +182,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid
 
+
             Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
 
             if(this.activeBins) {
@@ -207,6 +208,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.activeProject = newTab.model.getDesign();
+
+            this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
             this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
@@ -452,7 +455,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumn: function() {
-        this.totalColumns += 1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
@@ -463,7 +465,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin.deselect();
             this.selectedBin = null;
         } else {
-            selectedBinIndex = this.totalColumns;
+            selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
