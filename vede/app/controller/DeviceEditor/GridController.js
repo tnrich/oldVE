@@ -253,6 +253,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        if(this.selectedBin){
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
     },
 
     /**
@@ -445,13 +450,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumn: function() {
-        this.totalColumns +=1;
+        this.totalColumns += 1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin()) + 1;
+                                                        this.selectedBin.getBin());
+
+            this.selectedBin.deselect();
+            this.selectedBin = null;
         } else {
             selectedBinIndex = this.totalColumns;
         }
