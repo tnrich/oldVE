@@ -252,13 +252,13 @@ function encoded_eugene_rules_list_file(model)
         if(!val["operand2isNumber"])
         {
             part2 = partsIndex[operand2];
-            if(val["negationOperator"]) out += name+"(NOT "+part1["name"]+" "+operator+" "+part2["name"]+");\n";
-            else out += name+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+            if(val["negationOperator"]) out += "Rule "+name+"(NOT "+part1["name"]+" "+operator+" "+part2["name"]+");\n";
+            else out += "Rule "+name+"("+part1["name"]+" "+operator+" "+part2["name"]+");\n";
         }
         else
         {
             operand2 = val["operand2Number"];
-            out += name+"("+part1["name"]+" "+operator+" "+operand2+");\n";
+            out += "Rule "+name+"("+part1["name"]+" "+operator+" "+operand2+");\n";
         }
 
 
