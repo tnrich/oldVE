@@ -217,7 +217,7 @@ function encoded_target_part_order_list_file(model,method)
     >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
     ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
     */
-    //quicklog(out);
+    quicklog(out);
     return new Buffer(out).toString('base64'); 
 }
 
