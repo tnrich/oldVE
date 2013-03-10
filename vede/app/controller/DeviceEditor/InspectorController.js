@@ -391,11 +391,13 @@ onopenPartLibraryBtnClick: function () {
      * @param {Ext.form.field.Combobox} box The FAS combobox.
      */
     onPartAssemblyStrategyChange: function (box) {
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0]
         var newStrategy = box.getValue();
 
-        this.selectedPart.set("fas", newStrategy);
-
+        this.selectedPart.set("fas", newStrategy);  
         this.columnsGrid.getView().refresh();
+        
+        Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
     },
 
     /**
