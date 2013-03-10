@@ -69,7 +69,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Get the bin that the button refers to and reverse its direction.
         var parentBin = button.up().up().up().getBin();
 
-        this.application.fireEvent("BinHeaderClick", parentBin);
+        this.application.fireEvent("BinHeaderClick", button.up());
 
         parentBin.set("directionForward", !parentBin.get("directionForward"));
     },
