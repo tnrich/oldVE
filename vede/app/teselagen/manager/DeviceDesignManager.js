@@ -252,16 +252,16 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         } else if (collection.bins() === null || collection.bins() === undefined) {
             return combo;
         } else {
-        for (var i = 0; i < collection.bins().count(); i++) {
-            if (collection.bins().getAt(i).getPartByName("") != null) {
-                if (collection.bins().getAt(i).parts().count() > 1) {
-                combo = true;
+            for (var i = 0; i < collection.bins().count(); i++) {
+                if (collection.bins().getAt(i).getPartByName("") != null) {
+                    if (collection.bins().getAt(i).parts().count() > 1) {
+                    combo = true;
+                }
+                }
+            collection.set("combinatorial", combo);
+            return combo;
             }
         }
-        collection.set("combinatorial", combo);
-        return combo;
-        }
-    }
     },
 
     /**

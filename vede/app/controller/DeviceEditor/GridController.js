@@ -133,8 +133,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
-
-            if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
+            if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
+                this.selectedPart.deselect();
+            } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
                 this.selectedPart.select();
                 this.selectedPart.leaveselect();
             }
@@ -336,13 +337,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onRemoveFromParts: function(parts, removedPart, index) {
         var gridPart = this.getGridPartFromJ5Part(removedPart);
         var gridBin = gridPart.up("Bin");
+        var j5Bin = gridPart.up("Bin").getBin();
 
         gridBin.remove(gridPart);
         gridBin.setTotalRows(this.totalRows);
+        
+        this.selectedPart = null;
+        Vede.application.fireEvent("partSelected", this.selectedPart);
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
 
-        if(this.selectedPart === removedPart) {
-            this.selectedPart = null;
-        }
     },
 
     /**

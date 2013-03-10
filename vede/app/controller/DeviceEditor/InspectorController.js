@@ -145,10 +145,12 @@ onopenPartLibraryBtnClick: function () {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
                                                          this.selectedPart) < 0) {
-                this.DeviceDesignManager.addPartToBin(this.activeProject,
+                var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
                                                       this.selectedPart,
                                                       this.selectedBinIndex);
             }
+
+
 
             var self = this;
 
@@ -309,6 +311,7 @@ onopenPartLibraryBtnClick: function () {
             openPartLibraryBtn.addCls('selectPartFocus');
 
             this.selectedPart = newPart;
+
         }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
@@ -696,7 +699,6 @@ onopenPartLibraryBtnClick: function () {
         try {
             this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
-
             //this.clearPartInfo();
         } catch(err)
         {
