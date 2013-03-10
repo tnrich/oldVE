@@ -128,11 +128,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-        
+
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+
             if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
                 this.selectedPart.deselect();
             } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
@@ -147,7 +148,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.select();
 
          if(j5Part) {
-            if(j5Part.getSequenceFile().get("partSource")=="") {
+            if(j5Part.getSequenceFile().get("partSource")==="") {
                 gridPart.select();
             } else {
                 gridPart.mapSelect();
@@ -183,6 +184,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid
 
+
             Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
 
             if(this.activeBins) {
@@ -208,6 +210,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.activeProject = newTab.model.getDesign();
+
+            this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
             this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
@@ -256,6 +260,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        if(this.selectedBin){
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
     },
 
     /**
@@ -450,15 +459,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumn: function() {
-        this.totalColumns +=1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin()) + 1;
+                                                        this.selectedBin.getBin());
+
+            this.selectedBin.deselect();
+            this.selectedBin = null;
         } else {
-            selectedBinIndex = this.totalColumns;
+            selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
@@ -734,6 +745,27 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     },
 
+    suspendPartAlerts: function(){
+        //console.log("suspending part alerts");
+        this.activeBins.each(function(bin) {
+            var parts = bin.parts();
+
+            parts.un("add", this.onAddToParts, this);
+            parts.un("update", this.onPartsUpdate, this);
+            parts.un("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+    resumePartAlerts: function(){
+        //console.log("resuming part alerts");
+        this.activeBins.each(function(bin) {
+            var parts = bin.parts();
+
+            parts.on("add", this.onAddToParts, this);
+            parts.on("update", this.onPartsUpdate, this);
+            parts.on("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+
     onLaunch: function() {
 
         this.tabPanel = Ext.getCmp("mainAppPanel");
@@ -764,6 +796,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
+
+        this.application.on("suspendPartAlerts",this.suspendPartAlerts, this);
+        this.application.on("resumePartAlerts",this.resumePartAlerts, this);
 
         this.application.on("rerenderPart",this.rerenderPart, this);
 

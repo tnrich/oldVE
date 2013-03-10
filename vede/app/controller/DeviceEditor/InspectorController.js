@@ -413,9 +413,14 @@ onopenPartLibraryBtnClick: function () {
      */
     onAddColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
 
-        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+        if(selectedBin) {
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin); 
+            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+            this.columnsGrid.getSelectionModel().deselectAll();
+        } else {
+            this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
+        }
     },
 
     /**
@@ -454,16 +459,22 @@ onopenPartLibraryBtnClick: function () {
                 partsStore = partsStore.concat([part.get("name")]);
             });
 
-            newEugeneRule.setOperand1(this.selectedPart);
+            var self = this;
+            this.selectedPart.save({
+                callback: function(){
+                    newEugeneRule.setOperand1(self.selectedPart);
 
-            newEugeneRuleDialog.show();
+                    newEugeneRuleDialog.show();
 
-            ruleForm.loadRecord(newEugeneRule);
-            ruleForm.down("displayfield[cls='operand1Field']").setValue(
-                                        this.selectedPart.get("name"));
+                    ruleForm.loadRecord(newEugeneRule);
+                    ruleForm.down("displayfield[cls='operand1Field']").setValue(
+                                                self.selectedPart.get("name"));
 
-            operand2Field.bindStore(partsStore); 
-            operand2Field.setValue(partsStore[0]);
+                    operand2Field.bindStore(partsStore);
+                    operand2Field.setValue(partsStore[0]);
+                }
+            });
+
         }
     },
 
@@ -516,16 +527,21 @@ onopenPartLibraryBtnClick: function () {
         newRule.set("name", newName);
         newRule.set("negationOperator", newNegationOperator);
         newRule.set("compositionalOperator", newCompositionalOperator);
-        newRule.setOperand2(newOperand2);
+        var self = this;
+        newOperand2.save({
+            callback: function(){
+                newRule.setOperand2(newOperand2);                
 
-        this.activeProject.addToRules(newRule);
+                self.activeProject.addToRules(newRule);
 
-        var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                        this.selectedPart)
+                var rulesStore = self.DeviceDesignManager.getRulesInvolvingPart(self.activeProject,
+                                                                                self.selectedPart)
 
-        this.eugeneRulesGrid.reconfigure(rulesStore);
+                self.eugeneRulesGrid.reconfigure(rulesStore);
 
-        newEugeneRuleDialog.close();
+                newEugeneRuleDialog.close();
+            }
+        });
     },
 
     /**
@@ -633,6 +649,8 @@ onopenPartLibraryBtnClick: function () {
      * @param {Number} index The index where the bins were added.
      */
     onAddToBins: function (activeBins, addedBins, index) {
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+
         // Add event listeners to the parts store of this bin.
         Ext.each(addedBins, function (j5Bin) {
             parts = j5Bin.parts();
@@ -640,6 +658,16 @@ onopenPartLibraryBtnClick: function () {
             parts.on("update", this.onUpdateParts, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        this.columnsGrid.getSelectionModel().deselect(selectedPart);
+
+        // Remove the highlighting from the selected row- it appears that a bug
+        // is preventing this from happening automatically.
+        this.columnsGrid.getView().removeRowCls(selectedPart,
+                                    this.columnsGrid.getView().selectedItemCls);
+        this.columnsGrid.getView().removeRowCls(selectedPart,
+                                    this.columnsGrid.getView().focusedItemCls);
+
 
         this.renderCollectionInfo();
     },

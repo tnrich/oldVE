@@ -201,6 +201,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         // var loadingMessage = this.createLoadingMessage();
 
+        Vede.application.fireEvent("suspendPartAlerts");
+
         var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var deproject = activeTab.model;
 
@@ -243,10 +245,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             };
 
         var saveDesign = function () {
+                //console.log("saving design");
+                Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
                 design = activeTab.model.getDesign();
                 design.save({
                     callback: function (record, operation) {
                         // loadingMessage.close();
+                        Vede.application.fireEvent("resumePartAlerts");
                         if(typeof (cb) == "function") cb();
                     }
                 });
@@ -260,6 +265,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             });
         });
         // loadingMessage.update(30, "Saving "+countParts+" parts");
+        //console.log("Saving "+countParts+" parts");
         design.getJ5Collection().bins().each(function (bin, binKey) {
             bin.parts().each(function (part, partIndex) {
                 if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
@@ -269,14 +275,15 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                                 if(countParts == 1) saveDesign();
                                 countParts--;
                                 // loadingMessage.update(30, "Saving "+countParts+" parts");
+                                //console.log("Saving "+countParts+" parts");
                             });
-                            
                         }
                     });
                 } else {
                     saveAssociatedSequence(part,function(){
-                    if(countParts == 1) saveDesign();
+                    if(countParts === 1) saveDesign();
                     countParts--;
+                    // Vede.application.fireEvent("MapPart", part);
                     // loadingMessage.update(30, "Saving "+countParts+" parts");
                     });
                 }
