@@ -29,6 +29,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'button',
         cls: 'createPartBtn',
         icon: 'resources/images/create.png',
+        text: 'Create',
         scale: 'medium',
         tooltip: 'Create Part'
     },
