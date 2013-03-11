@@ -7,6 +7,7 @@ Ext.define('Vede.view.de.PartDefinitionDialog', {
 
     height: 400,
     width: 590,
+    modal: true,
     title: 'Specify Part Definition',
 
     initComponent: function() {

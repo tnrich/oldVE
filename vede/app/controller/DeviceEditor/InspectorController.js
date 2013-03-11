@@ -262,6 +262,9 @@ onopenPartLibraryBtnClick: function () {
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         var fasArray = [];
 
+        openPartLibraryBtn.enable();
+        openPartLibraryBtn.removeCls('btnDisabled');
+
         if(this.selectedBinIndex !== 0) {
             // Turn the FAS_LIST array into an array of arrays, as required by
             // the store's loadData function.
@@ -613,6 +616,7 @@ onopenPartLibraryBtnClick: function () {
      */
     onTabChange: function (tabPanel, newTab, oldTab) {
         if(newTab.initialCls == "DeviceEditorTab") { // It is a DE tab
+
             if(this.activeBins) {
                 this.activeBins.un("add", this.onAddToBins, this);
                 this.activeBins.un("remove", this.onRemoveFromBins, this);
@@ -657,6 +661,20 @@ onopenPartLibraryBtnClick: function () {
             this.eugeneRulesGrid = this.inspector.down("form[cls='eugeneRulesForm'] > gridpanel");
 
             this.renderCollectionInfo();
+            this.inspector.setActiveTab(1);
+
+            var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+            var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+            var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+            var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+
+            changePartDefinitionBtn.disable();
+            changePartDefinitionBtn.addCls('btnDisabled');
+            deletePartBtn.disable();
+            deletePartBtn.addCls('btnDisabled');
+            openPartLibraryBtn.disable();
+            openPartLibraryBtn.setText("Select Part From Library");
+            openPartLibraryBtn.addCls('btnDisabled');
         }
     },
 
