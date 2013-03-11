@@ -260,6 +260,23 @@ onopenPartLibraryBtnClick: function () {
         var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
         var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
+        var fasArray = [];
+
+        if(this.selectedBinIndex !== 0) {
+            // Turn the FAS_LIST array into an array of arrays, as required by
+            // the store's loadData function.
+            Ext.each(Teselagen.constants.Constants.FAS_LIST_NO_DIGEST, function(fas) {
+                fasArray.push([fas]);
+            });
+
+            fasForm.down("combobox").store.loadData(fasArray);
+        } else {
+            Ext.each(Teselagen.constants.Constants.FAS_LIST, function(fas) {
+                fasArray.push([fas]);
+            });
+
+            fasForm.down("combobox").store.loadData(fasArray);
+        }
 
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
@@ -313,7 +330,7 @@ onopenPartLibraryBtnClick: function () {
             this.selectedPart = newPart;
 
         }
-        
+
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
                                                                         this.selectedPart);
 
@@ -426,7 +443,8 @@ onopenPartLibraryBtnClick: function () {
     },
 
     /**
-     * Handler for the Remove Column button. Deletes the selected bin.
+     * Handler for the Remove Column button. Deletes the selected bin. If no bin
+     * is selected, removes the last bin in the design.
      */
     onRemoveColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
