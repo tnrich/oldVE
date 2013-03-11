@@ -169,56 +169,42 @@ function encoded_j5_parameters_file(params)
  */
 function encoded_target_part_order_list_file(model,method)
 {
- 
+
 
     var bins = model["j5collection"]["bins"];
 
     var out = '(>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps\n';
-    
     bins.forEach(function(bin){
         var direction = '';
         if(method.match(/Combinatorial/))
         {
             out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
-        
-            bin.parts.forEach(function(part){
-                var fro = (bin['fro'] == 'None') ? '' : '';
-                var direction = (part["directionForward"] == 'true') ? 'forward' : '';
-                var dsf = '';//bin["dsf"]
-                console.log("---");
-                console.log(part["fas"]);
-                var fas = (part["fas"] == 'None') ? '' : part["fas"];
-                console.log(fas);
 
-                out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + ',' + '\n';
+            bin.parts.forEach(function(part){
+                fas = (part["fas"] == 'None') ? '' : part["fas"];
+                fro = (bin['fro'] === 'None') ? '' : bin['fro'];
+                direction = (part["directionForward"] === 'true') ? 'forward' : '';
+                dsf = (bin['dsf'] === false) ? '' : '';
+                extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
+                extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
+
+                out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
             });
         }
         else
         {
-            direction = (bin.parts[0]["directionForward"] == 'true') ? 'forward' : '';
-            out += bin.parts[0]["name"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
+            direction = (bin.parts[0]["directionForward"] === 'true') ? 'forward' : '';
+            fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
+            fro = (bin['fro'] === 'None') ? '' : bin['fro'];
+            dsf = (bin['dsf'] === false) ? '' : bin['dsf'];
+            extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
+            extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
+
+            out += bin.parts[0]["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
         }
     });
-    /*
-    (>Bin) or Part Name,Direction,Forced Assembly Strategy?,Forced Relative Overhang Position?,Direct Synthesis Firewall?,Extra 5\' CPEC overlap bps,Extra 3\' CPEC overlap bps
-    >vector_backbone,,,2,,,
-    pS8c-vector_backbone,forward,,,,,
-    >nterm_sig_pep,,,,TRUE,,
-    BMC_nterm_sig_pep,forward,,,,,
-    ccmN_nterm_sig_pep,forward,,,,,
-    >gly_ser_linker,,,,,,
-    long_gly_ser_linker,forward,,,,,
-    short_gly_ser_linker,forward,,,,,
-    >GFPuv,,,,,,
-    GFPuv,forward,,,,,
-    >ssrA_tag_5prime,,Embed_in_primer_reverse,,TRUE,,
-    ssrA_tag_5prime,forward,,,,,
-    ssrA_tag_enhanced_5prime,forward,Embed_in_primer_reverse,,,,
-    >ssrA_tag_3prime,,Embed_in_primer_forward,,,,
-    ssrA_tag_3prime,forward,Embed_in_primer_forward,,,,
-    */
-    quicklog(out);
-    return new Buffer(out).toString('base64'); 
+
+    return new Buffer(out).toString('base64');
 }
 
 /**
