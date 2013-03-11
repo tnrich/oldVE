@@ -327,13 +327,20 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     execParams["master_plasmids_list_filename"] = masterFiles["masterPlasmidsListFileName"];
     execParams["encoded_master_plasmids_file"] = masterFiles["masterPlasmidsList"];
+
+    if(execParams["master_plasmids_list_filename"]==='' && execParams["encoded_master_plasmids_file"]==='') execParams["reuse_master_plasmids_file"] = "TRUE";
     
     execParams["master_oligos_list_filename"] = masterFiles["masterOligosListFileName"];
     execParams["encoded_master_oligos_file"] = masterFiles["masterOligosList"];
+
+    if(execParams["master_oligos_list_filename"]==='' && execParams["encoded_master_oligos_file"]==='') execParams["reuse_master_oligos_file"] = "TRUE";
     
     execParams["master_direct_syntheses_list_filename"] = masterFiles["masterDirectSynthesesListFileName"];
     execParams["encoded_master_direct_syntheses_file"] = masterFiles["masterDirectSynthesesList"];
 
+    if(execParams["master_direct_syntheses_list_filename"]==='' && execParams["encoded_master_direct_syntheses_file"]==='') execParams["reuse_master_direct_syntheses_file"] = "TRUE";
+
+    //quicklog(require('util').inspect(execParams, true, 5));
 
     var data = {};
 
