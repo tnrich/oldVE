@@ -272,6 +272,12 @@ Ext.define("Vede.controller.SequenceController", {
     onSequenceManagerChanged: function(pSeqMan) {
         this.SequenceManager = pSeqMan;
 
+        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+
+        if(this.SelectionLayer && this.SelectionLayer.selected) {
+            this.SelectionLayer.deselect();
+        }
+
         Ext.each(this.Managers, function(manager) {
             manager.setSequenceManager(pSeqMan);
         });
@@ -401,8 +407,7 @@ Ext.define("Vede.controller.SequenceController", {
         this.caretIndex = index;
         if(!silent && this.SequenceManager) {
             this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       this,
-                                       index);
+                                       this, index);
         }
     },
 
