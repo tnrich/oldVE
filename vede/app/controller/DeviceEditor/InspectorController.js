@@ -603,6 +603,20 @@ onopenPartLibraryBtnClick: function () {
      * Handles the event that a bin is selected in the Inspector.
      */
     onGridBinSelect: function (grid, j5Bin, selectedIndex) {
+        var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
+            var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
+            var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
+            var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+
+            changePartDefinitionBtn.disable();
+            changePartDefinitionBtn.addCls('btnDisabled');
+            deletePartBtn.disable();
+            deletePartBtn.addCls('btnDisabled');
+            openPartLibraryBtn.disable();
+            openPartLibraryBtn.setText("Select Part From Library");
+            openPartLibraryBtn.removeCls('selectPartFocus');
+            openPartLibraryBtn.addCls('btnDisabled');
+            
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
@@ -674,6 +688,7 @@ onopenPartLibraryBtnClick: function () {
             deletePartBtn.addCls('btnDisabled');
             openPartLibraryBtn.disable();
             openPartLibraryBtn.setText("Select Part From Library");
+            openPartLibraryBtn.removeCls('selectPartFocus');
             openPartLibraryBtn.addCls('btnDisabled');
         }
     },
