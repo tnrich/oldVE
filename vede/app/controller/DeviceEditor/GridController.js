@@ -69,7 +69,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Get the bin that the button refers to and reverse its direction.
         var parentBin = button.up().up().up().getBin();
 
-        this.application.fireEvent("BinHeaderClick", parentBin);
+        this.application.fireEvent("BinHeaderClick", button.up());
 
         parentBin.set("directionForward", !parentBin.get("directionForward"));
     },
@@ -134,7 +134,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
 
-            if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")==="") {
+            if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
+                this.selectedPart.deselect();
+            } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
                 this.selectedPart.select();
                 this.selectedPart.leaveselect();
             }
@@ -182,6 +184,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid
 
+
             Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
 
             if(this.activeBins) {
@@ -207,6 +210,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.activeProject = newTab.model.getDesign();
+
+            this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
             this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
@@ -255,6 +260,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        if(this.selectedBin){
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
     },
 
     /**
@@ -336,13 +346,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onRemoveFromParts: function(parts, removedPart, index) {
         var gridPart = this.getGridPartFromJ5Part(removedPart);
         var gridBin = gridPart.up("Bin");
+        var j5Bin = gridPart.up("Bin").getBin();
 
         gridBin.remove(gridPart);
         gridBin.setTotalRows(this.totalRows);
+        
+        this.selectedPart = null;
+        Vede.application.fireEvent("partSelected", this.selectedPart);
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
 
-        if(this.selectedPart === removedPart) {
-            this.selectedPart = null;
-        }
     },
 
     /**
@@ -447,15 +459,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumn: function() {
-        this.totalColumns +=1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin()) + 1;
+                                                        this.selectedBin.getBin());
+
+            this.selectedBin.deselect();
+            this.selectedBin = null;
         } else {
-            selectedBinIndex = this.totalColumns;
+            selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,

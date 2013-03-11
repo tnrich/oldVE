@@ -145,10 +145,12 @@ onopenPartLibraryBtnClick: function () {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
                                                          this.selectedPart) < 0) {
-                this.DeviceDesignManager.addPartToBin(this.activeProject,
+                var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
                                                       this.selectedPart,
                                                       this.selectedBinIndex);
             }
+
+
 
             var self = this;
 
@@ -309,6 +311,7 @@ onopenPartLibraryBtnClick: function () {
             openPartLibraryBtn.addCls('selectPartFocus');
 
             this.selectedPart = newPart;
+
         }
         
         var rulesStore = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
@@ -388,11 +391,13 @@ onopenPartLibraryBtnClick: function () {
      * @param {Ext.form.field.Combobox} box The FAS combobox.
      */
     onPartAssemblyStrategyChange: function (box) {
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0]
         var newStrategy = box.getValue();
 
-        this.selectedPart.set("fas", newStrategy);
-
+        this.selectedPart.set("fas", newStrategy);  
         this.columnsGrid.getView().refresh();
+        
+        Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
     },
 
     /**
@@ -410,9 +415,14 @@ onopenPartLibraryBtnClick: function () {
      */
     onAddColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
 
-        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+        if(selectedBin) {
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin); 
+            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+            this.columnsGrid.getSelectionModel().deselectAll();
+        } else {
+            this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
+        }
     },
 
     /**
@@ -641,6 +651,8 @@ onopenPartLibraryBtnClick: function () {
      * @param {Number} index The index where the bins were added.
      */
     onAddToBins: function (activeBins, addedBins, index) {
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+
         // Add event listeners to the parts store of this bin.
         Ext.each(addedBins, function (j5Bin) {
             parts = j5Bin.parts();
@@ -648,6 +660,16 @@ onopenPartLibraryBtnClick: function () {
             parts.on("update", this.onUpdateParts, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        this.columnsGrid.getSelectionModel().deselect(selectedPart);
+
+        // Remove the highlighting from the selected row- it appears that a bug
+        // is preventing this from happening automatically.
+        this.columnsGrid.getView().removeRowCls(selectedPart,
+                                    this.columnsGrid.getView().selectedItemCls);
+        this.columnsGrid.getView().removeRowCls(selectedPart,
+                                    this.columnsGrid.getView().focusedItemCls);
+
 
         this.renderCollectionInfo();
     },
@@ -707,7 +729,6 @@ onopenPartLibraryBtnClick: function () {
         try {
             this.columnsGrid.getView().refresh();
             this.renderCollectionInfo();
-
             //this.clearPartInfo();
         } catch(err)
         {
