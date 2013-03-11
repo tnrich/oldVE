@@ -6,9 +6,10 @@ Ext.define('Vede.view.PartLibraryWindow', {
     extend: 'Ext.window.Window',
     alias: 'widget.partLibrary',
     title: 'Part Library',
-    height: 200,
+    height: 400,
     width: 400,
     layout: 'fit',
+    modal: true,
     items: {
         xtype: 'grid',
         id: 'partLibraryGridList',
