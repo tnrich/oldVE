@@ -76,7 +76,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
                                                         .length + end - start;
             }
 
-            selectionLabelText = [start, " : ", end, " (", selectionLength, ")"].join("");
+            selectionLabelText = [start + 1, " : ", end, " (", selectionLength, ")"].join("");
 
             this.StatusPanel.down("tbtext[cls='selectionPositionText']")
                 .setText(selectionLabelText);
