@@ -358,7 +358,7 @@ onopenPartLibraryBtnClick: function () {
      */
     onBinSelected: function (j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
-
+        
         this.inspector.setActiveTab(1);
 
         selectionModel.select(j5Bin);
@@ -413,7 +413,7 @@ onopenPartLibraryBtnClick: function () {
 
         this.selectedPart.set("fas", newStrategy);  
         this.columnsGrid.getView().refresh();
-        
+
         Vede.application.fireEvent(this.DeviceEvent.MAP_PART, this.selectedPart);
     },
 

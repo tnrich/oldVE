@@ -9,7 +9,7 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 	region: 'north',
 	id: 'headerPanel',
 	cls: 'navbar navbar-static-top',
-	margin: '0 0 15 0',
+	margin: '0 0 10 0',
 	layout: 'fit',
 	items: [{
 		xtype: 'container',
