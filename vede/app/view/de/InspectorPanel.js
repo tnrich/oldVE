@@ -134,10 +134,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             name: 'fas',
                             queryMode: 'local',
                             anchor: '100%',
-                            store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
-                                    'Embed_in_primer_reverse',
-                                    'Embed_in_primer_forward', 'Annealed Oligos'],
-                            value: 'None'
+                            store: [],
                         }
                     ]
                 },
