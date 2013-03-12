@@ -606,6 +606,7 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     applySequenceManager: function(pSequenceManager) {
+        if(!this.sequenceManager) this.sequenceManager = pSequenceManager;
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
