@@ -776,9 +776,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(duplicated)
         {
-            var msg = Ext.MessageBox.confirm('Warning', 'There\'s another part using the same name. Are you sure you want to continue?',function(opt){
-                if(opt==='yes') return cb();
-            });
+                Ext.MessageBox.show({
+                    title: 'Error',
+                    msg: 'There\'s another part using the same name.',
+                    buttons: Ext.MessageBox.OK,
+                    icon:Ext.MessageBox.ERROR
+                });
         }
         else return cb();
     },
