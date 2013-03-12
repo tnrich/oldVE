@@ -16,7 +16,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     onSequenceSelectionChanged: function(pieController,start,end){
-        this.selectedStartBP = start;
+        this.selectedStartBP = start+1;
         this.selectedStopBP = end;
     },
 
@@ -71,6 +71,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         else
         {
             startBP.setValue(this.selectedPart.get('genbankStartBP'));
+            console.log(this.selectedPart.get('genbankStartBP'));
             stopBP.setValue(this.selectedPart.get('endBP'));
         }
 

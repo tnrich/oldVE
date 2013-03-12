@@ -361,9 +361,11 @@ onopenPartLibraryBtnClick: function () {
      */
     onBinSelected: function (j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
-        
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
+
         this.inspector.setActiveTab(1);
 
+        console.log(selectedPart);
         selectionModel.select(j5Bin);
 
         this.updateColumnContentDisplayField(j5Bin);
@@ -411,7 +413,7 @@ onopenPartLibraryBtnClick: function () {
      * @param {Ext.form.field.Combobox} box The FAS combobox.
      */
     onPartAssemblyStrategyChange: function (box) {
-        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0]
+        var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
         var newStrategy = box.getValue();
 
         this.selectedPart.set("fas", newStrategy);  
@@ -616,7 +618,7 @@ onopenPartLibraryBtnClick: function () {
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.removeCls('selectPartFocus');
             openPartLibraryBtn.addCls('btnDisabled');
-            
+
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
