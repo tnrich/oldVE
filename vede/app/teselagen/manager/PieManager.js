@@ -612,6 +612,7 @@ Ext.define("Teselagen.manager.PieManager", {
         if(this.pie) {
             if(pSequenceManager.getSequence().toString().length > 0) {
                 this.caret.show(true);
+                this.adjustCaret(0);
             } else if(this.caret) {
                 this.caret.destroy();
             }
