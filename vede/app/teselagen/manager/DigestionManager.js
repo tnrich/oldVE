@@ -58,8 +58,8 @@ Ext.define("Teselagen.manager.DigestionManager", {
 */
     },
     initializeSource: function(){
-        this.sourceSequence = this.digestionSequence.get("sequenceManager").sequence.toString();
-        this.sourceRevComSequence = this.digestionSequence.get("sequenceManager").sequence.toString();
+        this.sourceSequence = this.digestionSequence.get("sequenceManager").getSequence().toString();
+        this.sourceRevComSequence = this.digestionSequence.get("sequenceManager").getComplementSequence().toString();
 
         //The position the starting restriction enzyme matches on the sequence
         var relativeStart =  this.digestionSequence.get("startRelativePosition");
@@ -106,9 +106,6 @@ Ext.define("Teselagen.manager.DigestionManager", {
     },
     
     initializeDestination: function(){
-        //var this.destinationStartCutSite = null;
-        //var this.destinationEndCutSite = null;
-        
         for(var i = 0; i < this.restrictionEnzymeManager.cutSites.length; i++) {
             var cutSite = this.restrictionEnzymeManager.cutSites[i];
             if(this.start === cutSite.start) {
@@ -165,7 +162,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
 
         if (pType === this.self.matchReverseComOnly){
             //reverseComplementSequence();
-            this.pasteSequenceManager.reverseComplementSequence();
+            this.pasteSequenceManager.doReverseComplementSequence();
         }
         //startPosition and stopPosition are the start and stop of the sequence that we are going to remove from the destination.
         //We will be replacing it with sequence from the source, so we need to remove the overhang as well or it will be duplicated in the final.
@@ -208,10 +205,95 @@ Ext.define("Teselagen.manager.DigestionManager", {
         this.sequenceManager.removeSequence(startPosition, endPosition);
         this.sequenceManager.insertSequenceManager(this.pasteSequenceManager, startPosition);
         this.sequenceManager.manualUpdateEnd();
+    },
+    getMatchingType: function(){
+        if (this._matchType == null){
+            this.calculateMatchingType();
+        }
+        return this._matchType;
+    },
+    calculateMatchingType: function(){
+        var normalMatch = this.hasNormalMatch();
+        var revComMatch = this.hasRevComMatch();
+        if(normalMatch && revComMatch) {
+            this._matchType = this.self.matchBoth;
+        } else if (normalMatch && !revComMatch) {
+            this._matchType = this.self.matchNormalOnly;
+        } else if (!normalMatch && revComMatch) {
+            this._matchType = this.self.matchReverseComOnly;
+        } else {
+            this._matchType = this.self.matchNone;
+        }
+    },
+    hasNormalMatch: function(){
+        // Trying to much overhang by shape
+        var matchByShapeStart = this.matchByShape(this.sourceOverhangStartType, this.destinationOverhangStartType);
+        var matchByShapeEnd = this.matchByShape(this.sourceOverhangEndType, this.destinationOverhangEndType);
+        if(!matchByShapeStart || !matchByShapeEnd) {
+            return false;
+        }
+        // Trying to much overhang by length
+        if(this.sourceOverhangStartSequence.length !== this.destinationOverhangStartSequence.length || this.sourceOverhangEndSequence.length !== this.destinationOverhangEndSequence.length) {
+            return false;
+        }
+        // Trying to much overhang by sequence
+
+        var matchBySequenceStart = this.matchBySequence(this.sourceOverhangStartSequence, this.destinationOverhangStartSequence);
+        var matchBySequenceEnd = this.matchBySequence(this.sourceOverhangEndSequence, this.destinationOverhangEndSequence);
+        if(!matchBySequenceStart || !matchBySequenceEnd) {
+            return false;
+        }
+        return true;
+    },
+    hasRevComMatch: function(){
+        // Trying to match overhang by shape
+        var matchByShapeStart = this.matchRevComByShape(this.sourceOverhangStartType, this.destinationOverhangEndType);
+        var matchByShapeEnd = this.matchRevComByShape(this.sourceOverhangEndType, this.destinationOverhangStartType);
+        if(!matchByShapeStart || !matchByShapeEnd) {
+            return false;
+        }
+        // Trying to match overhang by length
+        if(this.sourceOverhangStartSequence.length !== this.destinationOverhangEndSequence.length || this.sourceOverhangEndSequence.length !== this.destinationOverhangStartSequence.length) {
+            return false;
+        }
+        // Trying to match overhang by sequence
+
+        if (this.sourceOverhangStartSequence !== this.destinationOverhangEndSequence){
+            return false;
+        }
+        if (this.sourceOverhangEndSequence !== this.destinationOverhangStartSequence){
+            return false;
+        }
+        return true;
+    },
+    matchByShape: function(sourceOverhangType, destinationOverhangType){
+        // Trying to match overhang by shape
+        var match = false;
+        
+        if((sourceOverhangType === this.self.overhangTop && destinationOverhangType === this.self.overhangBottom) || (sourceOverhangType === this.self.overhangBottom && destinationOverhangType === this.self.overhangTop) || (sourceOverhangType === this.self.overhangNone && destinationOverhangType === this.self.overhangNone)) {
+            match = true;
+        }
+        return match;
+    },
+    matchRevComByShape: function(sourceOverhangType, destinationOverhangType){
+        // Trying to match overhang by shape
+        var match = false;
+        if((sourceOverhangType === this.self.overhangTop && destinationOverhangType === this.self.overhangTop) || (sourceOverhangType === this.self.overhangBottom && destinationOverhangType === this.self.overhangBottom) || (sourceOverhangType === this.self.overhangNone && destinationOverhangType === this.self.overhangNone)) {
+            match = true;
+        }
+        return match;
+    },
+    matchBySequence: function(sourceOverhangSequence, destinationOverhangSequence){
+        // Trying to match overhang by sequence
+        var match = false;
+        var complement = Teselagen.bio.sequence.DNATools.complement(Teselagen.bio.sequence.DNATools.createDNA(destinationOverhangSequence)).seqString();
+        if(sourceOverhangSequence === complement) {
+            match = true;
+        }
+        return match;
     }
     /*
      * Not implemented because I don't think they do anything
-    calculateMatchingType: function(){},
     hasNormalMatch: function(){},
     hasRevComMatch: function(){},
     

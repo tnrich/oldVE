@@ -29,6 +29,88 @@ Ext.onReady(function() {
     //   Digestion Manager Unit Testing
     // ====================================
     describe("DigestionManager.js Tests", function() {
+        describe("Blunt ends for both", function() {
+            var sourceDNA = "ttacgcccccgggtcgaaaaaaaaaaaaaaaaaaaaacccgggatccgacagag";
+            var destinationDNA = "tgattacgcccagctggcatgcctgcaggtcgactctagaggatccccgggtaccgagctccagctgactggccgtc";
+            var sourceLeftRE = "SmaI";
+            var sourceRightRE ="SmaI";
+            var destLeftRE = "PvuII";
+            var destRightRE ="PvuII";
+            var sourceStart = 7;
+            var sourceStop = 37;
+            var destStart = 10;
+            var destStop = 67;
+            var dm;
+            it("DigestionManager exists", function(){
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                expect(dm).toBeDefined();
+            });
+            it("Source DNA initialized", function(){
+                expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
+            });
+            it("Destination DNA initialized", function(){
+                expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
+            });
+            it("The pair has a normal match", function(){
+                expect(dm.hasNormalMatch()).toBeTruthy();
+            });
+            it("The pair has a reverse complementary  match", function(){
+                expect(dm.hasRevComMatch()).toBeTruthy();
+            });
+            it("The pair has matching type of BOTH", function(){
+                expect(dm.getMatchingType()).toBe(dm.self.matchBoth);
+            });
+            it("DestinationDNA digested", function(){
+                dm.digest(dm.self.matchNormalOnly);
+                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgcccaggggtcgaaaaaaaaaaaaaaaaaaaaacccctgactggccgtc");
+            });
+            it("DestinationDNA pasted revcom", function(){
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                dm.digest(dm.self.matchReverseComOnly);
+                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgcccaggggtttttttttttttttttttttcgacccctgactggccgtc");
+            });
+        });
+        describe("Same ends for both", function() {
+            var sourceDNA = "ttacgccaagctttcgaaaaaaaaaaaaaaaaaaaaaaagcttatccgacagag";
+            var destinationDNA = "tgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcaagcttactggccgtc";
+            var sourceLeftRE = "HindIII";
+            var sourceRightRE ="HindIII";
+            var destLeftRE = "HindIII";
+            var destRightRE ="HindIII";
+            var sourceStart = 7;
+            var sourceStop = 37;
+            var destStart = 10;
+            var destStop = 67;
+            var dm;
+            it("DigestionManager exists", function(){
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                expect(dm).toBeDefined();
+            });
+            it("Source DNA initialized", function(){
+                expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
+            });
+            it("Destination DNA initialized", function(){
+                expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
+            });
+            it("The pair has a normal match", function(){
+                expect(dm.hasNormalMatch()).toBeTruthy();
+            });
+            it("The pair has a reverse complementary  match", function(){
+                expect(dm.hasRevComMatch()).toBeTruthy();
+            });
+            it("The pair has matching type of BOTH", function(){
+                expect(dm.getMatchingType()).toBe(dm.self.matchBoth);
+            });
+            it("DestinationDNA digested", function(){
+                dm.digest(dm.self.matchNormalOnly);
+                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgccaagctttcgaaaaaaaaaaaaaaaaaaaaaaagcttactggccgtc");
+            });
+            it("DestinationDNA pasted revcom", function(){
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                dm.digest(dm.self.matchReverseComOnly);
+                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgccaagctttttttttttttttttttttttcgaaagcttactggccgtc");
+            });
+        });
         describe("Same ends", function() {
             var sourceDNA = "ttacgccaagcttaaaaaaaaaaaaaaaaaaaaaaaagaattcatccgacagag";
             var destinationDNA = "tgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtc";
@@ -42,19 +124,23 @@ Ext.onReady(function() {
             var destStop = 67;
             var dm;
             it("DigestionManager exists", function(){
-                runs(function() {
-                    dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
-                    expect(dm).toBeDefined();
-                    waitsFor(function() {
-                        return Ext.isDefined(Vede.application);
-                    }, "Ext.application defined", 500);
-                });
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                expect(dm).toBeDefined();
             });
             it("Source DNA initialized", function(){
                 expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
             });
             it("Destination DNA initialized", function(){
                 expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
+            });
+            it("The pair has a normal match", function(){
+                expect(dm.hasNormalMatch()).toBeTruthy();
+            });
+            it("The pair does not have a reverse complementary  match", function(){
+                expect(dm.hasRevComMatch()).not.toBeTruthy();
+            });
+            it("The pair has matching type of Normal Only", function(){
+                expect(dm.getMatchingType()).toBe(dm.self.matchNormalOnly);
             });
             it("DestinationDNA digested", function(){
                 dm.digest(dm.self.matchNormalOnly);
@@ -71,23 +157,65 @@ Ext.onReady(function() {
             var sourceStart = 7;
             var sourceStop = 58;
             var destStart = 10;
-      var destStop = 67;
-      var dm;
-         it("Compatible Ends DigestionManager exists", function(){
-             dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
-             expect(dm).toBeDefined();
-         });
-         it("Source DNA initialized", function(){
-             expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
-         });
-         it("Destination DNA initialized", function(){
-             expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
-         });
-         it("DestinationDNA digested", function(){
-             dm.digest(dm.self.matchNormalOnly);
-             expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgccagatccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcactggccgtc");
-         });
-     });
+            var destStop = 67;
+            var dm;
+            it("DigestionManager exists", function(){
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                expect(dm).toBeDefined();
+            });
+            it("Source DNA initialized", function(){
+                expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
+            });
+            it("Destination DNA initialized", function(){
+                expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
+            });
+            it("The pair has a normal match", function(){
+                expect(dm.hasNormalMatch()).toBeTruthy();
+            });
+            it("The pair does not have a reverse complementary  match", function(){
+                expect(dm.hasRevComMatch()).not.toBeTruthy();
+            });
+            it("DestinationDNA digested", function(){
+                dm.digest(dm.self.matchNormalOnly);
+                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgccagatccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcactggccgtc");
+            });
+        });
+        describe("Incompatible ends", function() {
+            var sourceDNA = "ttacgccggatccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcatccgacagag";
+            var destinationDNA = "tgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtc";
+            var sourceLeftRE = "BamHI";
+            var sourceRightRE ="EcoRI";
+            var destLeftRE = "HindIII";
+            var destRightRE ="EcoRI";
+            var sourceStart = 7;
+            var sourceStop = 58;
+            var destStart = 10;
+            var destStop = 67;
+            var dm;
+            it("DigestionManager exists", function(){
+                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
+                expect(dm).toBeDefined();
+            });
+            it("Source DNA initialized", function(){
+                expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
+            });
+            it("Destination DNA initialized", function(){
+                expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
+            });
+            it("The pair does not have a normal match", function(){
+                expect(dm.hasNormalMatch()).not.toBeTruthy();
+            });
+            it("The pair does not have a reverse complementary  match", function(){
+                expect(dm.hasRevComMatch()).not.toBeTruthy();
+            });
+            it("The pair has matching type of None", function(){
+                expect(dm.getMatchingType()).toBe(dm.self.matchNone);
+            });
+            it("DestinationDNA digested", function(){
+                dm.digest(dm.self.matchNormalOnly);
+                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgccagatccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaattcactggccgtc");
+            });
+        });
     });
 });
 
@@ -186,6 +314,35 @@ function makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRig
 // H    Not G (A or C or T)
 // D    Not C (A or G or T)
 // V    Not T (A or G or C)
+
+//Blunt ends for both 
+//target
+//tgattacgcccagctggcatgcctgcaggtcgactctagaggatccccgggtaccgagctccagctgactggccgtc
+//          PvuII                                              PvuII
+//01234567890123456789012345678901234567890123456789012345678901234567890123456
+//        1         2         3         4         5         6         7
+//source
+// ttacgcccccgggaaaaaaaaaaaaaaaaaaaaaaaacccgggatccgacagag
+//        SmaI                          SmaI
+// 012345678901234567890123456789012345678901234567890123
+//           1         2         3         4         5
+//pasted
+//tgattacgcccaggggaaaaaaaaaaaaaaaaaaaaaaaacccctgactggccgtc
+
+
+//Same ends for both HindIII
+//target
+//tgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcaagcttactggccgtc
+//          HindIII                                            HindIII
+//01234567890123456789012345678901234567890123456789012345678901234567890123456
+//        1         2         3         4         5         6         7
+//source
+// ttacgccaagcttaaaaaaaaaaaaaaaaaaaaaaaaaagcttatccgacagag
+//        HindIII                       HindIII
+// 012345678901234567890123456789012345678901234567890123
+//           1         2         3         4         5
+//pasted
+//tgattacgccaagcttaaaaaaaaaaaaaaaaaaaaaaaaaagcttactggccgtc
 
 // Same ends HindIII
 // target
