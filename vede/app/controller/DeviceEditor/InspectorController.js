@@ -137,7 +137,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         });
     },
 
-onopenPartLibraryBtnClick: function () {
+    onopenPartLibraryBtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
 
@@ -206,28 +206,30 @@ onopenPartLibraryBtnClick: function () {
                         store: partLibrary,
                         listeners: {
                             "itemclick": function(grid, part, item){
-                                var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
-                                                                                self.selectedPart);
+                                Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
+                                    var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
+                                                                                    self.selectedPart);
 
-                                part.getSequenceFile({
-                                    callback: function(sequence){
-                                        if(bin)
-                                        {
-                                            var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                            var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-                                            bin.parts().removeAt(insertIndex);
-                                            bin.parts().insert(insertIndex,part);
-                                            self.onReRenderDECanvasEvent();
-                                            selectWindow.close();
-                                            self.selectedPart = part;
-                                            self.onReRenderDECanvasEvent();
-                                            Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                    part.getSequenceFile({
+                                        callback: function(sequence){
+                                            if(bin)
+                                            {
+                                                var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                                var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
+                                                bin.parts().removeAt(insertIndex);
+                                                bin.parts().insert(insertIndex,part);
+                                                self.onReRenderDECanvasEvent();
+                                                selectWindow.close();
+                                                self.selectedPart = part;
+                                                self.onReRenderDECanvasEvent();
+                                                Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
+                                            }
+                                            else
+                                            {
+                                                Ext.MessageBox.alert('Error','Failed mapping part from library');
+                                            }
                                         }
-                                        else
-                                        {
-                                            Ext.MessageBox.alert('Error','Failed mapping part from library');
-                                        }
-                                    }
+                                    });
                                 });
                             }
                         }
@@ -365,7 +367,7 @@ onopenPartLibraryBtnClick: function () {
 
         this.inspector.setActiveTab(1);
 
-        console.log(selectedPart);
+        //console.log(selectedPart);
         selectionModel.select(j5Bin);
 
         this.updateColumnContentDisplayField(j5Bin);
@@ -397,15 +399,17 @@ onopenPartLibraryBtnClick: function () {
      */
     onPartNameFieldChange: function (nameField) {
         var newName = nameField.getValue();
+        var self = this;
+        Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
+            self.selectedPart.set("name", newName);
 
-        this.selectedPart.set("name", newName);
-
-        if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
-                                                     this.selectedPart) < 0) {
-            this.DeviceDesignManager.addPartToBin(this.activeProject,
-                                                  this.selectedPart,
-                                                  this.selectedBinIndex);
-        }
+            if(self.DeviceDesignManager.getBinAssignment(self.activeProject,
+                                                         self.selectedPart) < 0) {
+                self.DeviceDesignManager.addPartToBin(self.activeProject,
+                                                      self.selectedPart,
+                                                      self.selectedBinIndex);
+            }
+        });
     },
 
     /**

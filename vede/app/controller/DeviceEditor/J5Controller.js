@@ -37,7 +37,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
-            {   
+            {
                 if (currentTab.j5Window) {currentTab.j5Window.close();}
 
                 var messagebox = Ext.MessageBox.show({
@@ -207,22 +207,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onUseServerPlasmidsRadioBtnChange: function (e) {
         // We only want to reset the file field if we are checking the radio button.
         if(e.getValue()) {
-            Ext.ComponentQuery.query("component[cls='plasmidsListFileSelector']")[0].reset();
+            currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.j5Window.down("component[cls='plasmidsListFileSelector']").reset();
         }
     },
 
     onUseEmptyPlasmidsRadioBtnChange: function (e) {
         if(e.getValue()) {
-            Ext.ComponentQuery.query("component[cls='plasmidsListFileSelector']")[0].reset();
+            currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.j5Window.down("component[cls='plasmidsListFileSelector']").reset();
         }
     },
 
     onPlasmidsListFileSelectorChange: function (me, value) {
+        currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var plasmidsFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        Ext.ComponentQuery.query("radio[cls='useServerPlasmidsRadioBtn']")[0].setValue(false);
-        Ext.ComponentQuery.query("radio[cls='useEmptyPlasmidsRadioBtn']")[0].setValue(false);
+        currentTab.j5Window.down("radio[cls='useServerPlasmidsRadioBtn']").setValue(false);
+        currentTab.j5Window.down("radio[cls='useEmptyPlasmidsRadioBtn']").setValue(false);
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
@@ -250,22 +253,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onUseServerOligosRadioBtnChange: function (e) {
         if(e.getValue()) {
-            Ext.ComponentQuery.query("component[cls='oligosListFileSelector']")[0].reset();
+            currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.j5Window.down("component[cls='oligosListFileSelector']").reset();
         }
     },
 
     onUseEmptyOligosRadioBtnChange: function (e) {
         if(e.getValue()) {
-            Ext.ComponentQuery.query("component[cls='oligosListFileSelector']")[0].reset();
+            currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.j5Window.down("component[cls='oligosListFileSelector']").reset();
         }
     },
 
     onOligosListFileSelectorChange: function (me) {
+        currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var oligosFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        Ext.ComponentQuery.query("radio[cls='useServerOligosRadioBtn']")[0].setValue(false);
-        Ext.ComponentQuery.query("radio[cls='useEmptyOligosRadioBtn']")[0].setValue(false);
+        currentTab.j5Window.down("radio[cls='useServerOligosRadioBtn']").setValue(false);
+        currentTab.j5Window.down("radio[cls='useEmptyOligosRadioBtn']").setValue(false);
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
@@ -291,22 +297,25 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onUseServerSynthesesRadioBtnChange: function (e) {
         if(e.getValue()) {
-            Ext.ComponentQuery.query("component[cls='directSynthesesFileSelector']")[0].reset();
+            currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.j5Window.down("component[cls='directSynthesesFileSelector']").reset();
         }
     },
 
     onUseEmptySynthesesRadioBtnChange: function (e) {
         if(e.getValue()) {
-            Ext.ComponentQuery.query("component[cls='directSynthesesFileSelector']")[0].reset();
+            currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+            currentTab.j5Window.down("component[cls='directSynthesesFileSelector']").reset();
         }
     },
 
     onDirectSynthesesFileSelectorChange: function (me) {
+        currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var synthesesFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        Ext.ComponentQuery.query("radio[cls='useServerSynthesesRadioBtn']")[0].setValue(false);
-        Ext.ComponentQuery.query("radio[cls='useEmptySynthesesRadioBtn']")[0].setValue(false);
+        currentTab.j5Window.down("radio[cls='useServerSynthesesRadioBtn']").setValue(false);
+        currentTab.j5Window.down("radio[cls='useEmptySynthesesRadioBtn']").setValue(false);
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
@@ -339,19 +348,21 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         this.populateAutomationParametersDialog();
     },
     populateAutomationParametersDialog: function () {
+        currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         this.automationParameters.fields.eachKey(function (key) {
             console.log(key);
             if(key !== "id" && key !== "j5run_id") {
-                Ext.ComponentQuery.query("component[cls='" + key + "']")[0].setValue(
+                currentTab.j5Window.down("component[cls='" + key + "']").setValue(
                 this.automationParameters.get(key));
             }
         }, this);
     },
 
     saveAutomationParams: function () {
+        currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         this.automationParameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
-                this.automationParameters.set(key, Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
+                this.automationParameters.set(key, currentTab.j5Window.down("component[cls='" + key + "']").getValue());
             }
         }, this);
     },
@@ -386,8 +397,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
 
     onRunJ5BtnClick: function (btn) {
-        var loadingMessage = this.j5Window.query('container[cls="j5progressContainer"]')[0].show();
-        var responseMessage = this.j5Window.query('displayfield[cls="j5ResponseTextField"]')[0].show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var loadingMessage = currentTab.j5Window.down('container[cls="j5progressContainer"]').show();
+        var responseMessage = currentTab.j5Window.down('displayfield[cls="j5ResponseTextField"]').show();
 
         var self = this;
         var masterPlasmidsList;
@@ -399,40 +411,40 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var masterDirectSynthesesList;
         var masterDirectSynthesesListFileName;
 
-        if(Ext.ComponentQuery.query("radio[cls='useServerPlasmidsRadioBtn']")[0].getValue()) {
+        if(currentTab.j5Window.down("radio[cls='useServerPlasmidsRadioBtn']").getValue()) {
             masterPlasmidsList = "";
             masterPlasmidsListFileName = "";
-        } else if(Ext.ComponentQuery.query("radio[cls='useEmptyPlasmidsRadioBtn']")[0].getValue()) {
+        } else if(currentTab.j5Window.down("radio[cls='useEmptyPlasmidsRadioBtn']").getValue()) {
             masterPlasmidsList = this.J5ControlsUtils.generateEmptyPlasmidsList();
             masterPlasmidsListFileName = "j5_plasmids.csv";
         } else {
             masterPlasmidsList = this.plasmidsListText;
             masterPlasmidsListFileName = this.getFileNameFromField(
-            Ext.ComponentQuery.query("component[cls='plasmidsListFileSelector']")[0]);
+            currentTab.j5Window.down("component[cls='plasmidsListFileSelector']"));
         }
 
-        if(Ext.ComponentQuery.query("radio[cls='useServerOligosRadioBtn']")[0].getValue()) {
+        if(currentTab.j5Window.down("radio[cls='useServerOligosRadioBtn']").getValue()) {
             masterOligosList = "";
             masterOligosListFileName = "";
-        } else if(Ext.ComponentQuery.query("radio[cls='useEmptyOligosRadioBtn']")[0].getValue()) {
+        } else if(currentTab.j5Window.down("radio[cls='useEmptyOligosRadioBtn']").getValue()) {
             masterOligosList = this.J5ControlsUtils.generateEmptyOligosList();
             masterOligosListFileName = "j5_oligos.csv";
         } else {
             masterOligosList = this.plasmidsListText;
             masterOligosListFileName = this.getFileNameFromField(
-            Ext.ComponentQuery.query("component[cls='oligosListFileSelector']")[0]);
+            currentTab.j5Window.down("component[cls='oligosListFileSelector']"));
         }
 
-        if(Ext.ComponentQuery.query("radio[cls='useServerSynthesesRadioBtn']")[0].getValue()) {
+        if(currentTab.j5Window.down("radio[cls='useServerSynthesesRadioBtn']").getValue()) {
             masterDirectSynthesesList = "";
             masterDirectSynthesesListFileName = "";
-        } else if(Ext.ComponentQuery.query("radio[cls='useEmptySynthesesRadioBtn']")[0].getValue()) {
+        } else if(currentTab.j5Window.down("radio[cls='useEmptySynthesesRadioBtn']").getValue()) {
             masterDirectSynthesesList = this.J5ControlsUtils.generateEmptyDirectSynthesesList();
             masterDirectSynthesesListFileName = "j5_directsyntheses.csv";
         } else {
             masterDirectSynthesesList = this.plasmidsListText;
             masterDirectSynthesesListFileName = this.getFileNameFromField(
-            Ext.ComponentQuery.query("component[cls='directSynthesesFileSelector']")[0]);
+            currentTab.j5Window.down("component[cls='directSynthesesFileSelector']"));
         }
 
         var masterFiles = {};
@@ -443,7 +455,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterDirectSynthesesList"] = Base64.encode(masterDirectSynthesesList);
         masterFiles["masterDirectSynthesesListFileName"] = masterDirectSynthesesListFileName;
 
-        var assemblyMethod = Ext.ComponentQuery.query("component[cls='assemblyMethodSelector']")[0].getValue();
+        var assemblyMethod = currentTab.j5Window.down("component[cls='assemblyMethodSelector']").getValue()
 
         if(assemblyMethod == "Mock Assembly") assemblyMethod = "Mock";
         if(assemblyMethod == "SLIC/Gibson/CPEC") assemblyMethod = "SLIC/Gibson/CPEC";
@@ -453,7 +465,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         if(assemblyMethod == "Combinatorial SLIC/Gibson/CPEC") assemblyMethod = "CombinatorialSLICGibsonCPEC";
         if(assemblyMethod == "Combinatorial Golden Gate") assemblyMethod = "CombinatorialGoldenGate";
 
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
         currentTab.j5Window.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
@@ -511,7 +522,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
         data.assemblyFileText = this.assemblyFileText;
         data.params = this.automationParameters.data;
-        data.reuse = Ext.ComponentQuery.query("component[name='automationParamsFileSource']")[0].getValue();
+        data.reuse = currentTab.j5Window.down("component[name='automationParamsFileSource']").getValue();
 
         var loadingMessage = this.createLoadingMessage();
 
@@ -584,7 +595,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     saveJ5Parameters: function () {
         this.j5Parameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
-                console.log(key);
                 this.j5Parameters.set(key, Ext.ComponentQuery.query("component[cls='" + key + "']")[0].getValue());
             }
         }, this);
@@ -626,12 +636,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         condenseParams = {};
         condenseParams["assemblyFiles"] = {};
         condenseParams["assemblyFiles"]["name"] = this.getFileNameFromField(
-        Ext.ComponentQuery.query("component[cls='condenseAssemblyFilesSelector']")[0]);
+        currentTab.j5Window.down("component[cls='condenseAssemblyFilesSelector']"));
         condenseParams["assemblyFiles"]["content"] = this.condenseAssemblyFilesText;
 
         condenseParams["zippedFiles"] = {};
         condenseParams["zippedFiles"]["name"] = this.getFileNameFromField(
-        Ext.ComponentQuery.query("component[cls='zippedAssemblyFilesSelector']")[0]);
+        currentTab.j5Window.down("component[cls='zippedAssemblyFilesSelector']"));
         condenseParams["zippedFiles"]["content"] = this.zippedPlateFilesSelector;
 
         var loadingMessage = this.createLoadingMessage();
