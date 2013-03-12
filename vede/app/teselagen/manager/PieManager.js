@@ -702,13 +702,13 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Int} angle The angle of the caret to reposition to.
      */
     adjustCaret: function(bp) {
-        var angle = bp * 2 * Math.PI / 
-            this.sequenceManager.getSequence().seqString().length;
-
         this.caret.destroy();
 
         if(this.sequenceManager &&
            this.sequenceManager.getSequence().toString().length > 0) {
+
+            var angle = bp * 2 * Math.PI / 
+                this.sequenceManager.getSequence().seqString().length;
 
             this.caret = Ext.create("Vede.view.pie.Caret", {
                 angle: angle,
