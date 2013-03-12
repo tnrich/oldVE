@@ -11,16 +11,19 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
     
     singleton: true,
 
-    BASE_URL: "/biojs/src/teselagen/bio/enzymes/assets/",
-    commonRestrictionEnzymes: null,
-    rebaseRestrictionEnzymes: null,
+    config: {
+        BASE_URL: "/biojs/src/teselagen/bio/enzymes/assets/",
+        commonRestrictionEnzymes: null,
+        rebaseRestrictionEnzymes: null,
+        enzymeHashMap: null
+    },
     
     /**
      * Retrieves and returns common enzymes from common.xml.
      * @return {Teselagen.bio.enzymes.RestrictionEnzyme[]} List of common enzymes.
      */
     getCommonRestrictionEnzymes: function() {
-        if(this.commonRestrictionEnzymes != null) {
+        if(this.commonRestrictionEnzymes !== null) {
             return this.commonRestrictionEnzymes;
         }
         
@@ -33,31 +36,44 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
      * @return {Teselagen.bio.enzymes.RestrictionEnzyme[]} List of enzymes in REBASE.
      */
     getRebaseRestrictionEnzymes: function() {
-        if(this.rebaseRestrictionEnzymes != null) {
+        if(this.rebaseRestrictionEnzymes !== null) {
             return this.rebaseRestrictionEnzymes;
         }
         
         this.rebaseRestrictionEnzymes = this.getEnzymes(this.BASE_URL + "rebase.xml");
         return this.rebaseRestrictionEnzymes;
     },
+    
+    /**
+     * Retrieves and returns an enzyme from REBASE.
+     * @return {Teselagen.bio.enzymes.RestrictionEnzyme} A particular enzyme from REBASE.
+     */
+    getRestrictionEnzyme: function(name) {
+        //don't need this, just need to make sure that we have pulled the enzymes from REBASE
+        var dummy = this.getRebaseRestrictionEnzymes();
+        if(this.enzymeHashMap.containsKey( name )) {
+            return this.enzymeHashMap.get( name );
+        }
+        return null;
+    },
 
     /**
      * @private
-     * Retrieves xml text from a given url, hands it to the parser, 
+     * Retrieves xml text from a given url, hands it to the parser,
      * and writes the enzymes to a variable.
      * @param {String} url The url to retrieve data from.
      * @param {String} group Which enzyme variable to write to; either "common" or "rebase".
      */
     getEnzymes: function(url) {
         var xhReq = new XMLHttpRequest();
-        xhReq.open("GET", url, false); 
+        xhReq.open("GET", url, false);
         xhReq.send(null);
         var xml = xhReq.responseText;
         
         // Handle errors.
-        if(xhReq.status != 200) {
-            bioException = Ext.create("Teselagen.bio.BioException", {
-                message: "Incorrect enzyme file URL: " + url,
+        if(xhReq.status !== 200) {
+            var bioException = Ext.create("Teselagen.bio.BioException", {
+                message: "Incorrect enzyme file URL: " + url
             });
             throw bioException;
         }
@@ -73,6 +89,10 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
      */
     parseXml: function(xml) {
         var enzymeList = new Array();
+        if (this.enzymeHashMap == undefined) {
+            this.enzymeHashMap = Ext.create("Ext.util.HashMap");
+        }
+        var localHashMap = this.enzymeHashMap;
         
         // Define an Ext model "Enzyme" to make reading from XML data possible.
         Ext.define("Enzyme", {
@@ -120,6 +140,7 @@ Ext.define("Teselagen.bio.enzymes.RestrictionEnzymeManager", {
             });
             
             enzymeList.push(enzyme);
+            localHashMap.add(enzyme.getName(), enzyme);
         });
         
         return enzymeList;
