@@ -12,19 +12,41 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     createPartWindow: null,
 
     onPartCreated: function (sequence, part) {
-        sequence.save({
-            callback: function () {
-                part.setSequenceFileModel(sequence);
-                part.set('sequencefile_id', sequence.data.id);
-                part.save({
-                    callback: function () {
-                        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
-                        parttext.animate({duration: 5000, to: {opacity: 0}});
-                    }
-                });
-            }
-        });
+
+        processPrompt = function(btn,text){
+            part.set('name',text);
+            executeRequest();
+        };
+
+        executeRequest = function(){
+            Ext.Ajax.request({
+                url: Teselagen.manager.SessionManager.buildUrl("checkDuplicatedPartName", ''),
+                method: 'GET',
+                params: {
+                    name: part.get('name')
+                },
+                success: function (response) {
+                    sequence.save({
+                        callback: function () {
+                            part.setSequenceFileModel(sequence);
+                            part.set('sequencefile_id', sequence.data.id);
+                            part.save({
+                                callback: function () {
+                                    var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
+                                    parttext.animate({duration: 5000, to: {opacity: 0}});
+                                }
+                            });
+                        }
+                    });
+                },
+                failure: function(response){
+                    Ext.MessageBox.prompt('Name', 'There\'s another part in the library using the same name. Please choose a different name', processPrompt);
+                }
+            });
+        };
+
+        executeRequest();
     },
 
     onCreatePartBtnClick: function () {
