@@ -1,17 +1,4 @@
 
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Quicksand Regular'), local('Quicksand-Regular'), url(http://themes.googleusercontent.com/static/fonts/quicksand/v2/sKd0EMYPAh5PYCRKSryvW7O3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
-}
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Quicksand Bold'), local('Quicksand-Bold'), url(http://themes.googleusercontent.com/static/fonts/quicksand/v2/32nyIRHyCu6iqEka_hbKsqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
-}
-
 .x-mask {
     z-index: 1000;
 }
@@ -26,16 +13,16 @@
 
 .x-mask-msg.splashscreen,
 .x-mask-msg.splashscreen div {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 11px;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 12px;
     color: #333;
     padding-top: 0px;
-    margin-left: -175px !important;
-    text-align: left;
+    margin-left: -50px !important;
+    text-align: center;
     border: none;
     background-color: transparent;
     background-position: top center;
-        z-index: 1000;
+    z-index: 1000;
 }
 
 .x-mask-msg.splashscreen span {
