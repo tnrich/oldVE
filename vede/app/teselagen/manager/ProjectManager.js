@@ -63,6 +63,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         });
         if(!duplicated) return cb(tabPanel);
+        else console.log("Trying to open duplicated tab!");
     },
 
     openj5Report: function (selectedDEProject) {
