@@ -781,6 +781,24 @@ background: #F8F8F8;
   color:black;
 }
 
+.downloadResults {
+  background: rgb(21, 133, 197);
+}
+
+.downloadResults .x-btn-inner {
+  color: white;
+}
+
+.j5detailpanel-fillcontent {
+  text-align: center;
+  border-radius:4px;
+  background: rgba(192, 192, 192, 0.21);
+}
+
+.downloadResults-over {
+  background: rgb(17, 101, 150);
+}
+
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {
   background: rgba(245,66,66,0.5);
   color: white;

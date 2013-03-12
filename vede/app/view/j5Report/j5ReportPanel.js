@@ -42,26 +42,54 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         items: [{
             xtype: 'menu',
             floating: false,
-            height: 453,
             width: 291,
             items: []
         }]
     }],
-    items: [{
+    items: [
+        {
+            xtype: 'panel',
+            title: 'Detail',
+            cls: 'j5detailpanel-fill',
+            hidden: true,
+            layout: 'fit',
+            border: 0,
+            items: [{
+                xtype: 'container',
+                cls: 'j5detailpanel-fillcontent',
+                height: 40,
+                padding: 12,
+                margin: '20 10 10 10',
+                html: 'Click on a J5 Run to View Results.'
+            }]
+        },
+        {
         xtype: 'panel',
         title: 'Detail',
         cls: 'j5detailpanel',
+        hidden: false,
+        autoScroll: true,
+        layout: 'fit',
+        border: 0,
         items: [{
-                    xtype: 'fieldset',
-                    margin: '10 10 10 10',
-                    width: 700,
-                    items: [
-                        {
+                    xtype: 'toolbar',
+                    layout: 'fit',
+                    height: 50,
+                    dock: 'top',
+                    items: [{
+                        xtype: 'button',
+                        margin: 10,
+                        text: 'Download Results',
+                        cls: 'downloadResults',
+                        overCls: 'downloadResults-over'
+                    }]
+            },{
                             xtype: 'gridpanel',
                             name: 'assemblies',
                             margin: '10 10 20 10',
-                            width: 650,
                             title: 'Output Plasmids',
+                            maxHeight: 600,
+                            layout: 'fit',
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -93,9 +121,10 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             xtype: 'gridpanel',
                             name: 'j5parameters',
                             margin: '10 10 20 10',
-                            width: 650,
-                            height:100,
                             title: 'j5 Parameters',
+                            minHeight: 100,
+                            maxHeight: 600,
+                            layout: 'fit',
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -110,31 +139,22 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                                     text: 'Value'
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
+                        },
+                    {
                     xtype: 'fieldset',
                     margin: '10 10 10 10',
-                    width: 700,
+                    layout: 'fit',
                     title: 'Combinatorial Mock Assembly Output',
                     items: [
                         {
                             xtype: 'textareafield',
                             name: 'combinatorialAssembly',
                             margin: '10 10 20 10',
-                            width: 650,
                             fieldLabel: ''
                         }
                     ]
-                },
-                {
-                    xtype: 'button',
-                    margin: 10,
-                    text: 'Download Results',
-                    cls: 'downloadResults'
                 }]
-    }],
+            }],
 
     listeners: {}
 }
