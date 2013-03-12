@@ -739,7 +739,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     }
                 });
             }
-            
+
             }});
         }, 1);
 
@@ -764,6 +764,23 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+    },
+
+    onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
+        duplicated = false;
+        this.activeBins.each(function(bin) {
+            bin.parts().each(function(part){
+                if(part!=pPart && part.get('name')===name) duplicated = true;
+            });
+        });
+
+        if(duplicated)
+        {
+            var msg = Ext.MessageBox.confirm('Warning', 'There\'s another part using the same name. Are you sure you want to continue?',function(opt){
+                if(opt==='yes') return cb();
+            });
+        }
+        else return cb();
     },
 
     onLaunch: function() {
@@ -814,8 +831,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onSelectBin,
                             this);
 
-        this.application.on(this.DeviceEvent.MAP_PART, 
-                            this.onPartCellSelectByMap, 
+        this.application.on(this.DeviceEvent.MAP_PART,
+                            this.onPartCellSelectByMap,
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART_SELECT,
@@ -829,7 +846,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("BinHeaderClick",
                             this.onBinHeaderClick,
                             this);
- 
+
         this.application.on("PartCellClick",
                             this.onPartCellClick,
                             this);
@@ -841,6 +858,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("PartCellVEEditClick",
                             this.onPartCellVEEditClick,
                             this);
-        
+
+        this.application.on("validateDuplicatedPartName",
+                            this.onValidateDuplicatedPartNameEvent,
+                            this);
+
         }
 });
