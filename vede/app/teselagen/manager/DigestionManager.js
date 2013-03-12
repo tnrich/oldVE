@@ -1,27 +1,29 @@
 /**
- * Digestion manager
- * @class Teselagen.manager.DigestionManager
- */
-
-/**
  * @class Teselagen.manager.DigestionManager
  * When copying a DNA fragment and pasting it into Vector Editor, the DigestionManager performs the following tasks.
- * 1) Process the source and destination pieces of DNA using the restriction enzymes supplied with the source 
+ * 1.   Process the source and destination pieces of DNA using the restriction enzymes supplied with the source
  * DigestionSequence and the RestrictionEnzymeManager, to determine composition of the ends of each piece.
- * 2) The source and destination pieces of DNA are compared to determine if they contain compatible ends in either 
+ * 2.   The source and destination pieces of DNA are compared to determine if they contain compatible ends in either
  * the forward or reverse orientation.
- * 3) The variable _matchType is set based on whether the two sequences can be combined in the forward, reverse, both
+ * 3.  The variable _matchType is set based on whether the two sequences can be combined in the forward, reverse, both
  * or no direction.
- * 4) The dialog box then uses getMatchingType to determine which options to display to the user for pasting.
- * 5) Depending on which option is selected the DigestionManager performs a paste (DigestionManager.digest), removing 
- * sequences at the ends of each piece and inserting the source into the destination piece such that the final 
+ * 4.  The dialog box then uses getMatchingType to determine which options to display to the user for pasting.
+ * 5. Depending on which option is selected the DigestionManager performs a paste (DigestionManager.digest), removing
+ * sequences at the ends of each piece and inserting the source into the destination piece such that the final
  * sequence matches what would be obtained if a restriction digestion followed by ligation had actually been performed.
- * 
+ *
  * Based on org.jbei.lib.mappers.DigestionCutter.as
- * 
+ *
  * @author Doug Hershberger
  * @author Nick Elsbree
  * @author Zinovii Dmytriv
+ */
+
+/*
+ * TODO:
+ * Throw an exception when trying to digest pieces in a way not specified in _matchType. Right now, you can digest things even if they aren't compatible
+ * I think we could eliminate some unnecessary steps by not ever converting the overhangs into reverse complementary sequences in the first place. Then when we do the comparison, we would need to convert it back.
+ * You really want the option to "fill ends and ligate" if the ends aren't compatible. But then again, who does that anymore?
  */
 Ext.define("Teselagen.manager.DigestionManager", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
@@ -31,54 +33,103 @@ Ext.define("Teselagen.manager.DigestionManager", {
                "Teselagen.manager.RestrictionEnzymeManager"],
 
     statics: {
+        /**
+         * The source sequence cannot be pasted into the destination as a restriction fragment
+         */
         matchNone: "None",
+        /**
+         * The source sequence can be pasted into the destination as a restriction fragment in the forward direction only
+         */
         matchNormalOnly: "NormalOnly",
+        /**
+         * The source sequence can be pasted into the destination as a restriction fragment in the reverse direction only
+         */
         matchReverseComOnly: "RevComOnly",
+        /**
+         * The source sequence can be pasted into the destination as a restriction fragment in either direction
+         */
         matchBoth: "Both",
+        //The rest of these are really private
         overhangNone: "None",
         overhangTop: "Top",
         overhangBottom: "Bottom"
     },
+    
+    //These are a bunch of private variables used in this class only
+    destinationStartCutSite: null,
+    _matchType: null,
+    destinationEndCutSite: null,
+    destinationOverhangStartType: null,
+    destinationOverhangEndType: null,
+    destinationOverhangStartSequence: null,
+    destinationOverhangEndSequence: null,
 
+    sourceSequence: null,
+    sourceRevComSequence: null,
+    sourceOverhangStartType: null,
+    sourceOverhangEndType: null,
+    sourceOverhangStartSequence: null,
+    sourceOverhangEndSequence: null,
+    pasteSequenceManager: null,
+    //So that we can use the shortcut DigestionManager to refer to this class
+    DigestionManager: null,
+    DNATools: null,
     config: {
+        /**
+         * @cfg {Teselagen.manager.SequenceManager} sequenceManager
+         * The SequenceManager that contains the destination sequence
+         *
+         */
         sequenceManager: null,
+        /**
+         * @cfg {Int} start
+         * The index of the start of the destination selection on the sequence in the SequenceManager,
+         * inclusive as shown in the example
+         *     @example
+         *               PvuII                                             PvuII
+         *     tgattacgccCAGCTGgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcCAGCTGactggccgtc
+         *               ^Start                                                End^
+         *     01234567890123456789012345678901234567890123456789012345678901234567890123456
+         *               1         2         3         4         5         6         7
+         *
+         */
         start: null,
+        /**
+         * @cfg {Int} end
+         * The index of the end of the destination selection on the sequence in the SequenceManager,
+         * exclusive as shown in the example
+         *     @example
+         *               PvuII                                             PvuII
+         *     tgattacgccCAGCTGgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcCAGCTGactggccgtc
+         *               ^Start                                                End^
+         *     01234567890123456789012345678901234567890123456789012345678901234567890123456
+         *               1         2         3         4         5         6         7
+         *
+         */
         end: null,
+        /**
+         * @cfg {Teselagen.models.DigestionSequence} digestionSequence
+         * An object that represents the source sequence and the enzymes that cut it
+         *
+         */
         digestionSequence: null,
-        restrictionEnzymeManager: null,
-
-        _matchType: null,
-
-        destinationStartCutSite: null,
-        destinationEndCutSite: null,
-        destinationOverhangStartType: null,
-        destinationOverhangEndType: null,
-        destinationOverhangStartSequence: null,
-        destinationOverhangEndSequence: null,
-
-        sourceSequence: null,
-        sourceRevComSequence: null,
-        sourceOverhangStartType: null,
-        sourceOverhangEndType: null,
-        sourceOverhangStartSequence: null,
-        sourceOverhangEndSequence: null,
-        pasteSequenceManager: null
+        /**
+         * @cfg {Teselagen.manager.RestrictionEnzymeManager} restrictionEnzymeManager
+         * An object that represents the enzymes to be used to cut the destination sequence
+         *
+         */
+        restrictionEnzymeManager: null
     },
     /**
-     * @param {Ext.util.HashMap} inData a HashMap of the parameters for creating the DigestionManager consisting of:
-     *         {Teselagen.manager.SequenceManager} sequenceManager: The DNA sequence of the destination piece
-     *         {Int} start: The offset with respect to the piece of DNA in the sequenceManager of the start of the 
-     *         destination sequence to be replaced. This should be the location of the start of the 
-     *         recognition sequence of the restriction enzyme used to digest it.
-     *         {Int} end: (See start) this should include the end of the recognition sequence of the restriction enzyme
-     *         used to digest it.
-     *         {Teselagen.models.DigestionSequence} digestionSequence: The source sequence and restriction enzymes
-     *         used to cut its ends
-     *         {Teselagen.manager.RestrictionEnzymeManager} restrictionEnzymeManager: A list of restriction enzymes 
-     *         used to cut the ends of the destination piece
+     * @constructor
+     * @param {Object/Mixed} inData
      * @return {Teselagen.manager.DigestionManager} This object.
      */
     constructor: function(inData){
+        //So that we can use the shortcut DigestionManager to refer to this class
+        this.DigestionManager = Teselagen.manager.DigestionManager;
+        //So that we can use the shortcut DNATools to refer to the DNATools
+        this.DNATools = Teselagen.bio.sequence.DNATools;
         this.statics();
         this.initConfig(inData);
         this.sequenceManager = inData.sequenceManager;
@@ -88,10 +139,10 @@ Ext.define("Teselagen.manager.DigestionManager", {
 
         this.initializeSource();
         this.initializeDestination();
-        /* this.calculateMatchingType();
-*/
+        this.calculateMatchingType();
     },
     /**
+     * @private
      * Initializes the source DNA fragment so that the pieces can be compared and combined
      */
     initializeSource: function(){
@@ -144,6 +195,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
     
 
     /**
+     * @private
      * Initializes the destination DNA fragment so that the pieces can be compared and combined
      */
     initializeDestination: function(){
@@ -199,10 +251,10 @@ Ext.define("Teselagen.manager.DigestionManager", {
     /**
      * Inserts the source fragment into the destination fragment in the forward or reverse orientation as indicated by pType.
      * The modified sequence will be in this.sequenceManager
-     * 
-     * @param {String} pType should be the static matchNormalOnly or matchReverseComOnly if you want to insert the 
+     *
+     * @param {String} pType should be the static matchNormalOnly or matchReverseComOnly if you want to insert the
      * source fragment in the forward or reverse orientation respectively
-     * 
+     *
      */
     digest: function(pType){
         if (!(pType === this.self.matchNormalOnly || pType === this.self.matchReverseComOnly)){
@@ -263,14 +315,15 @@ Ext.define("Teselagen.manager.DigestionManager", {
      * matchNone = source can not be pasted as a restriction fragment
      */
     getMatchingType: function(){
-        if (this._matchType == null){
+        if (this._matchType === null){
             this.calculateMatchingType();
         }
         return this._matchType;
     },
     /**
-     * Compares the source overhang to the destination to see if 
-     * they are a match in either direction. used by this.getMatchingType. 
+     * @private
+     * Compares the source overhang to the destination to see if
+     * they are a match in either direction. used by this.getMatchingType.
      * After calling this, this_matchType will be set to one of the following:
      * matchBoth
      * matchNormalOnly
@@ -291,7 +344,8 @@ Ext.define("Teselagen.manager.DigestionManager", {
         }
     },
     /**
-     * Compares the source overhang to the destination to see if 
+     * @private
+     * Compares the source overhang to the destination to see if
      * they are a  match. used by this.calculateMatchingType
      * @return {Boolean} true if these sequences match, false if not
      */
@@ -316,7 +370,8 @@ Ext.define("Teselagen.manager.DigestionManager", {
         return true;
     },
     /**
-     * Compares the reverse complemented source overhang to the destination to see if 
+     * @private
+     * Compares the reverse complemented source overhang to the destination to see if
      * they are a  match. used by this.calculateMatchingType
      * @return {Boolean} true if these sequences match, false if not
      */
@@ -342,7 +397,8 @@ Ext.define("Teselagen.manager.DigestionManager", {
         return true;
     },
     /**
-     * Compares the two overhang types of the source to the destination to see if 
+     * @private
+     * Compares the two overhang types of the source to the destination to see if
      * they could be a  match. used by this.hasNormalMatch
      * @param {String} sourceOverhangType
      * @param {String} destinationOverhangType
@@ -358,7 +414,8 @@ Ext.define("Teselagen.manager.DigestionManager", {
         return match;
     },
     /**
-     * Compares the two overhang types of the reverse complemented source to the destination to see if 
+     * @private
+     * Compares the two overhang types of the reverse complemented source to the destination to see if
      * they could be a  match. used by this.hasRevComMatch
      * @param {String} sourceOverhangType
      * @param {String} destinationOverhangType
@@ -373,6 +430,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
         return match;
     },
     /**
+     * @private
      * Complements the destination sequence and then compares the two. used by this.hasNormalMatch
      * @param {String} sourceOverhangSequence
      * @param {String} destinationOverhangSequence
@@ -381,7 +439,7 @@ Ext.define("Teselagen.manager.DigestionManager", {
     matchBySequence: function(sourceOverhangSequence, destinationOverhangSequence){
         // Trying to match overhang by sequence
         var match = false;
-        var complement = Teselagen.bio.sequence.DNATools.complement(Teselagen.bio.sequence.DNATools.createDNA(destinationOverhangSequence)).seqString();
+        var complement = this.DNATools.complement(this.DNATools.createDNA(destinationOverhangSequence)).seqString();
         if(sourceOverhangSequence === complement) {
             match = true;
         }
