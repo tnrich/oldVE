@@ -43,6 +43,9 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
                        "#ladderSelector": {
                            change: this.updateLadderLane
+                       },
+                       "#enzymeGroupSelector-search": {
+                           change: this.searchEnzymes
                        }
                    });
 
@@ -108,6 +111,43 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
                    Ext.each(newGroup.getEnzymes(), function(enzyme) {
                        enzymeArray.push({name: enzyme.getName()});
+                   });
+                   var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
+                   this.enzymeListSelector.store.loadData(enzymeArray, false);
+                   this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
+
+                   this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
+                   this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
+                   //Trigger an update of the filter also
+                   this.searchEnzymes(null);
+               },
+               /**
+                * Searches the itemselector field for enzyme names
+                */
+               searchEnzymes: function(combobox) {
+                   if (combobox === null) {
+                       combobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+                   }
+                   var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+                   var currentList = this.GroupManager.groupByName(groupSelector.getValue());
+                   //var currentList = this.enzymeListSelector.fromField.store.data.items;
+                   var enzymeArray = [];
+                   var searchPhrase = ".";
+                   if (combobox.getValue() !== null){
+                       searchPhrase = combobox.getValue();
+                   }
+                   try {
+                   var regEx = new RegExp(searchPhrase, "i");
+                   } catch(err) {
+                       //We can safely ignore errors in the regex. they'll just result in not getting what you are looking for
+                       regEx = null;
+                   }
+
+                   Ext.each(currentList.getEnzymes(), function(enzyme) {
+                       var temp = 0;
+                       if (enzyme.getName().search(regEx) !== -1) {
+                           enzymeArray.push({name: enzyme.getName()});
+                       }
                    });
                    var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
                    this.enzymeListSelector.store.loadData(enzymeArray, false);
