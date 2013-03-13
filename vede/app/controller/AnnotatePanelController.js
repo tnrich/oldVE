@@ -277,13 +277,17 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             
             this.callParent(arguments);
             this.SequenceAnnotationManager.adjustCaret(index);
-            
-            var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
-            var el = Ext.getCmp("AnnotateContainer").el;
 
-            if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
-                 metrics.getY() > el.getScroll().top)) {
-                el.scrollTo("top", metrics.getY());
+            // Only scroll to the location of the caret if we're not currently
+            // dragging to make a selection.
+            if(!this.mouseIsDown) {
+                var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
+                var el = Ext.getCmp("AnnotateContainer").el;
+
+                if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
+                     metrics.getY() > el.getScroll().top)) {
+                    el.scrollTo("top", metrics.getY());
+                }
             }
         }
     },
