@@ -169,7 +169,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 success: function (response) {
 
                 loadingMsgBox.updateProgress(50 / 100, 50 + '% completed');
-                
+
                 response = JSON.parse(response.responseText);
 
              var partLibrary = Ext.create('Teselagen.store.PartStore', {
