@@ -296,12 +296,25 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onRebaseSequence: function() {
+        var selectionEnd;
+
         if(this.SequenceManager) {
             this.SequenceManager.rebaseSequence(this.caretIndex);
             this.changeCaretPosition(0);
+
+            if(this.SelectionLayer.start > this.SelectionLayer.end) {
+                selectionEnd = this.SequenceManager.getSequence().toString().length - 
+                    this.SelectionLayer.start + this.SelectionLayer.end;
+            } else {
+                selectionEnd = this.SelectionLayer.end - this.SelectionLayer.start;
+            }
             
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+
+            this.select(0, selectionEnd);
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       this, 0, selectionEnd);
         }
 
         // Return false to cancel the event. This makes sure the method is
