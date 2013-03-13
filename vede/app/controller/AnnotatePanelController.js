@@ -123,6 +123,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onSequenceManagerChanged: function(pSeqMan){
         this.callParent(arguments);
         this.SelectionLayer.setSequenceManager(pSeqMan);
+
+        this.changeCaretPosition(0, true);
     },
 
     onShowFeaturesChanged: function(show) {

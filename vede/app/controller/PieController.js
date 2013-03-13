@@ -288,7 +288,8 @@ Ext.define('Vede.controller.PieController', {
                     this.changeCaretPosition(this.SelectionLayer.start);
                 }
 
-            } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
+            } else if(this.clickedAnnotationStart !== null && 
+                      this.clickedAnnotationEnd !== null){
                 // If we've clicked a sprite, select it.
                 this.select(this.clickedAnnotationStart,
                             this.clickedAnnotationEnd);
