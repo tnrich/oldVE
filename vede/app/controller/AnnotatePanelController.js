@@ -94,8 +94,6 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             newBpPerRow = this.self.MIN_BP_PER_ROW;
         }
 
-        console.log("width: " + width + ", bpPerRow: " + newBpPerRow);
-
         this.SequenceAnnotationManager.setBpPerRow(newBpPerRow);
 
         if(this.SequenceManager) {
