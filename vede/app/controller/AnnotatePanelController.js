@@ -23,6 +23,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.control({
             "#AnnotateContainer" : {
                 render: this.onRender
+            },
+            "#AnnotatePanel": {
+                resize: this.onResize
             }
         });
 
@@ -77,6 +80,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         pCmp.el.dom.setAttribute("tabindex", "0");
         pCmp.el.on("keydown", this.onKeydown, this);
         this.SequenceAnnotationManager.annotator.init();
+    },
+
+    onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
+        //console.log(width + " x " + height);
     },
     
     onKeydown: function(event) {

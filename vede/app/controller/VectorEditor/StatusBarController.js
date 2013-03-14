@@ -57,7 +57,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     },
     
     onCaretPositionChanged: function(scope, index) {
-        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index);
+        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index.toString());
     },
 
     onSelectionChanged: function(scope, start, end) {
