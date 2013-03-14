@@ -7,7 +7,20 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     id: 'VectorEditorMainToolBar',
     alias: 'widget.VectorEditorMainToolBar',
     items: [
-
+    {
+        xtype: 'button',
+        cls: 'saveSequenceBtn',
+        icon: 'resources/images/save.png',
+        text: 'Save Sequence',
+        scale: 'medium',
+        tooltip: 'Save Sequence',
+        hidden: true
+    },
+    {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20
+    },
     {
         xtype: 'filefield',
         buttonOnly: true,
