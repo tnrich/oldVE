@@ -55,8 +55,7 @@ Ext.define("Vede.view.annotate.Annotator", {
     init: function() {
         this.annotateSVG = d3.select("#AnnotateContainer")
             .append("svg:svg")
-            .attr("id", "annotateSVG")
-            .attr("width", "100%");
+            .attr("id", "annotateSVG");
         
         this.linesSVG = this.annotateSVG.append("svg:g")
             .attr("id", "linesSVG");
@@ -113,7 +112,7 @@ Ext.define("Vede.view.annotate.Annotator", {
             }
 
             this.annotateSVG.attr("height", this.sequenceRenderer.getTotalHeight());
-
+            this.annotateSVG.attr("width", this.sequenceRenderer.getTotalWidth() + 60);
         }
     },
 

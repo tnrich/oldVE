@@ -69,7 +69,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // Get the bin that the button refers to and reverse its direction.
         var parentBin = button.up().up().up().getBin();
 
-        this.application.fireEvent("BinHeaderClick", parentBin);
+        this.application.fireEvent("BinHeaderClick", button.up());
 
         parentBin.set("directionForward", !parentBin.get("directionForward"));
     },
@@ -100,6 +100,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Ext.container.Container} binHeader The clicked bin header.
      */
     onBinHeaderClick: function(binHeader) {
+
         var gridBin = binHeader.up().up();
         var j5Bin = gridBin.getBin();
 
@@ -127,15 +128,18 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var j5Part = gridPart.getPart();
         var j5Bin = gridPart.up("Bin").getBin();
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-        
+
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
 
-            if (this.selectedPart.getPart()==null || this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
+            if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
+                this.selectedPart.deselect();
+            } else if (this.selectedPart.getPart() && this.selectedPart.getPart().getSequenceFile().get("partSource")=="") {
                 this.selectedPart.select();
-             }
+                this.selectedPart.leaveselect();
+            }
         }
 
         this.selectedPart = gridPart;
@@ -144,7 +148,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.select();
 
          if(j5Part) {
-            if(j5Part.getSequenceFile().get("partSource")=="") {
+            if(j5Part.getSequenceFile().get("partSource")==="") {
                 gridPart.select();
             } else {
                 gridPart.mapSelect();
@@ -180,6 +184,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.grid = newTab.query("component[cls='designGrid']")[0];
             this.grid.removeAll(); // Clean grid
 
+
             Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]').setText(''); // Clean status bar alert
 
             if(this.activeBins) {
@@ -205,6 +210,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
 
             this.activeProject = newTab.model.getDesign();
+
+            this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
             this.activeProject.rules().on("add", this.onAddToEugeneRules, this);
             this.activeProject.rules().on("remove", this.onRemoveFromEugeneRules, this);
@@ -253,6 +260,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             parts.on("update", this.onPartsUpdate, this);
             parts.on("remove", this.onRemoveFromParts, this);
         }, this);
+
+        if(this.selectedBin){
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        }
     },
 
     /**
@@ -334,13 +346,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onRemoveFromParts: function(parts, removedPart, index) {
         var gridPart = this.getGridPartFromJ5Part(removedPart);
         var gridBin = gridPart.up("Bin");
+        var j5Bin = gridPart.up("Bin").getBin();
 
         gridBin.remove(gridPart);
         gridBin.setTotalRows(this.totalRows);
+        
+        this.selectedPart = null;
+        Vede.application.fireEvent("partSelected", this.selectedPart);
+        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
 
-        if(this.selectedPart === removedPart) {
-            this.selectedPart = null;
-        }
     },
 
     /**
@@ -445,15 +459,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumn: function() {
-        this.totalColumns +=1;
         var selectedBinIndex;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
-                                                        this.selectedBin.getBin()) + 1;
+                                                        this.selectedBin.getBin());
+
+            this.selectedBin.deselect();
+            this.selectedBin = null;
         } else {
-            selectedBinIndex = this.totalColumns;
+            selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
@@ -684,80 +700,98 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellVEEditClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
-        var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        
-        j5Part.getSequenceFile({
-        callback: function(associatedSequence,operation){
-        
-        if(associatedSequence)
-        {
-            console.log("onPartCellVEEditClick");
-            console.log(associatedSequence);
-            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
+        var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
 
-        }
-        else
-        {
-            console.log("This part doesn't have an associated sequence, creating new empty sequence");
-            var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                sequenceFileFormat: "Genbank",
-                sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                sequenceFileName: "untitled.gb",
-                partSource: "New Part"
-            });
-            
-            newSequenceFile.save({
-                callback: function(){
-                    j5Part.setSequenceFileModel(newSequenceFile);
-                    j5Part.save({
-                        callback: function(){
-                            console.log(j5Part);
-                            var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                            Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
-                        }
-                    });
-                }
-            });
-        }
+        DETab.setLoading(true);
         
-        }});
+        setTimeout(function() {
+            j5Part.getSequenceFile({
+            callback: function(associatedSequence,operation){
+            
+            if(associatedSequence)
+            {
+                console.log("onPartCellVEEditClick");
+                console.log(associatedSequence);
+                Vede.application.fireEvent("VectorEditorEditingMode",j5Part, DETab);
+                DETab.setLoading(false);
+            }
+            else
+            {
+                console.log("This part doesn't have an associated sequence, creating new empty sequence");
+                var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                    sequenceFileFormat: "Genbank",
+                    sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                    sequenceFileName: "untitled.gb",
+                    partSource: "New Part"
+                });
+                
+                newSequenceFile.save({
+                    callback: function(){
+                        j5Part.setSequenceFileModel(newSequenceFile);
+                        j5Part.save({
+                            callback: function(){
+                                console.log(j5Part);
+                                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
+                                DETab.setLoading(false);
+                            }
+                        });
+                    }
+                });
+            }
+
+            }});
+        }, 1);
 
     },
 
+    suspendPartAlerts: function(){
+        //console.log("suspending part alerts");
+        this.activeBins.each(function(bin) {
+            var parts = bin.parts();
+
+            parts.un("add", this.onAddToParts, this);
+            parts.un("update", this.onPartsUpdate, this);
+            parts.un("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+    resumePartAlerts: function(){
+        //console.log("resuming part alerts");
+        this.activeBins.each(function(bin) {
+            var parts = bin.parts();
+
+            parts.on("add", this.onAddToParts, this);
+            parts.on("update", this.onPartsUpdate, this);
+            parts.on("remove", this.onRemoveFromParts, this);
+        }, this);
+    },
+
+    onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
+        //console.log("Checking for duplicate part with id:"+pPart.get('id'));
+        duplicated = false;
+        this.activeBins.each(function(bin) {
+            bin.parts().each(function(part){
+                //console.log(part.get('id'));
+                if(part.get('id')!=pPart.get('id') && part.get('name')===name) duplicated = true;
+            });
+        });
+
+        if(duplicated)
+        {
+                Ext.MessageBox.show({
+                    title: 'Error',
+                    msg: 'Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.',
+                    buttons: Ext.MessageBox.OK,
+                    icon:Ext.MessageBox.ERROR
+                });
+        }
+        else return cb();
+    },
+
     onLaunch: function() {
-        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
-        this.grid = Ext.ComponentQuery.query("component[cls='designGrid']")[0];
-        
         this.tabPanel = Ext.getCmp("mainAppPanel");
-
-        // Empty model start with one bin and two empty parts
-        this.totalRows = 2;
-        var binModel = Ext.create("Teselagen.models.J5Bin", {
-            binName: "cds",
-            iconID: ""
-        });
-
-        var partModel1 = Ext.create("Teselagen.models.Part", {
-            name: "Part0"
-        });
-
-        var partModel2 = Ext.create("Teselagen.models.Part", {
-            name: "Part1"
-        });
-
-        binModel.parts().add(partModel1);
-        binModel.parts().add(partModel2);
-
-        var deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-            name: "Untitled Project"
-        });
-
-        var design = this.DeviceDesignManager.createDeviceDesignFromBins([binModel]);
-
-        deproject.setDesign(design);
-
-        this.tabPanel.down("DeviceEditorPanel").model = deproject;
+        this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
         this.tabPanel.on("tabchange",
                          this.onTabChange,
@@ -785,6 +819,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceEvent = Teselagen.event.DeviceEvent;
         this.ProjectEvent = Teselagen.event.ProjectEvent;
 
+        this.application.on("suspendPartAlerts",this.suspendPartAlerts, this);
+        this.application.on("resumePartAlerts",this.resumePartAlerts, this);
+
         this.application.on("rerenderPart",this.rerenderPart, this);
 
         this.application.on(this.DeviceEvent.ADD_ROW,
@@ -799,8 +836,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onSelectBin,
                             this);
 
-        this.application.on(this.DeviceEvent.MAP_PART, 
-                            this.onPartCellSelectByMap, 
+        this.application.on(this.DeviceEvent.MAP_PART,
+                            this.onPartCellSelectByMap,
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART_SELECT,
@@ -814,7 +851,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("BinHeaderClick",
                             this.onBinHeaderClick,
                             this);
- 
+
         this.application.on("PartCellClick",
                             this.onPartCellClick,
                             this);
@@ -826,6 +863,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("PartCellVEEditClick",
                             this.onPartCellVEEditClick,
                             this);
-        
+
+        this.application.on("validateDuplicatedPartName",
+                            this.onValidateDuplicatedPartNameEvent,
+                            this);
+
         }
 });

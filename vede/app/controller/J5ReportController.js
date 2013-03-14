@@ -14,8 +14,10 @@ Ext.define("Vede.controller.J5ReportController", {
     cls: 'j5ReportTab',
 
     onPlasmidsItemClick: function(row,record){
-        console.log("PLASMID SELECTED");
-        console.log(record);
+        var currentTab = Ext.getCmp("mainAppPanel");
+        var mask = new Ext.LoadMask(currentTab);
+
+        mask.setVisible(true, false);
 
         var sequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone(
             "GENBANK",
@@ -24,7 +26,13 @@ Ext.define("Vede.controller.J5ReportController", {
             ""
         );
 
-        Teselagen.manager.ProjectManager.openSequence(sequence);
+        // Javascript waits to render the loading mask until after the call to
+        // openSequence, so we force it to wait a millisecond before calling
+        // to give it time to render the loading mask.
+        setTimeout(function() {
+            Teselagen.manager.ProjectManager.openSequence(sequence);
+            mask.setVisible(false);
+        }, 1);
 
     },
 
@@ -33,6 +41,11 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     onJ5RunSelect: function( item, e, eOpts ){
+         this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
+            this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
+            this.detailPanel.show();
+            this.detailPanelFill.hide();
+
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
@@ -43,7 +56,7 @@ Ext.define("Vede.controller.J5ReportController", {
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
-        this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
+        // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
     renderMenu: function(){
@@ -68,6 +81,10 @@ Ext.define("Vede.controller.J5ReportController", {
     onTabChange: function (tabPanel, newTab, oldTab) {
         if(newTab.initialCls == "j5ReportTab") {
             this.tabPanel = Ext.getCmp('mainAppPanel').getActiveTab();
+            this.detailPanel = this.tabPanel.query('panel[cls="j5detailpanel"]')[0];
+            this.detailPanelFill = this.tabPanel.query('panel[cls="j5detailpanel-fill"]')[0];
+            this.detailPanel.hide();
+            this.detailPanelFill.show();
             this.activeProject = this.tabPanel.model;
             this.loadj5Results();
         }

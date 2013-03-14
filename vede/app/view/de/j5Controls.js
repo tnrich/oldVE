@@ -66,7 +66,8 @@ Ext.define('Vede.view.de.j5Controls', {
                             fieldLabel: '<b>Master Plasmids List</b>',
                             fieldLabelCls: 'align-middle',
                             labelWidth: 200,
-                            boxLabel: 'Use latest server version'
+                            boxLabel: 'Use latest server version',
+                            checked: true
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptyPlasmidsRadioBtn',
@@ -78,8 +79,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             labelPad: 15,
                             labelSeparator: ' ',
                             labelWidth: 10,
-                            boxLabel: 'Generate empty file',
-                            checked: true
+                            boxLabel: 'Generate empty file'
                         }, {
                             xtype: 'filefield',
                             flex: 1,
@@ -113,7 +113,8 @@ Ext.define('Vede.view.de.j5Controls', {
                             fieldLabel: '<b>Master Oligos List</b>',
                             fieldLabelCls: 'align-middle',
                             labelWidth: 200,
-                            boxLabel: 'Use latest server version'
+                            boxLabel: 'Use latest server version',
+                            checked: true
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptyOligosRadioBtn',
@@ -125,8 +126,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             labelPad: 15,
                             labelSeparator: ' ',
                             labelWidth: 10,
-                            boxLabel: 'Generate empty file',
-                            checked: true
+                            boxLabel: 'Generate empty file'
                         }, {
                             xtype: 'filefield',
                             flex: 1,
@@ -159,7 +159,8 @@ Ext.define('Vede.view.de.j5Controls', {
                             fieldLabel: '<b>Master Direct Syntheses List</b>',
                             fieldLabelCls: 'align-middle',
                             labelWidth: 200,
-                            boxLabel: 'Use latest server version'
+                            boxLabel: 'Use latest server version',
+                            checked: true
                         }, {
                             xtype: 'radiofield',
                             cls: 'useEmptySynthesesRadioBtn',
@@ -171,8 +172,7 @@ Ext.define('Vede.view.de.j5Controls', {
                             labelPad: 15,
                             labelSeparator: ' ',
                             labelWidth: 10,
-                            boxLabel: 'Generate empty file',
-                            checked: true
+                            boxLabel: 'Generate empty file'
                         }, {
                             xtype: 'filefield',
                             flex: 1,

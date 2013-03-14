@@ -213,4 +213,82 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         this.allCutSites = newAllCutSites;
         this.allCutSitesMap = newAllCutSitesMap;
     },
+
+    /**
+     * Returns the list of all cut sites sorted according to the supplied criteria.
+     * @param {String} "byStart" || "byEnd"
+     * @return {Teselagen.bio.enzymes.RestrictionCutSite[]} List of cut sites sorted by the start site or end site.
+     */
+    getAllCutsSorted: function(sortCriteria) {
+        //default to sorting byStart
+        sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
+        //Make a shallow copy of the array
+        var sortedCutSites = this.allCutSites.slice();
+        if (sortCriteria === "byStart") {
+            sortedCutSites.sort(this.sortByStart);
+        } else {
+            sortedCutSites.sort(this.sortByEnd);
+        }
+        return sortedCutSites;
+    },
+
+    /**
+     * Returns the first cut site sorted according to the supplied criteria.
+     * @param {String} "byStart" || "byEnd"
+     * @return {Teselagen.bio.enzymes.RestrictionCutSite} the first cut site sorted by the start site or end site.
+     */
+    getFirstCut: function(sortCriteria) {
+        //default to sorting byStart
+        sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byStart";
+        //Get the sorted array
+        var sortedCutSites = this.getAllCutsSorted(sortCriteria);
+        return sortedCutSites[0];
+    },
+
+    /**
+     * Returns the last cut site sorted according to the supplied criteria.
+     * @param {String} "byStart" || "byEnd"
+     * @return {Teselagen.bio.enzymes.RestrictionCutSite} the last cut site sorted by the start site or end site.
+     */
+    getLastCut: function(sortCriteria) {
+        //default to sorting byEnd
+        sortCriteria = typeof sortCriteria !== 'undefined' ? sortCriteria : "byEnd";
+        //Get the sorted array
+        var sortedCutSites = this.getAllCutsSorted(sortCriteria);
+        return sortedCutSites.pop();
+    },
+    
+    /**
+     * @private
+     * Helper function for sorting two restriction cut sites.
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} x
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} y
+     * @return {Int} The sort order.
+     */
+    sortByStart: function(x, y) {
+        if(x.start < y.start) {
+            return -1;
+        } else if(x.start > y.start) {
+            return 1;
+        } else {
+            return 0;
+        }
+    },
+    
+    /**
+     * @private
+     * Helper function for sorting two restriction cut sites.
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} x
+     * @param {Teselagen.bio.enzymes.RestrictionCutSite} y
+     * @return {Int} The sort order.
+     */
+    sortByEnd: function(x, y) {
+        if(x.end < y.end) {
+            return -1;
+        } else if(x.end > y.end) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 });

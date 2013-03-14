@@ -61,7 +61,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'button',
-                    text : 'Delete Part',
+                    text : 'Clear Part',
                     cls: 'deletePartBtn',
                     overCls: 'deletePartBtn-over',
                     margin: '2.5 0 2.5 0',
@@ -134,10 +134,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             name: 'fas',
                             queryMode: 'local',
                             anchor: '100%',
-                            store: ['None', 'DIGEST', 'Direct Synthesis', 'PCR',
-                                    'Embed_in_primer_reverse',
-                                    'Embed_in_primer_forward', 'Annealed Oligos'],
-                            value: 'None'
+                            store: [],
                         }
                     ]
                 },
@@ -301,6 +298,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 markDirty: false
                             },
                             autoScroll: true,
+                            allowDeselect: true,
                             columnLines: true,
                             height:132,
                             minHeight:132,

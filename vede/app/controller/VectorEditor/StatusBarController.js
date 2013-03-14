@@ -57,7 +57,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
     },
     
     onCaretPositionChanged: function(scope, index) {
-        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index);
+        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index.toString());
     },
 
     onSelectionChanged: function(scope, start, end) {
@@ -76,7 +76,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
                                                         .length + end - start;
             }
 
-            selectionLabelText = [start, " : ", end, " (", selectionLength, ")"].join("");
+            selectionLabelText = [start + 1, " : ", end, " (", selectionLength, ")"].join("");
 
             this.StatusPanel.down("tbtext[cls='selectionPositionText']")
                 .setText(selectionLabelText);

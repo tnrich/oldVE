@@ -7,69 +7,18 @@ Ext.define('Vede.view.common.HeaderPanelView', {
 	alias: 'widget.HeaderPanelView',
 
 	region: 'north',
-	height: 50,
 	id: 'headerPanel',
-	layout: {
-		align: 'stretch',
-		type: 'hbox'
-	},
+	cls: 'navbar navbar-static-top',
+	margin: '0 0 10 0',
+	layout: 'fit',
 	items: [{
-		xtype: 'panel',
-		flex: 0,
-		id: 'headerMain',
-		maxWidth: 220,
+		xtype: 'container',
+		cls: 'navbar-inner',
+		html: '<ul class="nav"><li id="headerUserIcon"><a href="" class="dropdown-toggle headerUserField" data-toggle="dropdown"><b class="caret"></b></a><ul class="dropdown-menu"><li><a id="auth-reconnect-btn">Reconnect</a></li><li><a id="auth-logout-btn">Logout</a></li></ul></li><li id="help_btn"><a href="">Help</a></li></ul>',
 		items: [{
 			xtype: 'image',
-			height: 32,
 			id: 'headerIcon',
-			margin: 10,
-			width: 201,
-			src: 'resources/images/teselagen_toplogo.png'
-		}]
-	}, {
-		xtype: 'panel',
-		flex: 3,
-		id: 'headerButs',
-		floating: false,
-	}, {
-		xtype: 'panel',
-		flex: 1,
-		id: 'headerSub',
-		margin: '15 10 10 10',
-		layout: {
-			align: 'stretch',
-			type: 'hbox'
-		},
-		items: [{
-			xtype: 'button',
-			flex: 1,
-			id: 'help_btn',
-			margin: "0 5 0 0",
-			text: 'Help',
-			cls: 'header_btn',
-			overCls: 'header_btn_over'
-		}, {
-			xtype: 'tbspacer',
-			width: 5
-		}, {
-			xtype: 'button',
-			flex: 1,
-			styleHtmlContent: false,
-			cls: 'header_btn',
-			overCls: 'header_btn_over',
-			id: 'headerUserIcon',
-			menu: {
-				xtype: 'menu',
-				items: [{
-					xtype: 'menuitem',
-					id: 'auth-reconnect-btn',
-					text: 'Reconnect'
-				}, {
-					xtype: 'menuitem',
-					id: 'auth-logout-btn',
-					text: 'Logout'
-				}]
-			}
+			src: 'resources/images/teselagen_toplogo_alt.png'
 		}]
 	}]
 });

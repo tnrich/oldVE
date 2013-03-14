@@ -10,61 +10,63 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     // {
     //     xtype: 'button',
     //     text: 'File',
-//         menu: {
-//             xtype: 'menu',
-//             id: 'veFileMenu',
-//             items: [{
-//                 xtype: 'filefield',
-//                 buttonOnly: true,
-//                 id: 'importMenuItem',
-//                 buttonConfig: {
-//                     border: false,
-//                     text: 'Import from File',
-// //                    listeners: {
-// //                        click: function() {
-// //                            Ext.getCmp('veFileMenu').hide();
-// //                        }
-// //                    }
-//                 }
-//             },
-// //            {
-// //                xtype: 'menuitem',
-// //                text: 'Download Genbank',
-// //                id: 'downloadGenbankMenuItem'
-// //            },
-// //            {
-// //                xtype: 'menuitem',
-// //                text: 'Rename Sequence',
-// //                id: 'renameSequenceItem'
-// //            },
-// //            {
-// //                xtype: 'menuseparator'
-// //            },
-// //            {
-// //                xtype: 'menuitem',
-// //                text: 'Project Properties'
-// //            },
-// //            {
-// //                xtype: 'menuitem',
-// //                text: 'Print',
-// //                menu: {
-// //                    xtype: 'menu',
-// //                    width: 120,
-// //                    items: [{
-// //                        xtype: 'menuitem',
-// //                        text: 'Sequence'
-// //                    }, {
-// //                        xtype: 'menuitem',
-// //                        text: 'Circular View'
-// //                    }, {
-// //                        xtype: 'menuitem',
-// //                        text: 'Linear View'
-// //                    }]
-// //                }
-// //            }
+    //     menu: {
+    //         xtype: 'menu',
+    //         id: 'veFileMenu',
+    //         minWidth: 140,
+    //         items: [
+    //             {
+    //             xtype: 'filefield',
+    //             buttonOnly: true,
+    //             id: 'importMenuItem',
+    //             buttonConfig: {
+    //                 border: false,
+    //                 text: 'Import from File',
+    //                listeners: {
+    //                    click: function() {
+    //                        Ext.getCmp('veFileMenu').hide();
+    //                    }
+    //                }
+    //             }
+    //         },
+    //        {
+    //            xtype: 'menuitem',
+    //            text: 'Download Genbank',
+    //            id: 'downloadGenbankMenuItem'
+    //        },
+    //        {
+    //            xtype: 'menuitem',
+    //            text: 'Rename Sequence',
+    //            id: 'renameSequenceItem'
+    //        },
+    //        {
+    //            xtype: 'menuseparator'
+    //        },
+    //        {
+    //            xtype: 'menuitem',
+    //            text: 'Project Properties'
+    //        },
+    //        {
+    //            xtype: 'menuitem',
+    //            text: 'Print',
+    //            menu: {
+    //                xtype: 'menu',
+    //                width: 120,
+    //                items: [{
+    //                    xtype: 'menuitem',
+    //                    text: 'Sequence'
+    //                }, {
+    //                    xtype: 'menuitem',
+    //                    text: 'Circular View'
+    //                }, {
+    //                    xtype: 'menuitem',
+    //                    text: 'Linear View'
+    //                }]
+    //            }
+    //        }
 
-//             ]
-//         }
+    //         ]
+    //     }
     // }, 
     {
         xtype: 'button',
@@ -126,11 +128,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 itemId: 'reverseComplementMenuItem',
                 text: 'Reverse Complement'
             },
-//            {
-//                xtype: 'menuitem',
-//                id: 'rebaseMenuItem',
-//                text: 'Rotate to Here'
-//            }
+            {
+                xtype: 'menuitem',
+                id: 'rebaseMenuItem',
+                text: 'Rotate to Here'
+            }
             ]
         }
     }, {

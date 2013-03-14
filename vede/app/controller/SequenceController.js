@@ -272,6 +272,12 @@ Ext.define("Vede.controller.SequenceController", {
     onSequenceManagerChanged: function(pSeqMan) {
         this.SequenceManager = pSeqMan;
 
+        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+
+        if(this.SelectionLayer && this.SelectionLayer.selected) {
+            this.SelectionLayer.deselect();
+        }
+
         Ext.each(this.Managers, function(manager) {
             manager.setSequenceManager(pSeqMan);
         });
@@ -290,9 +296,25 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     onRebaseSequence: function() {
+        var selectionEnd;
+
         if(this.SequenceManager) {
             this.SequenceManager.rebaseSequence(this.caretIndex);
             this.changeCaretPosition(0);
+
+            if(this.SelectionLayer.start > this.SelectionLayer.end) {
+                selectionEnd = this.SequenceManager.getSequence().toString().length - 
+                    this.SelectionLayer.start + this.SelectionLayer.end;
+            } else {
+                selectionEnd = this.SelectionLayer.end - this.SelectionLayer.start;
+            }
+            
+            this.SelectionLayer.deselect();
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+
+            this.select(0, selectionEnd);
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       this, 0, selectionEnd);
         }
 
         // Return false to cancel the event. This makes sure the method is
@@ -369,7 +391,7 @@ Ext.define("Vede.controller.SequenceController", {
     onCaretPositionChanged: function(scope, index) {
         if(scope !== this && this.SelectionLayer && 
            !this.SelectionLayer.selecting) {
-            // this.changeCaretPosition(index, true); #this seemed to be changing caret position to the end of the feature selected
+            this.changeCaretPosition(index, true);
         }
     },
 
@@ -401,8 +423,7 @@ Ext.define("Vede.controller.SequenceController", {
         this.caretIndex = index;
         if(!silent && this.SequenceManager) {
             this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
-                                       this,
-                                       index);
+                                       this, index);
         }
     },
 

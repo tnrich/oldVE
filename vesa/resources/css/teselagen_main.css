@@ -1,5 +1,8 @@
+<<<<<<< HEAD
+=======
 /*Font Families*/
 
+>>>>>>> master
 @font-face {
   font-family: 'Quicksand';
   font-style: normal;
@@ -13,6 +16,11 @@
   src: local('Quicksand Bold'), local('Quicksand-Bold'), url(http://themes.googleusercontent.com/static/fonts/quicksand/v2/32nyIRHyCu6iqEka_hbKsqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
 }
 
+<<<<<<< HEAD
+.x-body {
+	font-family: 'Quicksand', sans-serif;
+	font-size: 12px;
+=======
 /*Global Theme Vars*/
 
 body {
@@ -22,6 +30,7 @@ body {
 .x-body {
   font-family: 'Quicksand', sans-serif;
   font-size: 12px;
+>>>>>>> master
 }
 
 .x-panel-header-text-default,
@@ -32,11 +41,46 @@ body {
 }
 
 .x-tab-inner {
+<<<<<<< HEAD
+	font-family: 'Quicksand', sans-serif;
+=======
   font-family: 'Quicksand', sans-serif;
+>>>>>>> master
     font-size: 12px;
     color: #333;
 }
 
+<<<<<<< HEAD
+.x-btn,
+.x-btn-center,
+.x-btn-default-toolbar-small .x-btn-inner {
+	font-family: 'Quicksand', sans-serif;
+    font-size: 12px;
+    color: #333;	
+}
+
+#projectTab1, #projectTab2, #projectTab3, #projectTab4 {
+	height: 36px;
+	width: 54px;
+}
+
+.projectBarButton {
+	width: 32px;
+	height: 32px;
+}
+
+#tabbar-1013-body {
+	height:40px;
+}
+
+#tabbar-1013-strip {
+	top:37px;
+}
+
+#tabbar-1013-innerCt {
+	height:50px;
+}
+=======
 .x-panel-body-default {
   border-color: #EBEBEB;
 }
@@ -256,3 +300,4 @@ background: #F8F8F8;
   border: none;
 }
 
+>>>>>>> master

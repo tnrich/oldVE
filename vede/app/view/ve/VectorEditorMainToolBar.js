@@ -13,7 +13,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         buttonOnly: true,
         buttonConfig: {
             icon: 'resources/images/import_new.png',
-            text: '',
+            text: "Import",
             scale: 'medium',
             tooltip: 'Import File'
         },
@@ -29,6 +29,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'button',
         cls: 'createPartBtn',
         icon: 'resources/images/create.png',
+        text: 'Create',
         scale: 'medium',
         tooltip: 'Create Part'
     },

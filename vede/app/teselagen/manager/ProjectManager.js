@@ -17,13 +17,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
     workingSequence: null,
     workingSequenceFileManager: null,
     sequenceStore: null,
-    partLibrary: null,
 
     /**
      * Load User Info
      */
     loadUser: function () {
-        if(Ext.getCmp('headerUserIcon')) Ext.getCmp('headerUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
+        if(Ext.getCmp('headerUserField')) Ext.get('headerUserIcon').query("headerUserField").setText(Teselagen.manager.AuthenticationManager.username);
         if(Ext.getCmp('welcomeUserIcon')) Ext.getCmp('welcomeUserIcon').setText(Teselagen.manager.AuthenticationManager.username);
         var users = Ext.create("Teselagen.store.UserStore");
         var self = this;
@@ -64,6 +63,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         });
         if(!duplicated) return cb(tabPanel);
+        else console.log("Trying to open duplicated tab!");
     },
 
     openj5Report: function (selectedDEProject) {

@@ -52,20 +52,19 @@ Ext.define("Vede.controller.PartLibraryController", {
     },
 
     onPartListSelected: function(grid,part,item) {
-        //console.log("Part selected");
+        console.log("Part selected");
+        console.log(part.get('name'));
+        console.log("Validating...");
+        Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'));
         this.callbackFn(grid,part,item,this.partLibraryWindow);
     },
 
     onOpenPartLibrary: function(inCallbackFn) {
-        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var currentTabEl = (currentTab.getEl());
         //console.log("Opening part Library");
         if (this.partLibraryWindow === null)
         {
-            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow', {renderTo: currentTabEl});
-        } else {
-            this.partLibraryWindow.remove();
-            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow', {renderTo: currentTabEl});
+            this.partLibraryWindow = Ext.create('Vede.view.PartLibraryWindow');
+            this.partLibraryWindow.render(Ext.getCmp('mainAppPanel').getActiveTab().getEl());
         }
         this.fetchPartLibrary();
         this.callbackFn = inCallbackFn;

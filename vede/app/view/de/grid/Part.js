@@ -143,6 +143,10 @@ Ext.define('Vede.view.de.grid.Part', {
         this.partCell.down().removeBodyCls("gridPartCell-selected");
     },
 
+    leaveselect: function () {
+        this.partCell.down().removeBodyCls("gridPartCell-selected");
+    },
+
     mapSelect: function() {
         this.partCell.down().removeBodyCls("gridPartCell-alert");
         this.partCell.down().addBodyCls("gridPartCell-selected");

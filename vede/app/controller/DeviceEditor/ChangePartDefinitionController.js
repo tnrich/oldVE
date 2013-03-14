@@ -16,7 +16,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     },
 
     onSequenceSelectionChanged: function(pieController,start,end){
-        this.selectedStartBP = start;
+        this.selectedStartBP = start+1;
         this.selectedStopBP = end;
     },
 
@@ -71,6 +71,7 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
         else
         {
             startBP.setValue(this.selectedPart.get('genbankStartBP'));
+            console.log(this.selectedPart.get('genbankStartBP'));
             stopBP.setValue(this.selectedPart.get('endBP'));
         }
 
@@ -144,12 +145,12 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         this.selectedPart.set('genbankStartBP',startBP.getValue());
         this.selectedPart.set('endBP',stopBP.getValue());
-        
+
         this.selectedPart.set('revComp',revComp.getValue());
 
         if(this.selectedBinIndex!=-1) Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
         else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
-        
+
         this.selectedWindow.close();
     },
 

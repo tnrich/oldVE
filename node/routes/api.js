@@ -807,5 +807,19 @@ module.exports = function (app, express) {
     });
   });
 
+  //Check for duplicated names
+  app.get('/checkDuplicatedPartName', restrict, function (req, res) {
+    var Part = app.db.model("part");
+    var duplicated = false;
+    Part.find(function(err,parts){
+      counter = parts.length;
+      parts.forEach(function(part,key){
+        if(part.name===req.query.name) duplicated = true;
+      });
+
+      if(duplicated) res.json({'msg': 'Duplicated part name.'}, 500);
+      else res.json({});
+    });
+  });
 
 };

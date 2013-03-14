@@ -214,6 +214,7 @@ Ext.define('Vede.controller.PieController', {
 
         if(this.mouseIsDown && Math.abs(this.startSelectionAngle -
                     endSelectionAngle) > this.self.SELECTION_THRESHOLD &&
+                    this.SequenceManager.getSequence().toString().length > 0 &&
                     this.pieManager.sequenceManager) {
 
             var endSelectionIndex = this.bpAtAngle(endSelectionAngle);
@@ -287,7 +288,8 @@ Ext.define('Vede.controller.PieController', {
                     this.changeCaretPosition(this.SelectionLayer.start);
                 }
 
-            } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
+            } else if(this.clickedAnnotationStart !== null && 
+                      this.clickedAnnotationEnd !== null){
                 // If we've clicked a sprite, select it.
                 this.select(this.clickedAnnotationStart,
                             this.clickedAnnotationEnd);
@@ -352,6 +354,7 @@ Ext.define('Vede.controller.PieController', {
      */
     changeCaretPosition: function(index, silent) {
         if(index >= 0 &&
+           this.SequenceManager &&
            index <= this.SequenceManager.getSequence().toString().length) {
             this.callParent(arguments);
             this.pieManager.adjustCaret(index);

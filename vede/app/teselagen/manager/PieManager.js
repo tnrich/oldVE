@@ -606,11 +606,18 @@ Ext.define("Teselagen.manager.PieManager", {
     },
 
     applySequenceManager: function(pSequenceManager) {
+        if(!this.sequenceManager) this.sequenceManager = pSequenceManager;
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
         if(this.pie) {
-            this.caret.show(true);
+            if(pSequenceManager.getSequence().toString().length > 0) {
+                this.caret.show(true);
+                this.adjustCaret(0);
+            } else if(this.caret) {
+                this.caret.destroy();
+            }
+
             this.nameBox.destroy();
 
             this.nameBox = Ext.create("Vede.view.pie.NameBox", {
@@ -695,17 +702,22 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Int} angle The angle of the caret to reposition to.
      */
     adjustCaret: function(bp) {
-        var angle = bp * 2 * Math.PI / 
-            this.sequenceManager.getSequence().seqString().length;
-
         this.caret.destroy();
-        this.caret = Ext.create("Vede.view.pie.Caret", {
-            angle: angle,
-            center: this.center,
-            radius: this.railRadius + 10
-        });
 
-        this.pie.surface.add(this.caret);
-        this.caret.show(true);
+        if(this.sequenceManager &&
+           this.sequenceManager.getSequence().toString().length > 0) {
+
+            var angle = bp * 2 * Math.PI / 
+                this.sequenceManager.getSequence().seqString().length;
+
+            this.caret = Ext.create("Vede.view.pie.Caret", {
+                angle: angle,
+                center: this.center,
+                radius: this.railRadius + 10
+            });
+
+            this.pie.surface.add(this.caret);
+            this.caret.show(true);
+        }
     },
 });

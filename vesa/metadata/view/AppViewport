@@ -22,17 +22,26 @@
             "codeClass": null,
             "userConfig": {
                 "layout|region": "north",
+<<<<<<< HEAD
+                "designer|userClassName": "MyPanel15",
+                "height": 50,
+                "id": "headerPanel",
+                "layout": "fit",
+=======
                 "container|align": "stretch",
                 "designer|userClassName": "MyPanel15",
                 "height": 60,
                 "id": "headerPanel",
                 "layout": "hbox",
+>>>>>>> master
                 "title": null
             },
             "designerId": "0eb7ebe3-841a-4590-b130-8b8e3c2b08c2",
             "cn": [
                 {
                     "type": "panel",
+<<<<<<< HEAD
+=======
                     "reference": {
                         "name": "items",
                         "type": "array"
@@ -88,18 +97,60 @@
                 },
                 {
                     "type": "panel",
+>>>>>>> master
                     "reference": {
                         "name": "items",
                         "type": "array"
                     },
                     "codeClass": null,
                     "userConfig": {
+<<<<<<< HEAD
+                        "designer|userClassName": "MyPanel16",
+                        "id": "headerMain",
+                        "title": null
+                    },
+                    "designerId": "cd388f77-e2aa-442f-8373-517fb2c563bb",
+                    "cn": [
+                        {
+                            "type": "image",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyImg",
+                                "height": 32,
+                                "id": "headerIcon",
+                                "margin": 10,
+                                "ui": null,
+                                "width": 201,
+                                "src": "resources/images/teselagen_toplogo.png"
+                            },
+                            "designerId": "737f4a46-d415-4412-b8f9-54d6db62c7d7"
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "dockedItems",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dock": "right",
+                        "designer|userClassName": "MyPanel17",
+                        "id": "headerSub",
+                        "layout": "fit",
+=======
                         "layout|flex": 1,
                         "dock": null,
                         "container|align": "stretch",
                         "designer|userClassName": "MyPanel17",
                         "id": "headerSub",
                         "layout": "hbox",
+>>>>>>> master
                         "title": null
                     },
                     "designerId": "baa071a8-6c5d-4469-b563-566e27d80256",
@@ -112,6 +163,9 @@
                             },
                             "codeClass": null,
                             "userConfig": {
+<<<<<<< HEAD
+                                "designer|userClassName": "MyButton28",
+=======
                                 "layout|flex": 1,
                                 "designer|userClassName": "MyButton69",
                                 "cls": "header_btn",
@@ -132,6 +186,7 @@
                                 "dock": null,
                                 "designer|userClassName": "MyButton28",
                                 "id": "headerUserIcon",
+>>>>>>> master
                                 "style": null,
                                 "styleHtmlContent": false,
                                 "width": null,
@@ -176,13 +231,35 @@
             ]
         },
         {
-            "type": "treepanel",
+            "type": "tabpanel",
             "reference": {
                 "name": "items",
                 "type": "array"
             },
             "codeClass": null,
             "userConfig": {
+<<<<<<< HEAD
+                "layout|region": "west",
+                "layout|split": true,
+                "designer|userClassName": "MyTabPanel2",
+                "id": "projectPanel",
+                "maxWidth": 230,
+                "minWidth": 228,
+                "width": 228,
+                "collapseDirection": "left",
+                "collapsible": true,
+                "frameHeader": false,
+                "hideCollapseTool": false,
+                "minButtonWidth": null,
+                "preventHeader": false,
+                "title": "Project",
+                "activeTab": 0,
+                "minTabWidth": null,
+                "plain": false,
+                "removePanelHeader": false
+            },
+            "designerId": "ed4a0801-2a39-48a0-98f1-0903cdc24240",
+=======
                 "layout|margins": "0 10 0 0",
                 "layout|region": "west",
                 "designer|userClassName": "MyTreePanel",
@@ -193,18 +270,266 @@
                 "title": "Your Designs"
             },
             "designerId": "0c0f3dbf-3479-4891-be40-b3e9df1785f3",
+>>>>>>> master
             "cn": [
                 {
-                    "type": "treeview",
+                    "type": "panel",
                     "reference": {
-                        "name": "viewConfig",
-                        "type": "object"
+                        "name": "items",
+                        "type": "array"
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "designer|userClassName": "MyPanel19",
+                        "id": "projectDesignTab",
+                        "layout": "fit",
+                        "minButtonWidth": 32,
+                        "title": null
+                    },
+                    "designerId": "01138597-c053-4a28-a7ce-2c882bb0b1c9",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig5",
+                                "componentCls": null,
+                                "height": null,
+                                "id": "projectTab1",
+                                "minHeight": null,
+                                "minWidth": null,
+                                "autoWidth": true,
+                                "icon": "resources/images/ux/designTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "4b2e104b-076e-4a79-aa94-88a5b139403b"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel",
+                                "id": "projectDesignPanel",
+                                "title": "Your Designs"
+                            },
+                            "designerId": "0c0f3dbf-3479-4891-be40-b3e9df1785f3",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView"
+                                    },
+                                    "designerId": "bc865def-c23f-4923-a307-8cbf886f269d"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel20",
+                        "id": "projectAnalysisTab",
+                        "layout": "fit",
+                        "title": null
+                    },
+                    "designerId": "65f7be72-2233-42b2-bff3-6087afacdb93",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig6",
+                                "id": "projectTab2",
+                                "icon": "resources/images/ux/graphTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "76090913-638c-467b-b36d-3c04cd70f8b6"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel1",
+                                "id": "projectAnalysisPanel",
+                                "title": "j5 Results"
+                            },
+                            "designerId": "6e8be2f7-7b74-4d20-b87d-3c3291910a14",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView1"
+                                    },
+                                    "designerId": "7bf04b07-7254-4635-ac22-c5c92c010790"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyPanel21",
+                        "id": "projectPartsTab",
+                        "layout": "fit",
+                        "title": null
+                    },
+                    "designerId": "7d10a3e9-f7ae-49b2-a2b4-d10764fbda83",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig7",
+                                "id": "projectTab3",
+                                "icon": "resources/images/ux/partsTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "3edbaa2f-c94c-4d18-ac62-b53b27144663"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel2",
+                                "id": "projectPartsPanel",
+                                "title": "Your Parts"
+                            },
+                            "designerId": "5a07d9e8-2dcd-4529-b070-bec228044b89",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView2"
+                                    },
+                                    "designerId": "bc3c83e9-dec7-4690-b24a-775daf90f906"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+<<<<<<< HEAD
+                        "designer|userClassName": "MyPanel21",
+                        "id": "projectRegistryTab",
+                        "layout": "fit",
+                        "title": null
+                    },
+                    "designerId": "cfa7ae73-5cee-4c51-80be-c0d6d9e7b53d",
+                    "cn": [
+                        {
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig7",
+                                "id": "projectTab4",
+                                "minHeight": null,
+                                "minWidth": null,
+                                "autoWidth": false,
+                                "icon": "resources/images/ux/registryTab.png",
+                                "iconCls": "projectBarButton",
+                                "scale": null
+                            },
+                            "designerId": "ee600f18-fffa-4c08-98f6-ee0161fee1a8"
+                        },
+                        {
+                            "type": "treepanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "MyTreePanel3",
+                                "id": "projectsRegistryPanel",
+                                "title": "Registry"
+                            },
+                            "designerId": "1d4df9ec-49db-491d-8eb7-a921565a3864",
+                            "cn": [
+                                {
+                                    "type": "treeview",
+                                    "reference": {
+                                        "name": "viewConfig",
+                                        "type": "object"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyTreeView3"
+                                    },
+                                    "designerId": "15e8c485-daf8-4ad6-a641-a32918fbf25c"
+                                }
+                            ]
+                        }
+                    ]
+=======
                         "designer|userClassName": "MyTreeView"
                     },
                     "designerId": "bc865def-c23f-4923-a307-8cbf886f269d"
+>>>>>>> master
                 }
             ]
         },
@@ -218,7 +543,10 @@
             "userConfig": {
                 "layout|region": "center",
                 "designer|userClassName": "MyTabPanel6",
+<<<<<<< HEAD
+=======
                 "border": 0,
+>>>>>>> master
                 "id": "mainAppPanel",
                 "activeTab": 0
             },
@@ -513,7 +841,10 @@
                     "codeClass": null,
                     "userConfig": {
                         "designer|userClassName": "MyPanel8",
+<<<<<<< HEAD
+=======
                         "border": null,
+>>>>>>> master
                         "id": "VectorEditor",
                         "layout": "fit",
                         "title": "Vector Editor"
@@ -1943,7 +2274,10 @@
                             "userConfig": {
                                 "container|align": "stretch",
                                 "designer|userClassName": "MyPanel12",
+<<<<<<< HEAD
+=======
                                 "border": 0,
+>>>>>>> master
                                 "id": "VectorEditorPanel",
                                 "layout": "hbox",
                                 "title": null
@@ -2344,6 +2678,1522 @@
                                 "hidden": false,
                                 "id": "DeviceEditorToolPanel",
                                 "width": 150,
+<<<<<<< HEAD
+                                "layout": "fit",
+                                "title": null
+                            },
+                            "designerId": "73eee35b-35c4-4407-a6bb-a4777021372b",
+                            "cn": [
+                                {
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "dockedItems",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dock": "top",
+                                        "designer|userClassName": "MyToolbar3"
+                                    },
+                                    "designerId": "25d7eae5-28f3-4fd0-ac40-82364c771ee2",
+                                    "cn": [
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton23",
+                                                "id": "add_column_Btn",
+                                                "icon": "resources/images/icons/device/add_column.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Add Column"
+                                                ]
+                                            },
+                                            "designerId": "c30989b9-61c8-4eaa-a18a-56bb2684f3d4"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator18"
+                                            },
+                                            "designerId": "9de445e4-f767-49cd-9ac4-edbfdef59362"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton23",
+                                                "id": "add_row_Btn",
+                                                "icon": "resources/images/icons/device/add_row.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Add Row"
+                                                ]
+                                            },
+                                            "designerId": "a62ef331-6240-44b6-a557-b1cb20ef5bd7"
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator19"
+                                            },
+                                            "designerId": "57eb8940-aacd-45f0-ad11-dd9357d8173f"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton23",
+                                                "id": "ve_init_Btn",
+                                                "icon": "resources/images/icons/device/ve_icon.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "Vector Editor",
+                                                    ""
+                                                ]
+                                            },
+                                            "designerId": "3c4fb439-c387-4a4d-a245-cb37923b51fa",
+                                            "cn": [
+                                                {
+                                                    "type": "menu",
+                                                    "reference": {
+                                                        "name": "menu",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyMenu6",
+                                                        "id": "de_ve_menu",
+                                                        "minWidth": 160,
+                                                        "width": 120
+                                                    },
+                                                    "designerId": "e7a6bde1-cc87-46f4-b870-6033690add8a",
+                                                    "cn": [
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem27",
+                                                                "text": "Map From Clipboard"
+                                                            },
+                                                            "designerId": "13e66c1c-869c-4289-b022-85bd07ef2897"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem28",
+                                                                "text": "Map From Genbank"
+                                                            },
+                                                            "designerId": "3d490bb5-c539-4c37-81a6-cafcd80b8451"
+                                                        },
+                                                        {
+                                                            "type": "menuitem",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyMenuItem29",
+                                                                "text": "Go To Vector Editor"
+                                                            },
+                                                            "designerId": "34a65383-2247-4dcd-90bf-7b3a0784b7b1"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "tbseparator",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MySeparator20"
+                                            },
+                                            "designerId": "6988a756-5de9-46e2-8544-01fc13ebc6bd"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "layout|flex": null,
+                                                "designer|userClassName": "MyButton23",
+                                                "id": "j5_init_Btn",
+                                                "icon": "resources/images/icons/device/j5_icon.png",
+                                                "scale": "large",
+                                                "text": null,
+                                                "tooltip": [
+                                                    "j5"
+                                                ]
+                                            },
+                                            "designerId": "250a18a5-9700-489b-b2db-f20642eed214"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "container|align": "stretch",
+                                "designer|userClassName": "MyContainer6",
+                                "id": "DeviceEditorContainer",
+                                "layout": "hbox"
+                            },
+                            "designerId": "d926c3ed-e629-4da1-ad94-fadbf8afd977",
+                            "cn": [
+                                {
+                                    "type": "panel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 1,
+                                        "designer|userClassName": "MyPanel10",
+                                        "id": "DeviceEditorCanvas",
+                                        "width": 159,
+                                        "layout": "fit",
+                                        "animCollapse": false,
+                                        "title": null
+                                    },
+                                    "designerId": "18778696-a808-4a81-b49b-808bd237c540",
+                                    "cn": [
+                                        {
+                                            "type": "panel",
+                                            "reference": {
+                                                "name": "dockedItems",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "dock": "top",
+                                                "designer|userClassName": "MyPanel8",
+                                                "id": "DeviceEditorPartPanel",
+                                                "collapseDirection": "top",
+                                                "collapsed": true,
+                                                "collapsible": true,
+                                                "hideCollapseTool": false,
+                                                "title": "Parts",
+                                                "titleCollapse": true
+                                            },
+                                            "designerId": "88cd779c-e60d-4643-bf26-7674386d47cd",
+                                            "cn": [
+                                                {
+                                                    "type": "toolbar",
+                                                    "reference": {
+                                                        "name": "dockedItems",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "dock": "top",
+                                                        "container|align": "middle",
+                                                        "container|pack": "center",
+                                                        "designer|userClassName": "MyToolbar5",
+                                                        "height": 45,
+                                                        "id": "DeviceEditorPartsBar",
+                                                        "enableOverflow": true
+                                                    },
+                                                    "designerId": "40f1d048-130a-42ef-898c-be789dfc1ee5",
+                                                    "cn": [
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "ori_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/origin-of-replication.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Origin of Replication"
+                                                                ]
+                                                            },
+                                                            "designerId": "d0cb5b26-1ac5-4aad-bc9f-d3e507e9e429"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator22"
+                                                            },
+                                                            "designerId": "161bc7fb-ec1d-46af-ac26-878159c91d80"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "cds_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/cds.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "CDS"
+                                                                ]
+                                                            },
+                                                            "designerId": "757dbf5f-9a66-4c9b-9e58-362a83028c4e"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator21"
+                                                            },
+                                                            "designerId": "83a8479c-c1ff-486e-963b-e8f1981c574e"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "five_prime_ov_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/five-prime-overhang.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "5' Overhang"
+                                                                ]
+                                                            },
+                                                            "designerId": "de764c0a-3bc2-4118-b3c2-ebbdbcea2715"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator23"
+                                                            },
+                                                            "designerId": "0b635ba1-301b-4a9f-a5c3-310bc06b2dd2"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "three_prime_ov_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/three-prime-overhang.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "3' Overhang"
+                                                                ]
+                                                            },
+                                                            "designerId": "4622cc98-9506-4a88-93b8-2b17572e8943"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator24"
+                                                            },
+                                                            "designerId": "93aead69-2cc3-41eb-973f-7e62e49de2d0"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "translational_start_site_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/translational-start-site.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Translational Start Site"
+                                                                ]
+                                                            },
+                                                            "designerId": "91d670c5-8766-4215-abce-1dff6cf7e2fe"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator25"
+                                                            },
+                                                            "designerId": "1dc7e97b-5e61-4b97-b07f-3d44a137ae06"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "promoter_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/promoter.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Promoter"
+                                                                ]
+                                                            },
+                                                            "designerId": "47ededdd-0b1f-40c5-b2be-4168fc705f37"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator26"
+                                                            },
+                                                            "designerId": "52afe95b-9297-4770-8af7-f2acc7cf54f5"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "primer_binding_site_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/primer-binding-site.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Primer Binding Site"
+                                                                ]
+                                                            },
+                                                            "designerId": "70089c4f-3108-4f57-8e66-01fab098efcf"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator27"
+                                                            },
+                                                            "designerId": "2d4a2086-11d4-49de-9a79-a9af882e8a69"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "restriction_enz_recog_site_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/restriction-enzyme-recognition-site.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Restriction Enzyme Recognition Site"
+                                                                ]
+                                                            },
+                                                            "designerId": "5e647f5e-1dac-499b-b168-8e4c16f4633b"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator28"
+                                                            },
+                                                            "designerId": "5709cb56-cdc6-4568-938d-d07ef4d8e98d"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "restriction_site_w_no_overhang_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/restriction-site-with-no-overhang.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Restriction Site With No Overhangs"
+                                                                ]
+                                                            },
+                                                            "designerId": "109f0220-8c8d-4d60-a675-62ff2d047d67"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator29"
+                                                            },
+                                                            "designerId": "a802f0d8-927b-4c28-9fa7-dacc792a7468"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "protease_site_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/protease-site.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Protease Site"
+                                                                ]
+                                                            },
+                                                            "designerId": "66b6fa90-06fa-408d-9a71-3358e7736910"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator30"
+                                                            },
+                                                            "designerId": "c026f6ee-0010-4e5b-aafc-c836cf0faace"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "protein_stability_element_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/protein-stability-element.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Protein Stability Element"
+                                                                ]
+                                                            },
+                                                            "designerId": "3f4dd557-0604-4203-9d42-e6edbff79196"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator31"
+                                                            },
+                                                            "designerId": "7387522e-5728-4d0c-8824-609c9ee5974d"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "assembly_junction_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/assembly-junction.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Assembly Junction"
+                                                                ]
+                                                            },
+                                                            "designerId": "3abf8858-b190-4c3e-b7e4-e3a60d4dd3e2"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator32"
+                                                            },
+                                                            "designerId": "1dbd9590-422b-4637-9d92-196df0fb0e28"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "insulator_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/insulator.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Insulator"
+                                                                ]
+                                                            },
+                                                            "designerId": "7aee03fe-64f1-43ee-b8f2-061530fad6d2"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator33"
+                                                            },
+                                                            "designerId": "eb10499f-11a1-4619-b4a5-7cabc8f799b5"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "operator_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/operator.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Operator"
+                                                                ]
+                                                            },
+                                                            "designerId": "199ac7ba-54ad-4f6b-8314-199bdca6efd2"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator34"
+                                                            },
+                                                            "designerId": "ac10f696-eab7-4414-858c-bd261d759292"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "ribonuclease_site_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/ribonuclease-site.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Ribonuclease Site"
+                                                                ]
+                                                            },
+                                                            "designerId": "243d7290-65fe-47a4-8835-aa69823d071c"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator35"
+                                                            },
+                                                            "designerId": "1d7664a7-a3c7-4c6f-aa00-5d40d684627a"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "rna_stability_element_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/rna-stability-element.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "RNA Stability Element",
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            "designerId": "eb9381fb-55ad-4f57-9260-84feb7eab73d"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator36"
+                                                            },
+                                                            "designerId": "6fcff7cd-e093-4c8d-9a83-4329be6113c8"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "terminator_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/terminator.png",
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Terminator"
+                                                                ]
+                                                            },
+                                                            "designerId": "88f1efe0-82dd-4016-8b2b-e0137ef64f15"
+                                                        },
+                                                        {
+                                                            "type": "tbseparator",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MySeparator37"
+                                                            },
+                                                            "designerId": "7ed57f8d-3323-45a4-abfc-878a9c837bab"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyButton28",
+                                                                "height": null,
+                                                                "id": "signature_Btn",
+                                                                "width": null,
+                                                                "icon": "resources/images/symbols/signature.png",
+                                                                "params": [
+                                                                    "Signature"
+                                                                ],
+                                                                "scale": "large",
+                                                                "text": null,
+                                                                "tooltip": [
+                                                                    "Signature"
+                                                                ]
+                                                            },
+                                                            "designerId": "4a090fb7-d71a-446c-99b1-e7aaad8f66eb"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyContainer7",
+                                                "border": null,
+                                                "id": "designContainer",
+                                                "margin": 10,
+                                                "style": null
+                                            },
+                                            "designerId": "a56e7bd6-0eb5-4776-b5af-bfa270ef986b"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "tabpanel",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout|flex": 2,
+                                        "designer|userClassName": "MyTabPanel1",
+                                        "id": "InspectorPanel",
+                                        "maxWidth": 400,
+                                        "collapseDirection": "right",
+                                        "collapsed": false,
+                                        "collapsible": true,
+                                        "headerPosition": "left",
+                                        "hideCollapseTool": false,
+                                        "title": "Inspector",
+                                        "titleCollapse": true,
+                                        "activeTab": 0,
+                                        "minTabWidth": 130,
+                                        "plain": false,
+                                        "removePanelHeader": false
+                                    },
+                                    "designerId": "48b3f350-9c9f-412f-bf2c-994e58a59837",
+                                    "cn": [
+                                        {
+                                            "type": "panel",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "container|align": "stretch",
+                                                "designer|userClassName": "MyPanel13",
+                                                "layout": "vbox",
+                                                "title": "Part Info"
+                                            },
+                                            "designerId": "d0163502-0ce4-4d7e-b1ea-85637e10778c",
+                                            "cn": [
+                                                {
+                                                    "type": "form",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "layout|flex": 1,
+                                                        "container|align": "stretch",
+                                                        "designer|userClassName": "MyForm1",
+                                                        "height": 160,
+                                                        "id": "PartPropertiesForm",
+                                                        "maxHeight": 170,
+                                                        "width": 287,
+                                                        "layout": "vbox",
+                                                        "bodyPadding": 10,
+                                                        "title": "Properties"
+                                                    },
+                                                    "designerId": "335cc5ea-fa27-40f2-a43e-9647caceda2c",
+                                                    "cn": [
+                                                        {
+                                                            "type": "textfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyTextField",
+                                                                "id": "partNameField",
+                                                                "fieldLabel": "Part Name"
+                                                            },
+                                                            "designerId": "5601c1dc-16b4-41a7-b285-304f24e69ac8"
+                                                        },
+                                                        {
+                                                            "type": "displayfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyDisplayField",
+                                                                "designer|displayName": null,
+                                                                "height": 20,
+                                                                "id": "partSourceField",
+                                                                "inputId": null,
+                                                                "value": null,
+                                                                "fieldLabel": "Part Source"
+                                                            },
+                                                            "designerId": "1b5a3dcc-682f-4b56-aa61-d0b49334a8f0"
+                                                        },
+                                                        {
+                                                            "type": "displayfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyDisplayField1",
+                                                                "height": 20,
+                                                                "id": "reverseComplementField",
+                                                                "inputId": null,
+                                                                "value": null,
+                                                                "fieldLabel": "Reverse Complement",
+                                                                "labelAlign": null,
+                                                                "labelWidth": 120
+                                                            },
+                                                            "designerId": "d0705879-51b9-43a9-bc7b-a43748c41693"
+                                                        },
+                                                        {
+                                                            "type": "displayfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyDisplayField2",
+                                                                "height": 20,
+                                                                "id": "startBPField",
+                                                                "inputId": null,
+                                                                "value": null,
+                                                                "fieldLabel": "Start BP"
+                                                            },
+                                                            "designerId": "89082a44-0641-4de2-894e-cab1c171a6f6"
+                                                        },
+                                                        {
+                                                            "type": "displayfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|flex": null,
+                                                                "designer|userClassName": "MyDisplayField2",
+                                                                "height": 20,
+                                                                "id": "stopBPField",
+                                                                "inputId": null,
+                                                                "value": null,
+                                                                "fieldLabel": "End BP"
+                                                            },
+                                                            "designerId": "2f8515d8-ffca-44a3-9bc0-314866a10f31"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "form",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "layout|flex": 1,
+                                                        "designer|userClassName": "MyForm2",
+                                                        "maxHeight": 80,
+                                                        "bodyPadding": 10,
+                                                        "title": "Forced Assembly Strategy"
+                                                    },
+                                                    "designerId": "4b635965-662c-450b-9abc-932b90e3a10a",
+                                                    "cn": [
+                                                        {
+                                                            "type": "combobox",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|anchor": "100%",
+                                                                "designer|userClassName": "MyComboBox",
+                                                                "value": null,
+                                                                "fieldLabel": null,
+                                                                "store": null
+                                                            },
+                                                            "designerId": "fe9492d2-4231-4b28-92db-48b7f6877d82"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "form",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "layout|flex": 1,
+                                                        "designer|userClassName": "MyForm3",
+                                                        "minHeight": null,
+                                                        "bodyPadding": 10,
+                                                        "title": "Eugene Rules"
+                                                    },
+                                                    "designerId": "3d11860f-9ae9-4e96-a250-99c43333ec3d",
+                                                    "cn": [
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "dockedItems",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "dock": "top",
+                                                                "designer|userClassName": "MyButton46",
+                                                                "iconAlign": null,
+                                                                "scale": null,
+                                                                "text": "Add Rule"
+                                                            },
+                                                            "designerId": "15a0a9e9-0493-4751-b3fe-dfae7ca17019"
+                                                        },
+                                                        {
+                                                            "type": "button",
+                                                            "reference": {
+                                                                "name": "dockedItems",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "dock": "top",
+                                                                "designer|userClassName": "MyButton47",
+                                                                "iconAlign": null,
+                                                                "text": "List"
+                                                            },
+                                                            "designerId": "806321b9-5208-410c-ba5d-48d1f7a446e1"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "tab",
+                                                    "reference": {
+                                                        "name": "tabConfig",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "TabConfig3"
+                                                    },
+                                                    "designerId": "cd6d37ea-0e27-4864-8fce-a6749ee12994"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "panel",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "designer|userClassName": "MyPanel14",
+                                                "layout": "fit",
+                                                "title": "Collection Info"
+                                            },
+                                            "designerId": "3ef86246-dbef-4982-ab33-cafa0f89f2d9",
+                                            "cn": [
+                                                {
+                                                    "type": "tab",
+                                                    "reference": {
+                                                        "name": "tabConfig",
+                                                        "type": "object"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "TabConfig4"
+                                                    },
+                                                    "designerId": "76314c6c-b8bb-4521-a599-cbe500469ba9"
+                                                },
+                                                {
+                                                    "type": "form",
+                                                    "reference": {
+                                                        "name": "items",
+                                                        "type": "array"
+                                                    },
+                                                    "codeClass": null,
+                                                    "userConfig": {
+                                                        "designer|userClassName": "MyForm4",
+                                                        "id": "collectionInfoForm",
+                                                        "layout": null,
+                                                        "bodyBorder": false,
+                                                        "bodyPadding": 10,
+                                                        "title": null
+                                                    },
+                                                    "designerId": "f7bcf884-78ce-4711-a998-3bbf721fab2e",
+                                                    "cn": [
+                                                        {
+                                                            "type": "displayfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|anchor": "100%",
+                                                                "designer|userClassName": "MyDisplayField4",
+                                                                "id": "j5_ready_field",
+                                                                "value": [
+                                                                    "Display Field"
+                                                                ],
+                                                                "fieldLabel": "j5 Ready"
+                                                            },
+                                                            "designerId": "7a7e6877-eba0-4d83-8fbc-98a8cc6167e4"
+                                                        },
+                                                        {
+                                                            "type": "displayfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|anchor": "100%",
+                                                                "designer|userClassName": "MyDisplayField5",
+                                                                "id": "combinatorial_field",
+                                                                "value": [
+                                                                    "Display Field"
+                                                                ],
+                                                                "fieldLabel": "Combinatorial"
+                                                            },
+                                                            "designerId": "d4fa077d-0610-402c-8819-6285b25c58f4"
+                                                        },
+                                                        {
+                                                            "type": "radiogroup",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyRadioGroup",
+                                                                "id": "plasmid_geometry",
+                                                                "fieldLabel": "Plasmid Type",
+                                                                "labelAlign": null,
+                                                                "allowBlank": false,
+                                                                "vertical": null
+                                                            },
+                                                            "designerId": "8d5fb3fc-a87c-4332-8802-c452d76a3a1a",
+                                                            "cn": [
+                                                                {
+                                                                    "type": "radiofield",
+                                                                    "reference": {
+                                                                        "name": "items",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyRadio",
+                                                                        "id": "circular_plasmid_radio",
+                                                                        "name": "plasmidtype",
+                                                                        "fieldLabel": null,
+                                                                        "labelWidth": null,
+                                                                        "boxLabel": "Circular",
+                                                                        "checked": true
+                                                                    },
+                                                                    "designerId": "21b0dfe1-928c-4cb7-a860-24d589d10e19"
+                                                                },
+                                                                {
+                                                                    "type": "radiofield",
+                                                                    "reference": {
+                                                                        "name": "items",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyRadio1",
+                                                                        "id": "linear_plasmid_radio",
+                                                                        "name": "plasmidtype",
+                                                                        "fieldLabel": null,
+                                                                        "boxLabel": "Linear"
+                                                                    },
+                                                                    "designerId": "8efa940d-1050-4f1e-9860-4cab7525952d"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "gridpanel",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyGridPanel",
+                                                                "margin": 10,
+                                                                "autoScroll": true,
+                                                                "title": null,
+                                                                "columnLines": true
+                                                            },
+                                                            "designerId": "d904a5d5-ca69-47fc-a91b-2c704b86e0f8",
+                                                            "cn": [
+                                                                {
+                                                                    "type": "rownumberer",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "RowNumberer",
+                                                                        "width": 50,
+                                                                        "text": "Column"
+                                                                    },
+                                                                    "designerId": "f5475ed7-d2f1-4039-945e-94fc2a8ae2f6"
+                                                                },
+                                                                {
+                                                                    "type": "gridcolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyColumn1",
+                                                                        "text": "Direction"
+                                                                    },
+                                                                    "designerId": "64dee9af-886e-4bdf-84b4-3f433ad3462f"
+                                                                },
+                                                                {
+                                                                    "type": "numbercolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyNumberColumn",
+                                                                        "text": "Items"
+                                                                    },
+                                                                    "designerId": "1683a3ee-000e-484a-8224-fe6279f73070"
+                                                                },
+                                                                {
+                                                                    "type": "gridcolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyColumn2",
+                                                                        "text": "FAS"
+                                                                    },
+                                                                    "designerId": "805756f5-e119-4ad6-8ead-0fc23bddb6aa"
+                                                                },
+                                                                {
+                                                                    "type": "booleancolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyBooleanColumn",
+                                                                        "text": "DSF"
+                                                                    },
+                                                                    "designerId": "ced62a07-839f-42c5-b819-b792ce68d0e4"
+                                                                },
+                                                                {
+                                                                    "type": "gridcolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyColumn3",
+                                                                        "text": "FRO"
+                                                                    },
+                                                                    "designerId": "ebb8672f-ef6d-4e6a-a957-f6084abfb37c"
+                                                                },
+                                                                {
+                                                                    "type": "numbercolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyNumberColumn1",
+                                                                        "text": "5' Ex"
+                                                                    },
+                                                                    "designerId": "f774bb9e-298d-4fc1-97f0-08f438ee02b1"
+                                                                },
+                                                                {
+                                                                    "type": "numbercolumn",
+                                                                    "reference": {
+                                                                        "name": "columns",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyNumberColumn2",
+                                                                        "text": "3' Ex"
+                                                                    },
+                                                                    "designerId": "abb5723a-4fbf-45d3-839f-3fb978562404"
+                                                                },
+                                                                {
+                                                                    "type": "gridview",
+                                                                    "reference": {
+                                                                        "name": "viewConfig",
+                                                                        "type": "object"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyGridView"
+                                                                    },
+                                                                    "designerId": "447ee17c-4d7b-411f-9816-70c864bddca5"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "container",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "designer|userClassName": "MyContainer6",
+                                                                "id": "inspector_containerActions",
+                                                                "margin": 10
+                                                            },
+                                                            "designerId": "fea99267-0f37-4422-b697-0f8a0f126e48",
+                                                            "cn": [
+                                                                {
+                                                                    "type": "button",
+                                                                    "reference": {
+                                                                        "name": "items",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyButton49",
+                                                                        "text": "Add Column"
+                                                                    },
+                                                                    "designerId": "cba9a351-ab0b-4229-bdf1-10a7d9ab7134"
+                                                                },
+                                                                {
+                                                                    "type": "button",
+                                                                    "reference": {
+                                                                        "name": "items",
+                                                                        "type": "array"
+                                                                    },
+                                                                    "codeClass": null,
+                                                                    "userConfig": {
+                                                                        "designer|userClassName": "MyButton48",
+                                                                        "width": 100,
+                                                                        "text": "Remove Column"
+                                                                    },
+                                                                    "designerId": "0d3408a4-3233-4f26-a2c1-1d9b9efa6a28"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "textfield",
+                                                            "reference": {
+                                                                "name": "items",
+                                                                "type": "array"
+                                                            },
+                                                            "codeClass": null,
+                                                            "userConfig": {
+                                                                "layout|anchor": "100%",
+                                                                "designer|userClassName": "MyTextField1",
+                                                                "height": 200,
+                                                                "margin": 10,
+                                                                "minHeight": null,
+                                                                "width": 269,
+                                                                "fieldLabel": "Column Content",
+                                                                "labelAlign": "top"
+                                                            },
+                                                            "designerId": "e882fee4-6da8-4e90-919f-148fc73b14a2"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "panel",
+                            "reference": {
+                                "name": "dockedItems",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dock": "bottom",
+                                "designer|userClassName": "MyPanel4",
+                                "height": 23,
+                                "id": "StatusPanel",
+=======
+>>>>>>> master
                                 "layout": "fit",
                                 "title": null
                             },

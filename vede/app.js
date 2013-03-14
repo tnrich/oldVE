@@ -65,7 +65,6 @@ Ext.Loader.syncRequire([
         ,'Teselagen.renderer.rail.WireframeSelectionLayer'
         ,'Teselagen.renderer.rail.SelectionLayer'
         ,'Teselagen.manager.AAManager'
-        ,'Vede.view.PartLibraryWindow'
 ]);
 
 Ext.application({
@@ -105,8 +104,7 @@ Ext.application({
         'DeviceEditor.MainToolbarController',
         'Vede.controller.AuthEventDispatcherController',
         'Vede.controller.J5ReportController',
-        'Vede.controller.DeviceEditor.ChangePartDefinitionController',
-        "Vede.controller.PartLibraryController"
+        'Vede.controller.DeviceEditor.ChangePartDefinitionController'
     ],
     errorHandler: function(err) {
         console.warn(err);
