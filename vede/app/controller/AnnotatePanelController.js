@@ -8,6 +8,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent"],
 
+    statics: {
+        MIN_BP_PER_ROW: 20
+    },
+
     AnnotatePanel: null,
 
     SequenceAnnotationManager: null,
@@ -83,7 +87,20 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
-        //console.log(width + " x " + height);
+        // Calculate the BP's per row, rounded to the nearest 10.
+        var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
+
+        if(newBpPerRow < this.self.MIN_BP_PER_ROW) {
+            newBpPerRow = this.self.MIN_BP_PER_ROW;
+        }
+
+        console.log("width: " + width + ", bpPerRow: " + newBpPerRow);
+
+        this.SequenceAnnotationManager.setBpPerRow(newBpPerRow);
+
+        if(this.SequenceManager) {
+            this.SequenceAnnotationManager.render();
+        }
     },
     
     onKeydown: function(event) {
