@@ -91,10 +91,14 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         if(event.getKey() == event.UP) {
             this.changeCaretPosition(this.caretIndex -
-                                     this.SequenceAnnotationManager.bpPerRow);
+                                     this.SequenceAnnotationManager.bpPerRow,
+                                     false,
+                                     true);
         } else if(event.getKey() == event.DOWN) {
             this.changeCaretPosition(this.caretIndex +
-                                     this.SequenceAnnotationManager.bpPerRow);
+                                     this.SequenceAnnotationManager.bpPerRow,
+                                     false,
+                                     true);
         }
     },
 
@@ -123,7 +127,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start);
+            this.changeCaretPosition(start, false, true);
         }
     },
 
@@ -131,7 +135,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.callParent(arguments);
         this.SelectionLayer.setSequenceManager(pSeqMan);
 
-        this.changeCaretPosition(0, true);
+        this.changeCaretPosition(0, true, true);
     },
 
     onShowFeaturesChanged: function(show) {
@@ -169,7 +173,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
             this.mouseIsDown = true;
 
-            this.changeCaretPosition(index);
+            this.changeCaretPosition(index, false, true);
 
             if(this.SelectionLayer.selected && 
                pEvt.target.id !== "selectionRectangle") {
@@ -201,16 +205,16 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 this.startSelectionIndex = bpIndex;
                 this.selectionDirection = 1; // ignore direction on resizing
 
-                this.changeCaretPosition(bpIndex); 
+                this.changeCaretPosition(bpIndex, false, false); 
             } else if(this.endHandleResizing) {
                 this.endSelectionIndex = bpIndex;
                 this.selectionDirection = 1;
 
-                this.changeCaretPosition(this.startSelectionIndex);
+                this.changeCaretPosition(this.startSelectionIndex, false, false);
             } else {
                 this.endSelectionIndex = bpIndex; 
 
-                this.changeCaretPosition(this.startSelectionIndex);
+                this.changeCaretPosition(this.endSelectionIndex, false, false);
             }
                 
             if(this.SequenceAnnotationManager.annotator.isValidIndex(this.startSelectionIndex) &&
@@ -255,6 +259,14 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                                        this,
                                        this.SelectionLayer.start,
                                        this.SelectionLayer.end);
+
+            // Depending on selection direction, move caret either to start or 
+            // end of selection.
+            if(this.selectionDirection === 1) {
+                this.changeCaretPosition(this.SelectionLayer.end, false, false);
+            } else {
+                this.changeCaretPosition(this.SelectionLayer.start, false, false);
+            }
         } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd) {
             // If we've clicked a sprite, select it.
             this.SelectionLayer.endSelecting();
@@ -274,11 +286,11 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     select: function(start, end) {
-        this.changeCaretPosition(start);
+        this.changeCaretPosition(start, false, true);
         this.SelectionLayer.select(start, end);
     },
 
-    changeCaretPosition: function(index, silent) {
+    changeCaretPosition: function(index, silent, scrollToCaret) {
         if(index >= 0 &&
            index <= this.SequenceManager.getSequence().toString().length) {
             
@@ -287,7 +299,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
             // Only scroll to the location of the caret if we're not currently
             // dragging to make a selection.
-            if(!this.mouseIsDown) {
+            if(scrollToCaret) {
                 var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
                 var el = Ext.getCmp("AnnotateContainer").el;
 
