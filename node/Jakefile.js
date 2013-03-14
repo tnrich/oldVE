@@ -1,10 +1,12 @@
 /*global complete, fail, jake, process, task*/
 
+var util = require("util");
 var DbManager = require("./manager/DbManager")();
 var ApiManager = require("./manager/ApiManager")();
 var JakeUtil = require("../jakelib/JakeUtil");
 var dbManager = new DbManager();
 var apiManager;
+var nodePort = 3000;
 
 // Jake 'complete' event listener
 jake.addListener("complete", function () {
@@ -22,10 +24,17 @@ task("patchNode", function() {
     JakeUtil.exec(cmd);
 });
 
+task("setTestPort", function() {
+    nodePort = 3001;
+}) ;
+
 task("startNode", function() {
-    var cmd = "forever start -w --watchDirectory routes/ -a -l forever.log -o out.log -e err.log app.js";
+    var cmd = util.format("NODE_PORT=%d forever start -w --watchDirectory routes/ -a -l forever.log -o out.log -e err.log app.js >forever.log",
+            nodePort);
     JakeUtil.exec(cmd);
 });
+
+task("startNodeTest", ["setTestPort", "startNode"]);
 
 task("stopNode", function() {
     var cmd = "forever stop app.js";
