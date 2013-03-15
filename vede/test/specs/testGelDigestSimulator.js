@@ -1,60 +1,116 @@
 /*
  * @author Doug Hershberger
- * @author Micah Lerner
  */
 
 
-Ext.require("Teselagen.utils.SystemUtils");
+Ext.require('Ext.app.Application');
+
+var Application = null, ctlr = null, store = null;
+var testREs=new Array("EcoRI","EcoRV","EcoVIII", "M.EcoKDam", "BciVI", "BbvI", "BamHI");
+
 
 Ext.onReady(function() {
-
-    // ====================================
-    //   Gel Digestion Simulator Unit Testing
-    // ====================================
-    describe("Gel Digestion Simulator Unit Testing", function() {
-        describe("Blunt ends for both", function() {
-            var sourceDNA = "ttacgcccccgggtcgaaaaaaaaaaaaaaaaaaaaacccgggatccgacagag";
-            var destinationDNA = "tgattacgcccagctggcatgcctgcaggtcgactctagaggatccccgggtaccgagctccagctgactggccgtc";
-            var sourceLeftRE = "SmaI";
-            var sourceRightRE ="SmaI";
-            var destLeftRE = "PvuII";
-            var destRightRE ="PvuII";
-            var sourceStart = 7;
-            var sourceStop = 37;
-            var destStart = 10;
-            var destStop = 67;
-            var dm;
-            it("Digestion Simulator exists", function(){
-                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
-                expect(dm).toBeDefined();
-            });
-            it("Source DNA initialized", function(){
-                expect(!(dm.sourceOverhangStartSequence === null) && !(dm.sourceOverhangEndSequence === null) && !(dm.sourceOverhangStartType === null) && !(dm.sourceOverhangEndType === null)).toBeTruthy();
-            });
-            it("Destination DNA initialized", function(){
-                expect(!(dm.destinationOverhangStartType === null) && !(dm.destinationOverhangEndType === null) && !(dm.destinationOverhangStartSequence === null) && !(dm.destinationOverhangEndSequence === null)).toBeTruthy();
-            });
-            it("The pair has a normal match", function(){
-                expect(dm.hasNormalMatch()).toBeTruthy();
-            });
-            it("The pair has a reverse complementary  match", function(){
-                expect(dm.hasRevComMatch()).toBeTruthy();
-            });
-            it("The pair has matching type of BOTH", function(){
-                expect(dm.getMatchingType()).toBe(dm.self.matchBoth);
-            });
-            it("DestinationDNA digested", function(){
-                dm.digest(dm.self.matchNormalOnly);
-                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgcccaggggtcgaaaaaaaaaaaaaaaaaaaaacccctgactggccgtc");
-            });
-            it("DestinationDNA pasted revcom", function(){
-                dm = makeDigestionManager(sourceDNA, destinationDNA, sourceLeftRE, sourceRightRE, destLeftRE, destRightRE, sourceStart, sourceStop, destStart, destStop);
-                dm.digest(dm.self.matchReverseComOnly);
-                expect(dm.sequenceManager.sequence.toString()).toBe("tgattacgcccaggggtttttttttttttttttttttcgacccctgactggccgtc");
-            });
-        });
-    });
+	var simulateDigestionWindow = null;
+	describe("GelDigestSimulator testing", function() {
+		beforeEach(function(){
+			waitsFor( function(){
+					return (Vede.app !== null); 
+				},
+				"Vede never loaded",
+				400
+			);
+			runs( function(){
+				Application = Vede.app;
+		        if (!ctlr) {
+		            ctlr = Application.getController('SimulateDigestionController');
+		        }
+			});
+		});
+		afterEach(function(){
+			if(simulateDigestionWindow)simulateDigestionWindow.destroy();
+		});
+		describe("Basic Assumptions", function() {
+	
+		    it("has ExtJS4 loaded", function() {
+		        expect(Ext).toBeDefined();
+		        expect(Ext.getVersion()).toBeTruthy();
+		        expect(Ext.getVersion().major).toEqual(4);
+		    });
+	
+		    it("has loaded Vede code",function(){
+		        expect(Vede).toBeDefined();
+		    });
+		});
+		describe("Initializes objects to be tested", function() {
+		    it("loads the SimulateDigestionController", function() {
+		        expect(ctlr).toBeDefined();
+		    });
+		    it("loads other important objects in the controller", function() {
+		        expect(ctlr.GroupManager).not.toBe(null);
+		        expect(ctlr.DigestionCalculator).not.toBe(null);
+		        expect(ctlr.DNATools).not.toBe(null);
+		    });
+//		    it("loads other important objects at Window opening in the controller", function() {
+//		        simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
+//		        simulateDigestionWindow.show();
+//		        simulateDigestionWindow.center();
+//		        Application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+//		        expect(ctlr.managerWindow).not.toBe(null);
+//		        expect(ctlr.enzymeListSelector).not.toBe(null);
+//		        expect(ctlr.GroupManager.getIsInitialized()).toBeTruthy();
+//		    });
+		});
+		describe("Can work with enzyme groups", function() {
+			beforeEach(function(){
+				runs( function(){
+			        simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
+			        simulateDigestionWindow.show();
+			        simulateDigestionWindow.center();
+			        Application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
+				});
+				waitsFor( function(){
+						return (ctlr.GroupManager.getIsInitialized()); 
+					},
+					"GroupManager never loaded",
+					400
+				);
+			});
+		    it("adds the test group to the group manager", function() {
+				var testGroup = ctlr.GroupManager.createGroupByEnzymes("TEST", new Array("EcoRI","EcoRV","EcoVIII", "M.EcoKDam", "BciVI", "BbvI", "BamHI"));
+				ctlr.GroupManager.userGroups.push(testGroup);
+				var newGroup = ctlr.GroupManager.groupByName("TEST");
+		        expect(newGroup).toBeDefined();
+		        expect(newGroup).toBeTruthy();
+		        expect(newGroup.getEnzymes()[0].getName()).toBe("EcoRI");
+		        var groupCombobox = ctlr.managerWindow.query("#enzymeGroupSelector-digest")[0];
+		        groupCombobox.setValue("TEST");
+		        //ctlr.onEnzymeGroupSelected(groupCombobox);
+		        var tempSelectedEnzymes = ctlr.enzymeListSelector.fromField.store.data.items;
+		        expect(tempSelectedEnzymes.length).toBe(7);
+		        expect(tempSelectedEnzymes[0].data.name).toBe("BamHI");
+		        var searchCombobox = ctlr.managerWindow.query("#enzymeGroupSelector-search")[0];
+		        searchCombobox.setValue("eco");
+		        //ctlr.searchEnzymes(searchCombobox);
+	        	expect(tempSelectedEnzymes.length).toBe(4);
+	        	expect(tempSelectedEnzymes[0].data.name).toBe("M.EcoKDam");
+	        	tempSelectedEnzymes = ctlr.enzymeListSelector.fromField.store.data.items;
+	        	searchCombobox.setValue("eco");
+	        	var newSelectedEnzymes = ctlr.enzymeListSelector.fromField.store.data.items;
+	        	expect(tempSelectedEnzymes).toBe(newSelectedEnzymes);
+	        	var temp = 0;
+		    });
+		});
+	});
 });
 
-function makeGelDigestionSimulator() {
-}
+
+//function doStuff(){
+//	// simulate async stuff and wait 10ms
+//	setTimeout(function(){
+//		done = true;
+//	}, 10000); 
+//};
+//runs(doStuff);
+//waitsFor(function(){
+//	return done;
+//});

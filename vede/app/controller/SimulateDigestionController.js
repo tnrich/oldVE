@@ -7,7 +7,8 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
     requires: ["Teselagen.manager.RestrictionEnzymeGroupManager",
                "Teselagen.bio.tools.DigestionCalculator",
-               "Teselagen.bio.sequence.DNATools"],
+               "Teselagen.bio.sequence.DNATools",
+               "Ext.util.TaskRunner"],
 
                GroupManager: null,
                DigestionCalculator: null,
@@ -28,11 +29,14 @@ Ext.define('Vede.controller.SimulateDigestionController', {
                groupSelector: null,
                sampleLaneInitialized: false,
                enzymeListSelector: null,
+               filterTaskRunner: null,
+               filterTask: null,
 
                init: function() {
                    this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
                    this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
                    this.DNATools = Teselagen.bio.sequence.DNATools;
+                   this.filterTaskRunner = new Ext.util.TaskRunner();
                    this.control({
                        "#enzymeGroupSelector-digest": {
                            change: this.onEnzymeGroupSelected
@@ -118,33 +122,33 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
                    this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
                    this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
+                   var list = this.enzymeListSelector.fromField.boundList;
+                   var store = list.getStore();
+                   store.suspendEvents();
+                   tempSelectedEnzymes = this.enzymeListSelector.toField.store.getRange();
+                   tempSelectedEnzymes.forEach(function(enzyme) {
+                	   var deleted = store.query("name",enzyme.get("name"));
+                	   store.remove(deleted.items[0], false);;
+                   });
+                   store.resumeEvents();
+                   list.refresh();
+                   this.syncValue(); 
+                   list.getSelectionModel().select(selected);
                    //Trigger an update of the filter also
                    this.searchEnzymes(null);
                },
-               /**
-                * Searches the itemselector field for enzyme names
-                */
-               searchEnzymes: function(combobox) {
-                   if (combobox === null) {
-                       combobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
-                   }
-                   var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
-                   var currentList = this.GroupManager.groupByName(groupSelector.getValue());
-                   //var currentList = this.enzymeListSelector.fromField.store.data.items;
-                   var enzymeArray = [];
-                   var searchPhrase = ".";
-                   if (combobox.getValue() !== null){
-                       searchPhrase = combobox.getValue();
-                   }
-                   try {
-                   var regEx = new RegExp(searchPhrase, "i");
-                   } catch(err) {
-                       //We can safely ignore errors in the regex. they'll just result in not getting what you are looking for
-                       regEx = null;
-                   }
+               filterEnzymes: function(list, regEx) {
+            	   var enzymeArray = [];
+            	   function pausecomp(millis) {
+                	   var date = new Date();
+                	   var curDate = null;
 
-                   Ext.each(currentList.getEnzymes(), function(enzyme) {
+                	   do { curDate = new Date(); } 
+                	   while(curDate-date < millis);
+                   };
+                   Ext.each(list.getEnzymes(), function(enzyme) {
                        var temp = 0;
+                       pausecomp(100);
                        if (enzyme.getName().search(regEx) !== -1) {
                            enzymeArray.push({name: enzyme.getName()});
                        }
@@ -155,6 +159,61 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
                    this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
                    this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
+                   this.filterTask = null;
+               },
+               /**
+                * Searches the itemselector field for enzyme names
+                */
+               searchEnzymes: function(combobox) {
+            	   if (this.filterTask) {
+            		   this.filterTaskRunner.stop(this.filterTask);
+            	   }
+                   if (combobox === null) {
+                       combobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+                   }
+                   var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
+                   var currentList = this.GroupManager.groupByName(groupSelector.getValue());
+                   //var currentList = this.enzymeListSelector.fromField.store.data.items;
+                   //var enzymeArray = [];
+                   var searchPhrase = ".";
+                   if (combobox.getValue() !== null){
+                       searchPhrase = combobox.getValue();
+                   }
+                   try {
+                   var regEx = new RegExp(searchPhrase, "i");
+                   } catch(err) {
+                       //We can safely ignore errors in the regex. they'll just result in not getting what you are looking for
+                       regEx = null;
+                   }
+                   this.enzymeListSelector.fromField.store.filterBy(function(enzyme){
+                	   return enzyme.data.name.search(regEx) !== -1;
+                   }, this);
+//                   this.filterTask = this.filterTaskRunner.start({
+//                	   run: this.filterEnzymes(currentList, regEx),
+//                	   repeat: 1,
+//                	   scope: this
+//                   });
+                   var temp = 0;
+//                   function pausecomp(millis) {
+//	                   var date = new Date();
+//	                   var curDate = null;
+//	
+//	                   do { curDate = new Date(); } 
+//	                   while(curDate-date < millis);
+//                   };
+//                   Ext.each(currentList.getEnzymes(), function(enzyme) {
+//                       var temp = 0;
+//                       pausecomp(100);
+//                       if (enzyme.getName().search(regEx) !== -1) {
+//                           enzymeArray.push({name: enzyme.getName()});
+//                       }
+//                   });
+//                   var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
+//                   this.enzymeListSelector.store.loadData(enzymeArray, false);
+//                   this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
+//
+//                   this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
+//                   this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
                },
 
 
