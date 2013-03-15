@@ -13,7 +13,7 @@ Ext.define("Vede.view.ve.AnnotatePanel", {
     },
     collapsible: true,
     collapseDirection: "right",
-    title: "Annotate",
+    title: "Sequence",
     titleCollapse: true,
     items: [{
         xtype: "container",
