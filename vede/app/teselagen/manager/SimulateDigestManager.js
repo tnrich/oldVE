@@ -19,7 +19,46 @@ Ext.create("Teselagen.manager.SimulateDigestManager", {
         this.initConfig(inData);
         this.drawBG();
     },
-
+    filterEnzymes: function(searchCombo, groupSelector){
+    	//First we poulate the store with the right enzymes 
+    	var currentList = this.GroupManager.groupByName(groupSelector.getValue());
+        var enzymeArray = [];
+        Ext.each(newGroup.getEnzymes(), function(enzyme) {
+            enzymeArray.push({name: enzyme.getName()});
+        });
+        var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
+        this.enzymeListSelector.store.loadData(enzymeArray, false);
+        this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
+        this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
+        this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
+        //remove any items on the left that are on the right
+        var list = this.enzymeListSelector.fromField.boundList;
+        var store = list.getStore();
+        store.suspendEvents();
+        tempSelectedEnzymes = this.enzymeListSelector.toField.store.getRange();
+        tempSelectedEnzymes.forEach(function(enzyme) {
+     	   var deleted = store.query("name",enzyme.get("name"));
+     	   store.remove(deleted.items[0], false);;
+        });
+        store.resumeEvents();
+        list.refresh();
+        //Now we filter based on the search input
+    	//the default searchphrase will match anything
+    	var searchPhrase = ".";
+    	if (searchCombo.getValue() !== null){
+    		searchPhrase = searchCombo.getValue();
+    	}
+    	try {
+    		var regEx = new RegExp(searchPhrase, "i");
+    	} catch(err) {
+    		//We can safely ignore errors in the regex. they'll just result in not getting what you are looking for
+    		regEx = null;
+    	}
+    	this.enzymeListSelector.fromField.store.filterBy(function(enzyme){
+    		return enzyme.get("name").search(regEx) !== -1;
+    	}, this);
+    },
+    
     drawBG: function(){
         this.backgroundSpriteGroup.add(this.background);
         this.showSprites(this.backgroundSpriteGroup);
