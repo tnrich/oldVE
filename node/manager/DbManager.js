@@ -13,13 +13,13 @@ module.exports = function() {
     /**
      * @constructor
      */
-    function DbManager() {
-        this.dbname = "TestingTeselagen";
+    function DbManager(pDbname) {
+        this.dbname = pDbname || "TeselagenDev";
         this.host = "localhost";
         this.mongo = null;
         this.mongoose = null;
         this.port = 27017;
-        this.url = "mongodb://" + this.host + ":" + this.port + "/" + this.dbname;
+        this.setUrl();
     }
 
     /**
@@ -63,6 +63,20 @@ module.exports = function() {
             err = new Error("Unable to connect");
         }
         pNext(err);
+    };
+
+    /**
+     * Set db name
+     */
+    DbManager.prototype.setDbname = function(pName) {
+        this.dbname = pName;
+    };
+    
+    /**
+     * Set db url
+     */
+    DbManager.prototype.setUrl = function() {
+        this.url = "mongodb://" + this.host + ":" + this.port + "/" + this.dbname;
     };
 
     return DbManager;

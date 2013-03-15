@@ -50,7 +50,7 @@ module.exports = function (app, express) {
   var server = new app.mongo.Server('localhost', 27017, {
     auto_reconnect: true
   });
-  var db = new app.mongo.Db('TestingTeselagen', server);
+  var db = new app.mongo.Db(app.dbname, server);
   db.open(function (err, db) {
     if(!err) {
       console.log("GRIDFS: Online");
@@ -86,7 +86,7 @@ module.exports = function (app, express) {
   };
   */
 
-  app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen');
+  app.db = app.mongoose.createConnection('localhost', app.dbname);
   if (app.db) {
     console.log('MONGODB: MONGODB is online');
     require('./schemas/DBSchemas.js')(app.db);
@@ -161,7 +161,7 @@ module.exports = function (app, express) {
 
 
   // SOAP Jbei-ICE Client
-  if(app.program.stage || app.program.production) {
+  if(app.program.beta || app.program.prod) {
     app.soap.createClient('http://teselagen.com:8080/api/RegistryAPI?wsdl', function (err, client) {
       app.soap.client = client;
       if(!err) console.log('OPTIONS: SOAP CLIENT started');

@@ -28,16 +28,33 @@ app.program
   .version('0.0.1')
   .option('-e, --examples', 'Load Examples')
   .option('-g, --guest', 'Create Guest User')
-  .option('-d, --dev', 'Run Production environment')
-  .option('-s, --stage', 'Run Production environment')
+  .option('-d, --dev', 'Run Development environment')
+  .option('-t, --test', 'Run Test environment')
+  .option('-b, --beta', 'Run Beta environment')
   .option('-p, --prod', 'Run Production environment')
   .option('-q, --quiet', 'Disable logging')
   .parse(process.argv);
 
-if (app.program.dev) process.env.NODE_ENV = "Development";
-else if (app.program.stage) process.env.NODE_ENV = "Stage";
-else if (app.program.prod) process.env.NODE_ENV = "Production";
-else process.env.NODE_ENV = "Development";
+app.dbname = "TeselagenDev";
+if (app.program.dev) {
+    process.env.NODE_ENV = "Development";
+}
+else if (app.program.test) {
+    process.env.NODE_ENV = "Test";
+    app.dbname = "TeselagenTest";
+}
+else if (app.program.stage) {
+    process.env.NODE_ENV = "Beta";
+    app.dbname = "TeselagenBeta";
+}
+else if (app.program.prod) {
+    process.env.NODE_ENV = "Production";
+    app.dbname = "Teselagen";
+}
+else {
+    app.program.dev = true;
+    process.env.NODE_ENV = "Development";
+}
 
 // Log requests
 if (!app.program.quiet) app.use(express.logger());
