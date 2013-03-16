@@ -36,7 +36,7 @@ Ext.define("Teselagen.models.digest.Ladder", {
     },
 
     setLadder: function(pLadder){
-        if (inData.ladderName.indexOf('1kb') > -1 ){
+        if (pLadder.indexOf('1kb') > -1 ){
             this.bandSizes = this.self.BP_LADDER_BANDS; 
         }else {
             this.bandSizes = this.self.KB_LADDER_BANDS;

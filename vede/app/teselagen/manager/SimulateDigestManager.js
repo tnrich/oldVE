@@ -16,8 +16,8 @@ Ext.create("Teselagen.manager.SimulateDigestManager", {
     },
 
     constructor: function(inData){
-        this.initConfig(inData);
-        this.drawBG();
+//        this.initConfig(inData);
+//        this.drawBG();
     },
     filterEnzymes: function(searchCombo, groupSelector){
     	//First we poulate the store with the right enzymes 
