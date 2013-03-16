@@ -17,47 +17,41 @@ Ext.define("Teselagen.manager.RowManager", {
     },
 
     update: function(){
-        //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
         this.rows = [];
         
-//        console.log("Rows junk");
-        //console.log("Num rows: ");
-        //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
-        this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())))
-        //console.log(this.numRows);
-        
-        //console.log(this.sequenceAnnotator.getSequenceManager().getSequence().seqString());
+        if(this.sequenceAnnotator.getSequenceManager()) {
+            this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())))
 
+            var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
+            var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
 
-        var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
-        var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
-
-        for(var i = 0; i < this.numRows; i++) {
-            var start = i * this.sequenceAnnotator.getBpPerRow();
-            var end = (i + 1) * this.sequenceAnnotator.getBpPerRow() - 1;
-            
-            var sequence = seqString.substring(start, end + 1);
-            var oppositeSequence = complementSeqString.substring(start, end + 1);
+            for(var i = 0; i < this.numRows; i++) {
+                var start = i * this.sequenceAnnotator.getBpPerRow();
+                var end = (i + 1) * this.sequenceAnnotator.getBpPerRow() - 1;
+                
+                var sequence = seqString.substring(start, end + 1);
+                var oppositeSequence = complementSeqString.substring(start, end + 1);
+               
+                var rowData = Ext.create("Teselagen.models.sequence.RowData", {
+                        start: start,
+                        end: end,
+                        sequence: sequence,
+                        oppositeSequence: oppositeSequence,
+                });
+     
+                //console.log("Row Data: \n Start: " + (start + 1) + " End: " + (end + 1)+ "\n Sequence Length: " + sequence.length);
+                var row = Ext.create("Teselagen.models.sequence.Row", {
+                    index: i,
+                    rowData: rowData
+                }); 
+                //console.log(row.getRowData().getSequence());
+                this.rows.push(row);
+            }
            
-            var rowData = Ext.create("Teselagen.models.sequence.RowData", {
-                    start: start,
-                    end: end,
-                    sequence: sequence,
-                    oppositeSequence: oppositeSequence,
-            });
- 
-            //console.log("Row Data: \n Start: " + (start + 1) + " End: " + (end + 1)+ "\n Sequence Length: " + sequence.length);
-            var row = Ext.create("Teselagen.models.sequence.Row", {
-                index: i,
-                rowData: rowData
-            }); 
-            //console.log(row.getRowData().getSequence());
-            this.rows.push(row);
+               this.reloadFeatures(); 
+               this.reloadORFs();
+               this.reloadCutSites();
         }
-       
-           this.reloadFeatures(); 
-           this.reloadORFs();
-           this.reloadCutSites();
     },
 
     reloadFeatures: function(){

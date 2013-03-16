@@ -809,12 +809,26 @@ module.exports = function (app, express) {
 
   //Check for duplicated names
   app.get('/checkDuplicatedPartName', restrict, function (req, res) {
+
+    var reqPart = req.query.part;
+    var reqSequence = req.query.sequence;
+
     var Part = app.db.model("part");
     var duplicated = false;
     Part.find(function(err,parts){
       counter = parts.length;
       parts.forEach(function(part,key){
-        if(part.name===req.query.name) duplicated = true;
+        if(
+            part.name===req.query.name &&
+            part.iconId===reqPart.iconId &&
+            part.genbankStartBP===reqPart.genbankStartBP &&
+            part.endBP===reqPart.endBP &&
+            part.revComp===reqPart.revComp &&
+            part.fas===reqPart.fas &&
+            part.directionForward===reqPart.directionForward &&
+            part.sequencefile_id===reqPart.sequencefile_id
+          )
+          { duplicated = true; }
       });
 
       if(duplicated) res.json({'msg': 'Duplicated part name.'}, 500);

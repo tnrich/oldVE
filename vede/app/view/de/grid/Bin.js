@@ -102,11 +102,19 @@ Ext.define('Vede.view.de.grid.Bin', {
         }]);
 
         var currentRows = 0;
+        var firstFas;
+
         if(this.getBin()) {
+
+            if(this.getBin().parts().getRange()[0]) {
+                firstFas = this.getBin().parts().getRange()[0].get("fas");
+            }
+
             // Add each part in the bin to the bin view object.
             this.getBin().parts().each(function(part) {
                 this.add(Ext.create("Vede.view.de.grid.Part", {
-                    part: part
+                    part: part,
+                    fasConflict: part.get("fas") !== firstFas
                 }));
             }, this);
             
