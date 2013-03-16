@@ -32,28 +32,26 @@ app.program
   .option('-t, --test', 'Run Test environment')
   .option('-b, --beta', 'Run Beta environment')
   .option('-p, --prod', 'Run Production environment')
+  .option('-r, --port <n>', 'Node port default is 3000', parseInt)
   .option('-q, --quiet', 'Disable logging')
   .parse(process.argv);
 
-app.dbname = "TeselagenDev";
-if (app.program.dev) {
-    process.env.NODE_ENV = "Development";
+app.set("env", "development");
+app.dbname = "teselagenDev";
+if (app.program.test) {
+    app.set("env", "test");
+    app.dbname = "teselagenTest";
 }
-else if (app.program.test) {
-    process.env.NODE_ENV = "Test";
-    app.dbname = "TeselagenTest";
-}
-else if (app.program.stage) {
-    process.env.NODE_ENV = "Beta";
-    app.dbname = "TeselagenBeta";
+else if (app.program.beta) {
+    app.set("env", "beta");
+    app.dbname = "teselagenBeta";
 }
 else if (app.program.prod) {
-    process.env.NODE_ENV = "Production";
-    app.dbname = "Teselagen";
+    app.set("env", "production");
+    app.dbname = "teselagen";
 }
 else {
     app.program.dev = true;
-    process.env.NODE_ENV = "Development";
 }
 
 // Log requests
@@ -90,7 +88,7 @@ require('./routes/testing.js')(app);
 require('./routes/j5.js')(app);
 
 // Listen Local Port on environment port or default 3000
-var nodePort = process.env.NODE_PORT || 3000;
+var nodePort = app.program.port || 3000;
 app.listen(nodePort, function () {
-	console.log("OPTIONS: Nodejs server is running in %s mode on port %s",process.env.NODE_ENV, nodePort);
+	console.log("OPTIONS: Nodejs server is running in %s mode on port %s", app.get("env"), nodePort);
 });

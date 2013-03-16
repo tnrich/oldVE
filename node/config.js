@@ -41,7 +41,11 @@ module.exports = function (app, express) {
     app.use(express.errorHandler());
   });
 
-  app.configure('stage', function () {
+  app.configure('test', function () {
+    app.use(express.errorHandler());
+  });
+
+  app.configure('beta', function () {
     app.use(express.errorHandler());
   });
 
@@ -88,7 +92,7 @@ module.exports = function (app, express) {
 
   app.db = app.mongoose.createConnection('localhost', app.dbname);
   if (app.db) {
-    console.log('MONGODB: MONGODB is online');
+    console.log('Mongoose: connected to', app.dbname);
     require('./schemas/DBSchemas.js')(app.db);
   }
   else {
@@ -96,7 +100,7 @@ module.exports = function (app, express) {
   }
 
   // MYSQL CONNECTION
-  if(app.program.stage || app.program.prod) {
+  if(app.program.beta || app.program.prod) {
     // Init MYSQL
     var connection = app.mysql.createConnection({
       host: 'localhost',
@@ -148,7 +152,7 @@ module.exports = function (app, express) {
   }
   } 
   else {
-    console.log('OPTIONS: MYSQL OMMITED');
+    console.log('OPTIONS: MYSQL OMITTED');
   }
   app.mysql = connection;
 
@@ -176,7 +180,7 @@ module.exports = function (app, express) {
       });
     });
   } else {
-    console.log('OPTIONS: SOAP CLIENT OMMITED');
+    console.log('OPTIONS: SOAP CLIENT OMITTED');
   }
 
   app.xmlparser = new app.xml2js.Parser();

@@ -14,7 +14,7 @@ module.exports = function() {
      * @constructor
      */
     function DbManager(pDbname) {
-        this.dbname = pDbname || "TeselagenDev";
+        this.dbname = pDbname || "teselagenDev";
         this.host = "localhost";
         this.mongo = null;
         this.mongoose = null;
