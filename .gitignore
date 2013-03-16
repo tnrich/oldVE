@@ -1,5 +1,6 @@
 *.swp
 *~
+node_modules
 # OS generated files #
 *.js.swp
 *.un~
