@@ -41,7 +41,11 @@ module.exports = function (app, express) {
     app.use(express.errorHandler());
   });
 
-  app.configure('stage', function () {
+  app.configure('test', function () {
+    app.use(express.errorHandler());
+  });
+
+  app.configure('beta', function () {
     app.use(express.errorHandler());
   });
 
@@ -50,7 +54,7 @@ module.exports = function (app, express) {
   var server = new app.mongo.Server('localhost', 27017, {
     auto_reconnect: true
   });
-  var db = new app.mongo.Db('TestingTeselagen', server);
+  var db = new app.mongo.Db(app.dbname, server);
   db.open(function (err, db) {
     if(!err) {
       console.log("GRIDFS: Online");
@@ -86,9 +90,9 @@ module.exports = function (app, express) {
   };
   */
 
-  app.db = app.mongoose.createConnection('localhost', 'TestingTeselagen');
+  app.db = app.mongoose.createConnection('localhost', app.dbname);
   if (app.db) {
-    console.log('MONGODB: MONGODB is online');
+    console.log('Mongoose: connected to', app.dbname);
     require('./schemas/DBSchemas.js')(app.db);
   }
   else {
@@ -96,7 +100,7 @@ module.exports = function (app, express) {
   }
 
   // MYSQL CONNECTION
-  if(app.program.stage || app.program.prod) {
+  if(app.program.beta || app.program.prod) {
     // Init MYSQL
     var connection = app.mysql.createConnection({
       host: 'localhost',
@@ -148,7 +152,7 @@ module.exports = function (app, express) {
   }
   } 
   else {
-    console.log('OPTIONS: MYSQL OMMITED');
+    console.log('OPTIONS: MYSQL OMITTED');
   }
   app.mysql = connection;
 
@@ -161,7 +165,7 @@ module.exports = function (app, express) {
 
 
   // SOAP Jbei-ICE Client
-  if(app.program.stage || app.program.production) {
+  if(app.program.beta || app.program.prod) {
     app.soap.createClient('http://teselagen.com:8080/api/RegistryAPI?wsdl', function (err, client) {
       app.soap.client = client;
       if(!err) console.log('OPTIONS: SOAP CLIENT started');
@@ -176,7 +180,7 @@ module.exports = function (app, express) {
       });
     });
   } else {
-    console.log('OPTIONS: SOAP CLIENT OMMITED');
+    console.log('OPTIONS: SOAP CLIENT OMITTED');
   }
 
   app.xmlparser = new app.xml2js.Parser();
