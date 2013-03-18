@@ -1,4 +1,7 @@
+var execSync = require("exec-sync");
+
 exports.exec = function(pCmd) {
     console.log(pCmd);
-    jake.exec([pCmd], {printStdout:true, printStderr:true});
+    var out = execSync(pCmd, true);
+    console.log(out);
 }

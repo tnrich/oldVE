@@ -39,6 +39,9 @@ Ext.define('Vede.controller.AuthWindowController', {
     init: function () {
         var that = this;
         this.control({
+            "#headerPanel": {
+                afterrender: this.onRender
+            },
             "#auth-login-btn": {
                 click: this.onAuthLoginClick
             },
@@ -62,6 +65,14 @@ Ext.define('Vede.controller.AuthWindowController', {
                 }
             }
         });
+    },
+
+    onRender: function() {
+        Ext.get("auth-reconnect-btn").on('click', this.onReconnectClick);
+
+        Ext.get("auth-logout-btn").on('click', this.onLogoutClick);
     }
+
+
 
 });

@@ -271,6 +271,7 @@ box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 }
 
 .navbar .nav > li > a {
+  cursor: pointer;
   font-size: 12px !important;
   color: rgba(109,109,109,0.66)!important;
   text-shadow: none !important;
@@ -280,6 +281,10 @@ box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
   background: rgba(18,18,18,0.05) !important;
   color: rgb(0, 116, 194) !important;
   border-radius: 3px;
+}
+
+.dropdown-menu > li > a  {
+  cursor: pointer;
 }
 
 #headerUserIcon a, #help_btn a{
