@@ -703,16 +703,18 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
 
         DETab.setLoading(true);
-        
+
         setTimeout(function() {
             j5Part.getSequenceFile({
             callback: function(associatedSequence,operation){
-            
+
             if(associatedSequence)
             {
                 console.log("onPartCellVEEditClick");
-                console.log(associatedSequence);
-                Vede.application.fireEvent("VectorEditorEditingMode",j5Part, DETab);
+                j5Part.getSequenceFile({
+                    callback: function (seq) {
+                        Vede.application.fireEvent("OpenVectorEditor",seq);
+                }});
                 DETab.setLoading(false);
             }
             else
@@ -724,15 +726,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     sequenceFileName: "untitled.gb",
                     partSource: "New Part"
                 });
-                
+
                 newSequenceFile.save({
                     callback: function(){
                         j5Part.setSequenceFileModel(newSequenceFile);
                         j5Part.save({
                             callback: function(){
-                                console.log(j5Part);
-                                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
+                                Vede.application.fireEvent("openVectorEditor",newSequenceFile);
                                 DETab.setLoading(false);
                             }
                         });

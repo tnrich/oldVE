@@ -13,6 +13,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     singleton: true,
     currentUser: null,
     projects: null,
+    workingProject: null,
     workingVEProject: null,
     workingSequence: null,
     workingSequenceFileManager: null,
@@ -120,8 +121,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     openSequence: function (sequence) {
         console.log("Opening Sequence");
         this.workingSequence = sequence;
-        //this.workingVEProject = veproject;
-        Vede.application.fireEvent("VectorEditorProjectMode", this.workingSequence);
+        Vede.application.fireEvent("OpenVectorEditor",self.workingSequence);
     },
 
     openPart: function (part) {
@@ -146,7 +146,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             callback: function (record, operation) {
                 self.workingSequence = veproject.getSequenceFile();
                 self.workingVEProject = veproject;
-                Vede.application.fireEvent("VectorEditorProjectMode", self.workingSequence);
+                Vede.application.fireEvent("OpenVectorEditor",self.workingSequence);
             }
         });
     },
@@ -181,6 +181,54 @@ Ext.define("Teselagen.manager.ProjectManager", {
             };
 
         Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed, this);
+    },
+
+    /*
+    Creates a new VEProject based on an existing sequence
+    */
+    createNewVEProject: function(sequence){
+        var self = this;
+        var onPromptClosed = function (btn, text) {
+                if(btn == 'ok') {
+                    if(text === '') return Ext.MessageBox.prompt('Name', 'Please enter a vector editor project name:', onPromptClosed, this);
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Creating new ve project');
+                    var self = this;
+                    var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
+                        name: text,
+                        dateCreated: new Date(),
+                        dateModified: new Date()
+                    });
+
+                    project = Teselagen.manager.ProjectManager.workingProject;
+
+                    project.veprojects().add(veproject);
+                    veproject.setSequenceFile(sequence);
+                    veproject.save({callback: function(){
+
+                        sequence.setVectorEditorProject(veproject);
+                        sequence.set('veproject_id',veproject.data.id);
+
+                        sequence.save({
+                            callback: function () {
+
+                                veproject.set('sequencefile_id',sequence.data.id);
+                                veproject.save();
+
+                                Vede.application.fireEvent("renderProjectsTree", function () {
+                                    Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + veproject.data.id);
+                                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                                    self.openVEProject(veproject);
+                                });
+                            }
+                        });
+                    }});
+
+                } else {
+                    return false;
+                }
+            };
+
+        Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
     },
 
     createNewSequence: function (project) {

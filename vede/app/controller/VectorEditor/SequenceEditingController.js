@@ -5,11 +5,12 @@
 Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.SequenceManagerEvent", "Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager"],
+    requires: ["Teselagen.event.SequenceManagerEvent", "Teselagen.manager.SequenceFileManager", "Teselagen.manager.ProjectManager",
+    "Teselagen.manager.VectorEditorManager"],
 
     editingDETab: null,
-    sequenceFileManager: null,
     createPartWindow: null,
+    VEManager: null,
 
     onPartCreated: function (sequence, part) {
 
@@ -61,100 +62,41 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         });
 
         Vede.application.fireEvent("createPartDefinition", veproject, part, sequence);
-        /*
-        this.createPartWindow = Ext.create('Vede.view.de.PartDefinitionDialog');
-        this.createPartWindow.show();
-        this.createPartWindow.setTitle('Create Part');
-
-
-        var form = this.createPartWindow.down('form').getForm();
-        var name = form.findField('partName');
-        var partSource = form.findField('partSource');
-        var sourceData = form.findField('sourceData');
-        var specifiedSequence = form.findField('specifiedSequence');
-        var startBP = form.findField('startBP');
-        var stopBP = form.findField('stopBP');
-        var revComp = form.findField('revComp');
-
-        name.setValue('Untitled Part');
-        partSource.setValue(veproject.get('name'));
-        sourceData.setValue(sequence.get('sequenceFileContent'));
-
-        specifiedSequence.setValue('Whole sequence');
-        startBP.setValue(1);
-        stopBP.setValue(sequence.getLength());
-
-
-        this.createPartWindow.down('changePartDefinitionDoneBtn').hide();
-        this.createPartWindow.down('saveDefinitionPartBtn').show();
-        */
     },
 
-    onVectorEditorProjectMode: function (seq) {
-        var currentTabPanel = Ext.getCmp('mainAppPanel');
+    onOpenVectorEditor: function(seq){
+        console.log("Using general Vector Editor Sequence Editing Controller");
+        currentTabPanel = Ext.getCmp('mainAppPanel');
         currentTabPanel.setActiveTab(1);
-        self.editingSequence = seq;
+        Teselagen.manager.ProjectManager.workingSequence = seq;
         sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
-        self.sequenceFileManager = sequenceFileManager;
-        Teselagen.manager.ProjectManager.workingSequenceFileManager = sequenceFileManager;
+
+        this.VEManager = Ext.create("Teselagen.manager.VectorEditorManager",seq,sequenceFileManager);
+
         Vede.application.fireEvent("SequenceManagerChanged", sequenceFileManager);
-//        Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
     },
 
-    onVectorEditorEditingMode: function (j5Part, DETab) {
-        this.editingDETab = DETab;
-        var currentTabPanel = Ext.getCmp('mainAppPanel');
-        currentTabPanel.setActiveTab(1);
-
-        var self = this;
-
-        j5Part.getSequenceFile({
-            callback: function (seq) {
-                console.log(seq);
-                Teselagen.manager.ProjectManager.workingSequence = seq;
-                self.sequenceFileManager = Teselagen.manager.SequenceFileManager.sequenceFileToSequenceManager(seq);
-                Vede.application.fireEvent("SequenceManagerChanged", self.sequenceFileManager);
-//                Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveSequenceBtn"]')[0].show();
-            }
-        });
-
+    onsaveSequenceBtnClick: function(){
+        this.VEManager.saveSequence();
     },
-
-//    onsaveSequenceBtnClick: function () {
-//        var currentTabPanel = Ext.getCmp('mainAppPanel');
-//        var editingSequence = Teselagen.manager.ProjectManager.workingSequence;
-//        currentTabPanel.setLoading(true);
-//
-//        rawGenbank = this.sequenceFileManager.toGenbank().toString();
-//        editingSequence.setSequenceFileContent(rawGenbank);
-//
-//        var self = this;
-//
-//        editingSequence.save({
-//            callback: function () {
-//                currentTabPanel.setLoading(false);
-//                currentTabPanel.setActiveTab(self.editingDETab);
-//            }
-//        });
-//    },
 
     onSequenceManagerChanged: function (newSequenceFileManager) {
-        this.sequenceFileManager = newSequenceFileManager;
+        this.VEManager.changeSequenceManager(newSequenceFileManager);
     },
 
     init: function () {
 
         this.control({
-//            '#VectorEditorMainMenuBar > button[cls="saveSequenceBtn"]': {
-//                click: this.onsaveSequenceBtnClick
-//            },
+            '#VectorEditorMainToolBar > button[cls="saveSequenceBtn"]': {
+                click: this.onsaveSequenceBtnClick
+            },
             '#VectorEditorMainToolBar > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
             }
         });
 
-        this.application.on("VectorEditorEditingMode", this.onVectorEditorEditingMode, this);
-        this.application.on("VectorEditorProjectMode", this.onVectorEditorProjectMode, this);
+        this.application.on("openVectorEditor", this.onOpenVectorEditor, this);
+
         this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
         this.application.on("partCreated", this.onPartCreated, this);
 

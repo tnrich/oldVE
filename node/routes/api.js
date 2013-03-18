@@ -3,8 +3,12 @@
  * @module ./routes/api
  */
 module.exports = function (app, express) {
-    var errorHandler = express.errorHandler();
-    var apiManager = new app.ApiManager();
+  var errorHandler = express.errorHandler();
+  var apiManager = new app.ApiManager();
+
+  var emptyGenbank = '"LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//"';
+
+
 
   /**
    *  Login Auth Method : Find User in DB
@@ -555,9 +559,9 @@ module.exports = function (app, express) {
             res.json({"design":project.design});
         }
     });
-    
+
   });
-  
+
   // CREATE
   app.post('/user/projects/veprojects', restrict, function (req, res) {
     var Project = app.db.model("project");
@@ -608,70 +612,98 @@ module.exports = function (app, express) {
     });
   });
 
+  function autoReassignDuplicatedSequence(res,sequence,cb){
+    if(sequence.sequenceFileContent!=emptyGenbank)
+    {
+      var sequences = app.db.model("sequence");
+      sequences.findOne({_id:{$ne : sequence.id},hash:sequence.hash},function(err,seq){
+        if(seq) return cb(true,seq);
+        else return cb(false);
+      });
+    }
+    else return cb(false);
+  }
+
+  function checkForDuplicatedSequence(res,sequence,cb){
+    if(sequence.sequenceFileContent!=emptyGenbank)
+    {
+      var sequences = app.db.model("sequence");
+      sequences.findOne({_id:{$ne : sequence.id},hash:sequence.hash},function(err,seq){
+        if(seq) return res.json({"fault":"Duplicated sequence","pairId":seq._id},500);
+        else return cb(false);
+      });
+    }
+    else return cb(false);
+  }
+
+  // Return associated VE Project
+  function getAssociatedVEProject(sequence,cb)
+  {
+    if(sequence.veproject_id)
+    {
+      VEProject = app.db.model("veproject");
+      VEProject.findById(sequence.veproject_id,function(err,veproject){
+        if(err||!veproject) return res.json({"fault":"VEProject not found"},500);
+        else return cb(veproject);
+      });
+    }
+    else return cb(null);
+  }
+
   //CREATE
+  // Create a new sequence
   app.post('/user/projects/veprojects/sequences', function (req, res) {
-    var id = req.body["veproject_id"];
     var sequence = req.body;
     var VEProject = app.db.model("veproject");
     var Sequence = app.db.model("sequence");
 
-    if(id)
-    {
-      VEProject.findById(id,function(err,veproject){
-        if(err||!veproject) return res.json({"fault":"VEProject not found"},500);
-        var newSequence = new Sequence();
+    autoReassignDuplicatedSequence(res,sequence,function(duplicated,duplicatedSequence){
 
-        for(var prop in sequence) {
-          newSequence[prop] = sequence[prop];
-        }
+      if(duplicated) {
+        res.json({"sequence":duplicatedSequence});
+      }
+      else
+      {
+        getAssociatedVEProject(sequence,function(veproject){
+          var newSequence = new Sequence();
 
-        newSequence.save(function(){
-          veproject.sequencefile_id = newSequence;
-          veproject.save(function(err){
-            if(err) console.log(err);
-            console.log("New Sequence Saved!");
+          for(var prop in sequence) {
+            newSequence[prop] = sequence[prop];
+          }
 
-            res.json({"sequence":newSequence});
+          newSequence.save(function(){
+            if(veproject)
+            {
+              veproject.sequencefile_id = newSequence._id;
+              veproject.save(function(err){
+                if(err) console.log(err);
+                res.json({"sequence":newSequence});
+              });
+            }
+            else res.json({"sequence":newSequence});
           });
         });
-      });
-    }
-    else
-    {
-      var newSequence = new Sequence();
-
-      for(var prop in sequence) {
-        newSequence[prop] = sequence[prop];
       }
-
-      newSequence.save(function(err){
-        if(err) return res.json({"fault":"Sequence not saved"},500);
-        res.json({"sequence":newSequence});
-      });
-    }
+    });
   });
-
 
   //PUT
   app.put('/user/projects/veprojects/sequences', function (req, res) {
+    var sequence = req.body;
     var Sequence = app.db.model("sequence");
-    Sequence.findById(req.body.id,function(err, sequence){
-        if (err) {
-            errorHandler(err, req, res);
-        }
-        else {
-            for(var prop in req.body) {
-                sequence[prop] = req.body[prop];
-            }
-            sequence.save(function(pErr){
-                if (pErr) {
-                    errorHandler(pErr, req, res);
-                }
-                else {
-                    res.json({"sequence":sequence});
-                }
-            });
-        }
+    var VEProject = app.db.model("veproject");
+
+    checkForDuplicatedSequence(res,sequence,function(){
+      Sequence.findById(req.body.id,function(err, sequence){
+        VEProject.findOne({sequencefile_id:sequence.id},function(err, veproject){
+          for(var prop in req.body) {
+              sequence[prop] = req.body[prop];
+          }
+          sequence.save(function(pErr){
+            res.json({"sequence":sequence,"veproject":veproject});
+          });
+        });
+      });
     });
   });
 
