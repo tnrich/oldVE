@@ -18,7 +18,9 @@ Ext.define("Teselagen.models.digest.Gel", {
         ladder: null,
         ladderDefs: null,
         min: null,
-        max: null
+        max: null,
+        actualHeight: 400,
+        actualWidth: 400
     },
 
     constructor: function(inData){
@@ -43,8 +45,11 @@ Ext.define("Teselagen.models.digest.Gel", {
      * @param {Number} index 0 based index to insert at
      */
     createLane: function(newLaneName, index){
-        var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: newLaneName});
+        var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: newLaneName, actualHeight: this.actualHeight});
         this.insertLane(newLane, index);
+        for (var i = 0; i < this.lanes.length; i++) {
+            this.lanes[i].actualWidth = this.actualWidth / this.lanes.length;
+        }
     },
     /**
      * Inserts a lane at the index specified. If index is not provided then inserts it at the end
@@ -64,6 +69,20 @@ Ext.define("Teselagen.models.digest.Gel", {
         this.lanes = [];
     },
     /**
+     * Get a lane with the specified name.
+     * @param {String} laneName the lane to fetch
+     * @return {Teselagen.models.digest.GelLane} the lane named laneName
+     */
+    getLane: function(laneName){
+        var lane = null;
+        for (var i = 0; i < this.lanes.length; i++) {
+            if (this.lanes[i].getname() === laneName) {
+                lane = this.lanes[i];
+            }
+        }
+        return lane;
+    },
+    /**
      * Finds the minimum fragment length in all lanes on this gel
      * @return {Number}
      */
@@ -71,10 +90,12 @@ Ext.define("Teselagen.models.digest.Gel", {
         this.max = -Infinity, this.min = +Infinity;
          
         for (var i = 0; i < this.lanes.length; i++) {
-          if (this.lanes[i].max > this.max)
+          if (this.lanes[i].max > this.max) {
               this.max = this.lanes[i].max;
-          if (this.lanes[i].min < this.min) 
+          }
+          if (this.lanes[i].min < this.min) {
               this.min = this.lanes[i].min;
+          }
         }
     },
     /**
@@ -98,7 +119,7 @@ Ext.define("Teselagen.models.digest.Gel", {
      * @return {Ext.draw.Sprite[]}
      */
     draw: function(){
-        calculateMinMax();
+        this.calculateMinMax();
         var ladderHeight = this.actualHeight * 0.8;
         var ladderMin = this.ladder[this.ladder.length - 1]; 
         var ladderMax = this.ladder[0]; 
@@ -114,6 +135,6 @@ Ext.define("Teselagen.models.digest.Gel", {
          * http://stackoverflow.com/questions/5080028/what-is-the-most-efficient-way-to-concatenate-n-arrays-in-javascript
          */
         var bands = [].concat.apply([], this.lanes);
-        return bands
-    },
+        return bands;
+    }
 });

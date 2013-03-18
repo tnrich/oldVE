@@ -3,6 +3,8 @@
  * Class describing a lane of a gel
  * @author Doug Hershberger
  */
+Ext.require("Teselagen.bio.tools.DigestionCalculator");
+
 Ext.define("Teselagen.models.digest.GelLane", {
     config: {
         BAND_COLOR: '#fff',
@@ -12,6 +14,19 @@ Ext.define("Teselagen.models.digest.GelLane", {
         bandSizeLabels: null,
         bandSizeLabelYPositions: null,
         name: "default",
+        min: null,
+        max: null,
+        enzymes: null,
+        sequence: null,
+        //just here so that we can conveniently call digestionCalculator instead of using its full name
+        digestionCalculator: null,
+        //Here for convenience to allow us to refer to Teselagen.models.digest.Ladder using the shortcut "Ladder"
+        Ladder: null,
+        /**
+         * A {Teselagen.models.digest.GelBand[]} array of bands contained in this lane
+         * 
+         */
+        bands: null,
         
         ladderDefs: null,
 
@@ -27,43 +42,50 @@ Ext.define("Teselagen.models.digest.GelLane", {
      * @param  {String} ladder name of the ladder
      */
     constructor: function(inData){
+        this.bands = [];
         this.initConfig(inData);
-        this.ladderDefs = Ext.create("Teselagen.models.digest.Ladder", {ladderName: "1kb"});
+        this.digestionCalculator = Teselagen.bio.tools.DigestionCalculator;
+        this.Ladder = Teselagen.models.digest.Ladder;
+        if (inData.ladder !== null){
+            for (var i = 0; i < inData.ladder.length; ++i){
+                this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {size: inData.ladder[i]}));
+            }
+        }
         return this;
     },
-    
-    /**
-     * Updates the ladder being used to calculate band placement
-     * @param  {String} pLadder new ladder
-     */
-    updateLadderLane: function(pLadder){
-        if (pLadder.indexOf('1kb') > -1 ){
-            this.ladder = this.self.BP_LADDER_BANDS; 
-        }else {
-            this.ladder = this.self.KB_LADDER_BANDS;
-        }
-       this.redrawBands();
-        this.redrawBandSizeLabels();
-        //redrawConnectors();*/
-    },
 
     /**
-     * Recalculates Band Y positions
+     * Calculates Band Y positions
+     * @param {Number} totalLogDifference the log difference of the max band divided by the min band for this gel
+     * @param {Number} the minimum value of the minimum band in this gel (provided by the gel)
+     * 
      */
-    redrawBands: function(){
+    draw: function(totalLogDifference, min){
         var ladderHeight = this.actualHeight * 0.8;
-        var ladderMin = this.ladder[this.ladder.length - 1]; 
-        var ladderMax = this.ladder[0]; 
-        var totalLogDifference = Math.log(ladderMax / ladderMin);
         this.bandYPositions = [];
+        //If the fragments are the result of a digestion, then they can change
+        if (this.sequence !== null) {
+            this.bands = this.digestionCalculator.digestSequence(this.sequence, this.enzymes);
+        }
+        //else this must be a ladder
+        for (var i = 0; i < this.bands.length; ++i){
+            var bandSize = this.bands[i].size;
 
-        for (var i = 0; i < this.ladder.length; ++i){
-            var bandSize = this.ladder[i];
-
-            var currentLogDifference =  Math.log(this.ladder[i] / ladderMin);
+            var currentLogDifference =  Math.log(bandSize / min);
             var normalizedLogDifference =  currentLogDifference/ totalLogDifference;
             var scalingFactor = -(.1 * Math.sin(2*3.14*normalizedLogDifference));
             this.bandYPositions.push(0.9 * this.actualHeight - (scalingFactor + normalizedLogDifference) * ladderHeight);
+        }
+    },
+
+    /**
+     * Maps an array of digestion fragments to bands replacing the current bands
+     * @param {Teselagen.bio.sequence.dna.DigestionFragment[]} the array of digestion fragments to be mapped
+     */
+    mapFragmentsToBands: function(fragments){
+        this.bands = [];
+        for (var i = 0; i < fragments.length; ++i){
+            this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {digestionFragment: fragments[i]}));
         }
     },
 
