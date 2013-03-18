@@ -43,7 +43,26 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     });
                 },
                 failure: function(response){
-                    Ext.MessageBox.prompt('Name', 'There\'s another part in the library using the same name. Please choose a different name', processPrompt);
+                    response = JSON.parse(response.responseText);
+                    if(response.type==='error') Ext.MessageBox.prompt('Name', 'There\'s another part in the library using the same name. Please choose a different name', processPrompt);
+                    if(response.type==='warning')
+                    {
+                        Ext.MessageBox.confirm('Confirm', 'The part already exist. Are you sure you want to do that?',
+                        function(btn){
+                            if(btn==='yes')
+                            {
+                                part.setSequenceFileModel(sequence);
+                                part.set('sequencefile_id', sequence.data.id);
+                                part.save({
+                                    callback: function () {
+                                        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
+                                        parttext.animate({duration: 5000, to: {opacity: 0}});
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             });
         };

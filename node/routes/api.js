@@ -847,25 +847,33 @@ module.exports = function (app, express) {
     var reqSequence = req.query.sequence;
 
     var Part = app.db.model("part");
+
+    var duplicatedName = false;
+    var identical = false;
+
     Part.find(function(err,parts){
       counter = parts.length;
       parts.forEach(function(part,key){
+
+        if( part.name===reqPart.name ) duplicatedName = true;
+
         if(
-            part.name===reqPart.name &&
             part.genbankStartBP===reqPart.genbankStartBP.toString() &&
             part.endBP===reqPart.endBP.toString() &&
             part.revComp===reqPart.revComp.toString() &&
             part.fas===reqPart.fas.toString() &&
             part.directionForward===reqPart.directionForward.toString()
-          )
-          {
-            res.json({'msg': 'Duplicated part name.'}, 500);
-          }
-          else {counter--;}
-          if(counter===0) res.json({});
+          ) { identical = true; }
+
+        if(duplicatedName && !identical) { res.json({'msg': 'Duplicated part name.','type':'warning'}, 500); }
+        else if(duplicatedName && identical) { res.json({'msg': 'The part already exist.','type':'error'}, 500); }
+        else {counter--;}
+        if(counter===0) res.json({});
       });
       if(counter===0) res.json({});
     });
+
+
   });
 
 };
