@@ -24,7 +24,8 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                 url: Teselagen.manager.SessionManager.buildUrl("checkDuplicatedPartName", ''),
                 method: 'GET',
                 params: {
-                    name: part.get('name')
+                    name: part.get('name'),
+                    part: JSON.stringify(part.data)
                 },
                 success: function (response) {
                     sequence.save({

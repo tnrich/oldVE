@@ -842,29 +842,29 @@ module.exports = function (app, express) {
   //Check for duplicated names
   app.get('/checkDuplicatedPartName', restrict, function (req, res) {
 
-    var reqPart = req.query.part;
+    var reqPart = JSON.parse(req.query.part);
+    console.log(reqPart);
     var reqSequence = req.query.sequence;
 
     var Part = app.db.model("part");
-    var duplicated = false;
     Part.find(function(err,parts){
       counter = parts.length;
       parts.forEach(function(part,key){
         if(
-            part.name===req.query.name &&
-            part.iconId===reqPart.iconId &&
-            part.genbankStartBP===reqPart.genbankStartBP &&
-            part.endBP===reqPart.endBP &&
-            part.revComp===reqPart.revComp &&
-            part.fas===reqPart.fas &&
-            part.directionForward===reqPart.directionForward &&
-            part.sequencefile_id===reqPart.sequencefile_id
+            part.name===reqPart.name &&
+            part.genbankStartBP===reqPart.genbankStartBP.toString() &&
+            part.endBP===reqPart.endBP.toString() &&
+            part.revComp===reqPart.revComp.toString() &&
+            part.fas===reqPart.fas.toString() &&
+            part.directionForward===reqPart.directionForward.toString()
           )
-          { duplicated = true; }
+          {
+            res.json({'msg': 'Duplicated part name.'}, 500);
+          }
+          else {counter--;}
+          if(counter===0) res.json({});
       });
-
-      if(duplicated) res.json({'msg': 'Duplicated part name.'}, 500);
-      else res.json({});
+      if(counter===0) res.json({});
     });
   });
 
