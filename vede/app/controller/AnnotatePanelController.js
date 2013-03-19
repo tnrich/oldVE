@@ -89,6 +89,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
         // Calculate the BP's per row, rounded to the nearest 10.
         var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
+        var selectionStart;
+        var selectionEnd;
 
         if(newBpPerRow < this.self.MIN_BP_PER_ROW) {
             newBpPerRow = this.self.MIN_BP_PER_ROW;
@@ -98,6 +100,15 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         if(this.SequenceManager) {
             this.SequenceAnnotationManager.render();
+
+            // If something is selected, reselect it to reset the selection mask.
+            if(this.SelectionLayer.start > -1 && this.SelectionLayer.end > -1) {
+                selectionStart = this.SelectionLayer.start;
+                selectionEnd = this.SelectionLayer.end;
+
+                this.SelectionLayer.deselect();
+                this.select(selectionStart, selectionEnd);
+            }
         }
     },
     
