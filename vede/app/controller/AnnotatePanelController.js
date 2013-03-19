@@ -101,14 +101,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         if(this.SequenceManager) {
             this.SequenceAnnotationManager.render();
 
-            // If something is selected, reselect it to reset the selection mask.
-            if(this.SelectionLayer.start > -1 && this.SelectionLayer.end > -1) {
-                selectionStart = this.SelectionLayer.start;
-                selectionEnd = this.SelectionLayer.end;
-
-                this.SelectionLayer.deselect();
-                this.select(selectionStart, selectionEnd);
-            }
+            this.SelectionLayer.refresh();
         }
     },
     
@@ -339,6 +332,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onSequenceChanged: function(kind, obj) {
         this.callParent(arguments);
+
+        this.SelectionLayer.refresh();
+        this.changeCaretPosition(this.caretIndex, true, false);
     },
 
     onActiveEnzymesChanged: function() {

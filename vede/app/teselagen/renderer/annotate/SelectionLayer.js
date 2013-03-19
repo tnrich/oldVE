@@ -77,6 +77,19 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         this.hideHandles();
     },
 
+    refresh: function() {
+        var selectionStart;
+        var selectionEnd;
+
+        if(this.start > -1 && this.end > -1) {
+            selectionStart = this.start;
+            selectionEnd = this.end;
+
+            this.deselect();
+            this.select(selectionStart, selectionEnd);
+        }
+    },
+
     startSelecting: function() {
         this.selecting = true;
         this.hideHandles();
