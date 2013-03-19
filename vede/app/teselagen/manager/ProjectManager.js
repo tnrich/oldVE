@@ -116,13 +116,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 Ext.getCmp('mainAppPanel').remove(tab);
             }
         });
-        
+
     },
 
     openSequence: function (sequence) {
         console.log("Opening Sequence");
         this.workingSequence = sequence;
-        Vede.application.fireEvent("OpenVectorEditor",self.workingSequence);
+        Vede.application.fireEvent("OpenVectorEditor",this.workingSequence);
     },
 
     openPart: function (part) {
