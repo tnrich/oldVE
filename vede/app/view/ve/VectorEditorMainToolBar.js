@@ -13,8 +13,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         icon: 'resources/images/save.png',
         text: 'Save Sequence',
         scale: 'medium',
-        tooltip: 'Save Sequence',
-        hidden: true
+        tooltip: 'Save Sequence'
     },
     {
         xtype: 'tbseparator',
