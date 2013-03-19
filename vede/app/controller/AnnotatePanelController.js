@@ -89,6 +89,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
         // Calculate the BP's per row, rounded to the nearest 10.
         var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
+        var selectionStart;
+        var selectionEnd;
 
         if(newBpPerRow < this.self.MIN_BP_PER_ROW) {
             newBpPerRow = this.self.MIN_BP_PER_ROW;
@@ -98,6 +100,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         if(this.SequenceManager) {
             this.SequenceAnnotationManager.render();
+
+            this.SelectionLayer.refresh();
         }
     },
     
@@ -328,6 +332,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     onSequenceChanged: function(kind, obj) {
         this.callParent(arguments);
+
+        this.SelectionLayer.refresh();
+        this.changeCaretPosition(this.caretIndex, true, false);
     },
 
     onActiveEnzymesChanged: function() {
