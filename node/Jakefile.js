@@ -36,9 +36,11 @@ task("patchNode", function() {
     JakeUtil.exec(cmd);
 });
 
-task("startNode", function() {
-    var cmd = util.format("forever start --plain -w --watchDirectory routes " +
-            "-a -l forever.log -o out.log -e err.log %s %s",
+directory("log");
+
+task("startNode", ["log"], function() {
+    var cmd = util.format("forever start --plain -w --watchDirectory . " +
+            "-a -l forever.log -o log/out.log -e log/err.log %s %s",
             nodeApp, nodeOpts);
     JakeUtil.exec(cmd);
 });
