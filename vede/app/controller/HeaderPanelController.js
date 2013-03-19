@@ -6,6 +6,8 @@ Ext.define('Vede.controller.HeaderPanelController', {
     extend: 'Ext.app.Controller',
     requires: ["Teselagen.manager.ProjectManager","Teselagen.event.ProjectEvent",'Ext.window.MessageBox'],
     ProjectManagerWindow : null,
+    header: null,
+
     helpWindow : null,
     onHelpBtnClick: function(button, e, options) {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
@@ -55,7 +57,11 @@ Ext.define('Vede.controller.HeaderPanelController', {
     },
 
     init: function() {
+
      	this.control({
+            "#headerPanel": {
+                afterrender: this.onRender
+            },
      		"#help_btn": {
      			click: this.onHelpBtnClick
      		},
@@ -66,5 +72,10 @@ Ext.define('Vede.controller.HeaderPanelController', {
                 click: this.onReportErrorBtnClick
             }
      	});
+    },
+
+
+    onRender: function() {
+        Ext.get("help_btn").on('click', this.onHelpBtnClick);
     }
 });
