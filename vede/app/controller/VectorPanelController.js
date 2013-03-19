@@ -7,13 +7,13 @@ Ext.define("Vede.controller.VectorPanelController", {
     extend: "Ext.app.Controller",
     require: ["Teselagen.manager.ProjectManager"],
     isRendered: false,
-//    saveSequenceBtn : null,
 
     onTabChange: function (tabPanel, newTab, oldTab) {
         var self = this;
         if(newTab.xtype == "VectorEditorPanel") {
             if(!Teselagen.manager.ProjectManager.workingSequence) {
-                console.log("Creating empty VEProject/Sequence");
+                console.log("Opening VE Direct Mode");
+                Teselagen.manager.ProjectManager.directVEEditingMode = true;
 
                 //Create empty VEProject/Sequence
                 Teselagen.manager.ProjectManager.workingVEProject = Ext.create("Teselagen.models.VectorEditorProject", {
@@ -29,25 +29,9 @@ Ext.define("Vede.controller.VectorPanelController", {
                     partSource: "Untitled sequence"
                 });
 
-                //project.veprojects().add(veproject);
                 Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
-//                self.saveSequenceBtn = Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveNewSequenceBtn"]')[0].show();
-//                self.saveSequenceBtn.on("click", self.saveSequence,self);
-            }
-            else if(Teselagen.manager.ProjectManager.workingSequence&&!Teselagen.manager.ProjectManager.workingVEProject) {
-                console.log("Creating empty VEProject/Sequence");
-
-                //Create empty VEProject/Sequence
-                Teselagen.manager.ProjectManager.workingVEProject = Ext.create("Teselagen.models.VectorEditorProject", {
-                    name: "Untitled VEProject",
-                    dateCreated: new Date(),
-                    dateModified: new Date()
-                });
-
-                //project.veprojects().add(veproject);
-                Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
-//                self.saveSequenceBtn = Ext.getCmp('VectorEditorMainMenuBar').query('button[cls="saveNewSequenceBtn"]')[0].show();
-//                self.saveSequenceBtn.on("click", self.saveSequence,self);
+                Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingVEProject);
+                Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
             }
         }
     },

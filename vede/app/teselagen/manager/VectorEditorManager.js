@@ -30,20 +30,72 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         var self = this;
 
-        this.sequence.save({
-            success: function (msg,operation) {
-                currentTabPanel.setLoading(false);
-                parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-                parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved');
-                parttext.animate({duration: 5000, to: {opacity: 0}});
-                //veproject = JSON.parse(operation.response.responseText).veproject;
-                //self.saveProject(veproject);
-            },
-            failure: function(response,operation) {
-                Ext.MessageBox.alert('Error', 'Duplicated sequence.');
-                currentTabPanel.setLoading(false);
-            }
-        });
+        saveToServer = function(){
+            self.sequence.save({
+                success: function (msg,operation) {
+                    currentTabPanel.setLoading(false);
+                    parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
+                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved');
+                    parttext.animate({duration: 5000, to: {opacity: 0}});
+                    //veproject = JSON.parse(operation.response.responseText).veproject;
+                    //self.saveProject(veproject);
+                },
+                failure: function(response,operation) {
+                    Ext.MessageBox.alert('Error', 'Duplicated sequence.');
+                    currentTabPanel.setLoading(false);
+                }
+            });
+        };
+
+        if(!this.sequence.get('veproject_id'))
+        {
+            Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', function(btn,text){
+                if(btn==='ok')
+                {
+                    currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+                    currentTabEl = (currentTab.getEl());
+                    selectWindow = Ext.create('Ext.window.Window', {
+                        title: 'Please choose a project',
+                        height: 200,
+                        width: 400,
+                        layout: 'fit',
+                        renderTo: currentTabEl,
+                        items: {
+                            xtype: 'grid',
+                            border: false,
+                            columns: {
+                                items: {
+                                    dataIndex: "name"
+                                },
+                                defaults: {
+                                    flex: 1
+                                }
+                            },
+                            store: Teselagen.manager.ProjectManager.projects,
+                            listeners: {
+                                "itemclick": function(grid, project, item){
+                                    selectWindow.close();
+                                    Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
+                                    project.veprojects().add(Teselagen.manager.ProjectManager.workingVEProject);
+                                    Teselagen.manager.ProjectManager.workingVEProject.save({
+                                        callback: function(){
+                                            Teselagen.manager.ProjectManager.workingSequence.set('veproject_id',Teselagen.manager.ProjectManager.workingVEProject.data.id);
+                                            saveToServer();
+                                            Vede.application.fireEvent("renderProjectsTree", function () {
+                                                Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + Teselagen.manager.ProjectManager.workingVEProject.data.id);
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                    }).show();
+                }
+            });
+        }
+        else saveToServer();
+
     },
 
     saveProject: function(veproject){
