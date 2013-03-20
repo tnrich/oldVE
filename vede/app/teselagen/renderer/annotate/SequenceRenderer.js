@@ -219,21 +219,59 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     },
 
     renderAA: function(row){
-        var aaStart, aaEnd, 
+        var baseStart;
+        var aaStart = [];
+        var aaEnd = [];
         
-        //aaPadding moves the Amino acid rows into the correct places.
-        aaPadding;
+        // Which frame will be displaying at the first character of the row.
+        var leadingFrame;
+
+        // Array of how many characters to indent each frame's aa display.
+        var aaPadding = [];
+
+        // Array of offsets to add to the index of each frame's first displayed aa.
+        var frontOffsets = [];
 
         var start = row.getRowData().getStart();
         var end = row.getRowData().getEnd();
         var numberOfSpaces = 0;
 
-        aaStart = Math.floor(start / 3 * 2); // *2 to account for spaces in the aa sequence.
-        aaEnd = Math.floor(end / 3 * 2);
+        leadingFrame = start % 3;
 
-        var aminoAcids1 = this.aminoAcidsString1.substring(aaStart, aaEnd);
-        var aminoAcids2 = this.aminoAcidsString2.substring(aaStart, aaEnd);
-        var aminoAcids3 = this.aminoAcidsString3.substring(aaStart, aaEnd);
+        // Indent the aa displays appropriately, based on which frame leads.
+        aaPadding[leadingFrame] = 0;
+        aaPadding[(leadingFrame + 1) % 3] = 1;
+        aaPadding[(leadingFrame + 2) % 3] = 2;
+
+        // Based on which frame is leading, set the offsets.
+        if(leadingFrame === 0) {
+            frontOffsets = [0, 0, 0];
+        } else if(leadingFrame === 2) {
+            frontOffsets = [1, 1, 0];
+        } else {
+            frontOffsets = [1, 0, 0];
+        }
+
+        // Calculate which aa index should first be displayed for each frame.
+        baseStart = Math.floor(start / 3) * 2; // *2 to account for spaces in the aa sequence.
+        
+        aaStart[0] = baseStart + frontOffsets[0] * 2;
+        aaStart[1] = baseStart + frontOffsets[1] * 2;
+        aaStart[2] = baseStart + frontOffsets[2] * 2;
+
+        // Calculate which aa index will be displayed last for each frame. 
+        aaEnd[leadingFrame] = aaStart[leadingFrame] + 
+                                            Math.ceil((end - start + 1) / 3) * 2;
+
+        aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + 
+                                            Math.ceil((end - start) / 3) * 2;
+
+        aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + 
+                                            Math.ceil((end - start - 1) / 3) * 2;
+
+        var aminoAcids1 = this.aminoAcidsString1.substring(aaStart[0], aaEnd[0]);
+        var aminoAcids2 = this.aminoAcidsString2.substring(aaStart[1], aaEnd[1]);
+        var aminoAcids3 = this.aminoAcidsString3.substring(aaStart[2], aaEnd[2]);
 
         aminoAcids1 = aminoAcids1.replace(/ /g, "  ");
         aminoAcids2 = aminoAcids2.replace(/ /g, "  ");
@@ -252,7 +290,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         }
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+            .attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight - verticalOffset)
             .attr("font-family", this.self.FONT_FAMILY)
             .attr("font-size", this.self.FONT_SIZE)
@@ -264,7 +302,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         this.totalHeight += 20;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("x", 7 * this.sequenceAnnotationManager.self.CHAR_WIDTH)
+            .attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH)
             .attr("y", this.totalHeight - verticalOffset)
             .attr("font-family", this.self.FONT_FAMILY)
             .attr("font-size", this.self.FONT_SIZE)
@@ -276,7 +314,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         this.totalHeight += 20;
 
         this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text")
-            .attr("x", 8 * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
+            .attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH) 
             .attr("y", this.totalHeight - verticalOffset)
             .attr("font-family", this.self.FONT_FAMILY)
             .attr("font-size", this.self.FONT_SIZE)
@@ -289,10 +327,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     },
 
     renderAARevCom: function(row) {
-        var aaStart, aaEnd, 
+        var aaStart;
+        var aaEnd;
         
         //aaPadding moves the Amino acid rows into the correct places.
-        aaPadding;
+        var aaPadding;
 
         var start = row.getRowData().getStart();
         var end = row.getRowData().getEnd();
