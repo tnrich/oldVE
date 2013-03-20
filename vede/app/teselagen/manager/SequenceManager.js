@@ -1116,7 +1116,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var newFeatures = [];
         for (var i=0; i < this.features.length; i++) {
             revFeat = this.features[i].clone(); // DW: ORIG DOES NOT CLONE
-            newStart = seqLen - revFeat.getEnd() - 1;
+            newStart = seqLen - revFeat.getEnd();
 
             revFeat.setStrand(-revFeat.getStrand());
             revFeat.reverseLocations( newStart, seqLen, this.circular);
