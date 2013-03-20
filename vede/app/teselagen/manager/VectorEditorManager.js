@@ -42,7 +42,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                     {
                         if(response.info == "duplicated")
                         {
-                            Ext.MessageBox.alert('Warning', 'This sequence already exists in the part library, using existing copy of sequence');
+                            Ext.MessageBox.alert('Warning', 'This sequence already exists in the part library, using existing sequence');
                         }
                     }
                     self.saveProject(response.sequence.id);
