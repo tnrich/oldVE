@@ -660,7 +660,7 @@ module.exports = function (app, express) {
     autoReassignDuplicatedSequence(res,sequence,function(duplicated,duplicatedSequence){
 
       if(duplicated) {
-        res.json({"sequence":duplicatedSequence});
+        res.json({"sequence":duplicatedSequence,"info":"duplicated"});
       }
       else
       {

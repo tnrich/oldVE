@@ -33,12 +33,19 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         saveToServer = function(){
             self.sequence.save({
                 success: function (msg,operation) {
+                    response = JSON.parse(operation.response.responseText);
                     currentTabPanel.setLoading(false);
                     parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved');
                     parttext.animate({duration: 5000, to: {opacity: 0}});
-                    //veproject = JSON.parse(operation.response.responseText).veproject;
-                    //self.saveProject(veproject);
+                    if(response.info)
+                    {
+                        if(response.info == "duplicated")
+                        {
+                            Ext.MessageBox.alert('Warning', 'This sequence already exists in the part library, using existing copy of sequence');
+                        }
+                    }
+                    self.saveProject(response.sequence.id);
                 },
                 failure: function(response,operation) {
                     Ext.MessageBox.alert('Error', 'Duplicated sequence.');
@@ -98,9 +105,13 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
     },
 
-    saveProject: function(veproject){
-        console.log(Teselagen.manager.ProjectManager.workingVEProject);
+    saveProject: function(sequencefile_id){
+        veproject = Teselagen.manager.ProjectManager.workingVEProject;
         if(!veproject) Teselagen.manager.ProjectManager.createNewVEProject(this.sequence);
+        else {
+            veproject.set('sequencefile_id',sequencefile_id);
+            veproject.save();
+        }
     }
 
 });
