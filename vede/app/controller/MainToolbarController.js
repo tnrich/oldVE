@@ -5,19 +5,11 @@
 Ext.define('Vede.controller.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.event.VisibilityEvent",
-               'Teselagen.manager.ProjectManager',
-               "Teselagen.utils.FormatUtils"],
-
-    FormatUtils: null,
-    MenuItemEvent: null,
-    ProjectManager: null,
-    VisibilityEvent: null,
+    requires: ['Teselagen.manager.ProjectManager'],
 
     onImportBtnChange: function(pBtn) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
         // Change this at a later date when that class is tested. --DW 10.17.2012
-        
         if (typeof window.FileReader !== 'function') {
             Ext.Msg.alert('Browser does not support File API.');
         }
@@ -38,24 +30,9 @@ Ext.define('Vede.controller.MainToolbarController', {
             }
         }
     },
-    
+
     onImportFileLoad: function(pFile, pExt, pEvt) {
-        var result  = pEvt.target.result;
-        var gb      = this.FormatUtils.fileToGenbank(result, pExt);
-        var seqMgr = this.FormatUtils.genbankToSequenceManager(gb);
-        //console.log(gb.toString());
-        //console.log(seqMgr.getName());
-        this.application.fireEvent("SequenceManagerChanged", seqMgr);
-        var sequence = this.ProjectManager.workingSequence;
-        sequence.set('sequenceFileContent',gb.toString());
-        sequence.set('sequenceFileFormat',"GENBANK");
-        sequence.set('sequenceFileName',pFile.name);
-        var veproject = this.ProjectManager.workingVEProject;
-        veproject.set('name',seqMgr.getName());
-        var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Parsed Successfully');
-        parttext.animate({duration: 5000, to: {opacity: 0}});
-        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        Vede.application.fireEvent("ImportFileToSequence",pFile, pExt, pEvt,Teselagen.manager.ProjectManager.workingSequence);
     },
 
     onImportFileError: function(pEvt) {
@@ -64,7 +41,7 @@ Ext.define('Vede.controller.MainToolbarController', {
             throw err;
         }
     },
-    
+
     onCircularViewButtonClick: function(button, e, options) {
         var viewMode;
 
@@ -137,7 +114,7 @@ Ext.define('Vede.controller.MainToolbarController', {
         this.application.fireEvent("RestrictionEnzymeManagerOpened",
                                    restrictionEnzymesManagerWindow);
     },
-    
+
     onLinearViewBtnClick: function(button, e, options) {
         var viewMode;
 
@@ -163,10 +140,7 @@ Ext.define('Vede.controller.MainToolbarController', {
             linearButton.toggle(false, true);
         }
     },
-    onSaveBtnClick: function(button, e, options){
-//        this.application.fireEvent("saveCurrentVEProject");
-    },
-    
+
     onSaveToRegistryButtonClick: function(){
         Ext.create("Vede.view.SaveToRegistryWindow").show();
     },
@@ -211,9 +185,6 @@ Ext.define('Vede.controller.MainToolbarController', {
             "#linearViewBtn": {
                 click: this.onLinearViewBtnClick
             },
-            "#saveBtn": {
-//                click: this.onSaveBtnClick
-            },
             "#exportBtn": {
 //                click: this.onSaveToRegistryButtonClick
             },
@@ -221,11 +192,6 @@ Ext.define('Vede.controller.MainToolbarController', {
                 click: this.onSaveToRegistryConfirmationButtonClick
             }
         });
-
-        this.FormatUtils = Teselagen.utils.FormatUtils;
-        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
-        this.ProjectManager = Teselagen.manager.ProjectManager;
-        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     }

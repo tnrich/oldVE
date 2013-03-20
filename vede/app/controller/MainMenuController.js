@@ -57,11 +57,6 @@ Ext.define('Vede.controller.MainMenuController', {
             button.up('window').close();
         }
     },
-    
-
-//    onImportMenuItemClick: function(item, e, options) {
-//        Vede.application.fireEvent("ImportFileToSequence",Teselagen.manager.ProjectManager.workingSequence);
-//    },
 
     onCircularViewMenuItemCheckChange: function(menucheckitem, checked, options) {
         var viewMode;

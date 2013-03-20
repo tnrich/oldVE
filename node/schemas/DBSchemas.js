@@ -45,7 +45,8 @@ module.exports = function (db) {
 		sequenceFileFormat: String,
 		hash: String,
 		partSource: String,
-		sequenceFileName: String
+		sequenceFileName: String,
+		firstTimeImported: Boolean
 	});
 	registerSchema('sequence', SequenceSchema);
 
