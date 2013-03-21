@@ -56,7 +56,9 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         if(!this.sequence.get('veproject_id'))
         {
-            Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', function(btn,text){
+
+            var self = this;
+            msgPrompt = Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', function(btn,text){
                 if(btn==='ok')
                 {
                     currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
@@ -99,7 +101,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
                     }).show();
                 }
-            });
+                else urrentTabPanel.setLoading(false);
+            },this,false,self.sequenceFileManager.name);
         }
         else saveToServer();
 

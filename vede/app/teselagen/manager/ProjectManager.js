@@ -247,7 +247,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
                     var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
                         sequenceFileFormat: "GENBANK",
-                        sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                        sequenceFileContent: "LOCUS       "+text+"                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
                         sequenceFileName: "untitled.gb",
                         partSource: "Untitled sequence"
                     });
