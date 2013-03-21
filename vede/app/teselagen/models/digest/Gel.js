@@ -10,10 +10,9 @@ Ext.define("Teselagen.models.digest.Gel", {
          "Teselagen.models.digest.GelBand"
          ],
     config: {
-        name: null,
+        name: "default",
         BAND_COLOR: '#fff',
         CONNECTOR_COLOR: '#999999',
-        lanes: null,
         drawingSurface: null,
         ladderName: "1kb",
         ladder: null,
@@ -22,6 +21,11 @@ Ext.define("Teselagen.models.digest.Gel", {
         max: null,
         actualHeight: 400,
         actualWidth: 400
+    },
+
+    lanes: null,
+    getLanes: function(){
+        return this.lanes;
     },
 
     constructor: function(inData){
@@ -72,7 +76,8 @@ Ext.define("Teselagen.models.digest.Gel", {
      * clears all of the lanes from this gel
      */
     clearLanes: function(){
-        this.setLanes([]);
+//        this.setLanes([]);
+        this.lanes = [];
     },
     /**
      * Get a lane with the specified name.
