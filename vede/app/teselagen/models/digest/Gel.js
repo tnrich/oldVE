@@ -10,9 +10,10 @@ Ext.define("Teselagen.models.digest.Gel", {
          "Teselagen.models.digest.GelBand"
          ],
     config: {
+        name: null,
         BAND_COLOR: '#fff',
         CONNECTOR_COLOR: '#999999',
-        lanes: [],
+        lanes: null,
         drawingSurface: null,
         ladderName: "1kb",
         ladder: null,
@@ -25,6 +26,7 @@ Ext.define("Teselagen.models.digest.Gel", {
 
     constructor: function(inData){
         this.initConfig(inData);
+        this.lanes = [];
         this.ladderDefs = Ext.create("Teselagen.models.digest.Ladder", {ladderName: "1kb"});
     },
 
@@ -45,11 +47,8 @@ Ext.define("Teselagen.models.digest.Gel", {
      * @param {Number} index 0 based index to insert at
      */
     createLane: function(newLaneName, index){
-        var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: newLaneName, actualHeight: this.actualHeight});
+        var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: newLaneName});
         this.insertLane(newLane, index);
-        for (var i = 0; i < this.lanes.length; i++) {
-            this.lanes[i].actualWidth = this.actualWidth / this.lanes.length;
-        }
     },
     /**
      * Inserts a lane at the index specified. If index is not provided then inserts it at the end
@@ -57,16 +56,23 @@ Ext.define("Teselagen.models.digest.Gel", {
      * @param {Number} index 0 based index to insert at
      */
     insertLane: function(newLane, index){
+    	newLane.setActualHeight(this.getActualHeight());
         if(typeof index === 'undefined') {
-            index = this.lanes.length;
+            index = this.getLanes().length;
         }
-        this.lanes.splice(index, 0, newLane);
+        this.getLanes().splice(index, 0, newLane);
+        //recalculate the width of the lanes based on the number of lanes there are
+        var widthUnit = this.actualWidth / this.getLanes().length;
+        for (var i = 0; i < this.getLanes().length; i++) {
+            this.getLanes()[i].setActualWidth(widthUnit);
+            this.getLanes()[i].setXOffset(i * widthUnit);
+        }
     },
     /**
      * clears all of the lanes from this gel
      */
     clearLanes: function(){
-        this.lanes = [];
+        this.setLanes([]);
     },
     /**
      * Get a lane with the specified name.
@@ -75,9 +81,9 @@ Ext.define("Teselagen.models.digest.Gel", {
      */
     getLane: function(laneName){
         var lane = null;
-        for (var i = 0; i < this.lanes.length; i++) {
-            if (this.lanes[i].getname() === laneName) {
-                lane = this.lanes[i];
+        for (var i = 0; i < this.getLanes().length; i++) {
+            if (this.getLanes()[i].name === laneName) {
+                lane = this.getLanes()[i];
             }
         }
         return lane;
@@ -89,12 +95,12 @@ Ext.define("Teselagen.models.digest.Gel", {
     calculateMinMax: function(){
         this.max = -Infinity, this.min = +Infinity;
          
-        for (var i = 0; i < this.lanes.length; i++) {
-          if (this.lanes[i].max > this.max) {
-              this.max = this.lanes[i].max;
+        for (var i = 0; i < this.getLanes().length; i++) {
+          if (this.getLanes()[i].getMax() > this.max) {
+              this.max = this.getLanes()[i].getMax();
           }
-          if (this.lanes[i].min < this.min) {
-              this.min = this.lanes[i].min;
+          if (this.getLanes()[i].getMin() < this.min) {
+              this.min = this.getLanes()[i].getMin();
           }
         }
     },
@@ -121,20 +127,20 @@ Ext.define("Teselagen.models.digest.Gel", {
     draw: function(){
         this.calculateMinMax();
         var ladderHeight = this.actualHeight * 0.8;
-        var ladderMin = this.ladder[this.ladder.length - 1]; 
-        var ladderMax = this.ladder[0]; 
+//        var ladderMin = this.ladder[this.ladder.length - 1]; 
+//        var ladderMax = this.ladder[0]; 
         var totalLogDifference = Math.log(this.max / this.min);
         var laneBands = [];
-        for (var i = 0; i < this.lanes.length; ++i){
+        for (var i = 0; i < this.getLanes().length; ++i){
             //totalLogDifference, this.min are the two things we need to know to calculate the relative positions of all of the bands
-            laneBands.push(this.lanes[i].draw(totalLogDifference, this.min));
+            laneBands.push(this.getLanes()[i].draw(totalLogDifference, this.min));
         }
         /*
          * Javascript recipe for joining N arrays
          * [].concat.apply([], arrays);
          * http://stackoverflow.com/questions/5080028/what-is-the-most-efficient-way-to-concatenate-n-arrays-in-javascript
          */
-        var bands = [].concat.apply([], this.lanes);
+        var bands = [].concat.apply([], laneBands);
         return bands;
     }
 });

@@ -4,14 +4,30 @@
 
 
 Ext.require("Ext.app.Application");
-//Ext.require("Teselagen.bio.sequence.DNATools");
+Ext.require("Teselagen.models.digest.Gel");
+Ext.require("Teselagen.models.digest.GelLane");
+Ext.require("Teselagen.models.digest.GelBand");
+Ext.require("Teselagen.bio.sequence.DNATools");
+Ext.require("Teselagen.bio.enzymes.RestrictionEnzymeManager");
 
-var Application = null, ctlr = null, store = null, oDestinationDNA = null;
-//var puc = "agcgcccaatacgcaaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcccgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggcaccccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggataacaatttcacacaggaaacagctatgaccatgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcctgatgcggtattttctccttacgcatctgtgcggtatttcacaccgcatacgtcaaagcaaccatagtacgcgccctgtagcggcgcattaagcgcggcgggtgtggtggttacgcgcagcgtgaccgctacacttgccagcgccctagcgcccgctcctttcgctttcttcccttcctttctcgccacgttcgccggctttccccgtcaagctctaaatcgggggctccctttagggttccgatttagtgctttacggcacctcgaccccaaaaaacttgatttgggtgatggttcacgtagtgggccatcgccctgatagacggtttttcgccctttgacgttggagtccacgttctttaatagtggactcttgttccaaactggaacaacactcaaccctatctcgggctattcttttgatttataagggattttgccgatttcggcctattggttaaaaaatgagctgatttaacaaaaatttaacgcgaattttaacaaaatattaacgtttacaattttatggtgcactctcagtacaatctgctctgatgccgcatagttaagccagccccgacacccgccaacacccgctgacgcgccctgacgggcttgtctgctcccggcatccgcttacagacaagctgtgaccgtctccgggagctgcatgtgtcagaggttttcaccgtcatcaccgaaacgcgcgagacgaaagggcctcgtgatacgcctatttttataggttaatgtcatgataataatggtttcttagacgtcaggtggcacttttcggggaaatgtgcgcggaacccctatttgtttatttttctaaatacattcaaatatgtatccgctcatgagacaataaccctgataaatgcttcaataatattgaaaaaggaagagtatgagtattcaacatttccgtgtcgcccttattcccttttttgcggcattttgccttcctgtttttgctcacccagaaacgctggtgaaagtaaaagatgctgaagatcagttgggtgcacgagtgggttacatcgaactggatctcaacagcggtaagatccttgagagttttcgccccgaagaacgttttccaatgatgagcacttttaaagttctgctatgtggcgcggtattatcccgtattgacgccgggcaagagcaactcggtcgccgcatacactattctcagaatgacttggttgagtactcaccagtcacagaaaagcatcttacggatggcatgacagtaagagaattatgcagtgctgccataaccatgagtgataacactgcggccaacttacttctgacaacgatcggaggaccgaaggagctaaccgcttttttgcacaacatgggggatcatgtaactcgccttgatcgttgggaaccggagctgaatgaagccataccaaacgacgagcgtgacaccacgatgcctgtagcaatggcaacaacgttgcgcaaactattaactggcgaactacttactctagcttcccggcaacaattaatagactggatggaggcggataaagttgcaggaccacttctgcgctcggcccttccggctggctggtttattgctgataaatctggagccggtgagcgtgggtctcgcggtatcattgcagcactggggccagatggtaagccctcccgtatcgtagttatctacacgacggggagtcaggcaactatggatgaacgaaatagacagatcgctgagataggtgcctcactgattaagcattggtaactgtcagaccaagtttactcatatatactttagattgatttaaaacttcatttttaatttaaaaggatctaggtgaagatcctttttgataatctcatgaccaaaatcccttaacgtgagttttcgttccactgagcgtcagaccccgtagaaaagatcaaaggatcttcttgagatcctttttttctgcgcgtaatctgctgcttgcaaacaaaaaaaccaccgctaccagcggtggtttgtttgccggatcaagagctaccaactctttttccgaaggtaactggcttcagcagagcgcagataccaaatactgtccttctagtgtagccgtagttaggccaccacttcaagaactctgtagcaccgcctacatacctcgctctgctaatcctgttaccagtggctgctgccagtggcgataagtcgtgtcttaccgggttggactcaagacgatagttaccggataaggcgcagcggtcgggctgaacggggggttcgtgcacacagcccagcttggagcgaacgacctacaccgaactgagatacctacagcgtgagctatgagaaagcgccacgcttcccgaagggagaaaggcggacaggtatccggtaagcggcagggtcggaacaggagagcgcacgagggagcttccagggggaaacgcctggtatctttatagtcctgtcgggtttcgccacctctgacttgagcgtcgatttttgtgatgctcgtcaggggggcggagcctatggaaaaacgccagcaacgcggcctttttacggttcctggccttttgctggccttttgctcacatgttctttcctgcgttatcccctgattctgtggataaccgtattaccgcctttgagtgagctgataccgctcgccgcagccgaacgaccgagcgcagcgagtcagtgagcgaggaagcggaag";
+var Application = null, ctlr = null, store = null, digestedSequence = null;
+var puc = "agcgcccaatacgcaaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcccgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggcaccccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggataacaatttcacacaggaaacagctatgaccatgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcctgatgcggtattttctccttacgcatctgtgcggtatttcacaccgcatacgtcaaagcaaccatagtacgcgccctgtagcggcgcattaagcgcggcgggtgtggtggttacgcgcagcgtgaccgctacacttgccagcgccctagcgcccgctcctttcgctttcttcccttcctttctcgccacgttcgccggctttccccgtcaagctctaaatcgggggctccctttagggttccgatttagtgctttacggcacctcgaccccaaaaaacttgatttgggtgatggttcacgtagtgggccatcgccctgatagacggtttttcgccctttgacgttggagtccacgttctttaatagtggactcttgttccaaactggaacaacactcaaccctatctcgggctattcttttgatttataagggattttgccgatttcggcctattggttaaaaaatgagctgatttaacaaaaatttaacgcgaattttaacaaaatattaacgtttacaattttatggtgcactctcagtacaatctgctctgatgccgcatagttaagccagccccgacacccgccaacacccgctgacgcgccctgacgggcttgtctgctcccggcatccgcttacagacaagctgtgaccgtctccgggagctgcatgtgtcagaggttttcaccgtcatcaccgaaacgcgcgagacgaaagggcctcgtgatacgcctatttttataggttaatgtcatgataataatggtttcttagacgtcaggtggcacttttcggggaaatgtgcgcggaacccctatttgtttatttttctaaatacattcaaatatgtatccgctcatgagacaataaccctgataaatgcttcaataatattgaaaaaggaagagtatgagtattcaacatttccgtgtcgcccttattcccttttttgcggcattttgccttcctgtttttgctcacccagaaacgctggtgaaagtaaaagatgctgaagatcagttgggtgcacgagtgggttacatcgaactggatctcaacagcggtaagatccttgagagttttcgccccgaagaacgttttccaatgatgagcacttttaaagttctgctatgtggcgcggtattatcccgtattgacgccgggcaagagcaactcggtcgccgcatacactattctcagaatgacttggttgagtactcaccagtcacagaaaagcatcttacggatggcatgacagtaagagaattatgcagtgctgccataaccatgagtgataacactgcggccaacttacttctgacaacgatcggaggaccgaaggagctaaccgcttttttgcacaacatgggggatcatgtaactcgccttgatcgttgggaaccggagctgaatgaagccataccaaacgacgagcgtgacaccacgatgcctgtagcaatggcaacaacgttgcgcaaactattaactggcgaactacttactctagcttcccggcaacaattaatagactggatggaggcggataaagttgcaggaccacttctgcgctcggcccttccggctggctggtttattgctgataaatctggagccggtgagcgtgggtctcgcggtatcattgcagcactggggccagatggtaagccctcccgtatcgtagttatctacacgacggggagtcaggcaactatggatgaacgaaatagacagatcgctgagataggtgcctcactgattaagcattggtaactgtcagaccaagtttactcatatatactttagattgatttaaaacttcatttttaatttaaaaggatctaggtgaagatcctttttgataatctcatgaccaaaatcccttaacgtgagttttcgttccactgagcgtcagaccccgtagaaaagatcaaaggatcttcttgagatcctttttttctgcgcgtaatctgctgcttgcaaacaaaaaaaccaccgctaccagcggtggtttgtttgccggatcaagagctaccaactctttttccgaaggtaactggcttcagcagagcgcagataccaaatactgtccttctagtgtagccgtagttaggccaccacttcaagaactctgtagcaccgcctacatacctcgctctgctaatcctgttaccagtggctgctgccagtggcgataagtcgtgtcttaccgggttggactcaagacgatagttaccggataaggcgcagcggtcgggctgaacggggggttcgtgcacacagcccagcttggagcgaacgacctacaccgaactgagatacctacagcgtgagctatgagaaagcgccacgcttcccgaagggagaaaggcggacaggtatccggtaagcggcagggtcggaacaggagagcgcacgagggagcttccagggggaaacgcctggtatctttatagtcctgtcgggtttcgccacctctgacttgagcgtcgatttttgtgatgctcgtcaggggggcggagcctatggaaaaacgccagcaacgcggcctttttacggttcctggccttttgctggccttttgctcacatgttctttcctgcgttatcccctgattctgtggataaccgtattaccgcctttgagtgagctgataccgctcgccgcagccgaacgaccgagcgcagcgagtcagtgagcgaggaagcggaag";
 //var puc119 = "agcgcccaatacgcaaaccgcctctccc";
 var temp = 0;
+var step = 0;
+var ladderDefs = null;
+var oRE = null;
+var enzymes = [];
 
 Ext.onReady(function() {
+	digestedSequence = Teselagen.bio.sequence.DNATools.createDNASequence("pUC119", puc);
+	digestedSequence.setCircular(true);
+	var testEnzymes = ["EcoRI", "BamHI"];
+	//This array contains the actual RestrictionEnzyme datastructures.
+	for (var enzyme in testEnzymes){
+		var temp = testEnzymes[enzyme];
+	    enzymes.push(Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(testEnzymes[enzyme]));
+	};
     var testGel = null;
 	describe("Gel testing", function() {
 		beforeEach(function(){
@@ -23,46 +39,86 @@ Ext.onReady(function() {
 			);
 			runs( function(){
 				Application = Vede.app;
-				testGel = Ext.create("Teselagen.models.digest.Gel", {});
+				Ladder = Teselagen.models.digest.Ladder;
 			});
-			//oDestinationDNA = Teselagen.bio.sequence.DNATools.createDNA(puc);
 		});
 		describe("Basic Assumptions", function() {
 	
-		    it("has ExtJS4 loaded", function() {
+		    it("Has ExtJS4 loaded.", function() {
 		        expect(Ext).toBeDefined();
 		        expect(Ext.getVersion()).toBeTruthy();
 		        expect(Ext.getVersion().major).toEqual(4);
 		    });
 	
-		    it("has loaded Vede code",function(){
+		    it("Has loaded Vede code.",function(){
 		        expect(Vede).toBeDefined();
 		    });
 		});
-		describe("Initializes objects to be tested", function() {
+		describe("Can create, insert and retrieve lanes.", function() {
             it("loads the testGel", function() {
+				var testGel = Ext.create("Teselagen.models.digest.Gel", {name: "testGel"});
                 expect(testGel).toBeDefined();
-            });
-            it("Creates a new lane for the gel", function() {
-                testGel.createLane("Ladder");
-                expect(testGel.getLanes()[0]).toBeDefined();
-            });
-            it("inserts new lanes properly", function() {
                 testGel.clearLanes();
+            });
+            it("Creates a new lane for the gel.", function() {
+				var testGel1 = Ext.create("Teselagen.models.digest.Gel", {name: "testGel1"});
+                testGel1.createLane("Ladder");
+                expect(testGel1.getLanes()[0]).toBeDefined();
+                testGel1.clearLanes();
+            });
+            it("Inserts new lanes properly.", function() {
+				var testGel2 = Ext.create("Teselagen.models.digest.Gel", {name: "testGel2"});
+				//var testGel2 = new Teselagen.models.digest.Gel({name: "testGel2"});
                 for (var i=1;i<=5;i++) {
-                    testGel.createLane("Test" + i);
+                    testGel2.createLane("Test" + i);
                 }
                 var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA"});
-                testGel.insertLane(newLane, 2);
-                expect(testGel.getLanes()[2].getName()).toBe("TestA");
+                testGel2.insertLane(newLane, 2);
+                expect(testGel2.getLanes()[2].getName()).toBe("TestA");
+//                step = 1;
             });
+        	it("Retrieves lanes from the gel by name.", function() {
+				var testGel3 = Ext.create("Teselagen.models.digest.Gel", {name: "testGel3"});
+        		testGel3.createLane("Sample");
+        		var sample = testGel3.getLane("Sample");
+        		expect(sample).toBeDefined();
+        	});
 		});
-        describe("Can create objects from the requesite parts", function() {
-            it("loads the testGel", function() {
-                testGel.createLane("Sample");
-                var sample = testGel.getlane("Sample");
-                expect(sample).toBeDefined();
-            });
+        describe("Can create lanes from various inputs", function() {
+			var testGel4 = Ext.create("Teselagen.models.digest.Gel", {name: "testGel4"});
+        	it("Creates a lane based on a ladder as input.", function() {
+                //var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: Ladder.KB_LADDER_BANDS});
+                var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: Ladder.BP_LADDER_BANDS});
+        		expect(newLane).toBeDefined();
+        		//expect(newLane.getBands()[0].getSize()).toBe(3000);
+        		//expect(newLane.getBands()[13].getSize()).toBe(100);
+        		expect(newLane.getBands()[0].getSize()).toBe(20000);
+        		expect(newLane.getBands()[13].getSize()).toBe(75);
+        		testGel4.insertLane(newLane);
+        	});
+        	it("Creates a lane based on a sequence and enzymes as input.", function() {
+                var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: digestedSequence, enzymes: enzymes});
+                newLane.refreshDigestion();
+        		expect(newLane).toBeDefined();
+        		expect(newLane.getBands()[0].getSize()).toBe(27);
+        		expect(newLane.getBands()[1].getSize()).toBe(3147);
+        		expect(newLane.getMin()).toBe(27);
+        		expect(newLane.getMax()).toBe(3147);
+        		testGel4.insertLane(newLane);
+        	});
+        	it("Pulls Max and Min from all of the fragments available.", function() {
+        		expect(testGel4).toBeDefined();
+        		expect(testGel4.getMin()).toBe(27);
+        		expect(testGel4.getMax()).toBe(20000);
+        	});
+        	it("Calculates the right size for the different bands.", function() {
+        		expect(testGel4).toBeDefined();
+                expect(testGel4.getLanes()[0]).toBeDefined();
+                expect(testGel4.getLanes()[1]).toBeDefined();
+                var sprites = testGel4.draw();
+        		expect(testGel4.getMin()).toBe(27);
+        		expect(testGel4.getMax()).toBe(20000);
+        	});
         });
 	});
 });

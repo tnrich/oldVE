@@ -2,6 +2,7 @@
  * Simulate digestion manager
  * @class Teselagen.manager.SimulateDigestionManager
  */
+Ext.require("Teselagen.models.digest.Ladder");
 Ext.define("Teselagen.manager.SimulateDigestionManager", {
     config: {
         digestPanel: null,
@@ -16,9 +17,10 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
     },
     constructor: function(inData){
         this.initConfig(inData);
+        this.initializeDigestDrawingPanel();
     },
     filterEnzymes: function(searchCombo, groupSelector){
-        //First we poulate the store with the right enzymes 
+        //First we populate the store with the right enzymes 
         var currentList = this.groupManager.groupByName(groupSelector.getValue());
         var enzymeArray = [];
         Ext.each(currentList.getEnzymes(), function(enzyme) {
@@ -166,5 +168,68 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         });
         pSpriteGroup.show(true);
 
+    },
+    drawGel: function(pSpriteGroup){
+    	//just for testing
+    	var digestedSequence = null;
+    	var puc = "agcgcccaatacgcaaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcccgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggcaccccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggataacaatttcacacaggaaacagctatgaccatgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcctgatgcggtattttctccttacgcatctgtgcggtatttcacaccgcatacgtcaaagcaaccatagtacgcgccctgtagcggcgcattaagcgcggcgggtgtggtggttacgcgcagcgtgaccgctacacttgccagcgccctagcgcccgctcctttcgctttcttcccttcctttctcgccacgttcgccggctttccccgtcaagctctaaatcgggggctccctttagggttccgatttagtgctttacggcacctcgaccccaaaaaacttgatttgggtgatggttcacgtagtgggccatcgccctgatagacggtttttcgccctttgacgttggagtccacgttctttaatagtggactcttgttccaaactggaacaacactcaaccctatctcgggctattcttttgatttataagggattttgccgatttcggcctattggttaaaaaatgagctgatttaacaaaaatttaacgcgaattttaacaaaatattaacgtttacaattttatggtgcactctcagtacaatctgctctgatgccgcatagttaagccagccccgacacccgccaacacccgctgacgcgccctgacgggcttgtctgctcccggcatccgcttacagacaagctgtgaccgtctccgggagctgcatgtgtcagaggttttcaccgtcatcaccgaaacgcgcgagacgaaagggcctcgtgatacgcctatttttataggttaatgtcatgataataatggtttcttagacgtcaggtggcacttttcggggaaatgtgcgcggaacccctatttgtttatttttctaaatacattcaaatatgtatccgctcatgagacaataaccctgataaatgcttcaataatattgaaaaaggaagagtatgagtattcaacatttccgtgtcgcccttattcccttttttgcggcattttgccttcctgtttttgctcacccagaaacgctggtgaaagtaaaagatgctgaagatcagttgggtgcacgagtgggttacatcgaactggatctcaacagcggtaagatccttgagagttttcgccccgaagaacgttttccaatgatgagcacttttaaagttctgctatgtggcgcggtattatcccgtattgacgccgggcaagagcaactcggtcgccgcatacactattctcagaatgacttggttgagtactcaccagtcacagaaaagcatcttacggatggcatgacagtaagagaattatgcagtgctgccataaccatgagtgataacactgcggccaacttacttctgacaacgatcggaggaccgaaggagctaaccgcttttttgcacaacatgggggatcatgtaactcgccttgatcgttgggaaccggagctgaatgaagccataccaaacgacgagcgtgacaccacgatgcctgtagcaatggcaacaacgttgcgcaaactattaactggcgaactacttactctagcttcccggcaacaattaatagactggatggaggcggataaagttgcaggaccacttctgcgctcggcccttccggctggctggtttattgctgataaatctggagccggtgagcgtgggtctcgcggtatcattgcagcactggggccagatggtaagccctcccgtatcgtagttatctacacgacggggagtcaggcaactatggatgaacgaaatagacagatcgctgagataggtgcctcactgattaagcattggtaactgtcagaccaagtttactcatatatactttagattgatttaaaacttcatttttaatttaaaaggatctaggtgaagatcctttttgataatctcatgaccaaaatcccttaacgtgagttttcgttccactgagcgtcagaccccgtagaaaagatcaaaggatcttcttgagatcctttttttctgcgcgtaatctgctgcttgcaaacaaaaaaaccaccgctaccagcggtggtttgtttgccggatcaagagctaccaactctttttccgaaggtaactggcttcagcagagcgcagataccaaatactgtccttctagtgtagccgtagttaggccaccacttcaagaactctgtagcaccgcctacatacctcgctctgctaatcctgttaccagtggctgctgccagtggcgataagtcgtgtcttaccgggttggactcaagacgatagttaccggataaggcgcagcggtcgggctgaacggggggttcgtgcacacagcccagcttggagcgaacgacctacaccgaactgagatacctacagcgtgagctatgagaaagcgccacgcttcccgaagggagaaaggcggacaggtatccggtaagcggcagggtcggaacaggagagcgcacgagggagcttccagggggaaacgcctggtatctttatagtcctgtcgggtttcgccacctctgacttgagcgtcgatttttgtgatgctcgtcaggggggcggagcctatggaaaaacgccagcaacgcggcctttttacggttcctggccttttgctggccttttgctcacatgttctttcctgcgttatcccctgattctgtggataaccgtattaccgcctttgagtgagctgataccgctcgccgcagccgaacgaccgagcgcagcgagtcagtgagcgaggaagcggaag";
+    	var enzymes = [];
+
+    	var Ladder = Teselagen.models.digest.Ladder;
+    	digestedSequence = Teselagen.bio.sequence.DNATools.createDNASequence("pUC119", puc);
+    	digestedSequence.setCircular(true);
+    	var testEnzymes = ["EcoRI", "BamHI"];
+    	//This array contains the actual RestrictionEnzyme datastructures.
+    	for (var enzyme in testEnzymes){
+    		var temp = testEnzymes[enzyme];
+    		enzymes.push(Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(testEnzymes[enzyme]));
+    	};
+    	//just for testing
+    	var tempSurface = this.digestPanel.surface;
+    	var height = this.digestPanel.surface.height;
+    	var width = this.digestPanel.surface.width;
+    	var gel = Ext.create("Teselagen.models.digest.Gel", {name: "Gel", actualHeight: height, actualWidth: width});
+    	var ladderLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: Ladder.BP_LADDER_BANDS});
+    	gel.insertLane(ladderLane);
+    	var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: digestedSequence, enzymes: enzymes});
+    	gel.insertLane(sampleLane);
+    	var sprites = gel.draw();
+    	//this.ladderSpriteGroup.destroy();
+    	this.ladderSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
+    		surface: this.digestPanel.surface
+    	});
+    	for (var i in sprites){
+    		this.ladderSpriteGroup.add(sprites[i]);
+    	}
+    	this.ladderSpriteGroup.each(function(band){
+    		tempSurface.add(band);
+    	});
+    	this.ladderSpriteGroup.show(true);
+
+    },
+
+
+    /*
+     * Initializes components of the drawing panel
+     */
+    initializeDigestDrawingPanel: function(){
+    	this.digestSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
+    		surface: this.digestPanel.surface
+    	});
+    	var height = this.digestPanel.surface.height;
+    	var width = this.digestPanel.surface.width;
+    	//console.log(this.ladderLane.getLadder());
+    	var digestBG = Ext.create('Ext.draw.Sprite', {
+    		type: 'rect',
+    		height: height,
+    		width: width,
+    		fill: '#000',
+    		x: 0,
+    		y: 0
+    	});
+    	this.digestSpriteGroup.add(digestBG);
+    	var tempSurface = this.digestPanel.surface;
+    	tempSurface.add(digestBG );
+    	this.digestSpriteGroup.show(true);
     },
 });

@@ -109,8 +109,9 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		     groupManager: this.GroupManager,
 		     enzymeListSelector: this.enzymeListSelector
 		 });
-         this.digestManager.showSprites(this.digestSpriteGroup);
-         this.digestManager.updateLadderLane(ladderSelector);
+		 this.digestManager.drawGel();
+//         this.digestManager.showSprites(this.digestSpriteGroup);
+//         this.digestManager.updateLadderLane(ladderSelector);
 		 //'// Makes it look nicer in vim
 	 },
 
