@@ -9,6 +9,7 @@ Ext.define("Teselagen.models.digest.GelBand", {
         BAND_COLOR: '#fff',
 //        BAND_COLOR: '0000',
         CONNECTOR_COLOR: '#999999',
+        labelSize: 16,
         bandHeight: 2,
         actualWidth: 400,//null
         xOffset: 100,//null
@@ -60,19 +61,89 @@ Ext.define("Teselagen.models.digest.GelBand", {
     	var ladderHeight = height * 0.8;
     	var currentLogDifference =  Math.log(this.size / min);
     	var normalizedLogDifference =  currentLogDifference/ totalLogDifference;
-    	var scalingFactor = -(.1 * Math.sin(2*3.14*normalizedLogDifference));
-    	this.bandYPosition = (0.9 * height - (scalingFactor + normalizedLogDifference) * ladderHeight);
+        var scalingFactor = -(.1 * Math.sin(2*3.14*normalizedLogDifference));
+        this.bandYPosition = (0.9 * height - (scalingFactor + normalizedLogDifference) * ladderHeight);
+        /*
+         * Alternate way to calculate
+         * 
+         * I looked on the web for a formula to calculate band size in agarose gels. The only thing
+         * I found was that the distance traveled is inversely proportional to the log of size:
+         * 
+         *  d(this) = 1/Math.log(this.size);
+         *  
+         *  If we assume that the minimum sized fragment runs the full height of the lane then
+         *
+         *  d(min) = height = 1/Math.log(min);
+         *  
+         *  to solve for d(this) using ratios
+         *  
+         *  d(this)       1/Math.log(this.size)
+         *  -------   =   ---------------------
+         *  height        1/Math.log(min)
+         *  
+         *  simplifies to
+         *  
+         *  d(this)       Math.log(min)
+         *  -------   =   ---------------------
+         *  height        Math.log(this.size)
+         *  
+         *  simplifies to
+         *  
+         *                        Math.log(min)
+         *  d(this)  =  height  ---------------------
+         *                      Math.log(this.size)
+         *  
+         */
+        var altY = ladderHeight * Math.log(min) / Math.log(this.size);
+        maxY = ladderHeight * Math.log(min) / Math.log(20000);
+        var scaled = (altY - maxY) * ladderHeight / (ladderHeight - maxY);
+        scaled = scaled + height * .1
+        if (scaled >= height - 4) {
+            scaled = height - 4;
+        }
+        //this.bandYPosition = scaled;
+        /*
+         * 
+         */
+        var halfWidth = this.actualWidth / 2;
         var gelBand = Ext.create('Ext.draw.Sprite', {
             type: 'rect',
             fill: this.BAND_COLOR,
             height: this.bandHeight,
-            width: this.actualWidth * (1 - 2 * this.hPad),
-            x: this.xOffset + (this.actualWidth * this.hPad),
+            width: halfWidth * (1 - 2 * this.hPad),
+            x: this.xOffset + halfWidth + (halfWidth * this.hPad),
             y: this.bandYPosition
         });
     	return gelBand;
+    },
+    /**
+     * Returns a sprite that corresponds to the label for this band
+     * @return {Ext.draw.Sprite}
+     * 
+     */
+    drawLabels: function(){
+        var halfWidth = this.actualWidth / 2;
+        var sizeString = this.size.toString();
+        var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
+//        var paddedSizeString = "";
+//        for (var i = sizeString.length; i <= 6; i++) {
+//            paddedSizeString = paddedSizeString + " ";
+//        }
+//        paddedSizeString = paddedSizeString + sizeString;
+        var gelLabel = Ext.create('Ext.draw.Sprite', {
+            type: 'text',
+            text: sizeString,
+            fill: this.BAND_COLOR,
+            font: this.labelSize + 'px "monospace"',
+            style: {
+                textAlign: 'right',
+                display: 'block',
+                width: '50px'
+            },
+            x: txtOffset + this.xOffset + (halfWidth * this.hPad),
+            y: this.bandYPosition
+        });
+        return gelLabel;
     }
-    
-
 });
  
