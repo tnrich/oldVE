@@ -146,7 +146,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         formBind: true
                     }, {
                         xtype: 'button',
-                        text: 'Cancel'
+                        text: 'Cancel',
+                        cls: 'Cancel'
                     }]
                 }]
             }]
@@ -162,6 +163,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             fr.onload = processText;
             fr.readAsText(file);
         });
+
+        importModal.query('button[cls="Cancel"]')[0].on('click', function () {
+            importModal.close();
+        });
+
 
         function processText() {
             cb(fr.result, file.name);

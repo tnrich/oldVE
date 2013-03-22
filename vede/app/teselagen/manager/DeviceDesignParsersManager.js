@@ -12,6 +12,18 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     observable: "Ext.util.Observable"
   },
 
+  generateDesign: function(binsArray){
+    var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+    var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+    var deprojectId = Ext.getCmp('mainAppPanel').getActiveTab().modelId;
+    deproject.setDesign(design);
+    design.set( 'deproject_id', deprojectId);
+    deproject.set( 'id' , deprojectId );
+
+    Vede.application.fireEvent("ReRenderDECanvas");
+    Vede.application.fireEvent("checkj5Ready");
+  },
+
   parseJSON: function(input,fileName){
     console.log("Parsing JSON file");
     jsonDoc = JSON.parse(input);
@@ -35,27 +47,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         }
       });
     };
-
-    function finishedResolving(){
-      var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-      var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-      var deprojectId = Ext.getCmp('mainAppPanel').getActiveTab().modelId;
-      deproject.setDesign(design);
-      design.set( 'deproject_id', deprojectId);
-      deproject.set( 'id' , deprojectId );
-      
-      //Ext.getCmp('mainAppPanel').getActiveTab().setTitle(fileName.replace(/.json/g));
-      Vede.application.fireEvent("ReRenderDECanvas");
-      Vede.application.fireEvent("checkj5Ready");
-    };
-
-    /*
-    deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
-        name: fileName.replace(/.json/g,''),
-        dateCreated: new Date(),
-        dateModified: new Date()
-    });
-    */
 
     var sequences = [];
 
@@ -89,7 +80,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
               genbankStartBP: part["de:startBP"],
               endBP: part["de:stopBP"],
               revComp: part["de:revComp"],
-              fas: (part["de:parts"]["de:part"]["de:fas"]=='') ? 'None' : part["de:parts"]["de:part"]["de:fas"]
+              fas: (part["de:parts"]["de:part"]["de:fas"]==='') ? 'None' : part["de:parts"]["de:part"]["de:fas"]
           });
 
           var newSequence = Ext.create("Teselagen.models.SequenceFile", {
@@ -107,18 +98,18 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
           //console.log("Parts: "+partsCounter);
           //console.log("Bins: "+binsCounter);
           partsCounter--;
-          if(partsCounter == 0)
+          if(partsCounter === 0)
           {
             newBin.addToParts(tempPartsArray);
             binsArray.push(newBin);
-            
+
             binsCounter--;
 
-            if(binsCounter == 0)
+            if(binsCounter === 0)
             {
-              finishedResolving();
-            }            
-          } 
+              Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray);
+            }
+          }
         });
       }
     }
@@ -130,9 +121,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
   parseXML : function(input,fileName){
 
     console.log("Parsing XML file");
-
-    parser=new DOMParser();
-    xmlDoc=parser.parseFromString(input,"text/xml");
+    parser = new DOMParser();
+    xmlDoc = parser.parseFromString(input,"text/xml");
 
     function getPartByID(targetId){
       var parts = xmlDoc.getElementsByTagNameNS('*','partVO');
@@ -142,7 +132,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var id = part.getElementsByTagNameNS('*','part')[0].attributes[0].value;
         if(id == targetId) return part;
       }
-    };
+    }
 
 
     deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
@@ -181,18 +171,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             genbankStartBP: 1,
             endBP: 7
         });
-        tempPartsArray.push(newPart)
+        tempPartsArray.push(newPart);
       }
       newBin.addToParts(tempPartsArray);
       binsArray.push(newBin);
     }
 
-    var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-    deproject.setDesign(design);
-    Teselagen.manager.ProjectManager.workingProject.deprojects().add(deproject);
-    Teselagen.manager.ProjectManager.loadDesignAndChildResources();
-    Teselagen.manager.ProjectManager.openDEProject(deproject);
-
+    Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray);
   }
 
 });
