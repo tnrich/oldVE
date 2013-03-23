@@ -17,7 +17,7 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
     },
     constructor: function(inData){
         this.initConfig(inData);
-        this.initializeDigestDrawingPanel();
+        //this.initializeDigestDrawingPanel();
     },
     filterEnzymes: function(searchCombo, groupSelector){
         //First we populate the store with the right enzymes 
@@ -194,7 +194,9 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
     	var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: digestedSequence, enzymes: enzymes});
     	gel.insertLane(sampleLane);
     	var sprites = gel.draw();
-    	//this.ladderSpriteGroup.destroy();
+    	if (this.ladderSpriteGroup !== undefined && this.ladderSpriteGroup !== null) {
+    		this.ladderSpriteGroup.destroy();
+    	}
     	this.ladderSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
     		surface: this.digestPanel.surface
     	});

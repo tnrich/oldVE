@@ -54,6 +54,9 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 			 },
 			 "#enzymeGroupSelector-search": {
 				 change: this.searchEnzymes
+			 },
+			 "#drawingSurface": {
+				 resize: this.onGelResize
 			 }
 		 });
 
@@ -76,6 +79,8 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 
 	 onSimulateDigestionOpened: function(manager) {
 		 this.managerWindow = manager;
+		 this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
+		 this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {digestPanel: this.digestPanel });
 		 //this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
 		 //this.DNATools = Teselagen.bio.sequence.DNATools;
 		 var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
@@ -103,18 +108,24 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 console.log(groupArray)
 		 this.enzymeListSelector.store.loadData(groupArray);
 		 this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
-         this.initializeDigestDrawingPanel();
-		 this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {
-		     digestPanel: this.digestPanel,
-		     groupManager: this.GroupManager,
-		     enzymeListSelector: this.enzymeListSelector
-		 });
+         //this.initializeDigestDrawingPanel();
+		 this.digestManager.setDigestPanel(this.digestPanel);
+		 this.digestManager.setGroupManager(this.groupManager);
+		 this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
 		 this.digestManager.drawGel();
 //         this.digestManager.showSprites(this.digestSpriteGroup);
 //         this.digestManager.updateLadderLane(ladderSelector);
 		 //'// Makes it look nicer in vim
 	 },
-
+	 /**
+	  * Populates the itemselector field with enzyme names.
+	  * Called when the user selects a new group in the combobox.
+	  */
+	 onGelResize: function(drawingSurface, width, height, oldWidth, oldHeight, eOpts) {
+		 //having a chicken and the egg problem where this.digestManager is not being made until after this is called
+		 if (this.digestManager === undefined || this.digestManager === null) {return};
+		 this.digestManager.drawGel(drawingSurface, width, height);
+	 },
 	 /**
 	  * Populates the itemselector field with enzyme names.
 	  * Called when the user selects a new group in the combobox.

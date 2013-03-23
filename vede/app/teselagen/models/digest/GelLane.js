@@ -96,10 +96,12 @@ Ext.define("Teselagen.models.digest.GelLane", {
         var ladderHeight = this.actualHeight * 0.8;
         this.bandSprites = [];
         this.refreshDigestion();
-        for (var i = this.bands.length - 1; i >= 0; --i){
+        for (var i = 0; i < this.bands.length; ++i){
             var bandSprite = this.bands[i].draw(totalLogDifference, min, this.getActualHeight());
             this.bandSprites.push(bandSprite);
             var label = this.bands[i].drawLabels();
+            //reset label.shifted
+            label.shifted = false;
             //check the previous label to make sure we don't collide
             if (this.bandSprites.length > 1){
                 var previousLabel = this.bandSprites[this.bandSprites.length-2];
@@ -154,6 +156,8 @@ Ext.define("Teselagen.models.digest.GelLane", {
         	this.mapFragmentsToBands(this.digestionCalculator.digestSequence(this.sequence, this.enzymes));
         }
         //else this must be a ladder
+    	//sort the bands in reverse size order
+    	this.bands.sort(function(x, y){ return x.size - y.size });
     },
     
     /**

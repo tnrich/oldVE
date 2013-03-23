@@ -7,7 +7,12 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
     requires: ['Ext.form.Panel', 'Ext.ux.form.MultiSelect', 'Ext.ux.form.ItemSelector'],
     height: 500,
     width: 900,
-    resizable: false,
+    layout: {
+        align: 'stretch',
+        type: 'hbox'
+    },
+    resizable: true,
+    constrainHeader: true,
     title: 'Gel Digest',
     modal: true,
     initComponent: function() {
@@ -32,10 +37,10 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
 
         var me = this;
         Ext.applyIf(me, {
-            dockedItems: [ {
+            items: [ {
                 xtype: 'container',
-                height: 470,
-                width: 500,
+                height: '100%',
+                width: '100%',
                 layout: {
                     align: 'stretch',
                     type: 'hbox'
@@ -44,55 +49,66 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     xtype: 'panel',
                     width: 500,
                     title: 'Enzymes', 
-                    flex: 1,
+                    flex: 0,
                     layout: {
-                        type: 'absolute'
-                    } ,
-                    items: [ {
-                        xtype: 'combobox',
-                        id: 'enzymeGroupSelector-digest',
-                        store: groupStore, //change this store to query database
-                        width: 195,
-                        editable: false,
-                        queryMode: 'local',
-                        value: 'Common',
-                        displayField: 'name',
-                        x: 10,
-                        y: 10
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [ 
+                    {
+                    	xtype: 'panel',
+                    	width: 500,
+                    	layout: {
+                    		align: 'stretch',
+                    		type: 'hbox'
+                    	},
+                    	items: [{
+                            xtype: 'combobox',
+                            id: 'enzymeGroupSelector-digest',
+                            store: groupStore, //change this store to query database
+                            flex: 1,
+                            editable: false,
+                            queryMode: 'local',
+                            value: 'Common',
+                            displayField: 'name',
+                            x: 10,
+                            y: 10
+                        },
+                        {
+                            xtype: 'combobox',
+                            flex: 1,
+                            hideTrigger: true,
+                            valueField: 'name',
+                            emptyText: 'Search for Enzyme',
+                            id: 'enzymeGroupSelector-search',
+                            mode: 'local',
+                            disabled: false,
+                            //store: ['One'], 
+                            //disabled: true,
+                            x: 235,
+                            y: 10
+                        }
+                    	]
                     },
                     {
-                        xtype: 'combobox',
-                        width: 195,
-                        hideTrigger: true,
-                        valueField: 'name',
-                        emptyText: 'Search for Enzyme',
-                        id: 'enzymeGroupSelector-search',
-                        mode: 'local',
-                        disabled: false,
-                        //store: ['One'], 
-                        //disabled: true,
-                        x: 235,
-                        y: 10
-                    },
-                    {
-                        xtype: 'itemselector',
-                        name: 'itemselector',
-                        height: 370,
-                        width: 429,
-                        id: 'enzymeListSelector-digest',
-                        imagePath: '/extjs/examples/ux/css/images/',
-                        store: enzymeListStore,
-                        displayField: 'name',
-                        valueField: 'name',
-                        buttons: ["add", "remove"],
-                        buttonsText: {add: ">", remove: "<"},
-                        allowBlank: true,
-                        msgTarget: 'side',
-                        fromTitle: 'Available',
-                        toTitle: 'Selected',
-                        x: 10,
-                        y:40
-                    },
+                		xtype: 'itemselector',
+                		name: 'itemselector',
+                		height: 370,
+                		width: 429,
+                		id: 'enzymeListSelector-digest',
+                		imagePath: '/extjs/examples/ux/css/images/',
+                		store: enzymeListStore,
+                		displayField: 'name',
+                		valueField: 'name',
+                		buttons: ["add", "remove"],
+                		buttonsText: {add: ">", remove: "<"},
+                		allowBlank: true,
+                		msgTarget: 'side',
+                		fromTitle: 'Available',
+                		toTitle: 'Selected',
+                		x: 10,
+                		y:40
+                	},
                     {
                         xtype: 'button',
                         id: 'digestButton',
@@ -104,45 +120,12 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                 },
                 {
                     xtype: 'panel',
-                    height: 500,
-                    width: 400,
-                    layout: {
-                        align: 'middle',
-                        type: 'hbox'
-                    },
-                    dock: 'right',
-                    title: 'Digest Results',
                     flex: 1,
-
-                    dockedItems: [ {
-                        xtype: 'container',
-                        height: 400,
-                        width: 460,
-                        layout: {
-                            align: 'middle',
-                            type: 'hbox'
-                        },
-                        dock: 'bottom',
-                        items: [ {
-                            xtype: 'panel',
-                            height: 400,
-                            width: 400,
-                            layout: {
-                                type: 'absolute'
-                            },
-                            flex: 1,
-                            items: [ {
-                                xtype: 'draw',
-                                id: 'drawingSurface',
-                                height: 400,
-                                width: 445,
-                                x: 0,
-                                y: 0
-                            }]
-                        },
-                        ]
-                    }
-                    ],
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    title: 'Digest Results',
 
                     items: [ {
                         xtype: 'fieldcontainer',
@@ -150,23 +133,43 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                         padding: '10 0 30 10',
                         width: 400,
                         fieldLabel: '',
+                        flex: 0,
                         items: [ {
                             xtype: 'combobox',
                             height: 21,
                             id: 'ladderSelector',
                             padding: ' 10 0 0 10',
-                            width: 327,
+                            width: 400,
                             value: 'GeneRuler 1kb Plus DNA',
                             store: ['GeneRuler 1kb Plus DNA', 'GeneRuler 100bp Plus DNA'],
                             fieldLabel: 'Ladder',
                             editable: false,
                             x: 10,
                             y: 10,
-                        }]
-                    }]
-                }]
-            }]
-        });
+                        }]},
+                        {
+                            xtype: 'panel',
+                            flex: 1,
+                            layout: {
+                                type: 'vbox', 
+                                align: 'stretch'
+                            },
+                            bodyStyle: {
+                                background: '#000',
+                            },
+                            items: [ {
+                                xtype: 'draw',
+                                id: 'drawingSurface',
+                                flex: 1,
+                                x: 0,
+                                y: 0
+                            }
+                            ]
+                        }
+                ]
+                }
+            ]
+        }]});
         me.callParent(arguments);
     },
 
