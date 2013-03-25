@@ -14,11 +14,25 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         laddderSpriteGroup: null,
         groupManager: null,
         enzymeListSelector: null,
-        gel: null
+        gel: null, 
+        Ladder: null,
+        enzymes: null,
+        dnaSequence: null
     },
     constructor: function(inData){
         this.initConfig(inData);
+    	this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
         //this.initializeDigestDrawingPanel();
+    },
+    /*
+     * Updates the DNA sequence to be digested
+     * 
+     */
+    setDnaSequence: function(dnaSequence){
+    	this.dnaSequence = dnaSequence;
+    	//For right now, vector editor does not set the sequence as circular when reading from GenBank but 
+    	// the digestion assumes that it is circular
+    	dnaSequence.setCircular(true);
     },
     filterEnzymes: function(searchCombo, groupSelector){
         //First we populate the store with the right enzymes 
@@ -63,52 +77,9 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      * Updates the Ladder based on the selection in the ladder drop down.
      */
     updateLadderLane: function(ladder){
-        //Destroy all previous ladder bands
-        this.ladderSpriteGroup.destroy();
-        this.ladderSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
-            surface: this.digestPanel.surface
-        });
-        //Set the sample lane ladder so that sample ladder bands scale
-        //correctly
-        this.sampleLane.setLadder(ladder);
-        this.ladderLane.updateLadderLane(ladder);
-
-        //Draw all ladder bands and text labels
-        Ext.each(this.ladderLane.getBandYPositions(), function(yPosition, index){
-            var gelBand = Ext.create('Ext.draw.Sprite', {
-                type: 'rect',
-                fill: '#fff',
-                height: 2,
-                width: 100,
-                //      surface: this.digestPanel.surface,
-                x: 100,
-                y: yPosition
-            });
-            var bandText = Ext.create('Ext.draw.Sprite', {
-                type: 'text',
-                text: this.ladderLane.getLadder()[index],
-                fill: '#fff',
-                size: 50,
-                surface: this.digestPanel.surface,
-                x: 40,
-                y: yPosition
-            });
-
-            this.ladderSpriteGroup.add(bandText); 
-            this.ladderSpriteGroup.add(gelBand); 
-
-        }, this);
-
-        //Draw all ladder sprites using helper method
-        this.showSprites(this.ladderSpriteGroup);
-        console.log("changing ladder");
-
-        //Update sample lane everytime the ladder changes (to rescale band
-        //placement). The first time you do this, there won't be any enzymes
-        //selected, so an error would be thrown. A slightly hacky way to deal
-        //with this issue.
-        this.updateSampleLane(this.enzymeListSelector.toField.store);
-        this.sampleLaneInitialized = true;
+        this.selectedLadder = this.Ladder.ladderTypes.get(ladder);
+        //Trigger redrawing everything after the ladder has changed
+        this.drawGel();
     },
     /*
      * Updates sample lane contents, including rescaling based on ladder
@@ -117,57 +88,43 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
     updateSampleLane: function(selectedEnzymes){
         console.log("Updating sample...");
         console.log(selectedEnzymes);
-        if (!this.sampleLaneInitialized) return;
-
-        var currentSequence = "";
-
-        //This array contains the actual RestrictionEnzyme datastructures.
-        var enzymes = [];
+        //Clear the enzymes array
+        //Have to use local scope because calls to this in the each loop refere to the selectedEnzymes object, not this
+        var tempEnzymes = [];
         selectedEnzymes.each(function(enzyme){
             console.log(enzyme.data.name);
-            enzymes.push(Teselagen.manager.RestrictionEnzymeGroupManager.getEnzymeByName(enzyme.data.name));
+            tempEnzymes.push(Teselagen.manager.RestrictionEnzymeGroupManager.getEnzymeByName(enzyme.data.name));
         });
-        //create a new lane based on this sequence and the selected enzymes
-        var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: "Sample", sequence: this.dnaSequence, enzymes: enzymes});
-        //insert the new lane into the Gel
-        gel.insertLane(newLane);
-
-    },
-
-    /*
-     * A helper method to show a sprite group - the builtin wasn't working.
-     */
-    showSprites: function(pSpriteGroup){
-        var tempSurface = this.digestPanel.surface;
-        pSpriteGroup.each(function(band){
-            tempSurface.add(band);
-        });
-        pSpriteGroup.show(true);
-
+        this.enzymes = tempEnzymes;
+        this.drawGel();
     },
     drawGel: function(pSpriteGroup){
+    	if (this.digestPanel === null) {
+    		//We got here before the manager is initialized so bail
+    		return;
+    	}
     	//just for testing
-    	var digestedSequence = null;
-    	var puc = "agcgcccaatacgcaaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcccgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggcaccccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggataacaatttcacacaggaaacagctatgaccatgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcctgatgcggtattttctccttacgcatctgtgcggtatttcacaccgcatacgtcaaagcaaccatagtacgcgccctgtagcggcgcattaagcgcggcgggtgtggtggttacgcgcagcgtgaccgctacacttgccagcgccctagcgcccgctcctttcgctttcttcccttcctttctcgccacgttcgccggctttccccgtcaagctctaaatcgggggctccctttagggttccgatttagtgctttacggcacctcgaccccaaaaaacttgatttgggtgatggttcacgtagtgggccatcgccctgatagacggtttttcgccctttgacgttggagtccacgttctttaatagtggactcttgttccaaactggaacaacactcaaccctatctcgggctattcttttgatttataagggattttgccgatttcggcctattggttaaaaaatgagctgatttaacaaaaatttaacgcgaattttaacaaaatattaacgtttacaattttatggtgcactctcagtacaatctgctctgatgccgcatagttaagccagccccgacacccgccaacacccgctgacgcgccctgacgggcttgtctgctcccggcatccgcttacagacaagctgtgaccgtctccgggagctgcatgtgtcagaggttttcaccgtcatcaccgaaacgcgcgagacgaaagggcctcgtgatacgcctatttttataggttaatgtcatgataataatggtttcttagacgtcaggtggcacttttcggggaaatgtgcgcggaacccctatttgtttatttttctaaatacattcaaatatgtatccgctcatgagacaataaccctgataaatgcttcaataatattgaaaaaggaagagtatgagtattcaacatttccgtgtcgcccttattcccttttttgcggcattttgccttcctgtttttgctcacccagaaacgctggtgaaagtaaaagatgctgaagatcagttgggtgcacgagtgggttacatcgaactggatctcaacagcggtaagatccttgagagttttcgccccgaagaacgttttccaatgatgagcacttttaaagttctgctatgtggcgcggtattatcccgtattgacgccgggcaagagcaactcggtcgccgcatacactattctcagaatgacttggttgagtactcaccagtcacagaaaagcatcttacggatggcatgacagtaagagaattatgcagtgctgccataaccatgagtgataacactgcggccaacttacttctgacaacgatcggaggaccgaaggagctaaccgcttttttgcacaacatgggggatcatgtaactcgccttgatcgttgggaaccggagctgaatgaagccataccaaacgacgagcgtgacaccacgatgcctgtagcaatggcaacaacgttgcgcaaactattaactggcgaactacttactctagcttcccggcaacaattaatagactggatggaggcggataaagttgcaggaccacttctgcgctcggcccttccggctggctggtttattgctgataaatctggagccggtgagcgtgggtctcgcggtatcattgcagcactggggccagatggtaagccctcccgtatcgtagttatctacacgacggggagtcaggcaactatggatgaacgaaatagacagatcgctgagataggtgcctcactgattaagcattggtaactgtcagaccaagtttactcatatatactttagattgatttaaaacttcatttttaatttaaaaggatctaggtgaagatcctttttgataatctcatgaccaaaatcccttaacgtgagttttcgttccactgagcgtcagaccccgtagaaaagatcaaaggatcttcttgagatcctttttttctgcgcgtaatctgctgcttgcaaacaaaaaaaccaccgctaccagcggtggtttgtttgccggatcaagagctaccaactctttttccgaaggtaactggcttcagcagagcgcagataccaaatactgtccttctagtgtagccgtagttaggccaccacttcaagaactctgtagcaccgcctacatacctcgctctgctaatcctgttaccagtggctgctgccagtggcgataagtcgtgtcttaccgggttggactcaagacgatagttaccggataaggcgcagcggtcgggctgaacggggggttcgtgcacacagcccagcttggagcgaacgacctacaccgaactgagatacctacagcgtgagctatgagaaagcgccacgcttcccgaagggagaaaggcggacaggtatccggtaagcggcagggtcggaacaggagagcgcacgagggagcttccagggggaaacgcctggtatctttatagtcctgtcgggtttcgccacctctgacttgagcgtcgatttttgtgatgctcgtcaggggggcggagcctatggaaaaacgccagcaacgcggcctttttacggttcctggccttttgctggccttttgctcacatgttctttcctgcgttatcccctgattctgtggataaccgtattaccgcctttgagtgagctgataccgctcgccgcagccgaacgaccgagcgcagcgagtcagtgagcgaggaagcggaag";
-    	var enzymes = [];
-
-    	var Ladder = Teselagen.models.digest.Ladder;
-    	digestedSequence = Teselagen.bio.sequence.DNATools.createDNASequence("pUC119", puc);
-    	digestedSequence.setCircular(true);
-    	var testEnzymes = ["EcoRI", "BamHI"];
-    	//This array contains the actual RestrictionEnzyme datastructures.
-    	for (var enzyme in testEnzymes){
-    		var temp = testEnzymes[enzyme];
-    		enzymes.push(Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(testEnzymes[enzyme]));
-    	};
+//    	var digestedSequence = null;
+//    	var puc = "agcgcccaatacgcaaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcccgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggcaccccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggataacaatttcacacaggaaacagctatgaccatgattacgccaagcttgcatgcctgcaggtcgactctagaggatccccgggtaccgagctcgaattcactggccgtcgttttacaacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcctgatgcggtattttctccttacgcatctgtgcggtatttcacaccgcatacgtcaaagcaaccatagtacgcgccctgtagcggcgcattaagcgcggcgggtgtggtggttacgcgcagcgtgaccgctacacttgccagcgccctagcgcccgctcctttcgctttcttcccttcctttctcgccacgttcgccggctttccccgtcaagctctaaatcgggggctccctttagggttccgatttagtgctttacggcacctcgaccccaaaaaacttgatttgggtgatggttcacgtagtgggccatcgccctgatagacggtttttcgccctttgacgttggagtccacgttctttaatagtggactcttgttccaaactggaacaacactcaaccctatctcgggctattcttttgatttataagggattttgccgatttcggcctattggttaaaaaatgagctgatttaacaaaaatttaacgcgaattttaacaaaatattaacgtttacaattttatggtgcactctcagtacaatctgctctgatgccgcatagttaagccagccccgacacccgccaacacccgctgacgcgccctgacgggcttgtctgctcccggcatccgcttacagacaagctgtgaccgtctccgggagctgcatgtgtcagaggttttcaccgtcatcaccgaaacgcgcgagacgaaagggcctcgtgatacgcctatttttataggttaatgtcatgataataatggtttcttagacgtcaggtggcacttttcggggaaatgtgcgcggaacccctatttgtttatttttctaaatacattcaaatatgtatccgctcatgagacaataaccctgataaatgcttcaataatattgaaaaaggaagagtatgagtattcaacatttccgtgtcgcccttattcccttttttgcggcattttgccttcctgtttttgctcacccagaaacgctggtgaaagtaaaagatgctgaagatcagttgggtgcacgagtgggttacatcgaactggatctcaacagcggtaagatccttgagagttttcgccccgaagaacgttttccaatgatgagcacttttaaagttctgctatgtggcgcggtattatcccgtattgacgccgggcaagagcaactcggtcgccgcatacactattctcagaatgacttggttgagtactcaccagtcacagaaaagcatcttacggatggcatgacagtaagagaattatgcagtgctgccataaccatgagtgataacactgcggccaacttacttctgacaacgatcggaggaccgaaggagctaaccgcttttttgcacaacatgggggatcatgtaactcgccttgatcgttgggaaccggagctgaatgaagccataccaaacgacgagcgtgacaccacgatgcctgtagcaatggcaacaacgttgcgcaaactattaactggcgaactacttactctagcttcccggcaacaattaatagactggatggaggcggataaagttgcaggaccacttctgcgctcggcccttccggctggctggtttattgctgataaatctggagccggtgagcgtgggtctcgcggtatcattgcagcactggggccagatggtaagccctcccgtatcgtagttatctacacgacggggagtcaggcaactatggatgaacgaaatagacagatcgctgagataggtgcctcactgattaagcattggtaactgtcagaccaagtttactcatatatactttagattgatttaaaacttcatttttaatttaaaaggatctaggtgaagatcctttttgataatctcatgaccaaaatcccttaacgtgagttttcgttccactgagcgtcagaccccgtagaaaagatcaaaggatcttcttgagatcctttttttctgcgcgtaatctgctgcttgcaaacaaaaaaaccaccgctaccagcggtggtttgtttgccggatcaagagctaccaactctttttccgaaggtaactggcttcagcagagcgcagataccaaatactgtccttctagtgtagccgtagttaggccaccacttcaagaactctgtagcaccgcctacatacctcgctctgctaatcctgttaccagtggctgctgccagtggcgataagtcgtgtcttaccgggttggactcaagacgatagttaccggataaggcgcagcggtcgggctgaacggggggttcgtgcacacagcccagcttggagcgaacgacctacaccgaactgagatacctacagcgtgagctatgagaaagcgccacgcttcccgaagggagaaaggcggacaggtatccggtaagcggcagggtcggaacaggagagcgcacgagggagcttccagggggaaacgcctggtatctttatagtcctgtcgggtttcgccacctctgacttgagcgtcgatttttgtgatgctcgtcaggggggcggagcctatggaaaaacgccagcaacgcggcctttttacggttcctggccttttgctggccttttgctcacatgttctttcctgcgttatcccctgattctgtggataaccgtattaccgcctttgagtgagctgataccgctcgccgcagccgaacgaccgagcgcagcgagtcagtgagcgaggaagcggaag";
+//    	var enzymes = [];
+//
+//    	var Ladder = Teselagen.models.digest.Ladder;
+//    	digestedSequence = Teselagen.bio.sequence.DNATools.createDNASequence("pUC119", puc);
+//    	digestedSequence.setCircular(true);
+//    	var testEnzymes = ["EcoRI", "BamHI"];
+//    	//This array contains the actual RestrictionEnzyme datastructures.
+//    	for (var enzyme in testEnzymes){
+//    		var temp = testEnzymes[enzyme];
+//    		enzymes.push(Teselagen.bio.enzymes.RestrictionEnzymeManager.getRestrictionEnzyme(testEnzymes[enzyme]));
+//    	};
     	//just for testing
     	var tempSurface = this.digestPanel.surface;
     	var height = this.digestPanel.surface.height;
     	var width = this.digestPanel.surface.width;
     	var gel = Ext.create("Teselagen.models.digest.Gel", {name: "Gel", actualHeight: height, actualWidth: width});
-    	var ladderLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: Ladder.BP_LADDER_BANDS});
+    	var ladderLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: this.selectedLadder});
     	gel.insertLane(ladderLane);
-    	var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: digestedSequence, enzymes: enzymes});
+    	var sampleLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestA", sequence: this.dnaSequence, enzymes: this.enzymes});
     	gel.insertLane(sampleLane);
     	var sprites = gel.draw();
     	if (this.ladderSpriteGroup !== undefined && this.ladderSpriteGroup !== null) {

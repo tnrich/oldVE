@@ -8,6 +8,7 @@
 Ext.define("Teselagen.models.digest.Ladder", {
 
     config: {
+    	ladderTypes: null,
         bandSizes: null
     },
     statics: {
@@ -32,7 +33,7 @@ Ext.define("Teselagen.models.digest.Ladder", {
         PBR322_LADDER_BANDS: [587, 540, 502, 458, 434, 267, 234, 213, 192, 184, 124, 123, 104, 89, 90],
         //Lambda DNA/EcoRI+HindIII Marker http://www.thermoscientificbio.com/nucleic-acid-electrophor
         LAMBDA_LADDER_BANDS: [21226, 5148, 4973, 4268, 3530, 2027, 1904, 1584, 1375, 947, 831, 564],
-        KB_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100],
+        KB_LADDER_BANDS: [3000, 2000, 1500, 1200, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]
     },
 
 	/**
@@ -49,9 +50,17 @@ Ext.define("Teselagen.models.digest.Ladder", {
     constructor: function(inData){
         this.initConfig(inData);
         this.statics();
+        this.ladderTypes = new Ext.util.HashMap();
+        this.ladderTypes.add("GeneRuler High Range DNA Ladder 10,171-48,502 bp", this.self.GR_HIGH_RANGE_LADDER_BANDS);
+        this.ladderTypes.add("Generuler 1 kb DNA Ladder 250-10000 bp", this.self.GR_1KB_LADDER_BANDS);
+        this.ladderTypes.add("GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", this.self.GR_1KB_PLUS_LADDER_BANDS);
+        this.ladderTypes.add("GeneRuler 100 bp DNA Ladder 100-1000 bp", this.self.GR_100BP_LADDER_BANDS);
+        this.ladderTypes.add("GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", this.self.GR_100BP_PLUS_LADDER_BANDS);
+        this.ladderTypes.add("GeneRuler 50 bp DNA Ladder, 50-1000 bp", this.self.GR_50BP_LADDER_BANDS);
+        this.ladderTypes.add("GeneRuler Low Range DNA Ladder 25-700 bp", this.self.GR_LOW_RANGE_LADDER_BANDS);
 
-        this.setLadder(inData.ladderName);
-                return this;
+//        this.setLadder(inData.ladderName);
+//                return this;
 
     },
 

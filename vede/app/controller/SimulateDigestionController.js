@@ -41,6 +41,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
 		 this.DNATools = Teselagen.bio.sequence.DNATools;
 		 this.filterTaskRunner = new Ext.util.TaskRunner();
+		 this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {});
 		 this.control({
 			 "#enzymeGroupSelector-digest": {
 				 change: this.onEnzymeGroupSelected
@@ -57,6 +58,9 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 			 },
 			 "#drawingSurface": {
 				 resize: this.onGelResize
+			 },
+			 "#enzymeListSelector-digest": {
+				 change: this.onDigestButtonClick
 			 }
 		 });
 
@@ -73,6 +77,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 } else {
 			 this.dnaSequence = ""; 
 		 };
+		 this.digestManager.setDnaSequence(this.dnaSequence);
 
 //				 console.log("able to deal with completeSequence");
 	 },
@@ -80,7 +85,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 	 onSimulateDigestionOpened: function(manager) {
 		 this.managerWindow = manager;
 		 this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
-		 this.digestManager = Ext.create("Teselagen.manager.SimulateDigestionManager", {digestPanel: this.digestPanel });
+		 this.digestManager.digestPanel = this.digestPanel;
 		 //this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
 		 //this.DNATools = Teselagen.bio.sequence.DNATools;
 		 var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
@@ -112,34 +117,9 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 this.digestManager.setDigestPanel(this.digestPanel);
 		 this.digestManager.setGroupManager(this.GroupManager);
 		 this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
+		 var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
+		 this.updateLadderLane(ladderSelector);
 		 this.digestManager.drawGel();
-
-//	        var tip = Ext.create('Ext.tip.ToolTip', {
-//	            target: "drawingSurface",
-//	            html: 'Test'
-//	        });
-//         this.digestManager.showSprites(this.digestSpriteGroup);
-//         this.digestManager.updateLadderLane(ladderSelector);
-		 /*
-		  * Tooltip stuff
-		  */
-		     //var view = manager.getView();
-//		     	var tip = Ext.create('Ext.tip.ToolTip', {
-//		     	    // The overall target element.
-//		     	    target: manager.getEl(),
-//		     	    // Each grid row causes its own separate show and hide.
-//		     	    delegate: manager,
-//		     	    // Moving within the row should not hide the tip.
-//		     	    trackMouse: true,
-//		     	    // Render immediately so that tip.body can be referenced prior to the first show.
-//		     	    renderTo: Ext.getBody(),
-//		     	    listeners: {
-//		     	        // Change content dynamically depending on which element triggered the show.
-//		     	        beforeshow: function updateTipBody(tip) {
-//		     	            tip.update('Over item "' + manager.query(tip.triggerElement.getName()).getName() + '"');
-//		     	        }
-//		     	    }
-//		     	});
 		 //'// Makes it look nicer in vim
 	 },
 	 /**
