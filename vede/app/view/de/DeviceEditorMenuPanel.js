@@ -60,7 +60,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 }]
             }
         }, 
-        {
+/*        {
             xtype: 'button',
             text: 'Import',
             cls: 'importMenu',
@@ -79,6 +79,17 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 }]
             }
         }, 
+*/
+        {
+            xtype: 'filefield',
+            buttonOnly: true,
+            buttonConfig: {
+                text: "Import",
+                scale: 'small',
+                tooltip: 'Import File'
+            },
+            cls: 'DEimportBtn'
+        },
         {
             xtype: 'button',
             text: 'Insert',
