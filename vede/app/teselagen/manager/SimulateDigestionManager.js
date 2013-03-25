@@ -13,7 +13,8 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         sampleSpriteGroup: null,
         laddderSpriteGroup: null,
         groupManager: null,
-        enzymeListSelector: null
+        enzymeListSelector: null,
+        gel: null
     },
     constructor: function(inData){
         this.initConfig(inData);
@@ -126,35 +127,10 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
             console.log(enzyme.data.name);
             enzymes.push(Teselagen.manager.RestrictionEnzymeGroupManager.getEnzymeByName(enzyme.data.name));
         });
-
-        //Digest the sequence with all of the restriction enzymes you've
-        //selected
-        var newFragments = this.DigestionCalculator.digestSequence(this.dnaSequence, enzymes);
-        this.sampleSpriteGroup.destroy();
-        this.sampleSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
-            surface: this.digestPanel.surface
-        });
-        this.sampleLane.setFragments(newFragments);
-        // console.log(this.sampleLane.getBandYPositions());
-        this.sampleLane.redrawBands(); 
-
-        //Draw all bands in the sample lane
-        Ext.each(this.sampleLane.getBandYPositions(), function(yPosition, index){
-            var gelBand = Ext.create('Ext.draw.Sprite', {
-                type: 'rect',
-                fill: '#fff',
-                height: 2,
-                width: 100,
-                x: 300,
-                y: yPosition
-            });
-
-            this.sampleSpriteGroup.add(gelBand); 
-
-        }, this);
-        // this.ladderSpriteGroup.show(true);
-        this.showSprites(this.sampleSpriteGroup);
-        console.log("changing sample");
+        //create a new lane based on this sequence and the selected enzymes
+        var newLane = Ext.create("Teselagen.models.digest.GelLane", {name: "Sample", sequence: this.dnaSequence, enzymes: enzymes});
+        //insert the new lane into the Gel
+        gel.insertLane(newLane);
 
     },
 
@@ -208,6 +184,19 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
     	});
     	this.ladderSpriteGroup.show(true);
 
+    	for (var i in sprites){
+    		//only show tooltips for the products of digestion. I tried to make these tooltips while making the sprites but
+    		// it doesn't work. It seems you have to wait until the sprites have rendered to make the tooltips.
+    		// http://garysieling.com/blog/extjs-tooltip-example
+    		if (sprites[i].bandType === "digest") {
+	            var tip = Ext.create('Ext.tip.ToolTip', {
+	                target: sprites[i].id,
+	                showDelay: 0, //Show this tip immediately after the mouseover
+	                dismissDelay: 0, //Never hide this tooltip if the mouse is still over the sprite
+	                html: sprites[i].size + " bp, " + sprites[i].start + "(" + sprites[i].startRE + ").." + sprites[i].end + "(" + sprites[i].endRE + ")"
+	            });
+    		}
+    	}
     },
 
 

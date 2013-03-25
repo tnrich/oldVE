@@ -110,11 +110,36 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
          //this.initializeDigestDrawingPanel();
 		 this.digestManager.setDigestPanel(this.digestPanel);
-		 this.digestManager.setGroupManager(this.groupManager);
+		 this.digestManager.setGroupManager(this.GroupManager);
 		 this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
 		 this.digestManager.drawGel();
+
+//	        var tip = Ext.create('Ext.tip.ToolTip', {
+//	            target: "drawingSurface",
+//	            html: 'Test'
+//	        });
 //         this.digestManager.showSprites(this.digestSpriteGroup);
 //         this.digestManager.updateLadderLane(ladderSelector);
+		 /*
+		  * Tooltip stuff
+		  */
+		     //var view = manager.getView();
+//		     	var tip = Ext.create('Ext.tip.ToolTip', {
+//		     	    // The overall target element.
+//		     	    target: manager.getEl(),
+//		     	    // Each grid row causes its own separate show and hide.
+//		     	    delegate: manager,
+//		     	    // Moving within the row should not hide the tip.
+//		     	    trackMouse: true,
+//		     	    // Render immediately so that tip.body can be referenced prior to the first show.
+//		     	    renderTo: Ext.getBody(),
+//		     	    listeners: {
+//		     	        // Change content dynamically depending on which element triggered the show.
+//		     	        beforeshow: function updateTipBody(tip) {
+//		     	            tip.update('Over item "' + manager.query(tip.triggerElement.getName()).getName() + '"');
+//		     	        }
+//		     	    }
+//		     	});
 		 //'// Makes it look nicer in vim
 	 },
 	 /**

@@ -47,7 +47,7 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                 },
                 items: [ {
                     xtype: 'panel',
-                    width: 500,
+                    width: 300,
                     title: 'Enzymes', 
                     flex: 0,
                     layout: {
@@ -57,7 +57,7 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     items: [ 
                     {
                     	xtype: 'panel',
-                    	width: 500,
+                    	flex: 0,
                     	layout: {
                     		align: 'stretch',
                     		type: 'hbox'
@@ -93,8 +93,7 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                     {
                 		xtype: 'itemselector',
                 		name: 'itemselector',
-                		height: 370,
-                		width: 429,
+                        flex: 1,
                 		id: 'enzymeListSelector-digest',
                 		imagePath: '/extjs/examples/ux/css/images/',
                 		store: enzymeListStore,
@@ -106,17 +105,27 @@ Ext.define('Vede.view.SimulateDigestionWindow', {
                 		msgTarget: 'side',
                 		fromTitle: 'Available',
                 		toTitle: 'Selected',
-                		x: 10,
-                		y:40
+                		//x: 10,
+                		//y:40
                 	},
-                    {
-                        xtype: 'button',
-                        id: 'digestButton',
-                        width: 90,
-                        text: 'Run Digest',
-                        x: 340,
-                        y: 415
-                    } ] 
+                	{xtype: 'panel',
+                    	flex: 0,
+                    	layout: {
+                    		align: 'right',
+                    		type: 'vbox'
+                    	},
+                    	items: [
+                            {
+                                xtype: 'button',
+                                id: 'digestButton',
+                                width: 90,
+                                text: 'Run Digest',
+                                flex: 0
+                            }
+                            ]
+                        
+                	}
+                	]
                 },
                 {
                     xtype: 'panel',

@@ -7,10 +7,9 @@ Ext.define("Teselagen.models.digest.GelBand", {
 
     config: {
         BAND_COLOR: '#fff',
-//        BAND_COLOR: '0000',
         CONNECTOR_COLOR: '#999999',
         labelSize: 16,
-        bandHeight: 2,
+        bandHeight: 4,
         actualWidth: 400,//null
         xOffset: 100,//null
         bandYPosition: null,
@@ -28,9 +27,13 @@ Ext.define("Teselagen.models.digest.GelBand", {
          */
         end: null,
         /**
-         * The size of the band in base pairs
+         * The {Number} size of the band in base pairs
          */
-        size: 0
+        size: 0,
+        /**
+         * A {Teselagen.bio.sequence.dna.DigestionFragment} that represents this particular band
+         */
+        digestionFragment: null
     },
     /**
      * You can provide a {Teselagen.bio.sequence.dna.DigestionFragment} to inData as
@@ -92,6 +95,8 @@ Ext.define("Teselagen.models.digest.GelBand", {
          *                        Math.log(min)
          *  d(this)  =  height  ---------------------
          *                      Math.log(this.size)
+         *                      
+         *  But ultimately this doesn't look as nice as the other way, so I'm keeping that even though I don't understand it.
          *  
          */
         var altY = ladderHeight * Math.log(min) / Math.log(this.size);
@@ -106,6 +111,7 @@ Ext.define("Teselagen.models.digest.GelBand", {
          * 
          */
         var halfWidth = this.actualWidth / 2;
+        var type = "ladder";
         var gelBand = Ext.create('Ext.draw.Sprite', {
             type: 'rect',
             fill: this.BAND_COLOR,
@@ -114,6 +120,14 @@ Ext.define("Teselagen.models.digest.GelBand", {
             x: this.xOffset + halfWidth + (halfWidth * this.hPad),
             y: this.bandYPosition
         });
+        if (this.isDigest()){
+        	gelBand.bandType = "digest";
+        	gelBand.size = this.getSize();
+        	gelBand.start = this.digestionFragment.getStart();
+        	gelBand.end = this.digestionFragment.getEnd();
+        	gelBand.startRE = this.digestionFragment.getStartRE().getName();
+        	gelBand.endRE = this.digestionFragment.getEndRE().getName();
+        }
     	return gelBand;
     },
     /**
@@ -125,11 +139,6 @@ Ext.define("Teselagen.models.digest.GelBand", {
         var halfWidth = this.actualWidth / 2;
         var sizeString = this.size.toString();
         var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
-//        var paddedSizeString = "";
-//        for (var i = sizeString.length; i <= 6; i++) {
-//            paddedSizeString = paddedSizeString + " ";
-//        }
-//        paddedSizeString = paddedSizeString + sizeString;
         var gelLabel = Ext.create('Ext.draw.Sprite', {
             type: 'text',
             text: sizeString,
@@ -144,6 +153,14 @@ Ext.define("Teselagen.models.digest.GelBand", {
             y: this.bandYPosition
         });
         return gelLabel;
+    },
+    /**
+     * Returns true if this band is the product of a digest, otherwise false
+     * @return {Boolean}
+     * 
+     */
+    isDigest: function(){
+    	return (this.digestionFragment !== null);
     }
 });
  
