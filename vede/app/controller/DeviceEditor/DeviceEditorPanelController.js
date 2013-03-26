@@ -77,7 +77,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              icon: Ext.Msg.QUESTION
         });
 
-        function deleteDEProjectBtn (btn) { 
+        function deleteDEProjectBtn (btn) {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model, activeTab);
@@ -94,87 +94,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             "Combinatorial Golden Gate": "resources/examples/Combinatorial_Golden_Gate.json"
         };
 
-        Ext.Msg.show({
-             title:'Are you sure you want to load example?',
-             msg: 'WARNING: This will clear the current design. Any unsaved changes will be lost.',
-             buttons: Ext.Msg.OKCANCEL,
-             cls: 'messageBox',
-             fn: loadExample,
-             icon: Ext.Msg.QUESTION
+        Ext.Ajax.request({
+            url: examplesMap[selectedItem],
+            method: 'GET',
+            success: function (response) {
+                Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
+            }
         });
-
-        function loadExample (btn) { 
-            if (btn=='ok') {
-                Ext.Ajax.request({
-                url: examplesMap[selectedItem],
-                method: 'GET',
-                success: function (response) {
-                    Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText, selectedItem.replace(" ", "_"));
-                }
-                });
-             }
-     }
-    },
-
-    importDesignFromFormat: function (format, cb) {
-        var importModal = Ext.create("Ext.Window", {
-            title: 'Import ' + format + ' from File',
-            closable: true,
-            modal: true,
-            width: '500px',
-            items: [{
-                xtype: 'form',
-                bodyPadding: 10,
-                items: [{
-                    xtype: 'filefield',
-                    name: 'importedFile',
-                    allowBlank: false,
-                    anchor: '100%',
-                    validator: function (val, field) {
-                        if(format == 'JSON') fileName = /^.*\.json$/i;
-                        else if(format == 'XML') fileName = /^.*\.xml$/i;
-                        if(!fileName.test(val)) return "Please select a " + format + " file.";
-                        return fileName.test(val);
-                    }
-                }, {
-                    xtype: 'toolbar',
-                    ui: 'footer',
-                    items: [{
-                        xtype: 'button',
-                        text: 'Import',
-                        cls: 'Import',
-                        formBind: true
-                    }, {
-                        xtype: 'button',
-                        text: 'Cancel'
-                    }]
-                }]
-            }]
-        }).show();
-
-        var fr, file;
-        importModal.query('button[cls="Import"]')[0].on('click', function () {
-            var form = importModal.down('form').getForm();
-            var fileField = form.findField('importedFile');
-            var fileInput = fileField.extractFileInput();
-            file = fileInput.files[0];
-            fr = new FileReader();
-            fr.onload = processText;
-            fr.readAsText(file);
-        });
-
-        function processText() {
-            cb(fr.result, file.name);
-            importModal.close();
-        }
-    },
-
-    onimportXMLItemBtnClick: function () {
-        this.importDesignFromFormat('XML', Teselagen.manager.DeviceDesignParsersManager.parseXML);
-    },
-
-    onimportJSONItemBtnClick: function () {
-        this.importDesignFromFormat('JSON', Teselagen.manager.DeviceDesignParsersManager.parseJSON);
     },
 
     createLoadingMessage: function () {
@@ -335,12 +261,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {
                 click: this.onDeviceEditorRenameBtnClick
-            },
-            "button[cls='importMenu'] > menu > menuitem[text='XML file']": {
-                click: this.onimportXMLItemBtnClick
-            },
-            "button[cls='importMenu'] > menu > menuitem[text='JSON file']": {
-                click: this.onimportJSONItemBtnClick
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Row']": {
                 click: this.onAddRowClick
