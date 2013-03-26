@@ -36,155 +36,140 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         GENERIC: {
             key: "GENERIC",
             name: "generic",
-            url_svg: "resources/images/SBOLv_1.0_small/generic.svg",
-            url_png: "resources/images/symbols/generic.png",
             url_small: "resources/images/icons/device/small/generic.png",
-            url_smallRev: "resources/images/icons/device/small/generic_reverse.png"
+            url_large: "resources/images/icons/device/large/user-defined.png"
         },
-        ASSEMBLY_JUNCTION: {
+        ASSEMBLY_JUNCTION: { //As "assembly scar" in SBOL 1.0.0
             key: "ASSEMBLY_JUNCTION",
             name: "assembly_junction",
-            url_svg: "resources/images/SBOLv_1.0_small/assembly-junction.svg",
-            url_png: "resources/images/symbols/assembly-junction.png",
-            url_small: "resources/images/icons/device/small/assembly_junction.png",
-            url_smallRev: "resources/images/icons/device/small/assembly_junction_reverse.png"
+            url_small: "resources/images/icons/device/small/assembly-scar.png",
+            url_small: "resources/images/icons/device/small/assembly-scar.png"
+        },
+        BLUNT_RESTRICTION_SITE: { //New in SBOL 1.0.0
+            key: "BLUNT_RESTRICTION_SITE",
+            name: "blunt_restriction_site",
+            url_small: "resources/images/icons/device/small/blunt-restriction-site.png",
+            url_large: "resources/images/icons/device/large/blunt-restriction-site.png"
         },
         CDS: {
             key: "CDS",
             name: "cds",
-            url_svg: "resources/images/SBOLv_1.0_small/cds.svg",
-            url_png: "resources/images/symbols/cds.png",
             url_small: "resources/images/icons/device/small/cds.png",
-            url_smallRev: "resources/images/icons/device/small/cds_reverse.png"
+            url_large: "resources/images/icons/device/small/cds.png"
         },
         FIVE_PRIME_OVERHANG: {
             key: "FIVE_PRIME_OVERHANG",
             name: "five_prime_overhang",
-            url_svg: "resources/images/SBOLv_1.0_small/five-prime-overhang.svg",
-            url_png: "resources/images/symbols/five-prime-overhang.png",
-            url_small: "resources/images/icons/device/small/five_prime_overhang.png",
-            url_smallRev: "resources/images/icons/device/small/five_prime_overhang_reverse.png"
+            url_small: "resources/images/icons/device/small/five-prime-overhang.png",
+            url_large: "resources/images/icons/device/large/five-prime-overhang.png"
         },
         // DW NOTE: SBOL standards keep changing for this. A translational-start-site === five_prime_utr
-        FIVE_PRIME_UTR: {
+        FIVE_PRIME_UTR: { //As "ribosome entry site" in SBOL 1.0.0
             key: "FIVE_PRIME_UTR",
             name: "five_prime_utr",
-            url_svg: "resources/images/SBOLv_1.0_small/translational-start-site.svg",
-            url_png: "resources/images/symbols/translational-start-site.png",
-            url_small: "resources/images/icons/device/small/five_prime_utr.png",
-            url_smallRev: "resources/images/icons/device/small/five_prime_utr_reverse.png"
+            url_small: "resources/images/icons/device/small/ribosome-entry-site.png",
+            url_large: "resources/images/icons/device/large/ribosome-entry-site.png",
+        },
+        FIVE_PRIME_RESTRICTION_SITE: { //New in SBOL 1.0.0
+            key: "FIVE_PRIME_RESTRICTION_SITE",
+            name: "five_prime_restriction_site",
+            url_small: "resources/images/icons/device/small/five-prime-sticky-restriction-site.png"
         },
         INSULATOR: {
             key: "INSULATOR",
             name: "insulator",
-            url_svg: "resources/images/SBOLv_1.0_small/insulator.svg",
-            url_png: "resources/images/symbols/insulator.png",
             url_small: "resources/images/icons/device/small/insulator.png",
-            url_smallRev: "resources/images/icons/device/small/insulator_reverse.png"
+            url_large: "resources/images/icons/device/large/insulator.png"
         },
         OPERATOR_SITE: {
             key: "OPERATOR_SITE",
             name: "operator_site",
-            url_svg: "resources/images/SBOLv_1.0_small/operator.svg",
-            url_png: "resources/images/symbols/operator.png",
-            url_small: "resources/images/icons/device/small/operator_site.png",
-            url_smallRev: "resources/images/icons/device/small/operator_site_reverse.png"
+            url_small: "resources/images/icons/device/small/operator.png",
+            url_large: "resources/images/icons/device/large/operator.png"
         },
         ORIGIN_OF_REPLICATION: {
             key: "ORIGIN_OF_REPLICATION",
             name: "origin_of_replication",
-            url_svg: "resources/images/SBOLv_1.0_small/origin-of-replication.svg",
-            url_png: "resources/images/symbols/origin-of-replication.png",
-            url_small: "resources/images/icons/device/small/origin_of_replication.png",
-            url_smallRev: "resources/images/icons/device/small/origin_of_replication_reverse.png"
+            url_small: "resources/images/icons/device/small/origin-of-replication.png",
+            url_large: "resources/images/icons/device/large/origin-of-replication.png"
         },
         PRIMER_BINDING_SITE: {
             key: "PRIMER_BINDING_SITE",
             name: "primer_binding_site",
-            url_svg: "resources/images/SBOLv_1.0_small/primer-binding-site.svg",
-            url_png: "resources/images/symbols/primer-binding-site.png",
-            url_small: "resources/images/icons/device/small/primer_binding_site.png",
-            url_smallRev: "resources/images/icons/device/small/primer_binding_site_reverse.png"
+            url_small: "resources/images/icons/device/small/primer-binding-site.png",
+            url_large: "resources/images/icons/device/large/primer-binding-site.png"
         },
         PROMOTER: {
             key: "PROMOTER",
             name: "promoter",
-            url_svg: "resources/images/SBOLv_1.0_small/promoter.svg",
-            url_png: "resources/images/symbols/promoter.png",
             url_small: "resources/images/icons/device/small/promoter.png",
-            url_smallRev: "resources/images/icons/device/small/promoter_reverse.png"
+            url_large: "resources/images/icons/device/large/promoter.png"
         },
         PROTEASE_SITE: {
             key: "PROTEASE_SITE",
             name: "protease_site",
-            url_svg: "resources/images/SBOLv_1.0_small/protease-site.svg",
-            url_png: "resources/images/symbols/protease-site.png",
-            url_small: "resources/images/icons/device/small/protease_site.png",
-            url_smallRev: "resources/images/icons/device/small/protease_site_reverse.png"
+            url_small: "resources/images/icons/device/small/protease-site.png",
+            url_large: "resources/images/icons/device/large/protease-site.png"
         },
         PROTEIN_STABILITY_ELEMENT: {
             key: "PROTEIN_STABILITY_ELEMENT",
             name: "protein_stability_element",
-            url_svg: "resources/images/SBOLv_1.0_small/protein-stability-element.svg",
-            url_png: "resources/images/symbols/protein-stability-element.png",
             url_small: "resources/images/icons/device/small/protein_stability_element.png",
-            url_smallRev: "resources/images/icons/device/small/protein_stability_element_reverse.png"
+            url_large: "resources/images/icons/device/large/protein-stability-element.png"
         },
         RESTRICTION_ENZYME_RECOGNITION_SITE: {
             key: "RESTRICTION_ENZYME_RECOGNITION_SITE",
             name: "restriction_enzyme_recognition_site",
-            url_svg: "resources/images/SBOLv_1.0_small/restriction-enzyme-recognition-site.svg",
-            url_png: "resources/images/symbols/restriction-enzyme-recognition-site.png",
-            url_small: "resources/images/icons/device/small/restriction_enzyme_recognition_site.png",
-            url_smallRev: "resources/images/icons/device/small/restriction_enzyme_recognition_site_reverse.png"
+            url_small: "resources/images/icons/device/small/restriction-enzyme-recognition-site.png",
+            url_large: "resources/images/icons/device/large/restriction-enzyme-recognition-site.png"
         },
         RESTRICTION_SITE_NO_OVERHANG: {
             key: "RESTRICTION_SITE_NO_OVERHANG",
             name: "restriction_site_no_overhang",
-            url_svg: "resources/images/SBOLv_1.0_small/restriction-site-with-no-overhang.svg",
-            url_png: "resources/images/symbols/restriction-site-with-no-overhang.png",
-            url_small: "resources/images/icons/device/small/restriction_site_no_overhang.png",
-            url_smallRev: "resources/images/icons/device/small/restriction_site_no_overhang_reverse.png"
+            url_small: "resources/images/icons/device/small/restriction-site-no-overhang.png",
+            url_large: "resources/images/icons/device/large/restriction-site-no-overhang.png"
         },
         RIBONUCLEASE_SITE: {
             key: "RIBONUCLEASE_SITE",
             name: "ribonuclease_site",
-            url_svg: "resources/images/SBOLv_1.0_small/ribonuclease-site.svg",
-            url_png: "resources/images/symbols/ribonuclease-site.png",
-            url_small: "resources/images/icons/device/small/ribonuclease_site.png",
-            url_smallRev: "resources/images/icons/device/small/ribonuclease_site_reverse.png"
+            url_small: "resources/images/icons/device/small/ribonuclease-site.png",
+            url_large: "resources/images/icons/device/large/ribonuclease-site.png"
+        },
+        RIBOSOME_ENTRY_SITE: { //New in SBOL 1.0.0
+            key: "RIBOSOME_ENTRY_SITE",
+            name: "ribosome_entry_site",
+            url_small: "resources/images/icons/device/small/ribosome-entry-site.png",
+            url_large: "resources/images/icons/device/large/ribosome-entry-site.png",
         },
         RNA_STABILITY_ELEMENT: {
             key: "RNA_STABILITY_ELEMENT",
             name: "rna_stability_element",
-            url_svg: "resources/images/SBOLv_1.0_small/rna-stability-element.svg",
-            url_png: "resources/images/symbols/rna-stability-element.png",
-            url_small: "resources/images/icons/device/small/rna_stability_element.png",
-            url_smallRev: "resources/images/icons/device/small/rna_stability_element_reverse.png"
+            url_small: "resources/images/icons/device/small/rna-stability-element.png",
+            url_large: "resources/images/icons/device/large/rna-stability-element.png"
         },
         SIGNATURE: {
             key: "SIGNATURE",
             name: "signature",
-            url_svg: "resources/images/SBOLv_1.0_small/signature.svg",
-            url_png: "resources/images/symbols/signature.png",
             url_small: "resources/images/icons/device/small/signature.png",
-            url_smallRev: "resources/images/icons/device/small/signature_reverse.png"
+            url_large: "resources/images/icons/device/large/signature.png"
         },
         TERMINATOR: {
             key: "TERMINATOR",
             name: "terminator",
-            url_svg: "resources/images/SBOLv_1.0_small/terminator.svg",
-            url_png: "resources/images/symbols/terminator.png",
             url_small: "resources/images/icons/device/small/terminator.png",
-            url_smallRev: "resources/images/icons/device/smallterminator/_reverse.png"
+            url_large: "resources/images/icons/device/large/terminator.png"
         },
         THREE_PRIME_OVERHANG: {
             key: "THREE_PRIME_OVERHANG",
             name: "three_prime_overhang",
-            url_svg: "resources/images/SBOLv_1.0_small/three-prime-overhang.svg",
-            url_png: "resources/images/symbols/three-prime-overhang.png",
-            url_small: "resources/images/icons/device/small/three_prime_overhang.png",
-            url_smallRev: "resources/images/icons/device/small/three_prime_overhang_reverse.png"
+            url_small: "resources/images/icons/device/small/three-prime-overhang.png",
+            url_large: "resources/images/icons/device/large/three-prime-overhang.png"
+        },
+        THREE_PRIME_RESTRICTION_SITE: { //New in SBOL 1.0.0
+            key: "THREE_PRIME_RESTRICTION_SITE",
+            name: "three_prime_restriction_site",
+            url_small: "resources/images/icons/device/small/three-prime-sticky-restriction-site.png",
+            url_large: "resources/images/icons/device/large/three-prime-sticky-restriction-site.png"
         }
     },
 
@@ -196,8 +181,10 @@ Ext.define("Teselagen.constants.SBOLIcons", {
     ICON_LIST: [
         "GENERIC",
         "ASSEMBLY_JUNCTION",
+        "BLUNT_RESTRICTION_SITE", //New in SBOL 1.0.0
         "CDS",
         "FIVE_PRIME_OVERHANG",
+        "FIVE_PRIME_RESTRICTION_SITE", //New in SBOL 1.0.0
         "FIVE_PRIME_UTR",
         "INSULATOR",
         "OPERATOR_SITE",
@@ -212,7 +199,8 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         "RNA_STABILITY_ELEMENT",
         "SIGNATURE",
         "TERMINATOR",
-        "THREE_PRIME_OVERHANG"
+        "THREE_PRIME_OVERHANG",
+        "THREE_PRIME_RESTRICTION_SITE" //New in SBOL 1.0.0
     ],
 
     constructor: function() {
