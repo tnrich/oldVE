@@ -26,14 +26,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         design.set( 'deproject_id', deprojectId);
         deproject.set( 'id' , deprojectId );
 
-        Vede.application.fireEvent("ReRenderDECanvas");
-        Vede.application.fireEvent("checkj5Ready");
-
         // Load the Eugene Rules in the Design
         for(var ruleIndex in eugeneRules)
         {
           design.addToRules(eugeneRules[ruleIndex]);
         }
+
+        Vede.application.fireEvent("ReRenderDECanvas");
+        Vede.application.fireEvent("checkj5Ready");
 
       }
     }
@@ -206,6 +206,14 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       }
     }
 
+    function getSequenceByID(targetHash,cb){
+      var sequences = xmlDoc.getElementsByTagNameNS('*','sequenceFile');
+      for(var sequenceindex in sequences) {
+        sequence = sequences[sequenceindex];
+        if(!sequence.nodeName || typeof sequence != 'object') continue;
+        if(String(sequence.getAttribute("hash")) == String(targetHash)) cb(sequence);
+      };
+    }
 
     deproject = Ext.create("Teselagen.models.DeviceEditorProject", {
         name: fileName.replace(/.xml/g,''),
@@ -230,7 +238,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       var dsf = bin.getElementsByTagNameNS('*','dsf')[0].textContent;
 
       var newBin = Ext.create("Teselagen.models.J5Bin", {
-          binName: binName
+          binName: binName,
+          iconID: iconID,
+          directionForward: direction,
+          dsf: Boolean(dsf)
       });
 
       var parts = bin.getElementsByTagNameNS('*','partID');
@@ -240,12 +251,24 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         if(!parts[indexPart].nodeName) continue;
         var part = getPartByID(parts[indexPart].textContent);
         fas = part.getElementsByTagNameNS('*','parts')[0].getElementsByTagNameNS('*','part')[0].getElementsByTagNameNS('*','fas')[0].textContent;
+        hash = part.getElementsByTagNameNS('*','sequenceFileHash')[0].textContent;
         var newPart = Ext.create("Teselagen.models.Part", {
             name: part.getElementsByTagNameNS('*','name')[0].textContent,
             genbankStartBP: part.getElementsByTagNameNS('*','startBP')[0].textContent,
             endBP: part.getElementsByTagNameNS('*','stopBP')[0].textContent,
             revComp: part.getElementsByTagNameNS('*','revComp')[0].textContent,
             fas: (fas==='') ? 'None' : fas
+        });
+
+        getSequenceByID(hash,function(sequence){
+          // Sequence processing
+          newSequence = Ext.create("Teselagen.models.SequenceFile", {
+            sequenceFileContent : sequence.getElementsByTagNameNS('*','content')[0].textContent,
+            sequenceFileFormat : sequence.getElementsByTagNameNS('*','format')[0].textContent,
+            sequenceFileName : sequence.getElementsByTagNameNS('*','fileName')[0].textContent
+          });
+
+          newPart.setSequenceFileModel(newSequence);
         });
 
         tempPartsArray.push(newPart);
