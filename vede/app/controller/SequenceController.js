@@ -325,6 +325,19 @@ Ext.define("Vede.controller.SequenceController", {
     onReverseComplementSequence: function(e) {
         if(this.SequenceManager) {
             this.SequenceManager.doReverseComplementSequence();
+
+            var seqLen = this.SequenceManager.getSequence().toString().length;
+
+            var newSelectionEnd = seqLen - this.SelectionLayer.start;
+            var newSelectionStart = seqLen - this.SelectionLayer.end;
+
+            var oldCaretPosition = this.caretIndex;
+
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, 
+                                       null, newSelectionStart, newSelectionEnd);
+
+            this.application.fireEvent(this.CaretEvent.CARET_POSITION_CHANGED,
+                                       null, seqLen - oldCaretPosition);
         }
 
         // Return false to cancel the event. This makes sure the method is
