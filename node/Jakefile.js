@@ -40,18 +40,18 @@ directory("log");
 
 task("startNode", ["log"], function() {
     var cmd = util.format("forever start --plain -w --watchDirectory . " +
-            "-a -l forever.log -o log/out.log -e log/err.log %s %s",
+            "-a -p /var/log/forever -l forever.log -o log/out.log -e log/err.log %s %s",
             nodeApp, nodeOpts);
     JakeUtil.exec(cmd);
 });
 
 task("stopNode", function() {
-    var cmd = "forever stop --plain " + nodeApp;
+    var cmd = "forever stop -p /var/log/forever --plain " + nodeApp;
     JakeUtil.exec(cmd);
 });
 
 task("restartNode", function() {
-    var cmd = "forever restart --plain " + nodeApp;
+    var cmd = "forever restart -p /var/log/forever --plain " + nodeApp;
     JakeUtil.exec(cmd);
 });
 
