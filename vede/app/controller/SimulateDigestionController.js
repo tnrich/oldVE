@@ -13,28 +13,38 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 "Teselagen.bio.sequence.DNATools",
 		 "Teselagen.manager.SimulateDigestionManager",
 		 "Ext.util.TaskRunner"],
-
+	/*
+	 * The enzymeGroupManager that manages the groups of enzymes in this control
+	 */
 	 GroupManager: null,
-	 DigestionCalculator: null,
+	 /*
+	  * The DNATools object for manipulating DNA
+	  */
 	 DNATools: null,
+	 /*
+	  * The SimulateDigestionManager for this Controller
+	  */
 	 digestManager: null,
-
+	 /*
+	  * The window that calls this controller
+	  */
 	 managerWindow: null,
+	 /*
+	  * The panel where the gel is drawn
+	  */
 	 digestPanel: null,
-
-	 digestSpriteGroup: null,
-	 ladderSpriteGroup: null,
-	 sampleSpriteGroup: null,
-
-	 ladderLane: null,
-	 sampleLane: null,
+	 /*
+	  * The dnaSequence to be digested
+	  */
 	 dnaSequence: null,
-
+	 /*
+	  * The object that represents the dropdown for selecting enzyme groups
+	  */
 	 groupSelector: null,
-	 sampleLaneInitialized: false,
+	 /*
+	  * The object that represents the multiSelect control for selecting enzymes
+	  */
 	 enzymeListSelector: null,
-	 filterTaskRunner: null,
-	 filterTask: null,
 
 	 init: function() {
 		 this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
@@ -71,6 +81,10 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 }); 
 	 },
 
+	 /**
+	  * Gets data for the sequence from the provided sequenceManager
+	  * @param {Object} pSequenceManager the sequenceManager with the sequence in it
+	  */
 	 getSequenceManagerData: function(pSequenceManager){
 		 if (pSequenceManager.getSequence().seqString()){
 			 this.dnaSequence = Teselagen.bio.sequence.DNATools.createDNASequence("testSeq", pSequenceManager.getSequence().seqString());
@@ -78,10 +92,11 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 			 this.dnaSequence = ""; 
 		 };
 		 this.digestManager.setDnaSequence(this.dnaSequence);
-
-//				 console.log("able to deal with completeSequence");
 	 },
-
+	 /**
+	  * Initializes several items in this controller and the manager
+	  * @param {Object} manager the calling object
+	  */
 	 onSimulateDigestionOpened: function(manager) {
 		 this.managerWindow = manager;
 		 this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
@@ -90,11 +105,9 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 //this.DNATools = Teselagen.bio.sequence.DNATools;
 		 var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
 		 this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
-		 console.log("trying to init");
 		 if(!this.GroupManager.getIsInitialized()) {
 			 this.GroupManager.initialize();
 		 }
-		 console.log("fired");
 
 		 var nameData = [];
 		 //Add names of groups to combobox
@@ -110,10 +123,8 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 Ext.each(startGroup.getEnzymes(), function(enzyme) {
 			 groupArray.push({name: enzyme.getName()});
 		 });
-		 console.log(groupArray)
 		 this.enzymeListSelector.store.loadData(groupArray);
 		 this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
-         //this.initializeDigestDrawingPanel();
 		 this.digestManager.setDigestPanel(this.digestPanel);
 		 this.digestManager.setGroupManager(this.GroupManager);
 		 this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
@@ -123,8 +134,13 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 //'// Makes it look nicer in vim
 	 },
 	 /**
-	  * Populates the itemselector field with enzyme names.
-	  * Called when the user selects a new group in the combobox.
+	  * Redraws the gel when the window is resized
+	  * @param {Ext.draw.Surface} drawingSurface the surface the gel is drawn on
+	  * @param {Number} width the width of the surface the gel is drawn on
+	  * @param {Number} height the height of the surface the gel is drawn on
+	  * @param {Number} oldWidth the old width of the surface the gel is drawn on
+	  * @param {Number} oldHeight the old height of the surface the gel is drawn on
+	  * @param {Object} eOpts options from the calling object (not really used)
 	  */
 	 onGelResize: function(drawingSurface, width, height, oldWidth, oldHeight, eOpts) {
 		 //having a chicken and the egg problem where this.digestManager is not being made until after this is called
@@ -134,6 +150,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 	 /**
 	  * Populates the itemselector field with enzyme names.
 	  * Called when the user selects a new group in the combobox.
+	  * @param {Object} combobox the calling object
 	  */
 	 onEnzymeGroupSelected: function(combobox) {
 		 var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
@@ -142,6 +159,7 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 	 },
 	 /**
 	  * Searches the itemselector field for enzyme names
+	  * @param {Object} combobox the calling object
 	  */
 	 searchEnzymes: function(combobox) {
 		 var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
@@ -153,49 +171,15 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 	 /* 
 	  * Redigests your sequence with selected enzymes.
 	  */
+	 /**
+	  * Redigests your sequence with selected enzymes from the enzymeListSelector
+	  */
 	 onDigestButtonClick: function(){
-		 console.log(this.enzymeListSelector.toField.store); 
-		 console.log("Digesting!");
 		 this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
 	 },
-
-	 /*
-	  * Initializes components of the drawing panel
-	  */
-	 initializeDigestDrawingPanel: function(){
-		 this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
-		 this.digestSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
-			 surface: this.digestPanel.surface
-		 });
-		 this.sampleSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
-			 surface: this.digestPanel.surface
-		 });
-		 this.sampleLane = Ext.create("Teselagen.models.digest.SampleLane", {
-			 ladder: "1kb",
-		 });
-		 console.log('test');
-		 //console.log(this.ladderLane.getLadder());
-		 var digestBG = Ext.create('Ext.draw.Sprite', {
-			 type: 'rect',
-			 height: 400,
-			 width: 445,
-			 fill: '#000',
-			 x: 0,
-			 y: 0
-		 });
-		 this.digestSpriteGroup.add(digestBG);
-
-		 this.ladderSpriteGroup = Ext.create('Ext.draw.CompositeSprite', {
-			 surface: this.digestPanel.surface
-		 });
-
-		 this.ladderLane = Ext.create("Teselagen.models.digest.LadderLane", {
-			 ladder: "1kb",
-		 });
-		 var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
-	 },
-	 /*
+	 /**
 	  * Updates the Ladder based on the selection in the ladder drop down.
+	  * @param {Object} combobox the calling object
 	  */
 	 updateLadderLane: function(combobox){
 	     this.digestManager.updateLadderLane(combobox.getValue());
