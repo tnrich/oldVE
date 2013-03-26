@@ -239,11 +239,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       for(var indexPart in parts){
         if(!parts[indexPart].nodeName) continue;
         var part = getPartByID(parts[indexPart].textContent);
+        fas = part.getElementsByTagNameNS('*','parts')[0].getElementsByTagNameNS('*','part')[0].getElementsByTagNameNS('*','fas')[0].textContent;
         var newPart = Ext.create("Teselagen.models.Part", {
             name: part.getElementsByTagNameNS('*','name')[0].textContent,
-            genbankStartBP: 1,
-            endBP: 7
+            genbankStartBP: part.getElementsByTagNameNS('*','startBP')[0].textContent,
+            endBP: part.getElementsByTagNameNS('*','stopBP')[0].textContent,
+            revComp: part.getElementsByTagNameNS('*','revComp')[0].textContent,
+            fas: (fas==='') ? 'None' : fas
         });
+
         tempPartsArray.push(newPart);
         fullPartsAssocArray[part.getAttribute("id")] = newPart;
       }
