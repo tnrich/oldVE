@@ -181,6 +181,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
                 rulesArray.push(newEugeneRule);
               }
+
               Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray,rulesArray);
             }
           }
@@ -241,7 +242,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
           binName: binName,
           iconID: iconID,
           directionForward: direction,
-          dsf: Boolean(dsf)
+          dsf: (dsf==='true') ? true : false
       });
 
       var parts = bin.getElementsByTagNameNS('*','partID');
@@ -298,7 +299,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
       rulesArray.push(newEugeneRule);
 
     }
-
     Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray,rulesArray);
   }
 
