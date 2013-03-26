@@ -6,7 +6,8 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
     requires: ["Teselagen.event.DeviceEvent",
-               "Teselagen.manager.DeviceDesignManager"],
+               "Teselagen.manager.DeviceDesignManager",
+               "Teselagen.manager.DeviceDesignParsersManager"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -23,9 +24,40 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         Vede.application.fireEvent("openj5");
     },
 
-    onSaveDesignClick: function(button, e, options) {
-        console.log('Trying to save design!');
-        $(document).trigger('saveDesign');
+    onImportBtnChange: function(pBtn){
+        if (typeof window.FileReader !== 'function') {
+            Ext.Msg.alert('Browser does not support File API.');
+        }
+        else {
+            var fileInput = pBtn.extractFileInput();
+            var file = fileInput.files[0];
+            var ext = file.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i);
+            if (ext) {
+                Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Parsing File');
+                var fr = new FileReader();
+                fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
+                fr.onerror = this.onImportFileError;
+                fr.readAsText(file);
+            }
+            else {
+                Ext.MessageBox.alert('Error', 'Invalid file format');
+            }
+        }
+    },
+
+    onImportFileLoad: function(pFile, pExt, pEvt) {
+        try
+        {
+            if(pExt === 'json' || pExt === 'JSON') Teselagen.manager.DeviceDesignParsersManager.parseJSON(pEvt.target.result,pFile.name);
+            else if(pExt === 'xml' || pExt === 'XML') Teselagen.manager.DeviceDesignParsersManager.parseXML(pEvt.target.result,pFile.name);
+            else Ext.MessageBox.alert('Error', 'Invalid file format');
+        }
+        catch(exception)
+        {
+            console.log(exception);
+            Ext.MessageBox.alert('Error', "Error parsing file");
+            Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        }
     },
 
     init: function() {
@@ -38,6 +70,9 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             },
             "button[cls='j5_init_Btn']": {
                 click: this.onOpenj5Click
+            },
+            "filefield[cls='DEimportBtn']": {
+                change: this.onImportBtnChange
             }
         });
 

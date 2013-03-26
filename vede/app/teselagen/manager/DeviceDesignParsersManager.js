@@ -13,15 +13,33 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
   },
 
   generateDesign: function(binsArray){
-    var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-    var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
-    var deprojectId = Ext.getCmp('mainAppPanel').getActiveTab().modelId;
-    deproject.setDesign(design);
-    design.set( 'deproject_id', deprojectId);
-    deproject.set( 'id' , deprojectId );
 
-    Vede.application.fireEvent("ReRenderDECanvas");
-    Vede.application.fireEvent("checkj5Ready");
+    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+
+    function loadDesign(btn){
+      if(btn==="ok")
+      {
+        var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+        var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
+        var deprojectId = Ext.getCmp('mainAppPanel').getActiveTab().modelId;
+        deproject.setDesign(design);
+        design.set( 'deproject_id', deprojectId);
+        deproject.set( 'id' , deprojectId );
+
+        Vede.application.fireEvent("ReRenderDECanvas");
+        Vede.application.fireEvent("checkj5Ready");
+      }
+    }
+
+      Ext.Msg.show({
+        title:'Are you sure you want to load example?',
+        msg: 'WARNING: This will clear the current design. Any unsaved changes will be lost.',
+        buttons: Ext.Msg.OKCANCEL,
+        cls: 'messageBox',
+        fn: loadDesign,
+        icon: Ext.Msg.QUESTION
+      });
+
   },
 
   parseJSON: function(input,fileName){
@@ -57,6 +75,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     var binsCounter = bins.length;
 
     for(var indexBin in bins){
+      //console.log("Processing bin "+indexBin);
       var bin = bins[indexBin];
 
       var newBin = Ext.create("Teselagen.models.J5Bin", {
@@ -65,7 +84,20 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
           directionForward: (bin["de:direction"] == "forward"),
           dsf: Boolean(bin["de:dsf"])
       });
+
+      //console.log(bin);
+
       var parts = bin["de:binItems"]["de:partID"];
+      if(typeof(parts) === "number")
+      {
+        parts = [];
+        itemsObj = bin["de:binItems"];
+        for(var prop in itemsObj) {
+          parts.push(itemsObj[prop]);
+        }
+        //console.log(parts);
+      }
+
       //console.log(parts);
       var partsCounter = parts.length;
       //console.log("PartsCounter: "+partsCounter);
