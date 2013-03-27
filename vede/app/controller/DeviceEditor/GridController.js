@@ -519,7 +519,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: icon.url_svg
+            iconSource: icon.url_large
         });
 
         // If false flip, otherwise do nothing;
@@ -590,7 +590,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: icon.url_svg
+            iconSource: icon.url_large
         });
 
         if(index === null) {
