@@ -17,47 +17,56 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * Generate a DeviceEditor design based in an array of Bins and eugeneRules
      * @param {Array} Array of bins (constructors).
      * @param {Array} Array of eugeneRules (constructors).
+     * @param {Function} (optional) Callback with design as argument 0.
      */
-    generateDesign: function (binsArray, eugeneRules) {
+    generateDesign: function (binsArray, eugeneRules, cb) {
 
-        Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-
-        function loadDesign(btn) {
-            if (btn === "ok") {
-                var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-                var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
-                var deprojectId = Ext.getCmp("mainAppPanel").getActiveTab().modelId;
-                deproject.setDesign(design);
-                design.set("deproject_id", deprojectId);
-                deproject.set("id", deprojectId);
-
-                // Load the Eugene Rules in the Design
-                for (var ruleIndex in eugeneRules) {
-                    design.addToRules(eugeneRules[ruleIndex]);
-                }
-
-                Vede.application.fireEvent("ReRenderDECanvas");
-                Vede.application.fireEvent("checkj5Ready");
-
-            }
+        if(typeof(cb)==="function")
+        {
+            return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray));
         }
+        else
+        {
+            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-        Ext.Msg.show({
-            title: "Are you sure you want to load example?",
-            msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
-            buttons: Ext.Msg.OKCANCEL,
-            cls: "messageBox",
-            fn: loadDesign,
-            icon: Ext.Msg.QUESTION
-        });
+            function loadDesign(btn) {
+                if (btn === "ok") {
+                    var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+                    var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
+                    var deprojectId = Ext.getCmp("mainAppPanel").getActiveTab().modelId;
+                    deproject.setDesign(design);
+                    design.set("deproject_id", deprojectId);
+                    deproject.set("id", deprojectId);
+
+                    // Load the Eugene Rules in the Design
+                    for (var ruleIndex in eugeneRules) {
+                        design.addToRules(eugeneRules[ruleIndex]);
+                    }
+
+                    Vede.application.fireEvent("ReRenderDECanvas");
+                    Vede.application.fireEvent("checkj5Ready");
+
+                }
+            }
+
+            Ext.Msg.show({
+                title: "Are you sure you want to load example?",
+                msg: "WARNING: This will clear the current design. Any unsaved changes will be lost.",
+                buttons: Ext.Msg.OKCANCEL,
+                cls: "messageBox",
+                fn: loadDesign,
+                icon: Ext.Msg.QUESTION
+            });
+        }
 
     },
 
     /**
      * Parse a JSON DeviceEditor Design file.
      * @param {String} File input.
+     * @param {Function} (optional) Callback with design as argument 0.
      */
-    parseJSON: function (input) {
+    parseJSON: function (input,cb) {
         console.log("Parsing JSON file");
         var jsonDoc = JSON.parse(input);
         var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
@@ -160,7 +169,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                             if (eugeneRules.eugeneRule instanceof Array) {
                                 // Fix special cases where empty object is create to designate no eugeneRules
-                                if (eugeneRules.eugeneRule.length === 0) { eugeneRules = []; }
+                                if (eugeneRules.eugeneRule.length === 0) { eugeneRules = []; }
                             }
 
                             for (var ruleIndex in eugeneRules) {
@@ -179,7 +188,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                 rulesArray.push(newEugeneRule);
                             }
 
-                            Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray);
+                            Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
                         }
                     }
                 });
@@ -190,8 +199,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     /**
      * Parse a XML DeviceEditor Design file.
      * @param {String} File input.
+     * @param {Function} (optional) Callback with design as argument 0.
      */
-    parseXML: function (input) {
+    parseXML: function (input, cb) {
 
         console.log("Parsing XML file");
         var parser = new DOMParser();
@@ -200,7 +210,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         function getPartByID(targetId) {
             var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
             for (var indexPart in parts) {
-                if (!parts[indexPart].nodeName) { continue; }
+                if (!parts[indexPart].nodeName) { continue; }
                 var part = parts[indexPart];
                 var id = part.getElementsByTagNameNS("*", "part")[0].attributes[0].value;
                 if (id === targetId) { return part; }
@@ -243,7 +253,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var tempPartsArray = [];
             for (var indexPart in parts) {
-                if (!parts[indexPart].nodeName) { continue; }
+                if (!parts[indexPart].nodeName) { continue; }
                 var part = getPartByID(parts[indexPart].textContent);
                 var fas = part.getElementsByTagNameNS("*", "parts")[0].getElementsByTagNameNS("*", "part")[0].getElementsByTagNameNS("*", "fas")[0].textContent;
                 var hash = part.getElementsByTagNameNS("*", "sequenceFileHash")[0].textContent;
@@ -293,7 +303,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             rulesArray.push(newEugeneRule);
 
         }
-        Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray);
+        Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
     }
 
 });
