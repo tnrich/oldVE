@@ -12,6 +12,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         observable: "Ext.util.Observable"
     },
 
+
+    /**
+     * Generate a DeviceEditor design based in an array of Bins and eugeneRules
+     * @param {Array} Array of bins (constructors).
+     * @param {Array} Array of eugeneRules (constructors).
+     */
     generateDesign: function (binsArray, eugeneRules) {
 
         Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
@@ -47,6 +53,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     },
 
+    /**
+     * Parse a JSON DeviceEditor Design file.
+     * @param {String} File input.
+     */
     parseJSON: function (input) {
         console.log("Parsing JSON file");
         var jsonDoc = JSON.parse(input);
@@ -177,7 +187,10 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         }
     },
 
-
+    /**
+     * Parse a XML DeviceEditor Design file.
+     * @param {String} File input.
+     */
     parseXML: function (input) {
 
         console.log("Parsing XML file");
