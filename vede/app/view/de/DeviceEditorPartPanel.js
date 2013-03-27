@@ -87,11 +87,41 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             height: 40
         }, {
             xtype: 'button',
+            cls: 'five_prime_restriction_site_Btn',
+            data: { iconKey : 'FIVE_PRIME_RESTRICTION_SITE' },
+            icon: 'resources/images/icons/device/small/five-prime-sticky-restriction-site.png',
+            scale: 'large',
+            tooltip: '5\' Sticky Restriction Site'
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        },{
+            xtype: 'button',
+            cls: 'three_prime_restriction_site_Btn',
+            data: { iconKey : 'THREE_PRIME_RESTRICTION_SITE' },
+            icon: 'resources/images/icons/device/small/three-prime-sticky-restriction-site.png',
+            scale: 'large',
+            tooltip: '3\' Sticky Restriction Site'
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        },{
+            xtype: 'button',
             cls: 'restriction_enz_recog_site_Btn',
             data: { iconKey : 'RESTRICTION_ENZYME_RECOGNITION_SITE' },
             icon: 'resources/images/icons/device/small/restriction-enzyme-recognition-site.png',
             scale: 'large',
             tooltip: 'Restriction Enzyme Recognition Site'
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        },{
+            xtype: 'button',
+            cls: 'blunt_restriction_site_Btn',
+            data: { iconKey : 'BLUNT_RESTRICTION_SITE' },
+            icon: 'resources/images/icons/device/small/blunt-restriction-site.png',
+            scale: 'large',
+            tooltip: 'Blunt Restriction Site'
         }, {
             xtype: 'tbseparator',
             height: 40

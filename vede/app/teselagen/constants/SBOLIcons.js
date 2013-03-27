@@ -43,7 +43,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             key: "ASSEMBLY_JUNCTION",
             name: "assembly_junction",
             url_small: "resources/images/icons/device/small/assembly-scar.png",
-            url_small: "resources/images/icons/device/small/assembly-scar.png"
+            url_large: "resources/images/icons/device/large/assembly-scar.png"
         },
         BLUNT_RESTRICTION_SITE: { //New in SBOL 1.0.0
             key: "BLUNT_RESTRICTION_SITE",
@@ -55,7 +55,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             key: "CDS",
             name: "cds",
             url_small: "resources/images/icons/device/small/cds.png",
-            url_large: "resources/images/icons/device/small/cds.png"
+            url_large: "resources/images/icons/device/large/cds.png"
         },
         FIVE_PRIME_OVERHANG: {
             key: "FIVE_PRIME_OVERHANG",
@@ -73,7 +73,8 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         FIVE_PRIME_RESTRICTION_SITE: { //New in SBOL 1.0.0
             key: "FIVE_PRIME_RESTRICTION_SITE",
             name: "five_prime_restriction_site",
-            url_small: "resources/images/icons/device/small/five-prime-sticky-restriction-site.png"
+            url_small: "resources/images/icons/device/small/five-prime-sticky-restriction-site.png",
+            url_large: "resources/images/icons/device/large/five-prime-sticky-restriction-site.png"
         },
         INSULATOR: {
             key: "INSULATOR",
