@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 excluded=resources/js//*\:test/lib//*
-globals=Ext, Teselagen  
+globals=Ext\:false, Teselagen\:false, Vede\:true  
 included=//*.js
 options=browser\:true,\ncurly\:true, \neqeqeq\:true, \nforin\:true, \nimmed\:true,\nindent\:4, \nlatedef\:true, \nnewcap\:true, \nnoarg\:true, \nnonew\:true,\nquotmark\:true,  \ntrailing\:true, \nundef\:true, \nunused\:true
 projectSpecificOptions=true
