@@ -178,8 +178,9 @@ function encoded_target_part_order_list_file(model,method)
         var direction = '';
         if(method.match(/Combinatorial/))
         {
-            out += '>' + bin["binName"] + ',' + direction + ',' + ',' + ',' + ',' + ',' + '\n';
-
+            var tempOut = '';
+            var dsfFirewall = '';
+            var fas;
             bin.parts.forEach(function(part){
                 fas = (part["fas"] == 'None') ? '' : part["fas"];
                 fro = (bin['fro'] === 'None') ? '' : bin['fro'];
@@ -188,8 +189,13 @@ function encoded_target_part_order_list_file(model,method)
                 extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];
                 extra5PrimeBps = (bin['extra5PrimeBps'] === null) ? '' : bin['extra5PrimeBps'];
 
-                out += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
+                tempOut += part["name"] + ',' + direction + ',' + fas + ',' + fro + ',' + dsf + ',' + extra5PrimeBps + ',' + extra3PrimeBps + '\n';
             });
+
+            tempBinHeader = '>' + bin["binName"] + ',' + ',' + fas + ',' + ',' + bin["dsf"] + ',' + ',' + '\n';
+            out += tempBinHeader;
+            out += tempOut;
+
         }
         else
         {
@@ -360,7 +366,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
         "masterDirectSynthesesList"
     );
 
-    quicklog(require('util').inspect(execParams, true, 5));
+    //quicklog(require('util').inspect(execParams, true, 5));
 
     var data = {};
 
@@ -388,6 +394,7 @@ var j5rpcEncode = function(model,encodedParameters,encodedMasterFiles,assemblyMe
 
     console.log("Executing using method: "+data["assembly_method"]);
 
+    //quicklog(require('util').inspect(data, true, 5));
 
     return data;
 
