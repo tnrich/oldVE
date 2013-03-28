@@ -40,10 +40,12 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      * @param {Teselagen.bio.sequence.dna.DNASequence} dnaSequence which contains the sequence to be digested
      */
     setDnaSequence: function(dnaSequence){
-    	this.dnaSequence = dnaSequence;
-    	//For right now, vector editor does not set the sequence as circular when reading from GenBank but 
-    	// the digestion assumes that it is circular
-    	dnaSequence.setCircular(true);
+    	if (dnaSequence !== null && dnaSequence !== "") {
+        	this.dnaSequence = dnaSequence;
+        	//For right now, vector editor does not set the sequence as circular when reading from GenBank but 
+        	// the digestion assumes that it is circular
+    		dnaSequence.setCircular(true);
+    	}
     },
     /**
      * Filters the list of enzymes in the itemSelector based on the enzyme group selected and the search term

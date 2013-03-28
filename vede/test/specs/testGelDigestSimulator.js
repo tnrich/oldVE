@@ -1,6 +1,16 @@
 /*
  * @author Doug Hershberger
  */
+Ext.Loader.setConfig({
+    enabled: true,
+    paths: {
+        Ext: '.',
+        'Ext.ux': '../extjs/examples/ux',
+//        Teselagen: './app/teselagen',
+        Vede: './app',
+        'Teselagen.bio': '../biojs/src/teselagen/bio'
+    }
+});
 
 
 Ext.require('Ext.app.Application');
