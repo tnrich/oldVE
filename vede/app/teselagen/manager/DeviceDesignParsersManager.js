@@ -39,8 +39,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     deproject.set("id", deprojectId);
 
                     // Load the Eugene Rules in the Design
-                    for (var ruleIndex in eugeneRules) {
-                        design.addToRules(eugeneRules[ruleIndex]);
+                    for (var i = 0; i < eugeneRules.length; i++) {
+                        design.addToRules(eugeneRules[i]);
                     }
 
                     Vede.application.fireEvent("ReRenderDECanvas");
@@ -286,8 +286,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var eugeneRules = xmlDoc.getElementsByTagNameNS("*", "eugeneRules")[0].getElementsByTagNameNS("*", "eugeneRule");
         var rulesArray = [];
 
-        for (var indexRule in eugeneRules) {
-            var rule = eugeneRules[indexRule];
+        for (var i = 0; i < eugeneRules.length; i++) {
+            var rule = eugeneRules[i];
             if (typeof(rule) !== "object") { continue; }
             var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
             var operand2 = rule.getElementsByTagNameNS("*", "operand2ID")[0].textContent;
