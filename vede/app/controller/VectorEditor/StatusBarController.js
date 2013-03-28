@@ -49,15 +49,24 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
                             this.onSequenceChanged, this);
     },
 
+    reset: function() {
+        this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(
+                        this.SequenceManager.getSequence().toString().length);
+
+        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText("0");
+
+        this.onSelectionCanceled();
+        this.onSequenceChanged();
+    },
+
     onSequenceManagerChanged: function(newSeqMan) {
         this.SequenceManager = newSeqMan;
 
-        this.StatusPanel.down("tbtext[cls='sequenceLengthText']").setText(
-            this.SequenceManager.getSequence().toString().length);
+        this.reset();
     },
     
     onCaretPositionChanged: function(scope, index) {
-        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index);
+        this.StatusPanel.down("tbtext[cls='caretPositionText']").setText(index.toString());
     },
 
     onSelectionChanged: function(scope, start, end) {

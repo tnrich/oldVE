@@ -19,7 +19,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         writer: {
             type: "json"
         },
-        buildUrl: function () {
+        buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequences", this.url);
         }
     },
@@ -43,11 +43,11 @@ Ext.define("Teselagen.models.SequenceFile", {
         type: "long"
     }, {
         name: "sequenceFileFormat",
-        convert: function (v) {
+        convert: function(v) {
             var format = v.toUpperCase().replace(/[^A-Z]/gi, "");
             var constants = Teselagen.constants.Constants;
 
-            if(format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
+            if (format === constants.GENBANK || format === constants.FASTA || format === constants.JBEISEQ || format === constants.SBOLXML) {
                 return format;
             } else {
                 // COMMENTING THIS OUT FOR NOW
@@ -66,7 +66,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     {
         name: "hash",
-        convert: function (v, record) {
+        convert: function(v, record) {
             var content = record.get("sequenceFileContent");
             return Teselagen.bio.util.Sha256.hex_sha256(content);
         }
@@ -74,9 +74,9 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     {
         name: "partSource",
-        convert: function (v, record) {
+        convert: function(v, record) {
 
-            if(!(v === "" || v === undefined || v === null)) {
+            if (!(v === "" || v === undefined || v === null)) {
                 return v;
             }
             var format = record.get("sequenceFileFormat");
@@ -88,8 +88,8 @@ Ext.define("Teselagen.models.SequenceFile", {
 
     {
         name: "sequenceFileName",
-        convert: function (v, record) {
-            if(!(v === "" || v === undefined || v === null)) {
+        convert: function(v, record) {
+            if (!(v === "" || v === undefined || v === null)) {
                 return v;
             }
 
@@ -100,7 +100,13 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             return name;
         }
-    }],
+    }, {
+        name: "firstTimeImported",
+        type: "boolean",
+        defaultValue: "false"
+    }
+
+    ],
     /*
     validations: [{
         field: "sequenceFileFormat",
@@ -140,9 +146,9 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {String} pContent The sequence file, in string form.
      * @returns {String} SequenceHash
      */
-    setSequenceFileContent: function (pContent) {
+    setSequenceFileContent: function(pContent) {
 
-        if(pContent === undefined || pContent === null) {
+        if (pContent === undefined || pContent === null) {
             pContent = "";
         }
 
@@ -162,25 +168,25 @@ Ext.define("Teselagen.models.SequenceFile", {
      * If no Part Source is given, this function determines it based on SequenceFileContent.
      * @private
      */
-    makePartSource: function (pFormat, pContent) {
+    makePartSource: function(pFormat, pContent) {
 
         var constants = Teselagen.constants.Constants;
         var source = ""; //"UNKNOWN";
         var cnt;
 
-        if(pFormat === constants.GENBANK) {
+        if (pFormat === constants.GENBANK) {
             cnt = pContent.match(/LOCUS *(\S*)/);
-            if(cnt !== null && cnt.length >= 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 source = cnt[1].toString();
             }
-        } else if(pFormat === constants.FASTA) {
+        } else if (pFormat === constants.FASTA) {
             cnt = pContent.match(/>\s*(\S*)/);
-            if(cnt !== null && cnt.length >= 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 source = cnt[1].toString();
             }
-        } else if(pFormat === constants.JBEISEQ) {
+        } else if (pFormat === constants.JBEISEQ) {
             cnt = pContent.match(/<seq:name>(.*)<\/seq:name>/);
-            if(cnt !== null && cnt.length >= 1) {
+            if (cnt !== null && cnt.length >= 1) {
                 source = cnt[1].toString();
             }
         } else {}
@@ -194,10 +200,10 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {String} [pPartSource] Name of the PartSource. If undefined, will set based on SequenceFileContent and SequenceFileFormat properties.
      * @returns {String} Name of the set partSource
      */
-    setPartSource: function (pPartSource) {
+    setPartSource: function(pPartSource) {
 
         // In The case where there is an input
-        if(!(pPartSource === "" || pPartSource === undefined || pPartSource === null)) {
+        if (!(pPartSource === "" || pPartSource === undefined || pPartSource === null)) {
             this.set("partSource", pPartSource);
             return pPartSource;
         }
@@ -212,7 +218,7 @@ Ext.define("Teselagen.models.SequenceFile", {
      * If no File Name is given, this function determines it based on SequenceFileContent and SequenceFileFormat.
      * @private
      */
-    makeSequenceFileName: function (pFormat, pSource) {
+    makeSequenceFileName: function(pFormat, pSource) {
 
         var constants = Teselagen.constants.Constants;
         var format = this.get("sequenceFileFormat");
@@ -220,11 +226,11 @@ Ext.define("Teselagen.models.SequenceFile", {
 
         // If the file name was set with a "" for partSource, the file name may be ".fas", ".gb", or "xml"
         // Overwrite these filenames if that is true calling this method.
-        if(format === constants.GENBANK) {
+        if (format === constants.GENBANK) {
             name = pSource + ".gb";
-        } else if(format === constants.FASTA) {
+        } else if (format === constants.FASTA) {
             name = pSource + ".fas";
-        } else if(format === constants.JBEISEQ) {
+        } else if (format === constants.JBEISEQ) {
             name = pSource + ".xml"; // IS THIS THE CORRECT FILE SUFFIX?
         } else {
             name = pSource;
@@ -242,9 +248,9 @@ Ext.define("Teselagen.models.SequenceFile", {
      * @param {String} [pSequenceFileName] Sequence File name. If undefined, will set based on SequenceFileContent and SequenceFileFormat.
      * @returns {String} Set sequenceFileName.
      */
-    setSequenceFileName: function (pName) {
+    setSequenceFileName: function(pName) {
         // In The case where there is an input
-        if(!(pName === undefined || pName === null || pName === "")) {
+        if (!(pName === undefined || pName === null || pName === "")) {
             this.set("sequenceFileName", pName);
             return pName;
         }
@@ -253,7 +259,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         var name = this.get("sequenceFileName");
 
         // reparse from Content if there is no name
-        if(name.replace(/\.gb|\.fas|\.xml/gi, "") === "" || name === undefined) {
+        if (name.replace(/\.gb|\.fas|\.xml/gi, "") === "" || name === undefined) {
             var source = this.makePartSource(this.get("sequenceFileFormat"), this.get("sequenceFileContent"));
             name = this.makeSequenceFileName(this.get("sequenceFileFormat"), source);
         }
@@ -267,33 +273,29 @@ Ext.define("Teselagen.models.SequenceFile", {
      * Determine the length of the sequence.
      * @returns {Number} Length of the sequence
      */
-    getLength: function () {
+    getLength: function() {
         var constants = Teselagen.constants.Constants;
         var format = this.get("sequenceFileFormat");
         var content = this.get("sequenceFileContent");
         var end = 0;
 
-        if(format === constants.GENBANK) {
+        if (format === constants.GENBANK) {
             var gb = Teselagen.bio.parsers.GenbankManager.parseGenbankFile(content);
-            if(gb)
-            {
-                if(gb.findKeyword("ORIGIN"))
-                {
+            if (gb) {
+                if (gb.findKeyword("ORIGIN")) {
                     end = gb.findKeyword("ORIGIN").getSequence().length;
-                }
-                else end = -1;
-            }
-            else end = -1;
-        } else if(format === constants.FASTA) {
+                } else end = -1;
+            } else end = -1;
+        } else if (format === constants.FASTA) {
             var seq = content.replace(/>\s*(\S*)\s*/, "");
             seq = seq.replace(/\s/, "");
             //console.log(seq);
             end = seq.length;
-        } else if(format === constants.JBEISEQ) {
+        } else if (format === constants.JBEISEQ) {
             var jbei = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToJson(content);
             //console.log(jbei);
             end = jbei["seq:seq"]["seq:sequence"].length;
-        } else if(format === constants.SBOLXML) {
+        } else if (format === constants.SBOLXML) {
             var sbol = Teselagen.bio.parsers.ParsersManager.sbolXmlToJson(content);
             console.log(sbol);
             console.warn("Finding length for SBOL file not determined yet");

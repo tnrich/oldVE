@@ -188,20 +188,7 @@
         },
         "de:eugeneRules": {
             "eugeneRule": [
-                {
-                    "de:name": "Rule_1",
-                    "de:negationOperator": false,
-                    "de:operand1ID": 1318886361765194,
-                    "de:compositionalOperator": "THEN",
-                    "de:operand2ID": 1318886361747742
-                },
-                {
-                    "de:name": "Rule_2",
-                    "de:negationOperator": true,
-                    "de:operand1ID": 1318886361765194,
-                    "de:compositionalOperator": "THEN",
-                    "de:operand2ID": 1318886361747742
-                }
+
             ]
         },
         "de:j5Collection": {

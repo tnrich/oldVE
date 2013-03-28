@@ -2,5 +2,5 @@ eclipse.preferences.version=1
 excluded=node_modules//*\:public//*\:resources//*
 globals=require\:false
 included=//*.js
-options=browser\:true,curly\:true, eqeqeq\:true, expr\:true, forin\:true, immed\:true,indent\:4, latedef\:true, newcap\:true, noarg\:true, nonew\:true,quotmark\:true, regexp\:true, trailing\:true, undef\:true, unused\:true
+options=browser\:true,curly\:true, eqeqeq\:true, expr\:true, forin\:true, immed\:true,indent\:4, latedef\:true, newcap\:true, noarg\:true, nonew\:true,quotmark\:true, trailing\:true, undef\:true, unused\:true
 projectSpecificOptions=true

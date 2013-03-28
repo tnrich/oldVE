@@ -133,6 +133,7 @@ Ext.define("Vede.controller.ProjectController", {
         var deprojects = project.deprojects().load({
             callback: function () {
                 var deproject = deprojects.getById(deproject_id);
+                Teselagen.manager.ProjectManager.workingProject = project;
                 Teselagen.manager.ProjectManager.openDEProject(deproject);
             }
         });
@@ -227,9 +228,8 @@ Ext.define("Vede.controller.ProjectController", {
                                     Vede.application.fireEvent("renderProjectsTree", function () {
                                         Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + selectedVEProject.data.id);
                                     });
-                                    var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                                     Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
-                                    Vede.application.fireEvent("VectorEditorEditingMode", newPart, activeTab);
+                                    Vede.application.fireEvent("openVectorEditor", newSequenceFile);
                                 }
                             });
                         }

@@ -94,7 +94,7 @@ Ext.application({
         'SequenceController',
         'SimulateDigestionController',
         'VectorPanelController',
-        'VectorEditor.ImportSequenceWindowController',
+        'VectorEditor.ImportSequenceController',
         'VectorEditor.SequenceEditingController',
         'VectorEditor.StatusBarController',
         'DeviceEditor.DeviceEditorPanelController',

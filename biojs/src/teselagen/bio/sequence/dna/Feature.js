@@ -105,7 +105,7 @@ Ext.define("Teselagen.bio.sequence.dna.Feature", {
                         start: inData.start,
                         end: inData.end,
                         type: type,
-                        strand: inData.strand,
+                        strand: this.getStrand(),
                         notes: inData.notes
                     });
 

@@ -92,7 +92,7 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.caret.render();
     },
 
-    render:function() {
+    render: function() {
         this.RowManager.update();
         this.annotator.render();
 

@@ -58,10 +58,9 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
     addToolTip: function(sprite, tooltip) {
         sprite.tooltip = tooltip;
         sprite.on("render", function(me) {
-            Ext.tip.QuickTipManager.register({
+            var tip = Ext.create("Ext.tip.ToolTip", {
                 target: me.el,
-                text: me.tooltip,
-                hideDelay: 0
+                html: me.tooltip
             });
         });
     },

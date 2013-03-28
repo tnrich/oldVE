@@ -8,6 +8,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent"],
 
+    statics: {
+        MIN_BP_PER_ROW: 20
+    },
+
     AnnotatePanel: null,
 
     SequenceAnnotationManager: null,
@@ -23,6 +27,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.control({
             "#AnnotateContainer" : {
                 render: this.onRender
+            },
+            "#AnnotatePanel": {
+                resize: this.onResize
             }
         });
 
@@ -78,16 +85,39 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         pCmp.el.on("keydown", this.onKeydown, this);
         this.SequenceAnnotationManager.annotator.init();
     },
+
+    onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
+        // Calculate the BP's per row, rounded to the nearest 10.
+        var newBpPerRow = Math.floor((width - 60) / 10 / 10) * 10;
+        var selectionStart;
+        var selectionEnd;
+
+        if(newBpPerRow < this.self.MIN_BP_PER_ROW) {
+            newBpPerRow = this.self.MIN_BP_PER_ROW;
+        }
+
+        this.SequenceAnnotationManager.setBpPerRow(newBpPerRow);
+
+        if(this.SequenceManager) {
+            this.SequenceAnnotationManager.render();
+
+            this.SelectionLayer.refresh();
+        }
+    },
     
     onKeydown: function(event) {
         this.callParent(arguments);
 
         if(event.getKey() == event.UP) {
             this.changeCaretPosition(this.caretIndex -
-                                     this.SequenceAnnotationManager.bpPerRow);
+                                     this.SequenceAnnotationManager.bpPerRow,
+                                     false,
+                                     true);
         } else if(event.getKey() == event.DOWN) {
             this.changeCaretPosition(this.caretIndex +
-                                     this.SequenceAnnotationManager.bpPerRow);
+                                     this.SequenceAnnotationManager.bpPerRow,
+                                     false,
+                                     true);
         }
     },
 
@@ -116,13 +146,15 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onSelectionChanged: function(scope, start, end) {
         if(scope !== this) {
             this.SelectionLayer.select(start, end);
-            this.changeCaretPosition(start);
+            this.changeCaretPosition(start, false, true);
         }
     },
 
     onSequenceManagerChanged: function(pSeqMan){
         this.callParent(arguments);
         this.SelectionLayer.setSequenceManager(pSeqMan);
+
+        this.changeCaretPosition(0, true, true);
     },
 
     onShowFeaturesChanged: function(show) {
@@ -160,7 +192,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
             this.mouseIsDown = true;
 
-            this.changeCaretPosition(index);
+            this.changeCaretPosition(index, false, true);
 
             if(this.SelectionLayer.selected && 
                pEvt.target.id !== "selectionRectangle") {
@@ -192,16 +224,16 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 this.startSelectionIndex = bpIndex;
                 this.selectionDirection = 1; // ignore direction on resizing
 
-                this.changeCaretPosition(bpIndex); 
+                this.changeCaretPosition(bpIndex, false, false); 
             } else if(this.endHandleResizing) {
                 this.endSelectionIndex = bpIndex;
                 this.selectionDirection = 1;
 
-                this.changeCaretPosition(this.startSelectionIndex);
+                this.changeCaretPosition(this.startSelectionIndex, false, false);
             } else {
                 this.endSelectionIndex = bpIndex; 
 
-                this.changeCaretPosition(this.startSelectionIndex);
+                this.changeCaretPosition(this.endSelectionIndex, false, false);
             }
                 
             if(this.SequenceAnnotationManager.annotator.isValidIndex(this.startSelectionIndex) &&
@@ -246,6 +278,14 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                                        this,
                                        this.SelectionLayer.start,
                                        this.SelectionLayer.end);
+
+            // Depending on selection direction, move caret either to start or 
+            // end of selection.
+            if(this.selectionDirection === 1) {
+                this.changeCaretPosition(this.SelectionLayer.end, false, false);
+            } else {
+                this.changeCaretPosition(this.SelectionLayer.start, false, false);
+            }
         } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd) {
             // If we've clicked a sprite, select it.
             this.SelectionLayer.endSelecting();
@@ -265,29 +305,36 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     select: function(start, end) {
-        this.changeCaretPosition(start);
+        this.changeCaretPosition(start, false, true);
         this.SelectionLayer.select(start, end);
     },
 
-    changeCaretPosition: function(index, silent) {
+    changeCaretPosition: function(index, silent, scrollToCaret) {
         if(index >= 0 &&
            index <= this.SequenceManager.getSequence().toString().length) {
             
             this.callParent(arguments);
             this.SequenceAnnotationManager.adjustCaret(index);
-            
-            var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
-            var el = Ext.getCmp("AnnotateContainer").el;
 
-            if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
-                 metrics.getY() > el.getScroll().top)) {
-                el.scrollTo("top", metrics.getY());
+            // Only scroll to the location of the caret if we're not currently
+            // dragging to make a selection.
+            if(scrollToCaret) {
+                var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
+                var el = Ext.getCmp("AnnotateContainer").el;
+
+                if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
+                     metrics.getY() > el.getScroll().top)) {
+                    el.scrollTo("top", metrics.getY());
+                }
             }
         }
     },
 
     onSequenceChanged: function(kind, obj) {
         this.callParent(arguments);
+
+        this.SelectionLayer.refresh();
+        this.changeCaretPosition(this.caretIndex, true, false);
     },
 
     onActiveEnzymesChanged: function() {

@@ -28,7 +28,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'ori_Btn',
             data: { iconKey : 'ORIGIN_OF_REPLICATION' },
-            icon: 'resources/images/symbols/origin-of-replication.png',
+            icon: 'resources/images/icons/device/small/origin-of-replication.png',
             scale: 'large',
             tooltip: 'Origin of Replication'
         }, {
@@ -39,7 +39,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'cds_Btn',
             data: { iconKey : 'CDS' },
-            icon: 'resources/images/symbols/cds.png',
+            icon: 'resources/images/icons/device/small/cds.png',
             scale: 'large',
             tooltip: 'CDS'
         }, {
@@ -49,7 +49,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'five_prime_ov_Btn',
             data: { iconKey : 'FIVE_PRIME_OVERHANG' },
-            icon: 'resources/images/symbols/five-prime-overhang.png',
+            icon: 'resources/images/icons/device/small/five-prime-overhang.png',
             scale: 'large',
             tooltip: '5\' Overhang'
         }, {
@@ -59,7 +59,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'three_prime_ov_Btn',
             data: { iconKey : 'THREE_PRIME_OVERHANG' },
-            icon: 'resources/images/symbols/three-prime-overhang.png',
+            icon: 'resources/images/icons/device/small/three-prime-overhang.png',
             scale: 'large',
             tooltip: '3\' Overhang'
         }, {
@@ -69,7 +69,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'promoter_Btn',
             data: { iconKey : 'PROMOTER' },
-            icon: 'resources/images/symbols/promoter.png',
+            icon: 'resources/images/icons/device/small/promoter.png',
             scale: 'large',
             tooltip: 'Promoter'
         }, {
@@ -79,7 +79,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'primer_binding_site_Btn',
             data: { iconKey : 'PRIMER_BINDING_SITE' },
-            icon: 'resources/images/symbols/primer-binding-site.png',
+            icon: 'resources/images/icons/device/small/primer-binding-site.png',
             scale: 'large',
             tooltip: 'Primer Binding Site'
         }, {
@@ -87,11 +87,41 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             height: 40
         }, {
             xtype: 'button',
+            cls: 'five_prime_restriction_site_Btn',
+            data: { iconKey : 'FIVE_PRIME_RESTRICTION_SITE' },
+            icon: 'resources/images/icons/device/small/five-prime-sticky-restriction-site.png',
+            scale: 'large',
+            tooltip: '5\' Sticky Restriction Site'
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        },{
+            xtype: 'button',
+            cls: 'three_prime_restriction_site_Btn',
+            data: { iconKey : 'THREE_PRIME_RESTRICTION_SITE' },
+            icon: 'resources/images/icons/device/small/three-prime-sticky-restriction-site.png',
+            scale: 'large',
+            tooltip: '3\' Sticky Restriction Site'
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        },{
+            xtype: 'button',
             cls: 'restriction_enz_recog_site_Btn',
             data: { iconKey : 'RESTRICTION_ENZYME_RECOGNITION_SITE' },
-            icon: 'resources/images/symbols/restriction-enzyme-recognition-site.png',
+            icon: 'resources/images/icons/device/small/restriction-enzyme-recognition-site.png',
             scale: 'large',
             tooltip: 'Restriction Enzyme Recognition Site'
+        }, {
+            xtype: 'tbseparator',
+            height: 40
+        },{
+            xtype: 'button',
+            cls: 'blunt_restriction_site_Btn',
+            data: { iconKey : 'BLUNT_RESTRICTION_SITE' },
+            icon: 'resources/images/icons/device/small/blunt-restriction-site.png',
+            scale: 'large',
+            tooltip: 'Blunt Restriction Site'
         }, {
             xtype: 'tbseparator',
             height: 40
@@ -99,7 +129,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'restriction_site_w_no_overhang_Btn',
             data: { iconKey : 'RESTRICTION_SITE_NO_OVERHANG' },
-            icon: 'resources/images/symbols/restriction-site-with-no-overhang.png',
+            icon: 'resources/images/icons/device/small/restriction-site-with-no-overhang.png',
             scale: 'large',
             tooltip: 'Restriction Site With No Overhangs'
         }, {
@@ -109,7 +139,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'protease_site_Btn',
             data: { iconKey : 'PROTEASE_SITE' },
-            icon: 'resources/images/symbols/protease-site.png',
+            icon: 'resources/images/icons/device/small/protease-site.png',
             scale: 'large',
             tooltip: 'Protease Site'
         }, {
@@ -119,7 +149,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'protein_stability_element_Btn',
             data: { iconKey : 'PROTEIN_STABILITY_ELEMENT' },
-            icon: 'resources/images/symbols/protein-stability-element.png',
+            icon: 'resources/images/icons/device/small/protein-stability-element.png',
             scale: 'large',
             tooltip: 'Protein Stability Element'
         }, {
@@ -129,7 +159,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'assembly_junction_Btn',
             data: { iconKey : 'ASSEMBLY_JUNCTION' },
-            icon: 'resources/images/symbols/assembly-junction.png',
+            icon: 'resources/images/icons/device/small/assembly-scar.png',
             scale: 'large',
             tooltip: 'Assembly Junction'
         }, {
@@ -139,7 +169,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'insulator_Btn',
             data: { iconKey : 'INSULATOR' },
-            icon: 'resources/images/symbols/insulator.png',
+            icon: 'resources/images/icons/device/small/insulator.png',
             scale: 'large',
             tooltip: 'Insulator'
         }, {
@@ -149,7 +179,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'operator_Btn',
             data: { iconKey : 'OPERATOR_SITE' },
-            icon: 'resources/images/symbols/operator.png',
+            icon: 'resources/images/icons/device/small/operator.png',
             scale: 'large',
             tooltip: 'Operator'
         }, {
@@ -159,7 +189,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'ribonuclease_site_Btn',
             data: { iconKey : 'RIBONUCLEASE_SITE' },
-            icon: 'resources/images/symbols/ribonuclease-site.png',
+            icon: 'resources/images/icons/device/small/ribonuclease-site.png',
             scale: 'large',
             tooltip: 'Ribonuclease Site'
         }, {
@@ -169,7 +199,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'rna_stability_element_Btn',
             data: { iconKey : 'RNA_STABILITY_ELEMENT' },
-            icon: 'resources/images/symbols/rna-stability-element.png',
+            icon: 'resources/images/icons/device/small/rna-stability-element.png',
             scale: 'large',
             tooltip: 'RNA Stability Element'
         }, {
@@ -179,7 +209,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'terminator_Btn',
             data: { iconKey : 'TERMINATOR' },
-            icon: 'resources/images/symbols/terminator.png',
+            icon: 'resources/images/icons/device/small/terminator.png',
             scale: 'large',
             tooltip: 'Terminator'
         }, {
@@ -189,7 +219,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'signature_Btn',
             data: { iconKey : 'SIGNATURE' },
-            icon: 'resources/images/symbols/signature.png',
+            icon: 'resources/images/icons/device/small/signature.png',
             params: 'Signature',
             scale: 'large',
             tooltip: 'Signature'
@@ -200,7 +230,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'five_prime_utr_Btn',
             data: { iconKey : 'FIVE_PRIME_UTR' },
-            icon: 'resources/images/symbols/five_prime_utr.png',
+            icon: 'resources/images/icons/device/small/ribosome-entry-site.png',
             params: 'five_prime_utr',
             scale: 'large',
             tooltip: 'Five Prime UTR'
@@ -211,7 +241,7 @@ Ext.define('Vede.view.de.DeviceEditorPartPanel', {
             xtype: 'button',
             cls: 'generic',
             data: { iconKey : 'GENERIC' },
-            icon: 'resources/images/symbols/generic.png',
+            icon: 'resources/images/icons/device/small/generic.png',
             params: 'generic',
             scale: 'large',
             tooltip: 'Generic DNA'

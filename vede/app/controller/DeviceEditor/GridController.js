@@ -519,7 +519,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: icon.url_svg
+            iconSource: icon.url_large
         });
 
         // If false flip, otherwise do nothing;
@@ -590,7 +590,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var newBin = Ext.create("Vede.view.de.grid.Bin", {
             bin: j5Bin,
             totalRows: this.totalRows,
-            iconSource: icon.url_svg
+            iconSource: icon.url_large
         });
 
         if(index === null) {
@@ -703,16 +703,18 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var DETab = Ext.getCmp('mainAppPanel').getActiveTab();
 
         DETab.setLoading(true);
-        
+
         setTimeout(function() {
             j5Part.getSequenceFile({
             callback: function(associatedSequence,operation){
-            
+
             if(associatedSequence)
             {
                 console.log("onPartCellVEEditClick");
-                console.log(associatedSequence);
-                Vede.application.fireEvent("VectorEditorEditingMode",j5Part, DETab);
+                j5Part.getSequenceFile({
+                    callback: function (seq) {
+                        Vede.application.fireEvent("OpenVectorEditor",seq);
+                }});
                 DETab.setLoading(false);
             }
             else
@@ -724,15 +726,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                     sequenceFileName: "untitled.gb",
                     partSource: "New Part"
                 });
-                
+
                 newSequenceFile.save({
                     callback: function(){
                         j5Part.setSequenceFileModel(newSequenceFile);
                         j5Part.save({
                             callback: function(){
-                                console.log(j5Part);
-                                var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                                Vede.application.fireEvent("VectorEditorEditingMode",j5Part,activeTab);
+                                Vede.application.fireEvent("openVectorEditor",newSequenceFile);
                                 DETab.setLoading(false);
                             }
                         });
@@ -767,10 +767,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onValidateDuplicatedPartNameEvent: function(pPart,name,cb){
+        //console.log("Checking for duplicate part with id:"+pPart.get('id'));
         duplicated = false;
         this.activeBins.each(function(bin) {
             bin.parts().each(function(part){
-                if(part!=pPart && part.get('name')===name) duplicated = true;
+                //console.log(part.get('id'));
+                if(part.get('id')!=pPart.get('id') && part.get('name')===name) duplicated = true;
             });
         });
 
@@ -778,7 +780,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         {
                 Ext.MessageBox.show({
                     title: 'Error',
-                    msg: 'There\'s another part using the same name.',
+                    msg: 'Another non-identical part with that name already exists in the design. Please select the same part or a part with another name.',
                     buttons: Ext.MessageBox.OK,
                     icon:Ext.MessageBox.ERROR
                 });

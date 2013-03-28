@@ -34,7 +34,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
 
     render: function(){
         this.featureGroupSVG = this.sequenceAnnotator.featuresSVG.append("svg:g")
-                .attr("id", "feature-" +this.feature.getName());
+                .attr("id", "feature-" + this.feature.getName());
 
         this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
         var g = this.featureGroupSVG;
@@ -358,6 +358,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                                " L " + (pX) + " " + (pY + pHeight / 2));
             }
         }
+
         function drawFeatureForwardCurved(pGraphics, pX, pY, pWidth, pHeight){
             //drawFeatureRect(pGraphics, pX, pY, pWidth, pHeight);
             /*
@@ -399,16 +400,12 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         var color = switchObj[type] || "#CCCCCC";
         return color;
     },
-    findFeatureRowIndex: function(key, value, item){
-
-    },
 
     addToolTip: function(feature){
         var featureToolTip = this.featureGroupSVG.append("svg:title")
             .attr("id", "feature-tooltip-"+feature.getName());
         var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
         featureToolTip.text(toolTip);
-
     },
 
 
