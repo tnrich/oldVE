@@ -10,19 +10,46 @@ Ext.define("Teselagen.models.digest.Gel", {
          "Teselagen.models.digest.GelBand"
          ],
     config: {
+    	/**
+    	 * {String} name of this gel
+    	 */
         name: "default",
+        /**
+         * {String} default color for all bands of this gel (can be overridden by lane or by band)
+         */
         BAND_COLOR: '#fff',
+        /**
+         * {String} default color for all connectors in this gel (can be overridden by lane or by band)
+         */
         CONNECTOR_COLOR: '#999999',
-        drawingSurface: null,
-        ladderName: "1kb",
+        /**
+         * The ladder associated with this gel
+         */
         ladder: null,
+        /**
+         * Convenience object for accesssing the static Teselagen.models.gigest.Ladder object
+         */
         ladderDefs: null,
+        /**
+         * Length of the shortest band in this gel
+         */
         min: null,
+        /**
+         * Length of the longest band in this gel
+         */
         max: null,
+        /**
+         * Height of the gel
+         */
         actualHeight: 400,
+        /**
+         * Width of the gel
+         */
         actualWidth: 400
     },
-
+	/*
+	 * This is the array that stores the lanes in this gel
+	 */
     lanes: null,
     getLanes: function(){
         return this.lanes;
@@ -132,8 +159,6 @@ Ext.define("Teselagen.models.digest.Gel", {
     draw: function(){
         this.calculateMinMax();
         var ladderHeight = this.actualHeight * 0.8;
-//        var ladderMin = this.ladder[this.ladder.length - 1]; 
-//        var ladderMax = this.ladder[0]; 
         var totalLogDifference = Math.log(this.max / this.min);
         var laneBands = [];
         for (var i = 0; i < this.getLanes().length; ++i){

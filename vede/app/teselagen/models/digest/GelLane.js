@@ -7,16 +7,58 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 
 Ext.define("Teselagen.models.digest.GelLane", {
     config: {
-        BAND_COLOR: '#fff',
-        CONNECTOR_COLOR: '#999999',
-        labelSize: 16,
-        ladder: null,
-        bandSprites: null,
-        bandSizeLabels: null,
-        bandSizeLabelYPositions: null,
+    	/**
+    	 * {String} name of this gel
+    	 */
         name: "default",
+        /**
+         * {String} default color for all bands of this gel (can be overridden by lane or by band)
+         */
+        BAND_COLOR: '#fff',
+        /**
+         * {String} default color for all connectors in this gel (can be overridden by lane or by band)
+         */
+        CONNECTOR_COLOR: '#999999',
+        /**
+         * The ladder associated with this gel
+         */
+        ladder: null,
+        /**
+         * Convenience object for accesssing the static Teselagen.models.gigest.Ladder object
+         */
+        ladderDefs: null,
+        /**
+         * Length of the shortest band in this gel
+         */
         min: null,
+        /**
+         * Length of the longest band in this gel
+         */
         max: null,
+        /**
+         * Height of the gel
+         */
+        actualHeight: 400,
+        /**
+         * Width of the gel
+         */
+        actualWidth: 400,
+        /**
+         * size of the font for labels (in pixels)
+         */
+        labelSize: 16,
+        /**
+         * holds the sprites for all the bands
+         */
+        bandSprites: null,
+        /**
+         * holds the sprites for all the band size labels
+         */
+        bandSizeLabels: null,
+        /**
+         * holds the vertical (Y) positions for all the band size labels
+         */
+        bandSizeLabelYPositions: null,
         /**
          * An {Teselagen.bio.enzymes.RestrictionEnzyme[]} of the restriction enzymes to use to cut the DNA in sequence 
          */
@@ -39,14 +81,14 @@ Ext.define("Teselagen.models.digest.GelLane", {
          * 
          */
         laneType: "ladder",
-
+		/**
+		 * Horizontal padding for bands and labels (as a fraction of 1)
+		 */
         hPad: .1,
+        /**
+         * The horizontal (X) offset of this lane relative to the whoel gel
+         */
         xOffset: 100,
-        actualWidth: 400,
-        actualHeight: 600,
-
-        ladderChanged: true,
-        needsRemeasurement: true,
     },
 
     /**
@@ -145,7 +187,11 @@ Ext.define("Teselagen.models.digest.GelLane", {
 	        		laneLabelText = laneLabelText + "s";
 	        	}
 	        } else {
-	        	laneLabelText = "No Digestion"
+	        	if (this.sequence === null){
+	        		laneLabelText = "No Sequence";	
+	        	} else {
+	        		laneLabelText = "No Digestion";
+	        	}
 	        }
 	        var halfWidth = this.actualWidth / 2;
 	        var txtOffset = halfWidth;

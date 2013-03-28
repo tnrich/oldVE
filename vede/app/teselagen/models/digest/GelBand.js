@@ -6,17 +6,53 @@
 Ext.define("Teselagen.models.digest.GelBand", {
 
     config: {
+        /**
+         * {String}  color for this band
+         */
         BAND_COLOR: '#fff',
+        /**
+         * {String}  color for the connectors for this band
+         */
         CONNECTOR_COLOR: '#999999',
+        /**
+         * size of the font for labels (in pixels)
+         */
         labelSize: 16,
+        /**
+         * The hight (thickness) of this band in pixels
+         */
         bandHeight: 4,
+        /**
+         * Width of the band
+         */
         actualWidth: 400,//null
+        /**
+         * The horizontal (X) offset of this lane relative to the whoel gel
+         */
         xOffset: 100,//null
+        /**
+         * Vertical (Y) position of this band relative to the whole gel
+         */
         bandYPosition: null,
+        /**
+         * Text of the size label for this band
+         */
         bandSizeLabel: null,
+        /**
+         * Vertical (Y) position of this band's label relative to the whole gel
+         */
         bandSizeLabelYPosition: null,
+        /**
+         * height of the gel
+         */
         actualHeight: 800,
+		/**
+		 * Horizontal padding for bands and labels (as a fraction of 1)
+		 */
         hPad: .1,
+        /**
+         * Name of this band
+         */
         name: "default",
         /**
          * A {Text} label to associate with the start usually the restriction enzyme at this end
