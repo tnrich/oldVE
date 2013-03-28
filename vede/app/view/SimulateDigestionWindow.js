@@ -1,6 +1,8 @@
 /**
  * Simulate digestion window
  * @class Vede.view.SimulateDigestionWindow
+ * @author Doug Hershberger
+ * @author Micah Lerner
  */
 Ext.define('Vede.view.SimulateDigestionWindow', {
     extend: 'Ext.window.Window',

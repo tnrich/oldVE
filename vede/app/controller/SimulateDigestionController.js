@@ -1,6 +1,8 @@
 /**
  * A controller that handles events in the SimulateDigestionWindow
  * @class Vede.controller.SimulateDigestionController
+ * @author Doug Hershberger
+ * @author Micah Lerner
  */
 Ext.define('Vede.controller.SimulateDigestionController', {
 	extend: 'Ext.app.Controller',

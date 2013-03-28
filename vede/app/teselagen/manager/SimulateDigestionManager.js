@@ -1,6 +1,8 @@
 /**
  * Simulate digestion manager
  * @class Teselagen.manager.SimulateDigestionManager
+ * @author Doug Hershberger
+ * @author Micah Lerner
  */
 Ext.require("Teselagen.models.digest.Ladder");
 Ext.define("Teselagen.manager.SimulateDigestionManager", {
