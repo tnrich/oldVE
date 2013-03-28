@@ -75,7 +75,7 @@ Ext.onReady(function() {
 					400
 				);
 			});
-		    it("adds the test group to the group manager", function() {
+		    it("Filters enzymes correctly", function() {
 				var testGroup = ctlr.GroupManager.createGroupByEnzymes("TEST", new Array("EcoRI","EcoRV","EcoVIII", "M.EcoKDam", "BciVI", "BbvI", "BamHI"));
 				ctlr.GroupManager.userGroups.push(testGroup);
 				var newGroup = ctlr.GroupManager.groupByName("TEST");
@@ -90,10 +90,10 @@ Ext.onReady(function() {
 		        expect(tempSelectedEnzymes[0].data.name).toBe("BamHI");
 		        var searchCombobox = ctlr.managerWindow.query("#enzymeGroupSelector-search")[0];
 		        searchCombobox.setValue("eco");
-		        //ctlr.searchEnzymes(searchCombobox);
+		        ctlr.searchEnzymes(searchCombobox);
+		        tempSelectedEnzymes = ctlr.enzymeListSelector.fromField.store.data.items;
 	        	expect(tempSelectedEnzymes.length).toBe(4);
-	        	expect(tempSelectedEnzymes[0].data.name).toBe("M.EcoKDam");
-	        	tempSelectedEnzymes = ctlr.enzymeListSelector.fromField.store.data.items;
+	        	expect(tempSelectedEnzymes[0].data.name).toBe("EcoRI");
 	        	searchCombobox.setValue("eco");
 	        	var newSelectedEnzymes = ctlr.enzymeListSelector.fromField.store.data.items;
 	        	expect(tempSelectedEnzymes).toBe(newSelectedEnzymes);

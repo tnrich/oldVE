@@ -26,6 +26,10 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
          */
         dnaSequence: null
     },
+    /*
+     * holds the list of currently selected enzymes for persistance after the window is closed 
+     */
+    currentEnzymes: null,
     constructor: function(inData){
         this.initConfig(inData);
     	this.Ladder = Ext.create("Teselagen.models.digest.Ladder");
@@ -47,23 +51,40 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
      * @param {Object} groupSelector which contains the restriction enzyme group to be searched
      */
     filterEnzymes: function(searchCombo, groupSelector){
+    	//save the currently selected enzymes
+        this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
+        //Then perform the filter
+        this.filterEnzymesInternal(searchCombo, groupSelector);
+    },
+    /**
+     * Filters the list of enzymes in the itemSelector based on the enzyme group selected and the search term
+     * Seperated filterEnzymes and filterEnzymesInternal so that you can call a version of filterEnzymes
+     * that does not write over the list of currently selected enzymes. For example, when you reopen a
+     * window, you want to keep the list of currentEnzymesrather than write over it with the empty list
+     * @param {Object} searchCombo which contains the search term
+     * @param {Object} groupSelector which contains the restriction enzyme group to be searched
+     */
+    filterEnzymesInternal: function(searchCombo, groupSelector){
         //First we populate the store with the right enzymes 
         var currentList = this.groupManager.groupByName(groupSelector.getValue());
         var enzymeArray = [];
         Ext.each(currentList.getEnzymes(), function(enzyme) {
             enzymeArray.push({name: enzyme.getName()});
         });
-        var tempSelectedEnzymes = this.enzymeListSelector.toField.store.data.items;
         this.enzymeListSelector.store.loadData(enzymeArray, false);
         this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
-        this.enzymeListSelector.toField.store.loadData(tempSelectedEnzymes, false);
+        if (this.currentEnzymes === null){
+        	//loadData throws an error is currentEnzymes is null so lets just initialize it with an empty list
+            this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
+        }
+        this.enzymeListSelector.toField.store.loadData(this.currentEnzymes, false);
         this.enzymeListSelector.toField.bindStore(this.enzymeListSelector.toField.store);
         //remove any items on the left that are on the right
         var list = this.enzymeListSelector.fromField.boundList;
         var store = list.getStore();
         store.suspendEvents();
-        tempSelectedEnzymes = this.enzymeListSelector.toField.store.getRange();
-        tempSelectedEnzymes.forEach(function(enzyme) {
+        this.currentEnzymes = this.enzymeListSelector.toField.store.getRange();
+        this.currentEnzymes.forEach(function(enzyme) {
            var deleted = store.query("name",enzyme.get("name"));
            store.remove(deleted.items[0], false);;
         });
@@ -84,6 +105,12 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         this.enzymeListSelector.fromField.store.filterBy(function(enzyme){
             return enzyme.get("name").search(regEx) !== -1;
         }, this);
+    },
+    /**
+     * 
+     */
+    onClose: function(){
+    	this.currentEnzymes = this.enzymeListSelector.toField.store.data.items;
     },
     /**
      * Updates the Ladder based on the selection in the ladder drop down.

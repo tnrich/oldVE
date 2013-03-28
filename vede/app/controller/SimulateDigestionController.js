@@ -73,7 +73,6 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 				 change: this.onDigestButtonClick
 			 }
 		 });
-
 		 this.application.on({
 			 SequenceManagerChanged: this.getSequenceManagerData,
 			 SimulateDigestionWindowOpened: this.onSimulateDigestionOpened, 
@@ -99,6 +98,10 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 	  */
 	 onSimulateDigestionOpened: function(manager) {
 		 this.managerWindow = manager;
+		 this.managerWindow.on({
+		     beforeclose: this.onSimulateDigestionWindowClosed,
+		     scope: this
+		     });
 		 this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
 		 this.digestManager.digestPanel = this.digestPanel;
 		 //this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
@@ -118,20 +121,29 @@ Ext.define('Vede.controller.SimulateDigestionController', {
 		 // Set the value in the group combobox to the first element by default.
 		 groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
 
-		 var startGroup = this.GroupManager.groupByName(groupSelector.store.getAt("0").get("name"));
-		 var groupArray = [];
-		 Ext.each(startGroup.getEnzymes(), function(enzyme) {
-			 groupArray.push({name: enzyme.getName()});
-		 });
-		 this.enzymeListSelector.store.loadData(groupArray);
-		 this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
+//		 var startGroup = this.GroupManager.groupByName(groupSelector.store.getAt("0").get("name"));
+//		 var groupArray = [];
+//		 Ext.each(startGroup.getEnzymes(), function(enzyme) {
+//			 groupArray.push({name: enzyme.getName()});
+//		 });
+//		 this.enzymeListSelector.store.loadData(groupArray);
+//		 this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
 		 this.digestManager.setDigestPanel(this.digestPanel);
 		 this.digestManager.setGroupManager(this.GroupManager);
 		 this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
+		 var searchCombobox = this.managerWindow.query("#enzymeGroupSelector-search")[0];
+		 this.digestManager.filterEnzymesInternal(searchCombobox, groupSelector);
 		 var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
 		 this.updateLadderLane(ladderSelector);
 		 this.digestManager.drawGel();
 		 //'// Makes it look nicer in vim
+	 },
+	 /**
+	  * Calls the manager to save the currently selected enzymes
+	  * @param {Ext.panel.Panel} the window that is closed
+	  */
+	 onSimulateDigestionWindowClosed: function(window){
+		 this.digestManager.onClose();
 	 },
 	 /**
 	  * Redraws the gel when the window is resized
