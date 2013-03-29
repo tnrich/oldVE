@@ -29,25 +29,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         {
             Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
 
-            function loadDesign(btn) {
-                if (btn === "ok") {
-                    var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-                    var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
-                    var deprojectId = Ext.getCmp("mainAppPanel").getActiveTab().modelId;
-                    deproject.setDesign(design);
-                    design.set("deproject_id", deprojectId);
-                    deproject.set("id", deprojectId);
-
-                    // Load the Eugene Rules in the Design
-                    for (var ruleIndex in eugeneRules) {
-                        design.addToRules(eugeneRules[ruleIndex]);
-                    }
-
-                    Vede.application.fireEvent("ReRenderDECanvas");
-                    Vede.application.fireEvent("checkj5Ready");
-
-                }
-            }
+            var loadDesign = this.loadDesign.bind(this, binsArray, eugeneRules);
 
             Ext.Msg.show({
                 title: "Are you sure you want to load example?",
@@ -59,6 +41,33 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             });
         }
 
+    },
+
+    /**
+     * Loads a Designs
+     * @param {Array} Array of Bins
+     * @param {Array} Array of eugene rules
+     * @param {String} Button clicked
+
+     */
+    loadDesign: function (binsArray, eugeneRules, evt) {
+        if (evt === "ok") {
+            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
+            var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
+            var deprojectId = Ext.getCmp("mainAppPanel").getActiveTab().modelId;
+            deproject.setDesign(design);
+            design.set("deproject_id", deprojectId);
+            deproject.set("id", deprojectId);
+
+            // Load the Eugene Rules in the Design
+            for (var i = 0; i < eugeneRules.length; i++) {
+                design.addToRules(eugeneRules[i]);
+            }
+
+            Vede.application.fireEvent("ReRenderDECanvas");
+            Vede.application.fireEvent("checkj5Ready");
+
+        }
     },
 
     /**
@@ -286,8 +295,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var eugeneRules = xmlDoc.getElementsByTagNameNS("*", "eugeneRules")[0].getElementsByTagNameNS("*", "eugeneRule");
         var rulesArray = [];
 
-        for (var indexRule in eugeneRules) {
-            var rule = eugeneRules[indexRule];
+        for (var i = 0; i < eugeneRules.length; i++) {
+            var rule = eugeneRules[i];
             if (typeof(rule) !== "object") { continue; }
             var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
             var operand2 = rule.getElementsByTagNameNS("*", "operand2ID")[0].textContent;

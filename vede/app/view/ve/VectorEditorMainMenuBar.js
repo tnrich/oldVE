@@ -202,14 +202,14 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }]
         }
     }
-//    {
-//        xtype: 'button',
-//        text: 'Tools',
-//        menu: {
-//            xtype: 'menu',
-//            minWidth: 140,
-//            items: [
-//            {
+    ,{
+        xtype: 'button',
+        text: 'Tools',
+        menu: {
+            xtype: 'menu',
+            minWidth: 140,
+            items: [
+            {
 //                xtype: 'menuitem',
 //                id: 'createNewFeatureMenuItem',
 //                text: 'Create New Feature'
@@ -218,9 +218,9 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //                id: 'restrictionEnzymesManagerMenuItem',
 //                text: 'Restriction Enzymes Manager'
 //            }, {
-//                xtype: 'menuitem',
-//                id: 'simulateDigestionMenuItem',
-//                text: 'Simulate Digestion'
+                xtype: 'menuitem',
+                id: 'simulateDigestionMenuItem',
+                text: 'Simulate Digestion'
 //            }, {
 //                xtype: 'menuitem',
 //                text: 'Properties'
@@ -229,9 +229,9 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //            }, {
 //                xtype: 'menuitem',
 //                text: 'Preferences'
-//            }
-//            ]
-//        }
-//    },
+            }
+            ]
+        }
+    }
     ]
 });
