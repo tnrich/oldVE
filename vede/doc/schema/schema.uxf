@@ -141,7 +141,7 @@
       <w>221</w>
       <h>39</h>
     </coordinates>
-    <panel_attributes>Application preferences</panel_attributes>
+    <panel_attributes>ApplicationPreferences</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -186,7 +186,8 @@ m2=n</panel_attributes>
       <w>64</w>
       <h>220</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=-
+m1=n
 m2=n</panel_attributes>
     <additional_attributes>39;195;39;39</additional_attributes>
   </element>
@@ -198,7 +199,8 @@ m2=n</panel_attributes>
       <w>194</w>
       <h>129</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-
+    <panel_attributes>lt=-
+m1=n
 m2=n</panel_attributes>
     <additional_attributes>39;104;169;39</additional_attributes>
   </element>
@@ -242,8 +244,8 @@ r2=n</panel_attributes>
     <coordinates>
       <x>884</x>
       <y>91</y>
-      <w>312</w>
-      <h>91</h>
+      <w>311</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 r2=n</panel_attributes>
@@ -310,8 +312,8 @@ r2=n</panel_attributes>
     <coordinates>
       <x>1469</x>
       <y>169</y>
-      <w>65</w>
-      <h>195</h>
+      <w>64</w>
+      <h>194</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 r2=n</panel_attributes>
@@ -322,8 +324,8 @@ r2=n</panel_attributes>
     <coordinates>
       <x>1261</x>
       <y>117</y>
-      <w>208</w>
-      <h>91</h>
+      <w>207</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 r2=n</panel_attributes>
@@ -332,14 +334,14 @@ r2=n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1183</x>
+      <x>1196</x>
       <y>26</y>
-      <w>65</w>
-      <h>130</h>
+      <w>64</w>
+      <h>129</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;
-</panel_attributes>
-    <additional_attributes>39;104;39;39</additional_attributes>
+r2=n</panel_attributes>
+    <additional_attributes>39;39;39;104</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -416,7 +418,8 @@ r2=n</panel_attributes>
       <w>181</w>
       <h>142</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-
+    <panel_attributes>lt=-
+m1=n
 m2=n</panel_attributes>
     <additional_attributes>39;39;156;117</additional_attributes>
   </element>
@@ -439,7 +442,7 @@ m2=n</panel_attributes>
       <w>207</w>
       <h>129</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;</panel_attributes>
     <additional_attributes>39;39;182;104</additional_attributes>
   </element>
   <element>
@@ -447,7 +450,7 @@ m2=n</panel_attributes>
     <coordinates>
       <x>429</x>
       <y>559</y>
-      <w>286</w>
+      <w>143</w>
       <h>39</h>
     </coordinates>
     <panel_attributes>PrimerLibrary</panel_attributes>
@@ -502,8 +505,8 @@ m2=n</panel_attributes>
     <coordinates>
       <x>884</x>
       <y>0</y>
-      <w>286</w>
-      <h>156</h>
+      <w>285</w>
+      <h>155</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>39;130;260;39</additional_attributes>
@@ -539,7 +542,7 @@ m2=n</panel_attributes>
       <h>65</h>
     </coordinates>
     <panel_attributes>MongoDB Database Diagram
-December 18, 2012</panel_attributes>
+March 28, 2013</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
