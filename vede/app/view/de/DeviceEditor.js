@@ -18,10 +18,6 @@ Ext.define('Vede.view.de.DeviceEditor', {
     dockedItems: [{
         xtype: 'DeviceEditorMenuPanel'
     },
-    /*{
-        xtype: 'DeviceEditorStatusPanel'
-    },
-    */
     {
         xtype: 'DeviceEditorPartPanel'
     },
@@ -30,7 +26,6 @@ Ext.define('Vede.view.de.DeviceEditor', {
     }],
     items: [{
         xtype: 'panel',
-        //id: 'DeviceEditorContainer',
         layout: {
             align: 'stretch',
             type: 'fit'

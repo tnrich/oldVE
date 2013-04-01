@@ -232,11 +232,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
     },
 
-    createNewSequence: function (project) {
+    createNewSequence: function (project, veprojectNames) {
         var self = this;
         var onPromptClosed = function (btn, text) {
                 if(btn == 'ok') {
                     if(text === '') return Ext.MessageBox.prompt('Name', 'Please enter a vector editor project name:', onPromptClosed, this);
+                    for (var j=0; j<veprojectNames.length; j++) {
+                        if (veprojectNames[j].match(text)) return Ext.MessageBox.prompt('Name', 'Please enter a unique design name:', onPromptClosed, this);
+                    } 
                     Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Creating new ve project');
                     var self = this;
                     var veproject = Ext.create("Teselagen.models.VectorEditorProject", {
@@ -282,10 +285,13 @@ Ext.define("Teselagen.manager.ProjectManager", {
         Ext.MessageBox.prompt('Name', 'Please enter a sequence name:', onPromptClosed, this);
     },
 
-    createNewDEProjectAtProject: function (project) {
+    createNewDEProjectAtProject: function (project, projectNames) {
         var onPromptClosed = function (btn, text) {
                 if(btn == 'ok') {
                     if(text === '') return Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed, this);
+                    for (var j=0; j<projectNames.length; j++) {
+                        if (projectNames[j].match(text)) return Ext.MessageBox.prompt('Name', 'Please enter a unique design name:', onPromptClosed, this);
+                    }  
                     Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Generating Design');
                     var self = this;
                     if(project) {
@@ -348,7 +354,6 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 } else return false;
 
             };
-
         Ext.MessageBox.prompt('Name', 'Please enter a design name:', onPromptClosed, this);
 
     }
