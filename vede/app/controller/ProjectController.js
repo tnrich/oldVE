@@ -167,7 +167,11 @@ Ext.define("Vede.controller.ProjectController", {
     resolveAndCreateDEProject: function (record) {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        Teselagen.manager.ProjectManager.createNewDEProjectAtProject(project);
+        var projectNames = [];
+        project.deprojects().load().each(function (deproject) {
+                            projectNames.push(deproject.data.name);
+        });
+        Teselagen.manager.ProjectManager.createNewDEProjectAtProject(project, projectNames);
     },
 
     createProject: function (record) {
@@ -178,7 +182,11 @@ Ext.define("Vede.controller.ProjectController", {
     createSequence: function (record) {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        Teselagen.manager.ProjectManager.createNewSequence(project);
+        var veprojectNames = [];
+        project.veprojects().load().each(function (veproject) {
+                    veprojectNames.push(veproject.data.name);
+        });
+        Teselagen.manager.ProjectManager.createNewSequence(project, veprojectNames);
     },
 
     promptPartName: function(cb){

@@ -191,9 +191,17 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                     compositionalOperator: rule["de:compositionalOperator"],
                                     negationOperator: rule["de:negationOperator"]
                                 });
+                                fullPartsAssocArray[operand1].save({
+                                    callback: function(){
+                                        newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+                                    }
+                                });
+                                fullPartsAssocArray[operand2].save({
+                                    callback: function(){
+                                        newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+                                    }
+                                });
 
-                                newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-                                newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
                                 rulesArray.push(newEugeneRule);
                             }
 
