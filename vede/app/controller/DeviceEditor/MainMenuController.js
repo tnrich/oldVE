@@ -2,22 +2,30 @@
  * Main menu controller
  * @class Vede.controller.DeviceEditor.MainMenuController
  */
-Ext.define('Vede.controller.DeviceEditor.MainMenuController', {
-    extend: 'Ext.app.Controller',
+Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
+    extend: "Ext.app.Controller",
+    requires: [
+        "Teselagen.manager.DeviceDesignExporterManager"
+    ],
 
-    onNewDesignClick: function(button, e, options) {
+    onExportToJSONClick: function () {
+        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        Teselagen.manager.DeviceDesignExporterManager.exportToJSON(currentTab.model);
+    },
+
+    onNewDesignClick: function() {
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
-    onOpenDEProjectClick: function(button, e, options) {
+    onOpenDEProjectClick: function() {
 
     },
-    onSaveDesignClick: function(button, e, options) {
+    onSaveDesignClick: function() {
 
     },
 
     init: function() {
         this.control({
-            'button[cls="newDesign"]': {
+            "button[cls='newDesign']": {
                 click: this.onNewDesignClick
             },
             "#openDEProject": {
@@ -25,7 +33,10 @@ Ext.define('Vede.controller.DeviceEditor.MainMenuController', {
             },
             "#saveDesign": {
                 click: this.onSaveDesignClick
-            }
+            },
+            "button[cls='exportMenu'] > menu > menuitem[text='JSON file']": {
+                click: this.onExportToJSONClick
+            },
         });
 
     }

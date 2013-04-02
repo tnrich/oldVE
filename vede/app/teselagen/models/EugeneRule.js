@@ -157,6 +157,7 @@ Ext.define("Teselagen.models.EugeneRule", {
      * @param {Teselagen.models.Part|Number} pOperand2 can be a Part or a Number
      */
     setOperand2: function(pOperand2) {
+        console.log(pOperand2);
         if (Ext.typeOf(pOperand2) === "number") {
             //console.log(pOperand2);
             this.set("operand2Number", pOperand2);

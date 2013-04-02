@@ -32,6 +32,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         negationOperator: rule.negationOperator
                     });
 
+                    if(!rule.operand1_id || !rule.operand2_id)
+                    {
+                        console.log(rule);
+                        throw new Error("Some operand id is null.");
+                    }
+
                     newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
                     newEugeneRule.setOperand2(allParts.getById(rule.operand2_id));
                     currentProject.getDesign().addToRules(newEugeneRule);

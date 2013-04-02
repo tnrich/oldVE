@@ -8,7 +8,9 @@
     "Ext": false,
     "Teselagen": false,
     "Vede": false,
-    "describe" : false
+    "describe" : false,
+    "BlobBuilder" : false,
+    "saveAs" : false
   },
   "browser": true,
   "curly": true,
