@@ -25,10 +25,11 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
     },
 
     /**
-     * Generate JSON Structure
+     * Generate Object Structure
      * @param {Model} DEProject.
+     * @param {Model} Callback.
      */
-    exportToJSON: function (deproject) {
+    generateObject: function (deproject,cb) {
         var json = {};
         var design = deproject.getDesign();
 
@@ -116,10 +117,116 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
         json["de:sequenceFiles"]["de:sequenceFile"] = sequences;
         json["de:eugeneRules"]["de:eugeneRule"] = rules;
 
-        var fileName = deproject.get("name")+".json";
-        var fileContent = JSON.stringify({"de:design":json});
+        cb(json);
+    },
 
-        this.saveToFile(fileName,fileContent);
+    /**
+     * Generate JSON Structure
+     * @param {Model} DEProject.
+     */
+    exportToJSON: function (deproject) {
+        var self = this;
+        this.generateObject(deproject,function(json){
+            var fileName = deproject.get("name")+".json";
+            var fileContent = JSON.stringify({"de:design":json});
+            self.saveToFile(fileName,fileContent);
+        });
+    },
+
+
+    /**
+     * Generate XML Structure
+     * @param {Model} DEProject.
+     */
+    exportToXML: function (deproject) {
+        var self = this;
+        this.generateObject(deproject,function(json){
+            var fileName = deproject.get("name")+".xml";
+            var namespaceURI = "http://www.teselagen.com";
+            var doc = document.implementation.createDocument(namespaceURI, "de:design", null);
+
+            var j5Collection = doc.documentElement.appendChild(doc.createElementNS(namespaceURI,"de:j5Collection"));
+            var j5Bins = j5Collection.appendChild(doc.createElementNS(namespaceURI,"de:j5Bins"));
+
+            // Bins Processing
+            json["de:j5Collection"]["de:j5Bins"]["de:j5Bin"].forEach(function(bin){
+                var j5Bin = j5Bins.appendChild(doc.createElementNS(namespaceURI,"de:j5Bin"));
+
+                for(var prop in bin)
+                {
+                    if(typeof(bin[prop]) !== "object")
+                    {
+                        var propNode = j5Bin.appendChild(doc.createElementNS(namespaceURI,prop));
+                        if(bin[prop]) { propNode.textContent = bin[prop]; }
+                    }
+                }
+
+                var binItems = j5Bin.appendChild(doc.createElementNS(namespaceURI,"de:binItems"));
+                bin["de:binItems"]["de:partID"].forEach(function(partID){
+                    var part = binItems.appendChild(doc.createElementNS(namespaceURI,"de:partID"));
+                    part.textContent = partID;
+                });
+            });
+
+            var partsVOs = doc.documentElement.appendChild(doc.createElementNS(namespaceURI,"de:partVOs"));
+
+            // Parts Processing
+            json["de:partVOs"]["de:partVO"].forEach(function(part){
+                var partV0 = partsVOs.appendChild(doc.createElementNS(namespaceURI,"de:partVO"));
+
+                for(var prop in part)
+                {
+                    if(typeof(part[prop]) !== "object")
+                    {
+                        var propNode = partV0.appendChild(doc.createElementNS(namespaceURI,prop));
+                        if(part[prop]) { propNode.textContent = part[prop]; }
+                    }
+                }
+
+                var deParts = partV0.appendChild(doc.createElementNS(namespaceURI,"de:parts"));
+                var dePart = deParts.appendChild(doc.createElementNS(namespaceURI,"de:part"));
+                dePart.appendChild(doc.createElement("id")).textContent = part["de:parts"]["de:part"].id;
+                dePart.appendChild(doc.createElement("fas")).textContent = part["de:parts"]["de:part"].fas;
+            });
+
+            var sequenceFiles = doc.documentElement.appendChild(doc.createElementNS(namespaceURI,"de:sequenceFiles"));
+
+            // Sequences Processing
+            json["de:sequenceFiles"]["de:sequenceFile"].forEach(function(sequence){
+                var sequenceFile = sequenceFiles.appendChild(doc.createElementNS(namespaceURI,"de:sequenceFile"));
+
+                for(var prop in sequence)
+                {
+                    if(typeof(sequence[prop]) !== "object")
+                    {
+                        var propNode = sequenceFile.appendChild(doc.createElementNS(namespaceURI,prop));
+                        if(sequence[prop]) { propNode.textContent = sequence[prop]; }
+                    }
+                }
+            });
+
+            var eugeneRules = doc.documentElement.appendChild(doc.createElementNS(namespaceURI,"de:eugeneRules"));
+
+            // EugeneRules Processing
+            json["de:eugeneRules"]["de:eugeneRule"].forEach(function(rule){
+                var eugeneRule = eugeneRules.appendChild(doc.createElementNS(namespaceURI,"de:eugeneRule"));
+
+                for(var prop in rule)
+                {
+                    if(typeof(rule[prop]) !== "object")
+                    {
+                        var propNode = eugeneRule.appendChild(doc.createElementNS(namespaceURI,prop));
+                        if(rule[prop]) { propNode.textContent = rule[prop]; }
+                    }
+                }
+            });
+
+            //var sequenceFiles = doc.documentElement.appendChild(doc.createElementNS(namespaceURI,"de:sequenceFiles"));
+            //var sequenceFile = sequenceFiles.appendChild(doc.createElementNS(namespaceURI,"de:sequenceFile"));
+            //sequenceFile.textContent = "hello";
+
+            var fileContent = (new XMLSerializer()).serializeToString(doc);
+            self.saveToFile(fileName,fileContent);
+        });
     }
-
 });

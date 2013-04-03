@@ -13,6 +13,11 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
         Teselagen.manager.DeviceDesignExporterManager.exportToJSON(currentTab.model);
     },
 
+    onExportToXMLClick: function () {
+        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
+        Teselagen.manager.DeviceDesignExporterManager.exportToXML(currentTab.model);
+    },
+
     onNewDesignClick: function() {
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
@@ -36,6 +41,9 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
             },
             "button[cls='exportMenu'] > menu > menuitem[text='JSON file']": {
                 click: this.onExportToJSONClick
+            },
+            "button[cls='exportMenu'] > menu > menuitem[text='XML file']": {
+                click: this.onExportToXMLClick
             },
         });
 
