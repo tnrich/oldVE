@@ -42,6 +42,7 @@ Ext.Loader.syncRequire([
         ,'Teselagen.manager.RestrictionEnzymeManager'
         ,'Teselagen.manager.SequenceAnnotationManager'
         ,'Teselagen.renderer.annotate.LineRenderer'
+        ,'Teselagen.manager.SimulateDigestionManager'
         ,'Teselagen.manager.RowManager'
         ,'Vede.view.annotate.Annotator'
         ,'Teselagen.renderer.annotate.SequenceRenderer'

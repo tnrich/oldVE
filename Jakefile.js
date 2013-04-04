@@ -14,6 +14,14 @@ else if (process.platform == "linux") {
 
 directory(DOCSROOT);
 
+task("deployForever", function() {
+    var foreverDir = "/usr/local/lib/node_modules/forever";
+    JakeUtil.exec("cp forever/package.json " + foreverDir);
+    JakeUtil.exec("cp forever/forever.js " + foreverDir + "/lib");
+    JakeUtil.exec("cp forever/cli.js " + foreverDir + "/lib/forever");
+    JakeUtil.exec("cp forever/monitor " + foreverDir + "/bin");
+});
+
 task("jsduck", [DOCSROOT], function() {
     var JSDUCK_OUT = DOCSROOT + "/jsduck";
     if (fs.existsSync(JSDUCK_OUT)) {

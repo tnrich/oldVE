@@ -108,19 +108,24 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 Ext.getCmp('mainAppPanel').getActiveTab().model.getDesign().getJ5Collection().set('isCircular',isCircular);
 
             },
-            failure: function(response, opts) {
-                console.log(responseData.responseText);
+            failure: function(responseData, opts) {
                 loadingMessage.close();
-                var messagebox = Ext.MessageBox.show({
-                    title: "Execution Error",
-                    msg: responseData.responseText,
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
+                if(responseData)
+                {
+                    if(responseData.responseText)
+                    {
+                        var messagebox = Ext.MessageBox.show({
+                            title: "Execution Error",
+                            msg: responseData.responseText,
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
 
-                Ext.Function.defer(function () {
-                    messagebox.zIndexManager.bringToFront(messagebox);
-                }, 100);
+                        Ext.Function.defer(function () {
+                            messagebox.zIndexManager.bringToFront(messagebox);
+                        }, 100);       
+                    }
+                }
             }
         });
     },
@@ -490,15 +495,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                         }, 100);
                     }
                 } else {
-                    console.log(responseData.responseText);
+
                     loadingMessage.hide();
                     responseMessage.hide();
-                    // var messagebox = Ext.MessageBox.show({
-                    //     title: "Execution Error",
-                    //     msg: responseData.responseText,
-                    //     buttons: Ext.MessageBox.OK,
-                    //     icon: Ext.MessageBox.ERROR
-                    // });
+                    var messagebox = Ext.MessageBox.show({
+                        title: "Execution Error",
+                        msg: responseData.responseText,
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.ERROR
+                    });
 
                     Ext.Function.defer(function () {
                         messagebox.zIndexManager.bringToFront(messagebox);

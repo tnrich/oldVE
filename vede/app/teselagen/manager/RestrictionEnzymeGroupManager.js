@@ -126,14 +126,14 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         Ext.each(this.getSystemGroups(), function(systemGroup) {
             if(systemGroup.getName() == name) {
                 resultGroup = systemGroup;
-                return false;
+//                return false;
             }
         });
 
         Ext.each(this.getUserGroups(), function(userGroup) {
             if(userGroup.getName() == name) {
                 resultGroup = userGroup;
-                return false;
+//                return false;
             }
         });
 

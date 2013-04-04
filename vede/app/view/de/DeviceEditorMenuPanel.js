@@ -16,8 +16,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
-        items: [
-        {
+        items: [{
             xtype: 'button',
             text: 'File',
             cls: 'fileMenu',
@@ -26,18 +25,17 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 items: [{
                     xtype: 'menuitem',
                     text: 'Save Design'
-                }, 
-//                {
-//                    xtype: 'menuitem',
-//                    text: 'Delete Design'
-//                }, 
+                },
+                //                {
+                //                    xtype: 'menuitem',
+                //                    text: 'Delete Design'
+                //                }, 
                 {
                     xtype: 'menuitem',
                     text: 'Rename Design'
                 }]
             }
-        },
-        {
+        }, {
             xtype: 'button',
             text: 'Examples',
             cls: 'examplesMenu',
@@ -59,27 +57,58 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Combinatorial Golden Gate'
                 }]
             }
+        },
+        /*        {
+            xtype: 'button',
+            text: 'Import',
+            cls: 'importMenu',
+            menu: {
+                xtype: 'menu',
+                minWidth: 140,
+                width: 140,
+                items: [{
+                    xtype: 'menuitem',
+                    cls: 'importXML',
+                    text: 'XML file'
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'importJSON',
+                    text: 'JSON file'
+                }]
+            }
         }, 
-//        {
-//            xtype: 'button',
-//            text: 'Import',
-//            cls: 'importMenu',
-//            menu: {
-//                xtype: 'menu',
-//                minWidth: 140,
-//                width: 140,
-//                items: [{
-//                    xtype: 'menuitem',
-//                    cls: 'importXML',
-//                    text: 'XML file'
-//                }, {
-//                    xtype: 'menuitem',
-//                    cls: 'importJSON',
-//                    text: 'JSON file'
-//                }]
-//            }
-//        }, 
+*/
+
         {
+            xtype: 'filefield',
+            buttonOnly: true,
+            buttonConfig: {
+                text: 'Import',
+                scale: 'small',
+                tooltip: 'Import File'
+            },
+            cls: 'DEimportBtn'
+        },
+
+        {
+            xtype: 'button',
+            text: 'Export',
+            cls: 'exportMenu',
+            menu: {
+                xtype: 'menu',
+                minWidth: 140,
+                width: 140,
+                items: [{
+                    xtype: 'menuitem',
+                    cls: 'exportJSON',
+                    text: 'JSON file'
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'exportXML',
+                    text: 'XML file'
+                }]
+            }
+        }, {
             xtype: 'button',
             text: 'Insert',
             cls: 'insertMenu',
@@ -97,13 +126,11 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Column'
                 }]
             }
-        },
-        {
+        }, {
             xtype: 'button',
             text: 'j5',
             cls: 'j5button'
-        }
-        ]
+        }]
     }]
 }
 
