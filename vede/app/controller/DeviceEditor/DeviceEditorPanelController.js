@@ -62,7 +62,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     callback: function () {
                         Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | "+text);
 
-                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorStatusPanel').down('tbtext[id="DeviceEditorStatusBarAlert"]');
+                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('panel[cls="DeviceEditorStatusBar"]').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
                         parttext.animate({duration: 5000, to: {opacity: 0}});
 

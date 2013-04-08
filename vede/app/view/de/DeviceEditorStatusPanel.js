@@ -15,12 +15,12 @@ Ext.define("Vede.view.de.DeviceEditorStatusPanel", {
     dockedItems: [{
         xtype: "toolbar",
         dock: "top",
-        id: "DeviceEditorStatusBar",
+        cls: "DeviceEditorStatusBar",
         items: [{
             xtype: "tbfill"
         }, {
             xtype: "tbtext",
-            id: "DeviceEditorStatusBarAlert"
+            cls: "DeviceEditorStatusBarAlert"
         }]
     }]
 }
