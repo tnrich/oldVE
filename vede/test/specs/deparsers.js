@@ -46,14 +46,12 @@ Ext.onReady(function() {
                         url: testFile,
                         method: "GET",
                         success: function(response) {
-                            console.log(response);
+                            //console.log(JSON.parse(response.responseText));
                             Teselagen.manager.DeviceDesignParsersManager.parseJSON(response.responseText,
 
                             function(design) {
                                 tests--;
-                                //console.log(tests);
-                                console.log(design);
-                                designs.push(design);
+                                designs.push({name:response.request.options.url,design:design});
                                 if (tests === 0) flag = true;
                                 //console.log(flag);
                             });
@@ -69,7 +67,6 @@ Ext.onReady(function() {
             }, "The call is done", 100000);
 
             runs(function() {
-                console.log(designs);
                 expect(true).toEqual(true);
             });
 
@@ -84,8 +81,16 @@ Ext.onReady(function() {
             runs(function() {
                 dirtyRecordFlag = false;
                 for (var designIndex in designs) {
-                    design = designs[designIndex];
-                    if (design.dirty) dirtyRecordFlag = true;
+                    design = designs[designIndex].design;
+                    console.log("Testing: "+designs[designIndex].name);
+                    if (!design.dirty) {
+                        console.log("Test passed");
+                    }
+                    else {
+                        console.log("Test NOT passed"); 
+                        console.log(design);
+                        dirtyRecordFlag = true; 
+                    }
                 }
                 expect(dirtyRecordFlag).toBe(false);
             });
@@ -127,8 +132,7 @@ Ext.onReady(function() {
                             function(design) {
                                 tests--;
                                 //console.log(tests);
-                                console.log(design);
-                                designs.push(design);
+                                designs.push({name:response.request.options.url,design:design});
                                 if (tests === 0) flag = true;
                                 //console.log(flag);
                             });
@@ -144,7 +148,6 @@ Ext.onReady(function() {
             }, "The call is done", 100000);
 
             runs(function() {
-                console.log(designs);
                 expect(true).toEqual(true);
             });
 
@@ -159,8 +162,15 @@ Ext.onReady(function() {
             runs(function() {
                 dirtyRecordFlag = false;
                 for (var designIndex in designs) {
-                    design = designs[designIndex];
-                    if (design.dirty) dirtyRecordFlag = true;
+                    design = designs[designIndex].design;
+                    console.log("Testing: "+designs[designIndex].name);
+                    if (!design.dirty) {
+                        console.log("Test passed");
+                    }
+                    else {
+                        dirtyRecordFlag = true; 
+                        console.log("Test NOT passed"); 
+                    }
                 }
                 expect(dirtyRecordFlag).toBe(false);
             });

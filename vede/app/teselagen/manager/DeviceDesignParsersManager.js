@@ -76,7 +76,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * @param {Function} (optional) Callback with design as argument 0.
      */
     parseJSON: function (input,cb) {
-        console.log("Parsing JSON file");
         var jsonDoc = JSON.parse(input);
         var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
         var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
@@ -84,10 +83,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var fullPartsAssocArray = {};
         var binsCounter = bins.length;
 
-        function getSequenceByHash(targetHash, cb) {
+        function getSequenceByHash(targetHash, part, cb) {
             // Find sequence by hash
+            var found = false;
             sequences.forEach(function (sequence) {
-                if (String(sequence.hash) === String(targetHash)) { cb(sequence); }
+                if (String(sequence.hash) === String(targetHash) && !found) {
+                    found = true;
+                    part.sequence = sequence;
+                    return cb(part);
+                }
             });
         }
 
@@ -96,17 +100,11 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var parts = jsonDoc["de:design"]["de:partVOs"]["de:partVO"];
             parts.forEach(function (part) {
                 if (String(part["de:parts"]["de:part"].id) === String(targetId)) {
-                    getSequenceByHash(part["de:sequenceFileHash"], function (sequence) {
-                        part.sequence = sequence;
-                        cb(part);
-                    });
+                    getSequenceByHash(part["de:sequenceFileHash"], part, cb);
                 } else if (part["de:parts"]["de:part"] instanceof Array) {
                     // Cover the special cases in which some structures parts are inside subnodes that are array
                     if (String(part["de:parts"]["de:part"][0].id) === String(targetId)) {
-                        getSequenceByHash(part["de:sequenceFileHash"], function (sequence) {
-                            part.sequence = sequence;
-                            cb(part);
-                        });
+                        getSequenceByHash(part["de:sequenceFileHash"], part, cb);
                     }
                 }
             });
@@ -137,10 +135,15 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var partsCounter = parts.length;
 
+            if(indexBin==1)
+            {
+            //console.log(parts);
+            //console.log(parts.length);
+            }
+
             var tempPartsArray = [];
             for (var indexPart in parts) {
-                getPartByID(parts[indexPart], function (part) {
-
+                getPartByID(parts[indexPart], function (part) {               
                     // Part processing
                     var newPart = Ext.create("Teselagen.models.Part", {
                         name: part["de:name"],
@@ -172,39 +175,56 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                         if (binsCounter === 0) {
 
-                            //Process Eugene Rules
-                            var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
                             var rulesArray = [];
+                            if(typeof(cb) !== "function" ) // Not parsing eugeneRules in tests
+                            {
+                                //Process Eugene Rules
+                                var eugeneRules = jsonDoc["de:design"]["de:eugeneRules"];
 
-                            if (eugeneRules.eugeneRule instanceof Array) {
-                                // Fix special cases where empty object is create to designate no eugeneRules
-                                if (eugeneRules.eugeneRule.length === 0) { eugeneRules = []; }
-                            }
+                                // Fix for issue caused by designs with eugeneRules not defined within array structures
+                                if (eugeneRules["de:eugeneRule"] instanceof Array) {
+                                    eugeneRules = eugeneRules["de:eugeneRule"];
+                                }
 
-                            for (var ruleIndex in eugeneRules) {
-                                var rule = eugeneRules[ruleIndex];
-                                var operand1 = rule["de:operand1ID"];
-                                var operand2 = rule["de:operand2ID"];
-
-                                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-                                    name: rule["de:name"],
-                                    compositionalOperator: rule["de:compositionalOperator"],
-                                    negationOperator: rule["de:negationOperator"]
-                                });
-                                fullPartsAssocArray[operand1].save({
-                                    callback: function(){
-                                        newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+                                if (eugeneRules.eugeneRule instanceof Array) {
+                                    if(eugeneRules.eugeneRule.length === 0) {
+                                        eugeneRules = [];
                                     }
-                                });
-                                fullPartsAssocArray[operand2].save({
-                                    callback: function(){
-                                        newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+                                }
+
+                                //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
+                                //else { console.log("Eugene rules found."); }
+
+                                for (var ruleIndex in eugeneRules) {
+                                    var rule = eugeneRules[ruleIndex];
+                                    var operand1 = rule["de:operand1ID"];
+                                    var operand2 = rule["de:operand2ID"];
+
+                                    if(fullPartsAssocArray[operand1])
+                                    {
+                                        var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                                            name: rule["de:name"],
+                                            compositionalOperator: rule["de:compositionalOperator"],
+                                            negationOperator: rule["de:negationOperator"]
+                                        });
+                                        fullPartsAssocArray[operand1].save({
+                                            callback: function(){
+                                                newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
+                                            }
+                                        });
+                                        fullPartsAssocArray[operand2].save({
+                                            callback: function(){
+                                                newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+                                            }
+                                        });
+                                        rulesArray.push(newEugeneRule);
                                     }
-                                });
-
-                                rulesArray.push(newEugeneRule);
+                                    else
+                                    {
+                                        //console.warn("Eugene rule possible not loaded");
+                                    }
+                                }
                             }
-
                             Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
                         }
                     }
@@ -219,8 +239,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * @param {Function} (optional) Callback with design as argument 0.
      */
     parseXML: function (input, cb) {
-
-        console.log("Parsing XML file");
         var parser = new DOMParser();
         var xmlDoc = parser.parseFromString(input, "text/xml");
 
@@ -235,11 +253,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         }
 
         function getSequenceByID(targetHash, cb) {
+            var found = false;
             var sequences = xmlDoc.getElementsByTagNameNS("*", "sequenceFile");
             for (var sequenceindex in sequences) {
                 var sequence = sequences[sequenceindex];
                 if (!sequence.nodeName || typeof sequence !== "object") { continue; }
-                if (String(sequence.getAttribute.hash) === String(targetHash)) { cb(sequence); }
+                if (String(sequence.getAttribute.hash) === String(targetHash) && !found ) { cb(sequence); }
             }
         }
 
@@ -253,7 +272,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         for (var indexBin in bins) {
             if (!bins[indexBin].nodeName) { continue; }
             var bin = bins[indexBin];
-            //console.log(bin);
             var binName = bin.getElementsByTagNameNS("*", "binName")[0].textContent;
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;

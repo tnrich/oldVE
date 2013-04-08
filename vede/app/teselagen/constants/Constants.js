@@ -25,7 +25,8 @@ Ext.define("Teselagen.constants.Constants", {
         "FASTA",
         "JBEISEQXML",
         "JBEISEQJSON",
-        "SBOLXML"
+        "SBOLXML",
+        "jbei-seq"
     ],
     
     GENBANK:                "GENBANK",
