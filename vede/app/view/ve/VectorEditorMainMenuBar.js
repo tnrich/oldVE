@@ -126,7 +126,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }, {
                 xtype: 'menuitem',
                 itemId: 'reverseComplementMenuItem',
-                text: 'Reverse Complement'
+                text: 'Reverse Complement Entire Sequence'
             },
             {
                 xtype: 'menuitem',
