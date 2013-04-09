@@ -199,7 +199,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         if(stringLength <= 10 - pShift){
             result += pString;
-        }else{
+        } else {
             var start = 0;
             var end = 10 - pShift;
             while(start < stringLength){
@@ -234,7 +234,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         var start = row.getRowData().getStart();
         var end = row.getRowData().getEnd();
-        var numberOfSpaces = 0;
 
         leadingFrame = start % 3;
 
@@ -281,7 +280,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
             aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0, false);
             aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1, false);
             aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2, false);
-            numberOfSpaces = (row.getRowData().getSequence().length % 10) ? Math.round(row.getRowData().getSequence().length/10) : (Math.round(row.getRowData().getSequence().length/10) -1);
         }
 
         var verticalOffset = 0;
@@ -334,7 +332,11 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         // Which frame will be displaying at the first character of the row.
         var leadingFrame;
 
-        // Array of how many characters to indent each frame's aa display.
+        // Depending on which frame is leading, this determines how far the rows
+        // will be indented from the right side of the sequence.
+        var aaOffsets = [];
+
+        // Array of how many characters to indent each frame's aa display (from the start).
         var aaPadding = [];
 
         // Array of offsets to add to the index of each frame's first displayed aa.
@@ -344,7 +346,6 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
 
         var start = seqLen - row.getRowData().getEnd() - 1;
         var end = seqLen - row.getRowData().getStart() - 1;
-        var numberOfSpaces = 0;
 
         leadingFrame = Math.abs(start) % 3;
 
@@ -365,14 +366,21 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         aaStart[2] = baseStart + frontOffsets[2] * 2;
 
         // Calculate which aa index will be displayed last for each frame. 
-        aaEnd[leadingFrame] = aaStart[leadingFrame] + 
-                                            Math.ceil((end - start + 1) / 3) * 2;
+        if(row.getIndex() !== this.sequenceAnnotator.getRowManager().getRows().length - 1) {
+            aaEnd[leadingFrame] = aaStart[leadingFrame] + 
+                                                Math.ceil((end - start + 1) / 3) * 2;
 
-        aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + 
-                                            Math.ceil((end - start) / 3) * 2;
+            aaEnd[(leadingFrame + 1) % 3] = aaStart[(leadingFrame + 1) % 3] + 
+                                                Math.ceil((end - start) / 3) * 2;
 
-        aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + 
-                                            Math.ceil((end - start - 1) / 3) * 2;
+            aaEnd[(leadingFrame + 2) % 3] = aaStart[(leadingFrame + 2) % 3] + 
+                                                Math.ceil((end - start - 1) / 3) * 2;
+        // Calculate the end index for the last row.
+        } else {
+            aaEnd[0] = Math.ceil(row.getRowData().getSequence().length / 3) * 2;
+            aaEnd[1] = Math.ceil((row.getRowData().getSequence().length - 1) / 3) * 2;
+            aaEnd[2] = Math.ceil((row.getRowData().getSequence().length - 2) / 3) * 2;
+        }
 
         var aminoAcids1 = this.aminoAcidsStringRevCom1.substring(aaStart[0], aaEnd[0]);
         var aminoAcids2 = this.aminoAcidsStringRevCom2.substring(aaStart[1], aaEnd[1]);
@@ -392,17 +400,37 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         // Last row is a special case.
         if(row.getIndex() === this.sequenceAnnotator.getRowManager().getRows().length - 1) {
             var rowLength = row.getRowData().getSequence().length;
+            var extraBases = 0;
+
+            // Ensure that the "extra" bases at the end of the sequence don't
+            // screw up the alignment of the reverse complement amino acids.
+            if(this.sequenceAnnotator.showSpaceEvery10Bp) {
+                extraBases = 10 - rowLength % 10;
+            }
 
             aaPadding[0] = rowLength - 1 - aminoAcids1.length;
             aaPadding[1] = rowLength - 2 - aminoAcids2.length;
             aaPadding[2] = rowLength - 3 - aminoAcids3.length;
-        }
 
-        if(this.sequenceAnnotator.showSpaceEvery10Bp){
-            aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0, false).split("").reverse().join("");
-            aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1, false).split("").reverse().join("");
-            aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2, false).split("").reverse().join("");
-            numberOfSpaces = (row.getRowData().getSequence().length % 10) ? Math.round(row.getRowData().getSequence().length/10) : (Math.round(row.getRowData().getSequence().length/10) -1);
+            aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0 + extraBases, false).split("").reverse().join("");
+            aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1 + extraBases, false).split("").reverse().join("");
+            aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2 + extraBases, false).split("").reverse().join("");
+
+            aminoAcids1 = aminoAcids1.replace(/^\s{2,}/, "   ");
+            aminoAcids2 = aminoAcids2.replace(/^\s{2,}/, "   ");
+            aminoAcids3 = aminoAcids3.replace(/^\s{2,}/, "   ");
+        } else if(this.sequenceAnnotator.showSpaceEvery10Bp){
+            aaOffsets[leadingFrame] = 0;
+            aaOffsets[(leadingFrame + 1) % 3] = 1;
+            aaOffsets[(leadingFrame + 2) % 3] = 2;
+
+            aminoAcids1 = this.splitWithSpaces(aminoAcids1, aaOffsets[0], false).split("").reverse().join("");
+            aminoAcids2 = this.splitWithSpaces(aminoAcids2, aaOffsets[1], false).split("").reverse().join("");
+            aminoAcids3 = this.splitWithSpaces(aminoAcids3, aaOffsets[2], false).split("").reverse().join("");
+        } else {
+            aminoAcids1 = aminoAcids1.split("").reverse().join("");
+            aminoAcids2 = aminoAcids2.split("").reverse().join("");
+            aminoAcids3 = aminoAcids3.split("").reverse().join("");
         }
 
         var verticalOffset = 15;
