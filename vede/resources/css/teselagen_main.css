@@ -225,27 +225,14 @@ box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 
 
 #mainAppPanel .x-tab-default-top {
-  background: -webkit-linear-gradient(#ffffff 0%, #f8f8f8 100%);
-  background: -moz-linear-gradient(top, #ffffff 0%, #f8f8f8 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f8f8f8)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #ffffff 0%,#f8f8f8 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #ffffff 0%,#f8f8f8 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #ffffff 0%,#f8f8f8 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #ffffff 0%,#f8f8f8 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#F8F8F8',GradientType=0 ); /* IE6-9 */
-  border-color: #ddd;
+  background: #F8F8F8;
+  border-color: #E0E3E6
+  box-shadow:none;
 }
 
 #mainAppPanel .x-tab-top-active {
-  background: -webkit-linear-gradient(#f8f8f8 0%, #e8e8e8 100%);
-  background: -moz-linear-gradient(top, #f8f8f8 0%, #e8e8e8  100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#e8e8e8 )); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #f8f8f8 0%,#e8e8e8  100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #f8f8f8 0%,#e8e8e8  100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #f8f8f8 0%,#e8e8e8  100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #f8f8f8 0%,#e8e8e8  100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#e8e8e8',GradientType=0 ); /* IE6-9 */
-  border-color: #ccc;
+  background: #E0E3E6;
+  border-color: #E0E3E6;
   box-shadow: none;
 }
 
@@ -550,6 +537,9 @@ box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 
 #VectorPanel_header, #AnnotatePanel_header {
   border-top: 0px;
+  box-shadow: none;
+  border-color: #E0E3E6;
+  background: #E0E3E6;
 }
 
 #VectorEditorPanel-body {
