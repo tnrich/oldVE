@@ -706,7 +706,7 @@ ORIGIN
     <de:j5Bins>
       <de:j5Bin>
         <de:binName>backbone</de:binName>
-        <de:iconID>origin_of_replication</de:iconID>
+        <de:iconID>ORIGIN-OF-REPLICATION</de:iconID>
         <de:direction>forward</de:direction>
         <de:dsf>false</de:dsf>
         <de:binItems>

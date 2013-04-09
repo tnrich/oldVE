@@ -356,7 +356,7 @@ ORIGIN
     <de:j5Bins>
       <de:j5Bin>
         <de:binName>0</de:binName>
-        <de:iconID>origin_of_replication</de:iconID>
+        <de:iconID>ORIGIN-OF-REPLICATION</de:iconID>
         <de:direction>forward</de:direction>
         <de:dsf>false</de:dsf>
         <de:binItems>
@@ -365,7 +365,7 @@ ORIGIN
       </de:j5Bin>
       <de:j5Bin>
         <de:binName>1</de:binName>
-        <de:iconID>five_prime_utr</de:iconID>
+        <de:iconID>FIVE-PRIME-UTR</de:iconID>
         <de:direction>forward</de:direction>
         <de:dsf>false</de:dsf>
         <de:binItems>

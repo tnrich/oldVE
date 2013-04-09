@@ -7,7 +7,7 @@
 Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     alias: "DeviceDesignParsersManager",
     singleton: true,
-    requires: ["Teselagen.manager.DeviceDesignManager"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.constants.SBOLIcons"],
     mixins: {
         observable: "Ext.util.Observable"
     },
@@ -114,6 +114,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         // Bins Processing
         for (var indexBin in bins) {
             var bin = bins[indexBin];
+
+            if(!Teselagen.constants.SBOLIcons.ICONS[bin["de:iconID"].toUpperCase()]) { console.warn(bin["de:iconID"]); console.warn("Invalid iconID"); }
 
             var newBin = Ext.create("Teselagen.models.J5Bin", {
                 binName: bin["de:binName"],
@@ -276,6 +278,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;
             var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
+
+            if(!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) { console.warn(iconID); console.warn("Invalid iconID"); }
 
             var newBin = Ext.create("Teselagen.models.J5Bin", {
                 binName: binName,

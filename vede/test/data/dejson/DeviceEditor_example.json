@@ -183,7 +183,7 @@
                 "de:j5Bin": [
                     {
                         "de:binName": "vector_backbone",
-                        "de:iconID": "origin_of_replication",
+                        "de:iconID": "ORIGIN-OF-REPLICATION",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:fro": 2,
@@ -226,7 +226,7 @@
                     },
                     {
                         "de:binName": "ssrA_tag_5prime",
-                        "de:iconID": "protein_stability_element",
+                        "de:iconID": "PROTEIN-STABILITY-ELEMENT",
                         "de:direction": "forward",
                         "de:dsf": true,
                         "de:binItems": {
@@ -238,7 +238,7 @@
                     },
                     {
                         "de:binName": "ssrA_tag_3prime",
-                        "de:iconID": "protein_stability_element",
+                        "de:iconID": "PROTEIN-STABILITY-ELEMENT",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {

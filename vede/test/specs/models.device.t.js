@@ -777,7 +777,7 @@ Ext.onReady(function() {
                 
                 // check -- Non-empty defaults do not work!
                 expect(bin.get("binName").match("Bin")).not.toBe(null);
-                expect(bin.get("iconID")).toBe("GENERIC");
+                expect(bin.get("iconID")).toBe("USER-DEFINED");
                 expect(bin.get("directionForward")).toBe(true);
                 expect(bin.get("fas")).toBe("None");
 

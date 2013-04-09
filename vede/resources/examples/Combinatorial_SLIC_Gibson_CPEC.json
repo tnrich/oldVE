@@ -121,7 +121,7 @@
                 "de:j5Bin": [
                     {
                         "de:binName": "backbone",
-                        "de:iconID": "origin_of_replication",
+                        "de:iconID": "ORIGIN-OF-REPLICATION",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {

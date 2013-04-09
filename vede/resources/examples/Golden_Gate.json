@@ -59,7 +59,7 @@
                 "de:j5Bin": [
                     {
                         "de:binName": 0,
-                        "de:iconID": "origin_of_replication",
+                        "de:iconID": "ORIGIN-OF-REPLICATION",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {
@@ -70,7 +70,7 @@
                     },
                     {
                         "de:binName": 1,
-                        "de:iconID": "protein_stability_element",
+                        "de:iconID": "PROTEIN-STABILITY-ELEMENT",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {
