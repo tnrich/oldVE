@@ -12,6 +12,43 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         observable: "Ext.util.Observable"
     },
 
+    /**
+     * Check XmlDoc for XML4.0 iconIDreferences and update to new XMl4.1 standard
+     * @param {xmldoc} XmlDOC.
+     */
+    auto_migrate_XML4_to4_1: function(xmlDoc){
+
+        var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
+
+        for (var indexBin in bins) {
+            if (!bins[indexBin].nodeName) { continue; }
+            var bin = bins[indexBin];
+            var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
+            if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
+            {
+                bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID];
+            }
+        }
+
+        return xmlDoc;
+    },
+
+    /**
+    /**
+     * Check JSONDoc for JSON4.0 iconIDreferences and update to new JSON4.1 standard
+     * @param {JSONdoc} JSONDOC.
+     */
+    auto_migrate_JSON4_to4_1: function(jsonDoc){
+        var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
+        bins.forEach(function(bin){
+            var iconID = bin["de:iconID"].toUpperCase();
+            if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
+            {
+                bin["de:iconID"] = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID];
+            }
+        });
+        return jsonDoc;
+    },
 
     /**
      * Generate a DeviceEditor design based in an array of Bins and eugeneRules
@@ -77,6 +114,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     parseJSON: function (input,cb) {
         var jsonDoc = JSON.parse(input);
+        jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
         var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
         var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
         var binsArray = [];
@@ -243,6 +281,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     parseXML: function (input, cb) {
         var parser = new DOMParser();
         var xmlDoc = parser.parseFromString(input, "text/xml");
+
+        xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
 
         function getPartByID(targetId) {
             var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");

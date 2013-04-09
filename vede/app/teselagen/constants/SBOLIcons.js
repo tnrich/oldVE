@@ -10,6 +10,29 @@ Ext.define("Teselagen.constants.SBOLIcons", {
 
     ICONS: {},
 
+    ICONS_4_TO_4_1_UPDATE: {
+        "ASSEMBLY_JUNCTION": "ASSEMBLY-SCAR",
+        "BLUNT_RESTRICTION_SITE": "BLUNT-RESTRICTION-SITE",
+        "CDS": "CDS",
+        "FIVE_PRIME_OVERHANG": "FIVE-PRIME-OVERHANG",
+        "FIVE_PRIME_UTR": "FIVE-PRIME-UTR",
+        "FIVE_PRIME_STICKY_RESTRICTION_SITE": "FIVE-PRIME-STICKY-RESTRICTION-SITE",
+        "INSULATOR": "INSULATOR",
+        "OPERATOR_SITE": "OPERATOR",
+        "ORIGIN_OF_REPLICATION": "ORIGIN-OF-REPLICATION",
+        "PRIMER_BINDING_SITE": "PRIMER-BINDING-SITE",
+        "PROMOTER": "PROMOTER",
+        "PROTEASE_SITE": "PROTEASE-SITE",
+        "PROTEIN_STABILITY_ELEMENT": "PROTEIN-STABILITY-ELEMENT",
+        "RESTRICTION_ENZYME_RECOGNITION": "RESTRICTION-ENZYME-RECOGNITION-SITE",
+        "RIBOSOME_ENTRY_SITE": "RIBOSOME-ENTRY-SITE",
+        "RNA_STABILITY_ELEMENT": "RNA-STABILITY-ELEMENT",
+        "SIGNATURE": "SIGNATURE",
+        "TERMINATOR": "TERMINATOR",
+        "THREE_PRIME_OVERHANG": "THREE-PRIME-OVERHANG",
+        "THREE_PRIME_RESTRICTION": "THREE-PRIME-RESTRICTION-SITE"
+    },
+
     ICON_1_0_LIST: {
         "USER-DEFINED": {
             key: "USER-DEFINED",
@@ -156,10 +179,10 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         "GENERIC",
         "ASSEMBLY-JUNCTION",
         "BLUNT-RESTRICTION-SITE", //New in SBOL 1.0.0
-        "CDS",
+    "CDS",
         "FIVE-PRIME-OVERHANG",
         "FIVE-PRIME-RESTRICTION-SITE", //New in SBOL 1.0.0
-        "FIVE-PRIME-UTR",
+    "FIVE-PRIME-UTR",
         "INSULATOR",
         "OPERATOR-SITE",
         "ORIGIN-OF-REPLICATION",
@@ -183,7 +206,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
         this.ICONS = this.ICON_1_0_LIST;
 
         // Set the ICON_LIST to be an array of the key values
-        Ext.Object.each(this.ICONS , function(key, value, myself) {
+        Ext.Object.each(this.ICONS, function(key, value, myself) {
             list.push(key);
         });
         this.ICON_LIST = list;
