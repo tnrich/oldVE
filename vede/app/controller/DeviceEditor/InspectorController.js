@@ -517,6 +517,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             Ext.Msg.confirm("Delete Rule", "Are you sure you want to delete this Eugene rule?", function(button) {
                 if(button === "yes") {
+                    this.activeProject.rules().clearFilter();
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
                 }

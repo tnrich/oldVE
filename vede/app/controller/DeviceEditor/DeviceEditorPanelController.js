@@ -60,8 +60,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 deproject.set('name', text);
                 deproject.save({
                     callback: function () {
-                        Ext.getCmp('mainAppPanel').getActiveTab().setTitle(text);
-                        Ext.getCmp('mainAppPanel').getActiveTab().down('label[cls="designName"]').setText(text);
+                        Ext.getCmp('mainAppPanel').getActiveTab().setTitle("Device Editor | "+text);
+
+                        var parttext = Ext.getCmp('mainAppPanel').getActiveTab().down('panel[cls="DeviceEditorStatusBar"]').down('tbtext[cls="DeviceEditorStatusBarAlert"]');
+                        parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
+                        parttext.animate({duration: 5000, to: {opacity: 0}});
+
                         Vede.application.fireEvent("renderProjectsTree", function () {
                             Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
                         });

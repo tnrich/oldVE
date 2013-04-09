@@ -55,10 +55,10 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
             jsonBin["de:iconID" ] = bin.get("iconID");
             jsonBin["de:direction"] = bin.get("directionForward") ? "forward" : "reverse";
             jsonBin["de:dsf"] = bin.get("dsf");
-            jsonBin["de:fas"] = bin.get("fas");
+            //jsonBin["de:fas"] = (bin.get("fas") === "None") ? "" : bin.get("fas");
             jsonBin["de:fro"] = bin.get("fro");
-            jsonBin["de:extra3PrimeBps"] = bin.get("extra3PrimeBps");
-            jsonBin["de:extra5PrimeBps"] = bin.get("extra5PrimeBps");
+            //jsonBin["de:extra3PrimeBps"] = bin.get("extra3PrimeBps");
+            //jsonBin["de:extra5PrimeBps"] = bin.get("extra5PrimeBps");
 
             // Parts structure
             jsonBin["de:binItems"] = {};
@@ -66,14 +66,15 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
             bin.parts().each(function(part){
                 //console.log(part);
-                jsonBin["de:binItems"]["de:partID"].push(part.get("id"));
+                jsonBin["de:binItems"]["de:partID"].push(part.internalId);
 
                 var sequence = part.getSequenceFile();
 
                 // Process parts
                 var jsonPart = {};
 
-                jsonPart.id = part.get("id");
+                //jsonPart.id = part.get("id");
+                jsonPart.id = part.internalId;
                 jsonPart["de:name"] = part.get("name");
                 jsonPart["de:revComp"] = part.get("revComp");
                 jsonPart["de:startBP"] = part.get("genbankStartBP");
@@ -82,8 +83,9 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
                 jsonPart["de:parts"] = {};
                 jsonPart["de:parts"]["de:part"] = {};
-                jsonPart["de:parts"]["de:part"].id = part.get("id");
-                jsonPart["de:parts"]["de:part"].fas = part.get("fas");
+                //jsonPart["de:parts"]["de:part"].id = part.get("id");
+                jsonPart["de:parts"]["de:part"].id = part.internalId;
+                jsonPart["de:parts"]["de:part"]["de:fas"] = (part.get("fas") === "None") ? "" : part.get("fas");
 
                 parts.push(jsonPart);
 
@@ -99,15 +101,14 @@ Ext.define("Teselagen.manager.DeviceDesignExporterManager", {
 
             bins.push(jsonBin);
         });
-
+        Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign().rules().clearFilter();
         design.rules().each(function(rule){
             var jsonEugene = {};
-
             jsonEugene["de:name"] = rule.get("name");
             jsonEugene["de:negationOperator"] = rule.get("negationOperator");
-            jsonEugene["de:operand1ID"] = rule.getOperand1().get("id");
+            jsonEugene["de:operand1ID"] = rule.getOperand1().internalId;
             jsonEugene["de:compositionalOperator"] = rule.get("compositionalOperator");
-            jsonEugene["de:operand2ID"] = rule.getOperand2().get("id");
+            jsonEugene["de:operand2ID"] = rule.getOperand2().internalId;
 
             rules.push(jsonEugene);
         });
