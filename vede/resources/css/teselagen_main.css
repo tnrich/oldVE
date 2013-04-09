@@ -56,6 +56,18 @@ img {
   font-size: 12px;
   color: white;
 }
+
+.x-panel-header-default-framed-top, .x-panel-header-text-default-framed {
+  box-shadow: none;
+  background: #E0E3E6;
+  border-color: rgb(224, 224, 224);
+}
+
+.x-panel-header-default {
+  box-shadow: none;
+  background: #E0E3E6;
+  border-color: rgb(224, 224, 224);
+}
 /*
 .x-tool img {
   background-image: url(../../../extjs/resources/themes/images/gray/tools/tool-sprites.png);
