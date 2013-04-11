@@ -73,7 +73,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 });
             };
 
-        Ext.MessageBox.prompt("Rename Design", 'New name:', onPromptClosed, this);
+        Ext.MessageBox.prompt("Rename Design", 'New name:', onPromptClosed, this, false, deproject.get("name"));
     },
 
     onDeviceEditorDeleteBtnClick: function () {
