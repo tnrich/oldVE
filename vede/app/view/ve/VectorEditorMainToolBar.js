@@ -27,10 +27,15 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
             icon: 'resources/images/import_new.png',
             text: "Import",
             scale: 'medium',
-            tooltip: 'Import File'
+        },
+        listeners: {
+            render: {
+                fn: function(field) {
+                    field.el.set({title: "Import File"});
+                }
+            }
         },
         id: 'importBtn',
-//        tooltip: 'Import File'
     },
     {
         xtype: 'tbseparator',
