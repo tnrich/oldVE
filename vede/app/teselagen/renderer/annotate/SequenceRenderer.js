@@ -277,9 +277,9 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
         aminoAcids3 = aminoAcids3.replace(/ /g, "  ");
 
         if(this.sequenceAnnotator.showSpaceEvery10Bp){
-            aminoAcids1 = this.splitWithSpaces(aminoAcids1, 0, false);
-            aminoAcids2 = this.splitWithSpaces(aminoAcids2, 1, false);
-            aminoAcids3 = this.splitWithSpaces(aminoAcids3, 2, false);
+            aminoAcids1 = this.splitWithSpaces(aminoAcids1, aaPadding[0], false);
+            aminoAcids2 = this.splitWithSpaces(aminoAcids2, aaPadding[1], false);
+            aminoAcids3 = this.splitWithSpaces(aminoAcids3, aaPadding[2], false);
         }
 
         var verticalOffset = 0;
