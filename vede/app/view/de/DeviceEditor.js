@@ -15,6 +15,7 @@ Ext.define('Vede.view.de.DeviceEditor', {
     closable: true,
     border: 0,
     title: 'Device Editor',
+    bodyCls: 'DeviceEditorBody',
     dockedItems: [{
         xtype: 'DeviceEditorMenuPanel'
     },
@@ -23,10 +24,11 @@ Ext.define('Vede.view.de.DeviceEditor', {
     },
     {
         xtype: 'InspectorPanel'
-    },
-    {
-        xtype: "DeviceEditorStatusPanel"
-    }],
+    }
+    // {
+    //     xtype: "DeviceEditorStatusPanel"
+    // }
+    ],
     items: [{
         xtype: 'panel',
         layout: {

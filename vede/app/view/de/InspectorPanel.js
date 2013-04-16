@@ -76,10 +76,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    minHeight: 180,
-                    maxHeight: 180,
+                    minHeight: 170,
+                    maxHeight: 170,
                     bodyPadding: 10,
                     title: 'Properties',
+                    margin: '5px 0px 5px 0px',
                     items: [
                         {
                             xtype: 'textfield',
@@ -126,6 +127,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     minHeight: 70,
                     maxHeight: 70,
                     bodyPadding: 10,
+                    margin: '5px 0px 5px 0px',
                     title: 'Forced Assembly Strategy',
                     items: [
                         {
@@ -144,11 +146,13 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     flex: 1,
                     autoScroll: true,
                     bodyPadding: 10,
+                    margin: '5px 0px 0px 0px',
                     title: 'Eugene Rules',
                     items: [
                         {
                             xtype: 'gridpanel',
                             cls: 'eugeneRulesGrid',
+                            layout: 'fit',
                             viewConfig: {
                                 markDirty: false
                             },
@@ -158,8 +162,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             },
                             columnLines: true,
                             rowLines: true,
-                            minHeight: 150,
-                            maxHeight: 150,
+                            minHeight: 140,
                             columns: [
                                 {
                                     xtype: 'gridcolumn',
@@ -244,16 +247,21 @@ Ext.define('Vede.view.de.InspectorPanel', {
         },
         {
             xtype: 'panel',
+            cls: 'collectionInfoTab',
             layout: {
-                type: 'auto'
+                type: 'vbox',
+                align: 'stretch'
             },
             title: 'Collection Info',
+            autoScroll: true,
+            margin: "5px 0px 5px 0px",
             items: [
                 {
                     xtype: 'form',
                     cls: 'collectionInfoForm',
-                    overflowY: 'auto',
+                    flex: 2,
                     bodyBorder: false,
+                    autoScroll: true,
                     bodyPadding: 10,
                     items: [
                         {
@@ -297,10 +305,10 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             viewConfig: {
                                 markDirty: false
                             },
+                            layout: 'fit',                            
                             autoScroll: true,
                             allowDeselect: true,
                             columnLines: true,
-                            height:132,
                             minHeight:132,
                             plugins: {
                                 ptype: 'rowediting',
@@ -415,7 +423,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'container',
                             cls: 'inspector_containerActions',
-                            margin: '10 0 10 0',
+                            margin: '10px 0 10px 0',
                             layout: {
                                 type: 'hbox',
                             },
@@ -443,8 +451,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 },
                 {
                     xtype: 'form',
+                    autoScroll: true,
                     flex: 1,
                     title: 'Column Content',
+                    margin: '5px 0px 5px 0px',
+                    cls: 'columnContentForm',
                     items: [
                         {
                             xtype: 'displayfield',

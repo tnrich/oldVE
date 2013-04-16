@@ -15,6 +15,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
     frameHeader: false,
     closable: true,
     title: 'j5Report',
+    layout: 'fit',
     dockedItems: [{
         xtype: 'panel',
         dock: 'left',
@@ -52,7 +53,6 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             title: 'Detail',
             cls: 'j5detailpanel-fill',
             hidden: true,
-            layout: 'fit',
             border: 0,
             items: [{
                 xtype: 'container',
@@ -69,9 +69,8 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         cls: 'j5detailpanel',
         hidden: false,
         autoScroll: true,
-        layout: 'fit',
         border: 0,
-        items: [{
+        dockedItems: [{
                     xtype: 'toolbar',
                     layout: 'fit',
                     height: 50,
@@ -83,75 +82,76 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         cls: 'downloadResults',
                         overCls: 'downloadResults-over'
                     }]
-            },{
-                            xtype: 'gridpanel',
-                            name: 'assemblies',
-                            margin: '10 10 20 10',
-                            title: 'Output Plasmids',
-                            maxHeight: 600,
-                            layout: 'fit',
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    dataIndex: 'name',
-                                    flex: 1,
-                                    text: 'Name'
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    dataIndex: 'size',
-                                    flex: 1,
-                                    text: 'Size'
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    dataIndex: 'fileType',
-                                    flex: 1,
-                                    text: 'Type'
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    dataIndex: 'fileContent',
-                                    flex: 2,
-                                    text: 'Content'
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'gridpanel',
-                            name: 'j5parameters',
-                            margin: '10 10 20 10',
-                            title: 'j5 Parameters',
-                            minHeight: 100,
-                            maxHeight: 600,
-                            layout: 'fit',
-                            columns: [
-                                {
-                                    xtype: 'gridcolumn',
-                                    dataIndex: 'name',
-                                    flex: 1,
-                                    text: 'Name'
-                                },
-                                {
-                                    xtype: 'gridcolumn',
-                                    dataIndex: 'value',
-                                    flex: 1,
-                                    text: 'Value'
-                                }
-                            ]
-                        },
-                    {
-                    xtype: 'fieldset',
-                    margin: '10 10 10 10',
+                }],
+        items: [
+                {
+                    xtype: 'gridpanel',
+                    name: 'assemblies',
+                    margin: '10 10 20 10',
+                    title: 'Output Plasmids',
+                    minHeight: 100,
                     layout: 'fit',
-                    title: 'Combinatorial Mock Assembly Output',
-                    items: [
+                    columns: [
                         {
-                            xtype: 'textareafield',
-                            name: 'combinatorialAssembly',
-                            margin: '10 10 20 10',
-                            fieldLabel: ''
+                            xtype: 'gridcolumn',
+                            dataIndex: 'name',
+                            flex: 1,
+                            text: 'Name'
+                        },
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'size',
+                            flex: 1,
+                            text: 'Size'
+                        },
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'fileType',
+                            flex: 1,
+                            text: 'Type'
+                        },
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'fileContent',
+                            flex: 2,
+                            text: 'Content'
                         }
+                    ]
+                },
+                {
+                    xtype: 'gridpanel',
+                    name: 'j5parameters',
+                    margin: '10 10 20 10',
+                    title: 'j5 Parameters',
+                    minHeight: 100,
+                    layout: 'fit',
+                    columns: [
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'name',
+                            flex: 1,
+                            text: 'Name'
+                        },
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'value',
+                            flex: 1,
+                            text: 'Value'
+                        }
+                    ]
+                },
+                {
+                xtype: 'fieldset',
+                margin: '10 10 10 10',
+                layout: 'fit',
+                title: 'Combinatorial Mock Assembly Output',
+                items: [
+                    {
+                        xtype: 'textareafield',
+                        name: 'combinatorialAssembly',
+                        margin: '10 10 20 10',
+                        fieldLabel: ''
+                    }
                     ]
                 }]
             }],

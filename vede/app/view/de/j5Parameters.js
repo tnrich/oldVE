@@ -13,7 +13,8 @@ Ext.define('Vede.view.de.j5Parameters', {
     cls: 'j5Parameters_Window',
     autoScroll: true,
     modal: true,
-    maximizable: true,
+    maximizable: false,
+    resizable: false,
 
     initComponent: function () {
         var me = this;
