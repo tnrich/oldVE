@@ -101,7 +101,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
                     }).show();
                 }
-                else urrentTabPanel.setLoading(false);
+                else currentTabPanel.setLoading(false);
             },this,false,self.sequenceFileManager.name);
         }
         else saveToServer();
