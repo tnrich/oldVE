@@ -86,9 +86,10 @@ img {
 
 .x-menu-item-link {
   margin:0px;
-   transition: background .1s ease-in-out;
-   -moz-transition: background .1s ease-in-out;
-   -webkit-transition: background .1s ease-in-out;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .x-menu-item-active .x-menu-item-link {
@@ -160,9 +161,10 @@ img {
   background: #ECF0F1;
   border: 1px solid #E0E3E6;
   color: white;
-  transition: all.2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  -webkit-transition: all .2s ease-in-out;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .x-btn-default-small-over {
@@ -171,9 +173,10 @@ img {
 }
 
 .x-btn-default-toolbar-small {
-   transition: background .1s ease-in-out;
-   -moz-transition: background .1s ease-in-out;
-   -webkit-transition: background .1s ease-in-out;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .x-btn-default-toolbar-small-over {
@@ -187,9 +190,10 @@ img {
 }
 
 .x-btn-default-toolbar-medium-over {
-   transition: all .1s ease-in-out;
-   -moz-transition: all .1s ease-in-out;
-   -webkit-transition: all .1s ease-in-out;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .x-btn-default-toolbar-medium-over {
@@ -379,9 +383,9 @@ border-radius: 4px;
   border-color: #E0E3E6;
   box-shadow:none;
   border-bottom: 1px solid #E0E3E6 !important;
-  transition: all.3s ease-in-out;
-  -moz-transition: all .3s ease-in-out;
-  -webkit-transition: all .3s ease-in-out;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 #mainAppPanel .x-tab-top-active {
@@ -508,15 +512,8 @@ border-radius: 4px;
 
 #ProjectPanel_header { 
   border-top-right-radius: 4px;
-  border-color: #4c4c4c;
-  background: #4c4c4c; /* Old browsers */
-  background: -moz-linear-gradient(top,  #4c4c4c 0%, #3332342343 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(100%,#3332342343)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #4c4c4c 0%,#3332342343 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #4c4c4c 0%,#3332342343 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #4c4c4c 0%,#3332342343 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #4c4c4c 0%,#3332342343 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#3332342343',GradientType=0 ); /* IE6-9 */
+  border-color: #333234;
+  background: #333234;
   box-shadow: none;
 }
 
@@ -602,30 +599,30 @@ border-radius: 4px;
 }
 
 .projectStartBtn-over #projectStartBtn-btnInnerEl, .watchTutorialBtn-over #watchTutorialBtn-btnInnerEl, .readManualsBtn-over #readManualsBtn-btnInnerEl {
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   color: #006ADC;
 }
 
 .projectStartBtn-over #projectStartBtn-btnIconEl {
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   background-image: url(../images/projectstart-over.png) !important;
 }
 
 .watchTutorialBtn-over #watchTutorialBtn-btnIconEl {
-    -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   background-image: url(../images/watchtut-over.png) !important;
 }
 
 .readManualsBtn-over #readManualsBtn-btnIconEl {
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
+  -webkit-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -moz-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   background-image: url(../images/readman-over.png) !important;
 }
 
@@ -724,9 +721,9 @@ border-radius: 4px;
     text-overflow: ellipsis;
     font-size: 14px;
     font-weight: bold;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
+    -webkit-transition: border-color 0.3s ease, background 0.3s ease;
+    -moz-transition: border-color 0.3s ease, background 0.3s ease;
+    -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
 .binHeader:hover {    
@@ -742,15 +739,12 @@ border-radius: 4px;
   font-size:13px;
   background-color: #fefefe;
   border-color: #ECF0F1;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
+  -webkit-transition: border-color 0.3s ease, background 0.3s ease;
+  -moz-transition: border-color 0.3s ease, background 0.3s ease;
+  -o-transition: border-color 0.3s ease, background 0.3s ease;
 }
 
 .gridPartCell:hover {
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
     border-color: #4A4B4C;
 }
 
