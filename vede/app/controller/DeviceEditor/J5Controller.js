@@ -619,7 +619,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var j5Window = Ext.getCmp("mainAppPanel").getActiveTab().j5Window;
         j5Window.setLoading(true);
 
-        setTimeout(function() {
+        // Javascript waits to render the loading mask until after the call to
+        // openSequence, so we force it to wait a millisecond before calling
+        // to give it time to render the loading mask.
+        Ext.defer(function() {
             var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
             Teselagen.manager.ProjectManager.openSequence(newSequence);
 
@@ -629,7 +632,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             // the mainAppPanel.
             Ext.getCmp("mainAppPanel").setLoading();
             Ext.getCmp("mainAppPanel").setLoading(false);
-        });
+        }, 10);
     },
 
     onCondenseAssembliesBtnClick: function (btn) {

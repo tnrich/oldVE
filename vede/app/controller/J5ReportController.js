@@ -29,10 +29,10 @@ Ext.define("Vede.controller.J5ReportController", {
         // Javascript waits to render the loading mask until after the call to
         // openSequence, so we force it to wait a millisecond before calling
         // to give it time to render the loading mask.
-        setTimeout(function() {
+        Ext.defer(function() {
             Teselagen.manager.ProjectManager.openSequence(sequence);
             mask.setVisible(false);
-        }, 1);
+        }, 10);
 
     },
 

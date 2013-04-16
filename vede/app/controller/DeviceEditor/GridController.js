@@ -582,9 +582,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The location to add the bin to on the grid.
      */
     addJ5Bin: function(j5Bin, index) {
-        var iconSource;
-        iconSource = "resources/images/icons/device/small/origin_of_replication.png";
-        
+
         var icon = Teselagen.constants.SBOLIcons.ICONS[j5Bin.data.iconID.toUpperCase()];
 
         var newBin = Ext.create("Vede.view.de.grid.Bin", {

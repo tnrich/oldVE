@@ -64,7 +64,7 @@ Ext.define("Teselagen.models.J5Bin", {
                 if ( v === null || v === undefined || v === "") {
                     // DW NOTE: I am saving the key here, but maybe it should be name
                     // Depends on how you use iconID to find the original URL.
-                    return Teselagen.constants.SBOLIcons.ICONS.GENERIC.key;
+                    return Teselagen.constants.SBOLIcons.ICONS["USER-DEFINED"].key;
                 } else {
                     return v;
                 }
@@ -99,33 +99,6 @@ Ext.define("Teselagen.models.J5Bin", {
             field: "iconID",
             type: "inclusion",
             list: Teselagen.constants.SBOLIcons.ICON_LIST
-
-            // DW 11.24.12: DO NOT DO THIS!
-            // GET THE APPLICATION TO LOAD Teselagen.constants.SBOLIcons !!!!!
-            // YOU NEED THE PREVIOUS LINE TO WORK
-            //
-            // THIS IS A TEMPORARY SOLUTION !!!!!!!!!
-            /*list : [
-                "GENERIC",
-                "ASSEMBLY_JUNCTION",
-                "CDS",
-                "FIVE_PRIME_OVERHANG",
-                "FIVE_PRIME_UTR",
-                "INSULATOR",
-                "OPERATOR_SITE",
-                "ORIGIN_OF_REPLICATION",
-                "PRIMER_BINDING_SITE",
-                "PROMOTER",
-                "PROTEASE_SITE",
-                "PROTEIN_STABILITY_ELEMENT",
-                "RESTRICTION_ENZYME_RECOGNITION_SITE",
-                "RESTRICTION_SITE_NO_OVERHANG",
-                "RIBONUCLEASE_SITE",
-                "RNA_STABILITY_ELEMENT",
-                "SIGNATURE",
-                "TERMINATOR",
-                "THREE_PRIME_OVERHANG"
-            ]*/
         },
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},

@@ -352,7 +352,7 @@ GCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG
     <de:j5Bins>
       <de:j5Bin>
         <de:binName>vector_backbone</de:binName>
-        <de:iconID>origin_of_replication</de:iconID>
+        <de:iconID>ORIGIN-OF-REPLICATION</de:iconID>
         <de:direction>forward</de:direction>
         <de:dsf>false</de:dsf>
         <de:fro>2</de:fro>
@@ -391,7 +391,7 @@ GCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG
       </de:j5Bin>
       <de:j5Bin>
         <de:binName>ssrA_tag_5prime</de:binName>
-        <de:iconID>protein_stability_element</de:iconID>
+        <de:iconID>PROTEIN-STABILITY-ELEMENT</de:iconID>
         <de:direction>forward</de:direction>
         <de:dsf>true</de:dsf>
         <de:binItems>
@@ -401,7 +401,7 @@ GCGGCGAACGATGAAAACTATAACTATGCGCTGGCGGCG
       </de:j5Bin>
       <de:j5Bin>
         <de:binName>ssrA_tag_3prime</de:binName>
-        <de:iconID>protein_stability_element</de:iconID>
+        <de:iconID>PROTEIN-STABILITY-ELEMENT</de:iconID>
         <de:direction>forward</de:direction>
         <de:dsf>false</de:dsf>
         <de:binItems>

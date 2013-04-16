@@ -14,7 +14,7 @@ Ext.require("Teselagen.constants.SBOLIcons");
 
 Ext.onReady(function() {
 
-    
+
     describe("Testing JSON Test Designs", function() {
 
         var JSONTests = [
@@ -26,8 +26,12 @@ Ext.onReady(function() {
             "data/dejson/Golden_Gate_example_idented_simplified.json",
             "data/dejson/Golden_Gate_example_parsed.json",
             "data/dejson/Golden_Gate_example.json",
-            "data/dejson/SLIC_Gibson_CPEC_example_parsed.json"
-            ];
+            "data/dejson/SLIC_Gibson_CPEC_example_parsed.json",
+            "../resources/examples/SLIC_Gibson_CPEC.json",
+            "../resources/examples/Combinatorial_Golden_Gate.json",
+            "../resources/examples/Golden_Gate.json",
+            "../resources/examples/SLIC_Gibson_CPEC.json"
+        ];
 
 
         var designs = [];

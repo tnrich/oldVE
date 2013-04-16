@@ -7,11 +7,48 @@
 Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
     alias: "DeviceDesignParsersManager",
     singleton: true,
-    requires: ["Teselagen.manager.DeviceDesignManager"],
+    requires: ["Teselagen.manager.DeviceDesignManager","Teselagen.constants.SBOLIcons"],
     mixins: {
         observable: "Ext.util.Observable"
     },
 
+    /**
+     * Check XmlDoc for XML4.0 iconIDreferences and update to new XMl4.1 standard
+     * @param {xmldoc} XmlDOC.
+     */
+    auto_migrate_XML4_to4_1: function(xmlDoc){
+
+        var bins = xmlDoc.getElementsByTagNameNS("*", "j5Bins")[0].getElementsByTagNameNS("*", "j5Bin");
+
+        for (var indexBin in bins) {
+            if (!bins[indexBin].nodeName) { continue; }
+            var bin = bins[indexBin];
+            var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
+            if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
+            {
+                bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID];
+            }
+        }
+
+        return xmlDoc;
+    },
+
+    /**
+    /**
+     * Check JSONDoc for JSON4.0 iconIDreferences and update to new JSON4.1 standard
+     * @param {JSONdoc} JSONDOC.
+     */
+    auto_migrate_JSON4_to4_1: function(jsonDoc){
+        var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
+        bins.forEach(function(bin){
+            var iconID = bin["de:iconID"].toUpperCase();
+            if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
+            {
+                bin["de:iconID"] = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID];
+            }
+        });
+        return jsonDoc;
+    },
 
     /**
      * Generate a DeviceEditor design based in an array of Bins and eugeneRules
@@ -77,6 +114,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     parseJSON: function (input,cb) {
         var jsonDoc = JSON.parse(input);
+        jsonDoc = this.auto_migrate_JSON4_to4_1(jsonDoc);
         var bins = jsonDoc["de:design"]["de:j5Collection"]["de:j5Bins"]["de:j5Bin"];
         var sequences = jsonDoc["de:design"]["de:sequenceFiles"]["de:sequenceFile"];
         var binsArray = [];
@@ -114,6 +152,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         // Bins Processing
         for (var indexBin in bins) {
             var bin = bins[indexBin];
+
+            if(!Teselagen.constants.SBOLIcons.ICONS[bin["de:iconID"].toUpperCase()]) { console.warn(bin["de:iconID"]); console.warn("Invalid iconID"); }
 
             var newBin = Ext.create("Teselagen.models.J5Bin", {
                 binName: bin["de:binName"],
@@ -242,6 +282,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var parser = new DOMParser();
         var xmlDoc = parser.parseFromString(input, "text/xml");
 
+        xmlDoc = this.auto_migrate_XML4_to4_1(xmlDoc);
+
         function getPartByID(targetId) {
             var parts = xmlDoc.getElementsByTagNameNS("*", "partVO");
             for (var indexPart in parts) {
@@ -276,6 +318,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             var direction = bin.getElementsByTagNameNS("*", "direction")[0].textContent;
             var dsf = bin.getElementsByTagNameNS("*", "dsf")[0].textContent;
+
+            if(!Teselagen.constants.SBOLIcons.ICONS[iconID.toUpperCase()]) { console.warn(iconID); console.warn("Invalid iconID"); }
 
             var newBin = Ext.create("Teselagen.models.J5Bin", {
                 binName: binName,

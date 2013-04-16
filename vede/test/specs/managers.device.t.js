@@ -349,7 +349,7 @@ Ext.onReady(function() {
                     expect(success).toBe(true);
 
                     var iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
-                    expect(iconID).toBe("GENERIC");
+                    expect(iconID).toBe("USER-DEFINED");
 
 
                     DeviceDesignManager.setIconIDByBinIndex(design, 0, "BLAH");
@@ -357,9 +357,9 @@ Ext.onReady(function() {
                     expect(iconID).toBe("BLAH");
                     expect(DeviceDesignManager.getBinByIndex(design, 0).validate().length).toBe(1);
 
-                    DeviceDesignManager.setIconIDByBinIndex(design, 0, "ASSEMBLY_JUNCTION");
+                    DeviceDesignManager.setIconIDByBinIndex(design, 0, "ASSEMBLY_SCAR");
                     iconID = DeviceDesignManager.getIconIDByBinIndex(design, 0);
-                    expect(iconID).toBe("ASSEMBLY_JUNCTION");
+                    expect(iconID).toBe("ASSEMBLY_SCAR");
                     expect(DeviceDesignManager.getBinByIndex(design, 0).validate().length).toBe(0);
                     
 

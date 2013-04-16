@@ -5,7 +5,10 @@
 Ext.define('Vede.controller.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
-    requires: ['Teselagen.manager.ProjectManager'],
+    requires: ['Teselagen.event.VisibilityEvent',
+               'Teselagen.manager.ProjectManager'],
+
+    VisibilityEvent: null,
 
     onImportBtnChange: function(pBtn) {
         // This will be refactored into a manager (Teselagen.Utils.FileUtils.js).
@@ -154,6 +157,8 @@ Ext.define('Vede.controller.MainToolbarController', {
     },
 
     init: function() {
+        this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+
         this.control({
             "#importBtn": {
                 change: this.onImportBtnChange

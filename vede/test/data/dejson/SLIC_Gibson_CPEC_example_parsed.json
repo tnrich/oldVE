@@ -143,7 +143,7 @@
                 "de:j5Bin": [
                     {
                         "de:binName": "0",
-                        "de:iconID": "origin_of_replication",
+                        "de:iconID": "ORIGIN-OF-REPLICATION",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {
@@ -154,7 +154,7 @@
                     },
                     {
                         "de:binName": "1",
-                        "de:iconID": "five_prime_utr",
+                        "de:iconID": "FIVE-PRIME-UTR",
                         "de:direction": "forward",
                         "de:dsf": false,
                         "de:binItems": {
