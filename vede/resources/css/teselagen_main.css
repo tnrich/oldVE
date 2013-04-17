@@ -289,11 +289,19 @@ img {
 	color: #333234;
 }
 
-.x-mask-msg div {
+.x-mask-msg, .x-mask-msg div {
   font-family: 'Maven Pro', sans-serif;
   font-weight: 500;
   font-size: 12px;
   color: #333234;
+  box-shadow: none;
+  border: 0 none;
+  background-color: #ECF0F1;
+  border-radius: 2px;
+}
+
+.x-mask {
+  background: #ECF0F1;
 }
 
 .x-window-header-default-top{
