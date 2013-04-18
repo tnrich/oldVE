@@ -905,6 +905,19 @@ background: #F8F8F8;
   background: #F8F8F8;
 }
 
+.warning-wrap {
+  margin-bottom: 15px;
+}
+
+.warning-note {
+  height: 10px;
+  width: 10px;
+  border-radius: 1000px;
+  background: #FFD24D;
+  float: left;
+  margin: 10px;
+}
+
 .openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults {
   background: #1585C5;
   transition: background .2s ease-in-out;
