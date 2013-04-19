@@ -487,7 +487,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                         msgWarnings = "";
                         for(var index in warnings)
                         {
-                            msgWarnings += warnings[index].message+"<br>";
+                            msgWarnings += "<div class='warning-wrap'><div class='warning-note'></div>"+ "<div class='warning-text'>" + warnings[index].message +"</div></div>";
                         }
                         alertbox = Ext.MessageBox.alert('Warnings', msgWarnings);
                         Ext.Function.defer(function () {

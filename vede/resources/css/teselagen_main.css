@@ -301,7 +301,7 @@ img {
 }
 
 .x-mask {
-  background: #ECF0F1;
+  background: #E0E3E6;
 }
 
 .x-window-header-default-top{
@@ -898,11 +898,24 @@ background: #F8F8F8;
 }
 
 .j5Parameters_Window, .j5Parameters_Window .x-window-body {
-  background: rgb(240,240,240);
+  background: #F8F8F8;
 }
 
 .j5Parameters_Buttons {
-  background: #E0E3E6;
+  background: #F8F8F8;
+}
+
+.warning-wrap {
+  margin-bottom: 15px;
+}
+
+.warning-note {
+  height: 10px;
+  width: 10px;
+  border-radius: 1000px;
+  background: #FFD24D;
+  float: left;
+  margin: 10px;
 }
 
 .openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults {
