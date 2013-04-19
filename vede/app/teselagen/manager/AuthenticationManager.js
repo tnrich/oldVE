@@ -35,7 +35,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     var self = this;
     self.updateSplashScreenMessage('Getting authentication parameters');
     Ext.Ajax.request({
-      url: 'vede/deviceeditor',
+      url: 'deviceeditor',
       params: {},
       method: 'GET',
       success: function(response) {
