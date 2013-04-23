@@ -7,8 +7,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
         "Teselagen.models.J5Collection",
-        "Teselagen.models.EugeneRule"
-    ],
+        "Teselagen.models.EugeneRule"],
 
     proxy: {
         type: "rest",
@@ -30,16 +29,16 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 var binsTempArray = [];
 
-                record.getJ5Collection().bins().each(function(bin,binKey){
+                record.getJ5Collection().bins().each(function(bin, binKey) {
                     var partsTempArray = [];
-                    bin.parts().each(function(part){
-                        if(!part.isEmpty()) partsTempArray.push(part.getData().id);
+                    bin.parts().each(function(part) {
+                        if (!part.isEmpty()) partsTempArray.push(part.getData().id);
                     });
                     binsTempArray.push(partsTempArray);
                 });
 
-                data.j5collection.bins.forEach(function(bin,binKey){
-                    bin.parts.forEach(function(part,partKey){
+                data.j5collection.bins.forEach(function(bin, binKey) {
+                    bin.parts.forEach(function(part, partKey) {
                         delete data.j5collection.bins[binKey].parts;
                         data.j5collection.bins[binKey].parts = binsTempArray[binKey];
                     });
@@ -47,7 +46,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 data.rules = rules;
 
-                data.rules.forEach(function(rule,ruleKey){
+                data.rules.forEach(function(rule, ruleKey) {
                     delete data.rules[ruleKey]["Teselagen.models.Part"];
                 });
 
@@ -63,43 +62,50 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * Input parameters.
      * @param {int} id
      */
-    fields: [
-        {name: "deproject_id", type: "long"},
-    ],
+    fields: [{
+        name: "devicedesign_id",
+        type: "long"
+    }, {
+        name: "name",
+        type: "String",
+        defaultValue: ""
+    }],
 
-    validations: [
-    ],
+    validations: [],
 
-    associations: [
-        {
-            type: "hasOne",
-            model: "Teselagen.models.J5Collection",
-            getterName: "getJ5Collection",
-            setterName: "setJ5Collection",
-            associationKey: "j5collection",
-            name: "j5collection" // Note: not a documented config, but specified for getRecordData
-        },
-        {
-            type: "hasOne",
-            model: "Teselagen.models.SBOLvIconInfo",
-            getterName: "getSBOLvIconInfo",
-            setterName: "setSBOLvIconInfo",
-            associationKey: "sbolvIconInfo"
-        },
-        {
-            type: "hasMany",
-            model: "Teselagen.models.EugeneRule",
-            name: "rules",
-            associationKey: "rules"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.DeviceEditorProject",
-            getterName: "getDeviceEditorProject",
-            setterName: "setDeviceEditorProject",
-            associationKey: "deviceEditorProject"
-        }
-    ],
+    associations: [{
+        type: "hasOne",
+        model: "Teselagen.models.J5Collection",
+        getterName: "getJ5Collection",
+        setterName: "setJ5Collection",
+        associationKey: "j5collection",
+        name: "j5collection" // Note: not a documented config, but specified for getRecordData
+    }, {
+        type: "hasOne",
+        model: "Teselagen.models.SBOLvIconInfo",
+        getterName: "getSBOLvIconInfo",
+        setterName: "setSBOLvIconInfo",
+        associationKey: "sbolvIconInfo"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.EugeneRule",
+        name: "rules",
+        associationKey: "rules"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.J5Run",
+        name: "j5runs",
+        associationKey: "j5runs",
+        autoload: true,
+        foreignKey: "deproject_id"
+    }, {
+        type: "belongsTo",
+        model: "Teselagen.models.Project",
+        getterName: "getProject",
+        setterName: "setProject",
+        associationKey: "project",
+        foreignKey: "devicedesign_id"
+    }],
 
     /** (Untested)
      * Get number of bins in J5Bin.
@@ -120,7 +126,9 @@ Ext.define("Teselagen.models.DeviceDesign", {
         }
         var j5Coll = Ext.create("Teselagen.models.J5Collection");
         for (var i = 0; i < pNumBins; i++) {
-            var bin = Ext.create("Teselagen.models.J5Bin", {binName: "No_Name" + i});
+            var bin = Ext.create("Teselagen.models.J5Bin", {
+                binName: "No_Name" + i
+            });
             j5Coll.addToBin(bin, i);
         }
         this.setJ5Collection(j5Coll);
@@ -181,7 +189,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     removeAllRules: function() {
         this.rules().removeAll();
-        if (this.rules().count() === 0 ) {
+        if (this.rules().count() === 0) {
             return true;
         } else {
             return false;
@@ -198,7 +206,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         this.rules().clearFilter();
 
         this.rules().filterBy(function(rule) {
-            if(rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
+            if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
                 return true;
             } else {
                 return false;
@@ -214,7 +222,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
      */
     getRuleByName: function(pName) {
         var index = this.rules().find("name", pName);
-        if ( index !== -1) {
+        if (index !== -1) {
             return this.rules().getAt(index);
         } else {
             return null;

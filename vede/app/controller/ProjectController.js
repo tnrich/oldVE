@@ -16,15 +16,8 @@ Ext.define("Vede.controller.ProjectController", {
 
         var self = this;
 
-        var lastDEProjects = Ext.create('Ext.data.Store', {
-            model: 'Teselagen.models.DeviceEditorProject'
-        });
-
         var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
         rootNode.removeAll();
-
-        var partsRootNode = Ext.getCmp('projectPartsPanel').getRootNode();
-        partsRootNode.removeAll();
 
         rootNode.appendChild({
             text: 'Create project',
@@ -59,16 +52,16 @@ Ext.define("Vede.controller.ProjectController", {
                 id: 0
             });
 
-            var deprojects = project.deprojects();
-            deprojects.load({
+            var designs = project.designs();
+            designs.load({
                 callback: function () {
-                    deprojects.each(function (deproject) {
-                        lastDEProjects.add(deproject);
+                    designs.each(function (deproject) {
+
                         var deprojectnode = projectNode.appendChild({
                             text: deproject.data.name,
                             leaf: false,
                             id: deproject.data.id,
-                            hrefTarget: 'opende',
+                            hrefTarget: "opende",
                             icon: "resources/images/ux/design-tree-icon-leaf.png"
                         });
 
@@ -76,7 +69,7 @@ Ext.define("Vede.controller.ProjectController", {
                             text: "J5 Reports",
                             leaf: true,
                             id: deproject.data.id,
-                            hrefTarget: 'j5reports',
+                            hrefTarget: "j5reports",
                             icon: "resources/images/ux/j5-tree-icon-parent.png"
                         });
 
@@ -93,7 +86,7 @@ Ext.define("Vede.controller.ProjectController", {
                 Ext.create('Ext.data.Store', {
                     model: 'Teselagen.models.VectorEditorProject'
             });
-
+            /*
             var veprojects = project.veprojects();
             veprojects.load({
                 callback: function () {
@@ -120,6 +113,7 @@ Ext.define("Vede.controller.ProjectController", {
                     });
                 }
             });
+            */
         });
 
         //Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
@@ -130,7 +124,7 @@ Ext.define("Vede.controller.ProjectController", {
         var deproject_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var deprojects = project.deprojects().load({
+        var deprojects = project.designs().load({
             callback: function () {
                 var deproject = deprojects.getById(deproject_id);
                 Teselagen.manager.ProjectManager.workingProject = project;

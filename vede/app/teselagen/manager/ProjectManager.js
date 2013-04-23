@@ -81,6 +81,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     openDEProject: function (selectedDEProject) {
+        console.log(selectedDEProject);
+        /*
         this.checkDuplicatedTabs(selectedDEProject, "DeviceEditorTab", function (tabPanel) {
             Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
             var self = this;
@@ -98,6 +100,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 }
             });
         });
+        */
     },
 
     deleteDEProject: function (deproject, tab) {

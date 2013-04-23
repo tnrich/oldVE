@@ -1,26 +1,31 @@
 /**
  * Mongoose schema definitions:
- * 
- * + User
- * + j5run
- * + sequence
- * + part
- * + veproject
- * + deproject
- * + project
- * 
+ *
+ * + user : Describes a user.
+ * + j5run : Describes a result of a j5 execution.
+ * + devicedesign : Describes a design assembly. (linked to parts)
+ * + sequence : Describes a sequences.
+ * + part : Describe a part (linked to a sequence).
+ * + project : Describes a project that groups sequence, parts and devicedesign.
+ *
  * @module ./schemas/DBSchemas
  */
 
-module.exports = function (db) {
+module.exports = function(db) {
 
-    var mongoose = require("mongoose");
+	var mongoose = require("mongoose");
 
-    var registerSchema = function(name,schema){
+	var registerSchema = function(name, schema) {
 		db.model(name, schema);
-		schema.virtual('id').get(function () {return this._id.toString();});
-		schema.set('toJSON', { virtuals: true });
-		schema.set('toJSON', { virtuals: true });
+		schema.virtual('id').get(function() {
+			return this._id.toString();
+		});
+		schema.set('toJSON', {
+			virtuals: true
+		});
+		schema.set('toJSON', {
+			virtuals: true
+		});
 	};
 
 	var Schema = mongoose.Schema;
@@ -28,19 +33,33 @@ module.exports = function (db) {
 	var Mixed = mongoose.Schema.Types.Mixed;
 
 	var j5RunSchema = new Schema({
-		deproject_id: String,
+		devicedesign_id: {
+			type: oIDRef,
+			ref: 'devicedesign'
+		},
 		name: String,
 		file_id: oIDRef,
 		date: Date,
 		j5Results: Mixed,
 		j5Input: Mixed,
 		assemblyType: String,
-		assemblyMethod: String,
+		assemblyMethod: String
 	});
 	registerSchema('j5run', j5RunSchema);
 
 	var SequenceSchema = new Schema({
-		veproject_id: String,
+		project_id: {
+			type: oIDRef,
+			ref: 'project'
+		},
+		user_id: {
+			type: oIDRef,
+			ref: 'user'
+		},
+		name: String,
+		dateCreated: String,
+		dateModified: String,
+		ve_metadata: Mixed,
 		sequenceFileContent: String,
 		sequenceFileFormat: String,
 		hash: String,
@@ -51,6 +70,12 @@ module.exports = function (db) {
 	registerSchema('sequence', SequenceSchema);
 
 	var PartSchema = new Schema({
+		project_id : { type: oIDRef, ref: 'project' },
+		user_id : { type: oIDRef, ref: 'user' },
+		name: String,
+		dateCreated: String,
+		dateModified: String,
+		ve_metadata       :  Mixed,
 		id                :  String,
 		veproject_id      :  String,
 		j5bin_id          :  String,
@@ -58,99 +83,104 @@ module.exports = function (db) {
 		sequencefile_id   :  String,
 		directionForward  :  String,
 		fas               :  String,
-		name              :  String,
-		revComp           :  String,
-		genbankStartBP    :  String,
-		endBP             :  String,
-		iconID            :  String,
-		veproject_id      :  String,
-		j5bin_id          :  String,
-		eugenerule_id     :  String,
-		sequencefile_id   :  String,
-		directionForward  :  String,
-		fas               :  String,
-		name              :  String,
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
 		iconID            :  String
 	});
 
-	PartSchema.pre('save', function (next) {
-	  this.id = this._id;
-	  next();
-	})
+	PartSchema.pre('save', function(next) {
+		this.id = this._id;
+		next();
+	});
 
 	db.model('part', PartSchema);
 
-	var VEProjectSchema = new Schema({
-		name: String,
-		project_id : { type: oIDRef, ref: 'project' },
-		sequencefile_id: { type: oIDRef, ref: 'sequence' },
-		parts: [ { type: oIDRef, ref: 'part' } ]
-	});
-	registerSchema('veproject', VEProjectSchema);
-
-	var DEProjectSchema = new Schema({
+	var DeviceDesignSchema = new Schema({
+		project_id: {
+			type: oIDRef,
+			ref: 'project'
+		},
+		user_id: {
+			type: oIDRef,
+			ref: 'user'
+		},
 		name: String,
 		dateCreated: String,
 		dateModified: String,
-		project_id : { type: oIDRef, ref: 'project' },
-		design: {
-			name: String,
-			deproject_id: String,
-			j5collection: {
+		de_metadata: Mixed,
+		j5collection: {
+			directionForward: String,
+			combinatorial: String,
+			isCircular: String,
+			bins: [{
 				directionForward: String,
-				combinatorial: String,
-				isCircular: String,
-				bins: [{
-					directionForward: String,
-					dsf: String,
-					fro: String,
-					fas: String,
-					extra5PrimeBps: String,
-					extra3PrimeBps: String,
-					binName: String,
-					iconID: String,
-					parts: [ { type: oIDRef, ref: 'part' } ]
+				dsf: String,
+				fro: String,
+				fas: String,
+				extra5PrimeBps: String,
+				extra3PrimeBps: String,
+				binName: String,
+				iconID: String,
+				parts: [{
+					type: oIDRef,
+					ref: 'part'
 				}]
-			},
-			rules: [Mixed]
+			}]
 		},
-		j5runs : [{ type: oIDRef, ref: 'j5run' }]
+		rules: [Mixed],
+		j5runs: [{
+			type: oIDRef,
+			ref: 'j5run'
+		}]
 	});
-	registerSchema('deproject', DEProjectSchema);
+	registerSchema('devicedesign', DeviceDesignSchema);
 
 	var ProjectSchema = new Schema({
-		user_id : { type: oIDRef, ref: 'User' },
+		user_id: {
+			type: oIDRef,
+			ref: 'User'
+		},
 		dateCreated: String,
 		dateModified: String,
 		name: String,
-		deprojects : [{ type: oIDRef, ref: 'deproject' }],
-		veprojects : [{ type: oIDRef, ref: 'veproject' }],
-		projecttree: {
-			deprojects: [Mixed],
-			veproject: [Mixed],
-			parts: [Mixed]
-		}
+		sequences: [{
+			type: oIDRef,
+			ref: 'sequence'
+		}],
+		parts: [{
+			type: oIDRef,
+			ref: 'part'
+		}],
+		designs: [{
+			type: oIDRef,
+			ref: 'devicedesign'
+		}]
 	});
 	registerSchema('project', ProjectSchema);
 
 	var UserSchema = new Schema({
 		username: String,
-		name: String,
-		projects : [{ type: oIDRef, ref: 'project' }],
-		preferences: Mixed
+		firstName: String,
+		lastName: String,
+		email: String,
+		preferences: Mixed,
+		projects: [{
+			type: oIDRef,
+			ref: 'project'
+		}],
+		sequences: [{
+			type: oIDRef,
+			ref: 'sequence'
+		}],
+		parts: [{
+			type: oIDRef,
+			ref: 'part'
+		}],
+		designs: [{
+			type: oIDRef,
+			ref: 'devicedesign'
+		}]
 	});
 	registerSchema('User', UserSchema);
-
-	DEProjectSchema.post('save', function() {
-		var Project = db.model("project");
-		var self = this;
-	    Project.findById(this.project_id,function(err,proj){	
-	     	proj.projecttree.deprojects.push({'name':self.name,'id':self.id});
-	     	proj.save();
-	    });	  
-	});
-		
 };

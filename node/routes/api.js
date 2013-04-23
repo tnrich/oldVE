@@ -547,16 +547,17 @@ module.exports = function (app, express) {
 
   //READ
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
-    var DEProject = app.db.model("deproject");
-    DEProject.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
+    var DeviceDesign = app.db.model("devicedesign");
+    var project_id = JSON.parse(req.query.filter)[0].value;
+    DeviceDesign.findById(project_id).populate('j5collection.bins.parts').exec(function (err, design) {
         // Eugene rules to be send on a different request
-        delete project.design.rules;
+        delete design.rules;
         
         if (err) {
             errorHandler(err, req, res);
         }
         else {
-            res.json({"design":project.design});
+            res.json({"design":design});
         }
     });
 
