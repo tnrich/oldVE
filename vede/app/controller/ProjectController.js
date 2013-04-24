@@ -55,20 +55,20 @@ Ext.define("Vede.controller.ProjectController", {
             var designs = project.designs();
             designs.load({
                 callback: function () {
-                    designs.each(function (deproject) {
+                    designs.each(function (design) {
 
-                        var deprojectnode = projectNode.appendChild({
-                            text: deproject.data.name,
+                        var designnode = projectNode.appendChild({
+                            text: design.data.name,
                             leaf: false,
-                            id: deproject.data.id,
+                            id: design.data.id,
                             hrefTarget: "opende",
                             icon: "resources/images/ux/design-tree-icon-leaf.png"
                         });
 
-                        var j5resultsNode = deprojectnode.appendChild({
+                        var j5resultsNode = designnode.appendChild({
                             text: "J5 Reports",
                             leaf: true,
-                            id: deproject.data.id,
+                            id: design.data.id,
                             hrefTarget: "j5reports",
                             icon: "resources/images/ux/j5-tree-icon-parent.png"
                         });
@@ -162,8 +162,8 @@ Ext.define("Vede.controller.ProjectController", {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         var projectNames = [];
-        project.deprojects().load().each(function (deproject) {
-                            projectNames.push(deproject.data.name);
+        project.designs().load().each(function (design) {
+            projectNames.push(design.data.name);
         });
         Teselagen.manager.ProjectManager.createNewDEProjectAtProject(project, projectNames);
     },

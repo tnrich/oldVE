@@ -478,54 +478,58 @@ module.exports = function (app, express) {
   //CREATE
   app.post('/user/projects/deprojects/devicedesign', function (req, res) {
 
-    var DEProject = app.db.model("deproject");
+    var Project = app.db.model("project");
+    var DeviceDesign = app.db.model("devicedesign");
     var Part = app.db.model("part");
-
-    var id = req.body["deproject_id"];
-    var model = req.body;
     
-    DEProject.findById(id,function(err,deproject){
-      if(!deproject) return res.json({'fault':'deproject not found'},500);
-      deproject.design = model;
+    var newDesign = new DeviceDesign(req.body);
 
-      deproject.design.j5collection.bins.forEach(function(bin,binKey){
-        bin.parts.forEach(function(part,partKey){
-          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
-          if(partId) deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
+    newDesign.j5collection.bins.forEach(function(bin,binKey){
+      bin.parts.forEach(function(part,partKey){
+        var partId = newDesign.j5collection.bins[binKey].parts[partKey];
+        if(partId) newDesign.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
+      });
+    });
+
+    newDesign.save(function(err){
+
+      Project.findById(newDesign.project_id,function(err,project){
+        project.designs.push(newDesign);
+        project.save(function(){
+          if(err) console.log(err);
+          res.json({"design":newDesign}); 
         });
       });
-    
-      deproject.save(function(err){
-        if(err) console.log(err);
-        res.json({"design":req.body});
-      });
-
     });
   });
 
   //UPDATE/CREATE
   app.put('/user/projects/deprojects/devicedesign', function (req, res) {
-    var DEProject = app.db.model("deproject");
+    var DeviceDesign = app.db.model("devicedesign");
     var Part = app.db.model("part");
 
-    var id = req.body["deproject_id"];
+    var id = req.body.id;
     var model = req.body;
     
-    DEProject.findById(id,function(err,deproject){
-      deproject.design = model;
-      deproject.design.j5collection.bins.forEach(function(bin,binKey){
+    DeviceDesign.findById(id,function(err,devicedesign){
+
+      for(var prop in model) {
+        devicedesign[prop] = model[prop];
+      }
+
+      devicedesign.j5collection.bins.forEach(function(bin,binKey){
         bin.parts.forEach(function(part,partKey){
-          var partId = deproject.design.j5collection.bins[binKey].parts[partKey];
+          var partId = devicedesign.j5collection.bins[binKey].parts[partKey];
           if(partId)
           {
             partId = partId.toString();
-            delete deproject.design.j5collection.bins[binKey].parts[partKey];
+            delete devicedesign.j5collection.bins[binKey].parts[partKey];
             console.log(partId);
-            deproject.design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
+            devicedesign.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
           }
         });
       });
-      deproject.save(function(err){
+      devicedesign.save(function(err){
         if(err) console.log(err);
         res.json({"design":req.body});
       });
@@ -534,13 +538,13 @@ module.exports = function (app, express) {
 
   //READ EUGENE RULES
   app.get('/user/projects/deprojects/devicedesign/eugenerules', restrict, function (req, res) {
-    var DEProject = app.db.model("deproject");
-    DEProject.findById(req.query.id).exec(function (err, project) {
+    var DeviceDesign = app.db.model("devicedesign");
+    DeviceDesign.findById(req.query.id).exec(function (err, design) {
         if (err) {
             errorHandler(err, req, res);
         }
         else {
-            res.json({"rules":project.design.rules});
+            res.json({"rules":design.rules});
         }
     });
   });
@@ -548,18 +552,29 @@ module.exports = function (app, express) {
   //READ
   app.get('/user/projects/deprojects/devicedesign', restrict, function (req, res) {
     var DeviceDesign = app.db.model("devicedesign");
-    var project_id = JSON.parse(req.query.filter)[0].value;
-    DeviceDesign.findById(project_id).populate('j5collection.bins.parts').exec(function (err, design) {
-        // Eugene rules to be send on a different request
-        delete design.rules;
-        
-        if (err) {
-            errorHandler(err, req, res);
-        }
-        else {
-            res.json({"design":design});
-        }
-    });
+    var Project = app.db.model("project");
+
+    if(req.query.id)
+    {
+      DeviceDesign.findById(req.query.id).populate('design.j5collection.bins.parts').exec(function (err, project) {
+          // Eugene rules to be send on a different request
+          delete project.design.rules;
+          
+          if (err) {
+              errorHandler(err, req, res);
+          }
+          else {
+              res.json({"design":project.design});
+          }
+      });
+    }
+    else if(req.query.filter)
+    {
+      var project_id = JSON.parse(req.query.filter)[0].value;
+      Project.findById(project_id).populate('designs').exec(function (err, project) {
+          res.json({"design":project.designs});
+      });
+    }
 
   });
 

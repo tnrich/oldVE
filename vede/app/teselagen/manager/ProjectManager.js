@@ -80,27 +80,21 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
     },
 
-    openDEProject: function (selectedDEProject) {
-        console.log(selectedDEProject);
-        /*
-        this.checkDuplicatedTabs(selectedDEProject, "DeviceEditorTab", function (tabPanel) {
-            Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Design');
-            var self = this;
-            var selectedDesign = selectedDEProject.getDesign({
-                callback: function (record, operation) {
-                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                    selectedDesign = selectedDEProject.getDesign();
-                    tabPanel.add(Ext.create('Vede.view.de.DeviceEditor', {
-                        title: "Device Editor | " + selectedDEProject.data.name,
-                        model: selectedDEProject,
-                        modelId: selectedDEProject.data.id
-                    })).show();
-                    Vede.application.fireEvent("loadEugeneRules");
-                    Ext.getCmp('projectTreePanel').expandPath('/root/' + selectedDEProject.data.project_id + '/' + selectedDEProject.data.id);
-                }
-            });
+    openDEProject: function (selectedDesign) {
+
+        this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
+            Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
+            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+            tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
+                title: "Device Editor | " + selectedDesign.data.name,
+                model: selectedDesign,
+                modelId: selectedDesign.data.id
+            })).show();
+            Vede.application.fireEvent("loadEugeneRules");
+            Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
+
         });
-        */
+
     },
 
     deleteDEProject: function (deproject, tab) {
@@ -318,6 +312,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 });
                                 parts.push(newPart);
                                 tempParts.push(newPart);
+                                newBin.parts().add(newPart);
                             }
                             binsArray.push(newBin);
                         }
@@ -325,24 +320,22 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         var afterPartsSaved = function () {
 
                                 var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-                                deproject.setDesign(design);
-                                project.deprojects().add(deproject);
+                                design.set('name',text);
+                                design.set('project_id',project.data.id);
+                                project.designs().add(design);
+                                console.log(design);
 
-                                deproject.save({
+                                design.save({
                                     callback: function () {
-                                        design.set('deproject_id', deproject.get('id'));
-                                        design.save({
-                                            callback: function () {
-                                                Vede.application.fireEvent("renderProjectsTree", function () {
-                                                    console.log("Expanding " + '/root/' + project.data.id + '/' + deproject.data.id);
-                                                    Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id);
-                                                    Ext.getCmp('projectTreePanel').selectPath('/root/' + project.data.id + '/' + deproject.data.id);
-                                                });
-                                                self.openDEProject(deproject);
-                                            }
+                                        Vede.application.fireEvent("renderProjectsTree", function () {
+                                            console.log("Expanding " + '/root/' + project.data.id + '/' + design.data.id);
+                                            Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id);
+                                            Ext.getCmp('projectTreePanel').selectPath('/root/' + project.data.id + '/' + design.data.id);
                                         });
+                                        self.openDEProject(design);
                                     }
                                 });
+
                             };
 
                         parts.forEach(function (part, partIndex) {

@@ -37,7 +37,7 @@ Ext.define('Vede.view.de.grid.Part', {
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
         var html;
-        var activeProject = Ext.getCmp("mainAppPanel").getActiveTab().model.getDesign();
+        var activeProject = Ext.getCmp("mainAppPanel").getActiveTab().model;
 
         var parentIndex = this.DeviceDesignManager.getBinAssignment(activeProject, this.getPart());
         this.parentBin = this.DeviceDesignManager.getBinByIndex(activeProject, parentIndex);

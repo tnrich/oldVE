@@ -92,9 +92,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
             var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
             var deprojectId = Ext.getCmp("mainAppPanel").getActiveTab().modelId;
-            deproject.setDesign(design);
-            design.set("deproject_id", deprojectId);
-            deproject.set("id", deprojectId);
+            //deproject.setDesign(design);
+            //design.set("deproject_id", deprojectId);
+            //deproject.set("id", deprojectId);
 
             // Load the Eugene Rules in the Design
             for (var i = 0; i < eugeneRules.length; i++) {

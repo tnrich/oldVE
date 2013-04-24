@@ -22,6 +22,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
+                console.log(associatedData);
                 var j5Collection = associatedData["j5collection"];
 
                 var rules = associatedData["rules"];
@@ -55,7 +56,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign", this.url);
-        }
+        },
+        appendId: true,
+        noCache: false,
+        //filterParam: undefined,
+        groupParam: undefined,
+        pageParam: undefined,
+        startParam: undefined,
+        sortParam: undefined,
+        limitParam: undefined
     },
 
     /**
@@ -63,9 +72,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @param {int} id
      */
     fields: [{
-        name: "devicedesign_id",
+        name: "id",
         type: "long"
-    }, {
+    },
+    {
+        name: "project_id",
+        type: "long"
+    },
+    {
         name: "name",
         type: "String",
         defaultValue: ""
@@ -104,8 +118,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
         getterName: "getProject",
         setterName: "setProject",
         associationKey: "project",
-        foreignKey: "devicedesign_id"
+        foreignKey: "id"
     }],
+
+    getDesign: function(){
+        return this;
+    },
 
     /** (Untested)
      * Get number of bins in J5Bin.

@@ -36,14 +36,14 @@ Ext.define("Teselagen.models.Project", {
     }, {
         type: "hasMany",
         model: "Teselagen.models.SequenceFile",
-        name: "designs",
-        associationKey: "designs",
+        name: "sequences",
+        associationKey: "sequences",
         foreignKey: "project_id"
     }, {
         type: "hasMany",
         model: "Teselagen.models.Part",
-        name: "designs",
-        associationKey: "designs",
+        name: "parts",
+        associationKey: "parts",
         foreignKey: "project_id"
     }, {
         type: "belongsTo",
@@ -73,7 +73,15 @@ Ext.define("Teselagen.models.Project", {
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("user/projects", this.url);
-        }
+        },
+        appendId: true,
+        noCache: false,
+        filterParam: undefined,
+        groupParam: undefined,
+        pageParam: undefined,
+        startParam: undefined,
+        sortParam: undefined,
+        limitParam: undefined
     }
 
 });
