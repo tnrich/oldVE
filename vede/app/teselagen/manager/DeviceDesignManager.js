@@ -20,6 +20,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     statics: {
     },
 
+    /**
+     * @member Teselagen.manager.DeviceDesignManager
+     */
     constructor: function() {
     },
 

@@ -844,6 +844,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.tabPanel.on("tabchange", this.onTabChange, this);
     },
 
+    /**
+     * @member Vede.controller.DeviceEditor.InspectorController
+     */
     init: function () {
         this.callParent();
 

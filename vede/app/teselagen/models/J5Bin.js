@@ -33,7 +33,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Boolean} directionForward True for "forward" or False for "reverse". All parts within a bin should be the same direction.
      * @param {Boolean} dsf Direct Synthesis Firewall. False to allow j5 the flexibility to choose. True to prevent a direct synthesis piece from extending from a marked target part row to the target part in the next row.
      * @param {Teselagen.utils.NullableInt} fro Forced Relative Overlap/Overhang Position. Empty to allow j5 the flexibility to choose, or an integral number of bps (to forcibly set the relative overlap/overhang position).
-     * @param {String} fas Forced Assembly Strategy. Empty to allow j5 the flexibility to choose.
+     * @param {Array} fas Forced Assembly Strategy for each Part in the Bin. Set to None to allow j5 the flexibility to choose.
      * @param {Teselagen.utils.NullableInt} extra5PrimeBps
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
@@ -74,7 +74,8 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
-        {name: "fas",               type: "string",     defaultValue: "None"},
+//        {name: "fas",               type: "string",     defaultValue: "None"},
+        {name: "fas",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
