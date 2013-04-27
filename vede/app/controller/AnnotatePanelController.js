@@ -379,16 +379,28 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     onShowSequenceAAChanged: function(show) {
+        var start = this.SelectionLayer.start;
+        var end = this.SelectionLayer.end;
+
         this.SequenceAnnotationManager.setShowAminoAcids(show);
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
+
+            this.SelectionLayer.deselect();
+            this.select(start, end);
         }
     },
 
     onShowRevcomAAChanged: function(show) {
+        var start = this.SelectionLayer.start;
+        var end = this.SelectionLayer.end;
+
         this.SequenceAnnotationManager.setShowAminoAcidsRevCom(show);
         if(this.SequenceAnnotationManager.sequenceManager) {
             this.SequenceAnnotationManager.render();
+
+            this.SelectionLayer.deselect();
+            this.select(start, end);
         }
     },
 });
