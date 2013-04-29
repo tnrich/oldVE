@@ -57,7 +57,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      * @param {Function} (optional) Callback with design as argument 0.
      */
     generateDesign: function (binsArray, eugeneRules, cb) {
-
         if(typeof(cb)==="function")
         {
             return cb(Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray));
@@ -77,7 +76,6 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 icon: Ext.Msg.QUESTION
             });
         }
-
     },
 
     /**
@@ -89,12 +87,20 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
      */
     loadDesign: function (binsArray, eugeneRules, evt) {
         if (evt === "ok") {
-            var design = Teselagen.manager.DeviceDesignManager.createDeviceDesignFromBins(binsArray);
-            var deproject = Ext.getCmp("mainAppPanel").getActiveTab().model;
-            var deprojectId = Ext.getCmp("mainAppPanel").getActiveTab().modelId;
-            //deproject.setDesign(design);
-            //design.set("deproject_id", deprojectId);
-            //deproject.set("id", deprojectId);
+
+            var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
+            var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign,binsArray);
+            /*
+            if(existingDesign)
+            {
+                var existingDesignID = existingDesign.get("id");
+                design.set("id",existingDesignID);
+                design.set("name",existingDesign.get("name"));
+                design.set("project_id",existingDesign.get("project_id"));
+                existingDesign.destroy();
+            }
+            */
+            Ext.getCmp("mainAppPanel").getActiveTab().model = design;
 
             // Load the Eugene Rules in the Design
             for (var i = 0; i < eugeneRules.length; i++) {

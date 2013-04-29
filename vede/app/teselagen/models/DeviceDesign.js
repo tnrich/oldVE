@@ -22,7 +22,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                console.log(associatedData);
+                console.log(data);
                 var j5Collection = associatedData["j5collection"];
 
                 var rules = associatedData["rules"];

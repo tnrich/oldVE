@@ -47,6 +47,30 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Clear the design and add a given set of J5Bins.
+     * @param {Teselagen.models.DeviceDesign} DeviceEditor design.
+     * @param {Teselagen.models.J5Bin[]} pBins One or an array of J5Bins
+     * @returns {Teselagen.models.DeviceDesign}
+     */
+    clearDesignAndAddBins: function(device,pBins) {
+
+        var bins = device.getJ5Collection().bins();
+
+        bins.removeAll();
+
+        pBins.forEach(function(bin){
+            bins.add(bin);
+        });
+        
+
+        var err = device.validate();
+        if (err.length > 0) {
+            console.warn("Clearing DeviceDesign: " + err.length + " errors found.");
+        }
+        return device;
+    },
+
+    /**
      * Creates a DeviceDesign using a given set of J5Bins.
      * The order in the array determines the order in the Collection.
      * Validates DeviceDesign.
