@@ -630,7 +630,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
             // This gets rid of the weird bug where the loading mask remains on
             // the mainAppPanel.
-            //Ext.getCmp("mainAppPanel").setLoading();
+            Ext.getCmp("mainAppPanel").setLoading();
             Ext.getCmp("mainAppPanel").setLoading(false);
         }, 10);
     },
