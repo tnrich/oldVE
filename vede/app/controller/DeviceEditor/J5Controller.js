@@ -617,7 +617,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onPlasmidsItemClick: function (grid, record) {
 
         var j5Window = Ext.getCmp("mainAppPanel").getActiveTab().j5Window;
-        j5Window.setLoading(true);
+        var mask = new Ext.LoadMask(j5Window);
+
+        mask.setVisible(true, false);
 
         // Javascript waits to render the loading mask until after the call to
         // openSequence, so we force it to wait a millisecond before calling
@@ -626,12 +628,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
             Teselagen.manager.ProjectManager.openSequence(newSequence);
 
-            j5Window.setLoading(false);
+            mask.setVisible(false);
 
             // This gets rid of the weird bug where the loading mask remains on
             // the mainAppPanel.
-            Ext.getCmp("mainAppPanel").setLoading();
-            Ext.getCmp("mainAppPanel").setLoading(false);
+            //Ext.getCmp("mainAppPanel").setLoading();
+            //Ext.getCmp("mainAppPanel").setLoading(false);
         }, 10);
     },
 
