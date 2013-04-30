@@ -20,10 +20,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     statics: {
     },
 
+    constants: null,
+    
     /**
      * @member Teselagen.manager.DeviceDesignManager
      */
     constructor: function() {
+        this.constants = Teselagen.constants.Constants;
     },
 
 
@@ -559,9 +562,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     // Todo: move optional arguments to the end of parameter list
     /**
-     * Create a Part. Optional parameters require a "null" in its place.
+     * Create a Part and add to design. Optional parameters require a "null" in its place.
      * Executes validation.
      *
+     * @param {Teselagen.models.DeviceDesign} device Device design
+     * @param {Number} binIndex j5 bin index
      * @param {String} pName Name of Part
      * @param {int} pStart Genbank start index
      * @param {int} pEnd Genbank end index
@@ -732,12 +737,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
         } else {
-            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
+            // Does this make sense for invalid bin number?
+//            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
         }
         var added = j5Bin.addToParts(pPart, pPosition);
+        j5Bin.addFas(this.constants.FAS.NONE, pPosition);
         return added;
-
-        //return pDevice.getJ5Collection().addPartToBin(pPart, pBinIndex, pPosition);
     },
     /**
      * Deletes a Part after checking if a EugeneRule should also be deleted.
