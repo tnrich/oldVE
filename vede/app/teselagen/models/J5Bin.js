@@ -75,7 +75,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
 //        {name: "fas",               type: "string",     defaultValue: "None"},
-        {name: "fas",               defaultValue: []},
+        {name: "fases",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
@@ -104,11 +104,11 @@ Ext.define("Teselagen.models.J5Bin", {
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
         //{field: "fro",              type: "presence"},
-        {
-            field: "fas",
-            type: "inclusion",
-            list: Teselagen.constants.Constants.FAS_LIST
-        }//,
+//        {
+//            field: "fas",
+//            type: "inclusion",
+//            list: Teselagen.constants.Constants.FAS_LIST
+//        }//,
         //{field: "extra5PrimeBps",   type: "presence"},
         //{field: "extra3PrimeBps",   type: "presence"},
         //{field: "j5collection_id",    type: "presence"}
@@ -163,27 +163,26 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Adds a Part into the parts.
-     * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
-     * @param {Number} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
+     * @param {Teselagen.models.Part} part Can be a single part or an array of parts.
+     * @param {Number} [position] Index to insert pPart. Defaults to end of of array.
      * @returns {Boolean} True if added, false if not.
      */
     addToParts: function(pPart, pPosition) {
         var added = false;
 
         var cnt = this.partCount();
-
-        if (pPosition >= 0 && pPosition < cnt) {
-            //this.parts().splice(pPosition, 0, pPart);
-            this.parts().insert(pPosition, pPart);
+        if (Ext.isDefined(pPosition)) {
+            if (pPosition >= 0 && pPosition < cnt) {
+                this.parts().insert(pPosition, pPart);
+                added = true;
+            } else {
+                console.warn("Invalid index", pPosition);
+            }
         } else {
-            //this.parts().push(pPart);
             this.parts().add(pPart);
-        }
-
-        var newCnt  = this.partCount();
-        if (newCnt > cnt) {
             added = true;
         }
+
         return added;
     },
 
@@ -205,6 +204,34 @@ Ext.define("Teselagen.models.J5Bin", {
             removed = true;
         }
         return removed;
+    },
+
+    /**
+     * Adds a FAS into the fases array.
+     * @param {String} fas FAS for the respective part. Default is "None". 
+     * @param {Number} position Index to insert FAS. Default is append.
+     * @returns {Boolean} True if added, false if not.
+     */
+    addFas: function(pFas, pPosition) {
+        var added = false;
+        var fas = Teselagen.constants.Constants.FAS.NONE;
+        var fases = this.get("fases");
+
+        if (Ext.isDefined(pFas)) {
+            fas = pFas;
+        }
+        if (Ext.isDefined(pPosition)) {
+            if (Ext.isNumber(pPosition)) {
+                fases.splice(pPosition, 0, fas);
+                added = true;
+            } else {
+                console.warn("Invalid position:", pPosition);
+            }
+        } else {
+            fases.push(fas);
+            added = true;
+        }
+        return added;
     },
 
     // =============================================
