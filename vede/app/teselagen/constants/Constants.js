@@ -94,6 +94,15 @@ Ext.define("Teselagen.constants.Constants", {
         "Embed_in_primer_forward",
         "Annealed Oligos"
     ],
+    
+    FAS: Object.freeze({
+        NONE: "None",
+        DIRECT: "Direct Synthesis",
+        PCR: "PCR",
+        EMBED_REV: "Embed_in_primer_reverse",
+        EMBED_FWD: "Embed_in_primer_forward",
+        ANNEALED: "Annealed Oligos"
+    }),
 
     //================================================================
     // J5Run
