@@ -117,10 +117,6 @@ Ext.onReady(function() {
             expect(user.getBoss().getId()).toBe(20);
             expect(user.getBoss().get("name")).toBe("myboss2");
         });
-        it("J5Bin test", function() {
-            var j5bin = Ext.create("Teselagen.models.J5Bin", {fas:["fas1", "fas2"]});
-            expect(j5bin.get("fas")[1]).toBe("fas2");
-        });
         describe("File store tests.", function() {
             var proj, veprojs;
             it("Project", function() {
