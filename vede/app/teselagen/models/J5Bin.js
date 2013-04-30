@@ -75,7 +75,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
 //        {name: "fas",               type: "string",     defaultValue: "None"},
-        {name: "fas",               defaultValue: []},
+        {name: "fases",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
@@ -104,11 +104,11 @@ Ext.define("Teselagen.models.J5Bin", {
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
         //{field: "fro",              type: "presence"},
-        {
-            field: "fas",
-            type: "inclusion",
-            list: Teselagen.constants.Constants.FAS_LIST
-        }//,
+//        {
+//            field: "fas",
+//            type: "inclusion",
+//            list: Teselagen.constants.Constants.FAS_LIST
+//        }//,
         //{field: "extra5PrimeBps",   type: "presence"},
         //{field: "extra3PrimeBps",   type: "presence"},
         //{field: "j5collection_id",    type: "presence"}
@@ -162,7 +162,7 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
-     * Adds a Part into the parts.
+     * Add a Part to the parts store.
      * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
      * @param {Number} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
      * @returns {Boolean} True if added, false if not.
@@ -205,6 +205,36 @@ Ext.define("Teselagen.models.J5Bin", {
             removed = true;
         }
         return removed;
+    },
+
+    /**
+     * Add a FAS to the fases array.
+     * @param {Number} position Optional index to insert a FAS. By default
+     * FAS is appended.
+     * @param {String} fas FAS for the Part. "None" is default.
+     * @returns {Boolean} True if FAS was added.
+     */
+    addFas: function(pPosition, pFas) {
+        var added = false;
+        var fas = Teselagen.constants.Constants.FAS.NONE;
+        
+        if (Ext.isDefined(pFas)) {
+            fas = pFas;
+        }
+        if (Ext.isDefined(pPosition)) {
+            if (Ext.isNumber(pPosition)) {
+                this.fases.splice(pPosition, 0, fas);
+                added = true;
+            } else {
+                console.warning("Invalid index:", pPosition);
+            }
+        }
+        else {
+            this.fases.push(fas);
+            added = true;
+        }
+
+        return added;
     },
 
     // =============================================
