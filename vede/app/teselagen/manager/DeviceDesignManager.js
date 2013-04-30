@@ -719,25 +719,28 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return part;
     },
     /**
-     * Add a part to a J5Bin
+     * Add a Part to a J5Bin
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
-     * @param {Number} pBinIndex If invalid number, puts part in last bin.
-     * @param {Number} [pPosition] Optional index.
+     * @param {Number} pBinIndex If invalid, issues warning.
+     * @param {Number} [pPosition] Optional location for inserting the Part.
+     * If not supplied, will append Part to the J5Bin.
+     * @returns {Boolean} True if part was added.
      */
     addPartToBin: function(pDevice, pPart, pBinIndex, pPosition) {
         var j5Bin;
+        var added = false;
         var cnt = pDevice.getJ5Collection().binCount();
 
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
+            added = j5Bin.addToParts(pPart, pPosition);
+            j5Bin.addFas(pPosition);
         } else {
-            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
+//            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
+            console.warn("Part not added due to invalid bin index:", pBinIndex);
         }
-        var added = j5Bin.addToParts(pPart, pPosition);
         return added;
-
-        //return pDevice.getJ5Collection().addPartToBin(pPart, pBinIndex, pPosition);
     },
     /**
      * Deletes a Part after checking if a EugeneRule should also be deleted.
