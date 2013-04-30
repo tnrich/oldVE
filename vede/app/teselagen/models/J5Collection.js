@@ -240,20 +240,20 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Number} pPosition The position within the bin at which to add the Part. Defaults to end of array if invalid or undefined value.
      * @returns {Boolean} True if added, False if not.
      */
-    addPartToBin: function(pPart, pBinIndex, pPosition) {
-        var j5Bin;
-        var cnt = this.binCount();
-
-        if (pBinIndex >= 0 && pBinIndex < cnt) {
-            j5Bin = this.bins().getAt(pBinIndex);
-        } else {
-            j5Bin = this.bins().getAt(cnt);
-        }
-
-        var added = j5Bin.addToParts(pPart, pPosition);
-
-        return added;
-    },
+//    addPartToBin: function(pPart, pBinIndex, pPosition) {
+//        var j5Bin;
+//        var cnt = this.binCount();
+//
+//        if (pBinIndex >= 0 && pBinIndex < cnt) {
+//            j5Bin = this.bins().getAt(pBinIndex);
+//        } else {
+//            j5Bin = this.bins().getAt(cnt);
+//        }
+//
+//        var added = j5Bin.addToParts(pPart, pPosition);
+//
+//        return added;
+//    },
 
     /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Adds a Part to the J5Bin specified by binIndex at the position specified,
@@ -264,35 +264,35 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Number} pPosition The position within the J5Bin at which to add the Part. Defaults to end of array if invalid or undefined value.
      * @returns {Boolean} True if added, False if not.
      */
-    removePartFromBin: function(pPart, pBinIndex) {
-        var j5Bin;
-        var cnt     = this.binCount();
-
-        if (pBinIndex >= 0 && pBinIndex < cnt) {
-            j5Bin = this.bins().getAt(pBinIndex);
-        } else {
-            j5Bin = this.bins().getAt(cnt);
-        }
-
-        var removed = j5Bin.removeFromParts(pPart);
-
-        return removed;
-    },
+//    removePartFromBin: function(pPart, pBinIndex) {
+//        var j5Bin;
+//        var cnt     = this.binCount();
+//
+//        if (pBinIndex >= 0 && pBinIndex < cnt) {
+//            j5Bin = this.bins().getAt(pBinIndex);
+//        } else {
+//            j5Bin = this.bins().getAt(cnt);
+//        }
+//
+//        var removed = j5Bin.removeFromParts(pPart);
+//
+//        return removed;
+//    },
 
     /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * @param {Teselagen.models.Part} pPart
      * @returns {Boolean} True is in the J5Bins, False if not.
      */
-    isPartInCollection: function(pPart) {
-        var partIsPresent = false;
-        if (this.bins() === null || this.bins().count() === 0) {
-            return false;
-        }
-        for (var i = 0; i < this.bins().count(); i++) {
-            partIsPresent = this.bins().getAt(i).hasPart(pPart);
-        }
-        return partIsPresent;
-    },
+//    isPartInCollection: function(pPart) {
+//        var partIsPresent = false;
+//        if (this.bins() === null || this.bins().count() === 0) {
+//            return false;
+//        }
+//        for (var i = 0; i < this.bins().count(); i++) {
+//            partIsPresent = this.bins().getAt(i).hasPart(pPart);
+//        }
+//        return partIsPresent;
+//    },
 
     /** SHOULD BE REFACTORED TO DEVICE DESIGN MANAGER?
      * Determines the J5Bin a Part is in.
@@ -300,15 +300,15 @@ Ext.define("Teselagen.models.J5Collection", {
      * @param {Teselagen.models.Part} pPart The part whose J5Bin it belongs to.
      * @returns {Number} The first index of the bin that pPart is in. -1 if not present.
      */
-    getBinAssignment: function(pPart) {
-        var binIndex = -1;
-        for (var i = 0; i < this.binCount(); i++) {
-            if (this.bins().getAt(i).indexOfPart(pPart) !== -1) {
-                binIndex = i;
-            }
-        }
-        return binIndex;
-    },
+//    getBinAssignment: function(pPart) {
+//        var binIndex = -1;
+//        for (var i = 0; i < this.binCount(); i++) {
+//            if (this.bins().getAt(i).indexOfPart(pPart) !== -1) {
+//                binIndex = i;
+//            }
+//        }
+//        return binIndex;
+//    },
 
     /**
      * Checks to see if a given name is unique within the J5Bins names.
