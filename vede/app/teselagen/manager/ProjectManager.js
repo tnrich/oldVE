@@ -65,7 +65,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
             }
         });
         if(!duplicated) return cb(tabPanel);
-        else console.log("Trying to open duplicated tab!");
+        //else console.log("Trying to open duplicated tab!");
     },
 
     openj5Report: function (selectedDEProject) {
@@ -81,20 +81,21 @@ Ext.define("Teselagen.manager.ProjectManager", {
     },
 
     openDEProject: function (selectedDesign) {
+        var self = this;
+        selectedDesign.getDesign(function(loadedDesign){
+            self.checkDuplicatedTabs(loadedDesign, "DeviceEditorTab", function (tabPanel) {
+                Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
+                Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+                tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
+                    title: "Device Editor | " + loadedDesign.data.name,
+                    model: loadedDesign,
+                    modelId: loadedDesign.data.id
+                })).show();
+                Vede.application.fireEvent("loadEugeneRules");
+                Ext.getCmp("projectTreePanel").expandPath("/root/" + loadedDesign.data.project_id + "/" + loadedDesign.data.id);
 
-        this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
-            Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
-            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
-            tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
-                title: "Device Editor | " + selectedDesign.data.name,
-                model: selectedDesign,
-                modelId: selectedDesign.data.id
-            })).show();
-            Vede.application.fireEvent("loadEugeneRules");
-            Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
-
+            });
         });
-
     },
 
     deleteDEProject: function (deproject, tab) {

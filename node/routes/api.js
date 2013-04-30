@@ -587,27 +587,32 @@ module.exports = function(app, express) {
 
         if (req.query.id) {
             console.log("DE by id");
-            DeviceDesign.findById(req.query.id).populate('design.j5collection.bins').populate('design.j5collection.bins.parts').exec(function(err, project) {
+            DeviceDesign.findById(req.query.id).populate('design.j5collection.bins').populate('design.j5collection.bins.parts').exec(function(err, design) {
                 // Eugene rules to be send on a different request
-                delete project.design.rules;
+                delete design.rules;
 
                 if (err) {
                     errorHandler(err, req, res);
                 } else {
                     res.json({
-                        "design": project.design
+                        "design": design
                     });
                 }
             });
         } else if (req.query.filter) {
             console.log("DE's by project_id");
             var project_id = JSON.parse(req.query.filter)[0].value;
-            Project.findById(project_id).populate('designs').exec(function(err, project) {
+            Project.findById(project_id).populate({path:'designs', select:'name id project_id'}).exec(function(err, project) {
+                res.json({
+                    "design": project.designs
+                });
+                /*
                 DeviceDesign.populate(project.designs,{path:'j5collection.bins.parts'},function(err,designs){
                     res.json({
                         "design": designs
                     });
                 });
+                */
             });
         }
 

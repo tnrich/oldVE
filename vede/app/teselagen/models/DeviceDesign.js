@@ -121,7 +121,46 @@ Ext.define("Teselagen.models.DeviceDesign", {
         foreignKey: "id"
     }],
 
-    getDesign: function(){
+    modelIsLoaded: false,
+
+    reload: function(callBack) {
+
+        var me = this;
+        return Ext.getClass(this).load(this.getId(), {
+            success: function(r, o) {
+                console.log("record reloaded!");
+                var k;
+                for (k in r.data) {
+                    me.data[k] = r.data[k];
+                }
+
+                me.setJ5Collection(r.getJ5Collection());
+                me.j5runs().removeAll();
+                me.j5runs().insert(0,r.j5runs());
+
+                me.commit();
+                if (Ext.isFunction(callBack)) {
+                    callBack(me,true,o);
+                }
+            },
+            failure: function() {
+                if (Ext.isFunction(callBack)) {
+                    callBack(false);
+                }
+            }
+        });
+    },
+
+    getDesign: function(callback){
+        if(!this.modelIsLoaded)
+        {
+            this.modelIsLoaded = true;
+            this.reload(function(record){
+                if (Ext.isFunction(callback)) {
+                    callback(record);
+                }
+            });
+        }
         return this;
     },
 

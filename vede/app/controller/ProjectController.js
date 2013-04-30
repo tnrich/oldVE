@@ -121,14 +121,17 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     resolveAndOpenDEProject: function (record) {
-        var deproject_id = record.data.id;
+        var design_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var deprojects = project.designs().load({
-            callback: function () {
-                var deproject = deprojects.getById(deproject_id);
-                Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openDEProject(deproject);
+        var designs = project.designs().load({
+            id: '231313',
+            extraParams: {"type":"one"},
+            callback: function (design) {
+                console.log(design);
+                //var design = designs.getById(design_id);
+                //Teselagen.manager.ProjectManager.workingProject = project;
+                //Teselagen.manager.ProjectManager.opendesign(design);
             }
         });
 
