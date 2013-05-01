@@ -133,6 +133,7 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     /**
+     * @member Teselagen.models.J5Bin
      * @returns {Number} count Number of Parts in parts
      */
     partCount: function() {
@@ -164,15 +165,14 @@ Ext.define("Teselagen.models.J5Bin", {
     /**
      * Adds a Part into the parts.
      * @param {Teselagen.models.Part} part Can be a single part or an array of parts.
-     * @param {Number} [position] Index to insert pPart. Defaults to end of of array.
+     * @param {Number} [position] Index to insert part. Defaults to end of array.
      * @returns {Boolean} True if added, false if not.
      */
     addToParts: function(pPart, pPosition) {
         var added = false;
 
-        var cnt = this.partCount();
         if (Ext.isDefined(pPosition)) {
-            if (pPosition >= 0 && pPosition < cnt) {
+            if (pPosition >= 0) {
                 this.parts().insert(pPosition, pPart);
                 added = true;
             } else {
@@ -304,18 +304,18 @@ Ext.define("Teselagen.models.J5Bin", {
     /** IS THIS NECESSARY?
      *
      */
-    createPart: function(pPart) {
-        // If none passed in, create new part, create a new PartVO
-        var newPart = pPart;
-        if (pPart === null) {
-            newPart = Ext.create("Teselagen.models.Part", {});
-        }
-
-        // Create new Part containing PartVO
-        this.parts().add(newPart);
-
-        return newPart;
-    },
+//    createPart: function(pPart) {
+//        // If none passed in, create new part, create a new PartVO
+//        var newPart = pPart;
+//        if (pPart === null) {
+//            newPart = Ext.create("Teselagen.models.Part", {});
+//        }
+//
+//        // Create new Part containing PartVO
+//        this.parts().add(newPart);
+//
+//        return newPart;
+//    },
 
     // This differs from flex implementation
     /**
