@@ -572,7 +572,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {int} pEnd Genbank end index
      * @param {Boolean} [pRevComp] Reverse Complement. Default is false.
      * @param {Boolean} [pDirectionForward] Direction Forward. Default is true.
-     * @param {String} fas (?)
+     * @param {String} fas FAS for the part
      * @param {String} pIconID (?)
      */
     createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
@@ -582,7 +582,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             endBP: pEnd,
             revComp: pRevComp,
             directionForward: pDirectionForward,
-            fas: pFas,
             iconID: pIconID
         });
 
@@ -592,8 +591,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             //console.warn("Creating Part: " + err.length + " errors found.");
             //console.warn(err);
         }
-
-        pDevice.getJ5Collection().bins().getAt(pBinIndex).addToParts(part, -1); // put this here?
+        this.addPartToBin(pDevice, part, pBinIndex);
+        
         return part;
     },
     /**
