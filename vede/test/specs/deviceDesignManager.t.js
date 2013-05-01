@@ -456,10 +456,14 @@ Ext.onReady(function() {
                     expect (bin1parts.count()).toBe(2);
                     expect(bin1parts.getAt(0).get("name")).toBe("newPart1");
                 });
-                it("Should return false if specified bin index greater than n-1", function() {
+                it("Should return false if bin index greater than n-1", function() {
                     success = DeviceDesignManager.addPartToBin(design, part2, 5, 0); // index > bins
                     expect(success).toBe(false);
                 });
+                it("Should return false if bin index is < 0", function() {
+                    
+                };
+                it("Should return false if part index is < 0");
             });
 
             it("removePartFromBin()", function(){
