@@ -120,7 +120,7 @@ Ext.onReady(function() {
                     name: "addedPart2"
                 });
 
-                var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2], -1);
+                var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2]);
                 expect(success).toBe(true);
 
                 // Note that adding parts does not trigger a setting of Combinatorial
@@ -143,7 +143,7 @@ Ext.onReady(function() {
                     name: "addedPart2"
                 });
 
-                var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2], -1);
+                var success = design.getJ5Collection().bins().getAt(0).addToParts([part1,part2]);
                 expect(success).toBe(true);
 
                 // Note that adding parts does not trigger a setting of Combinatorial
@@ -163,13 +163,13 @@ Ext.onReady(function() {
                 var part1 = Ext.create("Teselagen.models.Part", {
                     name: "addedPart1"
                 });
-                var success = design.getJ5Collection().bins().getAt(0).addToParts([part1], -1);
+                var success = design.getJ5Collection().bins().getAt(0).addToParts([part1]);
                 expect(DeviceDesignManager.findMaxNumParts(design)).toBe(1);
 
                 var part2 = Ext.create("Teselagen.models.Part", {
                     name: "addedPart2"
                 });
-                success = design.getJ5Collection().bins().getAt(0).addToParts([part2], -1);
+                success = design.getJ5Collection().bins().getAt(0).addToParts([part2]);
 
                 expect(DeviceDesignManager.findMaxNumParts(design)).toBe(2);
 
@@ -187,10 +187,10 @@ Ext.onReady(function() {
                     fas: "PCR"
                 });
 
-                design.getJ5Collection().bins().getAt(0).addToParts([part1], -1);
+                design.getJ5Collection().bins().getAt(0).addToParts([part1]);
                 expect(DeviceDesignManager.checkJ5Ready(design)).toBe(false);
 
-                design.getJ5Collection().bins().getAt(1).addToParts([part2], -1);
+                design.getJ5Collection().bins().getAt(1).addToParts([part2]);
                 expect(DeviceDesignManager.checkJ5Ready(design)).toBe(true);
                 //console.log(design);
                 // Adding a part in each of the two bins will make this Design ready
@@ -438,9 +438,28 @@ Ext.onReady(function() {
                 expect(tmpPart.get("endBP")).toBe(10);
             });
 
-            it("addPartToBin()", function(){
-                var success = DeviceDesignManager.addPartToBin(design, part2, 1, 0);
-                expect(design.getJ5Collection().bins().getAt(1).parts().getAt(0).get("name")).toBe("newPart2");
+            describe("addPartToBin()", function(){
+                var success;
+                var design = DeviceDesignManager.createDeviceDesign(2);
+                var bin0parts = design.getJ5Collection().bins().getAt(0).parts();
+                var bin1parts = design.getJ5Collection().bins().getAt(1).parts();
+                it("Append part to second bin", function() {
+                    success = DeviceDesignManager.addPartToBin(design, part2, 1);
+                    expect(success).toBe(true);
+                    expect (bin0parts.count()).toBe(0);
+                    expect (bin1parts.count()).toBe(1);
+                    expect(bin1parts.getAt(0).get("name")).toBe("newPart2");
+                });
+                it("Insert part at index 0 of second bin", function() {
+                    success = DeviceDesignManager.addPartToBin(design, part1, 1, 0);  // insert at index 0
+                    expect(success).toBe(true);
+                    expect (bin1parts.count()).toBe(2);
+                    expect(bin1parts.getAt(0).get("name")).toBe("newPart1");
+                });
+                it("Should return false if specified bin index greater than n-1", function() {
+                    success = DeviceDesignManager.addPartToBin(design, part2, 5, 0); // index > bins
+                    expect(success).toBe(false);
+                });
             });
 
             it("removePartFromBin()", function(){
