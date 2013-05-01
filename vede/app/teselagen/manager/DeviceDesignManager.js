@@ -726,8 +726,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * Add a Part to a J5Bin
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
-     * @param {Number} pBinIndex If invalid, issues warning.
-     * @param {Number} [pPosition] Optional location for inserting the Part.
+     * @param {Number} binIndex Bin index (0 <= i < n-1). If invalid, issues warning.
+     * @param {Number} [position] Optional location for inserting the Part.
      * If not supplied, will append Part to the J5Bin.
      * @returns {Boolean} True if part was added.
      */

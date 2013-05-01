@@ -163,9 +163,9 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
-     * Adds a Part into the parts.
+     * Adds a Part into the parts store.
      * @param {Teselagen.models.Part} part Can be a single part or an array of parts.
-     * @param {Number} [position] Index to insert part. Defaults to end of array.
+     * @param {Number} [position] Index (i >= 0) to insert part. By default will append.
      * @returns {Boolean} True if added, false if not.
      */
     addToParts: function(pPart, pPosition) {
@@ -176,7 +176,7 @@ Ext.define("Teselagen.models.J5Bin", {
                 this.parts().insert(pPosition, pPart);
                 added = true;
             } else {
-                console.warn("Invalid index", pPosition);
+                console.warn("Invalid index:", pPosition);
             }
         } else {
             this.parts().add(pPart);
