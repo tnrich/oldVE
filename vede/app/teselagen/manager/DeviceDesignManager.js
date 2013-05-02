@@ -567,13 +567,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      *
      * @param {Teselagen.models.DeviceDesign} device Device design
      * @param {Number} binIndex j5 bin index
-     * @param {String} pName Name of Part
-     * @param {int} pStart Genbank start index
-     * @param {int} pEnd Genbank end index
-     * @param {Boolean} [pRevComp] Reverse Complement. Default is false.
-     * @param {Boolean} [pDirectionForward] Direction Forward. Default is true.
+     * @param {String} name Name of Part
+     * @param {int} start Genbank start index
+     * @param {int} end Genbank end index
+     * @param {Boolean} [revComp] Reverse Complement. Default is false.
+     * @param {Boolean} [directionForward] Direction Forward. Default is true.
      * @param {String} fas FAS for the part
-     * @param {String} pIconID (?)
+     * @param {String} iconID (?)
      */
     createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
         var part = Ext.create("Teselagen.models.Part", {
@@ -591,6 +591,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             //console.warn("Creating Part: " + err.length + " errors found.");
             //console.warn(err);
         }
+        console.log("Adding part to bin ", pBinIndex);
         this.addPartToBin(pDevice, part, pBinIndex);
         
         return part;
@@ -727,7 +728,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {Teselagen.models.DeviceDesign} device
      * @param {Teselagen.models.Part} part
      * @param {Number} binIndex Bin index (0 <= i < n-1). If invalid, issues warning.
-     * @param {Number} [position] Location for inserting the Part.  Undefined or <0 will append.
+     * @param {Number} [position] Location for inserting the Part.  Undefined or null will append.
      * @param {String} [fas] FAS for the part. Defaults to "None".
      * @returns {Boolean} True if part was added.
      */
