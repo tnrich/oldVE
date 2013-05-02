@@ -91,7 +91,7 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
             console.log(sequence.get('firstTimeImported'));
             sequence.set('firstTimeImported',true);
             self.renderSequence(fileContent,function(seqMgr){
-                veproject = Teselagen.manager.ProjectManager.workingVEProject;
+                veproject = Teselagen.manager.ProjectManager.workingSequence;
                 veproject.set('name',seqMgr.getName());
             });
         });
@@ -103,14 +103,14 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
             var result  = pEvt.target.result;
             var gb      = Teselagen.utils.FormatUtils.fileToGenbank(result, pExt);
             seqMgr =  Teselagen.utils.FormatUtils.genbankToSequenceManager(gb);
-            if(Teselagen.manager.ProjectManager.workingVEProject)
+            if(Teselagen.manager.ProjectManager.workingSequence)
             {
-                var name = Teselagen.manager.ProjectManager.workingVEProject.get('name');
+                var name = Teselagen.manager.ProjectManager.workingSequence.get('name');
                 console.log(name);
                 if(name == "Untitled VEProject")
                 {
                     console.log(seqMgr.name);
-                    Teselagen.manager.ProjectManager.workingVEProject.set('name',seqMgr.name);
+                    Teselagen.manager.ProjectManager.workingSequence.set('name',seqMgr.name);
                 }
                 else
                 {

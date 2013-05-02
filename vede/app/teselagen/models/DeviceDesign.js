@@ -152,6 +152,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     getDesign: function(callback){
+        /*
         if(!this.modelIsLoaded)
         {
             this.modelIsLoaded = true;
@@ -161,6 +162,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 }
             });
         }
+        */
         return this;
     },
 

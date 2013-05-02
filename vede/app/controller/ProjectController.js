@@ -86,34 +86,25 @@ Ext.define("Vede.controller.ProjectController", {
                 Ext.create('Ext.data.Store', {
                     model: 'Teselagen.models.VectorEditorProject'
             });
-            /*
-            var veprojects = project.veprojects();
-            veprojects.load({
+
+            var sequences = project.sequences();
+            sequences.load({
                 callback: function () {
-                    veprojects.each(function (veproject) {
-                        self.sequenceStore.add(veproject);
-                        Teselagen.manager.ProjectManager.sequenceStore.add(veproject);
+                    console.log(sequences);
+                    sequences.each(function (sequence) {
+                        self.sequenceStore.add(sequence);
+                        Teselagen.manager.ProjectManager.sequenceStore.add(sequence);
 
-                        var veprojectnode = projectNode.appendChild({
-                            text: veproject.data.name,
+                        var sequencenode = projectNode.appendChild({
+                            text: sequence.data.name,
                             leaf: true,
-                            id: veproject.data.id,
-                            hrefTarget: 'opensequence',
-                            icon: "resources/images/ux/sequence-tree-icon-leaf.png"
-                        });
-
-
-                        partsRootNode.appendChild({
-                            text: veproject.data.name,
-                            leaf: true,
-                            id: veproject.data.id,
+                            id: sequence.data.id,
                             hrefTarget: 'opensequence',
                             icon: "resources/images/ux/sequence-tree-icon-leaf.png"
                         });
                     });
                 }
             });
-            */
         });
 
         //Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
@@ -125,13 +116,12 @@ Ext.define("Vede.controller.ProjectController", {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         var designs = project.designs().load({
-            id: '231313',
-            extraParams: {"type":"one"},
-            callback: function (design) {
-                console.log(design);
-                //var design = designs.getById(design_id);
-                //Teselagen.manager.ProjectManager.workingProject = project;
-                //Teselagen.manager.ProjectManager.opendesign(design);
+            id: design_id,
+            callback: function (loadedDesign) {
+                design = loadedDesign[0];
+                var design = designs.getById(design_id);
+                Teselagen.manager.ProjectManager.workingProject = project;
+                Teselagen.manager.ProjectManager.openDEProject(design);
             }
         });
 
@@ -247,15 +237,20 @@ Ext.define("Vede.controller.ProjectController", {
 
     resolveAndOpenSequence: function (record) {
         Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Sequence');
-        var veproject_id = record.data.id;
+
+        var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var veprojects = project.veprojects().load({
-            callback: function () {
-                var veproject = veprojects.getById(veproject_id);
-                Teselagen.manager.ProjectManager.openVEProject(veproject);
+        var sequences = project.sequences().load({
+            id: sequence_id,
+            callback: function (loadedsequence) {
+                sequence = loadedsequence[0];
+                var sequence = sequences.getById(sequence_id);
+                Teselagen.manager.ProjectManager.workingProject = project;
+                Teselagen.manager.ProjectManager.openSequence(sequence);
             }
         });
+
     },
 
     expandProject: function (record) {

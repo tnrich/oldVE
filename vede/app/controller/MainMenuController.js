@@ -203,8 +203,8 @@ Ext.define('Vede.controller.MainMenuController', {
     onRenameSequenceItemClick: function(item, e, options){
 
         var onPromptClosed = function (answer, text) {
-            Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
-            Teselagen.manager.ProjectManager.workingVEProject.save({callback: function(){
+            Teselagen.manager.ProjectManager.workingSequence.set('name',text);
+            Teselagen.manager.ProjectManager.workingSequence.save({callback: function(){
                 Vede.application.fireEvent("renderProjectsTree");
             }});
         };

@@ -84,14 +84,15 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                             listeners: {
                                 "itemclick": function(grid, project, item){
                                     selectWindow.close();
-                                    Teselagen.manager.ProjectManager.workingVEProject.set('name',text);
-                                    project.veprojects().add(Teselagen.manager.ProjectManager.workingVEProject);
-                                    Teselagen.manager.ProjectManager.workingVEProject.save({
+                                    Teselagen.manager.ProjectManager.workingSequence.set('name',text);
+                                    Teselagen.manager.ProjectManager.workingSequence.setProject(project);
+                                    Teselagen.manager.ProjectManager.workingSequence.set('project_id',project.data.id);
+                                    project.sequences().add(Teselagen.manager.ProjectManager.workingSequence);
+                                    Teselagen.manager.ProjectManager.workingSequence.save({
                                         callback: function(){
-                                            Teselagen.manager.ProjectManager.workingSequence.set('veproject_id',Teselagen.manager.ProjectManager.workingVEProject.data.id);
                                             saveToServer();
                                             Vede.application.fireEvent("renderProjectsTree", function () {
-                                                Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + Teselagen.manager.ProjectManager.workingVEProject.data.id);
+                                                Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + Teselagen.manager.ProjectManager.workingSequence.data.id);
                                             });
                                         }
                                     });
@@ -109,7 +110,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     },
 
     saveProject: function(sequencefile_id){
-        veproject = Teselagen.manager.ProjectManager.workingVEProject;
+        veproject = Teselagen.manager.ProjectManager.workingSequence;
         if(!veproject) Teselagen.manager.ProjectManager.createNewVEProject(this.sequence);
         else {
             veproject.set('sequencefile_id',sequencefile_id);

@@ -14,7 +14,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     currentUser: null,
     projects: null,
     workingProject: null,
-    workingVEProject: null,
+    workingSequence: null,
     workingSequence: null,
     workingSequenceFileManager: null,
     sequenceStore: null,
@@ -82,20 +82,21 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     openDEProject: function (selectedDesign) {
         var self = this;
-        selectedDesign.getDesign(function(loadedDesign){
-            self.checkDuplicatedTabs(loadedDesign, "DeviceEditorTab", function (tabPanel) {
+        console.log(selectedDesign);
+        //selectedDesign.getDesign(function(loadedDesign){
+            this.checkDuplicatedTabs(selectedDesign, "DeviceEditorTab", function (tabPanel) {
                 Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Design");
                 Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
                 tabPanel.add(Ext.create("Vede.view.de.DeviceEditor", {
-                    title: "Device Editor | " + loadedDesign.data.name,
-                    model: loadedDesign,
-                    modelId: loadedDesign.data.id
+                    title: "Device Editor | " + selectedDesign.data.name,
+                    model: selectedDesign,
+                    modelId: selectedDesign.data.id
                 })).show();
                 Vede.application.fireEvent("loadEugeneRules");
-                Ext.getCmp("projectTreePanel").expandPath("/root/" + loadedDesign.data.project_id + "/" + loadedDesign.data.id);
+                Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 
             });
-        });
+        //});
     },
 
     deleteDEProject: function (deproject, tab) {
@@ -138,16 +139,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
         });
     },
 
-    openVEProject: function(veproject){
-        console.log("Opening Sequence Associated to VEProject");
-        var self = this;
-        var associatedSequence = veproject.getSequenceFile({
-            callback: function (record, operation) {
-                self.workingSequence = veproject.getSequenceFile();
-                self.workingVEProject = veproject;
-                Vede.application.fireEvent("OpenVectorEditor",self.workingSequence);
-            }
-        });
+    /**
+     * Open a sequence
+     * @param {SequenceFile} Receives a sequenceFile (already loaded)
+     */
+    openSequence: function(sequence){
+        console.log("Opening sequence");
+        self.workingSequence = sequence;
+        Vede.application.fireEvent("OpenVectorEditor",self.workingSequence);
     },
 
     createNewProject: function () {
@@ -216,7 +215,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 Vede.application.fireEvent("renderProjectsTree", function () {
                                     Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + veproject.data.id);
                                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                                    self.openVEProject(veproject);
+                                    self.openSequence(veproject);
                                 });
                             }
                         });
@@ -269,7 +268,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 Vede.application.fireEvent("renderProjectsTree", function () {
                                     Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + veproject.data.id);
                                     Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                                    self.openVEProject(veproject);
+                                    self.openSequence(veproject);
                                 });
                             }
                         });

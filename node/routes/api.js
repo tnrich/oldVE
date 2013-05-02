@@ -587,7 +587,7 @@ module.exports = function(app, express) {
 
         if (req.query.id) {
             console.log("DE by id");
-            DeviceDesign.findById(req.query.id).populate('design.j5collection.bins').populate('design.j5collection.bins.parts').exec(function(err, design) {
+            DeviceDesign.findById(req.query.id).populate('j5collection.bins.parts').exec(function(err, design) {
                 // Eugene rules to be send on a different request
                 delete design.rules;
 
@@ -764,21 +764,15 @@ module.exports = function(app, express) {
     app.put('/user/projects/veprojects/sequences', restrict,  function(req, res) {
         var sequence = req.body;
         var Sequence = app.db.model("sequence");
-        var VEProject = app.db.model("veproject");
 
         checkForDuplicatedSequence(res, sequence, function() {
             Sequence.findById(req.body.id, function(err, sequence) {
-                VEProject.findOne({
-                    sequencefile_id: sequence.id
-                }, function(err, veproject) {
-                    for (var prop in req.body) {
-                        sequence[prop] = req.body[prop];
-                    }
-                    sequence.save(function(pErr) {
-                        res.json({
-                            "sequence": sequence,
-                            "veproject": veproject
-                        });
+                for (var prop in req.body) {
+                    sequence[prop] = req.body[prop];
+                }
+                sequence.save(function(pErr) {
+                    res.json({
+                        "sequence": sequence
                     });
                 });
             });
@@ -787,13 +781,26 @@ module.exports = function(app, express) {
 
     //READ
     app.get('/user/projects/veprojects/sequences', restrict, function(req, res) {
-        var Sequence = app.db.model("sequence");
-        Sequence.findById(req.query.id, function(err, sequence) {
-            if (err) console.log("There was a problem!/");
-            res.json({
-                "sequence": sequence
+
+        if(req.query.id) {
+            var Sequence = app.db.model("sequence");
+            Sequence.findById(req.query.id, function(err, sequence) {
+                if (err) console.log("There was a problem!/");
+                res.json({
+                    "sequence": sequence
+                });
             });
-        });
+        }
+        else if(req.query.filter)
+        {
+            var project_id = JSON.parse(req.query.filter)[0].value;
+            var Sequence = app.db.model("sequence");
+            Sequence.find({"project_id":project_id}).exec(function(err, sequences) {
+                res.json({
+                    "sequence": sequences
+                });
+            });
+        }
     });
 
     //CREATE
