@@ -12,7 +12,7 @@ Ext.onReady(function() {
         }
     };
 
-    describe("Teselagen.models.J5Bin", function() {
+    xdescribe("Teselagen.models.J5Bin", function() {
         beforeEach(function() {
         });
 
