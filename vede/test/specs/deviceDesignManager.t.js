@@ -3,6 +3,7 @@
  * @author Diana Wong
  */
 
+/*global beforeEach, describe, expect, it*/
 Ext.require("Ext.Ajax");
 
 Ext.require("Teselagen.bio.util.StringUtil");
@@ -30,7 +31,6 @@ Ext.require("Teselagen.manager.DeviceDesignManager");
 
 Ext.onReady(function() {
 
-    var Sha256              = Teselagen.bio.util.Sha256;
     var DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
     describe("Teselagen.manager.DeviceDesignManager", function() {
@@ -78,7 +78,7 @@ Ext.onReady(function() {
         // J5Collection management
         //================================================================
         describe("J5Collection Management", function() {
-
+            var design;
             beforeEach(function() {
                 design      = DeviceDesignManager.createDeviceDesign(2);
             });
@@ -201,7 +201,7 @@ Ext.onReady(function() {
         // J5Bin management
         //================================================================
         describe("J5Bin Management", function() {
-
+            var design, bin1;
             beforeEach(function() {
                 design  = DeviceDesignManager.createDeviceDesign(2);
                 bin1     = Ext.create("Teselagen.models.J5Bin", {
@@ -213,7 +213,7 @@ Ext.onReady(function() {
                 expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("No_Name0");
                 expect(design.getJ5Collection().binCount()).toBe(2);
 
-                var bin = DeviceDesignManager.createEmptyJ5Bin(design, "TestBin", 0);
+//                var bin = DeviceDesignManager.createEmptyJ5Bin(design, "TestBin", 0);
                 var tmpBin = design.getJ5Collection().bins().getAt(0);
 
                 expect(tmpBin.get("binName")).toBe("TestBin");
@@ -372,7 +372,7 @@ Ext.onReady(function() {
         // Parts management
         //================================================================
         describe("Part Management", function() {
-
+            var bin1, bin2, design, part1, part2;
             // Depends on DeviceDesignManager.createDeviceDesignFromBins()
             beforeEach(function() {
 
@@ -397,7 +397,7 @@ Ext.onReady(function() {
                 expect(part1.get("genbankStartBP")).toBe(1);
 
                 // FIX THIS WHEN THE J5Bin VALIDATORS ARE DONE
-                var err = part1.validate();
+//                var err = part1.validate();
                 //expect(err.length).toBe(0);
             });
 
@@ -451,19 +451,23 @@ Ext.onReady(function() {
                     expect(bin1parts.getAt(0).get("name")).toBe("newPart2");
                 });
                 it("Insert part at index 0 of second bin", function() {
-                    success = DeviceDesignManager.addPartToBin(design, part1, 1, 0);  // insert at index 0
+                    success = DeviceDesignManager.addPartToBin(design, part1, 1, 0);
                     expect(success).toBe(true);
                     expect (bin1parts.count()).toBe(2);
                     expect(bin1parts.getAt(0).get("name")).toBe("newPart1");
                 });
                 it("Should return false if bin index greater than n-1", function() {
-                    success = DeviceDesignManager.addPartToBin(design, part2, 5, 0); // index > bins
+                    success = DeviceDesignManager.addPartToBin(design, part2, 5, 0);
                     expect(success).toBe(false);
                 });
                 it("Should return false if bin index is < 0", function() {
-                    
-                };
-                it("Should return false if part index is < 0");
+                    success = DeviceDesignManager.addPartToBin(design, part2, -1, 0);
+                    expect(success).toBe(false);
+                });
+                it("Should return false if part index is < 0", function() {
+                    success = DeviceDesignManager.addPartToBin(design, part2, 0, -1);
+                    expect(success).toBe(false);
+                });
             });
 
             it("removePartFromBin()", function(){
@@ -488,7 +492,7 @@ Ext.onReady(function() {
         // SequenceFile Management
         //================================================================
         describe("SequenceFile Management", function() {
-
+            var bin1, design, part1, part2, seq1, seq2;
             // Depends on   DeviceDesignManager.createDeviceDesignFromBins()
             //              DeviceDesignManager.createPart()
             beforeEach(function() {
@@ -565,14 +569,14 @@ Ext.onReady(function() {
 
             it("setSequenceFileContent()", function(){
                 expect(seq1.get("sequenceFileContent")).toBe(">seq1\nGATTACA");
-                var tmpSeq = DeviceDesignManager.setSequenceFileContent(seq1, ">newSeq1\nttttt");
+//                var tmpSeq = DeviceDesignManager.setSequenceFileContent(seq1, ">newSeq1\nttttt");
                 expect(seq1.get("sequenceFileContent")).toBe(">newSeq1\nttttt");
             });
 
             it("setPartSource()", function(){
                 expect(seq1.get("partSource")).toBe("seq1");
 
-                var tmpSeq = DeviceDesignManager.setPartSource(seq1, "newPartSource");
+//                var tmpSeq = DeviceDesignManager.setPartSource(seq1, "newPartSource");
                 expect(seq1.get("partSource")).toBe("newPartSource");
             });
 
@@ -631,7 +635,7 @@ Ext.onReady(function() {
         // EugeneRule Management
         //================================================================
         describe("EugeneRules Management", function() {
-
+            var design, name1, negOp, operand1, compOp, operand2, rule1, rule2;
             beforeEach(function() {
                 design      = DeviceDesignManager.createDeviceDesign(2);
                 name1       = "rule1";
