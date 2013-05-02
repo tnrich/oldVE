@@ -724,22 +724,20 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
     /**
      * Add a Part to a J5Bin
-     * @param {Teselagen.models.DeviceDesign} pDevice
-     * @param {Teselagen.models.Part} pPart
+     * @param {Teselagen.models.DeviceDesign} device
+     * @param {Teselagen.models.Part} part
      * @param {Number} binIndex Bin index (0 <= i < n-1). If invalid, issues warning.
-     * @param {Number} [position] Optional location for inserting the Part.
-     * If not supplied, will append Part to the J5Bin.
+     * @param {Number} [position] Location for inserting the Part.  Undefined or <0 will append.
+     * @param {String} [fas] FAS for the part. Defaults to "None".
      * @returns {Boolean} True if part was added.
      */
-    addPartToBin: function(pDevice, pPart, pBinIndex, pPosition) {
+    addPartToBin: function(pDevice, pPart, pBinIndex, pPosition, pFas) {
         var j5Bin;
         var added = false;
         var cnt = pDevice.getJ5Collection().binCount();
-
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
-            added = j5Bin.addToParts(pPart, pPosition);
-            j5Bin.addFas(this.constants.FAS.NONE, pPosition);
+            added = j5Bin.addToParts(pPart, pPosition, pFas);
         } else {
 //            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
             console.warn("Part not added due to invalid bin index:", pBinIndex);

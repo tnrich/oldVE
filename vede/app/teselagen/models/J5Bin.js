@@ -165,21 +165,24 @@ Ext.define("Teselagen.models.J5Bin", {
     /**
      * Adds a Part into the parts store.
      * @param {Teselagen.models.Part} part Can be a single part or an array of parts.
-     * @param {Number} [position] Index (i >= 0) to insert part. By default will append.
+     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or <0 will append.
+     * @param {String} [fas] FAS for the part. Defaults to "None".
      * @returns {Boolean} True if added, false if not.
      */
-    addToParts: function(pPart, pPosition) {
+    addToParts: function(pPart, pPosition, pFas) {
         var added = false;
 
-        if (Ext.isDefined(pPosition)) {
+        if (!Ext.isEmpty(pPosition)) {
             if (pPosition >= 0) {
                 this.parts().insert(pPosition, pPart);
+                this.addFas(pFas, pPosition);
                 added = true;
             } else {
                 console.warn("Invalid index:", pPosition);
             }
         } else {
             this.parts().add(pPart);
+            this.addFas(pFas);
             added = true;
         }
 
@@ -208,8 +211,8 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Adds a FAS into the fases array.
-     * @param {String} fas FAS for the respective part. Default is "None".
-     * @param {Number} position Index to insert FAS. Default is append.
+     * @param {String} [fas] FAS for the respective part. Default is "None".
+     * @param {Number} [position] Index to insert FAS. Default is append.
      * @returns {Boolean} True if added, false if not.
      */
     addFas: function(pFas, pPosition) {
