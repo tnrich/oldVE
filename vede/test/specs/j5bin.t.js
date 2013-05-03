@@ -4,6 +4,8 @@
  */
 
 /*global beforeEach, describe, expect, it*/
+//Ext.require("Teselagen.models.J5Bin");
+//Ext.require("Teselagen.models.Part");
 Ext.onReady(function() {
     var modelProxy = {
         type: "memory",
@@ -12,12 +14,10 @@ Ext.onReady(function() {
         }
     };
 
-    xdescribe("Teselagen.models.J5Bin", function() {
-        beforeEach(function() {
-        });
+    describe("Teselagen.models.J5Bin", function() {
 
         it("Create J5Bin and check defaults", function(){
-            var bin = Ext.create("Teselagen.models.J5Bin");
+            var bin = Ext.create("Teselagen.models.J5Bin", {iconID:null});
             bin.setProxy(modelProxy);
             expect(bin).not.toBe(null);
 
@@ -30,7 +30,7 @@ Ext.onReady(function() {
         });
 
         it("Validate()", function(){
-            var bin = Ext.create("Teselagen.models.J5Bin");
+            var bin = Ext.create("Teselagen.models.J5Bin", {iconID:null});
             expect(bin.validate().length).toBe(0);
 
             bin = Ext.create("Teselagen.models.J5Bin", {
@@ -50,7 +50,7 @@ Ext.onReady(function() {
             var part2   = Ext.create("Teselagen.models.Part");
 
             var bin     = Ext.create("Teselagen.models.J5Bin", {
-                //parts: [part1, part2]
+                iconID:null
             });
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
@@ -65,7 +65,7 @@ Ext.onReady(function() {
             var part2   = Ext.create("Teselagen.models.Part");
 
             var bin     = Ext.create("Teselagen.models.J5Bin", {
-                //parts: [part1, part2]
+                iconID:null
             });
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
@@ -79,43 +79,67 @@ Ext.onReady(function() {
 
         describe("addToParts", function() {
             it("Should be able to add parts to a bin", function(){
+                var success;
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
                 var part3   = Ext.create("Teselagen.models.Part");
-                var bin     = Ext.create("Teselagen.models.J5Bin", {
-                    parts: []
-                });
-                bin.setProxy(modelProxy);
-                expect(bin.partCount()).toBe(0);
-
-                var success = bin.addToParts(part1);
+                var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
+                // Append first part
+                success = bin.addToParts(part1);
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(1);
                 expect(bin.parts().getAt(0)).toBe(part1);
-
-                // add a second part, insert in front of previous part
-                success = bin.addToParts(part2, 0);
+                expect(bin.get("fases")[0]).toBe("None");
+                //Add a second part, insert in front of previous part
+                success = bin.addToParts(part2, 0, "fas1");
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(2);
                 expect(bin.parts().getAt(0)).toBe(part2);
                 expect(bin.parts().getAt(1)).toBe(part1);
-
-                // add a third in between
-                success = bin.addToParts(part3, 1);
+                expect(bin.get("fases")[0]).toBe("fas1");
+                expect(bin.get("fases")[1]).toBe("None");
+                //Add a third part in between
+                success = bin.addToParts(part3, 1, "fas2");
                 expect(success).toBe(true);
                 expect(bin.partCount()).toBe(3);
-
                 expect(bin.parts().getAt(0)).toBe(part2);
                 expect(bin.parts().getAt(1)).toBe(part3);
                 expect(bin.parts().getAt(2)).toBe(part1);
+                expect(bin.get("fases")[0]).toBe("fas1");
+                expect(bin.get("fases")[1]).toBe("fas2");
+                expect(bin.get("fases")[2]).toBe("None");
             });
-
+            it("Should be able to pass null for part index and non-null fas", function() {
+                var part1   = Ext.create("Teselagen.models.Part");
+                var part2   = Ext.create("Teselagen.models.Part");
+                var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
+                success = bin.addToParts(part1);
+                expect(success).toBe(true);
+                success = bin.addToParts(part2, null, "fas1");
+                expect(success).toBe(true);
+                expect(bin.partCount()).toBe(2);
+                expect(bin.parts().getAt(0)).toBe(part1);
+                expect(bin.parts().getAt(1)).toBe(part2);
+                expect(bin.get("fases")[0]).toBe("None");
+                expect(bin.get("fases")[1]).toBe("fas1");
+            });
+            it("Should return false if part index is negative", function() {
+                var part1   = Ext.create("Teselagen.models.Part");
+                var bin     = Ext.create("Teselagen.models.J5Bin");
+                success = bin.addToParts(part1, -1);
+                expect(success).toBe(false);
+            });
+            it("Should return false if part index is not a number", function() {
+                var part1   = Ext.create("Teselagen.models.Part");
+                var bin     = Ext.create("Teselagen.models.J5Bin");
+                success = bin.addToParts(part1, "a");
+                expect(success).toBe(false);
+            });
             it("Is a part and the owner bin linked or cloned?", function(){
                 var part1   = Ext.create("Teselagen.models.Part", {
                     partSource: "tmpname"
                 });
-                var bin     = Ext.create("Teselagen.models.J5Bin", {
-                });
+                var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
                 bin.setProxy(modelProxy);
                 expect(bin.partCount()).toBe(0);
 
@@ -140,7 +164,7 @@ Ext.onReady(function() {
             var part2   = Ext.create("Teselagen.models.Part");
 
             var bin     = Ext.create("Teselagen.models.J5Bin", {
-                //parts: [part1, part2]
+                iconID:null
             });
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
@@ -168,7 +192,7 @@ Ext.onReady(function() {
             var part2   = Ext.create("Teselagen.models.Part");
 
             var bin     = Ext.create("Teselagen.models.J5Bin", {
-                //parts: [part1, part2]
+                iconID:null
             });
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
@@ -197,7 +221,7 @@ Ext.onReady(function() {
 
             // Create a bin with parts
             var bin     = Ext.create("Teselagen.models.J5Bin", {
-                //parts: [part1, part2]
+                iconID:null
             });
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
@@ -227,7 +251,7 @@ Ext.onReady(function() {
             var part1   = Ext.create("Teselagen.models.Part", {
                 name: "blah"
             });
-            var bin     = Ext.create("Teselagen.models.J5Bin");
+            var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
             bin.addToParts([part1]);
 
             var unique  = bin.isUniquePartName("blah");
@@ -236,36 +260,5 @@ Ext.onReady(function() {
             expect(unique).toBe(true);
         });
 
-        describe("addFas", function() {
-            it("Should be able to access fases array", function() {
-                var j5bin = Ext.create("Teselagen.models.J5Bin", {fases:["fas1", "fas2"]});
-                expect(j5bin.get("fases")[1]).toBe("fas2");
-            });
-            it("Should be able to append default FAS", function() {
-                var j5bin = Ext.create("Teselagen.models.J5Bin");
-                j5bin.addFas();
-                expect(j5bin.get("fases")[0]).toBe("None");
-            });
-            it("Should be able to append given FAS", function() {
-                var j5bin = Ext.create("Teselagen.models.J5Bin", {fases:[]});
-                j5bin.addFas("fas1");
-                expect(j5bin.get("fases")[0]).toBe("fas1");
-            });
-            it("Should be able to insert a FAS at positive index", function() {
-                var j5bin = Ext.create("Teselagen.models.J5Bin", {fases:["fas1", "fas2"]});
-                j5bin.addFas("fas3", 1);
-                expect(j5bin.get("fases")[1]).toBe("fas3");
-            });
-            it("Should be able to insert a FAS at negative index", function() {
-                var j5bin = Ext.create("Teselagen.models.J5Bin", {fases:["fas1", "fas2", "fas3"]});
-                j5bin.addFas("fas4", -1);
-                expect(j5bin.get("fases")[2]).toBe("fas4");
-            });
-            it("Should not be able to insert a FAS at invalid index", function() {
-                var j5bin = Ext.create("Teselagen.models.J5Bin", {fases:["fas1", "fas2", "fas3"]});
-                var added = j5bin.addFas("fas4", "a");
-                expect(added).toBe(false);
-            });
-        });
     });
 });
