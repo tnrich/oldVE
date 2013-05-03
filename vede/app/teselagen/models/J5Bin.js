@@ -74,7 +74,6 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
-        {name: "fas",               type: "string",     defaultValue: "None"},
         {name: "fases",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
@@ -133,6 +132,16 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     /**
+     * Model constructor.  
+     * Needed to set fases array so that it will create an instance variable.
+     */
+    constructor: function(pCfg) {
+        var fases = pCfg && pCfg.fases ? pCfg.fases : [];
+        this.callParent(arguments);
+        this.set("fases", fases);
+    },
+
+    /**
      * @member Teselagen.models.J5Bin
      * @returns {Number} count Number of Parts in parts
      */
@@ -162,11 +171,6 @@ Ext.define("Teselagen.models.J5Bin", {
         return index;
     },
 
-    constructor: function(pCfg) {
-        var fases = pCfg && pCfg.fases ? pCfg.fases : [];
-        this.callParent(arguments);
-        this.set("fases", fases);
-    },
     /**
      * Adds a Part into the parts store.
      * @param {Teselagen.models.Part} part Can be a single part or an array of parts.
@@ -182,7 +186,6 @@ Ext.define("Teselagen.models.J5Bin", {
         if (!Ext.isEmpty(pFas)) {
             fas = pFas;
         }
-        console.log(this.get("binName"), this, pPart, pPosition, fases, this.get("fas"));
         if (!Ext.isEmpty(pPosition)) {
             if (Ext.isNumber(pPosition) && pPosition >= 0) {
                 this.parts().insert(pPosition, pPart);
@@ -196,7 +199,6 @@ Ext.define("Teselagen.models.J5Bin", {
             fases.push(fas);
             added = true;
         }
-        console.log(this.get("binName"), pPart, pPosition, fases);
 
         return added;
     },
