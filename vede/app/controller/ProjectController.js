@@ -1,6 +1,7 @@
 /**
  * Project controller
  * @class Vede.controller.ProjectController
+ * @author Rodrigo Pavez
  */
 Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
@@ -8,22 +9,31 @@ Ext.define("Vede.controller.ProjectController", {
 
     sequenceStore: null,
 
+    /**
+     * Call openProject when triggered by ProjectEvent.OPEN_PROJECT
+     * @param {Teselagen.models.Project} Project Model.
+     */
     openProject: function (project) {
         Teselagen.manager.ProjectManager.openProject(project);
     },
 
-    renderProjectsTree: function (cb) {
+    /**
+     * Load the projectTree in ProjectExplorer Panel, method triggered by 
+     * @param {callback} Callback function (optional).
+     * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
+     */
+    loadProjectTree: function (cb) {
 
         var self = this;
 
-        var rootNode = Ext.getCmp('projectTreePanel').getRootNode();
+        var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
         rootNode.removeAll();
 
         rootNode.appendChild({
-            text: 'Create project',
+            text: "Create project",
             leaf: true,
-            hrefTarget: 'newproj',
-            icon: 'resources/images/add.png',
+            hrefTarget: "newproj",
+            icon: "resources/images/add.png",
             id: 0
         });
 
@@ -33,22 +43,22 @@ Ext.define("Vede.controller.ProjectController", {
             var projectNode = rootNode.appendChild({
                 text: project.data.name,
                 id: project.data.id,
-                hrefTarget: 'openproj'
+                hrefTarget: "openproj"
             });
 
             projectNode.appendChild({
-                text: 'Create design',
+                text: "Create design",
                 leaf: true,
-                hrefTarget: 'newde',
-                icon: 'resources/images/add.png',
+                hrefTarget: "newde",
+                icon: "resources/images/add.png",
                 id: 0
             });
 
             projectNode.appendChild({
-                text: 'Create sequence',
+                text: "Create sequence",
                 leaf: true,
-                hrefTarget: 'newsequence',
-                icon: 'resources/images/add.png',
+                hrefTarget: "newsequence",
+                icon: "resources/images/add.png",
                 id: 0
             });
 
@@ -78,19 +88,18 @@ Ext.define("Vede.controller.ProjectController", {
             });
 
 
-            self.sequenceStore = Ext.create('Ext.data.Store', {
-                model: 'Teselagen.models.VectorEditorProject'
+            self.sequenceStore = Ext.create("Ext.data.Store", {
+                model: "Teselagen.models.VectorEditorProject"
             });
 
             Teselagen.manager.ProjectManager.sequenceStore =
-                Ext.create('Ext.data.Store', {
-                    model: 'Teselagen.models.VectorEditorProject'
+                Ext.create("Ext.data.Store", {
+                    model: "Teselagen.models.VectorEditorProject"
             });
 
             var sequences = project.sequences();
             sequences.load({
                 callback: function () {
-                    console.log(sequences);
                     sequences.each(function (sequence) {
                         self.sequenceStore.add(sequence);
                         Teselagen.manager.ProjectManager.sequenceStore.add(sequence);
@@ -99,7 +108,7 @@ Ext.define("Vede.controller.ProjectController", {
                             text: sequence.data.name,
                             leaf: true,
                             id: sequence.data.id,
-                            hrefTarget: 'opensequence',
+                            hrefTarget: "opensequence",
                             icon: "resources/images/ux/sequence-tree-icon-leaf.png"
                         });
                     });
@@ -107,21 +116,18 @@ Ext.define("Vede.controller.ProjectController", {
             });
         });
 
-        //Ext.getCmp('designGrid_Panel').reconfigure(lastDEProjects);
         if(typeof (cb) == "function") cb();
     },
 
-    resolveAndOpenDEProject: function (record) {
+    resolveAndopenDeviceDesign: function (record) {
         var design_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var designs = project.designs().load({
+        project.designs().load({
             id: design_id,
             callback: function (loadedDesign) {
-                design = loadedDesign[0];
-                var design = designs.getById(design_id);
                 Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openDEProject(design);
+                Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
             }
         });
 
@@ -158,10 +164,10 @@ Ext.define("Vede.controller.ProjectController", {
         project.designs().load().each(function (design) {
             projectNames.push(design.data.name);
         });
-        Teselagen.manager.ProjectManager.createNewDEProjectAtProject(project, projectNames);
+        Teselagen.manager.ProjectManager.createNewDeviceDesignAtProject(project, projectNames);
     },
 
-    createProject: function (record) {
+    createProject: function () {
         Teselagen.manager.ProjectManager.createNewProject();
     },
 
@@ -171,24 +177,23 @@ Ext.define("Vede.controller.ProjectController", {
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
         var veprojectNames = [];
         project.veprojects().load().each(function (veproject) {
-                    veprojectNames.push(veproject.data.name);
+            veprojectNames.push(veproject.data.name);
         });
         Teselagen.manager.ProjectManager.createNewSequence(project, veprojectNames);
     },
 
     promptPartName: function(cb){
         var onPromptClosed = function (btn, text) {
-                if(btn == 'ok') {
-                    if(text === '') return Ext.MessageBox.prompt('Name', 'Please enter a project name:', onPromptClosed, this);
-                    else return cb(text);
-                }
+            if(btn === "ok") {
+                if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a project name:", onPromptClosed, this); }
+                else { return cb(text); }
+            }
         };
 
-        Ext.MessageBox.prompt('Name', 'Please enter a part name:', onPromptClosed, this);
+        Ext.MessageBox.prompt("Name", "Please enter a part name:", onPromptClosed, this);
     },
 
     addPart: function (record) {
-        var self = this;
         var project_id = record.parentNode.parentNode.data.id;
         var veproject_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
@@ -213,15 +218,15 @@ Ext.define("Vede.controller.ProjectController", {
                 callback: function () {
                     newPart.setSequenceFileModel(newSequenceFile);
                     var selectedVEProjectID = selectedVEProject.data.id;
-                    newPart.set('veproject_id', selectedVEProjectID);
-                    selectedVEProject.set('id',selectedVEProjectID);
+                    newPart.set("veproject_id", selectedVEProjectID);
+                    selectedVEProject.set("id",selectedVEProjectID);
                     newPart.save({
                         callback: function () {
                             selectedVEProject.parts().add(newPart);
                             selectedVEProject.save({
                                 callback: function () {
-                                    Vede.application.fireEvent("renderProjectsTree", function () {
-                                        Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + selectedVEProject.data.id);
+                                    Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                                        Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + selectedVEProject.data.id);
                                     });
                                     Teselagen.manager.ProjectManager.workingSequence = newSequenceFile;
                                     Vede.application.fireEvent("openVectorEditor", newSequenceFile);
@@ -232,59 +237,57 @@ Ext.define("Vede.controller.ProjectController", {
                 }
             });
         });
-        
+
     },
 
     resolveAndOpenSequence: function (record) {
-        Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Sequence');
+        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Sequence");
 
         var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var sequences = project.sequences().load({
+        project.sequences().load({
             id: sequence_id,
             callback: function (loadedsequence) {
-                sequence = loadedsequence[0];
-                var sequence = sequences.getById(sequence_id);
                 Teselagen.manager.ProjectManager.workingProject = project;
-                Teselagen.manager.ProjectManager.openSequence(sequence);
+                Teselagen.manager.ProjectManager.openSequence(loadedsequence[0]);
             }
         });
 
     },
 
     expandProject: function (record) {
-        if(record.isExpanded()) record.collapse();
-        else record.expand();
+        if(record.isExpanded()) { record.collapse(); }
+        else { record.expand(); }
     },
 
     onProjectPanelItemClick: function (store, record) {
         switch(record.data.hrefTarget) {
-        case 'openproj':
+        case "openproj":
             this.expandProject(record);
             break;
-        case 'newproj':
+        case "newproj":
             this.createProject(record);
             break;
-        case 'newsequence':
+        case "newsequence":
             this.createSequence(record);
             break;
-        case 'newde':
+        case "newde":
             this.resolveAndCreateDEProject(record);
             break;
-        case 'opende':
-            this.resolveAndOpenDEProject(record);
+        case "opende":
+            this.resolveAndopenDeviceDesign(record);
             break;
-        case 'opensequence':
+        case "opensequence":
             this.resolveAndOpenSequence(record);
             break;
-        case 'j5report':
+        case "j5report":
             this.resolveAndOpenj5Report(record);
             break;
-        case 'j5reports':
+        case "j5reports":
             this.resolveAndOpenj5Reports(record);
             break;
-        case 'addpart':
+        case "addpart":
             this.addPart(record);
             break;
         }
@@ -292,10 +295,10 @@ Ext.define("Vede.controller.ProjectController", {
 
     onProjectPartsPanelItemClick: function (store, record) {
         switch(record.data.hrefTarget) {
-        case 'addpart':
+        case "addpart":
             this.addPart(record);
             break;
-        case 'openpart':
+        case "openpart":
             this.resolveAndOpenPart(record);
             break;
         }
@@ -306,7 +309,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     onNewDEClick: function () {
-        if(!Teselagen.manager.ProjectManager.workingProject) return Ext.MessageBox.alert('Alert', 'First select or create a Project.');
+        if(!Teselagen.manager.ProjectManager.workingProject) { return Ext.MessageBox.alert("Alert", "First select or create a Project."); }
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
 
@@ -320,13 +323,13 @@ Ext.define("Vede.controller.ProjectController", {
     init: function () {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
-        this.application.on("renderProjectsTree", this.renderProjectsTree, this);
+        this.application.on(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, this.loadProjectTree, this);
 
         this.control({
-            '#projectTreePanel': {
+            "#projectTreePanel": {
                 itemclick: this.onProjectPanelItemClick
             },
-            '#projectPartsPanel': {
+            "#projectPartsPanel": {
                 itemclick: this.onProjectPartsPanelItemClick
             },
             "#newProject_Btn": {

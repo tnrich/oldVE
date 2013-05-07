@@ -91,7 +91,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                                     Teselagen.manager.ProjectManager.workingSequence.save({
                                         callback: function(){
                                             saveToServer();
-                                            Vede.application.fireEvent("renderProjectsTree", function () {
+                                            Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                                 Ext.getCmp('projectTreePanel').expandPath('/root/' + project.data.id + '/' + Teselagen.manager.ProjectManager.workingSequence.data.id);
                                             });
                                         }

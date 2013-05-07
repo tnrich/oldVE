@@ -66,7 +66,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
                         parttext.animate({duration: 5000, to: {opacity: 0}});
 
-                        Vede.application.fireEvent("renderProjectsTree", function () {
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
                         });
                     }
@@ -83,14 +83,14 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              msg: 'WARNING: This will remove the current design. This action is not undoable!',
              cls: 'messageBox',
              buttons: Ext.Msg.OKCANCEL,
-             fn: deleteDEProjectBtn,
+             fn: DeleteDeviceDesignBtn,
              icon: Ext.Msg.QUESTION
         });
 
-        function deleteDEProjectBtn (btn) {
+        function DeleteDeviceDesignBtn (btn) {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model, activeTab);
+                Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
              }
          }
     },

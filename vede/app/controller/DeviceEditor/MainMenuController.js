@@ -21,7 +21,7 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
     onNewDesignClick: function() {
         Teselagen.manager.ProjectManager.createNewDeviceEditorProject();
     },
-    onOpenDEProjectClick: function() {
+    onopenDeviceDesignClick: function() {
 
     },
     onSaveDesignClick: function() {
@@ -33,8 +33,8 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
             "button[cls='newDesign']": {
                 click: this.onNewDesignClick
             },
-            "#openDEProject": {
-                click: this.onOpenDEProjectClick
+            "#openDeviceDesign": {
+                click: this.onopenDeviceDesignClick
             },
             "#saveDesign": {
                 click: this.onSaveDesignClick

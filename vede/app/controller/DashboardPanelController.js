@@ -9,7 +9,7 @@ Ext.define("Vede.controller.DashboardPanelController", {
 
 
 	onLastDEProjectsItemClick: function (item,record) {
-		Teselagen.manager.ProjectManager.openDEProject(record);
+		Teselagen.manager.ProjectManager.openDeviceDesign(record);
 	},
 
 	init: function () {

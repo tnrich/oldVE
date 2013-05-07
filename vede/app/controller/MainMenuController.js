@@ -205,7 +205,7 @@ Ext.define('Vede.controller.MainMenuController', {
         var onPromptClosed = function (answer, text) {
             Teselagen.manager.ProjectManager.workingSequence.set('name',text);
             Teselagen.manager.ProjectManager.workingSequence.save({callback: function(){
-                Vede.application.fireEvent("renderProjectsTree");
+                Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
             }});
         };
 

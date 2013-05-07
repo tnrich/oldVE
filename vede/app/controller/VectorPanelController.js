@@ -68,7 +68,7 @@ Ext.define("Vede.controller.VectorPanelController", {
 //                                                Teselagen.manager.ProjectManager.workingSequence.save({
 //                                                    callback: function () {
 //                                                        selectWindow.close();
-//                                                        Vede.application.fireEvent("renderProjectsTree");
+//                                                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
 //                                                        self.saveSequenceBtn.un('click',self);
 //                                                    }
 //                                                });
