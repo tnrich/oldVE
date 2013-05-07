@@ -55,7 +55,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign", this.url);
+            //return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign", this.url);
+            return Teselagen.manager.SessionManager.buildUserResUrl("/devicedesign", this.url);
         },
         appendId: true,
         noCache: false,

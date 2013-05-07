@@ -7,17 +7,18 @@
  */
 Ext.define("Teselagen.manager.SessionManager", {
     singleton: true,
-    
+
     requires: ["Teselagen.constants.Constants"],
 
     config: {
         baseURL: null,
+        baseUser: null,
         data: null,
         env: null
     },
-    
+
     constants: null,
-    
+
     /**
      * @member Teselagen.manager.SessionManager
      */
@@ -26,7 +27,7 @@ Ext.define("Teselagen.manager.SessionManager", {
         this.baseURL = location.href.substring(0,location.href.indexOf("/",7)+1) + "api/";
         this.env = this.constants.ENV_DEV;
     },
-    
+
     /**
      * Builds a URL for Proxies.
      * @param {String} pAction The action to be added to base URL.
@@ -34,6 +35,19 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     buildUrl: function(pAction, pDefault) {
         var url = this.baseURL + pAction;
+        if (this.getEnv() === this.constants.ENV_TEST) {
+            url = pDefault;
+        }
+        return url;
+    },
+
+    /**
+     * Builds a URL for User specific Resources
+     * @param {String} pAction The action to be added to base URL.
+     * @param {String} pDefault The default URL used for testing environment.
+     */
+    buildUserResUrl: function(pAction, pDefault) {
+        var url = this.baseURL + "user/" + this.config.baseUser + pAction;
         if (this.getEnv() === this.constants.ENV_TEST) {
             url = pDefault;
         }

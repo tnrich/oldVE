@@ -9,7 +9,8 @@ Ext.define("Teselagen.models.Part", {
 
     requires: [
         "Teselagen.models.SequenceFile",
-        "Teselagen.constants.Constants"],
+        "Teselagen.constants.Constants"
+    ],
 
     proxy: {
         type: "rest",
@@ -22,7 +23,7 @@ Ext.define("Teselagen.models.Part", {
             type: "json"
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
+            return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         }
     },
 

@@ -67,12 +67,12 @@ Ext.define("Teselagen.models.Project", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                data.deprojects = associatedData["deprojects"];
+                data.deprojects = associatedData.deprojects;
                 return data;
             }
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects", this.url);
+            return Teselagen.manager.SessionManager.buildUserResUrl("/projects", this.url);
         },
         appendId: true,
         noCache: false,
