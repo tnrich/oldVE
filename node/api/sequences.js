@@ -55,15 +55,22 @@ module.exports = function(app) {
                 var newSequence = new Sequence();
 
                 for (var prop in sequence) {
-                    newSequence[prop] = sequence[prop];
+                    if(prop!="project_id") { newSequence[prop] = sequence[prop]; }
+                }
+                if(sequence.project_id)
+                {
+                    if(sequence.project_id!="") newSequence.project_id = sequence.project_id;
                 }
 
-                newSequence.save(function() {
+                newSequence.save(function(err) {
+                    if(err) { console.log("WARNING: SEQUENCE NOT SAVED!"); console.log(err);}
+                    else  { console.log("INFO: NEW SEQUENCE SAVED!"); }
                     req.user.sequences.push(newSequence);
                     req.user.save(function(err) {
                         if (err) console.log(err);
                         res.json({
-                            "sequence": newSequence
+                            "sequence": newSequence,
+                            "info": "no duplicated"
                         });
                     });
                 });

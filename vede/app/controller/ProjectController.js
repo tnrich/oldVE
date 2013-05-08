@@ -7,7 +7,6 @@ Ext.define("Vede.controller.ProjectController", {
     extend: "Ext.app.Controller",
     requires: ["Teselagen.event.ProjectEvent", "Teselagen.manager.ProjectManager", "Teselagen.models.DeviceEditorProject", "Teselagen.models.SequenceFile", "Teselagen.models.Part", "Teselagen.models.VectorEditorProject"],
 
-    sequenceStore: null,
 
     /**
      * Call openProject when triggered by ProjectEvent.OPEN_PROJECT
@@ -26,9 +25,10 @@ Ext.define("Vede.controller.ProjectController", {
 
         var self = this;
 
-        var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
-        rootNode.removeAll();
+        var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
+        rootNode.removeAll(); // Remove existing subnodes   
 
+        // Append create project at the top
         rootNode.appendChild({
             text: "Create project",
             leaf: true,
@@ -37,15 +37,19 @@ Ext.define("Vede.controller.ProjectController", {
             id: 0
         });
 
-        var projects = Teselagen.manager.ProjectManager.projects;
+        var projects = Teselagen.manager.ProjectManager.projects; // Get projects store
 
+        // Iterate over projects
         projects.each(function (project) {
+
+            // Append existing project
             var projectNode = rootNode.appendChild({
                 text: project.data.name,
                 id: project.data.id,
                 hrefTarget: "openproj"
             });
 
+            // Append design to project node
             projectNode.appendChild({
                 text: "Create design",
                 leaf: true,
@@ -54,6 +58,7 @@ Ext.define("Vede.controller.ProjectController", {
                 id: 0
             });
 
+            // Append sequence to project node
             projectNode.appendChild({
                 text: "Create sequence",
                 leaf: true,
@@ -62,11 +67,13 @@ Ext.define("Vede.controller.ProjectController", {
                 id: 0
             });
 
-            var designs = project.designs();
-            designs.load({
+            var designs = project.designs(); // Get designs store from current project
+            designs.load({ // Load designs
                 callback: function () {
-                    designs.each(function (design) {
 
+                    // Iterate over designs
+                    designs.each(function (design) {
+                        // Append design to project node
                         var designnode = projectNode.appendChild({
                             text: design.data.name,
                             leaf: false,
@@ -75,36 +82,35 @@ Ext.define("Vede.controller.ProjectController", {
                             icon: "resources/images/ux/design-tree-icon-leaf.png"
                         });
 
-                        var j5resultsNode = designnode.appendChild({
+                        // Append j5Report to design
+                        designnode.appendChild({
                             text: "J5 Reports",
                             leaf: true,
                             id: design.data.id,
                             hrefTarget: "j5reports",
                             icon: "resources/images/ux/j5-tree-icon-parent.png"
                         });
-
                     });
                 }
             });
 
-
-            self.sequenceStore = Ext.create("Ext.data.Store", {
-                model: "Teselagen.models.VectorEditorProject"
-            });
+            // Empty sequenceFile store
 
             Teselagen.manager.ProjectManager.sequenceStore =
                 Ext.create("Ext.data.Store", {
-                    model: "Teselagen.models.VectorEditorProject"
+                model: "Teselagen.models.SequenceFile"
             });
 
-            var sequences = project.sequences();
-            sequences.load({
+            var sequences = project.sequences(); // Get sequences store from current project
+            sequences.load({ // Load sequences store
                 callback: function () {
-                    sequences.each(function (sequence) {
-                        self.sequenceStore.add(sequence);
-                        Teselagen.manager.ProjectManager.sequenceStore.add(sequence);
 
-                        var sequencenode = projectNode.appendChild({
+                    // Iterate over sequences
+                    sequences.each(function (sequence) {
+                        Teselagen.manager.ProjectManager.sequenceStore.add(sequence); // Add sequence to sequences store
+
+                        // Append sequence to project store
+                        projectNode.appendChild({
                             text: sequence.data.name,
                             leaf: true,
                             id: sequence.data.id,
@@ -116,7 +122,8 @@ Ext.define("Vede.controller.ProjectController", {
             });
         });
 
-        if(typeof (cb) == "function") cb();
+        // For testing, execute callback
+        if(typeof (cb) === "function") { cb(); }
     },
 
     resolveAndopenDeviceDesign: function (record) {
@@ -171,15 +178,15 @@ Ext.define("Vede.controller.ProjectController", {
         Teselagen.manager.ProjectManager.createNewProject();
     },
 
-    /* Creates a veproject and an associated sequence */
+    /* Creates a sequence and an associated sequence */
     createSequence: function (record) {
         var project_id = record.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var veprojectNames = [];
-        project.veprojects().load().each(function (veproject) {
-            veprojectNames.push(veproject.data.name);
+        var sequencesNames = [];
+        project.sequences().load().each(function (sequence) {
+            sequencesNames.push(sequence.data.name);
         });
-        Teselagen.manager.ProjectManager.createNewSequence(project, veprojectNames);
+        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
     },
 
     promptPartName: function(cb){

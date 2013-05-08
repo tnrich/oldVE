@@ -6,8 +6,7 @@
 Ext.define("Teselagen.models.DeviceDesign", {
     extend: "Ext.data.Model",
     requires: [
-        "Teselagen.models.J5Collection",
-        "Teselagen.models.EugeneRule"],
+        "Teselagen.models.J5Collection","Teselagen.models.EugeneRule"],
 
     proxy: {
         type: "rest",
@@ -22,27 +21,26 @@ Ext.define("Teselagen.models.DeviceDesign", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                console.log(data);
-                var j5Collection = associatedData["j5collection"];
+                var j5Collection = associatedData.j5collection;
 
-                var rules = associatedData["rules"];
+                var rules = associatedData.rules;
                 data.j5collection = j5Collection;
 
                 var binsTempArray = [];
 
-                record.getJ5Collection().bins().each(function(bin, binKey) {
+                record.getJ5Collection().bins().each(function(bin) {
                     var partsTempArray = [];
                     bin.parts().each(function(part) {
-                        if (!part.isEmpty()) partsTempArray.push(part.getData().id);
+                        if (!part.isEmpty()) { partsTempArray.push(part.getData().id); }
                     });
                     binsTempArray.push(partsTempArray);
                 });
 
                 data.j5collection.bins.forEach(function(bin, binKey) {
-                    bin.parts.forEach(function(part, partKey) {
-                        delete data.j5collection.bins[binKey].parts;
-                        data.j5collection.bins[binKey].parts = binsTempArray[binKey];
-                    });
+                    //bin.parts.forEach(function(part, partKey) {
+                    delete data.j5collection.bins[binKey].parts;
+                    data.j5collection.bins[binKey].parts = binsTempArray[binKey];
+                    //});
                 });
 
                 data.rules = rules;
@@ -75,12 +73,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     fields: [{
         name: "id",
         type: "long"
-    },
-    {
+    }, {
         name: "project_id",
         type: "long"
-    },
-    {
+    }, {
         name: "name",
         type: "String",
         defaultValue: ""
@@ -137,11 +133,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 me.setJ5Collection(r.getJ5Collection());
                 me.j5runs().removeAll();
-                me.j5runs().insert(0,r.j5runs());
+                me.j5runs().insert(0, r.j5runs());
 
                 me.commit();
                 if (Ext.isFunction(callBack)) {
-                    callBack(me,true,o);
+                    callBack(me, true, o);
                 }
             },
             failure: function() {
@@ -152,7 +148,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         });
     },
 
-    getDesign: function(callback){
+    getDesign: function() {
         /*
         if(!this.modelIsLoaded)
         {
