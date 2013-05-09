@@ -622,7 +622,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         // openSequence, so we force it to wait a millisecond before calling
         // to give it time to render the loading mask.
         Ext.defer(function() {
-            var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", this.SEQDATA, "tester", "");
+            var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
             Teselagen.manager.ProjectManager.openSequence(newSequence);
 
             mask.setVisible(false);
