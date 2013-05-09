@@ -14,6 +14,142 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5ParamsWindow: null,
     automationParamsWindow: null,
 
+    SEQDATA: "\nLOCUS       pmas00026               5365 bp    dna     circular UNK 26-OCT-2009" +
+"\nDEFINITION  promoter seq from pBAD33." +
+"\nACCESSION   unknown" +
+"\nKEYWORDS    ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ." +
+"\nFEATURES             Location/Qualifiers" +
+"\n     CDS             complement(7..885)" +
+"\n                     /label=araC" +
+"\n     protein_bind    914..931" +
+"\n                     /label=operator\O2" +
+"\n     promoter        complement(1036..1064)" +
+"\n                     /label=araC\promoter" +
+"\n     protein_bind    1072..1093" +
+"\n                     /label=operator\O1" +
+"\n     misc_binding    1115..1128" +
+"\n                     /label=CAP\site" +
+"\n     protein_bind    1124..1162" +
+"\n                     /label=Operator\I2\and\I1" +
+"\n     promoter        1161..1188" +
+"\n                     /label=pBAD\promoter" +
+"\n     RBS             1216..1235" +
+"\n                     /label=RBS" +
+"\n     CDS             1236..2084" +
+"\n                     /vntifkey='4'" +
+"\n                     /label=GFPuv" +
+"\n     misc_feature    1239..1289" +
+"\n                     /label=Clostridium_BMC_sig_pep" +
+"\n     misc_feature    1290..1337" +
+"\n                     /label=gly_ser_linker" +
+"\n     misc_feature    1757..1757" +
+"\n                     /label=XhoI_silent_mutation" +
+"\n     misc_feature    1856..1856" +
+"\n                     /label=BamHI_silent_mutation" +
+"\n     misc_feature    2049..2081" +
+"\n                     /vntifkey='21'" +
+"\n                     /label=ssrA\\tag" +
+"\n     terminator      2100..2228" +
+"\n                     /label=dbl\\term" +
+"\n     rep_origin      complement(2230..4458)" +
+"\n                     /label=pSC101**" +
+"\n     terminator      4459..4564" +
+"\n                     /label=T0" +
+"\n     misc_marker     complement(4580..5239)" +
+"\n                     /label=CmR" +
+"\nORIGIN      " +
+"\n        1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa" +
+"\n       61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc" +
+"\n      121 aaaaccaaca ttgcgaccga cggtggcgat aggcatccgg gtggtgctca aaagcagctt" +
+"\n      181 cgcctggctg atacgttggt cctcgcgcca gcttaagacg ctaatcccta actgctggcg" +
+"\n      241 gaaaagatgt gacagacgcg acggcgacaa gcaaacatgc tgtgcgacgc tggcgatatc" +
+"\n      301 aaaattgctg tctgccaggt gatcgctgat gtactgacaa gcctcgcgta cccgattatc" +
+"\n      361 catcggtgga tggagcgact cgttaatcgc ttccatgcgc cgcagtaaca attgctcaag" +
+"\n      421 cagatttatc gccagcagct ccgaatagcg cccttcccct tgcccggcgt taatgatttg" +
+"\n      481 cccaaacagg tcgctgaaat gcggctggtg cgcttcatcc gggcgaaaga accccgtatt" +
+"\n      541 ggcaaatatt gacggccagt taagccattc atgccagtag gcgcgcggac gaaagtaaac" +
+"\n      601 ccactggtga taccattcgc gagcctccgg atgacgaccg tagtgatgaa tctctcctgg" +
+"\n      661 cgggaacagc aaaatatcac ccggtcggca aacaaattct cgtccctgat ttttcaccac" +
+"\n      721 cccctgaccg cgaatggtga gattgagaat ataacctttc attcccagcg gtcggtcgat" +
+"\n      781 aaaaaaatcg agataaccgt tggcctcaat cggcgttaaa cccgccacca gatgggcatt" +
+"\n      841 aaacgagtat cccggcagca ggggatcatt ttgcgcttca gccatacttt tcatactccc" +
+"\n      901 gccattcaga gaagaaacca attgtccata ttgcatcaga cattgccgtc actgcgtctt" +
+"\n      961 ttactggctc ttctcgctaa ccaaaccggt aaccccgctt attaaaagca ttctgtaaca" +
+"\n     1021 aagcgggacc aaagccatga caaaaacgcg taacaaaagt gtctataatc acggcagaaa" +
+"\n     1081 agtccacatt gattatttgc acggcgtcac actttgctat gccatagcat ttttatccat" +
+"\n     1141 aagattagcg gattctacct gacgcttttt atcgcaactc tctactgttt ctccataccc" +
+"\n     1201 gtttttttgg gaatttttaa gaaggagata tacatatgga aaataacgct ttattagaac" +
+"\n     1261 aaataatcaa tgaagtttta aaaaatatgg gtggcagtgg tagcgggagc tcgggtggct" +
+"\n     1321 caggctctgg ttccagtaaa ggagaagaac ttttcactgg agttgtccca attcttgttg" +
+"\n     1381 aattagatgg tgatgttaat gggcacaaat tttctgtcag tggagagggt gaaggtgatg" +
+"\n     1441 caacatacgg aaaacttacc cttaaattta tttgcactac tggaaaacta cctgttccat" +
+"\n     1501 ggccaacact tgtcactact ttctcttatg gtgttcaatg cttttcccgt tatccggatc" +
+"\n     1561 atatgaaacg gcatgacttt ttcaagagtg ccatgcccga aggttatgta caggaacgca" +
+"\n     1621 ctatatcttt caaagatgac gggaactaca agacgcgtgc tgaagtcaag tttgaaggtg" +
+"\n     1681 atacccttgt taatcgtatc gagttaaaag gtattgattt taaagaagat ggaaacattc" +
+"\n     1741 tcggacacaa actcgaatac aactataact cacacaatgt atacatcacg gcagacaaac" +
+"\n     1801 aaaagaatgg aatcaaagct aacttcaaaa ttcgccacaa cattgaagat ggatctgttc" +
+"\n     1861 aactagcaga ccattatcaa caaaatactc caattggcga tggccctgtc cttttaccag" +
+"\n     1921 acaaccatta cctgtcgaca caatctgccc tttcgaaaga tcccaacgaa aagcgtgacc" +
+"\n     1981 acatggtcct tcttgagttt gtaactgctg ctgggattac acatggcatg gatgagctcg" +
+"\n     2041 gcggcggcgc ggcgaacgat gaaaactatg cgctggcggc gtaaatcgag taaggatctc" +
+"\n     2101 caggcatcaa ataaaacgaa aggctcagtc gaaagactgg gcctttcgtt ttatctgttg" +
+"\n     2161 tttgtcggtg aacgctctct actagagtca cactggctca ccttcgggtg ggcctttctg" +
+"\n     2221 cgtttatacc tagggtacgg gttttgctgc ccgcaaacgg gctgttctgg tgttgctagt" +
+"\n     2281 ttgttatcag aatcgcagat ccggcttcag ccggtttgcc ggctgaaagc gctatttctt" +
+"\n     2341 ccagaattgc catgattttt tccccacggg aggcgtcact ggctcccgtg ttgtcggcag" +
+"\n     2401 ctttgattcg ataagcagca tcgcctgttt caggctgtct atgtgtgact gttgagctgt" +
+"\n     2461 aacaagttgt ctcaggtgtt caatttcatg ttctagttgc tttgttttac tggtttcacc" +
+"\n     2521 tgttctatta ggtgttacat gctgttcatc tgttacattg tcgatctgtt catggtgaac" +
+"\n     2581 agctttgaat gcaccaaaaa ctcgtaaaag ctctgatgta tctatctttt ttacaccgtt" +
+"\n     2641 ttcatctgtg catatggaca gttttccctt tgatatgtaa cggtgaacag ttgttctact" +
+"\n     2701 tttgtttgtt agtcttgatg cttcactgat agatacaaga gccataagaa cctcagatcc" +
+"\n     2761 ttccgtattt agccagtatg ttctctagtg tggttcgttg tttttgcgtg agccatgaga" +
+"\n     2821 acgaaccatt gagatcatac ttactttgca tgtcactcaa aaattttgcc tcaaaactgg" +
+"\n     2881 tgagctgaat ttttgcagtt aaagcatcgt gtagtgtttt tcttagtccg ttatgtaggt" +
+"\n     2941 aggaatctga tgtaatggtt gttggtattt tgtcaccatt catttttatc tggttgttct" +
+"\n     3001 caagttcggt tacgagatcc atttgtctat ctagttcaac ttggaaaatc aacgtatcag" +
+"\n     3061 tcgggcggcc tcgcttatca accaccaatt tcatattgct gtaagtgttt aaatctttac" +
+"\n     3121 ttattggttt caaaacccat tggttaagcc ttttaaactc atggtagtta ttttcaagca" +
+"\n     3181 ttaacatgaa cttaaattca tcaaggctaa tctctatatt tgccttgtga gttttctttt" +
+"\n     3241 gtgttagttc ttttaataac cactcataaa tcctcataga gtatttgttt tcaaaagact" +
+"\n     3301 taacatgttc cagattatat tttatgaatt tttttaactg gaaaagataa ggcaatatct" +
+"\n     3361 cttcactaaa aactaattct aatttttcgc ttgagaactt ggcatagttt gtccactgga" +
+"\n     3421 aaatctcaaa gcctttaacc aaaggattcc tgatttccac agttctcgtc atcagctctc" +
+"\n     3481 tggttgcttt agctaataca ccataagcat tttccctact gatgttcatc atctgagcgt" +
+"\n     3541 attggttata agtgaacgat accgtccgtt ctttccttgt agggttttca atcgtggggt" +
+"\n     3601 tgagtagtgc cacacagcat aaaattagct tggtttcatg ctccgttaag tcatagcgac" +
+"\n     3661 taatcgctag ttcatttgct ttgaaaacaa ctaattcaga catacatctc aattggtcta" +
+"\n     3721 ggtgatttta atcactatac caattgagat gggctagtca atgataatta ctagtccttt" +
+"\n     3781 tcccgggtga tctgggtatc tgtaaattct gctagacctt tgctggaaaa cttgtaaatt" +
+"\n     3841 ctgctagacc ctctgtaaat tccgctagac ctttgtgtgt tttttttgtt tatattcaag" +
+"\n     3901 tggttataat ttatagaata aagaaagaat aaaaaaagat aaaaagaata gatcccagcc" +
+"\n     3961 ctgtgtataa ctcactactt tagtcagttc cgcagtatta caaaaggatg tcgcaaacgc" +
+"\n     4021 tgtttgctcc tctacaaaac agaccttaaa accctaaagg cttaagtagc accctcgcaa" +
+"\n     4081 gctcgggcaa atcgctgaat attccttttg tctccgacca tcaggcacct gagtcgctgt" +
+"\n     4141 ctttttcgtg acattcagtt cgctgcgctc acggctctgg cagtgaatgg gggtaaatgg" +
+"\n     4201 cactacaggc gccttttatg gattcatgca aggaaactac ccataataca agaaaagccc" +
+"\n     4261 gtcacgggct tctcagggcg ttttatggcg ggtctgctat gtggtgctat ctgacttttt" +
+"\n     4321 gctgttcagc agttcctgcc ctctgatttt ccagtctgac cacttcggat tatcccgtga" +
+"\n     4381 caggtcattc agactggcta atgcacccag taaggcagcg gtatcatcaa caggcttacc" +
+"\n     4441 cgtcttactg tccctagtgc ttggattctc accaataaaa aacgcccggc ggcaaccgag" +
+"\n     4501 cgttctgaac aaatccagat ggagttctga ggtcattact ggatctatca acaggagtcc" +
+"\n     4561 aagcgagctc gatatcaaat tacgccccgc cctgccactc atcgcagtac tgttgtaatt" +
+"\n     4621 cattaagcat tctgccgaca tggaagccat cacaaacggc atgatgaacc tgaatcgcca" +
+"\n     4681 gcggcatcag caccttgtcg ccttgcgtat aatatttgcc catggtgaaa acgggggcga" +
+"\n     4741 agaagttgtc catattggcc acgtttaaat caaaactggt gaaactcacc cagggattgg" +
+"\n     4801 ctgagacgaa aaacatattc tcaataaacc ctttagggaa ataggccagg ttttcaccgt" +
+"\n     4861 aacacgccac atcttgcgaa tatatgtgta gaaactgccg gaaatcgtcg tggtattcac" +
+"\n     4921 tccagagcga tgaaaacgtt tcagtttgct catggaaaac ggtgtaacaa gggtgaacac" +
+"\n     4981 tatcccatat caccagctca ccgtctttca ttgccatacg aaattccgga tgagcattca" +
+"\n     5041 tcaggcgggc aagaatgtga ataaaggccg gataaaactt gtgcttattt ttctttacgg" +
+"\n     5101 tctttaaaaa ggccgtaata tccagctgaa cggtctggtt ataggtacat tgagcaactg" +
+"\n     5161 actgaaatgc ctcaaaatgt tctttacgat gccattggga tatatcaacg gtggtatatc" +
+"\n     5221 cagtgatttt tttctccatt ttagcttcct tagctcctga aaatctcgat aactcaaaaa" +
+"\n     5281 atacgcccgg tagtgatctt atttcattat ggtgaaagtt ggaacctctt acgtgccgat" +
+"\n     5341 caacgtctca ttttcgccag atatc" +
+"\n\/\/",
+
     j5Parameters: null,
     j5ParameterFields: [],
 
@@ -511,9 +647,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
-
-
-
     },
 
     onDistributePCRBtn: function () {
@@ -615,8 +748,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onPlasmidsItemClick: function (grid, record) {
-
-        var j5Window = Ext.getCmp("mainAppPanel").getActiveTab().j5Window;
+        var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
+        var j5Window = DETab.j5Window;
         var mask = new Ext.LoadMask(j5Window);
 
         mask.setVisible(true, false);
@@ -625,7 +758,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         // openSequence, so we force it to wait a millisecond before calling
         // to give it time to render the loading mask.
         Ext.defer(function() {
-            var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
+            var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", this.SEQDATA, "tester", "");
             Teselagen.manager.ProjectManager.openSequence(newSequence);
 
             mask.setVisible(false);
@@ -634,7 +767,27 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             // the mainAppPanel.
             Ext.getCmp("mainAppPanel").setLoading();
             Ext.getCmp("mainAppPanel").setLoading(false);
-        }, 10);
+
+            // Showing and hiding the loading mask on the mainAppPanel removes
+            // the modal mask which prevented the user from interacting with the
+            // Device Editor panel behind the modal j5Window, so re-display the
+            // j5Window.
+            j5Window.hide();
+            j5Window.show();
+        }, 10, this);
+
+        // Re-displaying the j5Window messes up its layout for some reason, and
+        // calling doLayout fixes it, but only when we are on its parent tab. So
+        // add an event handler to call doLayout on the j5Window when we have
+        // switched to its parent tab.
+        var refreshJ5Window = function(mainAppPanel, newTab, oldTab) {
+            if(newTab === DETab) {
+                j5Window.doLayout();
+                mainAppPanel.un("tabchange", refreshJ5Window);
+            }
+        };
+
+        Ext.getCmp("mainAppPanel").on("tabchange", refreshJ5Window, this);
     },
 
     onCondenseAssembliesBtnClick: function (btn) {
