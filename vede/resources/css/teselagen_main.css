@@ -347,6 +347,11 @@ img {
 .x-css-shadow {
   box-shadow: none !important;
 }
+
+.x-resizable-over .x-resizable-handle-east, .x-resizable-over .x-resizable-handle-west, .x-resizable-pinned .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-west {
+  background-image: none;
+  background: #E0E3E6;
+}
 /*Header*/
 #headerPanel, #headerPanel-body {
   height: 120px !important;
