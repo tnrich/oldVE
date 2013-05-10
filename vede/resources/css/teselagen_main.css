@@ -356,6 +356,22 @@ border-color: #E0E3E6;
   background-image: none;
   background: #E0E3E6;
 }
+
+.x-resizable-over .x-resizable-handle-south, .x-resizable-over .x-resizable-handle-north, .x-resizable-pinned .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-north {
+  background-image: none;
+  background: #E0E3E6;
+}
+
+.x-resizable-over .x-resizable-handle-northwest, .x-resizable-pinned .x-resizable-handle-northwest {
+  background-image: none;
+  background: #E0E3E6;
+}
+
+.x-resizable-over .x-resizable-handle-southwest, .x-resizable-pinned .x-resizable-handle-southwest {
+  background-image: none;
+  background: #E0E3E6;
+}
+
 /*Header*/
 #headerPanel, #headerPanel-body {
   height: 120px !important;
