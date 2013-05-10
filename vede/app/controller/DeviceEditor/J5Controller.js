@@ -511,9 +511,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
-
-
-
     },
 
     onDistributePCRBtn: function () {
@@ -615,8 +612,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onPlasmidsItemClick: function (grid, record) {
-
-        var j5Window = Ext.getCmp("mainAppPanel").getActiveTab().j5Window;
+        var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
+        var j5Window = DETab.j5Window;
         var mask = new Ext.LoadMask(j5Window);
 
         mask.setVisible(true, false);
@@ -634,7 +631,24 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             // the mainAppPanel.
             Ext.getCmp("mainAppPanel").setLoading();
             Ext.getCmp("mainAppPanel").setLoading(false);
-        }, 10);
+        }, 10, this);
+
+        // Showing and hiding the loading mask on the mainAppPanel removes
+        // the modal mask which prevented the user from interacting with the
+        // Device Editor panel behind the modal j5Window, so re-display the
+        // j5Window when it is in view. If you don't wait until the window is in
+        // view, its layout gets all kinda screwed up.
+        var refreshJ5Window = function(mainAppPanel, newTab, oldTab) {
+            if(newTab === DETab) {
+                j5Window.hide();
+                j5Window.show();
+                j5Window.doLayout();
+
+                mainAppPanel.un("tabchange", refreshJ5Window);
+            }
+        };
+
+        Ext.getCmp("mainAppPanel").on("tabchange", refreshJ5Window, this);
     },
 
     onCondenseAssembliesBtnClick: function (btn) {
