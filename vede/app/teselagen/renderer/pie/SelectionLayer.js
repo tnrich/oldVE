@@ -71,5 +71,9 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
             fill: this.self.SELECTION_COLOR,
             "fill-opacity": this.self.SELECTION_TRANSPARENCY
         });
+
+        this.selectionSprite.on("render", function(sprite) {
+            sprite.setStyle("pointer-events", "none");
+        });
     }
 });
