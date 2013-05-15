@@ -52,10 +52,25 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 return data;
             }
         },
-        buildUrl: function() {
-            console.log(this);
-            //return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign", this.url);
-            return Teselagen.manager.SessionManager.buildUserResUrl("/devicedesign", this.url);
+        buildUrl: function(request) {
+            var restParams = "";
+            var idParam = "";
+            var filter = request.operation.filters[0].property;
+            console.log(request);
+            if(filter==="project_id")
+            {
+                var project_id = request.operation.filters[0].value;
+                restParams+= "/"+project_id;
+                delete request.params.filter;
+                if(request.operation.id)
+                {
+                    idParam = "/"+request.operation.id;
+                    delete request.params.id;
+                }
+                return Teselagen.manager.SessionManager.buildUserResUrl("/project"+restParams+"/devicedesigns"+idParam, this.url);
+            }
+
+
         },
         appendId: true,
         noCache: false,

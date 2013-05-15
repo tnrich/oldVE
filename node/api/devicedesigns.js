@@ -80,6 +80,36 @@ module.exports = function(app) {
         });
     });
 
+    // GET DEVICEDESIGNS BY PROJECT_ID
+    app.get('/user/:username/project/:project_id/devicedesigns', restrict, function(req, res) {
+        var Project = app.db.model("project");
+        console.log("DE's by project_id");
+        var project_id = req.params.project_id;
+        Project.findById(project_id).populate({path:'designs', select:'name id project_id'}).exec(function(err, project) {
+            res.json({
+                "design": project.designs
+            });
+        });
+    });
+
+    // GET DEVICEDESIGN BY ID
+    app.get('/user/:username/project/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
+        var DeviceDesign = app.db.model("devicedesign");
+        console.log("DE by id");
+        DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
+            // Eugene rules to be send on a different request
+            delete design.rules;
+
+            if (err) {
+                errorHandler(err, req, res);
+            } else {
+                res.json({
+                    "design": design
+                });
+            }
+        });
+    });
+
     //READ
     app.get('/user/:username/devicedesign', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
