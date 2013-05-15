@@ -6,5 +6,5 @@ node_modules
 *.un~
 # OS generated files #
 ################
-
+log
 .DS_Store

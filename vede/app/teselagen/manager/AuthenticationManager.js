@@ -32,20 +32,27 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
 
     Login: function(cb) {
         var self = this;
-        self.updateSplashScreenMessage("Getting authentication parameters");
-        Ext.Ajax.request({
-            url: "deviceeditor",
-            params: {},
-            method: "GET",
-            success: function(response) {
-                var session = JSON.parse(response.responseText);
-                self.username = session.username;
-                self.sendAuthRequest(session, cb);
-            },
-            failure: function() {
-                Ext.create("Vede.view.AuthWindow").show();
-            }
-        });
+        if(Vede.application.autoCredentialsFetch)
+        {
+            self.updateSplashScreenMessage("Getting authentication parameters");
+            Ext.Ajax.request({
+                url: "deviceeditor",
+                params: {},
+                method: "GET",
+                success: function(response) {
+                    var session = JSON.parse(response.responseText);
+                    self.username = session.username;
+                    self.sendAuthRequest(session, cb);
+                },
+                failure: function() {
+                    Ext.create("Vede.view.AuthWindow").show();
+                }
+            });
+        }
+        else
+        {
+           Ext.create("Vede.view.AuthWindow").show();
+        }
     },
 
     /**
