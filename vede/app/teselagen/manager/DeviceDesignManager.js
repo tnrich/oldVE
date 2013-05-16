@@ -572,10 +572,11 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @param {int} end Genbank end index
      * @param {Boolean} [revComp] Reverse Complement. Default is false.
      * @param {Boolean} [directionForward] Direction Forward. Default is true.
+     * @param {Number} [position] Location for inserting the Part.  Undefined or null will append.
      * @param {String} fas FAS for the part
      * @param {String} iconID (?)
      */
-    createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
+    createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pPos, pFas, pIconID) {
         var part = Ext.create("Teselagen.models.Part", {
             name: pName,
             genbankStartBP: pStart,
@@ -591,8 +592,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             //console.warn("Creating Part: " + err.length + " errors found.");
             //console.warn(err);
         }
-        console.log("Adding part to bin ", pBinIndex);
-        this.addPartToBin(pDevice, part, pBinIndex);
+        this.addPartToBin(pDevice, part, pBinIndex, pPos, pFas);
         
         return part;
     },
