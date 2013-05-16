@@ -39,7 +39,7 @@ Ext.onReady(function() {
         //================================================================
         // DeviceDesign management
         //================================================================
-        xdescribe("DeviceDesign Management", function() {
+        describe("DeviceDesign Management", function() {
             it("createDeviceDesign()", function(){
                 var design = DeviceDesignManager.createDeviceDesign(3);
 
@@ -64,9 +64,12 @@ Ext.onReady(function() {
                 expect(design.getJ5Collection().binCount()).toBe(1);
                 expect(design.getJ5Collection().bins().getAt(0).get("binName")).toBe("newBin");
 
+                // Finding null part name fails so tests below fail
+                expect(design.getJ5Collection().bins().getAt(0).parts().find("name","")).toBe(0);
+
                 expect(design.getJ5Collection().isCircular()).toBe(true);
-                expect(design.getJ5Collection().get("combinatorial")).toBe(true);
                 expect(DeviceDesignManager.setCombinatorial(design)).toBe(true);
+                expect(design.getJ5Collection().get("combinatorial")).toBe(true);
 
                 var err = design.validate();
                 expect(err.length).toBe(0);
@@ -77,7 +80,7 @@ Ext.onReady(function() {
         //================================================================
         // J5Collection management
         //================================================================
-        xdescribe("J5Collection Management", function() {
+        describe("J5Collection Management", function() {
             var design;
             beforeEach(function() {
                 design      = DeviceDesignManager.createDeviceDesign(2);
@@ -200,7 +203,7 @@ Ext.onReady(function() {
         //================================================================
         // J5Bin management
         //================================================================
-        xdescribe("J5Bin Management", function() {
+        describe("J5Bin Management", function() {
             var design, bin1;
             beforeEach(function() {
                 design  = DeviceDesignManager.createDeviceDesign(2);
@@ -372,28 +375,23 @@ Ext.onReady(function() {
         // Parts management
         //================================================================
         describe("Part Management", function() {
-            var bin1, bin2, design, part1, part2;
+            var bin1, bin2, design, part1, part2, part3;
             // Depends on DeviceDesignManager.createDeviceDesignFromBins()
-//            beforeEach(function() {
-                console.log("beforeEach");
-                bin1    = Ext.create("Teselagen.models.J5Bin", {
-                    binName: "newBin1"
-                });
-                bin2    = Ext.create("Teselagen.models.J5Bin", {
-                    binName: "newBin2"
-                });
+            bin1    = Ext.create("Teselagen.models.J5Bin", {
+                binName: "newBin1"
+            });
+            bin2    = Ext.create("Teselagen.models.J5Bin", {
+                binName: "newBin2"
+            });
 
-                design  = DeviceDesignManager.createDeviceDesignFromBins([bin1, bin2]);
+            design  = DeviceDesignManager.createDeviceDesignFromBins([bin1, bin2]);
 
-                console.log(bin1.get("fases"), bin2.get("fases"));
-                part1   = DeviceDesignManager.createPart(design, 0, "newPart1", 1, 10, false, true, "fas", "icon");
-                part2 = Ext.create("Teselagen.models.Part", {
-                    name: "newPart2"
-                });
-                console.log(bin1.get("fases"), bin2.get("fases"));
-//            });
+            part1   = DeviceDesignManager.createPart(design, 0, "newPart1", 1, 10, false, true, null, "fas", "icon");
+            part2 = Ext.create("Teselagen.models.Part", {
+                name: "newPart2"
+            });
 
-            xit("createPart()", function(){
+            it("createPart()", function(){
 
                 expect(part1.get("name")).toBe("newPart1");
                 expect(part1.get("genbankStartBP")).toBe(1);
@@ -403,7 +401,7 @@ Ext.onReady(function() {
                 //expect(err.length).toBe(0);
             });
 
-            xit("isPartInCollection()", function(){
+            it("isPartInCollection()", function(){
                 var present = DeviceDesignManager.isPartInCollection(design, part1);
                 //console.log(design.getJ5Collection().bins().getAt(0).hasPart(part));
                 expect(present).toBe(true);
@@ -412,7 +410,7 @@ Ext.onReady(function() {
                 expect(present).toBe(false);
             });
 
-            xit("getBinAssignment()", function(){
+            it("getBinAssignment()", function(){
                 // is present
                 var index = DeviceDesignManager.getBinAssignment(design, part1);
                 expect(index).toBe(0);
@@ -422,7 +420,7 @@ Ext.onReady(function() {
                 expect(index).toBe(-1);
             });
 
-            xit("isUniquePartName()", function(){
+            it("isUniquePartName()", function(){
                 //Test an existing name
                 var unique = DeviceDesignManager.isUniquePartName(design, "newPart1");
                 expect(unique).toBe(false);
@@ -435,7 +433,7 @@ Ext.onReady(function() {
             it("getPartById()**** UNTESTED until DB is done", function(){
             });
 
-            xit("getPartByName()", function(){
+            it("getPartByName() should find part with given name", function(){
                 var tmpPart = DeviceDesignManager.getPartByName(design, "newPart1");
                 expect(tmpPart.get("endBP")).toBe(10);
             });
@@ -445,32 +443,30 @@ Ext.onReady(function() {
                 var design2 = DeviceDesignManager.createDeviceDesign(2);
                 var bin20 = design2.getJ5Collection().bins().getAt(0);
                 var bin21 = design2.getJ5Collection().bins().getAt(1);
-                console.log(bin21);
-                xit("Append part to second bin", function() {
+                it("Append part to second bin", function() {
                     success = DeviceDesignManager.addPartToBin(design2, part2, 1);
                     expect(success).toBe(true);
                     expect (bin20.parts().count()).toBe(0);
                     expect (bin21.parts().count()).toBe(1);
                     expect(bin21.parts().getAt(0).get("name")).toBe("newPart2");
-                    console.log(bin21.get("fases"));
                     expect(bin21.get("fases").length).toBe(1);
                     expect(bin21.get("fases")[0]).toBe("None");
                 });
-                xit("Insert part at index 0 of second bin", function() {
+                it("Insert part at index 0 of second bin", function() {
                     success = DeviceDesignManager.addPartToBin(design2, part1, 1, 0);
                     expect(success).toBe(true);
                     expect (bin21.parts().count()).toBe(2);
                     expect(bin21.parts().getAt(0).get("name")).toBe("newPart1");
                 });
-                xit("Should return false if bin index greater than n-1", function() {
+                it("Should return false if bin index greater than n-1", function() {
                     success = DeviceDesignManager.addPartToBin(design2, part2, 5, 0);
                     expect(success).toBe(false);
                 });
-                xit("Should return false if bin index is < 0", function() {
+                it("Should return false if bin index is < 0", function() {
                     success = DeviceDesignManager.addPartToBin(design2, part2, -1, 0);
                     expect(success).toBe(false);
                 });
-                xit("Should return false if part index is < 0", function() {
+                it("Should return false if part index is < 0", function() {
                     success = DeviceDesignManager.addPartToBin(design2, part2, 0, -1);
                     expect(success).toBe(false);
                 });
@@ -497,7 +493,7 @@ Ext.onReady(function() {
         //================================================================
         // SequenceFile Management
         //================================================================
-        xdescribe("SequenceFile Management", function() {
+        describe("SequenceFile Management", function() {
             var bin1, design, part1, part2, seq1, seq2;
             // Depends on   DeviceDesignManager.createDeviceDesignFromBins()
             //              DeviceDesignManager.createPart()
@@ -509,7 +505,7 @@ Ext.onReady(function() {
 
                 design  = DeviceDesignManager.createDeviceDesignFromBins([bin1]);
 
-                part1   = DeviceDesignManager.createPart(design, 0, "newPart1", 1, 10, false, true, "fas", "icon");
+                part1   = DeviceDesignManager.createPart(design, 0, "newPart1", 1, 10, false, true, null, "fas", "icon");
                 part2 = Ext.create("Teselagen.models.Part", {
                     name: "newPart2"
                 });
@@ -640,15 +636,15 @@ Ext.onReady(function() {
         //================================================================
         // EugeneRule Management
         //================================================================
-        xdescribe("EugeneRules Management", function() {
+        describe("EugeneRules Management", function() {
             var design, name1, negOp, operand1, compOp, operand2, rule1, rule2;
             beforeEach(function() {
                 design      = DeviceDesignManager.createDeviceDesign(2);
                 name1       = "rule1";
                 negOp       = true;
-                operand1    = DeviceDesignManager.createPart(design, 0, "operand1", 1, 10, false, true, "fas", null);
+                operand1    = DeviceDesignManager.createPart(design, 0, "operand1", 1, 10, false, true, null, "fas", null);
                 compOp      = "AFTER";
-                operand2    = DeviceDesignManager.createPart(design, 1, "operand2", 2, 20, false, true, "fas", null);
+                operand2    = DeviceDesignManager.createPart(design, 1, "operand2", 2, 20, false, true, null, "fas", null);
 
                 // Rule that is already in the design, with 2 parts
                 rule1 = DeviceDesignManager.createEugeneRule(design, name1, negOp, operand1, compOp, operand2);

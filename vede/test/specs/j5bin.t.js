@@ -187,6 +187,10 @@ Ext.onReady(function() {
             expect(bin.partCount()).toBe(0);
         });
 
+        it("getPartByName should find part with given name");
+
+        it("getPartByName should find part with null name");
+        
         xit("getPartById() -- THIS WILL NOT WORK UNTIL RODRIGO/MONGO'S ID GENERATOR WORKS", function(){
             var part1   = Ext.create("Teselagen.models.Part");
             var part2   = Ext.create("Teselagen.models.Part");
