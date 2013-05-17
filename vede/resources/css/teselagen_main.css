@@ -72,7 +72,8 @@ img {
 }
 
 .x-panel-header-default-framed-collapsed-right {
-  background: #E0E3E6;
+  background: #ECF0F2;
+  border-color: #EBEBEB;
   border-radius: 0;
 }
 
@@ -475,7 +476,7 @@ border-radius: 4px;
 
 #ProjectPanel-placeholder {
   border-top-right-radius: 4px;
-  background: #E0E3E6;
+  background: #ECF0F1;
   border-color: #EBEBEB;
 }
 
