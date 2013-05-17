@@ -159,24 +159,26 @@ Ext.onReady(function() {
             });
         });
         
-        it("removeFromParts()", function(){
+        xit("removeFromParts()", function(){
             var part1   = Ext.create("Teselagen.models.Part");
             var part2   = Ext.create("Teselagen.models.Part");
-
             var bin     = Ext.create("Teselagen.models.J5Bin", {
                 iconID:null
             });
+            var fases = bin.get("fases");
             bin.setProxy(modelProxy);
             bin.addToParts([part1, part2]);
 
             expect(bin.partCount()).toBe(2);
             expect(bin.parts().getAt(0)).toBe(part1);
             expect(bin.parts().getAt(1)).toBe(part2);
+            expect(fases.length).toBe(2);
 
             var success = bin.removeFromParts(part1);
             expect(success).toBe(true);
             expect(bin.partCount()).toBe(1);
             expect(bin.parts().getAt(0)).toBe(part2);
+            expect(fases.length).toBe(1);
 
             // should fail to remove it again
             success = bin.removeFromParts(part1);
@@ -185,11 +187,30 @@ Ext.onReady(function() {
             success = bin.removeFromParts(part2);
             expect(success).toBe(true);
             expect(bin.partCount()).toBe(0);
+            expect(fases.length).toBe(0);
         });
 
-        it("getPartByName should find part with given name");
+        it("getPartByName should find part with given name", function() {
+            var part1   = Ext.create("Teselagen.models.Part", {name:"foo"});
+            var part2   = Ext.create("Teselagen.models.Part", {name:"foo2"});
+            var bin     = Ext.create("Teselagen.models.J5Bin", {
+                iconID:null
+            });
+            bin.addToParts([part1, part2]);
+            var part = bin.getPartByName("foo2");
+            expect(part.get("name")).toBe("foo2");
+        });
 
-        it("getPartByName should find part with null name");
+        it("getPartByName should find part with null name", function() {
+            var part1   = Ext.create("Teselagen.models.Part", {name:"foo"});
+            var part2   = Ext.create("Teselagen.models.Part", {name:""});
+            var bin     = Ext.create("Teselagen.models.J5Bin", {
+                iconID:null
+            });
+            bin.addToParts([part1, part2]);
+            var part = bin.getPartByName("");
+            expect(part.get("name")).toBe("");
+        });
         
         xit("getPartById() -- THIS WILL NOT WORK UNTIL RODRIGO/MONGO'S ID GENERATOR WORKS", function(){
             var part1   = Ext.create("Teselagen.models.Part");
