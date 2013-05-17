@@ -173,7 +173,7 @@ Ext.define("Teselagen.models.J5Bin", {
 
     /**
      * Adds a Part into the parts store.
-     * @param {Teselagen.models.Part} part Can be a single part or an array of parts.
+     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
      * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
      * @param {String} [fas] FAS for the part. Defaults to "None".
      * @returns {Boolean} True if added, false if not.
@@ -209,19 +209,16 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.models.Part} pPart
      * @returns {Boolean} True if removed, false if not.
      */
-    removeFromParts: function(pPart) {
-        var removed = false;
-
-        var cnt = this.partCount();
-        //Ext.Array.remove(this.parts(), pPart);
-        this.parts().remove(pPart);
-
-        var newCnt  = this.partCount();
-        if (newCnt < cnt) {
-            removed = true;
-        }
-        return removed;
-    },
+//    removeFromParts: function(pPart) {
+//        var removed = false;
+//        var index = this.parts().indexOf(pPart);
+//        if (index >= 0) {
+//            this.parts().remove(pPart);
+//            this.get("fases").splice(index, 1);
+//            removed = true;
+//        }
+//        return removed;
+//    },
 
     // =============================================
     // METHODS FROM PartProxy.as / PartManager.js
@@ -284,9 +281,6 @@ Ext.define("Teselagen.models.J5Bin", {
             deleted = true;
         }
         return deleted;
-
-        // Refresh all parts (to change colors, etc)
-        // DW: NEED TO FIRE EVENT TO REFRESH THE VIEW.
     },
     
 
