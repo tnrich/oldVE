@@ -78,8 +78,8 @@ Ext.onReady(function() {
         });
 
         describe("addToParts", function() {
-            it("Should be able to add parts to a bin", function(){
-                var success;
+            var success;
+            it("Should be able to add parts individually to a bin", function(){
                 var part1   = Ext.create("Teselagen.models.Part");
                 var part2   = Ext.create("Teselagen.models.Part");
                 var part3   = Ext.create("Teselagen.models.Part");
@@ -122,6 +122,43 @@ Ext.onReady(function() {
                 expect(bin.parts().getAt(1)).toBe(part2);
                 expect(bin.get("fases")[0]).toBe("None");
                 expect(bin.get("fases")[1]).toBe("fas1");
+            });
+            it("Should be able to append an array of parts and implicit array of fas", function() {
+                var part1   = Ext.create("Teselagen.models.Part");
+                var part2   = Ext.create("Teselagen.models.Part");
+                var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
+                success = bin.addToParts([part1, part2]);
+                expect(success).toBe(true);
+                expect(bin.partCount()).toBe(2);
+                var fases = bin.get("fases");
+                expect(fases.length).toBe(2);
+                expect(fases[1]).toBe("None");
+            });
+            it("Should be able to append an array of parts and array of fas", function() {
+                var part1   = Ext.create("Teselagen.models.Part");
+                var part2   = Ext.create("Teselagen.models.Part");
+                var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
+                success = bin.addToParts([part1, part2], null, ["fas1", "fas2"]);
+                expect(success).toBe(true);
+                expect(bin.partCount()).toBe(2);
+                var fases = bin.get("fases");
+                expect(fases.length).toBe(2);
+                expect(fases[1]).toBe("fas2");
+            });
+            it("Should be able to insert an array of parts and array of fas", function() {
+                var part1   = Ext.create("Teselagen.models.Part", {name:"part1"});
+                var part2   = Ext.create("Teselagen.models.Part", {name:"part2"});
+                var part3   = Ext.create("Teselagen.models.Part", {name:"part3"});
+                var bin     = Ext.create("Teselagen.models.J5Bin", {iconID:null});
+                bin.addToParts(part1);
+                // Insert array before first part
+                success = bin.addToParts([part2, part3], 0, ["fas2", "fas3"]);
+                expect(success).toBe(true);
+                expect(bin.partCount()).toBe(3);
+                expect(bin.parts().getAt(1).get("name")).toBe("part3")
+                var fases = bin.get("fases");
+                expect(fases.length).toBe(3);
+                expect(fases[1]).toBe("fas3");
             });
             it("Should return false if part index is negative", function() {
                 var part1   = Ext.create("Teselagen.models.Part");

@@ -175,28 +175,38 @@ Ext.define("Teselagen.models.J5Bin", {
      * Adds a Part into the parts store.
      * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
      * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
-     * @param {String} [fas] FAS for the part. Defaults to "None".
+     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
      * @returns {Boolean} True if added, false if not.
      */
     addToParts: function(pPart, pPosition, pFas) {
         var added = false;
-        var fas = Teselagen.constants.Constants.FAS.NONE;
+        var fasNone = Teselagen.constants.Constants.FAS.NONE;
+        var fas = fasNone;
         var fases = this.get("fases");
-
+        var isArray = Ext.isArray(pPart);
+        
         if (!Ext.isEmpty(pFas)) {
             fas = pFas;
+        }
+        else {
+            if (isArray) {
+                fas = [];
+                for (var i=0; i < pPart.length; i++) {
+                    fas.push(fasNone);
+                }
+            }
         }
         if (!Ext.isEmpty(pPosition)) {
             if (Ext.isNumber(pPosition) && pPosition >= 0) {
                 this.parts().insert(pPosition, pPart);
-                fases.splice(pPosition, 0, fas);
+                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
                 added = true;
             } else {
                 console.warn("Invalid part index:", pPosition);
             }
         } else {
             this.parts().add(pPart);
-            fases.push(fas);
+            this.set("fases", fases.concat(fas));
             added = true;
         }
 
