@@ -103,6 +103,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /** (Untested)
      * Get number of bins in J5Bin.
+     * @member Teselagen.models.DeviceDesign
      * @returns {Number}
      */
     getBinCount: function() {
@@ -146,7 +147,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /**
      * Adds a EugeneRule into the Rules Store.
-     * @param {Teselagen.models.EugeneRule} pRule. Can be a single part or an array of parts.
+     * @param {Teselagen.models.EugeneRule} pRule. Can be a single rule or an array of rules.
      * @returns {Boolean} True if added, false if not.
      */
     addToRules: function(pRule) {
@@ -162,7 +163,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     /**
      * Removes a EugeneRule from the Rules Store.
-     * @param {Teselagen.models.EugeneRule} pRule. Can be a single part or an array of parts.
+     * @param {Teselagen.models.EugeneRule/Teselagen.models.EugeneRule[]} rule Can be a single rule or an array of rules.
      * @returns {Boolean} True if removed, false if not.
      */
     removeFromRules: function(pRule) {
@@ -189,10 +190,10 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     /**
-     * Returns the EugeneRules Store of EugeneRules that containt the Part in either operand.
+     * Returns the EugeneRules Store of EugeneRules that contain the Part in either operand.
      *
      * @param {Teselagen.models.Part} pPart
-     * @return {Teselagen.models.EugeneRule[]} Array of EugeneRules containing pPart
+     * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
         this.rules().clearFilter();
@@ -222,7 +223,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
     },
 
     /**
-     * Checks to see if a given name is unique within the Rules names.
+     * Checks to see if a given name is unique within the Rules.
      * @param {String} pName Name to check against Rules.
      * @returns {Boolean} True if unique, false if not.
      */
