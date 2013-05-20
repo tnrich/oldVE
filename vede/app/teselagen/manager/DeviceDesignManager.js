@@ -763,11 +763,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         } else {
             j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
         }
-        //var removed = j5Bin.removeFromParts(pPart);
         var deleted = j5Bin.deletePart(pPart, pDevice);
         return deleted;
-
-        //return pDevice.removePartFromBin(pPart, pBinIndex);
     },
 
     /**
