@@ -132,7 +132,7 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     /**
-     * Model constructor.  
+     * Model constructor.
      * Needed to set fases array so that it will create an instance variable.
      */
     constructor: function(pCfg) {
@@ -268,11 +268,11 @@ Ext.define("Teselagen.models.J5Bin", {
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
      * No need to actually delete SequenceFiles or Parts.
      * @param {Teselagen.models.Part} pPart Part to be deleted.
-     * @param {Teselagen.models.DeviceDesign}
+     * @param {Teselagen.models.DeviceDesign} deviceDesign
      * @returns {Boolean} True if removed, false if not.
      */
     deletePart: function(pPart, pDeviceDesign) {
-        var cnt = this.partCount(); //this.parts().count()
+        var cnt = this.partCount();
         var deleted = false;
 
         for (var i = 0; i < cnt; i++) {
@@ -280,10 +280,10 @@ Ext.define("Teselagen.models.J5Bin", {
                 // want to delete this Part
 
                 var rulesToDelete = pDeviceDesign.getRulesInvolvingPart(pPart);
-                //console.log(rulesToDelete);
-                pDeviceDesign.removeFromRules(rulesToDelete);
+                pDeviceDesign.removeFromRules(rulesToDelete.getRange());
 
                 this.parts().removeAt(i);
+                this.get("fases").splice(i, 1);
             }
         }
         var newCnt  = this.partCount();
