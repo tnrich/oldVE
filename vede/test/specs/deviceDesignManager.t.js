@@ -473,12 +473,14 @@ Ext.onReady(function() {
             });
 
             it("removePartFromBin()", function(){
-
+                var bin0 = design.getJ5Collection().bins().getAt(0);
                 // Remove a part in a bin
-                expect(design.getJ5Collection().bins().getAt(0).parts().count()).toBe(1);
+                expect(bin0.parts().count()).toBe(1);
+                expect(bin0.get("fases").length).toBe(1);
                 var success = DeviceDesignManager.removePartFromBin(design, part1, 0);
-                expect(design.getJ5Collection().bins().getAt(0).parts().count()).toBe(0);
                 expect(success).toBe(true);
+                expect(bin0.parts().count()).toBe(0);
+                expect(bin0.get("fases").length).toBe(0);
 
                 // Remove a nonexisting part in a bin
                 success = DeviceDesignManager.removePartFromBin(design, part1, 1);

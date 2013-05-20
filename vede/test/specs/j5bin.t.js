@@ -238,17 +238,6 @@ Ext.onReady(function() {
             expect(part.get("name")).toBe("foo2");
         });
 
-        it("getPartByName should find part with null name", function() {
-            var part1   = Ext.create("Teselagen.models.Part", {name:"foo"});
-            var part2   = Ext.create("Teselagen.models.Part", {name:""});
-            var bin     = Ext.create("Teselagen.models.J5Bin", {
-                iconID:null
-            });
-            bin.addToParts([part1, part2]);
-            var part = bin.getPartByName("");
-            expect(part.get("name")).toBe("");
-        });
-        
         xit("getPartById() -- THIS WILL NOT WORK UNTIL RODRIGO/MONGO'S ID GENERATOR WORKS", function(){
             var part1   = Ext.create("Teselagen.models.Part");
             var part2   = Ext.create("Teselagen.models.Part");
@@ -286,7 +275,7 @@ Ext.onReady(function() {
                 iconID:null
             });
             bin.setProxy(modelProxy);
-            bin.addToParts([part1, part2]);
+            bin.addToParts([part1, part2], null, ["fas1", "fas2"]);
 
             // Create a Device with eugene rules that include the parts
             var device  = Ext.create("Teselagen.models.DeviceDesign");
@@ -303,6 +292,8 @@ Ext.onReady(function() {
             // Check New Structure
             expect(bin.parts().count()).toBe(1);
             expect(bin.parts().getAt(0)).toBe(part2);
+            expect(bin.get("fases").length).toBe(1);
+            expect(bin.get("fases")[0]).toBe("fas2");
             expect(device.rules().count()).toBe(0);
         });
 
