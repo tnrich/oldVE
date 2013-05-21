@@ -262,6 +262,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
         var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
+        var fasCombobox = fasForm.down("combobox");
         var fasArray = [];
 
         openPartLibraryBtn.enable();
