@@ -233,6 +233,20 @@ Ext.define("Teselagen.models.J5Bin", {
     // =============================================
     // METHODS FROM PartProxy.as / PartManager.js
 
+    /**
+     * Returns FAS for a part
+     * @param {Number} index Part index
+     * @returns {String} Null if not found.
+     */
+    getFas: function(pIndex) {
+        var fas = this.get("fases")[pIndex];
+        if (!fas) {
+            console.warn("Invalid part index:", pIndex);
+            fas = null;
+        }
+        return fas;
+    },
+    
     /** (From PartProxy)
      * Returns first matching Part with given Id number.
      * @param {Number} pId Index of Part in Bin.
