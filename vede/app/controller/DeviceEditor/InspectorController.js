@@ -15,8 +15,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     columnsGrid: null,
     eugeneRulesGrid: null,
     inspector: null,
+    selectedBin: null,
     selectedPart: null,
     selectedBinIndex: null,
+    selectedPartIndex: null,
     tabPanel: null,
 
     findBinByPart:function(findingPart,cb){
@@ -255,6 +257,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartSelected: function (j5Part, binIndex) {
 
         this.selectedBinIndex = binIndex;
+        this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -288,6 +291,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         // blank part and load it into the form.
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
+            this.selectedPartIndex = this.DeviceDesignManager.getPartIndex(this.selectedBin, j5Part);
 
             j5Part.getSequenceFile({
                 callback: function(sequenceFile){
@@ -310,21 +314,23 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
             });
 
-            if(j5Part.get("fas") === "") {
-                fasForm.down("combobox").setValue("None");
-            } else {
-                fasForm.loadRecord(j5Part);
-            }
+//            if(j5Part.get("fas") === "") {
+//                fasForm.down("combobox").setValue("None");
+//            } else {
+//                fasForm.loadRecord(j5Part);
+//            }
+            fasCombobox.setValue(this.selectedBin.getFas(this.selectedPartIndex));
             this.selectedPart = j5Part;
         } else {
             var newPart = Ext.create("Teselagen.models.Part");
             partPropertiesForm.loadRecord(newPart);
 
-            if(newPart.get("fas") === "") {
-                fasForm.down("combobox").setValue("None");
-            } else {
-                fasForm.loadRecord(newPart);
-            }
+//            if(newPart.get("fas") === "") {
+//                fasForm.down("combobox").setValue("None");
+//            } else {
+//                fasForm.loadRecord(newPart);
+//            }
+            fasCombobox.setValue("None");
             
             changePartDefinitionBtn.disable();
             changePartDefinitionBtn.addCls('btnDisabled');
@@ -365,7 +371,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onBinSelected: function (j5Bin) {
         var selectionModel = this.columnsGrid.getSelectionModel();
         var selectedPart = this.columnsGrid.getSelectionModel().getSelection()[0];
-
+        this.selectedBin = j5Bin;
         this.inspector.setActiveTab(1);
 
         //console.log(selectedPart);
@@ -381,11 +387,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     updateColumnContentDisplayField: function(j5Bin) {
         var contentField = this.inspector.down("displayfield[cls='columnContentDisplayField']");
         var contentArray = [];
-
-        j5Bin.parts().each(function (part) {
+        j5Bin.parts().each(function(part, i) {
             contentArray.push(part.get("name"));
             contentArray.push(": ");
-            contentArray.push(part.get("fas"));
+            contentArray.push(j5Bin.getFas(i));
             contentArray.push("<br>");
         });
 
