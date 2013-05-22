@@ -314,22 +314,16 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
             });
 
-//            if(j5Part.get("fas") === "") {
-//                fasForm.down("combobox").setValue("None");
-//            } else {
-//                fasForm.loadRecord(j5Part);
-//            }
-            fasCombobox.setValue(this.selectedBin.getFas(this.selectedPartIndex));
+            if(j5Part.get("fas") === "") {
+                fasForm.down("combobox").setValue("None");
+            } else {
+                fasForm.loadRecord(j5Part);
+            }
+//            fasCombobox.setValue(this.selectedBin.getFas(this.selectedPartIndex));
             this.selectedPart = j5Part;
         } else {
             var newPart = Ext.create("Teselagen.models.Part");
             partPropertiesForm.loadRecord(newPart);
-
-//            if(newPart.get("fas") === "") {
-//                fasForm.down("combobox").setValue("None");
-//            } else {
-//                fasForm.loadRecord(newPart);
-//            }
             fasCombobox.setValue("None");
             
             changePartDefinitionBtn.disable();
@@ -390,7 +384,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         j5Bin.parts().each(function(part, i) {
             contentArray.push(part.get("name"));
             contentArray.push(": ");
-            contentArray.push(j5Bin.getFas(i));
+            contentArray.push(part.get("fas"));
+//            contentArray.push(j5Bin.getFas(i));
             contentArray.push("<br>");
         });
 

@@ -53,7 +53,7 @@ Ext.define("Teselagen.models.Part", {
         {name: "eugenerule_id",        type: "long"},
         {name: "sequencefile_id",        type: "long"},
         {name: "directionForward",  type: "boolean",    defaultValue: true},
-//        {name: "fas",               type: "string",     defaultValue: "None"},
+        {name: "fas",               type: "string",     defaultValue: "None"},
         {
             name: "name",
             convert: function(v, record) {
