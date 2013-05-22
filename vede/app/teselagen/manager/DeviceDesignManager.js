@@ -768,6 +768,17 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Returns index of given part in bin.
+     * @param {Teselagen.models.Bin} bin
+     * @param {Teselagen.models.Part} part
+     * @returns {Number} Index of part or -1 if not found.
+     */
+    getPartIndex: function(pBin, pPart) {
+        var index = pBin.parts().indexOf(j5Part);
+        return index;
+    },
+    
+    /**
      * Set the Start index for a Part
      * @param {Teselagen.models.Part} pPart
      * @param {Number} pStart The start index, from 1 to length of the sequence, to set the start BP.
