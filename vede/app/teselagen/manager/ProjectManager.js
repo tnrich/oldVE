@@ -94,6 +94,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                         modelId: selectedDEProject.data.id
                     })).show();
                     Vede.application.fireEvent("loadEugeneRules");
+                    Vede.application.fireEvent("checkJ5Ready");
                     Ext.getCmp('projectTreePanel').expandPath('/root/' + selectedDEProject.data.project_id + '/' + selectedDEProject.data.id);
                 }
             });

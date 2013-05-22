@@ -248,15 +248,17 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var combo   = false;
 
         if (collection === null || collection === undefined) {
+            console.log('a');
             return combo;
         } else if (collection.bins() === null || collection.bins() === undefined) {
             return combo;
+            console.log('b');
         } else {
             for (var i = 0; i < collection.bins().count(); i++) {
-                if (collection.bins().getAt(i).getPartByName("") != null) {
-                    if (collection.bins().getAt(i).parts().count() > 1) {
+                if (collection.bins().getAt(i).parts().count() > 1) {
+                    console.log(collection.bins().getAt(i).parts().count());
+                    console.log('c');
                     combo = true;
-                }
                 }
             collection.set("combinatorial", combo);
             return combo;

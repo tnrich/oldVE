@@ -72,6 +72,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
         var j5collection = tab.model.getDesign().getJ5Collection();
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
+        var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
             j5collection.bins().each(function(bin,binKey){
@@ -88,6 +89,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
                 } else {
                     j5ReadyField.setFieldStyle("color:red");
+                }
+            if (combinatorial == true) {
+                    combinatorialField.setFieldStyle("color:purple");
+                } else {
+                    combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
                 }
 
             if (typeof(cb) == "function") {cb(combinatorial,j5ready);}
