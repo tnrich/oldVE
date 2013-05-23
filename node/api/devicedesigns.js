@@ -3,7 +3,8 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
     //CREATE
-    app.post('/users/:username/devicedesigns', function(req, res) {
+
+    app.post('/users/:username/projects/:project_id/devicedesigns', function(req, res) {
 
         var Project = app.db.model("project");
         var DeviceDesign = app.db.model("devicedesign");
@@ -69,7 +70,7 @@ module.exports = function(app) {
     //READ EUGENE RULES
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/eugenerules', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
-        DeviceDesign.findById(req.query.id).exec(function(err, design) {
+        DeviceDesign.findById(req.params.devicedesign_id).exec(function(err, design) {
             if (err) {
                 errorHandler(err, req, res);
             } else {

@@ -45,7 +45,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 return Teselagen.manager.SessionManager.buildUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
             }
             */
-                return Teselagen.manager.SessionManager.buildUrl("/sequences", this.url);
+                return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
 
 
         },

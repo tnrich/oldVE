@@ -78,13 +78,14 @@ Ext.define("Teselagen.models.DeviceDesign", {
             {
                 // Execute operation on specific record
                 console.log("Specific record");
+                console.log(request);
                 if(request.records)
                 {
                     if(request.records[0])
                     {
-                        console.log(request.records[0]);
+                        //console.log(request.records[0]);
                         restParams = "/" + request.records[0].data.project_id;
-                        idParam = "/" + request.records[0].data.id;
+                        idParam = (request.action === "create")? "" : "/" + request.records[0].data.id;
                         return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);                        
                     }
                 }
