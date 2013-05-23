@@ -30,6 +30,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 var binsTempArray = [];
 
+                // Get part ids
                 record.getJ5Collection().bins().each(function(bin,binKey){
                     var partsTempArray = [];
                     bin.parts().each(function(part){
@@ -40,6 +41,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 data.j5collection.bins.forEach(function(bin,binKey){
                     bin.parts.forEach(function(part,partKey){
+                        bin.fases[partKey] = part.fas;
                         delete data.j5collection.bins[binKey].parts;
                         data.j5collection.bins[binKey].parts = binsTempArray[binKey];
                     });
