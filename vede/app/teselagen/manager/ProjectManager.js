@@ -21,6 +21,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     /**
      * Load User Info
+     * @member Teselagen.manager.ProjectManager
      */
     loadUser: function () {
         var d = Ext.get("headerUserIcon");
