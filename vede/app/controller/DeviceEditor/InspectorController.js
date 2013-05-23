@@ -862,6 +862,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on("ReRenderDECanvas", this.onReRenderDECanvasEvent, this);
 
+        this.application.on("OpenPartLibrary", this.onopenPartLibraryBtnClick, this);
+
         this.application.on("checkj5Ready", this.onCheckj5Ready, this);
 
         this.application.on("partSelected",
