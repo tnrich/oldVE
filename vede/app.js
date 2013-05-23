@@ -2,6 +2,7 @@ var splashscreen;
 
 /*global console*/
 Ext.Loader.setConfig({
+    disableCaching: false,
     enabled: true,
     paths: {
         Ext: '.',

@@ -3,7 +3,7 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
    // Add new Project to Current User
-    app.post('/user/:username/projects', restrict, function(req, res) {
+    app.post('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         var newProject = new Project({
             name: req.body.name,
@@ -23,7 +23,7 @@ module.exports = function(app) {
     });
 
     // Update Project to Current User
-    app.put('/user/:username/projects', restrict, function(req, res) {
+    app.put('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         Project.findById(req.body.id, function(err, proj) {
             if (err || !proj) return res.json({
@@ -39,7 +39,7 @@ module.exports = function(app) {
     });
 
     // Delete Project
-    app.delete('/user/:username/projects', restrict, function(req, res) {
+    app.delete('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         if (req.body.id) {
             Project.findById(req.body.id, function(err, proj) {
@@ -61,7 +61,7 @@ module.exports = function(app) {
     });
 
     // Get User Projects
-    app.get('/user/:username/projects', restrict, function(req, res) {
+    app.get('/users/:username/projects', restrict, function(req, res) {
         var User = app.db.model("User");
         User.findById(req.user._id).populate('projects')
             .exec(function(err, user) {

@@ -55,10 +55,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
         buildUrl: function(request) {
             var restParams = "";
             var idParam = "";
-            var filter = request.operation.filters[0].property;
-            console.log(request);
+            var filter = "";
+            if(request.operation.filters)
+            {
+                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+            }
+            //console.log(request);
             if(filter==="project_id")
             {
+                console.log("By project");
                 var project_id = request.operation.filters[0].value;
                 restParams+= "/"+project_id;
                 delete request.params.filter;
@@ -67,7 +72,22 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     idParam = "/"+request.operation.id;
                     delete request.params.id;
                 }
-                return Teselagen.manager.SessionManager.buildUserResUrl("/project"+restParams+"/devicedesigns"+idParam, this.url);
+                return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
+            }
+            else
+            {
+                // Execute operation on specific record
+                console.log("Specific record");
+                if(request.records)
+                {
+                    if(request.records[0])
+                    {
+                        console.log(request.records[0]);
+                        restParams = "/" + request.records[0].data.project_id;
+                        idParam = "/" + request.records[0].data.id;
+                        return Teselagen.manager.SessionManager.buildUserResUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);                        
+                    }
+                }
             }
 
 

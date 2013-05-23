@@ -19,9 +19,36 @@ Ext.define("Teselagen.models.SequenceFile", {
         writer: {
             type: "json"
         },
-        buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
-        }
+        buildUrl: function(request) {
+            var restParams = "";
+            var idParam = "";
+            var filter = "";
+
+            console.log(request);
+            /*
+            if(request.operation.filters)
+            {
+                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+            }
+            //console.log(request);
+            if(filter==="project_id")
+            {
+                console.log("By sequence");
+                var project_id = request.operation.filters[0].value;
+                restParams+= "/"+project_id;
+                delete request.params.filter;
+                if(request.operation.id)
+                {
+                    idParam = "/"+request.operation.id;
+                    delete request.params.id;
+                }
+                return Teselagen.manager.SessionManager.buildUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
+            }
+            */
+                return Teselagen.manager.SessionManager.buildUrl("/sequences", this.url);
+
+
+        },
     },
 
     /**

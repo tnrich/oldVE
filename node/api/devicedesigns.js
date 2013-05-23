@@ -3,7 +3,7 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
 
     //CREATE
-    app.post('/user/:username/devicedesign', function(req, res) {
+    app.post('/users/:username/devicedesigns', function(req, res) {
 
         var Project = app.db.model("project");
         var DeviceDesign = app.db.model("devicedesign");
@@ -33,14 +33,14 @@ module.exports = function(app) {
     });
 
     //UPDATE/CREATE
-    app.put('/user/:username/devicedesign', function(req, res) {
+    app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         var Part = app.db.model("part");
 
         var id = req.body.id;
         var model = req.body;
 
-        DeviceDesign.findById(id, function(err, devicedesign) {
+        DeviceDesign.findById(req.params.devicedesign_id, function(err, devicedesign) {
 
             for (var prop in model) {
                 devicedesign[prop] = model[prop];
@@ -67,7 +67,7 @@ module.exports = function(app) {
     });
 
     //READ EUGENE RULES
-    app.get('/user/projects/deprojects/devicedesign/eugenerules', restrict, function(req, res) {
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/eugenerules', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.query.id).exec(function(err, design) {
             if (err) {
@@ -81,7 +81,7 @@ module.exports = function(app) {
     });
 
     // GET DEVICEDESIGNS BY PROJECT_ID
-    app.get('/user/:username/project/:project_id/devicedesigns', restrict, function(req, res) {
+    app.get('/users/:username/projects/:project_id/devicedesigns', restrict, function(req, res) {
         var Project = app.db.model("project");
         console.log("DE's by project_id");
         var project_id = req.params.project_id;
@@ -93,7 +93,7 @@ module.exports = function(app) {
     });
 
     // GET DEVICEDESIGN BY ID
-    app.get('/user/:username/project/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
+    app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         console.log("DE by id");
         DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
@@ -111,7 +111,7 @@ module.exports = function(app) {
     });
 
     //READ
-    app.get('/user/:username/devicedesign', restrict, function(req, res) {
+    app.get('/users/:username/devicedesigns', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         var Project = app.db.model("project");
 

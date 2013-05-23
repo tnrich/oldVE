@@ -2,7 +2,7 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
-    app.get('/user/:username', restrict, function(req, res) {
+    app.get('/users/:username', restrict, function(req, res) {
         var User = app.db.model("User");
         User.findById(req.user._id).populate('projects')
             .exec(function(err, user) {
@@ -19,7 +19,7 @@ module.exports = function(app) {
 
 
     // Update user
-    app.put('/user/:username', restrict, function(req, res) {
+    app.put('/users/:username', restrict, function(req, res) {
         res.json({});
     });
 };

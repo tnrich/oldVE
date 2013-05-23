@@ -14,7 +14,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         var deproject_id = currentProject.data.id;
         var self = this;
         Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign/eugenerules", ''),
+            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/000/devicedesigns/000/eugenerules", ''),
             method: 'GET',
             params: {
                 id: deproject_id

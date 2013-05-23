@@ -47,7 +47,7 @@ Ext.define("Teselagen.manager.SessionManager", {
      * @param {String} pDefault The default URL used for testing environment.
      */
     buildUserResUrl: function(pAction, pDefault) {
-        var url = this.baseURL + "user/" + this.config.baseUser + pAction;
+        var url = this.baseURL + "users/" + this.config.baseUser + pAction;
         if (this.getEnv() === this.constants.ENV_TEST) {
             url = pDefault;
         }
