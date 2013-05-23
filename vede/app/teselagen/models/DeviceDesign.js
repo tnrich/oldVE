@@ -15,7 +15,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
         url: "/vede/test/data/json/getDeviceDesign.json",
         reader: {
             type: "json",
-            root: "design"
+            root: "design",
+            getRecords: function(pData) {
+                console.log(pData);
+                return this.superclass.getRecords(pData);
+            }
         },
         writer: {
             type: "json",
