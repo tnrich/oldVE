@@ -774,7 +774,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Number} Index of part or -1 if not found.
      */
     getPartIndex: function(pBin, pPart) {
-        var index = pBin.parts().indexOf(j5Part);
+        var index = pBin.parts().indexOf(pPart);
         return index;
     },
     
