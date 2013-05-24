@@ -101,7 +101,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 model: selectedDesign,
                 modelId: selectedDesign.data.id
             })).show();
-            Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
+            //Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 
         });

@@ -23,8 +23,7 @@ Ext.define("Teselagen.models.SequenceFile", {
             var restParams = "";
             var idParam = "";
             var filter = "";
-
-            console.log(request);
+            if(request.params.id!=="") console.log(request);
             /*
             if(request.operation.filters)
             {

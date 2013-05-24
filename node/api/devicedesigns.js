@@ -26,7 +26,7 @@ module.exports = function(app) {
                 project.save(function() {
                     if (err) console.log(err);
                     res.json({
-                        "design": newDesign
+                        "designs": newDesign
                     });
                 });
             });
@@ -61,7 +61,7 @@ module.exports = function(app) {
             devicedesign.save(function(err) {
                 if (err) console.log(err);
                 res.json({
-                    "design": req.body
+                    "designs": req.body
                 });
             });
         });
@@ -72,7 +72,7 @@ module.exports = function(app) {
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.params.devicedesign_id).exec(function(err, design) {
             if (err) {
-                errorHandler(err, req, res);
+                console.log("Error while reading eugene rules");
             } else {
                 res.json({
                     "rules": design.rules
@@ -88,7 +88,7 @@ module.exports = function(app) {
         var project_id = req.params.project_id;
         Project.findById(project_id).populate({path:'designs', select:'name id project_id'}).exec(function(err, project) {
             res.json({
-                "design": project.designs
+                "designs": project.designs
             });
         });
     });
@@ -105,7 +105,7 @@ module.exports = function(app) {
                 errorHandler(err, req, res);
             } else {
                 res.json({
-                    "design": design
+                    "designs": design
                 });
             }
         });
@@ -117,7 +117,7 @@ module.exports = function(app) {
         var Project = app.db.model("project");
 
         if (req.query.id) {
-            console.log("DE by id");
+            //console.log("DE by id");
             DeviceDesign.findById(req.query.id).populate('j5collection.bins.parts').exec(function(err, design) {
                 // Eugene rules to be send on a different request
                 delete design.rules;
@@ -126,16 +126,16 @@ module.exports = function(app) {
                     errorHandler(err, req, res);
                 } else {
                     res.json({
-                        "design": design
+                        "designs": design
                     });
                 }
             });
         } else if (req.query.filter) {
-            console.log("DE's by project_id");
+            //console.log("DE's by project_id");
             var project_id = JSON.parse(req.query.filter)[0].value;
             Project.findById(project_id).populate({path:'designs', select:'name id project_id'}).exec(function(err, project) {
                 res.json({
-                    "design": project.designs
+                    "designs": project.designs
                 });
                 /*
                 DeviceDesign.populate(project.designs,{path:'j5collection.bins.parts'},function(err,designs){

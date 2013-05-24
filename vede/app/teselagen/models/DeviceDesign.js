@@ -13,7 +13,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         url: "/vede/test/data/json/getDeviceDesign.json",
         reader: {
             type: "json",
-            root: "design"
+            root: "designs"
         },
         writer: {
             type: "json",
@@ -63,7 +63,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             //console.log(request);
             if(filter==="project_id")
             {
-                console.log("By project");
+                //console.log("By project");
                 var project_id = request.operation.filters[0].value;
                 restParams+= "/"+project_id;
                 delete request.params.filter;
@@ -77,8 +77,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
             else
             {
                 // Execute operation on specific record
-                console.log("Specific record");
-                console.log(request);
+                //console.log("Specific record");
+                //console.log(request);
                 if(request.records)
                 {
                     if(request.records[0])

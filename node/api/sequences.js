@@ -104,7 +104,7 @@ module.exports = function(app) {
         if(req.query.id) {
             var Sequence = app.db.model("sequence");
             Sequence.findById(req.query.id, function(err, sequence) {
-                if (err) console.log("There was a problem!/");
+                if (err) console.log("There was a problem with GET sequence");
                 res.json({
                     "sequence": sequence
                 });

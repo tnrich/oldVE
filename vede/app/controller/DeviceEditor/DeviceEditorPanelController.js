@@ -10,6 +10,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     DeviceEvent: null,
 
     onLoadEugeneRulesEvent: function(){
+        console.log("Trying to load eugene rules");
+    },
+
+    /*
+    onLoadEugeneRulesEvent: function(){
         var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
@@ -48,6 +53,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             }
         });
     },
+    */
 
     openProject: function (project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
@@ -260,7 +266,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
 
-        this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+        //this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {

@@ -356,11 +356,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
 
                 // Supplying a only a name field makes an "empty" Part
-                if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
-                    ready = false;
-                }
-                if (parts.getAt(j).isEmpty() === true) {
-                    ready = false;
+                var part = parts.getAt(j);
+                if (part.data.sequencefile_id !== "")
+                {
+                    if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
+                        ready = false;
+                    }
+                    if (parts.getAt(j).isEmpty() === true) {
+                        ready = false;
+                    }
                 }
             }
         }

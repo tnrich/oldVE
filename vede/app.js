@@ -2,7 +2,7 @@ var splashscreen;
 
 /*global console*/
 Ext.Loader.setConfig({
-    disableCaching: false,
+    //disableCaching: false,
     enabled: true,
     paths: {
         Ext: '.',
@@ -160,7 +160,7 @@ Ext.application({
          * This option enable fetching username and password from /deviceeditor file
          * to be used for automatic login (for testing).
          */
-        Vede.application.autoCredentialsFetch = false;
+        Vede.application.autoCredentialsFetch = true;
 
         Teselagen.manager.AuthenticationManager.Login(); // Start Authentication process
 
