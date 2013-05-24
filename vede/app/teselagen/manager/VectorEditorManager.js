@@ -30,14 +30,18 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         var self = this;
 
+        var successFullSavedCallback = function(){
+            var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
+            parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
+            parttext.animate({duration: 5000, to: {opacity: 0}});
+        };
+
         var saveToServer = function(){
             self.sequence.save({
                 success: function (msg,operation) {
                     var response = JSON.parse(operation.response.responseText);
                     currentTabPanel.setLoading(false);
-                    var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
-                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
-                    parttext.animate({duration: 5000, to: {opacity: 0}});
+                    successFullSavedCallback();
                     if(response.info)
                     {
                         if(response.info === "duplicated")
@@ -89,7 +93,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                                     project.sequences().add(Teselagen.manager.ProjectManager.workingSequence);
                                     Teselagen.manager.ProjectManager.workingSequence.save({
                                         callback: function(){
-                                            saveToServer();
+                                            //saveToServer();
+                                            successFullSavedCallback();
                                             Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                                                 Ext.getCmp("projectTreePanel").expandPath("/root/" + project.data.id + "/" + Teselagen.manager.ProjectManager.workingSequence.data.id);
                                             });

@@ -83,23 +83,63 @@ module.exports = function(app) {
     app.put('/sequences', restrict,  function(req, res) {
         var sequence = req.body;
         var Sequence = app.db.model("sequence");
+        var Project = app.db.model("project");
+        Sequence.findById(req.body.id, function(err, sequence) {
 
-        checkForDuplicatedSequence(res, sequence, function() {
-            Sequence.findById(req.body.id, function(err, sequence) {
-                for (var prop in req.body) {
-                    sequence[prop] = req.body[prop];
-                }
-                sequence.save(function(pErr) {
-                    res.json({
-                        "sequence": sequence
+            if(req.body.project_id)
+            {
+                if(sequence.project_id!==req.body.project_id)
+                {
+                    Project.findById(req.body.project_id,function(err,project){
+                        project.sequences.push(sequence);
+                        project.save();
                     });
+                }
+            }
+
+            for (var prop in req.body) {
+                sequence[prop] = req.body[prop];
+            }
+            sequence.save(function(pErr) {
+                res.json({
+                    "sequence": sequence
                 });
             });
         });
+
+        // checkForDuplicatedSequence(res, sequence, function() {
+        // });
     });
 
+    //READ SEQUENCES WITHIN A PROJECT
+    app.get('/projects/:project_id/sequences', restrict, function(req, res) {
+            var Sequence = app.db.model("sequence");
+            var Project = app.db.model("project");
+            Project.findById(req.params.project_id).populate('sequences').exec(function(err, project) {
+                console.log(project);
+                res.json({
+                    "sequence": project.sequences
+                });
+            });
+        }
+    );
+
+    //READ SEQUENCE BY ID
+    app.get('/sequences/:sequence_id', restrict, function(req, res) {
+
+            var Sequence = app.db.model("sequence");
+            Sequence.findById(req.params.sequence_id, function(err, sequence) {
+                if (err) console.log("There was a problem with GET sequence");
+                res.json({
+                    "sequence": sequence
+                });
+            });
+        }
+    );
+
     //READ
-    app.get('/sequences', restrict, function(req, res) {
+    /*
+    app.get('/sequences/:sequence_id', restrict, function(req, res) {
 
         if(req.query.id) {
             var Sequence = app.db.model("sequence");
@@ -121,6 +161,7 @@ module.exports = function(app) {
             });
         }
     });
+    */
 
 /*
     // Get Sequences

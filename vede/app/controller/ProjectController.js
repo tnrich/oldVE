@@ -100,7 +100,7 @@ Ext.define("Vede.controller.ProjectController", {
                 Ext.create("Ext.data.Store", {
                 model: "Teselagen.models.SequenceFile"
             });
-            /*
+            
             var sequences = project.sequences(); // Get sequences store from current project
             sequences.load({ // Load sequences store
                 callback: function () {
@@ -120,7 +120,7 @@ Ext.define("Vede.controller.ProjectController", {
                     });
                 }
             });
-            */
+            
         });
 
         // For testing, execute callback

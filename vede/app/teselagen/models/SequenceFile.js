@@ -1,4 +1,4 @@
-/**
+ /**
  * @class Teselagen.models.SequenceFile
  * Class describing a SequenceFile.
  * @author Diana Wong
@@ -20,10 +20,45 @@ Ext.define("Teselagen.models.SequenceFile", {
             type: "json"
         },
         buildUrl: function(request) {
-            var restParams = "";
-            var idParam = "";
             var filter = "";
-            if(request.params.id!=="") console.log(request);
+
+            console.log(request);
+
+            // Checks if active filter
+            if(request.operation.filters)
+            {
+                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+            }
+
+            // Cases
+
+            if(request.operation.params.id)
+            {
+                // Get specific sequence using given id
+                var sequence_id = request.operation.params.id;
+                idParam = "/"+sequence_id;
+                delete request.params
+                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+            }
+
+            if(filter==="project_id")
+            {
+                // Get sequences within a project
+                var project_id = request.operation.filters[0].value;
+                var projectParam = "/"+project_id;
+                delete request.params
+                return Teselagen.manager.SessionManager.buildUrl("projects"+projectParam+"/sequences", this.url);
+
+            }
+
+            if(request.operation.action==="read"&&!request.operation.filters)
+            {
+                // Get specific sequence using Ext associations
+                var sequence_id = request.params.id;
+                idParam = "/"+sequence_id;
+                delete request.params
+                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+            }
             /*
             if(request.operation.filters)
             {

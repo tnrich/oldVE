@@ -4,3 +4,4 @@ node_modules
 .project
 node.sublime-project
 node.sublime-workspace
+appTest.js
