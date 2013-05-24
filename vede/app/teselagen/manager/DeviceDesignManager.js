@@ -277,10 +277,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             return combo;
         } else {
             for (var i = 0; i < collection.bins().count(); i++) {
-                if (collection.bins().getAt(i).getPartByName("") != null) {
-                    if (collection.bins().getAt(i).parts().count() > 1) {
+                if (collection.bins().getAt(i).parts().count() > 1) {
                     combo = true;
-                }
                 }
             collection.set("combinatorial", combo);
             return combo;

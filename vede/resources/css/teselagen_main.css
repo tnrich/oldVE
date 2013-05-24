@@ -72,7 +72,8 @@ img {
 }
 
 .x-panel-header-default-framed-collapsed-right {
-  background: #E0E3E6;
+  background: #ECF0F2;
+  border-color: #EBEBEB;
   border-radius: 0;
 }
 
@@ -117,6 +118,10 @@ img {
   border-color: #ECF0F1;
 }
 
+.x-panel-collapsed .x-panel-header-default-framed {
+border-color: #E0E3E6;
+} 
+
 .x-grid-row-over .x-grid-cell{
   background: #F8F8F8 !important;
 }
@@ -142,7 +147,7 @@ img {
 }
 
 .x-panel-body-default {
-  border-color: #EBEBEB;
+  border-color: #ECF0F1;
 }
 
 .x-btn,
@@ -347,6 +352,27 @@ img {
 .x-css-shadow {
   box-shadow: none !important;
 }
+
+.x-resizable-over .x-resizable-handle-east, .x-resizable-over .x-resizable-handle-west, .x-resizable-pinned .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-west {
+  background-image: none;
+  background: #E0E3E6;
+}
+
+.x-resizable-over .x-resizable-handle-south, .x-resizable-over .x-resizable-handle-north, .x-resizable-pinned .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-north {
+  background-image: none;
+  background: #E0E3E6;
+}
+
+.x-resizable-over .x-resizable-handle-northwest, .x-resizable-pinned .x-resizable-handle-northwest {
+  background-image: none;
+  background: #E0E3E6;
+}
+
+.x-resizable-over .x-resizable-handle-southwest, .x-resizable-pinned .x-resizable-handle-southwest {
+  background-image: none;
+  background: #E0E3E6;
+}
+
 /*Header*/
 #headerPanel, #headerPanel-body {
   height: 120px !important;
@@ -361,13 +387,13 @@ img {
 .navbar-inner {
 height: 60px !important;
 padding: 10px 0px 10px 0px;
-border-color: rgb(235,235,235);
+border-color: #ECF0F1;
 box-shadow:none !important;
 min-height: 40px;
 padding-left: 20px;
 padding-right: 20px;
 background: #F8F8F8;
-border: 1px solid rgba(240, 240, 240, 0.84));
+border: 1px solid #ECF0F1;
 -webkit-border-radius: 4px;
 -moz-border-radius: 4px;
 border-radius: 4px;
@@ -450,7 +476,7 @@ border-radius: 4px;
 
 #ProjectPanel-placeholder {
   border-top-right-radius: 4px;
-  background: #E0E3E6;
+  background: #ECF0F1;
   border-color: #EBEBEB;
 }
 
@@ -539,7 +565,7 @@ border-radius: 4px;
 
 #ProjectPanel-body {
   border-width: 0 1px;
-  border-color: #D6D6D6;
+  border-color: #ECF0F1;
   width:220px;
 }
 

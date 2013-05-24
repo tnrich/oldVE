@@ -72,7 +72,8 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     height: '120px',
                     icon: 'resources/images/readman.png',
                     iconAlign: 'top',
-                    text: 'Read the Manuals'
+                    text: 'Read the Manuals',
+                    href: 'http://help.teselagen.com/manual/'
                 }
                 ]
                 }

@@ -14,5 +14,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
     SELECT_PART: "SelectPart",
     MAP_PART: "MapPart",
     MAP_PART_SELECT: "MapPartSelect",
-    MAP_PART_NOTSELECT: "MapPartNotSelect"
+    MAP_PART_NOTSELECT: "MapPartNotSelect",
+
+    OPEN_LIBRARY: "OpenPartLibrary"
+
 });
