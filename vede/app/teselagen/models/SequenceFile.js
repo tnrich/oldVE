@@ -22,7 +22,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         buildUrl: function(request) {
             var filter = "";
 
-            console.log(request);
+            //console.log(request);
 
             // Checks if active filter
             if(request.operation.filters)

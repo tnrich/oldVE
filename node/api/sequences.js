@@ -42,6 +42,7 @@ module.exports = function(app) {
         var sequence = req.body;
         //var VEProject = app.db.model("veproject");
         var Sequence = app.db.model("sequence");
+        var Project = app.db.model("project");
 
         autoReassignDuplicatedSequence(res, sequence, function(duplicated, duplicatedSequence) {
 
@@ -52,14 +53,22 @@ module.exports = function(app) {
                 });
             } else {
 
+
                 var newSequence = new Sequence();
 
                 for (var prop in sequence) {
                     if(prop!="project_id") { newSequence[prop] = sequence[prop]; }
                 }
+
                 if(sequence.project_id)
                 {
                     if(sequence.project_id!="") newSequence.project_id = sequence.project_id;
+
+                    Project.findById(newSequence.project_id,function(err,project){
+                        project.sequences.push(newSequence);
+                        project.save();
+                    });
+
                 }
 
                 newSequence.save(function(err) {
@@ -116,7 +125,6 @@ module.exports = function(app) {
             var Sequence = app.db.model("sequence");
             var Project = app.db.model("project");
             Project.findById(req.params.project_id).populate('sequences').exec(function(err, project) {
-                console.log(project);
                 res.json({
                     "sequence": project.sequences
                 });

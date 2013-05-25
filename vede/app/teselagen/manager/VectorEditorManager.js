@@ -31,6 +31,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         var self = this;
 
         var successFullSavedCallback = function(){
+            currentTabPanel.setLoading(false);
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
             parttext.animate({duration: 5000, to: {opacity: 0}});
@@ -40,7 +41,6 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             self.sequence.save({
                 success: function (msg,operation) {
                     var response = JSON.parse(operation.response.responseText);
-                    currentTabPanel.setLoading(false);
                     successFullSavedCallback();
                     if(response.info)
                     {
