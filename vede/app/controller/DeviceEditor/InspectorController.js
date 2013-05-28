@@ -216,7 +216,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             "itemclick": function(grid, part, item){
                                 Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
                                     var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
-                                    debugger;
                                     part.getSequenceFile({
                                         callback: function(sequence){
                                             if(bin)
@@ -875,6 +874,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on("partSelected",
                     this.onPartSelected,
                     this);
+
+        this.application.on(this.DeviceEvent.CLEAR_PART, this.onDeletePartBtnClick);
 
         this.control({
             "textfield[cls='partNameField']": {
