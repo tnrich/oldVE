@@ -196,11 +196,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 var selectWindow = Ext.create('Ext.window.Window', {
                     title: 'Part Library',
-                    height: 200,
+                    height: 400,
                     width: 400,
                     layout: 'fit',
                     renderTo: currentTabEl,
                     closeAction: 'close',
+                    modal: true,
                     items: {
                         xtype: 'grid',
                         border: false,
