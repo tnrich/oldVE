@@ -42,6 +42,7 @@ Ext.define('Vede.controller.PieController', {
     
     onLaunch: function() {
         var pie;
+        var self = this;
 
         this.callParent(arguments);
         this.pieContainer = this.getPieContainer();
@@ -54,10 +55,25 @@ Ext.define('Vede.controller.PieController', {
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
-        this.Managers.push(this.pieManager);
-
         pie = this.pieManager.getPie();
         this.pieContainer.add(pie);
+
+        // When window is resized, scale the graphics in the pie.
+        var timeOut = null;
+
+        window.onresize = function(){
+            if (timeOut != null)
+                clearTimeout(timeOut);
+
+            timeOut = setTimeout(function(){
+                self.pieManager.sizeToFitContent(self.pieManager);
+            }, 400);
+        };
+
+        // When pie is resized, scale the graphics in the pie.
+        pie.on("resize", function() {
+            this.pieManager.sizeToFitContent(this.pieManager);
+        }, this);
 
         this.Managers.push(this.pieManager);
 

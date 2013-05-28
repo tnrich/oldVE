@@ -245,6 +245,40 @@ Ext.define("Teselagen.manager.PieManager", {
         } else {
             this.hideSprites(this.featureSprites);
         }
+
+        Ext.defer(function(){this.sizeToFitContent(this)}, 10, this);
+    },
+
+    /**
+     * Resize the surface to fit all content, ensuring that a scrollbar appears.
+     */
+    sizeToFitContent: function(scope) {
+        if(scope.labelSprites) {
+            var newWidth;
+            var newHeight;
+
+            if(scope.labelSprites.getBBox().width > scope.pie.surface.viewBox.width) {
+                newWidth = scope.pie.getWidth() * 
+                    (((scope.labelSprites.getBBox().width / scope.pie.surface.viewBox.width - 1) * 4) + 1);
+
+                scope.pie.surface.el.setStyle("width", newWidth + "px");
+
+                // Scroll to the center of the pie.
+                scope.pie.el.scrollTo("left", (scope.pie.getPositionEl().dom.scrollWidth - 
+                                    scope.pie.getPositionEl().dom.clientWidth) / 2);
+            }
+
+            if(scope.labelSprites.getBBox().height > scope.pie.surface.viewBox.height) {
+                newHeight = scope.pie.getHeight() * 
+                    (((scope.labelSprites.getBBox().height / scope.pie.surface.viewBox.height - 1) * 4) + 1);
+                scope.pie.surface.el.setStyle("height", newHeight + "px");
+            }
+
+            console.log("bbox height: " + scope.labelSprites.getBBox().height + 
+                        ", viewbox height: " + scope.pie.surface.viewBox.height);
+        } else {
+            console.log("not resizing");
+        }
     },
 
     /**
