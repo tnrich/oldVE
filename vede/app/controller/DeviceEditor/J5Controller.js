@@ -34,7 +34,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         var self = this;
 
-
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
             {
@@ -72,6 +71,29 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             combobox.setValue(store.first());
         });
 
+        // Set the currentTab's j5Window property to null when the window is closed.
+        // This tells the onTabChange function whether the window should be open
+        // or closed when the tab is switched.
+        this.j5Window.on("close", function() {
+            currentTab.j5Window = null;
+        }, this);
+    },
+
+    /**
+     * We render the j5Window to the current tab's el to allow the user to switch
+     * between tabs while the window is open. When the tab is switched, however,
+     * the modal mask remains, preventing the user from interacting with the tab
+     * until the j5Window is hidden again. To fix this, add an event listener to
+     * the mainAppPanel which hides the j5Window when the tab is switched away,
+     * and re-shows it when the tab is switched back.
+     */
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(oldTab.j5Window) {
+            oldTab.j5Window.hide();
+        }
+        if(newTab.j5Window) {
+            newTab.j5Window.show();
+        }
     },
 
     onEditJ5ParamsBtnClick: function () {
@@ -644,7 +666,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 j5Window.show();
                 j5Window.doLayout();
 
-                mainAppPanel.un("tabchange", refreshJ5Window);
+                mainAppPanel.un("tabchange", refreshJ5Window, this);
             }
         };
 
@@ -701,6 +723,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     init: function () {
         this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
             "button[cls='editj5ParamsBtn']": {
                 click: this.onEditJ5ParamsBtnClick
             },

@@ -281,8 +281,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                     combo = true;
                 }
             collection.set("combinatorial", combo);
-            return combo;
             }
+            return combo;
         }
     },
 
