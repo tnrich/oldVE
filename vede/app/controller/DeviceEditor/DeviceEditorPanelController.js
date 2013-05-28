@@ -256,6 +256,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
     },
 
+
+    onclearPartMenuItemClick: function() {
+        this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
+    },
+
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
     },
@@ -283,6 +288,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Column']": {
                 click: this.onAddColumnClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {
+                click: this.onclearPartMenuItemClick
             },
             "button[cls='examplesMenu'] > menu > menuitem": {
                 click: this.onOpenExampleItemBtnClick
