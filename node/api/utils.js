@@ -38,7 +38,11 @@ module.exports = function(app) {
         res.send();
     });
 
-    //Get Part Library
+    /**
+     * GET Part library items
+     * @memberof module:./routes/api
+     * @method POST /partLibrary
+     */
     app.get('/partLibrary', restrict, function(req, res) {
         var Part = app.db.model("part");
         Part.find({
@@ -54,7 +58,11 @@ module.exports = function(app) {
         });
     });
 
-    //Check for duplicated names
+    /**
+     * GET Result of Check for diplicated part names
+     * @memberof module:./routes/api
+     * @method POST /partLibrary
+     */
     app.get('/checkDuplicatedPartName', restrict, function(req, res) {
 
         var reqPart = JSON.parse(req.query.part);

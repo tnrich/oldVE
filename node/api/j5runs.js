@@ -2,6 +2,11 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
+    /**
+     * GET J5 RUNS
+     * @memberof module:./routes/api
+     * @method GET ''/users/:username/devicedesigns/:devicedesign_id/j5runs'
+     */
     app.get('/users/:username/devicedesigns/:devicedesign_id/j5runs', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         //var id = JSON.parse(req.query.filter)[0].value;

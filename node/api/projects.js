@@ -2,7 +2,11 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
-   // Add new Project to Current User
+    /**
+     * POST Project
+     * @memberof module:./routes/api
+     * @method GET '/users/:username/projects'
+     */
     app.post('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         var newProject = new Project({
@@ -22,7 +26,11 @@ module.exports = function(app) {
         });
     });
 
-    // Update Project to Current User
+    /**
+     * PUT Project
+     * @memberof module:./routes/api
+     * @method PUT '/users/:username/projects'
+     */
     app.put('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         Project.findById(req.body.id, function(err, proj) {
@@ -38,7 +46,11 @@ module.exports = function(app) {
         });
     });
 
-    // Delete Project
+    /**
+     * DELETE Project
+     * @memberof module:./routes/api
+     * @method DELETE '/users/:username/projects'
+     */
     app.delete('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");
         if (req.body.id) {
@@ -60,7 +72,11 @@ module.exports = function(app) {
         }
     });
 
-    // Get User Projects
+    /**
+     * GET User Projects
+     * @memberof module:./routes/api
+     * @method GET '/users/:username/projects'
+     */
     app.get('/users/:username/projects', restrict, function(req, res) {
         var User = app.db.model("User");
         User.findById(req.user._id).populate('projects')
