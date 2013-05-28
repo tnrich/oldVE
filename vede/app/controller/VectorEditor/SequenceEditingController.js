@@ -72,7 +72,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
 
     onCreatePartBtnClick: function () {
 
-        var veproject = Teselagen.manager.ProjectManager.workingVEProject;
+        var veproject = Teselagen.manager.ProjectManager.workingSequence;
         var sequence = Teselagen.manager.ProjectManager.workingSequence;
         var part = Ext.create("Teselagen.models.Part", {
             name: '',

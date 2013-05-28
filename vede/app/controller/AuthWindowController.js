@@ -6,6 +6,14 @@ Ext.define('Vede.controller.AuthWindowController', {
     extend: 'Ext.app.Controller',
     require: ["Teselagen.event.AuthenticationEvent", "Teselagen.manager.AuthenticationManager"],
 
+    onRegisterClick: function(){
+        console.log("Register");  
+    },
+
+    onConfigClick: function(){
+        Ext.get('auth-config').show();
+    },
+
     onAuthLoginClick: function (button, e, options) {
         var form = Ext.getCmp('auth-form').getForm();
         var params = {};
@@ -45,6 +53,9 @@ Ext.define('Vede.controller.AuthWindowController', {
             "#auth-login-btn": {
                 click: this.onAuthLoginClick
             },
+            "#auth-register-btn": {
+                click: this.onRegisterClick
+            },
             "#auth-logout-btn": {
                 click: this.onLogoutClick
             },
@@ -63,7 +74,10 @@ Ext.define('Vede.controller.AuthWindowController', {
                 specialkey: function (field, e) {
                     if(e.getKey() == e.ENTER) that.onAuthLoginClick();
                 }
-            }
+            },
+            "#auth-config-btn": {
+                click: this.onConfigClick
+            },
         });
     },
 

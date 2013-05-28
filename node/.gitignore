@@ -1,2 +1,7 @@
 log
 node_modules
+.settings
+.project
+node.sublime-project
+node.sublime-workspace
+appTest.js

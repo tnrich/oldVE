@@ -17,9 +17,13 @@ Ext.define("Teselagen.models.J5Bin", {
 
     proxy: {
         type: "memory",
-        reader: {type: "json"}
+        reader: {type: "json"},
+        listeners: {
+            remove: function () {
+                console.log("Attemping to remove j5bin");
+            }
+        }
     },
-    
     statics: {
         // For Default Names
         defaultNamePrefix: "Bin",

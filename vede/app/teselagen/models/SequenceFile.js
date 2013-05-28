@@ -1,4 +1,4 @@
-/**
+ /**
  * @class Teselagen.models.SequenceFile
  * Class describing a SequenceFile.
  * @author Diana Wong
@@ -19,9 +19,70 @@ Ext.define("Teselagen.models.SequenceFile", {
         writer: {
             type: "json"
         },
-        buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/veprojects/sequences", this.url);
-        }
+        buildUrl: function(request) {
+            var filter = "";
+
+            //console.log(request);
+
+            // Checks if active filter
+            if(request.operation.filters)
+            {
+                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+            }
+
+            // Cases
+
+            if(request.operation.params.id)
+            {
+                // Get specific sequence using given id
+                var sequence_id = request.operation.params.id;
+                idParam = "/"+sequence_id;
+                delete request.params
+                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+            }
+
+            if(filter==="project_id")
+            {
+                // Get sequences within a project
+                var project_id = request.operation.filters[0].value;
+                var projectParam = "/"+project_id;
+                delete request.params
+                return Teselagen.manager.SessionManager.buildUrl("projects"+projectParam+"/sequences", this.url);
+
+            }
+
+            if(request.operation.action==="read"&&!request.operation.filters)
+            {
+                // Get specific sequence using Ext associations
+                var sequence_id = request.params.id;
+                idParam = "/"+sequence_id;
+                delete request.params
+                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+            }
+            /*
+            if(request.operation.filters)
+            {
+                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+            }
+            //console.log(request);
+            if(filter==="project_id")
+            {
+                console.log("By sequence");
+                var project_id = request.operation.filters[0].value;
+                restParams+= "/"+project_id;
+                delete request.params.filter;
+                if(request.operation.id)
+                {
+                    idParam = "/"+request.operation.id;
+                    delete request.params.id;
+                }
+                return Teselagen.manager.SessionManager.buildUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
+            }
+            */
+                return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
+
+
+        },
     },
 
     /**
@@ -36,11 +97,14 @@ Ext.define("Teselagen.models.SequenceFile", {
         name: "id",
         type: "long"
     }, {
-        name: "veproject_id",
+        name: "project_id",
         type: "long"
     }, {
         name: "part_id",
         type: "long"
+    }, {
+        name: "name",
+        type: "string"
     }, {
         name: "sequenceFileFormat",
         convert: function(v) {
@@ -129,15 +193,13 @@ Ext.define("Teselagen.models.SequenceFile", {
         model: "Teselagen.models.Part",
         getterName: "getPart",
         setterName: "setPart",
-        //            associationKey: "part",
         foreignKey: "part_id"
     }, {
         type: "belongsTo",
-        model: "Teselagen.models.VectorEditorProject",
-        getterName: "getVectorEditorProject",
-        setterName: "setVectorEditorProject",
-        //            associationKey: "vectorEditorProject",
-        foreignKey: "veproject_id"
+        model: "Teselagen.models.Project",
+        getterName: "getProject",
+        setterName: "setProject",
+        foreignKey: "sequencefile_id"
     }],
 
     /**

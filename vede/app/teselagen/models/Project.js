@@ -5,8 +5,9 @@
 Ext.define("Teselagen.models.Project", {
     extend: "Ext.data.Model",
     requires: ["Teselagen.manager.SessionManager",
-               "Teselagen.models.DeviceEditorProject",
-               "Teselagen.models.VectorEditorProject"],
+        "Teselagen.models.DeviceDesign",
+        "Teselagen.models.SequenceFile",
+        "Teselagen.models.Part"],
 
     fields: [{
         name: "id",
@@ -25,23 +26,26 @@ Ext.define("Teselagen.models.Project", {
         name: "dateModified",
         type: "date"
     }],
-    
+
     associations: [{
         type: "hasMany",
-        model: "Teselagen.models.DeviceEditorProject",
-        name: "deprojects",
-        associationKey: "deprojects",
-        foreignKey: "project_id",
-        autoLoad: true
+        model: "Teselagen.models.DeviceDesign",
+        name: "designs",
+        associationKey: "designs",
+        foreignKey: "project_id"
     }, {
         type: "hasMany",
-        model: "Teselagen.models.VectorEditorProject",
-        name: "veprojects",
-        associationKey: "veprojects",
-        foreignKey: "project_id",
-        autoLoad: true
-    },
-    {
+        model: "Teselagen.models.SequenceFile",
+        name: "sequences",
+        associationKey: "sequences",
+        foreignKey: "project_id"
+    }, {
+        type: "hasMany",
+        model: "Teselagen.models.Part",
+        name: "parts",
+        associationKey: "parts",
+        foreignKey: "project_id"
+    }, {
         type: "belongsTo",
         model: "Teselagen.models.User",
         getterName: "getUser",
@@ -63,13 +67,21 @@ Ext.define("Teselagen.models.Project", {
             getRecordData: function(record) {
                 var data = record.getData();
                 var associatedData = record.getAssociatedData();
-                data.deprojects = associatedData["deprojects"];
+                data.deprojects = associatedData.deprojects;
                 return data;
             }
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects", this.url);
-        }
+            return Teselagen.manager.SessionManager.buildUserResUrl("/projects", this.url);
+        },
+        appendId: true,
+        noCache: false,
+        filterParam: undefined,
+        groupParam: undefined,
+        pageParam: undefined,
+        startParam: undefined,
+        sortParam: undefined,
+        limitParam: undefined
     }
 
 });

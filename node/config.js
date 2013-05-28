@@ -3,202 +3,114 @@
  * @module ./config
  */
 
-module.exports = function (app, express) {
+module.exports = function(app, express) {
 
-  var config = this;
+    var config = this;
 
-  // Socket io Config
-  var server = require('http').createServer(app);
-  //app.io = require('socket.io').listen(server);
-  // Express Framework Configuration
-  app.configure(function () {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.set('view options', {
-      layout: false
+    var server = require('http').Server(app);
+
+    // LOGGING
+    require('./logging').configLogging(app, express);
+
+    // LOAD ENVIRONMENT VARIABLES
+    require('./environments').readEnvironments(app);
+    require('./environments').configEnvironments(app, express);
+
+
+    // Express Framework Configuration
+    app.configure(function() {
+        app.set('views', __dirname + '/views');
+        app.set('view engine', 'jade'); // Jade engine for templates (http://jade-lang.com/)
+        app.set('view options', {
+            layout: false
+        }); // This opt allow extends
+        app.use(express.bodyParser()); // Use express response body parser (recommended)
+        app.use(express.cookieParser()); // Use express response cookie parser (recommended)
+        app.use(express.session({
+            secret: 'j5',
+            cookie: {
+                httpOnly: false
+            }
+        })); // Sessions managed using cookies
+        app.use(express.methodOverride()); // This config put express top methods on top of the API config
+        app.use(app.router); // Use express routing system
+        //app.use(express.static(__dirname + '/public')); // Static folder (not used) (optional)
     });
-    app.use(express.bodyParser());
-    app.use(express.cookieParser());
-    app.use(express.session({
-      secret: 'j5',
-      cookie: { httpOnly: false }
-    }));
+
+    // Init MONGODB (Native Driver)
     /*
-    app.use(express.cookieSession({
-      key: 'teselagen',
-      secret: 'j5',
-      cookie: { httpOnly: false }
-    }));
-    */
-    app.use(express.methodOverride());
+     * Reason to open MongoDB Native Driver is support for GridSTORE
+     * DB Operations managed by Mongoose loaded below
+     */
 
-    app.use(app.router);
-    app.use(express.static(__dirname + '/public'));
-  });
+    var MongoDBServer = new app.mongo.Server('localhost', 27017, {
+        auto_reconnect: true
+    });
+    var db = new app.mongo.Db(app.dbname, MongoDBServer, {
+        safe: true
+    });
+    db.open(function(err, db) {
+        if (!err) {
+            app.logger.info("GRIDFS: Online");
+        }
+    });
+    app.GridStoreDB = db;
 
-  // Environments
-  app.configure('development', function () {
-    app.use(express.errorHandler());
-  });
 
-  app.configure('test', function () {
-    app.use(express.errorHandler());
-  });
+    // Init MONGODB - MONGOOSE (ODM)
+    /*
+     * MONGOOSE (ODM) Initialization using app.dbname
+     */
 
-  app.configure('beta', function () {
-    app.use(express.errorHandler());
-  });
-
-  // Init MONGODB (Native Driver)
-  
-  var server = new app.mongo.Server('localhost', 27017, {
-    auto_reconnect: true
-  });
-  var db = new app.mongo.Db(app.dbname, server);
-  db.open(function (err, db) {
-    if(!err) {
-      console.log("GRIDFS: Online");
+    app.db = app.mongoose.createConnection('localhost', app.dbname);
+    if (app.db) {
+        app.logger.log("info","Mongoose: connected to database \"%s\"", app.dbname);
+        require('./schemas/DBSchemas.js')(app.db);
+    } else {
+        throw new Error("Cannot create Mongoose connection");
     }
-  });
-  app.GridStoreDB = db;
-  
 
-  // Init MONGOOSE (ODM)
-  //host, database, port, options
+    // Init XML-RPC
+    /*
+     * XML RPC Client Iniciatlization to execute j5 on remote servers
+     */
 
-
-  /*
-  J:true is specified, the getlasterror call awaits the journal commit before returning. 
-  If the server is running without journaling, it returns immediately, and successfully.
-  
-  W:2 A client can block until a write operation has been replicated to N servers.
-
-  majority: waits for more than 50% of the members to acknowledge the write 
-  (until replication is applied to the point of that write).
-  
-  fsync (Not recommended. Use j instead.) When running with journaling, the fsync option awaits the next group commit before returning.
-
-  */
-
-
-  // MONGODB CONNECTION
-  /*
-  var opts = {
-    getlasterror: 1,
-    j: true,
-    wtimeout: 10000
-  };
-  */
-
-  app.db = app.mongoose.createConnection('localhost', app.dbname);
-  if (app.db) {
-    console.log('Mongoose: connected to', app.dbname);
-    require('./schemas/DBSchemas.js')(app.db);
-  }
-  else {
-      throw new Error ("Cannot create Mongoose connection");
-  }
-
-  // MYSQL CONNECTION
-  if(app.program.beta || app.program.prod) {
-    // Init MYSQL
-    var connection = app.mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'tesela#rocks',
-      database: 'teselagen',
-      insecureAuth: true
+    app.j5client = app.xmlrpc.createClient({
+        host: 'dev.teselagen.com',
+        port: 80,
+        path: '/j5/j5_xml_rpc.pl'
     });
 
-  function handleDisconnect(connection) {
-      connection.on('error', function (err) {
-        if(!err.fatal) {
-          return;
-        }
+    // Init XML PARSER
+    /*
+     * XML Parser needed for coding and decoding ICE messages
+     * Maybe in future ICE can be refactored as a module and this added a self dependency
+     */
+    app.xmlparser = new app.xml2js.Parser();
 
-        if(err.code !== 'PROTOCOL_CONNECTION_LOST') {
-          throw err;
-        }
+    // INIT NodeMailer
+    /*
+     * NodeMailer user to send emails using local SMTP server
+     */
 
-        console.log('Re-connecting lost connection: ' + err.stack);
-
-        connection = app.mysql.createConnection(connection.config);
-        handleDisconnect(connection);
-        connection.connect();
-      });
-  }
-  
-  handleDisconnect(connection);
-
-  // We will only connect to mysql and check for credetentials on production environment
-  connection.connect();
-  console.log('OPTIONS: MYSQL started');
-  app.mysql.connection = connection;
-
-  function keepAlive() {
-      connection.query('SELECT 1');
-      console.log("Fired Keep-Alive");
-      return;
-  }
-  setInterval(keepAlive, 60000);
-  if(app.testing.enabled) {
-      console.log("Retrieving a valid sessionId");
-      var query = 'select * from j5sessions order by id desc limit 1;';
-      connection.query(query, function (err, rows, fields) {
-        if(err) throw err;
-        app.testing.sessionId = rows[0].session_id;
-        console.log("Using sessionId: " + app.testing.sessionId);
-      });
-  }
-  } 
-  else {
-    console.log('OPTIONS: MYSQL OMITTED');
-  }
-  app.mysql = connection;
-
-  // Init XML-RPC
-  app.j5client = app.xmlrpc.createClient({
-    host: 'dev.teselagen.com',
-    port: 80,
-    path: '/j5/j5_xml_rpc.pl'
-  });
-
-
-  // SOAP Jbei-ICE Client
-  if(app.program.beta || app.program.prod) {
-    app.soap.createClient('http://teselagen.com:8080/api/RegistryAPI?wsdl', function (err, client) {
-      app.soap.client = client;
-      if(!err) console.log('OPTIONS: SOAP CLIENT started');
-
-      app.soap.client.login({
-        login: 'Administrator',
-        password: 'te#rocks'
-      }, function (err, result) {
-        app.soap.sessionId = result.
-        return [0];
-        console.log('SOAP CLIENT: Jbei-ice Authentication complete #' + app.soap.sessionId);
-      });
+    app.mailer = app.nodemailer.createTransport("SMTP", {
+        host: 'localhost'
     });
-  } else {
-    console.log('OPTIONS: SOAP CLIENT OMITTED');
-  }
 
-  app.xmlparser = new app.xml2js.Parser();
+    // Load Manager classes
+    /*
+     * Managers to interact with models
+     * Not fully implemented, work in progress
+     * @author: Yuri Bendana
+     */
 
-  app.mailer = app.nodemailer.createTransport("SMTP",{
-      host: 'localhost'
-  });
-
-  // Load Manager classes
-  app.ApiManager = require("./manager/ApiManager")(app.db);
-  app.DEProjectManager = require("./manager/DEProjectManager")(app.db);
-  app.J5RunManager = require("./manager/J5RunManager")(app.db);
-  app.PartManager = require("./manager/PartManager")(app.db);
-  app.ProjectManager = require("./manager/ProjectManager")(app.db);
-  app.SequenceManager = require("./manager/SequenceManager")(app.db);
-  app.UserManager = require("./manager/UserManager")(app.db);
-  app.VEProjectManager = require("./manager/VEProjectManager")(app.db);
-  
-  return config;
+    app.ApiManager = require("./manager/ApiManager")(app.db);
+    app.DEProjectManager = require("./manager/DEProjectManager")(app.db);
+    app.J5RunManager = require("./manager/J5RunManager")(app.db);
+    app.PartManager = require("./manager/PartManager")(app.db);
+    app.ProjectManager = require("./manager/ProjectManager")(app.db);
+    app.SequenceManager = require("./manager/SequenceManager")(app.db);
+    app.UserManager = require("./manager/UserManager")(app.db);
+    app.VEProjectManager = require("./manager/VEProjectManager")(app.db);
 
 };

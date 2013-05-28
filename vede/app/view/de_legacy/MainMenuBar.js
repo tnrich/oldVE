@@ -24,7 +24,7 @@ Ext.define('Vede.view.de_legacy.MainMenuBar', {
                     },
                     {
                         xtype: 'menuitem',
-                        id: 'openDEProject',
+                        id: 'openDeviceDesign',
                         text: 'Open'
                     },
                     {

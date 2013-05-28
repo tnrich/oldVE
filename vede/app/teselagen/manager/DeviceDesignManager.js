@@ -53,6 +53,30 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
+     * Clear the design and add a given set of J5Bins.
+     * @param {Teselagen.models.DeviceDesign} DeviceEditor design.
+     * @param {Teselagen.models.J5Bin[]} pBins One or an array of J5Bins
+     * @returns {Teselagen.models.DeviceDesign}
+     */
+    clearDesignAndAddBins: function(device,pBins) {
+
+        var bins = device.getJ5Collection().bins();
+
+        bins.removeAll();
+
+        pBins.forEach(function(bin){
+            bins.add(bin);
+        });
+        
+
+        var err = device.validate();
+        if (err.length > 0) {
+            console.warn("Clearing DeviceDesign: " + err.length + " errors found.");
+        }
+        return device;
+    },
+
+    /**
      * Creates a DeviceDesign using a given set of J5Bins.
      * The order in the array determines the order in the Collection.
      * Validates DeviceDesign.
@@ -259,14 +283,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             return combo;
         } else {
             for (var i = 0; i < collection.bins().count(); i++) {
-                if (collection.bins().getAt(i).getPartByName("") != null) {
-                    if (collection.bins().getAt(i).parts().count() > 1) {
+                if (collection.bins().getAt(i).parts().count() > 1) {
                     combo = true;
                 }
-                }
             collection.set("combinatorial", combo);
-            return combo;
             }
+            return combo;
         }
     },
 
@@ -338,11 +360,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                 // CHANGE THIS ACCORDING TO HOW SEQUENCEFILE IS STORED IN PARTS
 
                 // Supplying a only a name field makes an "empty" Part
-                if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
-                    ready = false;
-                }
-                if (parts.getAt(j).isEmpty() === true) {
-                    ready = false;
+                var part = parts.getAt(j);
+                if (part.data.sequencefile_id !== "")
+                {
+                    if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
+                        ready = false;
+                    }
+                    if (parts.getAt(j).isEmpty() === true) {
+                        ready = false;
+                    }
                 }
             }
         }

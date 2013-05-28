@@ -34,7 +34,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         var self = this;
 
-
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
             {
@@ -72,6 +71,29 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             combobox.setValue(store.first());
         });
 
+        // Set the currentTab's j5Window property to null when the window is closed.
+        // This tells the onTabChange function whether the window should be open
+        // or closed when the tab is switched.
+        this.j5Window.on("close", function() {
+            currentTab.j5Window = null;
+        }, this);
+    },
+
+    /**
+     * We render the j5Window to the current tab's el to allow the user to switch
+     * between tabs while the window is open. When the tab is switched, however,
+     * the modal mask remains, preventing the user from interacting with the tab
+     * until the j5Window is hidden again. To fix this, add an event listener to
+     * the mainAppPanel which hides the j5Window when the tab is switched away,
+     * and re-shows it when the tab is switched back.
+     */
+    onTabChange: function(mainAppPanel, newTab, oldTab) {
+        if(oldTab.j5Window) {
+            oldTab.j5Window.hide();
+        }
+        if(newTab.j5Window) {
+            newTab.j5Window.show();
+        }
     },
 
     onEditJ5ParamsBtnClick: function () {
@@ -511,9 +533,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 }
             });
         });
-
-
-
     },
 
     onDistributePCRBtn: function () {
@@ -615,9 +634,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     onPlasmidsItemClick: function (grid, record) {
+        var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
+        var j5Window = DETab.j5Window;
+        var mask = new Ext.LoadMask(j5Window);
 
-        var j5Window = Ext.getCmp("mainAppPanel").getActiveTab().j5Window;
-        j5Window.setLoading(true);
+        mask.setVisible(true, false);
 
         // Javascript waits to render the loading mask until after the call to
         // openSequence, so we force it to wait a millisecond before calling
@@ -626,13 +647,30 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             var newSequence = Teselagen.manager.DeviceDesignManager.createSequenceFileStandAlone("GENBANK", record.data.fileContent, record.data.name, "");
             Teselagen.manager.ProjectManager.openSequence(newSequence);
 
-            j5Window.setLoading(false);
+            mask.setVisible(false);
 
             // This gets rid of the weird bug where the loading mask remains on
             // the mainAppPanel.
             Ext.getCmp("mainAppPanel").setLoading();
             Ext.getCmp("mainAppPanel").setLoading(false);
-        }, 10);
+        }, 10, this);
+
+        // Showing and hiding the loading mask on the mainAppPanel removes
+        // the modal mask which prevented the user from interacting with the
+        // Device Editor panel behind the modal j5Window, so re-display the
+        // j5Window when it is in view. If you don't wait until the window is in
+        // view, its layout gets all kinda screwed up.
+        var refreshJ5Window = function(mainAppPanel, newTab, oldTab) {
+            if(newTab === DETab) {
+                j5Window.hide();
+                j5Window.show();
+                j5Window.doLayout();
+
+                mainAppPanel.un("tabchange", refreshJ5Window, this);
+            }
+        };
+
+        Ext.getCmp("mainAppPanel").on("tabchange", refreshJ5Window, this);
     },
 
     onCondenseAssembliesBtnClick: function (btn) {
@@ -685,6 +723,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     init: function () {
         this.control({
+            "#mainAppPanel": {
+                tabchange: this.onTabChange
+            },
             "button[cls='editj5ParamsBtn']": {
                 click: this.onEditJ5ParamsBtnClick
             },

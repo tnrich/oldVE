@@ -10,11 +10,16 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     DeviceEvent: null,
 
     onLoadEugeneRulesEvent: function(){
+        console.log("Trying to load eugene rules");
+    },
+
+    /*
+    onLoadEugeneRulesEvent: function(){
         var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
         Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/devicedesign/eugenerules", ''),
+            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/000/devicedesigns/000/eugenerules", ''),
             method: 'GET',
             params: {
                 id: deproject_id
@@ -48,6 +53,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             }
         });
     },
+    */
 
     /**
      * When opening a Device Editor project, store it in the "model" attribute of the active Device Editor panel.
@@ -69,7 +75,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Design renamed');
                         parttext.animate({duration: 5000, to: {opacity: 0}});
 
-                        Vede.application.fireEvent("renderProjectsTree", function () {
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp('projectTreePanel').expandPath('/root/' + deproject.data.project_id + '/' + deproject.data.id);
                         });
                     }
@@ -86,14 +92,14 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
              msg: 'WARNING: This will remove the current design. This action is not undoable!',
              cls: 'messageBox',
              buttons: Ext.Msg.OKCANCEL,
-             fn: deleteDEProjectBtn,
+             fn: DeleteDeviceDesignBtn,
              icon: Ext.Msg.QUESTION
         });
 
-        function deleteDEProjectBtn (btn) {
+        function DeleteDeviceDesignBtn (btn) {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
-                Teselagen.manager.ProjectManager.deleteDEProject(activeTab.model, activeTab);
+                Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
              }
          }
     },
@@ -253,6 +259,11 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
     },
 
+
+    onclearPartMenuItemClick: function() {
+        this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
+    },
+
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
     },
@@ -266,7 +277,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
 
-        this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+        //this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
@@ -283,6 +294,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Column']": {
                 click: this.onAddColumnClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {
+                click: this.onclearPartMenuItemClick
             },
             "button[cls='examplesMenu'] > menu > menuitem": {
                 click: this.onOpenExampleItemBtnClick

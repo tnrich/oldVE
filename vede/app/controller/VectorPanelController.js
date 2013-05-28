@@ -16,7 +16,7 @@ Ext.define("Vede.controller.VectorPanelController", {
                 Teselagen.manager.ProjectManager.directVEEditingMode = true;
 
                 //Create empty VEProject/Sequence
-                Teselagen.manager.ProjectManager.workingVEProject = Ext.create("Teselagen.models.VectorEditorProject", {
+                Teselagen.manager.ProjectManager.workingSequence = Ext.create("Teselagen.models.VectorEditorProject", {
                     name: "Untitled VEProject",
                     dateCreated: new Date(),
                     dateModified: new Date()
@@ -29,8 +29,7 @@ Ext.define("Vede.controller.VectorPanelController", {
                     partSource: "Untitled sequence"
                 });
 
-                Teselagen.manager.ProjectManager.workingVEProject.setSequenceFile(Teselagen.manager.ProjectManager.workingSequence);
-                Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingVEProject);
+                //Teselagen.manager.ProjectManager.workingSequence.setVectorEditorProject(Teselagen.manager.ProjectManager.workingSequence);
                 Vede.application.fireEvent("OpenVectorEditor",Teselagen.manager.ProjectManager.workingSequence);
             }
         }
@@ -60,16 +59,16 @@ Ext.define("Vede.controller.VectorPanelController", {
 //                        store: Teselagen.manager.ProjectManager.projects,
 //                        listeners: {
 //                            "itemclick": function (grid, project, item) {
-//                                Teselagen.manager.ProjectManager.workingVEProject.set('name', sequenceName);
-//                                project.veprojects().add(Teselagen.manager.ProjectManager.workingVEProject);
+//                                Teselagen.manager.ProjectManager.workingSequence.set('name', sequenceName);
+//                                project.veprojects().add(Teselagen.manager.ProjectManager.workingSequence);
 //                                project.save({
 //                                    callback: function () {
-//                                        Teselagen.manager.ProjectManager.workingVEProject.save({
+//                                        Teselagen.manager.ProjectManager.workingSequence.save({
 //                                            callback: function () {
 //                                                Teselagen.manager.ProjectManager.workingSequence.save({
 //                                                    callback: function () {
 //                                                        selectWindow.close();
-//                                                        Vede.application.fireEvent("renderProjectsTree");
+//                                                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE);
 //                                                        self.saveSequenceBtn.un('click',self);
 //                                                    }
 //                                                });

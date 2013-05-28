@@ -23,7 +23,7 @@ Ext.define("Teselagen.models.Part", {
             type: "json"
         },
         buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/parts", this.url);
+            return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
         }
     },
 
@@ -46,19 +46,48 @@ Ext.define("Teselagen.models.Part", {
      * @param {Number}  endBP Genbank basepair ending index
      * @param {String}  iconID Icon id
      */
-    fields: [
-        {name: "id",                type: "long"},
-        {name: "veproject_id",        type: "long"},
-        // {name: "j5bin_id",        type: "long"},
-        {name: "eugenerule_id",        type: "long"},
-        {name: "sequencefile_id",        type: "long"},
-        {name: "directionForward",  type: "boolean",    defaultValue: true},
-        {name: "fas",               type: "string",     defaultValue: "None"},
-        {
-            name: "name",
-            convert: function(v, record) {
-                var name;
-                /*
+    fields: [{
+        name: "id",
+        type: "long"
+    }, {
+        name: "veproject_id",
+        type: "long"
+    },
+    // {name: "j5bin_id",        type: "long"},
+    {
+        name: "eugenerule_id",
+        type: "long"
+    }, {
+        name: "sequencefile_id",
+        type: "long"
+    }, {
+        name: "directionForward",
+        type: "boolean",
+        defaultValue: true
+    }, {
+        name: "fas",
+        type: "string",
+        defaultValue: "None"
+    },
+    /*{
+            name: "id",
+            convert: function() {
+                var extraDigits = Math.floor(Math.random() * 1000).toString();
+
+                while (extraDigits.length < 3) {
+                    extraDigits = "0" + extraDigits;
+                }
+                var id = (Date.now()) + extraDigits;
+                return id;
+            }
+        },
+        */
+    // Fields from PartVO
+    {
+        name: "name",
+        convert: function(v, record) {
+            var name;
+            /*
                 if (v === "" || v === undefined || v === null) {
                     name = record.self.defaultNamePrefix + record.self.highestDefaultNameIndex;
                     record.self.highestDefaultNameIndex += 1;
@@ -72,61 +101,71 @@ Ext.define("Teselagen.models.Part", {
                 }
                 return name;
                 */
-                name = v;
-                if (v === undefined || v === null) name="";
-                return name;
-            }
-        },
-        {name: "partSource",        type: "string",     defaultValue: ""},
-        {name: "revComp",           type: "boolean",    defaultValue: false},
-        {name: "genbankStartBP",    type: "int",        defaultValue: 0},       //startBP
-        {name: "endBP",             type: "int",        defaultValue: 0},       //stopBP
-        {name: "iconID",            type: "string",     defaultValue: ""}
+            name = v;
+            if (v === undefined || v === null) name = "";
+            return name;
+        }
+    }, {
+        name: "partSource",
+        type: "string",
+        defaultValue: ""
+    }, {
+        name: "revComp",
+        type: "boolean",
+        defaultValue: false
+    }, //revComp
+    {
+        name: "genbankStartBP",
+        type: "int",
+        defaultValue: 0
+    }, //startBP
+    {
+        name: "endBP",
+        type: "int",
+        defaultValue: 0
+    }, //stopBP
+    {
+        name: "iconID",
+        type: "string",
+        defaultValue: ""
+    } //,
     ],
 
-    validations: [
-        {field: "name",             type: "presence"},
-        {field: "partSource",       type: "presence"},
-        {field: "revComp",          type: "presence"},
-        {field: "genbankStartBP",   type: "presence"},
-        {field: "endBP",            type: "presence"},
-        {field: "iconID",           type: "presence"}
-    ],
+    validations: [{
+        field: "name",
+        type: "presence"
+    }, {
+        field: "partSource",
+        type: "presence"
+    }, {
+        field: "revComp",
+        type: "presence"
+    }, {
+        field: "genbankStartBP",
+        type: "presence"
+    }, {
+        field: "endBP",
+        type: "presence"
+    }, {
+        field: "iconID",
+        type: "presence"
+    }],
 
-    associations: [
-        {
-            type: "hasOne",
-            model: "Teselagen.models.SequenceFile",
-//            associationKey:"sequenceFile",
-            foreignKey:"sequencefile_id",
-            getterName: "getSequenceFile",
-            setterName: "setSequenceFileModel"
-//            , name: "sequenceFile"
-        }/*,
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.J5Bin",
-            getterName: "getJ5Bin",
-            setterName: "setJ5Bin",
-            associationKey: "j5Bin",
-            foreignKey: "j5bin_id"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.EugeneRule",
-            getterName: "getEugeneRule",
-            setterName: "setEugeneRule",
-            associationKey: "eugeneRule",
-            foreignKey: "eugenerule_id"
-        },
-        {
-            type: "belongsTo",
-            model: "Teselagen.models.VectorEditorProject",
-            getterName: "getVectorEditorProject",
-            setterName: "setVectorEditorProject",
-            associationKey: "vectorEditorProject",
-            foreignKey: "veproject_id"
-        }*/
+    associations: [{
+        type: "hasOne",
+        model: "Teselagen.models.SequenceFile",
+        foreignKey: "sequencefile_id",
+        getterName: "getSequenceFile",
+        setterName: "setSequenceFileModel"
+    }, {
+        type: "belongsTo",
+        model: "Teselagen.models.Project",
+        getterName: "getProject",
+        setterName: "setProject",
+        associationKey: "project",
+        foreignKey: "part_id"
+    }
+
     ],
 
     /**
@@ -137,7 +176,7 @@ Ext.define("Teselagen.models.Part", {
      */
     isEmpty: function() {
         var partEmpty = false;
-        if(!this.get('sequencefile_id')) partEmpty = true;
+        if (!this.get('sequencefile_id')) partEmpty = true;
         return partEmpty;
     },
 
@@ -154,15 +193,11 @@ Ext.define("Teselagen.models.Part", {
             return true;
         }
 
-        if (this.get("name") === otherPart.get("name") &&
-            this.get("partSouce") == otherPart.get("partSource") &&
-            this.get("revComp") === otherPart.get("revComp") &&
-            this.get("genbankStartBP") === otherPart.get("genbankStartBP") &&
-            this.get("endBP") === otherPart.get("endBP") &&
-            //this.get("sequenceFile") === otherPart.get("sequenceFile") &&
-            this.getSequenceFile() === otherPart.getSequenceFile() &&
-            //this.getSequenceFile().get("sequenceFileContent") === otherPart.getSequenceFile().get("sequenceFileContent") &&
-            this.get("iconID") === otherPart.get("iconID") ) {
+        if (this.get("name") === otherPart.get("name") && this.get("partSouce") == otherPart.get("partSource") && this.get("revComp") === otherPart.get("revComp") && this.get("genbankStartBP") === otherPart.get("genbankStartBP") && this.get("endBP") === otherPart.get("endBP") &&
+        //this.get("sequenceFile") === otherPart.get("sequenceFile") &&
+        this.getSequenceFile() === otherPart.getSequenceFile() &&
+        //this.getSequenceFile().get("sequenceFileContent") === otherPart.getSequenceFile().get("sequenceFileContent") &&
+        this.get("iconID") === otherPart.get("iconID")) {
             return true;
         }
         return false;
@@ -211,8 +246,8 @@ Ext.define("Teselagen.models.Part", {
         if (pSequenceFile === null) {
             this.setSequenceFileModel(pSequenceFile);
         } else {
-            var start   = 1;
-            var stop    = pSequenceFile.getLength();
+            var start = 1;
+            var stop = pSequenceFile.getLength();
 
             this.setSequenceFileModel(pSequenceFile);
 
