@@ -16,10 +16,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
         reader: {
             type: "json",
             root: "design",
-            getRecords: function(pData) {
-                console.log(pData);
-                return this.superclass.getRecords(pData);
-            }
         },
         writer: {
             type: "json",
