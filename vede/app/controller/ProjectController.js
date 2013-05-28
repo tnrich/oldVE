@@ -140,7 +140,7 @@ Ext.define("Vede.controller.ProjectController", {
         });
 
     },
-
+    /*
     resolveAndOpenj5Report: function (record) {
         var deproject_id = record.parentNode.parentNode.data.id;
         var project_id = record.parentNode.parentNode.parentNode.data.id;
@@ -152,15 +152,20 @@ Ext.define("Vede.controller.ProjectController", {
             }
         });
     },
+    */
 
     resolveAndOpenj5Reports: function (record) {
-        var deproject_id = record.parentNode.data.id;
+        var design_id = record.data.id;
         var project_id = record.parentNode.parentNode.data.id;
         var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
-        var deprojects = project.deprojects().load({
-            callback: function () {
-                var deproject = deprojects.getById(deproject_id);
-                Teselagen.manager.ProjectManager.openj5Report(deproject, record);
+        project.designs().load({
+            id: design_id,
+            callback: function (loadedDesign) {
+                Teselagen.manager.ProjectManager.workingProject = project;
+                var design = loadedDesign[0];
+                //console.log(design);
+                //var j5report = loadedDesign[0].j5runs();
+                Teselagen.manager.ProjectManager.openj5Report(design);
             }
         });
     },
@@ -289,9 +294,9 @@ Ext.define("Vede.controller.ProjectController", {
         case "opensequence":
             this.resolveAndOpenSequence(record);
             break;
-        case "j5report":
-            this.resolveAndOpenj5Report(record);
-            break;
+       // case "j5report":
+       //     this.resolveAndOpenj5Report(record);
+       //     break;
         case "j5reports":
             this.resolveAndOpenj5Reports(record);
             break;
