@@ -151,9 +151,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
                                                          this.selectedPart) < 0) {
-                var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
-                                                      this.selectedPart,
-                                                      this.selectedBinIndex);
+                // var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
+                //                                       this.selectedPart,
+                //                                       this.selectedBinIndex);
+                var selectedBinIndex = this.selectedBinIndex;
             }
 
 
@@ -197,6 +198,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     width: 400,
                     layout: 'fit',
                     renderTo: currentTabEl,
+                    closeAction: 'close',
                     items: {
                         xtype: 'grid',
                         border: false,
@@ -213,15 +215,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         listeners: {
                             "itemclick": function(grid, part, item){
                                 Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
-                                    var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
-                                                                                    self.selectedPart);
-
+                                    var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
+                                    debugger;
                                     part.getSequenceFile({
                                         callback: function(sequence){
                                             if(bin)
                                             {
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                                var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
+                                                // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                                 bin.parts().removeAt(insertIndex);
                                                 bin.parts().insert(insertIndex,part);
                                                 self.onReRenderDECanvasEvent();
@@ -237,10 +238,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         }
                                     });
                                 });
+                            },
+                            "close": function() {
+                                console.log('window is closed');
+                            },
+                            "hide": function() {
+                                console.log('window is hidden');
                             }
                         }
                     }
-
                 }).show();
                 loadingMsgBox.close();
             //end ajax request
