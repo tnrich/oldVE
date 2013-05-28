@@ -73,14 +73,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
     /**
      * openj5Report
      * Opens a j5Report model in a new tab.
-     * @param {Teselagen.models.j5Report} Receives a j5Report model (already loaded)
+     * @param {Teselagen.models.DeviceDesign} Receives a DeviceDesign model (already loaded)
      */
-    openj5Report: function (j5Report) {
-        this.checkDuplicatedTabs(j5Report, "j5ReportTab", function () {
+    openj5Report: function (DeviceDesign) {
+        this.checkDuplicatedTabs(DeviceDesign, "j5ReportTab", function () {
             var tabPanel = Ext.getCmp("mainAppPanel");
             var newj5ReportPanel = Ext.create("Vede.view.j5Report.j5ReportPanel", {
-                title: j5Report.data.name + " j5 Report",
-                model: j5Report
+                title: DeviceDesign.data.name + " j5 Report",
+                model: DeviceDesign
             });
             tabPanel.add(newj5ReportPanel).show();
             tabPanel.setActiveTab(newj5ReportPanel);
