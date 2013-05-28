@@ -27,17 +27,10 @@ Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
     onSaveDesignClick: function() {
 
     },
-    onclearPartMenuItemClick: function() {
-        var currentTab = Ext.getCmp("mainAppPanel").getActiveTab();
-        this.application.fireEvent("ClearPart");
-    },
 
     init: function() {
         this.control({
             "button[cls='newDesign']": {
-                click: this.onNewDesignClick
-            },
-            "button[cls='clearPartMenuItem']": {
                 click: this.onNewDesignClick
             },
             "#openDeviceDesign": {

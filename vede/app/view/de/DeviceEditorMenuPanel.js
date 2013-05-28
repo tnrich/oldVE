@@ -45,7 +45,7 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     xtype: 'menuitem',
                     text: 'Clear Part',
                     cls: 'clearPartMenuItem',
-                    // disabled: true
+                    disabled: true
                 }]
             }
         },{
