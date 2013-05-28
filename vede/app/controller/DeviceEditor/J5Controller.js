@@ -28,7 +28,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
 
-        if(!currentTab.j5Window) currentTab.j5Window = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
+        if(!currentTab.j5Window) currentTab.j5Window = Ext.create("Vede.view.de.j5Controls-Min", {renderTo: currentTabEl}).show();
         else currentTab.j5Window.show();
         this.j5Window = currentTab.j5Window;
 

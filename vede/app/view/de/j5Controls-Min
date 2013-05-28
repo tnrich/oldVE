@@ -1,0 +1,163 @@
+/**
+ * j5 controls view
+ * @class Vede.view.de.j5Controls-Min
+ */
+Ext.define('Vede.view.de.j5Controls-Min', {
+    extend: 'Ext.window.Window',
+    closeAction: 'hide',
+    height: 517,
+    width: 852,
+    layout: {
+        align: 'stretch',
+        type: 'vbox'
+    },
+    title: 'j5 Controls',
+    resizable: true,
+    constrainHeader: true,
+    resizeHandles: 's',
+    draggable: true,
+    modal: true,
+
+    initComponent: function () {
+        var me = this;
+
+        Ext.applyIf(me, {
+            items: [{
+                xtype: 'tabpanel',
+                flex: 1,
+                activeTab: 0,
+                items: [{
+                    xtype: 'panel',
+                    cls: 'j5runPanel',
+                    autoScroll: true,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    title: 'Run j5 on Server',
+                    items: [{
+                        xtype: 'container',
+                        padding: 5,
+                        layout: {
+                            align: 'start',
+                            type: 'hbox'
+                        },
+                        items: [{
+                            xtype: 'button',
+                            cls: 'editj5ParamsBtn',
+                            maxHeight: 23,
+                            maxWidth: 130,
+                            minHeight: 23,
+                            text: '<b>Edit j5 Parameters</b>'
+                        }]
+                    }, {
+                        xtype: 'combobox',
+                        minHeight: 33,
+                        cls: 'assemblyMethodSelector',
+                        maxWidth: 333,
+                        padding: 5,
+                        fieldLabel: '<b>Assembly Method:</b>',
+                        fieldLabelCls: 'align-middle',
+                        labelSeparator: ' ',
+                        labelWidth: 120,
+                        queryMode: 'local',
+                        displayField: 'assemblyMethod',
+                        valueField: 'assemblyMethod'
+                    }, {
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox',
+                            pack: 'start'
+                        },
+                        minHeight: 23,
+                        padding: 5,
+                        items: [{
+                            xtype: 'button',
+                            flex: 1,
+                            height: 23,
+                            cls: 'runj5Btn',
+                            overCls: 'runj5Btn-over',
+                            maxHeight: 23,
+                            maxWidth: 60,
+                            minHeight: 23,
+                            enableToggle: true,
+                            pressed: false,
+                            text: '<b>Run j5</b>'
+                        }, {
+                            xtype: 'button',
+                            flex: 1,
+                            height: 23,
+                            cls: 'downloadj5Btn',
+                            margin: '0 0 0 10',
+                            maxHeight: 23,
+                            maxWidth: 140,
+                            minHeight: 23,
+                            enableToggle: true,
+                            pressed: false,
+                            text: '<b>Download Results</b>',
+                            hidden: true
+                        }]
+                    },{
+                        xtype: 'container',
+                        cls: 'j5progressContainer',
+                        layout: {
+                            type: 'hbox',
+                            pack: 'start'
+                        },
+                        padding: 5,
+                        height: 24,
+                        minHeight: 24,
+                        hidden: true,
+                        items: [{
+                            xtype: 'container',
+                            height: 18,
+                            cls: 'progress progress-info progress-striped active',
+                            width: 500,
+                            items: [{
+                                xtype: 'container',
+                                height:18,
+                                cls: 'bar',
+                                width: 500
+                            }]
+                        },{
+                           xtype: 'button',
+                           cls: 'stopj5runBtn',
+                           height: 18,
+                           margin: '0 0 0 5',
+                           text: 'Cancel Run'
+                        }]
+                    },  {
+                        xtype: 'displayfield',
+                        padding: 5,
+                        hidden: true,
+                        height: 15,
+                        cls: 'j5ResponseTextField',
+                        value: '',
+                        hideLabel: true
+                    },{
+                        xtype: 'container',
+                        cls: 'loadAssemblyContainer',
+                        padding: 5,
+                        layout: {
+                            align: 'stretch',
+                            pack: 'end',
+                            type: 'hbox'
+                        },
+                        items: [{
+                            xtype: 'filefield',
+                            minHeight: 35,
+                            buttonOnly: true,
+                            cls: 'loadAssemblyBtn',
+                            validateOnChange: false,
+                            margin: '10 0 10 0',
+                            buttonText: '<b>Load Existing Assembly File</b>',
+                            hidden: true
+                        }]
+                    }]
+                }]
+                }]
+        });
+
+        me.callParent(arguments);
+    }
+});
