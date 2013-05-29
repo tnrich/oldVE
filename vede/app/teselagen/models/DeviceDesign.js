@@ -145,7 +145,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
         name: "j5runs",
         associationKey: "j5runs",
         autoload: true,
-        foreignKey: "deproject_id"
+        foreignKey: "devicedesign_id"
     }, {
         type: "belongsTo",
         model: "Teselagen.models.Project",

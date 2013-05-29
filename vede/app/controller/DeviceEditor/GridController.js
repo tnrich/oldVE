@@ -354,6 +354,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.selectedPart = null;
         Vede.application.fireEvent("partSelected", this.selectedPart);
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
+        Vede.application.fireEvent("checkj5Ready");
 
     },
 
@@ -486,6 +487,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedBin) {
             this.selectedBin.deselect();
+        }
+
+        if(this.selectedPart && this.selectedPart.down()) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
         }
 
         this.selectedBin = gridBin;

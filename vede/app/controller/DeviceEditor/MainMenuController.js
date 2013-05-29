@@ -4,7 +4,7 @@
  */
 Ext.define("Vede.controller.DeviceEditor.MainMenuController", {
     extend: "Ext.app.Controller",
-    requires: [
+    requires: ["Teselagen.event.DeviceEvent",
         "Teselagen.manager.DeviceDesignExporterManager"
     ],
 

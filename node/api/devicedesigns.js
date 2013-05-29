@@ -1,9 +1,13 @@
+
 module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
-    //CREATE
-
+    /**
+     * CREATE user
+     * @memberof module:./routes/api
+     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     */
     app.post('/users/:username/projects/:project_id/devicedesigns', function(req, res) {
 
         var Project = app.db.model("project");
@@ -33,8 +37,12 @@ module.exports = function(app) {
         });
     });
 
-    //UPDATE/CREATE
-    app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
+    /**
+     * UPDATE/CREATE user
+     * @memberof module:./routes/api
+     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     */
+        app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         var Part = app.db.model("part");
 
@@ -67,7 +75,11 @@ module.exports = function(app) {
         });
     });
 
-    //READ EUGENE RULES
+     /**
+     * GET Eugene Rules
+     * @memberof module:./routes/api
+     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     */
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id/eugenerules', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         DeviceDesign.findById(req.params.devicedesign_id).exec(function(err, design) {
@@ -81,7 +93,11 @@ module.exports = function(app) {
         });
     });
 
-    // GET DEVICEDESIGNS BY PROJECT_ID
+    /**
+     * GET device design by project_id
+     * @memberof module:./routes/api
+     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     */
     app.get('/users/:username/projects/:project_id/devicedesigns', restrict, function(req, res) {
         var Project = app.db.model("project");
         console.log("DE's by project_id");
@@ -93,7 +109,11 @@ module.exports = function(app) {
         });
     });
 
-    // GET DEVICEDESIGN BY ID
+    /**
+     * GET device design by id
+     * @memberof module:./routes/api
+     * @method POST '/users/:username/projects/:project_id/devicedesigns'
+     */
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         console.log("DE by id");
@@ -111,7 +131,8 @@ module.exports = function(app) {
         });
     });
 
-    //READ
+    // CODE BEING DEPREACTED
+    /*
     app.get('/users/:username/devicedesigns', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         var Project = app.db.model("project");
@@ -137,16 +158,17 @@ module.exports = function(app) {
                 res.json({
                     "designs": project.designs
                 });
-                /*
+                
                 DeviceDesign.populate(project.designs,{path:'j5collection.bins.parts'},function(err,designs){
                     res.json({
                         "design": designs
                     });
                 });
-                */
+                
             });
         }
 
     });
+    */
 
 };

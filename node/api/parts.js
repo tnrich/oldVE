@@ -2,40 +2,84 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
-    //CREATE
-    app.post('/parts', restrict,  function(req, res) {
+    var Part = app.db.model("part");
+    var Project = app.db.model("project");
 
-        var Part = app.db.model("part");
-        var newPart = new Part();
+    /**
+     * POST Parts
+     * @memberof module:./routes/api
+     * @method POST 'parts'
+     */
+
+    /*
+     * When a part is created a Fully quilified domain name (FQDN) should be generated.
+     * <company/institution>.<group>.<subgroup>.<user>.<project>.<design>.<part>
+     */
+
+    app.get('/fqdn', restrict,  function(req, res) {
+        console.log(req.user.FQDN);
+        return res.json(req.user)
+    });
+
+
+    var savePart = function(newPart,req,res){
 
         for (var prop in req.body) {
-            newPart[prop] = req.body[prop];
+            if(prop!=="project_id") newPart[prop] = req.body[prop];
         }
 
-        newPart.save(function() {
-            res.json({
-                'parts': newPart
+        if(req.body.project_id!=="") newPart.project_id = req.body.project_id;
+
+        Project.findById(req.body.project_id,function(err,project){
+            if(err) return res.json(500,{"error":err});
+            if(!project) return res.json(500,{"error":"project not found"});
+            
+            newPart.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
+
+            newPart.save(function(err){
+                if(err)
+                {
+                    if(err.code===11000)
+                    {
+                        // Duplicated Part
+                        Part.findOne({"FQDN":newPart.FQDN}).exec(function(err,part){
+                            res.json({'parts': part,"duplicated":true});
+                        });
+                    }
+                    else
+                    {
+                        return res.json(500,{"error":err});
+                    }
+                }
+                else res.json({'parts': newPart,"duplicated":false,"err":err});
             });
         });
+    };
+
+
+    app.post('/parts', restrict,  function(req, res) {
+        var newPart = new Part();
+        savePart(newPart,req,res);
     });
 
-    //PUT
+    /**
+     * PUT Parts
+     * @memberof module:./routes/api
+     * @method PUT 'parts'
+     */
     app.put('/parts', restrict,  function(req, res) {
-
-        var Part = app.db.model("part");
-        Part.findById(req.body.id, function(err, part) {
-            for (var prop in req.body) {
-                part[prop] = req.body[prop];
-            }
-            part.save(function() {
-                res.json({
-                    'parts': part
-                });
-            });
+        Part.findById(req.body.id, function(err, newPart) {
+            if(err) return res.json(500,{"error":err});
+            if(!newPart) return res.json(500,{"error":"Part not found!"});
+            savePart(newPart,req,res);
         });
     });
 
-    //GET
+    /**
+     * GET Parts
+     * @memberof module:./routes/api
+     * @method GET 'parts'
+     */
     app.get('/parts', restrict,  function(req, res) {
 
         if (req.query.filter) {
@@ -62,7 +106,11 @@ module.exports = function(app) {
     });
 
 
-    //DELETE
+    /**
+     * DELETE Parts
+     * @memberof module:./routes/api
+     * @method DELETE 'parts'
+     */
     app.delete('/parts', restrict, function(pReq, pRes) {
         var Part = app.db.model("part");
         Part.remove(function(pErr, pDocs) {

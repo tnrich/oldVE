@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager"],
+    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -194,6 +194,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     callback: function (record, operation) {
                         // loadingMessage.close();
                         Vede.application.fireEvent("resumePartAlerts");
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
+                        });
                         if(typeof (cb) == "function") cb();
                     }
                 });
@@ -256,6 +259,15 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
     },
 
+
+    onclearPartMenuItemClick: function() {
+        this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
+    },
+
+     onRemoveColumnMenuItemClick: function() {
+        this.application.fireEvent(this.DeviceEvent.REMOVE_COLUMN);
+    },
+
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
     },
@@ -283,6 +295,12 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Column']": {
                 click: this.onAddColumnClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {
+                click: this.onclearPartMenuItemClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {
+                click: this.onRemoveColumnMenuItemClick
             },
             "button[cls='examplesMenu'] > menu > menuitem": {
                 click: this.onOpenExampleItemBtnClick

@@ -73,14 +73,14 @@ Ext.define("Teselagen.manager.ProjectManager", {
     /**
      * openj5Report
      * Opens a j5Report model in a new tab.
-     * @param {Teselagen.models.j5Report} Receives a j5Report model (already loaded)
+     * @param {Teselagen.models.DeviceDesign} Receives a DeviceDesign model (already loaded)
      */
-    openj5Report: function (j5Report) {
-        this.checkDuplicatedTabs(j5Report, "j5ReportTab", function () {
+    openj5Report: function (DeviceDesign) {
+        this.checkDuplicatedTabs(DeviceDesign, "j5ReportTab", function () {
             var tabPanel = Ext.getCmp("mainAppPanel");
             var newj5ReportPanel = Ext.create("Vede.view.j5Report.j5ReportPanel", {
-                title: j5Report.data.name + " j5 Report",
-                model: j5Report
+                title: DeviceDesign.data.name + " j5 Report",
+                model: DeviceDesign
             });
             tabPanel.add(newj5ReportPanel).show();
             tabPanel.setActiveTab(newj5ReportPanel);
@@ -199,11 +199,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
     createNewSequence: function (project, veprojectNames) {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a vector editor project name:", onPromptClosed, this); }
+                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
                     for (var j=0; j<veprojectNames.length; j++) {
                         if (veprojectNames[j].match(text)) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new ve project");
+                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence");
                     var self = this;
 
                     var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
@@ -289,7 +289,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 });
 
                             };
-
+                        /*
                         parts.forEach(function (part, partIndex) {
                             part.save({
                                 callback: function () {
@@ -297,6 +297,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 }
                             });
                         });
+                        */
+                        afterPartsSaved();
 
                     }
                 } else { return false; }

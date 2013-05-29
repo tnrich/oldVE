@@ -23,8 +23,36 @@ Ext.define("Teselagen.models.J5Run", {
             type: "json",
             root: "j5runs"
         },
-        buildUrl: function() {
-            return Teselagen.manager.SessionManager.buildUrl("user/projects/deprojects/j5runs", this.url);
+        buildUrl: function(request) {
+            var restParams = "";
+            var idParam = "";
+            var filter = "";
+
+            //console.log(request);
+
+            if(request.operation.filters)
+            {
+                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
+            }
+
+            if(filter==="devicedesign_id")
+            {
+                //console.log("By project");
+                var project_id = request.operation.filters[0].value;
+                restParams+= "/"+project_id;
+                delete request.params.filter;
+                if(request.operation.id)
+                {
+                    idParam = "/"+request.operation.id;
+                    delete request.params.id;
+                }
+            return Teselagen.manager.SessionManager.buildUserResUrl("/devicedesigns"+restParams+'/j5runs', this.url);
+            //return Teselagen.manager.SessionManager.buildUrl("j5runs", this.url);
+            }
+
+            return '/no_path';
+
+
         }
     },
 
@@ -49,7 +77,7 @@ Ext.define("Teselagen.models.J5Run", {
         {name: "status",        type: "String",     defaultValue: ""}, // Thread execution Status flag (Pending, Finished)
 
         // IDs
-        {name: "deproject_id",  type: "long"}
+        {name: "devicedesign_id",  type: "long"}
     ],
 
     getItemTitle: function(){

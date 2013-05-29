@@ -32,6 +32,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                         callback: function () {
                             part.setSequenceFileModel(sequence);
                             part.set('sequencefile_id', sequence.data.id);
+                            part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
                             part.save({
                                 callback: function () {
                                     var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');

@@ -37,6 +37,24 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
             }
         }, {
             xtype: 'button',
+            text: 'Edit',
+            cls: 'editMenu',
+            menu: {
+                xtype: 'menu',
+                items: [{
+                    xtype: 'menuitem',
+                    text: 'Clear Part',
+                    cls: 'clearPartMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Remove Column',
+                    cls: 'removeColumnMenuItem',
+                    disabled: true
+                }]
+            }
+        },{
+            xtype: 'button',
             text: 'Examples',
             cls: 'examplesMenu',
             menu: {

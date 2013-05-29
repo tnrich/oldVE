@@ -154,6 +154,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
                                                       this.selectedPart,
                                                       this.selectedBinIndex);
+                var selectedBinIndex = this.selectedBinIndex;
             }
 
 
@@ -193,10 +194,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                 var selectWindow = Ext.create('Ext.window.Window', {
                     title: 'Part Library',
-                    height: 200,
+                    height: 400,
                     width: 400,
                     layout: 'fit',
                     renderTo: currentTabEl,
+                    closeAction: 'close',
+                    modal: true,
                     items: {
                         xtype: 'grid',
                         border: false,
@@ -213,15 +216,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         listeners: {
                             "itemclick": function(grid, part, item){
                                 Vede.application.fireEvent("validateDuplicatedPartName",part,part.get('name'),function(){
-                                    var bin = self.DeviceDesignManager.getBinByPart(self.activeProject,
-                                                                                    self.selectedPart);
-
+                                    var bin = self.DeviceDesignManager.getBinByIndex(self.activeProject,self.selectedBinIndex);
                                     part.getSequenceFile({
                                         callback: function(sequence){
                                             if(bin)
                                             {
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                                var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
+                                                // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                                 bin.parts().removeAt(insertIndex);
                                                 bin.parts().insert(insertIndex,part);
                                                 self.onReRenderDECanvasEvent();
@@ -240,7 +241,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                             }
                         }
                     }
-
                 }).show();
                 loadingMsgBox.close();
             //end ajax request
@@ -267,6 +267,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
         var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
         var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         var fasArray = [];
 
@@ -304,12 +305,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         partPropertiesForm.loadRecord(sequenceFile);     
                         deletePartBtn.enable();
                         deletePartBtn.removeCls('btnDisabled');
+                        clearPartMenuItem.enable();
                     } else {
                         changePartDefinitionBtn.disable();
                         openPartLibraryBtn.setText("Select Part From Library");
                         openPartLibraryBtn.addCls('selectPartFocus');
                         changePartDefinitionBtn.addCls('btnDisabled');     
                         deletePartBtn.enable();
+                        clearPartMenuItem.enable();
                         deletePartBtn.removeCls('btnDisabled');
                     }
                 }
@@ -334,6 +337,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             changePartDefinitionBtn.disable();
             changePartDefinitionBtn.addCls('btnDisabled');
             deletePartBtn.disable();
+            clearPartMenuItem.disable();
             deletePartBtn.addCls('btnDisabled');
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.addCls('selectPartFocus');
@@ -463,15 +467,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onRemoveColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-
+        var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
+        
         if(selectedBin) {
             var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
-
             this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
         } else {
             this.activeProject.getJ5Collection().deleteBinByIndex(
             this.activeProject.getJ5Collection().binCount() - 1);
         }
+
+        removeColumnMenuItem.disable();
     },
 
     /**
@@ -620,15 +626,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
             var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
             var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+            var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
+            var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
 
             changePartDefinitionBtn.disable();
             changePartDefinitionBtn.addCls('btnDisabled');
             deletePartBtn.disable();
+            clearPartMenuItem.disable();
             deletePartBtn.addCls('btnDisabled');
             openPartLibraryBtn.disable();
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.removeCls('selectPartFocus');
             openPartLibraryBtn.addCls('btnDisabled');
+
+            removeColumnMenuItem.enable();
 
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
@@ -866,9 +877,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on("checkj5Ready", this.onCheckj5Ready, this);
 
-        this.application.on("partSelected",
-                    this.onPartSelected,
-                    this);
+        this.application.on("partSelected", this.onPartSelected, this);
+
+        this.application.on("ClearPart", this.onDeletePartBtnClick, this);
+
+        this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
 
         this.control({
             "textfield[cls='partNameField']": {
