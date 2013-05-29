@@ -1,5 +1,6 @@
 *.swp
 *~
+log
 node_modules
 # OS generated files #
 *.js.swp
