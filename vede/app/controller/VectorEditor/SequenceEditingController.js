@@ -105,6 +105,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         this.VEManager.changeSequenceManager(newSequenceFileManager);
     },
 
+    onExportToFileMenuItemClick: function(){
+        this.VEManager.saveSequenceToFile();
+    },
+
     init: function () {
 
         this.control({
@@ -113,6 +117,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             },
             '#VectorEditorMainToolBar > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
+            },
+            "#exportToFileMenuItem": {
+                click: this.onExportToFileMenuItemClick
             }
         });
 

@@ -113,6 +113,19 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         }
         else { saveToServer(); }
 
+    },
+    saveSequenceToFile: function(){
+        gb  = this.sequenceFileManager.toGenbank().toString();
+
+        var saveFile = function(name,gb) {
+            var flag;
+            var text        = gb;
+            var filename    = name;
+            var bb          = new BlobBuilder();
+            bb.append(text);
+            saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+        };
+        saveFile(this.sequence.data.name+'.gb',gb);
     }
 
 });

@@ -48,7 +48,7 @@ module.exports = function(db) {
 	registerSchema('j5run', j5RunSchema);
 
 	var SequenceSchema = new Schema({
-		FQDN: { type : String, index: { unique: true, dropDups: true }}, 
+		FQDN: String,
 		project_id: {
 			type: oIDRef,
 			ref: 'project'
@@ -68,6 +68,9 @@ module.exports = function(db) {
 		sequenceFileName: String,
 		firstTimeImported: Boolean
 	});
+
+	SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true })
+
 	registerSchema('sequence', SequenceSchema);
 
 	var PartSchema = new Schema({

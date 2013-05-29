@@ -239,6 +239,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //            }, {
 //                xtype: 'menuitem',
 //                text: 'Preferences'
+            },
+            {
+                xtype: 'menuitem',
+                id: 'exportToFileMenuItem',
+                text: 'Export to File'
             }
             ]
         }
