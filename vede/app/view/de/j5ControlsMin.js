@@ -87,18 +87,18 @@ Ext.define('Vede.view.de.j5ControlsMin', {
                         hidden: true,
                         items: [{
                             xtype: 'container',
-                            height: 25,
+                            height: 23,
                             cls: 'progress progress-info progress-striped active',
                             width: 495,
                             items: [{
                                 xtype: 'container',
-                                height:25,
+                                height:23,
                                 cls: 'bar',
                                 width: 475                            }]
                         },{
                            xtype: 'button',
                            cls: 'stopj5runBtn',
-                           height: 25,
+                           height: 23,
                            margin: '0 0 0 5',
                            text: 'Cancel Run'
                         }]
@@ -108,7 +108,7 @@ Ext.define('Vede.view.de.j5ControlsMin', {
                         hidden: true,
                         height: 15,
                         cls: 'j5ResponseTextField',
-                        value: '',
+                        value: 'Doing Something...',
                         hideLabel: true
                     },{
                         xtype: 'container',

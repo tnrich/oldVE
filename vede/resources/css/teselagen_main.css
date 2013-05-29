@@ -1010,8 +1010,14 @@ background: #F8F8F8;
   width: 0px;
 }
 
-.j5ResponseTextField-inputEl {
-  color:black;
+.j5ResponseTextField {
+  top: 50px !important;
+  left: 11px !important;
+  width: 410px !important;
+}
+
+.j5ResponseTextField .x-form-display-field {
+  color:white;
 }
 
 .j5detailpanel-fillcontent {
