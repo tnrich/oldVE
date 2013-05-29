@@ -117,7 +117,7 @@ module.exports = function(db) {
 				directionForward: String,
 				dsf: String,
 				fro: String,
-				fas: String,
+				fases: [String],
 				extra5PrimeBps: String,
 				extra3PrimeBps: String,
 				binName: String,
