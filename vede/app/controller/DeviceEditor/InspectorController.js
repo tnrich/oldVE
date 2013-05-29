@@ -52,8 +52,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.clearPartInfo();
-        } else {
-            var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
         }
     },
 
@@ -469,15 +467,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onRemoveColumnButtonClick: function () {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-
+        var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
+        
         if(selectedBin) {
             var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
-
             this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
         } else {
             this.activeProject.getJ5Collection().deleteBinByIndex(
             this.activeProject.getJ5Collection().binCount() - 1);
         }
+
+        removeColumnMenuItem.disable();
     },
 
     /**
@@ -626,15 +626,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             var openPartLibraryBtn = this.inspector.down("button[cls='openPartLibraryBtn']");
             var changePartDefinitionBtn = this.inspector.down("button[cls='changePartDefinitionBtn']");
             var deletePartBtn = this.inspector.down("button[cls='deletePartBtn']");
+            var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
+            var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
 
             changePartDefinitionBtn.disable();
             changePartDefinitionBtn.addCls('btnDisabled');
             deletePartBtn.disable();
+            clearPartMenuItem.disable();
             deletePartBtn.addCls('btnDisabled');
             openPartLibraryBtn.disable();
             openPartLibraryBtn.setText("Select Part From Library");
             openPartLibraryBtn.removeCls('selectPartFocus');
             openPartLibraryBtn.addCls('btnDisabled');
+
+            removeColumnMenuItem.enable();
 
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
@@ -872,11 +877,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on("checkj5Ready", this.onCheckj5Ready, this);
 
-        this.application.on("partSelected",
-                    this.onPartSelected,
-                    this);
+        this.application.on("partSelected", this.onPartSelected, this);
 
-        this.application.on(this.DeviceEvent.CLEAR_PART, this.onDeletePartBtnClick, this);
+        this.application.on("ClearPart", this.onDeletePartBtnClick, this);
+
+        this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
 
         this.control({
             "textfield[cls='partNameField']": {
