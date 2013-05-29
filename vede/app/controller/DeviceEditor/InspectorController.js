@@ -151,9 +151,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
                                                          this.selectedPart) < 0) {
-                // var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
-                //                                       this.selectedPart,
-                //                                       this.selectedBinIndex);
+                var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
+                                                      this.selectedPart,
+                                                      this.selectedBinIndex);
                 var selectedBinIndex = this.selectedBinIndex;
             }
 
