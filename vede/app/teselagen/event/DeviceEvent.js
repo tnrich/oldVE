@@ -13,6 +13,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
     SELECT_BIN: "SelectBin",
     SELECT_PART: "SelectPart",
     CLEAR_PART: "ClearPart",
+    REMOVE_COLUMN: "RemoveColumn",
+
     MAP_PART: "MapPart",
     MAP_PART_SELECT: "MapPartSelect",
     MAP_PART_NOTSELECT: "MapPartNotSelect",
