@@ -199,11 +199,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
     createNewSequence: function (project, veprojectNames) {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a vector editor project name:", onPromptClosed, this); }
+                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
                     for (var j=0; j<veprojectNames.length; j++) {
                         if (veprojectNames[j].match(text)) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new ve project");
+                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence");
                     var self = this;
 
                     var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
@@ -289,7 +289,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 });
 
                             };
-
+                        /*
                         parts.forEach(function (part, partIndex) {
                             part.save({
                                 callback: function () {
@@ -297,6 +297,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 }
                             });
                         });
+                        */
+                        afterPartsSaved();
 
                     }
                 } else { return false; }

@@ -177,6 +177,7 @@ Ext.define("Vede.controller.ProjectController", {
         project.designs().load().each(function (design) {
             projectNames.push(design.data.name);
         });
+        Teselagen.manager.ProjectManager.workingProject = project;
         Teselagen.manager.ProjectManager.createNewDeviceDesignAtProject(project, projectNames);
     },
 
