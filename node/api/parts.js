@@ -2,7 +2,11 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
-    //CREATE
+    /**
+     * POST Parts
+     * @memberof module:./routes/api
+     * @method POST 'parts'
+     */
     app.post('/parts', restrict,  function(req, res) {
 
         var Part = app.db.model("part");
@@ -19,7 +23,11 @@ module.exports = function(app) {
         });
     });
 
-    //PUT
+    /**
+     * PUT Parts
+     * @memberof module:./routes/api
+     * @method PUT 'parts'
+     */
     app.put('/parts', restrict,  function(req, res) {
 
         var Part = app.db.model("part");
@@ -35,7 +43,11 @@ module.exports = function(app) {
         });
     });
 
-    //GET
+    /**
+     * GET Parts
+     * @memberof module:./routes/api
+     * @method GET 'parts'
+     */
     app.get('/parts', restrict,  function(req, res) {
 
         if (req.query.filter) {
@@ -62,7 +74,11 @@ module.exports = function(app) {
     });
 
 
-    //DELETE
+    /**
+     * DELETE Parts
+     * @memberof module:./routes/api
+     * @method DELETE 'parts'
+     */
     app.delete('/parts', restrict, function(pReq, pRes) {
         var Part = app.db.model("part");
         Part.remove(function(pErr, pDocs) {

@@ -36,8 +36,11 @@ module.exports = function(app) {
         } else return cb(false);
     }
 
-    //CREATE
-    // Create a new sequence
+    /**
+     * POST Sequence
+     * @memberof module:./routes/api
+     * @method POST '/sequences'
+     */
     app.post('/sequences', restrict, function(req, res) {
         var sequence = req.body;
         //var VEProject = app.db.model("veproject");
@@ -88,7 +91,11 @@ module.exports = function(app) {
         });
     });
 
-    //PUT
+    /**
+     * PUT Sequence
+     * @memberof module:./routes/api
+     * @method PUT '/sequences'
+     */
     app.put('/sequences', restrict,  function(req, res) {
         var sequence = req.body;
         var Sequence = app.db.model("sequence");
@@ -120,7 +127,11 @@ module.exports = function(app) {
         // });
     });
 
-    //READ SEQUENCES WITHIN A PROJECT
+    /**
+     * GET SEQUENCES WITHIN A PROJECT
+     * @memberof module:./routes/api
+     * @method GET '/sequences'
+     */
     app.get('/projects/:project_id/sequences', restrict, function(req, res) {
             var Sequence = app.db.model("sequence");
             var Project = app.db.model("project");
@@ -132,7 +143,11 @@ module.exports = function(app) {
         }
     );
 
-    //READ SEQUENCE BY ID
+    /**
+     * GET SEQUENCES BY ID
+     * @memberof module:./routes/api
+     * @method GET '/sequences'
+     */
     app.get('/sequences/:sequence_id', restrict, function(req, res) {
 
             var Sequence = app.db.model("sequence");
