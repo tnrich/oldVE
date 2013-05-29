@@ -1,21 +1,21 @@
 /**
  * j5 controls view
- * @class Vede.view.de.j5Controls-Min
+ * @class Vede.view.de.j5ControlsMin
  */
-Ext.define('Vede.view.de.j5Controls-Min', {
+Ext.define('Vede.view.de.j5ControlsMin', {
     extend: 'Ext.window.Window',
     closeAction: 'hide',
-    height: 517,
-    width: 852,
+    height: 130,
+    width: 525,
     layout: {
         align: 'stretch',
         type: 'vbox'
     },
     title: 'j5 Controls',
-    resizable: true,
+    resizable: false,
     constrainHeader: true,
     resizeHandles: 's',
-    draggable: true,
+    draggable: false,
     modal: true,
 
     initComponent: function () {
@@ -23,47 +23,24 @@ Ext.define('Vede.view.de.j5Controls-Min', {
 
         Ext.applyIf(me, {
             items: [{
-                xtype: 'tabpanel',
-                flex: 1,
-                activeTab: 0,
-                items: [{
-                    xtype: 'panel',
-                    cls: 'j5runPanel',
-                    autoScroll: true,
+                    xtype: 'container',
                     layout: {
-                        align: 'stretch',
-                        type: 'vbox'
+                        type: 'hbox'
                     },
-                    title: 'Run j5 on Server',
+                    padding: 5,
                     items: [{
-                        xtype: 'container',
-                        padding: 5,
-                        layout: {
-                            align: 'start',
-                            type: 'hbox'
-                        },
-                        items: [{
-                            xtype: 'button',
-                            cls: 'editj5ParamsBtn',
-                            maxHeight: 23,
-                            maxWidth: 130,
-                            minHeight: 23,
-                            text: '<b>Edit j5 Parameters</b>'
-                        }]
-                    }, {
                         xtype: 'combobox',
                         minHeight: 33,
                         cls: 'assemblyMethodSelector',
-                        maxWidth: 333,
-                        padding: 5,
                         fieldLabel: '<b>Assembly Method:</b>',
-                        fieldLabelCls: 'align-middle',
+                        labelCls: 'assembly-label',
                         labelSeparator: ' ',
-                        labelWidth: 120,
+                        labelWidth: 110,
+                        width:350,
                         queryMode: 'local',
                         displayField: 'assemblyMethod',
                         valueField: 'assemblyMethod'
-                    }, {
+                        }, {
                         xtype: 'container',
                         layout: {
                             type: 'hbox',
@@ -78,7 +55,7 @@ Ext.define('Vede.view.de.j5Controls-Min', {
                             cls: 'runj5Btn',
                             overCls: 'runj5Btn-over',
                             maxHeight: 23,
-                            maxWidth: 60,
+                            width: 140,
                             minHeight: 23,
                             enableToggle: true,
                             pressed: false,
@@ -97,6 +74,7 @@ Ext.define('Vede.view.de.j5Controls-Min', {
                             text: '<b>Download Results</b>',
                             hidden: true
                         }]
+                        }]
                     },{
                         xtype: 'container',
                         cls: 'j5progressContainer',
@@ -105,24 +83,22 @@ Ext.define('Vede.view.de.j5Controls-Min', {
                             pack: 'start'
                         },
                         padding: 5,
-                        height: 24,
-                        minHeight: 24,
+                        height: 30,
                         hidden: true,
                         items: [{
                             xtype: 'container',
-                            height: 18,
+                            height: 25,
                             cls: 'progress progress-info progress-striped active',
-                            width: 500,
+                            width: 495,
                             items: [{
                                 xtype: 'container',
-                                height:18,
+                                height:25,
                                 cls: 'bar',
-                                width: 500
-                            }]
+                                width: 475                            }]
                         },{
                            xtype: 'button',
                            cls: 'stopj5runBtn',
-                           height: 18,
+                           height: 25,
                            margin: '0 0 0 5',
                            text: 'Cancel Run'
                         }]
@@ -153,8 +129,6 @@ Ext.define('Vede.view.de.j5Controls-Min', {
                             buttonText: '<b>Load Existing Assembly File</b>',
                             hidden: true
                         }]
-                    }]
-                }]
                 }]
         });
 
