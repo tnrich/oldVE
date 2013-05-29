@@ -199,6 +199,16 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 id: 'cutSiteLabelsMenuItem',
                 text: 'Cut Site Labels',
                 checked: true
+            }, {
+                xtype: 'menuitem',
+                id: 'zoomInMenuItem',
+                hideOnClick: false,
+                text: 'Zoom In (+)'
+            }, {
+                xtype: 'menuitem',
+                id: 'zoomOutMenuItem',
+                hideOnClick: false,
+                text: 'Zoom Out (-)'
             }]
         }
     }
