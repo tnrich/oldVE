@@ -222,6 +222,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                             if(bin)
                                             {
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
+                                                // console.log(insertIndex);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                                 bin.parts().removeAt(insertIndex);
                                                 bin.parts().insert(insertIndex,part);
@@ -261,6 +262,13 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartSelected: function (j5Part, binIndex) {
 
         this.selectedBinIndex = binIndex;
+        // console.log(binIndex);
+
+        // var bin = this.DeviceDesignManager.getBinByIndex(this.activeProject,binIndex);
+        // console.log(bin.parts().indexOf(this.selectedPart));
+
+
+
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -311,9 +319,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         openPartLibraryBtn.setText("Select Part From Library");
                         openPartLibraryBtn.addCls('selectPartFocus');
                         changePartDefinitionBtn.addCls('btnDisabled');     
-                        deletePartBtn.enable();
-                        clearPartMenuItem.enable();
-                        deletePartBtn.removeCls('btnDisabled');
+                        deletePartBtn.disable();
+                        clearPartMenuItem.disable();
+                        deletePartBtn.addCls('btnDisabled');
                     }
                 }
             });

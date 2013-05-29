@@ -156,6 +156,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         } else {
             gridPart.select();
         }
+        console.log(gridPart);
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
@@ -697,6 +698,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onPartCellHasNotBeenMapped: function(j5Part) {
         var gridPart = this.getGridPartFromJ5Part(j5Part);
+
 
         gridPart.select();
     },

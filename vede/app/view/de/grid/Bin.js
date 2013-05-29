@@ -152,7 +152,7 @@ Ext.define('Vede.view.de.grid.Bin', {
         }
 
         while(currentRows < pTotalRows) {
-            this.add(Ext.create("Vede.view.de.grid.Part"));
+            this.add(Ext.create("Vede.view.de.grid.Part", {part: Ext.create("Teselagen.models.Part")}));
             currentRows += 1;
         }
 

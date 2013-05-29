@@ -519,6 +519,17 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             pName = "No_Name";
         }*/
         var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
+
+        var bin = this.getBinByIndex(pDevice, pIndex);
+
+        var emptyPartCount = this.findMaxNumParts(pDevice);
+
+        console.log(emptyPartCount);
+
+        for (var i = 0; i < emptyPartCount; i++) {
+            var newPart = this.createPart(pDevice, pIndex);
+        }
+
         return success;
     },
     /**
@@ -752,8 +763,12 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var j5Bin;
         var cnt = pDevice.getJ5Collection().binCount();
 
+        console.log(cnt);
+        console.log(pBinIndex);
+
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
+            console.log(j5Bin);
         } else {
             j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
         }
