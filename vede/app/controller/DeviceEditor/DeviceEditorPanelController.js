@@ -4,7 +4,7 @@
  */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager"],
+    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -194,6 +194,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     callback: function (record, operation) {
                         // loadingMessage.close();
                         Vede.application.fireEvent("resumePartAlerts");
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
+                        });
                         if(typeof (cb) == "function") cb();
                     }
                 });
