@@ -22,7 +22,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         this.sequenceFileManager = newSequenceManager;
     },
 
-    saveSequence : function(){
+    saveSequence : function(cb){
         var currentTabPanel = Ext.getCmp("mainAppPanel");
         currentTabPanel.setLoading(true);
 
@@ -36,6 +36,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
             parttext.animate({duration: 5000, to: {opacity: 0}});
+            if(typeof (cb) === "function") { cb(); }
         };
 
         var saveToServer = function(){
@@ -87,6 +88,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                             listeners: {
                                 "itemclick": function(grid, project){
                                     selectWindow.close();
+                                    Teselagen.manager.ProjectManager.workingProject = project;
                                     Teselagen.manager.ProjectManager.workingSequence.set("name",text);
                                     Teselagen.manager.ProjectManager.workingSequence.setProject(project);
                                     Teselagen.manager.ProjectManager.workingSequence.set("project_id",project.data.id);

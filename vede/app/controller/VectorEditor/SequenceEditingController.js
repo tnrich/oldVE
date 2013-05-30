@@ -19,7 +19,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             executeRequest();
         };
 
+        var self = this;
+
         executeRequest = function(){
+            /*
             Ext.Ajax.request({
                 url: Teselagen.manager.SessionManager.buildUrl("checkDuplicatedPartName", ''),
                 method: 'GET',
@@ -28,8 +31,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     part: JSON.stringify(part.data)
                 },
                 success: function (response) {
-                    sequence.save({
-                        callback: function () {
+            */
+            self.VEManager.saveSequence(function(){
+                    //sequence.save({
+                      //  callback: function () {
                             part.setSequenceFileModel(sequence);
                             part.set('sequencefile_id', sequence.data.id);
                             part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
@@ -40,8 +45,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     parttext.animate({duration: 5000, to: {opacity: 0}});
                                 }
                             });
-                        }
-                    });
+                    //    }
+                    //});
+            });
+            /*
                 },
                 failure: function(response){
                     response = JSON.parse(response.responseText);
@@ -66,6 +73,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                     }
                 }
             });
+            */
         };
 
         executeRequest();
@@ -124,7 +132,6 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         });
 
         this.application.on("openVectorEditor", this.onOpenVectorEditor, this);
-
         this.application.on("SequenceManagerChanged", this.onSequenceManagerChanged, this);
         this.application.on("partCreated", this.onPartCreated, this);
 
