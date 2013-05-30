@@ -14,14 +14,26 @@ Ext.define("Vede.view.pie.NameBox", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        this.callParent([{
-            type: "text",
-            text: inData.name + '\n(' + inData.length + ' bp)',
-            "font-size": "10px",
-            "font-weight": "bold",
-            x: this.center.x,
-            y: this.center.y,
-            "text-anchor": "middle",
-        }]);
+        if(inData.name) {
+            this.callParent([{
+                type: "text",
+                text: inData.name + '\n(' + inData.length + ' bp)',
+                "font-size": "10px",
+                "font-weight": "bold",
+                x: this.center.x,
+                y: this.center.y,
+                "text-anchor": "middle",
+            }]);
+        } else {
+            this.callParent([{
+                type: "text",
+                text: '(' + inData.length + ' bp)',
+                "font-size": "10px",
+                "font-weight": "bold",
+                x: this.center.x,
+                y: this.center.y,
+                "text-anchor": "middle",
+            }]);
+        }
     }
 });
