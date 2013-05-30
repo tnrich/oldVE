@@ -42,7 +42,7 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method POST '/users/:username/projects/:project_id/devicedesigns'
      */
-        app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
+    app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         var Part = app.db.model("part");
 
@@ -135,6 +135,16 @@ module.exports = function(app) {
                     "designs": design
                 });
             }
+        });
+    });
+
+    app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
+        var DeviceDesign = app.db.model("devicedesign");
+        DeviceDesign.remove(req.params.devicedesign_id).exec(function(err,devicedesigns) {
+            if(err) return res.json(500,{"error":err});
+            res.json({
+                "designs": devicedesigns
+            });
         });
     });
 

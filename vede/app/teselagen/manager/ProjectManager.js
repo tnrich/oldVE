@@ -109,12 +109,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     /**
      * deleteDeviceDesign
-     * Opens a DeviceDesign model in a new tab.
+     * Delete DeviceDesign Tab
      * @param {Teselagen.models.DeviceDEsign} Receives a DeviceDesign model (already loaded)
      */
     DeleteDeviceDesign: function (devicedesign, tab) {
-        //console.log("Deleting DeviceDesign");
-        var store =  devicedesign.store;
+        console.log("Deleting DeviceDesign");
+        var store =  Teselagen.manager.ProjectManager.workingProject.designs();
         store.remove(devicedesign);
 
         store.sync({

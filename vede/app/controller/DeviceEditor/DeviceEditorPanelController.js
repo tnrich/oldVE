@@ -151,7 +151,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         var design = deproject.getDesign();
         // loadingMessage.update(30, "Saving design");
-        deproject.save({callback:function(){
+        //deproject.save({callback:function(){
 
         var saveAssociatedSequence = function (part, cb) {
                 part.getSequenceFile({callback: function(associatedSequence){
@@ -236,7 +236,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             });
         });
 
-        }});
+        //}});
     },
 
     onDeviceEditorSaveBtnClick: function () {
