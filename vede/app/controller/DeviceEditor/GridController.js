@@ -313,11 +313,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onAddToParts: function(parts, addedParts, index) {
         // For each part added, insert it to the part's bin.
         Ext.each(addedParts, function(addedPart) {
-            var newPart = Ext.create("Vede.view.de.grid.Part", {
-                part: addedPart,
-                fasConflict: false
-            });
-
             this.renderFasConflicts(parts, addedPart);
         }, this);
     },
@@ -351,18 +346,28 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @param {Number} index The index of the removed part.
      */
     onRemoveFromParts: function(parts, removedPart, index) {
-        var gridPart = this.getGridPartFromJ5Part(removedPart);
-        var gridBin = gridPart.up("Bin");
-        var j5Bin = gridPart.up("Bin").getBin();
+        var gridBin;
+        var j5Bin;
+        var gridParts = this.getGridPartsFromJ5Part(removedPart);
+        var relatedRules;
 
-        gridBin.remove(gridPart);
-        gridBin.setTotalRows(this.totalRows);
-        
-        this.selectedPart = null;
-        Vede.application.fireEvent("partSelected", this.selectedPart);
-        this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
-        Vede.application.fireEvent("checkj5Ready");
+        this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
+                                                       removedPart).removeAll();
 
+        Ext.each(gridParts, function(gridPart) {
+            gridBin = gridPart.up("Bin");
+            j5Bin = gridPart.up("Bin").getBin();
+
+            gridBin.remove(gridPart);
+            gridBin.setTotalRows(this.totalRows);
+
+            this.application.fireEvent("ReRenderCollectionInfo");
+            
+            /*this.selectedPart = null;
+            Vede.application.fireEvent("partSelected", this.selectedPart);
+            this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);*/
+            Vede.application.fireEvent("checkj5Ready");
+        }, this);
     },
 
     /**
@@ -376,19 +381,22 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var operand1 = addedRule.getOperand1();
             var operand2 = addedRule.getOperand2();
 
-            var gridOperand1 = this.getGridPartFromJ5Part(operand1);
+            var gridOperands1 = this.getGridPartsFromJ5Part(operand1);
 
-            if(!gridOperand1.partCell.down("image[cls='eugeneRuleIndicator']")) {
-                gridOperand1.addEugeneRuleIndicator();
-            }
-
-            if(!addedRule.get("operand2isNumber")) {
-                var gridOperand2 = this.getGridPartFromJ5Part(operand2);
-
-                if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
-                    gridOperand2.addEugeneRuleIndicator();
+            Ext.each(gridOperands1, function(gridOperand1) {
+                if(!gridOperand1.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                    gridOperand1.addEugeneRuleIndicator();
                 }
-            }
+
+                if(!addedRule.get("operand2isNumber")) {
+                    var gridOperands2 = this.getGridPartsFromJ5Part(operand2);
+                    Ext.each(gridOperands2, function(gridOperand2) {
+                        if(!gridOperand2.partCell.down("image[cls='eugeneRuleIndicator']")) {
+                            gridOperand2.addEugeneRuleIndicator();
+                        }
+                    }, this);
+                }
+            }, this);
         }, this);
     },
 
@@ -409,7 +417,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // If there are no other rules involving operand 1, remove its indicator.
         if(operand1Rules.getCount() === 0) {
-            this.getGridPartFromJ5Part(operand1).removeEugeneRuleIndicator();
+            Ext.each(this.getGridPartsFromJ5Part(operand1), function(gridPart) {
+                gridPart.removeEugeneRuleIndicator();
+            });
         }
 
         // If operand 2 is not a number, remove its Eugene rule indicator.
@@ -418,7 +428,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                                 this.activeProject, operand2);
 
             if(operand2Rules.getCount() === 0) {
-                this.getGridPartFromJ5Part(operand2).removeEugeneRuleIndicator();
+                Ext.each(this.getGridPartsFromJ5Part(operand2), function(gridPart) {
+                    gridPart.removeEugeneRuleIndicator();
+                });
             }
         }
     },
@@ -560,33 +572,31 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * fas conflict indicator or not.
      */
     rerenderPart: function(j5Part, fasConflict) {
-        var binIndex = this.DeviceDesignManager.getBinAssignment(
-                            this.activeProject, j5Part);
-        var parentBin = this.DeviceDesignManager.getBinByIndex(
-                            this.activeProject, binIndex);
-        var parentGridBin = this.getGridBinFromJ5Bin(parentBin);
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        var gridPart = this.getGridPartFromJ5Part(j5Part);
-        var partIndex = parentBin.parts().indexOf(j5Part);
+        Ext.each(gridParts, function(gridPart) {
+            var parentGridBin = gridPart.up("Bin");
+            var partIndex = parentGridBin.getBin().parts().indexOf(j5Part);
 
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.selectedPart = null;
-        }
+            if(this.selectedPart && this.selectedPart.down()) {
+                this.selectedPart.deselect();
+                this.selectedPart = null;
+            }
 
-        // Remove part from grid and re-add it.
-        parentGridBin.remove(gridPart);
-        var newPart = Ext.create("Vede.view.de.grid.Part", {
-            part: j5Part,
-            fasConflict: fasConflict
-        });
+            // Remove part from grid and re-add it.
+            parentGridBin.remove(gridPart);
+            var newPart = Ext.create("Vede.view.de.grid.Part", {
+                part: j5Part,
+                fasConflict: fasConflict
+            });
 
-        // Insert the part at partIndex + 1, because the bin header is at index 0.
-        parentGridBin.insert(partIndex + 1, newPart);
+            // Insert the part at partIndex + 1, because the bin header is at index 0.
+            parentGridBin.insert(partIndex + 1, newPart);
 
-        this.selectedPart = newPart;
+            this.selectedPart = newPart;
 
-        newPart.select();
+            newPart.select();
+        }, this);
     },
 
     /**
@@ -650,35 +660,34 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * @return {Vede.view.de.grid.Part[]} The grid parts corresponding to the given 
      * part model.
      */
-    getGridPartFromJ5Part: function(j5Part) {
+    getGridPartsFromJ5Part: function(j5Part) {
         var targetGridParts = [];
 
-        Ext.each(this.grid.query("Part"), function(gridPart) {
-            if(gridPart.getPart() === j5Part) {
-                targetGridParts.push(gridPart);
-                return false;
-            }
+        Ext.each(this.grid.query("Bin"), function(gridBin) {
+            Ext.each(gridBin.query("Part"), function(gridPart) {
+                if(gridPart.getPart() === j5Part) {
+                    targetGridParts.push(gridPart);
+                }
+            });
         });
 
-        // If this method fails, we may be trying to retrieve a grid part which
-        // has no part associated with it yet. In this case, first retrieve the
-        // bin associated with the j5Part, then the index of the part itself.
-        if(!targetGridParts) {
-            var ownerBinIndex = this.DeviceDesignManager.getBinAssignment(
-                                        this.activeProject, j5Part);
+        Ext.each(this.DeviceDesignManager.getOwnerBinIndices(this.activeProject, j5Part), function(index) {
             var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
-                                                                  ownerBinIndex);
+                                                                  index);
             var gridBin = this.getGridBinFromJ5Bin(ownerBin);
-
             var partIndex = ownerBin.parts().indexOf(j5Part);
-            targetGridParts.push(gridBin.query("container[cls='gridPartContainer']")[partIndex]);
-        }
+            var gridPart = gridBin.items[partIndex];
+
+            if(!targetGridParts.indexOf(gridPart)) {
+                targetGridParts.push(gridPart);
+            }
+        }, this);
 
         return targetGridParts;
     },
 
     onPartCellSelectByMap: function(pj5Part) {
-        var gridPart = this.getGridPartFromJ5Part(pj5Part);
+        var gridPart = this.getGridPartsFromJ5Part(pj5Part)[0];
         var j5Part = gridPart.getPart();
 
         var j5Bin = gridPart.up("Bin").getBin();
@@ -697,15 +706,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
-        var gridPart = this.getGridPartFromJ5Part(j5Part);
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        gridPart.mapSelect();
+        Ext.each(gridParts, function(gridPart) {
+            gridPart.mapSelect();
+        });
     },
 
     onPartCellHasNotBeenMapped: function(j5Part) {
-        var gridPart = this.getGridPartFromJ5Part(j5Part);
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        gridPart.select();
+        Ext.each(gridParts, function(gridPart) {
+            gridPart.select();
+        });
     },
 
     onPartCellVEEditClick: function(partCell) {
@@ -814,11 +827,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         console.log("Copying Part",this.selectedPart.getPart());
         this.selectedClipboardPart = this.selectedPart.getPart();
     },
+
     onPastePartMenuItemClick: function(){
         if(this.selectedClipboardPart)
         {
-            this.selectedPart.setPart(this.selectedClipboardPart);
-            this.rerenderPart(this.selectedClipboardPart,true);
+            var index = this.selectedPart.up("Bin").query("Part").indexOf(this.selectedPart);
+            var parentGridBin = this.selectedPart.up("Bin");
+
+            parentGridBin.getBin().parts().removeAt(index);
+            parentGridBin.getBin().parts().insert(index, this.selectedClipboardPart);
+
+            this.selectedBin = null;
+            this.selectedPart = null;
+
+            this.grid.removeAll(); // Clean grid
+            this.renderDevice();
         }
         else
         {

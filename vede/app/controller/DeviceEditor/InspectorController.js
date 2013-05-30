@@ -480,6 +480,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         removeColumnMenuItem.disable();
     },
 
+    reconfigureEugeneRules: function() {
+        this.eugeneRulesGrid.reconfigure();
+    },
+
     /**
      * Handler for the Add Eugene Rule button. Brings up the Eugene Rule Dialog
      * and loads data into its fields.
@@ -812,6 +816,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
     },
 
+    onReRenderCollectionInfoEvent: function() {
+        this.renderCollectionInfo();
+    },
+
     /**
      * Fills in the Collection Info tab's various fields.
      */
@@ -882,6 +890,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.application.on("ClearPart", this.onDeletePartBtnClick, this);
 
         this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
+
+        this.application.on("ReRenderCollectionInfo", this.onReRenderCollectionInfoEvent, this);
 
         this.control({
             "textfield[cls='partNameField']": {

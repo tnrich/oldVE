@@ -691,6 +691,22 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //return pDevice.getJ5Collection().getBinAssignment(pPart);
     },
     /**
+     * Gets the indices of all bins that contain a given part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Number[]} Array of indices of all owner bins.
+     */
+    getOwnerBinIndices: function(pDevice, pPart) {
+        var binIndices = [];
+        for(var i = 0; i < pDevice.getJ5Collection().binCount(); i++) {
+            if(pDevice.getJ5Collection().bins().getAt(i).parts().indexOf(pPart) !== -1) {
+                binIndices.push(i);
+            }
+        }
+
+        return binIndices;
+    },
+    /**
      * Determines if a given part name is unique.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {String} pPartName
