@@ -264,17 +264,33 @@ Ext.define("Vede.controller.SequenceController", {
         if(this.application.ClipBoardData) {
             var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
 
-            if(this.SelectionLayer.selected) {
-                this.changeCaretPosition(this.SelectionLayer.start);
+            confirmationWindow.down("button[cls='pasteConfirmationOkButton']").on("click", function() {
+                var pasteSequenceManager;
 
-                this.deleteSequence(this.SelectionLayer.start,
-                                    this.SelectionLayer.end);
-            }
+                if(this.SelectionLayer.selected) {
+                    this.changeCaretPosition(this.SelectionLayer.start);
 
-            this.SequenceManager.insertSequenceManager(this.application.ClipBoardData,
-                                                       this.caretIndex);
+                    this.deleteSequence(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
+                }
 
-            this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
+                pasteSequenceManager = this.application.ClipBoardData;
+
+                if(confirmationWindow.down("radiogroup").getValue().pasteFormatField === "reverse") {
+                    pasteSequenceManager.doReverseComplementSequence();
+                }
+
+                confirmationWindow.close();
+
+                this.SequenceManager.insertSequenceManager(pasteSequenceManager,
+                                                           this.caretIndex);
+
+                this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
+            }, this);
+
+            confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {
+                confirmationWindow.close();
+            });
         }
     },
 

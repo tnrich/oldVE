@@ -7,20 +7,23 @@ Ext.define('Vede.view.ve.PasteConfirmationWindow', {
     extend: 'Ext.window.Window',
     title: 'Paste...',
     modal: true,
+    height: 135,
     items: [{
         xtype: 'container',
         layout: {
             type: 'vbox'
-        }
+        },
+        height: 135,
         items: [{
             xtype: 'container',
             layout: {
                 type: 'vbox'
             },
+            height: 135,
             resizable: false,
             items: [{
                 xtype: 'container',
-                flex: 2,
+                flex: 1.25,
                 layout: {
                     type: 'vbox'
                 },
@@ -28,12 +31,14 @@ Ext.define('Vede.view.ve.PasteConfirmationWindow', {
                     xtype: 'radiogroup',
                     columns: 1,
                     hideLabel: true,
+                    cls: 'pasteFormatRadioGroup',
                     items: [{
                         boxLabel: 'Sequence (with features if available)',
                         name: 'pasteFormatField',
-                        inputValue: 'forward'
+                        inputValue: 'forward',
+                        checked: true
                     }, {
-                        boxLabel: 'Reverse Complement',
+                        boxLabel: 'Reverse Complement Sequence',
                         name: 'pasteFormatField',
                         inputValue: 'reverse'
                     }]
@@ -42,16 +47,21 @@ Ext.define('Vede.view.ve.PasteConfirmationWindow', {
                 xtype: 'container',
                 flex: 1,
                 layout: {
-                    type: 'hbox'
+                    type: 'hbox',
+                    align: 'right'
                 },
                 items: [{
                     xtype: 'button',
                     text: 'Ok',
-                    cls: 'pasteConfirmationOkButton'
+                    cls: 'pasteConfirmationOkButton',
+                    margin: 2,
+                    padding: 2
                 }, {
                     xtype: 'button',
                     text: 'Cancel',
-                    cls: 'pasteConfirmationCancelButton'
+                    cls: 'pasteConfirmationCancelButton',
+                    margin: 2,
+                    padding: 2
                 }]
             }]
         }]
