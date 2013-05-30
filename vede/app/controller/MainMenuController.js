@@ -14,6 +14,18 @@ Ext.define('Vede.controller.MainMenuController', {
     ProjectManager: null,
     VisibilityEvent: null,
 
+    onCutMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.CUT);
+    },
+
+    onCopyMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.COPY);
+    },
+
+    onPasteMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.PASTE);
+    },
+
     onUndoMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.UNDO);
     },
@@ -217,6 +229,15 @@ Ext.define('Vede.controller.MainMenuController', {
 
     init: function() {
         this.control({
+            "#cutMenuItem": {
+                click: this.onCutMenuItemClick
+            },
+            "#copyMenuItem": {
+                click: this.onCopyMenuItemClick
+            },
+            "#pasteMenuItem": {
+                click: this.onPasteMenuItemClick
+            },
             "#undoMenuItem": {
                 click: this.onUndoMenuItemClick
             },

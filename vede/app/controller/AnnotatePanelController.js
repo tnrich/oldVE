@@ -32,8 +32,12 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 resize: this.onResize
             }
         });
-
         var listenersObject = {scope: this};
+
+        listenersObject[this.MenuItemEvent.CUT] = this.cutSelection;
+        listenersObject[this.MenuItemEvent.COPY] = this.copySelection;
+        listenersObject[this.MenuItemEvent.PASTE] = this.pasteFromClipboard;
+
         listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] = 
             this.onShowComplementaryChanged;
         listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] = 
@@ -119,6 +123,18 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                                      false,
                                      true);
         }
+    },
+
+    cutSelection: function() {
+        this.callParent(arguments);
+    },
+
+    copySelection: function() {
+        this.callParent(arguments);
+    },
+
+    pasteSelection: function() {
+        this.callParent(arguments);
     },
 
     onHandleClicked: function(type) {
