@@ -113,7 +113,18 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {Teselagen.models.DeviceDEsign} Receives a DeviceDesign model (already loaded)
      */
     DeleteDeviceDesign: function (devicedesign, tab) {
-        console.log("Deleting DeviceDesign");
+        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Deleting design");
+        var project_id = devicedesign.data.project_id;
+        var designs = Teselagen.manager.ProjectManager.workingProject.designs();
+        designs.remove(devicedesign);
+        devicedesign.destroy(true);
+        designs.sync();
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+            Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
+            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+        });
+        Ext.getCmp("mainAppPanel").remove(tab);
+        /*
         var store =  Teselagen.manager.ProjectManager.workingProject.designs();
         store.remove(devicedesign);
 
@@ -123,6 +134,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 Ext.getCmp("mainAppPanel").remove(tab);
             }
         });
+        */
     },
 
     /**

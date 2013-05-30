@@ -26,6 +26,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     selectedBin: null,
     selectedPart: null,
+    selectedClipboardPart: null,
 
     totalRows: 2,
     totalColumns: 1,
@@ -116,6 +117,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.selectedBin = gridBin;
         gridBin.select();
 
+        // DE-Activate Cut, Copy, Paste Options
+        this.toggleCutCopyPastePartOptions(false);
+
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
@@ -156,6 +160,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         } else {
             gridPart.select();
         }
+
+        // Activate Cut, Copy, Paste Options
+        this.toggleCutCopyPastePartOptions(true);
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
@@ -797,6 +804,28 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         else return cb();
     },
 
+    toggleCutCopyPastePartOptions: function(state){
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Cut Part"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Copy Part"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Paste Part"]')[0].setDisabled(!state||false);
+    },
+
+    onCopyPartMenuItemClick: function(){
+        console.log("Copying Part",this.selectedPart.getPart());
+        this.selectedClipboardPart = this.selectedPart.getPart();
+    },
+    onPastePartMenuItemClick: function(){
+        if(this.selectedClipboardPart)
+        {
+            this.selectedPart.setPart(this.selectedClipboardPart);
+            this.rerenderPart(this.selectedClipboardPart,true);
+        }
+        else
+        {
+            console.log("No part in clipboard");
+        }
+    },
+
     onLaunch: function() {
 
         this.tabPanel = Ext.getCmp("mainAppPanel");
@@ -825,7 +854,13 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             },
             "component[cls='gridPartCell']": {
                 render: this.addPartCellClickEvent
-            }
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Copy Part']": {
+                click: this.onCopyPartMenuItemClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Paste Part']": {
+                click: this.onPastePartMenuItemClick
+            },
         });
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
