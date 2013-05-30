@@ -118,6 +118,7 @@ module.exports = function(app) {
         var DeviceDesign = app.db.model("devicedesign");
         console.log("DE by id");
         DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
+            if(!design) return res.json(500,{"error":"design not found"});
             // Eugene rules to be send on a different request
             design = design.toObject();
             design.id = design._id;
@@ -135,7 +136,7 @@ module.exports = function(app) {
 
     app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
-        DeviceDesign.remove(req.params.devicedesign_id).exec(function(err,devicedesigns) {
+        DeviceDesign.findByIdAndRemove(req.params.devicedesign_id,function(err,devicedesigns) {
             if(err) return res.json(500,{"error":err});
             res.json({
                 "designs": devicedesigns

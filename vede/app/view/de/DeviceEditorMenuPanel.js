@@ -51,6 +51,21 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Remove Column',
                     cls: 'removeColumnMenuItem',
                     disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Cut Part',
+                    cls: 'cutPartMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Copy Part',
+                    cls: 'copyPartMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Paste Part',
+                    cls: 'pastePartMenuItem',
+                    disabled: true
                 }]
             }
         },{
