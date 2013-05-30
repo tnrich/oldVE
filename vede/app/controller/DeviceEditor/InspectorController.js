@@ -147,6 +147,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
 
+        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
+
         if(this.selectedPart) {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
@@ -461,7 +463,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         if(selectedBin) {
             var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
-            console.log(selectedBinIndex);
+
             this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, (selectedBinIndex+1));
             this.columnsGrid.getSelectionModel().deselectAll();
         } else {

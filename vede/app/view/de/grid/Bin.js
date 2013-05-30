@@ -142,7 +142,7 @@ Ext.define('Vede.view.de.grid.Bin', {
      * ensure it has the correct number of rows displayed.
      * @param {Number} pTotalRows The correct number of rows to display.
      */
-    applyTotalRows: function(pTotalRows, pIndex) {
+    applyTotalRows: function(pTotalRows) {
         var currentRows;
 
         if(this.items) {
@@ -153,18 +153,14 @@ Ext.define('Vede.view.de.grid.Bin', {
 
         var itemslist = this.items;
 
-        console.log(pIndex);
         while(currentRows < pTotalRows) {
-                console.log(this);
                 this.add(Ext.create("Vede.view.de.grid.Part"));
                 currentRows += 1;
         }
 
         while (currentRows > pTotalRows) {
-           this.items.items[pIndex-1].destroy(); //deletes selected row
             currentRows -= 1;
         }
-
 
         return pTotalRows;
     },

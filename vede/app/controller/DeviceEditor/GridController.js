@@ -162,6 +162,38 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     /**
+     * Handles the event where there are empty cells that need blank parts associated to them.
+     * Is called through an event that opens the Part Library. 
+     */
+
+    onfillBlankCells: function() {
+        var bins = this.activeProject.getJ5Collection().bins();
+        var tab = Ext.getCmp('mainAppPanel').getActiveTab();
+
+        var selectedBin = this.selectedBin;
+        var partCells = tab.query("component[cls='gridPartCell']");
+        var selectedPartCellIndex = this.selectedPart.up("Bin").items.indexOf(this.selectedPart);
+        var selectedPart = this.selectedPart;
+
+        for (var i = 0; i < partCells.length; i++) {
+            var gridPart = partCells[i].up().up();
+            var j5Part = gridPart.getPart();
+
+            if (!j5Part) {
+                var newPart = Ext.create("Teselagen.models.Part");
+                var partIndex = gridPart.up("Bin").items.indexOf(gridPart);
+                var j5Bin = gridPart.up("Bin").getBin();
+                var binIndex =  this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
+
+                this.DeviceDesignManager.addPartToBin(this.activeProject, newPart, binIndex);
+                console.log("partsAdded");
+            }
+        }
+
+        this.onPartCellClick(selectedBin.items.items[selectedPartCellIndex].down().down()); //Select the original cell that was selected.
+
+    },
+    /**
      * When the tab changes on the main panel, handles loading and rendering the
      * new device design, assuming the new tab is a device editor tab. Also sets
      * all the event listeners on the new device.
@@ -458,10 +490,28 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     onRemoveRow: function() {
         this.totalRows -= 1;
-        this.updateBinsWithTotalRows();
+        var partIndex=null;
+        var gridPart = this.selectedPart;
+        var bins = this.activeProject.getJ5Collection().bins();
 
-        var collection = this.activeProject.getJ5Collection();
-        var bins = collection.bins();
+        console.log(bins);
+
+        partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
+        console.log(partIndex);
+
+        // for (var i = 0; i < bins.length; i++) {
+        //     bins[i].parts()[partIndex].destroy();
+        // }
+        
+        this.selectedBin = null;
+        this.selectedPart = null;
+        
+        bins.each(function (bin, binIndex) {
+            bin.parts().removeAt(partIndex);
+        });
+
+        this.grid.removeAll();
+        this.renderDevice();
 
         // for (var i = 0; i < bins.count(); i++) {
         //     var parts = bins.getAt(i).parts();
@@ -473,7 +523,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumnLeft: function() {
-        var selectedBinIndex;
+        var selectedBinIndex = null;
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
@@ -496,7 +546,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * bin, or at the end of the device if there is no selected bin.
      */
     onAddColumnRight: function() {
-        var selectedBinIndex;
+        var selectedBinIndex = null;
 
         if(this.selectedBin) {
             selectedBinIndex = (this.DeviceDesignManager.getBinIndex(
@@ -646,16 +696,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * parts already.
      */
     updateBinsWithTotalRows: function() {
-        console.log(this.selectedPart);
-
-        var gridPart = this.selectedPart;
-
-        var partIndex = gridPart.up("Bin").items.indexOf(gridPart);
-        // console.log(partIndex);
-
         this.grid.items.each(function(bin) {
-            bin.setTotalRows(this.totalRows, partIndex);
+            bin.setTotalRows(this.totalRows);
         }, this);
+
+
     },
 
     /**
@@ -759,36 +804,41 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 j5Part.getSequenceFile({
                 callback: function(associatedSequence,operation){
 
-                if(associatedSequence)
-                {
-                    console.log("onPartCellVEEditClick");
-                    j5Part.getSequenceFile({
-                        callback: function (seq) {
-                            Vede.application.fireEvent("OpenVectorEditor",seq);
-                    }});
-                    DETab.setLoading(false);
-                }
-                else
-                {
-                    console.log("This part doesn't have an associated sequence, creating new empty sequence");
-                    var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
-                        sequenceFileFormat: "Genbank",
-                        sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
-                        sequenceFileName: "untitled.gb",
-                        partSource: "New Part"
-                    });
+                if(associatedSequence.get("partSource")!="") {
+                    if(associatedSequence) 
+                    {
+                        console.log("onPartCellVEEditClick");
+                        j5Part.getSequenceFile({
+                            callback: function (seq) {
+                                Vede.application.fireEvent("OpenVectorEditor",seq);
+                        }});
+                        DETab.setLoading(false);
+                    }
+                    else
+                    {
+                        console.log("This part doesn't have an associated sequence, creating new empty sequence");
+                        var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
+                            sequenceFileFormat: "Genbank",
+                            sequenceFileContent: "LOCUS       NO_NAME                    0 bp    DNA     circular     19-DEC-2012\nFEATURES             Location/Qualifiers\n\nNO ORIGIN\n//",
+                            sequenceFileName: "untitled.gb",
+                            partSource: "New Part"
+                        });
 
-                    newSequenceFile.save({
-                        callback: function(){
-                            j5Part.setSequenceFileModel(newSequenceFile);
-                            j5Part.save({
-                                callback: function(){
-                                    Vede.application.fireEvent("openVectorEditor",newSequenceFile);
-                                    DETab.setLoading(false);
-                                }
-                            });
-                        }
-                    });
+                        newSequenceFile.save({
+                            callback: function(){
+                                j5Part.setSequenceFileModel(newSequenceFile);
+                                j5Part.save({
+                                    callback: function(){
+                                        Vede.application.fireEvent("openVectorEditor",newSequenceFile);
+                                        DETab.setLoading(false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                } else {
+                    DETab.setLoading(false);
+                    Vede.application.fireEvent("OpenPartLibrary");
                 }
 
                 }});
@@ -875,6 +925,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on("suspendPartAlerts",this.suspendPartAlerts, this);
         this.application.on("resumePartAlerts",this.resumePartAlerts, this);
+
+        this.application.on("FillBlankCells", this.onfillBlankCells, this);
 
         this.application.on("rerenderPart",this.rerenderPart, this);
 
