@@ -14,6 +14,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         this.sequenceManager = mgr;
         this.sequence = seq;
         Ext.getCmp("mainAppPanel").down("button[cls=\"saveSequenceBtn\"]").show();
+        console.log(this.sequence);
     },
 
     changeSequenceManager: function(newSequenceManager){
@@ -38,21 +39,20 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         };
 
         var saveToServer = function(){
+
             self.sequence.save({
                 success: function (msg,operation) {
                     var response = JSON.parse(operation.response.responseText);
                     successFullSavedCallback();
-                    if(response.info)
+                    
+                    if(response.duplicated)
                     {
-                        if(response.info === "duplicated")
-                        {
-                            Ext.MessageBox.alert("Warning", "This sequence already exists in the part library, using existing sequence");
-                        }
+                        Ext.MessageBox.alert("Warning", "A part with the same name already exist in this project, using the unique instance of this sequence.");
                     }
-                    self.saveProject(response.sequence.id);
+                    
                 },
                 failure: function() {
-                    Ext.MessageBox.alert("Error", "Duplicated sequence.");
+                    Ext.MessageBox.alert("Error", "Error saving sequence.");
                     currentTabPanel.setLoading(false);
                 }
             });
@@ -91,6 +91,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                                     Teselagen.manager.ProjectManager.workingSequence.setProject(project);
                                     Teselagen.manager.ProjectManager.workingSequence.set("project_id",project.data.id);
                                     project.sequences().add(Teselagen.manager.ProjectManager.workingSequence);
+                                    saveToServer();
+                                    /*
                                     Teselagen.manager.ProjectManager.workingSequence.save({
                                         callback: function(){
                                             //saveToServer();
@@ -100,10 +102,10 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                                             });
                                         }
                                     });
+                                    */
                                 }
                             }
                         }
-
                     }).show();
                 }
                 else { currentTabPanel.setLoading(false); }
@@ -112,14 +114,18 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
         else { saveToServer(); }
 
     },
+    saveSequenceToFile: function(){
+        gb  = this.sequenceFileManager.toGenbank().toString();
 
-    saveProject: function(sequencefile_id){
-        var veproject = Teselagen.manager.ProjectManager.workingSequence;
-        if(!veproject) { Teselagen.manager.ProjectManager.createNewVEProject(this.sequence); }
-        else {
-            veproject.set("sequencefile_id",sequencefile_id);
-            veproject.save();
-        }
+        var saveFile = function(name,gb) {
+            var flag;
+            var text        = gb;
+            var filename    = name;
+            var bb          = new BlobBuilder();
+            bb.append(text);
+            saveAs(bb.getBlob("text/plain;charset=utf-8"), filename);
+        };
+        saveFile(this.sequence.data.name+'.gb',gb);
     }
 
 });

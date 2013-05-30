@@ -200,12 +200,17 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]
                     });
 
+                    newPart.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
+
                     // Sequence processing
                     var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                        name: part.sequence["de:fileName"].replace('.gb',""),
                         sequenceFileContent: part.sequence["de:content"],
                         sequenceFileFormat: part.sequence["de:format"],
-                        sequenceFileName: part.sequence["pj5_00001.gb"]
+                        sequenceFileName: part.sequence["de:fileName"],
                     });
+
+                    newSequence.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
 
                     newPart.setSequenceFileModel(newSequence);
 

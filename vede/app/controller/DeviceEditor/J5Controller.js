@@ -88,11 +88,17 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * and re-shows it when the tab is switched back.
      */
     onTabChange: function(mainAppPanel, newTab, oldTab) {
-        if(oldTab.j5Window) {
-            oldTab.j5Window.hide();
+        if(oldTab)
+        {
+            if(oldTab.j5Window) {
+                oldTab.j5Window.hide();
+            }
         }
-        if(newTab.j5Window) {
-            newTab.j5Window.show();
+
+        if(newTab) {
+            if(newTab.j5Window) {
+                newTab.j5Window.show();
+            }
         }
     },
 

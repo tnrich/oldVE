@@ -119,6 +119,8 @@ module.exports = function(app) {
         console.log("DE by id");
         DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
             // Eugene rules to be send on a different request
+            design = design.toObject();
+            design.id = design._id;
             delete design.rules;
 
             if (err) {

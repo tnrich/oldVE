@@ -24,7 +24,12 @@ Ext.define("Teselagen.models.Part", {
         },
         buildUrl: function() {
             return Teselagen.manager.SessionManager.buildUrl("parts", this.url);
+        },
+        /*
+        afterRequest: function(req, res) {
+            console.log(JSON.parse(req.operation.response.responseText).duplicated); 
         }
+        */
     },
 
     statics: {
@@ -50,7 +55,7 @@ Ext.define("Teselagen.models.Part", {
         name: "id",
         type: "long"
     }, {
-        name: "veproject_id",
+        name: "project_id",
         type: "long"
     },
     // {name: "j5bin_id",        type: "long"},
@@ -163,7 +168,7 @@ Ext.define("Teselagen.models.Part", {
         getterName: "getProject",
         setterName: "setProject",
         associationKey: "project",
-        foreignKey: "part_id"
+        foreignKey: "id"
     }
 
     ],

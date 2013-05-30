@@ -489,6 +489,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.selectedBin.deselect();
         }
 
+        if(this.selectedPart && this.selectedPart.down()) {
+            this.selectedPart.deselect();
+            this.selectedPart = null;
+        }
+
         this.selectedBin = gridBin;
 
         /*

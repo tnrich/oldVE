@@ -9,7 +9,8 @@ Ext.define("Teselagen.manager.PieManager", {
         LABEL_DISTANCE_FROM_RAIL: 35,
         LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
-        LABEL_CONNECTION_COLOR: "#d2d2d2"
+        LABEL_CONNECTION_COLOR: "#d2d2d2",
+        ZOOM_FACTOR: 1.05
     },
 
     config: {
@@ -48,6 +49,8 @@ Ext.define("Teselagen.manager.PieManager", {
 
     labelSprites: null,
 
+    zoomLevel: 0,
+
     /**
      * @member Teselagen.manager.PieManager
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
@@ -81,9 +84,7 @@ Ext.define("Teselagen.manager.PieManager", {
                     y: this.center.y
                 })
             ],
-            autoScroll: true,
-            overflowX: "scroll",
-            overflowY: "scroll"
+            autoScroll: true
         });
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
@@ -244,6 +245,75 @@ Ext.define("Teselagen.manager.PieManager", {
             this.showSprites(this.featureSprites);
         } else {
             this.hideSprites(this.featureSprites);
+        }
+
+        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
+    },
+
+    /**
+     * Zooms the pie in using the viewBox and adjusts its height accordingly.
+     */
+    zoomIn: function() {
+        var oldBox = this.pie.surface.viewBox;
+
+        var newHeight = this.pie.surface.el.getSize().height * 
+            this.self.ZOOM_FACTOR * 1.25;
+
+        this.pie.surface.el.setStyle("height", newHeight + "px");
+
+        this.zoomLevel += 1;
+
+        this.pie.surface.setViewBox(
+                this.center.x - oldBox.width / this.self.ZOOM_FACTOR / 2,
+                this.center.y - oldBox.height / this.self.ZOOM_FACTOR / 2,
+                oldBox.width / this.self.ZOOM_FACTOR, 
+                oldBox.height / this.self.ZOOM_FACTOR);
+
+        this.fitWidthToContent(this);
+    },
+
+    /**
+     * Zooms the pie out using the viewBox and adjusts its height accordingly.
+     */
+    zoomOut: function() {
+        var oldBox = this.pie.surface.viewBox;
+
+        var newHeight = this.pie.surface.el.getSize().height / 
+            this.self.ZOOM_FACTOR / 1.25;
+
+        this.pie.surface.el.setStyle("height", newHeight + "px");
+
+        this.zoomLevel -= 1;
+
+        this.pie.surface.setViewBox(
+                this.center.x - oldBox.width * this.self.ZOOM_FACTOR / 2,
+                this.center.y - oldBox.height * this.self.ZOOM_FACTOR / 2,
+                oldBox.width * this.self.ZOOM_FACTOR,
+                oldBox.height * this.self.ZOOM_FACTOR);
+
+        this.fitWidthToContent(this);
+    },
+
+    /**
+     * Adjust the width of the surface to fit all content, ensuring that a 
+     * scrollbar appears.
+     * @param {Teselagen.manager.PieManager} scope The pieManager. Used when being
+     * called by the window onresize event.
+     */
+    fitWidthToContent: function(scope) {
+        if(scope.labelSprites) {
+            var newWidth;
+
+            if(scope.labelSprites.getBBox().width > scope.pie.surface.viewBox.width) {
+                newWidth = scope.pie.getWidth() * 
+                    scope.labelSprites.getBBox().width / scope.pie.surface.viewBox.width * 5;
+
+                scope.pie.surface.el.setStyle("width", newWidth + "px");
+
+                // Scroll to the center of the pie.
+                scope.pie.el.scrollTo("left", (scope.pie.getPositionEl().dom.scrollWidth - 
+                                    scope.pie.getPositionEl().dom.clientWidth) / 2);
+            }
         }
     },
 

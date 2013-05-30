@@ -156,6 +156,10 @@ Ext.define('Vede.controller.MainToolbarController', {
         //console.log(gbMng.);
     },
 
+    onExportToFileButtonClick: function(){
+        
+    },
+
     init: function() {
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 

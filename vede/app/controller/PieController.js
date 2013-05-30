@@ -10,7 +10,7 @@ Ext.define('Vede.controller.PieController', {
     ],
     
     statics: {
-        SELECTION_THRESHOLD: 2 * Math.PI / 360
+        SELECTION_THRESHOLD: 2 * Math.PI / 360,
     },
 
     pieManager: null,
@@ -29,6 +29,12 @@ Ext.define('Vede.controller.PieController', {
                 mousedown: this.onMousedown,
                 mousemove: this.onMousemove,
                 mouseup: this.onMouseup,
+            },
+            "#zoomInMenuItem": {
+                click: this.onZoomInMenuItemClick
+            },
+            "#zoomOutMenuItem": {
+                click: this.onZoomOutMenuItemClick
             }
         });
     },
@@ -42,6 +48,7 @@ Ext.define('Vede.controller.PieController', {
     
     onLaunch: function() {
         var pie;
+        var self = this;
 
         this.callParent(arguments);
         this.pieContainer = this.getPieContainer();
@@ -54,10 +61,25 @@ Ext.define('Vede.controller.PieController', {
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
-        this.Managers.push(this.pieManager);
-
         pie = this.pieManager.getPie();
         this.pieContainer.add(pie);
+
+        // When window is resized, scale the graphics in the pie.
+        var timeOut = null;
+
+        window.onresize = function(){
+            if (timeOut != null)
+                clearTimeout(timeOut);
+
+            timeOut = setTimeout(function(){
+                self.pieManager.fitWidthToContent(self.pieManager);
+            }, 400);
+        };
+
+        // When pie is resized, scale the graphics in the pie.
+        pie.on("resize", function() {
+            this.pieManager.fitWidthToContent(this.pieManager);
+        }, this);
 
         this.Managers.push(this.pieManager);
 
@@ -73,7 +95,14 @@ Ext.define('Vede.controller.PieController', {
     },
 
     onKeydown: function(event) {
-        this.callParent(arguments);
+        // Handle zooming in/out with the +/- keys.
+        if(event.getKey() === 187) {
+            this.pieManager.zoomIn();
+        } else if (event.getKey() === 189) {
+            this.pieManager.zoomOut();
+        } else {
+            this.callParent(arguments);
+        }
     },
 
     onSequenceChanged: function() {
@@ -306,6 +335,14 @@ Ext.define('Vede.controller.PieController', {
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
             }
         }
+    },
+
+    onZoomInMenuItemClick: function() {
+        this.pieManager.zoomIn();
+    },
+
+    onZoomOutMenuItemClick: function() {
+        this.pieManager.zoomOut();
     },
 
     select: function(start, end) {

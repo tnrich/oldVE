@@ -36,7 +36,8 @@ Ext.define("Vede.view.ve.VectorEditorPanel", {
         },
         items: [{
             xtype: "VectorPanel",
-            flex: 1
+            flex: 1,
+            overflowY: "auto"
         }, {
             xtype: "splitter",
             collapseTarget: "prev"
