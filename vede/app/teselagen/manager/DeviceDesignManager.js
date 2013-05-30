@@ -20,7 +20,13 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     statics: {
     },
 
+    constants: null,
+    
+    /**
+     * @member Teselagen.manager.DeviceDesignManager
+     */
     constructor: function() {
+        this.constants = Teselagen.constants.Constants;
     },
 
 
@@ -582,25 +588,27 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     //================================================================
     // Todo: move optional arguments to the end of parameter list
     /**
-     * Create a Part. Optional parameters require a "null" in its place.
+     * Create a Part and add to design. Optional parameters require a "null" in its place.
      * Executes validation.
      *
-     * @param {String} pName Name of Part
-     * @param {int} pStart Genbank start index
-     * @param {int} pEnd Genbank end index
-     * @param {Boolean} [pRevComp] Reverse Complement. Default is false.
-     * @param {Boolean} [pDirectionForward] Direction Forward. Default is true.
-     * @param {String} fas (?)
-     * @param {String} pIconID (?)
+     * @param {Teselagen.models.DeviceDesign} device Device design
+     * @param {Number} binIndex j5 bin index
+     * @param {String} name Name of Part
+     * @param {int} start Genbank start index
+     * @param {int} end Genbank end index
+     * @param {Boolean} [revComp] Reverse Complement. Default is false.
+     * @param {Boolean} [directionForward] Direction Forward. Default is true.
+     * @param {Number} [position] Location for inserting the Part.  Undefined or null will append.
+     * @param {String} fas FAS for the part
+     * @param {String} iconID (?)
      */
-    createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pFas, pIconID) {
+    createPart: function(pDevice, pBinIndex, pName, pStart, pEnd, pRevComp, pDirectionForward, pPos, pFas, pIconID) {
         var part = Ext.create("Teselagen.models.Part", {
             name: pName,
             genbankStartBP: pStart,
             endBP: pEnd,
             revComp: pRevComp,
             directionForward: pDirectionForward,
-            fas: pFas,
             iconID: pIconID
         });
 
@@ -610,8 +618,8 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             //console.warn("Creating Part: " + err.length + " errors found.");
             //console.warn(err);
         }
-
-        pDevice.getJ5Collection().bins().getAt(pBinIndex).addToParts(part, -1); // put this here?
+        this.addPartToBin(pDevice, part, pBinIndex, pPos, pFas);
+        
         return part;
     },
     /**
@@ -758,25 +766,26 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return part;
     },
     /**
-     * Add a part to a J5Bin
-     * @param {Teselagen.models.DeviceDesign} pDevice
-     * @param {Teselagen.models.Part} pPart
-     * @param {Number} pBinIndex If invalid number, puts part in last bin.
-     * @param {Number} [pPosition] Optional index.
+     * Add a Part to a J5Bin
+     * @param {Teselagen.models.DeviceDesign} device
+     * @param {Teselagen.models.Part} part
+     * @param {Number} binIndex Bin index (0 <= i < n-1). If invalid, issues warning.
+     * @param {Number} [position] Location for inserting the Part.  Undefined or null will append.
+     * @param {String} [fas] FAS for the part. Defaults to "None".
+     * @returns {Boolean} True if part was added.
      */
-    addPartToBin: function(pDevice, pPart, pBinIndex, pPosition) {
+    addPartToBin: function(pDevice, pPart, pBinIndex, pPosition, pFas) {
         var j5Bin;
+        var added = false;
         var cnt = pDevice.getJ5Collection().binCount();
-
         if (pBinIndex >= 0 && pBinIndex < cnt) {
             j5Bin = pDevice.getJ5Collection().bins().getAt(pBinIndex);
+            added = j5Bin.addToParts(pPart, pPosition, pFas);
         } else {
-            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
+//            j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
+            console.warn("Part not added due to invalid bin index:", pBinIndex);
         }
-        var added = j5Bin.addToParts(pPart, pPosition);
         return added;
-
-        //return pDevice.getJ5Collection().addPartToBin(pPart, pBinIndex, pPosition);
     },
     /**
      * Deletes a Part after checking if a EugeneRule should also be deleted.
@@ -796,13 +805,21 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         } else {
             j5Bin = pDevice.getJ5Collection().bins().getAt(cnt);
         }
-        //var removed = j5Bin.removeFromParts(pPart);
         var deleted = j5Bin.deletePart(pPart, pDevice);
         return deleted;
-
-        //return pDevice.removePartFromBin(pPart, pBinIndex);
     },
 
+    /**
+     * Returns index of given part in bin.
+     * @param {Teselagen.models.Bin} bin
+     * @param {Teselagen.models.Part} part
+     * @returns {Number} Index of part or -1 if not found.
+     */
+    getPartIndex: function(pBin, pPart) {
+        var index = pBin.parts().indexOf(pPart);
+        return index;
+    },
+    
     /**
      * Set the Start index for a Part
      * @param {Teselagen.models.Part} pPart

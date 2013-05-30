@@ -37,7 +37,7 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Boolean} directionForward True for "forward" or False for "reverse". All parts within a bin should be the same direction.
      * @param {Boolean} dsf Direct Synthesis Firewall. False to allow j5 the flexibility to choose. True to prevent a direct synthesis piece from extending from a marked target part row to the target part in the next row.
      * @param {Teselagen.utils.NullableInt} fro Forced Relative Overlap/Overhang Position. Empty to allow j5 the flexibility to choose, or an integral number of bps (to forcibly set the relative overlap/overhang position).
-     * @param {String} fas Forced Assembly Strategy. Empty to allow j5 the flexibility to choose.
+     * @param {Array} fas Forced Assembly Strategy for each Part in the Bin. Set to None to allow j5 the flexibility to choose.
      * @param {Teselagen.utils.NullableInt} extra5PrimeBps
      * @param {Teselagen.utils.NullableInt} extra3PrimeBps
      */
@@ -78,7 +78,7 @@ Ext.define("Teselagen.models.J5Bin", {
         {name: "directionForward",  type: "boolean",    defaultValue: true},
         {name: "dsf",               type: "boolean",    defaultValue: false},
         {name: "fro",               type: "string",     defaultValue: ""},
-        {name: "fas",               type: "string",     defaultValue: "None"},
+        {name: "fases",               defaultValue: []},
         {name: "extra5PrimeBps",    type: "auto",       defaultValue: null},
         {name: "extra3PrimeBps",    type: "auto",       defaultValue: null}
 
@@ -103,15 +103,15 @@ Ext.define("Teselagen.models.J5Bin", {
             field: "iconID",
             type: "inclusion",
             list: Teselagen.constants.SBOLIcons.ICON_LIST
-        },
+        }
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
         //{field: "fro",              type: "presence"},
-        {
-            field: "fas",
-            type: "inclusion",
-            list: Teselagen.constants.Constants.FAS_LIST
-        }//,
+//        {
+//            field: "fas",
+//            type: "inclusion",
+//            list: Teselagen.constants.Constants.FAS_LIST
+//        }//,
         //{field: "extra5PrimeBps",   type: "presence"},
         //{field: "extra3PrimeBps",   type: "presence"},
         //{field: "j5collection_id",    type: "presence"}
@@ -136,6 +136,17 @@ Ext.define("Teselagen.models.J5Bin", {
     ],
 
     /**
+     * Model constructor.
+     * Needed to set fases array so that it will create an instance variable.
+     */
+    constructor: function(pCfg) {
+        var fases = pCfg && pCfg.fases ? pCfg.fases : [];
+        this.callParent(arguments);
+        this.set("fases", fases);
+    },
+
+    /**
+     * @member Teselagen.models.J5Bin
      * @returns {Number} count Number of Parts in parts
      */
     partCount: function() {
@@ -165,28 +176,44 @@ Ext.define("Teselagen.models.J5Bin", {
     },
 
     /**
-     * Adds a Part into the parts.
-     * @param {Teselagen.models.Part} pPart. Can be a single part or an array of parts.
-     * @param {Number} pPosition Index to insert pPart. Optional. Defaults to end of of array if invalid or undefined value.
+     * Adds a Part into the parts store.
+     * @param {Teselagen.models.Part/Teselagen.models.Part[]} part Can be a single part or an array of parts.
+     * @param {Number} [position] Index (i >= 0) to insert part. If undefined or null will append.
+     * @param {String/String[]} [fas] FAS for the part(s). Defaults to "None".
      * @returns {Boolean} True if added, false if not.
      */
-    addToParts: function(pPart, pPosition) {
+    addToParts: function(pPart, pPosition, pFas) {
         var added = false;
-
-        var cnt = this.partCount();
-
-        if (pPosition >= 0 && pPosition < cnt) {
-            //this.parts().splice(pPosition, 0, pPart);
-            this.parts().insert(pPosition, pPart);
-        } else {
-            //this.parts().push(pPart);
-            this.parts().add(pPart);
+        var fasNone = Teselagen.constants.Constants.FAS.NONE;
+        var fas = fasNone;
+        var fases = this.get("fases");
+        var isArray = Ext.isArray(pPart);
+        
+        if (!Ext.isEmpty(pFas)) {
+            fas = pFas;
         }
-
-        var newCnt  = this.partCount();
-        if (newCnt > cnt) {
+        else {
+            if (isArray) {
+                fas = [];
+                for (var i=0; i < pPart.length; i++) {
+                    fas.push(fasNone);
+                }
+            }
+        }
+        if (!Ext.isEmpty(pPosition)) {
+            if (Ext.isNumber(pPosition) && pPosition >= 0) {
+                this.parts().insert(pPosition, pPart);
+                fases.splice.apply(fases, [].concat(pPosition, 0, fas));
+                added = true;
+            } else {
+                console.warn("Invalid part index:", pPosition);
+            }
+        } else {
+            this.parts().add(pPart);
+            this.set("fases", fases.concat(fas));
             added = true;
         }
+
         return added;
     },
 
@@ -196,23 +223,34 @@ Ext.define("Teselagen.models.J5Bin", {
      * @param {Teselagen.models.Part} pPart
      * @returns {Boolean} True if removed, false if not.
      */
-    removeFromParts: function(pPart) {
-        var removed = false;
-
-        var cnt = this.partCount();
-        //Ext.Array.remove(this.parts(), pPart);
-        this.parts().remove(pPart);
-
-        var newCnt  = this.partCount();
-        if (newCnt < cnt) {
-            removed = true;
-        }
-        return removed;
-    },
+//    removeFromParts: function(pPart) {
+//        var removed = false;
+//        var index = this.parts().indexOf(pPart);
+//        if (index >= 0) {
+//            this.parts().remove(pPart);
+//            this.get("fases").splice(index, 1);
+//            removed = true;
+//        }
+//        return removed;
+//    },
 
     // =============================================
     // METHODS FROM PartProxy.as / PartManager.js
 
+    /**
+     * Returns FAS for a part
+     * @param {Number} index Part index
+     * @returns {String} Null if not found.
+     */
+    getFas: function(pIndex) {
+        var fas = this.get("fases")[pIndex];
+        if (!fas) {
+            console.warn("Invalid part index:", pIndex);
+            fas = null;
+        }
+        return fas;
+    },
+    
     /** (From PartProxy)
      * Returns first matching Part with given Id number.
      * @param {Number} pId Index of Part in Bin.
@@ -248,11 +286,11 @@ Ext.define("Teselagen.models.J5Bin", {
      * All Parts are from a collection, so removing from a J5Bin on removes the Part's link.
      * No need to actually delete SequenceFiles or Parts.
      * @param {Teselagen.models.Part} pPart Part to be deleted.
-     * @param {Teselagen.models.DeviceDesign}
+     * @param {Teselagen.models.DeviceDesign} deviceDesign
      * @returns {Boolean} True if removed, false if not.
      */
     deletePart: function(pPart, pDeviceDesign) {
-        var cnt = this.partCount(); //this.parts().count()
+        var cnt = this.partCount();
         var deleted = false;
 
         for (var i = 0; i < cnt; i++) {
@@ -260,10 +298,10 @@ Ext.define("Teselagen.models.J5Bin", {
                 // want to delete this Part
 
                 var rulesToDelete = pDeviceDesign.getRulesInvolvingPart(pPart);
-                //console.log(rulesToDelete);
-                pDeviceDesign.removeFromRules(rulesToDelete);
+                pDeviceDesign.removeFromRules(rulesToDelete.getRange());
 
                 this.parts().removeAt(i);
+                this.get("fases").splice(i, 1);
             }
         }
         var newCnt  = this.partCount();
@@ -271,27 +309,24 @@ Ext.define("Teselagen.models.J5Bin", {
             deleted = true;
         }
         return deleted;
-
-        // Refresh all parts (to change colors, etc)
-        // DW: NEED TO FIRE EVENT TO REFRESH THE VIEW.
     },
     
 
     /** IS THIS NECESSARY?
      *
      */
-    createPart: function(pPart) {
-        // If none passed in, create new part, create a new PartVO
-        var newPart = pPart;
-        if (pPart === null) {
-            newPart = Ext.create("Teselagen.models.Part", {});
-        }
-
-        // Create new Part containing PartVO
-        this.parts().add(newPart);
-
-        return newPart;
-    },
+//    createPart: function(pPart) {
+//        // If none passed in, create new part, create a new PartVO
+//        var newPart = pPart;
+//        if (pPart === null) {
+//            newPart = Ext.create("Teselagen.models.Part", {});
+//        }
+//
+//        // Create new Part containing PartVO
+//        this.parts().add(newPart);
+//
+//        return newPart;
+//    },
 
     // This differs from flex implementation
     /**

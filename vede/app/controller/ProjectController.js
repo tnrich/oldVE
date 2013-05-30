@@ -334,6 +334,9 @@ Ext.define("Vede.controller.ProjectController", {
 
     },
 
+    /**
+     * @member Vede.controller.ProjectController
+     */
     init: function () {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);

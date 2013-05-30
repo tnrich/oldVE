@@ -127,6 +127,11 @@ module.exports = function(app) {
             if (err) {
                 errorHandler(err, req, res);
             } else {
+                design.j5collection.bins.forEach(function(bin, i) {
+                    bin.parts.forEach(function(part, j) {
+                        part.fas = bin.fases[j];
+                    });
+                });
                 res.json({
                     "designs": design
                 });

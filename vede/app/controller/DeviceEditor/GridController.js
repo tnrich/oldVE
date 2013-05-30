@@ -20,7 +20,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     DeviceDesignManager: null,
 
     activeBins: null,
-    activeProject: null,
+    activeProject: null, 
     grid: null,
     tabPanel: null,
 
@@ -216,7 +216,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 this.activeProject.rules().un("remove", this.onRemoveFromEugeneRules, this);
             }
 
-            this.activeProject = newTab.model.getDesign();
+            this.activeProject = newTab.model.getDesign(); // yb:This is confusing because a Project is not a DeviceDesign.
 
             this.totalColumns = this.DeviceDesignManager.binCount(this.activeProject);
 
@@ -859,6 +859,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                          this);
     },
 
+    /**
+     * @member Vede.controller.DeviceEditor.GridController
+     */
     init: function() {
         this.callParent();
 
