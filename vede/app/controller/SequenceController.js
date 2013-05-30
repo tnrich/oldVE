@@ -243,7 +243,7 @@ Ext.define("Vede.controller.SequenceController", {
 
     cutSelection: function() {
         if(this.SelectionLayer.selected) {
-            this.application.ClipBoardData = this.SequenceManager.getSequence().toString().substring(
+            this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
 
             this.deleteSequence(this.SelectionLayer.start,
@@ -255,29 +255,26 @@ Ext.define("Vede.controller.SequenceController", {
 
     copySelection: function() {
         if(this.SelectionLayer.selected) {
-            this.application.ClipBoardData = this.SequenceManager.getSequence().toString().substring(
+            this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
         }
     },
 
     pasteFromClipboard: function() {
         if(this.application.ClipBoardData) {
-            if(this.safeEditing) {
-                this.doInsertSequence(this.DNATools.createDNA(this.application.ClipBoardData),
-                                      this.caretIndex);
-            } else {
-                if(this.SelectionLayer.selected) {
-                    this.changeCaretPosition(this.SelectionLayer.start);
+            var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
 
-                    this.deleteSequence(this.SelectionLayer.start,
-                                        this.SelectionLayer.end);
-                }
+            if(this.SelectionLayer.selected) {
+                this.changeCaretPosition(this.SelectionLayer.start);
 
-                this.SequenceManager.insertSequence(
-                    this.DNATools.createDNA(this.application.ClipBoardData), this.caretIndex);
-
-                this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
+                this.deleteSequence(this.SelectionLayer.start,
+                                    this.SelectionLayer.end);
             }
+
+            this.SequenceManager.insertSequenceManager(this.application.ClipBoardData,
+                                                       this.caretIndex);
+
+            this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
         }
     },
 
