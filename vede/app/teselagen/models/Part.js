@@ -39,19 +39,17 @@ Ext.define("Teselagen.models.Part", {
     },
 
     /**
-     * Input parameters.
-     * @param {Teselagen.models.PartVO} partVO PartVO.
+     * @param {Number} id Part id
+     * @param {Number} veproject_id VectorEditorProject id
+     * @param {Number} eugenerule_id EugeneRule id
+     * @param {Number} sequencefile_id SequenceFile id
      * @param {Boolean} directionForward Direction forward.
-     * @param {String}  fas
-     * @param {String}  id ID is composed of the Date.toString + 3 random digits
-     *
-     * ( Fields from PartVO)
-     * @param {String}  name The name of the PartVO.
+     * @param {String}  name The name of the Part.
+     * @param {String}  partSource The source of the Part.
      * @param {Boolean} revComp Reverse Complement.
      * @param {Number}  genbankStartBP Genbank basepair starting index
      * @param {Number}  endBP Genbank basepair ending index
-     * @param {Teselagen.models.SequenceFile} sequenceFile
-     * @param {String}  iconID iconID
+     * @param {String}  iconID Icon id
      */
     fields: [{
         name: "id",
@@ -90,7 +88,6 @@ Ext.define("Teselagen.models.Part", {
         },
         */
     // Fields from PartVO
-    //{name: "name",              type: "string",     defaultValue: ""},      //name
     {
         name: "name",
         convert: function(v, record) {
@@ -176,34 +173,6 @@ Ext.define("Teselagen.models.Part", {
 
     ],
 
-
-    // IDS ARE GENERATED ON SERVER SIDE
-    //    /**
-    //     * Generates ID based on date + 3 random digits
-    //     * @returns {String} id
-    //     * @private
-    //     *
-    //    generateId: function() {
-    //        var extraDigits = Math.floor(Math.random() * 1000).toString();
-    //
-    //        while (extraDigits.length < 3) {
-    //            extraDigits = "0" + extraDigits;
-    //        }
-    //        var id = (Date.now()) + extraDigits;
-    //        return id;
-    //    },
-    //    */
-    //
-    //    /**
-    //     * Sets a new id for this part, different than what was generated at object initiation.
-    //     * @returns {Boolean} True if set.
-    //     *
-    //    setId: function() {
-    //        var newId = this.generateId();
-    //        this.set("id", newId);
-    //        return true;
-    //     },
-    //    */
     /**
      * Determines if Part is empty, i.e.
      * a Part is empty if it only has default values and no set SequenceFile
@@ -216,7 +185,7 @@ Ext.define("Teselagen.models.Part", {
         return partEmpty;
     },
 
-    /*
+    /**
      * Compares another Part and determines if they are the same.
      * @param {Teselagen.models.PartVO} otherPart Part to compare to.
      * @returns {Boolean} True if the same, false if not.

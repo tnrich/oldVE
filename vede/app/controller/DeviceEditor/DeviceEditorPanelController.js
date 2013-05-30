@@ -53,6 +53,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
     
 
+    /**
+     * When opening a Device Editor project, store it in the "model" attribute of the active Device Editor panel.
+     */
     openProject: function (project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
@@ -270,6 +273,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Vede.application.fireEvent("openj5");
     },
 
+    /**
+     * @member Vede.controller.DeviceEditor.DeviceEditorPanelController
+     */
     init: function () {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);

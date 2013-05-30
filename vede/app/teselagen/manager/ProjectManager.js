@@ -19,7 +19,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     sequenceStore: null,
 
     /**
-     * loadUser
+     * @member Teselagen.manager.ProjectManager
      * Loads a user, sets currentUser, load projects and fire renderProjectTree (ProjectExplorer)
      */
     loadUser: function () {

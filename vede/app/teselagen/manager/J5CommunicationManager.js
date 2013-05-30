@@ -89,14 +89,11 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
         });
     },
 
-    //================================================================
-    // Generate j5 Ajax Request
-    //================================================================
     /**
      * Generates an AJAX request to the j5 server.
      */
     generateAjaxRequest: function (cb) {
-        console.log("Starting Ajax Request");
+//        console.log("Starting Ajax Request");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
