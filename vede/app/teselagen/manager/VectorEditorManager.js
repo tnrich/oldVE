@@ -10,19 +10,19 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     sequence: null,
 
     constructor: function(seq,mgr) {
-        console.log("Teselagen.manager.VectorEditorManager created");
+        //console.log("Teselagen.manager.VectorEditorManager created");
         this.sequenceManager = mgr;
         this.sequence = seq;
         Ext.getCmp("mainAppPanel").down("button[cls=\"saveSequenceBtn\"]").show();
-        console.log(this.sequence);
+        //console.log(this.sequence);
     },
 
     changeSequenceManager: function(newSequenceManager){
-        console.log("SequenceManager changed!!");
+        //console.log("SequenceManager changed!!");
         this.sequenceFileManager = newSequenceManager;
     },
 
-    saveSequence : function(){
+    saveSequence : function(cb){
         var currentTabPanel = Ext.getCmp("mainAppPanel");
         currentTabPanel.setLoading(true);
 
@@ -36,6 +36,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
             parttext.animate({duration: 5000, to: {opacity: 0}});
+            if(typeof (cb) === "function") { cb(); }
         };
 
         var saveToServer = function(){
@@ -87,6 +88,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
                             listeners: {
                                 "itemclick": function(grid, project){
                                     selectWindow.close();
+                                    Teselagen.manager.ProjectManager.workingProject = project;
                                     Teselagen.manager.ProjectManager.workingSequence.set("name",text);
                                     Teselagen.manager.ProjectManager.workingSequence.setProject(project);
                                     Teselagen.manager.ProjectManager.workingSequence.set("project_id",project.data.id);

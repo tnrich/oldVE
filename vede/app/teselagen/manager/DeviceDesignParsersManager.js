@@ -202,9 +202,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
                     newPart.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
 
+                    var partName;
+                    partName = part.sequence["name"];
+                    if(part.sequence["de:fileName"]) partName = part.sequence["de:fileName"].replace('.gb',"");
+
                     // Sequence processing
                     var newSequence = Ext.create("Teselagen.models.SequenceFile", {
-                        name: part.sequence["de:fileName"].replace('.gb',""),
+                        name: partName,
                         sequenceFileContent: part.sequence["de:content"],
                         sequenceFileFormat: part.sequence["de:format"],
                         sequenceFileName: part.sequence["de:fileName"],

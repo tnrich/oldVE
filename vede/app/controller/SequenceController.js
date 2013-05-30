@@ -243,7 +243,7 @@ Ext.define("Vede.controller.SequenceController", {
 
     cutSelection: function() {
         if(this.SelectionLayer.selected) {
-            this.application.ClipBoardData = this.SequenceManager.getSequence().toString().substring(
+            this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
 
             this.deleteSequence(this.SelectionLayer.start,
@@ -255,17 +255,18 @@ Ext.define("Vede.controller.SequenceController", {
 
     copySelection: function() {
         if(this.SelectionLayer.selected) {
-            this.application.ClipBoardData = this.SequenceManager.getSequence().toString().substring(
+            this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
         }
     },
 
     pasteFromClipboard: function() {
         if(this.application.ClipBoardData) {
-            if(this.safeEditing) {
-                this.doInsertSequence(this.DNATools.createDNA(this.application.ClipBoardData),
-                                      this.caretIndex);
-            } else {
+            var confirmationWindow = Ext.create("Vede.view.ve.PasteConfirmationWindow").show();
+
+            confirmationWindow.down("button[cls='pasteConfirmationOkButton']").on("click", function() {
+                var pasteSequenceManager;
+
                 if(this.SelectionLayer.selected) {
                     this.changeCaretPosition(this.SelectionLayer.start);
 
@@ -273,11 +274,23 @@ Ext.define("Vede.controller.SequenceController", {
                                         this.SelectionLayer.end);
                 }
 
-                this.SequenceManager.insertSequence(
-                    this.DNATools.createDNA(this.application.ClipBoardData), this.caretIndex);
+                pasteSequenceManager = this.application.ClipBoardData.clone();
+
+                if(confirmationWindow.down("radiogroup").getValue().pasteFormatField === "reverse") {
+                    pasteSequenceManager.doReverseComplementSequence();
+                }
+
+                confirmationWindow.close();
+
+                this.SequenceManager.insertSequenceManager(pasteSequenceManager,
+                                                           this.caretIndex);
 
                 this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
-            }
+            }, this);
+
+            confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {
+                confirmationWindow.close();
+            });
         }
     },
 

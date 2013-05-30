@@ -26,10 +26,10 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     xtype: 'menuitem',
                     text: 'Save Design'
                 },
-                //                {
-                //                    xtype: 'menuitem',
-                //                    text: 'Delete Design'
-                //                }, 
+                {
+                    xtype: 'menuitem',
+                    text: 'Delete Design'
+                }, 
                 {
                     xtype: 'menuitem',
                     text: 'Rename Design'
@@ -54,7 +54,21 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 }, {
                     xtype: 'menuitem',
                     text: 'Remove Row',
-                    cls: 'removeRowMenuItem'
+                    cls: 'removeRowMenuItem',
+                }, {
+                    text: 'Cut Part',
+                    cls: 'cutPartMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Copy Part',
+                    cls: 'copyPartMenuItem',
+                    disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Paste Part',
+                    cls: 'pastePartMenuItem',
+                    disabled: true
                 }]
             }
         },{

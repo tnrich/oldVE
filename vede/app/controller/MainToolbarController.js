@@ -156,8 +156,70 @@ Ext.define('Vede.controller.MainToolbarController', {
         //console.log(gbMng.);
     },
 
-    onExportToFileButtonClick: function(){
+    hidePanels: function(){
+        //Ext.getCmp('AnnotatePanel').collapse();
+        Ext.getCmp('ProjectPanel').hide();
+        //Ext.get('headerPanel').hide();
+        //Ext.get('VectorEditorMainMenuPanel').hide();
+        Ext.get("VectorEditorStatusPanel").hide();
+        Ext.get("FindPanel").hide();        
+    },
+
+    showPanels: function(){
+        //Ext.getCmp('AnnotatePanel').expand();
+        Ext.getCmp('ProjectPanel').show();
+        //Ext.get('headerPanel').show();
+        //Ext.get('VectorEditorMainMenuPanel').show();
+        Ext.get("VectorEditorStatusPanel").show();
+        Ext.get("FindPanel").show();        
+    },
+
+    registerFullScreenEventListener: function(){
+        var self = this;
+
+        document.addEventListener("fullscreenchange", function () {
+            if(!(document.fullscreenElement)) self.showPanels();
+            else self.hidePanels();
+        }, false);
         
+        document.addEventListener("mozfullscreenchange", function () {
+            if(!(document.mozFullScreen)) self.showPanels();
+            else self.hidePanels();
+        }, false);
+        
+        document.addEventListener("webkitfullscreenchange", function () {
+            if(!(document.webkitIsFullScreen)) self.showPanels();
+            else self.hidePanels();
+        }, false);
+    },
+
+    onFullscreenButtonClick: function(){
+
+        if(document.fullscreenElement || document.mozFullScreen || document.webkitIsFullScreen)
+        {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+            else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            }
+            else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
+        }
+        else
+        {
+            var docElm = document.documentElement;
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            }
+            else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            }
+            else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            }
+        }
     },
 
     init: function() {
@@ -199,10 +261,14 @@ Ext.define('Vede.controller.MainToolbarController', {
             },
             "#saveToRegistryConfirmation": {
                 click: this.onSaveToRegistryConfirmationButtonClick
-            }
+            },
+            "#fullscreen": {
+                click: this.onFullscreenButtonClick
+            },
         });
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+        this.registerFullScreenEventListener();
     }
 
 });

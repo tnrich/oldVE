@@ -10,7 +10,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     DeviceEvent: null,
 
     onLoadEugeneRulesEvent: function(){
-        console.log("Loading eugene rules");
+        //console.log("Loading eugene rules");
         var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
@@ -53,6 +53,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
     
 
+    /**
+     * When opening a Device Editor project, store it in the "model" attribute of the active Device Editor panel.
+     */
     openProject: function (project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
     },
@@ -148,7 +151,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         var design = deproject.getDesign();
         // loadingMessage.update(30, "Saving design");
-        deproject.save({callback:function(){
+        //deproject.save({callback:function(){
 
         var saveAssociatedSequence = function (part, cb) {
                 part.getSequenceFile({callback: function(associatedSequence){
@@ -233,7 +236,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             });
         });
 
-        }});
+        //}});
     },
 
     onDeviceEditorSaveBtnClick: function () {
@@ -277,6 +280,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Vede.application.fireEvent("openj5");
     },
 
+    /**
+     * @member Vede.controller.DeviceEditor.DeviceEditorPanelController
+     */
     init: function () {
         this.callParent();
         this.application.on(Teselagen.event.ProjectEvent.OPEN_PROJECT, this.openProject, this);
