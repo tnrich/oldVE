@@ -87,7 +87,6 @@ module.exports = function(db) {
 		eugenerule_id     :  String,
 		sequencefile_id   :  String,
 		directionForward  :  String,
-		fas               :  String,
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
