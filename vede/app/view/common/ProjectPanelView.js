@@ -28,7 +28,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         xtype: 'treepanel',
         border: 0,
         id: 'projectTreePanel',
-        rootVisible: false
+        rootVisible: false,
+        animate: false
     }, {
         hidden: true,
         flex: 1,

@@ -10,15 +10,15 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
     sequence: null,
 
     constructor: function(seq,mgr) {
-        console.log("Teselagen.manager.VectorEditorManager created");
+        //console.log("Teselagen.manager.VectorEditorManager created");
         this.sequenceManager = mgr;
         this.sequence = seq;
         Ext.getCmp("mainAppPanel").down("button[cls=\"saveSequenceBtn\"]").show();
-        console.log(this.sequence);
+        //console.log(this.sequence);
     },
 
     changeSequenceManager: function(newSequenceManager){
-        console.log("SequenceManager changed!!");
+        //console.log("SequenceManager changed!!");
         this.sequenceFileManager = newSequenceManager;
     },
 

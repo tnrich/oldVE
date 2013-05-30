@@ -197,6 +197,13 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         scale: 'medium',
         tooltip: 'Show ORF'
     },
+    {
+        xtype: 'button',
+        id: 'fullscreen',
+        scale: 'medium',
+        icon: 'resources/images/fullscreen.png',
+        tooltip: 'Toggle fullscreen'
+    },
     //        {
     //            xtype: 'button',
     //            id: 'reBtn',
