@@ -10,16 +10,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     DeviceEvent: null,
 
     onLoadEugeneRulesEvent: function(){
-        console.log("Trying to load eugene rules");
-    },
-
-    /*
-    onLoadEugeneRulesEvent: function(){
+        console.log("Loading eugene rules");
         var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
+        
         Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/000/devicedesigns/000/eugenerules", ''),
+            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/"+currentProject.data.project_id+"/devicedesigns/"+currentProject.data.id+"/eugenerules", ''),
             method: 'GET',
             params: {
                 id: deproject_id
@@ -52,8 +49,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 Ext.MessageBox.alert('Error','Problem while loading Eugene Rules');
             }
         });
+        
     },
-    */
+    
 
     openProject: function (project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
@@ -278,7 +276,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
 
-        //this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+        this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
