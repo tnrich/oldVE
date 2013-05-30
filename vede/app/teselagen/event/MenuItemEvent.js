@@ -5,6 +5,10 @@
 Ext.define("Teselagen.event.MenuItemEvent", {
     singleton: true,
 
+    CUT: "Cut",
+    COPY: "Copy",
+    PASTE: "Paste",
+
     UNDO: "Undo",
     REDO: "Redo",
 

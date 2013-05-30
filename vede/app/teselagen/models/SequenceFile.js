@@ -14,7 +14,7 @@ Ext.define("Teselagen.models.SequenceFile", {
         url: "/vede/test/data/json/sequenceFiles.json",
         reader: {
             type: "json",
-            root: "sequence"
+            root: "sequences"
         },
         writer: {
             type: "json"

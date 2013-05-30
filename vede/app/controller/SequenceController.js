@@ -114,7 +114,7 @@ Ext.define("Vede.controller.SequenceController", {
         listenersObject[this.SequenceManagerEvent.SEQUENCE_CHANGED] =
             this.onSequenceChanged;
 
-        this.application.on(listenersObject);
+        this.application.on(listenersObject, this);
     },
 
     onLaunch: function() {
@@ -151,43 +151,52 @@ Ext.define("Vede.controller.SequenceController", {
     onKeydown: function(event) {
         var character = String.fromCharCode(event.getCharCode()).toLowerCase();
 
-        if(event.ctrlKey && event.getKey() == event.LEFT) {
+        if(event.ctrlKey && event.getKey() === event.LEFT) {
             // Ctrl + Left: Move caret to start of previous block of 10 bases.
-            if(this.caretIndex % 10 == 0) {
+            if(this.caretIndex % 10 === 0) {
                 this.changeCaretPosition(this.caretIndex - 10);
             } else {
                 this.changeCaretPosition(Math.round(this.caretIndex / 10) * 10);
             }
-        } else if(event.ctrlKey && event.getKey() == event.RIGHT) {
+        } else if(event.ctrlKey && event.getKey() === event.RIGHT) {
             // Ctrl + Right: Move caret to end of current block of 10 bases.
-            if(this.caretIndex % 10 == 0) {
+            if(this.caretIndex % 10 === 0) {
                 this.changeCaretPosition(this.caretIndex + 10);
             } else {
                 this.changeCaretPosition(Math.round(this.caretIndex / 10 + 1) * 10);
             }
-        } else if(event.ctrlKey && event.getKey() == event.HOME) {
+        } else if(event.ctrlKey && event.getKey() === event.HOME) {
             // Ctrl + Home: Move caret to start of sequence.
             this.changeCaretPosition(0);
-        } else if(event.ctrlKey && event.getKey() == event.END) {
+        } else if(event.ctrlKey && event.getKey() === event.END) {
             // Ctrl + End: Move caret to end of sequence.
             this.changeCaretPosition(
                 this.SequenceManager.getSequence().toString().length - 1);
-        } else if(event.ctrlKey && event.getKey() == event.Z) {
+        } else if(event.ctrlKey && event.getKey() === event.X) {
+            // Ctrl + X: Cut.
+            this.cutSelection();
+        } else if(event.ctrlKey && event.getKey() === event.C) {
+            // Ctrl + C: Copy.
+            this.copySelection();
+        } else if(event.ctrlKey && event.getKey() === event.V) {
+            // Ctrl + V: Paste.
+            this.pasteFromClipboard();
+        } else if(event.ctrlKey && event.getKey() === event.Z) {
             // Ctrl + Z: Undo last action.
             this.application.fireEvent(this.MenuItemEvent.UNDO);
-        } else if(event.ctrlKey && event.getKey() == event.U) {
+        } else if(event.ctrlKey && event.getKey() === event.U) {
             // Ctrl + U: Redo last action.
             this.application.fireEvent(this.MenuItemEvent.REDO); 
-        } else if(event.ctrlKey && event.getKey() == event.A) {
+        } else if(event.ctrlKey && event.getKey() === event.A) {
             // Ctrl + A: Select everything.
             this.application.fireEvent(this.MenuItemEvent.SELECT_ALL);
-        } else if(event.ctrlKey && event.getKey() == event.I) {
+        } else if(event.ctrlKey && event.getKey() === event.I) {
             // Ctrl + I: Invert selection.
             this.application.fireEvent(this.MenuItemEvent.SELECT_INVERSE);
-        } else if(event.getKey() == event.LEFT) {
+        } else if(event.getKey() === event.LEFT) {
             // Left: Move caret down one base.
             this.changeCaretPosition(this.caretIndex - 1);
-        } else if(event.getKey() == event.RIGHT) {
+        } else if(event.getKey() === event.RIGHT) {
             // Right: Move caret right one base.
             this.changeCaretPosition(this.caretIndex + 1);
         } else if(!event.ctrlKey && !event.altKey) {
@@ -200,66 +209,88 @@ Ext.define("Vede.controller.SequenceController", {
                     this.doInsertSequence(this.DNATools.createDNA(character), 
                                           this.caretIndex);
                 } else {
+                    if(this.SelectionLayer.selected) {
+                        this.changeCaretPosition(this.SelectionLayer.start);
+
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+                    }
+
                     this.SequenceManager.insertSequence(
                         this.DNATools.createDNA(character), this.caretIndex);
 
                     this.changeCaretPosition(this.caretIndex + 1);
                 }
-            } else if(event.getKey() == event.DELETE) {
+            } else if(event.getKey() === event.DELETE) {
                 if(this.SelectionLayer.selected) {
-                    if(this.safeEditing) {
-                        this.doDeleteSequence(this.SelectionLayer.start,
-                                              this.SelectionLayer.end);
-                    } else {
-                        this.SequenceManager.removeSequence(
-                                            this.SelectionLayer.start,
-                                            this.SelectionLayer.end);
-
-                        this.changeCaretPosition(this.SelectionLayer.start);
-
-                        this.SelectionLayer.deselect();
-                        this.application.fireEvent(
-                            this.SelectionEvent.SELECTION_CANCELED);
-
-                    }
-
+                    this.deleteSequence(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
                 } else {
-                    if(this.safeEditing) {
-                        this.doDeleteSequence(this.caretIndex, 
-                                              this.caretIndex + 1);
-                    } else {
-                        this.SequenceManager.removeSequence(this.caretIndex,
-                                                            this.caretIndex + 1);
-                    }
+                    this.deleteSequence(this.caretIndex, this.caretIndex + 1);
                 }
 
-            } else if(event.getKey() == event.BACKSPACE && this.caretIndex > 0) {
+            } else if(event.getKey() === event.BACKSPACE && this.caretIndex > 0) {
                 if(this.SelectionLayer.selected) {
-                    if(this.safeEditing) {
-                        this.doDeleteSequence(this.SelectionLayer.start,
-                                              this.SelectionLayer.end);
-                    } else {
-                        this.SequenceManager.removeSequence(
-                                              this.SelectionLayer.start,
-                                              this.SelectionLayer.end);
-                        
-                        this.changeCaretPosition(this.SelectionLayer.start);
-
-                        this.SelectionLayer.deselect();
-                        this.application.fireEvent(
-                            this.SelectionEvent.SELECTION_CANCELED);
-                    }
+                    this.deleteSequence(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
                 } else {
-                    if(this.safeEditing) {
-                        this.doDeleteSequence(this.caretIndex - 1,
-                                              this.caretIndex);
-                    } else {
-                        this.SequenceManager.removeSequence(this.caretIndex - 1,
-                                                            this.caretIndex);
-
-                        this.changeCaretPosition(this.caretIndex - 1);
-                    }
+                    this.deleteSequence(this.caretIndex - 1, this.caretIndex);
+                    this.changeCaretPosition(this.caretIndex - 1);
                 }
+            }
+        }
+    },
+
+    cutSelection: function() {
+        if(this.SelectionLayer.selected) {
+            this.application.ClipBoardData = this.SequenceManager.getSequence().toString().substring(
+                this.SelectionLayer.start, this.SelectionLayer.end);
+
+            this.deleteSequence(this.SelectionLayer.start,
+                                this.SelectionLayer.end);
+            
+            this.changeCaretPosition(this.caretIndex - this.application.ClipBoardData.length);
+        }
+    },
+
+    copySelection: function() {
+        if(this.SelectionLayer.selected) {
+            this.application.ClipBoardData = this.SequenceManager.getSequence().toString().substring(
+                this.SelectionLayer.start, this.SelectionLayer.end);
+        }
+    },
+
+    pasteFromClipboard: function() {
+        if(this.application.ClipBoardData) {
+            if(this.safeEditing) {
+                this.doInsertSequence(this.DNATools.createDNA(this.application.ClipBoardData),
+                                      this.caretIndex);
+            } else {
+                if(this.SelectionLayer.selected) {
+                    this.changeCaretPosition(this.SelectionLayer.start);
+
+                    this.deleteSequence(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
+                }
+
+                this.SequenceManager.insertSequence(
+                    this.DNATools.createDNA(this.application.ClipBoardData), this.caretIndex);
+
+                this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
+            }
+        }
+    },
+
+    deleteSequence: function(start, end) {
+        if(this.safeEditing) {
+            this.doDeleteSequence(start, end);
+        } else {
+            this.SequenceManager.removeSequence(start, end);
+
+            if(this.SelectionLayer.selected) {
+                this.SelectionLayer.deselect();
+                this.application.fireEvent(
+                    this.SelectionEvent.SELECTION_CANCELED);
             }
         }
     },

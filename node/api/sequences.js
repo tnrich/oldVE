@@ -3,6 +3,10 @@ module.exports = function(app) {
     var restrict = app.auth.restrict;
     var constants = require('../routes/constants');
 
+    var Sequence = app.db.model("sequence");
+    var Project = app.db.model("project");
+
+    /*
     function autoReassignDuplicatedSequence(res, sequence, cb) {
         if (sequence.sequenceFileContent != constants.emptyGenbank) {
             var sequences = app.db.model("sequence");
@@ -35,6 +39,58 @@ module.exports = function(app) {
             });
         } else return cb(false);
     }
+    */
+
+    var saveSequence = function(newSequence,req,res){
+        for (var prop in req.body) {
+            if(prop!="project_id") { newSequence[prop] = req.body[prop]; }
+        }
+
+        if(req.body.project_id!="") newSequence.project_id = req.body.project_id;
+
+        Project.findById(req.body.project_id,function(err,project){
+            if(err) return res.json(500,{"error":err});
+            if(!project) return res.json(500,{"error":"project not found"});
+
+            newSequence.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
+
+            project.sequences.push(newSequence);
+            project.save();
+            newSequence.save(function(err){
+                if(err)
+                {
+                    if(err.code===11000)
+                    {
+                        // Duplicated Sequence
+                        Sequence.findOne({"FQDN":newSequence.FQDN}).exec(function(err,sequence){
+                            res.json({'sequences': sequence,"duplicated":true});
+                        });
+                    }
+                    else
+                    {
+                        return res.json(500,{"error":err});
+                    }
+                }
+                else res.json({'sequences': newSequence,"duplicated":false,"err":err});
+            });
+
+        });
+
+        /*
+        newSequence.save(function(err) {
+            if(err) { console.log("WARNING: SEQUENCE NOT SAVED!"); console.log(err);}
+            else  { console.log("INFO: NEW SEQUENCE SAVED!"); }
+            req.user.sequences.push(newSequence);
+            req.user.save(function(err) {
+                if (err) console.log(err);
+                res.json({
+                    "sequence": newSequence,
+                    "info": "no duplicated"
+                });
+            });
+        });
+        */
+    };
 
     /**
      * POST Sequence
@@ -42,53 +98,8 @@ module.exports = function(app) {
      * @method POST '/sequences'
      */
     app.post('/sequences', restrict, function(req, res) {
-        var sequence = req.body;
-        //var VEProject = app.db.model("veproject");
-        var Sequence = app.db.model("sequence");
-        var Project = app.db.model("project");
-
-        autoReassignDuplicatedSequence(res, sequence, function(duplicated, duplicatedSequence) {
-
-            if (duplicated) {
-                res.json({
-                    "sequence": duplicatedSequence,
-                    "info": "duplicated"
-                });
-            } else {
-
-
-                var newSequence = new Sequence();
-
-                for (var prop in sequence) {
-                    if(prop!="project_id") { newSequence[prop] = sequence[prop]; }
-                }
-
-                if(sequence.project_id)
-                {
-                    if(sequence.project_id!="") newSequence.project_id = sequence.project_id;
-
-                    Project.findById(newSequence.project_id,function(err,project){
-                        project.sequences.push(newSequence);
-                        project.save();
-                    });
-
-                }
-
-                newSequence.save(function(err) {
-                    if(err) { console.log("WARNING: SEQUENCE NOT SAVED!"); console.log(err);}
-                    else  { console.log("INFO: NEW SEQUENCE SAVED!"); }
-                    req.user.sequences.push(newSequence);
-                    req.user.save(function(err) {
-                        if (err) console.log(err);
-                        res.json({
-                            "sequence": newSequence,
-                            "info": "no duplicated"
-                        });
-                    });
-                });
-
-            }
-        });
+        var newSequence = new Sequence();
+        saveSequence(newSequence,req,res);
     });
 
     /**
@@ -97,34 +108,11 @@ module.exports = function(app) {
      * @method PUT '/sequences'
      */
     app.put('/sequences', restrict,  function(req, res) {
-        var sequence = req.body;
-        var Sequence = app.db.model("sequence");
-        var Project = app.db.model("project");
-        Sequence.findById(req.body.id, function(err, sequence) {
-
-            if(req.body.project_id)
-            {
-                if(sequence.project_id!==req.body.project_id)
-                {
-                    Project.findById(req.body.project_id,function(err,project){
-                        project.sequences.push(sequence);
-                        project.save();
-                    });
-                }
-            }
-
-            for (var prop in req.body) {
-                sequence[prop] = req.body[prop];
-            }
-            sequence.save(function(pErr) {
-                res.json({
-                    "sequence": sequence
-                });
-            });
+        Sequence.findById(req.body.id, function(err, newSequence) {
+            if(err) return res.json(500,{"error":err});
+            if(!newSequence) return res.json(500,{"error":"Sequence not found!"});
+            saveSequence(newSequence,req,res);
         });
-
-        // checkForDuplicatedSequence(res, sequence, function() {
-        // });
     });
 
     /**
@@ -137,7 +125,7 @@ module.exports = function(app) {
             var Project = app.db.model("project");
             Project.findById(req.params.project_id).populate('sequences').exec(function(err, project) {
                 res.json({
-                    "sequence": project.sequences
+                    "sequences": project.sequences
                 });
             });
         }
@@ -154,7 +142,7 @@ module.exports = function(app) {
             Sequence.findById(req.params.sequence_id, function(err, sequence) {
                 if (err) console.log("There was a problem with GET sequence");
                 res.json({
-                    "sequence": sequence
+                    "sequences": sequence
                 });
             });
         }

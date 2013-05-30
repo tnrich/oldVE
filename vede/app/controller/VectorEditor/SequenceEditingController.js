@@ -32,6 +32,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                         callback: function () {
                             part.setSequenceFileModel(sequence);
                             part.set('sequencefile_id', sequence.data.id);
+                            part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
                             part.save({
                                 callback: function () {
                                     var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
@@ -104,6 +105,10 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
         this.VEManager.changeSequenceManager(newSequenceFileManager);
     },
 
+    onExportToFileMenuItemClick: function(){
+        this.VEManager.saveSequenceToFile();
+    },
+
     init: function () {
 
         this.control({
@@ -112,6 +117,9 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
             },
             '#VectorEditorMainToolBar > button[cls="createPartBtn"]': {
                 click: this.onCreatePartBtnClick
+            },
+            "#exportToFileMenuItem": {
+                click: this.onExportToFileMenuItemClick
             }
         });
 

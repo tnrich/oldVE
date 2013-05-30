@@ -59,7 +59,9 @@ module.exports = function(app){
                     if (results === null) {
                         // If user not found create a new one
                         var newuser = new User({
-                            username: username
+                            username: username,
+                            groupName: 'Teselagen',
+                            groupType: 'com'
                         });
                         User.create(newuser, function(err, user) {
                             console.log(username + ' user created!');

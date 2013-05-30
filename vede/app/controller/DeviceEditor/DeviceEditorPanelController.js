@@ -4,22 +4,19 @@
  */
 Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     extend: 'Ext.app.Controller',
-    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager"],
+    requires: ["Ext.draw.*", "Teselagen.manager.DeviceDesignParsersManager", "Teselagen.manager.ProjectManager", "Teselagen.event.DeviceEvent", "Teselagen.manager.DeviceDesignManager","Teselagen.event.ProjectEvent"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
 
     onLoadEugeneRulesEvent: function(){
-        console.log("Trying to load eugene rules");
-    },
-
-    /*
-    onLoadEugeneRulesEvent: function(){
+        console.log("Loading eugene rules");
         var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
+        
         Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/000/devicedesigns/000/eugenerules", ''),
+            url: Teselagen.manager.SessionManager.buildUserResUrl("/projects/"+currentProject.data.project_id+"/devicedesigns/"+currentProject.data.id+"/eugenerules", ''),
             method: 'GET',
             params: {
                 id: deproject_id
@@ -52,8 +49,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 Ext.MessageBox.alert('Error','Problem while loading Eugene Rules');
             }
         });
+        
     },
-    */
+    
 
     openProject: function (project) {
         Ext.getCmp('mainAppPanel').getActiveTab().model = project;
@@ -194,6 +192,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                     callback: function (record, operation) {
                         // loadingMessage.close();
                         Vede.application.fireEvent("resumePartAlerts");
+                        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+                            Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
+                        });
                         if(typeof (cb) == "function") cb();
                     }
                 });
@@ -282,7 +283,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
 
-        //this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+        this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {
