@@ -636,19 +636,19 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     /**
-     * Helper function to retrieve the class of the part rendered on the grid
-     * given its corresponding Part model.
+     * Helper function to retrieve the class of the parts rendered on the grid
+     * given their corresponding Part model.
      * @param {Teselagen.models.Part} j5Part The model to match to a part
      * rendered on the grid.
-     * @return {Vede.view.de.grid.Part} The grid part corresponding to the given 
+     * @return {Vede.view.de.grid.Part[]} The grid parts corresponding to the given 
      * part model.
      */
     getGridPartFromJ5Part: function(j5Part) {
-        var targetGridPart = null;
+        var targetGridParts = [];
 
         Ext.each(this.grid.query("Part"), function(gridPart) {
             if(gridPart.getPart() === j5Part) {
-                targetGridPart = gridPart;
+                targetGridParts.push(gridPart);
                 return false;
             }
         });
@@ -656,7 +656,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // If this method fails, we may be trying to retrieve a grid part which
         // has no part associated with it yet. In this case, first retrieve the
         // bin associated with the j5Part, then the index of the part itself.
-        if(!targetGridPart) {
+        if(!targetGridParts) {
             var ownerBinIndex = this.DeviceDesignManager.getBinAssignment(
                                         this.activeProject, j5Part);
             var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
@@ -664,10 +664,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             var gridBin = this.getGridBinFromJ5Bin(ownerBin);
 
             var partIndex = ownerBin.parts().indexOf(j5Part);
-            targetGridPart = gridBin.query("container[cls='gridPartContainer']")[partIndex];
+            targetGridParts.push(gridBin.query("container[cls='gridPartContainer']")[partIndex]);
         }
 
-        return targetGridPart;
+        return targetGridParts;
     },
 
     onPartCellSelectByMap: function(pj5Part) {
