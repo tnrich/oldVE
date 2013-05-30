@@ -7,18 +7,18 @@ Ext.require("Teselagen.bio.tools.DigestionCalculator");
 
 Ext.define("Teselagen.models.digest.GelLane", {
     config: {
-    	/**
-    	 * {String} name of this gel
-    	 */
+        /**
+         * {String} name of this gel
+         */
         name: "default",
         /**
          * {String} default color for all bands of this gel (can be overridden by lane or by band)
          */
-        BAND_COLOR: '#fff',
+        BAND_COLOR: "#fff",
         /**
          * {String} default color for all connectors in this gel (can be overridden by lane or by band)
          */
-        CONNECTOR_COLOR: '#999999',
+        CONNECTOR_COLOR: "#999999",
         /**
          * The ladder associated with this gel
          */
@@ -60,7 +60,7 @@ Ext.define("Teselagen.models.digest.GelLane", {
          */
         bandSizeLabelYPositions: null,
         /**
-         * An {Teselagen.bio.enzymes.RestrictionEnzyme[]} of the restriction enzymes to use to cut the DNA in sequence 
+         * An {Teselagen.bio.enzymes.RestrictionEnzyme[]} of the restriction enzymes to use to cut the DNA in sequence
          */
         enzymes: null,
         /**
@@ -73,22 +73,22 @@ Ext.define("Teselagen.models.digest.GelLane", {
         Ladder: null,
         /**
          * A {Teselagen.models.digest.GelBand[]} array of bands contained in this lane
-         * 
+         *
          */
         bands: null,
         /**
          * A {String} the type of lane this is
-         * 
+         *
          */
         laneType: "ladder",
-		/**
-		 * Horizontal padding for bands and labels (as a fraction of 1)
-		 */
-        hPad: .1,
+        /**
+         * Horizontal padding for bands and labels (as a fraction of 1)
+         */
+        hPad: 0.1,
         /**
          * The horizontal (X) offset of this lane relative to the whoel gel
          */
-        xOffset: 100,
+        xOffset: 100
     },
 
     /**
@@ -106,14 +106,14 @@ Ext.define("Teselagen.models.digest.GelLane", {
         if (inData.ladder !== undefined){
             for (var i = 0; i < inData.ladder.length; ++i){
                 this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {
-                	size: inData.ladder[i], 
-                	actualWidth: this.getActualWidth(),
-                	xOffset: this.getXOffset(),
+                    size: inData.ladder[i],
+                    actualWidth: this.getActualWidth(),
+                    xOffset: this.getXOffset(),
                     labelSize: this.getLabelSize()
-                	}));
+                    }));
             }
         } else {
-        	this.laneType = "digest";
+            this.laneType = "digest";
         }
     },
     /**
@@ -143,66 +143,66 @@ Ext.define("Teselagen.models.digest.GelLane", {
      * @return {Ext.draw.Sprite[]}
      */
     draw: function(totalLogDifference, min){
-        var ladderHeight = this.actualHeight * 0.8;
+//        var ladderHeight = this.actualHeight * 0.8;
         this.bandSprites = [];
         this.refreshDigestion();
         for (var i = 0; i < this.bands.length; ++i){
             var bandSprite = this.bands[i].draw(totalLogDifference, min, this.getActualHeight());
             this.bandSprites.push(bandSprite);
             if (this.laneType === "ladder"){
-	            var label = this.bands[i].drawLabels();
-	            //reset label.shifted
-	            label.shifted = false;
-	            //check the previous label to make sure we don't collide
-	            if (this.bandSprites.length > 1){
-	                var previousLabel = this.bandSprites[this.bandSprites.length-2];
-	                var overlap = previousLabel.y - label.y - this.getLabelSize();
-	                if (overlap < 0 && previousLabel.shifted != true) {
-	                    label.setAttributes({
-	                        translate: {
-	                            x: this.getLabelSize()/2 * -6,
-	                            y: 0
-	                           }
-	                         }, true);
-	                    label.shifted = true;
-	                    var connector = Ext.create('Ext.draw.Sprite', {
-	                        type: 'rect',
-	                        fill: this.CONNECTOR_COLOR,
-	                        height: 1,
-	                        width: bandSprite.x - label.x + this.getLabelSize()/2 * (6 - label.text.length),
-	                        x: label.x - this.getLabelSize()/2 * (6 - label.text.length),
-	                        y: label.y
-	                    });
-	                    this.bandSprites.push(connector);
-	                }
-	            }
-	            this.bandSprites.push(label);
+                var label = this.bands[i].drawLabels();
+                //reset label.shifted
+                label.shifted = false;
+                //check the previous label to make sure we don't collide
+                if (this.bandSprites.length > 1){
+                    var previousLabel = this.bandSprites[this.bandSprites.length-2];
+                    var overlap = previousLabel.y - label.y - this.getLabelSize();
+                    if (overlap < 0 && previousLabel.shifted !== true) {
+                        label.setAttributes({
+                            translate: {
+                                x: this.getLabelSize()/2 * -6,
+                                y: 0
+                               }
+                             }, true);
+                        label.shifted = true;
+                        var connector = Ext.create("Ext.draw.Sprite", {
+                            type: "rect",
+                            fill: this.CONNECTOR_COLOR,
+                            height: 1,
+                            width: bandSprite.x - label.x + this.getLabelSize()/2 * (6 - label.text.length),
+                            x: label.x - this.getLabelSize()/2 * (6 - label.text.length),
+                            y: label.y
+                        });
+                        this.bandSprites.push(connector);
+                    }
+                }
+                this.bandSprites.push(label);
             }
         }
         if (this.laneType === "digest"){
-        	var laneLabelText;
-	        if (this.bands.length > 0){
-	        	laneLabelText = this.bands.length + " fragment";
-	        	if (this.bands.length > 1){
-	        		laneLabelText = laneLabelText + "s";
-	        	}
-	        } else {
-	        	if (this.sequence === null){
-	        		laneLabelText = "No Sequence";	
-	        	} else {
-	        		laneLabelText = "No Digestion";
-	        	}
-	        }
-	        var halfWidth = this.actualWidth / 2;
-	        var txtOffset = halfWidth;
-	        var laneLabel = Ext.create('Ext.draw.Sprite', {
-	            type: 'text',
-	            text: laneLabelText,
-	            fill: this.BAND_COLOR,
-	            font: this.labelSize + 'px "monospace"',
-	            x: txtOffset + this.xOffset + (halfWidth * this.hPad),
-	            y: 10
-	        });
+            var laneLabelText;
+            if (this.bands.length > 0){
+                laneLabelText = this.bands.length + " fragment";
+                if (this.bands.length > 1){
+                    laneLabelText = laneLabelText + "s";
+                }
+            } else {
+                if (this.sequence === null){
+                    laneLabelText = "No Sequence";
+                } else {
+                    laneLabelText = "No Digestion";
+                }
+            }
+            var halfWidth = this.actualWidth / 2;
+            var txtOffset = halfWidth;
+            var laneLabel = Ext.create("Ext.draw.Sprite", {
+                type: "text",
+                text: laneLabelText,
+                fill: this.BAND_COLOR,
+                font: this.labelSize + "px 'monospace'",
+                x: txtOffset + this.xOffset + (halfWidth * this.hPad),
+                y: 10
+            });
             this.bandSprites.push(laneLabel);
         }
         return this.bandSprites;
@@ -210,21 +210,21 @@ Ext.define("Teselagen.models.digest.GelLane", {
     /**
      * Returns a sprite that corresponds to the label for this lane
      * @return {Ext.draw.Sprite}
-     * 
+     *
      */
     drawLabels: function(){
         var halfWidth = this.actualWidth / 2;
         var sizeString = this.size.toString();
         var txtOffset = halfWidth * (1 - this.hPad) - sizeString.length * this.labelSize / 2;
-        var gelLabel = Ext.create('Ext.draw.Sprite', {
-            type: 'text',
+        var gelLabel = Ext.create("Ext.draw.Sprite", {
+            type: "text",
             text: sizeString,
             fill: this.BAND_COLOR,
-            font: this.labelSize + 'px "monospace"',
+            font: this.labelSize + "px 'monospace'",
             style: {
-                textAlign: 'right',
-                display: 'block',
-                width: '50px'
+                textAlign: "right",
+                display: "block",
+                width: "50px"
             },
             x: txtOffset + this.xOffset + (halfWidth * this.hPad),
             y: this.bandYPosition
@@ -237,11 +237,11 @@ Ext.define("Teselagen.models.digest.GelLane", {
     refreshDigestion: function(){
         //If the fragments are the result of a digestion, then they can change
         if (this.sequence !== null && this.enzymes !== null && this.enzymes.length > 0) {
-        	this.mapFragmentsToBands(this.digestionCalculator.digestSequence(this.sequence, this.enzymes));
+            this.mapFragmentsToBands(this.digestionCalculator.digestSequence(this.sequence, this.enzymes));
         }
         //else this must be a ladder
-    	//sort the bands in reverse size order
-    	this.bands.sort(function(x, y){ return x.size - y.size });
+        //sort the bands in reverse size order
+        this.bands.sort(function(x, y){ return x.size - y.size; });
     },
     
     /**
@@ -252,11 +252,11 @@ Ext.define("Teselagen.models.digest.GelLane", {
         this.bands = [];
         for (var i = 0; i < fragments.length; ++i){
             this.bands.push(Ext.create("Teselagen.models.digest.GelBand", {
-            	digestionFragment: fragments[i], 
-            	actualWidth: this.getActualWidth(),
-            	xOffset: this.getXOffset(),
+                digestionFragment: fragments[i],
+                actualWidth: this.getActualWidth(),
+                xOffset: this.getXOffset(),
                 labelSize: this.getLabelSize()
-            	}));
+                }));
         }
     },
 

@@ -5,23 +5,23 @@
  */
 Ext.define("Teselagen.models.digest.LadderLane", {
     config: {
-        BAND_COLOR: '#fff',
-        CONNECTOR_COLOR: '#999999',
+        BAND_COLOR: "#fff",
+        CONNECTOR_COLOR: "#999999",
         ladder: null,
         bandYPositions: null,
         bandSizeLabels: null,
-        bandSizeLabelYPositions: null,  
+        bandSizeLabelYPositions: null,
 
         actualWidth: 200,
         actualHeight: 400,
 
         ladderChanged: true,
-        needsRemeasurement: true,
+        needsRemeasurement: true
     },
 
     statics: {
-        BP_LADDER_BANDS: ['20000', '10000', '7000', '5000', '4000', '2000', '1500', '1000', '700', '500', '400', '300', '200', '75'],
-        KB_LADDER_BANDS: ['3000', '2000', '1500', '1200', '1000', '900', '800', '700', '600', '500', '400', '300', '200', '100'],
+        BP_LADDER_BANDS: ["20000", "10000", "7000", "5000", "4000", "2000", "1500", "1000", "700", "500", "400", "300", "200", "75"],
+        KB_LADDER_BANDS: ["3000", "2000", "1500", "1200", "1000", "900", "800", "700", "600", "500", "400", "300", "200", "100"]
     },
 
     /**
@@ -31,8 +31,8 @@ Ext.define("Teselagen.models.digest.LadderLane", {
     constructor: function(inData){
         this.initConfig(inData);
         this.statics();
-        if (inData.ladder.indexOf('1kb') > -1 ){
-            this.ladder = this.self.BP_LADDER_BANDS; 
+        if (inData.ladder.indexOf("1kb") > -1 ){
+            this.ladder = this.self.BP_LADDER_BANDS;
         }else {
             this.ladder = this.self.KB_LADDER_BANDS;
         }
@@ -44,8 +44,8 @@ Ext.define("Teselagen.models.digest.LadderLane", {
      * @param  {String} pLadder new ladder
      */
     updateLadderLane: function(pLadder){
-        if (pLadder.indexOf('1kb') > -1 ){
-            this.ladder = this.self.BP_LADDER_BANDS; 
+        if (pLadder.indexOf("1kb") > -1 ){
+            this.ladder = this.self.BP_LADDER_BANDS;
         }else {
             this.ladder = this.self.KB_LADDER_BANDS;
         }
@@ -59,17 +59,17 @@ Ext.define("Teselagen.models.digest.LadderLane", {
      */
     redrawBands: function(){
         var ladderHeight = this.actualHeight * 0.8;
-        var ladderMin = this.ladder[this.ladder.length - 1]; 
-        var ladderMax = this.ladder[0]; 
+        var ladderMin = this.ladder[this.ladder.length - 1];
+        var ladderMax = this.ladder[0];
         var totalLogDifference = Math.log(ladderMax / ladderMin);
         this.bandYPositions = [];
 
         for (var i = 0; i < this.ladder.length; ++i){
-            var bandSize = this.ladder[i];
+//            var bandSize = this.ladder[i];
 
             var currentLogDifference =  Math.log(this.ladder[i] / ladderMin);
             var normalizedLogDifference =  currentLogDifference/ totalLogDifference;
-            var scalingFactor = -(.1 * Math.sin(2*3.14*normalizedLogDifference));
+            var scalingFactor = -(0.1 * Math.sin(2*3.14*normalizedLogDifference));
             this.bandYPositions.push(0.9 * this.actualHeight - (scalingFactor + normalizedLogDifference) * ladderHeight);
         }
     },
@@ -83,8 +83,8 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         console.log("about to redraw bands");
         for (var i = 0; i < this.ladder.length; ++i){
             console.log("you are drawing");
-            var labelText = this.ladder[i];
-            var labelWidth = 40;
+//            var labelText = this.ladder[i];
+//            var labelWidth = 40;
             //var defaultLabelYPosition = bandYPositions[i] - 10;
             if(i === 0){
                 this.bandSizeLabelYPositions.push(50);
@@ -94,7 +94,7 @@ Ext.define("Teselagen.models.digest.LadderLane", {
         
         }
         console.log("redrew bands");
-    },
+    }
     
 
     
