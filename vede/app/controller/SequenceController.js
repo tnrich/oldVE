@@ -274,7 +274,7 @@ Ext.define("Vede.controller.SequenceController", {
                                         this.SelectionLayer.end);
                 }
 
-                pasteSequenceManager = this.application.ClipBoardData;
+                pasteSequenceManager = this.application.ClipBoardData.clone();
 
                 if(confirmationWindow.down("radiogroup").getValue().pasteFormatField === "reverse") {
                     pasteSequenceManager.doReverseComplementSequence();
