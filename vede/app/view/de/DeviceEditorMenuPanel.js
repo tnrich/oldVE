@@ -51,6 +51,10 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Remove Column',
                     cls: 'removeColumnMenuItem',
                     disabled: true
+                }, {
+                    xtype: 'menuitem',
+                    text: 'Remove Row',
+                    cls: 'removeRowMenuItem'
                 }]
             }
         },{
@@ -140,8 +144,12 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Row'
                 }, {
                     xtype: 'menuitem',
-                    cls: 'column',
-                    text: 'Column'
+                    cls: 'column-left',
+                    text: 'Column Left'
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'column-right',
+                    text: 'Column Right'
                 }]
             }
         }, {

@@ -147,6 +147,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.deselect();
         gridPart.select();
 
+
          if(j5Part) {
             if(j5Part.getSequenceFile().get("partSource")==="") {
                 gridPart.select();
@@ -156,7 +157,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         } else {
             gridPart.select();
         }
-        console.log(gridPart);
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
@@ -456,11 +456,23 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.updateBinsWithTotalRows();
     },
 
+    onRemoveRow: function() {
+        this.totalRows -= 1;
+        this.updateBinsWithTotalRows();
+
+        var collection = this.activeProject.getJ5Collection();
+        var bins = collection.bins();
+
+        // for (var i = 0; i < bins.count(); i++) {
+        //     var parts = bins.getAt(i).parts();
+        // }
+    },
+
     /**
-     * Handler for the Insert Column button. Inserts a bin after the selected
+     * Handler for the Insert Column to the Left button. Inserts a bin after the selected
      * bin, or at the end of the device if there is no selected bin.
      */
-    onAddColumn: function() {
+    onAddColumnLeft: function() {
         var selectedBinIndex;
 
         if(this.selectedBin) {
@@ -474,6 +486,30 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
+        console.log(selectedBinIndex);
+        this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
+                                                    selectedBinIndex);
+    },
+
+    /**
+     * Handler for the Insert Column to the Right button. Inserts a bin after the selected
+     * bin, or at the end of the device if there is no selected bin.
+     */
+    onAddColumnRight: function() {
+        var selectedBinIndex;
+
+        if(this.selectedBin) {
+            selectedBinIndex = (this.DeviceDesignManager.getBinIndex(
+                                                        this.activeProject,
+                                                        this.selectedBin.getBin())+1);
+
+            this.selectedBin.deselect();
+            this.selectedBin = null;
+        } else {
+            selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
+        }
+
+        console.log(selectedBinIndex);
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
     },
@@ -610,8 +646,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * parts already.
      */
     updateBinsWithTotalRows: function() {
+        console.log(this.selectedPart);
+
+        var gridPart = this.selectedPart;
+
+        var partIndex = gridPart.up("Bin").items.indexOf(gridPart);
+        // console.log(partIndex);
+
         this.grid.items.each(function(bin) {
-            bin.setTotalRows(this.totalRows);
+            bin.setTotalRows(this.totalRows, partIndex);
         }, this);
     },
 
@@ -839,8 +882,16 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onAddRow,
                             this);
 
-        this.application.on(this.DeviceEvent.ADD_COLUMN,
-                            this.onAddColumn,
+        this.application.on(this.DeviceEvent.ADD_COLUMN_LEFT,
+                            this.onAddColumnLeft,
+                            this);
+
+        this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,
+                            this.onAddColumnRight,
+                            this);
+
+        this.application.on(this.DeviceEvent.REMOVE_ROW, 
+                            this.onRemoveRow, 
                             this);
 
         this.application.on(this.DeviceEvent.SELECT_BIN,

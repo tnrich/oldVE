@@ -222,7 +222,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                             if(bin)
                                             {
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                                // console.log(insertIndex);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                                 bin.parts().removeAt(insertIndex);
                                                 bin.parts().insert(insertIndex,part);
@@ -461,8 +460,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
 
         if(selectedBin) {
-            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin); 
-            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
+            console.log(selectedBinIndex);
+            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, (selectedBinIndex+1));
             this.columnsGrid.getSelectionModel().deselectAll();
         } else {
             this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
