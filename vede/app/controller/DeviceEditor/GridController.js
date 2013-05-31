@@ -111,6 +111,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deMapSelect(this.selectedPart.getPart());
             this.selectedPart = null;
         }
 
@@ -139,6 +140,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deMapSelect(this.selectedPart.getPart());
 
             if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
                 this.selectedPart.deselect();
@@ -180,6 +182,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onTabChange: function(tabPanel, newTab, oldTab) {
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deMapSelect(this.selectedPart.getPart());
             this.selectedPart = null;
         }
         
@@ -512,6 +515,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deMapSelect(this.selectedPart.getPart());
             this.selectedPart = null;
         }
 
@@ -582,6 +586,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             if(this.selectedPart && this.selectedPart.down()) {
                 this.selectedPart.deselect();
+                this.deMapSelect(this.selectedPart.getPart());
                 this.selectedPart = null;
             }
 
@@ -698,6 +703,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deMapSelect(this.selectedPart.getPart());
         }
 
         this.selectedPart = gridPart;
@@ -736,8 +742,29 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             gridParts[0].select();
         }
 
+        // Select all gridParts with the same source, unless the j5Part is empty.
+        if(j5Part) {
+            j5Part.getSequenceFile({
+                callback: function(sequenceFile) {
+                    if(sequenceFile.get("partSource") !== "") {
+                        Ext.each(gridParts, function(gridPart) {
+                            gridPart.mapSelect();
+                        });
+                    }
+                }
+            });
+        }
+    },
+
+    /**
+     * Deselects all gridParts associated with a given j5 part.
+     * @param {Teselagen.model.Part} j5Part
+     */
+    deMapSelect: function(j5Part) {
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
         Ext.each(gridParts, function(gridPart) {
-            gridPart.mapSelect();
+            gridPart.deselect();
         });
     },
 
