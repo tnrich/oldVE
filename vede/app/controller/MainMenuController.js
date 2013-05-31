@@ -42,15 +42,9 @@ Ext.define('Vede.controller.MainMenuController', {
 
     onGotoMenuItemClick: function() {
         var gotoWindow = Ext.create("Vede.view.ve.GoToWindow");
-        gotoWindow.CaretEvent = this.CaretEvent;
-        
-        gotoWindow.down("numberfield").on("keyup", function(field, event) {
-            if(event.getKey() === event.ENTER) {
-                gotoWindow.goto();
-            }
-        }, this);
 
-        gotoWindow.show();
+        this.application.fireEvent(this.MenuItemEvent.GOTO_WINDOW_OPENED,
+                                   gotoWindow);
     },
 
     onSelectMenuItemClick: function() {

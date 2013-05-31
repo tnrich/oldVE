@@ -101,6 +101,9 @@ Ext.define("Teselagen.manager.FindManager", {
                 return false;
             }
         } else {
+            if(searchType === "ambiguous") {
+                expression = this.makeAmbiguousAAExpression(expression);
+            }
         }
     },
 
@@ -124,7 +127,29 @@ Ext.define("Teselagen.manager.FindManager", {
         for(var i = 0; i < expression.length; i++) {
             var character = expression.characterAt(i);
 
-            if(character == "a" || character == "t" || character == "c" || character == "g" || character == "u") {
+            if(character.match(/[atcgu]/)) {
+                ambiguous.push(character);
+            } else {
+                ambiguous.push(switchObj[character]);
+            }
+        }
+
+        return ambiguous.join("");
+    },
+
+    makeAmbiguousAAExpression: function(expression) {
+        var ambiguous = [];
+
+        var switchObj = {
+            b: "[DN]",
+            z: "[QE]",
+            x: "[ARNDCQEGHILKMFPSTWYV.]"
+        }
+
+        for(var i = 0; i < expression.length; i++) {
+            var character = expression.characterAt(i);
+
+            if(character.match(/[arndcqeghilkmfpstwyv.]/)) {
                 ambiguous.push(character);
             } else {
                 ambiguous.push(switchObj[character]);

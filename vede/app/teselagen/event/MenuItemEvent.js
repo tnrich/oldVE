@@ -16,6 +16,7 @@ Ext.define("Teselagen.event.MenuItemEvent", {
     SELECT_INVERSE: "SelectInverse",
 
     FIND_PANEL_OPENED: "FindPanelOpened",
+    GOTO_WINDOW_OPENED: "GoToWindowOpened",
     SELECT_WINDOW_OPENED: "SelectWindowOpened",
 
     REVERSE_COMPLEMENT: "ReverseComplement",

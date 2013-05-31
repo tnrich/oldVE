@@ -17,9 +17,36 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
         id: "findField",
         hideLabel: true,
         emptyText: "Search...",
+        enableKeyEvents: true,
         width: 500,
         maxWidth: 600,
-        margin: "2 4 2 4"
+        margin: "2 4 2 4",
+        //msgTarget: "side",
+        validator: function(value) {
+            var literal = Ext.getCmp("literalSelector").getValue();
+            var searchIn = Ext.getCmp("findInSelector").getValue();
+            var matches;
+
+            if(searchIn === "DNA") {
+                if(literal === "Literal") {
+                    matches = value.toLowerCase().match(/[^atcgu]/g)
+                } else {
+                    matches = value.toLowerCase().match(/[^atcgunkmryswbvhd]/g)
+                }
+            } else {
+                if(literal === "Literal") {
+                    matches = value.toLowerCase().match(/[^arndcqeghilkmfpstwyv.]/g);
+                } else {
+                    matches = value.toLowerCase().match(/[^arndcqeghilkmfpstwyv.xbz]/g);
+                }
+            }
+
+            if(!matches) {
+                return true;
+            } else {
+                return "Invalid character(s): " + matches;
+            }
+        }
     }, {
         xtype: "button",
         id: "findNextBtn",

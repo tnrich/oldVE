@@ -38,6 +38,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         listenersObject[this.MenuItemEvent.COPY] = this.copySelection;
         listenersObject[this.MenuItemEvent.PASTE] = this.pasteFromClipboard;
 
+        listenersObject[this.MenuItemEvent.GOTO_WINDOW_OPENED] = this.onGoToWindowOpened;
+
         listenersObject[this.VisibilityEvent.SHOW_COMPLEMENTARY_CHANGED] = 
             this.onShowComplementaryChanged;
         listenersObject[this.VisibilityEvent.SHOW_SPACES_CHANGED] = 
@@ -135,6 +137,26 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     pasteSelection: function() {
         this.callParent(arguments);
+    },
+
+    onGoToWindowOpened: function(goToWindow) {
+        var numberField = goToWindow.down("numberfield");
+
+        goToWindow.CaretEvent = this.CaretEvent;
+        
+        numberField.on("keyup", function(field, event) {
+            if(event.getKey() === event.ENTER) {
+                goToWindow.goto();
+            }
+        }, this);
+
+        goToWindow.show();
+
+        numberField.setValue(this.caretIndex);
+        numberField.setMaxValue(
+                        this.SequenceManager.getSequence().getSymbolsLength());
+
+        numberField.focus(true, 10);
     },
 
     onHandleClicked: function(type) {
