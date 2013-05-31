@@ -1008,19 +1008,52 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPastePartMenuItemClick: function(){
+
+        var self = this;
+
+        var reRenderGrid = function(){
+            self.selectedBin = null;
+            self.selectedPart = null;
+
+            self.grid.removeAll(); // Clean grid
+            self.renderDevice();
+        };
+
         if(this.selectedClipboardPart)
         {
-            var index = this.selectedPart.up("Bin").query("Part").indexOf(this.selectedPart);
-            var parentGridBin = this.selectedPart.up("Bin");
+            var performPaste = function(linked){
+                var index = self.selectedPart.up("Bin").query("Part").indexOf(self.selectedPart);
+                var parentGridBin = self.selectedPart.up("Bin");
 
-            parentGridBin.getBin().parts().removeAt(index);
-            parentGridBin.getBin().parts().insert(index, this.selectedClipboardPart);
+                parentGridBin.getBin().parts().removeAt(index);
+                if (linked) { parentGridBin.getBin().parts().insert(index, self.selectedClipboardPart); reRenderGrid(); }
+                else
+                {
+                    Ext.MessageBox.prompt('Part name', 'Please a name for the new part:', function(btn,text){
+                        var duplicatedPart = self.selectedClipboardPart.copy();
+                        duplicatedPart.set('name',text);
+                        Vede.application.fireEvent("validateDuplicatedPartName",duplicatedPart,text,function(){
+                            parentGridBin.getBin().parts().insert(index,duplicatedPart);
+                            reRenderGrid();
+                        })
+                    });
+                }
 
-            this.selectedBin = null;
-            this.selectedPart = null;
 
-            this.grid.removeAll(); // Clean grid
-            this.renderDevice();
+                //Ext.MessageBox.close();
+            };
+
+            Ext.MessageBox.show({
+                title:'Special paste',
+                msg: 'Select paste type',
+                buttonText: {yes: "Link Part",no: "Duplicate Part",cancel: "Cancel"},
+                fn: function(btn){
+                    if(btn==="yes") { performPaste(true); }
+                    else if(btn==="no") { performPaste(false); }
+                    else { Ext.MessageBox.close(); }
+                }
+            });
+
         }
         else
         {
