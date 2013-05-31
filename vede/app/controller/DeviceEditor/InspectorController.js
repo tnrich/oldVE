@@ -65,8 +65,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 bin.parts().each(function(part) {
                     part.getSequenceFile({
                         callback: function(sequenceFile){
-                        if(sequenceFile.get("partSource")!="") {
-                            tmpC++;
+                        if(sequenceFile) {
+                            if(sequenceFile.get("partSource")!="") {
+                                tmpC++;
+                            }
                         }
                     }
                 });
@@ -100,7 +102,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             });
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
-
             if (j5ready ==  true) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
                 } else {
@@ -236,7 +237,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         callback: function(sequence){
                                             if(bin)
                                             {
-                                                console.log(self.selectedPart);
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                                 bin.parts().removeAt(insertIndex);
@@ -382,9 +382,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
 
+        var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
+
         partPropertiesForm.getForm().reset();
         fasForm.getForm().reset();
 
+        clearPartMenuItem.disable();
         //this.eugeneRulesGrid.reconfigure();
     },
 
@@ -489,7 +492,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onRemoveColumnButtonClick: function () {
 
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
-        var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
+        var removeColumnMenuItem =  Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Column"]')[0];
+ 
 
         if (selectedBin) {
             Ext.Msg.show({
@@ -505,6 +509,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         }
 
         removeColumnMenuItem.disable();
+        this.application.fireEvent("ReRenderCollectionInfo");
+
     },
 
     removeColumn: function (selectedBin, evt) {
@@ -512,10 +518,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             if(selectedBin) {
                 var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
                 this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+                this.application.fireEvent("ReRenderCollectionInfo");
             } else {
                 this.activeProject.getJ5Collection().deleteBinByIndex(
                 this.activeProject.getJ5Collection().binCount() - 1);
+                this.columnsGrid.getView().refresh();
+                this.renderCollectionInfo();
+                this.application.fireEvent("ReRenderCollectionInfo");
             }
+
+            if (this.activeProject.getJ5Collection().binCount() == 0) {
+                this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, 0);
+            } 
+
+            this.application.fireEvent("ReRenderCollectionInfo");
         }
     },
 
@@ -869,14 +885,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var linearPlasmidField = this.inspector.down("radiofield[cls='linear_plasmid_radio']");
 
         if(this.activeProject) {
-            j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
-                                                            this.activeProject));
+            Vede.application.fireEvent("checkj5Ready");
+            // j5ReadyField.setValue(this.DeviceDesignManager.checkJ5Ready(
+            //                                                 this.activeProject));
 
-             if (this.DeviceDesignManager.checkJ5Ready(this.activeProject)) {
-                    j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
-                } else {
-                    j5ReadyField.setFieldStyle("color:red");
-                }
+            //  if (this.DeviceDesignManager.checkJ5Ready(this.activeProject)) {
+            //         j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
+            //     } else {
+            //         j5ReadyField.setFieldStyle("color:red");
+            //     }
 
             // combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
             //                                                 this.activeProject));

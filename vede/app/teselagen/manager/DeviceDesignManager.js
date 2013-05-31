@@ -379,14 +379,18 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                 if (part.data.sequencefile_id !== "")
                 {
                     if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
+                        console.log("a");
                         ready = false;
                     }
                     if (parts.getAt(j).isEmpty() === true) {
+                        console.log("b");
                         ready = false;
                     }
                 }
             }
         }
+
+        console.log(ready);
         collection.set("j5Ready", ready);
         return ready;
     },

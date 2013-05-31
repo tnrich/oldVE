@@ -170,9 +170,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             gridPart.select();
         }
 
-        var removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
-        removeRowMenuItem.enable();
-
         // Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(true);
 
@@ -817,18 +814,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-        }
-
-        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
+        // if(this.selectedPart && this.selectedPart.down()) {
+        //     this.selectedPart.deselect();
+        //     this.deHighlight(this.selectedPart.getPart());
+        // }
 
         this.onPartCellHasBeenMapped(j5Part);
+        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
+
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        console.log(gridParts);
 
         Ext.each(gridParts, function(gridPart) {
             gridPart.mapSelect();
@@ -997,6 +996,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Cut Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Copy Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Paste Part"]')[0].setDisabled(!state||false);
+
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Clear Part"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Column"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Row"]')[0].setDisabled(!state||false);
     },
 
     onCopyPartMenuItemClick: function(){
