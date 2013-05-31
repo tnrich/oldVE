@@ -1030,6 +1030,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPastePartMenuItemClick: function(){
 
         var self = this;
+        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
         if(this.selectedClipboardPart)
         {
