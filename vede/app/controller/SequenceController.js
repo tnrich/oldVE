@@ -448,7 +448,7 @@ Ext.define("Vede.controller.SequenceController", {
     onCaretPositionChanged: function(scope, index) {
         if(scope !== this && this.SelectionLayer && 
            !this.SelectionLayer.selecting) {
-            this.changeCaretPosition(index, true);
+            this.changeCaretPosition(index, true, true);
         }
     },
 

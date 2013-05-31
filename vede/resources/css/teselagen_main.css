@@ -787,6 +787,10 @@ border-radius: 4px;
     border-color: #006CAB;!important;
 }
 
+.gridPartCell-highlighted {
+    border-color: #006CAB;!important;
+}
+
 .fasConflictIndicator {
     position: absolute;
     top: 2px;

@@ -111,6 +111,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
             this.selectedPart = null;
         }
 
@@ -132,6 +133,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onPartCellClick: function(partCell) {
         var gridPart = partCell.up().up();
+
         var j5Part = gridPart.getPart();
 
         var j5Bin = gridPart.up("Bin").getBin();
@@ -141,6 +143,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
 
             if (this.selectedPart.getPart() && this.selectedPart.getPart().get("name")=="") {
                 this.selectedPart.deselect();
@@ -231,6 +234,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onTabChange: function(tabPanel, newTab, oldTab) {
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
             this.selectedPart = null;
         }
         
@@ -625,6 +629,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
             this.selectedPart = null;
         }
 
@@ -695,6 +700,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
             if(this.selectedPart && this.selectedPart.down()) {
                 this.selectedPart.deselect();
+                this.deHighlight(this.selectedPart.getPart());
                 this.selectedPart = null;
             }
 
@@ -812,6 +818,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
         }
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
@@ -842,6 +849,45 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.grid.removeAll();
         this.renderDevice();
+    },
+
+    /**
+     * When a SELECT_PART event is fired, check to see if it is already selected.
+     * If not, select it, then mapSelect all of the grid parts which have the
+     * same j5Part.
+     */
+    onPartSelected: function(j5Part) {
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        if(gridParts && !gridParts.indexOf(this.selectedPart)) {
+            this.selectedPart = gridParts[0];
+            gridParts[0].select();
+        }
+
+        // Select all gridParts with the same source, unless the j5Part is empty.
+        if(j5Part) {
+            j5Part.getSequenceFile({
+                callback: function(sequenceFile) {
+                    if(sequenceFile.get("partSource") !== "") {
+                        Ext.each(gridParts, function(gridPart) {
+                            gridPart.highlight();
+                        });
+                    }
+                }
+            });
+        }
+    },
+
+    /**
+     * Deselects all gridParts associated with a given j5 part.
+     * @param {Teselagen.model.Part} j5Part
+     */
+    deHighlight: function(j5Part) {
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        Ext.each(gridParts, function(gridPart) {
+            gridPart.deselect();
+        });
     },
 
     onPartCellVEEditClick: function(partCell) {
@@ -1054,6 +1100,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.MAP_PART_NOTSELECT,
                             this.onPartCellHasNotBeenMapped,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_PART,
+                            this.onPartSelected,
                             this);
 
         this.application.on("BinHeaderClick",

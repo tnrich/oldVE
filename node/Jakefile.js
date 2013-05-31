@@ -73,6 +73,11 @@ task("connectdb", function() {
     });
 }, {async:true});
 
+task("cleardb", function() {
+    var cmd = util.format("mongo %s clear.js", dbname);
+    JakeUtil.exec(cmd);
+})
+
 task("dropdb", function() {
     var cmd = util.format("mongo --eval 'db.dropDatabase()' %s", dbname);
     JakeUtil.exec(cmd);

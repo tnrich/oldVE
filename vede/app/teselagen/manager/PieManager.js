@@ -248,6 +248,8 @@ Ext.define("Teselagen.manager.PieManager", {
         }
 
         Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
+
+        //this.drawCoordinates();
     },
 
     /**
@@ -269,7 +271,7 @@ Ext.define("Teselagen.manager.PieManager", {
                 oldBox.width / this.self.ZOOM_FACTOR, 
                 oldBox.height / this.self.ZOOM_FACTOR);
 
-        this.fitWidthToContent(this);
+        this.fitWidthToContent(this);//, this.self.ZOOM_FACTOR * 5);
     },
 
     /**
@@ -291,7 +293,7 @@ Ext.define("Teselagen.manager.PieManager", {
                 oldBox.width * this.self.ZOOM_FACTOR,
                 oldBox.height * this.self.ZOOM_FACTOR);
 
-        this.fitWidthToContent(this);
+        this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
     },
 
     /**
@@ -299,14 +301,17 @@ Ext.define("Teselagen.manager.PieManager", {
      * scrollbar appears.
      * @param {Teselagen.manager.PieManager} scope The pieManager. Used when being
      * called by the window onresize event.
+     * @param {Number} magnification A factor used to expand/contract width based
+     * on the zoom level.
      */
-    fitWidthToContent: function(scope) {
+    fitWidthToContent: function(scope, magnification) {
         if(scope.labelSprites) {
             var newWidth;
+            var magnification = magnification || 1;
 
             if(scope.labelSprites.getBBox().width > scope.pie.surface.viewBox.width) {
-                newWidth = scope.pie.getWidth() * 
-                    scope.labelSprites.getBBox().width / scope.pie.surface.viewBox.width * 5;
+                newWidth = scope.pie.getWidth() * magnification *
+                    scope.labelSprites.getBBox().width / scope.pie.surface.viewBox.width * 1.5;
 
                 scope.pie.surface.el.setStyle("width", newWidth + "px");
 
@@ -315,18 +320,22 @@ Ext.define("Teselagen.manager.PieManager", {
                                     scope.pie.getPositionEl().dom.clientWidth) / 2);
             }
         }
+
+        console.log("magnification: " + magnification);
+        console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
+                    " x " + scope.pie.surface.el.getSize().height);
     },
 
     /**
      * Function for debugging which draws coordinates on the pie.
      */
     drawCoordinates: function() {
-        for(var i = 0; i < 200; i += 20) {
-            for(var j = 0; j < 200; j += 20) {
+        for(var i = -50; i < 500; i += 20) {
+            for(var j = -50; j < 500; j += 20) {
                 var sprite = Ext.create("Ext.draw.Sprite", {
                     type: "text",
-                    text: i + ", " + j,
-                    font: "4px monospace",
+                    text: i + " " + j,
+                    font: "2px monospace",
                     x: i,
                     y: j
                 });
