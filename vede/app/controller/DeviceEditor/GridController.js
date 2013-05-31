@@ -170,9 +170,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             gridPart.select();
         }
 
-        var removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
-        removeRowMenuItem.enable();
-
         // Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(true);
 
@@ -828,17 +825,17 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
-        var gridParts = this.getGridPartsFromJ5Part(j5Part);
-
-        Ext.each(gridParts, function(gridPart) {
-            gridPart.mapSelect();
-        });
-
         this.selectedPart = null;
         this.selectedBin = null;
 
         this.grid.removeAll();
         this.renderDevice();
+        
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        Ext.each(gridParts, function(gridPart) {
+            gridPart.mapSelect();
+        });
     },
 
     onPartCellHasNotBeenMapped: function(j5Part) {
@@ -997,6 +994,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Cut Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Copy Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Paste Part"]')[0].setDisabled(!state||false);
+
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Clear Part"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Column"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Row"]')[0].setDisabled(!state||false);
     },
 
     onCopyPartMenuItemClick: function(){
