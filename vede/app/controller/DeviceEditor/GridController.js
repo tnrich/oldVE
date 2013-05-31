@@ -129,7 +129,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onPartCellClick: function(partCell) {
         var gridPart = partCell.up().up();
+
         var j5Part = gridPart.getPart();
+
         var j5Bin = gridPart.up("Bin").getBin();
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
 
@@ -687,7 +689,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartCellSelectByMap: function(pj5Part) {
-        var gridPart = this.getGridPartsFromJ5Part(pj5Part)[0];
+        var gridParts = this.getGridPartsFromJ5Part(pj5Part)[0];
         var j5Part = gridPart.getPart();
 
         var j5Bin = gridPart.up("Bin").getBin();
@@ -718,6 +720,24 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         Ext.each(gridParts, function(gridPart) {
             gridPart.select();
+        });
+    },
+
+    /**
+     * When a SELECT_PART event is fired, check to see if it is already selected.
+     * If not, select it, then mapSelect all of the grid parts which have the
+     * same j5Part.
+     */
+    onPartSelected: function(j5Part) {
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        if(gridParts && !gridParts.indexOf(this.selectedPart)) {
+            this.selectedPart = gridParts[0];
+            gridParts[0].select();
+        }
+
+        Ext.each(gridParts, function(gridPart) {
+            gridPart.mapSelect();
         });
     },
 
@@ -916,6 +936,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.MAP_PART_NOTSELECT,
                             this.onPartCellHasNotBeenMapped,
+                            this);
+
+        this.application.on(this.DeviceEvent.SELECT_PART,
+                            this.onPartSelected,
                             this);
 
         this.application.on("BinHeaderClick",

@@ -8,6 +8,7 @@ Ext.define('Vede.view.ve.PasteConfirmationWindow', {
     title: 'Paste...',
     modal: true,
     height: 135,
+    resizable: false,
     items: [{
         xtype: 'container',
         layout: {
