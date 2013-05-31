@@ -63,12 +63,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         j5collection.bins().each(function(bin,binKey){
             if(bin.parts().getCount()>1) {
                 bin.parts().each(function(part) {
-                    part.get("name");
-                    if (part.get("name")!="") {
-                        tmpC++;
+                    part.getSequenceFile({
+                        callback: function(sequenceFile){
+                        if(sequenceFile.get("partSource")!="") {
+                            tmpC++;
+                        }
                     }
                 });
-            }
+            });
+        }
         });
         if (tmpC>1) {
             combinatorial = true;
