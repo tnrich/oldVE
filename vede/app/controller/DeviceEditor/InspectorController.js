@@ -73,7 +73,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             });
         }
         });
-        if (tmpC>0) {
+        if (tmpC>1) {
             combinatorial = true;
         }
         return cb(combinatorial);
