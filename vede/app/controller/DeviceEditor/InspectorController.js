@@ -879,7 +879,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
                                                             this.activeProject));
-            console.log(combinatorial);
+            console.log(this.DeviceDesignManager.setCombinatorial(this.activeProject));
 
             if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
                     combinatorialField.setFieldStyle("color:purple");
