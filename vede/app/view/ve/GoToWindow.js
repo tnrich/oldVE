@@ -6,21 +6,24 @@ Ext.define('Vede.view.ve.GoToWindow', {
     extend: 'Ext.window.Window',
     title: 'Go To...',
     modal: true,
-    height: 85,
+    height: 110,
     resizable: false,
     items: [{
         xtype: 'container',
         layout: {
             type: 'vbox'
         },
-        height: 85,
+        height: 110,
         items: [{
             xtype: 'numberfield',
             fieldLabel: 'Position',
             allowDecimals: false,
             enableKeyEvents: true,
-            minValue: 0,
-            value: 0
+            maxText: 'Value too high.',
+            minText: 'Value too low.',
+            minValue: 1,
+            msgTarget: 'under',
+            value: 1
         }, {
             xtype: 'container',
             layout: {
@@ -32,7 +35,7 @@ Ext.define('Vede.view.ve.GoToWindow', {
                 margin: 2,
                 padding: 2,
                 handler: function() {
-                    this.up("window").goto()
+                    this.up('window').goto()
                 }
             }, {
                 xtype: 'button',
@@ -40,16 +43,24 @@ Ext.define('Vede.view.ve.GoToWindow', {
                 margin: 2,
                 padding: 2,
                 handler: function() {
-                    this.up("window").close();
+                    this.up('window').close();
                 }
             }]
         }]
     }],
     goto: function() {
+        var field = this.down('numberfield');
+        var index = field.getValue();
+
+        if(index > field.maxValue) {
+            index = field.maxValue;
+        } else if(index < field.minValue) {
+            index = field.minValue - 1;
+        }
+
         Vede.application.fireEvent(
                         this.CaretEvent.CARET_POSITION_CHANGED, 
-                        this,
-                        this.down('numberfield').getValue());
+                        this, index - 1);
 
         this.close();
     }
