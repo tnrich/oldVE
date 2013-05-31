@@ -98,7 +98,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 }
                 else {j5ready = false;}
             });
-            console.log(combinatorial);
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
 
