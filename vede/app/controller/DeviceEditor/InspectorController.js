@@ -240,7 +240,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                 console.log(self.selectedPart);
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-                                                console.log(insertIndex);
                                                 bin.parts().removeAt(insertIndex);
                                                 bin.parts().insert(insertIndex,part);
                                                 self.onReRenderDECanvasEvent();
@@ -880,6 +879,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
                                                             this.activeProject));
+            console.log(combinatorial);
 
             if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
                     combinatorialField.setFieldStyle("color:purple");
