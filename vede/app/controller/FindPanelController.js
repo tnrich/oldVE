@@ -43,8 +43,6 @@ Ext.define('Vede.controller.FindPanelController', {
                                            this.literalSelector.getValue().toLowerCase(),
                                            this.caretIndex);
 
-        console.log(result);
-
         if(result) {
             this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                        this, result.start, result.end);
@@ -52,7 +50,7 @@ Ext.define('Vede.controller.FindPanelController', {
     },
 
     onHighlightAll: function() {
-
+        
     },
 
     init: function() {

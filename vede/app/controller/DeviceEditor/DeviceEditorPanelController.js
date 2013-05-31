@@ -256,10 +256,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
     },
 
-    onAddColumnClick: function () {
-        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
+    onAddColumnLeftClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_LEFT);
     },
 
+    onAddColumnRightClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_RIGHT);
+    },
 
     onclearPartMenuItemClick: function() {
         this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
@@ -267,6 +270,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
      onRemoveColumnMenuItemClick: function() {
         this.application.fireEvent(this.DeviceEvent.REMOVE_COLUMN);
+    },
+
+    onRemoveRowMenuItemClick: function() {
+        this.application.fireEvent(this.DeviceEvent.REMOVE_ROW);
     },
 
     onJ5buttonClick: function (button, e, options) {
@@ -304,14 +311,20 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             "button[cls='insertMenu'] > menu > menuitem[text='Row']": {
                 click: this.onAddRowClick
             },
-            "button[cls='insertMenu'] > menu > menuitem[text='Column']": {
-                click: this.onAddColumnClick
+            "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {
+                click: this.onAddColumnLeftClick
+            },
+            "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {
+                click: this.onAddColumnRightClick
             },
             "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {
                 click: this.onclearPartMenuItemClick
             },
             "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {
                 click: this.onRemoveColumnMenuItemClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Remove Row']": {
+                click: this.onRemoveRowMenuItemClick
             },
             "button[cls='examplesMenu'] > menu > menuitem": {
                 click: this.onOpenExampleItemBtnClick

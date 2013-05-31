@@ -11,9 +11,9 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'button',
         cls: 'saveSequenceBtn',
         icon: 'resources/images/save.png',
-        text: 'Save Sequence',
+        text: 'Save',
         scale: 'medium',
-        tooltip: 'Save Sequence'
+        tooltip: 'Save to Genbank File'
     },
     {
         xtype: 'tbseparator',
@@ -27,6 +27,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
             icon: 'resources/images/import_new.png',
             text: "Import",
             scale: 'medium',
+            tooltip: 'Open a Sequence File'
         },
         listeners: {
             render: {
