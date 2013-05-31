@@ -814,28 +814,30 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
-        if(this.selectedPart && this.selectedPart.down()) {
-            this.selectedPart.deselect();
-            this.deHighlight(this.selectedPart.getPart());
-        }
-
-        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
+        // if(this.selectedPart && this.selectedPart.down()) {
+        //     this.selectedPart.deselect();
+        //     this.deHighlight(this.selectedPart.getPart());
+        // }
 
         this.onPartCellHasBeenMapped(j5Part);
+        this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
+
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
+        var gridParts = this.getGridPartsFromJ5Part(j5Part);
+
+        console.log(gridParts);
+
+        Ext.each(gridParts, function(gridPart) {
+            gridPart.mapSelect();
+        });
+
         this.selectedPart = null;
         this.selectedBin = null;
 
         this.grid.removeAll();
         this.renderDevice();
-        
-        var gridParts = this.getGridPartsFromJ5Part(j5Part);
-
-        Ext.each(gridParts, function(gridPart) {
-            gridPart.mapSelect();
-        });
     },
 
     onPartCellHasNotBeenMapped: function(j5Part) {

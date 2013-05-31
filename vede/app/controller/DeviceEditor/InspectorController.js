@@ -245,7 +245,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                 selectWindow.close();
                                                 self.selectedPart = part;
                                                 self.onReRenderDECanvasEvent();
-                                                Vede.application.fireEvent(self.DeviceEvent.MAP_PART_SELECT, part);
+                                                Vede.application.fireEvent(self.DeviceEvent.MAP_PART, self.selectedPart);
                                             }
                                             else
                                             {
