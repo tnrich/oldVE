@@ -862,7 +862,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(gridParts && !gridParts.indexOf(this.selectedPart)) {
             this.selectedPart = gridParts[0];
-            gridParts[0].mapselect();
+            gridParts[0].select();
         }
 
         // Select all gridParts with the same source, unless the j5Part is empty.
@@ -871,6 +871,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 callback: function(sequenceFile) {
                     if(sequenceFile.get("partSource") !== "") {
                         Ext.each(gridParts, function(gridPart) {
+                            gridPart.mapSelect();
                             gridPart.highlight();
                         });
                     }
