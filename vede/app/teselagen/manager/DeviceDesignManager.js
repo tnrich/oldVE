@@ -276,6 +276,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     setCombinatorial: function(pDevice) {
         var collection = pDevice.getJ5Collection();
         var combo   = false;
+        var tmpC = 0;
 
         if (collection === null || collection === undefined) {
             return combo;
@@ -284,8 +285,22 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         } else {
             for (var i = 0; i < collection.bins().count(); i++) {
                 if (collection.bins().getAt(i).parts().count() > 1) {
-                    combo = true;
+                    collection.bins().getAt(i).parts().each(function(part) {
+                        part.getSequenceFile({
+                            callback: function(sequenceFile){
+                                if (sequenceFile) {
+                                    if(sequenceFile.get("partSource")!="") {
+                                        tmpC++;
+                                    }
+                                }
+                            }
+                        });
+                    });
                 }
+            console.log(tmpC);
+            if (tmpC>0) {
+                combinatorial = true;
+            }
             collection.set("combinatorial", combo);
             }
             return combo;

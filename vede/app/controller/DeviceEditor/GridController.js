@@ -120,6 +120,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         // DE-Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(false);
 
+        var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
+        removeColumnMenuItem.enable();
+
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
     },
 
@@ -130,6 +133,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellClick: function(partCell) {
         var gridPart = partCell.up().up();
         var j5Part = gridPart.getPart();
+
         var j5Bin = gridPart.up("Bin").getBin();
         this.application.fireEvent(this.DeviceEvent.SELECT_BIN, j5Bin);
 
@@ -162,6 +166,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             gridPart.select();
         }
 
+        var removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
+        removeRowMenuItem.enable();
+
         // Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(true);
 
@@ -176,29 +183,42 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onfillBlankCells: function() {
         var bins = this.activeProject.getJ5Collection().bins();
         var tab = Ext.getCmp('mainAppPanel').getActiveTab();
-
+        var selectedBinIndex = this.DeviceDesignManager.getBinIndex(
+                                                        this.activeProject,
+                                                        this.selectedBin.getBin());
         var selectedBin = this.selectedBin;
-        var partCells = tab.query("component[cls='gridPartCell']");
+        var partCells = this.selectedPart.up("Bin").query("Part");
+
+        var partGrids = tab.query("component[cls='gridPartsCell']");
+
         var selectedPartCellIndex = this.selectedPart.up("Bin").items.indexOf(this.selectedPart);
         var selectedPart = this.selectedPart;
 
-        for (var i = 0; i < partCells.length; i++) {
-            var gridPart = partCells[i].up().up();
-            var j5Part = gridPart.getPart();
+        var cellCount = this.selectedPart.up("Bin").items.items.length - 1;
 
+        this.selectedBin = null;
+        this.selectedPart = null;
+
+        for (var i = 0; i < cellCount; i++) {
+            var gridPart = partCells[i];
+            var j5Part = gridPart.getPart();
             if (!j5Part) {
                 var newPart = Ext.create("Teselagen.models.Part");
-                var partIndex = gridPart.up("Bin").items.indexOf(gridPart);
-                var j5Bin = gridPart.up("Bin").getBin();
-                var binIndex =  this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
-
+                var j5Bin = selectedBin;
+                var binIndex =  selectedBinIndex;
                 this.DeviceDesignManager.addPartToBin(this.activeProject, newPart, binIndex);
-                console.log("partsAdded");
             }
         }
 
-        this.onPartCellClick(selectedBin.items.items[selectedPartCellIndex].down().down()); //Select the original cell that was selected.
+            this.grid.removeAll(); // Clean grid
+            this.renderDevice();
 
+        selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, selectedBinIndex);
+        newGridBin = this.getGridBinFromJ5Bin(selectedBin);
+        newGridPart = newGridBin.items.items[selectedPartCellIndex];
+
+        this.onPartCellClick(newGridPart.down().down()); //Select the original cell that was selected.
+        
     },
     /**
      * When the tab changes on the main panel, handles loading and rendering the
@@ -508,33 +528,43 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onRemoveRow: function() {
-        this.totalRows -= 1;
-        var partIndex=null;
-        var gridPart = this.selectedPart;
-        var bins = this.activeProject.getJ5Collection().bins();
-
-        console.log(bins);
-
-        partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
-        console.log(partIndex);
-
-        // for (var i = 0; i < bins.length; i++) {
-        //     bins[i].parts()[partIndex].destroy();
-        // }
-        
-        this.selectedBin = null;
-        this.selectedPart = null;
-        
-        bins.each(function (bin, binIndex) {
-            bin.parts().removeAt(partIndex);
+        Ext.Msg.show({
+                title: "Are you sure you want to delete this row?",
+                msg: "WARNING: This will delete the current selected row. This process cannot be undone.",
+                buttons: Ext.Msg.OKCANCEL,
+                cls: "messageBox",
+                fn: this.removeRows.bind(this),
+                icon: Ext.Msg.QUESTION
         });
+    },
 
-        this.grid.removeAll();
-        this.renderDevice();
 
-        // for (var i = 0; i < bins.count(); i++) {
-        //     var parts = bins.getAt(i).parts();
-        // }
+    removeRows: function(evt) {
+        if (evt === "ok") {
+            this.totalRows -= 1;
+            var partIndex=null;
+            var gridPart = this.selectedPart;
+            var bins = this.activeProject.getJ5Collection().bins();
+
+            console.log(bins);
+
+            partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
+            console.log(partIndex);
+
+            // for (var i = 0; i < bins.length; i++) {
+            //     bins[i].parts()[partIndex].destroy();
+            // }
+            
+            this.selectedBin = null;
+            this.selectedPart = null;
+            
+            bins.each(function (bin, binIndex) {
+                bin.parts().removeAt(partIndex);
+            });
+
+            this.grid.removeAll();
+            this.renderDevice();
+        }
     },
 
     /**
@@ -555,7 +585,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
-        console.log(selectedBinIndex);
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
     },
@@ -578,7 +607,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             selectedBinIndex = this.DeviceDesignManager.binCount(this.activeProject);
         }
 
-        console.log(selectedBinIndex);
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
     },
@@ -776,18 +804,15 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPartCellSelectByMap: function(pj5Part) {
-        var gridPart = this.getGridPartsFromJ5Part(pj5Part)[0];
-        var j5Part = gridPart.getPart();
+        var j5Part = pj5Part;
 
-        var j5Bin = gridPart.up("Bin").getBin();
+        var j5Bin = this.DeviceDesignManager.getBinByPart(this.activeProject, j5Part);
 
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
             this.selectedPart.deselect();
         }
-
-        this.selectedPart = gridPart;
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
 
@@ -800,6 +825,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.each(gridParts, function(gridPart) {
             gridPart.mapSelect();
         });
+
+        this.selectedPart = null;
+        this.selectedBin = null;
+
+        this.grid.removeAll();
+        this.renderDevice();
     },
 
     onPartCellHasNotBeenMapped: function(j5Part) {
@@ -808,6 +839,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.each(gridParts, function(gridPart) {
             gridPart.select();
         });
+
+        this.grid.removeAll();
+        this.renderDevice();
     },
 
     onPartCellVEEditClick: function(partCell) {
