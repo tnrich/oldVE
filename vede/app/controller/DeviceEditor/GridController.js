@@ -27,6 +27,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     selectedBin: null,
     selectedPart: null,
     selectedClipboardPart: null,
+    ClipboardCutFlag: false,
 
     totalRows: 2,
     totalColumns: 1,
@@ -1002,22 +1003,33 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Row"]')[0].setDisabled(!state||false);
     },
 
+    reRenderGrid: function(){
+        this.selectedBin = null;
+        this.selectedPart = null;
+
+        this.grid.removeAll(); // Clean grid
+        this.renderDevice();
+    },
+
+    onCutPartMenuItemClick: function(){
+        console.log("Cutting Part",this.selectedPart.getPart());
+        this.selectedClipboardPart = this.selectedPart.getPart();
+        var index = this.selectedPart.up("Bin").query("Part").indexOf(this.selectedPart);
+        var parentGridBin = this.selectedPart.up("Bin");
+        parentGridBin.getBin().parts().removeAt(index);
+        this.reRenderGrid();
+        ClipboardCutFlag = true;
+    },
+
     onCopyPartMenuItemClick: function(){
         console.log("Copying Part",this.selectedPart.getPart());
         this.selectedClipboardPart = this.selectedPart.getPart();
+        ClipboardCutFlag = false;
     },
 
     onPastePartMenuItemClick: function(){
 
         var self = this;
-
-        var reRenderGrid = function(){
-            self.selectedBin = null;
-            self.selectedPart = null;
-
-            self.grid.removeAll(); // Clean grid
-            self.renderDevice();
-        };
 
         if(this.selectedClipboardPart)
         {
@@ -1026,7 +1038,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 var parentGridBin = self.selectedPart.up("Bin");
 
                 parentGridBin.getBin().parts().removeAt(index);
-                if (linked) { parentGridBin.getBin().parts().insert(index, self.selectedClipboardPart); reRenderGrid(); }
+                if (linked) { parentGridBin.getBin().parts().insert(index, self.selectedClipboardPart); self.reRenderGrid(); }
                 else
                 {
                     Ext.MessageBox.prompt('Part name', 'Please a name for the new part:', function(btn,text){
@@ -1034,7 +1046,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                         duplicatedPart.set('name',text);
                         Vede.application.fireEvent("validateDuplicatedPartName",duplicatedPart,text,function(){
                             parentGridBin.getBin().parts().insert(index,duplicatedPart);
-                            reRenderGrid();
+                            self.reRenderGrid();
                         })
                     });
                 }
@@ -1042,17 +1054,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
                 //Ext.MessageBox.close();
             };
-
-            Ext.MessageBox.show({
-                title:'Special paste',
-                msg: 'Select paste type',
-                buttonText: {yes: "Link Part",no: "Duplicate Part",cancel: "Cancel"},
-                fn: function(btn){
-                    if(btn==="yes") { performPaste(true); }
-                    else if(btn==="no") { performPaste(false); }
-                    else { Ext.MessageBox.close(); }
-                }
-            });
+            if(ClipboardCutFlag) { performPaste(true); }
+            else
+            {
+                Ext.MessageBox.show({
+                    title:'Special paste',
+                    msg: 'Select paste type',
+                    buttonText: {yes: "Link Part",no: "Duplicate Part",cancel: "Cancel"},
+                    fn: function(btn){
+                        if(btn==="yes") { performPaste(true); }
+                        else if(btn==="no") { performPaste(false); }
+                        else { Ext.MessageBox.close(); }
+                    }
+                });
+            }
 
         }
         else
@@ -1095,6 +1110,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             },
             "button[cls='editMenu'] > menu > menuitem[text='Paste Part']": {
                 click: this.onPastePartMenuItemClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Cut Part']": {
+                click: this.onCutPartMenuItemClick
             },
         });
 
