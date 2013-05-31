@@ -152,7 +152,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
         goToWindow.show();
 
-        numberField.setValue(this.caretIndex);
+        numberField.setValue(this.caretIndex + 1);
         numberField.setMaxValue(
                         this.SequenceManager.getSequence().getSymbolsLength());
 
