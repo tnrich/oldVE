@@ -297,6 +297,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                         });
                     });
                 }
+            console.log(tmpC);
             if (tmpC>1) {
                 combinatorial = true;
             }
