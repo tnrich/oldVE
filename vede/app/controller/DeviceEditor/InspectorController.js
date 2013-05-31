@@ -58,10 +58,24 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     },
 
     checkCombinatorial:function(j5collection,cb){
+        var tmpC = 0;
         combinatorial = false;
         j5collection.bins().each(function(bin,binKey){
-            if(bin.parts().getCount()>1) combinatorial = true;
+            if(bin.parts().getCount()>1) {
+                bin.parts().each(function(part) {
+                    part.getSequenceFile({
+                        callback: function(sequenceFile){
+                        if(sequenceFile.get("partSource")!="") {
+                            tmpC++;
+                        }
+                    }
+                });
+            });
+        }
         });
+        if (tmpC>1) {
+            combinatorial = true;
+        }
         return cb(combinatorial);
     },
 
@@ -149,13 +163,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
 
+        this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
+
         if(this.selectedPart) {
             // If the part is not owned by a bin yet, add it to the bin.
             if(this.DeviceDesignManager.getBinAssignment(this.activeProject,
                                                          this.selectedPart) < 0) {
-                var added = this.DeviceDesignManager.addPartToBin(this.activeProject,
-                                                      this.selectedPart,
-                                                      this.selectedBinIndex);
                 var selectedBinIndex = this.selectedBinIndex;
             }
 
@@ -223,6 +236,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         callback: function(sequence){
                                             if(bin)
                                             {
+                                                console.log(self.selectedPart);
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
                                                 bin.parts().removeAt(insertIndex);
@@ -264,6 +278,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.selectedBinIndex = binIndex;
         this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
+
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -277,6 +292,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         openPartLibraryBtn.enable();
         openPartLibraryBtn.removeCls('btnDisabled');
+
+        var removeRowMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Row']");
+        removeRowMenuItem.enable();
 
         if(this.selectedBinIndex !== 0) {
             // Turn the FAS_LIST array into an array of arrays, as required by
@@ -316,9 +334,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         openPartLibraryBtn.setText("Select Part From Library");
                         openPartLibraryBtn.addCls('selectPartFocus');
                         changePartDefinitionBtn.addCls('btnDisabled');     
-                        deletePartBtn.enable();
-                        clearPartMenuItem.enable();
-                        deletePartBtn.removeCls('btnDisabled');
+                        deletePartBtn.disable();
+                        clearPartMenuItem.disable();
+                        deletePartBtn.addCls('btnDisabled');
                     }
                 }
             });
@@ -454,8 +472,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
 
         if(selectedBin) {
-            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin); 
-            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, selectedBinIndex);
+            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
+            this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject, (selectedBinIndex+1));
             this.columnsGrid.getSelectionModel().deselectAll();
         } else {
             this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
@@ -467,18 +485,36 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * is selected, removes the last bin in the design.
      */
     onRemoveColumnButtonClick: function () {
+
         var selectedBin = this.columnsGrid.getSelectionModel().getSelection()[0];
         var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
-        
-        if(selectedBin) {
-            var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
-            this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+
+        if (selectedBin) {
+            Ext.Msg.show({
+                    title: "Are you sure you want to delete this row?",
+                    msg: "WARNING: This will delete the current selected row. This process cannot be undone.",
+                    buttons: Ext.Msg.OKCANCEL,
+                    cls: "messageBox",
+                    fn: this.removeColumn.bind(this, selectedBin),
+                    icon: Ext.Msg.QUESTION
+            });
         } else {
-            this.activeProject.getJ5Collection().deleteBinByIndex(
-            this.activeProject.getJ5Collection().binCount() - 1);
+            removeColumnMenuItem.disable();
         }
 
         removeColumnMenuItem.disable();
+    },
+
+    removeColumn: function (selectedBin, evt) {
+        if (evt === "ok") {
+            if(selectedBin) {
+                var selectedBinIndex = this.DeviceDesignManager.getBinIndex(this.activeProject, selectedBin);
+                this.activeProject.getJ5Collection().deleteBinByIndex(selectedBinIndex);
+            } else {
+                this.activeProject.getJ5Collection().deleteBinByIndex(
+                this.activeProject.getJ5Collection().binCount() - 1);
+            }
+        }
     },
 
     reconfigureEugeneRules: function() {
@@ -840,14 +876,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     j5ReadyField.setFieldStyle("color:red");
                 }
 
-            combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
-                                                            this.activeProject));
+            // combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
+            //                                                 this.activeProject));
+            // console.log(this.DeviceDesignManager.setCombinatorial(this.activeProject));
 
-            if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
-                    combinatorialField.setFieldStyle("color:purple");
-                } else {
-                    combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
-                }
+            // if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
+            //         combinatorialField.setFieldStyle("color:purple");
+            //     } else {
+            //         combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
+            //     }
 
             if(this.activeProject.getJ5Collection().get("isCircular")) {
                 circularPlasmidField.setValue(true);

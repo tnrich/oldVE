@@ -419,34 +419,34 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     renderer: Ext.util.Format.numberRenderer('0')
                                 }
                             ],
-                        },
-                        {
-                            xtype: 'container',
-                            cls: 'inspector_containerActions',
-                            margin: '10px 0 10px 0',
-                            layout: {
-                                type: 'hbox',
-                            },
-                            items: [
-                                {
-                                    xtype: 'button',
-                                    flex: 1,
-                                    cls: 'inspectorAddColumnBtn',
-                                    border: 0,
-                                    overCls: 'inspectorAddColumnBtn-over',
-                                    text: 'Add Column'
-                                },
-                                {
-                                    xtype: 'button',
-                                    flex: 1,
-                                    cls: 'inspectorRemoveColumnBtn',
-                                    border: 0,
-                                    overCls: 'inspectorRemoveColumnBtn-over',
-                                    margin: '0 0 0 5',
-                                    text: 'Remove Column'
-                                }
-                            ]
                         }
+                        // {
+                        //     xtype: 'container',
+                        //     cls: 'inspector_containerActions',
+                        //     margin: '10px 0 10px 0',
+                        //     layout: {
+                        //         type: 'hbox',
+                        //     },
+                        //     items: [
+                        //         {
+                        //             xtype: 'button',
+                        //             flex: 1,
+                        //             cls: 'inspectorAddColumnBtn',
+                        //             border: 0,
+                        //             overCls: 'inspectorAddColumnBtn-over',
+                        //             text: 'Add Column'
+                        //         },
+                        //         {
+                        //             xtype: 'button',
+                        //             flex: 1,
+                        //             cls: 'inspectorRemoveColumnBtn',
+                        //             border: 0,
+                        //             overCls: 'inspectorRemoveColumnBtn-over',
+                        //             margin: '0 0 0 5',
+                        //             text: 'Remove Column'
+                        //         }
+                        //     ]
+                        // }
                     ]
                 },
                 {
