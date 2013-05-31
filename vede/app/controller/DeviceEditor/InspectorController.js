@@ -63,15 +63,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         j5collection.bins().each(function(bin,binKey){
             if(bin.parts().getCount()>1) {
                 bin.parts().each(function(part) {
-                    part.getSequenceFile({
-                        callback: function(sequenceFile){
-                        if(sequenceFile.get("partSource")!="") {
-                            tmpC++;
-                        }
+                    part.get("name");
+                    if (part.get("name")!="") {
+                        tmpC++;
                     }
                 });
-            });
-        }
+            }
         });
         if (tmpC>1) {
             combinatorial = true;
@@ -877,15 +874,15 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     j5ReadyField.setFieldStyle("color:red");
                 }
 
-            combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
-                                                            this.activeProject));
-            console.log(this.DeviceDesignManager.setCombinatorial(this.activeProject));
+            // combinatorialField.setValue(this.DeviceDesignManager.setCombinatorial(
+            //                                                 this.activeProject));
+            // console.log(this.DeviceDesignManager.setCombinatorial(this.activeProject));
 
-            if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
-                    combinatorialField.setFieldStyle("color:purple");
-                } else {
-                    combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
-                }
+            // if (this.DeviceDesignManager.setCombinatorial(this.activeProject) == true) {
+            //         combinatorialField.setFieldStyle("color:purple");
+            //     } else {
+            //         combinatorialField.setFieldStyle("color:rgb(0, 173, 255)");
+            //     }
 
             if(this.activeProject.getJ5Collection().get("isCircular")) {
                 circularPlasmidField.setValue(true);

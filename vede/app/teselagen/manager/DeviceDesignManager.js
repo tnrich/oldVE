@@ -290,6 +290,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                             callback: function(sequenceFile){
                                 if (sequenceFile) {
                                     if(sequenceFile.get("partSource")!="") {
+                                        console.log(sequenceFile.get("partSource"));
                                         tmpC++;
                                     }
                                 }
@@ -297,7 +298,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                         });
                     });
                 }
-            console.log(tmpC);
             if (tmpC>1) {
                 combinatorial = true;
             }
