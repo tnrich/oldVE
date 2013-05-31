@@ -280,6 +280,10 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         Vede.application.fireEvent("openj5");
     },
 
+    onImportEugeneRulesBtnClick: function(){
+        
+    },
+
     /**
      * @member Vede.controller.DeviceEditor.DeviceEditorPanelController
      */
@@ -300,6 +304,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             },
             "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {
                 click: this.onDeviceEditorRenameBtnClick
+            },
+            "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {
+                click: this.onImportEugeneRulesBtnClick
             },
             "button[cls='insertMenu'] > menu > menuitem[text='Row']": {
                 click: this.onAddRowClick

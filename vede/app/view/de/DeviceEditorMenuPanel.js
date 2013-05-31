@@ -33,7 +33,19 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 {
                     xtype: 'menuitem',
                     text: 'Rename Design'
-                }]
+                }, 
+                {
+                    xtype: 'filefield',
+                    buttonOnly: true,
+                    buttonConfig: {
+                        text: 'Import Eugene Rules',
+                        scale: 'small',
+                        tooltip: 'Import EugeneRules',
+                        margin: '0 0 0 30'
+                    },
+                    cls: 'DEimportEugeneRulesBtn'
+                }
+                ]
             }
         }, {
             xtype: 'button',

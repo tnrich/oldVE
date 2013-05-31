@@ -8,6 +8,8 @@ Ext.define('Vede.controller.AppController', {
         Vede.application = Vede.app;
     },
     onLaunch: function() {
+        Ext.tip.QuickTipManager.init();
+
         // Prevent backspace key and control + arrow keys from sending the user
         // back a page.
         Ext.EventManager.addListener(Ext.getBody(), 'keydown', function(e){
