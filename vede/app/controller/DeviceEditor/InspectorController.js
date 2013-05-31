@@ -315,6 +315,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         // If a j5Part exists for the selected part, load it. If not, create a
         // blank part and load it into the form.
         if(j5Part) {
+            debugger;
             partPropertiesForm.loadRecord(j5Part);
             this.selectedPartIndex = this.DeviceDesignManager.getPartIndex(this.selectedBin, j5Part);
 
@@ -325,7 +326,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         openPartLibraryBtn.setText("Open Part Library");
                         openPartLibraryBtn.removeCls('selectPartFocus');
                         changePartDefinitionBtn.enable();
-                        partPropertiesForm.loadRecord(sequenceFile);     
                         deletePartBtn.enable();
                         deletePartBtn.removeCls('btnDisabled');
                         clearPartMenuItem.enable();
