@@ -288,6 +288,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var clearPartMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Clear Part']");
         var fasForm = this.inspector.down("form[cls='forcedAssemblyStrategyForm']");
         var fasCombobox = fasForm.down("combobox");
+        var partSourceNameField = this.inspector.down("displayfield[cls='partSourceField']");
         var fasArray = [];
 
         openPartLibraryBtn.enable();
@@ -328,6 +329,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         deletePartBtn.enable();
                         deletePartBtn.removeCls('btnDisabled');
                         clearPartMenuItem.enable();
+                        partSourceNameField.setValue(sequenceFile.get('partSource'));
                     } else {
                         changePartDefinitionBtn.disable();
                         openPartLibraryBtn.setText("Select Part From Library");
