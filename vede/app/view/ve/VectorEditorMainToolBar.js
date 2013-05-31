@@ -11,7 +11,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'button',
         cls: 'saveSequenceBtn',
         icon: 'resources/images/save.png',
-        text: 'Save',
         scale: 'medium',
         tooltip: 'Save to Genbank File'
     },
@@ -23,16 +22,16 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'filefield',
         buttonOnly: true,
+        buttonText: '',
         buttonConfig: {
             icon: 'resources/images/import_new.png',
-            text: "Import",
             scale: 'medium',
             tooltip: 'Open a Sequence File'
         },
         listeners: {
             render: {
                 fn: function(field) {
-                    field.el.set({title: "Import File"});
+                    field.el.set({title: "Open a Sequence File"});
                 }
             }
         },
@@ -47,7 +46,6 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'button',
         cls: 'createPartBtn',
         icon: 'resources/images/create.png',
-        text: 'Create',
         scale: 'medium',
         tooltip: 'Create Part'
     },

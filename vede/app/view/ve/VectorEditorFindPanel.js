@@ -71,6 +71,7 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
     }, {
         xtype: "button",
         id: "highlightAllBtn",
+        enableToggle: true,
         text: "<b>Highlight All</b>",
         margin: "2 4 2 4"
     }]
