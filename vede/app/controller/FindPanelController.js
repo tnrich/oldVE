@@ -30,6 +30,7 @@ Ext.define('Vede.controller.FindPanelController', {
 
     onFindPanelOpened: function() {
         Ext.getCmp("FindPanel").setVisible(!Ext.getCmp("FindPanel").isVisible());
+        Ext.getCmp("findField").focus(true, 10);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
@@ -37,32 +38,60 @@ Ext.define('Vede.controller.FindPanelController', {
         this.findManager.setSequenceManager(pSeqMan);
     },
 
+    onFindFieldKeyup: function(field, event) {
+        if(event.getKey() === event.ENTER) {
+            this.onFindNext();
+        }
+    },
+    
+    onFindFieldValidityChange: function(field, valid) {
+        if(valid) {
+            Ext.getCmp("findNextBtn").enable();
+        } else {
+            Ext.getCmp("findNextBtn").disable();
+        }
+    },
+
     onFindNext: function() {
-        var result = this.findManager.find(this.findField.getValue().toLowerCase(),
-                                           this.findInSelector.getValue().toLowerCase(),
-                                           this.literalSelector.getValue().toLowerCase(),
-                                           this.caretIndex);
+        if(this.findField.isValid()) {
+            var result = this.findManager.find(this.findField.getValue().toLowerCase(),
+                                               this.findInSelector.getValue().toLowerCase(),
+                                               this.literalSelector.getValue().toLowerCase(),
+                                               this.caretIndex);
 
-        console.log(result);
-
-        if(result) {
-            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
-                                       this, result.start, result.end);
+            if(result) {
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                           this, result.start, result.end);
+            }
         }
     },
 
     onHighlightAll: function() {
+        
+    },
 
+    validateFindField: function() {
+        this.findField.validate();
     },
 
     init: function() {
         this.control({
+            "#findField": {
+                keyup: this.onFindFieldKeyup,
+                validitychange: this.onFindFieldValidityChange
+            },
             "#findNextBtn": {
                 click: this.onFindNext
             },
             "#highlightAllBtn": {
                 click: this.onHighlightAll
             },
+            "#findInSelector": {
+                change: this.validateFindField
+            },
+            "#literalSelector": {
+                change: this.validateFindField
+            }
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;

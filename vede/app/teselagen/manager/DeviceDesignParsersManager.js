@@ -90,16 +90,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
             var existingDesign = Ext.getCmp("mainAppPanel").getActiveTab().model;
             var design = Teselagen.manager.DeviceDesignManager.clearDesignAndAddBins(existingDesign,binsArray);
-            /*
-            if(existingDesign)
-            {
-                var existingDesignID = existingDesign.get("id");
-                design.set("id",existingDesignID);
-                design.set("name",existingDesign.get("name"));
-                design.set("project_id",existingDesign.get("project_id"));
-                existingDesign.destroy();
-            }
-            */
+
             Ext.getCmp("mainAppPanel").getActiveTab().model = design;
 
             // Load the Eugene Rules in the Design
@@ -200,12 +191,21 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         fas: (part["de:parts"]["de:part"]["de:fas"] === "") ? "None" : part["de:parts"]["de:part"]["de:fas"]
                     });
 
+                    newPart.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
+
+                    var partName;
+                    partName = part.sequence["name"];
+                    if(part.sequence["de:fileName"]) partName = part.sequence["de:fileName"].replace('.gb',"");
+
                     // Sequence processing
                     var newSequence = Ext.create("Teselagen.models.SequenceFile", {
+                        name: partName,
                         sequenceFileContent: part.sequence["de:content"],
                         sequenceFileFormat: part.sequence["de:format"],
-                        sequenceFileName: part.sequence["pj5_00001.gb"]
+                        sequenceFileName: part.sequence["de:fileName"],
                     });
+
+                    newSequence.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
 
                     newPart.setSequenceFileModel(newSequence);
 
@@ -238,7 +238,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                                     }
                                 }
 
-                                //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
+                                //if(eugeneRules.length === 0) { console.log("No eugenes rules found"); }
                                 //else { console.log("Eugene rules found."); }
 
                                 for (var ruleIndex in eugeneRules) {
@@ -389,6 +389,60 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
         }
         Teselagen.manager.DeviceDesignParsersManager.generateDesign(binsArray, rulesArray, cb);
+    },
+
+    parseEugeneRules: function(content,filename,design){
+
+
+        // Build part Index
+
+        var partIndex = {};
+
+        design.getJ5Collection().bins().each(function (bin, binKey) {
+            bin.parts().each(function (part) {
+                partIndex[part.data.name] = part;
+            });
+        });
+    
+        var lines = content.split("\n");
+        var newRule;
+        
+        lines.forEach(function(line)
+        {
+            if(line!=="")
+            {
+                newRule = {
+                    operand1_id: "",
+                    operand2_id: "",
+                    negationOperator: "",
+                    name: "",
+                    compositionalOperator: ""
+                }
+                
+                var parsed = line.match(/Rule (.+)\((NOT|) (.+) (.+) (.+)\);/);
+                if(parsed.length===6)
+                {
+                    newRule.name = parsed[1];
+                    newRule.negationOperator = parsed[2];
+                    newRule.operand1 = partIndex[parsed[3]];
+                    newRule.compositionalOperator = parsed[4];
+                    newRule.operand2 = partIndex[parsed[5]];
+                }
+                
+                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                    name: newRule.name,
+                    compositionalOperator: newRule.compositionalOperator,
+                    negationOperator: newRule.negationOperator
+                });
+                
+                newEugeneRule.setOperand1(newRule.operand1);
+                newEugeneRule.setOperand2(newRule.operand2);
+
+                design.addToRules(newEugeneRule);
+
+                //debugger;
+            }
+        });
     }
 
 });

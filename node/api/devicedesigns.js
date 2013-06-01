@@ -42,7 +42,7 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method POST '/users/:username/projects/:project_id/devicedesigns'
      */
-        app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
+    app.put('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
         var Part = app.db.model("part");
 
@@ -118,16 +118,34 @@ module.exports = function(app) {
         var DeviceDesign = app.db.model("devicedesign");
         console.log("DE by id");
         DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
+            if(!design) return res.json(500,{"error":"design not found"});
             // Eugene rules to be send on a different request
+            design = design.toObject();
+            design.id = design._id;
             delete design.rules;
 
             if (err) {
                 errorHandler(err, req, res);
             } else {
+                design.j5collection.bins.forEach(function(bin, i) {
+                    bin.parts.forEach(function(part, j) {
+                        part.fas = bin.fases[j];
+                    });
+                });
                 res.json({
                     "designs": design
                 });
             }
+        });
+    });
+
+    app.delete('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
+        var DeviceDesign = app.db.model("devicedesign");
+        DeviceDesign.findByIdAndRemove(req.params.devicedesign_id,function(err,devicedesigns) {
+            if(err) return res.json(500,{"error":err});
+            res.json({
+                "designs": devicedesigns
+            });
         });
     });
 

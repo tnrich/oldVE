@@ -19,7 +19,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
     sequenceStore: null,
 
     /**
-     * loadUser
+     * @member Teselagen.manager.ProjectManager
      * Loads a user, sets currentUser, load projects and fire renderProjectTree (ProjectExplorer)
      */
     loadUser: function () {
@@ -101,7 +101,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 model: selectedDesign,
                 modelId: selectedDesign.data.id
             })).show();
-            //Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
+            Vede.application.fireEvent("loadEugeneRules"); // Fires event to load eugeneRules
             Ext.getCmp("projectTreePanel").expandPath("/root/" + selectedDesign.data.project_id + "/" + selectedDesign.data.id);
 
         });
@@ -109,12 +109,23 @@ Ext.define("Teselagen.manager.ProjectManager", {
 
     /**
      * deleteDeviceDesign
-     * Opens a DeviceDesign model in a new tab.
+     * Delete DeviceDesign Tab
      * @param {Teselagen.models.DeviceDEsign} Receives a DeviceDesign model (already loaded)
      */
     DeleteDeviceDesign: function (devicedesign, tab) {
-        //console.log("Deleting DeviceDesign");
-        var store =  devicedesign.store;
+        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Deleting design");
+        var project_id = devicedesign.data.project_id;
+        var designs = Teselagen.manager.ProjectManager.workingProject.designs();
+        designs.remove(devicedesign);
+        devicedesign.destroy(true);
+        designs.sync();
+        Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
+            Ext.getCmp("projectTreePanel").expandPath("/root/" + project_id);
+            Ext.getCmp("mainAppPanel").getActiveTab().el.unmask();
+        });
+        Ext.getCmp("mainAppPanel").remove(tab);
+        /*
+        var store =  Teselagen.manager.ProjectManager.workingProject.designs();
         store.remove(devicedesign);
 
         store.sync({
@@ -123,6 +134,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 Ext.getCmp("mainAppPanel").remove(tab);
             }
         });
+        */
     },
 
     /**
@@ -199,11 +211,11 @@ Ext.define("Teselagen.manager.ProjectManager", {
     createNewSequence: function (project, veprojectNames) {
         var onPromptClosed = function (btn, text) {
                 if(btn === "ok") {
-                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a vector editor project name:", onPromptClosed, this); }
+                    if(text === "") { return Ext.MessageBox.prompt("Name", "Please enter a sequence name:", onPromptClosed, this); }
                     for (var j=0; j<veprojectNames.length; j++) {
                         if (veprojectNames[j].match(text)) { return Ext.MessageBox.prompt("Name", "A sequence with this name already exists in this project. Please enter another name:", onPromptClosed, this); }
                     }
-                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new ve project");
+                    Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Creating new sequence");
                     var self = this;
 
                     var newSequenceFile = Ext.create("Teselagen.models.SequenceFile", {
@@ -289,7 +301,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 });
 
                             };
-
+                        /*
                         parts.forEach(function (part, partIndex) {
                             part.save({
                                 callback: function () {
@@ -297,6 +309,8 @@ Ext.define("Teselagen.manager.ProjectManager", {
                                 }
                             });
                         });
+                        */
+                        afterPartsSaved();
 
                     }
                 } else { return false; }

@@ -5,14 +5,28 @@
 Ext.define('Vede.controller.MainMenuController', {
     extend: 'Ext.app.Controller',
 
-    requires: ['Teselagen.event.MenuItemEvent',
+    requires: ['Teselagen.event.CaretEvent',
+               'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
                'Teselagen.utils.FormatUtils'],
 
+    CaretEvent: null,
     MenuItemEvent: null,
     ProjectManager: null,
     VisibilityEvent: null,
+
+    onCutMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.CUT);
+    },
+
+    onCopyMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.COPY);
+    },
+
+    onPasteMenuItemClick: function() {
+        this.application.fireEvent(this.MenuItemEvent.PASTE);
+    },
 
     onUndoMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.UNDO);
@@ -26,8 +40,15 @@ Ext.define('Vede.controller.MainMenuController', {
         this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
     },
 
+    onGotoMenuItemClick: function() {
+        var gotoWindow = Ext.create("Vede.view.ve.GoToWindow");
+
+        this.application.fireEvent(this.MenuItemEvent.GOTO_WINDOW_OPENED,
+                                   gotoWindow);
+    },
+
     onSelectMenuItemClick: function() {
-        var selectWindow = Ext.create("Vede.view.SelectWindow");
+        var selectWindow = Ext.create("Vede.view.ve.SelectWindow");
 
         selectWindow.show();
         selectWindow.center();
@@ -217,6 +238,15 @@ Ext.define('Vede.controller.MainMenuController', {
 
     init: function() {
         this.control({
+            "#cutMenuItem": {
+                click: this.onCutMenuItemClick
+            },
+            "#copyMenuItem": {
+                click: this.onCopyMenuItemClick
+            },
+            "#pasteMenuItem": {
+                click: this.onPasteMenuItemClick
+            },
             "#undoMenuItem": {
                 click: this.onUndoMenuItemClick
             },
@@ -225,6 +255,9 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#findMenuItem": {
                 click: this.onFindMenuItemClick
+            },
+            "#gotoMenuItem": {
+                click: this.onGotoMenuItemClick
             },
             "#selectMenuItem": {
                 click: this.onSelectMenuItemClick
@@ -291,6 +324,7 @@ Ext.define('Vede.controller.MainMenuController', {
             }
         });
 
+        this.CaretEvent = Teselagen.event.CaretEvent;
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.ProjectManager = Teselagen.manager.ProjectManager;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;

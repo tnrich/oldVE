@@ -5,6 +5,10 @@
 Ext.define("Teselagen.event.MenuItemEvent", {
     singleton: true,
 
+    CUT: "Cut",
+    COPY: "Copy",
+    PASTE: "Paste",
+
     UNDO: "Undo",
     REDO: "Redo",
 
@@ -12,6 +16,7 @@ Ext.define("Teselagen.event.MenuItemEvent", {
     SELECT_INVERSE: "SelectInverse",
 
     FIND_PANEL_OPENED: "FindPanelOpened",
+    GOTO_WINDOW_OPENED: "GoToWindowOpened",
     SELECT_WINDOW_OPENED: "SelectWindowOpened",
 
     REVERSE_COMPLEMENT: "ReverseComplement",

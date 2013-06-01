@@ -48,6 +48,7 @@ module.exports = function(db) {
 	registerSchema('j5run', j5RunSchema);
 
 	var SequenceSchema = new Schema({
+		FQDN: String,
 		project_id: {
 			type: oIDRef,
 			ref: 'project'
@@ -67,9 +68,13 @@ module.exports = function(db) {
 		sequenceFileName: String,
 		firstTimeImported: Boolean
 	});
+
+	SequenceSchema.index({ "FQDN": 1, "hash" : 1 }, { unique: true, dropDups: true })
+
 	registerSchema('sequence', SequenceSchema);
 
 	var PartSchema = new Schema({
+		FQDN: { type : String, index: { unique: true, dropDups: true }}, 
 		project_id : { type: oIDRef, ref: 'project' },
 		user_id : { type: oIDRef, ref: 'user' },
 		name: String,
@@ -82,7 +87,6 @@ module.exports = function(db) {
 		eugenerule_id     :  String,
 		sequencefile_id   :  String,
 		directionForward  :  String,
-		fas               :  String,
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
@@ -117,7 +121,7 @@ module.exports = function(db) {
 				directionForward: String,
 				dsf: String,
 				fro: String,
-				fas: String,
+				fases: [String],
 				extra5PrimeBps: String,
 				extra3PrimeBps: String,
 				binName: String,
@@ -165,6 +169,8 @@ module.exports = function(db) {
 		lastName: String,
 		email: String,
 		preferences: Mixed,
+		groupName: String,
+		groupType: String,
 		projects: [{
 			type: oIDRef,
 			ref: 'project'
@@ -182,5 +188,10 @@ module.exports = function(db) {
 			ref: 'devicedesign'
 		}]
 	});
+
+	UserSchema.virtual('FQDN').get(function () {
+	  return this.groupType + '.' + this.groupName + '.' + this.username;
+	});
+
 	registerSchema('User', UserSchema);
 };

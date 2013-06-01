@@ -74,8 +74,21 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 150,
-            items: [
-            {
+            items: [{
+                xtype: 'menuitem',
+                id: 'cutMenuItem',
+                text: 'Cut'
+            }, {
+                xtype: 'menuitem',
+                id: 'copyMenuItem',
+                text: 'Copy'
+            }, {
+                xtype: 'menuitem',
+                id: 'pasteMenuItem',
+                text: 'Paste'
+            }, {
+                xtype: 'menuseparator'
+            }, {
                 xtype: 'menuitem',
                 id: 'undoMenuItem',
                 text: 'Undo'
@@ -85,31 +98,17 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 text: 'Redo'
             }, {
                 xtype: 'menuseparator'
-            }, 
-//                    {
-//                xtype: 'menuitem',
-//                text: 'Copy'
-//            }, {
-//                xtype: 'menuitem',
-//                text: 'Cut'
-//            }, {
-//                xtype: 'menuitem',
-//                text: 'Paste'
-//            },
-//            {
-//                xtype: 'menuseparator'
-//            },
-//            {
-//                xtype: 'menuitem',
-//                id: 'findMenuItem',
-//                text: 'Find...'
-//            }, {
-//                xtype: 'menuitem',
-//                text: 'Go To...'
-//            }, {
-//                xtype: 'menuseparator'
-//            },
-            {
+            }, {
+                xtype: 'menuitem',
+                id: 'findMenuItem',
+                text: 'Find...'
+            }, {
+                xtype: 'menuitem',
+                id: 'gotoMenuItem',
+                text: 'Go To...'
+            }, {
+                xtype: 'menuseparator'
+            }, {
                 xtype: 'menuitem',
                 id: 'selectMenuItem',
                 text: 'Select...'
@@ -199,6 +198,16 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 id: 'cutSiteLabelsMenuItem',
                 text: 'Cut Site Labels',
                 checked: true
+            }, {
+                xtype: 'menuitem',
+                id: 'zoomInMenuItem',
+                hideOnClick: false,
+                text: 'Zoom In (+)'
+            }, {
+                xtype: 'menuitem',
+                id: 'zoomOutMenuItem',
+                hideOnClick: false,
+                text: 'Zoom Out (-)'
             }]
         }
     }
@@ -229,6 +238,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //            }, {
 //                xtype: 'menuitem',
 //                text: 'Preferences'
+            },
+            {
+                xtype: 'menuitem',
+                id: 'exportToFileMenuItem',
+                text: 'Export to File'
             }
             ]
         }
