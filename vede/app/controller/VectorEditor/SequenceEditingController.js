@@ -94,7 +94,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
     },
 
     onOpenVectorEditor: function(seq){
-        console.log("Using general Vector Editor Sequence Editing Controller");
+        //console.log("Using general Vector Editor Sequence Editing Controller");
         currentTabPanel = Ext.getCmp('mainAppPanel');
         currentTabPanel.setActiveTab(1);
         Teselagen.manager.ProjectManager.workingSequence = seq;

@@ -33,7 +33,19 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 {
                     xtype: 'menuitem',
                     text: 'Rename Design'
-                }]
+                }, 
+                {
+                    xtype: 'filefield',
+                    buttonOnly: true,
+                    buttonConfig: {
+                        text: 'Import Eugene Rules',
+                        scale: 'small',
+                        tooltip: 'Import EugeneRules',
+                        margin: '0 0 0 30'
+                    },
+                    cls: 'DEimportEugeneRulesBtn'
+                }
+                ]
             }
         }, {
             xtype: 'button',
@@ -53,6 +65,10 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     disabled: true
                 }, {
                     xtype: 'menuitem',
+                    text: 'Remove Row',
+                    cls: 'removeRowMenuItem',
+                    disabled: true,
+                }, {
                     text: 'Cut Part',
                     cls: 'cutPartMenuItem',
                     disabled: true
@@ -155,8 +171,12 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                     text: 'Row'
                 }, {
                     xtype: 'menuitem',
-                    cls: 'column',
-                    text: 'Column'
+                    cls: 'column-left',
+                    text: 'Column Left'
+                }, {
+                    xtype: 'menuitem',
+                    cls: 'column-right',
+                    text: 'Column Right'
                 }]
             }
         }, {

@@ -276,6 +276,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     setCombinatorial: function(pDevice) {
         var collection = pDevice.getJ5Collection();
         var combo   = false;
+        var tmpC = 0;
 
         if (collection === null || collection === undefined) {
             return combo;
@@ -284,8 +285,22 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         } else {
             for (var i = 0; i < collection.bins().count(); i++) {
                 if (collection.bins().getAt(i).parts().count() > 1) {
-                    combo = true;
+                    collection.bins().getAt(i).parts().each(function(part) {
+                        part.getSequenceFile({
+                            callback: function(sequenceFile){
+                                if (sequenceFile) {
+                                    if(sequenceFile.get("partSource")!="") {
+                                        console.log(sequenceFile.get("partSource"));
+                                        tmpC++;
+                                    }
+                                }
+                            }
+                        });
+                    });
                 }
+            if (tmpC>1) {
+                combinatorial = true;
+            }
             collection.set("combinatorial", combo);
             }
             return combo;
@@ -364,14 +379,18 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
                 if (part.data.sequencefile_id !== "")
                 {
                     if (Ext.getClassName(parts.getAt(j).getSequenceFile()) !== "Teselagen.models.SequenceFile") {
+                        console.log("a");
                         ready = false;
                     }
                     if (parts.getAt(j).isEmpty() === true) {
+                        console.log("b");
                         ready = false;
                     }
                 }
             }
         }
+
+        console.log(ready);
         collection.set("j5Ready", ready);
         return ready;
     },
@@ -525,6 +544,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
             pName = "No_Name";
         }*/
         var success = pDevice.getJ5Collection().addNewBinByIndex(pIndex, pName);
+
+        var bin = this.getBinByIndex(pDevice, pIndex);
+
+        var emptyPartCount = this.findMaxNumParts(pDevice);
+
+        // for (var i = 0; i < emptyPartCount; i++) {
+        //     var newPart = this.createPart(pDevice, pIndex);
+        // }
+
         return success;
     },
     /**
@@ -697,6 +725,22 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         }
         return binIndex;
         //return pDevice.getJ5Collection().getBinAssignment(pPart);
+    },
+    /**
+     * Gets the indices of all bins that contain a given part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Number[]} Array of indices of all owner bins.
+     */
+    getOwnerBinIndices: function(pDevice, pPart) {
+        var binIndices = [];
+        for(var i = 0; i < pDevice.getJ5Collection().binCount(); i++) {
+            if(pDevice.getJ5Collection().bins().getAt(i).parts().indexOf(pPart) !== -1) {
+                binIndices.push(i);
+            }
+        }
+
+        return binIndices;
     },
     /**
      * Determines if a given part name is unique.

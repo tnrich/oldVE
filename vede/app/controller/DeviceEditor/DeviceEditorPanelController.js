@@ -10,7 +10,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     DeviceEvent: null,
 
     onLoadEugeneRulesEvent: function(){
-        console.log("Loading eugene rules");
+        //console.log("Loading eugene rules");
         var currentProject = Ext.getCmp('mainAppPanel').getActiveTab().model;
         var deproject_id = currentProject.data.id;
         var self = this;
@@ -256,10 +256,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.ADD_ROW, null);
     },
 
-    onAddColumnClick: function () {
-        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN);
+    onAddColumnLeftClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_LEFT);
     },
 
+    onAddColumnRightClick: function () {
+        this.application.fireEvent(this.DeviceEvent.ADD_COLUMN_RIGHT);
+    },
 
     onclearPartMenuItemClick: function() {
         this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
@@ -269,8 +272,16 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.fireEvent(this.DeviceEvent.REMOVE_COLUMN);
     },
 
+    onRemoveRowMenuItemClick: function() {
+        this.application.fireEvent(this.DeviceEvent.REMOVE_ROW);
+    },
+
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
+    },
+
+    onImportEugeneRulesBtnClick: function(){
+        
     },
 
     /**
@@ -294,17 +305,26 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             "button[cls='fileMenu'] > menu > menuitem[text='Rename Design']": {
                 click: this.onDeviceEditorRenameBtnClick
             },
+            "button[cls='fileMenu'] > menu > menuitem[text='Import Eugene Rules']": {
+                click: this.onImportEugeneRulesBtnClick
+            },
             "button[cls='insertMenu'] > menu > menuitem[text='Row']": {
                 click: this.onAddRowClick
             },
-            "button[cls='insertMenu'] > menu > menuitem[text='Column']": {
-                click: this.onAddColumnClick
+            "button[cls='insertMenu'] > menu > menuitem[text='Column Left']": {
+                click: this.onAddColumnLeftClick
+            },
+            "button[cls='insertMenu'] > menu > menuitem[text='Column Right']": {
+                click: this.onAddColumnRightClick
             },
             "button[cls='editMenu'] > menu > menuitem[text='Clear Part']": {
                 click: this.onclearPartMenuItemClick
             },
             "button[cls='editMenu'] > menu > menuitem[text='Remove Column']": {
                 click: this.onRemoveColumnMenuItemClick
+            },
+            "button[cls='editMenu'] > menu > menuitem[text='Remove Row']": {
+                click: this.onRemoveRowMenuItemClick
             },
             "button[cls='examplesMenu'] > menu > menuitem": {
                 click: this.onOpenExampleItemBtnClick
