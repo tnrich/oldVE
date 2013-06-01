@@ -151,15 +151,22 @@ Ext.define('Vede.view.de.grid.Bin', {
             currentRows = this.getTotalRows();
         }
 
-        var itemslist = this.items;
+        console.log(currentRows);
 
-        while(currentRows < pTotalRows) {
-                this.add(Ext.create("Vede.view.de.grid.Part"));
-                currentRows += 1;
-        }
+        if (currentRows==0) {
+            this.add(Ext.create("Vede.view.de.grid.Part"));
+            currentRows += 1;
+        } else {
+            var itemslist = this.items;
 
-        while (currentRows > pTotalRows) {
-            currentRows -= 1;
+            while(currentRows < pTotalRows) {
+                    this.add(Ext.create("Vede.view.de.grid.Part"));
+                    currentRows += 1;
+            }
+
+            while (currentRows > pTotalRows) {
+                currentRows -= 1;
+            }
         }
 
         return pTotalRows;
