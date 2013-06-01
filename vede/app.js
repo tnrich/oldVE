@@ -73,8 +73,7 @@ Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
     views: [
-        'AppViewport',
-        'SimulateDigestionWindow'
+        'AppViewport'
     ],
     controllers: [
         'ActionStackController',

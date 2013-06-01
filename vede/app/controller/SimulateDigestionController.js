@@ -6,9 +6,6 @@
  */
 Ext.define("Vede.controller.SimulateDigestionController", {
     extend: "Ext.app.Controller",
-    views:
-        [ "SimulateDigestionWindow" ],
-
     requires:
         ["Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.bio.tools.DigestionCalculator",

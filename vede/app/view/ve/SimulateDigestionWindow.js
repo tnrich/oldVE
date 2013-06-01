@@ -4,7 +4,7 @@
  * @author Doug Hershberger
  * @author Micah Lerner
  */
-Ext.define("Vede.view.SimulateDigestionWindow", {
+Ext.define("Vede.view.ve.SimulateDigestionWindow", {
     extend: "Ext.window.Window",
     requires: ["Ext.form.Panel", "Ext.ux.form.MultiSelect", "Ext.ux.form.ItemSelector"],
     height: 500,
