@@ -48,6 +48,9 @@ Ext.define("Vede.controller.SimulateDigestionController", {
       */
      enzymeListSelector: null,
 
+     /**
+      * @member Vede.controller.SimulateDigestionController
+      */
      init: function() {
          this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
          this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
@@ -58,10 +61,6 @@ Ext.define("Vede.controller.SimulateDigestionController", {
              "#enzymeGroupSelector-digest": {
                  change: this.onEnzymeGroupSelected
              },
-             "#digestButton":{
-                 click: this.onDigestButtonClick
-             },
-
              "#ladderSelector": {
                  change: this.updateLadderLane
              },
@@ -72,7 +71,7 @@ Ext.define("Vede.controller.SimulateDigestionController", {
                  resize: this.onGelResize
              },
              "#enzymeListSelector-digest": {
-                 change: this.onDigestButtonClick
+                 change: this.onEnzymeListChange
              }
          });
          this.application.on({
@@ -179,8 +178,10 @@ Ext.define("Vede.controller.SimulateDigestionController", {
      /**
       * Redigests your sequence with selected enzymes from the enzymeListSelector
       */
-     onDigestButtonClick: function(){
+     onEnzymeListChange: function(){
          this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
+         this.enzymeListSelector.fromField.boundList.getStore().sort("name", "ASC");
+         this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
      },
      /**
       * Updates the Ladder based on the selection in the ladder drop down.
