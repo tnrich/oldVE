@@ -8,7 +8,7 @@
 Ext.define("Teselagen.models.digest.Ladder", {
 
     config: {
-    	ladderTypes: null,
+        ladderTypes: null,
         bandSizes: null
     },
     statics: {
@@ -43,7 +43,7 @@ Ext.define("Teselagen.models.digest.Ladder", {
      * band sizes
 	 */
 	fields: [
-		{name: "bandSizes", type: "auto", defaultValue: null},
+		{name: "bandSizes", type: "auto", defaultValue: null}
 		//{name: "name", type: "string", defaultValue: ""},
 	],
 
@@ -65,11 +65,11 @@ Ext.define("Teselagen.models.digest.Ladder", {
     },
 
     setLadder: function(pLadder){
-        if (pLadder.indexOf('1kb') > -1 ){
-            this.bandSizes = this.self.BP_LADDER_BANDS; 
+        if (pLadder.indexOf("1kb") > -1 ){
+            this.bandSizes = this.self.BP_LADDER_BANDS;
         }else {
             this.bandSizes = this.self.KB_LADDER_BANDS;
         }
 
-    },
+    }
 });
