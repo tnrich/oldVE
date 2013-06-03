@@ -990,6 +990,18 @@ background: #F8F8F8;
   background: #E0E3E6;
   color: #FFF;
 }
+
+.j5InfoTab-body {
+  background: #ECF0F1;
+}
+
+.useServerPlasmidsRadioBtn, .useEmptyPlasmidsRadioBtn {
+}
+
+.x-form-file-btn .x-btn-inner {
+    padding-top: 0px !important;
+}
+
 /*j5 Reports*/
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body, .j5ReportsPanel .x-menu {
   background: #333234 !important;
@@ -1032,7 +1044,11 @@ background: #F8F8F8;
 
 .assembly-label {
   position:relative;
-  top:9px;
+  top:4px;
+}
+
+.condenseAssembliesBtn {
+  float: right;
 }
 
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {

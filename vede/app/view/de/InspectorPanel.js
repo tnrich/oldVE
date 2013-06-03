@@ -471,6 +471,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
             xtype: 'panel',
             cls: 'j5InfoTab',
             title:'j5',
+            bodyCls: 'j5InfoTab-body',
             preventHeader: true,
             layout: {
                 type: 'vbox',
@@ -487,6 +488,306 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     margin: '2.5 0 2.5 0',
                     height: 40,
                     border: 0
+                },
+                {
+                    xtype: 'tabpanel',
+                    activeTab: 0,
+                    animCollapse: false,
+                    collapsible: false,
+                    removePanelHeader: true,
+                    items: [
+                    {
+                        xtype: 'form',
+                        flex: 1,
+                        cls: 'PartPropertiesForm',
+                        width: 287,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        bodyPadding: 10,
+                        title: 'Basic',
+                        margin: '5px 0px 5px 0px',
+                        items: [
+                            {
+                                xtype: 'combobox',
+                                cls: 'assemblyMethodSelector',
+                                fieldLabel: '<b>Assembly Method:</b>',
+                                labelCls: 'assembly-label',
+                                labelSeparator: ' ',
+                                labelWidth: 110,
+                                width:350,
+                                queryMode: 'local',
+                                displayField: 'assemblyMethod',
+                                valueField: 'assemblyMethod'
+                            },
+                            {   
+                                xtype: 'container',
+                                html: '<b>Master Plasmids List</b>',
+                                cls: 'masterPlasmidsList-box',
+                                margin: '15 0 0 0',
+                                layout: {
+                                    align: 'stretch',
+                                    type: 'vbox'
+                                },
+                                items: [{
+                                    xtype: 'radiofield',
+                                    cls: 'useServerPlasmidsRadioBtn',
+                                    name: 'plasmidsListSource',
+                                    margin: '20 0 0 25',
+                                    labelWidth: 110,
+                                    boxLabel: 'Use latest server version',
+                                    checked: true
+                                }, {
+                                    xtype: 'radiofield',
+                                    cls: 'useEmptyPlasmidsRadioBtn',
+                                    name: 'plasmidsListSource',
+                                    margin: '5 0 0 25',
+                                    fieldLabelCls: 'align-middle',
+                                    labelWidth: 110,
+                                    boxLabel: 'Generate empty file'
+                                }, {
+                                    xtype: 'filefield',
+                                    cls: 'plasmidsListFileSelector',
+                                    margin: '10 0 0 25',
+                                    validateOnChange: false,
+                                    padding: 0,
+                                    height: 23,
+                                    allowBlank: false,
+                                    hideLabel: false,
+                                    labelWidth: 10,
+                                    preventMark: false,
+                                    buttonOnly: false,
+                                    buttonText: '<b>Choose File</b>',
+                                    buttonConfig: {
+                                        stlye: {
+                                            paddingTop: '0px !important'
+                                        }
+                                    }
+                                }]
+                            },
+                            {   
+                                xtype: 'container',
+                                html: '<b>Master Oligos List</b>',
+                                margin: '15 0 0 0',
+                                layout: {
+                                    align: 'stretch',
+                                    type: 'vbox'
+                                },
+                                items: [{
+                                    xtype: 'radiofield',
+                                    cls: 'useServerOligosRadioBtn',
+                                    name: 'oligosListSource',
+                                    margin: '20 0 0 25',
+                                    labelWidth: 110,
+                                    boxLabel: 'Use latest server version',
+                                    checked: true
+                                }, {
+                                    xtype: 'radiofield',
+                                    cls: 'useEmptyOligosRadioBtn',
+                                    name: 'oligosListSource',
+                                    margin: '5 0 0 25',
+                                    fieldLabelCls: 'align-middle',
+                                    labelWidth: 110,
+                                    boxLabel: 'Generate empty file'
+                                }, {
+                                    xtype: 'filefield',
+                                    cls: 'oligosListFileSelector',
+                                    margin: '10 0 0 25',
+                                    validateOnChange: false,
+                                    padding: 0,
+                                    height: 23,
+                                    allowBlank: false,
+                                    hideLabel: false,
+                                    labelWidth: 10,
+                                    preventMark: false,
+                                    buttonOnly: false,
+                                    buttonText: '<b>Choose File</b>'
+                                }]
+                            },
+                            {   
+                                xtype: 'container',
+                                html: '<b>Master Direct Syntheses List</b>',
+                                margin: '15 0 0 0',
+                                layout: {
+                                    align: 'stretch',
+                                    type: 'vbox'
+                                },
+                                items: [{
+                                    xtype: 'radiofield',
+                                    cls: 'useServerSynthesesRadioBtn',
+                                    name: 'directSynthesesListSource',
+                                    margin: '20 0 0 25',
+                                    labelWidth: 110,
+                                    boxLabel: 'Use latest server version',
+                                    checked: true
+                                }, {
+                                    xtype: 'radiofield',
+                                    cls: 'useEmptySynthesesRadioBtn',
+                                    name: 'directSynthesesListSource',
+                                    margin: '5 0 0 25',
+                                    fieldLabelCls: 'align-middle',
+                                    labelWidth: 110,
+                                    boxLabel: 'Generate empty file'
+                                }, {
+                                    xtype: 'filefield',
+                                    cls: 'directSynthesesFileSelector',
+                                    margin: '10 0 0 25',
+                                    validateOnChange: false,
+                                    padding: 0,
+                                    height: 23,
+                                    allowBlank: false,
+                                    hideLabel: false,
+                                    labelWidth: 10,
+                                    preventMark: false,
+                                    buttonOnly: false,
+                                    buttonText: '<b>Choose File</b>'
+                                }]
+                            },
+                            {
+                                xtype: 'button',
+                                text : 'Edit J5 Parameters',
+                                // cls: 'runj5Btn',
+                                // overCls: 'runj5Btn-over',
+                                margin: '30 0 2.5 0',
+                                height: 30,
+                                border: 0
+                            },
+                        ]
+                    },
+                    {
+                        xtype: 'form',
+                        flex: 1,
+                        cls: 'PartPropertiesForm',
+                        width: 287,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        bodyPadding: 10,
+                        title: 'Advanced',
+                        margin: '5px 0px 5px 0px',
+                        items: [
+                            {   
+                                xtype: 'container',
+                                html: '<b>Condense Assembly Files</b>',
+                                cls: 'condenseAssemblyFiles-box',
+                                margin: '0 0 0 0',
+                                layout: {
+                                    align: 'stretch',
+                                    type: 'vbox'
+                                },
+                                items: [
+                                    {   
+                                    xtype: 'container',
+                                    html: 'Assembly Files To Condense List:',
+                                    cls: 'condenseAssemblyFiles-box',
+                                    margin: '25 0 0 25',
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'filefield',
+                                            cls: 'condenseAssemblyFilesSelector',
+                                            validateOnChange: false,
+                                            labelSeparator: ' ',
+                                            labelWidth: 10,
+                                            allowBlank: false,
+                                            hideLabel: false,
+                                            labelWidth: 10,
+                                            preventMark: false,
+                                            buttonOnly: false,
+                                            buttonText: '<b>Choose File</b>',
+                                            margin: '20 0 0 0'
+                                        }]
+                                    },
+                                    {   
+                                    xtype: 'container',
+                                    html: 'Zipped Assembly Files:',
+                                    cls: 'condenseAssemblyFiles-box',
+                                    margin: '15 0 0 25',
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [
+                                        {
+                                            xtype: 'filefield',
+                                            cls: 'zippedAssemblyFilesSelector',
+                                            validateOnChange: false,
+                                            labelSeparator: ' ',
+                                            labelWidth: 10,
+                                            allowBlank: false,
+                                            hideLabel: false,
+                                            labelWidth: 10,
+                                            preventMark: false,
+                                            buttonOnly: false,
+                                            buttonText: '<b>Choose File</b>',
+                                            margin: '20 0 0 0'
+                                        }
+                                        ]
+                                    },
+                                    {
+                                        xtype: 'panel',
+                                        margin: '25 0 0 0',
+                                        border: false,
+                                        items: [{
+                                            xtype: 'button',
+                                            cls: 'condenseAssembliesBtn',
+                                            text: '<b>Condense Assemblies</b>'
+                                        }, {
+                                            xtype: 'button',
+                                            cls: 'downloadCondenseAssemblyResultsBtn',
+                                            enableToggle: true,
+                                            pressed: false,
+                                            text: '<b>Download Results</b>',
+                                            hidden: true
+                                        }]
+                                    }
+                                ]   
+                            },
+                            {   
+                                xtype: 'container',
+                                html: '<b>Downstream Automation</b>',
+                                cls: 'downstreamAutomation-box',
+                                margin: '30 0 0 0',
+                                layout: {
+                                    align: 'stretch',
+                                    type: 'vbox'
+                                },
+                                items: [
+                                    {   
+                                    xtype: 'container',
+                                    html: 'Downtream Automation Parameters File',
+                                    cls: 'downstreamAutomationParameters-box',
+                                    margin: '25 0 0 0',
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [{
+                                        xtype: 'radiofield',
+                                        name: 'automationParamsFileSource',
+                                        margin: '20 0 0 25',
+                                        labelWidth: 110,
+                                        boxLabel: 'Use latest server version',
+                                        checked: true
+                                    }, {
+                                        xtype: 'radiofield',
+                                        name: 'automationParamsFileSource',
+                                        margin: '5 0 0 25',
+                                        fieldLabelCls: 'align-middle',
+                                        labelWidth: 110,
+                                        boxLabel: 'Use custom parameters'
+                                    }]
+                                }
+                                ]
+                            }
+                        ]
+                    }
+                    ]
                 }
             ]
         }
