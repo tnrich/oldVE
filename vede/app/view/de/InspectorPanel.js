@@ -466,6 +466,29 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     ]
                 }
             ]
+        },
+        {
+            xtype: 'panel',
+            cls: 'j5InfoTab',
+            title:'j5',
+            preventHeader: true,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            autoScroll: true,
+            margin: "5px 0px 5px 0px",
+            items: [
+                {
+                    xtype: 'button',
+                    text : 'Submit Run to j5',
+                    cls: 'runj5Btn',
+                    overCls: 'runj5Btn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 40,
+                    border: 0
+                }
+            ]
         }
     ]
 }
