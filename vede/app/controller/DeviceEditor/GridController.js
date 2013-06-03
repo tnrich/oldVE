@@ -544,29 +544,45 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     removeRows: function(evt) {
         if (evt === "ok") {
+
             this.totalRows -= 1;
+            this.updateBinsWithTotalRows(); 
+
+
             var partIndex=null;
             var gridPart = this.selectedPart;
             var bins = this.activeProject.getJ5Collection().bins();
 
-            console.log(bins);
+            if(this.totalRows == 0) {
+                partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
 
-            partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
-            console.log(partIndex);
+                this.selectedBin = null;
+                this.selectedPart = null;
+                
+                bins.each(function (bin, binIndex) {
+                    bin.parts().removeAt(partIndex);
+                });
 
-            // for (var i = 0; i < bins.length; i++) {
-            //     bins[i].parts()[partIndex].destroy();
-            // }
-            
-            this.selectedBin = null;
-            this.selectedPart = null;
-            
-            bins.each(function (bin, binIndex) {
-                bin.parts().removeAt(partIndex);
-            });
+                this.grid.removeAll();
+                this.renderDevice();
 
-            this.grid.removeAll();
-            this.renderDevice();
+                this.totalRows += 1;
+                this.updateBinsWithTotalRows();
+            }else {
+                partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
+
+                this.selectedBin = null;
+                this.selectedPart = null;
+                
+                bins.each(function (bin, binIndex) {
+                    bin.parts().removeAt(partIndex);
+                });
+
+                this.grid.removeAll();
+                this.renderDevice();
+            }
+
+             this.toggleCutCopyPastePartOptions(false);
         }
     },
 
@@ -590,6 +606,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
+
+        this.toggleCutCopyPastePartOptions(false);
     },
 
     /**
@@ -612,6 +630,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
+
+        this.toggleCutCopyPastePartOptions(false);
+        
+        $.jGrowl("Added Column Right");
     },
 
     /**
