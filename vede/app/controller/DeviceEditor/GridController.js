@@ -628,6 +628,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
+
+        $.jGrowl("Added Column Right");
     },
 
     /**
