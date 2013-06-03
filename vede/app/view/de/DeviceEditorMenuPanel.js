@@ -168,15 +168,18 @@ Ext.define('Vede.view.de.DeviceEditorMenuPanel', {
                 items: [{
                     xtype: 'menuitem',
                     cls: 'row',
-                    text: 'Row'
+                    text: 'Row',
+                    disabled: true
                 }, {
                     xtype: 'menuitem',
                     cls: 'column-left',
-                    text: 'Column Left'
+                    text: 'Column Left',
+                    disabled: true
                 }, {
                     xtype: 'menuitem',
                     cls: 'column-right',
-                    text: 'Column Right'
+                    text: 'Column Right',
+                    disabled: true
                 }]
             }
         }, {
