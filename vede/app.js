@@ -73,8 +73,7 @@ Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
     views: [
-        'AppViewport',
-        'SimulateDigestionWindow'
+        'AppViewport'
     ],
     controllers: [
         'ActionStackController',
@@ -93,17 +92,17 @@ Ext.application({
         'RestrictionEnzymeController',
         'SelectWindowController',
         'SequenceController',
-        'SimulateDigestionController',
         'VectorPanelController',
-        'VectorEditor.ImportSequenceController',
-        'VectorEditor.SequenceEditingController',
-        'VectorEditor.StatusBarController',
         'DeviceEditor.DeviceEditorPanelController',
         'DeviceEditor.GridController',
         'DeviceEditor.InspectorController',
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
+        'VectorEditor.ImportSequenceController',
+        'VectorEditor.SequenceEditingController',
+        'VectorEditor.SimulateDigestionController',
+        'VectorEditor.StatusBarController',
         'Vede.controller.AuthEventDispatcherController',
         'Vede.controller.J5ReportController',
         'Vede.controller.DeviceEditor.ChangePartDefinitionController'

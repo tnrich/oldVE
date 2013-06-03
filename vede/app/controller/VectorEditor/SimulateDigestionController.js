@@ -4,11 +4,8 @@
  * @author Doug Hershberger
  * @author Micah Lerner
  */
-Ext.define("Vede.controller.SimulateDigestionController", {
+Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
     extend: "Ext.app.Controller",
-    views:
-        [ "SimulateDigestionWindow" ],
-
     requires:
         ["Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.bio.tools.DigestionCalculator",
