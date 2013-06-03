@@ -606,6 +606,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
+
+        this.toggleCutCopyPastePartOptions(false);
     },
 
     /**
@@ -629,6 +631,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
 
+        this.toggleCutCopyPastePartOptions(false);
+        
         $.jGrowl("Added Column Right");
     },
 
