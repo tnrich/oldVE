@@ -4,8 +4,12 @@
  * @author Doug Hershberger
  * @author Micah Lerner
  */
-Ext.require("Teselagen.models.digest.Ladder");
 Ext.define("Teselagen.manager.SimulateDigestionManager", {
+    requires: ["Ext.draw.CompositeSprite",
+               "Ext.tip.ToolTip",
+               "Teselagen.models.digest.Gel",
+               "Teselagen.models.digest.GelLane",
+               "Teselagen.models.digest.Ladder"],
     config: {
         digestPanel: null,
         sampleLane: null,

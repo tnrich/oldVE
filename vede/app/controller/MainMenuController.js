@@ -9,7 +9,8 @@ Ext.define('Vede.controller.MainMenuController', {
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
-               'Teselagen.utils.FormatUtils'],
+               'Teselagen.utils.FormatUtils',
+               "Vede.view.ve.SimulateDigestionWindow"],
 
     CaretEvent: null,
     MenuItemEvent: null,
@@ -160,8 +161,7 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onSimulateDigestionMenuItemClick: function() {
-        console.log("called");
-        var simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
+        var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
         this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
