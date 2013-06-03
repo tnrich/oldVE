@@ -75,7 +75,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                             queryMode: "local",
                             value: "Common",
                             displayField: "name",
-                            maxWidth: 134
+                            flex:1
                         }
                         ]
                     },
