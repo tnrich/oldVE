@@ -608,6 +608,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                                     selectedBinIndex);
 
         this.toggleCutCopyPastePartOptions(false);
+
+        $.jGrowl("Added Column Left");
     },
 
     /**
