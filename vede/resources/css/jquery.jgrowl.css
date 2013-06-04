@@ -1,9 +1,10 @@
 
 div.jGrowl {
 	font-family: 		'Maven Pro', sans-serif;
-	z-index: 			#4A4B4C;
+	z-index: 			#9CA7B2;
 	color: 				#fff;
 	font-size: 			11px;
+	z-index: 			100000;
 }
 
 /** Special IE6 Style Positioning **/
@@ -81,12 +82,12 @@ div.center div.jGrowl-notification, div.center div.jGrowl-closer {
 }
 
 div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
-	background-color: 		#4A4B4C;
+	background-color: 		#9CA7B2;
 	opacity: 				.85;
 	-ms-filter: 			"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"; 
 	filter: 				progid:DXImageTransform.Microsoft.Alpha(Opacity=85); 
 	zoom: 					1;
-	width: 					235px;
+	width: 					200px;
 	padding: 				10px;
 	margin-top: 			5px;
 	margin-bottom: 			5px;
