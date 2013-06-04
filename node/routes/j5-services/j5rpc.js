@@ -181,8 +181,10 @@ function encoded_target_part_order_list_file(model,method)
             var tempOut = '';
             var dsfFirewall = '';
             var fas;
-            bin.parts.forEach(function(part){
-                fas = (part["fas"] == 'None') ? '' : part["fas"];
+            bin.parts.forEach(function(part,partKey){
+                //fas = (part["fas"] == 'None') ? '' : part["fas"];
+                fas = bin.fases[partKey];
+                if(fas === 'None') fas = '';
                 fro = (bin['fro'] === 'None') ? '' : bin['fro'];
                 direction = (part["directionForward"] === 'true') ? 'forward' : '';
                 dsf = (bin['dsf'] === false) ? '' : '';
@@ -200,7 +202,9 @@ function encoded_target_part_order_list_file(model,method)
         else
         {
             direction = (bin.parts[0]["directionForward"] === 'true') ? 'forward' : '';
-            fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
+            //fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
+            fas = bin.fases[0];
+            if(fas === 'None') fas = '';
             fro = (bin['fro'] === 'None') ? '' : bin['fro'];
             dsf = (bin['dsf'] === false) ? '' : bin['dsf'];
             extra3PrimeBps = (bin['extra3PrimeBps'] === null) ? '' : bin['extra3PrimeBps'];

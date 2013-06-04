@@ -43,7 +43,8 @@ module.exports = function(db) {
 		j5Results: Mixed,
 		j5Input: Mixed,
 		assemblyType: String,
-		assemblyMethod: String
+		assemblyMethod: String,
+		endDate: Date
 	});
 	registerSchema('j5run', j5RunSchema);
 
@@ -90,7 +91,8 @@ module.exports = function(db) {
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
-		iconID            :  String
+		iconID            :  String,
+		phantom           :  Boolean
 	});
 
 	PartSchema.pre('save', function(next) {

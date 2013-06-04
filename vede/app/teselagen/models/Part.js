@@ -108,9 +108,9 @@ Ext.define("Teselagen.models.Part", {
                 */
             name = v;
             if (v === undefined || v === null) name = "";
+            //if ( name !== "" ) record.set('phantom',false);
             return name;
-        }
-    }, {
+    }}, {
         name: "partSource",
         type: "string",
         defaultValue: ""
@@ -133,7 +133,11 @@ Ext.define("Teselagen.models.Part", {
         name: "iconID",
         type: "string",
         defaultValue: ""
-    } //,
+    }, {
+        name: "phantom",
+        type: "boolean",
+        defaultValue: false
+    }
     ],
 
     validations: [{

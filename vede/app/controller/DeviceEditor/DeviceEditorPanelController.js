@@ -216,25 +216,31 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         //console.log("Saving "+countParts+" parts");
         design.getJ5Collection().bins().each(function (bin, binKey) {
             bin.parts().each(function (part, partIndex) {
-                if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
-                    part.save({
-                        callback: function (part) {
-                            saveAssociatedSequence(part, function () {
-                                if(countParts == 1) saveDesign();
-                                countParts--;
-                                // loadingMessage.update(30, "Saving "+countParts+" parts");
-                                //console.log("Saving "+countParts+" parts");
-                            });
-                        }
-                    });
-                } else {
-                    saveAssociatedSequence(part,function(){
-                    if(countParts === 1) saveDesign();
-                    countParts--;
-                    // Vede.application.fireEvent("MapPart", part);
-                    // loadingMessage.update(30, "Saving "+countParts+" parts");
-                    });
-                }
+
+                    if(!part.data.project_id) part.set('project_id',Teselagen.manager.ProjectManager.workingProject.data.id);
+                    if(part.data.name==="") part.set('phantom',true);
+                    else part.set('phantom',false);
+                
+                    if(Object.keys(part.getChanges()).length > 0 || !part.data.id) {
+                        part.save({
+                            callback: function (part) {
+                                saveAssociatedSequence(part, function () {
+                                    if(countParts == 1) saveDesign();
+                                    countParts--;
+                                    // loadingMessage.update(30, "Saving "+countParts+" parts");
+                                    //console.log("Saving "+countParts+" parts");
+                                });
+                            }
+                        });
+                    } else {
+                        saveAssociatedSequence(part,function(){
+                        if(countParts === 1) saveDesign();
+                        countParts--;
+                        // Vede.application.fireEvent("MapPart", part);
+                        // loadingMessage.update(30, "Saving "+countParts+" parts");
+                        });
+                    }
+                //}
             });
         });
         
@@ -282,6 +288,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
+
+        $.jGrowl("Design Saved", {position: 'bottom-right'});
     },
 
     onImportEugeneRulesBtnClick: function(){
