@@ -21,7 +21,6 @@ Ext.define("Vede.view.ve.VectorEditorFindPanel", {
         width: 500,
         maxWidth: 600,
         margin: "2 4 2 4",
-        //msgTarget: "side",
         validator: function(value) {
             var literal = Ext.getCmp("literalSelector").getValue();
             var searchIn = Ext.getCmp("findInSelector").getValue();
