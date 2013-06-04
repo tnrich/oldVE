@@ -477,7 +477,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 type: 'vbox',
                 align: 'stretch'
             },
-            autoScroll: true,
+            autoScroll: false,
             margin: "5px 0px 5px 0px",
             items: [
                 {
@@ -492,9 +492,11 @@ Ext.define('Vede.view.de.InspectorPanel', {
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
+                    cls: 'j5InfoTab-Sub',
                     animCollapse: false,
                     collapsible: false,
                     removePanelHeader: true,
+                    margin: '10 0 0 0',
                     items: [
                     {
                         xtype: 'form',
@@ -525,7 +527,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 xtype: 'container',
                                 html: '<b>Master Plasmids List</b>',
                                 cls: 'masterPlasmidsList-box',
-                                margin: '15 0 0 0',
+                                margin: '20 0 0 0',
                                 layout: {
                                     align: 'stretch',
                                     type: 'vbox'
@@ -569,7 +571,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             {   
                                 xtype: 'container',
                                 html: '<b>Master Oligos List</b>',
-                                margin: '15 0 0 0',
+                                margin: '20 0 0 0',
                                 layout: {
                                     align: 'stretch',
                                     type: 'vbox'
@@ -608,7 +610,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             {   
                                 xtype: 'container',
                                 html: '<b>Master Direct Syntheses List</b>',
-                                margin: '15 0 0 0',
+                                margin: '20 0 0 0',
                                 layout: {
                                     align: 'stretch',
                                     type: 'vbox'
@@ -667,6 +669,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         bodyPadding: 10,
                         title: 'Advanced',
                         margin: '5px 0px 5px 0px',
+                        autoScroll: true,
                         items: [
                             {   
                                 xtype: 'container',
@@ -699,7 +702,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             labelWidth: 10,
                                             preventMark: false,
                                             buttonOnly: false,
-                                            buttonText: '<b>Choose File</b>',
+                                            buttonText: 'Choose File',
                                             margin: '20 0 0 0'
                                         }]
                                     },
@@ -724,26 +727,25 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             labelWidth: 10,
                                             preventMark: false,
                                             buttonOnly: false,
-                                            buttonText: '<b>Choose File</b>',
+                                            buttonText: 'Choose File',
                                             margin: '20 0 0 0'
                                         }
                                         ]
                                     },
                                     {
                                         xtype: 'panel',
-                                        margin: '25 0 0 0',
+                                        margin: '20 0 0 0',
                                         border: false,
-                                        items: [{
-                                            xtype: 'button',
-                                            cls: 'condenseAssembliesBtn',
-                                            text: '<b>Condense Assemblies</b>'
-                                        }, {
+                                        items: [
+                                         {
                                             xtype: 'button',
                                             cls: 'downloadCondenseAssemblyResultsBtn',
-                                            enableToggle: true,
-                                            pressed: false,
-                                            text: '<b>Download Results</b>',
-                                            hidden: true
+                                            text: 'Download Results'
+                                        },{
+                                            xtype: 'button',
+                                            cls: 'condenseAssembliesBtn',
+                                            text: 'Condense Assemblies',
+                                            margin: '0 10 0 0'
                                         }]
                                     }
                                 ]   
@@ -752,7 +754,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 xtype: 'container',
                                 html: '<b>Downstream Automation</b>',
                                 cls: 'downstreamAutomation-box',
-                                margin: '30 0 0 0',
+                                margin: '25 0 0 0',
                                 layout: {
                                     align: 'stretch',
                                     type: 'vbox'
@@ -760,9 +762,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 items: [
                                     {   
                                     xtype: 'container',
-                                    html: 'Downtream Automation Parameters File',
+                                    html: 'Downtream Automation Parameters File:',
                                     cls: 'downstreamAutomationParameters-box',
-                                    margin: '25 0 0 0',
+                                    margin: '25 0 0 25',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -770,18 +772,65 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     items: [{
                                         xtype: 'radiofield',
                                         name: 'automationParamsFileSource',
-                                        margin: '20 0 0 25',
+                                        margin: '20 0 0 45',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
                                     }, {
                                         xtype: 'radiofield',
                                         name: 'automationParamsFileSource',
-                                        margin: '5 0 0 25',
+                                        margin: '5 0 0 45',
                                         fieldLabelCls: 'align-middle',
                                         labelWidth: 110,
                                         boxLabel: 'Use custom parameters'
-                                    }]
+                                    },
+                                    {
+                                        xtype: 'button',
+                                        cls: 'customizeAutomationParamsBtn',
+                                        margin: '15 0 0 0',
+                                        text: 'Customize Automation Parameters'
+                                    },
+                                    {
+                                        xtype: 'filefield',
+                                        cls: 'sourcePlateListSelector',
+                                        margin: '15 0 0 0',
+                                        validateOnChange: false,
+                                        fieldLabel: 'Source Plate List:',
+                                        labelWidth: 110,
+                                        labelSeparator: ' ',
+                                        buttonText: 'Choose File'
+                                    }, {
+                                        xtype: 'filefield',
+                                        cls: 'zippedPlateFilesSelector',
+                                        fieldLabel: 'Zipped Plate Files:',
+                                        margin: '10 0 0 0',
+                                        labelWidth: 110,
+                                        labelSeparator: ' ',
+                                        buttonText: 'Choose File'
+                                    }, {
+                                        xtype: 'filefield',
+                                        cls: 'assemblyFileSelector',
+                                        validateOnChange: false,
+                                        fieldLabel: 'j5 Assembly File:',
+                                        margin: '10 0 0 0',
+                                        labelWidth: 110,
+                                        labelSeparator: ' ',
+                                        buttonText: 'Choose File'
+                                    }, {
+                                        xtype: 'button',
+                                        cls: 'distributePCRBtn',
+                                        margin: '20 0 0 0',
+                                        text: 'Distribute PCR Reactions'
+                                    }, {
+                                        xtype: 'button',
+                                        cls: 'downloadDownstreamAutomationBtn',
+                                        enableToggle: true,
+                                        pressed: false,
+                                        text: 'Download Results',
+                                        hidden: true,
+                                        margin: '15 0 0 0'
+                                    }
+                                    ]
                                 }
                                 ]
                             }

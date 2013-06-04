@@ -1036,6 +1036,12 @@ background: #F8F8F8;
   color:white;
 }
 
+.j5InfoTab-Sub .x-tab-top-active, .j5InfoTab-Sub .x-tab-default-top {
+  background: none;
+  border: 0 none;
+  border-bottom: 0 none !important;
+}
+
 .j5detailpanel-fillcontent {
   text-align: center;
   border-radius:4px;
@@ -1047,7 +1053,7 @@ background: #F8F8F8;
   top:4px;
 }
 
-.condenseAssembliesBtn {
+.condenseAssembliesBtn, .downloadCondenseAssemblyResultsBtn {
   float: right;
 }
 
