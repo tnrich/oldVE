@@ -21,11 +21,7 @@ Ext.define("Teselagen.models.digest.GelBand", {
         /**
          * The height (thickness) of this band in pixels
          */
-        bandHeight: 4,
-        /**
-         * The height (thickness) of this digest band in pixels
-         */
-        bandHeightDigest: 1,
+        bandHeight: 1,
         /**
          * Width of the band
          */
@@ -155,7 +151,7 @@ Ext.define("Teselagen.models.digest.GelBand", {
         var gelBand = Ext.create("Ext.draw.Sprite", {
             type: "rect",
             fill: this.BAND_COLOR,
-            height: this.isDigest() ? this.bandHeightDigest : this.bandHeight,
+            height: this.bandHeight,
             width: halfWidth * (1 - 2 * this.hPad),
             x: this.xOffset + halfWidth + (halfWidth * this.hPad),
             y: this.bandYPosition
