@@ -9,5 +9,8 @@ Ext.define("Teselagen.event.SelectionEvent", {
     singleton: true,
 
     SELECTION_CHANGED: "SelectionChanged",
-    SELECTION_CANCELED: "SelectionCanceled"
+    SELECTION_CANCELED: "SelectionCanceled",
+
+    HIGHLIGHT: "Highlight",
+    CLEAR_HIGHLIGHT: "ClearHighlight"
 });

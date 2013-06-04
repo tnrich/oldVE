@@ -7,7 +7,7 @@ Ext.define('Vede.controller.FindPanelController', {
 
     requires: ['Teselagen.event.CaretEvent',
                'Teselagen.event.MenuItemEvent',
-               'Teselagen.event.SelectionEvent',
+               'Teselagen.event.SelectionLayerEvent',
                'Teselagen.event.SequenceManagerEvent'],
 
     CaretEvent: null,
@@ -36,11 +36,19 @@ Ext.define('Vede.controller.FindPanelController', {
     onSequenceManagerChanged: function(pSeqMan) {
         this.sequenceManager = pSeqMan;
         this.findManager.setSequenceManager(pSeqMan);
+
+        this.findManager.getAAManager().setSequenceManager(pSeqMan);
     },
 
     onFindFieldKeyup: function(field, event) {
-        if(event.getKey() === event.ENTER) {
-            this.onFindNext();
+        if(field.getValue() && event.getKey() === event.ENTER) {
+            this.find(this.caretIndex + 1, this.caretIndex + 2);
+        } else if(field.getValue() && event.getKey() !== event.ENTER) {
+            this.find();
+        } else {
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+            this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
+            this.findField.setFieldStyle("background-color:white");
         }
     },
     
@@ -49,25 +57,60 @@ Ext.define('Vede.controller.FindPanelController', {
             Ext.getCmp("findNextBtn").enable();
         } else {
             Ext.getCmp("findNextBtn").disable();
+            this.findField.setFieldStyle("background-color:#ff6666");
         }
     },
 
-    onFindNext: function() {
+    onFindNextClick: function() {
+        this.find(this.caretIndex + 1, this.caretIndex + 2);
+    },
+
+    find: function(startIndex, aaStartIndex) {
         if(this.findField.isValid()) {
-            var result = this.findManager.find(this.findField.getValue().toLowerCase(),
-                                               this.findInSelector.getValue().toLowerCase(),
-                                               this.literalSelector.getValue().toLowerCase(),
-                                               this.caretIndex);
+            var result = this.findManager.findOne(this.findField.getValue(),
+                                               this.findInSelector.getValue(),
+                                               this.literalSelector.getValue(),
+                                               startIndex || this.caretIndex,
+                                               aaStartIndex);
 
             if(result) {
+                this.findField.setFieldStyle("background-color:white");
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this, result.start, result.end);
+
+                if(Ext.getCmp("highlightAllBtn").pressed) {
+                    this.highlightMatches();
+                }
+            } else {
+                this.findField.setFieldStyle("background-color:#ff6666");
+                this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
+
+                this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
             }
         }
     },
 
-    onHighlightAll: function() {
-        
+    onToggleHighlight: function(button, pressed) {
+        if(pressed) {
+            this.highlightMatches();
+        } else {
+            this.application.fireEvent(this.SelectionEvent.CLEAR_HIGHLIGHT);
+        }
+    },
+
+    onFindInSelectorChange: function() {
+        this.validateFindField();
+        this.find();
+    },
+
+    highlightMatches: function() {
+        var matches = this.findManager.findAll(this.findField.getValue(),
+                                               this.findInSelector.getValue(),
+                                               this.literalSelector.getValue());
+
+        if(matches) {
+            this.application.fireEvent(this.SelectionEvent.HIGHLIGHT, matches);
+        }
     },
 
     validateFindField: function() {
@@ -81,13 +124,13 @@ Ext.define('Vede.controller.FindPanelController', {
                 validitychange: this.onFindFieldValidityChange
             },
             "#findNextBtn": {
-                click: this.onFindNext
+                click: this.onFindNextClick
             },
             "#highlightAllBtn": {
-                click: this.onHighlightAll
+                toggle: this.onToggleHighlight
             },
             "#findInSelector": {
-                change: this.validateFindField
+                change: this.onFindInSelectorChange
             },
             "#literalSelector": {
                 change: this.validateFindField
@@ -113,5 +156,6 @@ Ext.define('Vede.controller.FindPanelController', {
         this.literalSelector = Ext.getCmp("literalSelector");
 
         this.findManager = Ext.create("Teselagen.manager.FindManager");
+        this.findManager.setAAManager(Ext.create("Teselagen.manager.AAManager"));
     },
 });
