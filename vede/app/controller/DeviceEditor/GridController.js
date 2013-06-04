@@ -161,7 +161,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
 
          if(j5Part) {
-            if(j5Part.getSequenceFile().get("partSource")==="") {
+            if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
             } else {
                 gridPart.deselect();
@@ -828,8 +828,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartCellHasBeenMapped: function(j5Part) {
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        console.log(gridParts);
-
         Ext.each(gridParts, function(gridPart) {
             gridPart.mapSelect();
         });
@@ -867,16 +865,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // Select all gridParts with the same source, unless the j5Part is empty.
         if(j5Part) {
-            j5Part.getSequenceFile({
-                callback: function(sequenceFile) {
-                    if(sequenceFile.get("partSource") !== "") {
-                        Ext.each(gridParts, function(gridPart) {
-                            gridPart.mapSelect();
-                            gridPart.highlight();
-                        });
-                    }
-                }
-            });
+            if(j5Part.get("sequence_id") !== "") {
+                Ext.each(gridParts, function(gridPart) {
+                    gridPart.mapSelect();
+                    gridPart.highlight();
+                });
+            }
         }
     },
 

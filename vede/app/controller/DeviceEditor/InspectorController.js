@@ -63,17 +63,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         j5collection.bins().each(function(bin,binKey){
             if(bin.parts().getCount()>1) {
                 bin.parts().each(function(part) {
-                    part.getSequenceFile({
-                        callback: function(sequenceFile){
-                        if(sequenceFile) {
-                            if(sequenceFile.get("partSource")!="") {
-                                tmpC++;
-                            }
-                        }
+                    if(part.get("sequencefile_id")!="") {
+                        tmpC++;
                     }
                 });
-            });
-        }
+            }
         });
         if (tmpC>1) {
             combinatorial = true;
@@ -319,28 +313,31 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             partPropertiesForm.loadRecord(j5Part);
             this.selectedPartIndex = this.DeviceDesignManager.getPartIndex(this.selectedBin, j5Part);
 
-            j5Part.getSequenceFile({
-                callback: function(sequenceFile){
-                    if(sequenceFile.get("partSource")!="") {
-                        changePartDefinitionBtn.removeCls('btnDisabled');
-                        openPartLibraryBtn.setText("Open Part Library");
-                        openPartLibraryBtn.removeCls('selectPartFocus');
-                        changePartDefinitionBtn.enable();
-                        deletePartBtn.enable();
-                        deletePartBtn.removeCls('btnDisabled');
-                        clearPartMenuItem.enable();
-                        partSourceNameField.setValue(sequenceFile.get('partSource'));
-                    } else {
-                        changePartDefinitionBtn.disable();
-                        openPartLibraryBtn.setText("Select Part From Library");
-                        openPartLibraryBtn.addCls('selectPartFocus');
-                        changePartDefinitionBtn.addCls('btnDisabled');     
-                        deletePartBtn.disable();
-                        clearPartMenuItem.disable();
-                        deletePartBtn.addCls('btnDisabled');
+            if(j5Part.get('sequencefile_id')!=="")
+            {
+                j5Part.getSequenceFile({
+                    callback: function(sequenceFile){
+                        if(sequenceFile.get("partSource")!="") {
+                            changePartDefinitionBtn.removeCls('btnDisabled');
+                            openPartLibraryBtn.setText("Open Part Library");
+                            openPartLibraryBtn.removeCls('selectPartFocus');
+                            changePartDefinitionBtn.enable();
+                            deletePartBtn.enable();
+                            deletePartBtn.removeCls('btnDisabled');
+                            clearPartMenuItem.enable();
+                            partSourceNameField.setValue(sequenceFile.get('partSource'));
+                        } else {
+                            changePartDefinitionBtn.disable();
+                            openPartLibraryBtn.setText("Select Part From Library");
+                            openPartLibraryBtn.addCls('selectPartFocus');
+                            changePartDefinitionBtn.addCls('btnDisabled');     
+                            deletePartBtn.disable();
+                            clearPartMenuItem.disable();
+                            deletePartBtn.addCls('btnDisabled');
+                        }
                     }
-                }
-            });
+                });
+            }
 
             if(j5Part.get("fas") === "") {
                 fasForm.down("combobox").setValue("None");
@@ -433,6 +430,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onPartNameFieldChange: function (nameField) {
         var newName = nameField.getValue();
         var self = this;
+        if(self.selectedPart.data.phantom)
+        {
+            self.selectedPart = new Part();
+        }
         Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
             self.selectedPart.set("name", newName);
 

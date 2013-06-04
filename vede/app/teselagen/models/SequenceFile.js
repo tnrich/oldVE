@@ -22,8 +22,6 @@ Ext.define("Teselagen.models.SequenceFile", {
         buildUrl: function(request) {
             var filter = "";
 
-            //console.log(request);
-
             // Checks if active filter
             if(request.operation.filters)
             {
@@ -37,7 +35,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 // Get specific sequence using given id
                 var sequence_id = request.operation.params.id;
                 idParam = "/"+sequence_id;
-                delete request.params
+                delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
             }
 
@@ -46,7 +44,7 @@ Ext.define("Teselagen.models.SequenceFile", {
                 // Get sequences within a project
                 var project_id = request.operation.filters[0].value;
                 var projectParam = "/"+project_id;
-                delete request.params
+                delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl("projects"+projectParam+"/sequences", this.url);
 
             }
@@ -56,30 +54,14 @@ Ext.define("Teselagen.models.SequenceFile", {
                 // Get specific sequence using Ext associations
                 var sequence_id = request.params.id;
                 idParam = "/"+sequence_id;
-                delete request.params
+
+                //if(sequence_id==="") debugger;
+
+                delete request.params;
                 return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
             }
-            /*
-            if(request.operation.filters)
-            {
-                if(request.operation.filters[0]) filter = request.operation.filters[0].property;
-            }
-            //console.log(request);
-            if(filter==="project_id")
-            {
-                console.log("By sequence");
-                var project_id = request.operation.filters[0].value;
-                restParams+= "/"+project_id;
-                delete request.params.filter;
-                if(request.operation.id)
-                {
-                    idParam = "/"+request.operation.id;
-                    delete request.params.id;
-                }
-                return Teselagen.manager.SessionManager.buildUrl("/projects"+restParams+"/devicedesigns"+idParam, this.url);
-            }
-            */
-                return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
+
+            return Teselagen.manager.SessionManager.buildUrl("sequences", this.url);
 
 
         },
