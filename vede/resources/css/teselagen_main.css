@@ -429,6 +429,14 @@ border-radius: 4px;
   border-bottom: 1px solid rgb(209, 213, 218) !important;
 }
 
+#mainAppPanel .x-tab-top-disabled {
+  background: rgb(230, 231, 235);
+}
+
+#mainAppPanel .x-tab-top-disabled button .x-tab-inner{
+  color: #999 !important;
+}
+
 .navbar .nav .active > a {
   background: 0 !important; 
   color: rgb(0, 116, 194) !important;
