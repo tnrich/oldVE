@@ -4,24 +4,24 @@
  * @author Doug Hershberger
  */
 Ext.define("Teselagen.models.digest.Gel", {
-    requires: 
+    requires:
         ["Teselagen.models.digest.Ladder",
          "Teselagen.models.digest.GelLane",
          "Teselagen.models.digest.GelBand"
          ],
     config: {
-    	/**
-    	 * {String} name of this gel
-    	 */
+        /**
+         * {String} name of this gel
+         */
         name: "default",
         /**
          * {String} default color for all bands of this gel (can be overridden by lane or by band)
          */
-        BAND_COLOR: '#fff',
+        BAND_COLOR: "#fff",
         /**
          * {String} default color for all connectors in this gel (can be overridden by lane or by band)
          */
-        CONNECTOR_COLOR: '#999999',
+        CONNECTOR_COLOR: "#999999",
         /**
          * The ladder associated with this gel
          */
@@ -47,9 +47,9 @@ Ext.define("Teselagen.models.digest.Gel", {
          */
         actualWidth: 400
     },
-	/*
-	 * This is the array that stores the lanes in this gel
-	 */
+    /*
+     * This is the array that stores the lanes in this gel
+     */
     lanes: null,
     getLanes: function(){
         return this.lanes;
@@ -62,14 +62,14 @@ Ext.define("Teselagen.models.digest.Gel", {
     },
 
     /**
-     * Sets the ladder for this Gel by searching for key phrases in the ladderName provided 
+     * Sets the ladder for this Gel by searching for key phrases in the ladderName provided
      * @param {String} ladderName
      */
     setLadder: function(ladderName){
-        if (ladderName.indexOf('1kb') > -1 ){
-            this.ladder = ladderDefs.BP_LADDER_BANDS; 
+        if (ladderName.indexOf("1kb") > -1 ){
+            this.ladder = this.ladderDefs.BP_LADDER_BANDS;
         }else {
-            this.ladder = ladderDefs.KB_LADDER_BANDS;
+            this.ladder = this.ladderDefs.KB_LADDER_BANDS;
         }
     },
     /**
@@ -87,8 +87,8 @@ Ext.define("Teselagen.models.digest.Gel", {
      * @param {Number} index 0 based index to insert at
      */
     insertLane: function(newLane, index){
-    	newLane.setActualHeight(this.getActualHeight());
-        if(typeof index === 'undefined') {
+        newLane.setActualHeight(this.getActualHeight());
+        if(typeof index === "undefined") {
             index = this.getLanes().length;
         }
         this.getLanes().splice(index, 0, newLane);
@@ -158,7 +158,7 @@ Ext.define("Teselagen.models.digest.Gel", {
      */
     draw: function(){
         this.calculateMinMax();
-        var ladderHeight = this.actualHeight * 0.8;
+//        var ladderHeight = this.actualHeight * 0.8;
         var totalLogDifference = Math.log(this.max / this.min);
         var laneBands = [];
         for (var i = 0; i < this.getLanes().length; ++i){

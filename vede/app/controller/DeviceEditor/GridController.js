@@ -121,6 +121,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // DE-Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(false);
+        this.toggleInsertOptions(true);
 
         var removeColumnMenuItem = this.tabPanel.down("button[cls='editMenu'] > menu > menuitem[text='Remove Column']");
         removeColumnMenuItem.enable();
@@ -173,6 +174,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         // Activate Cut, Copy, Paste Options
         this.toggleCutCopyPastePartOptions(true);
+        this.toggleInsertOptions(true);
 
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
     },
@@ -544,29 +546,46 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     removeRows: function(evt) {
         if (evt === "ok") {
+
             this.totalRows -= 1;
+            this.updateBinsWithTotalRows(); 
+
+
             var partIndex=null;
             var gridPart = this.selectedPart;
             var bins = this.activeProject.getJ5Collection().bins();
 
-            console.log(bins);
+            if(this.totalRows == 0) {
+                partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
 
-            partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
-            console.log(partIndex);
+                this.selectedBin = null;
+                this.selectedPart = null;
+                
+                bins.each(function (bin, binIndex) {
+                    bin.parts().removeAt(partIndex);
+                });
 
-            // for (var i = 0; i < bins.length; i++) {
-            //     bins[i].parts()[partIndex].destroy();
-            // }
-            
-            this.selectedBin = null;
-            this.selectedPart = null;
-            
-            bins.each(function (bin, binIndex) {
-                bin.parts().removeAt(partIndex);
-            });
+                this.grid.removeAll();
+                this.renderDevice();
 
-            this.grid.removeAll();
-            this.renderDevice();
+                this.totalRows += 1;
+                this.updateBinsWithTotalRows();
+            }else {
+                partIndex = (gridPart.up("Bin").items.indexOf(gridPart)-1);
+
+                this.selectedBin = null;
+                this.selectedPart = null;
+                
+                bins.each(function (bin, binIndex) {
+                    bin.parts().removeAt(partIndex);
+                });
+
+                this.grid.removeAll();
+                this.renderDevice();
+            }
+
+             this.toggleCutCopyPastePartOptions(false);
+             this.toggleInsertOptions(false);
         }
     },
 
@@ -576,6 +595,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onAddColumnLeft: function() {
         var selectedBinIndex = null;
+
+        if(this.selectedPart && this.selectedPart.down()) {
+            this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
+            this.selectedPart = null;
+        }
 
         if(this.selectedBin) {
             selectedBinIndex = this.DeviceDesignManager.getBinIndex(
@@ -590,6 +615,11 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
+
+        this.toggleCutCopyPastePartOptions(false);
+        this.toggleInsertOptions(false);
+
+        // $.jGrowl("Added Column Left");
     },
 
     /**
@@ -598,6 +628,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      */
     onAddColumnRight: function() {
         var selectedBinIndex = null;
+
+        if(this.selectedPart && this.selectedPart.down()) {
+            this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
+            this.selectedPart = null;
+        }
 
         if(this.selectedBin) {
             selectedBinIndex = (this.DeviceDesignManager.getBinIndex(
@@ -612,6 +648,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.DeviceDesignManager.addEmptyBinByIndex(this.activeProject,
                                                     selectedBinIndex);
+
+
+        this.toggleCutCopyPastePartOptions(false);
+        this.toggleInsertOptions(false);
+        
+        // $.jGrowl("Added Column Right");
     },
 
     /**
@@ -815,10 +857,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
-        // if(this.selectedPart && this.selectedPart.down()) {
-        //     this.selectedPart.deselect();
-        //     this.deHighlight(this.selectedPart.getPart());
-        // }
+        if(this.selectedPart && this.selectedPart.down()) {
+           this.selectedPart.deselect();
+            this.deHighlight(this.selectedPart.getPart());
+        }
 
         this.onPartCellHasBeenMapped(j5Part);
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
@@ -858,7 +900,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartSelected: function(j5Part) {
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        if(gridParts && !gridParts.indexOf(this.selectedPart)) {
+        if(gridParts && gridParts.indexOf(this.selectedPart) === -1) {
             this.selectedPart = gridParts[0];
             gridParts[0].select();
         }
@@ -995,6 +1037,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Clear Part"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Column"]')[0].setDisabled(!state||false);
         Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Remove Row"]')[0].setDisabled(!state||false);
+    },
+
+    toggleInsertOptions: function(state) {
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Row"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Column Left"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Column Right"]')[0].setDisabled(!state||false);
     },
 
     reRenderGrid: function(){

@@ -216,7 +216,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         
         // 2. REBASE
         var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
-            name: "REBASE",
+            name: "All Enzymes",
             enzymes: this.getRebaseEnzymesDatabase().getValues()
         });
 
