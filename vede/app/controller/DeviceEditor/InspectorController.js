@@ -54,6 +54,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             }
 
             this.clearPartInfo();
+            $.jGrowl("Part Cleared")
         }
     },
 
@@ -608,6 +609,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     this.activeProject.rules().clearFilter();
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
+                    $.jGrowl("Eugene Rule Removed")
                 }
             }, this);
         }
@@ -660,6 +662,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 newEugeneRuleDialog.close();
             }
         });
+        $.jGrowl("Eugene Rule Added")
     },
 
     /**

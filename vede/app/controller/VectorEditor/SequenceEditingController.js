@@ -43,6 +43,7 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
                                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
                                     parttext.animate({duration: 5000, to: {opacity: 0}});
+                                    $.jGrowl("Part Sucessfully Created")
                                 }
                             });
                     //    }
