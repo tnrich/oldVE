@@ -16,6 +16,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     SequenceAnnotationManager: null,
 
+    HighlightLayer: null,
+
     startHandleResizing: false,
     endHandleResizing: false,
 
@@ -32,6 +34,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 resize: this.onResize
             }
         });
+
         var listenersObject = {scope: this};
 
         listenersObject[this.MenuItemEvent.CUT] = this.cutSelection;
@@ -53,6 +56,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             this.onHandleClicked;
         listenersObject[this.SelectionLayerEvent.HANDLE_RELEASED] =
             this.onHandleReleased;
+
+        listenersObject[this.SelectionEvent.HIGHLIGHT] = this.onHighlight;
+        listenersObject[this.SelectionEvent.CLEAR_HIGHLIGHT] = this.onClearHighlight;
 
         this.application.on(listenersObject);
     },
@@ -78,6 +84,10 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.Managers.push(this.SequenceAnnotationManager);
 
         this.SelectionLayer = Ext.create("Teselagen.renderer.annotate.SelectionLayer", {
+            sequenceAnnotator: this.SequenceAnnotationManager.annotator
+        });
+
+        this.HighlightLayer = Ext.create("Teselagen.renderer.annotate.HighlightLayer", {
             sequenceAnnotator: this.SequenceAnnotationManager.annotator
         });
     },
@@ -172,6 +182,15 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         this.endHandleResizing = false;
     },
 
+    onHighlight: function(indices) {
+        this.HighlightLayer.clearHighlights();
+        this.HighlightLayer.addAllHighlights(indices);
+    },
+
+    onClearHighlight: function() {
+        this.HighlightLayer.clearHighlights();
+    },
+
     onVectorPanelAnnotationClicked: function(start, end) {
         this.select(start, end);
     },
@@ -191,6 +210,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     onSequenceManagerChanged: function(pSeqMan){
         this.callParent(arguments);
         this.SelectionLayer.setSequenceManager(pSeqMan);
+        this.HighlightLayer.setSequenceManager(pSeqMan);
 
         this.changeCaretPosition(0, true, true);
     },
