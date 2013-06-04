@@ -20,13 +20,13 @@ describe("Menu test", function () {
     it("Sandbox exists", function () {
         expect(Ext.get("sandbox")).toBeTruthy();
     });
-    xit("Show menu", function() {
+    it("Show menu", function() {
         Ext.widget("menu", {
             renderTo: "sandbox",
             width: 100,
 //            floating: false,
             hidden: false,
-            showSeparator: false,
+            showSeparator: true,
             items: [
                 btn,
                 {
