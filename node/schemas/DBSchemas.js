@@ -90,7 +90,8 @@ module.exports = function(db) {
 		revComp           :  String,
 		genbankStartBP    :  String,
 		endBP             :  String,
-		iconID            :  String
+		iconID            :  String,
+		phantom           :  Boolean
 	});
 
 	PartSchema.pre('save', function(next) {

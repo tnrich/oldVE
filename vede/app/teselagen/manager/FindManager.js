@@ -5,6 +5,160 @@
 Ext.define("Teselagen.manager.FindManager", {
     config: {
         sequenceManager: null,
+        AAManager: null,
+    },
+
+    /**
+     * Search for the given expression in the sequence.
+     * @param {String} expression The expression to search for.
+     * @param {String} dataType Either "DNA" or "Amino Acids"- what to search in.
+     * @param {String} searchType Either "literal" or "ambiguous"- how to search.
+     * @param {Object[]} Array of objects with attributes start and end.
+     */
+    findAll: function(expression, dataType, searchType) {
+        if(!this.sequenceManager || 
+           this.sequenceManager.getSequence().toString().length == 0 || 
+           expression.length == 0) { 
+
+            return null; 
+        }
+
+        expression = expression.toLowerCase();
+        dataType = dataType.toLowerCase();
+        searchType = searchType.toLowerCase();
+        
+        var sequence;
+        var revComSequence;
+        var originalSequence;
+        var result = [];
+        
+        if(dataType === "dna") {
+            if(searchType === "ambiguous") {
+                expression = this.makeAmbiguousDNAExpression(expression);
+            }
+
+            sequence = this.sequenceManager.getSequence().toString();
+            revComSequence = this.sequenceManager.getReverseComplementSequence().toString();
+
+            originalSequence = sequence;
+
+            // Tack on extra base pairs to the end of the sequence to ensure
+            // that the search will find results which go from the end of the
+            // sequence to the beginning.
+            sequence += sequence.slice(0, expression.length - 1);
+            revComSequence += revComSequence.slice(0, expression.length);
+
+            var regEx = new RegExp(expression, "gi");
+            var found;
+            var findStart;
+            var findEnd;
+
+            while((found = regEx.exec(sequence)) !== null) {
+                findStart = found.index;
+                findEnd = regEx.lastIndex;
+
+                if(findStart >= originalSequence.length) {
+                    findStart -= originalSequence.length;
+                }
+                if(findEnd >= originalSequence.length) {
+                    findEnd -= originalSequence.length;
+                }
+
+                result.push({start: findStart, end: findEnd});
+            }
+
+            // Search the reverse complement sequence.
+            while((found = regEx.exec(revComSequence)) !== null) {
+                findStart = revComSequence.length - regEx.lastIndex - expression.length;
+                findEnd = revComSequence.length - found.index - expression.length;
+
+                if(findStart >= originalSequence.length) {
+                    findStart -= originalSequence.length;
+                }
+                if(findEnd >= originalSequence.length) {
+                    findEnd -= originalSequence.length;
+                }
+
+                result.push({start: findStart, end: findEnd});
+            }
+        } else {
+            if(searchType === "ambiguous") {
+                expression = this.makeAmbiguousAAExpression(expression);
+            }
+
+            // Escape periods, which are meant to be interpreted as stop codons.
+            expression = expression.replace("\.", "\\.");
+
+            this.AAManager.recalculateNonCircular();
+
+            var aaSequenceFrames = this.AAManager.getAaSequence();
+            var aaRevComSequenceFrames = this.AAManager.getAaRevCom();
+            var originalSequence;
+            var regEx;
+            var aaStart;
+            var found;
+
+            // Search all 3 frames of the forward sequence.
+            Ext.each(aaSequenceFrames, function(aaSequence, frame) {
+                originalSequence = aaSequence;
+                aaSequence += aaSequence.slice(0, expression.length - 1);
+
+                regEx = new RegExp(expression, "gi");
+                while((found = regEx.exec(aaSequence)) !== null) {
+                    var findStart = found.index;
+                    var findEnd = regEx.lastIndex;
+
+                    if(findStart >= originalSequence.length) {
+                        findStart -= originalSequence.length;
+                    }
+                    if(findEnd >= originalSequence.length) {
+                        findEnd -= originalSequence.length;
+                    }
+
+                    result.push({start: findStart * 3 + frame,
+                                  end: findEnd * 3 + frame});
+                }
+            });
+
+            var offsets;
+            var seqLength = this.sequenceManager.getSequence().toString().length;
+
+            // Build an array of offsets based on the length of the sequence.
+            // These determine the distance in base pairs of the last character
+            // in each frame of the amino acid sequence from the first character
+            // of the DNA sequence.
+            if(seqLength % 3 === 0) {
+                offsets = [0, 2, 1];
+            } else if(seqLength % 3 === 1) {
+                offsets = [1, 0, 2];
+            } else {
+                offsets = [2, 1, 0];
+            }
+
+            // Search all 3 frames of the reverse complement sequence.
+            Ext.each(aaRevComSequenceFrames, function(aaSequence, frame) {
+                originalSequence = aaSequence;
+                aaSequence += aaSequence.slice(0, expression.length - 1);
+
+                regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi"); 
+                while((found = regEx.exec(aaSequence)) !== null) {
+                    var findStart = aaSequence.length - regEx.lastIndex;
+                    var findEnd = aaSequence.length - found.index;
+
+                    if(findStart >= originalSequence.length) {
+                        findStart -= originalSequence.length;
+                    }
+                    if(findEnd > originalSequence.length) {
+                        findEnd -= originalSequence.length;
+                    }
+
+                    result.push({start: findStart * 3 + offsets[frame],
+                                  end: findEnd * 3 + offsets[frame]});
+                }
+            });
+        }
+
+        return result;
     },
 
     /**
@@ -13,14 +167,19 @@ Ext.define("Teselagen.manager.FindManager", {
      * @param {String} dataType Either "DNA" or "Amino Acids"- what to search in.
      * @param {String} searchType Either "literal" or "ambiguous"- how to search.
      * @param {Int} start Where to start the search.
+     * @returns {Object} Object with attributes start and end.
      */
-    find: function(expression, dataType, searchType, start) {
+    findOne: function(expression, dataType, searchType, start, aaSearchStart) {
         if(!this.sequenceManager || 
            this.sequenceManager.getSequence().toString().length == 0 || 
            expression.length == 0) { 
 
             return null; 
         }
+
+        expression = expression.toLowerCase();
+        dataType = dataType.toLowerCase();
+        searchType = searchType.toLowerCase();
         
         var sequence;
         var revComSequence;
@@ -37,10 +196,8 @@ Ext.define("Teselagen.manager.FindManager", {
 
             originalSequence = sequence;
 
-            if(this.sequenceManager.getCircular()) {
-                sequence += sequence;
-                revComSequence += revComSequence;
-            }
+            sequence += sequence;
+            revComSequence += revComSequence;
 
             if(start != 0) {
                 sequence = sequence.slice(start);
@@ -55,7 +212,7 @@ Ext.define("Teselagen.manager.FindManager", {
             if(found) {
                 var findStart = found.index + start;
                 var findEnd = regEx.lastIndex + start;
-                distanceFromCaret = findStart;
+                distanceFromCaret = found.index;
 
                 if(findStart >= originalSequence.length) {
                     findStart -= originalSequence.length;
@@ -104,6 +261,121 @@ Ext.define("Teselagen.manager.FindManager", {
             if(searchType === "ambiguous") {
                 expression = this.makeAmbiguousAAExpression(expression);
             }
+
+            // Escape periods, which are meant to be interpreted as stop codons.
+            expression = expression.replace("\.", "\\.");
+
+            this.AAManager.recalculateNonCircular();
+
+            var aaSequenceFrames = this.AAManager.getAaSequence();
+            var aaRevComSequenceFrames = this.AAManager.getAaRevCom();
+            var originalSequence;
+            var regEx;
+            var aaStart;
+            var bestResult;
+            var bestRevComResult;
+            var found;
+            var distanceFromCaret;
+            var bestDistanceFromCaret = null;
+
+            // Search all 3 frames of the forward sequence.
+            Ext.each(aaSequenceFrames, function(aaSequence, frame) {
+                regEx = new RegExp(expression, "gi");
+                originalSequence = aaSequence;
+                aaSequence = aaSequence + aaSequence;
+
+                if(start === 0) {
+                    aaStart = 0;
+                } else {
+                    aaStart = Math.ceil((start - frame) / 3);
+                }
+
+                aaSequence = aaSequence.slice(aaStart);
+
+                found = regEx.exec(aaSequence);
+
+                if(found) {
+                    var findStart = found.index + aaStart;
+                    var findEnd = regEx.lastIndex + aaStart;
+                    distanceFromCaret = found.index;
+
+                    if(findStart >= originalSequence.length) {
+                        findStart -= originalSequence.length;
+                    }
+                    if(findEnd >= originalSequence.length) {
+                        findEnd -= originalSequence.length;
+                    }
+
+                    // If the current result is closer to the caret than the previous,
+                    // save it as the best result.
+                    if(bestDistanceFromCaret === null || 
+                       distanceFromCaret < bestDistanceFromCaret) {
+                        bestResult = {start: findStart * 3 + frame,
+                                      end: findEnd * 3 + frame};
+
+                        bestDistanceFromCaret = distanceFromCaret;
+                    }
+                }
+            });
+
+            if(aaSearchStart) {
+                start = aaSearchStart;
+            }
+
+            var offsets;
+            var seqLength = this.sequenceManager.getSequence().toString().length;
+
+            // Build an array of offsets based on the length of the sequence.
+            // These determine the distance in base pairs of the last character
+            // in each frame of the amino acid sequence from the first character
+            // of the DNA sequence.
+            if(seqLength % 3 === 0) {
+                offsets = [0, 2, 1];
+            } else if(seqLength % 3 === 1) {
+                offsets = [1, 0, 2];
+            } else {
+                offsets = [2, 1, 0];
+            }
+
+            // Search all 3 frames of the reverse complement sequence.
+            Ext.each(aaRevComSequenceFrames, function(aaSequence, frame) {
+                regEx = new RegExp(expression + "(?!.*" + expression + ")", "gi"); 
+                originalSequence = aaSequence;
+                aaSequence = aaSequence + aaSequence;
+
+                if(start === 0) {
+                    aaStart = 0;
+                } else {
+                    aaStart = Math.ceil((start - frame) / 3);
+                }
+
+                aaSequence = aaSequence.substring(0, aaSequence.length - aaStart);
+
+                found = regEx.exec(aaSequence);
+
+                if(found) {
+                    var findStart = aaSequence.length - regEx.lastIndex + aaStart;
+                    var findEnd = aaSequence.length - found.index + aaStart;
+                    distanceFromCaret = findStart - aaStart;
+
+                    if(findStart >= originalSequence.length) {
+                        findStart -= originalSequence.length;
+                    }
+                    if(findEnd > originalSequence.length) {
+                        findEnd -= originalSequence.length;
+                    }
+
+                    if(bestDistanceFromCaret === null || 
+                       distanceFromCaret < bestDistanceFromCaret) {
+                        bestResult = {start: findStart * 3 + offsets[frame],
+                                      end: findEnd * 3 + offsets[frame]};
+
+                        bestDistanceFromCaret = distanceFromCaret;
+                    }
+                }
+            }, this);
+
+            return bestResult;
         }
     },
 
@@ -125,7 +397,7 @@ Ext.define("Teselagen.manager.FindManager", {
         };
 
         for(var i = 0; i < expression.length; i++) {
-            var character = expression.characterAt(i);
+            var character = expression.charAt(i);
 
             if(character.match(/[atcgu]/)) {
                 ambiguous.push(character);
@@ -147,7 +419,7 @@ Ext.define("Teselagen.manager.FindManager", {
         }
 
         for(var i = 0; i < expression.length; i++) {
-            var character = expression.characterAt(i);
+            var character = expression.charAt(i);
 
             if(character.match(/[arndcqeghilkmfpstwyv.]/)) {
                 ambiguous.push(character);
