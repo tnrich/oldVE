@@ -85,6 +85,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var j5collection = tab.model.getDesign().getJ5Collection();
         var j5ReadyField = this.inspector.down("displayfield[cls='j5_ready_field']");
         var combinatorialField = this.inspector.down("displayfield[cls='combinatorial_field']");
+        var runj5Btn = this.inspector.down("button[cls='runj5Btn']");
+        var inspector = this.inspector;
+
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
             j5collection.bins().each(function(bin,binKey){
@@ -98,8 +101,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
             if (j5ready ==  true) {
                     j5ReadyField.setFieldStyle("color:rgb(0, 219, 0)");
+                    runj5Btn.enable();
+                    runj5Btn.removeCls('btnDisabled');
+                    inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
                 } else {
                     j5ReadyField.setFieldStyle("color:red");
+                    runj5Btn.disable();
+                    runj5Btn.addCls('btnDisabled');
+                    inspector.down("panel[cls='j5InfoTab']").setDisabled(true);
                 }
             if (combinatorial == true) {
                     combinatorialField.setFieldStyle("color:purple");
@@ -272,7 +281,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.selectedBinIndex = binIndex;
         this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
-
+        console.log(this.inspector);
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
