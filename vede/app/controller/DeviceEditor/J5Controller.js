@@ -31,9 +31,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         var inspector = currentTab.down('InspectorPanel');
 
-        // if(!currentTab.j5Window) currentTab.j5Window = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
-        // else currentTab.j5Window.show();
-        // this.j5Window = currentTab.j5Window;
+        // if(!currentTab) currentTab = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
+        // else currentTab.show();
+        // this = currentTab;
 
         var self = this;
 
@@ -80,8 +80,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         // Set the currentTab's j5Window property to null when the window is closed.
         // This tells the onTabChange function whether the window should be open
         // or closed when the tab is switched.
-        // this.j5Window.on("close", function() {
-        //     currentTab.j5Window = null;
+        // this.on("close", function() {
+        //     currentTab = null;
         // }, this);
     },
 
@@ -94,18 +94,20 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * and re-shows it when the tab is switched back.
      */
     onTabChange: function(mainAppPanel, newTab, oldTab) {
+        /*
         if(oldTab)
         {
-            if(oldTab.j5Window) {
-                oldTab.j5Window.hide();
+            if(oldTab) {
+                oldTab.hide();
             }
         }
 
         if(newTab) {
-            if(newTab.j5Window) {
-                newTab.j5Window.show();
+            if(newTab) {
+                newTab.show();
             }
         }
+        */
     },
 
     onEditJ5ParamsBtnClick: function () {
@@ -464,8 +466,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var inspector = currentTab.down('InspectorPanel');
 
-        // var loadingMessage = currentTab.j5Window.down('container[cls="j5progressContainer"]').show();
-        // var responseMessage = currentTab.j5Window.down('displayfield[cls="j5ResponseTextField"]').show();
+        // var loadingMessage = currentTab.down('container[cls="j5progressContainer"]').show();
+        // var responseMessage = currentTab.down('displayfield[cls="j5ResponseTextField"]').show();
 
         var self = this;
         var masterPlasmidsList;
@@ -489,7 +491,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             inspector.down("component[cls='plasmidsListFileSelector']"));
         }
 
-        if(currentTab.j5Window.down("radio[cls='useServerOligosRadioBtn']").getValue()) {
+        if(currentTab.down("radio[cls='useServerOligosRadioBtn']").getValue()) {
             masterOligosList = "";
             masterOligosListFileName = "";
         } else if(inspector.down("radio[cls='useEmptyOligosRadioBtn']").getValue()) {
@@ -534,15 +536,15 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.j5comm = Teselagen.manager.J5CommunicationManager;
         inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
-        responseMessage.setValue("Saving design");
+        //responseMessage.setValue("Saving design");
 
         Vede.application.fireEvent("saveDesignEvent", function () {
-            responseMessage.setValue("Executing j5 Run...Please wait...");
+            //responseMessage.setValue("Executing j5 Run...Please wait...");
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    responseMessage.setValue("Completed");
+                    //responseMessage.setValue("Completed");
                     loadingMessage.hide();
-                    responseMessage.hide();
+                    //responseMessage.hide();
                     if(warnings.length > 0)
                     {
                         msgWarnings = "";
@@ -558,7 +560,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 } else {
 
                     loadingMessage.hide();
-                    responseMessage.hide();
+                    //responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
                         msg: responseData.responseText,
@@ -681,7 +683,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onPlasmidsItemClick: function (grid, record) {
         var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
-        var j5Window = DETab.j5Window;
+        var j5Window = DETab;
         var mask = new Ext.LoadMask(j5Window);
 
         mask.setVisible(true, false);

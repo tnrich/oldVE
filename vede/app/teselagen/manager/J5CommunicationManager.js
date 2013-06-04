@@ -96,12 +96,12 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
 //        console.log("Starting Ajax Request");
 
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var runj5Btn = currentTab.j5Window.query('button[cls=runj5Btn]')[0];
-        var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
+        // var runj5Btn = currentTab.j5Window.query('button[cls=//runj5Btn]')[0];
+        // var resultsGrid = currentTab.j5Window.query('gridpanel[title=Plasmids]')[0];
         
-        resultsGrid.store.removeAll();
+        //resultsGrid.store.removeAll();
 
-        runj5Btn.toggle();
+        //runj5Btn.toggle();
 
         var deproject = Ext.getCmp('mainAppPanel').getActiveTab().model;
 
@@ -120,7 +120,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 
                 self.currentResults = response;
 
-                var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
+                //var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
 
                 var store = new Ext.data.JsonStore({
                     proxy: {
@@ -135,8 +135,8 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 });
                 store.load();
                 store.sort('name','ASC');
-                resultsGrid.reconfigure(store);
-                downloadBtn.show();
+                //resultsGrid.reconfigure(store);
+                //ownloadBtn.show();
 
                 return cb(true,null,response.warnings);
             },
