@@ -495,7 +495,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         var lengthBefore, insertSequence, insertSequenceLength;
 
         if (pPosition < 0 || pPosition > this.sequence.getSymbolsLength() || pInsertSequence.length === 0 ) {
-            console.log(pInsertSequence.seqString());
+            //console.log(pInsertSequence.seqString());
             return false;
         }
         this.needsRecalculateComplementSequence        = true;
@@ -765,10 +765,10 @@ Ext.define("Teselagen.manager.SequenceManager", {
              * |--SSSSSSSSSSSSSSSSSS------------------------------------------------------------------------------|
              *  FFFFFFFFFFFFFFFFFFFFFFFFF|                                         |FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  */
             else if((pEndIndex) <= featEnd) {
-                console.log(feature.getLocations()[0].getStart() +  " : " + feature.getLocations()[0].getEnd());
+                //console.log(feature.getLocations()[0].getStart() +  " : " + feature.getLocations()[0].getEnd());
                 feature.deleteAt(pStartIndex, pEndIndex - pStartIndex, lengthBefore, circular);
                 if (DEBUG_MODE) console.log("case Fc,Sn 3 ");  ///DEBUGGING HERE
-                console.log(feature.getLocations()[0].getStart() +  " : " + feature.getLocations()[0].getEnd());
+                //console.log(feature.getLocations()[0].getStart() +  " : " + feature.getLocations()[0].getEnd());
             }
             /* Selection in feature start
              * |----------------------------------------------------------------------SSSSSSSSSSSSSSSSSSSSSSSSS---|
@@ -901,28 +901,28 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 var delLength1b = featEnd - pStartIndex;
                 
                 delLengthBetween = featStart - featEnd;
-                console.log("delLength1a: " + delLength1a);
-                console.log("delLength1b: " + delLength1b);
-                console.log("delLengthBetween: " + delLengthBetween);
+                //console.log("delLength1a: " + delLength1a);
+                //console.log("delLength1b: " + delLength1b);
+                //console.log("delLengthBetween: " + delLengthBetween);
 
-                console.log("StartIndex of cut is less than the feature's end");
+                //console.log("StartIndex of cut is less than the feature's end");
                 delLength2 = lengthBefore - featStart;
                 var newCutStart = pStartIndex - pEndIndex;
                 feature.deleteAt(0, delLength1a, lengthBefore, circular);
-                console.log("Current feature properties after deletion 1: " );
+                //console.log("Current feature properties after deletion 1: " );
                 logFeatures();
 
                 lengthBefore2 = lengthBefore - delLength1a;
                 feature.deleteAt(newCutStart, delLength1b, lengthBefore2, circular);
-                console.log("Current feature properties after deletion 2: ");
+                //console.log("Current feature properties after deletion 2: ");
                 logFeatures();
 
                 lengthBefore3 = lengthBefore2 - delLength1b;
                 feature.deleteAt(featEnd, lengthBefore3 - featEnd, lengthBefore3, circular);
-                console.log("Current feature properties after deletion 3: ");
+                //console.log("Current feature properties after deletion 3: ");
                 logFeatures();
                 function logFeatures(){ Ext.each(feature.getLocations(), function(location){
-                console.log("The location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
+                //console.log("The location properties (start, end): " + location.getStart()+ ", " + location.getEnd());
             });}
 
             }
