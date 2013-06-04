@@ -166,6 +166,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         numberField.setMaxValue(
                         this.SequenceManager.getSequence().getSymbolsLength());
 
+        numberField.maxText = "Position must be at most " + numberField.maxValue + ".";
+
         numberField.focus(true, 10);
     },
 
