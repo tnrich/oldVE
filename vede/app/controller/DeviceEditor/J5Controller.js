@@ -130,16 +130,16 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     resetServerj5Params: function () {
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
-        loadingMessage.update(60, "Executing request");
+        // loadingMessage.update(60, "Executing request");
 
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("GetLastUpdatedUserFiles", ''),
             success: function (response) {
-                loadingMessage.update(100, "Completed");
-                loadingMessage.close();
+                // loadingMessage.update(100, "Completed");
+                // loadingMessage.close();
                 response = JSON.parse(response.responseText);
                 self.j5Parameters.loadValues(response.j5parameters);
                 self.populateJ5ParametersDialog();
@@ -148,7 +148,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
             },
             failure: function(responseData, opts) {
-                loadingMessage.close();
+                // loadingMessage.close();
                 if(responseData)
                 {
                     if(responseData.responseText)
@@ -543,7 +543,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     //responseMessage.setValue("Completed");
-                    loadingMessage.hide();
+                    // loadingMessage.hide();
                     //responseMessage.hide();
                     if(warnings.length > 0)
                     {
@@ -559,7 +559,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     }
                 } else {
 
-                    loadingMessage.hide();
+                    // loadingMessage.hide();
                     //responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
@@ -592,16 +592,16 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         data.params = this.automationParameters.data;
         data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
-        loadingMessage.update(60, "Executing request");
+        // loadingMessage.update(60, "Executing request");
         inspector.j5comm.distributePCRRequest(data, function (success, responseData) {
             if(success) {
-                loadingMessage.update(100, "Completed");
-                loadingMessage.close();
+                // loadingMessage.update(100, "Completed");
+                // loadingMessage.close();
             } else {
                 console.log(responseData.responseText);
-                loadingMessage.close();
+                // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,
@@ -740,16 +740,16 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         inspector.down("component[cls='zippedAssemblyFilesSelector']"));
         condenseParams["zippedFiles"]["content"] = this.zippedPlateFilesSelector;
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
-        loadingMessage.update(60, "Executing request");
+        // loadingMessage.update(60, "Executing request");
         inspector.j5comm.condenseAssemblyFiles(condenseParams, function (success, responseData) {
             if(success) {
-                loadingMessage.update(100, "Completed");
-                loadingMessage.close();
+                // loadingMessage.update(100, "Completed");
+                // loadingMessage.close();
             } else {
                 console.log(responseData.responseText);
-                loadingMessage.close();
+                // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,

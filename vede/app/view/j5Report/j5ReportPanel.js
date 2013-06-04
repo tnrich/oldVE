@@ -85,6 +85,62 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                 }],
         items: [
                 {
+                    xtype: 'form',
+                    cls: 'j5RunInfo',
+                    margin: '10 10 10 10',
+                    border: 0,
+                    items: [
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunId',
+                            cls: 'j5RunId',
+                            fieldLabel: '<b>j5 Run ID</b>',
+                            labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunStatus',
+                            cls: 'j5RunStatusField',
+                            fieldLabel: '<b>Run Status</b>',
+                            labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunStart',
+                            cls: 'j5RunStartField',
+                            fieldLabel: '<b>Date Submitted</b>',
+                            labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunEnd',
+                            cls: 'j5RunEndField',
+                            fieldLabel: '<b>Date Finished</b>',
+                            labelWidth: 100
+                        }
+                    ]
+                },
+                {
+                    xtype: 'gridpanel',
+                    name: 'warnings',
+                    hidden: true,
+                    margin: '10 10 20 10',
+                    title: 'Warnings',
+                    minHeight: 100,
+                    layout: 'fit',
+                    columns: [
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'warning',
+                            flex: 1
+                        }
+                    ]
+                },
+                {
                     xtype: 'gridpanel',
                     name: 'assemblies',
                     margin: '10 10 20 10',
