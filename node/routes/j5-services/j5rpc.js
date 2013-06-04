@@ -203,7 +203,7 @@ function encoded_target_part_order_list_file(model,method)
         {
             direction = (bin.parts[0]["directionForward"] === 'true') ? 'forward' : '';
             //fas = (bin.parts[0]["fas"] === 'None') ? '' : bin.parts[0]["fas"];
-            fas = bin.fases[partKey];
+            fas = bin.fases[0];
             if(fas === 'None') fas = '';
             fro = (bin['fro'] === 'None') ? '' : bin['fro'];
             dsf = (bin['dsf'] === false) ? '' : bin['dsf'];

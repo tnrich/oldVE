@@ -37,6 +37,7 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
             parttext.animate({duration: 5000, to: {opacity: 0}});
             if(typeof (cb) === "function") { cb(); }
+            $.jGrowl ("Sequence Successfully Saved")
         };
 
         var saveToServer = function(){

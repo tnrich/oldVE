@@ -98,6 +98,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
+                $.jGrowl("Design Deleted")
              }
          }
     },
@@ -197,6 +198,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         Vede.application.fireEvent("resumePartAlerts");
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
+                            $.jGrowl("Design Saved");
                         });
                         if(typeof (cb) == "function") cb();
                     }
@@ -241,7 +243,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                 //}
             });
         });
-
+        
         //}});
     },
 
@@ -250,7 +252,9 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         activeTab.el.mask('Loading');
         this.saveDEProject(function () {
             activeTab.el.unmask();
+
         });
+
     },
 
     onDeviceEditorSaveEvent: function (arg) {
