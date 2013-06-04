@@ -8,6 +8,7 @@ Ext.define('Vede.controller.MainToolbarController', {
     requires: ['Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager'],
 
+    MenuItemEvent: null,
     VisibilityEvent: null,
 
     onImportBtnChange: function(pBtn) {
@@ -223,6 +224,7 @@ Ext.define('Vede.controller.MainToolbarController', {
     },
 
     init: function() {
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.control({
