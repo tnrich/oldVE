@@ -44,7 +44,10 @@ module.exports = function(db) {
 		j5Input: Mixed,
 		assemblyType: String,
 		assemblyMethod: String,
-		endDate: Date
+		endDate: Date,
+		status: String,
+		warnings: Mixed,
+		user_id: { type: oIDRef, ref: 'user' } 
 	});
 	registerSchema('j5run', j5RunSchema);
 

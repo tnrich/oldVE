@@ -121,7 +121,7 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                 self.currentResults = response;
 
                 //var downloadBtn = currentTab.j5Window.query('button[cls=downloadj5Btn]')[0];
-
+                /*
                 var store = new Ext.data.JsonStore({
                     proxy: {
                         type: 'memory',
@@ -133,12 +133,13 @@ Ext.define("Teselagen.manager.J5CommunicationManager", {
                     },
                     fields: ['name','sizeBP','size','fileContent']
                 });
-                store.load();
-                store.sort('name','ASC');
+                */
+                //store.load();
+                //store.sort('name','ASC');
                 //resultsGrid.reconfigure(store);
                 //ownloadBtn.show();
 
-                return cb(true,null,response.warnings);
+                return cb(true,response);
             },
             failure: function(response) {
                 if(response.status == -1) return cb(false,{"responseText":"Execution aborted."});

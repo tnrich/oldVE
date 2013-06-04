@@ -545,7 +545,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     //responseMessage.setValue("Completed");
                     //loadingMessage.hide();
                     //responseMessage.hide();
-                    Ext.MessageBox.alert('j5 Run complete', 'Please check results in j5 reports tab.');
+                    Ext.MessageBox.alert("Status",responseData.status);
+                    /*
                     if(warnings.length > 0)
                     {
                         msgWarnings = "";
@@ -558,13 +559,14 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                             alertbox.zIndexManager.bringToFront(alertbox);
                         }, 100);
                     }
+                    */
                 } else {
                     s
                     //loadingMessage.hide();
                     //responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
-                        msg: responseData.responseText,
+                        msg: responseData.error,
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR
                     });

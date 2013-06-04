@@ -14,6 +14,8 @@ module.exports = function (app) {
 var j5rpcEncode = require('./j5rpc');
 var processJ5Response = require('./j5parser');
 
+var j5Runs = app.db.model("j5run");
+
 /**
  * Write to quick.log
  */
@@ -242,7 +244,7 @@ function readFile(objectId,cb)
 /**
  * Save file.
  */
-function saveFile(data,j5parameters,fileData,user,deproject,cb)
+function saveFile(newj5Run,data,j5parameters,fileData,user,deproject,cb)
 {
   var assert = require('assert');
 
@@ -264,24 +266,18 @@ function saveFile(data,j5parameters,fileData,user,deproject,cb)
             
             processJ5Response(data.assembly_method,fileData,function(parsedResults,warnings){
 
-              var newj5Run = new j5Run({
-                deproject_id: deproject._id,
-                name: "newResult",
-                file_id:objectId.toString(),
-                date: new Date(),
-                j5Input: {
-                  j5Parameters : JSON.parse(j5parameters)
-                },
-                j5Results: parsedResults,
-                assemblyMethod: data.assembly_method,
-                assemblyType: data.ASSEMBLY_PRODUCT_TYPE
-              });
+              newj5Run.j5Parameters = { j5Parameters : JSON.parse(j5parameters) };
+              newj5Run.file_id = objectId.toString();
+              newj5Run.j5Results = parsedResults;
+              newj5Run.endDate = new Date();
+              newj5Run.status = (warnings.length > 0) ? "Completed with warnings" : "Completed";
+              newj5Run.warnings = warnings;
 
               newj5Run.save(function(){
                 deproject.j5runs.push(newj5Run);
                 deproject.save(function(){
                   app.GridStoreDB.close();
-                  return cb(newj5Run,warnings);
+                  //return cb(newj5Run,warnings);
                 });
               });
 
@@ -295,7 +291,6 @@ function saveFile(data,j5parameters,fileData,user,deproject,cb)
 app.get('/getfile/:id',restrict,function(req,res){
   var o_id = new app.mongoose.mongo.ObjectID(req.params.id);
   
-  var j5Runs = app.db.model("j5run");
   j5Runs.findOne({'file_id':req.params.id},function(err,j5run){
   console.log(j5run);
   readFile(o_id,function(inputStream){
@@ -319,61 +314,92 @@ app.post('/getProtocol',restrict,function(req,res){
   res.json(protocol);
 });
 
+// Resolve sequences given a devicedesign, returns a callback
+var resolveSequences = function(devicedesign,cb){
+  devicedesign = devicedesign.toObject();
+  var Sequence = app.db.model("sequence");
+  var partsCounter = 0;
+  devicedesign.j5collection.bins.forEach(function(bin){
+      partsCounter += bin.parts.length;
+  });
+
+  devicedesign.j5collection.bins.forEach(function(bin,binKey){
+    bin.parts.forEach(function(part,partKey){
+      Sequence.findById(part.sequencefile_id,function(err,seq){
+        devicedesign.j5collection.bins[binKey].parts[partKey].SequenceFile = seq;
+        partsCounter--;
+        if(partsCounter===0) return cb(devicedesign);
+      });
+    });
+  });
+};
+
 // Design Assembly RPC
 app.post('/executej5',restrict,function(req,res){
 
+  // Variables definition
   var j5Params = {};
   var execParams = {};
   var DeviceDesign = app.db.model("devicedesign");
 
-  var resolveSequences = function(devicedesign,cb){
-    devicedesign = devicedesign.toObject();
-    var Sequence = app.db.model("sequence");
-    var partsCounter = 0;
-    devicedesign.j5collection.bins.forEach(function(bin){
-        partsCounter += bin.parts.length;
-    });
-
-    devicedesign.j5collection.bins.forEach(function(bin,binKey){
-      bin.parts.forEach(function(part,partKey){
-        Sequence.findById(part.sequencefile_id,function(err,seq){
-          devicedesign.j5collection.bins[binKey].parts[partKey].SequenceFile = seq;
-          partsCounter--;
-          if(partsCounter===0) return cb(devicedesign);
-        });
-      });
-    });
-  };
-
+  //Find the DeviceDesign in the Database populating the parts
   DeviceDesign.findById(req.body.deProjectId).populate('j5collection.bins.parts').exec(function(err,deviceDesignModel){
+
+    // Call resolve sequences to populate sequences (Further releases of mongoose may support multilevel chain population) so this can be refactored
     resolveSequences(deviceDesignModel,function(devicedesign){
+
+      // j5rpcEncode prepares the JSON (which will be translated to XML) to send via RPC.
       var data = j5rpcEncode(devicedesign,req.body.parameters,req.body.masterFiles,req.body.assemblyMethod);
+
+      // Credentials for RPC communication
       data["username"] = 'node';
       data["api_key"] = 'teselarocks';
 
-      //quicklog( require('util').inspect(data) );
+      /* Everything is ready for j5 communication - j5run is generated on pending status */
 
+      var newj5Run = new j5Runs({
+        deproject_id: deviceDesignModel._id,
+        name: "newResult",
+        date: new Date(),
+        assemblyMethod: data.assembly_method,
+        assemblyType: data.ASSEMBLY_PRODUCT_TYPE,
+        status: "In progress",
+        user_id: req.user._id
+      });
+
+      newj5Run.save(function(err){
+        if(err) return res.json(500,{error: "Unexpected error, j5 task couldn't start."});
+        res.json({status:"In progress"});
+      });
+      // file_id , j5Input and j5Results are filled once the job is completed.
+
+      // Call to j5Client to DesignAssembly 
       app.j5client.methodCall('DesignAssembly', [data], function (error, value) {
         if(error)
         {
+          // Catch error during j5 RPC execution
           console.log(error);
           res.send(error["faultString"], 500);
         }
         else
         {
+          // Get and decode the zip file returned by j5 server
           var encodedFileData = value['encoded_output_file'];
           var fileName = value['output_filename'];
-
           var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
-          saveFile(data,req.body.parameters,encodedFileData,req.user,deviceDesignModel,function(j5run,warnings){
+          saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel
+            /*
+            ,function(j5run,warnings){
             res.send(
               {
                 j5Results : j5run.j5Results,
                 warnings: warnings,
                 zipfile: encodedFileData
               });
-          });
+          }
+          */
+          );
         }
       });
 
