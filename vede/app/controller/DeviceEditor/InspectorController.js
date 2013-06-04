@@ -496,8 +496,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         if (selectedBin) {
             Ext.Msg.show({
-                    title: "Are you sure you want to delete this row?",
-                    msg: "WARNING: This will delete the current selected row. This process cannot be undone.",
+                    title: "Are you sure you want to delete this column?",
+                    msg: "WARNING: This will delete the current selected column. This process cannot be undone.",
                     buttons: Ext.Msg.OKCANCEL,
                     cls: "messageBox",
                     fn: this.removeColumn.bind(this, selectedBin),
@@ -507,7 +507,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             removeColumnMenuItem.disable();
         }
 
-        removeColumnMenuItem.disable();
+        removeColumnMenuItem.disable
+
+        this.toggleInsertOptions(false);        
         this.application.fireEvent("ReRenderCollectionInfo");
 
     },
@@ -532,6 +534,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
             this.application.fireEvent("ReRenderCollectionInfo");
         }
+    },
+
+    toggleInsertOptions: function(state) {
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Row"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Column Left"]')[0].setDisabled(!state||false);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('DeviceEditorMenuPanel').query('menuitem[text="Column Right"]')[0].setDisabled(!state||false);
     },
 
     reconfigureEugeneRules: function() {

@@ -4,7 +4,7 @@
  * @author Doug Hershberger
  * @author Micah Lerner
  */
-Ext.define("Vede.view.SimulateDigestionWindow", {
+Ext.define("Vede.view.ve.SimulateDigestionWindow", {
     extend: "Ext.window.Window",
     requires: ["Ext.form.Panel", "Ext.ux.form.MultiSelect", "Ext.ux.form.ItemSelector"],
     height: 500,
@@ -44,23 +44,20 @@ Ext.define("Vede.view.SimulateDigestionWindow", {
                 items: [ {
                     xtype: "panel",
                     width: 300,
-                    title: "Enzymes",
+                    title: "Enzyme Groups",
                     layout: {
                         align: "stretch",
                         type: "vbox"
                     },
                     items: [
                     {
-                            xtype: "combobox",
-                            id: "enzymeGroupSelector-digest",
-                            store: groupStore, //change this store to query database
-                            editable: false,
-                            queryMode: "local",
-                            value: "Common",
-                            displayField: "name",
-                            maxWidth: 134
-                    },
-                    {
+                        xtype: "container",
+                        layout: {
+                            type: "hbox",
+                            align: "stretch"
+                        },
+                        items: [
+                        {
                             xtype: "combobox",
                             hideTrigger: true,
                             valueField: "name",
@@ -69,7 +66,40 @@ Ext.define("Vede.view.SimulateDigestionWindow", {
                             queryMode: "local",
                             disabled: false,
                             maxWidth: 134
+                        },
+                        {
+                            xtype: "combobox",
+                            id: "enzymeGroupSelector-digest",
+                            store: groupStore, //change this store to query database
+                            editable: false,
+                            queryMode: "local",
+                            value: "Common",
+                            displayField: "name",
+                            flex:1
+                        }
+                        ]
                     },
+
+//                    {
+//                            xtype: "combobox",
+//                            id: "enzymeGroupSelector-digest",
+//                            store: groupStore, //change this store to query database
+//                            editable: false,
+//                            queryMode: "local",
+//                            value: "Common",
+//                            displayField: "name",
+//                            maxWidth: 134
+//                    },
+//                    {
+//                            xtype: "combobox",
+//                            hideTrigger: true,
+//                            valueField: "name",
+//                            emptyText: "Search for Enzyme",
+//                            id: "enzymeGroupSelector-search",
+//                            queryMode: "local",
+//                            disabled: false,
+//                            maxWidth: 134
+//                    },
                     {
                         xtype: "itemselector",
                         name: "itemselector",

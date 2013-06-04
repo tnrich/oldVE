@@ -12,7 +12,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         cls: 'saveSequenceBtn',
         icon: 'resources/images/save.png',
         scale: 'medium',
-        tooltip: 'Save to Genbank File'
+        tooltip: 'Save Sequence to Database'
     },
     {
         xtype: 'tbseparator',

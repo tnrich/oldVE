@@ -19,8 +19,7 @@ Ext.define('Vede.view.ve.GoToWindow', {
             fieldLabel: 'Position',
             allowDecimals: false,
             enableKeyEvents: true,
-            maxText: 'Value too high.',
-            minText: 'Value too low.',
+            minText: 'Position must be at least 1.',
             minValue: 1,
             msgTarget: 'under',
             value: 1

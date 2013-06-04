@@ -19,9 +19,9 @@ Ext.define("Teselagen.models.digest.GelBand", {
          */
         labelSize: 16,
         /**
-         * The hight (thickness) of this band in pixels
+         * The height (thickness) of this band in pixels
          */
-        bandHeight: 4,
+        bandHeight: 1,
         /**
          * Width of the band
          */

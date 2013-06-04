@@ -17,9 +17,9 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.GroupManager = Teselagen.manager.RestrictionEnzymeGroupManager;
 
         this.control({
-			"#OkButton": {
-				click: this.onOkButtonClick
-			},
+            "#OkButton": {
+                click: this.onOkButtonClick
+            },
             "#GroupComboBox": {
                  change: this.onGroupComboBoxChange
              },
@@ -32,22 +32,22 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
              "#DeleteGroupButton": {
                  click: this.onDeleteGroupButtonClick
              },
-			 "#selectAllButton": {
-			     click: this.onSelectAllButtonClick
-		     }, 
-			 "#selectButton": {
-			     click: this.onSelectButtonClick
-			 },
-			 "#deselectButton": {
-			     click: this.onDeselectButtonClick
-			 },
-			 "#deselectAllButton": {
-			     click: this.onDeselectAllButtonClick
-			 }
+             "#selectAllButton": {
+                 click: this.onSelectAllButtonClick
+             },
+             "#selectButton": {
+                 click: this.onSelectButtonClick
+             },
+             "#deselectButton": {
+                 click: this.onDeselectButtonClick
+             },
+             "#deselectAllButton": {
+                 click: this.onDeselectAllButtonClick
+             }
         });
 
         this.application.on({
-            RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened, 
+            RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened,
             scope: this
         });
     },
@@ -103,7 +103,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Called when the user selects a new group in the combobox.
      */
     onGroupComboBoxChange: function(combobox) {
-	    alert("enzyme group combo box changed, no function yet");
+        alert("enzyme group combo box changed, no function yet");
         // var newGroup = this.GroupManager.groupByName(combobox.getValue());
         // var newStoreData = [];
 
@@ -118,7 +118,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     },
 
     onEnzymeSearchBoxKeyup: function(field) {
-	    alert("enzyme search box click detected, no function yet");
+        alert("enzyme search box click detected, no function yet");
         // this.enzymeSelector.fromField.store.filterBy(function(rec) {
             // if(rec.data.name.search(new RegExp(field.getValue(), "i")) != -1) {
                 // return true;
@@ -129,11 +129,11 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
     },
 
     /**
-     * Saves the active enzymes to a group.	
+     * Saves the active enzymes to a group.
      * Not implemented in the flex version.
      */
     onSaveButtonClick: function() {
-		 alert("save button clicked, no function yet")
+         alert("save button clicked, no function yet")
     },
 
     /**
@@ -141,20 +141,20 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Also not implemented in the flex version.
      */
     onDeleteGroupButtonClick: function() {
-		 alert("delete button clicked, no function yet")
+         alert("delete button clicked, no function yet")
     },
 
     /**
      * Saves active enzymes and closes the window.
      */
     onOkButtonClick: function() {
-		alert("Ok button clicked, no function yet");
+        alert("Ok button clicked, no function yet");
         // var names = [];
         // this.enzymeSelector.toField.store.each(function(obj) {
             // names.push(obj.data.name);
         // });
 
-        // var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", 
+        // var newActiveGroup = this.GroupManager.createGroupByEnzymes("active",
                                                                     // names);
         // this.managerWindow.close();
 
@@ -163,39 +163,39 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             // this.application.fireEvent("ActiveEnzymesChanged");
         // }
     },
-	
-	/**
-	* closes window without saving selected enzymes
-	*/
-	onCancelButtonClick: function() {
-	    alert("cancel button clicked, no function yet");
-	},
-	
-	/**
-	* for every enzyme in AvailableEnzymeGridPanel and not in SelectedEnzymeGridPanel, add enzyme to SelectedEnzymeGridPanel
-	*/
-	onSelectAllButtonClick: function() {
-	    alert("select all button clicked, no function yet");
-	},
-	
-	/**
-	* if there is at least one enzyme selected in AvailableEnzymeGrid, add each selected enzyme to SelectedEnzymeGrid
-	*/
-	onSelectButtonClick: function() {
-	    alert("select button clicked, no function yet");
-	},
-	
-	/**
-	* if there is at least one enzyme selected in SelectedEnzymeGrid, remove each selected enzyme from SelectedEnzymeGrid
-	*/
-	onDeselectButtonClick: function() {
-	    alert("deselect button clicked, no function yet");
-	},
-	
-	/**
-	* remove all enzymes from SelectedEnzymeGrid
-	*/
-	onDeselectAllButtonClick: function() {
-	    alert("deselect all button clicked, no function yet");
-	}
+    
+    /**
+    * closes window without saving selected enzymes
+    */
+    onCancelButtonClick: function() {
+        alert("cancel button clicked, no function yet");
+    },
+    
+    /**
+    * for every enzyme in AvailableEnzymeGridPanel and not in SelectedEnzymeGridPanel, add enzyme to SelectedEnzymeGridPanel
+    */
+    onSelectAllButtonClick: function() {
+        alert("select all button clicked, no function yet");
+    },
+    
+    /**
+    * if there is at least one enzyme selected in AvailableEnzymeGrid, add each selected enzyme to SelectedEnzymeGrid
+    */
+    onSelectButtonClick: function() {
+        alert("select button clicked, no function yet");
+    },
+    
+    /**
+    * if there is at least one enzyme selected in SelectedEnzymeGrid, remove each selected enzyme from SelectedEnzymeGrid
+    */
+    onDeselectButtonClick: function() {
+        alert("deselect button clicked, no function yet");
+    },
+    
+    /**
+    * remove all enzymes from SelectedEnzymeGrid
+    */
+    onDeselectAllButtonClick: function() {
+        alert("deselect all button clicked, no function yet");
+    }
 });
