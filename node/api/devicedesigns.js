@@ -149,6 +149,7 @@ module.exports = function(app) {
             } else {
                 design.j5collection.bins.forEach(function(bin, i) {
                     bin.parts.forEach(function(part, partKey) {
+                        part.fas = bin.fases[partKey];
                         if(part.phantom) design.j5collection.bins[i].parts[partKey] = { name: "", phantom: true };
                     });
                 });
