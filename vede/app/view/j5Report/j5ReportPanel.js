@@ -93,9 +93,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                         {
                             xtype: 'displayfield',
                             height: 20,
-                            name: 'j5RunId',
-                            cls: 'j5RunId',
-                            fieldLabel: '<b>j5 Run ID</b>',
+                            name: 'j5AssemblyType',
+                            cls: 'j5RunAssemblyType',
+                            fieldLabel: '<b>Assembly Type</b>',
                             labelWidth: 100
                         },
                         {

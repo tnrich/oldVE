@@ -545,7 +545,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     //responseMessage.setValue("Completed");
                     //loadingMessage.hide();
                     //responseMessage.hide();
-                    Ext.MessageBox.alert("Status",responseData.status);
+                    $.jGrowl("j5 Run Submitted");
                     /*
                     if(warnings.length > 0)
                     {
