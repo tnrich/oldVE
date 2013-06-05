@@ -24,7 +24,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         var self = this;
         var task = new Ext.util.DelayedTask(function(){
             self.monitorServerTasks();
-            if(runFlag) task.delay(self.delay);
+            if(self.runFlag) task.delay(self.delay);
         });
         
         task.delay(this.delay);
