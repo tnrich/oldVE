@@ -211,20 +211,20 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     registerSystemGroups: function() {
         var newSystemGroups = this.getSystemGroups();
         
-        // 1. REBASE
-        var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
-            name: "All Enzymes",
-            enzymes: this.getRebaseEnzymesDatabase().getValues()
-        });
-
-        newSystemGroups.push(rebaseGroup);
-        // 2. Common
+        // 1. Common
         var commonGroup = this.createGroupByEnzymes("Common Enzymes", 
             ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV",
              "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI",
              "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"]);
         newSystemGroups.push(commonGroup);
         
+        // 2. REBASE
+        var rebaseGroup = Ext.create("Teselagen.models.RestrictionEnzymeGroup", {
+            name: "All Enzymes",
+            enzymes: this.getRebaseEnzymesDatabase().getValues()
+        });
+
+        newSystemGroups.push(rebaseGroup);
         // 3. Berkeley Biobrick
         var berkeleyBBGroup = this.createGroupByEnzymes("Berkeley BioBricks", ["EcoRI", "BglII", "BamHI", "XhoI"]);
         newSystemGroups.push(berkeleyBBGroup);
