@@ -131,7 +131,6 @@ Ext.define("Teselagen.models.digest.GelLane", {
      * @param {Number} newValue the new value
      */
     setXOffset: function(newValue){
-        console.log("setXOffset", newValue);
         for (var i = 0; i < this.bands.length; ++i){
             this.bands[i].setXOffset(newValue);
         }
@@ -195,17 +194,17 @@ Ext.define("Teselagen.models.digest.GelLane", {
                 }
             }
             var halfWidth = this.actualWidth / 2;
-            var txtOffset = halfWidth;
-//            var txtOffset = 0;
+            var xSpacer = halfWidth + (halfWidth * this.hPad);
+            var xSpacerFactor = 0.25;
+            xSpacer = xSpacer * xSpacerFactor;
             var laneLabel = Ext.create("Ext.draw.Sprite", {
                 type: "text",
                 text: laneLabelText,
                 fill: this.BAND_COLOR,
                 font: this.labelSize + "px 'monospace'",
-                x: txtOffset + this.xOffset + (halfWidth * this.hPad),
+                x: this.xOffset + xSpacer,
                 y: 10
             });
-            console.log("txtOffset", txtOffset, this.xOffset, halfWidth*this.hPad);
             this.bandSprites.push(laneLabel);
         }
         return this.bandSprites;

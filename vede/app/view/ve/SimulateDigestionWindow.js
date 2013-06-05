@@ -61,7 +61,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                             xtype: "combobox",
                             hideTrigger: true,
                             valueField: "name",
-                            emptyText: "Search for Enzyme",
+                            emptyText: "Search for Enzyme in...",
                             id: "enzymeGroupSelector-search",
                             queryMode: "local",
                             disabled: false,
@@ -73,7 +73,7 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                             store: groupStore, //change this store to query database
                             editable: false,
                             queryMode: "local",
-                            value: "Common",
+                            value: "All Enzymes",
                             displayField: "name",
                             flex:1
                         }
