@@ -255,16 +255,18 @@ Ext.define("Teselagen.manager.PieManager", {
             this.hideSprites(this.featureSprites);
         }
 
-        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
-
         //this.drawCoordinates();
         Ext.resumeLayouts(true);
+
+        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },
 
     /**
      * Zooms the pie in using the viewBox and adjusts its height accordingly.
      */
     zoomIn: function() {
+        Ext.suspendLayouts();
+
         var oldBox = this.pie.surface.viewBox;
 
         var newHeight = this.pie.surface.el.getSize().height * 
@@ -280,6 +282,8 @@ Ext.define("Teselagen.manager.PieManager", {
                 oldBox.width / this.self.ZOOM_FACTOR, 
                 oldBox.height / this.self.ZOOM_FACTOR);
 
+        Ext.resumeLayouts(true);
+
         this.fitWidthToContent(this);//, this.self.ZOOM_FACTOR * 5);
     },
 
@@ -287,6 +291,8 @@ Ext.define("Teselagen.manager.PieManager", {
      * Zooms the pie out using the viewBox and adjusts its height accordingly.
      */
     zoomOut: function() {
+        Ext.suspendLayouts();
+
         var oldBox = this.pie.surface.viewBox;
 
         var newHeight = this.pie.surface.el.getSize().height / 
@@ -301,6 +307,8 @@ Ext.define("Teselagen.manager.PieManager", {
                 this.center.y - oldBox.height * this.self.ZOOM_FACTOR / 2,
                 oldBox.width * this.self.ZOOM_FACTOR,
                 oldBox.height * this.self.ZOOM_FACTOR);
+
+        Ext.resumeLayouts(true);
 
         this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
     },
@@ -330,9 +338,9 @@ Ext.define("Teselagen.manager.PieManager", {
             }
         }
 
-        //console.log("magnification: " + magnification);
-        //console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
-        //            " x " + scope.pie.surface.el.getSize().height);
+        console.log("magnification: " + magnification);
+        console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
+                    " x " + scope.pie.surface.el.getSize().height);
     },
 
     /**
