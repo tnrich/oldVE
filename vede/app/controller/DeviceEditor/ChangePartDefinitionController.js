@@ -141,13 +141,17 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
             this.selectedPart.set('partSource',partSource.getValue());
             this.selectedSequence.set('sequenceFileContent',sourceData.getValue());
         }
+        
 
         this.selectedPart.set('genbankStartBP',startBP.getValue());
         this.selectedPart.set('endBP',stopBP.getValue());
 
         this.selectedPart.set('revComp',revComp.getValue());
 
-        if(this.selectedBinIndex!=-1) Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
+        if(this.selectedBinIndex!=-1) {
+            Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
+            $.jGrowl("Part Definition Changed");
+        }
         else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
 
         this.selectedWindow.close();

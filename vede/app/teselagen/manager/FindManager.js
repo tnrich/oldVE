@@ -397,7 +397,7 @@ Ext.define("Teselagen.manager.FindManager", {
         };
 
         for(var i = 0; i < expression.length; i++) {
-            var character = expression.characterAt(i);
+            var character = expression.charAt(i);
 
             if(character.match(/[atcgu]/)) {
                 ambiguous.push(character);
@@ -419,7 +419,7 @@ Ext.define("Teselagen.manager.FindManager", {
         }
 
         for(var i = 0; i < expression.length; i++) {
-            var character = expression.characterAt(i);
+            var character = expression.charAt(i);
 
             if(character.match(/[arndcqeghilkmfpstwyv.]/)) {
                 ambiguous.push(character);

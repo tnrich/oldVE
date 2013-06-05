@@ -31,7 +31,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                 record.getJ5Collection().bins().each(function(bin) {
                     var partsTempArray = [];
                     bin.parts().each(function(part) {
-                        if (!part.isEmpty()) {partsTempArray.push(part.getData().id); }
+                        {partsTempArray.push(part.getData().id); }
                     });
                     binsTempArray.push(partsTempArray);
                 });
