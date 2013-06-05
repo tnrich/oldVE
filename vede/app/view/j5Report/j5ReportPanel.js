@@ -121,6 +121,14 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             cls: 'j5RunEndField',
                             fieldLabel: '<b>Date Finished</b>',
                             labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunElapsed',
+                            cls: 'j5RunElapsedField',
+                            fieldLabel: '<b>Run Time</b>',
+                            labelWidth: 100
                         }
                     ]
                 },
