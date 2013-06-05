@@ -358,13 +358,14 @@ app.post('/executej5',restrict,function(req,res){
       /* Everything is ready for j5 communication - j5run is generated on pending status */
 
       var newj5Run = new j5Runs({
-        deproject_id: deviceDesignModel._id,
         name: "newResult",
         date: new Date(),
         assemblyMethod: data.assembly_method,
         assemblyType: data.ASSEMBLY_PRODUCT_TYPE,
         status: "In progress",
-        user_id: req.user._id
+        user_id: req.user._id,
+        devicedesign_id : deviceDesignModel._id,
+        project_id : deviceDesignModel.project_id 
       });
 
       newj5Run.save(function(err){
