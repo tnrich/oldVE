@@ -98,7 +98,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
-                $.jGrowl("Design Deleted")
+                $.jGrowl("Design Deleted");
              }
          }
     },
