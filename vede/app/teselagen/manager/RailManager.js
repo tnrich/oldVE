@@ -161,6 +161,8 @@ Ext.define("Teselagen.manager.RailManager", {
      * renderers.
      */
     render: function() {
+        Ext.suspendLayouts();
+
         if(this.dirty) {
             Ext.each(this.renderers, function(renderer) {
                 if(this.sequenceManagerChanged) {
@@ -244,6 +246,8 @@ Ext.define("Teselagen.manager.RailManager", {
         } else {
             this.hideSprites(this.featureSprites);
         }
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -251,11 +255,14 @@ Ext.define("Teselagen.manager.RailManager", {
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
      */
     showSprites: function(collection) {
-        collection.each(function(sprite) {
+        var sprite;
+
+        for(var i = 0; i < collection.length; i++) {
+            sprite = collection.getAt(i);
             this.rail.surface.add(sprite);
             sprite.show(true);
             this.rail.doComponentLayout();
-        }, this);
+        }
     },
     
     /**
@@ -263,9 +270,9 @@ Ext.define("Teselagen.manager.RailManager", {
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
      */
      hideSprites: function(collection) {
-         collection.each(function(sprite) {
-             sprite.hide(true);
-         });
+         for(var i = 0; i < collection.length; i++) {
+             collection.getAt(i).hide(true);
+         }
      },
 
 

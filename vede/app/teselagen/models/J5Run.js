@@ -65,8 +65,13 @@ Ext.define("Teselagen.models.J5Run", {
         {name: "comment",          type: "String", defaultValue: ""},
 
         // meta info
-        {name: "status",        type: "String",     defaultValue: ""},
         {name: "date",          type: "Date",     defaultValue: "",
+            convert: function(v, record) {
+                    var date = new Date(v);
+                    return date;
+                }
+        },
+        {name: "endDate",          type: "Date",     defaultValue: "",
             convert: function(v, record) {
                 var date = new Date(v);
                 return date;
@@ -75,6 +80,7 @@ Ext.define("Teselagen.models.J5Run", {
         {name: "assemblyType",  type: "String",     defaultValue: ""}, // Combinatorial or Not
         {name: "assemblyMethod",  type: "String",     defaultValue: ""}, // Combinatorial or Not
         {name: "status",        type: "String",     defaultValue: ""}, // Thread execution Status flag (Pending, Finished)
+        {name: "warnings",        type: "String",     defaultValue: ""},
 
         // IDs
         {name: "devicedesign_id",  type: "long"}

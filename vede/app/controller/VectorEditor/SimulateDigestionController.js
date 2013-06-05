@@ -4,11 +4,8 @@
  * @author Doug Hershberger
  * @author Micah Lerner
  */
-Ext.define("Vede.controller.SimulateDigestionController", {
+Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
     extend: "Ext.app.Controller",
-    views:
-        [ "SimulateDigestionWindow" ],
-
     requires:
         ["Teselagen.manager.RestrictionEnzymeGroupManager",
          "Teselagen.bio.tools.DigestionCalculator",
@@ -118,9 +115,6 @@ Ext.define("Vede.controller.SimulateDigestionController", {
          Ext.each(this.GroupManager.getGroupNames(), function(name) {
              groupSelector.store.add({"name": name});
          });
-
-         // Set the value in the group combobox to the first element by default.
-         groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
 
 //         var startGroup = this.GroupManager.groupByName(groupSelector.store.getAt("0").get("name"));
 //         var groupArray = [];

@@ -99,6 +99,13 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }, {
                 xtype: 'menuseparator'
             }, {
+                xtype: 'menucheckitem',
+                id: 'safeEditingMenuItem',
+                text: 'Safe Editing',
+                checked: true
+            }, {
+                xtype: 'menuseparator'
+            }, {
                 xtype: 'menuitem',
                 id: 'findMenuItem',
                 text: 'Find...'
@@ -218,19 +225,22 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             xtype: 'menu',
             minWidth: 140,
             items: [
-            {
+//            {
 //                xtype: 'menuitem',
 //                id: 'createNewFeatureMenuItem',
 //                text: 'Create New Feature'
-//            }, {
+//            },
+//            {
 //                xtype: 'menuitem',
 //                id: 'restrictionEnzymesManagerMenuItem',
 //                text: 'Restriction Enzymes Manager'
-//            }, {
+//            },
+            {
                 xtype: 'menuitem',
                 id: 'simulateDigestionMenuItem',
                 text: 'Simulate Digestion'
-//            }, {
+            },
+//            {
 //                xtype: 'menuitem',
 //                text: 'Properties'
 //            }, {
@@ -238,13 +248,12 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //            }, {
 //                xtype: 'menuitem',
 //                text: 'Preferences'
-            },
+//            },
             {
                 xtype: 'menuitem',
                 id: 'exportToFileMenuItem',
                 text: 'Export to File'
-            }
-            ]
+            }]
         }
     }
     ]

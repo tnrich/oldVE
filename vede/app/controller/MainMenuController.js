@@ -9,7 +9,8 @@ Ext.define('Vede.controller.MainMenuController', {
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
-               'Teselagen.utils.FormatUtils'],
+               'Teselagen.utils.FormatUtils',
+               "Vede.view.ve.SimulateDigestionWindow"],
 
     CaretEvent: null,
     MenuItemEvent: null,
@@ -34,6 +35,14 @@ Ext.define('Vede.controller.MainMenuController', {
 
     onRedoMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.REDO);
+    },
+
+    onSafeEditingMenuItemCheckChange: function(checkbox, checked) {
+        this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, checked);
+    },
+
+    validateSafeEditingMenuItem: function(checked) {
+        Ext.getCmp("safeEditingMenuItem").setChecked(checked);
     },
 
     onFindMenuItemClick: function() {
@@ -160,8 +169,7 @@ Ext.define('Vede.controller.MainMenuController', {
     },
 
     onSimulateDigestionMenuItemClick: function() {
-        console.log("called");
-        var simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
+        var simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
         simulateDigestionWindow.show();
         simulateDigestionWindow.center();
         this.application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);
@@ -253,6 +261,9 @@ Ext.define('Vede.controller.MainMenuController', {
             "#redoMenuItem": {
                 click: this.onRedoMenuItemClick
             },
+            "#safeEditingMenuItem": {
+                checkchange: this.onSafeEditingMenuItemCheckChange
+            },
             "#findMenuItem": {
                 click: this.onFindMenuItemClick
             },
@@ -328,6 +339,9 @@ Ext.define('Vede.controller.MainMenuController', {
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.ProjectManager = Teselagen.manager.ProjectManager;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+
+        this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED,
+                            this.validateSafeEditingMenuItem, this);
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     }

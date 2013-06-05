@@ -45,7 +45,7 @@ Ext.define("Vede.controller.SequenceController", {
     selectionDirection: 0,
     caretIndex: 0,
 
-    safeEditing: false,
+    safeEditing: true,
 
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
@@ -103,6 +103,8 @@ Ext.define("Vede.controller.SequenceController", {
 
         listenersObject[this.MenuItemEvent.SELECT_ALL] = this.onSelectAll;
         listenersObject[this.MenuItemEvent.SELECT_INVERSE] = this.onSelectInverse;
+
+        listenersObject[this.MenuItemEvent.SAFE_EDITING_CHANGED] = this.onSafeEditingChanged;
 
         listenersObject[this.MenuItemEvent.REVERSE_COMPLEMENT] = 
             this.onReverseComplementSequence;
@@ -205,39 +207,153 @@ Ext.define("Vede.controller.SequenceController", {
 
             if(this.DNAAlphabet.symbolByValue(character)) {
                 // If key is a valid nucleotide, insert it.
-                if(this.safeEditing) {
-                    this.doInsertSequence(this.DNATools.createDNA(character), 
-                                          this.caretIndex);
-                } else {
-                    if(this.SelectionLayer.selected) {
-                        this.changeCaretPosition(this.SelectionLayer.start);
+                if(this.SelectionLayer.selected) {
+                    if(this.safeEditing) {
+                        this.safeDelete(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
 
+                        this.SequenceManager.insertSequence(
+                            this.DNATools.createDNA(character), this.caretIndex);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+
+                        this.SequenceManager.insertSequence(
+                            this.DNATools.createDNA(character), this.caretIndex);
+
+                        this.changeCaretPosition(this.caretIndex + 1);
+                    }
+                } else {
+                    if(this.safeEditing) {
+                        this.safeInsert(character, this.caretIndex);
+                    } else {
+                        this.SequenceManager.insertSequence(
+                            this.DNATools.createDNA(character), this.caretIndex);
+
+                        this.changeCaretPosition(this.caretIndex + 1);
+                    }
+                }
+            } else if(event.getKey() === event.DELETE) {
+                // Delete: Delete the next character or the selection.
+                if(this.SelectionLayer.selected) {
+                    if(this.safeEditing) {
+                        this.safeDelete(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
+                    } else {
                         this.deleteSequence(this.SelectionLayer.start,
                                             this.SelectionLayer.end);
                     }
-
-                    this.SequenceManager.insertSequence(
-                        this.DNATools.createDNA(character), this.caretIndex);
-
-                    this.changeCaretPosition(this.caretIndex + 1);
-                }
-            } else if(event.getKey() === event.DELETE) {
-                if(this.SelectionLayer.selected) {
-                    this.deleteSequence(this.SelectionLayer.start,
-                                        this.SelectionLayer.end);
                 } else {
-                    this.deleteSequence(this.caretIndex, this.caretIndex + 1);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.caretIndex, this.caretIndex + 1);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+                    }
                 }
-
             } else if(event.getKey() === event.BACKSPACE && this.caretIndex > 0) {
+                // Backspace: Delete the previous character or the selection.
                 if(this.SelectionLayer.selected) {
-                    this.deleteSequence(this.SelectionLayer.start,
+                    if(this.safeEditing) {
+                        this.safeDelete(this.SelectionLayer.start,
                                         this.SelectionLayer.end);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+                    }
                 } else {
-                    this.deleteSequence(this.caretIndex - 1, this.caretIndex);
-                    this.changeCaretPosition(this.caretIndex - 1);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.caretIndex - 1, this.caretIndex);
+                    } else {
+                        this.deleteSequence(this.caretIndex - 1, this.caretIndex);
+                    }
                 }
             }
+        }
+    },
+
+    safeEditPrompt: function(features, callback) {
+        var self = this;
+        var promptWindow = Ext.create("Vede.view.ve.SafeEditWindow").show();
+        var grid = promptWindow.down("gridpanel");
+
+        promptWindow.callback = callback;
+        grid.reconfigure(features);
+
+        // Add a label to the checkbox column.
+        grid.columns[grid.columns.length - 1].setText("Remove");
+        grid.columns[0].setWidth(139);
+        grid.columns[grid.columns.length - 1].setWidth(50);
+
+        promptWindow.on('close', function() {
+            Ext.getCmp("AnnotateContainer").el.focus();
+        }, this);
+
+        promptWindow.down("displayfield").on("click", function() {
+            this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, false);
+            promptWindow.close();
+        }, this);
+    },
+
+    safeInsert: function(sequence, index, insertSequenceManager) {
+        var self = this;
+        var affectedFeatures = this.SequenceManager.featuresAt(index);
+        var sequenceLength;
+
+        if(affectedFeatures.length > 0) {
+            this.safeEditPrompt(affectedFeatures, function() {
+                if(insertSequenceManager) {
+                    self.SequenceManager.insertSequenceManager(sequence, index);
+                    sequenceLength = sequence.getSequence().toString().length;
+                } else {
+                    self.SequenceManager.insertSequence(self.DNATools.createDNA(sequence),
+                                                        index);
+                    sequenceLength = sequence.length;
+                }
+
+                // 'this' will refer to the SafeEditWindow.
+                var selected = this.down('gridpanel').selModel.getSelection();
+                var featureModel;
+
+                for(var i = 0; i < selected.length; i++) {
+                    featureModel = selected[i];
+                    self.SequenceManager.removeFeature(featureModel.data.field1);
+                }
+
+                self.changeCaretPosition(index + sequenceLength);
+            });
+        } else {
+            if(insertSequenceManager) {
+                this.SequenceManager.insertSequenceManager(sequence, index);
+                sequenceLength = sequence.getSequence().toString().length;
+            } else {
+                this.SequenceManager.insertSequence(this.DNATools.createDNA(sequence),
+                                                    index);
+                sequenceLength = sequence.length;
+            }
+
+            self.changeCaretPosition(index + sequenceLength);
+        }
+    },
+
+    safeDelete: function(start, end) {
+        var self = this;
+        var affectedFeatures = this.SequenceManager.featuresByRange(start, end);
+
+        if(affectedFeatures.length > 0) {
+            this.safeEditPrompt(affectedFeatures, function() {
+                self.deleteSequence(start, end);
+
+                // 'this' will refer to the SafeEditWindow.
+                var selected = this.down('gridpanel').selModel.getSelection();
+                var featureModel;
+                for(var i = 0; i < selected.length; i++) {
+                    featureModel = selected[i];
+                    self.SequenceManager.removeFeature(featureModel.data.field1);
+                }
+            });
+        } else {
+            this.deleteSequence(start, end);
         }
     },
 
@@ -246,10 +362,9 @@ Ext.define("Vede.controller.SequenceController", {
             this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
 
-            this.deleteSequence(this.SelectionLayer.start,
-                                this.SelectionLayer.end);
+            this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
             
-            this.changeCaretPosition(this.caretIndex - this.application.ClipBoardData.length);
+            //this.changeCaretPosition(this.caretIndex - this.application.ClipBoardData.length);
         }
     },
 
@@ -282,10 +397,7 @@ Ext.define("Vede.controller.SequenceController", {
 
                 confirmationWindow.close();
 
-                this.SequenceManager.insertSequenceManager(pasteSequenceManager,
-                                                           this.caretIndex);
-
-                this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
+                this.safeInsert(pasteSequenceManager, this.caretIndex, true);
             }, this);
 
             confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {
@@ -295,16 +407,14 @@ Ext.define("Vede.controller.SequenceController", {
     },
 
     deleteSequence: function(start, end) {
-        if(this.safeEditing) {
-            this.doDeleteSequence(start, end);
-        } else {
-            this.SequenceManager.removeSequence(start, end);
+        this.SequenceManager.removeSequence(start, end);
 
-            if(this.SelectionLayer.selected) {
-                this.SelectionLayer.deselect();
-                this.application.fireEvent(
-                    this.SelectionEvent.SELECTION_CANCELED);
-            }
+        this.changeCaretPosition(start);
+
+        if(this.SelectionLayer.selected) {
+            this.SelectionLayer.deselect();
+            this.application.fireEvent(
+                this.SelectionEvent.SELECTION_CANCELED);
         }
     },
 
@@ -322,9 +432,11 @@ Ext.define("Vede.controller.SequenceController", {
             this.SelectionLayer.deselect();
         }
 
-        Ext.each(this.Managers, function(manager) {
+        var manager;
+        for(var i = 0; i < this.Managers.length; i++) {
+            manager = this.Managers[i];
             manager.setSequenceManager(pSeqMan);
-        });
+        }
     },
 
     onSelectAll: function() {
@@ -337,6 +449,10 @@ Ext.define("Vede.controller.SequenceController", {
         if(this.SequenceManager && this.SelectionLayer) {
             this.select(this.SelectionLayer.end, this.SelectionLayer.start);
         }
+    },
+
+    onSafeEditingChanged: function(enabled) {
+        this.safeEditing = enabled;
     },
 
     onRebaseSequence: function() {
@@ -396,11 +512,13 @@ Ext.define("Vede.controller.SequenceController", {
             return;
         }
 
-        Ext.each(this.Managers, function(manager) {
+        var manager;
+        for(var i = 0; i < this.Managers.length; i++) {
+            manager = this.Managers[i];
             if(manager.sequenceChanged) {
                 manager.sequenceChanged();
             }
-        });
+        }
 
         switch (kind) {
             case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD:
