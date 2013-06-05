@@ -62,6 +62,17 @@ Ext.define('Vede.view.ve.SafeEditWindow', {
                 }
             }]
         }, {
+            xtype: 'displayfield',
+            hideLabel: true,
+            value: '<a href="#">Turn off safe editing</a>',
+            listeners: {
+                render: function(field) {
+                    field.getEl().on('click', function() {
+                        field.fireEvent('click', field);
+                    });
+                }
+            }
+        }, {
             xtype: 'container',
             layout: {
                 type: 'hbox'

@@ -37,6 +37,14 @@ Ext.define('Vede.controller.MainMenuController', {
         this.application.fireEvent(this.MenuItemEvent.REDO);
     },
 
+    onSafeEditingMenuItemCheckChange: function(checkbox, checked) {
+        this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, checked);
+    },
+
+    validateSafeEditingMenuItem: function(checked) {
+        Ext.getCmp("safeEditingMenuItem").setChecked(checked);
+    },
+
     onFindMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.FIND_PANEL_OPENED);
     },
@@ -253,6 +261,9 @@ Ext.define('Vede.controller.MainMenuController', {
             "#redoMenuItem": {
                 click: this.onRedoMenuItemClick
             },
+            "#safeEditingMenuItem": {
+                checkchange: this.onSafeEditingMenuItemCheckChange
+            },
             "#findMenuItem": {
                 click: this.onFindMenuItemClick
             },
@@ -328,6 +339,9 @@ Ext.define('Vede.controller.MainMenuController', {
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.ProjectManager = Teselagen.manager.ProjectManager;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+
+        this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED,
+                            this.validateSafeEditingMenuItem, this);
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
     }

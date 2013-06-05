@@ -62,36 +62,36 @@ Ext.define("Teselagen.bio.sequence.DNATools", {
 		 */
 		complementSymbol: function(pSymbol){
 			switch(pSymbol.getValue()) {
-				case this.DNAAlphabet.getA().getValue():
-					return this.DNAAlphabet.getT();
-				case this.DNAAlphabet.getT().getValue():
-					return this.DNAAlphabet.getA();
-				case this.DNAAlphabet.getG().getValue():
-					return this.DNAAlphabet.getC();
-				case this.DNAAlphabet.getC().getValue():
-					return this.DNAAlphabet.getG();
-				case this.DNAAlphabet.getY().getValue():
-					return this.DNAAlphabet.getR();
-				case this.DNAAlphabet.getR().getValue():
-					return this.DNAAlphabet.getY();
-				case this.DNAAlphabet.getS().getValue():
-					return this.DNAAlphabet.getS();
-				case this.DNAAlphabet.getW().getValue():
-					return this.DNAAlphabet.getW();
-				case this.DNAAlphabet.getK().getValue():
-					return this.DNAAlphabet.getM();
-				case this.DNAAlphabet.getM().getValue():
-					return this.DNAAlphabet.getK();
-				case this.DNAAlphabet.getB().getValue():
-					return this.DNAAlphabet.getV();
-				case this.DNAAlphabet.getV().getValue():
-					return this.DNAAlphabet.getB();
-				case this.DNAAlphabet.getD().getValue():
-					return this.DNAAlphabet.getH();
-				case this.DNAAlphabet.getH().getValue():
-					return this.DNAAlphabet.getD();
-				case this.DNAAlphabet.getN().getValue():
-					return this.DNAAlphabet.getN();
+				case this.DNAAlphabet.a.getValue():
+					return this.DNAAlphabet.t;
+				case this.DNAAlphabet.t.getValue():
+					return this.DNAAlphabet.a;
+				case this.DNAAlphabet.g.getValue():
+					return this.DNAAlphabet.c;
+				case this.DNAAlphabet.c.getValue():
+					return this.DNAAlphabet.g;
+				case this.DNAAlphabet.y.getValue():
+					return this.DNAAlphabet.r;
+				case this.DNAAlphabet.r.getValue():
+					return this.DNAAlphabet.y;
+				case this.DNAAlphabet.s.getValue():
+					return this.DNAAlphabet.s;
+				case this.DNAAlphabet.w.getValue():
+					return this.DNAAlphabet.w;
+				case this.DNAAlphabet.k.getValue():
+					return this.DNAAlphabet.m;
+				case this.DNAAlphabet.m.getValue():
+					return this.DNAAlphabet.k;
+				case this.DNAAlphabet.b.getValue():
+					return this.DNAAlphabet.v;
+				case this.DNAAlphabet.v.getValue():
+					return this.DNAAlphabet.b;
+				case this.DNAAlphabet.d.getValue():
+					return this.DNAAlphabet.h;
+				case this.DNAAlphabet.h.getValue():
+					return this.DNAAlphabet.d;
+				case this.DNAAlphabet.n.getValue():
+					return this.DNAAlphabet.n;
 				case this.DNAAlphabet.getGap().getValue():
 					return this.DNAAlphabet.getGap();
 				default:

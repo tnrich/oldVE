@@ -45,7 +45,7 @@ Ext.define("Vede.controller.SequenceController", {
     selectionDirection: 0,
     caretIndex: 0,
 
-    safeEditing: false,
+    safeEditing: true,
 
     clickedAnnotationStart: null,
     clickedAnnotationEnd: null,
@@ -103,6 +103,8 @@ Ext.define("Vede.controller.SequenceController", {
 
         listenersObject[this.MenuItemEvent.SELECT_ALL] = this.onSelectAll;
         listenersObject[this.MenuItemEvent.SELECT_INVERSE] = this.onSelectInverse;
+
+        listenersObject[this.MenuItemEvent.SAFE_EDITING_CHANGED] = this.onSafeEditingChanged;
 
         listenersObject[this.MenuItemEvent.REVERSE_COMPLEMENT] = 
             this.onReverseComplementSequence;
@@ -206,37 +208,74 @@ Ext.define("Vede.controller.SequenceController", {
             if(this.DNAAlphabet.symbolByValue(character)) {
                 // If key is a valid nucleotide, insert it.
                 if(this.SelectionLayer.selected) {
-                    this.safeDelete(this.SelectionLayer.start,
-                                    this.SelectionLayer.end);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
 
-                    this.SequenceManager.insertSequence(
-                        this.DNATools.createDNA(character), this.caretIndex);
+                        this.SequenceManager.insertSequence(
+                            this.DNATools.createDNA(character), this.caretIndex);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+
+                        this.SequenceManager.insertSequence(
+                            this.DNATools.createDNA(character), this.caretIndex);
+
+                        this.changeCaretPosition(this.caretIndex + 1);
+                    }
                 } else {
-                    this.safeInsert(character, this.caretIndex);
+                    if(this.safeEditing) {
+                        this.safeInsert(character, this.caretIndex);
+                    } else {
+                        this.SequenceManager.insertSequence(
+                            this.DNATools.createDNA(character), this.caretIndex);
+
+                        this.changeCaretPosition(this.caretIndex + 1);
+                    }
                 }
             } else if(event.getKey() === event.DELETE) {
                 // Delete: Delete the next character or the selection.
                 if(this.SelectionLayer.selected) {
-                    this.safeDelete(this.SelectionLayer.start,
-                                    this.SelectionLayer.end);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+                    }
                 } else {
-                    this.safeDelete(this.caretIndex, this.caretIndex + 1);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.caretIndex, this.caretIndex + 1);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+                    }
                 }
             } else if(event.getKey() === event.BACKSPACE && this.caretIndex > 0) {
                 // Backspace: Delete the previous character or the selection.
                 if(this.SelectionLayer.selected) {
-                    this.safeDelete(this.SelectionLayer.start,
-                                    this.SelectionLayer.end);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.SelectionLayer.start,
+                                        this.SelectionLayer.end);
+                    } else {
+                        this.deleteSequence(this.SelectionLayer.start,
+                                            this.SelectionLayer.end);
+                    }
                 } else {
-                    this.safeDelete(this.caretIndex - 1, this.caretIndex);
+                    if(this.safeEditing) {
+                        this.safeDelete(this.caretIndex - 1, this.caretIndex);
+                    } else {
+                        this.deleteSequence(this.caretIndex - 1, this.caretIndex);
+                    }
                 }
             }
         }
     },
 
     safeEditPrompt: function(features, callback) {
-        var promptWindow = Ext.create('Vede.view.ve.SafeEditWindow').show();
-        var grid = promptWindow.down('gridpanel');
+        var self = this;
+        var promptWindow = Ext.create("Vede.view.ve.SafeEditWindow").show();
+        var grid = promptWindow.down("gridpanel");
 
         promptWindow.callback = callback;
         grid.reconfigure(features);
@@ -245,6 +284,15 @@ Ext.define("Vede.controller.SequenceController", {
         grid.columns[grid.columns.length - 1].setText("Remove");
         grid.columns[0].setWidth(139);
         grid.columns[grid.columns.length - 1].setWidth(50);
+
+        promptWindow.on('close', function() {
+            Ext.getCmp("AnnotateContainer").el.focus();
+        }, this);
+
+        promptWindow.down("displayfield").on("click", function() {
+            this.application.fireEvent(this.MenuItemEvent.SAFE_EDITING_CHANGED, false);
+            promptWindow.close();
+        }, this);
     },
 
     safeInsert: function(sequence, index, insertSequenceManager) {
@@ -265,9 +313,12 @@ Ext.define("Vede.controller.SequenceController", {
 
                 // 'this' will refer to the SafeEditWindow.
                 var selected = this.down('gridpanel').selModel.getSelection();
-                Ext.each(selected, function(featureModel) {
+                var featureModel;
+
+                for(var i = 0; i < selected.length; i++) {
+                    featureModel = selected[i];
                     self.SequenceManager.removeFeature(featureModel.data.field1);
-                });
+                }
 
                 self.changeCaretPosition(index + sequenceLength);
             });
@@ -295,9 +346,11 @@ Ext.define("Vede.controller.SequenceController", {
 
                 // 'this' will refer to the SafeEditWindow.
                 var selected = this.down('gridpanel').selModel.getSelection();
-                Ext.each(selected, function(featureModel) {
+                var featureModel;
+                for(var i = 0; i < selected.length; i++) {
+                    featureModel = selected[i];
                     self.SequenceManager.removeFeature(featureModel.data.field1);
-                });
+                }
             });
         } else {
             this.deleteSequence(start, end);
@@ -379,9 +432,11 @@ Ext.define("Vede.controller.SequenceController", {
             this.SelectionLayer.deselect();
         }
 
-        Ext.each(this.Managers, function(manager) {
+        var manager;
+        for(var i = 0; i < this.Managers.length; i++) {
+            manager = this.Managers[i];
             manager.setSequenceManager(pSeqMan);
-        });
+        }
     },
 
     onSelectAll: function() {
@@ -394,6 +449,10 @@ Ext.define("Vede.controller.SequenceController", {
         if(this.SequenceManager && this.SelectionLayer) {
             this.select(this.SelectionLayer.end, this.SelectionLayer.start);
         }
+    },
+
+    onSafeEditingChanged: function(enabled) {
+        this.safeEditing = enabled;
     },
 
     onRebaseSequence: function() {
@@ -453,11 +512,13 @@ Ext.define("Vede.controller.SequenceController", {
             return;
         }
 
-        Ext.each(this.Managers, function(manager) {
+        var manager;
+        for(var i = 0; i < this.Managers.length; i++) {
+            manager = this.Managers[i];
             if(manager.sequenceChanged) {
                 manager.sequenceChanged();
             }
-        });
+        }
 
         switch (kind) {
             case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD:
