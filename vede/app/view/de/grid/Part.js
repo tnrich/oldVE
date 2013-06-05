@@ -140,7 +140,6 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     highlight: function() {
         this.partCell.down().addBodyCls("gridPartCell-highlighted");
-        this.partCell.down().addBodyCls("gridPartCell-selected");
     },
 
     /**
