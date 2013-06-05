@@ -29,7 +29,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 if (data[j5run].status === "In progress") monitor = true;
             }
             if(monitor) self.start();
-            else self.stop();
+            else self.stop(true);
         });
     },    
 
@@ -44,14 +44,13 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     },
 
     start: function(){
+        if(!this.runFlag) console.log("Tasks Monitor has been enabled.");
         this.runFlag = true;
-        console.log("Tasks Monitor has been enabled.");
-        this.startMonitoring();
     },
 
-    stop: function(){
+    stop: function(boot){
         this.runFlag = false;
-        console.log("Tasks Monitor has been disabled.");
+        if(!boot) console.log("Tasks Monitor has been disabled.");
     },
 
     monitorServerTasks: function(cb){
@@ -73,10 +72,12 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         if(this.debugFlag) console.log("-----------------------");
         if(this.debugFlag) console.log("Observing");
         var self = this;
+        var changes = false;
+        var anyRunningTask = false;
         for(var j5runKey in data)
         {
             var j5run = data[j5runKey]
-
+            if ( j5run.status === "In progress" ) anyRunningTask = true;
             if ( self.mon[j5run._id] )
             {
                 // Continue observed
@@ -86,9 +87,11 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
 
                     // Fire change
-                    Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
+                    // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
+                    $.jGrowl("j5 Run " + j5run.status);
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
+                    changes++;
                 }
                 else
                 {
@@ -102,6 +105,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 self.mon[j5run._id] = j5run.status;
             }
         };
+        if(!changes&&!anyRunningTask) self.stop(true);
     }
 
 });

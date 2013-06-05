@@ -87,6 +87,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
                 Teselagen.manager.TasksMonitor.bootMonitoring();
+                Teselagen.manager.TasksMonitor.startMonitoring();
                 if (cb) { return cb(true); }// for Testing
             },
             failure: function(response) {

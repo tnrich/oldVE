@@ -332,8 +332,6 @@ Ext.define("Teselagen.manager.SequenceManager", {
                     clonedFeature4.shift(-pStart, sequence.getSymbolsLength(), circular);
                     subFeatures.push(clonedFeature4);
                 }
-            } else {
-                return null;
             }
         }
         featuredSubSequence = Ext.create("Teselagen.manager.SequenceManager", {

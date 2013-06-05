@@ -47,16 +47,49 @@ Ext.define("Vede.controller.J5ReportController", {
             this.detailPanelFill.hide();
 
         this.activeJ5Run = this.activeProject.j5runs().getById(item.id);
+        var assemblyMethod = this.activeJ5Run.get('assemblyMethod');
+        var status = this.activeJ5Run.get('status');
+        var startDate = new Date(this.activeJ5Run.get('date'));
+        var endDate = new Date(this.activeJ5Run.get('endDate'));
+        var elapsed = endDate - startDate;
+        elapsed = Math.round(elapsed/1000);
+        elapsed = this.elapsedDate(elapsed);
+        startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
+        endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
         var assemblies    = this.activeJ5Run.getJ5Results().assemblies();
         var combinatorial = this.activeJ5Run.getJ5Results().getCombinatorialAssembly();
         var j5parameters = this.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
         //console.log(this.activeJ5Run.getJ5Input().getJ5Parameters());
         //console.log(j5parameters);
         //console.log(this.activeJ5Run);
+
+        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
+        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
+        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
+        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
+        this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
+
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
+    },
+
+    elapsedDate: function (seconds)
+    {
+    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+    var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+    if (numdays>0) {
+        return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+    }else if (numhours>0) {
+        return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+    }else if (numminutes>0) {
+        return numminutes + " minutes " + numseconds + " seconds";
+    } else {
+    return numseconds + " seconds";
+    }
     },
 
     renderMenu: function(){
