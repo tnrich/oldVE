@@ -206,8 +206,6 @@ Ext.define("Vede.controller.SequenceController", {
             if(this.DNAAlphabet.symbolByValue(character)) {
                 // If key is a valid nucleotide, insert it.
                 if(this.SelectionLayer.selected) {
-                    this.changeCaretPosition(this.SelectionLayer.start);
-
                     this.safeDelete(this.SelectionLayer.start,
                                     this.SelectionLayer.end);
 
@@ -216,8 +214,6 @@ Ext.define("Vede.controller.SequenceController", {
                 } else {
                     this.safeInsert(character, this.caretIndex);
                 }
-
-                this.changeCaretPosition(this.caretIndex + 1);
             } else if(event.getKey() === event.DELETE) {
                 // Delete: Delete the next character or the selection.
                 if(this.SelectionLayer.selected) {
@@ -251,24 +247,41 @@ Ext.define("Vede.controller.SequenceController", {
         grid.columns[grid.columns.length - 1].setWidth(50);
     },
 
-    safeInsert: function(sequence, index) {
+    safeInsert: function(sequence, index, insertSequenceManager) {
         var self = this;
         var affectedFeatures = this.SequenceManager.featuresAt(index);
+        var sequenceLength;
 
-        if(affectedFeatures) {
+        if(affectedFeatures.length > 0) {
             this.safeEditPrompt(affectedFeatures, function() {
-                self.SequenceManager.insertSequence(self.DNATools.createDNA(sequence),
-                                                    index);
+                if(insertSequenceManager) {
+                    self.SequenceManager.insertSequenceManager(sequence, index);
+                    sequenceLength = sequence.getSequence().toString().length;
+                } else {
+                    self.SequenceManager.insertSequence(self.DNATools.createDNA(sequence),
+                                                        index);
+                    sequenceLength = sequence.length;
+                }
 
                 // 'this' will refer to the SafeEditWindow.
                 var selected = this.down('gridpanel').selModel.getSelection();
                 Ext.each(selected, function(featureModel) {
                     self.SequenceManager.removeFeature(featureModel.data.field1);
                 });
+
+                self.changeCaretPosition(index + sequenceLength);
             });
         } else {
-            this.SequenceManager.insertSequence(this.DNATools.createDNA(sequence),
-                                                index);
+            if(insertSequenceManager) {
+                this.SequenceManager.insertSequenceManager(sequence, index);
+                sequenceLength = sequence.getSequence().toString().length;
+            } else {
+                this.SequenceManager.insertSequence(this.DNATools.createDNA(sequence),
+                                                    index);
+                sequenceLength = sequence.length;
+            }
+
+            self.changeCaretPosition(index + sequenceLength);
         }
     },
 
@@ -276,7 +289,7 @@ Ext.define("Vede.controller.SequenceController", {
         var self = this;
         var affectedFeatures = this.SequenceManager.featuresByRange(start, end);
 
-        if(affectedFeatures) {
+        if(affectedFeatures.length > 0) {
             this.safeEditPrompt(affectedFeatures, function() {
                 self.deleteSequence(start, end);
 
@@ -296,10 +309,9 @@ Ext.define("Vede.controller.SequenceController", {
             this.application.ClipBoardData = this.SequenceManager.subSequenceManager(
                 this.SelectionLayer.start, this.SelectionLayer.end);
 
-            this.deleteSequence(this.SelectionLayer.start,
-                                this.SelectionLayer.end);
+            this.safeDelete(this.SelectionLayer.start, this.SelectionLayer.end);
             
-            this.changeCaretPosition(this.caretIndex - this.application.ClipBoardData.length);
+            //this.changeCaretPosition(this.caretIndex - this.application.ClipBoardData.length);
         }
     },
 
@@ -332,10 +344,7 @@ Ext.define("Vede.controller.SequenceController", {
 
                 confirmationWindow.close();
 
-                this.SequenceManager.insertSequenceManager(pasteSequenceManager,
-                                                           this.caretIndex);
-
-                this.changeCaretPosition(this.caretIndex + this.application.ClipBoardData.length);
+                this.safeInsert(pasteSequenceManager, this.caretIndex, true);
             }, this);
 
             confirmationWindow.down("button[cls='pasteConfirmationCancelButton']").on("click", function() {

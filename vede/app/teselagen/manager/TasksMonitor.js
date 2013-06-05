@@ -11,6 +11,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     requires: ["Ext.data.Store"],
 
     debugFlag : false,
+    runFlag : true,
 
     mon: {}, // Object to observe
     delay: 1000,
@@ -23,11 +24,16 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         var self = this;
         var task = new Ext.util.DelayedTask(function(){
             self.monitorServerTasks();
-            task.delay(self.delay);
+            if(self.runFlag) task.delay(self.delay);
         });
         
         task.delay(this.delay);
 
+    },
+
+    stop: function(){
+        this.runFlag = false;
+        console.log("Tasks Monitor has been disabled.");
     },
 
     monitorServerTasks: function(){
