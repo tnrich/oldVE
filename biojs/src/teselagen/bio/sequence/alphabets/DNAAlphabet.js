@@ -50,21 +50,21 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
         that.callParent([]);
 
         this.symbolsMap =  {
-                "a": this.getA(),
-                "g": this.getG(),
-                "c": this.getC(),
-                "t": this.getT(),
-                "m": this.getM(),
-                "r": this.getR(),
-                "w": this.getW(),
-                "s": this.getS(),
-                "y": this.getY(),
-                "k": this.getK(),
-                "v": this.getV(),
-                "h": this.getH(),
-                "d": this.getD(),
-                "b": this.getB(),
-                "n": this.getN(),
+                "a": this.a,
+                "g": this.g,
+                "c": this.c,
+                "t": this.t,
+                "m": this.m,
+                "r": this.r,
+                "w": this.w,
+                "s": this.s,
+                "y": this.y,
+                "k": this.k,
+                "v": this.v,
+                "h": this.h,
+                "d": this.d,
+                "b": this.b,
+                "n": this.n,
         }
 
     },
@@ -80,25 +80,8 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
 
     symbolMap: function (pCharacter) {
         var safeChar = pCharacter.toLowerCase();
-        symbols = {
-                "a": this.getA(),
-                "g": this.getG(),
-                "c": this.getC(),
-                "t": this.getT(),
-                "m": this.getM(),
-                "r": this.getR(),
-                "w": this.getW(),
-                "s": this.getS(),
-                "y": this.getY(),
-                "k": this.getK(),
-                "v": this.getV(),
-                "h": this.getH(),
-                "d": this.getD(),
-                "b": this.getB(),
-                "n": this.getN(),
-        }
 
-        return symbols[pCharacter];
+        return this.symbolsMap[pCharacter];
     },
     /**
      * Returns data about the Adenine NucleotideSymbol

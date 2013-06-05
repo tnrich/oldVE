@@ -265,9 +265,12 @@ Ext.define("Vede.controller.SequenceController", {
 
                 // 'this' will refer to the SafeEditWindow.
                 var selected = this.down('gridpanel').selModel.getSelection();
-                Ext.each(selected, function(featureModel) {
+                var featureModel;
+
+                for(var i = 0; i < selected.length; i++) {
+                    featureModel = selected[i];
                     self.SequenceManager.removeFeature(featureModel.data.field1);
-                });
+                }
 
                 self.changeCaretPosition(index + sequenceLength);
             });
@@ -295,9 +298,11 @@ Ext.define("Vede.controller.SequenceController", {
 
                 // 'this' will refer to the SafeEditWindow.
                 var selected = this.down('gridpanel').selModel.getSelection();
-                Ext.each(selected, function(featureModel) {
+                var featureModel;
+                for(var i = 0; i < selected.length; i++) {
+                    featureModel = selected[i];
                     self.SequenceManager.removeFeature(featureModel.data.field1);
-                });
+                }
             });
         } else {
             this.deleteSequence(start, end);
@@ -379,9 +384,11 @@ Ext.define("Vede.controller.SequenceController", {
             this.SelectionLayer.deselect();
         }
 
-        Ext.each(this.Managers, function(manager) {
+        var manager;
+        for(var i = 0; i < this.Managers.length; i++) {
+            manager = this.Managers[i];
             manager.setSequenceManager(pSeqMan);
-        });
+        }
     },
 
     onSelectAll: function() {
@@ -453,11 +460,13 @@ Ext.define("Vede.controller.SequenceController", {
             return;
         }
 
-        Ext.each(this.Managers, function(manager) {
+        var manager;
+        for(var i = 0; i < this.Managers.length; i++) {
+            manager = this.Managers[i];
             if(manager.sequenceChanged) {
                 manager.sequenceChanged();
             }
-        });
+        }
 
         switch (kind) {
             case Teselagen.event.SequenceManagerEvent.KIND_FEATURE_ADD:
