@@ -86,7 +86,7 @@ Ext.define("Vede.controller.J5ReportController", {
 
     } else {
     return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
-
+    }
     },
 
     renderMenu: function(){

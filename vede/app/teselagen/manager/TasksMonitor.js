@@ -60,7 +60,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
 
                     // Fire change
-                    Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
+                    // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
+                    $.jGrowl("j5 Run " + j5run.status);
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
                 }
