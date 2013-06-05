@@ -44,8 +44,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     },
 
     start: function(){
-        if(!this.runFlag) console.log("Tasks Monitor has been enabled.");
         this.runFlag = true;
+        this.startMonitoring();
+        console.log("Tasks Monitor has been enabled.");
     },
 
     stop: function(boot){
@@ -77,7 +78,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         for(var j5runKey in data)
         {
             var j5run = data[j5runKey]
-            if ( j5run.status === "In progress" ) anyRunningTask = true;
+            if ( j5run.status === "In progress" ) { anyRunningTask = true; }
             if ( self.mon[j5run._id] )
             {
                 // Continue observed
@@ -91,7 +92,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     $.jGrowl("j5 Run " + j5run.status);
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
-                    changes++;
+                    changes = true;
                 }
                 else
                 {
@@ -105,6 +106,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 self.mon[j5run._id] = j5run.status;
             }
         };
+
         if(!changes&&!anyRunningTask) self.stop(true);
     }
 
