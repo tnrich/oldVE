@@ -289,7 +289,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
 
-        $.jGrowl("Design Saved", {position: 'bottom-right'});
+        $.jGrowl("Design Saved");
     },
 
     onImportEugeneRulesBtnClick: function(){

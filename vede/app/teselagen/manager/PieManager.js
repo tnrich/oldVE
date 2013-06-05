@@ -130,27 +130,33 @@ Ext.define("Teselagen.manager.PieManager", {
         });
 
         if(this.showFeatures) {
-            Ext.each(this.features, function(feature) {
+            var feature;
+            for(var i = 0; i < this.features.length; i++) {
+                feature = this.features[i];
                 if(selectionAnnotation.contains(feature)) {
                     annotationsInRange.push(feature);
                 }
-            });
+            }
         }
 
         if(this.showCutSites) {
-            Ext.each(this.cutSites, function(site) {
+            var site;
+            for(var i = 0; i < this.cutSites.length; i++) {
+                site = this.cutSites[i];
                 if(selectionAnnotation.contains(site)) {
                     annotationsInRange.push(site);
                 }
-            });
+            }
         }
 
         if(this.showOrfs) {
-            Ext.each(this.orfs, function(orf) {
+            var orf;
+            for(var i = 0; i < this.orfs.length; i++) {
+                orf = this.orfs[i];
                 if(selectionAnnotation.contains(orf)) {
                     annotationsInRange.push(orf);
                 }
-            });
+            }
         }
 
         return annotationsInRange;
@@ -163,8 +169,10 @@ Ext.define("Teselagen.manager.PieManager", {
      * renderers.
      */
     render: function() {
+        Ext.suspendLayouts();
         if(this.dirty) {
-            Ext.each(this.renderers, function(renderer) {
+            for(var i = 0; i < this.renderers.length; i++) {
+                renderer = this.renderers[i];
                 if(this.sequenceManagerChanged) {
                     renderer.setSequenceManager(this.sequenceManager);
                 }
@@ -174,7 +182,7 @@ Ext.define("Teselagen.manager.PieManager", {
                 if(this.centerChanged) {
                     renderer.setCenter(this.center);
                 }
-            }, this);
+            }
 
             this.dirty = false;
             this.sequenceManagerChanged = false;
@@ -247,15 +255,18 @@ Ext.define("Teselagen.manager.PieManager", {
             this.hideSprites(this.featureSprites);
         }
 
-        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
-
         //this.drawCoordinates();
+        Ext.resumeLayouts(true);
+
+        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },
 
     /**
      * Zooms the pie in using the viewBox and adjusts its height accordingly.
      */
     zoomIn: function() {
+        Ext.suspendLayouts();
+
         var oldBox = this.pie.surface.viewBox;
 
         var newHeight = this.pie.surface.el.getSize().height * 
@@ -271,6 +282,8 @@ Ext.define("Teselagen.manager.PieManager", {
                 oldBox.width / this.self.ZOOM_FACTOR, 
                 oldBox.height / this.self.ZOOM_FACTOR);
 
+        Ext.resumeLayouts(true);
+
         this.fitWidthToContent(this);//, this.self.ZOOM_FACTOR * 5);
     },
 
@@ -278,6 +291,8 @@ Ext.define("Teselagen.manager.PieManager", {
      * Zooms the pie out using the viewBox and adjusts its height accordingly.
      */
     zoomOut: function() {
+        Ext.suspendLayouts();
+
         var oldBox = this.pie.surface.viewBox;
 
         var newHeight = this.pie.surface.el.getSize().height / 
@@ -292,6 +307,8 @@ Ext.define("Teselagen.manager.PieManager", {
                 this.center.y - oldBox.height * this.self.ZOOM_FACTOR / 2,
                 oldBox.width * this.self.ZOOM_FACTOR,
                 oldBox.height * this.self.ZOOM_FACTOR);
+
+        Ext.resumeLayouts(true);
 
         this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
     },
@@ -321,9 +338,9 @@ Ext.define("Teselagen.manager.PieManager", {
             }
         }
 
-        //console.log("magnification: " + magnification);
-        //console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
-        //            " x " + scope.pie.surface.el.getSize().height);
+        console.log("magnification: " + magnification);
+        console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
+                    " x " + scope.pie.surface.el.getSize().height);
     },
 
     /**
@@ -350,22 +367,26 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
      */
     showSprites: function(collection) {
-        collection.each(function(sprite) {
+        var sprite;
+        for(var i = 0; i < collection.length; i++) {
+            sprite = collection.getAt(i);
             this.pie.surface.add(sprite);
             sprite.show(true);
             this.pie.doComponentLayout();
-        }, this);
+        }
     },
 
     /**
      * Helper function which hides the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
      */
-     hideSprites: function(collection) {
-         collection.each(function(sprite) {
-             sprite.hide(true);
-         });
-     },
+    hideSprites: function(collection) {
+        var sprite;
+        for(var i = 0; i < collection.length; i++) {
+            sprite = collection.getAt(i);
+            sprite.hide(true);
+        }
+    },
 
     /**
      * @private
@@ -377,7 +398,9 @@ Ext.define("Teselagen.manager.PieManager", {
         var color;
 
         if(this.showCutSites && this.showCutSiteLabels) {
-            Ext.each(this.cutSites, function(site) {
+            var site;
+            for(var i = 0; i < this.cutSites.length; i++) {
+                site = this.cutSites[i];
                 center = this.cutSiteRenderer.middlePoints.get(site);
 
                 if(site.getNumCuts() == 1) {
@@ -401,11 +424,13 @@ Ext.define("Teselagen.manager.PieManager", {
                                                 label.annotation.getEnd());
 
                 labels.push(label);
-            }, this);
+            }
         }
 
         if(this.showFeatures && this.showFeatureLabels) {
-            Ext.each(this.features, function(feature) {
+            var feature;
+            for(var i = 0; i < this.features.length; i++) {
+                feature = this.features[i];
                 center = this.featureRenderer.middlePoints.get(feature);
 
                 label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
@@ -422,7 +447,7 @@ Ext.define("Teselagen.manager.PieManager", {
                                                 label.annotation.getEnd());
 
                 labels.push(label);
-            }, this);
+            }
         }
 
         labels.sort(this.labelSort);
@@ -443,7 +468,10 @@ Ext.define("Teselagen.manager.PieManager", {
         var leftTopLabels = [];
         var leftBottomLabels = [];
 
-        Ext.each(labels, function(label) {
+        var label;
+        for(var i = 0; i < labels.length; i++) {
+            label = labels[i];
+
             var labelCenter = label.center;
             if(labelCenter < totalLength / 4) {
                 rightTopLabels.push(label);
@@ -456,7 +484,7 @@ Ext.define("Teselagen.manager.PieManager", {
             } else {
                 leftTopLabels.push(label);
             }
-        });
+        }
 
         var labelRadius = this.railRadius + this.self.LABEL_DISTANCE_FROM_RAIL;
 
@@ -473,28 +501,26 @@ Ext.define("Teselagen.manager.PieManager", {
         for(var i = numberOfRightTopLabels - 1; i >= 0; i--) {
             label = rightTopLabels[i];
 
-            if(!label.includeInView) {
-                continue; 
-            }
-
-            var labelCenter = label.center;
-            var angle = labelCenter * 2 * Math.PI / 
-                         this.sequenceManager.getSequence().toString().length;
-            
-            var xPosition = this.center.x + Math.sin(angle) * labelRadius;
-            var yPosition = this.center.y - Math.cos(angle) * labelRadius;
-            
-            if(yPosition < lastLabelYPosition) {
-                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-            } else {
-                yPosition = lastLabelYPosition;
+            if(label.includeInView) {
+                var labelCenter = label.center;
+                var angle = labelCenter * 2 * Math.PI / 
+                             this.sequenceManager.getSequence().toString().length;
                 
-                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-            }
+                var xPosition = this.center.x + Math.sin(angle) * labelRadius;
+                var yPosition = this.center.y - Math.cos(angle) * labelRadius;
+                
+                if(yPosition < lastLabelYPosition) {
+                    lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+                } else {
+                    yPosition = lastLabelYPosition;
+                    
+                    lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+                }
 
-            label.setAttributes({translate: {x: xPosition - label.x,
-                                              y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition));
+                label.setAttributes({translate: {x: xPosition - label.x,
+                                                  y: yPosition - label.y}});
+                labels.push(this.drawConnection(label, xPosition, yPosition));
+            }
         }
 
         // Scale Right Bottom Labels
@@ -504,28 +530,26 @@ Ext.define("Teselagen.manager.PieManager", {
         for(var j = 0; j < numberOfRightBottomLabels; j++) {
             label = rightBottomLabels[j];
 
-            if(!label.includeInView) {
-                continue; 
-            }
-            
-            var labelCenter = label.center;
-            var angle = labelCenter * 2 * Math.PI / 
-                this.sequenceManager.getSequence().toString().length - Math.PI / 2;
-            
-            var xPosition = this.center.x + Math.cos(angle) * labelRadius;
-            var yPosition = this.center.y + Math.sin(angle) * labelRadius;
-            
-            if(yPosition > lastLabelYPosition) {
-                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-            } else {
-                yPosition = lastLabelYPosition;
+            if(label.includeInView) {
+                var labelCenter = label.center;
+                var angle = labelCenter * 2 * Math.PI / 
+                    this.sequenceManager.getSequence().toString().length - Math.PI / 2;
                 
-                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-            }
+                var xPosition = this.center.x + Math.cos(angle) * labelRadius;
+                var yPosition = this.center.y + Math.sin(angle) * labelRadius;
+                
+                if(yPosition > lastLabelYPosition) {
+                    lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+                } else {
+                    yPosition = lastLabelYPosition;
+                    
+                    lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+                }
 
-            label.setAttributes({translate: {x: xPosition - label.x,
-                                              y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition));
+                label.setAttributes({translate: {x: xPosition - label.x,
+                                                  y: yPosition - label.y}});
+                labels.push(this.drawConnection(label, xPosition, yPosition));
+            }
         }
         
         // Scale Left Top Labels
@@ -535,28 +559,26 @@ Ext.define("Teselagen.manager.PieManager", {
         for(var k = 0; k < numberOfLeftTopLabels; k++) {
             label = leftTopLabels[k];
 
-            if(!label.includeInView) {
-                continue; 
-            }
-
-            var labelCenter = label.center;
-            var angle = 2 * Math.PI - labelCenter * 2 * Math.PI / 
-                         this.sequenceManager.getSequence().toString().length;
-            
-            var xPosition = this.center.x - Math.sin(angle) * labelRadius;
-            var yPosition = this.center.y - Math.cos(angle) * labelRadius;
-            
-            if(yPosition < lastLabelYPosition) {
-                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-            } else {
-                yPosition = lastLabelYPosition;
+            if(label.includeInView) {
+                var labelCenter = label.center;
+                var angle = 2 * Math.PI - labelCenter * 2 * Math.PI / 
+                             this.sequenceManager.getSequence().toString().length;
                 
-                lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
-            }
+                var xPosition = this.center.x - Math.sin(angle) * labelRadius;
+                var yPosition = this.center.y - Math.cos(angle) * labelRadius;
+                
+                if(yPosition < lastLabelYPosition) {
+                    lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+                } else {
+                    yPosition = lastLabelYPosition;
+                    
+                    lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
+                }
 
-            label.setAttributes({translate: {x: xPosition - label.x,
-                                              y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition)); 
+                label.setAttributes({translate: {x: xPosition - label.x,
+                                                  y: yPosition - label.y}});
+                labels.push(this.drawConnection(label, xPosition, yPosition)); 
+            }
         }
         
         // Scale Left Bottom Labels
@@ -566,28 +588,26 @@ Ext.define("Teselagen.manager.PieManager", {
         for(var l = numberOfLeftBottomLabels - 1; l >= 0; l--) {
             label = leftBottomLabels[l];
 
-            if(!label.includeInView) {
-                continue; 
-            }
-
-            var labelCenter = label.center;
-            var angle = labelCenter * 2 * Math.PI / 
-                        this.sequenceManager.getSequence().toString().length - Math.PI;
-            
-            var xPosition = this.center.x - Math.sin(angle) * labelRadius;
-            var yPosition = this.center.y + Math.cos(angle) * labelRadius;
-            
-            if(yPosition > lastLabelYPosition) {
-                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
-            } else {
-                yPosition = lastLabelYPosition;
+            if(label.includeInView) {
+                var labelCenter = label.center;
+                var angle = labelCenter * 2 * Math.PI / 
+                            this.sequenceManager.getSequence().toString().length - Math.PI;
                 
-                lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+                var xPosition = this.center.x - Math.sin(angle) * labelRadius;
+                var yPosition = this.center.y + Math.cos(angle) * labelRadius;
+                
+                if(yPosition > lastLabelYPosition) {
+                    lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+                } else {
+                    yPosition = lastLabelYPosition;
+                    
+                    lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
+                }
+                  
+                label.setAttributes({translate: {x: xPosition - label.x,
+                                                  y: yPosition - label.y}});
+                labels.push(this.drawConnection(label, xPosition, yPosition));
             }
-              
-            label.setAttributes({translate: {x: xPosition - label.x,
-                                              y: yPosition - label.y}});
-            labels.push(this.drawConnection(label, xPosition, yPosition));
         }
 
         if(this.labelSprites) {
@@ -601,13 +621,13 @@ Ext.define("Teselagen.manager.PieManager", {
         this.labelSprites.addAll(labels);
         this.showSprites(this.labelSprites);
 
-        Ext.each(leftTopLabels, function(label) {
-            label.setStyle("text-anchor", "end");
-        });
+        for(var i = 0; i < leftTopLabels.length; i++) {
+            leftTopLabels[i].setStyle("text-anchor", "end");
+        }
 
-        Ext.each(leftBottomLabels, function(label) {
-            label.setStyle("text-anchor", "end");
-        });
+        for(var i = 0; i < leftBottomLabels.length; i++) {
+            leftBottomLabels[i].setStyle("text-anchor", "end");
+        }
     },
 
     /**

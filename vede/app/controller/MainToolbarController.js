@@ -8,6 +8,7 @@ Ext.define('Vede.controller.MainToolbarController', {
     requires: ['Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager'],
 
+    MenuItemEvent: null,
     VisibilityEvent: null,
 
     onImportBtnChange: function(pBtn) {
@@ -217,12 +218,13 @@ Ext.define('Vede.controller.MainToolbarController', {
                 docElm.mozRequestFullScreen();
             }
             else if (docElm.webkitRequestFullScreen) {
-                docElm.webkitRequestFullScreen();
+                docElm.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
             }
         }
     },
 
     init: function() {
+        this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
 
         this.control({

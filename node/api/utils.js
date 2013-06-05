@@ -2,6 +2,9 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
+    var Part = app.db.model("part");
+    var J5Runs = app.db.model("j5run");
+
     /**
      * Send feedback
      * @memberof module:./routes/api
@@ -44,7 +47,7 @@ module.exports = function(app) {
      * @method POST /partLibrary
      */
     app.get('/partLibrary', restrict, function(req, res) {
-        var Part = app.db.model("part");
+        
         Part.find({
             name: {
                 $ne: ""
@@ -104,6 +107,25 @@ module.exports = function(app) {
         });
 
 
+    });
+
+
+    /**
+     * Monitor server Tasks
+     * @memberof module:./routes/api
+     * @method POST /sendFeedback
+     */
+    app.get('/monitorTasks', restrict, function(req, res) {
+        J5Runs
+            .find({
+                user_id : req.user._id
+            })
+            .select('status devicedesign_id project_id')
+            .exec(function(err,j5runs){
+                return res.json({
+                    j5runs: j5runs
+                });
+            });
     });
 
 };
