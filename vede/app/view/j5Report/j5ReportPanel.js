@@ -103,8 +103,8 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             height: 20,
                             name: 'j5RunStatus',
                             cls: 'j5RunStatusField',
-                            fieldLabel: '<b>Run Status</b>',
-                            labelWidth: 100
+                            fieldLabel: '<div class="status-note"></div><b>Run Status</b>',
+                            labelWidth: 115
                         },
                         {
                             xtype: 'displayfield',
