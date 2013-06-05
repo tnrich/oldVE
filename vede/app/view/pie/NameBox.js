@@ -3,9 +3,8 @@
  * @class Vede.view.pie.NameBox
  */
 Ext.define("Vede.view.pie.NameBox", {
-    extend: "Ext.draw.Sprite",
-
     config: {
+        pie: null,
         center: {},
         name: "",
         length: 0
@@ -13,6 +12,8 @@ Ext.define("Vede.view.pie.NameBox", {
 
     constructor: function(inData) {
         this.initConfig(inData);
+
+        var text;
 
         if(inData.name) {
             this.callParent([{
@@ -24,6 +25,7 @@ Ext.define("Vede.view.pie.NameBox", {
                 y: this.center.y,
                 "text-anchor": "middle",
             }]);
+            text = inData.name + '\n(' + inData.length + ' bp)';
         } else {
             this.callParent([{
                 type: "text",
@@ -34,6 +36,9 @@ Ext.define("Vede.view.pie.NameBox", {
                 y: this.center.y,
                 "text-anchor": "middle",
             }]);
+            text = '(' + inData.length + ' bp)';
         }
+
+        return
     }
 });

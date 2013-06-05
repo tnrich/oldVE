@@ -74,7 +74,16 @@ Ext.define("Teselagen.manager.PieManager", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        this.pie = Ext.create("Vede.view.pie.Pie", {
+        this.pie = d3.select("#pieContainer")
+                     .append("svg")
+                     .attr("overflow", "auto");
+
+        this.pie.append("circle")
+                .attr("radius", this.railRadius + this.self.PAD)
+                .attr("x", this.center.x)
+                .attr("y", this.center.y);
+
+        /*this.pie = Ext.create("Vede.view.pie.Pie", {
             items: [
                 Ext.create("Vede.view.pie.Frame"),
                 Ext.create("Ext.draw.Sprite", {
@@ -85,7 +94,7 @@ Ext.define("Teselagen.manager.PieManager", {
                 })
             ],
             autoScroll: true
-        });
+        });*/
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,
@@ -775,8 +784,6 @@ Ext.define("Teselagen.manager.PieManager", {
             center: this.center,
             radius: this.railRadius + 10
         });
-
-        this.pie.surface.add(this.caret);
 
         var name = "unknown";
         var length = 0

@@ -62,7 +62,6 @@ Ext.define('Vede.controller.PieController', {
         });
 
         pie = this.pieManager.getPie();
-        this.pieContainer.add(pie);
 
         // When window is resized, scale the graphics in the pie.
         var timeOut = null;
