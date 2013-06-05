@@ -20,6 +20,19 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         if(this.debugFlag) console.log("Tasks Monitor created!");
     },
 
+    bootMonitoring: function(){
+        var self = this;
+        this.monitorServerTasks(function(data){
+            var monitor = false;
+            for(var j5run in data)
+            {
+                if (data[j5run].status === "In progress") monitor = true;
+            }
+            if(monitor) self.start();
+            else self.stop();
+        });
+    },    
+
     startMonitoring: function() {
         var self = this;
         var task = new Ext.util.DelayedTask(function(){
@@ -28,7 +41,12 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         });
         
         task.delay(this.delay);
+    },
 
+    start: function(){
+        this.runFlag = true;
+        console.log("Tasks Monitor has been enabled.");
+        this.startMonitoring();
     },
 
     stop: function(){
@@ -36,7 +54,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         console.log("Tasks Monitor has been disabled.");
     },
 
-    monitorServerTasks: function(){
+    monitorServerTasks: function(cb){
         var self = this;
         Ext.Ajax.request({
             url: '/api/monitorTasks',
@@ -44,7 +62,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             },
             method: 'GET',
             success: function(response){
-                self.observeChanges(JSON.parse(response.responseText).j5runs);
+                var parsedResponse = JSON.parse(response.responseText);
+                self.observeChanges(parsedResponse.j5runs);
+                if(typeof (cb) === "function") { cb(parsedResponse); }
             }
         });
     },

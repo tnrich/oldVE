@@ -5,7 +5,7 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox"],
+    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox","Teselagen.manager.TasksMonitor"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -540,12 +540,13 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
+            Teselagen.manager.TasksMonitor.start();
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     //responseMessage.setValue("Completed");
                     //loadingMessage.hide();
                     //responseMessage.hide();
-                    Ext.MessageBox.alert("Status",responseData.status);
+                    //Ext.MessageBox.alert("Status",responseData.status);
                     /*
                     if(warnings.length > 0)
                     {
