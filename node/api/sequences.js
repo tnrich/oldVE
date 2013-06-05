@@ -137,7 +137,6 @@ module.exports = function(app) {
      * @method GET '/sequences'
      */
     app.get('/sequences/:sequence_id', restrict, function(req, res) {
-
             var Sequence = app.db.model("sequence");
             Sequence.findById(req.params.sequence_id, function(err, sequence) {
                 if (err) console.log("There was a problem with GET sequence");
@@ -145,6 +144,15 @@ module.exports = function(app) {
                     "sequences": sequence
                 });
             });
+        }
+    );
+
+    /**
+     * GET EMPTY SEQUENCE
+     * @method GET '/sequences'
+     */
+    app.get('/sequences', restrict, function(req, res) {
+            return res.json({"sequences":[]});
         }
     );
 

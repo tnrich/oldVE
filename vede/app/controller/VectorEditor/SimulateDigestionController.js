@@ -116,9 +116,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
              groupSelector.store.add({"name": name});
          });
 
-         // Set the value in the group combobox to the first element by default.
-         groupSelector.setValue(groupSelector.store.getAt("0").get("name"));
-
 //         var startGroup = this.GroupManager.groupByName(groupSelector.store.getAt("0").get("name"));
 //         var groupArray = [];
 //         Ext.each(startGroup.getEnzymes(), function(enzyme) {

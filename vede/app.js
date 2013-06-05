@@ -67,6 +67,7 @@ Ext.Loader.syncRequire([
         ,'Teselagen.renderer.rail.WireframeSelectionLayer'
         ,'Teselagen.renderer.rail.SelectionLayer'
         ,'Teselagen.manager.AAManager'
+        ,'Teselagen.manager.TasksMonitor'
 ]);
 
 Ext.application({

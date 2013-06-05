@@ -22,8 +22,9 @@ module.exports = function(app) {
     });
 
 
-    var savePart = function(newPart,req,res){
-
+    var savePart = function(req,res,existingPart){
+        var newPart = existingPart;
+        if(!existingPart) newPart = new Part();
         for (var prop in req.body) {
             if(prop!=="project_id") newPart[prop] = req.body[prop];
         }
@@ -31,7 +32,7 @@ module.exports = function(app) {
         if(req.body.project_id!=="") newPart.project_id = req.body.project_id;
 
         Project.findById(req.body.project_id,function(err,project){
-            if(err) return res.json(500,{"error":err});
+            if(err) return res.json(500,{"error":err,"info":"invalid project_id"});
             if(!project) return res.json(500,{"error":"project not found"});
             
             newPart.FQDN = req.user.FQDN+'.'+project.name+'.'+req.body.name;
@@ -58,8 +59,8 @@ module.exports = function(app) {
 
 
     app.post('/parts', restrict,  function(req, res) {
-        var newPart = new Part();
-        savePart(newPart,req,res);
+        if( req.body.name === "" || req.body.phantom ) return res.json({parts:app.constants.defaultEmptyPart});
+        savePart(req,res);
     });
 
     /**
@@ -68,11 +69,17 @@ module.exports = function(app) {
      * @method PUT 'parts'
      */
     app.put('/parts', restrict,  function(req, res) {
-        Part.findById(req.body.id, function(err, newPart) {
-            if(err) return res.json(500,{"error":err});
-            if(!newPart) return res.json(500,{"error":"Part not found!"});
-            savePart(newPart,req,res);
-        });
+
+        if(req.body.name===""||req.body.phantom) { return res.json({parts:app.constants.defaultEmptyPart}); }
+        else if(!req.body.id) { savePart(req,res); }
+        else
+        {
+            Part.findById(req.body.id, function(err, newPart) {
+                if(err) return res.json(500,{"error":err});
+                if(!newPart) return res.json(500,{"error":"Part not found!"});
+                savePart(req,res,newPart);
+            });
+        }
     });
 
     /**

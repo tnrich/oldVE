@@ -5,7 +5,7 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox"],
+    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox","Teselagen.manager.TasksMonitor"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -13,6 +13,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     j5Window: null,
     j5ParamsWindow: null,
     automationParamsWindow: null,
+    inspector: null,
 
     j5Parameters: null,
     j5ParameterFields: [],
@@ -28,16 +29,17 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
 
-        if(!currentTab.j5Window) currentTab.j5Window = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
-        else currentTab.j5Window.show();
-        this.j5Window = currentTab.j5Window;
+        var inspector = currentTab.down('InspectorPanel');
+
+        // if(!currentTab) currentTab = Ext.create("Vede.view.de.j5Controls", {renderTo: currentTabEl}).show();
+        // else currentTab.show();
+        // this = currentTab;
 
         var self = this;
 
         Vede.application.fireEvent("checkj5Ready",function(combinatorial,j5ready){
             if(!j5ready)
             {
-                if (currentTab.j5Window) {currentTab.j5Window.close();}
 
                 var messagebox = Ext.MessageBox.show({
                     title: "Alert",
@@ -49,7 +51,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 Ext.Function.defer(function () {
                     messagebox.zIndexManager.bringToFront(messagebox);
                 }, 100);
-            }
+            } else {
+
+            inspector.down("panel[cls='j5InfoTab']").setDisabled(false);
+            inspector.setActiveTab(2);
 
             var store;
             if(combinatorial)
@@ -66,17 +71,18 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                     data : [['Mock Assembly'], ['SLIC/Gibson/CPEC'], ['Golden Gate']]
                 });            }
 
-            var combobox = self.j5Window.down('component[cls="assemblyMethodSelector"]');
+            var combobox = inspector.down('component[cls="assemblyMethodSelector"]');
             combobox.bindStore(store);
             combobox.setValue(store.first());
+            }
         });
 
         // Set the currentTab's j5Window property to null when the window is closed.
         // This tells the onTabChange function whether the window should be open
         // or closed when the tab is switched.
-        this.j5Window.on("close", function() {
-            currentTab.j5Window = null;
-        }, this);
+        // this.on("close", function() {
+        //     currentTab = null;
+        // }, this);
     },
 
     /**
@@ -88,22 +94,27 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * and re-shows it when the tab is switched back.
      */
     onTabChange: function(mainAppPanel, newTab, oldTab) {
+        /*
         if(oldTab)
         {
-            if(oldTab.j5Window) {
-                oldTab.j5Window.hide();
+            if(oldTab) {
+                oldTab.hide();
             }
         }
 
         if(newTab) {
-            if(newTab.j5Window) {
-                newTab.j5Window.show();
+            if(newTab) {
+                newTab.show();
             }
         }
+        */
     },
 
     onEditJ5ParamsBtnClick: function () {
-        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters").show();
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var currentTabEl = (currentTab.getEl());
+        
+        this.j5ParamsWindow = Ext.create("Vede.view.de.j5Parameters", {renderTo: currentTabEl}).show();
 
         this.populateJ5ParametersDialog();
     },
@@ -119,16 +130,16 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     resetServerj5Params: function () {
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
-        loadingMessage.update(60, "Executing request");
+        // loadingMessage.update(60, "Executing request");
 
         var self = this;
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("GetLastUpdatedUserFiles", ''),
             success: function (response) {
-                loadingMessage.update(100, "Completed");
-                loadingMessage.close();
+                // loadingMessage.update(100, "Completed");
+                // loadingMessage.close();
                 response = JSON.parse(response.responseText);
                 self.j5Parameters.loadValues(response.j5parameters);
                 self.populateJ5ParametersDialog();
@@ -137,7 +148,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
             },
             failure: function(responseData, opts) {
-                loadingMessage.close();
+                // loadingMessage.close();
                 if(responseData)
                 {
                     if(responseData.responseText)
@@ -241,24 +252,30 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         // We only want to reset the file field if we are checking the radio button.
         if(e.getValue()) {
             currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-            currentTab.j5Window.down("component[cls='plasmidsListFileSelector']").reset();
+            var inspector = currentTab.down('InspectorPanel');
+
+            inspector.down("component[cls='plasmidsListFileSelector']").reset();
         }
     },
 
     onUseEmptyPlasmidsRadioBtnChange: function (e) {
         if(e.getValue()) {
             currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-            currentTab.j5Window.down("component[cls='plasmidsListFileSelector']").reset();
+            var inspector = currentTab.down('InspectorPanel');
+
+            inspector.down("component[cls='plasmidsListFileSelector']").reset();
         }
     },
 
     onPlasmidsListFileSelectorChange: function (me, value) {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+
         var plasmidsFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        currentTab.j5Window.down("radio[cls='useServerPlasmidsRadioBtn']").setValue(false);
-        currentTab.j5Window.down("radio[cls='useEmptyPlasmidsRadioBtn']").setValue(false);
+        inspector.down("radio[cls='useServerPlasmidsRadioBtn']").setValue(false);
+        inspector.down("radio[cls='useEmptyPlasmidsRadioBtn']").setValue(false);
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
@@ -287,24 +304,30 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onUseServerOligosRadioBtnChange: function (e) {
         if(e.getValue()) {
             currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-            currentTab.j5Window.down("component[cls='oligosListFileSelector']").reset();
+            var inspector = currentTab.down('InspectorPanel');
+
+            inspector.down("component[cls='oligosListFileSelector']").reset();
         }
     },
 
     onUseEmptyOligosRadioBtnChange: function (e) {
         if(e.getValue()) {
             currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-            currentTab.j5Window.down("component[cls='oligosListFileSelector']").reset();
+            var inspector = currentTab.down('InspectorPanel');
+
+            inspector.down("component[cls='oligosListFileSelector']").reset();
         }
     },
 
     onOligosListFileSelectorChange: function (me) {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+
         var oligosFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        currentTab.j5Window.down("radio[cls='useServerOligosRadioBtn']").setValue(false);
-        currentTab.j5Window.down("radio[cls='useEmptyOligosRadioBtn']").setValue(false);
+        inspector.down("radio[cls='useServerOligosRadioBtn']").setValue(false);
+        inspector.down("radio[cls='useEmptyOligosRadioBtn']").setValue(false);
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
@@ -331,24 +354,30 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onUseServerSynthesesRadioBtnChange: function (e) {
         if(e.getValue()) {
             currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-            currentTab.j5Window.down("component[cls='directSynthesesFileSelector']").reset();
+            var inspector = currentTab.down('InspectorPanel');
+
+            inspector.down("component[cls='directSynthesesFileSelector']").reset();
         }
     },
 
     onUseEmptySynthesesRadioBtnChange: function (e) {
         if(e.getValue()) {
             currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-            currentTab.j5Window.down("component[cls='directSynthesesFileSelector']").reset();
+            var inspector = currentTab.down('InspectorPanel');
+
+            inspector.down("component[cls='directSynthesesFileSelector']").reset();
         }
     },
 
     onDirectSynthesesFileSelectorChange: function (me) {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+
         var synthesesFile = me.button.fileInputEl.dom;
         var fr = new FileReader();
 
-        currentTab.j5Window.down("radio[cls='useServerSynthesesRadioBtn']").setValue(false);
-        currentTab.j5Window.down("radio[cls='useEmptySynthesesRadioBtn']").setValue(false);
+        inspector.down("radio[cls='useServerSynthesesRadioBtn']").setValue(false);
+        inspector.down("radio[cls='useEmptySynthesesRadioBtn']").setValue(false);
 
         me.inputEl.dom.value = this.getFileNameFromField(me);
 
@@ -382,10 +411,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
     populateAutomationParametersDialog: function () {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+
         this.automationParameters.fields.eachKey(function (key) {
             console.log(key);
             if(key !== "id" && key !== "j5run_id") {
-                currentTab.j5Window.down("component[cls='" + key + "']").setValue(
+                inspector.down("component[cls='" + key + "']").setValue(
                 this.automationParameters.get(key));
             }
         }, this);
@@ -393,9 +424,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     saveAutomationParams: function () {
         currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+
         this.automationParameters.fields.eachKey(function (key) {
             if(key !== "id" && key !== "j5run_id") {
-                this.automationParameters.set(key, currentTab.j5Window.down("component[cls='" + key + "']").getValue());
+                this.automationParameters.set(key, inspector.down("component[cls='" + key + "']").getValue());
             }
         }, this);
     },
@@ -431,8 +464,10 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onRunJ5BtnClick: function (btn) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        var loadingMessage = currentTab.j5Window.down('container[cls="j5progressContainer"]').show();
-        var responseMessage = currentTab.j5Window.down('displayfield[cls="j5ResponseTextField"]').show();
+        var inspector = currentTab.down('InspectorPanel');
+
+        // var loadingMessage = currentTab.down('container[cls="j5progressContainer"]').show();
+        // var responseMessage = currentTab.down('displayfield[cls="j5ResponseTextField"]').show();
 
         var self = this;
         var masterPlasmidsList;
@@ -444,40 +479,40 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         var masterDirectSynthesesList;
         var masterDirectSynthesesListFileName;
 
-        if(currentTab.j5Window.down("radio[cls='useServerPlasmidsRadioBtn']").getValue()) {
+        if(inspector.down("radio[cls='useServerPlasmidsRadioBtn']").getValue()) {
             masterPlasmidsList = "";
             masterPlasmidsListFileName = "";
-        } else if(currentTab.j5Window.down("radio[cls='useEmptyPlasmidsRadioBtn']").getValue()) {
+        } else if(inspector.down("radio[cls='useEmptyPlasmidsRadioBtn']").getValue()) {
             masterPlasmidsList = this.J5ControlsUtils.generateEmptyPlasmidsList();
             masterPlasmidsListFileName = "j5_plasmids.csv";
         } else {
             masterPlasmidsList = this.plasmidsListText;
             masterPlasmidsListFileName = this.getFileNameFromField(
-            currentTab.j5Window.down("component[cls='plasmidsListFileSelector']"));
+            inspector.down("component[cls='plasmidsListFileSelector']"));
         }
 
-        if(currentTab.j5Window.down("radio[cls='useServerOligosRadioBtn']").getValue()) {
+        if(currentTab.down("radio[cls='useServerOligosRadioBtn']").getValue()) {
             masterOligosList = "";
             masterOligosListFileName = "";
-        } else if(currentTab.j5Window.down("radio[cls='useEmptyOligosRadioBtn']").getValue()) {
+        } else if(inspector.down("radio[cls='useEmptyOligosRadioBtn']").getValue()) {
             masterOligosList = this.J5ControlsUtils.generateEmptyOligosList();
             masterOligosListFileName = "j5_oligos.csv";
         } else {
             masterOligosList = this.plasmidsListText;
             masterOligosListFileName = this.getFileNameFromField(
-            currentTab.j5Window.down("component[cls='oligosListFileSelector']"));
+            inspector.down("component[cls='oligosListFileSelector']"));
         }
 
-        if(currentTab.j5Window.down("radio[cls='useServerSynthesesRadioBtn']").getValue()) {
+        if(inspector.down("radio[cls='useServerSynthesesRadioBtn']").getValue()) {
             masterDirectSynthesesList = "";
             masterDirectSynthesesListFileName = "";
-        } else if(currentTab.j5Window.down("radio[cls='useEmptySynthesesRadioBtn']").getValue()) {
+        } else if(inspector.down("radio[cls='useEmptySynthesesRadioBtn']").getValue()) {
             masterDirectSynthesesList = this.J5ControlsUtils.generateEmptyDirectSynthesesList();
             masterDirectSynthesesListFileName = "j5_directsyntheses.csv";
         } else {
             masterDirectSynthesesList = this.plasmidsListText;
             masterDirectSynthesesListFileName = this.getFileNameFromField(
-            currentTab.j5Window.down("component[cls='directSynthesesFileSelector']"));
+            inspector.down("component[cls='directSynthesesFileSelector']"));
         }
 
         var masterFiles = {};
@@ -488,7 +523,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         masterFiles["masterDirectSynthesesList"] = Base64.encode(masterDirectSynthesesList);
         masterFiles["masterDirectSynthesesListFileName"] = masterDirectSynthesesListFileName;
 
-        var assemblyMethod = currentTab.j5Window.down("component[cls='assemblyMethodSelector']").getValue()
+        var assemblyMethod = inspector.down("component[cls='assemblyMethodSelector']").getValue()
 
         if(assemblyMethod == "Mock Assembly") assemblyMethod = "Mock";
         if(assemblyMethod == "SLIC/Gibson/CPEC") assemblyMethod = "SLIC/Gibson/CPEC";
@@ -498,37 +533,23 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
         if(assemblyMethod == "Combinatorial SLIC/Gibson/CPEC") assemblyMethod = "CombinatorialSLICGibsonCPEC";
         if(assemblyMethod == "Combinatorial Golden Gate") assemblyMethod = "CombinatorialGoldenGate";
 
-        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
-        currentTab.j5Window.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
+        inspector.j5comm = Teselagen.manager.J5CommunicationManager;
+        inspector.j5comm.setParameters(this.j5Parameters, masterFiles, assemblyMethod);
 
-        responseMessage.setValue("Saving design");
+        //responseMessage.setValue("Saving design");
 
         Vede.application.fireEvent("saveDesignEvent", function () {
-            responseMessage.setValue("Executing j5 Run...Please wait...");
-            currentTab.j5Window.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
+            //responseMessage.setValue("Executing j5 Run...Please wait...");
+            Teselagen.manager.TasksMonitor.start();
+            inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    responseMessage.setValue("Completed");
-                    loadingMessage.hide();
-                    responseMessage.hide();
-                    if(warnings.length > 0)
-                    {
-                        msgWarnings = "";
-                        for(var index in warnings)
-                        {
-                            msgWarnings += "<div class='warning-wrap'><div class='warning-note'></div>"+ "<div class='warning-text'>" + warnings[index].message +"</div></div>";
-                        }
-                        alertbox = Ext.MessageBox.alert('Warnings', msgWarnings);
-                        Ext.Function.defer(function () {
-                            alertbox.zIndexManager.bringToFront(alertbox);
-                        }, 100);
-                    }
+                    $.jGrowl("j5 Run Submitted");
                 } else {
-
-                    loadingMessage.hide();
-                    responseMessage.hide();
+                    //loadingMessage.hide();
+                    //responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({
                         title: "Execution Error",
-                        msg: responseData.responseText,
+                        msg: responseData.error,
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR
                     });
@@ -544,26 +565,29 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     onDistributePCRBtn: function () {
 
         console.log("Distribute PCR Reactions");
+
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
+        var inspector = currentTab.down('InspectorPanel');
+
+        inspector.j5comm = Teselagen.manager.J5CommunicationManager;
 
         data = {};
         data.sourcePlateFileText = this.sourcePlateFileText;
         data.zippedPlateFilesSelector = this.zippedPlateFilesSelector;
         data.assemblyFileText = this.assemblyFileText;
         data.params = this.automationParameters.data;
-        data.reuse = currentTab.j5Window.down("component[name='automationParamsFileSource']").getValue();
+        data.reuse = inspector.down("component[name='automationParamsFileSource']").getValue();
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
-        loadingMessage.update(60, "Executing request");
-        currentTab.j5Window.j5comm.distributePCRRequest(data, function (success, responseData) {
+        // loadingMessage.update(60, "Executing request");
+        inspector.j5comm.distributePCRRequest(data, function (success, responseData) {
             if(success) {
-                loadingMessage.update(100, "Completed");
-                loadingMessage.close();
+                // loadingMessage.update(100, "Completed");
+                // loadingMessage.close();
             } else {
                 console.log(responseData.responseText);
-                loadingMessage.close();
+                // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,
@@ -631,17 +655,21 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
     onDownloadj5Btn: function (button, e, options) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.j5Window.j5comm.downloadResults(button);
+        var inspector = currentTab.down('InspectorPanel');
+
+        inspector.j5comm.downloadResults(button);
     },
 
     onDownloadDownstreamAutomationBtn: function (button, e, options) {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.j5Window.j5comm.downloadDownstreamAutomationResults(button);
+        var inspector = currentTab.down('InspectorPanel');
+
+        inspector.j5comm.downloadDownstreamAutomationResults(button);
     },
 
     onPlasmidsItemClick: function (grid, record) {
         var DETab = Ext.getCmp("mainAppPanel").getActiveTab();
-        var j5Window = DETab.j5Window;
+        var j5Window = DETab;
         var mask = new Ext.LoadMask(j5Window);
 
         mask.setVisible(true, false);
@@ -683,29 +711,31 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         console.log("Condense Assembly Files");
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.j5Window.j5comm = Teselagen.manager.J5CommunicationManager;
+        var inspector = currentTab.down('InspectorPanel');
+
+        inspector.j5comm = Teselagen.manager.J5CommunicationManager;
 
         condenseParams = {};
         condenseParams["assemblyFiles"] = {};
         condenseParams["assemblyFiles"]["name"] = this.getFileNameFromField(
-        currentTab.j5Window.down("component[cls='condenseAssemblyFilesSelector']"));
+        inspector.down("component[cls='condenseAssemblyFilesSelector']"));
         condenseParams["assemblyFiles"]["content"] = this.condenseAssemblyFilesText;
 
         condenseParams["zippedFiles"] = {};
         condenseParams["zippedFiles"]["name"] = this.getFileNameFromField(
-        currentTab.j5Window.down("component[cls='zippedAssemblyFilesSelector']"));
+        inspector.down("component[cls='zippedAssemblyFilesSelector']"));
         condenseParams["zippedFiles"]["content"] = this.zippedPlateFilesSelector;
 
-        var loadingMessage = this.createLoadingMessage();
+        // var loadingMessage = this.createLoadingMessage();
 
-        loadingMessage.update(60, "Executing request");
-        currentTab.j5Window.j5comm.condenseAssemblyFiles(condenseParams, function (success, responseData) {
+        // loadingMessage.update(60, "Executing request");
+        inspector.j5comm.condenseAssemblyFiles(condenseParams, function (success, responseData) {
             if(success) {
-                loadingMessage.update(100, "Completed");
-                loadingMessage.close();
+                // loadingMessage.update(100, "Completed");
+                // loadingMessage.close();
             } else {
                 console.log(responseData.responseText);
-                loadingMessage.close();
+                // loadingMessage.close();
                 var messagebox = Ext.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,
@@ -723,7 +753,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     onDownloadCondenseAssemblyResultsBtnClick: function(button){
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
-        currentTab.j5Window.j5comm.downloadCondenseAssemblyResults(button);
+        currentTab.inspector.j5comm.downloadCondenseAssemblyResults(button);
  
     },
 

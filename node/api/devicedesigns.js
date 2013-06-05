@@ -3,6 +3,38 @@ module.exports = function(app) {
 
     var restrict = app.auth.restrict;
 
+     var DeviceDesign = app.db.model("devicedesign");
+     var Part = app.db.model("part");
+
+    function fillEmptyParts(design){
+
+        design.j5collection.bins.forEach(function(bin, binKey) {
+            bin.parts.forEach(function(part, partKey) {
+                var partId = design.j5collection.bins[binKey].parts[partKey];
+                if (partId) design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
+                else design.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(app.constants.defaultEmptyPart._id.toString());
+            });
+        });
+        return design;
+    };
+
+    function prepareDesignWithParts(design,cb){
+        DeviceDesign.findById(design._id).populate('j5collection.bins.parts').exec(function(err, design) {
+
+            design = design.toObject();
+            design.id = design._id;
+            delete design.rules;
+
+            design.j5collection.bins.forEach(function(bin, i) {
+                bin.parts.forEach(function(part, j) {
+                    //design.j5collection.bins[i].parts[j] = { name: "blank" };
+                });
+            });
+
+            return cb(design);
+        });
+    };
+
     /**
      * CREATE user
      * @memberof module:./routes/api
@@ -14,14 +46,11 @@ module.exports = function(app) {
         var DeviceDesign = app.db.model("devicedesign");
         var Part = app.db.model("part");
 
-        var newDesign = new DeviceDesign(req.body);
+        var reqDesign = req.body;
 
-        newDesign.j5collection.bins.forEach(function(bin, binKey) {
-            bin.parts.forEach(function(part, partKey) {
-                var partId = newDesign.j5collection.bins[binKey].parts[partKey];
-                if (partId) newDesign.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId.toString());
-            });
-        });
+        reqDesign = fillEmptyParts(reqDesign);
+
+        var newDesign = new DeviceDesign(reqDesign);
 
         newDesign.save(function(err) {
 
@@ -29,8 +58,10 @@ module.exports = function(app) {
                 project.designs.push(newDesign);
                 project.save(function() {
                     if (err) console.log(err);
-                    res.json({
-                        "designs": newDesign
+                    prepareDesignWithParts(newDesign,function(design){
+                        res.json({
+                            "designs": design
+                        });
                     });
                 });
             });
@@ -49,23 +80,14 @@ module.exports = function(app) {
         var id = req.body.id;
         var model = req.body;
 
+        model = fillEmptyParts(model);
+
         DeviceDesign.findById(req.params.devicedesign_id, function(err, devicedesign) {
 
             for (var prop in model) {
                 devicedesign[prop] = model[prop];
             }
 
-            devicedesign.j5collection.bins.forEach(function(bin, binKey) {
-                bin.parts.forEach(function(part, partKey) {
-                    var partId = devicedesign.j5collection.bins[binKey].parts[partKey];
-                    if (partId) {
-                        partId = partId.toString();
-                        delete devicedesign.j5collection.bins[binKey].parts[partKey];
-                        console.log(partId);
-                        devicedesign.j5collection.bins[binKey].parts[partKey] = app.mongoose.Types.ObjectId(partId);
-                    }
-                });
-            });
             devicedesign.save(function(err) {
                 if (err) console.log(err);
                 res.json({
@@ -100,7 +122,6 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects/:project_id/devicedesigns', restrict, function(req, res) {
         var Project = app.db.model("project");
-        console.log("DE's by project_id");
         var project_id = req.params.project_id;
         Project.findById(project_id).populate({path:'designs', select:'name id project_id'}).exec(function(err, project) {
             res.json({
@@ -116,20 +137,20 @@ module.exports = function(app) {
      */
     app.get('/users/:username/projects/:project_id/devicedesigns/:devicedesign_id', restrict, function(req, res) {
         var DeviceDesign = app.db.model("devicedesign");
-        console.log("DE by id");
         DeviceDesign.findById(req.params.devicedesign_id).populate('j5collection.bins.parts').exec(function(err, design) {
             if(!design) return res.json(500,{"error":"design not found"});
-            // Eugene rules to be send on a different request
+            
             design = design.toObject();
             design.id = design._id;
-            delete design.rules;
+            delete design.rules; // Eugene rules to be send on a different request
 
             if (err) {
                 errorHandler(err, req, res);
             } else {
                 design.j5collection.bins.forEach(function(bin, i) {
-                    bin.parts.forEach(function(part, j) {
-                        part.fas = bin.fases[j];
+                    bin.parts.forEach(function(part, partKey) {
+                        part.fas = bin.fases[partKey];
+                        if(part.phantom) design.j5collection.bins[i].parts[partKey] = { name: "", phantom: true };
                     });
                 });
                 res.json({

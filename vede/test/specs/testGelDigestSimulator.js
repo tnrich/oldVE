@@ -32,7 +32,7 @@ Ext.onReady(function() {
 			runs( function(){
 				Application = Vede.app;
 		        if (!ctlr) {
-		            ctlr = Application.getController('SimulateDigestionController');
+		            ctlr = Application.getController('VectorEditor.SimulateDigestionController');
 		        }
 			});
 		});
@@ -73,7 +73,7 @@ Ext.onReady(function() {
 		describe("Can work with enzyme groups", function() {
 			beforeEach(function(){
 				runs( function(){
-			        simulateDigestionWindow = Ext.create("Vede.view.SimulateDigestionWindow");
+			        simulateDigestionWindow = Ext.create("Vede.view.ve.SimulateDigestionWindow");
 			        simulateDigestionWindow.show();
 			        simulateDigestionWindow.center();
 			        Application.fireEvent("SimulateDigestionWindowOpened", simulateDigestionWindow);

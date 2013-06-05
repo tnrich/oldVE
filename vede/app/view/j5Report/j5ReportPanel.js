@@ -85,6 +85,78 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                 }],
         items: [
                 {
+                    xtype: 'form',
+                    cls: 'j5RunInfo',
+                    margin: '10 10 10 10',
+                    border: 0,
+                    items: [
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5AssemblyType',
+                            cls: 'j5RunAssemblyType',
+                            fieldLabel: '<b>Assembly Type</b>',
+                            labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunStatus',
+                            cls: 'j5RunStatusField',
+                            fieldLabel: '<div class="status-note"></div><b>Run Status</b>',
+                            labelWidth: 115
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunStart',
+                            cls: 'j5RunStartField',
+                            fieldLabel: '<b>Date Submitted</b>',
+                            labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunEnd',
+                            cls: 'j5RunEndField',
+                            fieldLabel: '<b>Date Finished</b>',
+                            labelWidth: 100
+                        },
+                        {
+                            xtype: 'displayfield',
+                            height: 20,
+                            name: 'j5RunElapsed',
+                            cls: 'j5RunElapsedField',
+                            fieldLabel: '<b>Run Time</b>',
+                            labelWidth: 100
+                        }
+                    ]
+                },
+                {
+                    xtype: 'gridpanel',
+                    name: 'warnings',
+                    cls: 'warningsGrid',
+                    hidden: true,
+                    margin: '10 10 20 10',
+                    title: 'Warnings',
+                    minHeight: 100,
+                    layout: 'fit',
+                    hideHeaders: true,
+                    columns: [
+                        {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'message',
+                            autoHeight: true,
+                            forceFit: true,
+                            flex: 1,
+                            renderer: function(val) {
+                                val = val.substring(1, val.length - 1);
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
+                        }
+                    ]
+                },
+                {
                     xtype: 'gridpanel',
                     name: 'assemblies',
                     margin: '10 10 20 10',
