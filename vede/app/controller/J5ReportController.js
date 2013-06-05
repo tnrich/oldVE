@@ -69,6 +69,11 @@ Ext.define("Vede.controller.J5ReportController", {
         this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
         this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
 
+        if(status=="Completed") {
+            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").addClass("status-note-completed");
+        }
+
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
