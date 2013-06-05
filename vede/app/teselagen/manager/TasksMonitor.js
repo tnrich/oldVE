@@ -89,7 +89,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
                     // Fire change
                     // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
-                    $.jGrowl("j5 Run " + j5run.status);
+                    $.jGrowl("j5 Run " + j5run.status, { sticky: true, theme: 'j5-completed'});
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
                     changes = true;
