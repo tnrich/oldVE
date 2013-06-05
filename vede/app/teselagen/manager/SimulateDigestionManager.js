@@ -159,7 +159,6 @@ Ext.define("Teselagen.manager.SimulateDigestionManager", {
         var tempSurface = this.digestPanel.surface;
         var height = this.digestPanel.surface.height;
         var width = this.digestPanel.surface.width;
-        console.log("h", height, "w", width);
         var gel = Ext.create("Teselagen.models.digest.Gel", {name: "Gel", actualHeight: height, actualWidth: width});
         var ladderLane = Ext.create("Teselagen.models.digest.GelLane", {name: "TestLadder", ladder: this.selectedLadder});
         gel.insertLane(ladderLane);

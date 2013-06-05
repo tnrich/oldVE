@@ -147,13 +147,17 @@ Ext.define("Teselagen.models.digest.GelBand", {
          *
          */
         var halfWidth = this.actualWidth / 2;
-//        var type = "ladder";
+        var xSpacer = halfWidth + (halfWidth * this.hPad);
+        var xSpacerFactor = 0.25;
+        if (this.isDigest()) {
+            xSpacer = xSpacer * xSpacerFactor;
+        }
         var gelBand = Ext.create("Ext.draw.Sprite", {
             type: "rect",
             fill: this.BAND_COLOR,
             height: this.bandHeight,
             width: halfWidth * (1 - 2 * this.hPad),
-            x: this.xOffset + halfWidth + (halfWidth * this.hPad),
+            x: this.xOffset + xSpacer,
             y: this.bandYPosition
         });
         if (this.isDigest()){
