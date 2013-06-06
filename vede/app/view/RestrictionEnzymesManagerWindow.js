@@ -1,13 +1,12 @@
 /**
  * Restriction enzymes manager window
  * @ignore
- * @class Vede.view.RestrictionEnzymesManagerWindow_original
- * @author Jenhan Tao
+ * @class Vede.view.RestrictionEnzymesManagerWindow
+ * @author Nick Elsbree
  */
 Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
     extend: 'Ext.window.Window',
-    requires: ['Ext.ux.form.Multiselect',
-               'Ext.ux.form.ItemSelector'],
+    requires: ['Vede.view.form.ItemSelector'],
 
     height: 474,
     width: 551,
@@ -95,7 +94,7 @@ Ext.define('Vede.view.RestrictionEnzymesManagerWindow', {
                                             enableKeyEvents: true
                                         },
                                         {
-                                            xtype: 'itemselector',
+                                            xtype: 'itemselectorvede',
                                             id: 'enzymeSelector',
                                             imagePath: '../../../extjs/examples/ux/css/images/',
                                             store: enzymeListStore,

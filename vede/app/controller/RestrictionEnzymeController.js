@@ -1,8 +1,8 @@
 /**
  * Restriction enzyme controller
- * @class Vede.controller.RestrictionEnzymeController_original
+ * @class Vede.controller.RestrictionEnzymeController
  * @ignore
- * @author Jenhan Tao
+ * @author Nick Elsbree
  */
 Ext.define("Vede.controller.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
