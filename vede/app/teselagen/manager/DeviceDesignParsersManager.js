@@ -459,6 +459,32 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 parsedRules.add(newEugeneRule); 
             }
         });
+    
+        var checkForDuplicatedRule = function(parsedRule,cb){
+            var rulesCounter = existingRules.count();
+            var duplicated = false;
+            existingRules.each(function(existingRule){
+                if(parsedRules.data.name === existingRule.data.name)
+                {
+                    duplicated = true;
+                    rulesCounter--;
+                }
+                else
+                {
+                    rulesCounter--;
+                }
+                if(rulesCounter === 1) cb(duplicated);
+            });
+        };
+
+        parsedRules.each(function(parsedRule){
+            console.log("processing: ",parsedRule.data.name);
+            checkForDuplicatedRule(parsedRule,function(duplicated){
+                console.log("duplicated: ",duplicated);
+            });
+        });
+
+
     }
 
 });
