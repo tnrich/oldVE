@@ -34,7 +34,7 @@ Ext.define("Vede.controller.ProjectController", {
             leaf: true,
             hrefTarget: "newproj",
             icon: "resources/images/add.png",
-            id: 0
+            id: 0,
         });
 
         var projects = Teselagen.manager.ProjectManager.projects; // Get projects store
@@ -55,7 +55,7 @@ Ext.define("Vede.controller.ProjectController", {
                 leaf: true,
                 hrefTarget: "newde",
                 icon: "resources/images/add.png",
-                id: 0
+                id: 0,
             });
 
             // Append sequence to project node
@@ -79,7 +79,8 @@ Ext.define("Vede.controller.ProjectController", {
                             leaf: false,
                             id: design.data.id,
                             hrefTarget: "opende",
-                            icon: "resources/images/ux/design-tree-icon-leaf.png"
+                            icon: "resources/images/ux/design-tree-icon-leaf.png",
+                            qtip: 'Design ' + design.data.name
                         });
 
                         // Append j5Report to design
@@ -88,7 +89,8 @@ Ext.define("Vede.controller.ProjectController", {
                             leaf: true,
                             id: design.data.id,
                             hrefTarget: "j5reports",
-                            icon: "resources/images/ux/j5-tree-icon-parent.png"
+                            icon: "resources/images/ux/j5-tree-icon-parent.png",
+                            qtip: design.data.name + ' Report'
                         });
                     });
                 }
@@ -115,7 +117,8 @@ Ext.define("Vede.controller.ProjectController", {
                             leaf: true,
                             id: sequence.data.id,
                             hrefTarget: "opensequence",
-                            icon: "resources/images/ux/sequence-tree-icon-leaf.png"
+                            icon: "resources/images/ux/sequence-tree-icon-leaf.png",
+                            qtip: 'Sequence ' + sequence.data.name
                         });
                     });
                 }
