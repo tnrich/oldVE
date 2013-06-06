@@ -762,9 +762,14 @@ Ext.define("Teselagen.manager.PieManager", {
                      .attr("height", 500);
 
         this.pie.append("circle")
-                .attr("radius", this.railRadius + this.self.PAD)
-                .attr("x", this.center.x)
-                .attr("y", this.center.y);
+                .attr("r", this.railRadius + this.self.PAD)
+                .attr("cx", this.center.x)
+                .attr("cy", this.center.y)
+                .attr("fill", "white");
+
+        this.frame = Ext.create("Vede.view.pie.Frame", {
+            pie: this.pie
+        });
 
         this.caret = Ext.create("Vede.view.pie.Caret", {
             pie: this.pie,
@@ -804,13 +809,11 @@ Ext.define("Teselagen.manager.PieManager", {
                 this.sequenceManager.getSequence().seqString().length;
 
             this.caret = Ext.create("Vede.view.pie.Caret", {
+                pie: this.pie,
                 angle: angle,
                 center: this.center,
                 radius: this.railRadius + 10
             });
-
-            this.pie.surface.add(this.caret);
-            this.caret.show(true);
         }
     },
 });

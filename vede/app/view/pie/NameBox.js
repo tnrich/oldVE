@@ -18,21 +18,36 @@ Ext.define("Vede.view.pie.NameBox", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        var text;
+        var text1;
+        var text2;
+        var group = inData.pie.append("svg:g")
+                              .attr("class", "pieNameBox")
+                              .attr("text-anchor", "middle")
+                              .attr("font-size", this.self.FONT_SIZE)
+                              .attr("font-weight", this.self.FONT_WEIGHT);
 
-        if(inData.name) {
-            text = inData.name + '<br>(' + inData.length + ' bp)';
+        if(!inData.name) {
+            text1 = '(' + inData.length + ' bp)';
+            group.append("svg:text")
+                 .text(text1)
+                 .attr("x", this.center.x)
+                 .attr("y", this.center.y);
         } else {
-            text = '(' + inData.length + ' bp)';
+            text1 = inData.name;
+            text2 = '(' + inData.length + 'bp)';
+
+            group.append("svg:text")
+                 .text(text1)
+                 .attr("x", this.center.x)
+                 .attr("y", this.center.y);
+
+            group.append("svg:text")
+                 .attr("dy", "1em")
+                 .text(text2)
+                 .attr("x", this.center.x)
+                 .attr("y", this.center.y);
         }
 
-        return inData.pie.append("svg:text")
-                         .attr("class", "pieNameBox")
-                         .attr("x", this.center.x)
-                         .attr("y", this.center.y)
-                         .attr("text-anchor", "middle")
-                         .attr("font-size", this.self.FONT_SIZE)
-                         .attr("font-weight", this.self.FONT_WEIGHT)
-                         .text(text);
+        return group;
     }
 });
