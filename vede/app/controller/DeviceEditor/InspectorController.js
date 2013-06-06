@@ -581,8 +581,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             });
 
             var self = this;
-            this.selectedPart.save({
-                callback: function(){
+            //this.selectedPart.save({
+            //    callback: function(){
                     newEugeneRule.setOperand1(self.selectedPart);
 
                     newEugeneRuleDialog.show();
@@ -593,8 +593,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                     operand2Field.bindStore(partsStore);
                     operand2Field.setValue(partsStore[0]);
-                }
-            });
+            //    }
+            //});
 
         }
     },
