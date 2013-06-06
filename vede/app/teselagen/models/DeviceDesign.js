@@ -306,15 +306,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         });
 
-        var newStore = Ext.create("Ext.data.Store", {
-            model: 'Teselagen.models.EugeneRule',
-            data: this.rules().getRange(),
-            proxy: 'memory'
-        });
-
-        this.rules().clearFilter();
-
-        return newStore;
+        return this.rules();
     },
 
     /**
