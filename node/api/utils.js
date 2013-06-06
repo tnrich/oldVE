@@ -120,7 +120,7 @@ module.exports = function(app) {
             .find({
                 user_id : req.user._id
             })
-            .select('status devicedesign_id project_id')
+            .select('status devicedesign_id project_id devicedesign_name date')
             .exec(function(err,j5runs){
                 return res.json({
                     j5runs: j5runs
