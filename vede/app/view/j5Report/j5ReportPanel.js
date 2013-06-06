@@ -42,7 +42,9 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         title: 'j5Runs',
         items: [{
             xtype: 'menu',
+            cls: 'j5RunsMenu',
             floating: false,
+            autoScroll: true,
             width: 291,
             items: []
         }]
