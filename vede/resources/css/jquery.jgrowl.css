@@ -138,6 +138,7 @@ div.jGrowl div.jGrowl-closer {
 .j5-completed {
 	background: #49647F !important;
 	right: 350px;
+	cursor: pointer;
 }
 
 /** Hide jGrowl when printing **/
