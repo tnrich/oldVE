@@ -74,28 +74,6 @@ Ext.define("Teselagen.manager.PieManager", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        this.pie = d3.select("#pieContainer")
-                     .append("svg")
-                     .attr("overflow", "auto");
-
-        this.pie.append("circle")
-                .attr("radius", this.railRadius + this.self.PAD)
-                .attr("x", this.center.x)
-                .attr("y", this.center.y);
-
-        /*this.pie = Ext.create("Vede.view.pie.Pie", {
-            items: [
-                Ext.create("Vede.view.pie.Frame"),
-                Ext.create("Ext.draw.Sprite", {
-                    type: "circle",
-                    radius: this.railRadius + this.self.PAD,
-                    x: this.center.x,
-                    y: this.center.y
-                })
-            ],
-            autoScroll: true
-        });*/
-
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
             sequenceManager: this.sequenceManager,
             center: this.center,
@@ -267,7 +245,7 @@ Ext.define("Teselagen.manager.PieManager", {
         //this.drawCoordinates();
         Ext.resumeLayouts(true);
 
-        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
+        //Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },
 
     /**
@@ -347,9 +325,9 @@ Ext.define("Teselagen.manager.PieManager", {
             }
         }
 
-        console.log("magnification: " + magnification);
-        console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
-                    " x " + scope.pie.surface.el.getSize().height);
+        //console.log("magnification: " + magnification);
+        //console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
+        //           " x " + scope.pie.surface.el.getSize().height);
     },
 
     /**
@@ -720,23 +698,21 @@ Ext.define("Teselagen.manager.PieManager", {
 
         if(this.pie) {
             if(pSequenceManager.getSequence().toString().length > 0) {
-                this.caret.show(true);
                 this.adjustCaret(0);
             } else if(this.caret) {
-                this.caret.destroy();
+                this.caret.remove();
             }
 
-            this.nameBox.destroy();
+            this.nameBox.remove();
 
             this.nameBox = Ext.create("Vede.view.pie.NameBox", {
+                pie: this.pie,
                 center: this.center,
                 name: pSequenceManager.getName(),
                 length: pSequenceManager.getSequence().toString().length
             });
 
-            this.pie.surface.add(this.nameBox);
-            this.nameBox.show(true);
-            this.nameBox.setStyle("dominant-baseline", "central");
+            //this.nameBox.setStyle("dominant-baseline", "central");
         }
 
         return pSequenceManager;
@@ -779,7 +755,17 @@ Ext.define("Teselagen.manager.PieManager", {
      * Adds the caret to the pie.
      */
     initPie: function() {
+        this.pie = d3.select("#PieContainer")
+                     .append("svg")
+                     .attr("overflow", "auto");
+
+        this.pie.append("circle")
+                .attr("radius", this.railRadius + this.self.PAD)
+                .attr("x", this.center.x)
+                .attr("y", this.center.y);
+
         this.caret = Ext.create("Vede.view.pie.Caret", {
+            pie: this.pie,
             angle: 0,
             center: this.center,
             radius: this.railRadius + 10
@@ -793,14 +779,13 @@ Ext.define("Teselagen.manager.PieManager", {
         }
 
         this.nameBox = Ext.create("Vede.view.pie.NameBox", {
+            pie: this.pie,
             center: this.center,
             name: name,
             length: length
         });
 
-        this.pie.surface.add(this.nameBox);
-        this.nameBox.show(true);
-        this.nameBox.setStyle("dominant-baseline", "central");
+        //this.nameBox.setStyle("dominant-baseline", "central");
     },
 
     /**
@@ -808,7 +793,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Int} angle The angle of the caret to reposition to.
      */
     adjustCaret: function(bp) {
-        this.caret.destroy();
+        this.caret.remove();
 
         if(this.sequenceManager &&
            this.sequenceManager.getSequence().toString().length > 0) {

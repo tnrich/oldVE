@@ -66,7 +66,7 @@ Ext.define('Vede.controller.PieController', {
         // When window is resized, scale the graphics in the pie.
         var timeOut = null;
 
-        window.onresize = function(){
+        /*window.onresize = function(){
             if (timeOut != null)
                 clearTimeout(timeOut);
 
@@ -78,7 +78,7 @@ Ext.define('Vede.controller.PieController', {
         // When pie is resized, scale the graphics in the pie.
         pie.on("resize", function() {
             this.pieManager.fitWidthToContent(this.pieManager);
-        }, this);
+        }, this);*/
 
         this.Managers.push(this.pieManager);
 
