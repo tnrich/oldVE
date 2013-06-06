@@ -39,23 +39,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onDeletePartBtnClick: function(){
         if(this.selectedPart) {
-            var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
-                                                                  this.selectedPart);
-            var involvedRules = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                               this.selectedPart);
-
-            involvedRules.each(function(rule) {
-                this.activeProject.rules().remove(rule);
-                rule.destroy();
-            }, this);
-
-            if(parentBin) {
-                parentBin.parts().remove(this.selectedPart);
-            }
-
-            this.clearPartInfo();
-            $.jGrowl("Part Cleared");
+            this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
         }
+    },
+
+    /**
+     * Handler for the CLEAR_PART event. Just clears part info- most logic for
+     * this event is handled in the grid controller, since it knows enough to
+     * delete the part from the correct bin.
+     */
+    onClearPart: function() {
+        this.clearPartInfo();
+        $.jGrowl("Part Cleared");
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -279,7 +274,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Number} binIndex The index of the bin that owns the selected part.
      */
     onPartSelected: function (j5Part, binIndex) {
-
         this.selectedBinIndex = binIndex;
         this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
         //console.log(this.inspector);
@@ -970,7 +964,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on("partSelected", this.onPartSelected, this);
 
-        this.application.on("ClearPart", this.onDeletePartBtnClick, this);
+        this.application.on("ClearPart", this.onClearPart, this);
 
         this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
 
