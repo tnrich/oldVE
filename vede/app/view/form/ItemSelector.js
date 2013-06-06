@@ -68,7 +68,7 @@ Ext.define('Vede.view.form.ItemSelector', {
     createList: function(title){
         var me = this;
 
-        return Ext.create('Vede.view.form.MultiSelect', {
+        return Ext.create('Ext.ux.form.MultiSelect', {
             // We don't want the multiselects themselves to act like fields,
             // so override these methods to prevent them from including
             // any of their values
