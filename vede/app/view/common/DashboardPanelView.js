@@ -61,7 +61,7 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                     height: '120px',
                     icon: 'resources/images/watchtut.png',
                     iconAlign: 'top',
-                    text: 'Watch a Tutorial'        
+                    text: 'Watch a Tutorial',       
                 },
                 {
                     xtype: 'button',
