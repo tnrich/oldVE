@@ -1060,10 +1060,33 @@ background: #F8F8F8;
   color:white;
 }
 
-.j5InfoTab-Sub .x-tab-top-active, .j5InfoTab-Sub .x-tab-default-top {
+.j5InfoTab-Sub .x-tab-default-top .x-tab-inner {
+  font-weight: 500;
+}
+
+.j5InfoTab-Sub .x-tab-top-active .x-tab-inner {
+  font-weight: bold;
+}
+
+.j5InfoTab-Sub .x-tab-top-active, .j5InfoTab-Sub .x-tab-default-top{
   background: none;
-  border: 0 none;
+  border: 0 none !important;
   border-bottom: 0 none !important;
+}
+
+.j5InfoTab-Sub-Advanced .x-tab-default-top {
+  background: none !important;
+  border-bottom-width: 0 none !important;
+}
+
+.j5InfoTab-Sub-Advanced .x-tab-top-active, .j5InfoTab-Sub-Advanced .x-tab-default-top {
+  background: none !important;
+  border: 0 none !important;
+  border-bottom-width: 0 none !important;
+}
+
+.j5InfoTab-Sub-Advanced-Body {
+  border: 0 none;
 }
 
 .j5detailpanel-fillcontent {
@@ -1077,8 +1100,8 @@ background: #F8F8F8;
   top:4px;
 }
 
-.condenseAssembliesBtn, .downloadCondenseAssemblyResultsBtn {
-  float: right;
+.condenseAssembliesBtn, .distributePCRBtn{
+  background: #F8F8F8;
 }
 
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {
