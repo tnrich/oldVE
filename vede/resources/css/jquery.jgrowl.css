@@ -55,7 +55,12 @@ div.jGrowl.top-left {
 }
 
 div.jGrowl.top-right {
-	right: 				150px;
+	right: 				170px;
+	top: 				3px;
+}
+
+div.jGrowl.top-right-more {
+	right: 				350px;
 	top: 				3px;
 }
 
@@ -128,6 +133,12 @@ div.jGrowl div.jGrowl-closer {
 	font-size:				.9em;
 	font-weight: 			bold;
 	text-align: 			center;
+}
+
+.j5-completed {
+	background: #49647F !important;
+	right: 350px;
+	cursor: pointer;
 }
 
 /** Hide jGrowl when printing **/

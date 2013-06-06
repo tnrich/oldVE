@@ -61,7 +61,7 @@ Ext.define("Vede.controller.VectorEditor.StatusBarController", {
 
     onSequenceManagerChanged: function(newSeqMan) {
         this.SequenceManager = newSeqMan;
-
+        console.log("status reset");
         this.reset();
     },
     

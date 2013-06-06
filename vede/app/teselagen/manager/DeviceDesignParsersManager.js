@@ -26,7 +26,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var iconID = bin.getElementsByTagNameNS("*", "iconID")[0].textContent;
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
             {
-                bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID];
+                bin.getElementsByTagNameNS("*", "iconID")[0].textContent = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
             }
         }
 
@@ -44,7 +44,7 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var iconID = bin["de:iconID"].toUpperCase();
             if(!Teselagen.constants.SBOLIcons.ICONS[iconID])
             {
-                bin["de:iconID"] = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID];
+                bin["de:iconID"] = Teselagen.constants.SBOLIcons.ICONS_4_TO_4_1_UPDATE[iconID.toUpperCase()];
             }
         });
         return jsonDoc;
@@ -375,16 +375,29 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
             var rule = eugeneRules[i];
             if (typeof(rule) !== "object") { continue; }
             var operand1 = rule.getElementsByTagNameNS("*", "operand1ID")[0].textContent;
-            var operand2 = rule.getElementsByTagNameNS("*", "operand2ID")[0].textContent;
+            
+            var operand2isNumber = false;
+            var operand2Node = rule.getElementsByTagNameNS("*", "operand2ID")[0];
+            var operand2;
+            if(!operand2Node)
+            {
+                // operand2Node might be a number
+                operand2Node = rule.getElementsByTagNameNS("*", "operand2Number")[0];
+                operand2 = parseInt( operand2Node.textContent );
+                operand2isNumber = true;
+            }
+            else operand2 = operand2Node.textContent;
 
             var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                 name: rule.getElementsByTagNameNS("*", "name")[0].textContent,
                 compositionalOperator: rule.getElementsByTagNameNS("*", "compositionalOperator")[0].textContent,
-                negationOperator: rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent
+                negationOperator: rule.getElementsByTagNameNS("*", "negationOperator")[0].textContent,
+                operand2isNumber: operand2isNumber
             });
 
             newEugeneRule.setOperand1(fullPartsAssocArray[operand1]);
-            newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
+            if( operand2isNumber ) newEugeneRule.setOperand2(operand2);
+            else newEugeneRule.setOperand2(fullPartsAssocArray[operand2]);
             rulesArray.push(newEugeneRule);
 
         }
@@ -393,6 +406,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
 
     parseEugeneRules: function(content,filename,design){
 
+
+        // Existing rules
+        var existingRules = design.rules();
 
         // Build part Index
 
@@ -407,6 +423,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         var lines = content.split("\n");
         var newRule;
         
+        var parsedRules = Ext.create('Ext.data.Store', { model: "Teselagen.models.EugeneRule" });
+
         lines.forEach(function(line)
         {
             if(line!=="")
@@ -438,11 +456,35 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 newEugeneRule.setOperand1(newRule.operand1);
                 newEugeneRule.setOperand2(newRule.operand2);
 
-                design.addToRules(newEugeneRule);
-
-                //debugger;
+                parsedRules.add(newEugeneRule); 
             }
         });
+    
+        var checkForDuplicatedRule = function(parsedRule,cb){
+            var rulesCounter = existingRules.count();
+            var duplicated = false;
+            existingRules.each(function(existingRule){
+                if(parsedRules.data.name === existingRule.data.name)
+                {
+                    duplicated = true;
+                    rulesCounter--;
+                }
+                else
+                {
+                    rulesCounter--;
+                }
+                if(rulesCounter === 1) cb(duplicated);
+            });
+        };
+
+        parsedRules.each(function(parsedRule){
+            console.log("processing: ",parsedRule.data.name);
+            checkForDuplicatedRule(parsedRule,function(duplicated){
+                console.log("duplicated: ",duplicated);
+            });
+        });
+
+
     }
 
 });

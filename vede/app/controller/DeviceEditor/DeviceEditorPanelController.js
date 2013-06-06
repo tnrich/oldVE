@@ -34,10 +34,14 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         negationOperator: rule.negationOperator
                     });
 
-                    if(!rule.operand1_id || !rule.operand2_id)
+                    if(!rule.operand1_id)
                     {
-                        console.log(rule);
-                        throw new Error("Some operand id is null.");
+                        throw new Error("Operand 1 ID is missing");
+                    }
+
+                    if( !rule.operand2_id && !rule.operand2isNumber )
+                    {
+                        throw new Error("Operand 2 ID is missing");                     
                     }
 
                     newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
@@ -98,12 +102,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
-                $.jGrowl("Design Deleted")
+                $.jGrowl("Design Deleted");
              }
          }
     },
 
     onOpenExampleItemBtnClick: function (item, e, eOpts) {
+        
         var selectedItem = item.text;
         var examplesMap = {
             "SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json",
@@ -289,11 +294,123 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
 
-        $.jGrowl("Design Saved", {position: 'bottom-right'});
+        $.jGrowl("Design Saved");
     },
 
     onImportEugeneRulesBtnClick: function(){
         
+    },
+
+    onJumpToJ5Run: function(data) {
+        var design_id = data.devicedesign_id;
+        var project_id = data.project_id;
+        var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
+
+        var self = this;
+        var continueCode = function(){
+
+        self.detailPanel = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel"]')[0];
+        self.detailPanelFill = Ext.getCmp('mainAppPanel').getActiveTab().query('panel[cls="j5detailpanel-fill"]')[0];
+        self.detailPanel.show();
+        self.detailPanelFill.hide();
+
+
+
+        var j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
+
+        j5runs.load({
+            callback : function(){
+
+                j5runs = Teselagen.manager.ProjectManager.projects.getById(project_id).designs().getById(design_id).j5runs();
+
+                self.activeJ5Run = j5runs.getById(data.id);
+
+
+        var assemblyMethod = self.activeJ5Run.get('assemblyMethod');
+        var status = self.activeJ5Run.get('status');
+        var startDate = new Date(self.activeJ5Run.get('date'));
+        var endDate = new Date(self.activeJ5Run.get('endDate'));
+        var elapsed = endDate - startDate;
+        elapsed = Math.round(elapsed/1000);
+        elapsed = self.elapsedDate(elapsed);
+        startDate = Ext.Date.format(startDate, "l, F d, Y g:i:s A");
+        endDate = Ext.Date.format(endDate, "l, F d, Y g:i:s A");
+        var assemblies    = self.activeJ5Run.getJ5Results().assemblies();
+        var combinatorial = self.activeJ5Run.getJ5Results().getCombinatorialAssembly();
+        var j5parameters = self.activeJ5Run.getJ5Input().getJ5Parameters().getParametersAsStore();
+        //console.log(self.activeJ5Run.getJ5Input().getJ5Parameters());
+        //console.log(j5parameters);
+        //console.log(self.activeJ5Run);
+
+        Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5AssemblyType').setValue(assemblyMethod);
+        Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStatus').setValue(status);
+        Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunStart').setValue(startDate);
+        Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
+        Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
+
+        if(status=="Completed") {
+            var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").addClass("status-note-completed");
+        } else if (status=="Completed with warnings") {
+            var field = Ext.getCmp('mainAppPanel').getActiveTab().down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").addClass("status-note-warning");
+        }
+
+        var warnings = self.activeJ5Run.raw.warnings;
+
+        var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
+            model: 'Teselagen.models.j5Output.Warning',
+            data: warnings,
+        });
+
+        if ((warnings.length>0)==true) {
+            Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').show();
+            Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+        } else {
+             Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="warnings"]').hide();
+             warnings = null;
+             warningsStore = null;
+        }
+
+        Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="assemblies"]').reconfigure(assemblies);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
+        Ext.getCmp('mainAppPanel').getActiveTab().down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+    
+            }
+        });
+
+        };
+
+        project.designs().load({
+            id: design_id,
+            callback: function (loadedDesign) {
+                Teselagen.manager.ProjectManager.workingProject = project;
+                var design = loadedDesign[0];
+                //console.log(design);
+                //var j5report = loadedDesign[0].j5runs();
+                Teselagen.manager.ProjectManager.openj5Report(design,continueCode);
+            }
+        });
+
+    },
+
+    elapsedDate: function (seconds)
+    {
+    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+    var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+    if (numdays>0) {
+        return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+    }else if (numhours>0) {
+        return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+    }else if (numminutes>0) {
+        return numminutes + " minutes " + numseconds + " seconds";
+    } else {
+    return numseconds + " seconds";
+    }
     },
 
     /**
@@ -306,6 +423,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
         this.application.on("saveDesignEvent", this.onDeviceEditorSaveEvent, this);
 
         this.application.on("loadEugeneRules", this.onLoadEugeneRulesEvent, this);
+
+        this.application.on("jumpToJ5Run", this.onJumpToJ5Run, this);
 
         this.control({
             "button[cls='fileMenu'] > menu > menuitem[text='Save Design']": {

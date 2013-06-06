@@ -545,7 +545,6 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 if(success) {
                     $.jGrowl("j5 Run Submitted");
                 } else {
-                    s
                     //loadingMessage.hide();
                     //responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({
