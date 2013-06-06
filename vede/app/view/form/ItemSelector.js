@@ -7,10 +7,10 @@
 /**
  * A control that allows selection of between two Ext.ux.form.MultiSelect controls.
  */
-Ext.define('Ext.ux.form.ItemSelector', {
+Ext.define('Vede.view.form.ItemSelector', {
     extend: 'Ext.ux.form.MultiSelect',
-    alias: ['widget.itemselectorfield', 'widget.itemselector'],
-    alternateClassName: ['Ext.ux.ItemSelector'],
+    alias: ['widget.itemselectorvede'],
+//    alternateClassName: ['Ext.ux.ItemSelector'],
     requires: [
         'Ext.button.Button',
         'Ext.ux.form.MultiSelect'
@@ -42,6 +42,11 @@ Ext.define('Ext.ux.form.ItemSelector', {
         bottom: "Move to Bottom"
     },
 
+    /**
+     * @cfg {Boolean} [doCopy=false] True to copy items instead of moving them
+     */
+    doCopy:false,
+
     layout: {
         type: 'hbox',
         align: 'stretch'
@@ -50,7 +55,9 @@ Ext.define('Ext.ux.form.ItemSelector', {
     initComponent: function() {
         var me = this;
 
-        me.ddGroup = me.id + '-dd';
+        if (me.ddReorder) {
+            me.ddGroup = me.id + '-dd';
+        }
         me.callParent();
 
         // bindStore must be called after the fromField has been created because
@@ -61,7 +68,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
     createList: function(title){
         var me = this;
 
-        return Ext.create('Ext.ux.form.MultiSelect', {
+        return Ext.create('Vede.view.form.MultiSelect', {
             // We don't want the multiselects themselves to act like fields,
             // so override these methods to prevent them from including
             // any of their values
@@ -257,8 +264,18 @@ Ext.define('Ext.ux.form.ItemSelector', {
 
         fromStore.suspendEvents();
         toStore.suspendEvents();
-        fromStore.remove(recs);
-        toStore.add(recs);
+        if (!me.doCopy) {
+            fromStore.remove(recs);
+            toStore.add(recs);
+        }
+        else {
+            if (add) {
+                toStore.add(recs);
+            }
+            else {
+                fromStore.remove(recs);
+            }
+        }
         fromStore.resumeEvents();
         toStore.resumeEvents();
 
