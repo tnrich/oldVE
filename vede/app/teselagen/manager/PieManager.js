@@ -756,8 +756,10 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     initPie: function() {
         this.pie = d3.select("#PieContainer")
-                     .append("svg")
-                     .attr("overflow", "auto");
+                     .append("svg:svg")
+                     .attr("overflow", "auto")
+                     .attr("width", 500)
+                     .attr("height", 500);
 
         this.pie.append("circle")
                 .attr("radius", this.railRadius + this.self.PAD)
