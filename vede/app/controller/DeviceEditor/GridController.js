@@ -892,6 +892,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * part model.
      */
     getGridPartsFromJ5Part: function(j5Part) {
+        if(!j5Part) {
+            return [];
+        }
+        
         var targetGridParts = [];
         var bins = this.grid.query("Bin");
         var parts;
