@@ -104,7 +104,6 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onOpenExampleItemBtnClick: function (item, e, eOpts) {
-        debugger
         var selectedItem = item.text;
         var examplesMap = {
             "SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json",
