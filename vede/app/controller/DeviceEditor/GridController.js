@@ -8,7 +8,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     requires: ["Teselagen.event.DeviceEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
-               "Teselagen.constants.SBOLIcons"],
+               "Teselagen.constants.SBOLIcons",
+               "Vede.view.de.grid.Bin",
+               "Vede.view.de.grid.Part"],
 
     statics: {
         DEFAULT_ROWS: 2
