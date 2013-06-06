@@ -152,8 +152,7 @@ module.exports = function(app) {
                         part.fas = bin.fases[partKey];
                         if(part.phantom) {
                             design.j5collection.bins[i].parts[partKey] = app.constants.defaultEmptyPart; 
-                            delete design.j5collection.bins[i].parts[partKey].id;
-                            design.j5collection.bins[i].parts[partKey].id.fas = "None";
+                            //delete design.j5collection.bins[i].parts[partKey].id;
                         }
                     });
                 });

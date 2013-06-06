@@ -10,13 +10,15 @@ module.exports = function(app){
         {
             defaultEmptyPart = new Part({name:"",phantom:true});
             defaultEmptyPart.save(function(){
-            	app.constants.defaultEmptyPart = defaultEmptyPart;
+            	app.constants.defaultEmptyPart = defaultEmptyPart.toObject();;
+                delete app.constants.defaultEmptyPart.id;
             });
         }
         else 
         {
             defaultEmptyPart = blank;
-            app.constants.defaultEmptyPart = defaultEmptyPart;
+            app.constants.defaultEmptyPart = defaultEmptyPart.toObject();;
+            delete app.constants.defaultEmptyPart.id;
         }
     });
 
