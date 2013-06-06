@@ -34,10 +34,14 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         negationOperator: rule.negationOperator
                     });
 
-                    if(!rule.operand1_id || !rule.operand2_id)
+                    if(!rule.operand1_id)
                     {
-                        console.log(rule);
-                        throw new Error("Some operand id is null.");
+                        throw new Error("Operand 1 ID is missing");
+                    }
+
+                    if( !rule.operand2_id && !rule.operand2isNumber )
+                    {
+                        throw new Error("Operand 2 ID is missing");                     
                     }
 
                     newEugeneRule.setOperand1(allParts.getById(rule.operand1_id));
@@ -104,6 +108,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     },
 
     onOpenExampleItemBtnClick: function (item, e, eOpts) {
+        debugger
         var selectedItem = item.text;
         var examplesMap = {
             "SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json",

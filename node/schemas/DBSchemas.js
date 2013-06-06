@@ -49,7 +49,8 @@ module.exports = function(db) {
 		warnings: Mixed,
 		user_id: { type: oIDRef, ref: 'user' },
 		project_id: { type: oIDRef, ref: 'project' },
-		devicedesign_id: { type: oIDRef, ref: 'devicedesign' } 
+		devicedesign_id: { type: oIDRef, ref: 'devicedesign' },
+		devicedesign_name: String
 	});
 	registerSchema('j5run', j5RunSchema);
 
