@@ -681,6 +681,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                                                             this.activeProject,
                                                             j5Part);
 
+            this.deHighlight(j5Part);
+
             // Remove associated rules if the part is only contained in one bin.
             if(parentBins.length > 1) {
                 this.selectedPart.up('Bin').getBin().parts().remove(j5Part);
@@ -898,17 +900,20 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var ownerIndices = this.DeviceDesignManager.getOwnerBinIndices(this.activeProject,
                                                                        j5Part);
 
+        // Iterate through gridParts and find all those with a matching j5Part.
         for(var i = 0; i < bins.length; i++) {
             gridBin = bins[i];
             parts = gridBin.query("Part");
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
-                if(gridPart.getPart() === j5Part) {
+                if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
+                   !gridPart.getPart().phantom) {
                     targetGridParts.push(gridPart);
                 }
             }
         }
 
+        // Iterate through j5Parts and find those matching ours.
         for(i = 0; i < ownerIndices.length; i++) {
             var ownerBin = this.DeviceDesignManager.getBinByIndex(this.activeProject,
                                                                   ownerIndices[i]);
@@ -990,7 +995,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     /**
-     * Deselects all gridParts associated with a given j5 part.
+     * De-highlights all gridParts associated with a given j5 part.
      * @param {Teselagen.model.Part} j5Part
      */
     deHighlight: function(j5Part) {

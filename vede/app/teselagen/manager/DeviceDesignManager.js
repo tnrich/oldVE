@@ -770,9 +770,15 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     getOwnerBinIndices: function(pDevice, pPart) {
         var binIndices = [];
-        for(var i = 0; i < pDevice.getJ5Collection().binCount(); i++) {
-            if(pDevice.getJ5Collection().bins().getAt(i).parts().indexOf(pPart) !== -1) {
-                binIndices.push(i);
+        var binsStore = pDevice.getJ5Collection().bins();
+        var partsStore;
+        for(var i = 0; i < binsStore.getCount(); i++) {
+            partsStore = binsStore.getAt(i).parts();
+
+            for(var j = 0; j < partsStore.getCount(); j++) {
+                if(partsStore.getAt(j).id === pPart.id) {
+                    binIndices.push(i);
+                }
             }
         }
 
