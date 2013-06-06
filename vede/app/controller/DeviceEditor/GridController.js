@@ -895,7 +895,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(!j5Part) {
             return [];
         }
-        
+
         var targetGridParts = [];
         var bins = this.grid.query("Bin");
         var parts;
@@ -983,7 +983,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     onPartSelected: function(j5Part) {
         var gridParts = this.getGridPartsFromJ5Part(j5Part);
 
-        if(gridParts && gridParts.indexOf(this.selectedPart) === -1) {
+        if(gridParts.length > 0 && gridParts.indexOf(this.selectedPart) === -1) {
             this.selectedPart = gridParts[0];
             gridParts[0].select();
         }
