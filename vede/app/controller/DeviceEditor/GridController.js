@@ -896,7 +896,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
     /**
      * When a SELECT_PART event is fired, check to see if it is already selected.
-     * If not, select it, then mapSelect all of the grid parts which have the
+     * If not, select it, then highlight all of the grid parts which have the
      * same j5Part.
      */
     onPartSelected: function(j5Part) {
@@ -911,7 +911,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         if(j5Part) {
             if(j5Part.get("sequence_id") !== "") {
                 Ext.each(gridParts, function(gridPart) {
-                    gridPart.mapSelect();
                     gridPart.highlight();
                 });
             }
@@ -1072,57 +1071,23 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     },
 
     onPastePartMenuItemClick: function(){
+        var index = this.selectedPart.up("Bin").query("Part").indexOf(this.selectedPart);
+        var parentGridBin = this.selectedPart.up("Bin");
 
-        var self = this;
+        parentGridBin.getBin().parts().removeAt(index);
+
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
         if(this.selectedClipboardPart)
         {
-            var performPaste = function(linked){
-                var index = self.selectedPart.up("Bin").query("Part").indexOf(self.selectedPart);
-                var parentGridBin = self.selectedPart.up("Bin");
-
-                parentGridBin.getBin().parts().removeAt(index);
-                if (linked) { parentGridBin.getBin().parts().insert(index, self.selectedClipboardPart); self.reRenderGrid(); }
-                else
-                {
-                    Ext.MessageBox.prompt('Part name', 'Please a name for the new part:', function(btn,text){
-                        var duplicatedPart = self.selectedClipboardPart.copy();
-                        duplicatedPart.set('name',text);
-                        Vede.application.fireEvent("validateDuplicatedPartName",duplicatedPart,text,function(){
-                            parentGridBin.getBin().parts().insert(index,duplicatedPart);
-                            self.reRenderGrid();
-                        })
-                    });
-                }
-
-
-                //Ext.MessageBox.close();
-            };
-            if(ClipboardCutFlag) { performPaste(true); }
-            else
-            {
-                Ext.MessageBox.show({
-                    title:'Special paste',
-                    msg: 'Select paste type',
-                    buttonText: {yes: "Link Part",no: "Duplicate Part",cancel: "Cancel"},
-                    fn: function(btn){
-                        if(btn==="yes") { performPaste(true); }
-                        else if(btn==="no") { performPaste(false); }
-                        else { Ext.MessageBox.close(); }
-                    }
-                });
-            }
-
-        }
-        else
-        {
+            parentGridBin.getBin().parts().insert(index, this.selectedClipboardPart);
+            this.reRenderGrid();
+        } else {
             console.log("No part in clipboard");
         }
     },
 
     onLaunch: function() {
-
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.DeviceDesignManager = Teselagen.manager.DeviceDesignManager;
 
@@ -1158,7 +1123,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             },
             "button[cls='editMenu'] > menu > menuitem[text='Cut Part']": {
                 click: this.onCutPartMenuItemClick
-            },
+            }
         });
 
         this.DeviceEvent = Teselagen.event.DeviceEvent;
