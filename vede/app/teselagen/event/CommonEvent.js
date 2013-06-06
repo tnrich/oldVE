@@ -15,5 +15,7 @@ Ext.define("Teselagen.event.CommonEvent", {
     REMOVE_FEATURE: "RemoveFeature",
     CREATE_FEATURE: "CreateFeature",
 
+    JUMPTOJ5RUN: "jumpToJ5Run",
+
     ACTION_MESSAGE: "ActionMessage"
 });

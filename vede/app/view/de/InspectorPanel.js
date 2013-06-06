@@ -661,14 +661,12 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             ]
                         },
                         {
-                            xtype: 'form',
-                            flex: 1,
-                            cls: 'PartPropertiesForm',
-                            width: 287,
-                            layout: {
-                                align: 'stretch',
-                                type: 'vbox'
-                            },
+                            xtype: 'tabpanel',
+                            activeTab: 0,
+                            cls: 'j5InfoTab-Sub-Advanced',
+                            animCollapse: false,
+                            collapsible: false,
+                            removePanelHeader: true,
                             bodyPadding: 10,
                             title: 'Advanced',
                             margin: '5px 0px 5px 0px',
@@ -676,7 +674,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             items: [
                                 {   
                                     xtype: 'container',
-                                    html: '<b>Condense Assembly Files</b>',
+                                    title: 'Condense Assembly Files',
                                     cls: 'condenseAssemblyFiles-box',
                                     margin: '0 0 0 0',
                                     layout: {
@@ -688,7 +686,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'container',
                                         html: 'Assembly Files To Condense List:',
                                         cls: 'condenseAssemblyFiles-box',
-                                        margin: '25 0 0 25',
+                                        margin: '10 0 0 0',
                                         layout: {
                                             align: 'stretch',
                                             type: 'vbox'
@@ -713,7 +711,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'container',
                                         html: 'Zipped Assembly Files:',
                                         cls: 'condenseAssemblyFiles-box',
-                                        margin: '15 0 0 25',
+                                        margin: '15 0 0 0',
                                         layout: {
                                             align: 'stretch',
                                             type: 'vbox'
@@ -755,7 +753,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 },
                                 {   
                                     xtype: 'container',
-                                    html: '<b>Downstream Automation</b>',
+                                    title: 'Downstream Automation',
                                     cls: 'downstreamAutomation-box',
                                     margin: '25 0 0 0',
                                     layout: {
@@ -767,7 +765,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'container',
                                         html: 'Downtream Automation Parameters File:',
                                         cls: 'downstreamAutomationParameters-box',
-                                        margin: '25 0 0 25',
+                                        margin: '5 0 0 0',
                                         layout: {
                                             align: 'stretch',
                                             type: 'vbox'
@@ -775,14 +773,14 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         items: [{
                                             xtype: 'radiofield',
                                             name: 'automationParamsFileSource',
-                                            margin: '20 0 0 45',
+                                            margin: '20 0 0 25',
                                             labelWidth: 110,
                                             boxLabel: 'Use latest server version',
                                             checked: true
                                         }, {
                                             xtype: 'radiofield',
                                             name: 'automationParamsFileSource',
-                                            margin: '5 0 0 45',
+                                            margin: '5 0 0 25',
                                             fieldLabelCls: 'align-middle',
                                             labelWidth: 110,
                                             boxLabel: 'Use custom parameters'
@@ -796,7 +794,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         {
                                             xtype: 'filefield',
                                             cls: 'sourcePlateListSelector',
-                                            margin: '15 0 0 0',
+                                            margin: '35 0 0 0',
                                             validateOnChange: false,
                                             fieldLabel: 'Source Plate List:',
                                             labelWidth: 110,
