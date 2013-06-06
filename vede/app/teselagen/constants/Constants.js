@@ -162,8 +162,8 @@ Ext.define("Teselagen.constants.Constants", {
     LINEAR:     "linear",
     //================================================================
 
-    constructor: function() {
-        this.RECT_SHAPE_MIN_SIZE = this.RECT_SHAPE_DEFAULT_SIZE / 2;
-    }
+    //constructor: function() {
+    //   this.RECT_SHAPE_MIN_SIZE = this.RECT_SHAPE_DEFAULT_SIZE / 2;
+    //}
 
 });

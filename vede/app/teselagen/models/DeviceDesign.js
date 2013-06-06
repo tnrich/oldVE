@@ -300,6 +300,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
+        this.rules().clearFilter();
+
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
                 return true;
