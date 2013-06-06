@@ -21,7 +21,7 @@ Ext.define("Vede.view.pie.NameBox", {
         var text;
 
         if(inData.name) {
-            text = inData.name + '\n(' + inData.length + ' bp)';
+            text = inData.name + '<br>(' + inData.length + ' bp)';
         } else {
             text = '(' + inData.length + ' bp)';
         }
@@ -33,6 +33,6 @@ Ext.define("Vede.view.pie.NameBox", {
                          .attr("text-anchor", "middle")
                          .attr("font-size", this.self.FONT_SIZE)
                          .attr("font-weight", this.self.FONT_WEIGHT)
-                         .attr("text", text);
+                         .text(text);
     }
 });
