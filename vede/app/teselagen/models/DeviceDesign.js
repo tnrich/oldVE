@@ -38,6 +38,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 data.j5collection.bins.forEach(function(bin,binKey){
                     var partIds = binsTempArray[binKey];
+                    bin.fases = [];
                     for (var i= 0; i < partIds.length; i++) {
                         bin.fases[i] = bin.parts[i].fas;
                     }
@@ -48,6 +49,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
                 data.rules.forEach(function(rule, ruleKey) {
                     delete data.rules[ruleKey]["Teselagen.models.Part"];
+                    delete data.rules[ruleKey]["teselagen.models.devicedesign_id"];
                 });
 
                 return data;
@@ -306,15 +308,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         });
 
-        var newStore = Ext.create("Ext.data.Store", {
-            model: 'Teselagen.models.EugeneRule',
-            data: this.rules().getRange(),
-            proxy: 'memory'
-        });
-
-        this.rules().clearFilter();
-
-        return newStore;
+        return this.rules();
     },
 
     /**
