@@ -429,15 +429,28 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         {
             if(line!=="")
             {
+                var commentLine = false;
+                var notfoundPart = false;
+
                 newRule = {
                     operand1_id: "",
                     operand2_id: "",
                     negationOperator: "",
                     name: "",
-                    compositionalOperator: ""
+                    compositionalOperator: "",
+                    operand2Number: 0,
+                    operand2isNumber: false
                 }
                 
                 var parsed = line.match(/Rule (.+)\((NOT|) (.+) (.+) (.+)\);/);
+                if(!parsed) parsed = line.match(/Rule (.+)\((.+) (.+) (.+)\);/);
+                if(!parsed) 
+                {
+                    parsed = line.match(/\/\//);
+                    commentLine = true;
+                }
+                if(!parsed) new Error("Invalid eugene rule line");
+
                 if(parsed.length===6)
                 {
                     newRule.name = parsed[1];
@@ -446,26 +459,81 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     newRule.compositionalOperator = parsed[4];
                     newRule.operand2 = partIndex[parsed[5]];
                 }
-                
-                var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
-                    name: newRule.name,
-                    compositionalOperator: newRule.compositionalOperator,
-                    negationOperator: newRule.negationOperator
-                });
-                
-                newEugeneRule.setOperand1(newRule.operand1);
-                newEugeneRule.setOperand2(newRule.operand2);
+                else if(parsed.length===5)
+                {
+                    newRule.name = parsed[1];
+                    //newRule.negationOperator = parsed[2];
+                    newRule.operand1 = partIndex[parsed[2]];
+                    newRule.compositionalOperator = parsed[3];
 
-                parsedRules.add(newEugeneRule); 
+                    var operand2 = parsed[4];
+                    if( isNaN ( parseInt( operand2 ) ) )
+                    {
+                        // Operand 2 is a part
+                        newRule.operand2 = partIndex[operand2];
+                        newRule.operand2isNumber = false;
+                        if(operand2 && !newRule.operand2) notfoundPart = true;
+                    }
+                    else
+                    {
+                        // Operand 2 is a number
+                        newRule.operand2Number = operand2;
+                        newRule.operand2isNumber = true;
+
+                    }
+                }
+                else if(commentLine)
+                {
+                    console.log("Line is comment");
+                }
+                else throw new Error("Invalid eugene rule line");
+                
+                if(!commentLine && !notfoundPart)
+                {
+                    var unsupported = false;
+
+                    try {
+                    var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
+                        name: newRule.name,
+                        compositionalOperator: newRule.compositionalOperator,
+                        negationOperator: newRule.negationOperator
+                    });
+                    }
+                    catch(e)
+                    {
+                        //debugger;
+                        if( e.message.match( /Illegal CompositionalOperator/ ) )
+                        {
+                            console.log("Unsupported operator");
+                            unsupported = true;
+                        }
+                    }
+                    
+                    if(!unsupported)
+                    {
+                        newEugeneRule.setOperand1(newRule.operand1);
+                        if(!newRule.operand2isNumber) newEugeneRule.setOperand2(newRule.operand2);
+                        else
+                        {
+                            newEugeneRule.set('operand2isNumber',true);
+                            newEugeneRule.set('operand2Number',newRule.operand2Number);
+                        }
+
+                        parsedRules.add(newEugeneRule);
+                    }
+                }
             }
         });
     
         var checkForDuplicatedRule = function(parsedRule,cb){
+
             var rulesCounter = existingRules.count();
             var duplicated = false;
             existingRules.each(function(existingRule){
+                if(parsedRule.data.name === "rule2") debugger;
                 if(parsedRules.data.name === existingRule.data.name)
                 {
+                    console.log("found duplicated rule");
                     duplicated = true;
                     rulesCounter--;
                 }
