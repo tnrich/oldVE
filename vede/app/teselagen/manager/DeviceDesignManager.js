@@ -772,6 +772,9 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var binIndices = [];
         var binsStore = pDevice.getJ5Collection().bins();
         var partsStore;
+        if(!pPart) {
+            return [];
+        }
         for(var i = 0; i < binsStore.getCount(); i++) {
             partsStore = binsStore.getAt(i).parts();
 
