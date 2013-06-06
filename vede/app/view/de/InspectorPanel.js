@@ -492,6 +492,18 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     disabled: true,
                 },
                 {
+                    xtype: 'button',
+                    cls: 'condenseAssembliesBtn',
+                    text: 'Condense Assemblies',
+                    margin: '2.5 0 2.5 0'
+                },
+                {
+                    xtype: 'button',
+                    cls: 'distributePCRBtn',
+                    margin: '2.5 0 2.5 0',
+                    text: 'Distribute PCR Reactions'
+                }, 
+                {
                     xtype: 'tabpanel',
                     activeTab: 0,
                     cls: 'j5InfoTab-Sub',
@@ -529,7 +541,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'container',
                                     html: '<b>Master Plasmids List</b>',
                                     cls: 'masterPlasmidsList-box',
-                                    margin: '20 0 0 0',
+                                    margin: '15 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -538,7 +550,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'radiofield',
                                         cls: 'useServerPlasmidsRadioBtn',
                                         name: 'plasmidsListSource',
-                                        margin: '20 0 0 25',
+                                        margin: '15 0 0 25',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
@@ -573,7 +585,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {   
                                     xtype: 'container',
                                     html: '<b>Master Oligos List</b>',
-                                    margin: '20 0 0 0',
+                                    margin: '15 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -582,7 +594,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'radiofield',
                                         cls: 'useServerOligosRadioBtn',
                                         name: 'oligosListSource',
-                                        margin: '20 0 0 25',
+                                        margin: '15 0 0 25',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
@@ -612,7 +624,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {   
                                     xtype: 'container',
                                     html: '<b>Master Direct Syntheses List</b>',
-                                    margin: '20 0 0 0',
+                                    margin: '15 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -621,7 +633,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'radiofield',
                                         cls: 'useServerSynthesesRadioBtn',
                                         name: 'directSynthesesListSource',
-                                        margin: '20 0 0 25',
+                                        margin: '15 0 0 25',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
@@ -654,7 +666,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     cls: 'editj5ParamsBtn',
                                     // cls: 'runj5Btn',
                                     // overCls: 'runj5Btn-over',
-                                    margin: '30 0 2.5 0',
+                                    margin: '15 0 0 0',
                                     height: 30,
                                     border: 0
                                 },
@@ -669,8 +681,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             removePanelHeader: true,
                             bodyPadding: 10,
                             title: 'Advanced',
-                            margin: '5px 0px 5px 0px',
-                            autoScroll: true,
+                            border: 0,
+                            bodyCls: 'j5InfoTab-Sub-Advanced-Body',
+                            margin: '5px 0px 0px 0px',
                             items: [
                                 {   
                                     xtype: 'container',
@@ -737,17 +750,13 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             xtype: 'panel',
                                             margin: '20 0 0 0',
                                             border: false,
-                                            items: [
-                                             {
-                                                xtype: 'button',
-                                                cls: 'downloadCondenseAssemblyResultsBtn',
-                                                text: 'Download Results'
-                                            },{
-                                                xtype: 'button',
-                                                cls: 'condenseAssembliesBtn',
-                                                text: 'Condense Assemblies',
-                                                margin: '0 10 0 0'
-                                            }]
+                                            // items: [
+                                            //  {
+                                            //     xtype: 'button',
+                                            //     cls: 'downloadCondenseAssemblyResultsBtn',
+                                            //     text: 'Download Results'
+                                            // }
+                                            // ]
                                         }
                                     ]   
                                 },
@@ -755,7 +764,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'container',
                                     title: 'Downstream Automation',
                                     cls: 'downstreamAutomation-box',
-                                    margin: '25 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -786,12 +794,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             boxLabel: 'Use custom parameters'
                                         },
                                         {
-                                            xtype: 'button',
-                                            cls: 'customizeAutomationParamsBtn',
-                                            margin: '15 0 0 0',
-                                            text: 'Customize Automation Parameters'
-                                        },
-                                        {
                                             xtype: 'filefield',
                                             cls: 'sourcePlateListSelector',
                                             margin: '35 0 0 0',
@@ -817,20 +819,23 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             labelWidth: 110,
                                             labelSeparator: ' ',
                                             buttonText: 'Choose File'
-                                        }, {
+                                        },
+                                        {
                                             xtype: 'button',
-                                            cls: 'distributePCRBtn',
+                                            cls: 'customizeAutomationParamsBtn',
                                             margin: '20 0 0 0',
-                                            text: 'Distribute PCR Reactions'
-                                        }, {
-                                            xtype: 'button',
-                                            cls: 'downloadDownstreamAutomationBtn',
-                                            enableToggle: true,
-                                            pressed: false,
-                                            text: 'Download Results',
-                                            hidden: true,
-                                            margin: '15 0 0 0'
+                                            height: 30,
+                                            text: 'Customize Automation Parameters'
                                         }
+                                        // {
+                                        //     xtype: 'button',
+                                        //     cls: 'downloadDownstreamAutomationBtn',
+                                        //     enableToggle: true,
+                                        //     pressed: false,
+                                        //     text: 'Download Results',
+                                        //     hidden: true,
+                                        //     margin: '15 0 0 0'
+                                        // }
                                         ]
                                     }
                                     ]

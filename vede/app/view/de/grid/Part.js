@@ -80,15 +80,17 @@ Ext.define('Vede.view.de.grid.Part', {
                         'text-align': 'center'
                     },
                     html: html,
-                    /*listeners: {
-                        afterrender: function (obj) {
-                            if(self.getPart()) { 
-                                if(self.getPart().isEmpty()) {
-                                    console.log(obj.getEl().getAttribute("id"));
-                                }
-                            }
-                        }
-                    }*/
+                    // listeners: {
+                    //     afterrender: function (obj) {
+                    //         if(self.getPart()) { 
+                    //             console.log(this.up().el);
+                    //             var tip = Ext.create("Ext.tip.ToolTip", {
+                    //                 target: this.up().el,
+                    //                 html: "Hey"
+                    //             });
+                    //         }
+                    //     }
+                    // }
                 }]
             }]
         });
