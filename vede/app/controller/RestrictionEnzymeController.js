@@ -1,8 +1,8 @@
 /**
  * Restriction enzyme controller
- * @class Vede.controller.RestrictionEnzymeController_original
+ * @class Vede.controller.RestrictionEnzymeController
  * @ignore
- * @author Jenhan Tao
+ * @author Nick Elsbree
  */
 Ext.define("Vede.controller.RestrictionEnzymeController", {
     extend: "Ext.app.Controller",
@@ -33,10 +33,13 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             "#deleteGroupButton": {
                 click: this.onDeleteGroupButtonClick
             },
+            "#enzymeSelector": {
+                 change: this.onEnzymeListChange
+             }
         });
 
         this.application.on({
-            RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened, 
+            RestrictionEnzymeManagerOpened: this.onEnzymeManagerOpened,
             scope: this
         });
     },
@@ -53,7 +56,6 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             this.GroupManager.initialize();
         }
 
-        var nameData = [];
         var groupSelector = this.managerWindow.query("#enzymeGroupSelector")[0];
 
         Ext.each(this.GroupManager.getGroupNames(), function(name) {
@@ -93,8 +95,6 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      */
     onEnzymeGroupSelected: function(combobox) {
         var newGroup = this.GroupManager.groupByName(combobox.getValue());
-        var newStoreData = [];
-
         var enzymeArray = [];
 
         Ext.each(newGroup.getEnzymes(), function(enzyme) {
@@ -107,7 +107,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
 
     onEnzymeSearchFieldKeyup: function(field) {
         this.enzymeSelector.fromField.store.filterBy(function(rec) {
-            if(rec.data.name.search(new RegExp(field.getValue(), "i")) != -1) {
+            if(rec.data.name.search(new RegExp(field.getValue(), "i")) !== -1) {
                 return true;
             }
         });
@@ -115,12 +115,20 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
         this.enzymeSelector.fromField.bindStore(this.enzymeSelector.fromField.store);
     },
 
-    /**
-     * Saves the active enzymes to a group.	
+     /**
+      * Resorts the enzyme lists
+      */
+     onEnzymeListChange: function(){
+//         this.enzymeSelector.fromField.boundList.getStore().sort("name", "ASC");
+         this.enzymeSelector.toField.boundList.getStore().sort("name", "ASC");
+     },
+
+     /**
+     * Saves the active enzymes to a group.
      * Not implemented in the flex version.
      */
     onSaveButtonClick: function() {
-		alert("save button clicked, no function yet")
+		alert("save button clicked, no function yet");
     },
 
     /**
@@ -128,7 +136,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
      * Also not implemented in the flex version.
      */
     onDeleteGroupButtonClick: function() {
-		alert("delete button clicked, no function yet")
+		alert("delete button clicked, no function yet");
     },
 
     /**
@@ -140,7 +148,7 @@ Ext.define("Vede.controller.RestrictionEnzymeController", {
             names.push(obj.data.name);
         });
 
-        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active", 
+        var newActiveGroup = this.GroupManager.createGroupByEnzymes("active",
                                                                     names);
         this.managerWindow.close();
 
