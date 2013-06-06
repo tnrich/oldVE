@@ -98,12 +98,13 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
-                $.jGrowl("Design Deleted")
+                $.jGrowl("Design Deleted");
              }
          }
     },
 
     onOpenExampleItemBtnClick: function (item, e, eOpts) {
+        debugger
         var selectedItem = item.text;
         var examplesMap = {
             "SLIC/Gibson/CPEC": "resources/examples/SLIC_Gibson_CPEC.json",
@@ -289,7 +290,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
 
-        $.jGrowl("Design Saved", {position: 'bottom-right'});
+        $.jGrowl("Design Saved");
     },
 
     onImportEugeneRulesBtnClick: function(){

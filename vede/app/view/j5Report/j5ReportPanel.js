@@ -103,8 +103,8 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                             height: 20,
                             name: 'j5RunStatus',
                             cls: 'j5RunStatusField',
-                            fieldLabel: '<b>Run Status</b>',
-                            labelWidth: 100
+                            fieldLabel: '<div class="status-note"></div><b>Run Status</b>',
+                            labelWidth: 115
                         },
                         {
                             xtype: 'displayfield',
@@ -135,16 +135,24 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
                 {
                     xtype: 'gridpanel',
                     name: 'warnings',
+                    cls: 'warningsGrid',
                     hidden: true,
                     margin: '10 10 20 10',
                     title: 'Warnings',
                     minHeight: 100,
                     layout: 'fit',
+                    hideHeaders: true,
                     columns: [
                         {
                             xtype: 'gridcolumn',
-                            dataIndex: 'warning',
-                            flex: 1
+                            dataIndex: 'message',
+                            autoHeight: true,
+                            forceFit: true,
+                            flex: 1,
+                            renderer: function(val) {
+                                val = val.substring(1, val.length - 1);
+                                return '<div style="white-space:normal !important;">'+ val +'</div>';
+                            }
                         }
                     ]
                 },

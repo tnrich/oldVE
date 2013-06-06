@@ -48,9 +48,9 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     onImportFileLoad: function(pFile, pExt, pEvt) {
         try
         {
-            if(pExt === 'json' || pExt === 'JSON') Teselagen.manager.DeviceDesignParsersManager.parseJSON(pEvt.target.result,pFile.name);
-            else if(pExt === 'xml' || pExt === 'XML') Teselagen.manager.DeviceDesignParsersManager.parseXML(pEvt.target.result,pFile.name);
-            else Ext.MessageBox.alert('Error', 'Invalid file format');
+          if(pExt === 'json' || pExt === 'JSON') Teselagen.manager.DeviceDesignParsersManager.parseJSON(pEvt.target.result,pFile.name);
+          else if(pExt === 'xml' || pExt === 'XML') Teselagen.manager.DeviceDesignParsersManager.parseXML(pEvt.target.result,pFile.name);
+          else Ext.MessageBox.alert('Error', 'Invalid file format');
         }
         catch(exception)
         {
@@ -60,7 +60,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
         }
     },
 
-    onImportFileLoad: function(pFile, pExt, pEvt) {
+    onImportEugeneRulesFileLoad: function(pFile, pExt, pEvt) {
         try
         {
             var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
@@ -85,7 +85,7 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
             if (ext) {
                 //Ext.getCmp('mainAppPanel').getActiveTab().el.mask('Loading Eugene Rules');
                 var fr = new FileReader();
-                fr.onload = this.onImportFileLoad.bind(this, file, ext[1]);
+                fr.onload = this.onImportEugeneRulesFileLoad.bind(this, file, ext[1]);
                 fr.onerror = this.onImportFileError;
                 fr.readAsText(file);
             }

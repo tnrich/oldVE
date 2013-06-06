@@ -156,6 +156,11 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
         var startRow = this.sequenceAnnotator.rowByBpIndex(fromIndex);
         var endRow = this.sequenceAnnotator.rowByBpIndex(toIndex);
 
+        if(!startRow || !endRow) {
+            this.deselect();
+            return;
+        }
+
         if(startRow.getIndex() === endRow.getIndex()) {
             this.drawRowSelectionRect(fromIndex, toIndex);
         } else if(startRow.getIndex() + 1 <= endRow.getIndex()) {

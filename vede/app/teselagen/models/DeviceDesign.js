@@ -298,8 +298,6 @@ Ext.define("Teselagen.models.DeviceDesign", {
      * @return {Ext.data.Store} Filtered store of EugeneRules containing pPart
      */
     getRulesInvolvingPart: function(pPart) {
-        this.rules().clearFilter();
-
         this.rules().filterBy(function(rule) {
             if (rule.getOperand1() === pPart || rule.getOperand2() === pPart) {
                 return true;
@@ -308,7 +306,15 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         });
 
-        return this.rules();
+        var newStore = Ext.create("Ext.data.Store", {
+            model: 'Teselagen.models.EugeneRule',
+            data: this.rules().getRange(),
+            proxy: 'memory'
+        });
+
+        this.rules().clearFilter();
+
+        return newStore;
     },
 
     /**

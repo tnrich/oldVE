@@ -5,7 +5,7 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox"],
+    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox","Teselagen.manager.TasksMonitor"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -540,28 +540,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
+            Teselagen.manager.TasksMonitor.start();
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    //responseMessage.setValue("Completed");
-                    //loadingMessage.hide();
-                    //responseMessage.hide();
                     $.jGrowl("j5 Run Submitted");
-                    /*
-                    if(warnings.length > 0)
-                    {
-                        msgWarnings = "";
-                        for(var index in warnings)
-                        {
-                            msgWarnings += "<div class='warning-wrap'><div class='warning-note'></div>"+ "<div class='warning-text'>" + warnings[index].message +"</div></div>";
-                        }
-                        alertbox = Ext.MessageBox.alert('Warnings', msgWarnings);
-                        Ext.Function.defer(function () {
-                            alertbox.zIndexManager.bringToFront(alertbox);
-                        }, 100);
-                    }
-                    */
                 } else {
-                    s
                     //loadingMessage.hide();
                     //responseMessage.hide();
                     var messagebox = Ext.MessageBox.show({

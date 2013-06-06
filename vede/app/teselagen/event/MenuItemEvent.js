@@ -12,6 +12,8 @@ Ext.define("Teselagen.event.MenuItemEvent", {
     UNDO: "Undo",
     REDO: "Redo",
 
+    SAFE_EDITING_CHANGED: "SafeEditingChanged",
+
     SELECT_ALL: "SelectAll",
     SELECT_INVERSE: "SelectInverse",
 

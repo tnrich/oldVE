@@ -20,6 +20,19 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         if(this.debugFlag) console.log("Tasks Monitor created!");
     },
 
+    bootMonitoring: function(){
+        var self = this;
+        this.monitorServerTasks(function(data){
+            var monitor = false;
+            for(var j5run in data)
+            {
+                if (data[j5run].status === "In progress") monitor = true;
+            }
+            if(monitor) self.start();
+            else self.stop(true);
+        });
+    },    
+
     startMonitoring: function() {
         var self = this;
         var task = new Ext.util.DelayedTask(function(){
@@ -28,15 +41,20 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         });
         
         task.delay(this.delay);
-
     },
 
-    stop: function(){
+    start: function(){
+        this.runFlag = true;
+        this.startMonitoring();
+        console.log("Tasks Monitor has been enabled.");
+    },
+
+    stop: function(boot){
         this.runFlag = false;
-        console.log("Tasks Monitor has been disabled.");
+        if(!boot) console.log("Tasks Monitor has been disabled.");
     },
 
-    monitorServerTasks: function(){
+    monitorServerTasks: function(cb){
         var self = this;
         Ext.Ajax.request({
             url: '/api/monitorTasks',
@@ -44,7 +62,9 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             },
             method: 'GET',
             success: function(response){
-                self.observeChanges(JSON.parse(response.responseText).j5runs);
+                var parsedResponse = JSON.parse(response.responseText);
+                self.observeChanges(parsedResponse.j5runs);
+                if(typeof (cb) === "function") { cb(parsedResponse); }
             }
         });
     },
@@ -53,10 +73,12 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         if(this.debugFlag) console.log("-----------------------");
         if(this.debugFlag) console.log("Observing");
         var self = this;
+        var changes = false;
+        var anyRunningTask = false;
         for(var j5runKey in data)
         {
             var j5run = data[j5runKey]
-
+            if ( j5run.status === "In progress" ) { anyRunningTask = true; }
             if ( self.mon[j5run._id] )
             {
                 // Continue observed
@@ -67,9 +89,10 @@ Ext.define("Teselagen.manager.TasksMonitor", {
 
                     // Fire change
                     // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
-                    $.jGrowl("j5 Run " + j5run.status);
+                    $.jGrowl("j5 Run " + j5run.status, { sticky: true, theme: 'j5-completed', data: j5run});
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
+                    changes = true;
                 }
                 else
                 {
@@ -83,6 +106,8 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 self.mon[j5run._id] = j5run.status;
             }
         };
+
+        if(!changes&&!anyRunningTask) self.stop(true);
     }
 
 });

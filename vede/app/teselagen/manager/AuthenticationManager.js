@@ -5,7 +5,7 @@
  **/
 
 Ext.define("Teselagen.manager.AuthenticationManager", {
-    requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor.startMonitoring"],
+    requires: ["Teselagen.event.AuthenticationEvent", "Vede.view.common.ProjectPanelView", "Vede.view.AuthWindow","Teselagen.manager.TasksMonitor"],
     alias: "AuthenticationManager",
     singleton: true,
     mixins: {
@@ -86,6 +86,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
                 self.updateSplashScreenMessage(self.authResponse.msg);
                 if (Ext.getCmp("AuthWindow")) { Ext.getCmp("AuthWindow").destroy(); }
                 Vede.application.fireEvent(Teselagen.event.AuthenticationEvent.LOGGED_IN);
+                Teselagen.manager.TasksMonitor.bootMonitoring();
                 Teselagen.manager.TasksMonitor.startMonitoring();
                 if (cb) { return cb(true); }// for Testing
             },

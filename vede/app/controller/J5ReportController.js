@@ -69,9 +69,36 @@ Ext.define("Vede.controller.J5ReportController", {
         this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunEnd').setValue(endDate);
         this.tabPanel.down("form[cls='j5RunInfo']").getForm().findField('j5RunElapsed').setValue(elapsed);
 
+        if(status=="Completed") {
+            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-warning");
+            $("#" + field + " .status-note").addClass("status-note-completed");
+        } else if (status=="Completed with warnings") {
+            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").addClass("status-note-warning");
+        }
+
+        var warnings = this.activeJ5Run.raw.warnings;
+
+        var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
+            model: 'Teselagen.models.j5Output.Warning',
+            data: warnings,
+        });
+
+        if ((warnings.length>0)==true) {
+            this.tabPanel.down('gridpanel[name="warnings"]').show();
+            this.tabPanel.down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+        } else {
+             this.tabPanel.down('gridpanel[name="warnings"]').hide();
+             warnings = null;
+             warningsStore = null;
+        }
+
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 

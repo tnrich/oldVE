@@ -99,6 +99,13 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             }, {
                 xtype: 'menuseparator'
             }, {
+                xtype: 'menucheckitem',
+                id: 'safeEditingMenuItem',
+                text: 'Safe Editing',
+                checked: true
+            }, {
+                xtype: 'menuseparator'
+            }, {
                 xtype: 'menuitem',
                 id: 'findMenuItem',
                 text: 'Find...'

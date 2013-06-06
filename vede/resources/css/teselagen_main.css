@@ -1010,6 +1010,22 @@ background: #F8F8F8;
     padding-top: 0px !important;
 }
 
+.status-note {
+  height: 10px;
+  width: 10px;
+  background: #61B5FF;
+  border-radius: 1000px;
+  float: right;
+  margin-top: 3px;
+}
+
+.status-note-completed {
+  background: #77FF73;
+}
+
+.status-note-warning {
+  background: #FFD24D;
+}
 /*j5 Reports*/
 .j5ReportsPanel, .j5ReportsPanel .x-panel-body-default-framed, .j5ReportsPanel .x-menu-body, .j5ReportsPanel .x-menu {
   background: #333234 !important;
