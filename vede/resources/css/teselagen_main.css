@@ -1013,18 +1013,18 @@ background: #F8F8F8;
   margin: 10px;
 }
 
-.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults {
+.openPartLibraryBtn, .changePartDefinitionBtn, .deletePartBtn, .runj5Btn, .downloadResults, .condenseAssembliesBtn, .distributePCRBtn {
   background: #1585C5;
   transition: background .2s ease-in-out;
   -moz-transition: background .2s ease-in-out;
   -webkit-transition: background .2s ease-in-out;
 }
 
-.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner{
+.openPartLibraryBtn .x-btn-inner, .changePartDefinitionBtn .x-btn-inner, .deletePartBtn .x-btn-inner, .runj5Btn .x-btn-inner, .downloadResults .x-btn-inner, .condenseAssembliesBtn .x-btn-inner, .distributePCRBtn .x-btn-inner{
   color: white;
 }
 
-.openPartLibraryBtn-over, .changePartDefinitionBtn-over, .deletePartBtn-over, .runj5Btn-over, .downloadResults-over {
+.openPartLibraryBtn-over, .changePartDefinitionBtn-over, .deletePartBtn-over, .runj5Btn-over, .downloadResults-over, .condenseAssembliesBtn-over, .distributePCRBtn-over {
   background: #006CAB;
 }
 
@@ -1076,6 +1076,17 @@ background: #F8F8F8;
   padding: 1px 25px 1px 25px;
   font-weight: bold;
   margin: 0px 10px 0px 0px !important;
+}
+
+.importEugeneRulesBtn {
+  margin: 4px 0px 0px 27px;
+  border: 0 !important;
+  font-size: 9px;
+  background: none;
+}
+
+.importEugeneRulesBtn .x-btn-inner {
+  font-size: 11px !important;
 }
 
 .j5button .x-btn-inner {
@@ -1152,11 +1163,12 @@ background: #F8F8F8;
 
 .j5InfoTab-Sub-Advanced .x-tab-default-top {
   background: none !important;
+  border: 0 none !important;
   border-bottom-width: 0 none !important;
 }
 
-.j5InfoTab-Sub-Advanced .x-tab-top-active, .j5InfoTab-Sub-Advanced .x-tab-default-top {
-  background: none !important;
+.j5InfoTab-Sub-Advanced .x-tab-top-active {
+  background: #ECF0F1 !important;
   border: 0 none !important;
   border-bottom-width: 0 none !important;
 }
@@ -1176,8 +1188,8 @@ background: #F8F8F8;
   top:4px;
 }
 
-.condenseAssembliesBtn, .distributePCRBtn{
-  background: #F8F8F8;
+.x-box-scroller-top .x-menu-scroll-top {
+  display: none;
 }
 
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {

@@ -87,16 +87,19 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
             var tmpJ = 0;
+            var cnt = j5collection.bins().getCount();
+
             j5collection.bins().each(function(bin,binKey){
-                var cnt = bin.parts().getCount();
                 bin.parts().each(function(part) {
                     if(part != undefined) {
-                        if(part.get('sequencefile_id') === "") {
+                        if(part.get('sequencefile_id') != "") {
                             tmpJ++;
                         }
                     }
                 });
-                if (tmpJ==cnt) {j5ready = false;}
+                console.log(tmpJ);
+                console.log(cnt);
+                if (tmpJ<cnt) {j5ready = false;} else {j5ready = true;}
             });
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);

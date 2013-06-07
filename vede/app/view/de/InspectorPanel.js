@@ -488,21 +488,40 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     overCls: 'runj5Btn-over',
                     margin: '2.5 0 2.5 0',
                     height: 40,
-                    border: 0,
-                    disabled: true,
+                    border: 0
                 },
                 {
                     xtype: 'button',
+                    text : 'Condense Assemblies',
                     cls: 'condenseAssembliesBtn',
-                    text: 'Condense Assemblies',
-                    margin: '2.5 0 2.5 0'
+                    overCls: 'condenseAssembliesBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 40,
+                    border: 0,
+                    hidden: true,
                 },
                 {
                     xtype: 'button',
+                    text : 'Distribute PCR Reactions',
                     cls: 'distributePCRBtn',
+                    overCls: 'distributePCRBtn-over',
                     margin: '2.5 0 2.5 0',
-                    text: 'Distribute PCR Reactions'
-                }, 
+                    height: 40,
+                    border: 0,
+                    hidden: true,
+                },
+                // {
+                //     xtype: 'button',
+                //     cls: 'condenseAssembliesBtn',
+                //     text: 'Condense Assemblies',
+                //     margin: '2.5 0 2.5 0'
+                // },
+                // {
+                //     xtype: 'button',
+                //     cls: 'distributePCRBtn',
+                //     margin: '2.5 0 2.5 0',
+                //     text: 'Distribute PCR Reactions'
+                // }, 
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
@@ -541,7 +560,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'container',
                                     html: '<b>Master Plasmids List</b>',
                                     cls: 'masterPlasmidsList-box',
-                                    margin: '15 0 0 0',
+                                    margin: '20 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -550,7 +569,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'radiofield',
                                         cls: 'useServerPlasmidsRadioBtn',
                                         name: 'plasmidsListSource',
-                                        margin: '15 0 0 25',
+                                        margin: '20 0 0 25',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
@@ -585,7 +604,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {   
                                     xtype: 'container',
                                     html: '<b>Master Oligos List</b>',
-                                    margin: '15 0 0 0',
+                                    margin: '20 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -594,7 +613,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'radiofield',
                                         cls: 'useServerOligosRadioBtn',
                                         name: 'oligosListSource',
-                                        margin: '15 0 0 25',
+                                        margin: '20 0 0 25',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
@@ -624,7 +643,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                 {   
                                     xtype: 'container',
                                     html: '<b>Master Direct Syntheses List</b>',
-                                    margin: '15 0 0 0',
+                                    margin: '20 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -633,7 +652,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         xtype: 'radiofield',
                                         cls: 'useServerSynthesesRadioBtn',
                                         name: 'directSynthesesListSource',
-                                        margin: '15 0 0 25',
+                                        margin: '20 0 0 25',
                                         labelWidth: 110,
                                         boxLabel: 'Use latest server version',
                                         checked: true
@@ -771,32 +790,33 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     items: [
                                         {   
                                         xtype: 'container',
-                                        html: 'Downtream Automation Parameters File:',
+                                        html: '',
                                         cls: 'downstreamAutomationParameters-box',
                                         margin: '5 0 0 0',
                                         layout: {
                                             align: 'stretch',
                                             type: 'vbox'
                                         },
-                                        items: [{
-                                            xtype: 'radiofield',
-                                            name: 'automationParamsFileSource',
-                                            margin: '20 0 0 25',
-                                            labelWidth: 110,
-                                            boxLabel: 'Use latest server version',
-                                            checked: true
-                                        }, {
-                                            xtype: 'radiofield',
-                                            name: 'automationParamsFileSource',
-                                            margin: '5 0 0 25',
-                                            fieldLabelCls: 'align-middle',
-                                            labelWidth: 110,
-                                            boxLabel: 'Use custom parameters'
-                                        },
+                                        items: [
+                                        // {
+                                        //     xtype: 'radiofield',
+                                        //     name: 'automationParamsFileSource',
+                                        //     margin: '20 0 0 25',
+                                        //     labelWidth: 110,
+                                        //     boxLabel: 'Use latest server version',
+                                        //     checked: true
+                                        // }, {
+                                        //     xtype: 'radiofield',
+                                        //     name: 'automationParamsFileSource',
+                                        //     margin: '5 0 0 25',
+                                        //     fieldLabelCls: 'align-middle',
+                                        //     labelWidth: 110,
+                                        //     boxLabel: 'Use custom parameters'
+                                        // },
                                         {
                                             xtype: 'filefield',
                                             cls: 'sourcePlateListSelector',
-                                            margin: '35 0 0 0',
+                                            margin: '30 0 0 0',
                                             validateOnChange: false,
                                             fieldLabel: 'Source Plate List:',
                                             labelWidth: 110,
@@ -806,7 +826,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             xtype: 'filefield',
                                             cls: 'zippedPlateFilesSelector',
                                             fieldLabel: 'Zipped Plate Files:',
-                                            margin: '10 0 0 0',
+                                            margin: '15 0 0 0',
                                             labelWidth: 110,
                                             labelSeparator: ' ',
                                             buttonText: 'Choose File'
@@ -815,7 +835,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             cls: 'assemblyFileSelector',
                                             validateOnChange: false,
                                             fieldLabel: 'j5 Assembly File:',
-                                            margin: '10 0 0 0',
+                                            margin: '15 0 0 0',
                                             labelWidth: 110,
                                             labelSeparator: ' ',
                                             buttonText: 'Choose File'
