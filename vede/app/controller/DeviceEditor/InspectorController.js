@@ -50,7 +50,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onClearPart: function() {
         this.clearPartInfo();
-        $.jGrowl("Part Cleared");
+        toastr.options.onclick = null;
+        toastr.info("Part Cleared");
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -97,8 +98,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
                 });
-                console.log(tmpJ);
-                console.log(cnt);
                 if (tmpJ<cnt) {j5ready = false;} else {j5ready = true;}
             });
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
@@ -170,6 +169,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onopenPartLibraryBtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
+        var selectedPartIndex = this.selectedBin.indexOfPart(this.selectedPart);
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
@@ -246,8 +246,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                             {
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-                                                bin.parts().removeAt(insertIndex);
-                                                bin.parts().insert(insertIndex,part);
+                                                bin.parts().removeAt(selectedPartIndex);
+                                                bin.parts().insert(selectedPartIndex,part);
                                                 self.onReRenderDECanvasEvent();
                                                 selectWindow.close();
                                                 self.selectedPart = part;
@@ -614,7 +614,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     this.activeProject.rules().clearFilter();
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
-                    $.jGrowl("Eugene Rule Removed");
+                    toastr.options.onclick = null;
+                    toastr.info("Eugene Rule Removed");
                 }
             }, this);
         }
@@ -667,7 +668,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 newEugeneRuleDialog.close();
             }
         });
-        $.jGrowl("Eugene Rule Added");
+        toastr.options.onclick = null;
+        toastr.info("Eugene Rule Added");
     },
 
     /**

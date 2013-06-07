@@ -28,6 +28,7 @@ Ext.define('Vede.view.de.grid.Bin', {
 
     constructor: function(config) {
         this.initConfig(config);
+        var self = this;
 
         var flipButtonIconPath;
         var html;
@@ -69,6 +70,16 @@ Ext.define('Vede.view.de.grid.Bin', {
                 },
                 layout: {
                     type: 'absolute'
+                },
+                listeners: {
+                        afterrender: function (obj) {
+                            if(self.getBin()) {
+                                var tip = Ext.create('Ext.tip.ToolTip', {
+                                        target: this.up().el,
+                                        html: html
+                                });
+                            }
+                        }
                 },
                 items: [{
                     xtype: 'button',

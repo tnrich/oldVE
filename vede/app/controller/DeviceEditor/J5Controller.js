@@ -534,7 +534,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             Teselagen.manager.TasksMonitor.start();
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    $.jGrowl("j5 Run Submitted");
+                    toastr.options.onclick = null;
+                    toastr.info("j5 Run Submitted");
                 } else {
                     //loadingMessage.hide();
                     //responseMessage.hide();
