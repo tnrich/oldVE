@@ -228,7 +228,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
              {
                 xtype: 'menuitem',
                 id: 'createNewFeatureMenuItem',
-                text: 'Create New Feature'
+                text: 'Annotate'
             },
             {
                 xtype: 'menuitem',
