@@ -16,6 +16,8 @@ var processJ5Response = require('./j5parser');
 
 var j5Runs = app.db.model("j5run");
 
+var fs = require("fs");
+
 /**
  * Write to quick.log
  */
@@ -408,6 +410,22 @@ app.post('/executej5',restrict,function(req,res){
     });
 
   });
+});
+
+// Design Assembly RPC
+app.get('/sbol',function(req,res){
+
+
+  fs.readFile('./resources/sbol/ConvertSBOLXML_query0.xml', encoding='utf8', function (err, data) {
+    res.json({data:data});
+    /*
+    app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
+
+    });
+    */
+
+  });
+
 });
 
 };

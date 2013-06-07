@@ -247,6 +247,10 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                                 Vede.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION);
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
+
+                                                // bin.parts().removeAt(insertIndex);
+                                                // console.log(insertIndex);
+                                                // bin.parts().insert(insertIndex,part);
                                                 bin.parts().removeAt(selectedPartIndex);
                                                 bin.parts().insert(selectedPartIndex,part);
                                                 self.onReRenderDECanvasEvent();
@@ -353,6 +357,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
                 });
+            } else {
+                changePartDefinitionBtn.disable();
+                openPartLibraryBtn.setText("Select Part From Library");
+                openPartLibraryBtn.addCls('selectPartFocus');
+                changePartDefinitionBtn.addCls('btnDisabled');     
+                deletePartBtn.disable();
+                clearPartMenuItem.disable();
+                deletePartBtn.addCls('btnDisabled');
             }
 
             if(j5Part.get("fas") === "") {

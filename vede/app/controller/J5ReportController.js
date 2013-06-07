@@ -132,12 +132,15 @@ Ext.define("Vede.controller.J5ReportController", {
 
     loadj5Results: function () {
         var self = this;
+
         this.activeProject.j5runs().load({
             callback: function (runs) {
-                self.j5runs = runs;
+                self.j5runs = runs.reverse();
                 self.renderMenu();
             }
         });
+
+
     },
 
     onTabChange: function (tabPanel, newTab, oldTab) {

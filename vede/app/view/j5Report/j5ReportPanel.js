@@ -32,6 +32,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
         frameHeader: false,
         hideCollapseTool: false,
         overlapHeader: false,
+        autoScroll:true,
         titleCollapse: false,
         plain: false,
         removePanelHeader: false,
@@ -44,7 +45,7 @@ Ext.define('Vede.view.j5Report.j5ReportPanel', {
             xtype: 'menu',
             cls: 'j5RunsMenu',
             floating: false,
-            autoScroll: true,
+            autoScroll: false,
             width: 291,
             items: []
         }]

@@ -1,4 +1,4 @@
-/**
+    /**
  * j5 controller
  * @class Vede.controller.DeviceEditor.J5Controller
  */
@@ -93,10 +93,42 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * the mainAppPanel which hides the j5Window when the tab is switched away,
      * and re-shows it when the tab is switched back.
      */
-    onTabChange: function(j5AdvancedTab, newTab, oldTab) {
-        if(newTab.initialCls == "j5InfoTab-Sub-Advanced")
-            {
-                this.onTabChange
+
+     onTabChange: function(j5AdvancedTab, newTab, oldTab) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+        var runj5Btn = inspector.down("button[cls='runj5Btn']");
+        var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
+        var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
+
+        if(newTab.initialCls == "j5InfoTab-Basic") {
+                runj5Btn.show();
+                distributePCRBtn.hide();
+                condenseAssembliesBtn.hide();
+        } else {
+            j5AdvancedTab.getActiveTab().setActiveTab(0);
+            runj5Btn.hide();
+            distributePCRBtn.hide();
+            condenseAssembliesBtn.show();
+        }
+        
+    },
+
+    onTabChangeSub: function(j5AdvancedTab, newTab, oldTab) {
+        var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
+        var inspector = currentTab.down('InspectorPanel');
+        var runj5Btn = inspector.down("button[cls='runj5Btn']");
+        var condenseAssembliesBtn = inspector.down("button[cls='condenseAssembliesBtn']");
+        var distributePCRBtn = inspector.down("button[cls='distributePCRBtn']");
+
+        if(newTab.initialCls == "condenseAssemblyFiles-box") {
+                runj5Btn.hide();
+                distributePCRBtn.hide();
+                condenseAssembliesBtn.show();
+            }else if(newTab.initialCls == "downstreamAutomation-box") {                    
+                runj5Btn.hide();
+                distributePCRBtn.show();
+                condenseAssembliesBtn.hide();
             }
         
     },
@@ -751,6 +783,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     init: function () {
         this.control({
+            "panel[cls='j5InfoTab-Sub-Advanced']": {
+                tabchange: this.onTabChangeSub
+            },
             "panel[cls='j5InfoTab-Sub']": {
                 tabchange: this.onTabChange
             },

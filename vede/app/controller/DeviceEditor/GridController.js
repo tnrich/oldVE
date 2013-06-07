@@ -385,6 +385,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.renderFasConflicts(parts, addedPart);
         }, this);
 
+        this.totalRows = this.DeviceDesignManager.findMaxNumParts(this.activeProject);
         this.updateBinsWithTotalRows();
     },
 
@@ -856,8 +857,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * parts already.
      */
     updateBinsWithTotalRows: function() {
-        this.totalRows = this.DeviceDesignManager.findMaxNumParts(this.activeProject);
-
         var items = this.grid.items.getRange();
 
         for(var i = 0; i < items.length; i++) {
@@ -990,7 +989,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(gridParts.length > 0 && gridParts.indexOf(this.selectedPart) === -1) {
             this.selectedPart = gridParts[0];
-            gridParts[0].select();
+            gridParts[0].mapSelect();
         }
 
         // Select all gridParts with the same source, unless the j5Part is empty.
