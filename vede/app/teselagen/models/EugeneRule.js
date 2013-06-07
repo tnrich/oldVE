@@ -56,6 +56,8 @@ Ext.define("Teselagen.models.EugeneRule", {
         },
 
         
+        {name: "originalRuleLine",      type: "String",    defaultValue: ""},
+
         {name: "negationOperator",      type: "boolean",    defaultValue: false},
 
         {
