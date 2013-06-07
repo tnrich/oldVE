@@ -40,7 +40,8 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
             parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on '+ nowDate);
             if(typeof (cb) === "function") { cb(); }
-            $.jGrowl ("Sequence Successfully Saved");
+            toastr.options.onclick = null;
+            toastr.info ("Sequence Successfully Saved");
         };
 
         var saveToServer = function(){

@@ -84,7 +84,6 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 // Continue observed
                 if( self.mon[j5run._id] !== j5run.status ) 
                 {
-                    console.log(j5run);
                     // Change
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
                     var startDate = new Date(j5run.date);
@@ -94,7 +93,11 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                     elapsed = self.elapsedDate(elapsed);
                                 // Fire change
                     // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
-                    $.jGrowl("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});
+                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",j5run);}
+                    toastr.options.timeOut = 0;
+                    toastr.success("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});
+                    toastr.options.timeOut = 5000;
+
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
                     changes = true;

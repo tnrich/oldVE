@@ -638,7 +638,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.toggleInsertOptions(false);
 
-        // $.jGrowl("Added Column Left");
+        // toastr.info("Added Column Left");
 
     },
 
@@ -673,7 +673,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleCutCopyPastePartOptions(false);
         this.toggleInsertOptions(false);
         
-        // $.jGrowl("Added Column Right");
+        // toastr.info("Added Column Right");
     },
 
     /**

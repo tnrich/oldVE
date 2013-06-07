@@ -93,21 +93,12 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
      * the mainAppPanel which hides the j5Window when the tab is switched away,
      * and re-shows it when the tab is switched back.
      */
-    onTabChange: function(mainAppPanel, newTab, oldTab) {
-        /*
-        if(oldTab)
-        {
-            if(oldTab) {
-                oldTab.hide();
+    onTabChange: function(j5AdvancedTab, newTab, oldTab) {
+        if(newTab.initialCls == "j5InfoTab-Sub-Advanced")
+            {
+                this.onTabChange
             }
-        }
-
-        if(newTab) {
-            if(newTab) {
-                newTab.show();
-            }
-        }
-        */
+        
     },
 
     onEditJ5ParamsBtnClick: function () {
@@ -543,7 +534,8 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             Teselagen.manager.TasksMonitor.start();
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
-                    $.jGrowl("j5 Run Submitted");
+                    toastr.options.onclick = null;
+                    toastr.info("j5 Run Submitted");
                 } else {
                     //loadingMessage.hide();
                     //responseMessage.hide();
@@ -759,7 +751,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
     init: function () {
         this.control({
-            "#mainAppPanel": {
+            "panel[cls='j5InfoTab-Sub']": {
                 tabchange: this.onTabChange
             },
             "button[cls='editj5ParamsBtn']": {

@@ -50,7 +50,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onClearPart: function() {
         this.clearPartInfo();
-        $.jGrowl("Part Cleared");
+        toastr.options.onclick = null;
+        toastr.info("Part Cleared");
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -87,16 +88,17 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
             var tmpJ = 0;
+            var cnt = j5collection.bins().getCount();
+
             j5collection.bins().each(function(bin,binKey){
-                var cnt = bin.parts().getCount();
                 bin.parts().each(function(part) {
                     if(part != undefined) {
-                        if(part.get('sequencefile_id') === "") {
+                        if(part.get('sequencefile_id') != "") {
                             tmpJ++;
                         }
                     }
                 });
-                if (tmpJ==cnt) {j5ready = false;}
+                if (tmpJ<cnt) {j5ready = false;} else {j5ready = true;}
             });
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
@@ -612,7 +614,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     this.activeProject.rules().clearFilter();
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
-                    $.jGrowl("Eugene Rule Removed");
+                    toastr.options.onclick = null;
+                    toastr.info("Eugene Rule Removed");
                 }
             }, this);
         }
@@ -665,7 +668,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 newEugeneRuleDialog.close();
             }
         });
-        $.jGrowl("Eugene Rule Added");
+        toastr.options.onclick = null;
+        toastr.info("Eugene Rule Added");
     },
 
     /**
