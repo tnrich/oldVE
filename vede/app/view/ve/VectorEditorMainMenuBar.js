@@ -225,11 +225,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             xtype: 'menu',
             minWidth: 140,
             items: [
-//            {
-//                xtype: 'menuitem',
-//                id: 'createNewFeatureMenuItem',
-//                text: 'Create New Feature'
-//            },
+             {
+                xtype: 'menuitem',
+                id: 'createNewFeatureMenuItem',
+                text: 'Create New Feature'
+            },
             {
                 xtype: 'menuitem',
                 id: 'restrictionEnzymesManagerMenuItem',

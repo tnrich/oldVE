@@ -16,7 +16,7 @@ Ext.define("Vede.controller.SequenceController", {
                "Teselagen.event.SelectionLayerEvent",
                "Teselagen.event.VisibilityEvent",
                "Teselagen.manager.RestrictionEnzymeGroupManager"],
-
+    
     AAManager: null,
     ORFManager: null,
     RestrictionEnzymeManager: null,
@@ -117,8 +117,9 @@ Ext.define("Vede.controller.SequenceController", {
             this.onSequenceChanged;
 
         this.application.on(listenersObject, this);
+        
     },
-
+    
     onLaunch: function() {
         // TODO: maybe put managers in statics so they are shared by all 
         // child controllers? 
