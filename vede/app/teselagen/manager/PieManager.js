@@ -31,6 +31,10 @@ Ext.define("Teselagen.manager.PieManager", {
     nameBox: null,
     caret: null,
 
+    cutSiteSVG: null,
+    orfSVG: null,
+    featureSVG: null,
+
     cutSiteRenderer: null,
     orfRenderer: null,
     renderers: [],
@@ -75,6 +79,7 @@ Ext.define("Teselagen.manager.PieManager", {
         this.initConfig(inData);
 
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
+            cutSiteSVG: this.cutSiteSVG,
             sequenceManager: this.sequenceManager,
             center: this.center,
             railRadius: this.railRadius,
@@ -82,6 +87,7 @@ Ext.define("Teselagen.manager.PieManager", {
         });
 
         this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+            featureSVG: this.featureSVG,
             sequenceManager: this.sequenceManager,
             center: this.center,
             railRadius: this.railRadius,
@@ -89,6 +95,7 @@ Ext.define("Teselagen.manager.PieManager", {
         });
 
         this.orfRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {
+            orfSVG: this.orfSVG,
             sequenceManager: this.sequenceManager,
             center: this.center,
             railRadius: this.railRadius,
@@ -792,7 +799,14 @@ Ext.define("Teselagen.manager.PieManager", {
             length: length
         });
 
-        //this.nameBox.setStyle("dominant-baseline", "central");
+        this.cutSiteSVG = this.pie.append("svg:g")
+                                  .attr("class", "pieCutSite");
+
+        this.orfSVG = this.pie.append("svg:g")
+                              .attr("class", "pieOrf");
+
+        this.featureSVG = this.pie.append("svg:g")
+                                  .attr("class", "pieFeature");
     },
 
     /**

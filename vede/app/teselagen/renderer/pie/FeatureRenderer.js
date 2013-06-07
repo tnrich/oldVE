@@ -9,10 +9,13 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
 
     statics: {
         DEFAULT_FEATURE_HEIGHT: 7,
-        DEFAULT_FEATURES_GAP: 3
+        DEFAULT_FEATURES_GAP: 3,
+        OUTLINE_COLOR: "black",
+        OUTLINE_WIDTH: 0.5
     },
 
     config: {
+        featureSVG: null,
         features: [],
         middlePoints: null
     },
@@ -32,8 +35,8 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
     },
 
     /**
-     * Converts the given features and their locations to sprites.
-     * @return {Ext.draw.Sprite[]} The array of sprites.
+     * Converts the given features and their locations to sprites and appends
+     * them to this.pie.
      */
     render: function() {
         var sprites = [];
@@ -75,6 +78,12 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
 
                 if(feature.getStart() == location.getStart() &&
                    feature.getStrand() == this.StrandType.BACKWARD) {
+
+                    this.featureSVG.append("svg:path")
+                                   .attr("stroke", this.self.OUTLINE_COLOR)
+                                   .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                                   .attr("fill", color)
+                                   .attr("fill-rule", "evenodd");
 
                     arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, 
                                  featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 

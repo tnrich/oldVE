@@ -10,8 +10,6 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
     ARC_THRESHOLD: 5, // Minimum arc length of a feature to be drawn as a
                       // full pie piece as opposed to a triangle.
-    OUTLINE_COLOR: "black",
-    OUTLINE_WIDTH: 0.5,
 
     /**
      * Draws an arc using an SVG path.
@@ -260,7 +258,7 @@ Ext.define("Teselagen.utils.GraphicUtils", {
         // The tip of the arrow.
         var middlePoint = Ext.create("Teselagen.bio.util.Point");
 
-        var sprite;
+        var path;
         if(direction > 0) {
             if(startAngle > endAngle) {
                 arcLength = radius * (2 * Math.PI - startAngle + endAngle);
@@ -301,20 +299,13 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                     innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
                     innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
 
-                    sprite = Ext.create("Ext.draw.Sprite", {
-                        type: "path",
-                        path: this.drawArc(center, outerRadius, startAngle, 
-                                    endAngle, false, true, sweep, largeFlag) + 
-                              "L" + middlePoint.x + " " + middlePoint.y + " " +
-                              "L" + innerCorner.x + " " + innerCorner.y + " " +
-                              this.drawArc(center, innerRadius, startAngle,
-                                    endAngle, true, true, !sweep, largeFlag) +
-                              "L" + outerCorner.x + " " + outerCorner.y,
-                        stroke: this.OUTLINE_COLOR,
-                        "stroke-width": this.OUTLINE_WIDTH,
-                        fill: color,
-                        "fill-rule": "evenodd"
-                    });
+                    path = this.drawArc(center, outerRadius, startAngle, 
+                                 endAngle, false, true, sweep, largeFlag) + 
+                           "L" + middlePoint.x + " " + middlePoint.y + " " +
+                           "L" + innerCorner.x + " " + innerCorner.y + " " +
+                           this.drawArc(center, innerRadius, startAngle,
+                                 endAngle, true, true, !sweep, largeFlag) +
+                           "L" + outerCorner.x + " " + outerCorner.y;
                 } else if(direction == 2) {
                     middlePoint.x = center.x + radius * Math.sin(startAngle);
                     middlePoint.y = center.y - radius * Math.cos(startAngle);
@@ -327,21 +318,14 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                     innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
                     innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
 
-                    sprite = Ext.create("Ext.draw.Sprite", {
-                        type: "path",
-                        path: "M" + outerCorner.x + " " + outerCorner.y + 
-                              this.drawArc(center, outerRadius, startAngle,
-                                    endAngle, false, true, sweep, largeFlag) + 
-                              "L" + innerCorner.x + " " + innerCorner.y +
-                              this.drawArc(center, innerRadius, startAngle,
-                                    endAngle, true, true, !sweep, largeFlag) + 
-                              "L" + middlePoint.x + " " + middlePoint.y + 
-                              "L" + outerCorner.x + " " + outerCorner.y,
-                        stroke: this.OUTLINE_COLOR,
-                        "stroke-width": this.OUTLINE_WIDTH,
-                        fill: color,
-                        "fill-rule": "evenodd"
-                    });
+                    path = "M" + outerCorner.x + " " + outerCorner.y + 
+                           this.drawArc(center, outerRadius, startAngle,
+                                endAngle, false, true, sweep, largeFlag) + 
+                           "L" + innerCorner.x + " " + innerCorner.y +
+                           this.drawArc(center, innerRadius, startAngle,
+                                endAngle, true, true, !sweep, largeFlag) + 
+                           "L" + middlePoint.x + " " + middlePoint.y + 
+                           "L" + outerCorner.x + " " + outerCorner.y;
                 }
             } else {
                 if(direction == 1) {
@@ -353,16 +337,9 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                     innerCorner.x = center.x + innerRadius * Math.sin(startAngle);
                     innerCorner.y = center.y - innerRadius * Math.cos(startAngle);
 
-                    sprite = Ext.create("Ext.draw.Sprite", {
-                        type: "path",
-                        path: "M" + outerCorner.x + " " + outerCorner.y +
-                              "L" + middlePoint.x + " " + middlePoint.y +
-                              "L" + innerCorner.x + " " + innerCorner.y +
-                              "Z",
-                        stroke: this.OUTLINE_COLOR,
-                        "stroke-width": this.OUTLINE_WIDTH,
-                        fill: color
-                    });
+                    path = "M" + outerCorner.x + " " + outerCorner.y +
+                           "L" + middlePoint.x + " " + middlePoint.y +
+                           "L" + innerCorner.x + " " + innerCorner.y + "Z";
                 } else if(direction == 2) {
                     middlePoint.x = center.x + radius * Math.sin(startAngle);
                     middlePoint.y = center.y - radius * Math.cos(startAngle);
@@ -372,16 +349,9 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                     innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
                     innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
 
-                    sprite = Ext.create("Ext.draw.Sprite", {
-                        type: "path",
-                        path: "M" + outerCorner.x + " " + outerCorner.y +
-                              "L" + innerCorner.x + " " + innerCorner.y +
-                              "L" + middlePoint.x + " " + middlePoint.y +
-                              "Z",
-                        stroke: this.OUTLINE_COLOR,
-                        "stroke-width": this.OUTLINE_WIDTH,
-                        fill: color
-                    });
+                    path = "M" + outerCorner.x + " " + outerCorner.y +
+                           "L" + innerCorner.x + " " + innerCorner.y +
+                           "L" + middlePoint.x + " " + middlePoint.y + "Z";
                 }
             }
         } else {
@@ -391,22 +361,16 @@ Ext.define("Teselagen.utils.GraphicUtils", {
             innerCorner.x = center.x + innerRadius * Math.sin(endAngle);
             innerCorner.y = center.y - innerRadius * Math.cos(endAngle);
 
-            sprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + outerCorner.x + " " + outerCorner.y +
-                      this.drawArc(center, outerRadius, startAngle, endAngle,
-                                   false, true) + 
-                      "L" + innerCorner.x + " " + innerCorner.y +
-                      this.drawArc(center, innerRadius, startAngle, endAngle,
-                                   false, true) +
-                      "L" + outerCorner.x + " " + outerCorner.y,
-                stroke: this.OUTLINE_COLOR,
-                "stroke-width": this.OUTLINE_WIDTH,
-                fill: color
-            });
+            path = "M" + outerCorner.x + " " + outerCorner.y +
+                   this.drawArc(center, outerRadius, startAngle, endAngle,
+                                false, true) + 
+                   "L" + innerCorner.x + " " + innerCorner.y +
+                   this.drawArc(center, innerRadius, startAngle, endAngle,
+                                false, true) +
+                   "L" + outerCorner.x + " " + outerCorner.y;
         }
 
-        return sprite;
+        return path;
     },
 
     /**
