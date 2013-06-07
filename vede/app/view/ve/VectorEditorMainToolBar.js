@@ -205,6 +205,11 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         tooltip: 'Show ORF'
     },
     {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20
+    },
+    {
         xtype: 'button',
         cls: 'fullscreenBtn',
         id: 'fullscreen',
