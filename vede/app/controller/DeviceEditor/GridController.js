@@ -177,6 +177,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
          if(j5Part) {
             if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
+                gridPart.selectAlert();
             } else {
                 gridPart.deselect();
                 gridPart.mapSelect();
