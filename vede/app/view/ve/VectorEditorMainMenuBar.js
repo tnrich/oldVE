@@ -230,11 +230,11 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
 //                id: 'createNewFeatureMenuItem',
 //                text: 'Create New Feature'
 //            },
-//            {
-//                xtype: 'menuitem',
-//                id: 'restrictionEnzymesManagerMenuItem',
-//                text: 'Restriction Enzymes Manager'
-//            },
+            {
+                xtype: 'menuitem',
+                id: 'restrictionEnzymesManagerMenuItem',
+                text: 'Restriction Enzymes Manager'
+            },
             {
                 xtype: 'menuitem',
                 id: 'simulateDigestionMenuItem',

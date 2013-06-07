@@ -29,6 +29,7 @@ Ext.define('Vede.view.de.grid.Part', {
 
     constructor: function (config) {
         var self = this;
+        var fas;
         this.initConfig(config);
 
         //if (this.getPart()) console.log(this.getPart().get("name"));
@@ -80,15 +81,17 @@ Ext.define('Vede.view.de.grid.Part', {
                         'text-align': 'center'
                     },
                     html: html,
-                    /*listeners: {
+                    listeners: {
                         afterrender: function (obj) {
-                            if(self.getPart()) { 
-                                if(self.getPart().isEmpty()) {
-                                    console.log(obj.getEl().getAttribute("id"));
-                                }
+                            if(self.getPart() && self.getPart().get("name")) {
+                                var tip = Ext.create('Ext.tip.ToolTip', {
+                                        target: this.up().el,
+                                        html: self.getPart().get("name")
+
+                                });
                             }
                         }
-                    }*/
+                    }
                 }]
             }]
         });
@@ -115,8 +118,11 @@ Ext.define('Vede.view.de.grid.Part', {
 
         // If the fas is set, add either a red or blue rectangle, depending on 
         // whether the fasConflict flag is true or false.
-        if(this.parentBin && this.getPart().get("fas") != "None") {
-            this.addFasIndicator(this.getFasConflict());
+        if (this.parentBin) {
+            fas = this.getPart().get("fas") || "None";
+            if (fas != "None") {
+                this.addFasIndicator(this.getFasConflict());
+            }
         }
 
         // If the part is associated with a Eugene rule, add the indicator.
@@ -140,7 +146,6 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     highlight: function() {
         this.partCell.down().addBodyCls("gridPartCell-highlighted");
-        this.partCell.down().addBodyCls("gridPartCell-selected");
     },
 
     /**

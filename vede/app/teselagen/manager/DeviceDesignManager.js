@@ -458,7 +458,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
     },
 
     /**
-     * Gets the parent bin of a part.
+     * Gets one parent bin of a part.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
      * @returns {Teselagen.models.J5Bin}
@@ -467,6 +467,41 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         var parentIndex = this.getBinAssignment(pDevice, pPart);
 
         return this.getBinByIndex(pDevice, parentIndex);
+    },
+
+    /**
+     * Gets all bins which contain a part.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Teselagen.models.J5Bin[]}
+     */
+    getParentBins: function(pDevice, pPart) {
+        var bins = [];
+        var binIndices = this.getOwnerBinIndices(pDevice, pPart);
+
+        for(var i = 0; i < binIndices.length; i++) {
+            bins.push(this.getBinByIndex(pDevice, binIndices[i]));
+        }
+
+        return bins;
+    },
+
+    /**
+     * Gets the bin which owns a specific parts store.
+     * @param {Teselagen.models.DeviceDesign} pDevice
+     * @param {Teselagen.models.Part} pPart
+     * @returns {Teselagen.models.J5Bin[]}
+     */
+    getBinByPartsStore: function(pDevice, pStore) {
+        var bins = pDevice.getJ5Collection().bins().getRange();
+        var ownerBin;
+
+        for(var i = 0; i < bins.length; i++) {
+            ownerBin = bins[i];
+            if(ownerBin.parts() === pStore) {
+                return ownerBin;
+            }
+        }
     },
 
     /**
@@ -711,7 +746,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         //return pDevice.isPartInCollection(pPart);
     },
     /**
-     * Determines the bin that pPart is in and returns its index.
+     * Determines (last) bin that pPart is in and returns its index.
      * @param {Teselagen.models.DeviceDesign} pDevice
      * @param {Teselagen.models.Part} pPart
      * @returns {Number} Index of bin.
@@ -726,6 +761,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
         return binIndex;
         //return pDevice.getJ5Collection().getBinAssignment(pPart);
     },
+
     /**
      * Gets the indices of all bins that contain a given part.
      * @param {Teselagen.models.DeviceDesign} pDevice
@@ -734,9 +770,20 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     getOwnerBinIndices: function(pDevice, pPart) {
         var binIndices = [];
-        for(var i = 0; i < pDevice.getJ5Collection().binCount(); i++) {
-            if(pDevice.getJ5Collection().bins().getAt(i).parts().indexOf(pPart) !== -1) {
-                binIndices.push(i);
+        var binsStore = pDevice.getJ5Collection().bins();
+        var partsStore;
+        if(!pPart) {
+            return [];
+        }
+        for(var i = 0; i < binsStore.getCount(); i++) {
+            partsStore = binsStore.getAt(i).parts();
+
+            for(var j = 0; j < partsStore.getCount(); j++) {
+                if(partsStore.getAt(j) && partsStore.getAt(j).id && pPart.id) { 
+                    if(partsStore.getAt(j).id === pPart.id) {
+                        binIndices.push(i);
+                    }
+                }
             }
         }
 

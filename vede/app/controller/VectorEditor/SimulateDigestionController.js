@@ -102,27 +102,17 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
              });
          this.digestPanel = this.managerWindow.query("#drawingSurface")[0];
          this.digestManager.digestPanel = this.digestPanel;
-         //this.DigestionCalculator = Teselagen.bio.tools.DigestionCalculator;
-         //this.DNATools = Teselagen.bio.sequence.DNATools;
          var groupSelector = this.managerWindow.query("#enzymeGroupSelector-digest")[0];
          this.enzymeListSelector = this.managerWindow.query("#enzymeListSelector-digest")[0];
          if(!this.GroupManager.getIsInitialized()) {
              this.GroupManager.initialize();
          }
 
-//         var nameData = [];
          //Add names of groups to combobox
          Ext.each(this.GroupManager.getGroupNames(), function(name) {
              groupSelector.store.add({"name": name});
          });
 
-//         var startGroup = this.GroupManager.groupByName(groupSelector.store.getAt("0").get("name"));
-//         var groupArray = [];
-//         Ext.each(startGroup.getEnzymes(), function(enzyme) {
-//             groupArray.push({name: enzyme.getName()});
-//         });
-//         this.enzymeListSelector.store.loadData(groupArray);
-//         this.enzymeListSelector.bindStore(this.enzymeListSelector.store);
          this.digestManager.setDigestPanel(this.digestPanel);
          this.digestManager.setGroupManager(this.GroupManager);
          this.digestManager.setEnzymeListSelector(this.enzymeListSelector);
@@ -131,7 +121,6 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
          var ladderSelector = this.managerWindow.query("#ladderSelector")[0];
          this.updateLadderLane(ladderSelector);
          this.digestManager.drawGel();
-         //"// Makes it look nicer in vim
      },
      /**
       * Calls the manager to save the currently selected enzymes
@@ -174,7 +163,7 @@ Ext.define("Vede.controller.VectorEditor.SimulateDigestionController", {
       */
      onEnzymeListChange: function(){
          this.digestManager.updateSampleLane(this.enzymeListSelector.toField.store);
-         this.enzymeListSelector.fromField.boundList.getStore().sort("name", "ASC");
+//         this.enzymeListSelector.fromField.boundList.getStore().sort("name", "ASC");
          this.enzymeListSelector.toField.boundList.getStore().sort("name", "ASC");
      },
      /**

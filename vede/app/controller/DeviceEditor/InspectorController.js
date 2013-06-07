@@ -39,23 +39,18 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      */
     onDeletePartBtnClick: function(){
         if(this.selectedPart) {
-            var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
-                                                                  this.selectedPart);
-            var involvedRules = this.DeviceDesignManager.getRulesInvolvingPart(this.activeProject,
-                                                                               this.selectedPart);
-
-            involvedRules.each(function(rule) {
-                this.activeProject.rules().remove(rule);
-                rule.destroy();
-            }, this);
-
-            if(parentBin) {
-                parentBin.parts().remove(this.selectedPart);
-            }
-
-            this.clearPartInfo();
-            $.jGrowl("Part Cleared")
+            this.application.fireEvent(this.DeviceEvent.CLEAR_PART);
         }
+    },
+
+    /**
+     * Handler for the CLEAR_PART event. Just clears part info- most logic for
+     * this event is handled in the grid controller, since it knows enough to
+     * delete the part from the correct bin.
+     */
+    onClearPart: function() {
+        this.clearPartInfo();
+        $.jGrowl("Part Cleared");
     },
 
     checkCombinatorial:function(j5collection,cb){
@@ -91,12 +86,20 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.checkCombinatorial(j5collection,function(combinatorial){
             j5ready = true;
+            var tmpJ = 0;
+            var cnt = j5collection.bins().getCount();
+
             j5collection.bins().each(function(bin,binKey){
-                var firstPart = bin.parts().first();
-                if(firstPart != undefined) {
-                    if(firstPart.get('sequencefile_id') === "") {j5ready = false;}
-                }
-                else {j5ready = false;}
+                bin.parts().each(function(part) {
+                    if(part != undefined) {
+                        if(part.get('sequencefile_id') != "") {
+                            tmpJ++;
+                        }
+                    }
+                });
+                console.log(tmpJ);
+                console.log(cnt);
+                if (tmpJ<cnt) {j5ready = false;} else {j5ready = true;}
             });
             tab.query("component[cls='combinatorial_field']")[0].setValue(combinatorial);
             tab.query("component[cls='j5_ready_field']")[0].setValue(j5ready);
@@ -157,7 +160,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 selectedPart.setSequenceFileModel(newSequenceFile);
                 selectedPart.save({
                     callback: function(){
-                        console.log(selectedPart);
+                        //console.log(selectedPart);
                     }
                 });
             }
@@ -279,10 +282,9 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {Number} binIndex The index of the bin that owns the selected part.
      */
     onPartSelected: function (j5Part, binIndex) {
-
         this.selectedBinIndex = binIndex;
         this.selectedBin = this.DeviceDesignManager.getBinByIndex(this.activeProject, binIndex);
-        console.log(this.inspector);
+        //console.log(this.inspector);
         this.inspector.setActiveTab(0);
 
         var partPropertiesForm = this.inspector.down("form[cls='PartPropertiesForm']");
@@ -327,23 +329,26 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             {
                 j5Part.getSequenceFile({
                     callback: function(sequenceFile){
-                        if(sequenceFile.get("partSource")!="") {
-                            changePartDefinitionBtn.removeCls('btnDisabled');
-                            openPartLibraryBtn.setText("Open Part Library");
-                            openPartLibraryBtn.removeCls('selectPartFocus');
-                            changePartDefinitionBtn.enable();
-                            deletePartBtn.enable();
-                            deletePartBtn.removeCls('btnDisabled');
-                            clearPartMenuItem.enable();
-                            partSourceNameField.setValue(sequenceFile.get('partSource'));
-                        } else {
-                            changePartDefinitionBtn.disable();
-                            openPartLibraryBtn.setText("Select Part From Library");
-                            openPartLibraryBtn.addCls('selectPartFocus');
-                            changePartDefinitionBtn.addCls('btnDisabled');     
-                            deletePartBtn.disable();
-                            clearPartMenuItem.disable();
-                            deletePartBtn.addCls('btnDisabled');
+                        if(sequenceFile)
+                        {
+                            if(sequenceFile.get("partSource")!="") {
+                                changePartDefinitionBtn.removeCls('btnDisabled');
+                                openPartLibraryBtn.setText("Open Part Library");
+                                openPartLibraryBtn.removeCls('selectPartFocus');
+                                changePartDefinitionBtn.enable();
+                                deletePartBtn.enable();
+                                deletePartBtn.removeCls('btnDisabled');
+                                clearPartMenuItem.enable();
+                                partSourceNameField.setValue(sequenceFile.get('partSource'));
+                            } else {
+                                changePartDefinitionBtn.disable();
+                                openPartLibraryBtn.setText("Select Part From Library");
+                                openPartLibraryBtn.addCls('selectPartFocus');
+                                changePartDefinitionBtn.addCls('btnDisabled');     
+                                deletePartBtn.disable();
+                                clearPartMenuItem.disable();
+                                deletePartBtn.addCls('btnDisabled');
+                            }
                         }
                     }
                 });
@@ -578,8 +583,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
             });
 
             var self = this;
-            this.selectedPart.save({
-                callback: function(){
+            //this.selectedPart.save({
+            //    callback: function(){
                     newEugeneRule.setOperand1(self.selectedPart);
 
                     newEugeneRuleDialog.show();
@@ -590,8 +595,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
                     operand2Field.bindStore(partsStore);
                     operand2Field.setValue(partsStore[0]);
-                }
-            });
+            //    }
+            //});
 
         }
     },
@@ -609,7 +614,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                     this.activeProject.rules().clearFilter();
                     this.activeProject.rules().remove(selectedRule);
                     selectedRule.destroy();
-                    $.jGrowl("Eugene Rule Removed")
+                    $.jGrowl("Eugene Rule Removed");
                 }
             }, this);
         }
@@ -662,7 +667,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                 newEugeneRuleDialog.close();
             }
         });
-        $.jGrowl("Eugene Rule Added")
+        $.jGrowl("Eugene Rule Added");
     },
 
     /**
@@ -967,7 +972,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
 
         this.application.on("partSelected", this.onPartSelected, this);
 
-        this.application.on("ClearPart", this.onDeletePartBtnClick, this);
+        this.application.on("ClearPart", this.onClearPart, this);
 
         this.application.on("RemoveColumn", this.onRemoveColumnButtonClick, this);
 

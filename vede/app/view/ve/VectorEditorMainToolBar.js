@@ -10,8 +10,8 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         cls: 'saveSequenceBtn',
-        icon: 'resources/images/save.png',
         scale: 'medium',
+        icon: 'resources/images/save.png',
         tooltip: 'Save Sequence to Database'
     },
     {
@@ -23,6 +23,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         xtype: 'filefield',
         buttonOnly: true,
         buttonText: '',
+        cls: 'importSequenceBtn',
         buttonConfig: {
             icon: 'resources/images/import_new.png',
             scale: 'medium',
@@ -78,6 +79,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     //        },
     {
         xtype: 'button',
+        cls: 'undoBtn',
         id: 'undoViewBtn',
         icon: 'resources/images/undo_new.png',
         scale: 'medium',
@@ -89,6 +91,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
         height: 20,
     }, {
         xtype: 'button',
+        cls: 'redoBtn',
         id: 'redoViewBtn',
         icon: 'resources/images/redo_new.png',
         scale: 'medium',
@@ -101,9 +104,10 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     },
     {
         xtype: 'button',
+        cls: 'circularBtn',
         id: 'circularViewBtn',
         enableToggle: true,
-        icon: 'resources/images/pie.png',
+        icon: 'resources/images/circular.png',
         pressed: true,
         scale: 'medium',
         tooltip: 'Circular View'
@@ -115,9 +119,10 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     },
     {
         xtype: 'button',
+        cls: 'linearBtn',
         id: 'linearViewBtn',
         enableToggle: true,
-        icon: 'resources/images/rail.png',
+        icon: 'resources/images/linear.png',
         scale: 'medium',
         tooltip: 'Linear View'
     },
@@ -163,6 +168,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     //        },
     {
         xtype: 'button',
+        cls: 'featuresBtn',
         id: 'featuresBtn',
         enableToggle: true,
         icon: 'resources/images/features.png',
@@ -177,6 +183,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     },
     {
         xtype: 'button',
+        cls: 'cutSitesBtn',
         id: 'cutsitesBtn',
         enableToggle: true,
         icon: 'resources/images/cut_sites.png',
@@ -191,13 +198,20 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'button',
         id: 'orfsBtn',
+        cls: 'orfsBtn',
         enableToggle: true,
         icon: 'resources/images/orf.png',
         scale: 'medium',
         tooltip: 'Show ORF'
     },
     {
+        xtype: 'tbseparator',
+        cls: 'vetbseparator',
+        height: 20
+    },
+    {
         xtype: 'button',
+        cls: 'fullscreenBtn',
         id: 'fullscreen',
         scale: 'medium',
         icon: 'resources/images/fullscreen.png',

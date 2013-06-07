@@ -54,7 +54,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * @param {model} Receives a sequenceFile (already loaded)
      * @param {function} Callback function returning the tabPanel (doesn't return if fail)
      */
-    checkDuplicatedTabs: function (model, tabName, cb) {
+    checkDuplicatedTabs: function (model, tabName, cb, cb2) {
         var tabPanel = Ext.getCmp("mainAppPanel");
         var duplicated = false;
         var ModelId = model.data.id;
@@ -63,6 +63,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
                 if(tab.model.data.id === ModelId) {
                     duplicated = true;
                     tabPanel.setActiveTab(key);
+                    if(typeof (cb2) === "function") { cb2(); }
                 }
             }
         });
@@ -75,7 +76,7 @@ Ext.define("Teselagen.manager.ProjectManager", {
      * Opens a j5Report model in a new tab.
      * @param {Teselagen.models.DeviceDesign} Receives a DeviceDesign model (already loaded)
      */
-    openj5Report: function (DeviceDesign) {
+    openj5Report: function (DeviceDesign,cb) {
         this.checkDuplicatedTabs(DeviceDesign, "j5ReportTab", function () {
             var tabPanel = Ext.getCmp("mainAppPanel");
             var newj5ReportPanel = Ext.create("Vede.view.j5Report.j5ReportPanel", {
@@ -84,7 +85,12 @@ Ext.define("Teselagen.manager.ProjectManager", {
             });
             tabPanel.add(newj5ReportPanel).show();
             tabPanel.setActiveTab(newj5ReportPanel);
-        });
+            if(typeof (cb) === "function") { cb(); }
+        },
+        function(){
+            if(typeof (cb) === "function") { cb(); }
+        }
+        );
     },
 
     /**
