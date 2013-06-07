@@ -425,6 +425,13 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
         
         var parsedRules = Ext.create('Ext.data.Store', { model: "Teselagen.models.EugeneRule" });
 
+
+        var conflictRules = [];
+        var newRules = Ext.create('Ext.data.Store', { model: "Teselagen.models.EugeneRule" });
+        var ignoredLines = [];
+        var repeatedRules = [];
+
+
         lines.forEach(function(line)
         {
             if(line!=="")
@@ -484,10 +491,12 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
                 else if(commentLine)
                 {
-                    console.log("Line is comment");
+                    ignoredLines.push(line);
                 }
                 else throw new Error("Invalid eugene rule line");
                 
+                if(notfoundPart) ignoredLines.push(line);
+
                 if(!commentLine && !notfoundPart)
                 {
                     var unsupported = false;
@@ -496,7 +505,8 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                     var newEugeneRule = Ext.create("Teselagen.models.EugeneRule", {
                         name: newRule.name,
                         compositionalOperator: newRule.compositionalOperator,
-                        negationOperator: newRule.negationOperator
+                        negationOperator: newRule.negationOperator,
+                        originalRuleLine: line
                     });
                     }
                     catch(e)
@@ -504,8 +514,9 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                         //debugger;
                         if( e.message.match( /Illegal CompositionalOperator/ ) )
                         {
-                            console.log("Unsupported operator");
+                            //console.log("Unsupported operator");
                             unsupported = true;
+                            ignoredLines.push(line);
                         }
                     }
                     
@@ -524,16 +535,16 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 }
             }
         });
-    
-        var checkForDuplicatedRule = function(parsedRule,cb){
+
+        var checkForDuplicatedName = function(parsedRule,cb){
 
             var rulesCounter = existingRules.count();
             var duplicated = false;
             existingRules.each(function(existingRule){
-                if(parsedRule.data.name === "rule2") debugger;
-                if(parsedRules.data.name === existingRule.data.name)
+                if(
+                    parsedRule.data.name === existingRule.data.name
+                )
                 {
-                    console.log("found duplicated rule");
                     duplicated = true;
                     rulesCounter--;
                 }
@@ -541,14 +552,84 @@ Ext.define("Teselagen.manager.DeviceDesignParsersManager", {
                 {
                     rulesCounter--;
                 }
-                if(rulesCounter === 1) cb(duplicated);
+                if(rulesCounter === 0) cb(duplicated);
+            });
+        };
+    
+        var checkForConflicts = function(rule,cb){
+
+            checkForDuplicatedName(rule,function(dup){
+                if(dup) { 
+                    rule.set('name',rule.data.name+'_1');
+                    conflictRules.push("Name conflict, renamed to "+rule.data.name); 
+                }
+                return cb(dup)
+            })
+        };
+
+        var checkForRepeatedRule = function(parsedRule,cb){
+
+            var rulesCounter = existingRules.count();
+            var duplicated = false;
+            existingRules.each(function(existingRule){
+                if(
+                    parsedRule.data.operand1_id === existingRule.data.operand1_id &&
+                    parsedRule.data.operand2_id === existingRule.data.operand2_id &&
+                    parsedRule.data.negationOperator === existingRule.data.negationOperator &&
+                    parsedRule.data.operand2isNumber === existingRule.data.operand2isNumber &&
+                    parsedRule.data.operand2Number === existingRule.data.operand2Number &&
+                    parsedRule.data.compositionalOperator === existingRule.data.compositionalOperator
+                )
+                {
+                    duplicated = true;
+                    rulesCounter--;
+                }
+                else
+                {
+                    rulesCounter--;
+                }
+                if(rulesCounter === 0) cb(duplicated);
             });
         };
 
-        parsedRules.each(function(parsedRule){
-            console.log("processing: ",parsedRule.data.name);
-            checkForDuplicatedRule(parsedRule,function(duplicated){
-                console.log("duplicated: ",duplicated);
+
+        var endEugeneRulesProcessing = function(){
+                        console.log("------------");
+                        console.log("Conflicts");
+                        console.log(conflictRules);
+                        console.log("------------");
+                        console.log("New rules");
+                        newRules.each(function(rule){
+                            console.log(rule.data.originalRuleLine);
+                        });
+                        console.log("------------");
+                        console.log("Ignored lines");
+                        console.log(ignoredLines);
+                        console.log("------------");
+                        console.log("Repeated rules");
+                        console.log(repeatedRules);
+        };
+
+        var processedRules = parsedRules.count();
+
+        parsedRules.each(function(parsedRule)
+        {
+            //sconsole.log("processing: ",parsedRule.data.name);
+            checkForRepeatedRule(parsedRule,function(repeated){
+                if(repeated) 
+                {
+                    repeatedRules.push(parsedRule.data.originalRuleLine);
+                    processedRules--;
+                    if(processedRules === 0) endEugeneRulesProcessing();
+                }
+                else
+                {
+                    checkForConflicts(parsedRule,function(conflicts){
+                        newRules.add(parsedRule);
+                        processedRules--;
+                        if(processedRules === 0) endEugeneRulesProcessing();
+                    });
+                }
             });
         });
 
