@@ -12,7 +12,7 @@ Ext.Loader.setConfig({
     }
 });
 
-Ext.Loader.syncRequire([
+/*Ext.Loader.syncRequire([
         //Sync requires
         'Ext.Error'
         ,'Teselagen.constants.Constants'
@@ -67,7 +67,7 @@ Ext.Loader.syncRequire([
         ,'Teselagen.renderer.rail.SelectionLayer'
         ,'Teselagen.manager.AAManager'
 ]);
-
+*/
 Ext.application({
     autoCreateViewport: true,
     name: 'Vede',
