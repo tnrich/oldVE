@@ -205,6 +205,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
                                                         this.selectedBin.getBin());
+        var selectedPartIndex = null;
         var selectedBin = this.selectedBin;
         var partCells = selectedBin.query("Part");
 
@@ -212,8 +213,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var cellCount = this.selectedBin.items.items.length - 1;
 
-        this.selectedBin = null;
-        this.selectedPart = null;
+        if(this.selectedPart) {
+            selectedPartIndex = this.selectedBin.query("Part").indexOf(this.selectedPart);
+            this.selectedPart = null;
+        }
 
         for (var i = 0; i < cellCount; i++) {
             var gridPart = partCells[i];
@@ -226,9 +229,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        //this.grid.removeAll(); // Clean grid
-        //this.renderDevice();
+        if(selectedPartIndex !== null) {
+            this.selectedPart = this.selectedBin.query("Part")[selectedPartIndex];
+            this.selectedPart.select();
+        }
     },
+
     /**
      * When the tab changes on the main panel, handles loading and rendering the
      * new device design, assuming the new tab is a device editor tab. Also sets
@@ -933,7 +939,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         return targetGridParts;
     },
 
-    onPartCellSelectByMap: function(pj5Part) {
+    onPartMapped: function(pj5Part) {
         var j5Part = pj5Part;
 
         var j5Bin = this.DeviceDesignManager.getBinByPart(this.activeProject, j5Part);
@@ -941,13 +947,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
-           this.selectedPart.deselect();
+            this.selectedPart.deselect();
             this.deHighlight(this.selectedPart.getPart());
         }
 
         this.onPartCellHasBeenMapped(j5Part);
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
-
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
@@ -1271,7 +1276,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART,
-                            this.onPartCellSelectByMap,
+                            this.onPartMapped,
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART_SELECT,
