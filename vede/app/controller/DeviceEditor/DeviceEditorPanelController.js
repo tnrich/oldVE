@@ -111,7 +111,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
             if (btn=='ok') {
                 var activeTab = Ext.getCmp('mainAppPanel').getActiveTab();
                 Teselagen.manager.ProjectManager.DeleteDeviceDesign(activeTab.model, activeTab);
-                $.jGrowl("Design Deleted");
+                toastr.options.onclick = null;
+                toastr.info("Design Deleted");
              }
          }
     },
@@ -217,7 +218,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
                         Vede.application.fireEvent("resumePartAlerts");
                         Vede.application.fireEvent(Teselagen.event.ProjectEvent.LOAD_PROJECT_TREE, function () {
                             Ext.getCmp("projectTreePanel").expandPath("/root/" + Teselagen.manager.ProjectManager.workingProject.data.id + "/" + design.data.id);
-                            $.jGrowl("Design Saved");
+                            toastr.options.onclick = null;
+                            toastr.info("Design Saved");
                         });
                         if(typeof (cb) == "function") cb();
                     }
@@ -307,8 +309,8 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
     onJ5buttonClick: function (button, e, options) {
         Vede.application.fireEvent("openj5");
-
-        $.jGrowl("Design Saved");
+        toastr.options.onclick = null;
+        toastr.info("Design Saved");
     },
 
     onImportEugeneRulesBtnClick: function(){
