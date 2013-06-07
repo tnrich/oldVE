@@ -5,7 +5,7 @@
 Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     extend: 'Ext.app.Controller',
 
-    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.MessageBox","Teselagen.manager.TasksMonitor"],
+    requires: ["Teselagen.constants.Constants", "Teselagen.manager.DeviceDesignManager", "Teselagen.utils.J5ControlsUtils", "Teselagen.manager.J5CommunicationManager", "Teselagen.manager.ProjectManager", "Teselagen.bio.parsers.GenbankManager", "Ext.window.MessageBox","Teselagen.manager.TasksMonitor"],
 
     DeviceDesignManager: null,
     J5ControlsUtils: null,
@@ -41,11 +41,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             if(!j5ready)
             {
 
-                var messagebox = Ext.MessageBox.show({
+                var messagebox = Ext.window.MessageBox.show({
                     title: "Alert",
                     msg: "Not ready to run j5",
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
+                    buttons: Ext.window.MessageBox.OK,
+                    icon: Ext.window.MessageBox.ERROR
                 });
 
                 Ext.Function.defer(function () {
@@ -144,11 +144,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 {
                     if(responseData.responseText)
                     {
-                        var messagebox = Ext.MessageBox.show({
+                        var messagebox = Ext.window.MessageBox.show({
                             title: "Execution Error",
                             msg: responseData.responseText,
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR
+                            buttons: Ext.window.MessageBox.OK,
+                            icon: Ext.window.MessageBox.ERROR
                         });
 
                         Ext.Function.defer(function () {
@@ -432,7 +432,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
     },
 
     createLoadingMessage: function () {
-        var msgBox = Ext.MessageBox.show({
+        var msgBox = Ext.window.MessageBox.show({
             title: 'Please wait',
             msg: 'Preparing input parameters',
             progressText: 'Initializing...',
@@ -538,11 +538,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                 } else {
                     //loadingMessage.hide();
                     //responseMessage.hide();
-                    var messagebox = Ext.MessageBox.show({
+                    var messagebox = Ext.window.MessageBox.show({
                         title: "Execution Error",
                         msg: responseData.error,
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.ERROR
+                        buttons: Ext.window.MessageBox.OK,
+                        icon: Ext.window.MessageBox.ERROR
                     });
 
                     Ext.Function.defer(function () {
@@ -579,11 +579,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             } else {
                 console.log(responseData.responseText);
                 // loadingMessage.close();
-                var messagebox = Ext.MessageBox.show({
+                var messagebox = Ext.window.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
+                    buttons: Ext.window.MessageBox.OK,
+                    icon: Ext.window.MessageBox.ERROR
                 });
 
                 Ext.Function.defer(function () {
@@ -727,11 +727,11 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
             } else {
                 console.log(responseData.responseText);
                 // loadingMessage.close();
-                var messagebox = Ext.MessageBox.show({
+                var messagebox = Ext.window.MessageBox.show({
                     title: "Execution Error",
                     msg: responseData.responseText,
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
+                    buttons: Ext.window.MessageBox.OK,
+                    icon: Ext.window.MessageBox.ERROR
                 });
 
                 Ext.Function.defer(function () {
