@@ -82,7 +82,10 @@ this file in most cases.
         <!-- initialize the build.dir property from the workspace config after we've loaded it -->
         <property name="build.dir" location="${app.build.dir}/${args.environment}"/>
         
-        <property name="build.compression.production" value="-yui"/>
+
+        <!-- TESELAGEN use value = "-yui" in the line below for compression -->
+        <property name="build.compression.production" value=""/>
+
         <property name="build.compression.testing" value=""/>
         
         <!--
