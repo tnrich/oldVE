@@ -229,7 +229,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        if(selectedPartIndex !== null) {
+        if(selectedPartIndex !== null && selectedPartIndex > 0) {
             this.selectedPart = this.selectedBin.query("Part")[selectedPartIndex];
             this.selectedPart.select();
         }
@@ -675,6 +675,22 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleInsertOptions(false);
         
         // toastr.info("Added Column Right");
+    },
+
+    /**
+     * Handler for InsertPartAtSelection event.
+     */
+    onInsertPartAtSelection: function(j5Part) {
+        var selectedIndex;
+        var selectedGridBin = this.selectedBin;
+        var selectedJ5Bin = this.selectedBin.getBin();
+
+        if(this.selectedPart) {
+            selectedIndex = selectedGridBin.query("Part").indexOf(this.selectedPart);
+
+            selectedJ5Bin.parts().removeAt(selectedIndex);
+            selectedJ5Bin.parts().insert(selectedIndex, j5Part);
+        }
     },
 
     /**
@@ -1260,6 +1276,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.application.on(this.DeviceEvent.ADD_COLUMN_RIGHT,
                             this.onAddColumnRight,
+                            this);
+
+        this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
+                            this.onInsertPartAtSelection,
                             this);
 
         this.application.on(this.DeviceEvent.CLEAR_PART,
