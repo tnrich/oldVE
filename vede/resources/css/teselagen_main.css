@@ -1192,6 +1192,10 @@ background: #F8F8F8;
   display: none;
 }
 
+.x-box-scroller-bottom .x-menu-scroll-bottom {
+  display: none;
+}
+
 .stopj5runBtn, .stopj5runBtn .x-btn-inner {
   background: rgb(245,66,66);
   color: white;

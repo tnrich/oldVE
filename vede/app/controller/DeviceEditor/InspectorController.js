@@ -169,6 +169,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     onopenPartLibraryBtnClick: function () {
         var currentTab = Ext.getCmp('mainAppPanel').getActiveTab();
         var currentTabEl = (currentTab.getEl());
+        var selectedPartIndex = this.selectedBin.indexOfPart(this.selectedPart);
 
         this.application.fireEvent(this.DeviceEvent.FILL_BLANK_CELLS);
 
@@ -245,9 +246,12 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                             {
                                                 var insertIndex = bin.parts().indexOf(self.selectedPart);
                                                 // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-                                                bin.parts().removeAt(insertIndex);
-                                                console.log(insertIndex);
-                                                bin.parts().insert(insertIndex,part);
+
+                                                // bin.parts().removeAt(insertIndex);
+                                                // console.log(insertIndex);
+                                                // bin.parts().insert(insertIndex,part);
+                                                bin.parts().removeAt(selectedPartIndex);
+                                                bin.parts().insert(selectedPartIndex,part);
                                                 self.onReRenderDECanvasEvent();
                                                 selectWindow.close();
                                                 self.selectedPart = part;
@@ -352,6 +356,14 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                         }
                     }
                 });
+            } else {
+                changePartDefinitionBtn.disable();
+                openPartLibraryBtn.setText("Select Part From Library");
+                openPartLibraryBtn.addCls('selectPartFocus');
+                changePartDefinitionBtn.addCls('btnDisabled');     
+                deletePartBtn.disable();
+                clearPartMenuItem.disable();
+                deletePartBtn.addCls('btnDisabled');
             }
 
             if(j5Part.get("fas") === "") {
