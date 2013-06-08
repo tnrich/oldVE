@@ -150,7 +150,8 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
 
         if(this.selectedBinIndex!=-1) {
             Vede.application.fireEvent("partSelected",this.selectedPart,this.selectedBinIndex);
-            $.jGrowl("Part Definition Changed");
+            toastr.options.onclick = null;
+            toastr.info("Part Definition Changed");
         }
         else Vede.application.fireEvent("partCreated",this.selectedSequence,this.selectedPart);
 

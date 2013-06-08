@@ -770,9 +770,20 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      */
     getOwnerBinIndices: function(pDevice, pPart) {
         var binIndices = [];
-        for(var i = 0; i < pDevice.getJ5Collection().binCount(); i++) {
-            if(pDevice.getJ5Collection().bins().getAt(i).parts().indexOf(pPart) !== -1) {
-                binIndices.push(i);
+        var binsStore = pDevice.getJ5Collection().bins();
+        var partsStore;
+        if(!pPart) {
+            return [];
+        }
+        for(var i = 0; i < binsStore.getCount(); i++) {
+            partsStore = binsStore.getAt(i).parts();
+
+            for(var j = 0; j < partsStore.getCount(); j++) {
+                if(partsStore.getAt(j) && partsStore.getAt(j).id && pPart.id) { 
+                    if(partsStore.getAt(j).id === pPart.id) {
+                        binIndices.push(i);
+                    }
+                }
             }
         }
 
@@ -880,7 +891,7 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Number} Index of part or -1 if not found.
      */
     getPartIndex: function(pBin, pPart) {
-        var index = pBin.parts().indexOf(pPart);
+        var index = pBin.parts().getRange().indexOf(pPart);
         return index;
     },
     
