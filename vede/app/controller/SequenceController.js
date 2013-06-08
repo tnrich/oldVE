@@ -449,6 +449,8 @@ Ext.define("Vede.controller.SequenceController", {
     onSelectInverse: function() {
         if(this.SequenceManager && this.SelectionLayer) {
             this.select(this.SelectionLayer.end, this.SelectionLayer.start);
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       this, this.SelectionLayer.start, this.SelectionLayer.end);
         }
     },
 

@@ -109,11 +109,19 @@ Ext.define('Vede.controller.DeviceEditor.ChangePartDefinitionController', {
     openCreatePart: function(veproject,selectedPart,selectedSequence){
 
         this.selectedWindow = Ext.create('Vede.view.de.PartDefinitionDialog').show();
+        var form = this.selectedWindow.down('form').getForm();
         this.selectedPart = selectedPart;
         this.selectedVEProject = veproject;
         this.selectedSequence = selectedSequence;
         this.selectedBinIndex = null;
         this.selectedBinIndex = -1;
+
+        var startBP = form.findField('startBP');
+        var stopBP = form.findField('stopBP');
+
+        console.log(this.selectedStartBP);
+        startBP.setValue(this.selectedStartBP);
+        stopBP.setValue(this.selectedStopBP);
 
         this.populateFields();
 
