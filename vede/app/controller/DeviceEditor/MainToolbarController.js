@@ -61,17 +61,17 @@ Ext.define('Vede.controller.DeviceEditor.MainToolbarController', {
     },
 
     onImportEugeneRulesFileLoad: function(pFile, pExt, pEvt) {
-        try
-        {
+        //try
+        //{
             var design = Ext.getCmp('mainAppPanel').getActiveTab().model;
             Teselagen.manager.DeviceDesignParsersManager.parseEugeneRules(pEvt.target.result,pFile.name,design);
-        }
-        catch(exception)
-        {
-            console.log(exception);
-            Ext.MessageBox.alert('Error', "Error parsing file");
-            Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-        }
+        //}
+        //catch(exception)
+        //{
+        //    console.log(exception);
+        //    Ext.MessageBox.alert('Error', "Error parsing file");
+        //    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        //}
     },
 
     onImportEugeneRulesBtnChange: function(pBtn){

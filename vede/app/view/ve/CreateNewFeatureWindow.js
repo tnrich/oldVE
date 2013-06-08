@@ -3,7 +3,7 @@
  * @class Vede.view.RestrictionEnzymesManagerWindow
  * @author Jenhan Tao
  */
-Ext.define('Vede.view.CreateNewFeatureWindow', {
+Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
     extend: 'Ext.window.Window',
 
     height: 450,
@@ -13,10 +13,10 @@ Ext.define('Vede.view.CreateNewFeatureWindow', {
     layout: {
         type: 'fit'
     },
-    title: 'Create New Feature',
+    title: 'Annotate',
 
     initComponent: function() {
-var me = this;
+    	var me = this;
 
         Ext.applyIf(me, {
             items: [
@@ -30,33 +30,48 @@ var me = this;
                             xtype: 'textfield',
                             width: 325,
                             fieldLabel: 'Name',
-                            allowBlank: false,
+                            id: 'createNewFeatureWindowNameField',
+                            allowBlank: false
                         },
                         {
                             xtype: 'radiogroup',
                             height: 30,
                             width: 326,
                             fieldLabel: 'Strand',
+                            id: 'createNewFeatureWindowStrandRadioGroup',
                             allowBlank: false,
                             items: [
                                 {
                                     xtype: 'radiofield',
                                     name: 'strandSelector',
                                     labelAlign: 'right',
-                                    boxLabel: 'Positive'
+                                    boxLabel: 'Positive',
+                                    id: 'createNewFeatureWindowPositiveCheckBox',
+                                    inputValue: 1
                                 },
                                 {
                                     xtype: 'radiofield',
                                     name: 'strandSelector',
                                     labelAlign: 'right',
-                                    boxLabel: 'Negative'
+                                    boxLabel: 'Negative',
+                                    id: 'createNewFeatureWindowNegativeCheckBox',
+                                    inputValue: -1
                                 }
                             ]
                         },
                         {
                             xtype: 'combobox',
                             width: 323,
-                            fieldLabel: 'Type'
+                            fieldLabel: 'Type',
+                            id: 'createNewFeatureWindowTypeComboBox',
+                            editable: false,
+                            store: {
+                            	fields: ['label', 'data'],
+                            	data: Teselagen.constants.Constants.FEATURE_TYPES
+                            },
+                            queryMode: 'local',
+                            displayField: 'label',
+                            valueField: 'label'
                         },
                         {
                             xtype: 'fieldcontainer',
@@ -66,49 +81,64 @@ var me = this;
                             items: [
                                 {
                                     xtype: 'numberfield',
+                                    allowDecimals: false,
                                     width: 217,
                                     fieldLabel: 'Start',
-                                    labelWidth: 50
+                                    id: 'createNewFeatureWindowStartField',
+                                    labelWidth: 50,
+                                    value: 1,
+                                    minValue: 1,
+                                    allowBlank: false,
+                                    maxValue: 1
                                 },
                                 {
                                     xtype: 'numberfield',
+                                    allowDecimals: false,
                                     width: 217,
                                     fieldLabel: 'End',
-                                    labelWidth: 50
+                                    id: 'createNewFeatureWindowEndField',
+                                    labelWidth: 50,
+                                    value: 1,
+                                    minValue: 1,
+                                    allowBlank: false,
+                                    maxValue: 1
                                 }
                             ]
                         },
                         {
                             xtype: 'fieldcontainer',
                             height: 144,
-                            fieldLabel: 'Attributes',
+                            fieldLabel: 'Attributes',                           
                             items: [
                                 {
                                     xtype: 'gridpanel',
+                                    id: 'createNewFeatureWindowAttributesGridPanel',
                                     width: 216,
+                                    height: 144,                                  
                                     forceFit: true,
-                                    columnLines: true,
-                                    columns: [
-                                        {
-                                            xtype: 'gridcolumn',
-                                            dataIndex: 'string',
-                                            text: 'Key'
-                                        },
-                                        {
-                                            xtype: 'gridcolumn',
-                                            dataIndex: 'string',
-                                            text: 'Value'
-                                        }
-                                    ],
-                                    viewConfig: {
-
+                                    scroll: 'vertical',
+                                    columnLines: true,                         
+                                    store: {
+                                    	fields: ['key', 'value'],
+                                    	data: [
+                                    	    {key: '', value: ''},
+                                    	    {key: '', value: ''},
+                                    	    {key: '', value: ''},
+                                    	    {key: '', value: ''}
+                                    	]
                                     },
+                                    numberOfLines: 4, 
+                                    columns: [
+                                        {header: 'Key', dataIndex: 'key', editor: 'textfield'},
+                                        {header: 'Value', dataIndex: 'value', editor: 'textfield'}
+                                    ],
+                                    viewConfig: { 
+                                    },                                  
+                                    selType: 'cellmodel',
                                     plugins: [
                                         Ext.create('Ext.grid.plugin.CellEditing', {
-                                            ptype: 'cellediting'
-                                        }),
-                                        Ext.create('Ext.grid.plugin.RowEditing', {
-                                            ptype: 'rowediting'
+                                            ptype: 'cellediting',
+                                            clicksToEdit: 1
                                         })
                                     ]
                                 }
@@ -133,16 +163,18 @@ var me = this;
                                             xtype: 'button',
                                             margin: 10,
                                             padding: 5,
-                                            text: 'Cancel'
+                                            text: 'Cancel',
+                                            handler: function() {me.close();}
                                         },
                                         {
                                             xtype: 'tbseparator'
                                         },
                                         {
                                             xtype: 'button',
+                                            id: 'createNewFeatureWindowOKButton',
                                             margin: 10,
                                             padding: 5,
-                                            text: 'Ok'
+                                            text: 'Ok'                                          
                                         }
                                     ]
                                 }

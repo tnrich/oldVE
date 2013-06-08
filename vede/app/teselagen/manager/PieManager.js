@@ -338,9 +338,9 @@ Ext.define("Teselagen.manager.PieManager", {
             }
         }
 
-        console.log("magnification: " + magnification);
-        console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
-                    " x " + scope.pie.surface.el.getSize().height);
+        //console.log("magnification: " + magnification);
+        //console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
+        //            " x " + scope.pie.surface.el.getSize().height);
     },
 
     /**

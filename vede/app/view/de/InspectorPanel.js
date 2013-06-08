@@ -488,9 +488,40 @@ Ext.define('Vede.view.de.InspectorPanel', {
                     overCls: 'runj5Btn-over',
                     margin: '2.5 0 2.5 0',
                     height: 40,
-                    border: 0,
-                    disabled: true,
+                    border: 0
                 },
+                {
+                    xtype: 'button',
+                    text : 'Condense Assemblies',
+                    cls: 'condenseAssembliesBtn',
+                    overCls: 'condenseAssembliesBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 40,
+                    border: 0,
+                    hidden: true,
+                },
+                {
+                    xtype: 'button',
+                    text : 'Distribute PCR Reactions',
+                    cls: 'distributePCRBtn',
+                    overCls: 'distributePCRBtn-over',
+                    margin: '2.5 0 2.5 0',
+                    height: 40,
+                    border: 0,
+                    hidden: true,
+                },
+                // {
+                //     xtype: 'button',
+                //     cls: 'condenseAssembliesBtn',
+                //     text: 'Condense Assemblies',
+                //     margin: '2.5 0 2.5 0'
+                // },
+                // {
+                //     xtype: 'button',
+                //     cls: 'distributePCRBtn',
+                //     margin: '2.5 0 2.5 0',
+                //     text: 'Distribute PCR Reactions'
+                // }, 
                 {
                     xtype: 'tabpanel',
                     activeTab: 0,
@@ -503,7 +534,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'form',
                             flex: 1,
-                            cls: 'PartPropertiesForm',
+                            cls: 'j5InfoTab-Basic',
                             width: 287,
                             layout: {
                                 align: 'stretch',
@@ -654,7 +685,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     cls: 'editj5ParamsBtn',
                                     // cls: 'runj5Btn',
                                     // overCls: 'runj5Btn-over',
-                                    margin: '30 0 2.5 0',
+                                    margin: '15 0 0 0',
                                     height: 30,
                                     border: 0
                                 },
@@ -669,8 +700,9 @@ Ext.define('Vede.view.de.InspectorPanel', {
                             removePanelHeader: true,
                             bodyPadding: 10,
                             title: 'Advanced',
-                            margin: '5px 0px 5px 0px',
-                            autoScroll: true,
+                            border: 0,
+                            bodyCls: 'j5InfoTab-Sub-Advanced-Body',
+                            margin: '5px 0px 0px 0px',
                             items: [
                                 {   
                                     xtype: 'container',
@@ -685,7 +717,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         {   
                                         xtype: 'container',
                                         html: 'Assembly Files To Condense List:',
-                                        cls: 'condenseAssemblyFiles-box',
                                         margin: '10 0 0 0',
                                         layout: {
                                             align: 'stretch',
@@ -737,17 +768,13 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             xtype: 'panel',
                                             margin: '20 0 0 0',
                                             border: false,
-                                            items: [
-                                             {
-                                                xtype: 'button',
-                                                cls: 'downloadCondenseAssemblyResultsBtn',
-                                                text: 'Download Results'
-                                            },{
-                                                xtype: 'button',
-                                                cls: 'condenseAssembliesBtn',
-                                                text: 'Condense Assemblies',
-                                                margin: '0 10 0 0'
-                                            }]
+                                            // items: [
+                                            //  {
+                                            //     xtype: 'button',
+                                            //     cls: 'downloadCondenseAssemblyResultsBtn',
+                                            //     text: 'Download Results'
+                                            // }
+                                            // ]
                                         }
                                     ]   
                                 },
@@ -755,7 +782,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     xtype: 'container',
                                     title: 'Downstream Automation',
                                     cls: 'downstreamAutomation-box',
-                                    margin: '25 0 0 0',
                                     layout: {
                                         align: 'stretch',
                                         type: 'vbox'
@@ -763,38 +789,33 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                     items: [
                                         {   
                                         xtype: 'container',
-                                        html: 'Downtream Automation Parameters File:',
+                                        html: '',
                                         cls: 'downstreamAutomationParameters-box',
                                         margin: '5 0 0 0',
                                         layout: {
                                             align: 'stretch',
                                             type: 'vbox'
                                         },
-                                        items: [{
-                                            xtype: 'radiofield',
-                                            name: 'automationParamsFileSource',
-                                            margin: '20 0 0 25',
-                                            labelWidth: 110,
-                                            boxLabel: 'Use latest server version',
-                                            checked: true
-                                        }, {
-                                            xtype: 'radiofield',
-                                            name: 'automationParamsFileSource',
-                                            margin: '5 0 0 25',
-                                            fieldLabelCls: 'align-middle',
-                                            labelWidth: 110,
-                                            boxLabel: 'Use custom parameters'
-                                        },
-                                        {
-                                            xtype: 'button',
-                                            cls: 'customizeAutomationParamsBtn',
-                                            margin: '15 0 0 0',
-                                            text: 'Customize Automation Parameters'
-                                        },
+                                        items: [
+                                        // {
+                                        //     xtype: 'radiofield',
+                                        //     name: 'automationParamsFileSource',
+                                        //     margin: '20 0 0 25',
+                                        //     labelWidth: 110,
+                                        //     boxLabel: 'Use latest server version',
+                                        //     checked: true
+                                        // }, {
+                                        //     xtype: 'radiofield',
+                                        //     name: 'automationParamsFileSource',
+                                        //     margin: '5 0 0 25',
+                                        //     fieldLabelCls: 'align-middle',
+                                        //     labelWidth: 110,
+                                        //     boxLabel: 'Use custom parameters'
+                                        // },
                                         {
                                             xtype: 'filefield',
                                             cls: 'sourcePlateListSelector',
-                                            margin: '35 0 0 0',
+                                            margin: '30 0 0 0',
                                             validateOnChange: false,
                                             fieldLabel: 'Source Plate List:',
                                             labelWidth: 110,
@@ -804,7 +825,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             xtype: 'filefield',
                                             cls: 'zippedPlateFilesSelector',
                                             fieldLabel: 'Zipped Plate Files:',
-                                            margin: '10 0 0 0',
+                                            margin: '15 0 0 0',
                                             labelWidth: 110,
                                             labelSeparator: ' ',
                                             buttonText: 'Choose File'
@@ -813,24 +834,27 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                             cls: 'assemblyFileSelector',
                                             validateOnChange: false,
                                             fieldLabel: 'j5 Assembly File:',
-                                            margin: '10 0 0 0',
+                                            margin: '15 0 0 0',
                                             labelWidth: 110,
                                             labelSeparator: ' ',
                                             buttonText: 'Choose File'
-                                        }, {
+                                        },
+                                        {
                                             xtype: 'button',
-                                            cls: 'distributePCRBtn',
+                                            cls: 'customizeAutomationParamsBtn',
                                             margin: '20 0 0 0',
-                                            text: 'Distribute PCR Reactions'
-                                        }, {
-                                            xtype: 'button',
-                                            cls: 'downloadDownstreamAutomationBtn',
-                                            enableToggle: true,
-                                            pressed: false,
-                                            text: 'Download Results',
-                                            hidden: true,
-                                            margin: '15 0 0 0'
+                                            height: 30,
+                                            text: 'Customize Automation Parameters'
                                         }
+                                        // {
+                                        //     xtype: 'button',
+                                        //     cls: 'downloadDownstreamAutomationBtn',
+                                        //     enableToggle: true,
+                                        //     pressed: false,
+                                        //     text: 'Download Results',
+                                        //     hidden: true,
+                                        //     margin: '15 0 0 0'
+                                        // }
                                         ]
                                     }
                                     ]
