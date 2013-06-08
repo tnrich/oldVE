@@ -10,21 +10,53 @@ module.exports = function() {
 
     /**
      * @constructor
-     * @param pDb database connection
+     * @param db database connection
      */
     function UserManager(pDb) {
         this.db = pDb;
+        this.User = this.db.model("User");
     }
 
-    /**
+   /**
      * Delete all users
      */
     UserManager.prototype.deleteAll = function(pNext) {
-        var User = this.db.model("User");
-        User.remove(function(pErr) {
+        this.User.remove(function(pErr) {
             pNext(pErr);
         });
     };
+
+    /**
+     * Get user by id
+     * @param id User id
+     */
+    UserManager.prototype.getUserById = function(pId, pNext) {
+        this.User.findById(pId).populate("projects").exec(function(pErr, pUser) {
+            if (pUser.projects) {
+                pUser.projects.forEach(function(pProj) {
+                    pProj.deprojects = undefined;
+                    pProj.veprojects = undefined;
+                });
+            }
+            pNext(pErr, pUser);
+        });
+   };
+
+    /**
+     * Get user by name
+     * @param name username
+     */
+    UserManager.prototype.getUserByName = function(pName, pNext) {
+        this.User.findOne({username:pName}).populate("projects").exec(function(pErr, pUser) {
+            if (pUser.projects) {
+                pUser.projects.forEach(function(pProj) {
+                    pProj.deprojects = undefined;
+                    pProj.veprojects = undefined;
+                });
+            }
+            pNext(pErr, pUser);
+        });
+   };
 
     return UserManager;
 };

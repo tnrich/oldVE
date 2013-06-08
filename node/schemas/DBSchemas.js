@@ -194,6 +194,12 @@ module.exports = function(db) {
 		designs: [{
 			type: oIDRef,
 			ref: 'devicedesign'
+		}],
+		userRestrictionEnzymeGroups: [{
+		    name: String,
+		    userRestrictionEnzymes: [{
+		        name: String
+		    }]
 		}]
 	});
 

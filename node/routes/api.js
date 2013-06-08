@@ -2,10 +2,7 @@
  * TeselaGen API
  * @module ./routes/api
  */
-module.exports = function(app, express) {
-
-    var errorHandler = express.errorHandler();
-    var apiManager = new app.ApiManager();
+module.exports = function(app) {
 
     require('../routes/constants')(app);
 

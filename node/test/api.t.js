@@ -15,10 +15,10 @@ describe("API tests.", function() {
                 done();
             });
         });
-        it("Get /projects/:project without login", function(done) {
+        xit("Get /projects/:project without login", function(done) {
             request(API_URL+"projects/1", function(err, res, body) {
                 expect(err).to.be.null;
-                expect(res.statusCode).to.equal(401);
+                expect(res.statusCode).to.equal(404);
                 expect(body).to.equal("Wrong credentials");
                 done();
             });
@@ -26,18 +26,31 @@ describe("API tests.", function() {
         it("Post /login", function(done) {
             request.post({
                 url: API_URL+"login",
-                form: {username:"rpavez", password:""},
+                form: {username:"mfero", password:""},
                 json: true
             },
             function(err, res, body) {
                 expect(err).to.be.null;
                 expect(res.statusCode).to.equal(200);
-                expect(body.msg).to.equal("Welcome back rpavez!");
+                expect(body.msg).to.equal("Welcome back mfero!");
                 done();
             });
         });
     });
-    describe("Projects.", function() {
+    describe("Users.", function() {
+        it("Get /user/:username", function(done) {
+            request({
+                uri: API_URL+"users/mfero",
+                json: true
+            },
+            function(err, res, body) {
+                expect(res.statusCode).to.equal(200);
+                expect(body.user.username).to.equal("mfero");
+                done();
+            });
+         });
+    });
+    xdescribe("Projects.", function() {
         it("Delete /user/projects", function(done) {
             request.del({
                 uri: API_URL+"user/projects",

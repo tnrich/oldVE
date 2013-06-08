@@ -97,20 +97,21 @@ module.exports = function(app, express) {
         host: 'localhost'
     });
 
-    // Load Manager classes
+    // Error handler
+    app.errorHandler = express.errorHandler();
+
+    
     /*
-     * Managers to interact with models
-     * Not fully implemented, work in progress
-     * @author: Yuri Bendana
+     * Load Manager classes
+     * Managers interact with models
      */
 
-    app.ApiManager = require("./manager/ApiManager")(app.db);
-    app.DEProjectManager = require("./manager/DEProjectManager")(app.db);
-    app.J5RunManager = require("./manager/J5RunManager")(app.db);
-    app.PartManager = require("./manager/PartManager")(app.db);
-    app.ProjectManager = require("./manager/ProjectManager")(app.db);
-    app.SequenceManager = require("./manager/SequenceManager")(app.db);
-    app.UserManager = require("./manager/UserManager")(app.db);
-    app.VEProjectManager = require("./manager/VEProjectManager")(app.db);
+    app.ApiManager = require("./manager/ApiManager")();
+    app.DeviceDesignManager = require("./manager/DeviceDesignManager")();
+    app.J5RunManager = require("./manager/J5RunManager")();
+    app.PartManager = require("./manager/PartManager")();
+    app.ProjectManager = require("./manager/ProjectManager")();
+    app.SequenceManager = require("./manager/SequenceManager")();
+    app.UserManager = require("./manager/UserManager")();
 
 };

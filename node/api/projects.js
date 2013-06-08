@@ -5,7 +5,7 @@ module.exports = function(app) {
     /**
      * POST Project
      * @memberof module:./routes/api
-     * @method GET '/users/:username/projects'
+     * @method POST '/users/:username/projects'
      */
     app.post('/users/:username/projects', restrict, function(req, res) {
         var Project = app.db.model("project");

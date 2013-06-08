@@ -16,7 +16,7 @@ module.exports = function(app){
     /**
      * Authentication Restriction.
      * If user session is active then find the user in DB.
-     * If no testing is enabled no option to use Guest User then Wrong Credential.
+     * Otherwise send an error.
      */
     var restrict = function(req, res, next) {
         if (req.session.user) {

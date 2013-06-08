@@ -29,7 +29,7 @@ app.winston = require('winston');
 require('./config.js')(app, express);
 
 // API
-require('./routes/api.js')(app, express);
+require('./routes/api.js')(app);
 
 // Services
 require('./routes/j5-services/j5.js')(app);
