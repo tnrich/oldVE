@@ -258,7 +258,7 @@ Ext.define("Vede.controller.ProjectController", {
     },
 
     resolveAndOpenSequence: function (record) {
-        Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Sequence");
+        // Ext.getCmp("mainAppPanel").getActiveTab().el.mask("Loading Sequence");
 
         var sequence_id = record.data.id;
         var project_id = record.parentNode.data.id;
