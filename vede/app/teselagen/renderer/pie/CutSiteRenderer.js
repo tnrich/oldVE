@@ -10,6 +10,7 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
     },
     
     config: {
+        cutSiteSVG: null,
         cutSites: [],
         middlePoints: null 
     },

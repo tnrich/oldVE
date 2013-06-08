@@ -186,67 +186,43 @@ Ext.define("Teselagen.manager.PieManager", {
 
         if(this.cutSitesChanged) {
             this.cutSiteRenderer.setCutSites(this.cutSites);
+            this.cutSiteRenderer.render();
+
             this.cutSitesChanged = false;
-
-            if(this.cutSiteSprites) {
-                this.cutSiteSprites.destroy();
-            }
-
-            this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.pie.surface
-            });
-
-            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         }
 
         if(this.featuresChanged) {
             this.featureRenderer.setFeatures(this.features);
+            this.featureRenderer.render();
+
             this.featuresChanged = false;
-
-            if(this.featureSprites) {
-                this.featureSprites.destroy();
-            }
-
-            this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.pie.surface
-            });
-
-            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
         if(this.orfsChanged) {
             this.orfRenderer.setOrfs(this.orfs);
+            this.orfRenderer.render();
+
             this.orfsChanged = false;
-
-            if(this.orfSprites) {
-                this.orfSprites.destroy();
-            }
-
-            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.pie.surface
-            });
-
-            this.orfSprites.addAll(this.orfRenderer.render());
         }
 
         this.renderLabels();
 
         if(this.showOrfs) {
-            this.showSprites(this.orfSprites);
+            this.orfSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.orfSprites);
+            this.orfSVG.style("visibility", "hidden");
         }
 
         if(this.showCutSites) {
-            this.showSprites(this.cutSiteSprites);
+            this.cutSiteSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.cutSiteSprites);
+            this.cutSiteSVG.style("visibility", "hidden");
         }
 
         if(this.showFeatures) {
-            this.showSprites(this.featureSprites);
+            this.featureSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.featureSprites);
+            this.featureSVG.style("visibility", "hidden");
         }
 
         //this.drawCoordinates();
@@ -768,7 +744,7 @@ Ext.define("Teselagen.manager.PieManager", {
                      .attr("width", 500)
                      .attr("height", 500);
 
-        this.pie.append("circle")
+        this.pie.append("svg:circle")
                 .attr("r", this.railRadius + this.self.PAD)
                 .attr("cx", this.center.x)
                 .attr("cy", this.center.y)
@@ -801,12 +777,15 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.cutSiteSVG = this.pie.append("svg:g")
                                   .attr("class", "pieCutSite");
+        this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
 
         this.orfSVG = this.pie.append("svg:g")
                               .attr("class", "pieOrf");
+        this.orfRenderer.setOrfSVG(this.orfSVG);
 
         this.featureSVG = this.pie.append("svg:g")
                                   .attr("class", "pieFeature");
+        this.featureRenderer.setFeatureSVG(this.featureSVG);
     },
 
     /**

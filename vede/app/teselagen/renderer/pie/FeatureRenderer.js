@@ -39,7 +39,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
      * them to this.pie.
      */
     render: function() {
-        var sprites = [];
+        var path;
         var featureAlignment = this.Alignment.buildAlignmentMap(this.features, 
                                                          this.sequenceManager);
 
@@ -65,9 +65,9 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
             }
 
             // Draw a pie slice for each location in the feature.
-            var arcSprite;
             var startAngle;
             var endAngle;
+
             Ext.each(feature.getLocations(), function(location) {
                 color = this.colorByType(feature.getType().toLowerCase());
 
@@ -79,38 +79,37 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                 if(feature.getStart() == location.getStart() &&
                    feature.getStrand() == this.StrandType.BACKWARD) {
 
-                    this.featureSVG.append("svg:path")
-                                   .attr("stroke", this.self.OUTLINE_COLOR)
-                                   .attr("stroke-width", this.self.OUTLINE_WIDTH)
-                                   .attr("fill", color)
-                                   .attr("fill-rule", "evenodd");
-
-                    arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center, 
+                    path = this.GraphicUtils.drawDirectedPiePiece(this.center, 
                                  featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 
                                  startAngle, endAngle, direction, color);
-
                 } else if(feature.getEnd() == location.getEnd() && 
                           feature.getStrand() == this.StrandType.FORWARD) {
 
-                    arcSprite = this.GraphicUtils.drawDirectedPiePiece(this.center,
+                    path = this.GraphicUtils.drawDirectedPiePiece(this.center,
                                  featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 
                                  startAngle, endAngle, direction, color);
 
                 } else {
-                    arcSprite = this.GraphicUtils.drawPiePiece(this.center,
+                    path = this.GraphicUtils.drawPiePiece(this.center,
                                  featureRadius, this.self.DEFAULT_FEATURE_HEIGHT, 
                                  startAngle, endAngle, direction, color);
                 }
 
-                this.addToolTip(arcSprite, this.getToolTip(feature));
-                this.addClickListener(arcSprite, feature.getStart(), 
-                                      feature.getEnd());
-
-                sprites.push(arcSprite);
+                this.featureSVG.append("svg:path")
+                               .attr("stroke", this.self.OUTLINE_COLOR)
+                               .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                               .attr("fill", color)
+                               .attr("fill-rule", "evenodd")
+                               .attr("d", path)
+                               .on("mousedown", function() {
+                                   Vede.application.fireEvent("VectorPanelAnnotationClicked",
+                                                              feature.getStart(),
+                                                              feature.getEnd);
+                               })
+                               .append("svg:title")
+                               .text(this.getToolTip(feature));
             }, this);
         }, this);
-
-        return sprites;
     },
 
     /**

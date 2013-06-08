@@ -84,92 +84,66 @@ Ext.define("Teselagen.utils.GraphicUtils", {
                "A" + radius + " " + radius + " 0 " + largeFlag + " " + 
                sweepFlag + " " + endPoint.x + " " + endPoint.y + " ";
         
-        if(!returnString) {
-            return Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: path
-            });
-        } else {
-            return path;
-        }
+        return path;
     },
 
-     drawRect: function(xPos, yPos, width, color) {
-         var sprite;
-         var path;
-         var returnString = returnString || false;
-         
-         path = "M" + xPos + " " + yPos +
-                "L" + (xPos+width) + " " + yPos +
-                "L" + (xPos+width) + " " + (yPos+7) +
-                "L" + xPos + " " + (yPos+7) +
-                "L" + xPos + " " + yPos + " ";
-         
-             return Ext.create("Ext.draw.Sprite", {
-                 type: "path",
-                 path: path,
-                 stroke: this.OUTLINE_COLOR,
-                 "stroke-width": this.OUTLINE_WIDTH,
-                 fill: color
-             });
-     },
+    drawRect: function(xPos, yPos, width, color) {
+        var sprite;
+        var path;
+        var returnString = returnString || false;
+
+        path = "M" + xPos + " " + yPos +
+               "L" + (xPos+width) + " " + yPos +
+               "L" + (xPos+width) + " " + (yPos+7) +
+               "L" + xPos + " " + (yPos+7) +
+               "L" + xPos + " " + yPos + " ";
+
+        return path;
+    },
      
-     drawFeaturePositiveArrow: function(xPos, yPos, width, color) {
-         var sprite;
-         var path;
-         var returnSTring = returnSTring || false;
+    drawFeaturePositiveArrow: function(xPos, yPos, width, color) {
+        var sprite;
+        var path;
          
-         if (width>4) {
-         path =  "M" + xPos + " " + yPos +
-                 "L" + (xPos+(width-4)) + " " + yPos +
-                 "L" + (xPos+width) + " " + (yPos+((8)/2)) +
-                 "L" + (xPos+(width-4)) + " " + (yPos+8) +
-                 "L" + xPos + " " + (yPos+8) +
-                 "L" + xPos + " " + yPos + " ";
-         } else {
-             path =  "M" + xPos + " " + yPos +
-             "L" + (xPos+width) + " " + (yPos + ((8)/2)) +
-             "L" + xPos + " " + (yPos+8) +
-             "L" + xPos + " " + yPos + " ";
-         }
-         
- 
-      return Ext.create("Ext.draw.Sprite", {
-          type: "path",
-          path: path,
-          stroke: this.OUTLINE_COLOR,
-          "stroke-width": this.OUTLINE_WIDTH,
-          fill: color
-      });
-},
+        if (width>4) {
+            path =  "M" + xPos + " " + yPos +
+                    "L" + (xPos+(width-4)) + " " + yPos +
+                    "L" + (xPos+width) + " " + (yPos+((8)/2)) +
+                    "L" + (xPos+(width-4)) + " " + (yPos+8) +
+                    "L" + xPos + " " + (yPos+8) +
+                    "L" + xPos + " " + yPos + " ";
+        } else {
+            path = "M" + xPos + " " + yPos +
+                   "L" + (xPos+width) + " " + (yPos + ((8)/2)) +
+                   "L" + xPos + " " + (yPos+8) +
+                   "L" + xPos + " " + yPos + " ";
+        }
+
+        return path;
+    },
      
-     drawFeatureNegativeArrow: function(xPos, yPos, width, color) {
-         var sprite;
-         var path;
-         var returnSTring = returnSTring || false;
-         
-         if (width>4) {
-         path =  "M" + xPos + " " +  (yPos+((8)/2)) +
-                 "L" + (xPos+4) + " " + yPos +
-                 "L" + (xPos+(width)) + " " + yPos +
-                 "L" + (xPos+(width)) + " " + (yPos+8) +
-                 "L" + (xPos+4) + " " + (yPos+8) +
-                 "L" + xPos + " " + (yPos+((8)/2)) + " ";
-         } else {
-             path =  "M" + xPos + " " +  (yPos+((8)/2)) +
-             "L" + (xPos+width) + " " + yPos +
-             "L" + (xPos+width) + " " + (yPos+8) +
-             "L" + xPos + " " + (yPos+((8)/2)) + " ";
-         }
-         
-      return Ext.create("Ext.draw.Sprite", {
-          type: "path",
-          path: path,
-          stroke: this.OUTLINE_COLOR,
-          "stroke-width": this.OUTLINE_WIDTH,
-          fill: color 
-      });
-},
+    drawFeatureNegativeArrow: function(xPos, yPos, width, color) {
+        var sprite;
+        var path;
+        var returnSTring = returnSTring || false;
+
+        if (width>4) {
+            path =  "M" + xPos + " " +  (yPos+((8)/2)) +
+            "L" + (xPos+4) + " " + yPos +
+            "L" + (xPos+(width)) + " " + yPos +
+            "L" + (xPos+(width)) + " " + (yPos+8) +
+            "L" + (xPos+4) + " " + (yPos+8) +
+            "L" + xPos + " " + (yPos+((8)/2)) + " ";
+        } else {
+            path =  "M" + xPos + " " +  (yPos+((8)/2)) +
+            "L" + (xPos+width) + " " + yPos +
+            "L" + (xPos+width) + " " + (yPos+8) +
+            "L" + xPos + " " + (yPos+((8)/2)) + " ";
+        }
+
+        return path;
+    },
+
     /**
      * Function which draws a portion of the pie with no directionality. Used in
      * FeatureRenderer to draw locations of a feature which do not contain either
@@ -194,6 +168,8 @@ Ext.define("Teselagen.utils.GraphicUtils", {
 
         var outerCorner = Ext.create("Teselagen.bio.util.Point"); 
         var innerCorner = Ext.create("Teselagen.bio.util.Point");
+
+        var path;
         
         outerCorner.x = center.x + outerRadius * Math.sin(startAngle);
         outerCorner.y = center.y - outerRadius * Math.cos(startAngle);
@@ -212,19 +188,15 @@ Ext.define("Teselagen.utils.GraphicUtils", {
             largeFlag = true;
         }
 
-        return Ext.create("Ext.draw.Sprite", {
-            type: "path",
-            path: "M" + outerCorner.x + " " + outerCorner.y + " " +
-                  this.drawArc(center, outerRadius, startAngle, endAngle, false,
-                               true, sweep, largeFlag) +
-                  "L" + innerCorner.x + " " + innerCorner.y + " " +
-                  this.drawArc(center, innerRadius, startAngle, endAngle, true,
-                               true, !sweep, largeFlag) + 
-                  "L" + outerCorner.x + " " + outerCorner.y,
-            stroke: this.OUTLINE_COLOR,
-            "stroke-width": this.OUTLINE_WIDTH,
-            fill: color
-        });
+        path = "M" + outerCorner.x + " " + outerCorner.y + " " +
+               this.drawArc(center, outerRadius, startAngle, endAngle, false,
+                            true, sweep, largeFlag) +
+               "L" + innerCorner.x + " " + innerCorner.y + " " +
+               this.drawArc(center, innerRadius, startAngle, endAngle, true,
+                            true, !sweep, largeFlag) + 
+               "L" + outerCorner.x + " " + outerCorner.y;
+
+        return path;
     },
 
     /**
