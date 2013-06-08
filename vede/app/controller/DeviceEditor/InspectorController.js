@@ -244,7 +244,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         callback: function(sequence){
                                             if(bin)
                                             {
-                                                this.application.fireEvent(this.DeviceEvent.INSERT_PART_AT_SELECTION);
+                                                self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION, part);
                                                 self.onReRenderDECanvasEvent();
                                                 selectWindow.close();
                                                 self.selectedPart = part;
@@ -320,7 +320,6 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         // blank part and load it into the form.
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
-            this.selectedPartIndex = this.DeviceDesignManager.getPartIndex(this.selectedBin, j5Part);
 
             if(j5Part.get('sequencefile_id')!=="")
             {
