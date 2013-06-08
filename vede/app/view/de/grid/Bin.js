@@ -156,6 +156,7 @@ Ext.define('Vede.view.de.grid.Bin', {
     applyTotalRows: function(pTotalRows) {
         var currentRows;
 
+        console.log(this);
         if(this.items) {
             currentRows = this.query("Part").length;
         } else {

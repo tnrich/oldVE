@@ -138,6 +138,10 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        // this.partCell.down().addBodyCls("gridPartCell-alert");
+    },
+
+    selectAlert: function () {
         this.partCell.down().addBodyCls("gridPartCell-alert");
     },
 
