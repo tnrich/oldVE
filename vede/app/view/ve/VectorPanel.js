@@ -13,7 +13,7 @@ Ext.define("Vede.view.ve.VectorPanel", {
     scrollable: false,
     collapsible: true,
     collapseDirection: "left",
-    title: "Vector",
+    title: "Map",
     titleCollapse: "true",
     items: [{
         xtype: "container",

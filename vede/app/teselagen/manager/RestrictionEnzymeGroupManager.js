@@ -70,9 +70,11 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
     loadUserRestrictionEnzymes: function(user) {
         this.setUserGroups([]);
         var newUserGroups = [];
-        
+        var newUserGroup, userEnzymes;
+        var newActiveGroup = [];
+       
         Ext.each(user.restrictionEnzymeGroups(), function(group) {
-            if(!group || !group.get("groupName") || group.get("enzymeNames").length == 0) {
+            if(!group || !group.get("groupName") || group.get("enzymeNames").length === 0) {
                 return true; // This simply tells Ext.each to continue to the next iteration.
             }
 
@@ -85,8 +87,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         // Load the UserRestrictionEnzymeGroup's active enzymes.
         if(userEnzymes.get("activeEnzymeNames").length > 0) {
             this.setActiveGroup([]);
-            var newActiveGroup = [];
-
+ 
             var activeEnzymeNames = this.createGroupByEnzymes("active",
                                             userEnzymes.get("activeEnzymeNames"));
             
@@ -108,7 +109,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         var newUserGroups = this.getUserGroups();
         var index = newUserGroups.indexOf(enzymeGroup);
 
-        if(index != -1) {
+        if(index !== -1) {
             newUserGroups.splice(index, 1);
         }
 
@@ -125,14 +126,14 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
 
 
         Ext.each(this.getSystemGroups(), function(systemGroup) {
-            if(systemGroup.getName() == name) {
+            if(systemGroup.getName() === name) {
                 resultGroup = systemGroup;
 //                return false;
             }
         });
 
         Ext.each(this.getUserGroups(), function(userGroup) {
-            if(userGroup.getName() == name) {
+            if(userGroup.getName() === name) {
                 resultGroup = userGroup;
 //                return false;
             }
@@ -212,7 +213,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         var newSystemGroups = this.getSystemGroups();
         
         // 1. Common
-        var commonGroup = this.createGroupByEnzymes("Common Enzymes", 
+        var commonGroup = this.createGroupByEnzymes("Common Enzymes",
             ["AatII", "AvrII", "BamHI", "BglII", "BsgI", "EagI", "EcoRI", "EcoRV",
              "HindIII", "KpnI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "SacI",
              "SacII", "SalI", "SmaI", "SpeI", "SphI", "XbaI", "XhoI", "XmaI"]);
@@ -234,7 +235,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         newSystemGroups.push(mitBBGroup);
         
         // 5. Fermentas Fast Digest
-        var fermentasFastDigestBBGroup = this.createGroupByEnzymes("Fermentas Fast Digest", 
+        var fermentasFastDigestBBGroup = this.createGroupByEnzymes("Fermentas Fast Digest",
             ["AatII", "Acc65I", "AccI", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AgeI",
              "AjuI", "AleI", "AluI", "Alw21I", "Alw26I", "AlwNI", "ApaI", "ApaLI", "AscI",
              "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BamHI", "BanI", "BbsI", "BbvI", "BclI",
@@ -256,5 +257,5 @@ Ext.define("Teselagen.manager.RestrictionEnzymeGroupManager", {
         newSystemGroups.push(fermentasFastDigestBBGroup);
 
         this.setSystemGroups(newSystemGroups);
-    },
+    }
 });
