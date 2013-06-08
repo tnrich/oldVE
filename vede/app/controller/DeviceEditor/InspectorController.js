@@ -244,14 +244,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         callback: function(sequence){
                                             if(bin)
                                             {
-                                                var insertIndex = bin.parts().indexOf(self.selectedPart);
-                                                // var binIndex = self.DeviceDesignManager.getBinIndex(self.activeProject,bin);
-
-                                                // bin.parts().removeAt(insertIndex);
-                                                // console.log(insertIndex);
-                                                // bin.parts().insert(insertIndex,part);
-                                                bin.parts().removeAt(selectedPartIndex);
-                                                bin.parts().insert(selectedPartIndex,part);
+                                                this.application.fireEvent(this.DeviceEvent.INSERT_PART_AT_SELECTION);
                                                 self.onReRenderDECanvasEvent();
                                                 selectWindow.close();
                                                 self.selectedPart = part;
