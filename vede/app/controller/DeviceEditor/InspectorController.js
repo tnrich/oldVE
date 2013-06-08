@@ -244,7 +244,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                                         callback: function(sequence){
                                             if(bin)
                                             {
-                                                this.application.fireEvent(this.DeviceEvent.INSERT_PART_AT_SELECTION);
+                                                self.application.fireEvent(self.DeviceEvent.INSERT_PART_AT_SELECTION);
                                                 self.onReRenderDECanvasEvent();
                                                 selectWindow.close();
                                                 self.selectedPart = part;
