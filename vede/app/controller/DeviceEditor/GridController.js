@@ -232,7 +232,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        if(selectedPartIndex !== null && selectedPartIndex > 0) {
+        if(selectedPartIndex !== null && selectedPartIndex >= 0) {
             this.selectedPart = this.selectedBin.query("Part")[selectedPartIndex];
             this.selectedPart.select();
         }
@@ -687,10 +687,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var selectedIndex;
         var selectedGridBin = this.selectedBin;
         var selectedJ5Bin = this.selectedBin.getBin();
-
         if(this.selectedPart) {
             selectedIndex = selectedGridBin.query("Part").indexOf(this.selectedPart);
-
             selectedJ5Bin.parts().removeAt(selectedIndex);
             selectedJ5Bin.parts().insert(selectedIndex, j5Part);
         }
