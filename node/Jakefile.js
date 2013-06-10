@@ -40,7 +40,7 @@ directory("log");
 
 task("startNode", ["log"], function() {
     var cmd = util.format("forever start --plain -w --watchDirectory . " +
-            "-a -p /var/log/forever -l forever.log -o log/out.log -e log/err.log %s %s",
+            "-a -p /var/log/forever -l forever.log -o ../log/out.log -e ../log/err.log %s %s",
             nodeApp, nodeOpts);
     JakeUtil.exec(cmd);
 });
