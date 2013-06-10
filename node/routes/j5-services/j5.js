@@ -425,10 +425,17 @@ app.post('/sbol',function(req,res){
 
     console.log("Running ConvertSBOLXML");
     app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
-      var encodedFile = value["encoded_output_file"];
-      var zip = new require('node-zip')(encodedFile, {base64: true, checkCRC32: true});
-      var file = zip.files["inputsequencefile.gb"].data;
-      res.json({error:error,data:file});
+      if(!error && value["encoded_output_file"])
+      {
+        var encodedFile = value["encoded_output_file"];
+        var zip = new require('node-zip')(encodedFile, {base64: true, checkCRC32: true});
+        var file = zip.files["inputsequencefile.gb"].data;
+        res.json({error:error,data:file});
+      }
+      else
+      {
+        res.send({error:error,details:value},500);
+      }
     });
 });
 
