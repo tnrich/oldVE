@@ -388,8 +388,9 @@ app.post('/executej5',restrict,function(req,res){
         else
         {
           // Get and decode the zip file returned by j5 server
+          var encodedFileData = value['encoded_output_file'];
           var fileName = value['output_filename'];
-          var decodedFile = value['encoded_output_file'];
+          var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
 
           saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel
             /*
@@ -413,21 +414,22 @@ app.post('/executej5',restrict,function(req,res){
 
 // Design Assembly RPC
 app.post('/sbol',function(req,res){
+  /* For testing */
   //fs.readFile('./resources/sbol/ConvertSBOLXML_query0.json', encoding='utf8', function (err, rawData) {
     //var data = JSON.parse(rawData);
     //res.json({data:data});
-
+  //});
     var data = {};
     data["conversion_method"] = "ConvertSBOLXMLToGenBankClean"
-    data["encoded_to_be_converted_file"] = new Buffer(req.body.data).toString('base64');
+    data["encoded_to_be_converted_file"] = req.body.data;
 
-
-    //return res.json({data:data});
-
+    console.log("Running ConvertSBOLXML");
     app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
-      res.json({error:error,data:value});
+      var encodedFile = value["encoded_output_file"];
+      var zip = new require('node-zip')(encodedFile, {base64: true, checkCRC32: true});
+      var file = zip.files["inputsequencefile.gb"].data;
+      res.json({error:error,data:file});
     });
-  //});
 });
 
 };

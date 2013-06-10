@@ -33,28 +33,20 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
     parse: function(data, cb){
         console.log("Parsing using j5");
         
-
-        var messageBox = Ext.MessageBox.show({
-           title: 'Please wait',
-           msg: 'Loading items...',
-           progressText: 'Initializing...',
-           width:300,
-           progress:true,
-           closable:false,
-           animateTarget: 'mb6'
-       });
-
-        p.wait({
-            interval: 500,
-            //bar will move fast!
-            duration: 50000,
-            increment: 15,
-            text: 'Updating...',
-            scope: this,
-            fn: function () {
-                p.updateText('Done!');
-            }
+        Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+        var messageBox = Ext.MessageBox.wait(
+            "Converting XML...",
+            "Waiting for the server"
+        );
+        
+        /*
+        var task = new Ext.util.DelayedTask(function() {
+            messageBox.updateProgress(100,"Done!","done");
+            messageBox.close();
         });
+
+        task.delay(5000);
+        */
 
         Ext.Ajax.request({
             url: Teselagen.manager.SessionManager.buildUrl("sbol", ''),
@@ -64,10 +56,9 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
             },
             success: function (response) {
                 response = JSON.parse(response.responseText);
-                //var downloadBtn = currentTab.j5Window.query('button[cls=downloadCondenseAssemblyResultsBtn]')[0];
-                //downloadBtn.show();
-                //self.condenseAssemblyFilesResults = response;
-                //return cb(true);
+                messageBox.close();
+                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                cb(response.data);
             },
             failure: function(response, opts) {
                 //return cb(false,response);

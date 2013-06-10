@@ -111,9 +111,8 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
         var result  = pEvt.target.result;
         var asyncParseFlag = false;
 
-        var ext = pFile.name.match(/^.*\.(genbank|gb|fas|fasta|xml|json)$/i)[1];
         //console.log(ext);
-        switch(ext)
+        switch(pExt)
         {
             case "fasta":
                 fileContent = Teselagen.bio.parsers.ParsersManager.fastaToGenbank(result).toString();
@@ -129,7 +128,10 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                 break;
             case "xml":
                 asyncParseFlag = true;
-                fileContent = self.detectXMLFormat(result,cb);
+                fileContent = self.detectXMLFormat(result,function(pGB){
+                    var gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
+                    return cb(gb);;
+                });
                 break;
         }
         
