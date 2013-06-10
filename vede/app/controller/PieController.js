@@ -11,7 +11,7 @@ Ext.define('Vede.controller.PieController', {
     
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360,
-        PIE_CENTER: {x: 300, y: 300},
+        PIE_CENTER: {x: 100, y: 100},
         RAIL_RADIUS: 100
     },
 
@@ -53,6 +53,11 @@ Ext.define('Vede.controller.PieController', {
             self.onMousemove(self);
         });
 
+        // When pie is resized, scale the graphics in the pie.
+        this.pieContainer.on("resize", function() {
+            this.pieManager.fitWidthToContent(this.pieManager);
+        }, this);
+
         // Set the tabindex attribute in order to receive keyboard events on a div.
         this.pieContainer.el.dom.setAttribute("tabindex", "0");
         this.pieContainer.el.on("keydown", this.onKeydown, this);
@@ -78,7 +83,7 @@ Ext.define('Vede.controller.PieController', {
         // When window is resized, scale the graphics in the pie.
         var timeOut = null;
 
-        /*window.onresize = function(){
+        window.onresize = function(){
             if (timeOut != null)
                 clearTimeout(timeOut);
 
@@ -86,11 +91,6 @@ Ext.define('Vede.controller.PieController', {
                 self.pieManager.fitWidthToContent(self.pieManager);
             }, 400);
         };
-
-        // When pie is resized, scale the graphics in the pie.
-        pie.on("resize", function() {
-            this.pieManager.fitWidthToContent(this.pieManager);
-        }, this);*/
 
         this.Managers.push(this.pieManager);
 
@@ -367,8 +367,16 @@ Ext.define('Vede.controller.PieController', {
      * angle relative to the vertical.
      */
     getClickAngle: function() {
-        var relX = d3.event.layerX - this.pieManager.center.x;
-        var relY = d3.event.layerY - this.pieManager.center.y;
+        var svg = d3.select(".pieParent");
+        var translateValues;
+        if(svg.attr("transform")) {
+            translateValues = svg.attr("transform").match(/[-.\d]+/g);
+        } else {
+            translateValues = [0, 0];
+        }
+
+        var relX = d3.event.layerX - translateValues[0] - this.pieManager.center.x;
+        var relY = d3.event.layerY - translateValues[1] - this.pieManager.center.y;
 
         var angle = Math.atan(relY / relX) + Math.PI / 2;
         if(relX < 0) {

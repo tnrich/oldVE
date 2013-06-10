@@ -251,7 +251,7 @@ Ext.define("Teselagen.manager.PieManager", {
         //this.drawCoordinates();
         Ext.resumeLayouts(true);
 
-        //Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
+        Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },
 
     /**
@@ -315,7 +315,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * on the zoom level.
      */
     fitWidthToContent: function(scope, magnification) {
-        if(scope.labelSprites) {
+        /*if(scope.labelSprites) {
             var newWidth;
             var magnification = magnification || 1;
 
@@ -329,11 +329,21 @@ Ext.define("Teselagen.manager.PieManager", {
                 scope.pie.el.scrollTo("left", (scope.pie.getPositionEl().dom.scrollWidth - 
                                     scope.pie.getPositionEl().dom.clientWidth) / 2);
             }
-        }
+        }*/
 
-        //console.log("magnification: " + magnification);
-        //console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
-        //           " x " + scope.pie.surface.el.getSize().height);
+        var containerSize = Ext.getCmp("PieContainer").getSize();
+        var transX = containerSize.width / 2 - this.center.x;
+        var transY = containerSize.height / 2 - this.center.y;
+        var pieBox = this.pie[0][0].getBBox();
+
+        //this.parentSVG.attr("transform", "translate(" + transX + ", " + transY + ")");
+        //this.pie.style("left", transX);
+        
+        /*this.pie.attr("viewBox", "0 0 " + containerSize.width + " " + containerSize.height)
+                .attr("preserveAspectRatio", "xMidYMin slice");*/
+
+        /*this.pie.attr("width", pieBox.width + transX)
+                .attr("height", pieBox.height + transY);*/
     },
 
     /**
@@ -767,6 +777,10 @@ Ext.define("Teselagen.manager.PieManager", {
         this.pie = d3.select("#PieContainer")
                      .append("svg:svg")
                      .attr("id", "Pie")
+                     /*.attr("width", 500)
+                     .attr("height", 500)*/
+                     /*.attr("viewBox", "-50 -50 500 500")
+                     .attr("preserveAspectRatio", "xMidYMin")*/
                      .attr("overflow", "auto");
 
         this.parentSVG = this.pie.append("svg:g")

@@ -104,7 +104,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                                .on("mousedown", function() {
                                    Vede.application.fireEvent("VectorPanelAnnotationClicked",
                                                               feature.getStart(),
-                                                              feature.getEnd);
+                                                              feature.getEnd());
                                })
                                .append("svg:title")
                                .text(this.getToolTip(feature));
