@@ -563,7 +563,9 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
 
         Vede.application.fireEvent("saveDesignEvent", function () {
             //responseMessage.setValue("Executing j5 Run...Please wait...");
-            Teselagen.manager.TasksMonitor.start();
+            if (Teselagen.manager.TasksMonitor.runFlag) {
+                Teselagen.manager.TasksMonitor.start();
+            }
             inspector.j5comm.generateAjaxRequest(function (success, responseData, warnings) {
                 if(success) {
                     toastr.options.onclick = null;
