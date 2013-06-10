@@ -39,7 +39,9 @@ Ext.define('Ext.ux.IFrame', {
     },
 
     initEvents : function() {
-        var me = this;
+        var me = this,
+            iframeEl = me.iframeEl.dom,
+            frameEl = me.getFrame();
         me.callParent();
         me.iframeEl.on('load', me.onLoad, me);
     },
@@ -79,28 +81,24 @@ Ext.define('Ext.ux.IFrame', {
     },
 
     beforeDestroy: function () {
-        this.cleanupListeners(true);
-        this.callParent();
-    },
-    
-    cleanupListeners: function(destroying){
-        var doc, prop;
+        var me = this,
+            doc, prop;
 
-        if (this.rendered) {
+        if (me.rendered) {
             try {
-                doc = this.getDoc();
+                doc = me.getDoc();
                 if (doc) {
                     Ext.EventManager.removeAll(doc);
-                    if (destroying) {
-                        for (prop in doc) {
-                            if (doc.hasOwnProperty && doc.hasOwnProperty(prop)) {
-                                delete doc[prop];
-                            }
+                    for (prop in doc) {
+                        if (doc.hasOwnProperty && doc.hasOwnProperty(prop)) {
+                            delete doc[prop];
                         }
                     }
                 }
             } catch(e) { }
         }
+
+        me.callParent();
     },
 
     onLoad: function() {
@@ -130,7 +128,7 @@ Ext.define('Ext.ux.IFrame', {
             }
 
             // We need to be sure we remove all our events from the iframe on unload or we're going to LEAK!
-            Ext.EventManager.on(this.getWin(), 'beforeunload', me.cleanupListeners, me);
+            Ext.EventManager.on(window, 'unload', me.beforeDestroy, me);
 
             this.el.unmask();
             this.fireEvent('load', this);
@@ -148,15 +146,8 @@ Ext.define('Ext.ux.IFrame', {
         // relay event from the iframe's document to the document that owns the iframe...
 
         var iframeEl = this.iframeEl,
-
-            // Get the left-based iframe position
-            iframeXY = Ext.Element.getTrueXY(iframeEl),
-            originalEventXY = event.getXY(),
-
-            // Get the left-based XY position.
-            // This is because the consumer of the injected event (Ext.EventManager) will
-            // perform its own RTL normalization.
-            eventXY = Ext.EventManager.getPageXY(event.browserEvent);
+            iframeXY = iframeEl.getXY(),
+            eventXY = event.getXY();
 
         // the event from the inner document has XY relative to that document's origin,
         // so adjust it to use the origin of the iframe in the outer document:
@@ -164,7 +155,7 @@ Ext.define('Ext.ux.IFrame', {
 
         event.injectEvent(iframeEl); // blame the iframe for the event...
 
-        event.xy = originalEventXY; // restore the original XY (just for safety)
+        event.xy = eventXY; // restore the original XY (just for safety)
     },
 
     load: function (src) {

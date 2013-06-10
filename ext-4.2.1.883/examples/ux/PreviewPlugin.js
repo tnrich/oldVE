@@ -24,34 +24,30 @@ Ext.define('Ext.ux.PreviewPlugin', {
      */
     previewExpanded: true,
     
-    setCmp: function(grid) {
+    constructor: function(config) {
         this.callParent(arguments);
-        
         var bodyField   = this.bodyField,
             hideBodyCls = this.hideBodyCls,
-            features    = [{
+            section     = this.getCmp(),
+            features = [{
                 ftype: 'rowbody',
                 getAdditionalData: function(data, idx, record, orig, view) {
-                    var getAdditionalData = Ext.grid.feature.RowBody.prototype.getAdditionalData,
-                        additionalData = {
-                            rowBody: data[bodyField],
-                            rowBodyCls: grid.previewExpanded ? '' : hideBodyCls
-                        };
-                        
-                    if (getAdditionalData) {
-                        Ext.apply(additionalData, getAdditionalData.apply(this, arguments));
-                    }
-                    return additionalData;
+                    var o = Ext.grid.feature.RowBody.prototype.getAdditionalData.apply(this, arguments);
+                    Ext.apply(o, {
+                        rowBody: data[bodyField],
+                        rowBodyCls: section.previewExpanded ? '' : hideBodyCls
+                    });
+                    return o;
                 }
-            }, {
+            },{
                 ftype: 'rowwrap'
             }];
         
-        grid.previewExpanded = this.previewExpanded;
-        if (!grid.features) {
-            grid.features = [];
+        section.previewExpanded = this.previewExpanded;
+        if (!section.features) {
+            section.features = [];
         }
-        grid.features = features.concat(grid.features);
+        section.features = features.concat(section.features);
     },
     
     /**

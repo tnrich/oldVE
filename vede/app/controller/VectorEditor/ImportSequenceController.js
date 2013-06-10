@@ -101,8 +101,20 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
 
 
     detectXMLFormat: function(data,cb){
-        //fileContent = Teselagen.bio.parsers.ParsersManager.jbeiseqXmlToGenbank(result).toString();
-        Teselagen.bio.parsers.SbolParser.parse(data,cb);
+
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(data, "text/xml");
+        var diff = xmlDoc.getElementsByTagNameNS("*", "seq");
+        if(diff.length>0)
+        {
+            // JBEI-SEQ
+            return cb(data,false);
+        }
+        else
+        {
+            // SBOL
+            Teselagen.bio.parsers.SbolParser.parse(data,cb);
+        }
     },
 
     parseSequence: function(pFile, pExt, pEvt,cb){
@@ -128,8 +140,10 @@ Ext.define('Vede.controller.VectorEditor.ImportSequenceController', {
                 break;
             case "xml":
                 asyncParseFlag = true;
-                fileContent = self.detectXMLFormat(result,function(pGB){
-                    var gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
+                fileContent = self.detectXMLFormat(result,function(pGB,isSBOL){
+                    var gb;
+                    if(isSBOL) gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "gb");
+                    else  gb = Teselagen.utils.FormatUtils.fileToGenbank(pGB, "xml");
                     return cb(gb);;
                 });
                 break;

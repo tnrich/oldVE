@@ -58,7 +58,7 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
                 response = JSON.parse(response.responseText);
                 messageBox.close();
                 Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                cb(response.data);
+                cb(response.data,true);
             },
             failure: function(response, opts) {
                 //return cb(false,response);

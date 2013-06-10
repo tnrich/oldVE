@@ -40,10 +40,8 @@ Ext.define('Ext.ux.grid.filter.StringFilter', {
     init : function (config) {
         Ext.applyIf(config, {
             enableKeyEvents: true,
-            labelCls: 'ux-rangemenu-icon ' + this.iconCls,
-            hideEmptyLabel: false,
-            labelSeparator: '',
-            labelWidth: 29,
+            iconCls: this.iconCls,
+            hideLabel: true,
             listeners: {
                 scope: this,
                 keyup: this.onInputKeyUp,
@@ -57,7 +55,6 @@ Ext.define('Ext.ux.grid.filter.StringFilter', {
 
         this.inputItem = Ext.create('Ext.form.field.Text', config);
         this.menu.add(this.inputItem);
-        this.menu.showSeparator = false;
         this.updateTask = Ext.create('Ext.util.DelayedTask', this.fireUpdate, this);
     },
 

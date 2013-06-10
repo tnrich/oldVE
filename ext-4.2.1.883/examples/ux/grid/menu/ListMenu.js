@@ -34,8 +34,6 @@ Ext.define('Ext.ux.grid.menu.ListMenu', {
      */
     single : false,
 
-    plain: true,
-
     constructor : function (cfg) {
         var me = this,
             options,
@@ -54,28 +52,16 @@ Ext.define('Ext.ux.grid.menu.ListMenu', {
             'checkchange'
         );
 
-        me.callParent(arguments);
+        me.callParent([cfg = cfg || {}]);
 
-        // A ListMenu which is completely unconfigured acquires its store from the unique values of its field in the store
-        if (!me.store && !me.options) {
-            me.options = me.grid.store.collect(me.dataIndex, false, true);
-        }
-
-        if (!me.store && me.options) {
+        if(!cfg.store && cfg.options) {
             options = [];
-            for(i = 0, len = me.options.length; i < len; i++) {
-                value = me.options[i];
-                switch (Ext.type(value)) {
-                    case 'array': 
-                        options.push(value);
-                        break;
-                    case 'object':
-                        options.push([value[me.idField], value[me.labelField]]);
-                        break;
-                    default:
-                        if (value != null) {
-                            options.push([value, value]);
-                        }
+            for(i = 0, len = cfg.options.length; i < len; i++){
+                value = cfg.options[i];
+                switch(Ext.type(value)){
+                    case 'array':  options.push(value); break;
+                    case 'object': options.push([value[me.idField], value[me.labelField]]); break;
+                    case 'string': options.push([value, value]); break;
                 }
             }
 
@@ -120,11 +106,10 @@ Ext.define('Ext.ux.grid.menu.ListMenu', {
      * thus recalculate the width and potentially hang the menu from the left.
      */
     show : function () {
-        var me = this;
-        if (me.loadOnShow && !me.loaded && !me.store.loading) {
-            me.store.load();
+        if (this.loadOnShow && !this.loaded && !this.store.loading) {
+            this.store.load();
         }
-        me.callParent();
+        this.callParent();
     },
 
     /** @private */
@@ -138,6 +123,7 @@ Ext.define('Ext.ux.grid.menu.ListMenu', {
 
         Ext.suspendLayouts();
         me.removeAll(true);
+
         gid = me.single ? Ext.id() : null;
         for (i = 0, len = records.length; i < len; i++) {
             itemValue = records[i].get(me.idField);
@@ -176,7 +162,7 @@ Ext.define('Ext.ux.grid.menu.ListMenu', {
                         item.setChecked(true, true);
                     }
                 }
-            });
+            }, this);
         }
     },
 
@@ -191,7 +177,7 @@ Ext.define('Ext.ux.grid.menu.ListMenu', {
             if (item.checked) {
                 value.push(item.value);
             }
-        });
+        },this);
         this.selected = value;
 
         this.fireEvent('checkchange', item, checked);
