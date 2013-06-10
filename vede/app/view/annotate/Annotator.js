@@ -3,6 +3,9 @@
  * Class which handles rendering in the annotate panel.
  */
 Ext.define("Vede.view.annotate.Annotator", {
+    requires: ["Teselagen.models.Rectangle",
+               "Teselagen.renderer.annotate.FeatureRenderer"],
+    
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
 

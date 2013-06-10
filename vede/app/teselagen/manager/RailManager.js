@@ -4,6 +4,8 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.manager.RailManager", {
+    requires: ["Teselagen.bio.sequence.dna.Feature"],
+    
     statics: {
         PAD: 50,
         LABEL_DISTANCE_FROM_RAIL: 3,

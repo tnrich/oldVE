@@ -6,11 +6,16 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.renderer.common.Label", {
-    extend: "Ext.draw.Sprite",
-
     requires: ["Teselagen.bio.util.StringUtil"],
 
+    statics: {
+        FONT_SIZE: "6px"
+    },
+
     config: {
+        labelSVG: null,
+        tooltip: "",
+        click: null,
         needsMeasurement: true,
         annotation: null,
         includeInView: true,
@@ -32,15 +37,6 @@ Ext.define("Teselagen.renderer.common.Label", {
         this.initConfig(inData);
         this.StringUtil = Teselagen.bio.util.StringUtil;
 
-        this.callParent([Ext.create("Ext.draw.Sprite", {
-            type: "text",
-            text: this.labelText(),
-            fill: inData.color || "black",
-            "font-size": "6px",
-            x: inData.x,
-            y: inData.y
-        })]);
-
         /*
             Line 48 fix: this.StringUtil.trim fails because it used to receive this.labelText() of type Object
         */
@@ -51,5 +47,16 @@ Ext.define("Teselagen.renderer.common.Label", {
             this.setIncludeInView(false);
         }
 
+        this.label = this.labelSVG.append("svg:text")
+                     .attr("fill", inData.color || "black")
+                     .attr("font-size", this.self.FONT_SIZE)
+                     .attr("x", inData.x)
+                     .attr("y", inData.y)
+                     .text(this.labelText())
+                     .on("mousedown", inData.click);
+
+
+        this.label.append("svg:title")
+                  .text(inData.tooltip);
     }
 });

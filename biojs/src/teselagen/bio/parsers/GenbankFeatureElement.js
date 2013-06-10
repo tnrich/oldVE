@@ -23,7 +23,8 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankFeatureElement", {
 
-    requires: ["Teselagen.bio.util.StringUtil"],
+    requires: ["Teselagen.bio.util.StringUtil",
+               "Teselagen.bio.parsers.GenbankFeatureQualifier"],
 
     /**
      * @cfg {Object} config

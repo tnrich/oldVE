@@ -26,7 +26,7 @@ Ext.define('Vede.controller.RailController', {
      * @member Vede.controller.RailController
      */
     init: function() {
-        this.callParent();
+        /*this.callParent();
 
         this.control({
             "#Rail" : {
@@ -34,17 +34,17 @@ Ext.define('Vede.controller.RailController', {
                 mousemove: this.onMousemove,
                 mouseup: this.onMouseup
             }
-        });
+        });*/
     },
 
     initRail: function() {
-        this.railManager.initRail();
+        //this.railManager.initRail();
         // Set the tabindex attribute in order to receive keyboard events on a div.
-        this.railContainer.el.dom.setAttribute("tabindex", "0");
-        this.railContainer.el.on("keydown", this.onKeydown, this);
+        //this.railContainer.el.dom.setAttribute("tabindex", "0");
+        //this.railContainer.el.on("keydown", this.onKeydown, this);
     },
 
-    onLaunch: function() {
+    /*onLaunch: function() {
         var rail;
 
         this.callParent(arguments);
@@ -73,7 +73,7 @@ Ext.define('Vede.controller.RailController', {
             reference: this.railManager.reference,
             railWidth: this.railManager.railWidth
         });
-    },
+    },*/
 
     onKeydown: function(event) {
         this.callParent(arguments);
@@ -123,7 +123,7 @@ Ext.define('Vede.controller.RailController', {
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
-        this.callParent(arguments);
+        /*this.callParent(arguments);
 
         this.railManager.setOrfs(this.ORFManager.getOrfs());
         this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
@@ -132,7 +132,7 @@ Ext.define('Vede.controller.RailController', {
         this.railManager.render();
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.SelectionLayer.setSequenceManager(pSeqMan);
+        this.SelectionLayer.setSequenceManager(pSeqMan);*/
     },
 
     onShowFeaturesChanged: function(show) {

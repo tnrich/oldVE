@@ -66,13 +66,13 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
     },
 
     /**
-     * Adds an onclick listener to the sprite which fires an application event
+     * Returns a function which fires an application event
      * with the start and end as arguments. This allows the controllers to
      * select the annotation when it is clicked.
      */
-    addClickListener: function(sprite, start, end) {
-        sprite.on("mousedown", function() {
+    getClickListener: function(start, end) {
+        return function() {
             Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
-        });
+        };
     },
 });

@@ -6,6 +6,8 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.utils.GraphicUtils", {
+    requires: ["Teselagen.bio.util.Point"],
+    
     singleton: true,
 
     ARC_THRESHOLD: 5, // Minimum arc length of a feature to be drawn as a

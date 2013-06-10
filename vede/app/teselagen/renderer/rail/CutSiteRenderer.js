@@ -3,6 +3,8 @@
  * Class which creates sprites to draw all given cut sites.
  */
 Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
+    reqires: ["Teselagen.bio.util.Point"],
+    
     extend: "Teselagen.renderer.rail.RailRenderer",
 
     statics: {

@@ -4,7 +4,6 @@
  */
 Ext.define('Vede.view.pie.Frame', {
     statics: {
-        CENTER: {x: 100, y: 100},
         OUTER_RADIUS: 100,
         INNER_RADIUS: 97,
         OUTLINE_WIDTH: 0.5,
@@ -13,7 +12,7 @@ Ext.define('Vede.view.pie.Frame', {
     },
 
     constructor: function(inData) {
-        var center = this.self.CENTER;
+        var center = inData.center;
         var outerRadius = this.self.OUTER_RADIUS;
         var innerRadius = this.self.INNER_RADIUS;
         var outerStartPoint = {x: center.x - outerRadius, y: center.y};

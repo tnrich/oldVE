@@ -10,6 +10,9 @@ Ext.define('Vede.controller.MainMenuController', {
                'Teselagen.event.VisibilityEvent',
                'Teselagen.manager.ProjectManager',
                'Teselagen.utils.FormatUtils',
+               "Vede.view.ve.GoToWindow",
+               "Vede.view.RestrictionEnzymesManagerWindow",
+               "Vede.view.ve.SelectWindow",
                "Vede.view.ve.SimulateDigestionWindow"],
 
     CaretEvent: null,

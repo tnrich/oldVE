@@ -8,6 +8,8 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     requires: ["Teselagen.event.DeviceEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
+               "Vede.view.de.grid.Bin",
+               "Vede.view.de.grid.Part",
                "Teselagen.constants.SBOLIcons"],
 
     statics: {
@@ -1226,6 +1228,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("validateDuplicatedPartName",
                             this.onValidateDuplicatedPartNameEvent,
                             this);
-
         }
 });
