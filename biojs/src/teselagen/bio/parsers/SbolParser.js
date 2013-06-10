@@ -9,6 +9,7 @@
  *
  * Check for each level and parse downward from there.
  *
+ * @author Rodrigo Pavez
  * @author Diana Wong
  */
 
@@ -27,6 +28,51 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
     constructor: function() {
         XmlToJson = Teselagen.bio.util.XmlToJson;
         namespace = "";
+    },
+
+    parse: function(data, cb){
+        console.log("Parsing using j5");
+        
+
+        var messageBox = Ext.MessageBox.show({
+           title: 'Please wait',
+           msg: 'Loading items...',
+           progressText: 'Initializing...',
+           width:300,
+           progress:true,
+           closable:false,
+           animateTarget: 'mb6'
+       });
+
+        p.wait({
+            interval: 500,
+            //bar will move fast!
+            duration: 50000,
+            increment: 15,
+            text: 'Updating...',
+            scope: this,
+            fn: function () {
+                p.updateText('Done!');
+            }
+        });
+
+        Ext.Ajax.request({
+            url: Teselagen.manager.SessionManager.buildUrl("sbol", ''),
+            params: {
+                filename: 'example.xml',
+                data: Base64.encode(data)
+            },
+            success: function (response) {
+                response = JSON.parse(response.responseText);
+                //var downloadBtn = currentTab.j5Window.query('button[cls=downloadCondenseAssemblyResultsBtn]')[0];
+                //downloadBtn.show();
+                //self.condenseAssemblyFilesResults = response;
+                //return cb(true);
+            },
+            failure: function(response, opts) {
+                //return cb(false,response);
+            }
+        });
     },
 
     /** NOT WRITTEN NOT TESTED

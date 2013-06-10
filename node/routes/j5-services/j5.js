@@ -388,9 +388,8 @@ app.post('/executej5',restrict,function(req,res){
         else
         {
           // Get and decode the zip file returned by j5 server
-          var encodedFileData = value['encoded_output_file'];
           var fileName = value['output_filename'];
-          var decodedFile = new Buffer(encodedFileData, 'base64').toString('binary');
+          var decodedFile = value['encoded_output_file'];
 
           saveFile(newj5Run,data,req.body.parameters,encodedFileData,req.user,deviceDesignModel
             /*
@@ -413,19 +412,22 @@ app.post('/executej5',restrict,function(req,res){
 });
 
 // Design Assembly RPC
-app.get('/sbol',function(req,res){
+app.post('/sbol',function(req,res){
+  //fs.readFile('./resources/sbol/ConvertSBOLXML_query0.json', encoding='utf8', function (err, rawData) {
+    //var data = JSON.parse(rawData);
+    //res.json({data:data});
+
+    var data = {};
+    data["conversion_method"] = "ConvertSBOLXMLToGenBankClean"
+    data["encoded_to_be_converted_file"] = new Buffer(req.body.data).toString('base64');
 
 
-  fs.readFile('./resources/sbol/ConvertSBOLXML_query0.xml', encoding='utf8', function (err, data) {
-    res.json({data:data});
-    /*
+    //return res.json({data:data});
+
     app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
-
+      res.json({error:error,data:value});
     });
-    */
-
-  });
-
+  //});
 });
 
 };
