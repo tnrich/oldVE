@@ -336,14 +336,14 @@ Ext.define("Teselagen.manager.PieManager", {
         var transY = containerSize.height / 2 - this.center.y;
         var pieBox = this.pie[0][0].getBBox();
 
-        //this.parentSVG.attr("transform", "translate(" + transX + ", " + transY + ")");
+        this.parentSVG.attr("transform", "translate(" + transX + ", " + transY + ")");
         //this.pie.style("left", transX);
         
         /*this.pie.attr("viewBox", "0 0 " + containerSize.width + " " + containerSize.height)
                 .attr("preserveAspectRatio", "xMidYMin slice");*/
 
-        /*this.pie.attr("width", pieBox.width + transX)
-                .attr("height", pieBox.height + transY);*/
+        this.pie.attr("width", pieBox.width + transX)
+                .attr("height", pieBox.height + transY);
     },
 
     /**
