@@ -9,7 +9,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
     requires: ["Vede.view.form.ItemSelector"],
 
     height: 474,
-    width: 551,
+    width: 450,
     layout: {
         align: "stretch",
         type: "vbox"
@@ -38,10 +38,9 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                 {
                     xtype: "container",
                     layout: {
-                        align: "stretch",
+                        align: "middle",
                         type: "hbox"
                     },
-//                    flex: 1,
                     items: [
                         {
                             xtype: "container",
@@ -49,7 +48,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                                 align: "stretch",
                                 type: "vbox"
                             },
-//                            flex: 1,
+                            width: 180,
                             items: [
                                 {
                                     xtype: "combobox",
@@ -59,6 +58,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                                     fieldLabel: "Enzyme Groups",
                                     labelAlign: "top",
                                     queryMode: "local",
+                                    maxWidth: 150,
                                     editable: false
                                 },
                                 {
@@ -66,9 +66,8 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                                     id: "enzymeSearchField",
                                     fieldLabel: "Label",
                                     hideLabel: true,
-//                                    margin: 10,
                                     emptyText: "Search for Enzyme",
-//                                    maxWidth: 150,
+                                    maxWidth: 150,
                                     enableKeyEvents: true
                                 }
                             ]
@@ -81,6 +80,7 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                             fieldLabel: "User Enzyme Groups",
                             labelAlign: "top",
                             queryMode: "local",
+                            width: 150,
                             editable: false
                         }
                     ]
@@ -98,42 +98,34 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                             id: "enzymeSelector",
                             store: enzymeListStore,
                             displayField: "name",
-                            flex: 1,
+//                            flex: 1,
+                            width: 330,
                             buttons: ["add", "remove"],
                             buttonsText: {add:"Add to Active", remove:"Remove from Active"},
                             doCopy: true
                         },
                         {
                             xtype: "container",
-//                            height: 100,
-//                            padding: 2,
-//                            width: 130,
                             layout: {
                                 align: "stretch",
-//                                padding: 2,
                                 type: "vbox"
                             },
+//                            flex: 1,
                             items: [
                                 {
                                     xtype: "button",
-//                                    margin: 2,
                                     text: "Save as Group",
-                                    id: "saveGroupButton",
-//                                                flex: 1
+                                    id: "saveGroupButton"
                                 },
                                 {
                                     xtype: "button",
-//                                    margin: 2,
                                     text: "Delete Group",
-                                    id: "deleteGroupButton",
-//                                                flex: 1
+                                    id: "deleteGroupButton"
                                 },
                                 {
                                     xtype: "button",
-//                                    margin: 2,
                                     text: "Make Active",
-                                    id: "makeActiveButton",
-//                                            flex: 1
+                                    id: "makeActiveButton"
                                 }
                             ]
                         }
@@ -141,30 +133,21 @@ Ext.define("Vede.view.RestrictionEnzymesManagerWindow", {
                 },
                 {
                     xtype: "container",
-//                    margin: "",
-//                    padding: 0,
                     layout: {
                         align: "stretch",
-//                                    padding: 2,
                         type: "hbox"
                     },
                     items: [
                         {
                             xtype: "button",
-//                            height: 23,
                             id: "restrictionEnzymesManagerOKButton",
-//                            margin: 2,
-//                            maxHeight: 28,
-//                            padding: "",
-//                            width: 69,
+                            width: 69,
                             text: "OK"
                         },
                         {
                             xtype: "button",
                             id: "restrictionEnzymesManagerCancelButton",
-//                            margin: 2,
-//                            maxHeight: 28,
-//                            width: 69,
+                            width: 69,
                             text: "Cancel"
                         }
                     ]

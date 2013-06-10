@@ -101,6 +101,7 @@ Ext.application({
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
+        'VectorEditor.CreateNewFeatureWindowController',		//
         'VectorEditor.ImportSequenceController',
         'VectorEditor.SequenceEditingController',
         'VectorEditor.SimulateDigestionController',

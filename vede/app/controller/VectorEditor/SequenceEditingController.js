@@ -45,7 +45,8 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                                     nowDate = Ext.Date.format(now, "l, F d, Y");
                                     var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
                                     parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
-                                    $.jGrowl("Part Sucessfully Created");
+                                    toastr.options.onclick = null;
+                                    toastr.info("Part Sucessfully Created");
                                 }
                             });
                     //    }

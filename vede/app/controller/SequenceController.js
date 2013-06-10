@@ -16,7 +16,7 @@ Ext.define("Vede.controller.SequenceController", {
                "Teselagen.event.SelectionLayerEvent",
                "Teselagen.event.VisibilityEvent",
                "Teselagen.manager.RestrictionEnzymeGroupManager"],
-
+    
     AAManager: null,
     ORFManager: null,
     RestrictionEnzymeManager: null,
@@ -117,8 +117,9 @@ Ext.define("Vede.controller.SequenceController", {
             this.onSequenceChanged;
 
         this.application.on(listenersObject, this);
+        
     },
-
+    
     onLaunch: function() {
         // TODO: maybe put managers in statics so they are shared by all 
         // child controllers? 
@@ -448,6 +449,8 @@ Ext.define("Vede.controller.SequenceController", {
     onSelectInverse: function() {
         if(this.SequenceManager && this.SelectionLayer) {
             this.select(this.SelectionLayer.end, this.SelectionLayer.start);
+            this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
+                                       this, this.SelectionLayer.start, this.SelectionLayer.end);
         }
     },
 

@@ -138,6 +138,10 @@ Ext.define('Vede.view.de.grid.Part', {
      */
     select: function () {
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        // this.partCell.down().addBodyCls("gridPartCell-alert");
+    },
+
+    selectAlert: function () {
         this.partCell.down().addBodyCls("gridPartCell-alert");
     },
 
@@ -162,8 +166,8 @@ Ext.define('Vede.view.de.grid.Part', {
     },
 
     mapSelect: function() {
-        this.partCell.down().removeBodyCls("gridPartCell-alert");
         this.partCell.down().addBodyCls("gridPartCell-selected");
+        this.partCell.down().removeBodyCls("gridPartCell-alert");
     },
     /**
      * If the fas is set, add either a red or blue rectangle, depending on

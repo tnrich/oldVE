@@ -177,6 +177,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
          if(j5Part) {
             if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
+                if (j5Part.get('name') != "") {
+                    gridPart.selectAlert();
+                }
             } else {
                 gridPart.deselect();
                 gridPart.mapSelect();
@@ -205,6 +208,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var selectedBinIndex = this.DeviceDesignManager.getBinIndex(
                                                         this.activeProject,
                                                         this.selectedBin.getBin());
+        var selectedPartIndex = null;
         var selectedBin = this.selectedBin;
         var partCells = selectedBin.query("Part");
 
@@ -212,8 +216,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         var cellCount = this.selectedBin.items.items.length - 1;
 
-        this.selectedBin = null;
-        this.selectedPart = null;
+        if(this.selectedPart) {
+            selectedPartIndex = this.selectedBin.query("Part").indexOf(this.selectedPart);
+            this.selectedPart = null;
+        }
 
         for (var i = 0; i < cellCount; i++) {
             var gridPart = partCells[i];
@@ -226,9 +232,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             }
         }
 
-        //this.grid.removeAll(); // Clean grid
-        //this.renderDevice();
+        if(selectedPartIndex !== null && selectedPartIndex >= 0) {
+            this.selectedPart = this.selectedBin.query("Part")[selectedPartIndex];
+            this.selectedPart.select();
+        }
     },
+
     /**
      * When the tab changes on the main panel, handles loading and rendering the
      * new device design, assuming the new tab is a device editor tab. Also sets
@@ -379,6 +388,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             this.renderFasConflicts(parts, addedPart);
         }, this);
 
+        this.totalRows = this.DeviceDesignManager.findMaxNumParts(this.activeProject);
         this.updateBinsWithTotalRows();
     },
 
@@ -632,7 +642,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         this.toggleInsertOptions(false);
 
-        // $.jGrowl("Added Column Left");
+        // toastr.info("Added Column Left");
 
     },
 
@@ -667,7 +677,21 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.toggleCutCopyPastePartOptions(false);
         this.toggleInsertOptions(false);
         
-        // $.jGrowl("Added Column Right");
+        // toastr.info("Added Column Right");
+    },
+
+    /**
+     * Handler for InsertPartAtSelection event.
+     */
+    onInsertPartAtSelection: function(j5Part) {
+        var selectedIndex;
+        var selectedGridBin = this.selectedBin;
+        var selectedJ5Bin = this.selectedBin.getBin();
+        if(this.selectedPart) {
+            selectedIndex = selectedGridBin.query("Part").indexOf(this.selectedPart);
+            selectedJ5Bin.parts().removeAt(selectedIndex);
+            selectedJ5Bin.parts().insert(selectedIndex, j5Part);
+        }
     },
 
     /**
@@ -850,8 +874,6 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
      * parts already.
      */
     updateBinsWithTotalRows: function() {
-        this.totalRows = this.DeviceDesignManager.findMaxNumParts(this.activeProject);
-
         var items = this.grid.items.getRange();
 
         for(var i = 0; i < items.length; i++) {
@@ -933,7 +955,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         return targetGridParts;
     },
 
-    onPartCellSelectByMap: function(pj5Part) {
+    onPartMapped: function(pj5Part) {
         var j5Part = pj5Part;
 
         var j5Bin = this.DeviceDesignManager.getBinByPart(this.activeProject, j5Part);
@@ -941,13 +963,12 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         var binIndex = this.DeviceDesignManager.getBinIndex(this.activeProject,j5Bin);
 
         if(this.selectedPart && this.selectedPart.down()) {
-           this.selectedPart.deselect();
+            this.selectedPart.deselect();
             this.deHighlight(this.selectedPart.getPart());
         }
 
         this.onPartCellHasBeenMapped(j5Part);
         this.application.fireEvent(this.DeviceEvent.SELECT_PART, j5Part, binIndex);
-
     },
 
     onPartCellHasBeenMapped: function(j5Part) {
@@ -985,7 +1006,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
 
         if(gridParts.length > 0 && gridParts.indexOf(this.selectedPart) === -1) {
             this.selectedPart = gridParts[0];
-            gridParts[0].select();
+            gridParts[0].mapSelect();
         }
 
         // Select all gridParts with the same source, unless the j5Part is empty.
@@ -1258,6 +1279,10 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this.onAddColumnRight,
                             this);
 
+        this.application.on(this.DeviceEvent.INSERT_PART_AT_SELECTION,
+                            this.onInsertPartAtSelection,
+                            this);
+
         this.application.on(this.DeviceEvent.CLEAR_PART,
                             this.onClearPart,
                             this);
@@ -1271,7 +1296,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART,
-                            this.onPartCellSelectByMap,
+                            this.onPartMapped,
                             this);
 
         this.application.on(this.DeviceEvent.MAP_PART_SELECT,

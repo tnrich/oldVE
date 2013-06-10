@@ -849,7 +849,8 @@ border-radius: 4px;
 
 .gridPartCell-selected {
     background-color: #ECF0F1;
-    border-color: #006CAB;!important;
+    border-color: #4A4B4C;
+    /*border-color: #006CAB;*/
 }
 
 .gridPartCell-highlighted {
@@ -1189,6 +1190,10 @@ background: #F8F8F8;
 }
 
 .x-box-scroller-top .x-menu-scroll-top {
+  display: none;
+}
+
+.x-box-scroller-bottom .x-menu-scroll-bottom {
   display: none;
 }
 

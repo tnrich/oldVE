@@ -177,7 +177,7 @@ Ext.define('Vede.controller.MainMenuController', {
 
     onCreateNewFeatureMenuItemClick: function() {
         var createNewFeatureWindow = Ext.create(
-            "Vede.view.CreateNewFeatureWindow");
+            "Vede.view.ve.CreateNewFeatureWindow");
 
         createNewFeatureWindow.show();
         createNewFeatureWindow.center();

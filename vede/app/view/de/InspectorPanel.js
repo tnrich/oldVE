@@ -534,7 +534,7 @@ Ext.define('Vede.view.de.InspectorPanel', {
                         {
                             xtype: 'form',
                             flex: 1,
-                            cls: 'PartPropertiesForm',
+                            cls: 'j5InfoTab-Basic',
                             width: 287,
                             layout: {
                                 align: 'stretch',
@@ -717,7 +717,6 @@ Ext.define('Vede.view.de.InspectorPanel', {
                                         {   
                                         xtype: 'container',
                                         html: 'Assembly Files To Condense List:',
-                                        cls: 'condenseAssemblyFiles-box',
                                         margin: '10 0 0 0',
                                         layout: {
                                             align: 'stretch',
