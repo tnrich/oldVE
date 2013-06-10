@@ -212,7 +212,11 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
                          root: 'parts'
                      }
                  },
-                 autoLoad: true
+                 autoLoad: true,
+                 sorters: [{
+                    property: 'name',
+                    direction: 'ASC'
+                 }]
              });
 
                 var selectWindow = Ext.create('Ext.window.Window', {

@@ -88,6 +88,7 @@ Ext.application({
         'MainMenuController',
         'MainPanelController',
         'MainToolbarController',
+        'PartLibraryController',
         'PieController',
         'ProjectController',
         'RailController',
