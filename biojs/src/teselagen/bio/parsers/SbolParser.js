@@ -61,7 +61,9 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
                 cb(response.data,true);
             },
             failure: function(response, opts) {
-                //return cb(false,response);
+                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                messageBox.close();
+                Ext.MessageBox.alert('Failed','Conversion failed');
             }
         });
     },
