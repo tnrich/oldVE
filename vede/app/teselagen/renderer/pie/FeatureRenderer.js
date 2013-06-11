@@ -95,7 +95,7 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
 
                 this.addToolTip(arcSprite, this.getToolTip(feature));
                 this.addClickListener(arcSprite, feature.getStart(), 
-                                      feature.getEnd());
+                                      feature.getEnd(),feature);
 
                 sprites.push(arcSprite);
             }, this);

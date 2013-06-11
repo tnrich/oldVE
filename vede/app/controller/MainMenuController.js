@@ -16,7 +16,8 @@ Ext.define('Vede.controller.MainMenuController', {
     MenuItemEvent: null,
     ProjectManager: null,
     VisibilityEvent: null,
-
+    SequenceManagerEvent: null,
+    
     onCutMenuItemClick: function() {
         this.application.fireEvent(this.MenuItemEvent.CUT);
     },
@@ -182,8 +183,6 @@ Ext.define('Vede.controller.MainMenuController', {
         createNewFeatureWindow.show();
         createNewFeatureWindow.center();
 
-        this.application.fireEvent("RestrictionEnzymeManagerOpened",
-                                   restrictionEnzymesManagerWindow);
     },
 
     onRestrictionEnzymesManagerMenuItemClick: function() {
@@ -243,7 +242,30 @@ Ext.define('Vede.controller.MainMenuController', {
     onHelpBtnClick: function(button, e, options) {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },
-
+    
+    /*onNewBlankVectorEditorMenuItemClick: function() {
+    	this.application.fireEvent(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, Ext.create("Teselagen.manager.SequenceManager",
+    			{sequence: Teselagen.bio.sequence.DNATools.createDNA('')}));
+    	this.application.fireEvent(this.MenuItemEvent.NEW_BLANK_VECTOR_EDITOR);
+    	//Add something to deselect sequence part in Panel Menu or something
+    	
+    	
+    	//Ext.getCmp('projectTreePanel').activeItem=0;
+    	/*listenersObject[this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED] =
+            this.onSequenceManagerChanged;*/   	
+//    },
+    
+    onSelectionCancelled: function(scope) {
+    	Ext.getCmp("createNewFeatureMenuItem").disable();
+    	//console.log("dfadsfadsfadsg");
+    },
+    onSelectionChanged: function(scope) {
+    	Ext.getCmp("createNewFeatureMenuItem").enable();
+    },
+    onSequenceManagerChanged: function(scope) {
+    	Ext.getCmp("createNewFeatureMenuItem").disable();
+    },
+    
     init: function() {
         this.control({
             "#cutMenuItem": {
@@ -332,17 +354,27 @@ Ext.define('Vede.controller.MainMenuController', {
             },
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
-            }
+            },
+            /*"#newBlankVectorEditorMenuItem": {
+                click: this.onNewBlankVectorEditorMenuItemClick
+            }*/
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;
         this.MenuItemEvent = Teselagen.event.MenuItemEvent;
         this.ProjectManager = Teselagen.manager.ProjectManager;
         this.VisibilityEvent = Teselagen.event.VisibilityEvent;
+        this.SequenceManagerEvent = Teselagen.event.SequenceManagerEvent;
 
         this.application.on(this.MenuItemEvent.SAFE_EDITING_CHANGED,
                             this.validateSafeEditingMenuItem, this);
 
         this.application.on("ViewModeChanged", this.onViewModeChanged, this);
+        this.application.on(Teselagen.event.SelectionEvent.SELECTION_CANCELED, 
+                this.onSelectionCancelled,this);
+        this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, 
+                this.onSelectionChanged,this);
+        this.application.on(Teselagen.event.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, 
+                this.onSequenceManagerChanged,this);
     }
 });

@@ -444,7 +444,7 @@ Ext.define("Teselagen.manager.PieManager", {
                                         this.featureRenderer.getToolTip(feature));
                 this.featureRenderer.addClickListener(label,
                                                 label.annotation.getStart(),
-                                                label.annotation.getEnd());
+                                                label.annotation.getEnd(),label.annotation);
 
                 labels.push(label);
             }

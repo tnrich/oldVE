@@ -4,7 +4,9 @@
  */
 Ext.define("Teselagen.event.MenuItemEvent", {
     singleton: true,
-
+    
+    NEW_BLANK_VECTOR_EDITOR: "NewBlankVectorEditor",
+    
     CUT: "Cut",
     COPY: "Copy",
     PASTE: "Paste",
