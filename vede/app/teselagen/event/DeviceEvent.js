@@ -17,6 +17,8 @@ Ext.define("Teselagen.event.DeviceEvent", {
     REMOVE_COLUMN: "RemoveColumn",
     REMOVE_ROW: "RemoveRow",
 
+    INSERT_PART_AT_SELECTION: "InsertPartAtSelection",
+
     MAP_PART: "MapPart",
     MAP_PART_SELECT: "MapPartSelect",
     MAP_PART_NOTSELECT: "MapPartNotSelect",

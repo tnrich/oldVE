@@ -11,6 +11,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     requires: ["Ext.data.Store"],
 
     debugFlag : false,
+    disabled : false,
     runFlag : true,
 
     mon: {}, // Object to observe
@@ -86,10 +87,18 @@ Ext.define("Teselagen.manager.TasksMonitor", {
                 {
                     // Change
                     if(this.debugFlag) console.log(j5run._id," changed to ",j5run.status);
-
-                    // Fire change
+                    var startDate = new Date(j5run.date);
+                    var endDate = Date.now();
+                    var elapsed = endDate - startDate;
+                    elapsed = Math.round(elapsed/1000);
+                    elapsed = self.elapsedDate(elapsed);
+                                // Fire change
                     // Vede.application.fireEvent("j5runstatusChanged",j5run._id,j5run.status);
-                    $.jGrowl("j5 Run " + j5run.status);
+                    toastr.options.onclick = function() { Vede.application.fireEvent("jumpToJ5Run",j5run);}
+                    toastr.options.timeOut = 0;
+                    toastr.success("j5 Run for " +j5run.devicedesign_name + " " + j5run.status + "<br>Submitted " + elapsed + " ago <br> Click To See Results", { sticky: true, theme: 'j5-completed', data: j5run});
+                    toastr.options.timeOut = 5000;
+
 
                     self.mon[j5run._id] = j5run.status; // Set the changed
                     changes = true;
@@ -108,6 +117,23 @@ Ext.define("Teselagen.manager.TasksMonitor", {
         };
 
         if(!changes&&!anyRunningTask) self.stop(true);
+    },
+
+    elapsedDate: function (seconds)
+    {
+    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+    var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+    if (numdays>0) {
+        return numdays + " days" + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+    }else if (numhours>0) {
+        return numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+    }else if (numminutes>0) {
+        return numminutes + " minutes " + numseconds + " seconds";
+    } else {
+    return numseconds + " seconds";
     }
+    },
 
 });

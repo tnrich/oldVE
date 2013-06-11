@@ -37,7 +37,9 @@ Ext.define("Vede.controller.J5ReportController", {
     },
 
     downloadResults: function(){
-        location.href = '/api/getfile/'+this.activeJ5Run.data.file_id;
+        if (this.activeJ5Run) {
+            location.href = '/api/getfile/'+this.activeJ5Run.data.file_id;
+        }
     },
 
     onJ5RunSelect: function( item, e, eOpts ){
@@ -71,12 +73,34 @@ Ext.define("Vede.controller.J5ReportController", {
 
         if(status=="Completed") {
             var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-warning");
             $("#" + field + " .status-note").addClass("status-note-completed");
+        } else if (status=="Completed with warnings") {
+            var field = this.tabPanel.down("form[cls='j5RunInfo']").query('field[cls="j5RunStatusField"]')[0].getId();
+            $("#" + field + " .status-note").removeClass("status-note-completed");
+            $("#" + field + " .status-note").addClass("status-note-warning");
+        }
+
+        var warnings = this.activeJ5Run.raw.warnings;
+
+        var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
+            model: 'Teselagen.models.j5Output.Warning',
+            data: warnings,
+        });
+
+        if ((warnings.length>0)==true) {
+            this.tabPanel.down('gridpanel[name="warnings"]').show();
+            this.tabPanel.down('gridpanel[name="warnings"]').reconfigure(warningsStore);
+        } else {
+             this.tabPanel.down('gridpanel[name="warnings"]').hide();
+             warnings = null;
+             warningsStore = null;
         }
 
         this.tabPanel.down('gridpanel[name="assemblies"]').reconfigure(assemblies);
         this.tabPanel.down('gridpanel[name="j5parameters"]').reconfigure(j5parameters);
         this.tabPanel.down('textareafield[name="combinatorialAssembly"]').setValue(combinatorial.get('nonDegenerativeParts'));
+
         // this.tabPanel.query('panel[cls="j5ReportsPanel"]')[0].collapse(Ext.Component.DIRECTION_LEFT,true);
     },
 
@@ -108,12 +132,15 @@ Ext.define("Vede.controller.J5ReportController", {
 
     loadj5Results: function () {
         var self = this;
+
         this.activeProject.j5runs().load({
             callback: function (runs) {
-                self.j5runs = runs;
+                self.j5runs = runs.reverse();
                 self.renderMenu();
             }
         });
+
+
     },
 
     onTabChange: function (tabPanel, newTab, oldTab) {
@@ -128,6 +155,10 @@ Ext.define("Vede.controller.J5ReportController", {
         }
     },
 
+    setActiveRun: function (activeJ5Run) {
+        this.activeJ5Run = activeJ5Run;
+    },
+
     onLaunch: function () {
         this.tabPanel = Ext.getCmp("mainAppPanel");
         this.tabPanel.on("tabchange", this.onTabChange, this);
@@ -135,6 +166,8 @@ Ext.define("Vede.controller.J5ReportController", {
 
     init: function () {
         this.callParent();
+
+        this.application.on("resetJ5ActiveRun", this.setActiveRun, this);
 
         this.control({
             'panel[cls="j5ReportsPanel"] > menu > menuitem': {

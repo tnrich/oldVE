@@ -31,7 +31,6 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
      */
     constructor: function(inData) {
         this.initConfig(inData);
-
         this.Alignment = Teselagen.renderer.common.Alignment;
         this.StrandType = Teselagen.bio.sequence.common.StrandType;
     },
@@ -64,7 +63,7 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
             });
         });
     },
-
+    
     /**
      * Returns a function which fires an application event
      * with the start and end as arguments. This allows the controllers to
@@ -75,4 +74,36 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
             Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
         };
     },
+
+    getRightClickListener: function(annotation) {
+        var sequenceManager = this.sequenceManager;
+        return function() {
+            Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
+            e.preventDefault();
+            var contextMenu = Ext.create('Ext.menu.Menu',{
+                  items: [{
+                    text: 'Edit Sequence Feature',
+                    //iconCls: 'edit',
+                    handler: function() {
+                        var editSequenceFeatureWindow = Ext.create(
+                        "Vede.view.ve.EditSequenceFeatureWindow");
+                        
+                        editSequenceFeatureWindow.show();
+                        editSequenceFeatureWindow.center();
+                    }
+                  },{
+                    text: 'Delete Sequence Feature',
+                    //iconCls: 'edit',
+                    handler: function() {
+                        sequenceManager.removeFeature(feature,false);
+                    }
+                  }]
+            });                  
+            contextMenu.show(); 
+            contextMenu.setPagePosition(e.getX(),e.getY()-5);
+        };
+    },
 });
+
+
+

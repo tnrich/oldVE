@@ -9,6 +9,9 @@ Ext.define('Vede.view.de.grid.Bin', {
     extend: 'Ext.container.Container',
     alias: 'widget.Bin',
     
+    requires: ["Ext.layout.container.Table",
+               "Ext.tip.ToolTip"],
+
     statics: {
         forwardButtonIconPath: 'resources/images/ux/right2.gif',
         reverseButtonIconPath: 'resources/images/ux/left2.gif'
@@ -28,6 +31,7 @@ Ext.define('Vede.view.de.grid.Bin', {
 
     constructor: function(config) {
         this.initConfig(config);
+        var self = this;
 
         var flipButtonIconPath;
         var html;
@@ -69,6 +73,16 @@ Ext.define('Vede.view.de.grid.Bin', {
                 },
                 layout: {
                     type: 'absolute'
+                },
+                listeners: {
+                        afterrender: function (obj) {
+                            if(self.getBin()) {
+                                var tip = Ext.create('Ext.tip.ToolTip', {
+                                        target: this.up().el,
+                                        html: html
+                                });
+                            }
+                        }
                 },
                 items: [{
                     xtype: 'button',
@@ -156,7 +170,6 @@ Ext.define('Vede.view.de.grid.Bin', {
             currentRows += 1;
         } else {
             var itemslist = this.items;
-
             while(currentRows < pTotalRows) {
                     this.add(Ext.create("Vede.view.de.grid.Part"));
                     currentRows += 1;

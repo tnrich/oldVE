@@ -16,6 +16,7 @@ Ext.define("Teselagen.renderer.common.Label", {
         labelSVG: null,
         tooltip: "",
         click: null,
+        rightClick: null,
         needsMeasurement: true,
         annotation: null,
         includeInView: true,
@@ -55,7 +56,8 @@ Ext.define("Teselagen.renderer.common.Label", {
                      .attr("x", inData.x)
                      .attr("y", inData.y)
                      .text(this.labelText())
-                     .on("mousedown", inData.click);
+                     .on("mousedown", inData.click)
+                     .on("contextmenu", inData.rightClick);
 
 
         this.label.append("svg:title")

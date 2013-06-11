@@ -101,11 +101,11 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                                .attr("fill", color)
                                .attr("fill-rule", "evenodd")
                                .attr("d", path)
-                               .on("mousedown", function() {
-                                   Vede.application.fireEvent("VectorPanelAnnotationClicked",
-                                                              feature.getStart(),
-                                                              feature.getEnd());
-                               })
+                               .on("mousedown", this.getClickListener(
+                                                        feature.getStart(),
+                                                        feature.getEnd()),
+                               .on("contextmenu", this.getRightClickListener(
+                                                        feature)),
                                .append("svg:title")
                                .text(this.getToolTip(feature));
             }, this);

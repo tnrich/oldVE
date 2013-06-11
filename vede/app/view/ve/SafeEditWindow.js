@@ -23,10 +23,9 @@ Ext.define('Vede.view.ve.SafeEditWindow', {
             columnLines: true,
             rowLines: true,
             sortableColumns: false,
-            plugins: {
-                ptype: 'cellediting',
-                clicksToEdit: 1
-            },
+            plugins: Ext.create('Ext.grid.plugin.CellEditing',{
+                clicksToEdit: 1,
+            }),
             selModel: {
                 selType: 'checkboxmodel',
                 injectCheckbox: 'last',

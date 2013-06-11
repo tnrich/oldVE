@@ -68,6 +68,7 @@ Ext.Loader.syncRequire([
         ,'Teselagen.renderer.rail.SelectionLayer'
         ,'Teselagen.manager.AAManager'
         ,'Teselagen.manager.TasksMonitor'
+        ,'Teselagen.renderer.annotate.HighlightLayer'
 ]);
 
 Ext.application({
@@ -87,6 +88,7 @@ Ext.application({
         'MainMenuController',
         'MainPanelController',
         'MainToolbarController',
+        'PartLibraryController',
         'PieController',
         'ProjectController',
         'RailController',
@@ -100,6 +102,8 @@ Ext.application({
         'DeviceEditor.J5Controller',
         'DeviceEditor.MainMenuController',
         'DeviceEditor.MainToolbarController',
+        'VectorEditor.CreateNewFeatureWindowController',
+        'VectorEditor.EditSequenceFeatureWindowController',
         'VectorEditor.ImportSequenceController',
         'VectorEditor.SequenceEditingController',
         'VectorEditor.SimulateDigestionController',

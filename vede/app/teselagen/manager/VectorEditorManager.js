@@ -31,13 +31,17 @@ Ext.define("Teselagen.manager.VectorEditorManager", {
 
         var self = this;
 
+        var now = new Date();
+        nowTime = Ext.Date.format(now, "g:i:s A  ");
+        nowDate = Ext.Date.format(now, "l, F d, Y");
+
         var successFullSavedCallback = function(){
             currentTabPanel.setLoading(false);
             var parttext = Ext.getCmp("VectorEditorStatusPanel").down("tbtext[id=\"VectorEditorStatusBarAlert\"]");
-            parttext.animate({duration: 1000, to: {opacity: 1}}).setText("Sequence Successfully Saved");
-            parttext.animate({duration: 5000, to: {opacity: 0}});
+            parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Sequence Successfully Saved at ' + nowTime + ' on '+ nowDate);
             if(typeof (cb) === "function") { cb(); }
-            $.jGrowl ("Sequence Successfully Saved")
+            toastr.options.onclick = null;
+            toastr.info ("Sequence Successfully Saved");
         };
 
         var saveToServer = function(){

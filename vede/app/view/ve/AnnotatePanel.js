@@ -23,5 +23,5 @@ Ext.define("Vede.view.ve.AnnotatePanel", {
         layout: {
             type: "fit"
         }
-    }]
+    }],
 });

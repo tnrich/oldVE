@@ -16,6 +16,8 @@ var processJ5Response = require('./j5parser');
 
 var j5Runs = app.db.model("j5run");
 
+var fs = require("fs");
+
 /**
  * Write to quick.log
  */
@@ -358,13 +360,15 @@ app.post('/executej5',restrict,function(req,res){
       /* Everything is ready for j5 communication - j5run is generated on pending status */
 
       var newj5Run = new j5Runs({
-        deproject_id: deviceDesignModel._id,
         name: "newResult",
         date: new Date(),
         assemblyMethod: data.assembly_method,
         assemblyType: data.ASSEMBLY_PRODUCT_TYPE,
         status: "In progress",
-        user_id: req.user._id
+        user_id: req.user._id,
+        devicedesign_id : deviceDesignModel._id,
+        project_id : deviceDesignModel.project_id,
+        devicedesign_name: deviceDesignModel.name
       });
 
       newj5Run.save(function(err){
@@ -406,6 +410,33 @@ app.post('/executej5',restrict,function(req,res){
     });
 
   });
+});
+
+// Design Assembly RPC
+app.post('/sbol',function(req,res){
+  /* For testing */
+  //fs.readFile('./resources/sbol/ConvertSBOLXML_query0.json', encoding='utf8', function (err, rawData) {
+    //var data = JSON.parse(rawData);
+    //res.json({data:data});
+  //});
+    var data = {};
+    data["conversion_method"] = "ConvertSBOLXMLToGenBankClean"
+    data["encoded_to_be_converted_file"] = req.body.data;
+
+    console.log("Running ConvertSBOLXML");
+    app.j5client.methodCall('ConvertSBOLXML', [data], function (error, value) {
+      if(!error && value["encoded_output_file"])
+      {
+        var encodedFile = value["encoded_output_file"];
+        var zip = new require('node-zip')(encodedFile, {base64: true, checkCRC32: true});
+        var file = zip.files["inputsequencefile.gb"].data;
+        res.json({error:error,data:file});
+      }
+      else
+      {
+        res.send({error:error,details:value},500);
+      }
+    });
 });
 
 };

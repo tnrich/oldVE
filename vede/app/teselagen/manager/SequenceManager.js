@@ -451,7 +451,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
         //return this.features.contains(feature);
         return Ext.Array.contains(this.features, pFeature);
     },
-
+      
     /**
      * Insert another sequence manager at position. This method is used on sequence paste.
      *

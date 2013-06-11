@@ -6,7 +6,7 @@
  */
 Ext.define("Vede.view.ve.SimulateDigestionWindow", {
     extend: "Ext.window.Window",
-    requires: ["Ext.form.Panel", "Ext.ux.form.MultiSelect", "Ext.ux.form.ItemSelector"],
+    requires: ["Ext.form.Panel", "Vede.view.form.ItemSelector"],
     height: 500,
     width: 900,
     layout: {
@@ -79,42 +79,20 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                         }
                         ]
                     },
-
-//                    {
-//                            xtype: "combobox",
-//                            id: "enzymeGroupSelector-digest",
-//                            store: groupStore, //change this store to query database
-//                            editable: false,
-//                            queryMode: "local",
-//                            value: "Common",
-//                            displayField: "name",
-//                            maxWidth: 134
-//                    },
-//                    {
-//                            xtype: "combobox",
-//                            hideTrigger: true,
-//                            valueField: "name",
-//                            emptyText: "Search for Enzyme",
-//                            id: "enzymeGroupSelector-search",
-//                            queryMode: "local",
-//                            disabled: false,
-//                            maxWidth: 134
-//                    },
                     {
-                        xtype: "itemselector",
-                        name: "itemselector",
+                        xtype: "itemselectorvede",
+                        name: "itemselectorvede",
                         flex: 1,
                         id: "enzymeListSelector-digest",
-//                        imagePath: "/extjs/examples/ux/css/images/",
                         store: enzymeListStore,
                         displayField: "name",
                         valueField: "name",
                         buttons: ["add", "remove"],
                         buttonsText: {add:"Add to Active", remove:"Remove from Active"},
-//                        allowBlank: true,
                         msgTarget: "side",
                         fromTitle: "Available",
-                        toTitle: "Active"
+                        toTitle: "Active",
+                        doCopy: true
                     }]
                 },
                 {
@@ -138,13 +116,12 @@ Ext.define("Vede.view.ve.SimulateDigestionWindow", {
                             height: 21,
                             id: "ladderSelector",
                             padding: " 10 0 0 10",
-                            width: 400,
+                            width: 425,
                             value: "GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp",
-                            store: ["GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", "GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", "GeneRuler Low Range DNA Ladder 25-700 bp"],
+                            store: ["GeneRuler 1 kb Plus DNA Ladder 75-20,000 bp", "GeneRuler 100 bp Plus DNA Ladder 100-3000 bp", 
+                                    "GeneRuler Low Range DNA Ladder 25-700 bp"],
                             fieldLabel: "Ladder",
-                            editable: false,
-                            x: 10,
-                            y: 10
+                            editable: false
                         }]},
                         {
                             xtype: "panel",

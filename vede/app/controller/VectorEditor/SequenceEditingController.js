@@ -40,10 +40,13 @@ Ext.define('Vede.controller.VectorEditor.SequenceEditingController', {
                             part.set('project_id', Teselagen.manager.ProjectManager.workingProject.data.id);
                             part.save({
                                 callback: function () {
+                                    var now = new Date();
+                                    nowTime = Ext.Date.format(now, "g:i:s A  ");
+                                    nowDate = Ext.Date.format(now, "l, F d, Y");
                                     var parttext = Ext.getCmp('VectorEditorStatusPanel').down('tbtext[id="VectorEditorStatusBarAlert"]');
-                                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created');
-                                    parttext.animate({duration: 5000, to: {opacity: 0}});
-                                    $.jGrowl("Part Sucessfully Created")
+                                    parttext.animate({duration: 1000, to: {opacity: 1}}).setText('Part created at ' + nowTime + ' on ' + nowDate);
+                                    toastr.options.onclick = null;
+                                    toastr.info("Part Sucessfully Created");
                                 }
                             });
                     //    }
