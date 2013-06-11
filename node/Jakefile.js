@@ -11,11 +11,13 @@ var nodeApp = "app.js";
 var nodePort = 3000;
 var nodeOpts = "";
 var env = process.env.env;
+var foreverLog = "forever.log";
 
 if (env == "test") {
     nodeApp = "appTest.js";
     nodeOpts = "-t -r 3001";
     dbname = "teselagenTest";
+    foreverLog="foreverTest.log";
 }
 
 // Jake 'complete' event listener
@@ -40,8 +42,8 @@ directory("log");
 
 task("startNode", ["log"], function() {
     var cmd = util.format("forever start --plain -w --watchDirectory . " +
-            "-a -p /var/log/forever -l forever.log -o ../log/out.log -e ../log/err.log %s %s",
-            nodeApp, nodeOpts);
+            "-a -p /var/log/forever -l %s -o ../log/out.log -e ../log/err.log %s %s", 
+    foreverLog, nodeApp, nodeOpts);
     JakeUtil.exec(cmd);
 });
 
