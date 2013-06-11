@@ -250,7 +250,7 @@ Ext.define('Vede.controller.RailController', {
             self.WireframeSelectionLayer.startSelecting();
             self.WireframeSelectionLayer.select(start, end);
 
-            if(pEvt.ctrlKey) {
+            if(d3.event.ctrlKey) {
                 self.SelectionLayer.startSelecting();
 
                 self.select(start, end);
@@ -269,7 +269,7 @@ Ext.define('Vede.controller.RailController', {
     /**
      * Finalizes a selection at the end of a click-and-drag sequence.
      */
-    onMouseup: function(pEvt, pOpts) {
+    onMouseup: function() {
 
         if(self.mouseIsDown) {
             self.mouseIsDown = false;
