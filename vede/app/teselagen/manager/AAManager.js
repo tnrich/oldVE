@@ -7,7 +7,7 @@
 Ext.define("Teselagen.manager.AAManager", {
     extend: "Teselagen.mappers.Mapper",
 
-    requires: ["Teselagen.bio.sequence.TranslationUtils"],
+    requires: ["Teselagen.bio.sequence.TranslationUtils","Teselagen.bio.sequence.symbols.GapSymbol"],
 
     config: {
         aaSequence: ["", "", ""],

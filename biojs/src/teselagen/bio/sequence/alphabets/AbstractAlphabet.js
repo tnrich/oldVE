@@ -8,7 +8,7 @@
  * @author Timothy Ham (original author)
  */ 
  Ext.define("Teselagen.bio.sequence.alphabets.AbstractAlphabet", {
-	require: ["Teselagen.bio.sequence.symbols.GapSymbol", "Teselagen.bio.BioException"],
+	requires: ["Teselagen.bio.sequence.symbols.GapSymbol", "Teselagen.bio.BioException"],
 
 	symbolsMap: [],
 
