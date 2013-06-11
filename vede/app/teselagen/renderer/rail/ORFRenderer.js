@@ -14,6 +14,7 @@ Ext.define("Teselagen.renderer.rail.ORFRenderer", {
     },
 
     config: {
+        orfSVG: null,
         orfs: null,
         railWidth: null,
         railHeight: null,
@@ -36,7 +37,7 @@ Ext.define("Teselagen.renderer.rail.ORFRenderer", {
      * @return {Ext.draw.Sprite[]} The sprites created from the orfs.
      */
     render: function() {
-        var sprites = [];
+        var path;
         var orfAlignment = this.Alignment.buildAlignmentMap(this.orfs, 
                                                          this.sequenceManager);
         this.maxAlignmentRow = Math.max.apply(null, orfAlignment.getValues());
@@ -57,18 +58,16 @@ Ext.define("Teselagen.renderer.rail.ORFRenderer", {
             var endPoint = (orf.getEnd() / seqLen) * this.railWidth;
 
             // Generate the line of the orf.
-            var lineSprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + startPoint + " " + orfHeight +
-                "L" + endPoint + 
-                " " + orfHeight,
-                stroke: color
-            });
+            path = "M" + startPoint + " " + orfHeight +
+                   "L" + endPoint + " " + orfHeight;
 
-            sprites.push(lineSprite);
-
-            this.addToolTip(lineSprite, tooltip);
-            this.addClickListener(lineSprite, orf.getStart(), orf.getEnd());
+            this.orfSVG.append("svg:path")
+                       .attr("stroke", color)
+                       .attr("d", path)
+                       .on("mousedown", this.getClickListener(orf.getStart(),
+                                                              orf.getEnd()))
+                       .append("svg:title")
+                       .text(tooltip);
 
             // Render start codons as bold dots.
             Ext.each(orf.getStartCodons(), function(codonIndex) {
@@ -77,18 +76,15 @@ Ext.define("Teselagen.renderer.rail.ORFRenderer", {
                 var codonX = this.reference.x + ((codonIndex/seqLen) * this.railWidth);
                 var codonY = this.reference.y + orfHeight;
 
-                var codonSprite = Ext.create("Ext.draw.Sprite", {
-                    type: "circle",
-                    radius: 2,
-                    x: codonX,
-                    y: codonY,
-                    fill: color
-                });
-
-                this.addToolTip(codonSprite, tooltip);
-                this.addClickListener(codonSprite, orf.getStart(), orf.getEnd());
-
-                sprites.push(codonSprite);
+                this.orfSVG.append("svg:circle")
+                           .attr("r", 2)
+                           .attr("cx", codonX)
+                           .attr("cy", codonY)
+                           .attr("fill", color)
+                           .on("mousedown", this.getClickListener(orf.getStart(),
+                                                                  orf.getEnd()))
+                           .append("svg:title")
+                           .text(tooltip);
             }, this);
             
             var lastPoint;
@@ -101,26 +97,22 @@ Ext.define("Teselagen.renderer.rail.ORFRenderer", {
                 lastPoint = startPoint;
             }
             
-            var stopSprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + (this.reference.x + lastPoint) + " " +
-                      (this.reference.y + (orfHeight + 2)) + "L" + 
-                      (this.reference.x + arrowShiftAngle) + 
-                      " " + (this.reference.y + orfHeight) + 
-                      "L" + (this.reference.x + lastPoint) + " " + 
-                      (this.reference.y + (orfHeight - 2))  + 
-                      "z",
-                stroke: color,
-                fill: color
-            });
+            path = "M" + (this.reference.x + lastPoint) + " " +
+                   (this.reference.y + (orfHeight + 2)) + "L" + 
+                   (this.reference.x + arrowShiftAngle) + 
+                   " " + (this.reference.y + orfHeight) + 
+                   "L" + (this.reference.x + lastPoint) + " " + 
+                   (this.reference.y + (orfHeight - 2))  + "z";
 
-            this.addToolTip(stopSprite, tooltip);
-            this.addClickListener(stopSprite, orf.getStart(), orf.getEnd());
-
-            sprites.push(stopSprite);
+            this.orfSVG.append("svg:path")
+                       .attr("stroke", color)
+                       .attr("fill", color)
+                       .attr("d", path)
+                       .on("mousedown", this.getClickListener(orf.getStart(),
+                                                              orf.getEnd()))
+                       .append("svg:title")
+                       .text(tooltip);
         }, this);
-        
-        return sprites;
     },
 
     /**

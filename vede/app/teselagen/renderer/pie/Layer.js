@@ -25,8 +25,6 @@ Ext.define("Teselagen.renderer.pie.Layer", {
     selecting: false,
     selected: false,
 
-    selectionSprite: null,
-
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
      * sequenceManager instance to obtain sequence length from.

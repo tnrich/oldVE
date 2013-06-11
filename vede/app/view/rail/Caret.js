@@ -3,8 +3,8 @@
  * Selection line for circular DNA drawing
  */
 Ext.define("Vede.view.rail.Caret", {
-    extend: "Ext.draw.Sprite",
     config: {
+        rail: null,
         start: null,
         reference: null,
         length: null,
@@ -20,13 +20,12 @@ Ext.define("Vede.view.rail.Caret", {
 
         var x = (this.start * this.railWidth) + pConfig.reference.x;
         var y = pConfig.reference.y + this.self.CARET_HEIGHT;
-        var config = {
-            type: 'path',
-            path: 'M' + x + ' ' + (-y) + 
-            'L' + x + ' ' + y,
-            stroke: this.self.CARET_COLOR
-        }
-        
-        this.callParent([config]);
+
+        var path = 'M' + x + ' ' + (-y) + 'L' + x + ' ' + y;
+
+        return pConfig.rail.append("svg:path")
+                           .attr("class", "railCaret")
+                           .attr("stroke", this.self.CARET_COLOR)
+                           .attr("d", path);
     }
 });

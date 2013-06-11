@@ -26,25 +26,42 @@ Ext.define('Vede.controller.RailController', {
      * @member Vede.controller.RailController
      */
     init: function() {
-        /*this.callParent();
+        this.callParent();
 
         this.control({
-            "#Rail" : {
-                mousedown: this.onMousedown,
-                mousemove: this.onMousemove,
-                mouseup: this.onMouseup
+            "#zoomInMenuItem": {
+                click: this.onZoomInMenuItemClick
+            },
+            "#zoomOutMenuItem": {
+                click: this.onZoomOutMenuItemClick
             }
-        });*/
+        });
+
     },
 
     initRail: function() {
-        //this.railManager.initRail();
+        this.railManager.initRail();
+        var rail = this.railManager.getRail();
+        var self = this;
+
+        rail.on("mousedown", function() {
+            self.onMousedown(self);
+        });
+
+        rail.on("mouseup", function() {
+            self.onMouseup(self);
+        });
+
+        rail.on("mousemove", function() {
+            self.onMousemove(self);
+        });
+
         // Set the tabindex attribute in order to receive keyboard events on a div.
-        //this.railContainer.el.dom.setAttribute("tabindex", "0");
-        //this.railContainer.el.on("keydown", this.onKeydown, this);
+        this.railContainer.el.dom.setAttribute("tabindex", "0");
+        this.railContainer.el.on("keydown", this.onKeydown, this);
     },
 
-    /*onLaunch: function() {
+    onLaunch: function() {
         var rail;
 
         this.callParent(arguments);
@@ -73,7 +90,7 @@ Ext.define('Vede.controller.RailController', {
             reference: this.railManager.reference,
             railWidth: this.railManager.railWidth
         });
-    },*/
+    },
 
     onKeydown: function(event) {
         this.callParent(arguments);
@@ -117,13 +134,10 @@ Ext.define('Vede.controller.RailController', {
             this.SelectionLayer.select(start, end);
             this.changeCaretPosition(start);
         }
-
-        this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
-        this.SelectionLayer.selectionSprite.show(true);
     },
 
     onSequenceManagerChanged: function(pSeqMan) {
-        /*this.callParent(arguments);
+        this.callParent(arguments);
 
         this.railManager.setOrfs(this.ORFManager.getOrfs());
         this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
@@ -132,7 +146,10 @@ Ext.define('Vede.controller.RailController', {
         this.railManager.render();
 
         this.WireframeSelectionLayer.setSequenceManager(pSeqMan);
-        this.SelectionLayer.setSequenceManager(pSeqMan);*/
+        this.WireframeSelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
+
+        this.SelectionLayer.setSequenceManager(pSeqMan);
+        this.SelectionLayer.setSelectionSVG(this.railManager.selectionSVG);
     },
 
     onShowFeaturesChanged: function(show) {
@@ -178,17 +195,16 @@ Ext.define('Vede.controller.RailController', {
     /**
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
-    onMousedown: function(pEvt, pOpts) {
-        this.startSelectionAngle = this.getClickAngle(pEvt);
-        this.mouseIsDown = true;
+    onMousedown: function(self) {
+        self.startSelectionAngle = self.getClickAngle();
+        self.mouseIsDown = true;
 
-
-        if(this.railManager.sequenceManager) {
-            this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
-            this.changeCaretPosition(this.startSelectionIndex);
+        if(self.railManager.sequenceManager) {
+            self.startSelectionIndex = self.bpAtAngle(self.startSelectionAngle);
+            self.changeCaretPosition(self.startSelectionIndex);
         }
 
-        this.selectionDirection = 0;
+        self.selectionDirection = 0;
     },
 
     /**
@@ -196,61 +212,57 @@ Ext.define('Vede.controller.RailController', {
      * sticky select (when the ctrl key is not held) as the mouse moves during a
      * click-and-drag.
      */
-    onMousemove: function(pEvt, pOpts) {
-        var endSelectionAngle = this.getClickAngle(pEvt);
+    onMousemove: function(self) {
+        var endSelectionAngle = self.getClickAngle();
         var start;
         var end;
         var multirend;
         
-        if(this.mouseIsDown && Math.abs(this.startSelectionAngle -
-                    endSelectionAngle) > this.self.SELECTION_THRESHOLD &&
-                    this.railManager.sequenceManager) {
+        if(self.mouseIsDown && Math.abs(self.startSelectionAngle -
+                    endSelectionAngle) > self.self.SELECTION_THRESHOLD &&
+                    self.railManager.sequenceManager) {
 
-            this.endSelectionIndex = this.bpAtAngle(endSelectionAngle);
-            this.railManager.rail.surface.remove(this.WireframeSelectionLayer.selectionSprite, true);
+            self.endSelectionIndex = self.bpAtAngle(endSelectionAngle);
 
             // Set the direction of selection if it has not yet been determined.
-            if(this.selectionDirection == 0) {
-                if(this.startSelectionAngle < endSelectionAngle) {
-                    this.selectionDirection = -1;
-                    if(endSelectionAngle >= this.startSelectionAngle) {
-                        this.selectionDirection = 1;
+            if(self.selectionDirection == 0) {
+                if(self.startSelectionAngle < endSelectionAngle) {
+                    self.selectionDirection = -1;
+                    if(endSelectionAngle >= self.startSelectionAngle) {
+                        self.selectionDirection = 1;
                     }
                 } else {
-                    this.selectionDirection = 1;
-                    if(endSelectionAngle <= this.startSelectionAngle) {
-                        this.selectionDirection = -1;
+                    self.selectionDirection = 1;
+                    if(endSelectionAngle <= self.startSelectionAngle) {
+                        self.selectionDirection = -1;
                     }
                 }
             }
 
-            if(this.selectionDirection == -1) {
-                start = this.endSelectionIndex;
-                end = this.startSelectionIndex;
+            if(self.selectionDirection == -1) {
+                start = self.endSelectionIndex;
+                end = self.startSelectionIndex;
             } else {
-                start = this.startSelectionIndex;
-                end = this.endSelectionIndex;
+                start = self.startSelectionIndex;
+                end = self.endSelectionIndex;
             }
 
-            this.WireframeSelectionLayer.startSelecting();
-            this.WireframeSelectionLayer.select(start, end);
-
-            this.railManager.rail.surface.add(this.WireframeSelectionLayer.selectionSprite);
-            this.WireframeSelectionLayer.selectionSprite.show(true);
+            self.WireframeSelectionLayer.startSelecting();
+            self.WireframeSelectionLayer.select(start, end);
 
             if(pEvt.ctrlKey) {
-                this.SelectionLayer.startSelecting();
+                self.SelectionLayer.startSelecting();
 
-                this.select(start, end);
+                self.select(start, end);
 
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED, 
-                                           this,
-                                           this.SelectionLayer.start, 
-                                           this.SelectionLayer.end);
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED, 
+                                           self,
+                                           self.SelectionLayer.start, 
+                                           self.SelectionLayer.end);
             } else {
-                this.stickySelect(start, end);
+                self.stickySelect(start, end);
             }
-            this.changeCaretPosition(start);
+            self.changeCaretPosition(start);
         }
     },
 
@@ -259,45 +271,50 @@ Ext.define('Vede.controller.RailController', {
      */
     onMouseup: function(pEvt, pOpts) {
 
-        if(this.mouseIsDown) {
-            this.mouseIsDown = false;
+        if(self.mouseIsDown) {
+            self.mouseIsDown = false;
 
-            if(this.WireframeSelectionLayer.selected && 
-                this.WireframeSelectionLayer.selecting) {
+            if(self.WireframeSelectionLayer.selected && 
+                self.WireframeSelectionLayer.selecting) {
 
-                // If this is the end of a click-and-drag, fire a selection event.
-                this.WireframeSelectionLayer.endSelecting();
-                this.WireframeSelectionLayer.deselect();
+                // If self is the end of a click-and-drag, fire a selection event.
+                self.WireframeSelectionLayer.endSelecting();
+                self.WireframeSelectionLayer.deselect();
 
-                this.SelectionLayer.endSelecting();
+                self.SelectionLayer.endSelecting();
 
-                if(this.SelectionLayer.end != -1) {
-                    this.changeCaretPosition(this.SelectionLayer.start);
+                if(self.SelectionLayer.end != -1) {
+                    self.changeCaretPosition(self.SelectionLayer.start);
                 }
 
-            } else if(this.clickedAnnotationStart && this.clickedAnnotationEnd){
+            } else if(self.clickedAnnotationStart && self.clickedAnnotationEnd){
                 // If we've clicked a sprite, select it.
-                this.select(this.clickedAnnotationStart,
-                            this.clickedAnnotationEnd);
+                self.select(self.clickedAnnotationStart,
+                            self.clickedAnnotationEnd);
 
-                this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
-                                           this,
-                                           this.SelectionLayer.start,
-                                           this.SelectionLayer.end);
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CHANGED,
+                                           self,
+                                           self.SelectionLayer.start,
+                                           self.SelectionLayer.end);
 
-                this.clickedAnnotationStart = null;
-                this.clickedAnnotationEnd = null;
+                self.clickedAnnotationStart = null;
+                self.clickedAnnotationEnd = null;
             } else {
-                this.SelectionLayer.deselect();
+                self.SelectionLayer.deselect();
             }
         }
     },
 
+    onZoomInMenuItemClick: function() {
+        this.railManager.zoomIn();
+    },
+
+    onZoomOutMenuItemClick: function() {
+        this.railManager.zoomOut();
+    },
+
     select: function(start, end) {
         this.SelectionLayer.select(start, end);
-
-        this.railManager.rail.surface.add(this.SelectionLayer.selectionSprite);
-        this.SelectionLayer.selectionSprite.show(true);
 
         this.changeCaretPosition(this.SelectionLayer.start);
     },
@@ -307,12 +324,8 @@ Ext.define('Vede.controller.RailController', {
      * angle relative to the vertical.
      * @param {Ext.direct.Event} event The click event to determine the angle of.
      */
-    getClickAngle: function(event) {
-        var el = this.railManager.getRail().surface.el;
-        var relX = (event.getX() - (Math.round(el.getBox().x)))/(el.getBox().width);
-        var relY = event.getY() - (Math.round(el.getBox().height / 2) + el.getBox().y);;
-        var angle = relX;
-        return angle;
+    getClickAngle: function() {
+        return d3.event.layerX;
     },
 
     /**

@@ -59,11 +59,8 @@ Ext.define("Teselagen.renderer.pie.CutSiteRenderer", {
                            .attr("stroke", this.self.FRAME_COLOR)
                            .attr("stroke-width", this.self.CUTSITE_LINE_WIDTH)
                            .attr("d", path)
-                           .on("mousedown", function() {
-                               Vede.application.fireEvent("VectorPanelAnnotationClicked",
-                                                          site.getStart(),
-                                                          site.getEnd());
-                           })
+                           .on("mousedown", this.getClickListener(site.getStart(),
+                                                                  site.getEnd()))
                            .append("svg:title")
                            .text(this.getToolTip(site));
         }, this);

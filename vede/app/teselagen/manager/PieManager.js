@@ -171,6 +171,8 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     render: function() {
         Ext.suspendLayouts();
+        
+        var renderer;
         if(this.dirty) {
             for(var i = 0; i < this.renderers.length; i++) {
                 renderer = this.renderers[i];
@@ -581,7 +583,9 @@ Ext.define("Teselagen.manager.PieManager", {
                 }
 
                 label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
-                                        "," + (yPosition - label.label.attr("y")) + ")");
+                                        "," + (yPosition - label.label.attr("y")) + ")")
+                           .style("text-anchor", "end");
+
                 labels.push(this.drawConnection(label, xPosition, yPosition)); 
             }
         }
@@ -610,28 +614,11 @@ Ext.define("Teselagen.manager.PieManager", {
                 }
 
                 label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
-                                        "," + (yPosition - label.label.attr("y")) + ")");
+                                        "," + (yPosition - label.label.attr("y")) + ")")
+                           .style("text-anchor", "end");
+
                 labels.push(this.drawConnection(label, xPosition, yPosition));
             }
-        }
-
-        /*if(this.labelSprites) {
-            this.labelSprites.remove();
-        }
-
-        this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-
-        this.labelSprites.addAll(labels);
-        this.showSprites(this.labelSprites);*/
-
-        for(var i = 0; i < leftTopLabels.length; i++) {
-            leftTopLabels[i].label.style("text-anchor", "end");
-        }
-
-        for(var i = 0; i < leftBottomLabels.length; i++) {
-            leftBottomLabels[i].label.style("text-anchor", "end");
         }
     },
 
@@ -651,21 +638,16 @@ Ext.define("Teselagen.manager.PieManager", {
             path = "M" + labelX + " " + labelY +
                    "L" + this.featureRenderer.middlePoints.get(label.annotation).x + 
                    " " + this.featureRenderer.middlePoints.get(label.annotation).y;
-
-            return this.labelSVG.append("svg:path")
-                                .attr("stroke", this.self.LABEL_CONNECTION_COLOR)
-                                .attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH)
-                                .attr("d", path);
         } else {
             path = "M" + labelX + " " + labelY +
                    "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + 
                    " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y;
-
-            return this.labelSVG.append("svg:path")
-                                .attr("stroke", this.self.LABEL_CONNECTION_COLOR)
-                                .attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH)
-                                .attr("d", path);
         }
+
+        return this.labelSVG.append("svg:path")
+                            .attr("stroke", this.self.LABEL_CONNECTION_COLOR)
+                            .attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH)
+                            .attr("d", path);
     },
 
     /**
@@ -730,8 +712,6 @@ Ext.define("Teselagen.manager.PieManager", {
                 name: pSequenceManager.getName(),
                 length: pSequenceManager.getSequence().toString().length
             });
-
-            //this.nameBox.setStyle("dominant-baseline", "central");
         }
 
         return pSequenceManager;

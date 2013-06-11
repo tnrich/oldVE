@@ -19,6 +19,8 @@ Ext.define("Teselagen.renderer.common.Label", {
         needsMeasurement: true,
         annotation: null,
         includeInView: true,
+        x: 0,
+        y: 0
     },
 
     StringUtil: null,

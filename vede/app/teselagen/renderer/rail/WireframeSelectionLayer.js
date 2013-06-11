@@ -14,12 +14,16 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
     },
 
     drawSelectionRail: function(fromIndex, endIndex) {
+        var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
+
         if(seqLen == 0 || (this.start == fromIndex && this.end == endIndex) ||
            fromIndex == endIndex) {
 
             return;
         }
+
+        d3.selectAll(".railWireframeElement").remove();
 
         var startAngle = fromIndex / seqLen;
         var endAngle = endIndex  / seqLen;
@@ -34,36 +38,30 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
         
         var wireWidth = (startAngle-endAngle) * this.railWidth;
 
-
-        if (endPoint<startPoint) {
-            this.selectionSprite = Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M 0" + " " + wireHeight + 
-                      "L" + endPoint + " " + wireHeight + 
-                      "L" + endPoint  + " " + (-wireHeight) + 
-                      "L 0" +  " " + (-wireHeight) +
-                      "L 0" + " " + (wireHeight) +
-                      "M" + startPoint + " " + wireHeight +
-                      "L" + this.railWidth + " " + (wireHeight) +
-                      "L" + this.railWidth  + " " + (-wireHeight) +
-                      "L" + startPoint  + " " + (-wireHeight) +
-                      "L" + startPoint + " " + wireHeight,
-                stroke: this.self.FRAME_COLOR,
-                "stroke-opacity": this.self.STROKE_OPACITY,
-            });
-            
-        }else {
-        
-        this.selectionSprite = Ext.create("Ext.draw.Sprite", {
-            type: "path",
-            path: "M" + startPoint + " " + wireHeight + 
-                  "L" + endPoint + " " + wireHeight + 
-                  "L" + endPoint  + " " + (-wireHeight) + 
-                  "L" + startPoint  + " " + (-wireHeight) +
-                  "L" + startPoint  + " " + wireHeight,
-            stroke: this.self.FRAME_COLOR,
-            "stroke-opacity": this.self.STROKE_OPACITY,
-        });
+        if (endPoint < startPoint) {
+            path = "M 0" + " " + wireHeight + 
+                   "L" + endPoint + " " + wireHeight + 
+                   "L" + endPoint  + " " + (-wireHeight) + 
+                   "L 0" +  " " + (-wireHeight) +
+                   "L 0" + " " + (wireHeight) +
+                   "M" + startPoint + " " + wireHeight +
+                   "L" + this.railWidth + " " + (wireHeight) +
+                   "L" + this.railWidth  + " " + (-wireHeight) +
+                   "L" + startPoint  + " " + (-wireHeight) +
+                   "L" + startPoint + " " + wireHeight;
+        } else {
+            path = "M" + startPoint + " " + wireHeight + 
+                   "L" + endPoint + " " + wireHeight + 
+                   "L" + endPoint  + " " + (-wireHeight) + 
+                   "L" + startPoint  + " " + (-wireHeight) +
+                   "L" + startPoint  + " " + wireHeight;
         }
+
+        this.selectionSVG.append("svg:path")
+                         .attr("class", "railWireframeElement")
+                         .attr("stroke", this.self.FRAME_COLOR)
+                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                         .attr("fill", "none")
+                         .attr("d", path);
     }
 });

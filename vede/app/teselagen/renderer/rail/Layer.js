@@ -10,6 +10,7 @@ Ext.define("Teselagen.renderer.rail.Layer", {
     },
 
     config: {
+        selectionSVG: null,
         sequenceManager: null,
         reference: {},
         radius: 0,
@@ -24,8 +25,6 @@ Ext.define("Teselagen.renderer.rail.Layer", {
 
     selecting: false,
     selected: false,
-
-    selectionSprite: null,
 
     /**
      * @param {Teselagen.manager.SequenceManager} sequenceManager The
@@ -63,10 +62,6 @@ Ext.define("Teselagen.renderer.rail.Layer", {
         
         this.selected = false;
         this.selecting = false;
-
-        if(this.selectionSprite) {
-            this.selectionSprite.destroy();
-        }
     },
 
     startSelecting: function() {
