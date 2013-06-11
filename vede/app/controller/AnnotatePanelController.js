@@ -24,6 +24,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     endSelectionIndex: null,
 
     init: function(){
+
         this.callParent();
 
         this.control({
@@ -31,7 +32,8 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 render: this.onRender
             },
             "#AnnotatePanel": {
-                resize: this.onResize
+                resize: this.onResize,
+                beforecollapse: this.onBeforeCollapse
             }
         });
 
@@ -463,4 +465,13 @@ Ext.define('Vede.controller.AnnotatePanelController', {
             this.select(start, end);
         }
     },
+
+    onBeforeCollapse: function() {
+        var doCollapse = true;
+        var vectorPanel = Ext.getCmp("VectorPanel");
+        if (vectorPanel.collapsed) {
+            doCollapse = false;
+        }
+        return doCollapse;
+    }
 });

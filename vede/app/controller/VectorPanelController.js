@@ -94,7 +94,8 @@ Ext.define("Vede.controller.VectorPanelController", {
         this.control({
             "#VectorPanel": {
                 afterrender: this.onRender,
-                resize: this.onResize
+                resize: this.onResize,
+                beforecollapse: this.onBeforeCollapse
             }
         });
     },
@@ -114,6 +115,14 @@ Ext.define("Vede.controller.VectorPanelController", {
 
     onResize: function () {
         //        console.log("resize");
-    }
+    },
 
+    onBeforeCollapse: function () {
+        var doCollapse = true;
+        var annotatePanel = Ext.getCmp("AnnotatePanel");
+        if (annotatePanel.collapsed) {
+            doCollapse = false;
+        }
+        return doCollapse;
+    }
 });
