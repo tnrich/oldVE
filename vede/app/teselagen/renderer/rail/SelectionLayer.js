@@ -14,6 +14,12 @@ Ext.define("Teselagen.renderer.rail.SelectionLayer", {
         WIREFRAME_OFFSET: 5 // Distance of wireframe from rail edge.
     },
 
+    deselect: function() {
+        this.callParent();
+
+        d3.selectAll(".pieSelectionElement").remove();
+    },
+
     /**
      * Draws the shaded wedge-shaped selection area.
      */

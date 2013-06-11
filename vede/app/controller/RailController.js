@@ -196,7 +196,7 @@ Ext.define('Vede.controller.RailController', {
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
     onMousedown: function(self) {
-        self.startSelectionAngle = self.getClickAngle();
+        self.startSelectionAngle = self.getClickLocation();
         self.mouseIsDown = true;
 
         if(self.railManager.sequenceManager) {
@@ -213,7 +213,7 @@ Ext.define('Vede.controller.RailController', {
      * click-and-drag.
      */
     onMousemove: function(self) {
-        var endSelectionAngle = self.getClickAngle();
+        var endSelectionAngle = self.getClickLocation();
         var start;
         var end;
         var multirend;
@@ -269,7 +269,7 @@ Ext.define('Vede.controller.RailController', {
     /**
      * Finalizes a selection at the end of a click-and-drag sequence.
      */
-    onMouseup: function() {
+    onMouseup: function(self) {
 
         if(self.mouseIsDown) {
             self.mouseIsDown = false;
@@ -301,6 +301,7 @@ Ext.define('Vede.controller.RailController', {
                 self.clickedAnnotationEnd = null;
             } else {
                 self.SelectionLayer.deselect();
+                self.application.fireEvent(self.SelectionEvent.SELECTION_CANCELED);
             }
         }
     },
@@ -320,12 +321,20 @@ Ext.define('Vede.controller.RailController', {
     },
 
     /**
-     * Given a click event, converts the document-relative coordinates to an
-     * angle relative to the vertical.
+     * Given a click event, converts the document-relative coordinates to a
+     * value representing where the user clicked as a proportion of the total
+     * length of the sequence.
      * @param {Ext.direct.Event} event The click event to determine the angle of.
      */
-    getClickAngle: function() {
-        return d3.event.layerX;
+    getClickLocation: function() {
+        var fraction = d3.event.layerX / 
+                        d3.select(".railParent > rect")[0][0].width.baseVal.value;
+
+        if(fraction > 1) {
+            fraction = 1;
+        }
+
+        return fraction;
     },
 
     /**

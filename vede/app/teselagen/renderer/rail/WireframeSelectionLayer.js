@@ -13,6 +13,12 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
         WIREFRAME_OFFSET: 5 // Distance of wireframe from rail edge.
     },
 
+    deselect: function() {
+        this.callParent();
+
+        d3.selectAll(".pieWireframeElement").remove();
+    },
+
     drawSelectionRail: function(fromIndex, endIndex) {
         var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
