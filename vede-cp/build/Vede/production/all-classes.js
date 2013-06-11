@@ -31190,6 +31190,181 @@ Ext.enableFx = true;
 }}, 0, ["draw"], ["draw", "component", "box"], {"draw": true, "component": true, "box": true}, ["widget.draw"], 0, [Ext.draw, 'Component'], 0));
 ;
 
+(Ext.cmd.derive('Ext.layout.container.Table', Ext.layout.container.Container, {alternateClassName: 'Ext.layout.TableLayout', monitorResize: false, type: 'table', clearEl: true, targetCls: Ext.baseCSSPrefix + 'table-layout-ct', tableCls: Ext.baseCSSPrefix + 'table-layout', cellCls: Ext.baseCSSPrefix + 'table-layout-cell', tableAttrs: null, itemSizePolicy: {setsWidth: 0, setsHeight: 0}, getItemSizePolicy: function(item) {
+  return this.itemSizePolicy;
+}, getLayoutItems: function() {
+  var me = this, result = [], items = me.callParent(), item, len = items.length, i;
+  for (i = 0; i < len; i++) 
+    {
+      item = items[i];
+      if (!item.hidden) 
+      {
+        result.push(item);
+      }
+    }
+  return result;
+}, renderChildren: function() {
+  var me = this, items = me.getLayoutItems(), tbody = me.owner.getTargetEl().child('table', true).tBodies[0], rows = tbody.rows, i = 0, len = items.length, cells, curCell, rowIdx, cellIdx, item, trEl, tdEl, itemCt;
+  cells = me.calculateCells(items);
+  for (; i < len; i++) 
+    {
+      curCell = cells[i];
+      rowIdx = curCell.rowIdx;
+      cellIdx = curCell.cellIdx;
+      item = items[i];
+      trEl = rows[rowIdx];
+      if (!trEl) 
+      {
+        trEl = tbody.insertRow(rowIdx);
+        if (me.trAttrs) 
+        {
+          trEl.set(me.trAttrs);
+        }
+      }
+      itemCt = tdEl = Ext.get(trEl.cells[cellIdx] || trEl.insertCell(cellIdx));
+      if (me.needsDivWrap()) 
+      {
+        itemCt = tdEl.first() || tdEl.createChild({tag: 'div'});
+        itemCt.setWidth(null);
+      }
+      if (!item.rendered) 
+      {
+        me.renderItem(item, itemCt, 0);
+      } else if (!me.isValidParent(item, itemCt, rowIdx, cellIdx, tbody)) 
+      {
+        me.moveItem(item, itemCt, 0);
+      }
+      if (me.tdAttrs) 
+      {
+        tdEl.set(me.tdAttrs);
+      }
+      if (item.tdAttrs) 
+      {
+        tdEl.set(item.tdAttrs);
+      }
+      tdEl.set({colSpan: item.colspan || 1, rowSpan: item.rowspan || 1, id: item.cellId || '', cls: me.cellCls + ' ' + (item.cellCls || '')});
+      if (!cells[i + 1] || cells[i + 1].rowIdx !== rowIdx) 
+      {
+        cellIdx++;
+        while (trEl.cells[cellIdx]) 
+          {
+            trEl.deleteCell(cellIdx);
+          }
+      }
+    }
+  rowIdx++;
+  while (tbody.rows[rowIdx]) 
+    {
+      tbody.deleteRow(rowIdx);
+    }
+}, calculate: function(ownerContext) {
+  if (!ownerContext.hasDomProp('containerChildrenDone')) 
+  {
+    this.done = false;
+  } else {
+    var targetContext = ownerContext.targetContext, widthShrinkWrap = ownerContext.widthModel.shrinkWrap, heightShrinkWrap = ownerContext.heightModel.shrinkWrap, shrinkWrap = heightShrinkWrap || widthShrinkWrap, table = shrinkWrap && targetContext.el.child('table', true), targetPadding = shrinkWrap && targetContext.getPaddingInfo();
+    if (widthShrinkWrap) 
+    {
+      ownerContext.setContentWidth(table.offsetWidth + targetPadding.width, true);
+    }
+    if (heightShrinkWrap) 
+    {
+      ownerContext.setContentHeight(table.offsetHeight + targetPadding.height, true);
+    }
+  }
+}, finalizeLayout: function() {
+  if (this.needsDivWrap()) 
+  {
+    var items = this.getLayoutItems(), i, iLen = items.length, item;
+    for (i = 0; i < iLen; i++) 
+      {
+        item = items[i];
+        Ext.fly(item.el.dom.parentNode).setWidth(item.getWidth());
+      }
+  }
+  if (Ext.isIE6 || (Ext.isIEQuirks)) 
+  {
+    this.owner.getTargetEl().child('table').repaint();
+  }
+}, calculateCells: function(items) {
+  var cells = [], rowIdx = 0, colIdx = 0, cellIdx = 0, totalCols = this.columns || Infinity, rowspans = [], i = 0, j, len = items.length, item;
+  for (; i < len; i++) 
+    {
+      item = items[i];
+      while (colIdx >= totalCols || rowspans[colIdx] > 0) 
+        {
+          if (colIdx >= totalCols) 
+          {
+            colIdx = 0;
+            cellIdx = 0;
+            rowIdx++;
+            for (j = 0; j < totalCols; j++) 
+              {
+                if (rowspans[j] > 0) 
+                {
+                  rowspans[j]--;
+                }
+              }
+          } else {
+            colIdx++;
+          }
+        }
+      cells.push({rowIdx: rowIdx, cellIdx: cellIdx});
+      for (j = item.colspan || 1; j; --j) 
+        {
+          rowspans[colIdx] = item.rowspan || 1;
+          ++colIdx;
+        }
+      ++cellIdx;
+    }
+  return cells;
+}, getRenderTree: function() {
+  var me = this, items = me.getLayoutItems(), cells, rows = [], result = Ext.apply({tag: 'table', role: 'presentation', cls: me.tableCls, cellspacing: 0, cn: {tag: 'tbody', cn: rows}}, me.tableAttrs), tdAttrs = me.tdAttrs, needsDivWrap = me.needsDivWrap(), i, len = items.length, item, curCell, tr, rowIdx, cellIdx, cell;
+  cells = me.calculateCells(items);
+  for (i = 0; i < len; i++) 
+    {
+      item = items[i];
+      curCell = cells[i];
+      rowIdx = curCell.rowIdx;
+      cellIdx = curCell.cellIdx;
+      tr = rows[rowIdx];
+      if (!tr) 
+      {
+        tr = rows[rowIdx] = {tag: 'tr', cn: []};
+        if (me.trAttrs) 
+        {
+          Ext.apply(tr, me.trAttrs);
+        }
+      }
+      cell = tr.cn[cellIdx] = {tag: 'td'};
+      if (tdAttrs) 
+      {
+        Ext.apply(cell, tdAttrs);
+      }
+      Ext.apply(cell, {colSpan: item.colspan || 1, rowSpan: item.rowspan || 1, id: item.cellId || '', cls: me.cellCls + ' ' + (item.cellCls || '')});
+      if (needsDivWrap) 
+      {
+        cell = cell.cn = {tag: 'div'};
+      }
+      me.configureItem(item);
+      cell.cn = item.getRenderTree();
+    }
+  return result;
+}, isValidParent: function(item, target, rowIdx, cellIdx) {
+  var tbody, correctCell, table;
+  if (arguments.length === 3) 
+  {
+    table = item.el.up('table');
+    return table && table.dom.parentNode === target.dom;
+  }
+  tbody = this.owner.getTargetEl().child('table', true).tBodies[0];
+  correctCell = tbody.rows[rowIdx].cells[cellIdx];
+  return item.el.dom.parentNode === correctCell;
+}, needsDivWrap: function() {
+  return Ext.isOpera10_5;
+}}, 0, 0, 0, 0, ["layout.table"], 0, [Ext.layout.container, 'Table', Ext.layout, 'TableLayout'], 0));
+;
+
 (Ext.cmd.derive('Ext.container.Viewport', Ext.container.Container, {alternateClassName: 'Ext.Viewport', isViewport: true, ariaRole: 'application', preserveElOnDestroy: true, initComponent: function() {
   var me = this, html = document.body.parentNode, el;
   Ext.getScrollbarSize();
@@ -47434,6 +47609,410 @@ Ext.enableFx = true;
 (Ext.cmd.derive('Ext.grid.Panel', Ext.panel.Table, {alternateClassName: ['Ext.list.ListView', 'Ext.ListView', 'Ext.grid.GridPanel'], viewType: 'gridview', lockable: false, bothCfgCopy: ['invalidateScrollerOnRefresh', 'hideHeaders', 'enableColumnHide', 'enableColumnMove', 'enableColumnResize', 'sortableColumns'], normalCfgCopy: ['verticalScroller', 'verticalScrollDock', 'verticalScrollerType', 'scroll'], lockedCfgCopy: [], rowLines: true}, 0, ["grid", "gridpanel"], ["panel", "component", "tablepanel", "container", "grid", "box", "gridpanel"], {"panel": true, "component": true, "tablepanel": true, "container": true, "grid": true, "box": true, "gridpanel": true}, ["widget.grid", "widget.gridpanel"], 0, [Ext.grid, 'Panel', Ext.list, 'ListView', Ext, 'ListView', Ext.grid, 'GridPanel'], 0));
 ;
 
+(Ext.cmd.derive('Ext.grid.RowEditor', Ext.form.Panel, {saveBtnText: 'Update', cancelBtnText: 'Cancel', errorsText: 'Errors', dirtyText: 'You need to commit or cancel your changes', lastScrollLeft: 0, lastScrollTop: 0, border: false, hideMode: 'offsets', initComponent: function() {
+  var me = this, form;
+  me.cls = Ext.baseCSSPrefix + 'grid-row-editor';
+  me.layout = {type: 'hbox', align: 'middle'};
+  me.columns = new Ext.util.HashMap();
+  me.columns.getKey = function(columnHeader) {
+  var f;
+  if (columnHeader.getEditor) 
+  {
+    f = columnHeader.getEditor();
+    if (f) 
+    {
+      return f.id;
+    }
+  }
+  return columnHeader.id;
+};
+  me.mon(me.columns, {add: me.onFieldAdd, remove: me.onFieldRemove, replace: me.onFieldReplace, scope: me});
+  me.callParent(arguments);
+  if (me.fields) 
+  {
+    me.setField(me.fields);
+    delete me.fields;
+  }
+  me.mon(Ext.container.Container.hierarchyEventSource, {scope: me, show: me.repositionIfVisible});
+  form = me.getForm();
+  form.trackResetOnLoad = true;
+}, onFieldChange: function() {
+  var me = this, form = me.getForm(), valid = form.isValid();
+  if (me.errorSummary && me.isVisible()) 
+  {
+    me[valid ? 'hideToolTip' : 'showToolTip']();
+  }
+  me.updateButton(valid);
+  me.isValid = valid;
+}, updateButton: function(valid) {
+  var buttons = this.floatingButtons;
+  if (buttons) 
+  {
+    buttons.child('#update').setDisabled(!valid);
+  }
+}, afterRender: function() {
+  var me = this, plugin = me.editingPlugin;
+  me.callParent(arguments);
+  me.mon(me.renderTo, 'scroll', me.onCtScroll, me, {buffer: 100});
+  me.mon(me.el, {click: Ext.emptyFn, stopPropagation: true});
+  me.el.swallowEvent(['keypress', 'keydown']);
+  me.keyNav = new Ext.util.KeyNav(me.el, {enter: plugin.completeEdit, esc: plugin.onEscKey, scope: plugin});
+  me.mon(plugin.view, {beforerefresh: me.onBeforeViewRefresh, refresh: me.onViewRefresh, itemremove: me.onViewItemRemove, scope: me});
+}, onBeforeViewRefresh: function(view) {
+  var me = this, viewDom = view.el.dom;
+  if (me.el.dom.parentNode === viewDom) 
+  {
+    viewDom.removeChild(me.el.dom);
+  }
+}, onViewRefresh: function(view) {
+  var me = this, viewDom = view.el.dom, context = me.context, idx;
+  viewDom.appendChild(me.el.dom);
+  if (context && (idx = context.store.indexOf(context.record)) >= 0) 
+  {
+    context.row = view.getNode(idx);
+    me.reposition();
+    if (me.tooltip && me.tooltip.isVisible()) 
+    {
+      me.tooltip.setTarget(context.row);
+    }
+  } else {
+    me.editingPlugin.cancelEdit();
+  }
+}, onViewItemRemove: function(record, index) {
+  var context = this.context;
+  if (context && record === context.record) 
+  {
+    this.editingPlugin.cancelEdit();
+  }
+}, onCtScroll: function(e, target) {
+  var me = this, scrollTop = target.scrollTop, scrollLeft = target.scrollLeft;
+  if (scrollTop !== me.lastScrollTop) 
+  {
+    me.lastScrollTop = scrollTop;
+    if ((me.tooltip && me.tooltip.isVisible()) || me.hiddenTip) 
+    {
+      me.repositionTip();
+    }
+  }
+  if (scrollLeft !== me.lastScrollLeft) 
+  {
+    me.lastScrollLeft = scrollLeft;
+    me.reposition();
+  }
+}, onColumnAdd: function(column) {
+  if (!column.isGroupHeader) 
+  {
+    this.setField(column);
+  }
+}, onColumnRemove: function(column) {
+  this.columns.remove(column);
+}, onColumnResize: function(column, width) {
+  if (!column.isGroupHeader) 
+  {
+    column.getEditor().setWidth(width - 2);
+    this.repositionIfVisible();
+  }
+}, onColumnHide: function(column) {
+  if (!column.isGroupHeader) 
+  {
+    column.getEditor().hide();
+    this.repositionIfVisible();
+  }
+}, onColumnShow: function(column) {
+  var field = column.getEditor();
+  field.setWidth(column.getWidth() - 2).show();
+  this.repositionIfVisible();
+}, onColumnMove: function(column, fromIdx, toIdx) {
+  if (!column.isGroupHeader) 
+  {
+    var field = column.getEditor();
+    if (this.items.indexOf(field) != toIdx) 
+    {
+      this.move(fromIdx, toIdx);
+    }
+  }
+}, onFieldAdd: function(map, fieldId, column) {
+  var me = this, colIdx, field;
+  if (!column.isGroupHeader) 
+  {
+    colIdx = me.editingPlugin.grid.headerCt.getHeaderIndex(column);
+    field = column.getEditor({xtype: 'displayfield'});
+    me.insert(colIdx, field);
+  }
+}, onFieldRemove: function(map, fieldId, column) {
+  var me = this, field, fieldEl;
+  if (!column.isGroupHeader) 
+  {
+    field = column.getEditor();
+    fieldEl = field.el;
+    me.remove(field, false);
+    if (fieldEl) 
+    {
+      fieldEl.remove();
+    }
+  }
+}, onFieldReplace: function(map, fieldId, column, oldColumn) {
+  this.onFieldRemove(map, fieldId, oldColumn);
+}, clearFields: function() {
+  var map = this.columns, key;
+  for (key in map) 
+    {
+      if (map.hasOwnProperty(key)) 
+      {
+        map.removeAtKey(key);
+      }
+    }
+}, getFloatingButtons: function() {
+  var me = this, cssPrefix = Ext.baseCSSPrefix, btnsCss = cssPrefix + 'grid-row-editor-buttons', plugin = me.editingPlugin, minWidth = Ext.panel.Panel.prototype.minButtonWidth, btns;
+  if (!me.floatingButtons) 
+  {
+    btns = me.floatingButtons = new Ext.Container({renderTpl: ['<div class="{baseCls}-ml"></div>', '<div class="{baseCls}-mr"></div>', '<div class="{baseCls}-bl"></div>', '<div class="{baseCls}-br"></div>', '<div class="{baseCls}-bc"></div>', '{%this.renderContainer(out,values)%}'], width: 200, renderTo: me.el, baseCls: btnsCss, layout: {type: 'hbox', align: 'middle'}, defaults: {flex: 1, margins: '0 1 0 1'}, items: [{itemId: 'update', xtype: 'button', handler: plugin.completeEdit, scope: plugin, text: me.saveBtnText, minWidth: minWidth}, {xtype: 'button', handler: plugin.cancelEdit, scope: plugin, text: me.cancelBtnText, minWidth: minWidth}]});
+    me.mon(btns.el, {mousedown: Ext.emptyFn, click: Ext.emptyFn, stopEvent: true});
+  }
+  return me.floatingButtons;
+}, repositionIfVisible: function(c) {
+  var me = this, view = me.view;
+  if (c && (c == me || !view.isDescendantOf(c))) 
+  {
+    return;
+  }
+  if (me.isVisible() && view.isVisible(true)) 
+  {
+    me.reposition();
+  }
+}, reposition: function(animateConfig) {
+  var me = this, context = me.context, row = context && Ext.get(context.row), btns = me.getFloatingButtons(), btnEl = btns.el, grid = me.editingPlugin.grid, viewEl = grid.view.el, mainBodyWidth = grid.headerCt.getFullWidth(), scrollerWidth = grid.getWidth(), width = Math.min(mainBodyWidth, scrollerWidth), scrollLeft = grid.view.el.dom.scrollLeft, btnWidth = btns.getWidth(), left = (width - btnWidth) / 2 + scrollLeft, y, rowH, newHeight, invalidateScroller = function() {
+  btnEl.scrollIntoView(viewEl, false);
+  if (animateConfig && animateConfig.callback) 
+  {
+    animateConfig.callback.call(animateConfig.scope || me);
+  }
+}, animObj;
+  if (row && Ext.isElement(row.dom)) 
+  {
+    row.scrollIntoView(viewEl, false);
+    y = row.getXY()[1] - 5;
+    rowH = row.getHeight();
+    newHeight = rowH + (me.editingPlugin.grid.rowLines ? 9 : 10);
+    if (me.getHeight() != newHeight) 
+    {
+      me.setHeight(newHeight);
+      me.el.setLeft(0);
+    }
+    if (animateConfig) 
+    {
+      animObj = {to: {y: y}, duration: animateConfig.duration || 125, listeners: {afteranimate: function() {
+  invalidateScroller();
+  y = row.getXY()[1] - 5;
+}}};
+      me.el.animate(animObj);
+    } else {
+      me.el.setY(y);
+      invalidateScroller();
+    }
+  }
+  if (me.getWidth() != mainBodyWidth) 
+  {
+    me.setWidth(mainBodyWidth);
+  }
+  btnEl.setLeft(left);
+}, getEditor: function(fieldInfo) {
+  var me = this;
+  if (Ext.isNumber(fieldInfo)) 
+  {
+    return me.query('>[isFormField]')[fieldInfo];
+  } else if (fieldInfo.isHeader && !fieldInfo.isGroupHeader) 
+  {
+    return fieldInfo.getEditor();
+  }
+}, removeField: function(field) {
+  var me = this;
+  field = me.getEditor(field);
+  me.mun(field, 'validitychange', me.onValidityChange, me);
+  me.columns.removeAtKey(field.id);
+  Ext.destroy(field);
+}, setField: function(column) {
+  var me = this, i, length, field;
+  if (Ext.isArray(column)) 
+  {
+    length = column.length;
+    for (i = 0; i < length; i++) 
+      {
+        me.setField(column[i]);
+      }
+    return;
+  }
+  field = column.getEditor(null, {xtype: 'displayfield', getModelData: function() {
+  return null;
+}});
+  field.margins = '0 0 0 2';
+  me.mon(field, 'change', me.onFieldChange, me);
+  if (me.isVisible() && me.context) 
+  {
+    if (field.is('displayfield')) 
+    {
+      me.renderColumnData(field, me.context.record, column);
+    } else {
+      field.suspendEvents();
+      field.setValue(me.context.record.get(column.dataIndex));
+      field.resumeEvents();
+    }
+  }
+  me.columns.add(field.id, column);
+  if (column.hidden) 
+  {
+    me.onColumnHide(column);
+  } else if (column.rendered) 
+  {
+    me.onColumnShow(column);
+  }
+}, loadRecord: function(record) {
+  var me = this, form = me.getForm(), fields = form.getFields(), items = fields.items, length = items.length, i, displayFields, isValid;
+  for (i = 0; i < length; i++) 
+    {
+      items[i].suspendEvents();
+    }
+  form.loadRecord(record);
+  for (i = 0; i < length; i++) 
+    {
+      items[i].resumeEvents();
+    }
+  isValid = form.isValid();
+  if (me.errorSummary) 
+  {
+    if (isValid) 
+    {
+      me.hideToolTip();
+    } else {
+      me.showToolTip();
+    }
+  }
+  me.updateButton(isValid);
+  displayFields = me.query('>displayfield');
+  length = displayFields.length;
+  for (i = 0; i < length; i++) 
+    {
+      me.renderColumnData(displayFields[i], record);
+    }
+}, renderColumnData: function(field, record, activeColumn) {
+  var me = this, grid = me.editingPlugin.grid, headerCt = grid.headerCt, view = grid.view, store = view.store, column = activeColumn || me.columns.get(field.id), value = record.get(column.dataIndex), renderer = column.editRenderer || column.renderer, metaData, rowIdx, colIdx;
+  if (renderer) 
+  {
+    metaData = {tdCls: '', style: ''};
+    rowIdx = store.indexOf(record);
+    colIdx = headerCt.getHeaderIndex(column);
+    value = renderer.call(column.scope || headerCt.ownerCt, value, metaData, record, rowIdx, colIdx, store, view);
+  }
+  field.setRawValue(value);
+  field.resetOriginalValue();
+}, beforeEdit: function() {
+  var me = this;
+  if (me.isVisible() && me.errorSummary && !me.autoCancel && me.isDirty()) 
+  {
+    me.showToolTip();
+    return false;
+  }
+}, startEdit: function(record, columnHeader) {
+  var me = this, grid = me.editingPlugin.grid, store = grid.store, context = me.context = Ext.apply(me.editingPlugin.context, {view: grid.getView(), store: store});
+  context.grid.getSelectionModel().select(record);
+  me.loadRecord(record);
+  if (!me.isVisible()) 
+  {
+    me.show();
+    me.focusContextCell();
+  } else {
+    me.reposition({callback: this.focusContextCell});
+  }
+}, focusContextCell: function() {
+  var field = this.getEditor(this.context.colIdx);
+  if (field && field.focus) 
+  {
+    field.focus();
+  }
+}, cancelEdit: function() {
+  var me = this, form = me.getForm(), fields = form.getFields(), items = fields.items, length = items.length, i;
+  me.hide();
+  form.clearInvalid();
+  for (i = 0; i < length; i++) 
+    {
+      items[i].suspendEvents();
+    }
+  form.reset();
+  for (i = 0; i < length; i++) 
+    {
+      items[i].resumeEvents();
+    }
+}, completeEdit: function() {
+  var me = this, form = me.getForm();
+  if (!form.isValid()) 
+  {
+    return;
+  }
+  form.updateRecord(me.context.record);
+  me.hide();
+  return true;
+}, onShow: function() {
+  this.callParent(arguments);
+  this.reposition();
+}, onHide: function() {
+  var me = this;
+  me.callParent(arguments);
+  if (me.tooltip) 
+  {
+    me.hideToolTip();
+  }
+  if (me.context) 
+  {
+    me.context.view.focus();
+    me.context = null;
+  }
+}, isDirty: function() {
+  var me = this, form = me.getForm();
+  return form.isDirty();
+}, getToolTip: function() {
+  return this.tooltip || (this.tooltip = new Ext.tip.ToolTip({cls: Ext.baseCSSPrefix + 'grid-row-editor-errors', title: this.errorsText, autoHide: false, closable: true, closeAction: 'disable', anchor: 'left'}));
+}, hideToolTip: function() {
+  var me = this, tip = me.getToolTip();
+  if (tip.rendered) 
+  {
+    tip.disable();
+  }
+  me.hiddenTip = false;
+}, showToolTip: function() {
+  var me = this, tip = me.getToolTip(), context = me.context, row = Ext.get(context.row), viewEl = context.grid.view.el;
+  tip.setTarget(row);
+  tip.showAt([-10000, -10000]);
+  tip.update(me.getErrors());
+  tip.mouseOffset = [viewEl.getWidth() - row.getWidth() + me.lastScrollLeft + 15, 0];
+  me.repositionTip();
+  tip.doLayout();
+  tip.enable();
+}, repositionTip: function() {
+  var me = this, tip = me.getToolTip(), context = me.context, row = Ext.get(context.row), viewEl = context.grid.view.el, viewHeight = viewEl.getHeight(), viewTop = me.lastScrollTop, viewBottom = viewTop + viewHeight, rowHeight = row.getHeight(), rowTop = row.dom.offsetTop, rowBottom = rowTop + rowHeight;
+  if (rowBottom > viewTop && rowTop < viewBottom) 
+  {
+    tip.show();
+    me.hiddenTip = false;
+  } else {
+    tip.hide();
+    me.hiddenTip = true;
+  }
+}, getErrors: function() {
+  var me = this, dirtyText = !me.autoCancel && me.isDirty() ? me.dirtyText + '<br />' : '', errors = [], fields = me.query('>[isFormField]'), length = fields.length, i;
+  function createListItem(e) {
+    return '<li>' + e + '</li>';
+  }
+  for (i = 0; i < length; i++) 
+    {
+      errors = errors.concat(Ext.Array.map(fields[i].getErrors(), createListItem));
+    }
+  return dirtyText + '<ul>' + errors.join('') + '</ul>';
+}, beforeDestroy: function() {
+  Ext.destroy(this.floatingButtons, this.tooltip);
+  this.callParent();
+}}, 0, 0, ["panel", "form", "component", "container", "box"], {"panel": true, "form": true, "component": true, "container": true, "box": true}, 0, 0, [Ext.grid, 'RowEditor'], 0));
+;
+
 (Ext.cmd.derive('Ext.grid.plugin.HeaderResizer', Ext.AbstractPlugin, {disabled: false, config: {dynamic: false}, colHeaderCls: Ext.baseCSSPrefix + 'column-header', minColWidth: 40, maxColWidth: 1000, wResizeCursor: 'col-resize', eResizeCursor: 'col-resize', init: function(headerCt) {
   this.headerCt = headerCt;
   headerCt.on('render', this.afterHeaderRender, this, {single: true});
@@ -49163,6 +49742,149 @@ Ext.enableFx = true;
   position.column = this.view.getHeaderCt().getVisibleHeaderClosestToIndex(position.column).getIndex();
   return this.startEdit(position.row, position.column);
 }}, 1, 0, 0, 0, ["plugin.cellediting"], 0, [Ext.grid.plugin, 'CellEditing'], 0));
+;
+
+(Ext.cmd.derive('Ext.grid.plugin.RowEditing', Ext.grid.plugin.Editing, {editStyle: 'row', autoCancel: true, errorSummary: true, constructor: function() {
+  var me = this;
+  me.callParent(arguments);
+  if (!me.clicksToMoveEditor) 
+  {
+    me.clicksToMoveEditor = me.clicksToEdit;
+  }
+  me.autoCancel = !!me.autoCancel;
+}, init: function(grid) {
+  this.callParent([grid]);
+}, destroy: function() {
+  var me = this;
+  Ext.destroy(me.editor);
+  me.callParent(arguments);
+}, startEdit: function(record, columnHeader) {
+  var me = this, editor = me.getEditor();
+  if ((editor.beforeEdit() !== false) && (me.callParent(arguments) !== false)) 
+  {
+    editor.startEdit(me.context.record, me.context.column);
+    return true;
+  }
+  return false;
+}, cancelEdit: function() {
+  var me = this;
+  if (me.editing) 
+  {
+    me.getEditor().cancelEdit();
+    me.callParent(arguments);
+  }
+}, completeEdit: function() {
+  var me = this;
+  if (me.editing && me.validateEdit()) 
+  {
+    me.editing = false;
+    me.fireEvent('edit', me, me.context);
+  }
+}, validateEdit: function() {
+  var me = this, editor = me.editor, context = me.context, record = context.record, newValues = {}, originalValues = {}, editors = editor.items.items, e, eLen = editors.length, name, item;
+  for (e = 0; e < eLen; e++) 
+    {
+      item = editors[e];
+      name = item.name;
+      newValues[name] = item.getValue();
+      originalValues[name] = record.get(name);
+    }
+  Ext.apply(context, {newValues: newValues, originalValues: originalValues});
+  return me.callParent(arguments) && me.getEditor().completeEdit();
+}, getEditor: function() {
+  var me = this;
+  if (!me.editor) 
+  {
+    me.editor = me.initEditor();
+  }
+  return me.editor;
+}, initEditor: function() {
+  var me = this, grid = me.grid, view = me.view, headerCt = grid.headerCt, btns = ['saveBtnText', 'cancelBtnText', 'errorsText', 'dirtyText'], b, bLen = btns.length, cfg = {autoCancel: me.autoCancel, errorSummary: me.errorSummary, fields: headerCt.getGridColumns(), hidden: true, view: view, editingPlugin: me, renderTo: view.el}, item;
+  for (b = 0; b < bLen; b++) 
+    {
+      item = btns[b];
+      if (Ext.isDefined(me[item])) 
+      {
+        cfg[item] = me[item];
+      }
+    }
+  return Ext.create('Ext.grid.RowEditor', cfg);
+}, initEditTriggers: function() {
+  var me = this, view = me.view, moveEditorEvent = me.clicksToMoveEditor === 1 ? 'click' : 'dblclick';
+  me.callParent(arguments);
+  if (me.clicksToMoveEditor !== me.clicksToEdit) 
+  {
+    me.mon(view, 'cell' + moveEditorEvent, me.moveEditorByClick, me);
+  }
+  view.on({render: function() {
+  me.mon(me.grid.headerCt, {scope: me, columnresize: me.onColumnResize, columnhide: me.onColumnHide, columnshow: me.onColumnShow, columnmove: me.onColumnMove});
+}, single: true});
+}, startEditByClick: function() {
+  var me = this;
+  if (!me.editing || me.clicksToMoveEditor === me.clicksToEdit) 
+  {
+    me.callParent(arguments);
+  }
+}, moveEditorByClick: function() {
+  var me = this;
+  if (me.editing) 
+  {
+    me.superclass.onCellClick.apply(me, arguments);
+  }
+}, onColumnAdd: function(ct, column) {
+  if (column.isHeader) 
+  {
+    var me = this, editor;
+    me.initFieldAccessors(column);
+    editor = me.editor;
+    if (editor && editor.onColumnAdd) 
+    {
+      editor.onColumnAdd(column);
+    }
+  }
+}, onColumnRemove: function(ct, column) {
+  if (column.isHeader) 
+  {
+    var me = this, editor = me.getEditor();
+    if (editor && editor.onColumnRemove) 
+    {
+      editor.onColumnRemove(column);
+    }
+    me.removeFieldAccessors(column);
+  }
+}, onColumnResize: function(ct, column, width) {
+  if (column.isHeader) 
+  {
+    var me = this, editor = me.getEditor();
+    if (editor && editor.onColumnResize) 
+    {
+      editor.onColumnResize(column, width);
+    }
+  }
+}, onColumnHide: function(ct, column) {
+  var me = this, editor = me.getEditor();
+  if (editor && editor.onColumnHide) 
+  {
+    editor.onColumnHide(column);
+  }
+}, onColumnShow: function(ct, column) {
+  var me = this, editor = me.getEditor();
+  if (editor && editor.onColumnShow) 
+  {
+    editor.onColumnShow(column);
+  }
+}, onColumnMove: function(ct, column, fromIdx, toIdx) {
+  var me = this, editor = me.getEditor();
+  if (editor && editor.onColumnMove) 
+  {
+    editor.onColumnMove(column, fromIdx, toIdx - (toIdx > fromIdx ? 1 : 0));
+  }
+}, setColumnField: function(column, field) {
+  var me = this, editor = me.getEditor();
+  editor.removeField(column);
+  me.callParent(arguments);
+  me.getEditor().setField(column);
+}}, 1, 0, 0, 0, ["plugin.rowediting"], 0, [Ext.grid.plugin, 'RowEditing'], 0));
 ;
 
 (Ext.cmd.derive('Ext.layout.component.Body', Ext.layout.component.Auto, {type: 'body', beginLayout: function(ownerContext) {
@@ -57929,12 +58651,15 @@ Ext.enableFx = true;
     if (request.operation.filters[0]) 
     filter = request.operation.filters[0].property;
   }
-  if (request.operation.params.id) 
+  if (request.operation.params) 
   {
-    var sequence_id = request.operation.params.id;
-    idParam = "/" + sequence_id;
-    delete request.params;
-    return Teselagen.manager.SessionManager.buildUrl("sequences" + idParam, this.url);
+    if (request.operation.params.id) 
+    {
+      var sequence_id = request.operation.params.id;
+      idParam = "/" + sequence_id;
+      delete request.params;
+      return Teselagen.manager.SessionManager.buildUrl("sequences" + idParam, this.url);
+    }
   }
   if (filter === "project_id") 
   {
@@ -58106,7 +58831,7 @@ Ext.enableFx = true;
 (Ext.cmd.derive('Teselagen.event.DeviceEvent', Ext.Base, {singleton: true, ADD_COLUMN_LEFT: "AddColumnLeft", ADD_COLUMN_RIGHT: "AddColumnRight", ADD_ROW: "AddRow", SELECT_BIN: "SelectBin", SELECT_PART: "SelectPart", CLEAR_PART: "ClearPart", REMOVE_COLUMN: "RemoveColumn", REMOVE_ROW: "RemoveRow", INSERT_PART_AT_SELECTION: "InsertPartAtSelection", MAP_PART: "MapPart", MAP_PART_SELECT: "MapPartSelect", MAP_PART_NOTSELECT: "MapPartNotSelect", FILL_BLANK_CELLS: "FillBlankCells", OPEN_LIBRARY: "OpenPartLibrary"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'DeviceEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', floatable: true, frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, plain: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, width: 100, layout: {deferredRender: false, type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: {ptype: 'rowediting', clicksToEdit: 2}, columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
+(Ext.cmd.derive('Vede.view.de.InspectorPanel', Ext.tab.Panel, {cls: 'InspectorPanel', activeTab: 1, animCollapse: false, dock: 'right', floatable: true, frame: true, minWidth: 350, bodyBorder: false, collapseDirection: 'right', collapsible: true, frameHeader: false, hideCollapseTool: false, overlapHeader: false, plain: false, title: 'Inspector', titleCollapse: false, removePanelHeader: false, resizable: true, width: 100, layout: {deferredRender: false, type: 'card'}, items: [{xtype: 'panel', layout: {align: 'stretch', type: 'vbox'}, preventHeader: true, title: 'Part Info', cls: 'partInfoTab', autoScroll: true, items: [{xtype: 'button', text: 'Open Part Library', cls: 'openPartLibraryBtn', overCls: 'openPartLibraryBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Change Part Definition', cls: 'changePartDefinitionBtn', overCls: 'changePartDefinitionBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'button', text: 'Clear Part', cls: 'deletePartBtn', overCls: 'deletePartBtn-over', margin: '2.5 0 2.5 0', border: 0}, {xtype: 'form', flex: 1, cls: 'PartPropertiesForm', width: 287, layout: {align: 'stretch', type: 'vbox'}, minHeight: 170, maxHeight: 170, bodyPadding: 10, title: 'Properties', margin: '5px 0px 5px 0px', items: [{xtype: 'textfield', cls: 'partNameField', name: "name", fieldLabel: 'Part Name', enableKeyEvents: true}, {xtype: 'displayfield', height: 20, name: "partSource", cls: 'partSourceField', fieldLabel: 'Part Source'}, {xtype: 'displayfield', height: 20, cls: 'reverseComplementField', name: 'revComp', fieldLabel: 'Reverse Complement? (on source)', labelWidth: 210}, {xtype: 'displayfield', height: 20, cls: 'startBPField', name: 'genbankStartBP', fieldLabel: 'Start BP'}, {xtype: 'displayfield', height: 20, cls: 'stopBPField', name: 'endBP', fieldLabel: 'Stop BP'}]}, {xtype: 'form', cls: 'forcedAssemblyStrategyForm', flex: 1, minHeight: 70, maxHeight: 70, bodyPadding: 10, margin: '5px 0px 5px 0px', title: 'Forced Assembly Strategy', items: [{xtype: 'combobox', cls: 'forcedAssemblyComboBox', name: 'fas', queryMode: 'local', anchor: '100%', store: []}]}, {xtype: 'form', cls: 'eugeneRulesForm', flex: 1, autoScroll: true, bodyPadding: 10, margin: '5px 0px 0px 0px', title: 'Eugene Rules', items: [{xtype: 'gridpanel', cls: 'eugeneRulesGrid', layout: 'fit', viewConfig: {markDirty: false}, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2}), columnLines: true, rowLines: true, minHeight: 140, columns: [{xtype: 'gridcolumn', width: 100, text: 'Name', dataIndex: 'name', editor: {xtype: 'textfield', allowBlank: false}}, {xtype: 'gridcolumn', text: 'Operand 1', dataIndex: 'operand1_id', renderer: function(id, metaData, rule) {
   return rule.getOperand1().get("name");
 }}, {xtype: 'booleancolumn', text: 'NOT?', dataIndex: 'negationOperator', trueText: 'Yes', falseText: 'No', editor: {xtype: 'checkbox'}}, {xtype: 'gridcolumn', text: 'Operator', dataIndex: 'compositionalOperator', editor: {xtype: 'combobox', store: Teselagen.constants.Constants.COMPOP_LIST}}, {xtype: 'gridcolumn', text: 'Operand 2', dataIndex: 'operand2_id', renderer: function(id, metaData, rule) {
   if (rule.get("operand2isNumber")) 
@@ -58115,7 +58840,7 @@ Ext.enableFx = true;
   } else {
     return rule.getOperand2().get("name");
   }
-}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', autoScroll: true, margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', viewConfig: {markDirty: false}, layout: 'fit', autoScroll: true, allowDeselect: true, columnLines: true, minHeight: 132, plugins: {ptype: 'rowediting', clicksToEdit: 2, errorSummary: false}, columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
+}}]}, {xtype: 'container', margin: '10 0 10 0', layout: {type: 'hbox'}, items: [{xtype: 'button', flex: 1, cls: 'addEugeneRuleBtn', overCls: 'addEugeneRuleBtn-over', border: 0, text: 'Add Rule'}, {xtype: 'button', flex: 1, cls: 'deleteEugeneRuleBtn', margin: '0 0 0 5', overCls: 'deleteEugeneRuleBtn-over', border: 0, text: 'Delete Rule'}]}]}]}, {xtype: 'panel', cls: 'collectionInfoTab', layout: {type: 'vbox', align: 'stretch'}, title: 'Collection Info', autoScroll: true, margin: "5px 0px 5px 0px", items: [{xtype: 'form', cls: 'collectionInfoForm', flex: 2, bodyBorder: false, autoScroll: true, bodyPadding: 10, items: [{xtype: 'displayfield', anchor: '100%', cls: 'j5_ready_field', value: 'false', fieldLabel: 'j5 Ready'}, {xtype: 'displayfield', anchor: '100%', cls: 'combinatorial_field', value: 'false', fieldLabel: 'Combinatorial'}, {xtype: 'radiogroup', cls: 'plasmid_geometry', fieldLabel: 'Plasmid Type', allowBlank: false, items: [{xtype: 'radiofield', cls: 'circular_plasmid_radio', name: 'plasmidtype', boxLabel: 'Circular', checked: true}, {xtype: 'radiofield', cls: 'linear_plasmid_radio', name: 'plasmidtype', boxLabel: 'Linear'}]}, {xtype: 'gridpanel', cls: 'inspectorGrid', viewConfig: {markDirty: false}, layout: 'fit', autoScroll: true, allowDeselect: true, columnLines: true, minHeight: 132, plugins: Ext.create('Ext.grid.plugin.RowEditing', {clicksToEdit: 2, errorSummary: false}), columns: [{xtype: 'gridcolumn', width: 100, text: '<div data-qtip="Column Name">Column Name</div>', dataIndex: 'binName', editor: {xtype: 'textfield', allowBlank: false}, renderer: function(value, metadata) {
   metadata.tdAttr = 'data-qtip="' + value + '"';
   return value;
 }}, {xtype: 'gridcolumn', text: '<div data-qtip="Direction">Direction</div>', dataIndex: 'directionForward', editor: {xtype: 'combobox', store: [[true, "Forward"], [false, "Reverse"]]}, renderer: function(forward) {
@@ -71866,7 +72591,7 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
 }}, 0, 0, ["panel", "window", "component", "container", "box"], {"panel": true, "window": true, "component": true, "container": true, "box": true}, 0, 0, [Vede.view.ve, 'GoToWindow'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.SafeEditWindow', Ext.window.Window, {title: 'Editing...', modal: true, width: 400, resizable: false, items: [{xtype: 'container', layout: {type: 'vbox'}, width: 400, items: [{xtype: 'gridpanel', cls: 'safeEditGrid', width: 400, layout: 'fit', title: 'Features Affected By Edit', columnLines: true, rowLines: true, sortableColumns: false, plugins: {ptype: 'cellediting', clicksToEdit: 1}, selModel: {selType: 'checkboxmodel', injectCheckbox: 'last', showHeaderCheckbox: false, checkOnly: true, mode: 'MULTI'}, columns: [{xtype: 'gridcolumn', text: 'Name', columnWidth: 200, dataIndex: 'name', renderer: function(id, metaData, featureModel) {
+(Ext.cmd.derive('Vede.view.ve.SafeEditWindow', Ext.window.Window, {title: 'Editing...', modal: true, width: 400, resizable: false, items: [{xtype: 'container', layout: {type: 'vbox'}, width: 400, items: [{xtype: 'gridpanel', cls: 'safeEditGrid', width: 400, layout: 'fit', title: 'Features Affected By Edit', columnLines: true, rowLines: true, sortableColumns: false, plugins: Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 1}), selModel: {selType: 'checkboxmodel', injectCheckbox: 'last', showHeaderCheckbox: false, checkOnly: true, mode: 'MULTI'}, columns: [{xtype: 'gridcolumn', text: 'Name', columnWidth: 200, dataIndex: 'name', renderer: function(id, metaData, featureModel) {
   var feature = featureModel.data.field1;
   return feature.getName();
 }}, {xtype: 'gridcolumn', text: 'Type', dataIndex: 'type', renderer: function(id, metaData, featureModel) {

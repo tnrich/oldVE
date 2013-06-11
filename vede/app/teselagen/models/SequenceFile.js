@@ -30,13 +30,16 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             // Cases
 
-            if(request.operation.params.id)
+            if(request.operation.params)
             {
-                // Get specific sequence using given id
-                var sequence_id = request.operation.params.id;
-                idParam = "/"+sequence_id;
-                delete request.params;
-                return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+                if(request.operation.params.id)
+                {
+                    // Get specific sequence using given id
+                    var sequence_id = request.operation.params.id;
+                    idParam = "/"+sequence_id;
+                    delete request.params;
+                    return Teselagen.manager.SessionManager.buildUrl("sequences"+idParam, this.url);
+                }
             }
 
             if(filter==="project_id")
