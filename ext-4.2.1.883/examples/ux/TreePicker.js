@@ -4,10 +4,6 @@
 Ext.define('Ext.ux.TreePicker', {
     extend: 'Ext.form.field.Picker',
     xtype: 'treepicker',
-    
-    uses: [
-        'Ext.tree.Panel'
-    ],
 
     triggerCls: Ext.baseCSSPrefix + 'form-arrow-trigger',
 
@@ -66,11 +62,7 @@ Ext.define('Ext.ux.TreePicker', {
             'select'
         );
 
-        me.mon(me.store, {
-            scope: me,
-            load: me.onLoad,
-            update: me.onUpdate
-        });
+        me.store.on('load', me.onLoad, me);
     },
 
     /**
@@ -78,28 +70,29 @@ Ext.define('Ext.ux.TreePicker', {
      */
     createPicker: function() {
         var me = this,
-            picker = new Ext.tree.Panel({
-                shrinkWrapDock: 2,
+            picker = Ext.create('Ext.tree.Panel', {
                 store: me.store,
                 floating: true,
+                hidden: true,
                 displayField: me.displayField,
                 columns: me.columns,
-                minHeight: me.minPickerHeight,
-                maxHeight: me.maxPickerHeight,
-                manageHeight: false,
+                maxHeight: me.maxTreeHeight,
                 shadow: false,
+                manageHeight: false,
                 listeners: {
-                    scope: me,
-                    itemclick: me.onItemClick
+                    itemclick: Ext.bind(me.onItemClick, me)
                 },
                 viewConfig: {
                     listeners: {
-                        scope: me,
-                        render: me.onViewRender
+                        render: function(view) {
+                            view.getEl().on('keypress', me.onPickerKeypress, me);
+                        }
                     }
                 }
             }),
             view = picker.getView();
+
+        view.on('render', me.setPickerViewStyles, me);
 
         if (Ext.isIE9 && Ext.isStrict) {
             // In IE9 strict mode, the tree view grows by the height of the horizontal scroll bar when the items are highlighted or unhighlighted.
@@ -114,9 +107,17 @@ Ext.define('Ext.ux.TreePicker', {
         }
         return picker;
     },
-    
-    onViewRender: function(view){
-        view.getEl().on('keypress', this.onPickerKeypress, this);
+
+    /**
+     * Sets min/max height styles on the tree picker's view element after it is rendered.
+     * @param {Ext.tree.View} view
+     * @private
+     */
+    setPickerViewStyles: function(view) {
+        view.getEl().setStyle({
+            'min-height': this.minPickerHeight + 'px',
+            'max-height': this.maxPickerHeight + 'px'
+        });
     },
 
     /**
@@ -198,19 +199,13 @@ Ext.define('Ext.ux.TreePicker', {
         var me = this,
             picker = me.picker,
             store = picker.store,
-            value = me.value,
-            node;
+            value = me.value;
 
-        
-        if (value) {
-            node = store.getNodeById(value);
+        if(value) {
+            picker.selectPath(store.getNodeById(value).getPath());
+        } else {
+            picker.getSelectionModel().select(store.getRootNode());
         }
-        
-        if (!node) {
-            node = store.getRootNode();
-        }
-        
-        picker.selectPath(node.getPath());
 
         Ext.defer(function() {
             picker.getView().focus();
@@ -269,14 +264,6 @@ Ext.define('Ext.ux.TreePicker', {
 
         if (value) {
             this.setValue(value);
-        }
-    },
-    
-    onUpdate: function(store, rec, type, modifiedFieldNames){
-        var display = this.displayField;
-        
-        if (type === 'edit' && modifiedFieldNames && Ext.Array.contains(modifiedFieldNames, display) && this.value === rec.getId()) {
-            this.setRawValue(rec.get(display));
         }
     }
 

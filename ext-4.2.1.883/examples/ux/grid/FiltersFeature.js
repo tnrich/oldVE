@@ -172,7 +172,8 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
     constructor : function (config) {
         var me = this;
 
-        me.callParent(arguments);
+        config = config || {};
+        Ext.apply(me, config);
 
         me.deferredUpdate = Ext.create('Ext.util.DelayedTask', me.reload, me);
 
@@ -181,10 +182,11 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
         me.filterConfigs = config.filters;
     },
 
-    init: function(grid) {
+    attachEvents: function() {
         var me = this,
             view = me.view,
-            headerCt = view.headerCt;
+            headerCt = view.headerCt,
+            grid = me.getGridPanel();
 
         me.bindStore(view.getStore(), true);
 
@@ -251,7 +253,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
         });
 
         // Then we merge on filters from the columns in the grid. The columns' filters take precedence.
-        Ext.Array.each(grid.columnManager.getColumns(), function (column) {
+        Ext.Array.each(grid.columns, function (column) {
             if (column.filterable === false) {
                 filters.removeAtKey(column.dataIndex);
             } else {
@@ -282,9 +284,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
             filter = filters[i];
             if (filter) {
                 FilterClass = me.getFilterClass(filter.type);
-                filter = filter.menu ? filter : new FilterClass(Ext.apply({
-                    grid: me.grid
-                }, filter));
+                filter = filter.menu ? filter : new FilterClass(filter);
                 me.filters.add(filter);
                 Ext.util.Observable.capture(filter, this.onStateChange, this);
             }
@@ -550,7 +550,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
         } else {
             me.deferredUpdate.cancel();
             if (store.buffered) {
-                store.data.clear();
+                store.pageMap.clear();
             }
             store.loadPage(1);
         }
@@ -562,23 +562,12 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
      * @private
      */
     getRecordFilter : function () {
-        var f = [], len, i,
-            lockingPartner = this.lockingPartner;
-
+        var f = [], len, i;
         this.filters.each(function (filter) {
             if (filter.active) {
                 f.push(filter);
             }
         });
-
-        // Be sure to check the active filters on a locking partner as well.
-        if (lockingPartner) {
-            lockingPartner.filters.each(function (filter) {
-                if (filter.active) {
-                    f.push(filter);
-                }
-            });
-        }
 
         len = f.length;
         return function (record) {
@@ -598,7 +587,7 @@ Ext.define('Ext.ux.grid.FiltersFeature', {
      */
     addFilter : function (config) {
         var me = this,
-            columns = me.getGridPanel().columnManager.getColumns(),
+            columns = me.getGridPanel().columns,
             i, columnsLength, column, filtersLength, filter;
 
         

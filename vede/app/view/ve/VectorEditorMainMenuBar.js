@@ -7,67 +7,140 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     id: 'VectorEditorMainMenuBar',
     alias: 'widget.VectorEditorMainMenuBar',
     items: [
-    // {
-    //     xtype: 'button',
-    //     text: 'File',
-    //     menu: {
-    //         xtype: 'menu',
-    //         id: 'veFileMenu',
-    //         minWidth: 140,
-    //         items: [
-    //             {
-    //             xtype: 'filefield',
-    //             buttonOnly: true,
-    //             id: 'importMenuItem',
-    //             buttonConfig: {
-    //                 border: false,
-    //                 text: 'Import from File',
-    //                listeners: {
-    //                    click: function() {
-    //                        Ext.getCmp('veFileMenu').hide();
-    //                    }
-    //                }
-    //             }
-    //         },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Download Genbank',
-    //            id: 'downloadGenbankMenuItem'
-    //        },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Rename Sequence',
-    //            id: 'renameSequenceItem'
-    //        },
-    //        {
-    //            xtype: 'menuseparator'
-    //        },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Project Properties'
-    //        },
-    //        {
-    //            xtype: 'menuitem',
-    //            text: 'Print',
-    //            menu: {
-    //                xtype: 'menu',
-    //                width: 120,
-    //                items: [{
-    //                    xtype: 'menuitem',
-    //                    text: 'Sequence'
-    //                }, {
-    //                    xtype: 'menuitem',
-    //                    text: 'Circular View'
-    //                }, {
-    //                    xtype: 'menuitem',
-    //                    text: 'Linear View'
-    //                }]
-    //            }
-    //        }
-
-    //         ]
-    //     }
-    // }, 
+     /*{
+         xtype: 'button',
+         text: 'File',
+         menu: {
+             xtype: 'menu',
+             id: 'veFileMenu',
+             minWidth: 140,
+             items: [
+                 /*{
+                 xtype: 'filefield',
+                 buttonOnly: true,
+                 id: 'importMenuItem',
+                 buttonConfig: {
+                     border: false,
+                     text: 'Import from File',
+                    listeners: {
+                        click: function() {
+                            Ext.getCmp('veFileMenu').hide();
+                        }
+                    }
+                 }
+             },*/
+            /*{
+                xtype: 'menuitem',
+                text: 'New Blank Vector Editor',
+                id: 'newBlankVectorEditorMenuItem'
+            },
+            {
+                xtype: 'menuitem',
+                text: 'New from Existing...',
+                id: 'newFromExistingMenuItem'
+            },
+            {
+                xtype: 'menuitem',
+                text: 'Open...',
+                id: 'openMenuItem'
+            },
+            {
+                xtype: 'menuitem',
+                text: 'Open Recent',
+                id: 'openRecentMenuItem'//,
+                /*menu: {
+	            	xtype: 'menu',
+	            	width: 120,
+	            	items []
+            	}*/
+            /*},
+            {
+                xtype: 'menuitem',
+                text: 'Close',
+                id: 'closeMenuItem'
+            },
+            {
+                xtype: 'menuseparator'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Save',
+                id: 'saveMenuItem'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Save As...',
+                id: 'saveAsMenuItem'
+            },
+            {
+                xtype: 'menuseparator'
+            },
+            {
+                xtype: 'menuitem',
+                text: 'Share',
+                id: 'shareItem'//,
+                /*menu: {
+                	xtype: 'menu',
+                	width: 120,
+                	items []
+                }*/
+            /*},
+            {
+                xtype: 'menuseparator'
+            },
+            {
+                xtype: 'menuitem',
+                text: 'Permissions',
+                id: 'permissionsMenuItem'//,
+                /*menu: {
+            		xtype: 'menu',
+            		width: 120,
+            		items []
+            	}*/
+            /*},
+            {
+                xtype: 'menuseparator'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Print Setup...',
+                id: 'printSetupMenuItem'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Print...',
+                id: 'printMenuItem'
+            },
+            {
+                xtype: 'menuseparator'
+            },
+            {
+            	xtype: 'menuitem',
+                text: 'Properties...',
+                id: 'propertiesMenuItem'
+            }
+            /*{
+                xtype: 'menuitem',
+                text: 'Print',
+                menu: {
+                    xtype: 'menu',
+                    width: 120,
+                    items: [{
+                        xtype: 'menuitem',
+                        text: 'Sequence'
+                    }, {
+                        xtype: 'menuitem',
+                        text: 'Circular View'
+                    }, {
+                        xtype: 'menuitem',
+                        text: 'Linear View'
+                    }]
+                }
+            }*/
+/*
+             ]
+         }
+     },*/ 
     {
         xtype: 'button',
         text: 'Edit',
@@ -138,7 +211,21 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 xtype: 'menuitem',
                 id: 'rebaseMenuItem',
                 text: 'Rotate to Here'
-            }
+            },{
+                xtype: 'menuseparator'
+            },
+            {
+                xtype: 'menuitem',
+                id: 'createNewFeatureMenuItem',
+                text: 'Annotate as new Sequence Feature',
+                disabled: true
+            }/*, Removed in favor of a context menu.
+            {
+                xtype: 'menuitem',
+                id: 'editSequenceFeatureMenuItem',
+                text: 'Edit Sequence Feature'//,
+                //disabled: true
+            }*/
             ]
         }
     }, {
@@ -224,12 +311,8 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
         menu: {
             xtype: 'menu',
             minWidth: 140,
-            items: [
-             {
-                xtype: 'menuitem',
-                id: 'createNewFeatureMenuItem',
-                text: 'Annotate'
-            },
+            items: [     
+             
             {
                 xtype: 'menuitem',
                 id: 'restrictionEnzymesManagerMenuItem',

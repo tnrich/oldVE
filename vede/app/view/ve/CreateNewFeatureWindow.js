@@ -13,7 +13,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
     layout: {
         type: 'fit'
     },
-    title: 'Annotate',
+    title: 'Annotate as new Sequence Feature',
 
     initComponent: function() {
     	var me = this;
@@ -71,7 +71,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                             },
                             queryMode: 'local',
                             displayField: 'label',
-                            valueField: 'label'
+                            valueField: 'data'
                         },
                         {
                             xtype: 'fieldcontainer',
@@ -114,7 +114,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     xtype: 'gridpanel',
                                     id: 'createNewFeatureWindowAttributesGridPanel',
                                     width: 216,
-                                    height: 144,                                  
+                                    height: 144,  
                                     forceFit: true,
                                     scroll: 'vertical',
                                     columnLines: true,                         
@@ -127,7 +127,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     	    {key: '', value: ''}
                                     	]
                                     },
-                                    numberOfLines: 4, 
+                                    numberOfLines: 1, 
                                     columns: [
                                         {header: 'Key', dataIndex: 'key', editor: 'textfield'},
                                         {header: 'Value', dataIndex: 'value', editor: 'textfield'}
@@ -138,7 +138,13 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     plugins: [
                                         Ext.create('Ext.grid.plugin.CellEditing', {
                                             ptype: 'cellediting',
-                                            clicksToEdit: 1
+                                            clicksToEdit: 1,
+                                            listeners: {
+                                                beforeedit: function(editor, e){
+                                                	if (e.rowIdx >= Ext.getCmp("createNewFeatureWindowAttributesGridPanel").numberOfLines)
+                                                        return false;
+                                                }
+                                            }
                                         })
                                     ]
                                 }
@@ -158,7 +164,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                         pack: 'end',
                                         type: 'hbox'
                                     },
-                                    items: [
+                                    items: [										
                                         {
                                             xtype: 'button',
                                             margin: 10,

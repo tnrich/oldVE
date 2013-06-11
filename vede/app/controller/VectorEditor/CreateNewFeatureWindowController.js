@@ -2,6 +2,8 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     extend: "Ext.app.Controller",
     
     sequenceManager: null,
+    selectedStart: null,
+    selectedEnd: null,
     
     onWindowShow: function() {
     	Ext.getCmp("createNewFeatureWindowPositiveCheckBox").setValue(true);
@@ -9,16 +11,23 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     	typeBox.setValue('misc_feature');
     	
     	var grid = Ext.getCmp("createNewFeatureWindowAttributesGridPanel");
-    	grid.numberOfLines = grid.getStore().getCount();
     	
     	var seqLen = this.sequenceManager.getSequence().toString().length;
     	if(seqLen==0) seqLen=1;
     	Ext.getCmp("createNewFeatureWindowStartField").setMaxValue(seqLen);
     	Ext.getCmp("createNewFeatureWindowEndField").setMaxValue(seqLen);
+    	    	
+    	Ext.getCmp("createNewFeatureWindowStartField").setValue(this.selectedStart+1);
+    	Ext.getCmp("createNewFeatureWindowEndField").setValue(this.selectedEnd);
     },
     
     onSequenceManagerChanged: function(sequenceManager) {
         this.sequenceManager = sequenceManager;
+    },
+    
+    onSelectionChanged: function(scope, start, end) {
+    	this.selectedStart = start;
+    	this.selectedEnd = end;  	
     },
     
     editAttributes: function(editor, e) {
@@ -26,12 +35,12 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     	if(e.column.dataIndex=='key') {
     		if(e.value!=e.originalValue && e.originalValue=='' && e.record.data.value=='' && (grid.numberOfLines-1)==e.rowIdx) {
     	    	grid.numberOfLines++;
-    	    	grid.store.add({key: '', value: ''});
+    	    	if (grid.numberOfLines>4) grid.store.add({key: '', value: ''});
     		}
     	} else if(e.column.dataIndex=='value') {
     		if(e.value!=e.originalValue && e.originalValue=='' && e.record.data.key=='' && (grid.numberOfLines-1)==e.rowIdx) {
     	    	grid.numberOfLines++;
-    	    	grid.store.add({key: '', value: ''});
+    	    	if (grid.numberOfLines>4) grid.store.add({key: '', value: ''});
     		}
     	}
     },
@@ -41,7 +50,7 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     	var name = nameField.getValue();
     	var strand = Ext.getCmp("createNewFeatureWindowStrandRadioGroup").getValue().strandSelector;
     	var type = Ext.getCmp("createNewFeatureWindowTypeComboBox").getValue();
-    	var start = Ext.getCmp("createNewFeatureWindowStartField").getValue();
+    	var start = Ext.getCmp("createNewFeatureWindowStartField").getValue()-1;
     	var end = Ext.getCmp("createNewFeatureWindowEndField").getValue();
     	if(name==null || name.match(/^\s*$/) || name.length==0) {
     		nameField.setFieldStyle("border-color:red");
@@ -82,10 +91,12 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
 	    	if(value>seqLen) Ext.getCmp("createNewFeatureWindowStartField").setValue(seqLen);
 	    	else if(value==0) Ext.getCmp("createNewFeatureWindowStartField").setValue(1);
 	    	else if(value==null) Ext.getCmp("createNewFeatureWindowStartField").setValue(1);
-	    	else Ext.getCmp("createNewFeatureWindowStartField").setValue(1);
-    	}
+	    	else Ext.getCmp("createNewFeatureWindowStartField").setValue(1);	    	
+    	}   	
     },
-    
+    startFieldChange: function() {
+    	this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED,this,Ext.getCmp("createNewFeatureWindowStartField").getValue()-1,this.selectedEnd);  
+    },
     endFieldBlur: function() {
     	if(!Ext.getCmp("createNewFeatureWindowEndField").isValid()) {
     		var value = Ext.getCmp("createNewFeatureWindowEndField").getValue();
@@ -94,10 +105,12 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
 	    	if(value>seqLen) Ext.getCmp("createNewFeatureWindowEndField").setValue(seqLen);
 	    	else if(value==0) Ext.getCmp("createNewFeatureWindowEndField").setValue(1);
 	    	else if(value==null) Ext.getCmp("createNewFeatureWindowEndField").setValue(1);
-	    	else Ext.getCmp("createNewFeatureWindowEndField").setValue(1);
-    	}
+	    	else Ext.getCmp("createNewFeatureWindowEndField").setValue(1);	    	
+    	}  	
     },
-
+    endFieldChange: function() {
+    	this.application.fireEvent(Teselagen.event.SelectionEvent.SELECTION_CHANGED,this,this.selectedStart,Ext.getCmp("createNewFeatureWindowEndField").getValue());
+    },
     
     init: function() {
     	this.control({
@@ -111,14 +124,18 @@ Ext.define("Vede.controller.VectorEditor.CreateNewFeatureWindowController", {
     			show: this.onWindowShow
     		},
     		'#createNewFeatureWindowStartField': {
-    			blur: this.startFieldBlur
+    			blur: this.startFieldBlur,
+    			change: this.startFieldChange
     		},
     		'#createNewFeatureWindowEndField': {
-    			blur: this.endFieldBlur
+    			blur: this.endFieldBlur,
+    			change: this.endFieldChange
     		}
     	});
     	this.application.on("SequenceManagerChanged", 
                 this.onSequenceManagerChanged, this);
+    	this.application.on(Teselagen.event.SelectionEvent.SELECTION_CHANGED, 
+                this.onSelectionChanged,this);
     }    
 });
 

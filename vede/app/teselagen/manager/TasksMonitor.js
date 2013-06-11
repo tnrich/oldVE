@@ -11,6 +11,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
     requires: ["Ext.data.Store"],
 
     debugFlag : false,
+    disabled : false,
     runFlag : true,
 
     mon: {}, // Object to observe
