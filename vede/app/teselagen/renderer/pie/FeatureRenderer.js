@@ -103,9 +103,9 @@ Ext.define("Teselagen.renderer.pie.FeatureRenderer", {
                                .attr("d", path)
                                .on("mousedown", this.getClickListener(
                                                         feature.getStart(),
-                                                        feature.getEnd()),
+                                                        feature.getEnd()))
                                .on("contextmenu", this.getRightClickListener(
-                                                        feature)),
+                                                        feature))
                                .append("svg:title")
                                .text(this.getToolTip(feature));
             }, this);

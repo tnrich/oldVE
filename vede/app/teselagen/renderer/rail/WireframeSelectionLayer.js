@@ -16,7 +16,7 @@ Ext.define("Teselagen.renderer.rail.WireframeSelectionLayer", {
     deselect: function() {
         this.callParent();
 
-        d3.selectAll(".pieWireframeElement").remove();
+        d3.selectAll(".railWireframeElement").remove();
     },
 
     drawSelectionRail: function(fromIndex, endIndex) {

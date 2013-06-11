@@ -17,7 +17,7 @@ Ext.define("Teselagen.renderer.rail.SelectionLayer", {
     deselect: function() {
         this.callParent();
 
-        d3.selectAll(".pieSelectionElement").remove();
+        d3.selectAll(".railSelectionElement").remove();
     },
 
     /**
