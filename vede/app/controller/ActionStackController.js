@@ -67,5 +67,5 @@ Ext.define("Vede.controller.ActionStackController", {
             callback:function(){
                 console.log("Working sequence updated!");
         }});
-    },
+    }
 });

@@ -3,17 +3,17 @@
  * @class Vede.view.RestrictionEnzymesManagerWindow
  * @author Jenhan Tao
  */
-Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
+Ext.define('Vede.view.ve.EditSequenceFeatureWindow', {
     extend: 'Ext.window.Window',
 
     height: 450,
-    id: 'CreateNewFeature',
+    id: 'EditSequenceFeature',
     modal: true,
     width: 400,
     layout: {
         type: 'fit'
     },
-    title: 'Annotate as new Sequence Feature',
+    title: 'Edit Sequence Feature',
 
     initComponent: function() {
     	var me = this;
@@ -27,10 +27,10 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                     bodyPadding: 10,
                     items: [
                         {
-                            xtype: 'textfield',
+                        	xtype: 'textfield',
                             width: 325,
                             fieldLabel: 'Name',
-                            id: 'createNewFeatureWindowNameField',
+                            id: 'editSequenceFeatureWindowNameField',
                             allowBlank: false
                         },
                         {
@@ -38,7 +38,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                             height: 30,
                             width: 326,
                             fieldLabel: 'Strand',
-                            id: 'createNewFeatureWindowStrandRadioGroup',
+                            id: 'editSequenceFeatureWindowStrandRadioGroup',
                             allowBlank: false,
                             items: [
                                 {
@@ -46,7 +46,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     name: 'strandSelector',
                                     labelAlign: 'right',
                                     boxLabel: 'Positive',
-                                    id: 'createNewFeatureWindowPositiveCheckBox',
+                                    id: 'editSequenceFeatureWindowPositiveCheckBox',
                                     inputValue: 1
                                 },
                                 {
@@ -54,7 +54,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     name: 'strandSelector',
                                     labelAlign: 'right',
                                     boxLabel: 'Negative',
-                                    id: 'createNewFeatureWindowNegativeCheckBox',
+                                    id: 'editSequenceFeatureWindowNegativeCheckBox',
                                     inputValue: -1
                                 }
                             ]
@@ -63,7 +63,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                             xtype: 'combobox',
                             width: 323,
                             fieldLabel: 'Type',
-                            id: 'createNewFeatureWindowTypeComboBox',
+                            id: 'editSequenceFeatureWindowTypeComboBox',
                             editable: false,
                             store: {
                             	fields: ['label', 'data'],
@@ -84,7 +84,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     allowDecimals: false,
                                     width: 217,
                                     fieldLabel: 'Start',
-                                    id: 'createNewFeatureWindowStartField',
+                                    id: 'editSequenceFeatureWindowStartField',
                                     labelWidth: 50,
                                     value: 1,
                                     minValue: 1,
@@ -96,7 +96,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                     allowDecimals: false,
                                     width: 217,
                                     fieldLabel: 'End',
-                                    id: 'createNewFeatureWindowEndField',
+                                    id: 'editSequenceFeatureWindowEndField',
                                     labelWidth: 50,
                                     value: 1,
                                     minValue: 1,
@@ -112,9 +112,9 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                             items: [
                                 {
                                     xtype: 'gridpanel',
-                                    id: 'createNewFeatureWindowAttributesGridPanel',
+                                    id: 'editSequenceFeatureWindowAttributesGridPanel',
                                     width: 216,
-                                    height: 144,  
+                                    height: 144,                                  
                                     forceFit: true,
                                     scroll: 'vertical',
                                     columnLines: true,                         
@@ -141,7 +141,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                             clicksToEdit: 1,
                                             listeners: {
                                                 beforeedit: function(editor, e){
-                                                	if (e.rowIdx >= Ext.getCmp("createNewFeatureWindowAttributesGridPanel").numberOfLines)
+                                                	if (e.rowIdx >= Ext.getCmp("editSequenceFeatureWindowAttributesGridPanel").numberOfLines)
                                                         return false;
                                                 }
                                             }
@@ -164,7 +164,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                         pack: 'end',
                                         type: 'hbox'
                                     },
-                                    items: [										
+                                    items: [
                                         {
                                             xtype: 'button',
                                             margin: 10,
@@ -177,7 +177,7 @@ Ext.define('Vede.view.ve.CreateNewFeatureWindow', {
                                         },
                                         {
                                             xtype: 'button',
-                                            id: 'createNewFeatureWindowOKButton',
+                                            id: 'editSequenceFeatureWindowOKButton',
                                             margin: 10,
                                             padding: 5,
                                             text: 'Ok'                                          
