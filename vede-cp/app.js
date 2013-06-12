@@ -6,7 +6,7 @@ Ext.Loader.setConfig({
     enabled: true,
     paths: {
         //Ext: './ext',
-        'Ext.ux': './ext/examples/ux',
+        'Ext.ux': './ext/src/ux',
         Teselagen: './app/teselagen',
         Vede: './app',
         'Teselagen.bio': '../biojs/src/teselagen/bio'

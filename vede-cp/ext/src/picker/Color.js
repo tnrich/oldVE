@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * Color picker provides a simple color palette for choosing colors. The picker can be rendered to any container. The
  * available default to a standard 40-color palette; this can be customized with the {@link #colors} config.
@@ -33,6 +50,12 @@ Ext.define('Ext.picker.Color', {
      * The CSS class to apply to the selected element
      */
     selectedCls: Ext.baseCSSPrefix + 'color-picker-selected',
+
+    /**
+     * @cfg {String} itemCls
+     * The CSS class to apply to the color picker's items
+     */
+    itemCls: Ext.baseCSSPrefix + 'color-picker-item',
 
     /**
      * @cfg {String} value
@@ -102,13 +125,13 @@ Ext.define('Ext.picker.Color', {
     
     renderTpl: [
         '<tpl for="colors">',
-            '<a href="#" class="color-{.}" hidefocus="on">',
-                '<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
+            '<a href="#" class="color-{.} {parent.itemCls}" hidefocus="on">',
+                '<span class="{parent.itemCls}-inner" style="background:#{.}">&#160;</span>',
             '</a>',
         '</tpl>'
     ],
 
-    // private
+    // @private
     initComponent : function(){
         var me = this;
 
@@ -129,7 +152,7 @@ Ext.define('Ext.picker.Color', {
     },
 
 
-    // private
+    // @private
     initRenderData : function(){
         var me = this;
         return Ext.apply(me.callParent(), {
@@ -151,7 +174,7 @@ Ext.define('Ext.picker.Color', {
         }
     },
 
-    // private
+    // @private
     afterRender : function(){
         var me = this,
             value;
@@ -164,7 +187,7 @@ Ext.define('Ext.picker.Color', {
         }
     },
 
-    // private
+    // @private
     handleClick : function(event, target){
         var me = this,
             color;
@@ -207,6 +230,21 @@ Ext.define('Ext.picker.Color', {
                 me.fireEvent('select', me, color);
             }
         }
+    },
+    
+    /**
+     * Clears any selection and sets the value to `null`.
+     */
+    clear: function(){
+        var me = this,
+            value = me.value,
+            el;
+            
+        if (value && me.rendered) {
+            el = me.el.down('a.color-' + value);
+            el.removeCls(me.selectedCls);
+        }
+        me.value = null;  
     },
 
     /**
