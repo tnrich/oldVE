@@ -58543,6 +58543,48 @@ Ext.enableFx = true;
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'TasksMonitor'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.utils.SystemUtils', Ext.Base, {singleton: true, getSystemMonospaceFontFamily: function() {
+  var resultFont = "Courier New";
+  if (this.isWindowsOS()) 
+  {
+    resultFont = "Lucida Console";
+  } else if (this.isLinuxOS()) 
+  {
+    resultFont = "Monospace";
+  } else if (this.isMacOS()) 
+  {
+    resultFont = "Monaco";
+  }
+  return resultFont;
+}, isWindowsOS: function() {
+  return navigator.platform.indexOf("Win") != -1;
+}, isLinuxOS: function() {
+  return navigator.platform.indexOf("Linux") != -1;
+}, isMacOS: function() {
+  return navigator.platform.indexOf("Mac") != -1;
+}, goToUrl: function(url) {
+  window.open(url);
+}, applicationVersion: function(majorVersion) {
+  var versionDate = new Date();
+  var version = majorVersion + "." + String(versionDate.getFullYear()).substr(2, 2) + "." + String(versionDate.getMonth() + 1) + "." + String(versionDate.getDate());
+  return version;
+}, getBaseURL: function() {
+  var url = location.href;
+  var baseURL = url.substring(0, url.indexOf('/', 14));
+  if (baseURL.indexOf('http://localhost') != -1) 
+  {
+    var url = location.href;
+    var pathname = location.pathname;
+    var index1 = url.indexOf(pathname);
+    var index2 = url.indexOf("/", index1 + 1);
+    var baseLocalUrl = url.substr(0, index2);
+    return baseLocalUrl + "/";
+  } else {
+    return baseURL + "/";
+  }
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'SystemUtils'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.manager.AuthenticationManager', Ext.Base, {singleton: true, authResponse: null, username: null, updateSplashScreenMessage: function(message, stop) {
   if (splashscreen) 
   {
@@ -58568,6 +58610,8 @@ Ext.enableFx = true;
 }});
   } else {
     Ext.create("Vede.view.AuthWindow").show();
+    var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+    Ext.getCmp('select-server-combo').setValue(baseURL + 'api/');
   }
 }, sendAuthRequest: function(params, cb) {
   var self = this;
@@ -61585,13 +61629,11 @@ Ext.enableFx = true;
     this.select(start, end);
   }
 }, onBeforeCollapse: function() {
-  var doCollapse = true;
   var vectorPanel = Ext.getCmp("VectorPanel");
   if (vectorPanel.collapsed) 
   {
-    doCollapse = false;
+    vectorPanel.expand();
   }
-  return doCollapse;
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'AnnotatePanelController'], 0));
 ;
 
@@ -62979,7 +63021,7 @@ Ext.enableFx = true;
     }
   }
 }, init: function() {
-  this.control({"#VectorPanel": {afterrender: this.onRender, resize: this.onResize, beforecollapse: this.onBeforeCollapse}});
+  this.control({"#VectorPanel": {afterrender: this.onRender, resize: this.onResize, collapse: this.onCollapse}});
 }, onLaunch: function() {
   this.tabPanel = Ext.getCmp("mainAppPanel");
   this.tabPanel.on("tabchange", this.onTabChange, this);
@@ -62991,14 +63033,12 @@ Ext.enableFx = true;
     this.isRendered = true;
   }
 }, onResize: function() {
-}, onBeforeCollapse: function() {
-  var doCollapse = true;
+}, onCollapse: function() {
   var annotatePanel = Ext.getCmp("AnnotatePanel");
   if (annotatePanel.collapsed) 
   {
-    doCollapse = false;
+    annotatePanel.expand();
   }
-  return doCollapse;
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'VectorPanelController'], 0));
 ;
 
@@ -70890,34 +70930,6 @@ Ext.application({autoCreateViewport: true, name: 'Vede', views: ['AppViewport', 
   }
   d3.select("#selectionSVG").append("svg:rect").attr("x", startMetrics.x).attr("y", startMetrics.y + 4).attr("width", endMetrics.x - startMetrics.x).attr("height", this.sequenceAnnotationManager.caret.height - 4).attr("fill", this.self.SELECTION_COLOR).attr("fill-opacity", this.self.SELECTION_TRANSPARENCY);
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SelectionLayer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.utils.SystemUtils', Ext.Base, {singleton: true, getSystemMonospaceFontFamily: function() {
-  var resultFont = "Courier New";
-  if (this.isWindowsOS()) 
-  {
-    resultFont = "Lucida Console";
-  } else if (this.isLinuxOS()) 
-  {
-    resultFont = "Monospace";
-  } else if (this.isMacOS()) 
-  {
-    resultFont = "Monaco";
-  }
-  return resultFont;
-}, isWindowsOS: function() {
-  return navigator.platform.indexOf("Win") != -1;
-}, isLinuxOS: function() {
-  return navigator.platform.indexOf("Linux") != -1;
-}, isMacOS: function() {
-  return navigator.platform.indexOf("Mac") != -1;
-}, goToUrl: function(url) {
-  window.open(url);
-}, applicationVersion: function(majorVersion) {
-  var versionDate = new Date();
-  var version = majorVersion + "." + String(versionDate.getFullYear()).substr(2, 2) + "." + String(versionDate.getMonth() + 1) + "." + String(versionDate.getDate());
-  return version;
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'SystemUtils'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {

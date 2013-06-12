@@ -87,20 +87,26 @@ Ext.application({
     },
 
     launch: function() {
-
         Vede.application = this;
 
-        Ext.Ajax.cors = true; // Allow CORS
-        Ext.Ajax.withCredentials = true;
-        Ext.Ajax.timeout = 100000;
+        Ext.Ajax.cors = true; // Allow CORS (Cross-Origin Resource Sharing)
+        Ext.Ajax.withCredentials = true; // Allow cross-domain cookie-based authentication
+        Ext.Ajax.timeout = 100000; // Ajax timeout
         Ext.Error.notify = false; // prevent ie6 and ie7 popup
         Ext.Error.handle = this.errorHandler; // handle errors raised by Ext.Error
 
-        Teselagen.manager.AuthenticationManager.Login(); // Start Auth process
+        /*
+         * autoCredentialsFetch
+         * This option enable fetching username and password from /deviceeditor file
+         * to be used for automatic login (for testing).
+         */
+        Vede.application.autoCredentialsFetch = true;
+
+        Teselagen.manager.AuthenticationManager.Login(); // Start Authentication process
 
         var self = this;
 
-        // Setup a task to fadeOut the splashscreen
+        // Task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             if(splashscreen)
                 {
@@ -122,7 +128,7 @@ Ext.application({
             else { Teselagen.manager.ProjectManager.loadUser(); }
         });
 
+        // After logged in execute task to fadeOut the splashscreen
         this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});
-
     }
 });

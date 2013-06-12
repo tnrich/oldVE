@@ -52,7 +52,7 @@ Ext.define("Teselagen.models.SequenceFile", {
 
             }
 
-            if(request.operation.action==="read"&&!request.operation.filters)
+            if(request.operation.action==="read"&&!request.operation.filters&&request.params.id)
             {
                 // Get specific sequence using Ext associations
                 var sequence_id = request.params.id;
