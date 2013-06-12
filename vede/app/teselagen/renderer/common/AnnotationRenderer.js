@@ -75,11 +75,11 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
         };
     },
 
-    getRightClickListener: function(annotation) {
+    getRightClickListener: function(feature) {
         var sequenceManager = this.sequenceManager;
         return function() {
             Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
-            e.preventDefault();
+            d3.event.preventDefault();
             var contextMenu = Ext.create('Ext.menu.Menu',{
                   items: [{
                     text: 'Edit Sequence Feature',

@@ -10,12 +10,17 @@ Ext.define("Teselagen.manager.PieManager", {
         LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2",
-        ZOOM_FACTOR: 1.05
+        ZOOM_INCREMENT: 0.25
     },
 
     requires: ["Teselagen.bio.sequence.dna.Feature",
+               "Teselagen.renderer.pie.CutSiteLabel",
+               "Teselagen.renderer.pie.CutSiteRenderer",
                "Teselagen.renderer.pie.FeatureLabel",
+               "Teselagen.renderer.pie.FeatureRenderer",
+               "Teselagen.renderer.pie.ORFRenderer",
                "Vede.view.pie.Caret",
+               "Vede.view.pie.Frame",
                "Vede.view.pie.NameBox"],
 
     config: {
@@ -250,62 +255,58 @@ Ext.define("Teselagen.manager.PieManager", {
             this.featureSVG.style("visibility", "hidden");
         }
 
-        //this.drawCoordinates();
         Ext.resumeLayouts(true);
 
         Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },
 
     /**
-     * Zooms the pie in using the viewBox and adjusts its height accordingly.
+     * Zooms the pie in using a transformation matrix.
      */
     zoomIn: function() {
         Ext.suspendLayouts();
 
-        var oldBox = this.pie.surface.viewBox;
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-        var newHeight = this.pie.surface.el.getSize().height * 
-            this.self.ZOOM_FACTOR * 1.25;
+        // Increase scale values.
+        scale[0] += this.self.ZOOM_INCREMENT;
+        scale[1] += this.self.ZOOM_INCREMENT;
 
-        this.pie.surface.el.setStyle("height", newHeight + "px");
-
-        this.zoomLevel += 1;
-
-        this.pie.surface.setViewBox(
-                this.center.x - oldBox.width / this.self.ZOOM_FACTOR / 2,
-                this.center.y - oldBox.height / this.self.ZOOM_FACTOR / 2,
-                oldBox.width / this.self.ZOOM_FACTOR, 
-                oldBox.height / this.self.ZOOM_FACTOR);
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
 
         Ext.resumeLayouts(true);
 
-        this.fitWidthToContent(this);//, this.self.ZOOM_FACTOR * 5);
+        this.fitWidthToContent(this);
     },
 
     /**
-     * Zooms the pie out using the viewBox and adjusts its height accordingly.
+     * Zooms the pie out using a transformation matrix.
      */
     zoomOut: function() {
-        Ext.suspendLayouts();
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
 
-        var oldBox = this.pie.surface.viewBox;
+        // Only zoom out if it won't make the SVG disappear!
+        if(scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) {
+            Ext.suspendLayouts();
 
-        var newHeight = this.pie.surface.el.getSize().height / 
-            this.self.ZOOM_FACTOR / 1.25;
+            // Increase scale values.
+            scale[0] -= this.self.ZOOM_INCREMENT;
+            scale[1] -= this.self.ZOOM_INCREMENT;
 
-        this.pie.surface.el.setStyle("height", newHeight + "px");
+            this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                     " " + translate[0] + " " + translate[1] + ")");
 
-        this.zoomLevel -= 1;
+            Ext.resumeLayouts(true);
 
-        this.pie.surface.setViewBox(
-                this.center.x - oldBox.width * this.self.ZOOM_FACTOR / 2,
-                this.center.y - oldBox.height * this.self.ZOOM_FACTOR / 2,
-                oldBox.width * this.self.ZOOM_FACTOR,
-                oldBox.height * this.self.ZOOM_FACTOR);
-
-        Ext.resumeLayouts(true);
-
-        this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+            this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+        }
     },
 
     /**
@@ -313,38 +314,22 @@ Ext.define("Teselagen.manager.PieManager", {
      * scrollbar appears.
      * @param {Teselagen.manager.PieManager} scope The pieManager. Used when being
      * called by the window onresize event.
-     * @param {Number} magnification A factor used to expand/contract width based
-     * on the zoom level.
      */
-    fitWidthToContent: function(scope, magnification) {
-        /*if(scope.labelSprites) {
-            var newWidth;
-            var magnification = magnification || 1;
-
-            if(scope.labelSprites.getBBox().width > scope.pie.surface.viewBox.width) {
-                newWidth = scope.pie.getWidth() * magnification *
-                    scope.labelSprites.getBBox().width / scope.pie.surface.viewBox.width * 1.5;
-
-                scope.pie.surface.el.setStyle("width", newWidth + "px");
-
-                // Scroll to the center of the pie.
-                scope.pie.el.scrollTo("left", (scope.pie.getPositionEl().dom.scrollWidth - 
-                                    scope.pie.getPositionEl().dom.clientWidth) / 2);
-            }
-        }*/
-
+    fitWidthToContent: function(scope) {
         var containerSize = Ext.getCmp("PieContainer").getSize();
-        var transX = containerSize.width / 2 - this.center.x;
-        var transY = containerSize.height / 2 - this.center.y;
-        var pieBox = this.pie[0][0].getBBox();
+        var transX = containerSize.width / 2 - scope.center.x;
+        var transY = containerSize.height / 2 - scope.center.y;
+        var pieBox = scope.pie[0][0].getBBox();
 
-        this.parentSVG.attr("transform", "translate(" + transX + ", " + transY + ")");
-        //this.pie.style("left", transX);
-        
-        /*this.pie.attr("viewBox", "0 0 " + containerSize.width + " " + containerSize.height)
-                .attr("preserveAspectRatio", "xMidYMin slice");*/
+        // Get previous values for scale and transform.
+        var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
 
-        this.pie.attr("width", pieBox.width + transX)
+        scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + transX + " " + transY + ")");
+
+        scope.pie.attr("width", pieBox.width + transX)
                 .attr("height", pieBox.height + transY);
     },
 
@@ -352,14 +337,16 @@ Ext.define("Teselagen.manager.PieManager", {
      * Function for debugging which draws coordinates on the pie.
      */
     drawCoordinates: function() {
-        var coordSVG = this.parentSVG.append("svg:g");
+        d3.select(".coordinateSVG").remove();
+        var coordSVG = this.parentSVG.append("svg:g")
+                                     .attr("class", "coordinateSVG");
         for(var i = -50; i < 500; i += 20) {
             for(var j = -50; j < 500; j += 20) {
                 coordSVG.append("svg:text")
-                        .attr("font", "2px monospace")
+                        .attr("font-size", "6px")
                         .attr("x", i)
                         .attr("y", j)
-                        .text(i + " " + j);
+                        .text(i + "," + j);
             }
         }
     },
@@ -758,14 +745,11 @@ Ext.define("Teselagen.manager.PieManager", {
         this.pie = d3.select("#PieContainer")
                      .append("svg:svg")
                      .attr("id", "Pie")
-                     /*.attr("width", 500)
-                     .attr("height", 500)*/
-                     /*.attr("viewBox", "-50 -50 500 500")
-                     .attr("preserveAspectRatio", "xMidYMin")*/
                      .attr("overflow", "auto");
 
         this.parentSVG = this.pie.append("svg:g")
-                                 .attr("class", "pieParent");
+                                 .attr("class", "pieParent")
+                                 .attr("transform", "matrix(1 0 0 1 0 0)");
 
         this.frame = Ext.create("Vede.view.pie.Frame", {
             pie: this.parentSVG,

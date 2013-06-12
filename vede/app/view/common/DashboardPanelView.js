@@ -19,6 +19,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
             flex: 1,
             border: 0,
             padding: 50,
+            layout: {
+                type: 'fit'
+            },
             items: [
                 {
                 xtype: 'panel',
@@ -34,6 +37,9 @@ Ext.define('Vede.view.common.DashboardPanelView', {
                 flex: 1,
                 border: 0,
                 padding: 50,
+                layout: {
+                    type: 'fit'
+                },
                 items: [
                 {
                     xtype: 'button',

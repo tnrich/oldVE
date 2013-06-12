@@ -4,14 +4,23 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.manager.RailManager", {
-    requires: ["Teselagen.bio.sequence.dna.Feature"],
+    requires: ["Teselagen.bio.sequence.dna.Feature",
+               "Teselagen.renderer.rail.CutSiteLabel",
+               "Teselagen.renderer.rail.CutSiteRenderer",
+               "Teselagen.renderer.rail.FeatureLabel",
+               "Teselagen.renderer.rail.FeatureRenderer",
+               "Teselagen.renderer.rail.ORFRenderer",
+               "Vede.view.rail.Caret",
+               "Vede.view.rail.Frame",
+               "Vede.view.rail.NameBox"],
     
     statics: {
         PAD: 50,
         LABEL_DISTANCE_FROM_RAIL: 3,
         LABEL_HEIGHT: 7,
         LABEL_CONNECTION_WIDTH: 0.5,
-        LABEL_CONNECTION_COLOR: "#d2d2d2"
+        LABEL_CONNECTION_COLOR: "#d2d2d2",
+        ZOOM_INCREMENT: 0.25
     },
 
     config: {
@@ -248,8 +257,82 @@ Ext.define("Teselagen.manager.RailManager", {
     },
 
     /**
+     * Zooms the rail in by scaling it with a transformation matrix.
+     */
+    zoomIn: function() {
+        Ext.suspendLayouts();
+
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
+
+        // Increase scale values.
+        scale[0] += this.self.ZOOM_INCREMENT;
+        scale[1] += this.self.ZOOM_INCREMENT;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        Ext.resumeLayouts(true);
+
+        this.fitWidthToContent(this);
+    },
+
+    /**
+     * Zooms the rail out using a transformation matrix.
+     */
+    zoomOut: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        // Only zoom out if it won't make the SVG disappear!
+        if(scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) {
+            Ext.suspendLayouts();
+
+            // Increase scale values.
+            scale[0] -= this.self.ZOOM_INCREMENT;
+            scale[1] -= this.self.ZOOM_INCREMENT;
+
+            this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                     " " + translate[0] + " " + translate[1] + ")");
+
+            Ext.resumeLayouts(true);
+
+            this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+        }
+    },
+
+    /**
+     * Adjust the width of the surface to fit all content, ensuring that a 
+     * scrollbar appears.
+     * @param {Teselagen.manager.RailManager} scope The railManager. Used when being
+     * called by the window onresize event.
+     */
+    fitWidthToContent: function(scope) {
+        var containerSize = Ext.getCmp("RailContainer").getSize();
+        var transX = 0;//containerSize.width / 2 - scope.center.x;
+        var transY = containerSize.height / 2;
+        var railBox = scope.rail[0][0].getBBox();
+
+        // Get previous values for scale and transform.
+        var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + transX + " " + transY + ")");
+
+        scope.rail.attr("width", railBox.width + transX)
+                 .attr("height", railBox.height + transY);
+    },
+
+    /**
      * Helper function which renders the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
+     * @deprecated
      */
     showSprites: function(collection) {
         var sprite;
@@ -265,6 +348,7 @@ Ext.define("Teselagen.manager.RailManager", {
     /**
      * Helper function which hides the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
+     * @deprecated
      */
      hideSprites: function(collection) {
          for(var i = 0; i < collection.length; i++) {
@@ -537,10 +621,12 @@ Ext.define("Teselagen.manager.RailManager", {
                       .attr("overflow", "auto");
 
         this.parentSVG = this.rail.append("svg:g")
-                                  .attr("class", "railParent");
+                                  .attr("class", "railParent")
+                                  .attr("transform", "matrix(1 0 0 1 0 0)");
 
         this.frame = Ext.create("Vede.view.rail.Frame", {
             rail: this.parentSVG,
+            railWidth: this.railWidth,
             center: this.center
         });
 

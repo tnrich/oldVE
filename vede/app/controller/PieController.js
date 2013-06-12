@@ -5,6 +5,10 @@
 Ext.define('Vede.controller.PieController', {
     extend: 'Vede.controller.SequenceController',
 
+    requires: ["Teselagen.manager.PieManager",
+               "Teselagen.renderer.pie.SelectionLayer",
+               "Teselagen.renderer.pie.WireframeSelectionLayer"],
+
     refs: [
         {ref: "pieContainer", selector: "#PieContainer"}
     ],
@@ -368,15 +372,20 @@ Ext.define('Vede.controller.PieController', {
      */
     getClickAngle: function() {
         var svg = d3.select(".pieParent");
-        var translateValues;
+        var transformValues;
+        var scrolled = this.pieContainer.el.getScroll();
+
         if(svg.attr("transform")) {
-            translateValues = svg.attr("transform").match(/[-.\d]+/g);
+            transformValues = svg.attr("transform").match(/[-.\d]+/g);
         } else {
-            translateValues = [0, 0];
+            transformValues = [0, 0, 0, 0, 0, 0];
         }
 
-        var relX = d3.event.layerX - translateValues[0] - this.pieManager.center.x;
-        var relY = d3.event.layerY - translateValues[1] - this.pieManager.center.y;
+        var relX = d3.event.layerX - transformValues[4] -
+            this.pieManager.center.x * transformValues[0] + scrolled.left;
+
+        var relY = d3.event.layerY - transformValues[5] -
+            this.pieManager.center.y * transformValues[3] + scrolled.top;
 
         var angle = Math.atan(relY / relX) + Math.PI / 2;
         if(relX < 0) {

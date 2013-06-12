@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * @private
  * @class Ext.util.LruCache
@@ -217,11 +234,32 @@ Ext.define('Ext.util.LruCache', {
             map = this.map;
 
         for (key in map) {
+            // Attention. Differs from subclass in that this compares the value property
+            // of the entry.
             if (map.hasOwnProperty(key) && map[key].value === value) {
                 return key;
             }
         }
         return undefined;
+    },
+
+    /**
+     * Performs a shallow copy on this haLruCachesh.
+     * @return {Ext.util.HashMap} The new hash object.
+     */
+    clone: function() {
+        var newCache = new this.self(this.initialConfig),
+            map = this.map,
+            key;
+
+        newCache.suspendEvents();
+        for (key in map) {
+            if (map.hasOwnProperty(key)) {
+                newCache.add(key, map[key].value);
+            }
+        }
+        newCache.resumeEvents();
+        return newCache;
     },
 
     /**

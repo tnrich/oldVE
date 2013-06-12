@@ -4,7 +4,10 @@
  */
 Ext.define("Vede.view.annotate.Annotator", {
     requires: ["Teselagen.models.Rectangle",
-               "Teselagen.renderer.annotate.FeatureRenderer"],
+               "Teselagen.renderer.annotate.CutSiteRenderer",
+               "Teselagen.renderer.annotate.FeatureRenderer",
+               "Teselagen.renderer.annotate.ORFRenderer",
+               "Teselagen.renderer.annotate.SequenceRenderer"],
     
     extend: "Ext.draw.Component",
     alias: "widget.annotator",

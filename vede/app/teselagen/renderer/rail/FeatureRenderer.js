@@ -10,6 +10,8 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
     statics: {
         DEFAULT_FEATURE_HEIGHT: 7,
         DEFAULT_FEATURES_GAP: 5,
+        OUTLINE_COLOR: "black",
+        OUTLINE_WIDTH: 0.5
     },
 
     config: {

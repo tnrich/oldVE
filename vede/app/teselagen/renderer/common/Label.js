@@ -9,7 +9,8 @@ Ext.define("Teselagen.renderer.common.Label", {
     requires: ["Teselagen.bio.util.StringUtil"],
 
     statics: {
-        FONT_SIZE: "6px"
+        FONT_FAMILY: "sans-serif",
+        FONT_SIZE: "10px"
     },
 
     config: {
@@ -52,10 +53,11 @@ Ext.define("Teselagen.renderer.common.Label", {
 
         this.label = this.labelSVG.append("svg:text")
                      .attr("fill", inData.color || "black")
-                     .attr("font-size", this.self.FONT_SIZE)
                      .attr("x", inData.x)
                      .attr("y", inData.y)
                      .text(this.labelText())
+                     .attr("font-family", this.self.FONT_FAMILY)
+                     .attr("font-size", this.self.FONT_SIZE)
                      .on("mousedown", inData.click)
                      .on("contextmenu", inData.rightClick);
 

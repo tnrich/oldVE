@@ -11,7 +11,7 @@ Ext.define('Vede.controller.DeviceEditor.J5Controller', {
                "Teselagen.manager.J5CommunicationManager", 
                "Teselagen.manager.ProjectManager", 
                "Teselagen.bio.parsers.GenbankManager", 
-               "Ext.MessageBox",
+               "Ext.window.MessageBox",
                "Teselagen.manager.TasksMonitor"],
 
     DeviceDesignManager: null,

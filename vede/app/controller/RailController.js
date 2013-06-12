@@ -5,6 +5,10 @@
 Ext.define('Vede.controller.RailController', {
     extend: 'Vede.controller.SequenceController',
 
+    requires: ["Teselagen.manager.RailManager",
+               "Teselagen.renderer.rail.SelectionLayer",
+               "Teselagen.renderer.rail.WireframeSelectionLayer"],
+
     statics: {
         SELECTION_THRESHOLD: 2 * Math.PI / 360
     },
@@ -56,6 +60,11 @@ Ext.define('Vede.controller.RailController', {
             self.onMousemove(self);
         });
 
+        // When rail is resized, scale the graphics in the rail.
+        this.railContainer.on("resize", function() {
+            this.railManager.fitWidthToContent(this.railManager);
+        }, this);
+
         // Set the tabindex attribute in order to receive keyboard events on a div.
         this.railContainer.el.dom.setAttribute("tabindex", "0");
         this.railContainer.el.on("keydown", this.onKeydown, this);
@@ -69,14 +78,25 @@ Ext.define('Vede.controller.RailController', {
 
         this.railManager = Ext.create("Teselagen.manager.RailManager", {
             reference: {x: 0, y: 0},
-            railWidth: 300,
+            railWidth: 400,
             showCutSites: Ext.getCmp("cutSitesMenuItem").checked,
             showFeatures: Ext.getCmp("featuresMenuItem").checked,
             showOrfs: Ext.getCmp("orfsMenuItem").checked
         });
 
         rail = this.railManager.getRail();
-        this.railContainer.add(rail);
+
+        // When window is resized, scale the graphics in the rail.
+        var timeOut = null;
+
+        window.onresize = function(){
+            if (timeOut != null)
+                clearTimeout(timeOut);
+
+            timeOut = setTimeout(function(){
+                self.railManager.fitWidthToContent(self.railManager);
+            }, 400);
+        };
 
         this.Managers.push(this.railManager);
         this.railContainer.hide();
@@ -93,7 +113,27 @@ Ext.define('Vede.controller.RailController', {
     },
 
     onKeydown: function(event) {
-        this.callParent(arguments);
+        // Handle zooming in/out with the +/- keys.
+        if(event.getKey() === 187) {
+            this.railManager.zoomIn();
+        } else if (event.getKey() === 189) {
+            this.railManager.zoomOut();
+        } else {
+            this.callParent(arguments);
+        }
+    },
+
+    onSequenceChanged: function() {
+        if(!this.SequenceManager) {
+            return;
+        }
+
+        this.callParent();
+        this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
+        this.railManager.setOrfs(this.ORFManager.getOrfs());
+        this.railManager.setFeatures(this.SequenceManager.getFeatures());
+
+        this.railManager.render();
     },
 
     onActiveEnzymesChanged: function() {

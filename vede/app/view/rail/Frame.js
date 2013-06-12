@@ -5,7 +5,6 @@
 Ext.define('Vede.view.rail.Frame', {
     statics: {
         RECT_REFERENCE: {x: 0, y: 0},
-        RECT_WIDTH: 300,
         RECT_HEIGHT: 3,
         RECT_GAP: 3,
         OUTLINE_WIDTH: 0.5,
@@ -22,7 +21,7 @@ Ext.define('Vede.view.rail.Frame', {
         return inData.rail.append("svg:rect")
                           .attr("x", reference.x)
                           .attr("y", reference.y)
-                          .attr("width", this.self.RECT_WIDTH)
+                          .attr("width", inData.railWidth)
                           .attr("height", this.self.RECT_HEIGHT)
                           .attr("stroke", this.self.OUTLINE_COLOR)
                           .attr("stroke-width", this.self.OUTLINE_WIDTH)

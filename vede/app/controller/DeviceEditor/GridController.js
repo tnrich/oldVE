@@ -174,7 +174,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.select();
 
 
-         if(j5Part) {
+
+        if(j5Part) {
+            console.log("phantom: " + j5Part.phantom);
             if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
                 if (j5Part.get('name') != "") {
@@ -185,6 +187,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 gridPart.mapSelect();
             }
         } else {
+            console.log("no part associated with cell");
             gridPart.select();
         }
 

@@ -7,7 +7,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent",
-               "Teselagen.renderer.annotate.HighlightLayer"],
+               "Teselagen.manager.SequenceAnnotationManager",
+               "Teselagen.renderer.annotate.HighlightLayer",
+               "Teselagen.renderer.annotate.SelectionLayer"],
 
     statics: {
         MIN_BP_PER_ROW: 20

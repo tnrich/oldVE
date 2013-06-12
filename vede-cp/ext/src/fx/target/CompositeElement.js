@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * @class Ext.fx.target.CompositeElement
  * 
@@ -27,7 +44,8 @@ Ext.define('Ext.fx.target.CompositeElement', {
 
     getAttr: function(attr, val) {
         var out      = [],
-            elements = this.target.elements,
+            target = this.target,
+            elements = target.elements,
             length   = elements.length,
             i,
             el;
@@ -36,11 +54,39 @@ Ext.define('Ext.fx.target.CompositeElement', {
             el = elements[i];
 
             if (el) {
-                el = this.target.getElement(el);
+                el = target.getElement(el);
                 out.push([el, this.getElVal(el, attr, val)]);
             }
         }
 
         return out;
+    },
+    
+    setAttr: function(targetData){
+        var target = this.target,
+            ln = targetData.length,
+            elements = target.elements,
+            ln3 = elements.length,
+            value, k,
+            attrs, attr, o, i, j, ln2;
+            
+        for (i = 0; i < ln; i++) {
+            attrs = targetData[i].attrs;
+            for (attr in attrs) {
+                if (attrs.hasOwnProperty(attr)) {
+                    ln2 = attrs[attr].length;
+                    for (j = 0; j < ln2; j++) {
+                        value = attrs[attr][j][1];
+                        for (k = 0; k < ln3; ++k) {
+                            el = elements[k];
+                            if (el) {
+                                el = target.getElement(el);
+                                this.setElVal(el, attr, value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 });
