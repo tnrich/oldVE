@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * A custom {@link Ext.data.Store} for the {@link Ext.grid.property.Grid}. This class handles the mapping
  * between the custom data source objects supported by the grid and the {@link Ext.grid.property.Property} format
@@ -76,16 +93,17 @@ Ext.define('Ext.grid.property.Store', {
                     return new Ext.data.ResultSet(result);
                 },
 
-                // private
+                // @private
                 isEditableValue: function(val){
-                    return Ext.isPrimitive(val) || Ext.isDate(val);
+                    return Ext.isPrimitive(val) || Ext.isDate(val) || val === null;
                 }
             });
         }
         return this.reader;
     },
 
-    // protected - should only be called by the grid.  Use grid.setSource instead.
+    // @protected
+    // Should only be called by the grid.  Use grid.setSource instead.
     setSource : function(dataObject) {
         var me = this;
 
@@ -99,12 +117,12 @@ Ext.define('Ext.grid.property.Store', {
         me.fireEvent('refresh', me);
     },
 
-    // private
+    // @private
     getProperty : function(row) {
        return Ext.isNumber(row) ? this.getAt(row) : this.getById(row);
     },
 
-    // private
+    // @private
     setValue : function(prop, value, create){
         var me = this,
             rec = me.getRec(prop);
@@ -120,7 +138,7 @@ Ext.define('Ext.grid.property.Store', {
         }
     },
 
-    // private
+    // @private
     remove : function(prop) {
         var rec = this.getRec(prop);
         if (rec) {
@@ -129,12 +147,13 @@ Ext.define('Ext.grid.property.Store', {
         }
     },
 
-    // private
+    // @private
     getRec : function(prop) {
         return this.getById(prop);
     },
 
-    // protected - should only be called by the grid.  Use grid.getSource instead.
+    // @protected
+    // Should only be called by the grid.  Use grid.getSource instead.
     getSource : function() {
         return this.source;
     }

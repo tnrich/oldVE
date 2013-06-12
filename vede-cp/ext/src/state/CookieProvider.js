@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * A Provider implementation which saves and retrieves state via cookies. The CookieProvider supports the usual cookie
  * options, such as:
@@ -51,7 +68,7 @@ Ext.define('Ext.state.CookieProvider', {
     constructor : function(config){
         var me = this;
         me.path = "/";
-        me.expires = new Date(new Date().getTime()+(1000*60*60*24*7)); //7 days
+        me.expires = new Date(Ext.Date.now() + (1000*60*60*24*7)); //7 days
         me.domain = null;
         me.secure = false;
         me.callParent(arguments);

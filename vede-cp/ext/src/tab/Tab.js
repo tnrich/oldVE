@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * @author Ed Spencer
  * 
@@ -10,11 +27,8 @@ Ext.define('Ext.tab.Tab', {
     alias: 'widget.tab',
 
     requires: [
-        'Ext.layout.component.Tab',
         'Ext.util.KeyNav'
     ],
-
-    componentLayout: 'tab',
 
     /**
      * @property {Boolean} isTab
@@ -23,6 +37,7 @@ Ext.define('Ext.tab.Tab', {
     isTab: true,
 
     baseCls: Ext.baseCSSPrefix + 'tab',
+    closeElOverCls: Ext.baseCSSPrefix + 'tab-close-btn-over',
 
     /**
      * @cfg {String} activeCls
@@ -115,6 +130,8 @@ Ext.define('Ext.tab.Tab', {
         if (me.card) {
             me.setCard(me.card);
         }
+
+        me.overCls = ['over', me.position + '-over'];
     },
 
     getTemplateArgs: function() {
@@ -126,6 +143,10 @@ Ext.define('Ext.tab.Tab', {
 
         return result;
     },
+    
+    getFramingInfoCls: function(){
+        return this.baseCls + '-' + this.ui + '-' + this.position;
+    },
 
     beforeRender: function() {
         var me = this,
@@ -135,6 +156,10 @@ Ext.define('Ext.tab.Tab', {
         me.callParent();
         
         me.addClsWithUI(me.position);
+
+        if (me.active) {
+            me.addClsWithUI([me.activeCls, me.position + '-' + me.activeCls]);
+        }
 
         // Set all the state classNames, as they need to include the UI
         // me.disabledCls = me.getClsWithUIs('disabled');
@@ -162,13 +187,27 @@ Ext.define('Ext.tab.Tab', {
     onRender: function() {
         var me = this;
 
+        me.setElOrientation();
+
         me.callParent(arguments);
+
+        if (me.closable) {
+            me.closeEl.addClsOnOver(me.closeElOverCls);
+        }
 
         me.keyNav = new Ext.util.KeyNav(me.el, {
             enter: me.onEnterKey,
             del: me.onDeleteKey,
             scope: me
         });
+    },
+
+    setElOrientation: function() {
+        var position = this.position;
+
+        if (position === 'left' || position === 'right') {
+            this.el.setVertical(position === 'right' ? 90 : 270);
+        }
     },
 
     // inherit docs
@@ -242,13 +281,14 @@ Ext.define('Ext.tab.Tab', {
 
         if (me.closable) {
             if (!closeEl) {
-                me.closeEl = me.btnWrap.insertSibling({
+                closeEl = me.closeEl = me.btnWrap.insertSibling({
                     tag: 'a',
                     cls: me.baseCls + '-close-btn',
                     href: '#',
                     title: me.closeText
                 }, 'after');
             }
+            closeEl.addClsOnOver(me.closeElOverCls);
         } else if (closeEl) {
             closeEl.remove();
             delete me.closeEl;
@@ -282,6 +322,7 @@ Ext.define('Ext.tab.Tab', {
         me.setText(me.title || card.title);
         me.setIconCls(me.iconCls || card.iconCls);
         me.setIcon(me.icon || card.icon);
+        me.setGlyph(me.glyph || card.glyph);
     },
 
     /**

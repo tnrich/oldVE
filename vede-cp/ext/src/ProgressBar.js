@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
 /**
  * An updateable progress bar component. The progress bar supports two different modes: manual and automatic.
  *
@@ -63,8 +80,9 @@ Ext.define('Ext.ProgressBar', {
     baseCls: Ext.baseCSSPrefix + 'progress',
 
     /**
-     * @cfg {Boolean} animate
-     * True to animate the progress bar during transitions.
+     * @cfg {Boolean/Object} animate
+     * True to animate the progress bar during transitions, or an animation configuration
+     * (see the {@link #method-animate} method for details).
      */
     animate: false,
 
@@ -85,7 +103,7 @@ Ext.define('Ext.ProgressBar', {
         '<tpl if="internalText">',
             '<div class="{baseCls}-text {baseCls}-text-back">{text}</div>',
         '</tpl>',
-        '<div id="{id}-bar" class="{baseCls}-bar" style="width:{percentage}%">',
+        '<div id="{id}-bar" class="{baseCls}-bar {baseCls}-bar-{ui}" style="width:{percentage}%">',
             '<tpl if="internalText">',
                 '<div class="{baseCls}-text">',
                     '<div>{text}</div>',
@@ -322,7 +340,8 @@ Ext.define('Ext.ProgressBar', {
     },
 
     onDestroy: function(){
-        var me = this;
+        var me = this,
+            bar = me.bar;
         
         me.clearTimer();
         if (me.rendered) {
@@ -330,6 +349,9 @@ Ext.define('Ext.ProgressBar', {
                 me.textEl.clear();
             }
             Ext.destroyMembers(me, 'textEl', 'progressBar');
+            if (bar && me.animate) {
+                bar.stopAnimation();
+            }
         }
         me.callParent();
     }
