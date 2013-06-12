@@ -51,6 +51,8 @@ Ext.define("Teselagen.renderer.common.Label", {
             this.setIncludeInView(false);
         }
 
+        console.log("font size: " + this.self.FONT_SIZE + ", font family: " + this.self.FONT_FAMILY);
+
         this.label = this.labelSVG.append("svg:text")
                      .attr("fill", inData.color || "black")
                      .attr("x", inData.x)

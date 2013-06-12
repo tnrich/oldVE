@@ -72070,6 +72070,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     this.setIncludeInView(false);
   }
+  console.log("font size: " + this.self.FONT_SIZE + ", font family: " + this.self.FONT_FAMILY);
   this.label = this.labelSVG.append("svg:text").attr("fill", inData.color || "black").attr("x", inData.x).attr("y", inData.y).text(this.labelText()).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).on("mousedown", inData.click).on("contextmenu", inData.rightClick);
   this.label.append("svg:title").text(inData.tooltip);
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'Label'], 0));
