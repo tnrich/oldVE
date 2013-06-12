@@ -80,7 +80,7 @@ Ext.define('Vede.view.de.grid.Part', {
                         'padding-top': '10px',
                         'text-align': 'center'
                     },
-                    html: this.getPart().get("name"),
+                    html: html,
                     listeners: {
                         afterrender: function (obj) {
                             if(self.getPart() && self.getPart().get("name")) {
