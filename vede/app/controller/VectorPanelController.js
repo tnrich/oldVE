@@ -120,7 +120,7 @@ Ext.define("Vede.controller.VectorPanelController", {
     onCollapse: function () {
         var annotatePanel = Ext.getCmp("AnnotatePanel");
         if (annotatePanel.collapsed) {
-            annotatePanel.expand()
+            annotatePanel.expand([true])
         }
     }
 });
