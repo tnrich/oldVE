@@ -933,7 +933,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
             for(var j = 0; j < parts.length; j++) {
                 gridPart = parts[j];
                 if(gridPart.getPart() && gridPart.getPart().id === j5Part.id && 
-                   !gridPart.getPart().phantom) {
+                   !gridPart.getPart().get("phantom")) {
                     targetGridParts.push(gridPart);
                 }
             }
