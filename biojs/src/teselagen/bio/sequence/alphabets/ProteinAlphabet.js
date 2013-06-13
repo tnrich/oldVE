@@ -9,6 +9,9 @@
  */
 Ext.define("Teselagen.bio.sequence.alphabets.ProteinAlphabet", {
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet",
+
+	requires: "Teselagen.bio.sequence.symbols.AminoAcidSymbol",
+
 	singleton: true,
 	
 	a: Ext.create("Teselagen.bio.sequence.symbols.AminoAcidSymbol", {name:'Alanine', threeLettersName: 'Ala', value: 'A'}),

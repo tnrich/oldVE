@@ -65452,9 +65452,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   namespace = "";
 }, parse: function(data, cb) {
   console.log("Parsing using j5");
+  var self = this;
   Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+  var performOperation = function(preserveSBOL) {
   var messageBox = Ext.MessageBox.wait("Converting XML...", "Waiting for the server");
-  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("sbol", ''), params: {filename: 'example.xml', data: Base64.encode(data)}, success: function(response) {
+  Ext.Ajax.request({url: Teselagen.manager.SessionManager.buildUrl("sbol", ''), params: {filename: 'example.xml', data: Base64.encode(data), preserveSBOL: preserveSBOL}, success: function(response) {
   response = JSON.parse(response.responseText);
   messageBox.close();
   Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
@@ -65464,6 +65466,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   messageBox.close();
   Ext.MessageBox.alert('Failed', 'Conversion failed');
 }});
+};
+  Ext.Msg.show({title: 'Alert', msg: "Do you want to preserve SBOL information during import process?", width: 300, buttons: Ext.Msg.YESNOCANCEL, buttonText: ['', 'Yes', 'No', 'Cancel'], fn: function(buttonId) {
+  if (buttonId === 'yes') 
+  {
+    performOperation(true);
+  } else if (buttonId === 'no') 
+  {
+    performOperation(false);
+  }
+}, icon: Ext.MessageBox.ALERT});
 }, jbeiseqJsonToXml: function(json) {
 }, sbolXmlToJson: function(xmlStr, pRootNamespace) {
   var result = {};
@@ -66101,7 +66113,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Teselagen.event.AuthenticationEvent', Ext.Base, {singleton: true, LOGGED_IN: "LoggedIn"}, 0, 0, 0, 0, 0, 0, [Teselagen.event, 'AuthenticationEvent'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Project', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{flex: 1, xtype: 'treepanel', border: false, id: 'projectTreePanel', width: 220, rootVisible: false, animate: false}, {hidden: true, flex: 1, xtype: 'treepanel', title: 'Part Library', id: 'projectPartsPanel', width: 220, rootVisible: false}]}, 0, ["ProjectPanelView"], ["panel", "component", "container", "ProjectPanelView", "box"], {"panel": true, "component": true, "container": true, "ProjectPanelView": true, "box": true}, ["widget.ProjectPanelView"], 0, [Vede.view.common, 'ProjectPanelView'], 0));
+(Ext.cmd.derive('Vede.view.common.ProjectPanelView', Ext.panel.Panel, {region: 'west', id: 'ProjectPanel', minWidth: 220, width: 220, collapseDirection: 'left', collapsible: true, hideCollapseTool: false, title: 'Project', margin: '0 10 0 0', layout: {type: 'vbox', pack: 'center'}, items: [{flex: 1, xtype: 'treepanel', border: false, id: 'projectTreePanel', width: 220, rootVisible: false, animate: false, width: 220}, {hidden: true, flex: 1, xtype: 'treepanel', title: 'Part Library', id: 'projectPartsPanel', width: 220, rootVisible: false}]}, 0, ["ProjectPanelView"], ["panel", "component", "container", "ProjectPanelView", "box"], {"panel": true, "component": true, "container": true, "ProjectPanelView": true, "box": true}, ["widget.ProjectPanelView"], 0, [Vede.view.common, 'ProjectPanelView'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.AuthWindow', Ext.window.Window, {id: 'AuthWindow', floating: true, frame: false, style: 'z-index:8000', bodyBorder: false, closable: false, title: 'Authentication', x: 80, y: 30, initComponent: function() {
@@ -66217,6 +66229,48 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.manager, 'TasksMonitor'], 0));
 ;
 
+(Ext.cmd.derive('Teselagen.utils.SystemUtils', Ext.Base, {singleton: true, getSystemMonospaceFontFamily: function() {
+  var resultFont = "Courier New";
+  if (this.isWindowsOS()) 
+  {
+    resultFont = "Lucida Console";
+  } else if (this.isLinuxOS()) 
+  {
+    resultFont = "Monospace";
+  } else if (this.isMacOS()) 
+  {
+    resultFont = "Monaco";
+  }
+  return resultFont;
+}, isWindowsOS: function() {
+  return navigator.platform.indexOf("Win") != -1;
+}, isLinuxOS: function() {
+  return navigator.platform.indexOf("Linux") != -1;
+}, isMacOS: function() {
+  return navigator.platform.indexOf("Mac") != -1;
+}, goToUrl: function(url) {
+  window.open(url);
+}, applicationVersion: function(majorVersion) {
+  var versionDate = new Date();
+  var version = majorVersion + "." + String(versionDate.getFullYear()).substr(2, 2) + "." + String(versionDate.getMonth() + 1) + "." + String(versionDate.getDate());
+  return version;
+}, getBaseURL: function() {
+  var url = location.href;
+  var baseURL = url.substring(0, url.indexOf('/', 14));
+  if (baseURL.indexOf('http://localhost') != -1) 
+  {
+    var url = location.href;
+    var pathname = location.pathname;
+    var index1 = url.indexOf(pathname);
+    var index2 = url.indexOf("/", index1 + 1);
+    var baseLocalUrl = url.substr(0, index2);
+    return baseLocalUrl + "/";
+  } else {
+    return baseURL + "/";
+  }
+}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'SystemUtils'], 0));
+;
+
 (Ext.cmd.derive('Teselagen.manager.AuthenticationManager', Ext.Base, {singleton: true, authResponse: null, username: null, updateSplashScreenMessage: function(message, stop) {
   if (splashscreen) 
   {
@@ -66242,6 +66296,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }});
   } else {
     Ext.create("Vede.view.AuthWindow").show();
+    var baseURL = Teselagen.utils.SystemUtils.getBaseURL();
+    Ext.getCmp('select-server-combo').setValue(baseURL + 'api/');
   }
 }, sendAuthRequest: function(params, cb) {
   var self = this;
@@ -66342,7 +66398,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     delete request.params;
     return Teselagen.manager.SessionManager.buildUrl("projects" + projectParam + "/sequences", this.url);
   }
-  if (request.operation.action === "read" && !request.operation.filters) 
+  if (request.operation.action === "read" && !request.operation.filters && request.params.id) 
   {
     var sequence_id = request.params.id;
     idParam = "/" + sequence_id;
@@ -66574,7 +66630,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}}, 0, ["DeviceEditorPanel"], ["panel", "DeviceEditorPanel", "component", "container", "box"], {"panel": true, "DeviceEditorPanel": true, "component": true, "container": true, "box": true}, ["widget.DeviceEditorPanel"], 0, [Vede.view.de, 'DeviceEditor'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.AnnotatePanel', Ext.panel.Panel, {id: "AnnotatePanel", width: "645px", layout: {type: "fit"}, collapsible: true, collapseDirection: "right", title: "Sequence", titleCollapse: true, items: [{xtype: "container", overflowY: "scroll", id: "AnnotateContainer", layout: {type: "fit"}}]}, 0, ["AnnotatePanel"], ["panel", "component", "container", "AnnotatePanel", "box"], {"panel": true, "component": true, "container": true, "AnnotatePanel": true, "box": true}, ["widget.AnnotatePanel"], 0, [Vede.view.ve, 'AnnotatePanel'], 0));
+(Ext.cmd.derive('Vede.view.ve.AnnotatePanel', Ext.panel.Panel, {id: "AnnotatePanel", width: "645px", layout: {type: "fit"}, collapsible: true, animCollapse: false, collapseDirection: "right", title: "Sequence", titleCollapse: true, items: [{xtype: "container", overflowY: "scroll", id: "AnnotateContainer", layout: {type: "fit"}}]}, 0, ["AnnotatePanel"], ["panel", "component", "container", "AnnotatePanel", "box"], {"panel": true, "component": true, "container": true, "AnnotatePanel": true, "box": true}, ["widget.AnnotatePanel"], 0, [Vede.view.ve, 'AnnotatePanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.VectorEditorFindPanel', Ext.panel.Panel, {id: "FindPanel", height: 28, dock: "bottom", layout: {type: "hbox"}, hidden: true, items: [{xtype: "textfield", id: "findField", hideLabel: true, emptyText: "Search...", enableKeyEvents: true, width: 500, maxWidth: 600, margin: "2 4 2 4", validator: function(value) {
@@ -66620,7 +66676,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.view.ve.VectorEditorStatusPanel', Ext.panel.Panel, {id: "VectorEditorStatusPanel", dock: "bottom", border: '0 1 1 1', height: 23, layout: {type: "fit"}, headerPosition: "bottom", dockedItems: [{xtype: "toolbar", dock: "top", id: "VectorEditorStatusBar", items: [{xtype: "tbfill"}, {xtype: "tbtext", id: "VectorEditorStatusBarAlert"}, {xtype: "tbtext", cls: "meltingTemperatureText", text: ""}, {xtype: "tbseparator"}, {xtype: "tbtext", text: "Read only"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "caretPositionText", text: "0"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "selectionPositionText", text: "- : -"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "sequenceLengthText", text: "0"}]}]}, 0, ["VectorEditorStatusPanel"], ["panel", "component", "container", "VectorEditorStatusPanel", "box"], {"panel": true, "component": true, "container": true, "VectorEditorStatusPanel": true, "box": true}, ["widget.VectorEditorStatusPanel"], 0, [Vede.view.ve, 'VectorEditorStatusPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.VectorPanel', Ext.panel.Panel, {id: "VectorPanel", scrollable: false, collapsible: true, collapseDirection: "left", title: "Map", titleCollapse: "true", items: [{xtype: "container", id: "PieContainer", style: {overflow: "auto"}, layout: {type: "fit"}}, {xtype: "container", id: "RailContainer", style: {overflow: "auto"}, layout: {type: "fit"}}]}, 0, ["VectorPanel"], ["panel", "component", "container", "box", "VectorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorPanel": true}, ["widget.VectorPanel"], 0, [Vede.view.ve, 'VectorPanel'], 0));
+(Ext.cmd.derive('Vede.view.ve.VectorPanel', Ext.panel.Panel, {id: "VectorPanel", scrollable: false, collapsible: true, collapseDirection: "left", title: "Map", titleCollapse: true, items: [{xtype: "container", id: "PieContainer", style: {overflow: "auto"}, layout: {type: "fit"}}, {xtype: "container", id: "RailContainer", style: {overflow: "auto"}, layout: {type: "fit"}}]}, 0, ["VectorPanel"], ["panel", "component", "container", "box", "VectorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorPanel": true}, ["widget.VectorPanel"], 0, [Vede.view.ve, 'VectorPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.VectorEditorPanel', Ext.panel.Panel, {id: "VectorEditorPanel", border: 0, layout: {type: "fit"}, title: "Vector Editor", closable: false, dockedItems: [{xtype: "VectorEditorMainMenuPanel"}, {xtype: "VectorEditorStatusPanel"}, {xtype: "VectorEditorFindPanel"}], items: [{xtype: "panel", border: 0, id: "VectorEditorSubPanel", layout: {align: "stretch", type: "hbox"}, items: [{xtype: "VectorPanel", flex: 1, overflowY: "auto"}, {xtype: "splitter", collapseTarget: "prev"}, {xtype: "AnnotatePanel", flex: 1.2}]}]}, 0, ["VectorEditorPanel"], ["panel", "component", "container", "box", "VectorEditorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorEditorPanel": true}, ["widget.VectorEditorPanel"], 0, [Vede.view.ve, 'VectorEditorPanel'], 0));
@@ -69619,6 +69675,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
         }
       }
+      if (startBP < 0 || endBP < 0) 
+      {
+        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + feature.getStart() + ", ending at " + feature.getEnd() + ", ignoring.");
+        return;
+      }
       if (startBP > endBP && this.feature.getType() != "misc_feature") 
       {
         var bpStartMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(row.getRowData().getStart());
@@ -69985,34 +70046,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   this.orfSVG.append("svg:title").text(tooltipLabel);
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'ORFRenderer'], 0));
-;
-
-(Ext.cmd.derive('Teselagen.utils.SystemUtils', Ext.Base, {singleton: true, getSystemMonospaceFontFamily: function() {
-  var resultFont = "Courier New";
-  if (this.isWindowsOS()) 
-  {
-    resultFont = "Lucida Console";
-  } else if (this.isLinuxOS()) 
-  {
-    resultFont = "Monospace";
-  } else if (this.isMacOS()) 
-  {
-    resultFont = "Monaco";
-  }
-  return resultFont;
-}, isWindowsOS: function() {
-  return navigator.platform.indexOf("Win") != -1;
-}, isLinuxOS: function() {
-  return navigator.platform.indexOf("Linux") != -1;
-}, isMacOS: function() {
-  return navigator.platform.indexOf("Mac") != -1;
-}, goToUrl: function(url) {
-  window.open(url);
-}, applicationVersion: function(majorVersion) {
-  var versionDate = new Date();
-  var version = majorVersion + "." + String(versionDate.getFullYear()).substr(2, 2) + "." + String(versionDate.getMonth() + 1) + "." + String(versionDate.getDate());
-  return version;
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.utils, 'SystemUtils'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
@@ -73114,7 +73147,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return pOrfs;
 }, initPie: function() {
   this.pie = d3.select("#PieContainer").append("svg:svg").attr("id", "Pie").attr("overflow", "auto");
-  this.parentSVG = this.pie.append("svg:g").attr("class", "pieParent").attr("transform", "matrix(1 0 0 1 0 0)");
+  this.parentSVG = this.pie.append("svg:g").attr("class", "pieParent").attr("transform", "matrix(1.5 0 0 1.5 0 0)");
   this.frame = Ext.create("Vede.view.pie.Frame", {pie: this.parentSVG, center: this.center});
   this.caret = Ext.create("Vede.view.pie.Caret", {pie: this.parentSVG, angle: 0, center: this.center, radius: this.railRadius + 10});
   var name = "unknown";
@@ -73133,6 +73166,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.orfRenderer.setOrfSVG(this.orfSVG);
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
+  this.fitWidthToContent(this);
 }, adjustCaret: function(bp) {
   this.caret.remove();
   if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
@@ -73994,8 +74028,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
   var scale = [Number(translateValues[0]), Number(translateValues[3])];
   var translate = [Number(translateValues[4]), Number(translateValues[5])];
-  console.log("svg element bbox y: " + railBox.y);
-  console.log("g element bbox y: " + parentBox.y);
   scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + transY + ")");
   scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD).attr("height", railBox.height + transY);
 }, showSprites: function(collection) {
@@ -74160,7 +74192,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return pOrfs;
 }, initRail: function() {
   this.rail = d3.select("#RailContainer").append("svg:svg").attr("id", "Rail").attr("overflow", "auto");
-  this.parentSVG = this.rail.append("svg:g").attr("class", "railParent").attr("transform", "matrix(1 0 0 1 " + this.self.RAIL_PAD + " 0)");
+  this.parentSVG = this.rail.append("svg:g").attr("class", "railParent").attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
   this.frame = Ext.create("Vede.view.rail.Frame", {rail: this.parentSVG, railWidth: this.railWidth, center: this.center});
   this.caret = Ext.create("Vede.view.rail.Caret", {rail: this.parentSVG, start: 0, reference: this.reference, railWidth: this.railWidth, length: 3});
   var name = "unknown";
@@ -74179,6 +74211,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.orfRenderer.setOrfSVG(this.orfSVG);
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
+  this.fitWidthToContent(this);
 }, adjustCaret: function(bp) {
   var start = bp / this.sequenceManager.getSequence().seqString().length;
   this.caret.remove();
@@ -74758,7 +74791,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var annotatePanel = Ext.getCmp("AnnotatePanel");
   if (annotatePanel.collapsed) 
   {
-    annotatePanel.expand();
+    annotatePanel.expand([true]);
   }
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'VectorPanelController'], 0));
 ;
@@ -76383,7 +76416,7 @@ function requestMessageProcessor(request, success) {
       for (var j = 0; j < parts.length; j++) 
         {
           gridPart = parts[j];
-          if (gridPart.getPart() && gridPart.getPart().id === j5Part.id && !gridPart.getPart().phantom) 
+          if (gridPart.getPart() && gridPart.getPart().id === j5Part.id && !gridPart.getPart().get("phantom")) 
           {
             targetGridParts.push(gridPart);
           }
@@ -78738,12 +78771,12 @@ function requestMessageProcessor(request, success) {
   var self = this;
   var rootNode = Ext.getCmp("projectTreePanel").getRootNode();
   rootNode.removeAll();
-  rootNode.appendChild({text: "Create project", leaf: true, hrefTarget: "newproj", icon: "resources/images/add.png", id: 0});
+  rootNode.appendChild({text: "Create project", leaf: true, hrefTarget: "newproj", icon: "resources/images/add.png"});
   var projects = Teselagen.manager.ProjectManager.projects;
   projects.each(function(project) {
   var projectNode = rootNode.appendChild({text: project.data.name, id: project.data.id, hrefTarget: "openproj"});
-  projectNode.appendChild({text: "Create design", leaf: true, hrefTarget: "newde", icon: "resources/images/add.png", id: 0});
-  projectNode.appendChild({text: "Create sequence", leaf: true, hrefTarget: "newsequence", icon: "resources/images/add.png", id: 0});
+  projectNode.appendChild({text: "Create design", leaf: true, hrefTarget: "newde", icon: "resources/images/add.png"});
+  projectNode.appendChild({text: "Create sequence", leaf: true, hrefTarget: "newsequence", icon: "resources/images/add.png"});
   var designs = project.designs();
   designs.load({callback: function() {
   designs.each(function(design) {

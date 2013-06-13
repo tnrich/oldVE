@@ -8,7 +8,8 @@ Ext.define('Vede.controller.FindPanelController', {
     requires: ['Teselagen.event.CaretEvent',
                'Teselagen.event.MenuItemEvent',
                'Teselagen.event.SelectionLayerEvent',
-               'Teselagen.event.SequenceManagerEvent'],
+               'Teselagen.event.SequenceManagerEvent',
+               'Teselagen.manager.FindManager'],
 
     CaretEvent: null,
     MenuItemEvent: null,

@@ -10,9 +10,12 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
     statics: {
         DEFAULT_FEATURE_HEIGHT: 7,
         DEFAULT_FEATURES_GAP: 5,
+        OUTLINE_COLOR: "black",
+        OUTLINE_WIDTH: 0.5
     },
 
     config: {
+        featureSVG: null,
         features: [],
         railWidth: null,
         railHeight:null,
@@ -39,10 +42,9 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
      * @return {Ext.draw.Sprite[]} The array of sprites.
      */
     render: function() {
-        var sprites = [];
+        var path;
         var featureAlignment = this.Alignment.buildAlignmentMap(this.features, 
                                                          this.sequenceManager);
-
         
         Ext.each(this.features, function(feature) {
             var featureGap = this.railGap - this.self.DEFAULT_FEATURES_GAP - 
@@ -99,27 +101,29 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
                 if(feature.getStart() == location.getStart() &&
                    feature.getStrand() == this.StrandType.BACKWARD) {
 
-                    recSprite = this.GraphicUtils.drawFeatureNegativeArrow(xStartPosition, yPosition, featureWidth, color);
+                    path = this.GraphicUtils.drawFeatureNegativeArrow(xStartPosition, yPosition, featureWidth, color);
 
                 } else if(feature.getEnd() == location.getEnd() && 
                           feature.getStrand() == this.StrandType.FORWARD) {
 
-                    recSprite = this.GraphicUtils.drawFeaturePositiveArrow(xStartPosition, yPosition, featureWidth, color);
+                    path = this.GraphicUtils.drawFeaturePositiveArrow(xStartPosition, yPosition, featureWidth, color);
 
                 } else {
-                    recSprite = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
+                    path = this.GraphicUtils.drawRect(xStartPosition, yPosition, featureWidth, color);
                 }
 
-                this.addToolTip(recSprite, this.getToolTip(feature));
-
-                sprites.push(recSprite);
-                
+                this.featureSVG.append("svg:path")
+                               .attr("stroke", this.self.OUTLINE_COLOR)
+                               .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                               .attr("fill", color)
+                               .attr("fill-rule", "evenodd")
+                               .attr("d", path)
+                               .on("mousedown", this.getClickListener(feature.getStart(),
+                                                                      feature.getEnd()))
+                               .append("svg:title")
+                               .text(this.getToolTip(feature));
             }, this);
         }, this);
-        
-
-//        console.log("All sprites calculated.");
-        return sprites;
     },
 
     /**

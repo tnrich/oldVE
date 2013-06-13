@@ -6,7 +6,8 @@ Ext.define("Vede.controller.ActionStackController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.MenuItemEvent",
-               "Teselagen.event.SequenceManagerEvent"],
+               "Teselagen.event.SequenceManagerEvent",
+               "Teselagen.manager.ActionStackManager"],
 
     ActionStackManager: null,
     SequenceManager: null,

@@ -6,7 +6,9 @@ Ext.define('Vede.controller.MainToolbarController', {
     extend: 'Ext.app.Controller',
 
     requires: ['Teselagen.event.VisibilityEvent',
-               'Teselagen.manager.ProjectManager'],
+               'Teselagen.manager.ProjectManager',
+               'Teselagen.bio.parsers.GenbankManager',
+               'Vede.view.RestrictionEnzymesManagerWindow'],
 
     MenuItemEvent: null,
     VisibilityEvent: null,

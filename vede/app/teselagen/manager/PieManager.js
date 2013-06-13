@@ -10,8 +10,18 @@ Ext.define("Teselagen.manager.PieManager", {
         LABEL_HEIGHT: 10,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2",
-        ZOOM_FACTOR: 1.05
+        ZOOM_INCREMENT: 0.25
     },
+
+    requires: ["Teselagen.bio.sequence.dna.Feature",
+               "Teselagen.renderer.pie.CutSiteLabel",
+               "Teselagen.renderer.pie.CutSiteRenderer",
+               "Teselagen.renderer.pie.FeatureLabel",
+               "Teselagen.renderer.pie.FeatureRenderer",
+               "Teselagen.renderer.pie.ORFRenderer",
+               "Vede.view.pie.Caret",
+               "Vede.view.pie.Frame",
+               "Vede.view.pie.NameBox"],
 
     config: {
         sequenceManager: null,
@@ -30,6 +40,12 @@ Ext.define("Teselagen.manager.PieManager", {
 
     nameBox: null,
     caret: null,
+
+    labelSVG: null,
+    cutSiteSVG: null,
+    orfSVG: null,
+    featureSVG: null,
+    selectionSVG: null,
 
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -74,20 +90,8 @@ Ext.define("Teselagen.manager.PieManager", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        this.pie = Ext.create("Vede.view.pie.Pie", {
-            items: [
-                Ext.create("Vede.view.pie.Frame"),
-                Ext.create("Ext.draw.Sprite", {
-                    type: "circle",
-                    radius: this.railRadius + this.self.PAD,
-                    x: this.center.x,
-                    y: this.center.y
-                })
-            ],
-            autoScroll: true
-        });
-
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.pie.CutSiteRenderer", {
+            cutSiteSVG: this.cutSiteSVG,
             sequenceManager: this.sequenceManager,
             center: this.center,
             railRadius: this.railRadius,
@@ -95,6 +99,7 @@ Ext.define("Teselagen.manager.PieManager", {
         });
 
         this.featureRenderer = Ext.create("Teselagen.renderer.pie.FeatureRenderer", {
+            featureSVG: this.featureSVG,
             sequenceManager: this.sequenceManager,
             center: this.center,
             railRadius: this.railRadius,
@@ -102,6 +107,7 @@ Ext.define("Teselagen.manager.PieManager", {
         });
 
         this.orfRenderer = Ext.create("Teselagen.renderer.pie.ORFRenderer", {
+            orfSVG: this.orfSVG,
             sequenceManager: this.sequenceManager,
             center: this.center,
             railRadius: this.railRadius,
@@ -170,6 +176,8 @@ Ext.define("Teselagen.manager.PieManager", {
      */
     render: function() {
         Ext.suspendLayouts();
+        
+        var renderer;
         if(this.dirty) {
             for(var i = 0; i < this.renderers.length; i++) {
                 renderer = this.renderers[i];
@@ -191,126 +199,114 @@ Ext.define("Teselagen.manager.PieManager", {
         }
 
         if(this.cutSitesChanged) {
+            this.cutSiteSVG.remove();
+            this.cutSiteSVG = this.parentSVG.append("svg:g")
+                                      .attr("class", "pieCutSite");
+            this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+
+
             this.cutSiteRenderer.setCutSites(this.cutSites);
+            this.cutSiteRenderer.render();
+
             this.cutSitesChanged = false;
-
-            if(this.cutSiteSprites) {
-                this.cutSiteSprites.destroy();
-            }
-
-            this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.pie.surface
-            });
-
-            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         }
 
         if(this.featuresChanged) {
+            this.featureSVG.remove();
+            this.featureSVG = this.parentSVG.append("svg:g")
+                                      .attr("class", "pieFeature");
+            this.featureRenderer.setFeatureSVG(this.featureSVG);
+
             this.featureRenderer.setFeatures(this.features);
+            this.featureRenderer.render();
+
             this.featuresChanged = false;
-
-            if(this.featureSprites) {
-                this.featureSprites.destroy();
-            }
-
-            this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.pie.surface
-            });
-
-            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
         if(this.orfsChanged) {
+            this.orfSVG.remove();
+            this.orfSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "pieOrf");
+            this.orfRenderer.setOrfSVG(this.orfSVG);
+
             this.orfRenderer.setOrfs(this.orfs);
+            this.orfRenderer.render();
+
             this.orfsChanged = false;
-
-            if(this.orfSprites) {
-                this.orfSprites.destroy();
-            }
-
-            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.pie.surface
-            });
-
-            this.orfSprites.addAll(this.orfRenderer.render());
         }
 
         this.renderLabels();
 
         if(this.showOrfs) {
-            this.showSprites(this.orfSprites);
+            this.orfSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.orfSprites);
+            this.orfSVG.style("visibility", "hidden");
         }
 
         if(this.showCutSites) {
-            this.showSprites(this.cutSiteSprites);
+            this.cutSiteSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.cutSiteSprites);
+            this.cutSiteSVG.style("visibility", "hidden");
         }
 
         if(this.showFeatures) {
-            this.showSprites(this.featureSprites);
+            this.featureSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.featureSprites);
+            this.featureSVG.style("visibility", "hidden");
         }
 
-        //this.drawCoordinates();
         Ext.resumeLayouts(true);
 
         Ext.defer(function(){this.fitWidthToContent(this)}, 10, this);
     },
 
     /**
-     * Zooms the pie in using the viewBox and adjusts its height accordingly.
+     * Zooms the pie in using a transformation matrix.
      */
     zoomIn: function() {
         Ext.suspendLayouts();
 
-        var oldBox = this.pie.surface.viewBox;
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-        var newHeight = this.pie.surface.el.getSize().height * 
-            this.self.ZOOM_FACTOR * 1.25;
+        // Increase scale values.
+        scale[0] += this.self.ZOOM_INCREMENT;
+        scale[1] += this.self.ZOOM_INCREMENT;
 
-        this.pie.surface.el.setStyle("height", newHeight + "px");
-
-        this.zoomLevel += 1;
-
-        this.pie.surface.setViewBox(
-                this.center.x - oldBox.width / this.self.ZOOM_FACTOR / 2,
-                this.center.y - oldBox.height / this.self.ZOOM_FACTOR / 2,
-                oldBox.width / this.self.ZOOM_FACTOR, 
-                oldBox.height / this.self.ZOOM_FACTOR);
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
 
         Ext.resumeLayouts(true);
 
-        this.fitWidthToContent(this);//, this.self.ZOOM_FACTOR * 5);
+        this.fitWidthToContent(this);
     },
 
     /**
-     * Zooms the pie out using the viewBox and adjusts its height accordingly.
+     * Zooms the pie out using a transformation matrix.
      */
     zoomOut: function() {
-        Ext.suspendLayouts();
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
 
-        var oldBox = this.pie.surface.viewBox;
+        // Only zoom out if it won't make the SVG disappear!
+        if(scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) {
+            Ext.suspendLayouts();
 
-        var newHeight = this.pie.surface.el.getSize().height / 
-            this.self.ZOOM_FACTOR / 1.25;
+            // Increase scale values.
+            scale[0] -= this.self.ZOOM_INCREMENT;
+            scale[1] -= this.self.ZOOM_INCREMENT;
 
-        this.pie.surface.el.setStyle("height", newHeight + "px");
+            this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                     " " + translate[0] + " " + translate[1] + ")");
 
-        this.zoomLevel -= 1;
+            Ext.resumeLayouts(true);
 
-        this.pie.surface.setViewBox(
-                this.center.x - oldBox.width * this.self.ZOOM_FACTOR / 2,
-                this.center.y - oldBox.height * this.self.ZOOM_FACTOR / 2,
-                oldBox.width * this.self.ZOOM_FACTOR,
-                oldBox.height * this.self.ZOOM_FACTOR);
-
-        Ext.resumeLayouts(true);
-
-        this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+            this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+        }
     },
 
     /**
@@ -318,46 +314,39 @@ Ext.define("Teselagen.manager.PieManager", {
      * scrollbar appears.
      * @param {Teselagen.manager.PieManager} scope The pieManager. Used when being
      * called by the window onresize event.
-     * @param {Number} magnification A factor used to expand/contract width based
-     * on the zoom level.
      */
-    fitWidthToContent: function(scope, magnification) {
-        if(scope.labelSprites) {
-            var newWidth;
-            var magnification = magnification || 1;
+    fitWidthToContent: function(scope) {
+        var containerSize = Ext.getCmp("PieContainer").getSize();
+        var transX = containerSize.width / 2 - scope.center.x;
+        var transY = containerSize.height / 2 - scope.center.y;
+        var pieBox = scope.pie[0][0].getBBox();
 
-            if(scope.labelSprites.getBBox().width > scope.pie.surface.viewBox.width) {
-                newWidth = scope.pie.getWidth() * magnification *
-                    scope.labelSprites.getBBox().width / scope.pie.surface.viewBox.width * 1.5;
+        // Get previous values for scale and transform.
+        var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
 
-                scope.pie.surface.el.setStyle("width", newWidth + "px");
+        scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + transX + " " + transY + ")");
 
-                // Scroll to the center of the pie.
-                scope.pie.el.scrollTo("left", (scope.pie.getPositionEl().dom.scrollWidth - 
-                                    scope.pie.getPositionEl().dom.clientWidth) / 2);
-            }
-        }
-
-        //console.log("magnification: " + magnification);
-        //console.log("surface dimensions: " + scope.pie.surface.el.getSize().width + 
-        //            " x " + scope.pie.surface.el.getSize().height);
+        scope.pie.attr("width", pieBox.width + transX)
+                 .attr("height", pieBox.height + transY);
     },
 
     /**
      * Function for debugging which draws coordinates on the pie.
      */
     drawCoordinates: function() {
+        d3.select(".coordinateSVG").remove();
+        var coordSVG = this.parentSVG.append("svg:g")
+                                     .attr("class", "coordinateSVG");
         for(var i = -50; i < 500; i += 20) {
             for(var j = -50; j < 500; j += 20) {
-                var sprite = Ext.create("Ext.draw.Sprite", {
-                    type: "text",
-                    text: i + " " + j,
-                    font: "2px monospace",
-                    x: i,
-                    y: j
-                });
-                this.pie.surface.add(sprite);
-                sprite.show(true);
+                coordSVG.append("svg:text")
+                        .attr("font-size", "6px")
+                        .attr("x", i)
+                        .attr("y", j)
+                        .text(i + "," + j);
             }
         }
     },
@@ -365,6 +354,7 @@ Ext.define("Teselagen.manager.PieManager", {
     /**
      * Helper function which renders the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
+     * @deprecated
      */
     showSprites: function(collection) {
         var sprite;
@@ -379,6 +369,7 @@ Ext.define("Teselagen.manager.PieManager", {
     /**
      * Helper function which hides the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
+     * @deprecated
      */
     hideSprites: function(collection) {
         var sprite;
@@ -397,6 +388,10 @@ Ext.define("Teselagen.manager.PieManager", {
         var center;
         var color;
 
+        this.labelSVG.remove();
+        this.labelSVG = this.parentSVG.append("svg:g")
+                                .attr("class", "pieLabel");
+
         if(this.showCutSites && this.showCutSiteLabels) {
             var site;
             for(var i = 0; i < this.cutSites.length; i++) {
@@ -410,18 +405,17 @@ Ext.define("Teselagen.manager.PieManager", {
                 }
 
                 label = Ext.create("Teselagen.renderer.pie.CutSiteLabel", {
+                    labelSVG: this.labelSVG,
                     annotation: site,
                     x: center.x,
                     y: center.y,
                     center: this.annotationCenter(site),
-                    color: color
+                    color: color,
+                    tooltip: this.cutSiteRenderer.getToolTip(site),
+                    click: this.cutSiteRenderer.getClickListener(
+                                                    site.getStart(),
+                                                    site.getEnd())
                 });
-
-                this.cutSiteRenderer.addToolTip(label,
-                                            this.cutSiteRenderer.getToolTip(site));
-                this.cutSiteRenderer.addClickListener(label,
-                                                label.annotation.getStart(),
-                                                label.annotation.getEnd());
 
                 labels.push(label);
             }
@@ -434,17 +428,17 @@ Ext.define("Teselagen.manager.PieManager", {
                 center = this.featureRenderer.middlePoints.get(feature);
 
                 label = Ext.create("Teselagen.renderer.pie.FeatureLabel", {
+                    labelSVG: this.labelSVG,
                     annotation: feature,
                     x: center.x,
                     y: center.y,
-                    center: this.annotationCenter(feature)
+                    center: this.annotationCenter(feature),
+                    tooltip: this.featureRenderer.getToolTip(feature),
+                    click: this.featureRenderer.getClickListener(
+                                                    feature.getStart(),
+                                                    feature.getEnd()),
+                    rightClick: this.featureRenderer.getRightClickListener(feature)
                 });
-
-                this.featureRenderer.addToolTip(label,
-                                        this.featureRenderer.getToolTip(feature));
-                this.featureRenderer.addClickListener(label,
-                                                label.annotation.getStart(),
-                                                label.annotation.getEnd(),label.annotation);
 
                 labels.push(label);
             }
@@ -517,8 +511,8 @@ Ext.define("Teselagen.manager.PieManager", {
                     lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
                 }
 
-                label.setAttributes({translate: {x: xPosition - label.x,
-                                                  y: yPosition - label.y}});
+                label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
+                                        "," + (yPosition - label.label.attr("y")) + ")");
                 labels.push(this.drawConnection(label, xPosition, yPosition));
             }
         }
@@ -546,8 +540,9 @@ Ext.define("Teselagen.manager.PieManager", {
                     lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
                 }
 
-                label.setAttributes({translate: {x: xPosition - label.x,
-                                                  y: yPosition - label.y}});
+                label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
+                                        "," + (yPosition - label.label.attr("y")) + ")");
+
                 labels.push(this.drawConnection(label, xPosition, yPosition));
             }
         }
@@ -575,8 +570,10 @@ Ext.define("Teselagen.manager.PieManager", {
                     lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
                 }
 
-                label.setAttributes({translate: {x: xPosition - label.x,
-                                                  y: yPosition - label.y}});
+                label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
+                                        "," + (yPosition - label.label.attr("y")) + ")")
+                           .style("text-anchor", "end");
+
                 labels.push(this.drawConnection(label, xPosition, yPosition)); 
             }
         }
@@ -603,30 +600,13 @@ Ext.define("Teselagen.manager.PieManager", {
                     
                     lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
                 }
-                  
-                label.setAttributes({translate: {x: xPosition - label.x,
-                                                  y: yPosition - label.y}});
+
+                label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
+                                        "," + (yPosition - label.label.attr("y")) + ")")
+                           .style("text-anchor", "end");
+
                 labels.push(this.drawConnection(label, xPosition, yPosition));
             }
-        }
-
-        if(this.labelSprites) {
-            this.labelSprites.destroy();
-        }
-
-        this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.pie.surface
-        });
-
-        this.labelSprites.addAll(labels);
-        this.showSprites(this.labelSprites);
-
-        for(var i = 0; i < leftTopLabels.length; i++) {
-            leftTopLabels[i].setStyle("text-anchor", "end");
-        }
-
-        for(var i = 0; i < leftBottomLabels.length; i++) {
-            leftBottomLabels[i].setStyle("text-anchor", "end");
         }
     },
 
@@ -641,25 +621,21 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {String} align The argument for the text-anchor property.
      */
     drawConnection: function(label, labelX, labelY) {
+        var path;
         if(label.annotation instanceof Teselagen.bio.sequence.dna.Feature) {
-            return Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + labelX + " " + labelY +
-                      "L" + this.featureRenderer.middlePoints.get(label.annotation).x + 
-                      " " + this.featureRenderer.middlePoints.get(label.annotation).y,
-                stroke: this.self.LABEL_CONNECTION_COLOR,
-                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
-            });
+            path = "M" + labelX + " " + labelY +
+                   "L" + this.featureRenderer.middlePoints.get(label.annotation).x + 
+                   " " + this.featureRenderer.middlePoints.get(label.annotation).y;
         } else {
-            return Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + labelX + " " + labelY +
-                      "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + 
-                      " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y,
-                stroke: this.self.LABEL_CONNECTION_COLOR,
-                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
-            });
+            path = "M" + labelX + " " + labelY +
+                   "L" + this.cutSiteRenderer.middlePoints.get(label.annotation).x + 
+                   " " + this.cutSiteRenderer.middlePoints.get(label.annotation).y;
         }
+
+        return this.labelSVG.append("svg:path")
+                            .attr("stroke", this.self.LABEL_CONNECTION_COLOR)
+                            .attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH)
+                            .attr("d", path);
     },
 
     /**
@@ -711,23 +687,19 @@ Ext.define("Teselagen.manager.PieManager", {
 
         if(this.pie) {
             if(pSequenceManager.getSequence().toString().length > 0) {
-                this.caret.show(true);
                 this.adjustCaret(0);
             } else if(this.caret) {
-                this.caret.destroy();
+                this.caret.remove();
             }
 
-            this.nameBox.destroy();
+            this.nameBox.remove();
 
             this.nameBox = Ext.create("Vede.view.pie.NameBox", {
+                pie: this.parentSVG,
                 center: this.center,
                 name: pSequenceManager.getName(),
                 length: pSequenceManager.getSequence().toString().length
             });
-
-            this.pie.surface.add(this.nameBox);
-            this.nameBox.show(true);
-            this.nameBox.setStyle("dominant-baseline", "central");
         }
 
         return pSequenceManager;
@@ -770,30 +742,60 @@ Ext.define("Teselagen.manager.PieManager", {
      * Adds the caret to the pie.
      */
     initPie: function() {
+        this.pie = d3.select("#PieContainer")
+                     .append("svg:svg")
+                     .attr("id", "Pie")
+                     .attr("overflow", "auto");
+
+        this.parentSVG = this.pie.append("svg:g")
+                                 .attr("class", "pieParent")
+                                 .attr("transform", "matrix(1.5 0 0 1.5 0 0)");
+
+        this.frame = Ext.create("Vede.view.pie.Frame", {
+            pie: this.parentSVG,
+            center: this.center
+        });
+
         this.caret = Ext.create("Vede.view.pie.Caret", {
+            pie: this.parentSVG,
             angle: 0,
             center: this.center,
             radius: this.railRadius + 10
         });
 
-        this.pie.surface.add(this.caret);
-
         var name = "unknown";
-        var length = 0
+        var length = 0;
         if(this.sequenceManager) {
             name = this.sequenceManager.getName();
             length = this.sequenceManager.getSequence().toString().length;
         }
 
         this.nameBox = Ext.create("Vede.view.pie.NameBox", {
+            pie: this.parentSVG,
             center: this.center,
             name: name,
             length: length
         });
 
-        this.pie.surface.add(this.nameBox);
-        this.nameBox.show(true);
-        this.nameBox.setStyle("dominant-baseline", "central");
+        this.labelSVG = this.parentSVG.append("svg:g")
+                                .attr("class", "pieLabel");
+
+        this.selectionSVG = this.parentSVG.append("svg:g")
+                                    .attr("class", "pieSelection");
+
+        this.cutSiteSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "pieCutSite");
+        this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+
+        this.orfSVG = this.parentSVG.append("svg:g")
+                              .attr("class", "pieOrf");
+        this.orfRenderer.setOrfSVG(this.orfSVG);
+
+        this.featureSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "pieFeature");
+        this.featureRenderer.setFeatureSVG(this.featureSVG);
+
+        this.fitWidthToContent(this);
     },
 
     /**
@@ -801,7 +803,7 @@ Ext.define("Teselagen.manager.PieManager", {
      * @param {Int} angle The angle of the caret to reposition to.
      */
     adjustCaret: function(bp) {
-        this.caret.destroy();
+        this.caret.remove();
 
         if(this.sequenceManager &&
            this.sequenceManager.getSequence().toString().length > 0) {
@@ -810,13 +812,11 @@ Ext.define("Teselagen.manager.PieManager", {
                 this.sequenceManager.getSequence().seqString().length;
 
             this.caret = Ext.create("Vede.view.pie.Caret", {
+                pie: this.parentSVG,
                 angle: angle,
                 center: this.center,
                 radius: this.railRadius + 10
             });
-
-            this.pie.surface.add(this.caret);
-            this.caret.show(true);
         }
     },
 });

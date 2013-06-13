@@ -1,8 +1,8 @@
 /**
  * Select window
- * @class Vede.view.SelectWindow
+ * @class Vede.view.ve.SelectWindow
  */
-Ext.define('Vede.view.SelectWindow', {
+Ext.define('Vede.view.ve.SelectWindow', {
     extend: 'Ext.window.Window',
 
     layout: {
