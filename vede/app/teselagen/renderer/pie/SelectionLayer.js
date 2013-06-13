@@ -5,6 +5,8 @@
  * @author Zinovii Dmytriv (original author of SelectionLayer.as)
  */
 Ext.define("Teselagen.renderer.pie.SelectionLayer", {
+    requires: ["Teselagen.bio.util.Point"],
+    
     extend: "Teselagen.renderer.pie.Layer",
 
     statics: {
@@ -13,18 +15,23 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
         SELECTION_FRAME_COLOR: "#CCCCCC"
     },
 
+    deselect: function() {
+        this.callParent();
+
+        d3.selectAll(".pieSelectionElement").remove();
+    },
+
     /**
      * Draws the shaded wedge-shaped selection area.
      */
     drawSelectionPie: function(fromIndex, endIndex) {
+        var path;
         var seqLen = this.sequenceManager.getSequence().toString().length;
         if(seqLen == 0) {
             return;
         }
 
-        if(this.selectionSprite) {
-            this.selectionSprite.destroy();
-        }
+        d3.select(".pieSelectionElement").remove();
 
         this.startAngle = fromIndex * 2 * Math.PI / seqLen;
         this.endAngle = endIndex * 2 * Math.PI / seqLen;
@@ -59,21 +66,19 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
             largeArcFlag = 1;
         }
 
-        this.selectionSprite = Ext.create("Ext.draw.Sprite", {
-            type: "path",
-            path: "M" + this.center.x + " " + this.center.y + " " +
-                  "L" + startPoint.x + " " + startPoint.y + " " + 
-                  "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag +
-                  " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
-                  "L" + this.center.x + " " + this.center.y,
-            stroke: this.self.SELECTION_FRAME_COLOR,
-            "stroke-opacity": this.self.STROKE_OPACITY,
-            fill: this.self.SELECTION_COLOR,
-            "fill-opacity": this.self.SELECTION_TRANSPARENCY
-        });
+        path = "M" + this.center.x + " " + this.center.y + " " +
+               "L" + startPoint.x + " " + startPoint.y + " " + 
+               "A" + this.radius + " " + this.radius + " 0 " + largeArcFlag +
+               " " + sweepFlag + " " + endPoint.x + " " + endPoint.y +
+               "L" + this.center.x + " " + this.center.y;
 
-        this.selectionSprite.on("render", function(sprite) {
-            sprite.setStyle("pointer-events", "none");
-        });
+        this.selectionSVG.append("svg:path")
+                         .attr("class", "pieSelectionElement")
+                         .attr("stroke", this.self.SELECTION_FRAME_COLOR)
+                         .attr("stroke-opacity", this.self.STROKE_OPACITY)
+                         .attr("fill", this.self.SELECTION_COLOR)
+                         .attr("fill-opacity", this.self.SELECTION_TRANSPARENCY)
+                         .attr("d", path)
+                         .style("pointer-events", "none");
     }
 });

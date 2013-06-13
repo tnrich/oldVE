@@ -36,12 +36,12 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
                 }
             }
         },
-        id: 'importBtn',
+        id: 'importBtn'
     },
     {
         xtype: 'tbseparator',
         cls: 'vetbseparator',
-        height: 20,
+        height: 20
     },
     {
         xtype: 'button',
@@ -53,7 +53,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'tbseparator',
         cls: 'vetbseparator',
-        height: 20,
+        height: 20
     },
 
     //        {
@@ -88,7 +88,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'tbseparator',
         cls: 'vetbseparator',
-        height: 20,
+        height: 20
     }, {
         xtype: 'button',
         cls: 'redoBtn',
@@ -100,7 +100,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'tbseparator',
         cls: 'vetbseparator',
-        height: 20,
+        height: 20
     },
     {
         xtype: 'button',
@@ -115,7 +115,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'tbseparator',
         cls: 'vetbseparator',
-        height: 20,
+        height: 20
     },
     {
         xtype: 'button',
@@ -129,7 +129,7 @@ Ext.define('Vede.view.ve.VectorEditorMainToolBar', {
     {
         xtype: 'tbseparator',
         cls: 'vetbseparator',
-        height: 20,
+        height: 20
     },
     //        {
     //            xtype: 'button',

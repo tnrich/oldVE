@@ -14,7 +14,8 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankManager_noSing", {
     
-    requires: ["Teselagen.bio.util.StringUtil"],
+    requires: ["Teselagen.bio.util.StringUtil",
+               "Teselagen.bio.parsers.GenbankLocusKeyword"],
     
     /**
      * Static variables. Common Genbank Keyword names.

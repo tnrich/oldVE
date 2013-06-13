@@ -30,7 +30,9 @@ Ext.define("Teselagen.bio.parsers.ParsersManager", {
         "Teselagen.bio.util.StringUtil",
         "Teselagen.bio.util.Sha256",
 
-        "Teselagen.bio.parsers.GenbankManager",
+        "Teselagen.bio.parsers.Genbank",
+        "Teselagen.bio.parsers.GenbankLocusKeyword",
+        "Teselagen.bio.parsers.GenbankOriginKeyword",
         "Teselagen.bio.parsers.SbolParser",
         "Teselagen.bio.parsers.JbeiseqParser",
         "Teselagen.bio.sequence.DNATools",
