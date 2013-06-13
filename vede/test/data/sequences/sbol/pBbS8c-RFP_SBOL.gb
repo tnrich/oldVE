@@ -1,609 +1,963 @@
-LOCUS       pBbS8c-RFP              5213 bp    dna     linear   UNK 
-DEFINITION  promoter seq from pBAD33.
-ACCESSION   2637F7B9-1B9C-4581-83F8-5A0A36115A00
+LOCUS       pBbS8c-RFP              5213 bp ds-DNA     linear       13-JUN-2013
+ACCESSION   pBbS8c-RFP
+VERSION     pBbS8c-RFP
+KEYWORDS    .
 FEATURES             Location/Qualifiers
      promoter        1161..1188
-                     /SBOL_DC_displayId="pBAD\promoter"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#9198F9B7-37D
-                     7-4827-A68E-B34B8CAE4E39"
-                     /label=pBAD\promoter
+                     /label="pBAD promoter"
+                     /SBOL_DC_displayId="1f5d6be1-5f21-4a56-a164-2358afa31074"
+                     /SBOL_DC_name="pBAD promoter"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000167
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#9436A2BF-034C-48A5-9A4
-                     6-1080F1FF4E2A"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#1f5d6be1-5f21-4a56-a16
+                      4-2358afa31074"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#137daacd-47d
+                      e-4ede-b62d-8ba90799561e"
                      /SBOL_DC_nucleotides="gacgctttttatcgcaactctctactgt"
      misc_feature    1161..1188
+                     /label=""
                      /SBOL_SA_nucleotides="gacgctttttatcgcaactctctactgt"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#9198F9B7-37D7-4827-A68
-                     E-B34B8CAE4E39"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#137daacd-47de-4ede-b62
+                      d-8ba90799561e"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1188"
                      /SBOL_SA_bioStart="1161"
      protein_bind    1124..1162
-                     /SBOL_DC_displayId="Operator\I2\and\I1"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#B14BAA2F-91D
-                     2-4F89-AFDB-0993B60E8A46"
-                     /label=Operator\I2\and\I1
+                     /label="Operator I2 and I1"
+                     /SBOL_DC_displayId="315e2c4a-512a-4e86-a3e3-3134d662a124"
+                     /SBOL_DC_name="Operator I2 and I1"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000410
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#3961961F-C9B3-4D8A-A84
-                     F-98E770877248"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#315e2c4a-512a-4e86-a3e
+                      3-3134d662a124"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#0158e775-36b
+                      3-42dc-b5e3-3635a351fdd1"
                      /SBOL_DC_nucleotides="atagcatttttatccataagattagcggattctacc
-                     tga"
+                      tga"
      misc_feature    1124..1162
+                     /label=""
                      /SBOL_SA_nucleotides="atagcatttttatccataagattagcggattctacc
-                     tga"
+                      tga"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#B14BAA2F-91D2-4F89-AFD
-                     B-0993B60E8A46"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#0158e775-36b3-42dc-b5e
+                      3-3635a351fdd1"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1162"
                      /SBOL_SA_bioStart="1124"
      misc_binding    1115..1128
-                     /SBOL_DC_displayId="CAP\site"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#556EE242-606
-                     C-48E3-8268-64C34553BF4F"
-                     /label=CAP\site
+                     /label="CAP site"
+                     /SBOL_DC_displayId="6fc3e4c1-7ac0-4b59-8ba4-c01d37b73b3d"
+                     /SBOL_DC_name="CAP site"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000409
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#EBB986B0-BEA2-4192-BE0
-                     C-43EEC95306D1"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#6fc3e4c1-7ac0-4b59-8ba
+                      4-c01d37b73b3d"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#bc864b66-086
+                      1-4a35-a054-69a6149fcf7b"
                      /SBOL_DC_nucleotides="tgctatgccatagc"
      misc_feature    1115..1128
+                     /label=""
                      /SBOL_SA_nucleotides="tgctatgccatagc"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#556EE242-606C-48E3-826
-                     8-64C34553BF4F"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#bc864b66-0861-4a35-a05
+                      4-69a6149fcf7b"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1128"
                      /SBOL_SA_bioStart="1115"
      protein_bind    1072..1093
-                     /SBOL_DC_displayId="operator\O1"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#18A46DDC-A31
-                     4-4EFF-8E99-E1F0B2ACB876"
-                     /label=operator\O1
+                     /label="operator O1"
+                     /SBOL_DC_displayId="be2f77e1-e674-44ed-8fba-40fc30c28549"
+                     /SBOL_DC_name="operator O1"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000410
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#B7154206-CCAA-42A6-A91
-                     4-94C4A4C45266"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#be2f77e1-e674-44ed-8fb
+                      a-40fc30c28549"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#b703b000-b4f
+                      c-47dc-9ed1-2b63ec36874a"
                      /SBOL_DC_nucleotides="cggcagaaaagtccacattgat"
      misc_feature    1072..1093
+                     /label=""
                      /SBOL_SA_nucleotides="cggcagaaaagtccacattgat"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#18A46DDC-A314-4EFF-8E9
-                     9-E1F0B2ACB876"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#b703b000-b4fc-47dc-9ed
+                      1-2b63ec36874a"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1093"
                      /SBOL_SA_bioStart="1072"
      protein_bind    914..931
-                     /SBOL_DC_displayId="operator\O2"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#8015BBD6-C01
-                     F-489B-A565-4F9A2A45541D"
-                     /label=operator\O2
+                     /label="operator O2"
+                     /SBOL_DC_displayId="1410b150-c5f9-45d5-aca9-7b599d66c370"
+                     /SBOL_DC_name="operator O2"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000410
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#DD586B96-12A5-40AD-8C5
-                     5-740F8910ECA3"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#1410b150-c5f9-45d5-aca
+                      9-7b599d66c370"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#bda04e66-34f
+                      9-416e-8056-dd66b9dd6794"
                      /SBOL_DC_nucleotides="gaaaccaattgtccatat"
      misc_feature    914..931
+                     /label=""
                      /SBOL_SA_nucleotides="gaaaccaattgtccatat"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#8015BBD6-C01F-489B-A56
-                     5-4F9A2A45541D"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#bda04e66-34f9-416e-805
+                      6-dd66b9dd6794"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="931"
                      /SBOL_SA_bioStart="914"
      promoter        complement(1036..1064)
-                     /SBOL_DC_displayId="araC\promoter"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#D8348CE0-0DA
-                     6-4F88-ABCE-A50E6FDDA569"
-                     /label=araC\promoter
+                     /label="araC promoter"
+                     /SBOL_DC_displayId="6b9d2f51-e19f-4d00-af96-fe3756cd406e"
+                     /SBOL_DC_name="araC promoter"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000167
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#232D6FAC-ABCB-46B2-AEB
-                     B-7F058D379C7F"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#6b9d2f51-e19f-4d00-af9
+                      6-fe3756cd406e"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#7136a61a-551
+                      c-4f5e-9ce2-b951cb8a98f3"
                      /SBOL_DC_nucleotides="catgacaaaaacgcgtaacaaaagtgtct"
      misc_feature    complement(1036..1064)
+                     /label=""
                      /SBOL_SA_nucleotides="catgacaaaaacgcgtaacaaaagtgtct"
                      /SBOL_SA_strand="-"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#D8348CE0-0DA6-4F88-ABC
-                     E-A50E6FDDA569"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#7136a61a-551c-4f5e-9ce
+                      2-b951cb8a98f3"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1064"
                      /SBOL_SA_bioStart="1036"
      CDS             complement(7..885)
-                     /SBOL_DC_displayId="araC"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#B2513CE8-954
-                     2-4FBA-85A5-89A405DC35FF"
-                     /label=araC
+                     /label="araC"
+                     /SBOL_DC_displayId="044e8377-a1d1-40ee-8b81-2915a3204b13"
+                     /SBOL_DC_name="araC"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000316
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#702F1955-4962-466E-9AB
-                     D-7FBA11502928"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#044e8377-a1d1-40ee-8b8
+                      1-2915a3204b13"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#ed17ce23-a5e
+                      8-4294-8574-7e452d7d2cd5"
                      /SBOL_DC_nucleotides="ttatgacaacttgacggctacatcattcactttttc
+                     
                      ttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgc
+                     
                      gagaaatagagttgatcgtcaaaaccaacattgcgaccgacggtggcgataggcatcc
+                     
                      gggtggtgctcaaaagcagcttcgcctggctgatacgttggtcctcgcgccagcttaa
+                     
                      gacgctaatccctaactgctggcggaaaagatgtgacagacgcgacggcgacaagcaa
+                     
                      acatgctgtgcgacgctggcgatatcaaaattgctgtctgccaggtgatcgctgatgt
+                     
                      actgacaagcctcgcgtacccgattatccatcggtggatggagcgactcgttaatcgc
+                     
                      ttccatgcgccgcagtaacaattgctcaagcagatttatcgccagcagctccgaatag
+                     
                      cgcccttccccttgcccggcgttaatgatttgcccaaacaggtcgctgaaatgcggct
+                     
                      ggtgcgcttcatccgggcgaaagaaccccgtattggcaaatattgacggccagttaag
+                     
                      ccattcatgccagtaggcgcgcggacgaaagtaaacccactggtgataccattcgcga
+                     
                      gcctccggatgacgaccgtagtgatgaatctctcctggcgggaacagcaaaatatcac
+                     
                      ccggtcggcaaacaaattctcgtccctgatttttcaccaccccctgaccgcgaatggt
+                     
                      gagattgagaatataacctttcattcccagcggtcggtcgataaaaaaatcgagataa
+                     
                      ccgttggcctcaatcggcgttaaacccgccaccagatgggcattaaacgagtatcccg
-                     gcagcaggggatcattttgcgcttcagccat"
+                      gcagcaggggatcattttgcgcttcagccat"
      misc_feature    complement(7..885)
+                     /label=""
                      /SBOL_SA_nucleotides="ttatgacaacttgacggctacatcattcactttttc
+                     
                      ttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaatacccgc
+                     
                      gagaaatagagttgatcgtcaaaaccaacattgcgaccgacggtggcgataggcatcc
+                     
                      gggtggtgctcaaaagcagcttcgcctggctgatacgttggtcctcgcgccagcttaa
+                     
                      gacgctaatccctaactgctggcggaaaagatgtgacagacgcgacggcgacaagcaa
+                     
                      acatgctgtgcgacgctggcgatatcaaaattgctgtctgccaggtgatcgctgatgt
+                     
                      actgacaagcctcgcgtacccgattatccatcggtggatggagcgactcgttaatcgc
+                     
                      ttccatgcgccgcagtaacaattgctcaagcagatttatcgccagcagctccgaatag
+                     
                      cgcccttccccttgcccggcgttaatgatttgcccaaacaggtcgctgaaatgcggct
+                     
                      ggtgcgcttcatccgggcgaaagaaccccgtattggcaaatattgacggccagttaag
+                     
                      ccattcatgccagtaggcgcgcggacgaaagtaaacccactggtgataccattcgcga
+                     
                      gcctccggatgacgaccgtagtgatgaatctctcctggcgggaacagcaaaatatcac
+                     
                      ccggtcggcaaacaaattctcgtccctgatttttcaccaccccctgaccgcgaatggt
+                     
                      gagattgagaatataacctttcattcccagcggtcggtcgataaaaaaatcgagataa
+                     
                      ccgttggcctcaatcggcgttaaacccgccaccagatgggcattaaacgagtatcccg
-                     gcagcaggggatcattttgcgcttcagccat"
+                      gcagcaggggatcattttgcgcttcagccat"
                      /SBOL_SA_strand="-"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#B2513CE8-9542-4FBA-85A
-                     5-89A405DC35FF"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#ed17ce23-a5e8-4294-857
+                      4-7e452d7d2cd5"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="885"
                      /SBOL_SA_bioStart="7"
      RBS             1226..1245
-                     /SBOL_DC_displayId="RBS"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#58D2BC95-669
-                     E-417F-931A-580AC2928BA4"
-                     /label=RBS
+                     /label="RBS"
+                     /SBOL_DC_displayId="bc01f2fb-4f20-40df-95a4-74b017763803"
+                     /SBOL_DC_name="RBS"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000139
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#88E4D048-BF05-4435-BD3
-                     D-665B1DBC56EE"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#bc01f2fb-4f20-40df-95a
+                      4-74b017763803"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#c09863fd-f63
+                      8-4979-b106-5123058cf7f4"
                      /SBOL_DC_nucleotides="tttaagaaggagatatacat"
      misc_feature    1226..1245
+                     /label=""
                      /SBOL_SA_nucleotides="tttaagaaggagatatacat"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#58D2BC95-669E-417F-931
-                     A-580AC2928BA4"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#c09863fd-f638-4979-b10
+                      6-5123058cf7f4"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1245"
                      /SBOL_SA_bioStart="1226"
      terminator      1948..2076
-                     /SBOL_DC_displayId="dbl\term"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#ACC91309-391
-                     1-41A5-BF1E-207647D8C644"
-                     /label=dbl\term
+                     /label="dbl term"
+                     /SBOL_DC_displayId="2734de95-7821-4b93-913c-4203dcd4782d"
+                     /SBOL_DC_name="dbl term"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000141
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#CDEC02A2-DE8F-4BC9-91A
-                     C-D9896AED1DC4"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#2734de95-7821-4b93-913
+                      c-4203dcd4782d"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#281415da-ac9
+                      2-4440-9970-5c84315a31aa"
                      /SBOL_DC_nucleotides="ccaggcatcaaataaaacgaaaggctcagtcgaaag
+                     
                      actgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacac
-                     tggctcaccttcgggtgggcctttctgcgtttata"
+                      tggctcaccttcgggtgggcctttctgcgtttata"
      misc_feature    1948..2076
+                     /label=""
                      /SBOL_SA_nucleotides="ccaggcatcaaataaaacgaaaggctcagtcgaaag
+                     
                      actgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacac
-                     tggctcaccttcgggtgggcctttctgcgtttata"
+                      tggctcaccttcgggtgggcctttctgcgtttata"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#ACC91309-3911-41A5-BF1
-                     E-207647D8C644"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#281415da-ac92-4440-997
+                      0-5c84315a31aa"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="2076"
                      /SBOL_SA_bioStart="1948"
      CDS             1246..1923
-                     /SBOL_DC_displayId="RFP"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#01A074B1-06D
-                     3-4A17-8520-3001085CBA13"
-                     /label=RFP
+                     /label="RFP"
+                     /SBOL_DC_displayId="c4a77e44-c0ee-433f-a39e-1c41b84145e9"
+                     /SBOL_DC_name="RFP"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000316
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#9687C4B6-3772-4F68-86F
-                     B-A211BEB07949"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#c4a77e44-c0ee-433f-a39
+                      e-1c41b84145e9"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#07648508-5a7
+                      8-44eb-a455-dc5dae809aa2"
                      /SBOL_DC_nucleotides="atggcgagtagcgaagacgttatcaaagagttcatg
+                     
                      cgtttcaaagttcgtatggaaggttccgttaacggtcacgagttcgaaatcgaaggtg
+                     
                      aaggtgaaggtcgtccgtacgaaggtacccagaccgctaaactgaaagttaccaaagg
+                     
                      tggtccgctgccgttcgcttgggacatcctgtccccgcagttccagtacggttccaaa
+                     
                      gcttacgttaaacacccggctgacatcccggactacctgaaactgtccttcccggaag
+                     
                      gtttcaaatgggaacgtgttatgaacttcgaagacggtggtgttgttaccgttaccca
+                     
                      ggactcctccctgcaagacggtgagttcatctacaaagttaaactgcgtggtaccaac
+                     
                      ttcccgtccgacggtccggttatgcagaaaaaaaccatgggttgggaagcttccaccg
+                     
                      aacgtatgtacccggaagacggtgctctgaaaggtgaaatcaaaatgcgtctgaaact
+                     
                      gaaagacggtggtcactacgacgctgaagttaaaaccacctacatggctaaaaaaccg
+                     
                      gttcagctgccgggtgcttacaaaaccgacatcaaactggacatcacctcccacaacg
+                     
                      aagactacaccatcgttgaacagtacgaacgtgctgaaggtcgtcactccaccggtgc
-                     ttaa"
+                      ttaa"
      misc_feature    1246..1923
+                     /label=""
                      /SBOL_SA_nucleotides="atggcgagtagcgaagacgttatcaaagagttcatg
+                     
                      cgtttcaaagttcgtatggaaggttccgttaacggtcacgagttcgaaatcgaaggtg
+                     
                      aaggtgaaggtcgtccgtacgaaggtacccagaccgctaaactgaaagttaccaaagg
+                     
                      tggtccgctgccgttcgcttgggacatcctgtccccgcagttccagtacggttccaaa
+                     
                      gcttacgttaaacacccggctgacatcccggactacctgaaactgtccttcccggaag
+                     
                      gtttcaaatgggaacgtgttatgaacttcgaagacggtggtgttgttaccgttaccca
+                     
                      ggactcctccctgcaagacggtgagttcatctacaaagttaaactgcgtggtaccaac
+                     
                      ttcccgtccgacggtccggttatgcagaaaaaaaccatgggttgggaagcttccaccg
+                     
                      aacgtatgtacccggaagacggtgctctgaaaggtgaaatcaaaatgcgtctgaaact
+                     
                      gaaagacggtggtcactacgacgctgaagttaaaaccacctacatggctaaaaaaccg
+                     
                      gttcagctgccgggtgcttacaaaaccgacatcaaactggacatcacctcccacaacg
+                     
                      aagactacaccatcgttgaacagtacgaacgtgctgaaggtcgtcactccaccggtgc
-                     ttaa"
+                      ttaa"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#01A074B1-06D3-4A17-852
-                     0-3001085CBA13"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#07648508-5a78-44eb-a45
+                      5-dc5dae809aa2"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="1923"
                      /SBOL_SA_bioStart="1246"
      terminator      4307..4412
-                     /SBOL_DC_displayId="T0"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#68908B52-15F
-                     1-4A73-8C5E-10B29B4B2A4D"
-                     /label=T0
+                     /label="T0"
+                     /SBOL_DC_displayId="b9b36e59-640e-4ce2-b57b-4690ba9dd86c"
+                     /SBOL_DC_name="T0"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000141
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#005F16F0-655C-48F0-8A5
-                     F-B22E71B21B99"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#b9b36e59-640e-4ce2-b57
+                      b-4690ba9dd86c"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#9b667e8b-6dc
+                      d-4e9e-bee3-04c277d8e6b3"
                      /SBOL_DC_nucleotides="gcttggattctcaccaataaaaaacgcccggcggca
+                     
                      accgagcgttctgaacaaatccagatggagttctgaggtcattactggatctatcaac
-                     aggagtccaagc"
+                      aggagtccaagc"
      misc_feature    4307..4412
+                     /label=""
                      /SBOL_SA_nucleotides="gcttggattctcaccaataaaaaacgcccggcggca
+                     
                      accgagcgttctgaacaaatccagatggagttctgaggtcattactggatctatcaac
-                     aggagtccaagc"
+                      aggagtccaagc"
                      /SBOL_SA_strand="+"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#68908B52-15F1-4A73-8C5
-                     E-10B29B4B2A4D"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#9b667e8b-6dcd-4e9e-bee
+                      3-04c277d8e6b3"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="4412"
                      /SBOL_SA_bioStart="4307"
      rep_origin      complement(2078..4306)
-                     /SBOL_DC_displayId="pSC101**"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#0181AEC4-9B9
-                     6-41E3-A631-EB7857BDCD18"
-                     /label=pSC101**
+                     /label="pSC101**"
+                     /SBOL_DC_displayId="c10b81ba-73e1-4965-8132-64b6b40cc0bf"
+                     /SBOL_DC_name="pSC101**"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0000296
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#34296321-D4C7-40A2-899
-                     D-43FDAFCD9140"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#c10b81ba-73e1-4965-813
+                      2-64b6b40cc0bf"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#8ebdfd57-da2
+                      c-4494-bd6f-07794b215d6c"
                      /SBOL_DC_nucleotides="ctagggtacgggttttgctgcccgcaaacgggctgt
+                     
                      tctggtgttgctagtttgttatcagaatcgcagatccggcttcagccggtttgccggc
+                     
                      tgaaagcgctatttcttccagaattgccatgattttttccccacgggaggcgtcactg
+                     
                      gctcccgtgttgtcggcagctttgattcgataagcagcatcgcctgtttcaggctgtc
+                     
                      tatgtgtgactgttgagctgtaacaagttgtctcaggtgttcaatttcatgttctagt
+                     
                      tgctttgttttactggtttcacctgttctattaggtgttacatgctgttcatctgtta
+                     
                      cattgtcgatctgttcatggtgaacagctttgaatgcaccaaaaactcgtaaaagctc
+                     
                      tgatgtatctatcttttttacaccgttttcatctgtgcatatggacagttttcccttt
+                     
                      gatatgtaacggtgaacagttgttctacttttgtttgttagtcttgatgcttcactga
+                     
                      tagatacaagagccataagaacctcagatccttccgtatttagccagtatgttctcta
+                     
                      gtgtggttcgttgtttttgcgtgagccatgagaacgaaccattgagatcatacttact
+                     
                      ttgcatgtcactcaaaaattttgcctcaaaactggtgagctgaatttttgcagttaaa
+                     
                      gcatcgtgtagtgtttttcttagtccgttatgtaggtaggaatctgatgtaatggttg
+                     
                      ttggtattttgtcaccattcatttttatctggttgttctcaagttcggttacgagatc
+                     
                      catttgtctatctagttcaacttggaaaatcaacgtatcagtcgggcggcctcgctta
+                     
                      tcaaccaccaatttcatattgctgtaagtgtttaaatctttacttattggtttcaaaa
+                     
                      cccattggttaagccttttaaactcatggtagttattttcaagcattaacatgaactt
+                     
                      aaattcatcaaggctaatctctatatttgccttgtgagttttcttttgtgttagttct
+                     
                      tttaataaccactcataaatcctcatagagtatttgttttcaaaagacttaacatgtt
+                     
                      ccagattatattttatgaatttttttaactggaaaagataaggcaatatctcttcact
+                     
                      aaaaactaattctaatttttcgcttgagaacttggcatagtttgtccactggaaaatc
+                     
                      tcaaagcctttaaccaaaggattcctgatttccacagttctcgtcatcagctctctgg
+                     
                      ttgctttagctaatacaccataagcattttccctactgatgttcatcatctgagcgta
+                     
                      ttggttataagtgaacgataccgtccgttctttccttgtagggttttcaatcgtgggg
+                     
                      ttgagtagtgccacacagcataaaattagcttggtttcatgctccgttaagtcatagc
+                     
                      gactaatcgctagttcatttgctttgaaaacaactaattcagacatacatctcaattg
+                     
                      gtctaggtgattttaatcactataccaattgagatgggctagtcaatgataattacta
+                     
                      gtccttttcccgggtgatctgggtatctgtaaattctgctagacctttgctggaaaac
+                     
                      ttgtaaattctgctagaccctctgtaaattccgctagacctttgtgtgttttttttgt
+                     
                      ttatattcaagtggttataatttatagaataaagaaagaataaaaaaagataaaaaga
+                     
                      atagatcccagccctgtgtataactcactactttagtcagttccgcagtattacaaaa
+                     
                      ggatgtcgcaaacgctgtttgctcctctacaaaacagaccttaaaaccctaaaggctt
+                     
                      aagtagcaccctcgcaagctcgggcaaatcgctgaatattccttttgtctccgaccat
+                     
                      caggcacctgagtcgctgtctttttcgtgacattcagttcgctgcgctcacggctctg
+                     
                      gcagtgaatgggggtaaatggcactacaggcgccttttatggattcatgcaaggaaac
+                     
                      tacccataatacaagaaaagcccgtcacgggcttctcagggcgttttatggcgggtct
+                     
                      gctatgtggtgctatctgactttttgctgttcagcagttcctgccctctgattttcca
+                     
                      gtctgaccacttcggattatcccgtgacaggtcattcagactggctaatgcacccagt
-                     aaggcagcggtatcatcaacaggcttacccgtcttactgtccctagt"
+                      aaggcagcggtatcatcaacaggcttacccgtcttactgtccctagt"
      misc_feature    complement(2078..4306)
+                     /label=""
                      /SBOL_SA_nucleotides="ctagggtacgggttttgctgcccgcaaacgggctgt
+                     
                      tctggtgttgctagtttgttatcagaatcgcagatccggcttcagccggtttgccggc
+                     
                      tgaaagcgctatttcttccagaattgccatgattttttccccacgggaggcgtcactg
+                     
                      gctcccgtgttgtcggcagctttgattcgataagcagcatcgcctgtttcaggctgtc
+                     
                      tatgtgtgactgttgagctgtaacaagttgtctcaggtgttcaatttcatgttctagt
+                     
                      tgctttgttttactggtttcacctgttctattaggtgttacatgctgttcatctgtta
+                     
                      cattgtcgatctgttcatggtgaacagctttgaatgcaccaaaaactcgtaaaagctc
+                     
                      tgatgtatctatcttttttacaccgttttcatctgtgcatatggacagttttcccttt
+                     
                      gatatgtaacggtgaacagttgttctacttttgtttgttagtcttgatgcttcactga
+                     
                      tagatacaagagccataagaacctcagatccttccgtatttagccagtatgttctcta
+                     
                      gtgtggttcgttgtttttgcgtgagccatgagaacgaaccattgagatcatacttact
+                     
                      ttgcatgtcactcaaaaattttgcctcaaaactggtgagctgaatttttgcagttaaa
+                     
                      gcatcgtgtagtgtttttcttagtccgttatgtaggtaggaatctgatgtaatggttg
+                     
                      ttggtattttgtcaccattcatttttatctggttgttctcaagttcggttacgagatc
+                     
                      catttgtctatctagttcaacttggaaaatcaacgtatcagtcgggcggcctcgctta
+                     
                      tcaaccaccaatttcatattgctgtaagtgtttaaatctttacttattggtttcaaaa
+                     
                      cccattggttaagccttttaaactcatggtagttattttcaagcattaacatgaactt
+                     
                      aaattcatcaaggctaatctctatatttgccttgtgagttttcttttgtgttagttct
+                     
                      tttaataaccactcataaatcctcatagagtatttgttttcaaaagacttaacatgtt
+                     
                      ccagattatattttatgaatttttttaactggaaaagataaggcaatatctcttcact
+                     
                      aaaaactaattctaatttttcgcttgagaacttggcatagtttgtccactggaaaatc
+                     
                      tcaaagcctttaaccaaaggattcctgatttccacagttctcgtcatcagctctctgg
+                     
                      ttgctttagctaatacaccataagcattttccctactgatgttcatcatctgagcgta
+                     
                      ttggttataagtgaacgataccgtccgttctttccttgtagggttttcaatcgtgggg
+                     
                      ttgagtagtgccacacagcataaaattagcttggtttcatgctccgttaagtcatagc
+                     
                      gactaatcgctagttcatttgctttgaaaacaactaattcagacatacatctcaattg
+                     
                      gtctaggtgattttaatcactataccaattgagatgggctagtcaatgataattacta
+                     
                      gtccttttcccgggtgatctgggtatctgtaaattctgctagacctttgctggaaaac
+                     
                      ttgtaaattctgctagaccctctgtaaattccgctagacctttgtgtgttttttttgt
+                     
                      ttatattcaagtggttataatttatagaataaagaaagaataaaaaaagataaaaaga
+                     
                      atagatcccagccctgtgtataactcactactttagtcagttccgcagtattacaaaa
+                     
                      ggatgtcgcaaacgctgtttgctcctctacaaaacagaccttaaaaccctaaaggctt
+                     
                      aagtagcaccctcgcaagctcgggcaaatcgctgaatattccttttgtctccgaccat
+                     
                      caggcacctgagtcgctgtctttttcgtgacattcagttcgctgcgctcacggctctg
+                     
                      gcagtgaatgggggtaaatggcactacaggcgccttttatggattcatgcaaggaaac
+                     
                      tacccataatacaagaaaagcccgtcacgggcttctcagggcgttttatggcgggtct
+                     
                      gctatgtggtgctatctgactttttgctgttcagcagttcctgccctctgattttcca
+                     
                      gtctgaccacttcggattatcccgtgacaggtcattcagactggctaatgcacccagt
-                     aaggcagcggtatcatcaacaggcttacccgtcttactgtccctagt"
+                      aaggcagcggtatcatcaacaggcttacccgtcttactgtccctagt"
                      /SBOL_SA_strand="-"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#0181AEC4-9B96-41E3-A63
-                     1-EB7857BDCD18"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#8ebdfd57-da2c-4494-bd6
+                      f-07794b215d6c"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="4306"
                      /SBOL_SA_bioStart="2078"
      misc_marker     complement(4428..5087)
-                     /SBOL_DC_displayId="CmR"
-                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#B10CE6BF-FE9
-                     4-4AC8-A488-A9641FF9D4F1"
-                     /label=CmR
+                     /label="CmR"
+                     /SBOL_DC_displayId="2117fd8e-2f19-4522-8677-dfa713d365f9"
+                     /SBOL_DC_name="CmR"
                      /SBOL_DC_type_1="http://purl.obolibrary.org/obo/SO_0001645
-                     "
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#D76BAE18-1539-4793-93D
-                     B-5D1FF78E4C93"
+                      "
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#2117fd8e-2f19-4522-867
+                      7-dfa713d365f9"
+                     /SBOL_DC_parent_SA_uri="http://j5.jbei.org/sa#4dbc3416-925
+                      a-4b62-9a27-1b2099e7c611"
                      /SBOL_DC_nucleotides="ttacgccccgccctgccactcatcgcagtactgttg
+                     
                      taattcattaagcattctgccgacatggaagccatcacaaacggcatgatgaacctga
+                     
                      atcgccagcggcatcagcaccttgtcgccttgcgtataatatttgcccatggtgaaaa
+                     
                      cgggggcgaagaagttgtccatattggccacgtttaaatcaaaactggtgaaactcac
+                     
                      ccagggattggctgagacgaaaaacatattctcaataaaccctttagggaaataggcc
+                     
                      aggttttcaccgtaacacgccacatcttgcgaatatatgtgtagaaactgccggaaat
+                     
                      cgtcgtggtattcactccagagcgatgaaaacgtttcagtttgctcatggaaaacggt
+                     
                      gtaacaagggtgaacactatcccatatcaccagctcaccgtctttcattgccatacga
+                     
                      aattccggatgagcattcatcaggcgggcaagaatgtgaataaaggccggataaaact
+                     
                      tgtgcttatttttctttacggtctttaaaaaggccgtaatatccagctgaacggtctg
+                     
                      gttataggtacattgagcaactgactgaaatgcctcaaaatgttctttacgatgccat
-                     tgggatatatcaacggtggtatatccagtgatttttttctccat"
+                      tgggatatatcaacggtggtatatccagtgatttttttctccat"
      misc_feature    complement(4428..5087)
+                     /label=""
                      /SBOL_SA_nucleotides="ttacgccccgccctgccactcatcgcagtactgttg
+                     
                      taattcattaagcattctgccgacatggaagccatcacaaacggcatgatgaacctga
+                     
                      atcgccagcggcatcagcaccttgtcgccttgcgtataatatttgcccatggtgaaaa
+                     
                      cgggggcgaagaagttgtccatattggccacgtttaaatcaaaactggtgaaactcac
+                     
                      ccagggattggctgagacgaaaaacatattctcaataaaccctttagggaaataggcc
+                     
                      aggttttcaccgtaacacgccacatcttgcgaatatatgtgtagaaactgccggaaat
+                     
                      cgtcgtggtattcactccagagcgatgaaaacgtttcagtttgctcatggaaaacggt
+                     
                      gtaacaagggtgaacactatcccatatcaccagctcaccgtctttcattgccatacga
+                     
                      aattccggatgagcattcatcaggcgggcaagaatgtgaataaaggccggataaaact
+                     
                      tgtgcttatttttctttacggtctttaaaaaggccgtaatatccagctgaacggtctg
+                     
                      gttataggtacattgagcaactgactgaaatgcctcaaaatgttctttacgatgccat
-                     tgggatatatcaacggtggtatatccagtgatttttttctccat"
+                      tgggatatatcaacggtggtatatccagtgatttttttctccat"
                      /SBOL_SA_strand="-"
-                     /SBOL_SA_uri="http://j5.jbei.org/sa#B10CE6BF-FE94-4AC8-A48
-                     8-A9641FF9D4F1"
-                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                     /SBOL_SA_uri="http://j5.jbei.org/sa#4dbc3416-925a-4b62-9a2
+                      7-1b2099e7c611"
+                     /SBOL_SA_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
                      /SBOL_SA_bioEnd="5087"
                      /SBOL_SA_bioStart="4428"
      misc_feature    1..5213
+                     /label=""
                      /SBOL_DS_nucleotides="gacgtcttatgacaacttgacggctacatcattcac
+                     
                      tttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaat
+                     
                      acccgcgagaaatagagttgatcgtcaaaaccaacattgcgaccgacggtggcgatag
+                     
                      gcatccgggtggtgctcaaaagcagcttcgcctggctgatacgttggtcctcgcgcca
+                     
                      gcttaagacgctaatccctaactgctggcggaaaagatgtgacagacgcgacggcgac
+                     
                      aagcaaacatgctgtgcgacgctggcgatatcaaaattgctgtctgccaggtgatcgc
+                     
                      tgatgtactgacaagcctcgcgtacccgattatccatcggtggatggagcgactcgtt
+                     
                      aatcgcttccatgcgccgcagtaacaattgctcaagcagatttatcgccagcagctcc
+                     
                      gaatagcgcccttccccttgcccggcgttaatgatttgcccaaacaggtcgctgaaat
+                     
                      gcggctggtgcgcttcatccgggcgaaagaaccccgtattggcaaatattgacggcca
+                     
                      gttaagccattcatgccagtaggcgcgcggacgaaagtaaacccactggtgataccat
+                     
                      tcgcgagcctccggatgacgaccgtagtgatgaatctctcctggcgggaacagcaaaa
+                     
                      tatcacccggtcggcaaacaaattctcgtccctgatttttcaccaccccctgaccgcg
+                     
                      aatggtgagattgagaatataacctttcattcccagcggtcggtcgataaaaaaatcg
+                     
                      agataaccgttggcctcaatcggcgttaaacccgccaccagatgggcattaaacgagt
+                     
                      atcccggcagcaggggatcattttgcgcttcagccatacttttcatactcccgccatt
+                     
                      cagagaagaaaccaattgtccatattgcatcagacattgccgtcactgcgtcttttac
+                     
                      tggctcttctcgctaaccaaaccggtaaccccgcttattaaaagcattctgtaacaaa
+                     
                      gcgggaccaaagccatgacaaaaacgcgtaacaaaagtgtctataatcacggcagaaa
+                     
                      agtccacattgattatttgcacggcgtcacactttgctatgccatagcatttttatcc
+                     
                      ataagattagcggattctacctgacgctttttatcgcaactctctactgtttctccat
+                     
                      acccgtttttttgggaattcaaaagatcttttaagaaggagatatacatatggcgagt
+                     
                      agcgaagacgttatcaaagagttcatgcgtttcaaagttcgtatggaaggttccgtta
+                     
                      acggtcacgagttcgaaatcgaaggtgaaggtgaaggtcgtccgtacgaaggtaccca
+                     
                      gaccgctaaactgaaagttaccaaaggtggtccgctgccgttcgcttgggacatcctg
+                     
                      tccccgcagttccagtacggttccaaagcttacgttaaacacccggctgacatcccgg
+                     
                      actacctgaaactgtccttcccggaaggtttcaaatgggaacgtgttatgaacttcga
+                     
                      agacggtggtgttgttaccgttacccaggactcctccctgcaagacggtgagttcatc
+                     
                      tacaaagttaaactgcgtggtaccaacttcccgtccgacggtccggttatgcagaaaa
+                     
                      aaaccatgggttgggaagcttccaccgaacgtatgtacccggaagacggtgctctgaa
+                     
                      aggtgaaatcaaaatgcgtctgaaactgaaagacggtggtcactacgacgctgaagtt
+                     
                      aaaaccacctacatggctaaaaaaccggttcagctgccgggtgcttacaaaaccgaca
+                     
                      tcaaactggacatcacctcccacaacgaagactacaccatcgttgaacagtacgaacg
+                     
                      tgctgaaggtcgtcactccaccggtgcttaaggatccaaactcgagtaaggatctcca
+                     
                      ggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttg
+                     
                      tttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttc
+                     
                      tgcgtttatacctagggtacgggttttgctgcccgcaaacgggctgttctggtgttgc
+                     
                      tagtttgttatcagaatcgcagatccggcttcagccggtttgccggctgaaagcgcta
+                     
                      tttcttccagaattgccatgattttttccccacgggaggcgtcactggctcccgtgtt
+                     
                      gtcggcagctttgattcgataagcagcatcgcctgtttcaggctgtctatgtgtgact
+                     
                      gttgagctgtaacaagttgtctcaggtgttcaatttcatgttctagttgctttgtttt
+                     
                      actggtttcacctgttctattaggtgttacatgctgttcatctgttacattgtcgatc
+                     
                      tgttcatggtgaacagctttgaatgcaccaaaaactcgtaaaagctctgatgtatcta
+                     
                      tcttttttacaccgttttcatctgtgcatatggacagttttccctttgatatgtaacg
+                     
                      gtgaacagttgttctacttttgtttgttagtcttgatgcttcactgatagatacaaga
+                     
                      gccataagaacctcagatccttccgtatttagccagtatgttctctagtgtggttcgt
+                     
                      tgtttttgcgtgagccatgagaacgaaccattgagatcatacttactttgcatgtcac
+                     
                      tcaaaaattttgcctcaaaactggtgagctgaatttttgcagttaaagcatcgtgtag
+                     
                      tgtttttcttagtccgttatgtaggtaggaatctgatgtaatggttgttggtattttg
+                     
                      tcaccattcatttttatctggttgttctcaagttcggttacgagatccatttgtctat
+                     
                      ctagttcaacttggaaaatcaacgtatcagtcgggcggcctcgcttatcaaccaccaa
+                     
                      tttcatattgctgtaagtgtttaaatctttacttattggtttcaaaacccattggtta
+                     
                      agccttttaaactcatggtagttattttcaagcattaacatgaacttaaattcatcaa
+                     
                      ggctaatctctatatttgccttgtgagttttcttttgtgttagttcttttaataacca
+                     
                      ctcataaatcctcatagagtatttgttttcaaaagacttaacatgttccagattatat
+                     
                      tttatgaatttttttaactggaaaagataaggcaatatctcttcactaaaaactaatt
+                     
                      ctaatttttcgcttgagaacttggcatagtttgtccactggaaaatctcaaagccttt
+                     
                      aaccaaaggattcctgatttccacagttctcgtcatcagctctctggttgctttagct
+                     
                      aatacaccataagcattttccctactgatgttcatcatctgagcgtattggttataag
+                     
                      tgaacgataccgtccgttctttccttgtagggttttcaatcgtggggttgagtagtgc
+                     
                      cacacagcataaaattagcttggtttcatgctccgttaagtcatagcgactaatcgct
+                     
                      agttcatttgctttgaaaacaactaattcagacatacatctcaattggtctaggtgat
+                     
                      tttaatcactataccaattgagatgggctagtcaatgataattactagtccttttccc
+                     
                      gggtgatctgggtatctgtaaattctgctagacctttgctggaaaacttgtaaattct
+                     
                      gctagaccctctgtaaattccgctagacctttgtgtgttttttttgtttatattcaag
+                     
                      tggttataatttatagaataaagaaagaataaaaaaagataaaaagaatagatcccag
+                     
                      ccctgtgtataactcactactttagtcagttccgcagtattacaaaaggatgtcgcaa
+                     
                      acgctgtttgctcctctacaaaacagaccttaaaaccctaaaggcttaagtagcaccc
+                     
                      tcgcaagctcgggcaaatcgctgaatattccttttgtctccgaccatcaggcacctga
+                     
                      gtcgctgtctttttcgtgacattcagttcgctgcgctcacggctctggcagtgaatgg
+                     
                      gggtaaatggcactacaggcgccttttatggattcatgcaaggaaactacccataata
+                     
                      caagaaaagcccgtcacgggcttctcagggcgttttatggcgggtctgctatgtggtg
+                     
                      ctatctgactttttgctgttcagcagttcctgccctctgattttccagtctgaccact
+                     
                      tcggattatcccgtgacaggtcattcagactggctaatgcacccagtaaggcagcggt
+                     
                      atcatcaacaggcttacccgtcttactgtccctagtgcttggattctcaccaataaaa
+                     
                      aacgcccggcggcaaccgagcgttctgaacaaatccagatggagttctgaggtcatta
+                     
                      ctggatctatcaacaggagtccaagcgagctcgatatcaaattacgccccgccctgcc
+                     
                      actcatcgcagtactgttgtaattcattaagcattctgccgacatggaagccatcaca
+                     
                      aacggcatgatgaacctgaatcgccagcggcatcagcaccttgtcgccttgcgtataa
+                     
                      tatttgcccatggtgaaaacgggggcgaagaagttgtccatattggccacgtttaaat
+                     
                      caaaactggtgaaactcacccagggattggctgagacgaaaaacatattctcaataaa
+                     
                      ccctttagggaaataggccaggttttcaccgtaacacgccacatcttgcgaatatatg
+                     
                      tgtagaaactgccggaaatcgtcgtggtattcactccagagcgatgaaaacgtttcag
+                     
                      tttgctcatggaaaacggtgtaacaagggtgaacactatcccatatcaccagctcacc
+                     
                      gtctttcattgccatacgaaattccggatgagcattcatcaggcgggcaagaatgtga
+                     
                      ataaaggccggataaaacttgtgcttatttttctttacggtctttaaaaaggccgtaa
+                     
                      tatccagctgaacggtctggttataggtacattgagcaactgactgaaatgcctcaaa
+                     
                      atgttctttacgatgccattgggatatatcaacggtggtatatccagtgatttttttc
+                     
                      tccattttagcttccttagctcctgaaaatctcgataactcaaaaaatacgcccggta
+                     
                      gtgatcttatttcattatggtgaaagttggaacctcttacgtgccgatcaacgtctca
-                     ttttcgccagatatc"
-                     /SBOL_DS_uri="http://j5.jbei.org/ds#73F1C815-FCC5-4FCB-ACB
-                     A-EBB56A348895"
-                     /SBOL_DS_parent_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9
-                     C-4581-83F8-5A0A36115A00"
+                      ttttcgccagatatc"
+                     /SBOL_DS_uri="http://j5.jbei.org/ds#050b07a6-cc90-4b7d-8d7
+                      9-2aae78b03d4c"
+                     /SBOL_DS_parent_DC_uri="http://j5.jbei.org/dc#036e3481-560
+                      0-49fa-bc3a-e8fbf9d57eac"
      misc_feature    1..5213
-                     /SBOL_DC_displayId="pBbS8c-RFP"
-                     /label=pBbS8c-RFP
-                     /SBOL_DC_description="promoter seq from pBAD33."
-                     /SBOL_DC_uri="http://j5.jbei.org/dc#2637F7B9-1B9C-4581-83F
-                     8-5A0A36115A00"
+                     /label="pBbS8c-RFP"
+                     /SBOL_DC_displayId="036e3481-5600-49fa-bc3a-e8fbf9d57eac"
+                     /SBOL_DC_name="pBbS8c-RFP"
+                     /SBOL_DC_uri="http://j5.jbei.org/dc#036e3481-5600-49fa-bc3
+                      a-e8fbf9d57eac"
                      /SBOL_DC_nucleotides="gacgtcttatgacaacttgacggctacatcattcac
+                     
                      tttttcttcacaaccggcacggaactcgctcgggctggccccggtgcattttttaaat
+                     
                      acccgcgagaaatagagttgatcgtcaaaaccaacattgcgaccgacggtggcgatag
+                     
                      gcatccgggtggtgctcaaaagcagcttcgcctggctgatacgttggtcctcgcgcca
+                     
                      gcttaagacgctaatccctaactgctggcggaaaagatgtgacagacgcgacggcgac
+                     
                      aagcaaacatgctgtgcgacgctggcgatatcaaaattgctgtctgccaggtgatcgc
+                     
                      tgatgtactgacaagcctcgcgtacccgattatccatcggtggatggagcgactcgtt
+                     
                      aatcgcttccatgcgccgcagtaacaattgctcaagcagatttatcgccagcagctcc
+                     
                      gaatagcgcccttccccttgcccggcgttaatgatttgcccaaacaggtcgctgaaat
+                     
                      gcggctggtgcgcttcatccgggcgaaagaaccccgtattggcaaatattgacggcca
+                     
                      gttaagccattcatgccagtaggcgcgcggacgaaagtaaacccactggtgataccat
+                     
                      tcgcgagcctccggatgacgaccgtagtgatgaatctctcctggcgggaacagcaaaa
+                     
                      tatcacccggtcggcaaacaaattctcgtccctgatttttcaccaccccctgaccgcg
+                     
                      aatggtgagattgagaatataacctttcattcccagcggtcggtcgataaaaaaatcg
+                     
                      agataaccgttggcctcaatcggcgttaaacccgccaccagatgggcattaaacgagt
+                     
                      atcccggcagcaggggatcattttgcgcttcagccatacttttcatactcccgccatt
+                     
                      cagagaagaaaccaattgtccatattgcatcagacattgccgtcactgcgtcttttac
+                     
                      tggctcttctcgctaaccaaaccggtaaccccgcttattaaaagcattctgtaacaaa
+                     
                      gcgggaccaaagccatgacaaaaacgcgtaacaaaagtgtctataatcacggcagaaa
+                     
                      agtccacattgattatttgcacggcgtcacactttgctatgccatagcatttttatcc
+                     
                      ataagattagcggattctacctgacgctttttatcgcaactctctactgtttctccat
+                     
                      acccgtttttttgggaattcaaaagatcttttaagaaggagatatacatatggcgagt
+                     
                      agcgaagacgttatcaaagagttcatgcgtttcaaagttcgtatggaaggttccgtta
+                     
                      acggtcacgagttcgaaatcgaaggtgaaggtgaaggtcgtccgtacgaaggtaccca
+                     
                      gaccgctaaactgaaagttaccaaaggtggtccgctgccgttcgcttgggacatcctg
+                     
                      tccccgcagttccagtacggttccaaagcttacgttaaacacccggctgacatcccgg
+                     
                      actacctgaaactgtccttcccggaaggtttcaaatgggaacgtgttatgaacttcga
+                     
                      agacggtggtgttgttaccgttacccaggactcctccctgcaagacggtgagttcatc
+                     
                      tacaaagttaaactgcgtggtaccaacttcccgtccgacggtccggttatgcagaaaa
+                     
                      aaaccatgggttgggaagcttccaccgaacgtatgtacccggaagacggtgctctgaa
+                     
                      aggtgaaatcaaaatgcgtctgaaactgaaagacggtggtcactacgacgctgaagtt
+                     
                      aaaaccacctacatggctaaaaaaccggttcagctgccgggtgcttacaaaaccgaca
+                     
                      tcaaactggacatcacctcccacaacgaagactacaccatcgttgaacagtacgaacg
+                     
                      tgctgaaggtcgtcactccaccggtgcttaaggatccaaactcgagtaaggatctcca
+                     
                      ggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttg
+                     
                      tttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttc
+                     
                      tgcgtttatacctagggtacgggttttgctgcccgcaaacgggctgttctggtgttgc
+                     
                      tagtttgttatcagaatcgcagatccggcttcagccggtttgccggctgaaagcgcta
+                     
                      tttcttccagaattgccatgattttttccccacgggaggcgtcactggctcccgtgtt
+                     
                      gtcggcagctttgattcgataagcagcatcgcctgtttcaggctgtctatgtgtgact
+                     
                      gttgagctgtaacaagttgtctcaggtgttcaatttcatgttctagttgctttgtttt
+                     
                      actggtttcacctgttctattaggtgttacatgctgttcatctgttacattgtcgatc
+                     
                      tgttcatggtgaacagctttgaatgcaccaaaaactcgtaaaagctctgatgtatcta
+                     
                      tcttttttacaccgttttcatctgtgcatatggacagttttccctttgatatgtaacg
+                     
                      gtgaacagttgttctacttttgtttgttagtcttgatgcttcactgatagatacaaga
+                     
                      gccataagaacctcagatccttccgtatttagccagtatgttctctagtgtggttcgt
+                     
                      tgtttttgcgtgagccatgagaacgaaccattgagatcatacttactttgcatgtcac
+                     
                      tcaaaaattttgcctcaaaactggtgagctgaatttttgcagttaaagcatcgtgtag
+                     
                      tgtttttcttagtccgttatgtaggtaggaatctgatgtaatggttgttggtattttg
+                     
                      tcaccattcatttttatctggttgttctcaagttcggttacgagatccatttgtctat
+                     
                      ctagttcaacttggaaaatcaacgtatcagtcgggcggcctcgcttatcaaccaccaa
+                     
                      tttcatattgctgtaagtgtttaaatctttacttattggtttcaaaacccattggtta
+                     
                      agccttttaaactcatggtagttattttcaagcattaacatgaacttaaattcatcaa
+                     
                      ggctaatctctatatttgccttgtgagttttcttttgtgttagttcttttaataacca
+                     
                      ctcataaatcctcatagagtatttgttttcaaaagacttaacatgttccagattatat
+                     
                      tttatgaatttttttaactggaaaagataaggcaatatctcttcactaaaaactaatt
+                     
                      ctaatttttcgcttgagaacttggcatagtttgtccactggaaaatctcaaagccttt
+                     
                      aaccaaaggattcctgatttccacagttctcgtcatcagctctctggttgctttagct
+                     
                      aatacaccataagcattttccctactgatgttcatcatctgagcgtattggttataag
+                     
                      tgaacgataccgtccgttctttccttgtagggttttcaatcgtggggttgagtagtgc
+                     
                      cacacagcataaaattagcttggtttcatgctccgttaagtcatagcgactaatcgct
+                     
                      agttcatttgctttgaaaacaactaattcagacatacatctcaattggtctaggtgat
+                     
                      tttaatcactataccaattgagatgggctagtcaatgataattactagtccttttccc
+                     
                      gggtgatctgggtatctgtaaattctgctagacctttgctggaaaacttgtaaattct
+                     
                      gctagaccctctgtaaattccgctagacctttgtgtgttttttttgtttatattcaag
+                     
                      tggttataatttatagaataaagaaagaataaaaaaagataaaaagaatagatcccag
+                     
                      ccctgtgtataactcactactttagtcagttccgcagtattacaaaaggatgtcgcaa
+                     
                      acgctgtttgctcctctacaaaacagaccttaaaaccctaaaggcttaagtagcaccc
+                     
                      tcgcaagctcgggcaaatcgctgaatattccttttgtctccgaccatcaggcacctga
+                     
                      gtcgctgtctttttcgtgacattcagttcgctgcgctcacggctctggcagtgaatgg
+                     
                      gggtaaatggcactacaggcgccttttatggattcatgcaaggaaactacccataata
+                     
                      caagaaaagcccgtcacgggcttctcagggcgttttatggcgggtctgctatgtggtg
+                     
                      ctatctgactttttgctgttcagcagttcctgccctctgattttccagtctgaccact
+                     
                      tcggattatcccgtgacaggtcattcagactggctaatgcacccagtaaggcagcggt
+                     
                      atcatcaacaggcttacccgtcttactgtccctagtgcttggattctcaccaataaaa
+                     
                      aacgcccggcggcaaccgagcgttctgaacaaatccagatggagttctgaggtcatta
+                     
                      ctggatctatcaacaggagtccaagcgagctcgatatcaaattacgccccgccctgcc
+                     
                      actcatcgcagtactgttgtaattcattaagcattctgccgacatggaagccatcaca
+                     
                      aacggcatgatgaacctgaatcgccagcggcatcagcaccttgtcgccttgcgtataa
+                     
                      tatttgcccatggtgaaaacgggggcgaagaagttgtccatattggccacgtttaaat
+                     
                      caaaactggtgaaactcacccagggattggctgagacgaaaaacatattctcaataaa
+                     
                      ccctttagggaaataggccaggttttcaccgtaacacgccacatcttgcgaatatatg
+                     
                      tgtagaaactgccggaaatcgtcgtggtattcactccagagcgatgaaaacgtttcag
+                     
                      tttgctcatggaaaacggtgtaacaagggtgaacactatcccatatcaccagctcacc
+                     
                      gtctttcattgccatacgaaattccggatgagcattcatcaggcgggcaagaatgtga
+                     
                      ataaaggccggataaaacttgtgcttatttttctttacggtctttaaaaaggccgtaa
+                     
                      tatccagctgaacggtctggttataggtacattgagcaactgactgaaatgcctcaaa
+                     
                      atgttctttacgatgccattgggatatatcaacggtggtatatccagtgatttttttc
+                     
                      tccattttagcttccttagctcctgaaaatctcgataactcaaaaaatacgcccggta
+                     
                      gtgatcttatttcattatggtgaaagttggaacctcttacgtgccgatcaacgtctca
-                     ttttcgccagatatc"
+                      ttttcgccagatatc"
 ORIGIN      
         1 gacgtcttat gacaacttga cggctacatc attcactttt tcttcacaac cggcacggaa
        61 ctcgctcggg ctggccccgg tgcatttttt aaatacccgc gagaaataga gttgatcgtc
