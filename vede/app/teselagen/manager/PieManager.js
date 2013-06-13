@@ -749,7 +749,7 @@ Ext.define("Teselagen.manager.PieManager", {
 
         this.parentSVG = this.pie.append("svg:g")
                                  .attr("class", "pieParent")
-                                 .attr("transform", "matrix(1 0 0 1 0 0)");
+                                 .attr("transform", "matrix(1.5 0 0 1.5 0 0)");
 
         this.frame = Ext.create("Vede.view.pie.Frame", {
             pie: this.parentSVG,
@@ -794,6 +794,8 @@ Ext.define("Teselagen.manager.PieManager", {
         this.featureSVG = this.parentSVG.append("svg:g")
                                   .attr("class", "pieFeature");
         this.featureRenderer.setFeatureSVG(this.featureSVG);
+
+        this.fitWidthToContent(this);
     },
 
     /**

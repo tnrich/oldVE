@@ -631,7 +631,7 @@ Ext.define("Teselagen.manager.RailManager", {
 
         this.parentSVG = this.rail.append("svg:g")
                                   .attr("class", "railParent")
-                                  .attr("transform", "matrix(1 0 0 1 " + this.self.RAIL_PAD + " 0)");
+                                  .attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
 
         this.frame = Ext.create("Vede.view.rail.Frame", {
             rail: this.parentSVG,
@@ -679,6 +679,7 @@ Ext.define("Teselagen.manager.RailManager", {
                                   .attr("class", "railFeature");
         this.featureRenderer.setFeatureSVG(this.featureSVG);
 
+        this.fitWidthToContent(this);
     },
     
     /**
