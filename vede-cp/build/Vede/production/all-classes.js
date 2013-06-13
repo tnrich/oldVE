@@ -66620,7 +66620,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 (Ext.cmd.derive('Vede.view.ve.VectorEditorStatusPanel', Ext.panel.Panel, {id: "VectorEditorStatusPanel", dock: "bottom", border: '0 1 1 1', height: 23, layout: {type: "fit"}, headerPosition: "bottom", dockedItems: [{xtype: "toolbar", dock: "top", id: "VectorEditorStatusBar", items: [{xtype: "tbfill"}, {xtype: "tbtext", id: "VectorEditorStatusBarAlert"}, {xtype: "tbtext", cls: "meltingTemperatureText", text: ""}, {xtype: "tbseparator"}, {xtype: "tbtext", text: "Read only"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "caretPositionText", text: "0"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "selectionPositionText", text: "- : -"}, {xtype: "tbseparator"}, {xtype: "tbtext", cls: "sequenceLengthText", text: "0"}]}]}, 0, ["VectorEditorStatusPanel"], ["panel", "component", "container", "VectorEditorStatusPanel", "box"], {"panel": true, "component": true, "container": true, "VectorEditorStatusPanel": true, "box": true}, ["widget.VectorEditorStatusPanel"], 0, [Vede.view.ve, 'VectorEditorStatusPanel'], 0));
 ;
 
-(Ext.cmd.derive('Vede.view.ve.VectorPanel', Ext.panel.Panel, {id: "VectorPanel", scrollable: false, collapsible: true, collapseDirection: "left", title: "Map", titleCollapse: "true", items: [{xtype: "container", id: "PieContainer", style: {overflow: "auto"}, layout: {type: "fit"}}, {xtype: "container", id: "RailContainer", layout: {type: "fit"}}]}, 0, ["VectorPanel"], ["panel", "component", "container", "box", "VectorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorPanel": true}, ["widget.VectorPanel"], 0, [Vede.view.ve, 'VectorPanel'], 0));
+(Ext.cmd.derive('Vede.view.ve.VectorPanel', Ext.panel.Panel, {id: "VectorPanel", scrollable: false, collapsible: true, collapseDirection: "left", title: "Map", titleCollapse: "true", items: [{xtype: "container", id: "PieContainer", style: {overflow: "auto"}, layout: {type: "fit"}}, {xtype: "container", id: "RailContainer", style: {overflow: "auto"}, layout: {type: "fit"}}]}, 0, ["VectorPanel"], ["panel", "component", "container", "box", "VectorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorPanel": true}, ["widget.VectorPanel"], 0, [Vede.view.ve, 'VectorPanel'], 0));
 ;
 
 (Ext.cmd.derive('Vede.view.ve.VectorEditorPanel', Ext.panel.Panel, {id: "VectorEditorPanel", border: 0, layout: {type: "fit"}, title: "Vector Editor", closable: false, dockedItems: [{xtype: "VectorEditorMainMenuPanel"}, {xtype: "VectorEditorStatusPanel"}, {xtype: "VectorEditorFindPanel"}], items: [{xtype: "panel", border: 0, id: "VectorEditorSubPanel", layout: {align: "stretch", type: "hbox"}, items: [{xtype: "VectorPanel", flex: 1, overflowY: "auto"}, {xtype: "splitter", collapseTarget: "prev"}, {xtype: "AnnotatePanel", flex: 1.2}]}]}, 0, ["VectorEditorPanel"], ["panel", "component", "container", "box", "VectorEditorPanel"], {"panel": true, "component": true, "container": true, "box": true, "VectorEditorPanel": true}, ["widget.VectorEditorPanel"], 0, [Vede.view.ve, 'VectorEditorPanel'], 0));
@@ -72060,7 +72060,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 0, 0, 0, 0, 0, 0, [Vede.controller, 'MainToolbarController'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.common.Label', Ext.Base, {statics: {FONT_FAMILY: "sans-serif", FONT_SIZE: "10px"}, config: {labelSVG: null, tooltip: "", click: null, rightClick: null, needsMeasurement: true, annotation: null, includeInView: true, x: 0, y: 0}, StringUtil: null, labelText: function() {
+(Ext.cmd.derive('Teselagen.renderer.common.Label', Ext.Base, {inheritableStatics: {FONT_FAMILY: "sans-serif", FONT_SIZE: "6px"}, config: {labelSVG: null, tooltip: "", click: null, rightClick: null, needsMeasurement: true, annotation: null, includeInView: true, x: 0, y: 0}, StringUtil: null, labelText: function() {
   return "";
 }, constructor: function(inData) {
   this.initConfig(inData);
@@ -72070,7 +72070,6 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     this.setIncludeInView(false);
   }
-  console.log("font size: " + this.self.FONT_SIZE + ", font family: " + this.self.FONT_FAMILY);
   this.label = this.labelSVG.append("svg:text").attr("fill", inData.color || "black").attr("x", inData.x).attr("y", inData.y).text(this.labelText()).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).on("mousedown", inData.click).on("contextmenu", inData.rightClick);
   this.label.append("svg:title").text(inData.tooltip);
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'Label'], 0));
@@ -72858,8 +72857,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var transY = containerSize.height / 2 - scope.center.y;
   var pieBox = scope.pie[0][0].getBBox();
   var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [translateValues[0], translateValues[3]];
-  var translate = [translateValues[4], translateValues[5]];
+  var scale = [Number(translateValues[0]), Number(translateValues[3])];
+  var translate = [Number(translateValues[4]), Number(translateValues[5])];
   scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + transX + " " + transY + ")");
   scope.pie.attr("width", pieBox.width + transX).attr("height", pieBox.height + transY);
 }, drawCoordinates: function() {
@@ -73467,12 +73466,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var svg = d3.select(".pieParent");
   var transformValues;
   var scrolled = this.pieContainer.el.getScroll();
-  if (svg.attr("transform")) 
-  {
-    transformValues = svg.attr("transform").match(/[-.\d]+/g);
-  } else {
-    transformValues = [0, 0, 0, 0, 0, 0];
-  }
+  transformValues = svg.attr("transform").match(/[-.\d]+/g);
   var relX = d3.event.layerX - transformValues[4] - this.pieManager.center.x * transformValues[0] + scrolled.left;
   var relY = d3.event.layerY - transformValues[5] - this.pieManager.center.y * transformValues[3] + scrolled.top;
   var angle = Math.atan(relY / relX) + Math.PI / 2;
@@ -73859,7 +73853,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Vede.view.rail, 'NameBox'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.manager.RailManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 3, LABEL_HEIGHT: 7, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, reference: null, rail: null, nameBox: null, railGap: 0, railWidth: 300, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, startPoints: null, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railGapChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.manager.RailManager', Ext.Base, {statics: {PAD: 50, LABEL_DISTANCE_FROM_RAIL: 3, LABEL_HEIGHT: 7, LABEL_CONNECTION_WIDTH: 0.5, LABEL_CONNECTION_COLOR: "#d2d2d2", RAIL_PAD: 100, ZOOM_INCREMENT: 0.25}, config: {sequenceManager: null, reference: null, rail: null, nameBox: null, railGap: 0, railWidth: 300, cutSites: [], features: [], orfs: [], showCutSites: false, showFeatures: true, showOrfs: false, startPoints: null, showFeatureLabels: true, showCutSiteLabels: true}, nameBox: null, caret: null, labelSVG: null, cutSiteSVG: null, orfSVG: null, featureSVG: null, selectionSVG: null, cutSiteRenderer: null, orfRenderer: null, renderers: [], dirty: false, sequenceManagerChanged: false, centerChanged: false, railGapChanged: false, cutSitesChanged: false, featuresChanged: false, orfsChanged: false, orfSprites: null, featureSprites: null, cutSiteSprites: null, labelSprites: null, constructor: function(inData) {
   this.initConfig(inData);
   this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {cutSiteSVG: this.cutSiteSVG, sequenceManager: this.sequenceManager, reference: this.reference, railHeight: this.railHeight, railWidth: this.railWidth, railGap: this.railGap, cutSites: this.cutSites});
   this.featureRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {featureSVG: this.featureSVG, sequenceManager: this.sequenceManager, railWidth: this.railWidth, railHeight: this.railHeight, reference: this.reference, railGap: this.railGap, features: this.features});
@@ -73994,14 +73988,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
 }, fitWidthToContent: function(scope) {
   var containerSize = Ext.getCmp("RailContainer").getSize();
-  var transX = 0;
   var transY = containerSize.height / 2;
   var railBox = scope.rail[0][0].getBBox();
+  var parentBox = scope.parentSVG[0][0].getBBox();
   var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-  var scale = [translateValues[0], translateValues[3]];
-  var translate = [translateValues[4], translateValues[5]];
-  scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + transX + " " + transY + ")");
-  scope.rail.attr("width", railBox.width + transX).attr("height", railBox.height + transY);
+  var scale = [Number(translateValues[0]), Number(translateValues[3])];
+  var translate = [Number(translateValues[4]), Number(translateValues[5])];
+  console.log("svg element bbox y: " + railBox.y);
+  console.log("g element bbox y: " + parentBox.y);
+  scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + " " + translate[0] + " " + transY + ")");
+  scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD).attr("height", railBox.height + transY);
 }, showSprites: function(collection) {
   var sprite;
   for (var i = 0; i < collection.length; i++) 
@@ -74164,7 +74160,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   return pOrfs;
 }, initRail: function() {
   this.rail = d3.select("#RailContainer").append("svg:svg").attr("id", "Rail").attr("overflow", "auto");
-  this.parentSVG = this.rail.append("svg:g").attr("class", "railParent").attr("transform", "matrix(1 0 0 1 0 0)");
+  this.parentSVG = this.rail.append("svg:g").attr("class", "railParent").attr("transform", "matrix(1 0 0 1 " + this.self.RAIL_PAD + " 0)");
   this.frame = Ext.create("Vede.view.rail.Frame", {rail: this.parentSVG, railWidth: this.railWidth, center: this.center});
   this.caret = Ext.create("Vede.view.rail.Caret", {rail: this.parentSVG, start: 0, reference: this.reference, railWidth: this.railWidth, length: 3});
   var name = "unknown";
@@ -74292,6 +74288,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.railContainer.el.on("keydown", this.onKeydown, this);
 }, onLaunch: function() {
   var rail;
+  var self = this;
   this.callParent(arguments);
   this.railContainer = this.getRailContainer();
   this.railManager = Ext.create("Teselagen.manager.RailManager", {reference: {x: 0, y: 0}, railWidth: 400, showCutSites: Ext.getCmp("cutSitesMenuItem").checked, showFeatures: Ext.getCmp("featuresMenuItem").checked, showOrfs: Ext.getCmp("orfsMenuItem").checked});
@@ -74479,7 +74476,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.SelectionLayer.select(start, end);
   this.changeCaretPosition(this.SelectionLayer.start);
 }, getClickLocation: function() {
-  var fraction = d3.event.layerX / d3.select(".railParent > rect")[0][0].width.baseVal.value;
+  var svg = d3.select(".railParent");
+  var transformValues;
+  var scrolled = this.railContainer.el.getScroll();
+  transformValues = svg.attr("transform").match(/[-.\d]+/g);
+  var fraction = (d3.event.layerX - transformValues[4] + scrolled.left) / (d3.select(".railParent > rect")[0][0].width.baseVal.value * transformValues[0]);
   if (fraction > 1) 
   {
     fraction = 1;
