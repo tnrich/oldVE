@@ -16,12 +16,12 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
     /**
      * Draws the shaded wedge-shaped selection area.
      */
-    drawSelectionPie: function(fromIndex, endIndex) {
+    drawSelectionPie: function(fromIndex, endIndex, pointerEvents) {
         var seqLen = this.sequenceManager.getSequence().toString().length;
         if(seqLen == 0) {
             return;
         }
-
+        
         if(this.selectionSprite) {
             this.selectionSprite.destroy();
         }
@@ -71,9 +71,71 @@ Ext.define("Teselagen.renderer.pie.SelectionLayer", {
             fill: this.self.SELECTION_COLOR,
             "fill-opacity": this.self.SELECTION_TRANSPARENCY
         });
-
-        this.selectionSprite.on("render", function(sprite) {
-            sprite.setStyle("pointer-events", "none");
-        });
+        
+        if(!pointerEvents) {
+	        this.selectionSprite.pointerEvents = "none";
+        	this.selectionSprite.on("render", function(sprite) {
+	        	sprite.setStyle("pointer-events", "none");
+	        	//console.log(sprite.el.getStyle("pointer-events"));
+	        });
+        } else {
+        	this.selectionSprite.pointerEvents = pointerEvents;
+        	this.selectionSprite.on("render", function(sprite) {
+	        	sprite.setStyle("pointer-events", pointerEvents);
+	        	//console.log(sprite.el.getStyle("pointer-events"));
+	        });
+        }
+        
+        if(this.selectionSprite.pointerEvents=="all") {
+	        this.selectionSprite.on("render", function(sprite) {
+	    		var contextMenu = Ext.create('Ext.menu.Menu',{items: [{
+		        	  text: 'Annotate as new Sequence Feature',
+		        	  handler: function() {
+		        		  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");     	
+		        		  createNewFeatureWindow.show();
+		        		  createNewFeatureWindow.center();
+		        	  }
+		        }]});
+	    		
+	    		console.log("SelectionSprite rendered");
+	    		
+	    		Vede.application.on("RightClickedOnFeature", function onRightClickedOnFeature(e, feature) {  			
+	    			Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);      			
+	    			contextMenu.add([{
+	                    xtype: 'menuseparator'
+	                  },{
+	    	    	    text: 'Edit Sequence Feature',
+	    	    	    handler: function() {
+	    	            	var editSequenceFeatureWindow = Ext.create(
+	    	                "Vede.view.ve.EditSequenceFeatureWindow");
+	    	            	
+	    	                editSequenceFeatureWindow.show();
+	    	                editSequenceFeatureWindow.center();
+	    	    	    }
+	    	    	  },{
+	    	      	    text: 'Delete Sequence Feature',
+	    	      	    handler: function() {
+	    	      	    	this.sequenceManager.removeFeature(feature,false);
+	    	      	    }
+	    	      	}]);
+	    			console.log("isRightClickedOnFeature is TRUE & working");
+	    		}, this, {single: true});
+	    		
+	        	sprite.el.on("contextmenu", function(e) {
+	        		e.preventDefault();
+	        		//console.log("### CONTEXT MENU SHOWN ###");
+	        		contextMenu.show();   		
+	                contextMenu.setPagePosition(e.getX()+1,e.getY()-5);
+	                Vede.application.fireEvent("SelectionLayerContextMenu");
+	            }, this);
+	        	
+	        	
+	        }, this, {single: true});
+        }
     }
+    
 });
+
+
+
+

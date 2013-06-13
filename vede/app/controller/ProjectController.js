@@ -310,7 +310,30 @@ Ext.define("Vede.controller.ProjectController", {
             break;
         }
     },
-
+    
+    onProjectPanelItemContextMenu: function(store, record, item, index, e) {   	
+    	e.preventDefault();
+        var contextMenu = Ext.create('Ext.menu.Menu',{
+        	  items: [{
+        	    text: 'Rename'/*,
+        	    handler: function() {
+                	var editSequenceFeatureWindow = Ext.create(
+                    "Vede.view.ve.EditSequenceFeatureWindow");
+                	
+                    editSequenceFeatureWindow.show();
+                    editSequenceFeatureWindow.center();
+        	    }*/
+        	  },{
+          	    text: 'Delete'/*,
+          	    handler: function() {
+          	    	sequenceManager.removeFeature(feature,false);
+          	    }*/
+          	  }]
+        });                  
+        contextMenu.show(); 
+        contextMenu.setPagePosition(e.getX(),e.getY()-5);
+    },
+    
     onProjectPartsPanelItemClick: function (store, record) {
         switch(record.data.hrefTarget) {
         case "addpart":
@@ -348,7 +371,8 @@ Ext.define("Vede.controller.ProjectController", {
 
         this.control({
             "#projectTreePanel": {
-                itemclick: this.onProjectPanelItemClick
+                itemclick: this.onProjectPanelItemClick,
+                itemcontextmenu: this.onProjectPanelItemContextMenu
             },
             "#projectPartsPanel": {
                 itemclick: this.onProjectPartsPanelItemClick

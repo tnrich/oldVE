@@ -243,21 +243,28 @@ Ext.define('Vede.controller.MainMenuController', {
         if(!this.helpWindow || !this.helpWindow.body) this.helpWindow = Ext.create("Vede.view.HelpWindow").show();
     },
     
-    /*onNewBlankVectorEditorMenuItemClick: function() {
-    	this.application.fireEvent(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, Ext.create("Teselagen.manager.SequenceManager",
+    onNewBlankVectorEditorMenuItemClick: function() {
+    	//Teselagen.manager.ProjectManager.openSequence();
+    	var project = Teselagen.manager.ProjectManager.workingProject;
+    	var sequencesNames = [];
+        project.sequences().load().each(function (sequence) {
+            sequencesNames.push(sequence.data.name);
+        });
+        Teselagen.manager.ProjectManager.createNewSequence(project, sequencesNames);
+    	
+    	
+    	
+    	/*this.application.fireEvent(this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED, Ext.create("Teselagen.manager.SequenceManager",
     			{sequence: Teselagen.bio.sequence.DNATools.createDNA('')}));
     	this.application.fireEvent(this.MenuItemEvent.NEW_BLANK_VECTOR_EDITOR);
-    	//Add something to deselect sequence part in Panel Menu or something
-    	
-    	
+    	//Add something to deselect sequence part in Panel Menu or something	
     	//Ext.getCmp('projectTreePanel').activeItem=0;
-    	/*listenersObject[this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED] =
+    	listenersObject[this.SequenceManagerEvent.SEQUENCE_MANAGER_CHANGED] =
             this.onSequenceManagerChanged;*/   	
-//    },
+    },
     
     onSelectionCancelled: function(scope) {
     	Ext.getCmp("createNewFeatureMenuItem").disable();
-    	//console.log("dfadsfadsfadsg");
     },
     onSelectionChanged: function(scope) {
     	Ext.getCmp("createNewFeatureMenuItem").enable();
@@ -355,9 +362,9 @@ Ext.define('Vede.controller.MainMenuController', {
             "#restrictionEnzymesManagerMenuItem": {
                 click: this.onRestrictionEnzymesManagerMenuItemClick
             },
-            /*"#newBlankVectorEditorMenuItem": {
+            "#newBlankVectorEditorMenuItem": {
                 click: this.onNewBlankVectorEditorMenuItemClick
-            }*/
+            }
         });
 
         this.CaretEvent = Teselagen.event.CaretEvent;

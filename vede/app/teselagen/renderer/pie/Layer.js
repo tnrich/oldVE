@@ -41,8 +41,8 @@ Ext.define("Teselagen.renderer.pie.Layer", {
      * @param {Int} fromIndex The index where selection started.
      * @param {Int} toIndex The index where selection ended.
      */
-    select: function(fromIndex, toIndex) {
-        this.drawSelectionPie(fromIndex, toIndex);
+    select: function(fromIndex, toIndex, pointerEvents) {
+        this.drawSelectionPie(fromIndex, toIndex, pointerEvents);
 
         this.selected = true;
         this.start = fromIndex;

@@ -98,8 +98,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
         pCmp.el.on("mousemove", this.onMousemove, this);
         // Set the tabindex attribute in order to receive keyboard events on the div.
         pCmp.el.dom.setAttribute("tabindex", "0");
-        pCmp.el.on("keydown", this.onKeydown, this);
+        pCmp.el.on("keydown", this.onKeydown, this);       
         this.SequenceAnnotationManager.annotator.init();
+        
     },
 
     onResize: function(annotatePanel, width, height, oldWidth, oldHeight) {
@@ -251,11 +252,13 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                                                                  adjustedY);
 
             this.mouseIsDown = true;
+            this.mouseButton = pEvt.button;
 
             this.changeCaretPosition(index, false, true);
 
             if(this.SelectionLayer.selected && 
-               pEvt.target.id !== "selectionRectangle") {
+               pEvt.target.id !== "selectionRectangle" &&
+               pEvt.button != 2) {           	
                 this.SelectionLayer.deselect();
                 this.application.fireEvent(
                     this.SelectionEvent.SELECTION_CANCELED);
@@ -269,7 +272,7 @@ Ext.define('Vede.controller.AnnotatePanelController', {
     },
 
     onMousemove: function(pEvt, pOpts) {
-        if(this.mouseIsDown) {
+        if(this.mouseIsDown && this.mouseButton!=2) {
             var el = Ext.getCmp("AnnotateContainer").el;
             var x = pEvt.getX() - el.getX();
             var y = pEvt.getY() + el.getScroll().top - el.getY();
@@ -358,12 +361,14 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                                        this,
                                        this.SelectionLayer.start,
                                        this.SelectionLayer.end);
+        } else if(pEvt.button == 2) {
+        	
         } else {
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
     },
-
+    
     select: function(start, end) {
         this.changeCaretPosition(start, false, true);
         this.SelectionLayer.select(start, end);

@@ -7,7 +7,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
     id: 'VectorEditorMainMenuBar',
     alias: 'widget.VectorEditorMainMenuBar',
     items: [
-     /*{
+     {
          xtype: 'button',
          text: 'File',
          menu: {
@@ -29,7 +29,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                     }
                  }
              },*/
-            /*{
+            {
                 xtype: 'menuitem',
                 text: 'New Blank Vector Editor',
                 id: 'newBlankVectorEditorMenuItem'
@@ -84,7 +84,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                 	width: 120,
                 	items []
                 }*/
-            /*},
+            },
             {
                 xtype: 'menuseparator'
             },
@@ -97,7 +97,7 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
             		width: 120,
             		items []
             	}*/
-            /*},
+            },
             {
                 xtype: 'menuseparator'
             },
@@ -137,10 +137,10 @@ Ext.define('Vede.view.ve.VectorEditorMainMenuBar', {
                     }]
                 }
             }*/
-/*
+
              ]
          }
-     },*/ 
+     },
     {
         xtype: 'button',
         text: 'Edit',

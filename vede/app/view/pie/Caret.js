@@ -28,5 +28,10 @@ Ext.define("Vede.view.pie.Caret", {
             stroke: pConfig.stroke || this.self.CARET_COLOR
         }
     	this.callParent([config]);
+        
+        var me = this;
+        me.on("render", function() {
+            me.setStyle("pointer-events", "none");
+        });
     },
 });

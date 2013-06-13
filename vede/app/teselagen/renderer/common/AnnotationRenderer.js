@@ -71,17 +71,30 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
      */
     addClickListener: function(sprite, start, end, feature) {
         var sequenceManager = this.sequenceManager;
+        var me = this;
     	sprite.on("mousedown", function() {
             Vede.application.fireEvent("VectorPanelAnnotationClicked", start, end);
         });
+    	
+    	sprite.on("render", function(sprite) {
+        	sprite.on("mousedown", function(adsfagr, e) { 
+        		if(e.button==2){
+        			e.preventDefault();
+        			//Vede.application.fireEvent("contextmenu",e);
+        			Vede.application.fireEvent("RightClickedOnFeature", e, feature);
+        			//console.log("RightClickedOnFeature");
+        		}
+        	});
+        });
+        	
         sprite.on("render", function() {       	
-        	sprite.el.on("contextmenu", function(e) {
+        	sprite.el.on("contextmenu", function(e) { 
+        		//console.log("AnnotationRender: ON ContextMenu");
         		Vede.application.fireEvent("VectorPanelAnnotationContextMenu", feature);
                 e.preventDefault();
                 var contextMenu = Ext.create('Ext.menu.Menu',{
                 	  items: [{
                 	    text: 'Edit Sequence Feature',
-                	    //iconCls: 'edit',
                 	    handler: function() {
                         	var editSequenceFeatureWindow = Ext.create(
                             "Vede.view.ve.EditSequenceFeatureWindow");
@@ -91,14 +104,13 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
                 	    }
                 	  },{
                   	    text: 'Delete Sequence Feature',
-                  	    //iconCls: 'edit',
                   	    handler: function() {
                   	    	sequenceManager.removeFeature(feature,false);
                   	    }
                   	  }]
-                });                  
+                });
                 contextMenu.show(); 
-                contextMenu.setPagePosition(e.getX(),e.getY()-5);
+                contextMenu.setPagePosition(e.getX()+1,e.getY()-5);
             });
         });
         

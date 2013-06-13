@@ -17,7 +17,8 @@ Ext.define('Vede.controller.PieController', {
     pieContainer: null,
 
     startSelectionAngle: 0,
-
+    isRightClicked: false,
+    
     /**
      * @member Vede.controller.PieController
      */
@@ -37,6 +38,9 @@ Ext.define('Vede.controller.PieController', {
                 click: this.onZoomOutMenuItemClick
             }
         });
+        
+        this.application.on("RightClickOnPieDrawComponent", 
+        		this.onRightClickOnPieDrawComponent, this);
     },
 
     initPie: function() {
@@ -218,11 +222,20 @@ Ext.define('Vede.controller.PieController', {
      * Initiates a click-and-drag sequence and moves the caret to click location.
      */
     onMousedown: function(pEvt, pOpts) {
-        this.startSelectionAngle = this.getClickAngle(pEvt);
+        
+    	// This makes it so that right clicks don't select/deselect.
+    	//if(pEvt.button==2) return;
+    	
+    	if(pEvt.button!=2) {
+    		this.startSelectionAngle = this.getClickAngle(pEvt);
+    		this.isRightClicked = false;
+    	} else {
+    		this.isRightClicked = true;
+    	}
         this.mouseIsDown = true;
 
 
-        if(this.pieManager.sequenceManager) {
+        if(this.pieManager.sequenceManager&&pEvt.button!=2) {
             this.startSelectionIndex = this.bpAtAngle(this.startSelectionAngle);
 
             this.changeCaretPosition(this.startSelectionIndex);
@@ -237,7 +250,11 @@ Ext.define('Vede.controller.PieController', {
      * click-and-drag.
      */
     onMousemove: function(pEvt, pOpts) {
-        var endSelectionAngle = this.getClickAngle(pEvt);
+        
+    	// This makes it so that right clicks don't select/deselect.
+    	if(this.isRightClicked) return;
+    	
+    	var endSelectionAngle = this.getClickAngle(pEvt);
         var start;
         var end;
 
@@ -300,13 +317,13 @@ Ext.define('Vede.controller.PieController', {
      * Finalizes a selection at the end of a click-and-drag sequence.
      */
     onMouseup: function(pEvt, pOpts) {
-
+    	
         if(this.mouseIsDown) {
             this.mouseIsDown = false;
 
             if(this.WireframeSelectionLayer.selected && 
-                this.WireframeSelectionLayer.selecting) {
-
+                this.WireframeSelectionLayer.selecting) {                     	
+            	
                 // If this is the end of a click-and-drag, fire a selection event.
                 this.WireframeSelectionLayer.endSelecting();
                 this.WireframeSelectionLayer.deselect();
@@ -331,9 +348,11 @@ Ext.define('Vede.controller.PieController', {
                 this.clickedAnnotationStart = null;
                 this.clickedAnnotationEnd = null;
             } else {
+            	if(pEvt.button==2) return;
                 this.SelectionLayer.deselect();
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
             }
+            this.isRightClicked = false;
         }
     },
 
@@ -345,11 +364,11 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager.zoomOut();
     },
 
-    select: function(start, end) {
+    select: function(start, end, pointerEvents) {
         if(start == 0 && end == this.SequenceManager.getSequence().toString().length) {
-            this.SelectionLayer.select(start, end-1);
+            this.SelectionLayer.select(start, end-1, pointerEvents);
         } else {
-            this.SelectionLayer.select(start, end);
+            this.SelectionLayer.select(start, end, pointerEvents);
         }
 
         this.pieManager.pie.surface.add(this.SelectionLayer.selectionSprite);
@@ -404,7 +423,7 @@ Ext.define('Vede.controller.PieController', {
      * @param {Int} start The index of where dragging began.
      * @param {Int} end The current index of the caret.
      */
-    stickySelect: function(start, end) {
+    stickySelect: function(start, end, pointerEvents) {
         var annotations = this.pieManager.getAnnotationsInRange(start, end);
 
         if(annotations.length > 0) {
@@ -423,7 +442,7 @@ Ext.define('Vede.controller.PieController', {
                 });
 
                 this.SelectionLayer.startSelecting();
-                this.select(minStart, maxEnd);
+                this.select(minStart, maxEnd, pointerEvents);
 
                 this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                            this,
@@ -499,7 +518,7 @@ Ext.define('Vede.controller.PieController', {
                         this.SelectionEvent.SELECTION_CANCELED);
                 } else {
                     this.SelectionLayer.startSelecting();
-                    this.select(selStart, selEnd);
+                    this.select(selStart, selEnd, pointerEvents);
 
                     this.application.fireEvent(this.SelectionEvent.SELECTION_CHANGED,
                                                this,
@@ -511,5 +530,25 @@ Ext.define('Vede.controller.PieController', {
             this.SelectionLayer.deselect();
             this.application.fireEvent(this.SelectionEvent.SELECTION_CANCELED);
         }
+    },
+    
+    onRightClickOnPieDrawComponent: function(e) {
+    	e.preventDefault();
+    	
+    	if (this.SelectionLayer.selectionSprite.pointerEvents!="all") {
+    		this.SelectionLayer.selectionSprite.destroy();
+    		this.select(this.SelectionLayer.start,this.SelectionLayer.end,"all");
+    	}
+    	this.application.fireEvent("contextmenu",e);
+    	
+    	this.application.on("SelectionLayerContextMenu", function(){   		   		
+    		this.SelectionLayer.selectionSprite.destroy();
+    		this.select(this.SelectionLayer.start,this.SelectionLayer.end);
+    	}, this, {single: true});
     }
 });
+
+
+
+
+

@@ -213,6 +213,23 @@ Ext.define("Teselagen.renderer.annotate.SelectionLayer", {
                 Vede.application.fireEvent(
                     that.SelectionLayerEvent.HANDLE_CLICKED, "right");
             });
+        
+        this.selectionSVG.on("contextmenu", function(data, index) {
+    		//e.preventDefault();
+        	d3.event.preventDefault();
+    		var contextMenu = Ext.create('Ext.menu.Menu',{items: []});
+    		contextMenu.add({
+        	  text: 'Annotate as new Sequence Feature',
+        	  handler: function() {
+        		  var createNewFeatureWindow = Ext.create("Vede.view.ve.CreateNewFeatureWindow");     	
+        		  createNewFeatureWindow.show();
+        		  createNewFeatureWindow.center();
+        	  }
+    		});
+    		
+    		contextMenu.show(); 
+            contextMenu.setPagePosition(d3.event.pageX+1,d3.event.pageY-5);
+    	});
     },
 
     drawRowSelectionRect: function(startIndex, endIndex, lastBaseInRow) {
