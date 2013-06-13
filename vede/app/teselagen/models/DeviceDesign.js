@@ -10,7 +10,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
 
     proxy: {
         type: "rest",
-        url: "/vede/test/data/json/getDeviceDesign.json",
+        //url: "/vede/test/data/json/getDeviceDesign.json",
         reader: {
             type: "json",
             root: "designs"
@@ -56,6 +56,49 @@ Ext.define("Teselagen.models.DeviceDesign", {
             }
         },
         buildUrl: function(request) {
+
+            console.log(request);
+            //debugger;
+
+
+            // CASE 1: READ ALL DEVICE DESIGNS FROM GIVEN PROJECT
+            if(request.action === "read" && request.params)
+            {
+                if(request.operation.filters)
+                {
+                    if(request.operation.filters[0])
+                    {
+                        if(request.operation.filters[0].property==="project_id")
+                        {
+                            var url = "/projects"+'/'+request.operation.filters[0].value+"/devicedesigns";
+                            console.log("READING DEVICE DESIGNS FROM PROJECT: ",url);
+                            delete request.params.filter;
+                            return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+                        }
+                    }
+                }
+            }
+
+            // CASE 2: CREATE A NEW DEVICEDESIGN AT PROJECT
+            if(request.action === "create" && request.records[0].data.project_id!="")
+            {
+                var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns";
+                console.log("CREATING DEVICE DESIGN AT PROJECT: ",url);
+                delete request.params.filter;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
+
+
+            // CASE 3: UPDATE AN EXISTING DEVICEDESIGN AT PROJECT
+            if(request.action === "update" && request.records[0].data.project_id!="" && request.records[0].data.id!="")
+            {
+                var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns"+'/'+request.records[0].data.id;
+                console.log("UPDATE DEVICE DESIGN AT PROJECT: ",url);
+                delete request.params.filter;
+                return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
+
+            /*
             var restParams = "";
             var idParam = "";
             var filter = "";
@@ -93,6 +136,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
                     }
                 }
             }
+            */
 
 
         },
@@ -106,11 +150,11 @@ Ext.define("Teselagen.models.DeviceDesign", {
         limitParam: undefined
     },
 
-    constructor: function(inData) {
-        this.callParent([inData]);
-
-        this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
-    },
+    //constructor: function(inData) {
+    //    this.callParent([inData]);
+    //
+    //    this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+    //},
 
     /**
      * Input parameters.

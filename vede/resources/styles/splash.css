@@ -37,10 +37,15 @@
     /* Important required due to the loading symbols CSS selector */
     background-image: url('../images/logo-splash.png') !important;
     margin-top: 0px;
-    width:400px;
-    height:200px;
+    width:330px;
+    height:175px;
 }
 
 .x-mask-msg div:nth-child(2) {
      background-position: 35px top !important;
+}
+
+#splash-text 
+{
+    margin-top: 10px;
 }
