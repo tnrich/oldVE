@@ -20,6 +20,7 @@ Ext.define("Teselagen.manager.RailManager", {
         LABEL_HEIGHT: 7,
         LABEL_CONNECTION_WIDTH: 0.5,
         LABEL_CONNECTION_COLOR: "#d2d2d2",
+        RAIL_PAD: 100,
         ZOOM_INCREMENT: 0.25
     },
 
@@ -313,20 +314,28 @@ Ext.define("Teselagen.manager.RailManager", {
      */
     fitWidthToContent: function(scope) {
         var containerSize = Ext.getCmp("RailContainer").getSize();
-        var transX = 0;//containerSize.width / 2 - scope.center.x;
         var transY = containerSize.height / 2;
+
         var railBox = scope.rail[0][0].getBBox();
+        var parentBox = scope.parentSVG[0][0].getBBox();
 
         // Get previous values for scale and transform.
         var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
-        var scale = [translateValues[0], translateValues[3]];
-        var translate = [translateValues[4], translateValues[5]];
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
+
+        /*if(railBox.y > parentBox.y) {
+            transY += railBox.y - parentBox.y;
+        }*/
+
+        console.log("svg element bbox y: " + railBox.y);
+        console.log("g element bbox y: " + parentBox.y);
 
         scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
-                                                 " " + transX + " " + transY + ")");
+                                                 " " + translate[0] + " " + transY + ")");
 
-        scope.rail.attr("width", railBox.width + transX)
-                 .attr("height", railBox.height + transY);
+        scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD)
+                  .attr("height", railBox.height + transY);
     },
 
     /**
@@ -622,7 +631,7 @@ Ext.define("Teselagen.manager.RailManager", {
 
         this.parentSVG = this.rail.append("svg:g")
                                   .attr("class", "railParent")
-                                  .attr("transform", "matrix(1 0 0 1 0 0)");
+                                  .attr("transform", "matrix(1 0 0 1 " + this.self.RAIL_PAD + " 0)");
 
         this.frame = Ext.create("Vede.view.rail.Frame", {
             rail: this.parentSVG,

@@ -375,11 +375,7 @@ Ext.define('Vede.controller.PieController', {
         var transformValues;
         var scrolled = this.pieContainer.el.getScroll();
 
-        if(svg.attr("transform")) {
-            transformValues = svg.attr("transform").match(/[-.\d]+/g);
-        } else {
-            transformValues = [0, 0, 0, 0, 0, 0];
-        }
+        transformValues = svg.attr("transform").match(/[-.\d]+/g);
 
         var relX = d3.event.layerX - transformValues[4] -
             this.pieManager.center.x * transformValues[0] + scrolled.left;

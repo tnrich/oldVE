@@ -27,6 +27,9 @@ Ext.define("Vede.view.ve.VectorPanel", {
     }, {
         xtype: "container",
         id: "RailContainer",
+        style: {
+            overflow: "auto"
+        },
         layout: {
             type: "fit"
         }

@@ -72,6 +72,7 @@ Ext.define('Vede.controller.RailController', {
 
     onLaunch: function() {
         var rail;
+        var self = this;
 
         this.callParent(arguments);
         this.railContainer = this.getRailContainer();
@@ -367,8 +368,14 @@ Ext.define('Vede.controller.RailController', {
      * @param {Ext.direct.Event} event The click event to determine the angle of.
      */
     getClickLocation: function() {
-        var fraction = d3.event.layerX / 
-                        d3.select(".railParent > rect")[0][0].width.baseVal.value;
+        var svg = d3.select(".railParent");
+        var transformValues;
+        var scrolled = this.railContainer.el.getScroll();
+
+        transformValues = svg.attr("transform").match(/[-.\d]+/g);
+
+        var fraction = (d3.event.layerX - transformValues[4] + scrolled.left) / 
+                        (d3.select(".railParent > rect")[0][0].width.baseVal.value * transformValues[0]);
 
         if(fraction > 1) {
             fraction = 1;

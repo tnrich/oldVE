@@ -8,9 +8,9 @@
 Ext.define("Teselagen.renderer.common.Label", {
     requires: ["Teselagen.bio.util.StringUtil"],
 
-    statics: {
+    inheritableStatics: {
         FONT_FAMILY: "sans-serif",
-        FONT_SIZE: "10px"
+        FONT_SIZE: "6px"
     },
 
     config: {
@@ -50,8 +50,6 @@ Ext.define("Teselagen.renderer.common.Label", {
         if(!this.labelText() || !this.StringUtil.trim(labelString)) {
             this.setIncludeInView(false);
         }
-
-        console.log("font size: " + this.self.FONT_SIZE + ", font family: " + this.self.FONT_FAMILY);
 
         this.label = this.labelSVG.append("svg:text")
                      .attr("fill", inData.color || "black")
