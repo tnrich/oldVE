@@ -29,7 +29,8 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         border: 0,
         id: 'projectTreePanel',
         rootVisible: false,
-        animate: false
+        animate: false,
+        width: 220
     }, {
         hidden: true,
         flex: 1,
