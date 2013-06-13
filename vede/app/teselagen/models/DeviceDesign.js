@@ -106,6 +106,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
         limitParam: undefined
     },
 
+    constructor: function(inData) {
+        this.callParent([inData]);
+
+        this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+    },
+
     /**
      * Input parameters.
      * @param {int} id

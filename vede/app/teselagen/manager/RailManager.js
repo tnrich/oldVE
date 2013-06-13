@@ -678,6 +678,24 @@ Ext.define("Teselagen.manager.RailManager", {
 
         this.fitWidthToContent(this);
     },
+
+    updateNameBox: function() {
+        var name;
+        var length;
+
+        if(this.sequenceManager) {
+            name = this.sequenceManager.getName();
+            length = this.sequenceManager.getSequence().toString().length;
+        }
+
+        this.nameBox.remove();
+        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
+            rail: this.parentSVG,
+            center: this.center,
+            name: name,
+            length: length
+        });
+    },
     
     /**
      * Repositions the caret to the given angle.

@@ -131,6 +131,8 @@ Ext.define('Vede.controller.PieController', {
         this.pieManager.setFeatures(this.SequenceManager.getFeatures());
 
         this.pieManager.render();
+
+        this.pieManager.updateNameBox();
     },
 
     onActiveEnzymesChanged: function() {

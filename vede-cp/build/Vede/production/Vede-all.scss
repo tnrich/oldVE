@@ -1,4 +1,4 @@
-$image-search-path: '/Users/nelsbree/ve/vede-cp/build/Vede/production/resources';
+$image-search-path: '/Users/tim98210/Sites/Teselagen/ve/vede-cp/build/Vede/production/resources';
 $theme-name:  'teselagen' !default;
 $include-enzyme: true;
 $include-ext-abstractcomponent: true;
@@ -824,6 +824,9 @@ $include-vede-view-ve-vectorpanel: true;
 @import '../../../ext/packages/ext-theme-gray/sass/etc/all';
 /* including package teselagen */
 @import '../../../packages/teselagen/sass/etc/all';
+/* including package teselagen */
+@import '../../../packages/teselagen/sass/var/Component';
+@import '../../../packages/teselagen/sass/var/panel/Panel';
 /* including package ext-theme-gray */
 @import '../../../ext/packages/ext-theme-gray/sass/var/Component';
 @import '../../../ext/packages/ext-theme-gray/sass/var/ProgressBar';
@@ -1039,3 +1042,11 @@ $relative-image-path-for-uis: $ext-theme-classic-resource-path;
 @import '../../../ext/packages/ext-theme-classic/sass/src/grid/plugin/RowEditing';
 @import '../../../ext/packages/ext-theme-classic/sass/src/resizer/Resizer';
 @import '../../../ext/packages/ext-theme-classic/sass/src/tab/Panel';
+/* including package Vede */
+$Vede-resource-path: 'images' !default;
+$relative-image-path-for-uis: $Vede-resource-path;
+@import '../../../sass/src/view/common/ProjectPanelView';
+@import '../../../sass/src/view/common/HeaderPanelView';
+@import '../../../sass/src/view/ve/VectorEditorMainToolBar';
+@import '../../../sass/src/view/ve/VectorEditorPanel';
+@import '../../../sass/src/view/AppViewport';

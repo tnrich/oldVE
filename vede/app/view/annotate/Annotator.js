@@ -239,12 +239,13 @@ Ext.define("Vede.view.annotate.Annotator", {
                 this.self.CHAR_WIDTH;
 
             var bpY = row.getSequenceMetrics().y;
-            resultsMetrics = Ext.create("Teselagen.models.Rectangle", {
+
+            resultsMetrics = {
                 x: bpX,
                 y: bpY,
                 width: 2, //fix to make resizable
                 height: 3,
-            });
+            };
         }
         return resultsMetrics;
     },

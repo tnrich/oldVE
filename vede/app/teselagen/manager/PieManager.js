@@ -798,6 +798,24 @@ Ext.define("Teselagen.manager.PieManager", {
         this.fitWidthToContent(this);
     },
 
+    updateNameBox: function() {
+        var name;
+        var length;
+
+        if(this.sequenceManager) {
+            name = this.sequenceManager.getName();
+            length = this.sequenceManager.getSequence().toString().length;
+        }
+
+        this.nameBox.remove();
+        this.nameBox = Ext.create("Vede.view.pie.NameBox", {
+            pie: this.parentSVG,
+            center: this.center,
+            name: name,
+            length: length
+        });
+    },
+
     /**
      * Repositions the caret to the given angle.
      * @param {Int} angle The angle of the caret to reposition to.
