@@ -1,4 +1,7 @@
 Ext.define("Teselagen.manager.RowManager", {
+    requires: ["Teselagen.models.sequence.Row",
+               "Teselagen.models.sequence.RowData"],
+    
     config: {
         sequenceAnnotator: null,
 

@@ -11,14 +11,9 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     width: 220,
     collapseDirection: 'left',
     collapsible: true,
-    frameHeader: false,
     hideCollapseTool: false,
-    preventHeader: false,
     title: 'Project',
-    plain: false,
-    removePanelHeader: false,
     margin: '0 10 0 0',
-
     layout: {
         type: 'vbox',
         pack: 'center'
@@ -26,8 +21,9 @@ Ext.define('Vede.view.common.ProjectPanelView', {
     items: [{
         flex: 1,
         xtype: 'treepanel',
-        border: 0,
+        border: false,
         id: 'projectTreePanel',
+        width: 220,
         rootVisible: false,
         animate: false,
         width: 220
@@ -40,5 +36,4 @@ Ext.define('Vede.view.common.ProjectPanelView', {
         width: 220,
         rootVisible: false
     }]
-
 });

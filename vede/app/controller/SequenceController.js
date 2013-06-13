@@ -15,6 +15,8 @@ Ext.define("Vede.controller.SequenceController", {
                "Teselagen.event.SelectionEvent",
                "Teselagen.event.SelectionLayerEvent",
                "Teselagen.event.VisibilityEvent",
+               "Teselagen.manager.AAManager",
+               "Teselagen.manager.ORFManager",
                "Teselagen.manager.RestrictionEnzymeGroupManager"],
     
     AAManager: null,

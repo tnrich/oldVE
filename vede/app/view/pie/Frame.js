@@ -3,10 +3,7 @@
  * Base of circular DNA drawing
  */
 Ext.define('Vede.view.pie.Frame', {
-    extend: 'Ext.draw.Sprite',
-
     statics: {
-        CENTER: {x: 100, y: 100},
         OUTER_RADIUS: 100,
         INNER_RADIUS: 97,
         OUTLINE_WIDTH: 0.5,
@@ -14,8 +11,8 @@ Ext.define('Vede.view.pie.Frame', {
         RING_COLOR: "#ffffb3" // The color of the area between the two circles.
     },
 
-    constructor: function() {
-        var center = this.self.CENTER;
+    constructor: function(inData) {
+        var center = inData.center;
         var outerRadius = this.self.OUTER_RADIUS;
         var innerRadius = this.self.INNER_RADIUS;
         var outerStartPoint = {x: center.x - outerRadius, y: center.y};
@@ -29,19 +26,19 @@ Ext.define('Vede.view.pie.Frame', {
         // fill computes properly. See the SVG documentation on fill-rule for more.
         // Basically, ExtJS doesn't let you set fill-rule, so we can only use the
         // default of "nonzero", while we would like to set it to "evenodd".
-        this.callParent([{
-            type: "path",
-            path: "M" + outerStartPoint.x + " " + outerStartPoint.y + 
+        var path = "M" + outerStartPoint.x + " " + outerStartPoint.y + 
                   "A" + outerRadius + " " + outerRadius + " 0 1 1 " + 
                   outerStartPoint.x + " " + (outerStartPoint.y + 0.0001) + 
                   "L" + outerStartPoint.x + " " + outerStartPoint.y + 
                   "M" + innerStartPoint.x + " " + innerStartPoint.y +
                   "A" + innerRadius + " " + innerRadius + " 0 1 0 " +
-                  innerStartPoint.x + " " + (innerStartPoint.y - 0.0001),
-            stroke: this.self.OUTLINE_COLOR,
-            "stroke-width": this.self.OUTLINE_WIDTH,
-            fill: this.self.RING_COLOR,
-            "fill-rule": "evenodd"
-        }]);
+                  innerStartPoint.x + " " + (innerStartPoint.y - 0.0001);
+
+        return inData.pie.append("svg:path")
+                         .attr("stroke", this.self.OUTLINE_COLOR)
+                         .attr("stroke-width", this.self.OUTLINE_WIDTH)
+                         .attr("fill", this.self.RING_COLOR)
+                         .attr("fill-rule", "evenodd")
+                         .attr("d", path);
     }
 });

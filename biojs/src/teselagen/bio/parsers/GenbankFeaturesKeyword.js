@@ -13,7 +13,8 @@
 
 Ext.define("Teselagen.bio.parsers.GenbankFeaturesKeyword", {
 
-    requires: ["Teselagen.bio.util.StringUtil"],
+    requires: ["Teselagen.bio.util.StringUtil",
+               "Teselagen.bio.parsers.GenbankFeatureElement"],
 
     extend: "Teselagen.bio.parsers.Keyword",
 

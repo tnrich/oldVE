@@ -9,6 +9,9 @@
  */
 Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
 	extend: "Teselagen.bio.sequence.alphabets.AbstractAlphabet",
+
+	requires: "Teselagen.bio.sequence.symbols.NucleotideSymbol",
+
 	singleton: true,
 
 	a: Ext.create("Teselagen.bio.sequence.symbols.NucleotideSymbol", {name: "Adenine", value: "a" , ambiguousMatches: []}),

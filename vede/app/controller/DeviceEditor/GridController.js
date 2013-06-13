@@ -8,9 +8,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
     requires: ["Teselagen.event.DeviceEvent",
                "Teselagen.manager.DeviceDesignManager",
                "Teselagen.models.DeviceEditorProject",
-               "Teselagen.constants.SBOLIcons",
                "Vede.view.de.grid.Bin",
-               "Vede.view.de.grid.Part"],
+               "Vede.view.de.grid.Part",
+               "Teselagen.constants.SBOLIcons"],
 
     statics: {
         DEFAULT_ROWS: 2
@@ -174,7 +174,9 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         gridPart.select();
 
 
-         if(j5Part) {
+
+        if(j5Part) {
+            console.log("phantom: " + j5Part.phantom);
             if(j5Part.get("sequencefile_id")==="") {
                 gridPart.select();
                 if (j5Part.get('name') != "") {
@@ -185,6 +187,7 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
                 gridPart.mapSelect();
             }
         } else {
+            console.log("no part associated with cell");
             gridPart.select();
         }
 
@@ -1330,6 +1333,5 @@ Ext.define("Vede.controller.DeviceEditor.GridController", {
         this.application.on("validateDuplicatedPartName",
                             this.onValidateDuplicatedPartNameEvent,
                             this);
-
         }
 });

@@ -4,12 +4,24 @@
  * @author Nick Elsbree
  */
 Ext.define("Teselagen.manager.RailManager", {
+    requires: ["Teselagen.bio.sequence.dna.Feature",
+               "Teselagen.renderer.rail.CutSiteLabel",
+               "Teselagen.renderer.rail.CutSiteRenderer",
+               "Teselagen.renderer.rail.FeatureLabel",
+               "Teselagen.renderer.rail.FeatureRenderer",
+               "Teselagen.renderer.rail.ORFRenderer",
+               "Vede.view.rail.Caret",
+               "Vede.view.rail.Frame",
+               "Vede.view.rail.NameBox"],
+    
     statics: {
         PAD: 50,
         LABEL_DISTANCE_FROM_RAIL: 3,
         LABEL_HEIGHT: 7,
         LABEL_CONNECTION_WIDTH: 0.5,
-        LABEL_CONNECTION_COLOR: "#d2d2d2"
+        LABEL_CONNECTION_COLOR: "#d2d2d2",
+        RAIL_PAD: 100,
+        ZOOM_INCREMENT: 0.25
     },
 
     config: {
@@ -32,6 +44,12 @@ Ext.define("Teselagen.manager.RailManager", {
 
     nameBox: null,
     caret: null,
+
+    labelSVG: null,
+    cutSiteSVG: null,
+    orfSVG: null,
+    featureSVG: null,
+    selectionSVG: null,
    
     cutSiteRenderer: null,
     orfRenderer: null,
@@ -73,14 +91,8 @@ Ext.define("Teselagen.manager.RailManager", {
     constructor: function(inData) {
         this.initConfig(inData);
 
-        this.rail = Ext.create("Vede.view.rail.Rail", {
-            items: [
-                Ext.create("Vede.view.rail.Frame"),
-                
-            ]
-        });
-
         this.cutSiteRenderer = Ext.create("Teselagen.renderer.rail.CutSiteRenderer", {
+            cutSiteSVG: this.cutSiteSVG,
             sequenceManager: this.sequenceManager,
             reference: this.reference,
             railHeight: this.railHeight,
@@ -90,6 +102,7 @@ Ext.define("Teselagen.manager.RailManager", {
         });
 
         this.featureRenderer = Ext.create("Teselagen.renderer.rail.FeatureRenderer", {
+            featureSVG: this.featureSVG,
             sequenceManager: this.sequenceManager,
             railWidth: this.railWidth,
             railHeight: this.railHeight,
@@ -99,6 +112,7 @@ Ext.define("Teselagen.manager.RailManager", {
         });
 
         this.orfRenderer = Ext.create("Teselagen.renderer.rail.ORFRenderer", {
+            orfSVG: this.orfSVG,
             sequenceManager: this.sequenceManager,
             reference: this.reference,
             railHeight: this.railGap,
@@ -163,8 +177,10 @@ Ext.define("Teselagen.manager.RailManager", {
     render: function() {
         Ext.suspendLayouts();
 
+        var renderer;
         if(this.dirty) {
-            Ext.each(this.renderers, function(renderer) {
+            for(var i = 0; i < this.renderers.length; i++) {
+                renderer = this.renderers[i];
                 if(this.sequenceManagerChanged) {
                     renderer.setSequenceManager(this.sequenceManager);
                 }
@@ -174,7 +190,7 @@ Ext.define("Teselagen.manager.RailManager", {
                 if(this.referenceChanged) {
                     renderer.setCenter(this.center);
                 }
-            }, this);
+            }
 
             this.dirty = false;
             this.sequenceManagerChanged = false;
@@ -183,76 +199,146 @@ Ext.define("Teselagen.manager.RailManager", {
         }
 
         if(this.cutSitesChanged) {
+            this.cutSiteSVG.remove();
+            this.cutSiteSVG = this.parentSVG.append("svg:g")
+                                            .attr("class", "railCutSite");
+            this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+
             this.cutSiteRenderer.setCutSites(this.cutSites);
+            this.cutSiteRenderer.render();
+
             this.cutSitesChanged = false;
-
-            if(this.cutSiteSprites) {
-                this.cutSiteSprites.destroy();
-            }
-
-            this.cutSiteSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.rail.surface
-            });
-
-            this.cutSiteSprites.addAll(this.cutSiteRenderer.render());
         }
 
         if(this.featuresChanged) {
+            this.featureSVG.remove();
+            this.featureSVG = this.parentSVG.append("svg:g")
+                                            .attr("class", "railFeature");
+            this.featureRenderer.setFeatureSVG(this.featureSVG);
+
             this.featureRenderer.setFeatures(this.features);
+            this.featureRenderer.render();
+
             this.featuresChanged = false;
-
-            if(this.featureSprites) {
-                this.featureSprites.destroy();
-            }
-
-            this.featureSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.rail.surface
-            });
-
-            this.featureSprites.addAll(this.featureRenderer.render());
         }
 
         if(this.orfsChanged) {
+            this.orfSVG.remove();
+            this.orfSVG = this.parentSVG.append("svg:g")
+                                            .attr("class", "railOrf");
+            this.orfRenderer.setOrfSVG(this.orfSVG);
+
             this.orfRenderer.setOrfs(this.orfs);
+            this.orfRenderer.render();
+
             this.orfsChanged = false;
-
-            if(this.orfSprites) {
-                this.orfSprites.destroy();
-            }
-
-            this.orfSprites = Ext.create("Ext.draw.CompositeSprite", {
-                surface: this.rail.surface
-            });
-
-            this.orfSprites.addAll(this.orfRenderer.render());
         }
 
         this.renderLabels();
 
         if(this.showOrfs) {
-            this.showSprites(this.orfSprites);
+            this.orfSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.orfSprites);
+            this.orfSVG.style("visibility", "hidden");
         }
 
         if(this.showCutSites) {
-            this.showSprites(this.cutSiteSprites);
+            this.cutSiteSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.cutSiteSprites);
+            this.cutSiteSVG.style("visibility", "hidden");
         }
 
         if(this.showFeatures) {
-            this.showSprites(this.featureSprites);
+            this.featureSVG.style("visibility", "visible");
         } else {
-            this.hideSprites(this.featureSprites);
+            this.featureSVG.style("visibility", "hidden");
         }
 
         Ext.resumeLayouts(true);
     },
 
     /**
+     * Zooms the rail in by scaling it with a transformation matrix.
+     */
+    zoomIn: function() {
+        Ext.suspendLayouts();
+
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
+
+        // Increase scale values.
+        scale[0] += this.self.ZOOM_INCREMENT;
+        scale[1] += this.self.ZOOM_INCREMENT;
+
+        this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + translate[1] + ")");
+
+        Ext.resumeLayouts(true);
+
+        this.fitWidthToContent(this);
+    },
+
+    /**
+     * Zooms the rail out using a transformation matrix.
+     */
+    zoomOut: function() {
+        // Get previous values for scale and transform.
+        var translateValues = this.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [translateValues[0], translateValues[3]];
+        var translate = [translateValues[4], translateValues[5]];
+
+        // Only zoom out if it won't make the SVG disappear!
+        if(scale[0] > this.self.ZOOM_INCREMENT && scale[1] > this.self.ZOOM_INCREMENT) {
+            Ext.suspendLayouts();
+
+            // Increase scale values.
+            scale[0] -= this.self.ZOOM_INCREMENT;
+            scale[1] -= this.self.ZOOM_INCREMENT;
+
+            this.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                     " " + translate[0] + " " + translate[1] + ")");
+
+            Ext.resumeLayouts(true);
+
+            this.fitWidthToContent(this);//, 1 / this.self.ZOOM_FACTOR / 5);
+        }
+    },
+
+    /**
+     * Adjust the width of the surface to fit all content, ensuring that a 
+     * scrollbar appears.
+     * @param {Teselagen.manager.RailManager} scope The railManager. Used when being
+     * called by the window onresize event.
+     */
+    fitWidthToContent: function(scope) {
+        var containerSize = Ext.getCmp("RailContainer").getSize();
+        var transY = containerSize.height / 2;
+
+        var railBox = scope.rail[0][0].getBBox();
+        var parentBox = scope.parentSVG[0][0].getBBox();
+
+        // Get previous values for scale and transform.
+        var translateValues = scope.parentSVG.attr("transform").match(/[-.\d]+/g);
+        var scale = [Number(translateValues[0]), Number(translateValues[3])];
+        var translate = [Number(translateValues[4]), Number(translateValues[5])];
+
+        /*if(railBox.y > parentBox.y) {
+            transY += railBox.y - parentBox.y;
+        }*/
+
+        scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
+                                                 " " + translate[0] + " " + transY + ")");
+
+        scope.rail.attr("width", railBox.width + translate[0] + this.self.RAIL_PAD)
+                  .attr("height", railBox.height + transY);
+    },
+
+    /**
      * Helper function which renders the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to render.
+     * @deprecated
      */
     showSprites: function(collection) {
         var sprite;
@@ -268,6 +354,7 @@ Ext.define("Teselagen.manager.RailManager", {
     /**
      * Helper function which hides the sprites in a CompositeSprite.
      * @param {Ext.draw.CompositeSprite} collection The CompositeSprite to hide.
+     * @deprecated
      */
      hideSprites: function(collection) {
          for(var i = 0; i < collection.length; i++) {
@@ -283,41 +370,62 @@ Ext.define("Teselagen.manager.RailManager", {
     renderLabels: function() {
         var labels = [];
         var start;
-        
+        var color;
+
+        this.labelSVG.remove();
+        this.labelSVG = this.parentSVG.append("svg:g")
+                                .attr("class", "railLabel");
+
         if(this.showCutSites && this.showCutSiteLabels) {
-            Ext.each(this.cutSites, function(site) {
+            var site;
+            for(var i = 0; i < this.cutSites.length; i++) {
+                site = this.cutSites[i];
                 start = this.cutSiteRenderer.startPoints.get(site);
+
+                if(site.getNumCuts() == 1) {
+                    color = "#E57676";
+                } else {
+                    color = "#888888";
+                }
+
                 label = Ext.create("Teselagen.renderer.rail.CutSiteLabel", {
+                    labelSVG: this.labelSVG,
                     annotation: site,
                     x: start.x,
                     y: start.y,
-                    start: start
+                    start: start,
+                    color: color,
+                    tooltip: this.cutSiteRenderer.getToolTip(site),
+                    click: this.cutSiteRenderer.getClickListener(
+                                                    site.getStart(),
+                                                    site.getEnd())
                 });
 
-                this.cutSiteRenderer.addToolTip(label, 
-                                            this.cutSiteRenderer.getToolTip(site));
-     
                 labels.push(label);
-            }, this);
             }
-        
-        if(this.showFeatures && this.showFeatureLabels) {
-        Ext.each(this.features, function(feature) {
-            start = this.featureRenderer.startPoints.get(feature);
-            
-            label = Ext.create("Teselagen.renderer.rail.FeatureLabel", {
-                annotation: feature,
-                x: start.x,
-                y: start.y,
-                start: start
-            });
-
-            this.featureRenderer.addToolTip(label,
-                                    this.featureRenderer.getToolTip(feature));
-            labels.push(label);
-        }, this);
         }
 
+        if(this.showFeatures && this.showFeatureLabels) {
+            var feature;
+            for(var i = 0; i < this.features.length; i++) {
+                feature = this.features[i];
+                start = this.featureRenderer.startPoints.get(feature);
+
+                label = Ext.create("Teselagen.renderer.rail.FeatureLabel", {
+                    labelSVG: this.labelSVG,
+                    annotation: feature,
+                    x: start.x,
+                    y: start.y,
+                    start: start,
+                    tooltip: this.featureRenderer.getToolTip(feature),
+                    click: this.featureRenderer.getClickListener(
+                                                    feature.getStart(),
+                                                    feature.getEnd())
+                });
+
+                labels.push(label);
+            }
+        }
 
         labels.sort(this.labelSort);
         this.adjustLabelPositions(labels);
@@ -336,16 +444,16 @@ Ext.define("Teselagen.manager.RailManager", {
         
         var rightLabels = [];
         var leftLabels = [];
-        var labelIndex;
+        var label;
 
-        Ext.each(labels, function(label) {
-            labelIndex = labels.indexOf(label);
-            if(labelIndex < (totalNumberOfLabels/2)) {
+        for(var i = 0; i < labels.length; i++) {
+            label = labels[i];
+            if(i < (totalNumberOfLabels/2)) {
                 leftLabels.push(label);
             } else {
                 rightLabels.push(label);
             }
-        });
+        }
 
         var labelHeight = 3 + this.self.LABEL_DISTANCE_FROM_RAIL;
 
@@ -367,7 +475,7 @@ Ext.define("Teselagen.manager.RailManager", {
                 continue; 
             }
             
-            var xPosition = this.reference.x + (label.x);
+            var xPosition = this.reference.x + (label.label.attr("x"));
             var yPosition = this.reference.y -  labelHeight;
             
             if(yPosition < lastLabelYPosition) {
@@ -378,8 +486,9 @@ Ext.define("Teselagen.manager.RailManager", {
                 lastLabelYPosition = yPosition - this.self.LABEL_HEIGHT;
             }
 
-            label.setAttributes({translate: {x: xPosition - label.x,
-                                              y: yPosition - label.y}});
+            label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
+                                        "," + (yPosition - label.label.attr("y")) + ")")
+                       .style("text-anchor", "end");
            
             labels.push(this.drawConnection(label, xPosition, yPosition));
         }
@@ -391,7 +500,7 @@ Ext.define("Teselagen.manager.RailManager", {
                 continue; 
             }
             
-            var xPosition = this.reference.x + (label.x);
+            var xPosition = this.reference.x + (label.label.attr("x"));
             var yPosition = this.reference.y -  labelHeight;
             
             if(yPosition < lastLabelYPosition) {
@@ -402,34 +511,12 @@ Ext.define("Teselagen.manager.RailManager", {
                 lastLabelYPosition = yPosition + this.self.LABEL_HEIGHT;
             }
 
-            label.setAttributes({translate: {x: xPosition - label.x,
-                                              y: yPosition - label.y}});
+            label.label.attr("transform", "translate(" + (xPosition - label.label.attr("x")) +
+                                        "," + (yPosition - label.label.attr("y")) + ")")
+                       .style("text-anchor", "start");
            
             labels.push(this.drawConnection(label, xPosition, yPosition));
         }
-
-        if(this.labelSprites) {
-            this.labelSprites.destroy();
-        }
-
-        if(this.labelSprites) {
-            this.labelSprites.destroy();
-        }
-
-        this.labelSprites = Ext.create("Ext.draw.CompositeSprite", {
-            surface: this.rail.surface
-        });
-
-        this.labelSprites.addAll(labels);
-        this.showSprites(this.labelSprites);
-        
-        Ext.each(leftLabels, function(label) {
-            label.setStyle("text-anchor", "end");
-        });
-
-        Ext.each(rightLabels, function(label) {
-            label.setStyle("text-anchor", "start");
-        });
     },
 
     /**
@@ -443,25 +530,21 @@ Ext.define("Teselagen.manager.RailManager", {
      * @param {String} align The argument for the text-anchor property.
      */
     drawConnection: function(label, labelX, labelY) {
+        var path;
         if(label.annotation instanceof Teselagen.bio.sequence.dna.Feature) {
-            return Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + this.featureRenderer.startPoints.get(label.annotation).x + " " + labelY +
-                      "L" + this.featureRenderer.startPoints.get(label.annotation).x + 
-                      " " + this.featureRenderer.startPoints.get(label.annotation).y,
-                stroke: this.self.LABEL_CONNECTION_COLOR,
-                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
-            });
+            path = "M" + this.featureRenderer.startPoints.get(label.annotation).x + " " + labelY +
+                   "L" + this.featureRenderer.startPoints.get(label.annotation).x + 
+                   " " + this.featureRenderer.startPoints.get(label.annotation).y;
         } else {
-            return Ext.create("Ext.draw.Sprite", {
-                type: "path",
-                path: "M" + labelX + " " + labelY +
-                      "L" + this.cutSiteRenderer.startPoints.get(label.annotation).x + 
-                      " " + this.cutSiteRenderer.startPoints.get(label.annotation).y,
-                stroke: this.self.LABEL_CONNECTION_COLOR,
-                "stroke-width": this.self.LABEL_CONNECTION_WIDTH,
-            });
+            path = "M" + labelX + " " + labelY +
+                   "L" + this.cutSiteRenderer.startPoints.get(label.annotation).x + 
+                   " " + this.cutSiteRenderer.startPoints.get(label.annotation).y;
         }
+
+        return this.labelSVG.append("svg:path")
+                            .attr("stroke", this.self.LABEL_CONNECTION_COLOR)
+                            .attr("stroke-width", this.self.LABEL_CONNECTION_WIDTH)
+                            .attr("d", path);
     },
 
     /**
@@ -486,20 +569,18 @@ Ext.define("Teselagen.manager.RailManager", {
         this.dirty = true;
         this.sequenceManagerChanged = true;
 
-        if (this.rail) {
-        this.caret.show(true);
-        this.rail.surface.remove(this.nameBox);
+        if(this.rail) {
+            this.nameBox.remove();
 
-        this.nameBox = Ext.create("Vede.view.rail.NameBox", {
-            center: this.center,
-            name: pSequenceManager.getName(),
-            length: pSequenceManager.getSequence().toString().length
-        });
+            this.nameBox = Ext.create("Vede.view.rail.NameBox", {
+                rail: this.parentSVG,
+                center: this.center,
+                name: pSequenceManager.getName(),
+                length: pSequenceManager.getSequence().toString().length
+            });
 
-        this.rail.surface.add(this.nameBox);
-        this.nameBox.show(true);
-        this.nameBox.setStyle("dominant-baseline", "central");
         }
+
         return pSequenceManager;
     },
 
@@ -540,14 +621,28 @@ Ext.define("Teselagen.manager.RailManager", {
      * Adds the caret to the rail.
      */
     initRail: function() {
+        this.rail = d3.select("#RailContainer")
+                      .append("svg:svg")
+                      .attr("id", "Rail")
+                      .attr("overflow", "auto");
+
+        this.parentSVG = this.rail.append("svg:g")
+                                  .attr("class", "railParent")
+                                  .attr("transform", "matrix(1.5 0 0 1.5 " + this.self.RAIL_PAD + " 0)");
+
+        this.frame = Ext.create("Vede.view.rail.Frame", {
+            rail: this.parentSVG,
+            railWidth: this.railWidth,
+            center: this.center
+        });
+
         this.caret = Ext.create("Vede.view.rail.Caret", {
+            rail: this.parentSVG,
             start: 0,
             reference: this.reference,
             railWidth: this.railWidth,
             length: 3
         });
-
-        this.rail.surface.add(this.caret);
 
         var name = "unknown";
         var length = 0
@@ -557,14 +652,31 @@ Ext.define("Teselagen.manager.RailManager", {
         }
 
         this.nameBox = Ext.create("Vede.view.rail.NameBox", {
+            rail: this.parentSVG,
             center: this.center,
             name: name,
             length: length
         });
 
-        this.rail.surface.add(this.nameBox);
-        this.nameBox.show(true);
-        this.nameBox.setStyle("dominant-baseline", "central");
+        this.labelSVG = this.parentSVG.append("svg:g")
+                                .attr("class", "railLabel");
+
+        this.selectionSVG = this.parentSVG.append("svg:g")
+                                    .attr("class", "railSelection");
+
+        this.cutSiteSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "railCutSite");
+        this.cutSiteRenderer.setCutSiteSVG(this.cutSiteSVG);
+
+        this.orfSVG = this.parentSVG.append("svg:g")
+                              .attr("class", "railOrf");
+        this.orfRenderer.setOrfSVG(this.orfSVG);
+
+        this.featureSVG = this.parentSVG.append("svg:g")
+                                  .attr("class", "railFeature");
+        this.featureRenderer.setFeatureSVG(this.featureSVG);
+
+        this.fitWidthToContent(this);
     },
     
     /**
@@ -574,20 +686,19 @@ Ext.define("Teselagen.manager.RailManager", {
     adjustCaret: function(bp) {
         var start = bp / 
             this.sequenceManager.getSequence().seqString().length;
-        this.caret.destroy();
+
+        this.caret.remove();
 
         if(this.sequenceManager &&
            this.sequenceManager.getSequence().toString().length > 0) {
 
             this.caret = Ext.create("Vede.view.rail.Caret", {
+                rail: this.parentSVG,
                 start: start,
                 reference: this.reference,
                 railWidth: this.railWidth,
                 length: 3
             });
-
-            this.rail.surface.add(this.caret);
-            this.caret.show(true);
         }
     }
 });

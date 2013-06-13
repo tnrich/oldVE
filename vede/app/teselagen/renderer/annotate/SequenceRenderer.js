@@ -11,6 +11,7 @@ Ext.define("Teselagen.renderer.annotate.SequenceRenderer", {
     requires: ["Teselagen.bio.enzymes.RestrictionCutSite",
                "Teselagen.bio.orf.ORF",
                "Teselagen.bio.sequence.common.Annotation",
+               "Teselagen.models.sequence.Row",
                "Teselagen.utils.SystemUtils"],
 
     statics: {

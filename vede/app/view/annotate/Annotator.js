@@ -3,6 +3,12 @@
  * Class which handles rendering in the annotate panel.
  */
 Ext.define("Vede.view.annotate.Annotator", {
+    requires: ["Teselagen.models.Rectangle",
+               "Teselagen.renderer.annotate.CutSiteRenderer",
+               "Teselagen.renderer.annotate.FeatureRenderer",
+               "Teselagen.renderer.annotate.ORFRenderer",
+               "Teselagen.renderer.annotate.SequenceRenderer"],
+    
     extend: "Ext.draw.Component",
     alias: "widget.annotator",
 
@@ -134,6 +140,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         var that = this;
         for (var i = 0; i < retrievedFeatures.length; i++){
             var feature = retrievedFeatures[i];
+            //console.log("feature " + feature.getName() + " starts at " + feature.getStart() + " and ends at " + feature.getEnd());
             var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {
                 sequenceAnnotator: that,
                 feature: feature

@@ -6,6 +6,9 @@
  * @author Zinovii Dmytriv (original author)
  */
 Ext.define("Teselagen.utils.FeaturedDNASequenceUtils", {
+    requires: ["Teselagen.bio.sequence.dna.Feature",
+               "Teselagen.bio.sequence.dna.FeatureNote"],
+    
     singleton: true,
 
     /**
