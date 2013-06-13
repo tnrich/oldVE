@@ -33,7 +33,7 @@ module.exports = function() {
     UserManager.prototype.getUserById = function(pId, pNext) {
         this.User.findById(pId).populate("projects").exec(function(pErr, pUser) {
             if (!pErr) {
-                if (pUser.projects) {
+                if (pUser && pUser.projects) {
                     pUser.projects.forEach(function(pProj) {
                         pProj.deprojects = undefined;
                         pProj.veprojects = undefined;
