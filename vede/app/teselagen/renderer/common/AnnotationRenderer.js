@@ -100,7 +100,7 @@ Ext.define("Teselagen.renderer.common.AnnotationRenderer", {
                   }]
             });                  
             contextMenu.show(); 
-            contextMenu.setPagePosition(e.getX(),e.getY()-5);
+            contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
         };
     },
 });

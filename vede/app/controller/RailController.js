@@ -135,6 +135,8 @@ Ext.define('Vede.controller.RailController', {
         this.railManager.setFeatures(this.SequenceManager.getFeatures());
 
         this.railManager.render();
+
+        this.railManager.updateNameBox();
     },
 
     onActiveEnzymesChanged: function() {

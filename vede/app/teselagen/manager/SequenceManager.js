@@ -1407,6 +1407,4 @@ Ext.define("Teselagen.manager.SequenceManager", {
             this.needsRecalculateReverseComplementSequence = false;
         }
     }
-
-
 });
