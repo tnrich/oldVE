@@ -9,6 +9,21 @@ module.exports = function(app) {
      * @memberof module:./routes/api
      * @method GET "/users/:username"
      */
+    app.delete("/users", restrict, function(req, res) {
+        userManager.deleteAll(function(err) {
+            if (err) {
+                app.errorHandler(err, req, res);
+            } else {
+                res.json({});
+            }
+        });
+    });
+
+    /**
+     * GET USER
+     * @memberof module:./routes/api
+     * @method GET "/users/:username"
+     */
     app.get("/users/:username", restrict, function(req, res) {
         userManager.getUserById(req.user._id, function(err, user) {
             if (err) {
@@ -27,6 +42,14 @@ module.exports = function(app) {
      * @method PUT "/users/:username"
      */
     app.put("/users/:username", restrict, function(req, res) {
-        res.json({});
+        req.user.username = req.body.username || req.user.username;
+        userManager.updateUser(req.user, function(err, pUser) {
+            if (err) {
+                app.errorHandler(err, req, res);
+            } else {
+                req.session.user = pUser;
+                res.json({});
+            }
+        });
     });
 };

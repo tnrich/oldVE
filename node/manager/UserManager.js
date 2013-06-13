@@ -32,11 +32,13 @@ module.exports = function() {
      */
     UserManager.prototype.getUserById = function(pId, pNext) {
         this.User.findById(pId).populate("projects").exec(function(pErr, pUser) {
-            if (pUser.projects) {
-                pUser.projects.forEach(function(pProj) {
-                    pProj.deprojects = undefined;
-                    pProj.veprojects = undefined;
-                });
+            if (!pErr) {
+                if (pUser.projects) {
+                    pUser.projects.forEach(function(pProj) {
+                        pProj.deprojects = undefined;
+                        pProj.veprojects = undefined;
+                    });
+                }
             }
             pNext(pErr, pUser);
         });
@@ -48,15 +50,42 @@ module.exports = function() {
      */
     UserManager.prototype.getUserByName = function(pName, pNext) {
         this.User.findOne({username:pName}).populate("projects").exec(function(pErr, pUser) {
-            if (pUser.projects) {
-                pUser.projects.forEach(function(pProj) {
-                    pProj.deprojects = undefined;
-                    pProj.veprojects = undefined;
-                });
+            if (!pErr) {
+                if (pUser.projects) {
+                    pUser.projects.forEach(function(pProj) {
+                        pProj.deprojects = undefined;
+                        pProj.veprojects = undefined;
+                    });
+                }
             }
             pNext(pErr, pUser);
         });
    };
 
-    return UserManager;
+    /**
+     * Update user
+     * @param name username
+     */
+    UserManager.prototype.updateUser = function(pReqUser, pNext) {
+        this.getUserById(pReqUser._id, function(pErr, pUser) {
+            if (!pErr) {
+                pUser.username = pReqUser.username;
+                pUser.firstName = pReqUser.firstName;
+                pUser.lastName = pReqUser.lastName;
+                pUser.email = pReqUser.email;
+                pUser.preferences = pReqUser.preferences;
+                pUser.groupName = pReqUser.groupName;
+                pUser.groupType = pReqUser.groupType;
+                pUser.userRestrictionEnzymeGroups = pReqUser.userRestrictionEnzymeGroups;
+                pUser.save(function(pErr, pUser) {
+                    pNext(pErr, pUser);
+                });
+            }
+            else {
+                pNext(pErr);
+            }
+        });
+   };
+
+   return UserManager;
 };

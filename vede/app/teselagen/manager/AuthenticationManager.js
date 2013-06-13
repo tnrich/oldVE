@@ -15,6 +15,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
     username: null,
 
     updateSplashScreenMessage: function(message, stop) {
+        var splashscreen;
         if (splashscreen) {Ext.get("splash-text").update(message); }
         if (stop) {
             Ext.select(".x-mask-msg.splashscreen div:nth(2)").setStyle("background-image", "url()");
@@ -92,7 +93,7 @@ Ext.define("Teselagen.manager.AuthenticationManager", {
             },
             failure: function(response) {
                 self.updateSplashScreenMessage(response.statusText, true);
-                if (cb) { return cb(false, response.statusText); }
+                if (cb) {return cb(false, response.statusText); }
             }
         });
     }

@@ -99,11 +99,11 @@ Ext.define("Teselagen.models.J5Bin", {
 
     validations: [
         {field: "binName",          type: "presence"},
-        {
-            field: "iconID",
-            type: "inclusion",
-            list: Teselagen.constants.SBOLIcons.ICON_LIST
-        }
+//        {
+//            field: "iconID",
+//            type: "inclusion",
+//            list: Teselagen.constants.SBOLIcons.ICON_LIST
+//        }
         //field: "directionForward", type: "presence"},
         //{field: "dsf",              type: "presence"},
         //{field: "fro",              type: "presence"},

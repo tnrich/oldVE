@@ -4,7 +4,7 @@ var ApiManager = require("../manager/ApiManager")();
 var apiManager;
 
 describe("API tests.", function() {
-    var date, projects;
+    var date, projects, user;
     before(function() {
         apiManager = new ApiManager(dbManager.mongoose);
     });
@@ -38,15 +38,33 @@ describe("API tests.", function() {
         });
     });
     describe("Users.", function() {
-        it("Get /user/:username", function(done) {
+        it("Get /users/:username", function(done) {
             request({
                 uri: API_URL+"users/mfero",
                 json: true
             },
             function(err, res, body) {
                 expect(res.statusCode).to.equal(200);
-                expect(body.user.username).to.equal("mfero");
+                user = body.user;
+                expect(user.username).to.equal("mfero");
                 done();
+            });
+         });
+        it("Put /users/:username", function(done) {
+            user.username="mike.fero1";
+            request({
+                uri: API_URL+"users/mfero",
+                method: "put",
+                json: {user:user}
+            },
+            function(err, res) {
+                expect(res.statusCode).to.equal(200);
+                apiManager.userManager.getUserById(user.id, function(pErr, pUser) {
+                    expect(pErr).to.be.null;
+                    expect(pUser).not.to.be.null;
+                    expect(pUser.username).to.equal("mike.fero1");
+                    done();
+                });
             });
          });
     });

@@ -64,7 +64,7 @@ Ext.define("Teselagen.manager.TasksMonitor", {
             success: function(response){
                 var parsedResponse = JSON.parse(response.responseText);
                 self.observeChanges(parsedResponse.j5runs);
-                if(typeof (cb) === "function") { cb(parsedResponse); }
+                if(typeof (cb) === "function") {cb(parsedResponse); }
             }
         });
     },

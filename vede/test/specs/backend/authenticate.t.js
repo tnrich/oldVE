@@ -28,7 +28,7 @@ Ext.onReady(function () {
             var success, response;
             runs(function() {
                 Ext.Ajax.request({
-                    url: constants.API_URL+"user",
+                    url: constants.API_URL+"users/mfero",
                     method: "GET",
                     callback: function(pReq, pSuccess, pResp) {
                         success = pSuccess;
@@ -49,9 +49,9 @@ Ext.onReady(function () {
             });
         });
 
-        it("Login using rpavez/nopassword", function () {
+        it("Login using mfero/nopassword", function () {
             var params = {
-                    username: "rpavez",
+                    username: "mfero",
                     password: "",
                     server: constants.API_URL
             };
@@ -68,7 +68,7 @@ Ext.onReady(function () {
             runs(function() {
                 authResponse = authenticationManager.authResponse;
                 expect(authResponse.firstTime).toBe(false);
-                expect(authResponse.msg).toBe("Welcome back rpavez!");
+                expect(authResponse.msg).toBe("Welcome back mfero!");
             });
         });
     });

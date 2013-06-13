@@ -35,7 +35,7 @@ Ext.define("Teselagen.manager.SessionManager", {
      */
     buildUrl: function(pAction, pDefault) {
         var url = this.baseURL + pAction;
-        if (this.getEnv() === this.constants.ENV_TEST) {
+        if (pDefault && this.getEnv() === this.constants.ENV_TEST) {
             url = pDefault;
         }
         return url;
@@ -47,8 +47,8 @@ Ext.define("Teselagen.manager.SessionManager", {
      * @param {String} pDefault The default URL used for testing environment.
      */
     buildUserResUrl: function(pAction, pDefault) {
-        var url = this.baseURL + "users/" + this.config.baseUser + pAction;
-        if (this.getEnv() === this.constants.ENV_TEST) {
+        var url = this.baseURL + "users/" + this.getBaseUser() + pAction;
+        if (pDefault && this.getEnv() === this.constants.ENV_TEST) {
             url = pDefault;
         }
         return url;

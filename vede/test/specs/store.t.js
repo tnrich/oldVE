@@ -20,9 +20,11 @@ Ext.onReady(function () {
                 projStore = Ext.create("Teselagen.store.ProjectStore");
                 projStore.load(function() {
                     expect(projStore.getCount()).toBe(3);
-                    expect(projStore.getAt(0).get("name")).toBe("Project A");
-                    expect(projStore.getAt(1).get("name")).toBe("Project B");
-                    expect(projStore.getAt(2).get("name")).toBe("Project C");
+                    if (projStore.getCount()===3) {
+                        expect(projStore.getAt(0).get("name")).toBe("Project A");
+                        expect(projStore.getAt(1).get("name")).toBe("Project B");
+                        expect(projStore.getAt(2).get("name")).toBe("Project C");
+                    }
                 });
             });
             it("Insert project in store", function() {
@@ -30,14 +32,17 @@ Ext.onReady(function () {
                    var proj = Ext.create("Teselagen.models.Project", {name: "proj1"});
                    projStore.insert(2, proj); // 0 < index < count
                    expect(projStore.getCount()).toBe(4);
-                   expect(projStore.getAt(2).get("name")).toBe("proj1");
-                   expect(projStore.getAt(3).get("name")).toBe("Project C");
-                   projStore.removeAt(2);
-                   expect(projStore.getCount()).toBe(3);
-                   projStore.insert(5, proj); // index > count
-                   expect(projStore.getCount()).toBe(4);
-                   expect(projStore.getAt(3).get("name")).toBe("proj1"); // appended record
-                   projStore.removeAt(3);
+                   if(projStore.getCount()===4) {
+                       expect(projStore.getAt(2).get("name")).toBe("proj1");
+                       expect(projStore.getAt(3).get("name")).toBe("Project C");
+                       projStore.removeAt(2);
+                       expect(projStore.getCount()).toBe(3);
+                       projStore.insert(5, proj); // index > count
+                       expect(projStore.getCount()).toBe(4);
+                       expect(projStore.getAt(3).get("name")).toBe("proj1"); // appended record
+                       projStore.removeAt(3);
+                   }
+                
                 });
             });
             it("Load Specific Project", function () {

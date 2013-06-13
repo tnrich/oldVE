@@ -20,13 +20,8 @@ module.exports = function(app){
      */
     var restrict = function(req, res, next) {
         if (req.session.user) {
-            var User = app.db.model("User");
-            User.findOne({
-                'username': req.session.user.username
-            }, function(err, user) {
-                req.user = user;
-                next();
-            });
+            req.user = req.session.user;
+            next();
         } else {
             res.send("Wrong credentials", 401);
         }
