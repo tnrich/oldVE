@@ -134,6 +134,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         var that = this;
         for (var i = 0; i < retrievedFeatures.length; i++){
             var feature = retrievedFeatures[i];
+            //console.log("feature " + feature.getName() + " starts at " + feature.getStart() + " and ends at " + feature.getEnd());
             var featureRenderer = Ext.create("Teselagen.renderer.annotate.FeatureRenderer", {
                 sequenceAnnotator: that,
                 feature: feature
