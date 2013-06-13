@@ -328,9 +328,6 @@ Ext.define("Teselagen.manager.RailManager", {
             transY += railBox.y - parentBox.y;
         }*/
 
-        console.log("svg element bbox y: " + railBox.y);
-        console.log("g element bbox y: " + parentBox.y);
-
         scope.parentSVG.attr("transform", "matrix(" + scale[0] + " 0 0 " + scale[1] + 
                                                  " " + translate[0] + " " + transY + ")");
 
