@@ -22,7 +22,6 @@ Ext.define("Vede.controller.ProjectController", {
      * @return {Teselagen.bio.enzymes.RestrictionCutSite} A RestrictionCutSite object.
      */
     loadProjectTree: function (cb) {
-
         var self = this;
 
         var rootNode = Ext.getCmp("projectTreePanel").getRootNode(); // Set the root node
@@ -34,7 +33,7 @@ Ext.define("Vede.controller.ProjectController", {
             leaf: true,
             hrefTarget: "newproj",
             icon: "resources/images/add.png",
-            id: 0,
+            //id: 0,
         });
 
         var projects = Teselagen.manager.ProjectManager.projects; // Get projects store
@@ -55,7 +54,7 @@ Ext.define("Vede.controller.ProjectController", {
                 leaf: true,
                 hrefTarget: "newde",
                 icon: "resources/images/add.png",
-                id: 0,
+                //id: 0,
             });
 
             // Append sequence to project node
@@ -64,7 +63,7 @@ Ext.define("Vede.controller.ProjectController", {
                 leaf: true,
                 hrefTarget: "newsequence",
                 icon: "resources/images/add.png",
-                id: 0
+                //id: 0
             });
 
             var designs = project.designs(); // Get designs store from current project
