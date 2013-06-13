@@ -14,7 +14,7 @@ Ext.define("Teselagen.renderer.annotate.LineRenderer", {
         horizontalLines: null,
 
         featureHeight: 10,
-        numFeatures: 2,
+        numFeatures: 2
     },
     constructor: function(inData){
         this.initConfig(inData);

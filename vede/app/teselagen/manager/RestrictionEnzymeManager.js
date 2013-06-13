@@ -16,7 +16,7 @@ Ext.define("Teselagen.manager.RestrictionEnzymeManager", {
         allCutSitesMap: Ext.create("Ext.util.HashMap"), 
         cutSites: [],
         cutSitesMap: [],
-        maxCuts: -1,
+        maxCuts: -1
     },
 
     mixins: {

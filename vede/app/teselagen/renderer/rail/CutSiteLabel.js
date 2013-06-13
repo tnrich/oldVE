@@ -8,7 +8,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteLabel", {
     extend: "Teselagen.renderer.common.Label",
 
     config: {
-        start: null,
+        start: null
     },
 
     constructor: function(inData) {

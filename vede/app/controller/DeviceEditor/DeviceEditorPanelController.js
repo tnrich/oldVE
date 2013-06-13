@@ -376,7 +376,7 @@ Ext.define('Vede.controller.DeviceEditor.DeviceEditorPanelController', {
 
         var warningsStore = Ext.create('Teselagen.store.WarningsStore', {
             model: 'Teselagen.models.j5Output.Warning',
-            data: warnings,
+            data: warnings
         });
 
         if ((warnings.length>0)==true) {

@@ -64,7 +64,7 @@ Ext.define("Teselagen.bio.sequence.alphabets.RNAAlphabet", {
                 "h": this.getH(),
                 "d": this.getD(),
                 "b": this.getB(),
-                "n": this.getN(),
+                "n": this.getN()
         };
 	},
 /**

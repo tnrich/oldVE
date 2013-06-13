@@ -63106,16 +63106,19 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 };
   this.seqString = function() {
   var string = [];
+  var element;
   if (this.sequenceString && !this.sequenceChanged) 
   {
     return this.sequenceString;
   } else {
-    symbols.forEach(function(element) {
-  if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) 
-  {
-    string.push(element.getValue());
-  }
-});
+    for (var i = 0; i < symbols.length; i++) 
+      {
+        element = symbols[i];
+        if (element.getValue()) 
+        {
+          string.push(element.getValue());
+        }
+      }
     this.sequenceChanged = false;
   }
   this.sequenceString = string.join("");
@@ -67623,7 +67626,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       }
     }
   }
-}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
+}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, constructor: function(inData) {
+  this.callParent([inData]);
+  this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
   return Ext.getClass(this).load(this.getId(), {success: function(r, o) {
   console.log("record reloaded!");
@@ -67728,7 +67734,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return false;
   }
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.Project', Ext.data.Model, {fields: [{name: "id", type: "long"}, {name: "user_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}, {name: "dateCreated", type: "date"}, {name: "dateModified", type: "date"}], associations: [{type: "hasMany", model: "Teselagen.models.DeviceDesign", name: "designs", associationKey: "designs", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.SequenceFile", name: "sequences", associationKey: "sequences", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.Part", name: "parts", associationKey: "parts", foreignKey: "project_id"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], proxy: {type: "rest", url: "/vede/test/data/json/projects.json", reader: {type: "json", root: "projects"}, writer: {type: "json", getRecordData: function(record) {
@@ -69274,8 +69280,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.rows = [];
   if (this.sequenceAnnotator.getSequenceManager()) 
   {
-    this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())));
     var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
+    this.numRows = Number(Math.ceil(((seqString.length + 1) / this.sequenceAnnotator.getBpPerRow())));
     var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
     for (var i = 0; i < this.numRows; i++) 
       {
@@ -69301,24 +69307,30 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureToRowMap = Ext.create("Ext.util.HashMap");
   var start;
   var end;
+  var row;
+  var feature;
   var featuresAlignment;
-  Ext.each(rowsFeatures, function(row, i) {
-  start = i * this.sequenceAnnotator.getBpPerRow();
-  end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
-  featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
-  this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
-  if (!row) 
-  {
-    return true;
-  }
-  Ext.each(row, function(feature) {
-  if (!this.featureToRowMap.get(feature.getName())) 
-  {
-    this.featureToRowMap.add(feature.getName(), []);
-  }
-  this.featureToRowMap.get(feature.getName()).push(i);
-}, this);
-}, this);
+  for (var i = 0; i < rowsFeatures.length; i++) 
+    {
+      row = rowsFeatures[i];
+      start = i * this.sequenceAnnotator.getBpPerRow();
+      end = (i + 1) * this.sequenceAnnotator.getBpPerRow();
+      featuresAlignment = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
+      this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
+      if (!row) 
+      {
+        return true;
+      }
+      for (var j = 0; j < row.length; j++) 
+        {
+          feature = row[j];
+          if (!this.featureToRowMap.get(feature.getName())) 
+          {
+            this.featureToRowMap.add(feature.getName(), []);
+          }
+          this.featureToRowMap.get(feature.getName()).push(i);
+        }
+    }
 }, reloadCutSites: function() {
   if (!this.sequenceAnnotator.showCutSites || !this.sequenceAnnotator.restrictionEnzymeManager || !this.sequenceAnnotator.restrictionEnzymeManager.getCutSites()) 
   {
@@ -69628,6 +69640,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureColor = this.colorByType(this.feature.getType().toLowerCase());
   var g = this.featureGroupSVG;
   var feature = this.feature;
+  var featureStart = this.feature.getStart();
+  var featureEnd = this.feature.getEnd();
   g.attr("fill", this.featureColor);
   var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
   if (!featureRows) 
@@ -69647,37 +69661,37 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       {
         downShift += 4 + this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
       }
-      if (this.feature.getStart() > this.feature.getEnd()) 
+      if (featureStart > featureEnd) 
       {
-        if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()) 
+        if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
         {
-          endBP = this.feature.getEnd() - 1;
+          endBP = featureEnd - 1;
         } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length) 
         {
         } else {
           endBP = row.getRowData().getEnd();
         }
-        if (this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() < row.getRowData().getEnd()) 
+        if (featureStart >= row.getRowData().getStart() && featureStart < row.getRowData().getEnd()) 
         {
-          startBP = this.feature.getStart();
+          startBP = featureStart;
         } else {
           startBP = row.getRowData().getStart();
         }
       } else {
-        if (this.feature.getStart() < row.getRowData().getStart() && this.feature.getEnd() < row.getRowData().getStart()) 
+        if (featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()) 
         {
           continue;
-        } else if (this.feature.getStart() > row.getRowData().getEnd() && this.feature.getEnd() > row.getRowData().getEnd()) 
+        } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()) 
         {
           continue;
         } else {
-          startBP = (this.feature.getStart() < row.getRowData().getStart()) ? row.getRowData().getStart() : this.feature.getStart();
-          endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
+          startBP = (featureStart < row.getRowData().getStart()) ? row.getRowData().getStart() : featureStart;
+          endBP = ((featureEnd - 1) < row.getRowData().getEnd()) ? (featureEnd - 1) : row.getRowData().getEnd();
         }
       }
       if (startBP < 0 || endBP < 0) 
       {
-        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + feature.getStart() + ", ending at " + feature.getEnd() + ", ignoring.");
+        console.warn("Invalid feature: name " + feature.getName() + ", starting at " + featureStart + ", ending at " + featureEnd + ", ignoring.");
         return;
       }
       if (startBP > endBP && this.feature.getType() != "misc_feature") 
@@ -69686,15 +69700,15 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
         var bpEndMetrics1 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(endBP, this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
         var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
         var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
-        var featureX1 = bpStartMetrics1.getX() + 2;
-        var featureX2 = bpStartMetrics2.getX() + 2;
-        var featureYCommon = bpStartMetrics1.getY() + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
+        var featureX1 = bpStartMetrics1.x + 2;
+        var featureX2 = bpStartMetrics2.x + 2;
+        var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
         if (this.sequenceAnnotationManager.showAminoAcidsRevCom) 
         {
           featureYCommon += 3 * 20;
         }
-        var featureRowWidth1 = (bpEndMetrics1.getX() - bpStartMetrics1.getX()) * 16;
-        var featureRowWidth2 = (bpEndMetrics2.getX() - bpStartMetrics2.getX()) * 16;
+        var featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
+        var featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
         var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
         if (this.feature.getStrand() === 0) 
         {
@@ -69725,7 +69739,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
         } else if (this.feature.getStrand() == 1) 
         {
-          if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()) 
+          if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()) 
           {
             drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
           } else {
@@ -69733,7 +69747,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
           }
         } else if (this.feature.getStrand() == -1) 
         {
-          if (this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() <= row.getRowData().getEnd()) 
+          if (featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()) 
           {
             drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
           } else {
@@ -69824,7 +69838,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
             {
               if (location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1) 
               {
-                if (this.feature.getEnd() == location.getEnd()) 
+                if (featureEnd == location.getEnd()) 
                 {
                   drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else {
@@ -69837,7 +69851,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
             {
               if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()) 
               {
-                if (this.feature.getStart() == location.getStart()) 
+                if (featureStart == location.getStart()) 
                 {
                   drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else {
@@ -69890,7 +69904,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   var color = switchObj[type] || "#CCCCCC";
   return color;
 }, addToolTip: function(feature) {
-  var featureToolTip = this.featureGroupSVG.append("svg:title").attr("id", "feature-tooltip-" + feature.getName());
+  var featureToolTip = this.featureGroupSVG.append("svg:title");
   var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
   featureToolTip.text(toolTip);
 }, addClickListener: function(feature) {
@@ -70048,7 +70062,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'ORFRenderer'], 0));
 ;
 
-(Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
+(Ext.cmd.derive('Teselagen.renderer.annotate.SequenceRenderer', Ext.Base, {statics: {FONT_SIZE: 12, FONT_FAMILY: "Ubuntu Mono", COMPLEMENTARY_SEQUENCE_FILL: "#b0b0b0", COMPLEMENTARY_VERTICAL_OFFSET: 16, LETTER_SPACING: 3}, config: {sequenceAnnotator: null, rows: null, featureToRowMap: null, orfToRowMap: null, cutSiteToRowMap: null, showORfs: false, numRows: 0, totalHeight: 0, totalWidth: 0, drawingPanel: null, sequenceAnnotationManager: null, needsMeasurement: false}, aminoAcidsString1: null, aminoAcidsString2: null, aminoAcidsString3: null, aminoAcidsStringRevCom1: null, aminoAcidsStringRevCom2: null, aminoAcidsStringRevCom3: null, constructor: function(inData) {
   this.initConfig(inData);
   this.sequenceAnnotationManager = this.sequenceAnnotator;
   this.sequenceAnnotator = this.sequenceAnnotator.sequenceAnnotator;
@@ -70127,9 +70141,8 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
       this.totalHeight += 3;
       var rowWidth = this.totalWidth;
       var rowHeight = this.totalHeight - rowY;
-      var nucleotideRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g").attr("id", "nucleotide-row" + i);
       var rowSequence = row.getRowData().getSequence();
-      nucleotideRowSVG.append("svg:text").attr("x", sequenceX).attr("y", sequenceY + 20).text(sequenceString).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+      this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "sequenceSVG").attr("x", sequenceX).attr("y", sequenceY + 20).text(sequenceString);
       row.metrics.x = rowX;
       row.metrics.y = rowY;
       row.metrics.width = rowWidth;
@@ -70147,6 +70160,10 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     }
   this.sequenceAnnotator.getRowManager().setRows(newRows);
   this.sequenceAnnotator.setAnnotator(this.sequenceAnnotationManager);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll("text").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll(".complementarySequenceSVG").attr("fill", this.self.COMPLEMENTARY_SEQUENCE_FILL);
+  this.sequenceAnnotationManager.sequenceSVG.selectAll(".bpLabelSVG").attr("xml:space", "preserve");
+  this.sequenceAnnotationManager.aminoAcidsSVG.selectAll("text").attr("xml:space", "preserve").attr("fill", "blue").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
 }, getUpdatedRows: function() {
   return this.sequenceAnnotator.getRowManager().getRows();
 }, splitWithSpaces: function(pString, pShift, pSplitLast) {
@@ -70216,11 +70233,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   {
     verticalOffset = row.getRowData().getOrfAlignment().getCount() * 8;
   }
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids1);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids1);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids2);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids2);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids3);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "aminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight - verticalOffset).text(aminoAcids3);
   this.totalHeight += 20;
 }, renderAARevCom: function(row) {
   var baseStart;
@@ -70298,11 +70315,11 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     aminoAcids3 = aminoAcids3.split("").reverse().join("");
   }
   var verticalOffset = 15;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids1);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[0]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids1);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids2);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[1]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids2);
   this.totalHeight += 20;
-  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("fill", "blue").attr("xml:space", "preserve").attr("letter-spacing", this.self.LETTER_SPACING).text(aminoAcids3);
+  this.sequenceAnnotationManager.aminoAcidsSVG.append("svg:text").attr("class", "revComAminoAcidSVG").attr("x", (6 + aaPadding[2]) * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + verticalOffset).text(aminoAcids3);
   this.totalHeight += 20;
 }, renderComplementarySequence: function(row) {
   var sequenceString = ["      "];
@@ -70315,7 +70332,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   sequenceString = sequenceString.join("");
   stringLength = sequenceString.length;
-  var complementRowSVG = this.sequenceAnnotationManager.sequenceSVG.append("svg:g").attr("id", "nucleotide-comp-row" + row.getIndex()).append("svg:text").attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + this.self.COMPLEMENTARY_VERTICAL_OFFSET).text(sequenceString).attr("fill", "#b0b0b0").attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING);
+  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "complementarySequenceSVG").attr("x", 6 * this.sequenceAnnotationManager.self.CHAR_WIDTH).attr("y", this.totalHeight + this.self.COMPLEMENTARY_VERTICAL_OFFSET).text(sequenceString);
   this.totalHeight += 20;
 }, renderIndexString: function(pIndex) {
   var result = String(pIndex);
@@ -70334,7 +70351,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   }
   return result;
 }, renderBpLabel: function(basePairs, labelX, labelY) {
-  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("x", labelX).attr("y", labelY).attr("font-family", this.self.FONT_FAMILY).attr("font-size", this.self.FONT_SIZE).attr("letter-spacing", this.self.LETTER_SPACING).attr("xml:space", "preserve").text(this.renderIndexString(basePairs));
+  this.sequenceAnnotationManager.sequenceSVG.append("svg:text").attr("class", "bpLabelSVG").attr("x", labelX).attr("y", labelY).text(this.renderIndexString(basePairs));
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.annotate, 'SequenceRenderer'], 0));
 ;
 
@@ -70451,7 +70468,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     }
     var bpX = row.getSequenceMetrics().x + numberOfCharacters * this.self.CHAR_WIDTH;
     var bpY = row.getSequenceMetrics().y;
-    resultsMetrics = Ext.create("Teselagen.models.Rectangle", {x: bpX, y: bpY, width: 2, height: 3});
+    resultsMetrics = {x: bpX, y: bpY, width: 2, height: 3};
   }
   return resultsMetrics;
 }, rowByBpIndex: function(pIndex) {
@@ -71047,9 +71064,9 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
     {
       var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
       var el = Ext.getCmp("AnnotateContainer").el;
-      if (!(metrics.getY() < el.getScroll().top + el.getViewSize().height && metrics.getY() > el.getScroll().top)) 
+      if (!(metrics.y < el.getScroll().top + el.getViewSize().height && metrics.y > el.getScroll().top)) 
       {
-        el.scrollTo("top", metrics.getY());
+        el.scrollTo("top", metrics.y);
       }
     }
   }
@@ -72245,7 +72262,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   sequenceManager.removeFeature(feature, false);
 }}]});
   contextMenu.show();
-  contextMenu.setPagePosition(e.getX(), e.getY() - 5);
+  contextMenu.setPagePosition(d3.event.pageX, d3.event.pageY - 5);
 };
 }}, 1, 0, 0, 0, 0, 0, [Teselagen.renderer.common, 'AnnotationRenderer'], 0));
 ;
@@ -73167,6 +73184,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "pieFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
   this.fitWidthToContent(this);
+}, updateNameBox: function() {
+  var name;
+  var length;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox.remove();
+  this.nameBox = Ext.create("Vede.view.pie.NameBox", {pie: this.parentSVG, center: this.center, name: name, length: length});
 }, adjustCaret: function(bp) {
   this.caret.remove();
   if (this.sequenceManager && this.sequenceManager.getSequence().toString().length > 0) 
@@ -73342,6 +73369,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.pieManager.setOrfs(this.ORFManager.getOrfs());
   this.pieManager.setFeatures(this.SequenceManager.getFeatures());
   this.pieManager.render();
+  this.pieManager.updateNameBox();
 }, onActiveEnzymesChanged: function() {
   this.callParent();
   this.pieManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());
@@ -74212,6 +74240,16 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.featureSVG = this.parentSVG.append("svg:g").attr("class", "railFeature");
   this.featureRenderer.setFeatureSVG(this.featureSVG);
   this.fitWidthToContent(this);
+}, updateNameBox: function() {
+  var name;
+  var length;
+  if (this.sequenceManager) 
+  {
+    name = this.sequenceManager.getName();
+    length = this.sequenceManager.getSequence().toString().length;
+  }
+  this.nameBox.remove();
+  this.nameBox = Ext.create("Vede.view.rail.NameBox", {rail: this.parentSVG, center: this.center, name: name, length: length});
 }, adjustCaret: function(bp) {
   var start = bp / this.sequenceManager.getSequence().seqString().length;
   this.caret.remove();
@@ -74358,6 +74396,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   this.railManager.setOrfs(this.ORFManager.getOrfs());
   this.railManager.setFeatures(this.SequenceManager.getFeatures());
   this.railManager.render();
+  this.railManager.updateNameBox();
 }, onActiveEnzymesChanged: function() {
   this.callParent();
   this.railManager.setCutSites(this.RestrictionEnzymeManager.getCutSites());

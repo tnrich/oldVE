@@ -11,7 +11,7 @@ Ext.define("Teselagen.renderer.annotate.CutSiteRenderer", {
         CUT_SITE_COLOR: "#625D5D",
         ONE_CUT_COLOR: "#E57676",
         MULTIPLE_CUT_COLOR: "#888888",
-        CUTSITE_HEIGHT_OFFSET: 25,
+        CUTSITE_HEIGHT_OFFSET: 25
     },
 
     config: {

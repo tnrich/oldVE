@@ -33,7 +33,7 @@ Ext.define("Vede.controller.ProjectController", {
             leaf: true,
             hrefTarget: "newproj",
             icon: "resources/images/add.png",
-            //id: 0,
+            //id: 0
         });
 
         var projects = Teselagen.manager.ProjectManager.projects; // Get projects store
@@ -54,7 +54,7 @@ Ext.define("Vede.controller.ProjectController", {
                 leaf: true,
                 hrefTarget: "newde",
                 icon: "resources/images/add.png",
-                //id: 0,
+                //id: 0
             });
 
             // Append sequence to project node

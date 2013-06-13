@@ -36,7 +36,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         featureRows: 2,
         BP_PER_LINE: 60,
         bpPerRow: 60,
-        aminoSequencesShown: 5,
+        aminoSequencesShown: 5
     },
 
     /**
@@ -244,7 +244,7 @@ Ext.define("Vede.view.annotate.Annotator", {
                 x: bpX,
                 y: bpY,
                 width: 2, //fix to make resizable
-                height: 3,
+                height: 3
             };
         }
         return resultsMetrics;
@@ -353,7 +353,7 @@ Ext.define("Vede.view.annotate.Annotator", {
         if (this.sequenceRenderer == null){
             this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.SequenceRenderer",
                     {
-                        sequenceAnnotator: this,
+                        sequenceAnnotator: this
                     }
             );
         }

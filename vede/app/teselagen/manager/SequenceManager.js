@@ -1327,7 +1327,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
                 var tmpNote = Ext.create("Teselagen.bio.sequence.dna.FeatureNote", {
                     name:   gbFeats[i].getFeatureQualifier()[k].getName(),
                     value:  gbFeats[i].getFeatureQualifier()[k].getValue(),
-                    quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted(),
+                    quoted: gbFeats[i].getFeatureQualifier()[k].getQuoted()
                 });
                 notes.push(tmpNote);
             }
@@ -1355,7 +1355,7 @@ Ext.define("Teselagen.manager.SequenceManager", {
             name: name,
             sequence: sequence.seqString(),
             isCircular: isCirc,
-            features: features,
+            features: features
         });
 
         this.name = name;

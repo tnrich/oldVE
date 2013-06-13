@@ -64,7 +64,7 @@ Ext.define("Teselagen.bio.sequence.alphabets.DNAAlphabet", {
                 "h": this.h,
                 "d": this.d,
                 "b": this.b,
-                "n": this.n,
+                "n": this.n
         }
 
     },

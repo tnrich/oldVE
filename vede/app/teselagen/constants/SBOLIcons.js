@@ -68,7 +68,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             key: "FIVE_PRIME_UTR",
             name: "five_prime_utr",
             url_small: "resources/images/icons/device/small/ribosome-entry-site.png",
-            url_large: "resources/images/icons/device/large/ribosome-entry-site.png",
+            url_large: "resources/images/icons/device/large/ribosome-entry-site.png"
         },
         "FIVE-PRIME-STICKY-RESTRICTION-SITE": { //New in SBOL 1.0.0
             key: "FIVE_PRIME_RESTRICTION_SITE",
@@ -140,7 +140,7 @@ Ext.define("Teselagen.constants.SBOLIcons", {
             key: "RIBOSOME_ENTRY_SITE",
             name: "ribosome_entry_site",
             url_small: "resources/images/icons/device/small/ribosome-entry-site.png",
-            url_large: "resources/images/icons/device/large/ribosome-entry-site.png",
+            url_large: "resources/images/icons/device/large/ribosome-entry-site.png"
         },
         "RNA-STABILITY-ELEMENT": {
             key: "RNA_STABILITY_ELEMENT",

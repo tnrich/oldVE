@@ -52,12 +52,12 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         complementRenderer: null,
         renderers: null,
 
-        RowManager: null,
+        RowManager: null
     },
     renderers: [],
     caret: null,
     statics: {
-       DEFAULT_BP_PER_ROW: 60,
+       DEFAULT_BP_PER_ROW: 60
     },
 
     constructor: function(inData){
