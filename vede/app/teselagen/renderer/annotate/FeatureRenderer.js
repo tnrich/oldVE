@@ -40,6 +40,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         var g = this.featureGroupSVG;
 
         var feature = this.feature;
+
         g.attr("fill", this.featureColor);
 
         var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
@@ -88,6 +89,13 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     startBP = (this.feature.getStart() < row.getRowData().getStart()) ? row.getRowData().getStart() : this.feature.getStart();
                     endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
                 }
+            }
+
+            if(startBP < 0 || endBP < 0) {
+                console.warn("Invalid feature: name " + feature.getName() + 
+                             ", starting at " + feature.getStart() + ", ending at " + 
+                             feature.getEnd() + ", ignoring.");
+                return;
             }
 
             if (startBP > endBP && this.feature.getType() != "misc_feature"){
