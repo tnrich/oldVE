@@ -11,7 +11,7 @@ Ext.Loader.setConfig({
         Vede: './app',
         'Teselagen.bio': '../biojs/src/teselagen/bio'
     },
-    disableCaching: false
+    //disableCaching: false
 });
 
 Ext.application({

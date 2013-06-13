@@ -877,7 +877,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {String} modified The name of the field that was edited.
      */
     onUpdateParts: function(parts, updatedPart, operation, modified) {
-        if(modified)
+        if( modified && !updatedPart.data.phantom)
         {
             if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,
