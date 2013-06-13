@@ -847,6 +847,10 @@ border-radius: 4px;
     border-color: #4A4B4C;
 }
 
+.gridPartCell-alert:hover {
+  border-color: rgb(225, 0, 0);
+} 
+
 .gridPartCell-selected {
     background-color: #ECF0F1;
     border-color: #4A4B4C;
@@ -855,6 +859,18 @@ border-radius: 4px;
 
 .gridPartCell-highlighted {
     border-color: #006CAB;!important;
+}
+
+.gridPartCell-alert {
+  border-color: rgb(225, 0, 0);
+}
+
+.mapAlert {
+  color: white;
+  background: rgb(255, 115, 115);
+  padding: 3px;
+  font-size: 10px;
+  border-radius: 4px;
 }
 
 .fasConflictIndicator {
@@ -975,18 +991,6 @@ background: #F8F8F8;
 
 .DeviceEditorCanvas, .designGrid, .DeviceEditorCanvas .x-layout-fit  {
   width: auto ! important;
-}
-
-.gridPartCell-alert {
-  border-color: rgb(225, 0, 0);
-}
-
-.mapAlert {
-  color: white;
-  background: rgb(255, 115, 115);
-  padding: 3px;
-  font-size: 10px;
-  border-radius: 4px;
 }
 
 .j5Parameters_Window label {
