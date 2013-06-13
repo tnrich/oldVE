@@ -59,7 +59,6 @@ Ext.define("Teselagen.manager.DeviceDesignManager", {
      * @returns {Teselagen.models.DeviceDesign}
      */
     clearDesignAndAddBins: function(device,pBins) {
-
         var bins = device.getJ5Collection().bins();
 
         bins.removeAll();
