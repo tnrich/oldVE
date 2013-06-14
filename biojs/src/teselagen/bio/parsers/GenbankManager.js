@@ -14,7 +14,15 @@
 Ext.define("Teselagen.bio.parsers.GenbankManager", {
 
     //alternateClassName: "Teselagen.GenbankManager",
-    requires: ["Teselagen.bio.util.StringUtil"],
+    requires: ["Teselagen.bio.util.StringUtil",
+               "Teselagen.bio.parsers.Genbank",
+               "Teselagen.bio.parsers.GenbankFeatureElement",
+               "Teselagen.bio.parsers.GenbankFeatureLocation",
+               "Teselagen.bio.parsers.GenbankFeatureQualifier",
+               "Teselagen.bio.parsers.GenbankFeaturesKeyword",
+               "Teselagen.bio.parsers.GenbankLocusKeyword",
+               "Teselagen.bio.parsers.GenbankKeyword",
+               "Teselagen.bio.parsers.GenbankOriginKeyword"],
     singleton: true,
     /**
      * Static variables. Common Genbank Keyword names.

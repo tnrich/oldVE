@@ -5,7 +5,7 @@
  */
 Ext.define("Vede.controller.VectorPanelController", {
     extend: "Ext.app.Controller",
-    require: ["Teselagen.manager.ProjectManager"],
+    requires: ["Teselagen.manager.ProjectManager","Ext.layout.container.Border"],
     isRendered: false,
 
     onTabChange: function (tabPanel, newTab, oldTab) {

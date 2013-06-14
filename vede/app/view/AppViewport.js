@@ -6,6 +6,8 @@
 Ext.define('Vede.view.AppViewport', {
     extend: 'Ext.container.Viewport',
 
+    requires: ["Ext.layout.container.Border"],
+
     layout: {
         type: 'border'
     },

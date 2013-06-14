@@ -1,4 +1,7 @@
 Ext.define("Teselagen.manager.RowManager", {
+    requires: ["Teselagen.models.sequence.Row",
+               "Teselagen.models.sequence.RowData"],
+    
     config: {
         sequenceAnnotator: null,
 
@@ -20,9 +23,9 @@ Ext.define("Teselagen.manager.RowManager", {
         this.rows = [];
         
         if(this.sequenceAnnotator.getSequenceManager()) {
-            this.numRows = Number(Math.ceil(((this.sequenceAnnotator.getSequenceManager().getSequence().seqString().length + 1) / this.sequenceAnnotator.getBpPerRow())))
-
             var seqString = this.sequenceAnnotator.getSequenceManager().getSequence().seqString().toUpperCase();
+            this.numRows = Number(Math.ceil(((seqString.length + 1) / this.sequenceAnnotator.getBpPerRow())));
+
             var complementSeqString = this.sequenceAnnotator.getSequenceManager().getComplementSequence().seqString().toUpperCase();
 
             for(var i = 0; i < this.numRows; i++) {
@@ -55,37 +58,40 @@ Ext.define("Teselagen.manager.RowManager", {
     },
 
     reloadFeatures: function(){
-
         if (!this.sequenceAnnotator.getSequenceManager().getFeatures()) {
             return;
         }
 
         var features = this.sequenceAnnotator.getSequenceManager().getFeatures();
         var rowsFeatures = this.rowAnnotations(features);
-        //console.log("rowsFeatures: " + rowsFeatures);
         this.featureToRowMap = Ext.create("Ext.util.HashMap");
         var start;
         var end;
+        var row;
+        var feature;
         var featuresAlignment;
-        Ext.each(rowsFeatures, function(row, i){
+
+        for(var i = 0; i < rowsFeatures.length; i++) {
+            row = rowsFeatures[i];
             start = i * this.sequenceAnnotator.getBpPerRow();
             end = (i+1) * this.sequenceAnnotator.getBpPerRow();
-            featuresAlignment  = Teselagen.renderer.common.Alignment.buildAlignmentMap( row, this.sequenceAnnotator.getSequenceManager());
+            featuresAlignment  = Teselagen.renderer.common.Alignment.buildAlignmentMap(row, this.sequenceAnnotator.getSequenceManager());
 
             this.rows[i].getRowData().setFeaturesAlignment(featuresAlignment.clone());
 
             if(!row){
                 return true;
             }
-            Ext.each(row, function(feature){
+
+            for(var j = 0; j < row.length; j++) {
+                feature = row[j];
                 if(!this.featureToRowMap.get(feature.getName())){
                     this.featureToRowMap.add(feature.getName(), []);
                 }
 
                 this.featureToRowMap.get(feature.getName()).push(i);
-
-            }, this);
-        }, this);
+            }
+        }
         /*//console.log("Feature to row Map: " + this.featureToRowMap.getKeys());
 
         for (var k = 0; k < this.sequenceAnnotator.getSequenceManager().getFeatures().length; k++){

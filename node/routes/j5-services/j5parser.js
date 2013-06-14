@@ -1197,6 +1197,13 @@ var processJ5Response = function(method,encodedFileData,callback) {
 
     async.parallel({
 
+        combinatorialAssembly: function(callback){
+            //processAssemblies(files.assemblies,
+                //function(){
+                    callback(null, {"temp":"empty"});
+                //});
+        },
+
         assemblies: function(callback){
             processAssemblies(files.assemblies,
                 function(assemblies){

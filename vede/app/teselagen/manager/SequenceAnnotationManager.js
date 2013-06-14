@@ -1,4 +1,10 @@
 Ext.define("Teselagen.manager.SequenceAnnotationManager", {
+
+    requires: ["Teselagen.manager.RowManager",
+               "Teselagen.renderer.annotate.LineRenderer",
+               "Vede.view.annotate.Annotator",
+               "Vede.view.annotate.Caret"],
+
     config: {
         sequenceManager: null,
         orfManager: null,
@@ -58,18 +64,11 @@ Ext.define("Teselagen.manager.SequenceAnnotationManager", {
         this.initConfig(inData);
         var that = this;
         this.lineRenderer = Ext.create("Teselagen.renderer.annotate.LineRenderer");
-        //this.sequenceRenderer = Ext.create("Teselagen.renderer.annotate.TextRenderer");
         this.RowManager = Ext.create("Teselagen.manager.RowManager", {
-            sequenceAnnotator: that,
+            sequenceAnnotator: that
         });
         this.annotator = Ext.create("Vede.view.annotate.Annotator", {
-            sequenceAnnotator: that,
-            items: [
-//                Ext.create("Ext.draw.Sprite", {
-//                    type: "path",
-//                    path: ""
-//                })
-            ]
+            sequenceAnnotator: that
         });
         this.caret = Ext.create("Vede.view.annotate.Caret", {
             sequenceAnnotator: that.annotator

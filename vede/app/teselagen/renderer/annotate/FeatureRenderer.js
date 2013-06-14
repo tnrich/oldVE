@@ -40,6 +40,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
         var g = this.featureGroupSVG;
 
         var feature = this.feature;
+        var featureStart = this.feature.getStart();
+        var featureEnd = this.feature.getEnd();
+
         g.attr("fill", this.featureColor);
 
         var featureRows = this.sequenceAnnotationManager.getRowManager().getFeatureToRowMap().get(feature.getName());
@@ -65,29 +68,36 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     this.sequenceAnnotator.sequenceRenderer.self.COMPLEMENTARY_VERTICAL_OFFSET;
             }
 
-            if( this.feature.getStart() > this.feature.getEnd()){
-                if (this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()){
-                    endBP = this.feature.getEnd() - 1;
+            if( featureStart > featureEnd){
+                if (featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()){
+                    endBP = featureEnd - 1;
                 } else if (row.getRowData().getEnd() >= this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length){
                 //
                 } else {
                     endBP = row.getRowData().getEnd();
                 }
 
-                if (this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() < row.getRowData().getEnd()){
-                    startBP = this.feature.getStart();
+                if (featureStart >= row.getRowData().getStart() && featureStart < row.getRowData().getEnd()){
+                    startBP = featureStart;
                 } else{
                     startBP = row.getRowData().getStart();
                 }
             } else{
-                if(this.feature.getStart() < row.getRowData().getStart() && this.feature.getEnd() < row.getRowData().getStart()){
+                if(featureStart < row.getRowData().getStart() && featureEnd < row.getRowData().getStart()){
                     continue;
-                } else if (this.feature.getStart() > row.getRowData().getEnd() && this.feature.getEnd() > row.getRowData().getEnd()){
+                } else if (featureStart > row.getRowData().getEnd() && featureEnd > row.getRowData().getEnd()){
                     continue;
                 } else{
-                    startBP = (this.feature.getStart() < row.getRowData().getStart()) ? row.getRowData().getStart() : this.feature.getStart();
-                    endBP = ((this.feature.getEnd() - 1) < row.getRowData().getEnd()) ? (this.feature.getEnd() - 1) : row.getRowData().getEnd();
+                    startBP = (featureStart < row.getRowData().getStart()) ? row.getRowData().getStart() : featureStart;
+                    endBP = ((featureEnd - 1) < row.getRowData().getEnd()) ? (featureEnd - 1) : row.getRowData().getEnd();
                 }
+            }
+
+            if(startBP < 0 || endBP < 0) {
+                console.warn("Invalid feature: name " + feature.getName() + 
+                             ", starting at " + featureStart + ", ending at " + 
+                             featureEnd + ", ignoring.");
+                return;
             }
 
             if (startBP > endBP && this.feature.getType() != "misc_feature"){
@@ -97,9 +107,9 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 var bpStartMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(startBP);
                 var bpEndMetrics2 = this.sequenceAnnotator.bpMetricsByIndex(Math.min(row.getRowData().getEnd(), this.sequenceAnnotationManager.getSequenceManager().getSequence().seqString().length - 1));
 
-                var featureX1 = bpStartMetrics1.getX() + 2;
-                var featureX2 = bpStartMetrics2.getX() + 2;
-                var featureYCommon = bpStartMetrics1.getY() + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
+                var featureX1 = bpStartMetrics1.x + 2;
+                var featureX2 = bpStartMetrics2.x + 2;
+                var featureYCommon = bpStartMetrics1.y + this.self.DEFAULT_FEATURES_SEQUENCE_GAP + downShift;
 
                 /*if(this.sequenceAnnotationManager.showAminoAcids){
                     //Add AminoAcidsTextRenderer
@@ -111,8 +121,8 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     featureYCommon += 3 * 20;
                 }
 
-                var featureRowWidth1 = (bpEndMetrics1.getX() - bpStartMetrics1.getX()) * 16;
-                var featureRowWidth2 = (bpEndMetrics2.getX() - bpStartMetrics2.getX()) * 16;
+                var featureRowWidth1 = (bpEndMetrics1.x - bpStartMetrics1.x) * 16;
+                var featureRowWidth2 = (bpEndMetrics2.x - bpStartMetrics2.x) * 16;
 
                 var featureRowHeightCommon = this.self.DEFAULT_FEATURE_HEIGHT;
 
@@ -148,13 +158,13 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                 if (this.feature.getStrand() == 0){
                     drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                 } else if ( this.feature.getStrand() == 1){
-                    if(this.feature.getEnd() >= row.getRowData().getStart() && this.feature.getEnd() <= row.getRowData().getEnd()){
+                    if(featureEnd >= row.getRowData().getStart() && featureEnd <= row.getRowData().getEnd()){
                         drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else{
                         drawFeatureForwardRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     }
                 } else if( this.feature.getStrand() == -1){
-                    if(this.feature.getStart() >= row.getRowData().getStart() && this.feature.getStart() <= row.getRowData().getEnd()){
+                    if(featureStart >= row.getRowData().getStart() && featureStart <= row.getRowData().getEnd()){
                         drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else{
                         drawFeatureBackwardRect(g, (featureX-8), featureY, featureRowWidth, featureRowHeight);
@@ -252,7 +262,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                         drawFeatureRect(g, featureX, featureY, featureRowWidth, featureRowHeight);
                     } else if( this.feature.getStrand() == 1){
                         if(location.getEnd() >= row.getRowData().getStart() && location.getEnd() < row.getRowData().getEnd() + 1){
-                            if(this.feature.getEnd() == location.getEnd()){
+                            if(featureEnd == location.getEnd()){
 
                                 drawFeatureForwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                             } else {
@@ -264,7 +274,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
                     } else if (this.feature.getStrand() == -1){
 
                         if (location.getStart() >= row.getRowData().getStart() && location.getStart() <= row.getRowData().getEnd()){
-                            if (this.feature.getStart() == location.getStart()){
+                            if (featureStart == location.getStart()){
                                 drawFeatureBackwardArrow(g, featureX, featureY, featureRowWidth, featureRowHeight);
                             } else{
                                 drawFeatureBackwardCurved(g, featureX, featureY, featureRowWidth, featureRowHeight);
@@ -402,8 +412,7 @@ Ext.define("Teselagen.renderer.annotate.FeatureRenderer", {
     },
 
     addToolTip: function(feature){
-        var featureToolTip = this.featureGroupSVG.append("svg:title")
-            .attr("id", "feature-tooltip-"+feature.getName());
+        var featureToolTip = this.featureGroupSVG.append("svg:title");
         var toolTip = feature.getType() + " - " + feature.getName() + ": " + feature.getStart() + ".." + feature.getEnd();
         featureToolTip.text(toolTip);
     },

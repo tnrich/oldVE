@@ -6,7 +6,8 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
     extend: "Ext.app.Controller",
 
     requires: ["Teselagen.event.DeviceEvent",
-    "Vede.view.de.PartDefinitionDialog"],
+    "Vede.view.de.PartDefinitionDialog",
+    "Ext.layout.container.Border"],
 
     DeviceDesignManager: null,
     DeviceEvent: null,
@@ -331,7 +332,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         if(j5Part) {
             partPropertiesForm.loadRecord(j5Part);
 
-            if(j5Part.get('sequencefile_id')!=="")
+            if( j5Part.get('sequencefile_id')!=="" && !j5Part.get('phantom') )
             {
                 j5Part.getSequenceFile({
                     callback: function(sequenceFile){
@@ -461,7 +462,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
         var self = this;
         if(self.selectedPart.data.phantom)
         {
-            self.selectedPart = new Part();
+            self.selectedPart = Ext.create("Teselagen.models.Part");
         }
         Vede.application.fireEvent("validateDuplicatedPartName",this.selectedPart,newName,function(){
             self.selectedPart.set("name", newName);
@@ -882,7 +883,7 @@ Ext.define("Vede.controller.DeviceEditor.InspectorController", {
      * @param {String} modified The name of the field that was edited.
      */
     onUpdateParts: function(parts, updatedPart, operation, modified) {
-        if(modified)
+        if( modified && !updatedPart.data.phantom)
         {
             if(modified.indexOf("name") > -1 || modified.indexOf("fas") > -1) {
                 var parentBin = this.DeviceDesignManager.getBinByPart(this.activeProject,

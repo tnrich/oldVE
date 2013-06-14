@@ -32,40 +32,67 @@ Ext.define("Teselagen.bio.parsers.SbolParser", {
 
     parse: function(data, cb){
         console.log("Parsing using j5");
-        
+        var self = this;
+
         Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-        var messageBox = Ext.MessageBox.wait(
-            "Converting XML...",
-            "Waiting for the server"
-        );
-        
-        /*
-        var task = new Ext.util.DelayedTask(function() {
-            messageBox.updateProgress(100,"Done!","done");
-            messageBox.close();
+
+        var performOperation = function(preserveSBOL){
+
+            var messageBox = Ext.MessageBox.wait(
+                "Converting XML...",
+                "Waiting for the server"
+            );
+            
+            /*
+            var task = new Ext.util.DelayedTask(function() {
+                messageBox.updateProgress(100,"Done!","done");
+                messageBox.close();
+            });
+
+            task.delay(5000);
+            */
+
+            Ext.Ajax.request({
+                url: Teselagen.manager.SessionManager.buildUrl("sbol", ''),
+                params: {
+                    filename: 'example.xml',
+                    data: Base64.encode(data),
+                    preserveSBOL: preserveSBOL
+                },
+                success: function (response) {
+                    response = JSON.parse(response.responseText);
+                    messageBox.close();
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                    cb(response.data,true);
+                },
+                failure: function(response, opts) {
+                    Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
+                    messageBox.close();
+                    Ext.MessageBox.alert('Failed','Conversion failed');
+                }
+            });
+
+        };
+
+        Ext.Msg.show({
+            title: 'Alert',
+            msg: "Do you want to preserve SBOL information during import process?",
+            width: 300,
+            buttons: Ext.Msg.YESNOCANCEL,
+            buttonText: ['','Yes','No','Cancel'],
+            fn: function(buttonId){
+                if(buttonId==='yes')
+                {
+                    performOperation(true);
+                }
+                else if(buttonId==='no')
+                {
+                    performOperation(false);
+                }
+            },
+            icon: Ext.MessageBox.ALERT
         });
 
-        task.delay(5000);
-        */
-
-        Ext.Ajax.request({
-            url: Teselagen.manager.SessionManager.buildUrl("sbol", ''),
-            params: {
-                filename: 'example.xml',
-                data: Base64.encode(data)
-            },
-            success: function (response) {
-                response = JSON.parse(response.responseText);
-                messageBox.close();
-                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                cb(response.data,true);
-            },
-            failure: function(response, opts) {
-                Ext.getCmp('mainAppPanel').getActiveTab().el.unmask();
-                messageBox.close();
-                Ext.MessageBox.alert('Failed','Conversion failed');
-            }
-        });
     },
 
     /** NOT WRITTEN NOT TESTED

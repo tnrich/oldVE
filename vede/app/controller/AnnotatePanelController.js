@@ -7,7 +7,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
 
     requires: ["Teselagen.event.SequenceManagerEvent",
                "Teselagen.event.MapperEvent",
-               "Teselagen.manager.SequenceAnnotationManager"],
+               "Teselagen.manager.SequenceAnnotationManager",
+               "Teselagen.renderer.annotate.HighlightLayer",
+               "Teselagen.renderer.annotate.SelectionLayer"],
 
     statics: {
         MIN_BP_PER_ROW: 20
@@ -385,9 +387,9 @@ Ext.define('Vede.controller.AnnotatePanelController', {
                 var metrics = this.SequenceAnnotationManager.annotator.bpMetricsByIndex(index);
                 var el = Ext.getCmp("AnnotateContainer").el;
 
-                if(!(metrics.getY() < el.getScroll().top + el.getViewSize().height &&
-                     metrics.getY() > el.getScroll().top)) {
-                    el.scrollTo("top", metrics.getY());
+                if(!(metrics.y < el.getScroll().top + el.getViewSize().height &&
+                     metrics.y > el.getScroll().top)) {
+                    el.scrollTo("top", metrics.y);
                 }
             }
         }

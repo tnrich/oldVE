@@ -10,7 +10,8 @@ Ext.Loader.setConfig({
         Teselagen: './app/teselagen',
         Vede: './app',
         'Teselagen.bio': '../biojs/src/teselagen/bio'
-    }
+    },
+    //disableCaching: false
 });
 
 Ext.application({
@@ -87,6 +88,7 @@ Ext.application({
     },
 
     launch: function() {
+
         Vede.application = this;
 
         Ext.Ajax.cors = true; // Allow CORS (Cross-Origin Resource Sharing)
@@ -129,6 +131,7 @@ Ext.application({
         });
 
         // After logged in execute task to fadeOut the splashscreen
-        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});
+        this.on(Teselagen.event.AuthenticationEvent.LOGGED_IN, function(){task.delay(1500);});        
+
     }
 });
