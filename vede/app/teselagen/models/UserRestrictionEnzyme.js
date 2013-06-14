@@ -6,6 +6,10 @@
  */
 Ext.define("Teselagen.models.UserRestrictionEnzyme", {
     extend: "Ext.data.Model",
+    
+    proxy: {
+        type: "memory"
+    },
 
     /**
      * @param {String} name The name of the enzyme.

@@ -9,7 +9,11 @@
      
      requires: ["Teselagen.models.UserRestrictionEnzyme"],
 
-     /**
+     proxy: {
+         type: "memory"
+     },
+
+    /**
       * Input parameters.
       * @param {String} name The name assigned to the group of enzymes.
       */
