@@ -94,6 +94,10 @@ img {
   -o-transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
+.x-tab-default .x-tab-inner {
+  font-size:12px;
+}
+
 .x-menu-item-active {
   background: #E0E3E6;
   border: 0 none;
