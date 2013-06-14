@@ -67593,16 +67593,19 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
 });
   return data;
 }}, buildUrl: function(request) {
+  this.debugFlag = false;
+  if (this.debugFlag) 
   console.log(request);
   if (request.action === "read" && request.params) 
   {
     if (request.operation.filters) 
     {
-      if (request.operation.filters[0]) 
+      if (request.operation.filters[0] && !request.params.id) 
       {
         if (request.operation.filters[0].property === "project_id") 
         {
           var url = "/projects" + '/' + request.operation.filters[0].value + "/devicedesigns";
+          if (this.debugFlag) 
           console.log("READING DEVICE DESIGNS FROM PROJECT: ", url);
           delete request.params.filter;
           return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
@@ -67613,6 +67616,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   if (request.action === "create" && request.records[0].data.project_id != "") 
   {
     var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns";
+    if (this.debugFlag) 
     console.log("CREATING DEVICE DESIGN AT PROJECT: ", url);
     delete request.params.filter;
     return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
@@ -67620,11 +67624,32 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   if (request.action === "update" && request.records[0].data.project_id != "" && request.records[0].data.id != "") 
   {
     var url = "/projects" + '/' + request.records[0].data.project_id + "/devicedesigns" + '/' + request.records[0].data.id;
+    if (this.debugFlag) 
     console.log("UPDATE DEVICE DESIGN AT PROJECT: ", url);
     delete request.params.filter;
     return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
   }
-}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
+  if (request.action === "read" && request.params) 
+  {
+    if (request.operation.filters) 
+    {
+      if (request.operation.filters[0] && request.params.id) 
+      {
+        if (request.operation.filters[0].property === "project_id") 
+        {
+          var url = "/projects" + '/' + request.operation.filters[0].value + "/devicedesigns/" + request.params.id;
+          if (this.debugFlag) 
+          console.log("READING SPECIFIC DESIGN FROM PROJECT: ", url);
+          delete request.params.filter;
+          return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+        }
+      }
+    }
+  }
+}, appendId: true, noCache: false, groupParam: undefined, pageParam: undefined, startParam: undefined, sortParam: undefined, limitParam: undefined}, constructor: function(inData) {
+  this.callParent([inData]);
+  this.setJ5Collection(Ext.create("Teselagen.models.J5Collection"));
+}, fields: [{name: "id", type: "long"}, {name: "project_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}], validations: [], associations: [{type: "hasOne", model: "Teselagen.models.J5Collection", getterName: "getJ5Collection", setterName: "setJ5Collection", associationKey: "j5collection", name: "j5collection"}, {type: "hasOne", model: "Teselagen.models.SBOLvIconInfo", getterName: "getSBOLvIconInfo", setterName: "setSBOLvIconInfo", associationKey: "sbolvIconInfo"}, {type: "hasMany", model: "Teselagen.models.EugeneRule", name: "rules", associationKey: "rules"}, {type: "hasMany", model: "Teselagen.models.J5Run", name: "j5runs", associationKey: "j5runs", autoload: true, foreignKey: "devicedesign_id"}, {type: "belongsTo", model: "Teselagen.models.Project", getterName: "getProject", setterName: "setProject", associationKey: "project", foreignKey: "id"}], modelIsLoaded: false, reload: function(callBack) {
   var me = this;
   return Ext.getClass(this).load(this.getId(), {success: function(r, o) {
   console.log("record reloaded!");
@@ -67729,7 +67754,7 @@ Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {override: 'Ext.tree.View
   } else {
     return false;
   }
-}}, 0, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
+}}, 1, 0, 0, 0, 0, 0, [Teselagen.models, 'DeviceDesign'], 0));
 ;
 
 (Ext.cmd.derive('Teselagen.models.Project', Ext.data.Model, {fields: [{name: "id", type: "long"}, {name: "user_id", type: "long"}, {name: "name", type: "String", defaultValue: ""}, {name: "dateCreated", type: "date"}, {name: "dateModified", type: "date"}], associations: [{type: "hasMany", model: "Teselagen.models.DeviceDesign", name: "designs", associationKey: "designs", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.SequenceFile", name: "sequences", associationKey: "sequences", foreignKey: "project_id"}, {type: "hasMany", model: "Teselagen.models.Part", name: "parts", associationKey: "parts", foreignKey: "project_id"}, {type: "belongsTo", model: "Teselagen.models.User", getterName: "getUser", setterName: "setUser", associationKey: "user", foreignKey: "user_id"}], proxy: {type: "rest", url: "/vede/test/data/json/projects.json", reader: {type: "json", root: "projects"}, writer: {type: "json", getRecordData: function(record) {
@@ -78819,7 +78844,7 @@ function requestMessageProcessor(request, success) {
   designs.load({callback: function() {
   designs.each(function(design) {
   var designnode = projectNode.appendChild({text: design.data.name, leaf: false, id: design.data.id, hrefTarget: "opende", icon: "resources/images/ux/design-tree-icon-leaf.png", qtip: 'Design ' + design.data.name});
-  designnode.appendChild({text: "J5 Reports", leaf: true, id: design.data.id, hrefTarget: "j5reports", icon: "resources/images/ux/j5-tree-icon-parent.png", qtip: design.data.name + ' Report'});
+  designnode.appendChild({text: "J5 Reports", leaf: true, id: design.data.id + 'report', hrefTarget: "j5reports", icon: "resources/images/ux/j5-tree-icon-parent.png", qtip: design.data.name + ' Report'});
 });
 }});
   Teselagen.manager.ProjectManager.sequenceStore = Ext.create("Ext.data.Store", {model: "Teselagen.models.SequenceFile"});
@@ -78844,7 +78869,8 @@ function requestMessageProcessor(request, success) {
   Teselagen.manager.ProjectManager.openDeviceDesign(loadedDesign[0]);
 }});
 }, resolveAndOpenj5Reports: function(record) {
-  var design_id = record.data.id;
+  var design_id = record.data.id.replace("report", "");
+  ;
   var project_id = record.parentNode.parentNode.data.id;
   var project = Teselagen.manager.ProjectManager.projects.getById(project_id);
   project.designs().load({id: design_id, callback: function(loadedDesign) {

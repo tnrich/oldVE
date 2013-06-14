@@ -57,8 +57,8 @@ Ext.define("Teselagen.models.DeviceDesign", {
         },
         buildUrl: function(request) {
 
-            console.log(request);
-            //debugger;
+            this.debugFlag = false;
+            if(this.debugFlag) console.log(request);
 
 
             // CASE 1: READ ALL DEVICE DESIGNS FROM GIVEN PROJECT
@@ -66,12 +66,12 @@ Ext.define("Teselagen.models.DeviceDesign", {
             {
                 if(request.operation.filters)
                 {
-                    if(request.operation.filters[0])
+                    if(request.operation.filters[0] && !request.params.id)
                     {
                         if(request.operation.filters[0].property==="project_id")
                         {
                             var url = "/projects"+'/'+request.operation.filters[0].value+"/devicedesigns";
-                            console.log("READING DEVICE DESIGNS FROM PROJECT: ",url);
+                            if(this.debugFlag) console.log("READING DEVICE DESIGNS FROM PROJECT: ",url);
                             delete request.params.filter;
                             return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
                         }
@@ -83,7 +83,7 @@ Ext.define("Teselagen.models.DeviceDesign", {
             if(request.action === "create" && request.records[0].data.project_id!="")
             {
                 var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns";
-                console.log("CREATING DEVICE DESIGN AT PROJECT: ",url);
+                if(this.debugFlag) console.log("CREATING DEVICE DESIGN AT PROJECT: ",url);
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
             }
@@ -93,9 +93,28 @@ Ext.define("Teselagen.models.DeviceDesign", {
             if(request.action === "update" && request.records[0].data.project_id!="" && request.records[0].data.id!="")
             {
                 var url = "/projects"+'/'+request.records[0].data.project_id+"/devicedesigns"+'/'+request.records[0].data.id;
-                console.log("UPDATE DEVICE DESIGN AT PROJECT: ",url);
+                if(this.debugFlag) console.log("UPDATE DEVICE DESIGN AT PROJECT: ",url);
                 delete request.params.filter;
                 return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);                
+            }
+
+
+            // CASE 4: READ SPECIFIC DEVICE DESIGN FROM PROJECT
+            if(request.action === "read" && request.params)
+            {
+                if(request.operation.filters)
+                {
+                    if(request.operation.filters[0] && request.params.id)
+                    {
+                        if(request.operation.filters[0].property==="project_id")
+                        {
+                            var url = "/projects"+'/'+request.operation.filters[0].value+"/devicedesigns/"+request.params.id;
+                            if(this.debugFlag) console.log("READING SPECIFIC DESIGN FROM PROJECT: ",url);
+                            delete request.params.filter;
+                            return Teselagen.manager.SessionManager.buildUserResUrl(url, this.url);
+                        }
+                    }
+                }
             }
 
             /*

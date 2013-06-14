@@ -16,7 +16,8 @@ Ext.define("Teselagen.models.J5Parameters", {
     extend: "Ext.data.Model",
 
     requires: [
-        "Teselagen.constants.Constants"
+        "Teselagen.constants.Constants",
+        "Ext.data.JsonStore"
     ],
 
     proxy: {
