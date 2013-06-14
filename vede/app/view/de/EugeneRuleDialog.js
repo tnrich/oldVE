@@ -76,7 +76,7 @@ Ext.define('Vede.view.de.EugeneRuleDialog', {
             buttons: [
                 {
                     text: 'Done',
-                    cls: 'submitNewEugeneRuleBtn',
+                    cls: 'submitNewEugeneRuleBtn'
                 },
                 {
                     text: 'Cancel',

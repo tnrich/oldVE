@@ -8,7 +8,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
     extend: "Teselagen.renderer.rail.RailRenderer",
 
     statics: {
-        CUTSITE_LINE_WIDTH: 0.5,
+        CUTSITE_LINE_WIDTH: 0.5
     },
     
     config: {
@@ -18,7 +18,7 @@ Ext.define("Teselagen.renderer.rail.CutSiteRenderer", {
         railHeight:null,
         railGap: null,
         startPoints: null,
-        reference: null,
+        reference: null
     },
 
     /**

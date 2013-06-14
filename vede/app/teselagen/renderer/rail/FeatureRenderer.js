@@ -20,7 +20,7 @@ Ext.define("Teselagen.renderer.rail.FeatureRenderer", {
         railWidth: null,
         railHeight:null,
         railGap: null,
-        startPoints:null,
+        startPoints:null
     },
 
     /**

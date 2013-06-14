@@ -10,7 +10,7 @@ Ext.define("Teselagen.renderer.sequence.ORFRenderer", {
 
     config: {
         contentHolder: null,
-        orf: null,
+        orf: null
     },
 
     constructor: function(inData) {

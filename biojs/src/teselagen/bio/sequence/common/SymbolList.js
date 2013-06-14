@@ -123,15 +123,20 @@ Ext.define("Teselagen.bio.sequence.common.SymbolList", {
 		 */	
 		this.seqString = function (){
 			var string = [];
+            var element;
+
             if(this.sequenceString && !this.sequenceChanged) {
                 return this.sequenceString;
             }
+
             else {
-                symbols.forEach(function(element){
-                    if (Ext.getClassName(element).indexOf("Teselagen.bio.sequence.symbols.") !== -1) {
+                for(var i = 0; i < symbols.length; i++) {
+                    element = symbols[i];
+
+                    if (element.getValue()) {
                         string.push(element.getValue());
                     }
-                });
+                }
 
                 this.sequenceChanged = false;
             }
